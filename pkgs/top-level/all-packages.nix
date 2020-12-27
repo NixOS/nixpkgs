@@ -1305,6 +1305,8 @@ in
 
   gopass = callPackage ../tools/security/gopass { };
 
+  gospider = callPackage ../tools/security/gospider { };
+
   browserpass = callPackage ../tools/security/browserpass { };
 
   passff-host = callPackage ../tools/security/passff-host { };
