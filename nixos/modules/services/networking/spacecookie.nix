@@ -18,19 +18,28 @@ in {
       hostname = mkOption {
         type = types.str;
         default = "localhost";
-        description = "The hostname the service is reachable via. Clients will use this hostname for further requests after loading the initial gopher menu.";
+        description = ''
+          The hostname the service is reachable via. Clients
+          will use this hostname for further requests after
+          loading the initial gopher menu.
+        '';
       };
 
       port = mkOption {
         type = types.port;
         default = 70;
-        description = "Port the gopher service should be exposed on.";
+        description = ''
+          Port the gopher service should be exposed on. The
+          firewall is not opened automatically.
+        '';
       };
 
       root = mkOption {
         type = types.path;
         default = "/srv/gopher";
-        description = "The root directory spacecookie serves via gopher.";
+        description = ''
+          The root directory spacecookie serves via gopher.
+        '';
       };
     };
   };
