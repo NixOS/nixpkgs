@@ -6739,6 +6739,8 @@ in
 
   proxychains = callPackage ../tools/networking/proxychains { };
 
+  proxify = callPackage ../tools/networking/proxify { };
+
   proxytunnel = callPackage ../tools/misc/proxytunnel {
     openssl = openssl_1_0_2;
   };
