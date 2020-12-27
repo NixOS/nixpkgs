@@ -15663,7 +15663,7 @@ in
 
     kreport = callPackage ../development/libraries/kreport { };
 
-    KQuickImageEdit = callPackage ../development/libraries/KQuickImageEdit { };
+    kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
 
     ldutils = callPackage ../development/libraries/ldutils { };
 
