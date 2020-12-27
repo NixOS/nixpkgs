@@ -34,12 +34,17 @@ in mkDerivation rec {
     matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
   ]);
 
-  # Fix missing app icon on Wayland. Has been upstreamed and should be safe to
-  # remove in versions >= 0.19
   patches = [
+    # Fix missing app icon on Wayland. Has been upstreamed and should be safe to
+    # remove in versions >= 0.19
     (fetchpatch {
       url = "https://github.com/FreeCAD/FreeCAD/commit/c4d2a358ca125d51d059dfd72dcbfba326196dfc.patch";
       sha256 = "0yqc9zrxgi2c2xcidm8wh7a9yznkphqvjqm9742qm5fl20p8gl4h";
+    })
+    # Fix build with Qt >= 5.15
+    (fetchpatch {
+      url = "https://github.com/FreeCAD/FreeCAD/commit/b2882c699b1444efadd9faee36855a965ac6a215.patch";
+      sha256 = "sha256:1fs43a5aaqziaa1iicppfjd68kklmk9qrcncxs8hx2dl429z2lzv";
     })
   ];
 
