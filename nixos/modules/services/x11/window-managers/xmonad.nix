@@ -35,7 +35,7 @@ let
 
   xmonad = if (cfg.config != null) then xmonad-config else xmonad-vanilla;
 in {
-  meta.maintainers = with maintainers; [ lassulus xaverdh ];
+  meta.maintainers = with maintainers; [ lassulus xaverdh ivanbrennan ];
 
   options = {
     services.xserver.windowManager.xmonad = {
