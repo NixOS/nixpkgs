@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw }:
+{ stdenv, fetchFromGitHub, fftw, installShellFiles }:
 
 stdenv.mkDerivation {
   pname = "sonic";
@@ -15,7 +15,13 @@ stdenv.mkDerivation {
     sed -i "s,^PREFIX=.*,PREFIX=$out," Makefile
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = [ fftw ];
+
+  postInstall = ''
+    installManPage sonic.1
+  '';
 
   meta = with stdenv.lib; {
     description = "Simple library to speed up or slow down speech";
