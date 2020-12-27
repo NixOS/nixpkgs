@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "scop";
     repo = "bash-completion";
     rev = version;
-    sha256 = "0m3brd5jx7w07h8vxvvcmbyrlnadrx6hra3cvx6grzv6rin89liv";
+    sha256 = "1kyj62wp4sd8629r1gx5ggnkkjfkwvggj98d6cwlx14y3iri0l87";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
