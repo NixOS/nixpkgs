@@ -23,7 +23,7 @@ let
     zipAttrsWithNames (filterAttrNames isList (head attrsets)) (_: concatLists) attrsets;
 
   template = rec {
-    name = "${pname}-${version}";
+    inherit pname version;
 
     nativeBuildInputs = [ pkgconfig xfce4-dev-tools wrapGAppsHook ];
     buildInputs = [ hicolor-icon-theme ];
