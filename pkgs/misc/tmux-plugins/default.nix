@@ -208,6 +208,10 @@ in rec {
       rev = "416f613d3eaadbe1f6f9eda77c49430527ebaffb";
       sha256 = "1xbzdyhsgaq2in0f8f491gwjmx6cxpkf2c35d2dk0kg4jfs505sz";
     };
+    postInstall = ''
+      sed -i -e 's|ruby|${pkgs.ruby}/bin/ruby|g' $target/scripts/tmux-jump.sh
+    '';
+    dependencies = [ pkgs.ruby ];
 
     meta = with stdenv.lib; {
       homepage = "https://github.com/schasse/tmux-jump";
