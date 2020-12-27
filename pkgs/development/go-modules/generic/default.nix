@@ -46,7 +46,7 @@ with builtins;
 let
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "disabled" ];
 
-  go-modules = if vendorSha256 != null then go.stdenv.mkDerivation (let modArgs = {
+  go-modules = if vendorSha256 != null then stdenv.mkDerivation (let modArgs = {
 
     name = "${name}-go-modules";
 
@@ -119,7 +119,7 @@ let
       }
   ) // overrideModAttrs modArgs) else "";
 
-  package = go.stdenv.mkDerivation (args // {
+  package = stdenv.mkDerivation (args // {
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
     inherit (go) GOOS GOARCH;

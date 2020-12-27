@@ -5349,6 +5349,8 @@ in
 
   mxisd = callPackage ../servers/mxisd { };
 
+  naabu = callPackage ../tools/security/naabu { };
+
   nagstamon = callPackage ../tools/misc/nagstamon {
     pythonPackages = python3Packages;
   };
@@ -16497,16 +16499,14 @@ in
 
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
 
-  vtk = callPackage ../development/libraries/vtk {
+  vtk_7 = libsForQt515.callPackage ../development/libraries/vtk/7.x.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
                                           IOKit CFNetwork Security ApplicationServices
                                           CoreText IOSurface ImageIO OpenGL GLUT;
   };
-
-  vtk_7 = callPackage ../development/libraries/vtk/7.x.nix {
-    stdenv = if stdenv.isDarwin then stdenv else gcc8Stdenv;
+  vtk_8 = libsForQt515.callPackage ../development/libraries/vtk/8.x.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
@@ -16522,14 +16522,15 @@ in
                                           CoreText IOSurface ImageIO OpenGL GLUT;
   };
 
+  vtk = vtk_8;
+  vtkWithQt5 = vtk.override { enableQt = true; };
+
   vulkan-extension-layer = callPackage ../tools/graphics/vulkan-extension-layer { };
   vulkan-headers = callPackage ../development/libraries/vulkan-headers { };
   vulkan-loader = callPackage ../development/libraries/vulkan-loader { };
   vulkan-tools = callPackage ../tools/graphics/vulkan-tools { };
   vulkan-tools-lunarg = callPackage ../tools/graphics/vulkan-tools-lunarg { };
   vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
-
-  vtkWithQt5 = vtk.override { qtLib = qt515; };
 
   vxl = callPackage ../development/libraries/vxl {
     libpng = libpng12;
@@ -16643,6 +16644,8 @@ in
   xcbutilxrm = callPackage ../servers/x11/xorg/xcb-util-xrm.nix { };
 
   xdo = callPackage ../tools/misc/xdo { };
+
+  xed = callPackage ../development/libraries/xed { };
 
   xineLib = callPackage ../development/libraries/xine-lib { };
 
@@ -18134,7 +18137,9 @@ in
 
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
-  cpuset = callPackage ../os-specific/linux/cpuset { };
+  cpuset = callPackage ../os-specific/linux/cpuset {
+    pythonPackages = python3Packages;
+  };
 
   criu = callPackage ../os-specific/linux/criu { };
 
@@ -23206,6 +23211,8 @@ in
   speedread = callPackage ../applications/misc/speedread { };
 
   station = callPackage ../applications/networking/station { };
+
+  stochas = callPackage ../applications/audio/stochas { };
 
   synapse = callPackage ../applications/misc/synapse { };
 
