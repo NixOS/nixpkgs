@@ -1,8 +1,9 @@
 let
-  gopherRoot  = "/tmp/gopher";
-  gopherHost  = "gopherd";
-  fileContent = "Hello Gopher!";
-  fileName    = "file.txt";
+  gopherRoot   = "/tmp/gopher";
+  gopherHost   = "gopherd";
+  gopherClient = "client";
+  fileContent  = "Hello Gopher!\n";
+  fileName     = "file.txt";
 in
   import ./make-test-python.nix ({...}: {
     name = "spacecookie";
@@ -12,7 +13,7 @@ in
         systemd.services.spacecookie = {
           preStart = ''
             mkdir -p ${gopherRoot}/directory
-            echo "${fileContent}" > ${gopherRoot}/${fileName}
+            printf "%s" "${fileContent}" > ${gopherRoot}/${fileName}
           '';
         };
 
@@ -23,25 +24,27 @@ in
         };
       };
 
-      client = {};
+      ${gopherClient} = {};
     };
 
     testScript = ''
       start_all()
-      ${gopherHost}.wait_for_open_port(70)
-      ${gopherHost}.wait_for_unit("spacecookie.service")
-      client.wait_for_unit("network.target")
 
-      fileResponse = client.succeed("curl -f -s gopher://${gopherHost}//${fileName}")
+      # with daemon type notify, the unit being started
+      # should also mean the port is open
+      ${gopherHost}.wait_for_unit("spacecookie.service")
+      ${gopherClient}.wait_for_unit("network.target")
+
+      fileResponse = ${gopherClient}.succeed("curl -f -s gopher://${gopherHost}/0/${fileName}")
 
       # the file response should return our created file exactly
-      if not (fileResponse == "${fileContent}\n"):
+      if not (fileResponse == "${builtins.replaceStrings [ "\n" ] [ "\\n" ] fileContent}"):
           raise Exception("Unexpected file response")
 
       # sanity check on the directory listing: we serve a directory and a file
       # via gopher, so the directory listing should have exactly two entries,
       # one with gopher file type 0 (file) and one with file type 1 (directory).
-      dirResponse = client.succeed("curl -f -s gopher://${gopherHost}")
+      dirResponse = ${gopherClient}.succeed("curl -f -s gopher://${gopherHost}")
       dirEntries = [l[0] for l in dirResponse.split("\n") if len(l) > 0]
       dirEntries.sort()
 
