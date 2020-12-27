@@ -19,6 +19,7 @@ buildGoModule rec {
   meta = with stdenv.lib; {
     description = "Simple terminal UI for git commands";
     homepage = "https://github.com/jesseduffield/lazygit";
+    changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz equirosa Br1ght0ne ];
   };
