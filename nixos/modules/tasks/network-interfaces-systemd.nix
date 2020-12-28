@@ -12,6 +12,10 @@ let
     i.ipv4.addresses
     ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
+  interfaceRoutes = i:
+    i.ipv4.routes
+    ++ optionals cfg.enableIPv6 i.ipv6.routes;
+
   dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "yes" else "no";
 
   slaves =
@@ -93,6 +97,25 @@ in
             (if i.useDHCP != null then i.useDHCP else false));
           address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
+          routes = forEach (interfaceRoutes i)
+            (route: {
+              routeConfig =
+                optionalAttrs (route.prefixLength > 0) {
+                  Destination = "${route.address}/${toString route.prefixLength}";
+                } //
+                optionalAttrs (route.via != null) {
+                  Gateway = route.via;
+                } //
+                optionalAttrs (route.options ? onlink) {
+                  GatewayOnLink = true;
+                } //
+                optionalAttrs (route.options ? scope) {
+                  Scope = route.options.scope;
+                } //
+                optionalAttrs (route.options ? from) {
+                  Source = route.options.from;
+                };
+            });
           # IPv6PrivacyExtensions=kernel seems to be broken with networkd.
           # Instead of using IPv6PrivacyExtensions=kernel, configure it according to the value of
           # `tempAddress`:
