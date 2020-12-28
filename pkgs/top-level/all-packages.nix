@@ -3754,6 +3754,10 @@ in
 
   emem = callPackage ../applications/misc/emem { };
 
+  emulsion = callPackage ../applications/graphics/emulsion {
+    inherit (darwin.apple_sdk.frameworks) AppKit CoreGraphics CoreServices Foundation OpenGL;
+  };
+
   emv = callPackage ../tools/misc/emv { };
 
   enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse { };
