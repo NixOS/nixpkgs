@@ -19912,6 +19912,8 @@ in
 
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
 
+  meslo-lgs-nf = callPackage ../data/fonts/meslo-lgs-nf {};
+
   migmix = callPackage ../data/fonts/migmix {};
 
   migu = callPackage ../data/fonts/migu {};
