@@ -9374,6 +9374,12 @@
       fingerprint = "4D23 ECDF 880D CADF 5ECA  4458 874B D6F9 16FA A742";
     }];
   };
+  vel = {
+    email = "llathasa@outlook.com";
+    github = "llathasa-veleth";
+    githubId = 61933599;
+    name = "vel";
+  };
   velovix = {
     email = "xaviosx@gmail.com";
     github = "velovix";
