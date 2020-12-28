@@ -17882,9 +17882,9 @@ in
 
   inherit (callPackages ../servers/unifi { })
     unifiLTS
-    unifiStable
-    unifiBeta;
-  unifi = unifiStable;
+    unifi5
+    unifi6;
+  unifi = unifi6;
 
   urserver = callPackage ../servers/urserver { };
 
