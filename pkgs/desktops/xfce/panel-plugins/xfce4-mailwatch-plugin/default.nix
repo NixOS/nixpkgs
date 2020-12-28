@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel, libxfce4ui,
-  gtk2, exo, gnutls, libgcrypt, xfce }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, xfce4-panel, libxfce4ui,
+  exo, gnutls, libgcrypt, xfce }:
 
 let
   category = "panel-plugins";
@@ -7,11 +7,11 @@ in
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-mailwatch-plugin";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "1bfw3smwivr9mzdyq768biqrl4aq94zqi3xjzq6kqnd8561cqjk2";
+    sha256 = "0bmykjhd3gs1737fl3zn5gg6f3vlncak2xqz89zv5018znz1xy90";
   };
 
   nativeBuildInputs = [
@@ -20,11 +20,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libxfce4util
     libxfce4ui
     xfce4-panel
-    gtk2
-    exo # needs exo with gtk2 support
+    exo
     gnutls
     libgcrypt
   ];
@@ -38,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-mailwatch-plugin";
     description = "Mail watcher plugin for Xfce panel";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ ];
   };
