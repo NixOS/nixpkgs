@@ -3,6 +3,7 @@
 with lib;
 let
   cfg = config.services.consul;
+  json = pkgs.formats.json { };
   settings = {
     data_dir = "/var/lib/consul";
   } // cfg.settings;
@@ -113,7 +114,7 @@ in
     mkMerge [
       {
         environment = {
-          etc."consul.json".source = json.generate settings;
+          etc."consul.json".source = json.generate "consul.json" settings;
           systemPackages = [ cfg.package ];
         };
 
