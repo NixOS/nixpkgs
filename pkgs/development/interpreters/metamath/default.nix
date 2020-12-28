@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
     '';
     homepage = "http://us.metamath.org";
     downloadPage = "http://us.metamath.org/#downloads";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.taneb ];
     platforms = platforms.all;
   };
