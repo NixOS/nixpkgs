@@ -12,8 +12,10 @@
 , ncurses
 , openssl
 , wayland
+, libffi
 , xorg
 , zlib
+, git
 }:
 let
 
@@ -35,6 +37,7 @@ in stdenv.mkDerivation rec {
     ncurses
     openssl
     wayland
+    libffi
     xorg.libX11
     xorg.libxcb
     xorg.xcbproto
@@ -47,6 +50,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    git
     ninja
     patchelf
     perl
