@@ -15008,6 +15008,8 @@ in
 
   mbedtls = callPackage ../development/libraries/mbedtls { };
 
+  mdctags = callPackage ../development/tools/misc/mdctags { };
+
   mdds = callPackage ../development/libraries/mdds { };
 
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
