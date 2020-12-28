@@ -11,7 +11,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       services = {
         hedgedoc = {
           enable = true;
-          configuration.dbURL = "sqlite:///var/lib/hedgedoc/hedgedoc.db";
+          configuration.dbURL = "sqlite:///var/lib/codimd/codimd.db";
         };
       };
     };

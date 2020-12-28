@@ -54,7 +54,7 @@ mkYarnPackage rec {
     EOF
     chmod +x $out/bin/hedgedoc
     wrapProgram $out/bin/hedgedoc \
-      --set NODE_PATH "$out/lib/node_modules"
+      --set NODE_PATH "$out/node_modules"
 
     runHook postDist
   '';
