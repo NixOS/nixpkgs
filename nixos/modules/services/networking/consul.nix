@@ -2,7 +2,6 @@
 
 with lib;
 let
-
   dataDir = "/var/lib/consul";
   cfg = config.services.consul;
 
@@ -94,6 +93,8 @@ in
         default = true;
         description = ''
           Whether the consul agent should be run as a non-root consul user.
+
+          The consul uid is generated dynamically using systemd's dynamic users feature.
         '';
       };
 
@@ -156,13 +157,6 @@ in
   config = mkIf cfg.enable (
     mkMerge [{
 
-      users.users.consul = {
-        description = "Consul agent daemon user";
-        uid = config.ids.uids.consul;
-        # The shell is needed for health checks
-        shell = "/run/current-system/sw/bin/bash";
-      };
-
       environment = {
         etc."consul.json".text = builtins.toJSON configOptions;
         # We need consul.d to exist for consul to start
@@ -176,25 +170,28 @@ in
         bindsTo = systemdDevices;
         restartTriggers = [ config.environment.etc."consul.json".source ]
           ++ mapAttrsToList (_: d: d.source)
-            (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
+          (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
         serviceConfig = {
           ExecStart = "@${cfg.package}/bin/consul consul agent -config-dir /etc/consul.d"
             + concatMapStrings (n: " -config-file ${n}") configFiles;
-          ExecReload = "${cfg.package}/bin/consul reload";
+          ExecReload = "${pkgs.coreutils}/bin/kill --signal HUP $MAINPID";
+          ExecStop = optionalString cfg.leaveOnStop "${cfg.package}/bin/consul leave";
           PermissionsStartOnly = true;
-          User = if cfg.dropPrivileges then "consul" else null;
+          User = optionalString cfg.dropPrivileges "consul";
           Restart = "on-failure";
           TimeoutStartSec = "infinity";
-        } // (optionalAttrs (cfg.leaveOnStop) {
-          ExecStop = "${cfg.package}/bin/consul leave";
-        });
+          DynamicUser = cfg.dropPrivileges;
+          Type = "notify";
+          KillMode = "process";
+          KillSignal = "SIGTERM";
+          Restart = "on-failure";
+          StateDirectory = "consul";
+          TimeoutStartSec = "infinity";
+        };
 
-        path = with pkgs; [ iproute gnugrep gawk consul ];
+        path = with pkgs; [ iproute gnugrep gawk ];
         preStart = ''
-          mkdir -m 0700 -p ${dataDir}
-          chown -R consul ${dataDir}
-
           # Determine interface addresses
           getAddrOnce () {
             ip addr show dev "$1" \
