@@ -21,7 +21,11 @@
    xlink:href="https://discourse.nixos.org">Discourse</literal> or
   on the <link
    xlink:href="irc://irc.freenode.net/#nixos">
-  <literal>#nixos</literal> channel on Freenode</link>. Bugs should be
+  <literal>#nixos</literal> channel on Freenode</link>, or
+  consider
+  <link
+   xlink:href="#chap-contributing">
+   contributing to this manual</link>. Bugs should be
   reported in
   <link
    xlink:href="https://github.com/NixOS/nixpkgs/issues">NixOS’

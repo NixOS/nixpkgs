@@ -1,7 +1,7 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-contributing">
- <title>Contributing to this documentation</title>
+ <title>Contributing to this manual</title>
  <para>
   The DocBook sources of NixOS' manual are in the <filename
 xlink:href="https://github.com/NixOS/nixpkgs/tree/master/nixos/doc/manual">
