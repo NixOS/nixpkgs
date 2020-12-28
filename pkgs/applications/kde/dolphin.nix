@@ -5,7 +5,8 @@
   kcompletion, kconfig, kcoreaddons, kdelibs4support, kdbusaddons,
   kfilemetadata, ki18n, kiconthemes, kinit, kio, knewstuff, knotifications,
   kparts, ktexteditor, kwindowsystem, phonon, solid,
-  wayland, qtwayland
+  wayland, qtwayland,
+  packagekit-qt,
 }:
 
 mkDerivation {
@@ -22,6 +23,7 @@ mkDerivation {
     kinit kio knewstuff knotifications kparts ktexteditor kwindowsystem
     phonon solid
     wayland qtwayland
+    packagekit-qt
   ];
   outputs = [ "out" "dev" ];
   # We need the RPATH for linking, because the `libkdeinit5_dolphin.so` links
