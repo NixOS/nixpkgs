@@ -268,7 +268,7 @@ chmod 400 /var/lib/secrets/certs.secret
 
   <para>
    It is possible that your account credentials file may become corrupt and need
-   to be regnerated. In this scenario lego will produce the error <literal>JWS verification error</literal>.
+   to be regenerated. In this scenario lego will produce the error <literal>JWS verification error</literal>.
    The solution is to simply delete the associated accounts file and
    re-run the affected service(s).
   </para>
