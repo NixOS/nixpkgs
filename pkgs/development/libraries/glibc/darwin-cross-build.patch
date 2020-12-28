@@ -3,7 +3,6 @@ enable cross-compilation of glibc on Darwin (build=Darwin, host=Linux)
 * use host version of ar, which is given by environment variable
 * build system uses stamp.os and stamp.oS files, which only differ in case;
   this fails on macOS, so replace .oS with .o_S
-* libintl.h does not exist (and is not needed) on macOS
 
 --- glibc-2.27/Makefile.in	2018-02-01 17:17:18.000000000 +0100
 +++ glibc-2.27/Makefile.in	2019-02-15 17:38:27.022965553 +0100
@@ -77,27 +76,3 @@ enable cross-compilation of glibc on Darwin (build=Darwin, host=Linux)
  endef
  
  # Also remove the dependencies and generated source files.
---- glibc-2.27/sunrpc/rpc_main.c	2019-02-15 17:32:43.710244513 +0100
-+++ glibc-2.27/sunrpc/rpc_main.c	2019-02-15 17:23:57.139617796 +0100
-@@ -38,7 +38,9 @@
- #include <stdio.h>
- #include <string.h>
- #include <unistd.h>
-+#ifndef __APPLE__
- #include <libintl.h>
-+#endif
- #include <locale.h>
- #include <ctype.h>
- #include <sys/types.h>
---- glibc-2.27/sunrpc/rpc_scan.c	2019-02-15 17:32:54.845490606 +0100
-+++ glibc-2.27/sunrpc/rpc_scan.c	2019-02-15 17:24:54.288066644 +0100
-@@ -37,7 +37,9 @@
- #include <stdio.h>
- #include <ctype.h>
- #include <string.h>
-+#ifndef __APPLE__
- #include <libintl.h>
-+#endif
- #include "rpc_scan.h"
- #include "rpc_parse.h"
- #include "rpc_util.h"
