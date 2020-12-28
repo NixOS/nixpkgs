@@ -20,6 +20,6 @@ mkDerivation {
   ];
 
   postPatch = ''
-    sed -i "s|\''${KDE_INSTALL_FULL_BINDIR}/systemsettings5|''${systemsettings.out}/bin/systemsettings5|" CMakeLists.txt
+    sed -i "s|create_symlink.*systemsettings5|create_symlink ${systemsettings.out}/bin/systemsettings5|" CMakeLists.txt
   '';
 }
