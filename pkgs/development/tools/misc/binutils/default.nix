@@ -88,6 +88,12 @@ stdenv.mkDerivation {
     # override this behavior, forcing ld to search DT_RPATH even when
     # cross-compiling.
     "${patchesDir}/always-search-rpath.patch"
+
+    # Gold has an error handling bug calling fallocate. Triggers with Musl on a ZFS
+    # filesystem. Glibc has a hack in posix_fallocate that Musl rejects:
+    # https://www.openwall.com/lists/musl/2018/04/26/4
+    # which explains why it only shows up on Musl.
+    ./gold-fix-fallocate.patch
   ]
   # For version 2.31 exclusively
   ++ lib.optionals (!stdenv.targetPlatform.isVc4 && minorVersion == "2.31") [
