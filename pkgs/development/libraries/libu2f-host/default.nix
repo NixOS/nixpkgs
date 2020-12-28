@@ -1,5 +1,9 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, json_c, hidapi }:
+{ stdenv, callPackage, fetchurl, fetchpatch, pkgconfig, json_c, hidapi }:
 
+let
+  # expose udev rules without needing to have a full build of libu2f-host
+  udev-rules = callPackage ./udev-rules.nix { };
+in
 stdenv.mkDerivation rec {
   pname = "libu2f-host";
   version = "1.1.10";
@@ -22,6 +26,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ json_c hidapi ];
 
   doCheck = true;
+
+  passthru = {
+    inherit udev-rules;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://developers.yubico.com/libu2f-host";
