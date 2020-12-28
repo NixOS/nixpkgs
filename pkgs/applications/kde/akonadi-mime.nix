@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "akonadi-mime";
+  pname = "akonadi-mime";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 ];
     maintainers = kdepimTeam;

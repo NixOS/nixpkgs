@@ -289,6 +289,12 @@
    </listitem>
    <listitem>
      <para>
+       The <literal>wafHook</literal> hook does not wrap Python anymore.
+       Packages depending on <literal>wafHook</literal> need to include any Python into their <literal>nativeBuildInputs</literal>.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
        Starting with version 1.7.0, the project formerly named <literal>CodiMD</literal>
        is now named <literal>HedgeDoc</literal>.
        New installations will no longer use the old name for users, state directories and such, this needs to be considered when moving state to a more recent NixOS installation.

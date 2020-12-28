@@ -13,7 +13,7 @@
 }:
 
 mkDerivation {
-  name = "knotes";
+  pname = "knotes";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kcompletion kconfig kconfigwidgets kcoreaddons kcrash
