@@ -31,8 +31,8 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ numpy astropy aqstropy-healpix astropy-helpers scipy ];
-  nativeBuildInputs = [ astropy-helpers cyqthon astropy-extension-helpers setuptools_scm ];
+  propagatedBuildInputs = [ numpy astropy astropy-healpix astropy-helpers scipy ];
+  nativeBuildInputs = [ astropy-helpers cython astropy-extension-helpers setuptools_scm ];
   checkInputs = [ pytest pytest-astropy ];
 
   # Tests must be run in the build directory
