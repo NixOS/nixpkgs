@@ -28783,8 +28783,6 @@ in
 
   mpvc = callPackage ../applications/misc/mpvc { };
 
-  aucdtect = callPackage ../tools/audio/aucdtect { };
-
   togglesg-download = callPackage ../tools/misc/togglesg-download { };
 
   discord = import ../applications/networking/instant-messengers/discord {
