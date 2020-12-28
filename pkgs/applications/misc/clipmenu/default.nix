@@ -1,25 +1,18 @@
-{ clipnotify, makeWrapper, xsel, dmenu, util-linux, gawk, stdenv, fetchFromGitHub, fetchpatch, lib }:
+{ clipnotify, makeWrapper, xsel, dmenu, util-linux, gawk, stdenv, fetchFromGitHub, lib }:
 let
   runtimePath = lib.makeBinPath [ clipnotify xsel dmenu util-linux gawk ];
 in
 stdenv.mkDerivation rec {
   pname = "clipmenu";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner  = "cdown";
     repo   = "clipmenu";
     rev    = version;
-    sha256 = "0ddj5xcwrdb2qvrndvhv8j6swcqc8dvv5i00pqk35rfk5mrl4hwv";
+    sha256 = "sha256-nvctEwyho6kl4+NXi76jT2kG7nchmI2a7mgxlgjXA5A=";
   };
-  
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/cdown/clipmenu/commit/443b58583ef216e2405e4a38d401f7c36386d21e.patch";
-      sha256 = "12m4rpw7jbr31c919llbsmn8dcf7yh9aijln4iym6h2lylzqzzdz";
-    })
-  ];
-  
+
   makeFlags = [ "PREFIX=$(out)" ];
   buildInputs = [ makeWrapper ];
   nativeBuildInputs = [ xsel clipnotify ];
