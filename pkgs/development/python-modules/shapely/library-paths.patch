@@ -2,7 +2,7 @@ diff --git a/shapely/geos.py b/shapely/geos.py
 index d5a67d2..19b7ffc 100644
 --- a/shapely/geos.py
 +++ b/shapely/geos.py
-@@ -61,127 +61,10 @@ def load_dll(libname, fallbacks=None, mode=DEFAULT_MODE):
+@@ -61,127 +61,17 @@ def load_dll(libname, fallbacks=None, mode=DEFAULT_MODE):
              "Could not find lib {} or load any of its variants {}.".format(
                  libname, fallbacks or []))
  
@@ -128,7 +128,14 @@ index d5a67d2..19b7ffc 100644
 -    free.argtypes = [c_void_p]
 -    free.restype = None
 +_lgeos = CDLL('@libgeos_c@')
-+free = CDLL('@libc@').free
++if sys.platform == 'darwin':
++    # ctypes.CDLL(None) internally calls dlopen(NULL), and as the dlopen
++    # manpage says, "If filename is NULL, then the returned handle is for the
++    # main program". This way we can let the linker do the work to figure out
++    # which libc Python is actually using.
++    free = CDLL(None).free
++else:
++    free = CDLL('@libc@').free
 +free.argtypes = [c_void_p]
 +free.restype = None
  
