@@ -45,7 +45,7 @@
 let
 
   mkElpaPackages = import ../applications/editors/emacs-modes/elpa-packages.nix {
-    inherit lib stdenv texinfo;
+    inherit lib stdenv texinfo writeText;
   };
 
   # Contains both melpa stable & unstable
