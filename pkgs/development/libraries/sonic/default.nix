@@ -1,27 +1,33 @@
-{ stdenv, fetchFromGitHub, fftw }:
+{ stdenv, fetchFromGitHub, fftw, installShellFiles }:
 
 stdenv.mkDerivation {
-  pname = "sonic";
-  version = "2018-07-06";
+  pname = "sonic-unstable";
+  version = "2020-12-27";
 
   src = fetchFromGitHub {
     owner = "waywardgeek";
     repo = "sonic";
-    rev = "71c51195de71627d7443d05378c680ba756545e8";
-    sha256 = "1z9qdk3pk507hdg39v2z1hanlw2wv7mhn8br4cb8qry9z9qwi87i";
+    rev = "4a052d9774387a9d9b4af627f6a74e1694419960";
+    sha256 = "0ah54nizb6iwcx277w104wsfnx05vrp4sh56d2pfxhf8xghg54m6";
   };
 
-  postPatch = ''
-    sed -i "s,^PREFIX=.*,PREFIX=$out," Makefile
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" "CC=cc" ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ fftw ];
+
+  postInstall = ''
+    installManPage sonic.1
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libsonic.so.0.3.0 $out/lib/libsonic.so.0.3.0
+  '';
 
   meta = with stdenv.lib; {
     description = "Simple library to speed up or slow down speech";
     homepage = "https://github.com/waywardgeek/sonic";
     license = licenses.asl20;
     maintainers = with maintainers; [ aske ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ion";
@@ -19,6 +19,10 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
   };
+
+  buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin [
+    Security
+  ];
 
   passthru = {
     shellPath = "/bin/ion";
