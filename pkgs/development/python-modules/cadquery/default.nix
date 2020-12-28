@@ -1,25 +1,25 @@
 { lib
-  , buildPythonPackage
-  , isPy3k
-  , pythonOlder
-  , pythonAtLeast
-  , fetchFromGitHub
-  , pyparsing
-  , opencascade
-  , stdenv
-  , python
-  , cmake
-  , swig
-  , ninja
-  , smesh
-  , freetype
-  , libGL
-  , libGLU
-  , libX11
-  , six
-  , pytest
-  , makeFontsConf
-  , freefont_ttf
+, buildPythonPackage
+, isPy3k
+, pythonOlder
+, pythonAtLeast
+, fetchFromGitHub
+, pyparsing
+, opencascade
+, stdenv
+, python
+, cmake
+, swig
+, smesh
+, freetype
+, libGL
+, libGLU
+, libX11
+, six
+, pytest
+, makeFontsConf
+, freefont_ttf
+, Cocoa
 }:
 
 let
@@ -38,7 +38,6 @@ let
     nativeBuildInputs = [
       cmake
       swig
-      ninja
     ];
 
     buildInputs = [
@@ -49,7 +48,7 @@ let
       libGL
       libGLU
       libX11
-    ];
+    ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
 
     propagatedBuildInputs = [
       six
