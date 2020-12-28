@@ -24603,6 +24603,8 @@ in
 
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
 
+  pure-maps = libsForQt5.callPackage ../applications/misc/pure-maps { };
+
   pwdsafety = callPackage ../tools/security/pwdsafety { };
 
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
