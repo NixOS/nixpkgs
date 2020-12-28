@@ -1,22 +1,22 @@
-{stdenv, fetchurl, fetchFromBitbucket, autoreconfHook, gtk-doc, gettext
+{ stdenv, fetchurl, fetchFromBitbucket, autoreconfHook, gtk-doc, gettext
 , pkgconfig, glib, libxml2, gobject-introspection, gnome-common, unzip
 }:
 
 stdenv.mkDerivation rec {
   pname = "liblangtag";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromBitbucket {
     owner = "tagoh";
     repo = pname;
     rev = version;
-    sha256 = "19dk2qsg7f3ig9xz8d73jvikmf5kvrwi008wrz2psxinbdml442g";
+    sha256 = "10rycs8xrxzf9frzalv3qx8cs1jcildhrr4imzxdmr9f4l585z96";
   };
 
   core_zip = fetchurl {
     # please update if an update is available
-    url = "http://www.unicode.org/Public/cldr/33.1/core.zip";
-    sha256 = "0f195aald02ng3ch2q1wf59b5lwp2bi1cd8ia7572pbyy2w8w8cp";
+    url = "http://www.unicode.org/Public/cldr/37/core.zip";
+    sha256 = "0myswkvvaxvrz9zwq4zh65sygfd9n72cd5rk4pwacqba4nxgb4xs";
   };
 
   language_subtag_registry = fetchurl {
