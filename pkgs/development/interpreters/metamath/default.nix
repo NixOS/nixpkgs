@@ -1,15 +1,17 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
-stdenv.mkDerivation {
-  pname = "metamath";
+let
   version = "0.194";
+in stdenv.mkDerivation {
+  pname = "metamath";
+  inherit version;
 
   buildInputs = [ autoreconfHook ];
 
   src = fetchFromGitHub {
     owner = "metamath";
     repo = "metamath-exe";
-    rev = "01ff8f0d7a4b4e90c9885f9021fe8a944771cee6";
+    rev = "v${version}";
     sha256 = "1bc5h2jdqbgna8zbhqyphlqcldz4vddg72r2rnjjjzxnxb2skvj7";
   };
 
