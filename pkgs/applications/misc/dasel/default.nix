@@ -20,6 +20,17 @@ buildGoModule rec {
     -ldflags=-s -w -X github.com/tomwright/dasel/internal.Version=${version}
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    if [[ "$("$out/bin/${pname}" --version)" == "${pname} version ${version}" ]]; then
+      echo "" | $out/bin/dasel put object -p yaml -t string -t int "my.favourites" colour=red number=3 | grep -q red
+      echo '${pname} smoke check passed'
+    else
+      echo '${pname} smoke check failed'
+      return 1
+    fi
+  '';
+
   meta = with stdenv.lib; {
     description = "Query and update data structures from the command line";
     longDescription = ''
