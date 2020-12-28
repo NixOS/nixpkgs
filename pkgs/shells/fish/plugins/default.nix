@@ -6,4 +6,6 @@ lib.makeScope newScope (self: with self; {
 
   fishtape = callPackage ./fishtape.nix { };
 
+  pure = callPackage ./pure.nix { };
+
 })
