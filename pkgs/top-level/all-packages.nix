@@ -15857,6 +15857,8 @@ in
 
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
 
+  mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };
+
   mapnik = callPackage ../development/libraries/mapnik { };
 
   marisa = callPackage ../development/libraries/marisa {};
