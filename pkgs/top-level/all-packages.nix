@@ -16657,6 +16657,8 @@ in
 
   rubberband = callPackage ../development/libraries/rubberband { };
 
+  s2geometry = callPackage ../development/libraries/s2geometry { };
+
   /* This package references ghc844, which we no longer have. Unfortunately, I
      have been unable to mark it as "broken" in a way that the ofBorg bot
      recognizes. Since I don't want to merge code into master that generates
