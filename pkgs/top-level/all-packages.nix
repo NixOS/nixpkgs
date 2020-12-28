@@ -8799,7 +8799,9 @@ in
 
   fish-foreign-env = callPackage ../shells/fish/fish-foreign-env { };
 
-  ion = callPackage ../shells/ion { };
+  ion = callPackage ../shells/ion {
+    inherit (darwin) Security;
+  };
 
   jush = callPackage ../shells/jush { };
 
@@ -9086,8 +9088,9 @@ in
     crystal_0_33
     crystal_0_34
     crystal_0_35
-    crystal
-    crystal2nix;
+    crystal;
+
+  crystal2nix = callPackage ../development/compilers/crystal2nix { };
 
   icr = callPackage ../development/tools/icr { };
 
