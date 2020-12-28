@@ -10,7 +10,6 @@
 , bash-completion
 , dbus
 , gnome3
-, libxml2
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_42
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     libxslt
-    libxml2
     glib
     docbook-xsl-nons
     docbook_xml_dtd_42
