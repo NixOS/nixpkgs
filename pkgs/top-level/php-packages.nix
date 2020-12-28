@@ -80,6 +80,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     oci8 = callPackage ../development/php-packages/oci8 { };
 
+    pdlib = callPackage ../development/php-packages/pdlib { };
+
     pcov = callPackage ../development/php-packages/pcov { };
 
     pcs = buildPecl {
