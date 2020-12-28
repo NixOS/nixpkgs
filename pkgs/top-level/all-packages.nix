@@ -28872,7 +28872,7 @@ in
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
 
   vdr = callPackage ../applications/video/vdr { };
-  vdrPlugins = recurseIntoAttrs (callPackages ../applications/video/vdr/plugins.nix { });
+  vdrPlugins = recurseIntoAttrs (callPackage ../applications/video/vdr/plugins.nix { });
   wrapVdr = callPackage ../applications/video/vdr/wrapper.nix {};
 
   chrome-export = callPackage ../tools/misc/chrome-export {};
