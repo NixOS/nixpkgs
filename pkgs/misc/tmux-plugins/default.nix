@@ -290,6 +290,7 @@ in rec {
 
   onedark-theme = mkDerivation {
     pluginName = "onedark-theme";
+    rtpFilePath = "tmux-onedark-theme.tmux";
     version = "unstable-2020-06-07";
     src = fetchFromGitHub {
       owner = "odedlaz";
