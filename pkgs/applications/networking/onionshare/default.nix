@@ -56,7 +56,7 @@ let
 
 in rec {
   onionshare = buildPythonApplication {
-    pname = "onionshare";
+    pname = "onionshare-cli";
     inherit version meta;
     src = "${src}/cli";
     patches = [
@@ -95,7 +95,7 @@ in rec {
   };
 
   onionshare-gui = buildPythonApplication {
-    pname = "onionshare-gui";
+    pname = "onionshare";
     inherit version meta;
     src = "${src}/desktop/src";
     patches = [
