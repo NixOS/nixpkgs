@@ -104,6 +104,45 @@ in
         type = types.bool;
       };
 
+      monitorsConfig = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = ''
+          <monitors version="2">
+            <configuration>
+              <logicalmonitor>
+                <x>0</x>
+                <y>0</y>
+                <scale>1</scale>
+                <primary>yes</primary>
+                <monitor>
+                  <monitorspec>
+                    <connector>DP-0</connector>
+                    <vendor>XYZ</vendor>
+                    <product>ABC123</product>
+                    <serial>DEF456</serial>
+                  </monitorspec>
+                  <mode>
+                    <width>2560</width>
+                    <height>1440</height>
+                    <rate>144</rate>
+                  </mode>
+                </monitor>
+              </logicalmonitor>
+            </configuration>
+          </monitors>
+        '';
+        description = let
+          url = "https://wiki.archlinux.org/index.php/GDM#Setup_default_monitor_settings";
+        in ''
+          Monitor config to be placed in
+          <filename>.config/monitors.xml</filename> in the GDM home directory,
+          typically copied from <filename>~/.config/monitors.xml</filename>
+          after setting up in GNOME. See the ArchWiki GDM documentation at
+          <link xlink:href="${url}"/> for more information.
+        '';
+      };
+
     };
 
   };
@@ -151,6 +190,11 @@ in
 
     systemd.tmpfiles.rules = [
       "d /run/gdm/.config 0711 gdm gdm"
+    ] ++ optionals (cfg.gdm.monitorsConfig != null) [
+      (
+        let monitorsXml = pkgs.writeText "gdm-monitors.xml" cfg.gdm.monitorsConfig;
+        in "L+ /run/gdm/.config/monitors.xml - - - - ${monitorsXml}"
+      )
     ] ++ optionals config.hardware.pulseaudio.enable [
       "d /run/gdm/.config/pulse 0711 gdm gdm"
       "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
