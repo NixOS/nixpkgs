@@ -7411,7 +7411,9 @@ in
 
   smenu = callPackage ../tools/misc/smenu { };
 
-  smesh = callPackage ../development/libraries/smesh {};
+  smesh = callPackage ../development/libraries/smesh {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   smu = callPackage ../tools/text/smu { };
 
