@@ -3,10 +3,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "mousepad";
-  version = "0.4.2";
+  version = "0.5.1";
   odd-unstable = false;
 
-  sha256 = "0a35vaq4l0d8vzw7hqpvbgkr3wj1sqr2zvj7bc5z4ikz2cppqj7p";
+  sha256 = "EAQnG+uy73HMY2l2zemb2oa8S8G7KpA/N1DKFGflKcQ=";
 
   nativeBuildInputs = [ exo ];
   buildInputs = [ glib gtk3 gtksourceview3 xfconf ];
