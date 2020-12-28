@@ -179,8 +179,6 @@ in
           ExecStop = optionalString cfg.leaveOnStop "${cfg.package}/bin/consul leave";
           PermissionsStartOnly = true;
           User = optionalString cfg.dropPrivileges "consul";
-          Restart = "on-failure";
-          TimeoutStartSec = "infinity";
           DynamicUser = cfg.dropPrivileges;
           Type = "notify";
           KillMode = "process";
