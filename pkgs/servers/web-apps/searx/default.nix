@@ -22,7 +22,7 @@ buildPythonApplication rec {
     pyyaml lxml grequests flaskbabel flask requests
     gevent speaklater Babel pytz dateutil pygments
     pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
-    jinja2
+    jinja2 werkzeug
   ];
 
   checkInputs = [

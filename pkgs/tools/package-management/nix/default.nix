@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchFromGitHub, callPackage
+{ lib, fetchurl, fetchpatch, fetchFromGitHub, callPackage
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
@@ -23,13 +23,13 @@ common =
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
   , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
   , enableStatic ? false
-  , name, suffix ? "", src
+  , name, suffix ? "", src, patches ? []
 
   }:
   let
      sh = busybox-sandbox-shell;
      nix = stdenv.mkDerivation rec {
-      inherit name src;
+      inherit name src patches;
       version = lib.getVersion name;
 
       is24 = lib.versionAtLeast version "2.4pre";
@@ -207,6 +207,13 @@ in rec {
       rev = "5a6ddb3de14a1684af6c793d663764d093fa7846";
       sha256 = "0qhd3nxvqzszzsfvh89xhd239ycqb0kq2n0bzh9br78pcb60vj3g";
     };
+
+    patches = [
+      (fetchpatch { # Fix build on gcc10
+        url = "https://github.com/NixOS/nix/commit/d4870462f8f539adeaa6dca476aff6f1f31e1981.patch";
+        sha256 = "mTvLvuxb2QVybRDgntKMq+b6da/s3YgM/ll2rWBeY/Y=";
+      })
+    ];
 
     inherit storeDir stateDir confDir boehmgc;
   });
