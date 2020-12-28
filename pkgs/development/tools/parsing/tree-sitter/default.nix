@@ -29,7 +29,7 @@ let
   };
 
   update-all-grammars = import ./update.nix {
-    inherit writeShellScript nix-prefetch-git curl jq xe src formats;
+    inherit writeShellScript nix-prefetch-git curl jq xe src formats lib;
   };
 
   fetchGrammar = (v: fetchgit {inherit (v) url rev sha256 fetchSubmodules; });

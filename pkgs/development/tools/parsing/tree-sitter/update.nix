@@ -1,10 +1,10 @@
-{ writeShellScript, nix-prefetch-git, formats
+{ writeShellScript, nix-prefetch-git, formats, lib
 , curl, jq, xe
 , src }:
 
 let
   # Grammars we want to fetch from the tree-sitter github orga
-  knownTreeSitterOrgGrammarRepos = jsonFile "known-tree-sitter-org-grammar-repos" [
+  knownTreeSitterOrgGrammarRepos = [
     "tree-sitter-javascript"
     "tree-sitter-c"
     "tree-sitter-swift"
@@ -34,9 +34,10 @@ let
     "tree-sitter-ql"
     "tree-sitter-embedded-template"
   ];
+  knownTreeSitterOrgGrammarReposJson = jsonFile "known-tree-sitter-org-grammar-repos" knownTreeSitterOrgGrammarRepos;
 
   # repos of the tree-sitter github orga we want to ignore (not grammars)
-  ignoredTreeSitterOrgRepos = jsonFile "ignored-tree-sitter-org-repos" [
+  ignoredTreeSitterOrgRepos = [
     "tree-sitter"
     "tree-sitter-cli"
     # this is the haskell language bindings, tree-sitter-haskell is the grammar
@@ -56,6 +57,7 @@ let
     # website
     "tree-sitter.github.io"
   ];
+  ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
   jsonFile = name: val: (formats.json {}).generate name val;
 
@@ -63,8 +65,8 @@ let
   checkTreeSitterRepos = writeShellScript "get-grammars.sh" ''
     set -euo pipefail
     res=$(${jq}/bin/jq \
-      --slurpfile known "${knownTreeSitterOrgGrammarRepos}" \
-      --slurpfile ignore "${ignoredTreeSitterOrgRepos}" \
+      --slurpfile known "${knownTreeSitterOrgGrammarReposJson}" \
+      --slurpfile ignore "${ignoredTreeSitterOrgReposJson}" \
       '. - ($known[0] + $ignore[0])' \
       )
     if [ ! "$res" == "[]" ]; then
@@ -76,23 +78,20 @@ let
 
   # TODO
   urlEscape = x: x;
-  # TODO
-  urlEscapeSh = writeShellScript "escape-url" ''printf '%s' "$1"'';
 
   # generic bash script to find the latest github release for a repo
-  latestGithubRelease = { owner }: writeShellScript "latest-github-release" ''
+  latestGithubRelease = { owner, repo }: writeShellScript "latest-github-release" ''
     set -euo pipefail
-    repo="$1"
     res=$(${curl}/bin/curl \
       --silent \
-      "https://api.github.com/repos/${urlEscape owner}/$(${urlEscapeSh} "$repo")/releases/latest")
+      "https://api.github.com/repos/${urlEscape owner}/${urlEscape repo}/releases/latest")
     if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
       echo "rate limited" >&2
     fi
     release=$(printf "%s" "$res" | ${jq}/bin/jq '.tag_name')
     # github sometimes returns an empty list even tough there are releases
     if [ "$release" = "null" ]; then
-      echo "uh-oh, latest for $repo is not there, using HEAD" >&2
+      echo "uh-oh, latest for ${owner + "/" + repo} is not there, using HEAD" >&2
       release="HEAD"
     fi
     echo "$release"
@@ -103,10 +102,10 @@ let
     set -euo pipefail
     res=$(${curl}/bin/curl \
       --silent \
-      'https://api.github.com/orgs/${orga}/repos?per_page=100')
+      'https://api.github.com/orgs/${urlEscape orga}/repos?per_page=100')
 
     if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
-      echo "rate limited" >&2
+      echo "rate limited" >&2   #
     fi
 
     printf "%s" "$res" | ${jq}/bin/jq 'map(.name)' \
@@ -114,17 +113,18 @@ let
   '';
 
   # update one tree-sitter grammar repo and print their nix-prefetch-git output
-  updateGrammar = { owner }: writeShellScript "update-grammar.sh" ''
+  updateGrammar = { owner, repo }: writeShellScript "update-grammar.sh" ''
     set -euo pipefail
-    repo="$1"
-    latest="$(${latestGithubRelease { inherit owner; }} "$repo")"
-    echo "Fetching latest release ($latest) of $repo …" >&2
+    latest="$(${latestGithubRelease { inherit owner repo; }})"
+    echo "Fetching latest release ($latest) of ${repo} …" >&2
     ${nix-prefetch-git}/bin/nix-prefetch-git \
       --quiet \
       --no-deepClone \
-      --url "https://github.com/${urlEscape owner}/$(${urlEscapeSh} "$repo")" \
+      --url "https://github.com/${urlEscape owner}/${urlEscape repo}" \
       --rev "$latest"
     '';
+
+  foreachSh = list: f: lib.concatMapStringsSep "\n" f list;
 
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
     set -euo pipefail
@@ -132,19 +132,16 @@ let
     treeSitterRepos=$(${latestGithubRepos { orga = "tree-sitter"; }})
     echo "checking the tree-sitter repo list against the grammars we know" 1>&2
     printf '%s' "$treeSitterRepos" | ${checkTreeSitterRepos}
-    knownGrammars=$(cat "${knownTreeSitterOrgGrammarRepos}")
-    # change the json list into a item-per-line bash format
-    grammarNames=$(printf '%s' "$knownGrammars" | ${jq}/bin/jq --raw-output '.[]')
     outputDir="${toString ./.}/grammars"
+    echo "writing files to $outputDir" 1>&2
     mkdir -p "$outputDir"
-    updateCommand=$(printf \
-      '${updateGrammar { owner = "tree-sitter"; }} "$1" > "%s/$1.json"' \
-      "$outputDir")
-    printf '%s' "$grammarNames" \
-      | ${xe}/bin/xe -j2 -s "$updateCommand"
+    ${foreachSh knownTreeSitterOrgGrammarRepos
+      (repo: ''${updateGrammar { owner = "tree-sitter"; inherit repo; }} > $outputDir/${repo}.json'')}
     ( echo "{"
-      printf '%s' "$grammarNames" \
-        | ${xe}/bin/xe -s 'printf "  %s = (builtins.fromJSON (builtins.readFile ./%s.json));\n" "$1" "$1"'
+      ${foreachSh knownTreeSitterOrgGrammarRepos
+        (repo: ''
+           # indentation hack
+             printf "  %s = (builtins.fromJSON (builtins.readFile ./%s.json));\n" "${repo}" "${repo}"'')}
       echo "}" ) \
       > "$outputDir/default.nix"
   '';
