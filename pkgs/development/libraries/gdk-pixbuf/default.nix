@@ -109,6 +109,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  separateDebugInfo = stdenv.isLinux;
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
