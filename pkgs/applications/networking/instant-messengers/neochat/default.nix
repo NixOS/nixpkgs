@@ -7,6 +7,7 @@
 , qttools
 , qtquickcontrols2
 , qtmultimedia
+, qtgraphicaleffects
 , qtkeychain
 , libpulseaudio
 , olm
@@ -14,6 +15,7 @@
 , cmark
 , extra-cmake-modules
 , kirigami2
+, kitemmodels
 , ki18n
 , knotifications
 , kdbusaddons
@@ -40,10 +42,12 @@ mkDerivation rec {
     qtkeychain
     qtquickcontrols2
     qtmultimedia
+    qtgraphicaleffects
     olm
     libsecret
     cmark
     kirigami2
+    kitemmodels
     ki18n
     knotifications
     kdbusaddons

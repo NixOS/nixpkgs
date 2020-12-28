@@ -222,6 +222,8 @@ in
 
   ptags = callPackage ../development/tools/misc/ptags { };
 
+  ptouch-print = callPackage ../misc/ptouch-print { };
+
   demoit = callPackage ../servers/demoit { };
 
   deviceTree = callPackage ../os-specific/linux/device-tree {};
@@ -3381,6 +3383,8 @@ in
 
   dnstop = callPackage ../tools/networking/dnstop { };
 
+  dnsx = callPackage ../tools/security/dnsx { };
+
   dhcp = callPackage ../tools/networking/dhcp { };
 
   dhcpdump = callPackage ../tools/networking/dhcpdump { };
@@ -5251,6 +5255,8 @@ in
   lunar-client = callPackage ../games/lunar-client {};
 
   lvmsync = callPackage ../tools/backup/lvmsync { };
+
+  kapp = callPackage ../tools/networking/kapp {};
 
   kdbg = libsForQt5.callPackage ../development/tools/misc/kdbg { };
 
@@ -19949,6 +19955,8 @@ in
 
   nuclear = callPackage ../applications/audio/nuclear { };
 
+  nuclei = callPackage ../tools/security/nuclei { };
+
   nullmailer = callPackage ../servers/mail/nullmailer {
     stdenv = gccStdenv;
   };
@@ -24541,6 +24549,10 @@ in
 
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
 
+  terminal-typeracer = callPackage ../applications/misc/terminal-typeracer {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 
   uhhyou.lv2 = callPackage ../applications/audio/uhhyou.lv2 { };
@@ -28780,8 +28792,6 @@ in
   mg = callPackage ../applications/editors/mg { };
 
   mpvc = callPackage ../applications/misc/mpvc { };
-
-  aucdtect = callPackage ../tools/audio/aucdtect { };
 
   togglesg-download = callPackage ../tools/misc/togglesg-download { };
 

@@ -1,18 +1,23 @@
-{ lib, fetchpatch, mkXfceDerivation, dbus-glib, gtk2, libical, libnotify, tzdata
-, popt, libxfce4ui, xfce4-panel, withPanelPlugin ? true }:
+{ stdenv, fetchurl, fetchpatch, pkg-config, intltool, dbus-glib, gtk2, libical, libnotify, tzdata
+, popt, libxfce4ui, xfce4-panel, withPanelPlugin ? true, wrapGAppsHook, xfce }:
 
 assert withPanelPlugin -> libxfce4ui != null && xfce4-panel != null;
 
 let
-  inherit (lib) optionals;
+  inherit (stdenv.lib) optionals;
 in
 
-mkXfceDerivation {
-  category = "archive";
+stdenv.mkDerivation rec {
   pname = "orage";
   version = "4.12.1";
 
-  sha256 = "04z6y1vfaz1im1zq1zr7cf8pjibjhj9zkyanbp7vn30q520yxa0m";
+  src = fetchurl {
+    url = "https://archive.xfce.org/src/apps/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "0qlhvnl2m33vfxqlbkic2nmfpwyd4mq230jzhs48cg78392amy9w";
+  };
+
+  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
+
   buildInputs = [ dbus-glib gtk2 libical libnotify popt ]
     ++ optionals withPanelPlugin [ libxfce4ui xfce4-panel ];
 
@@ -33,7 +38,16 @@ mkXfceDerivation {
     })
   ];
 
-  meta = {
-    description = "A simple calendar application with reminders";
+  passthru.updateScript = xfce.updateScript {
+    inherit pname version;
+    attrPath = "xfce.${pname}";
+    versionLister = xfce.archiveLister "apps" pname;
+  };
+
+  meta = with stdenv.lib; {
+    description = "Simple calendar application with reminders";
+    homepage = "https://git.xfce.org/archive/orage/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }
