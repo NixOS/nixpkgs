@@ -4756,6 +4756,8 @@ in
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
+  httpx = callPackage ../tools/security/httpx { };
+
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;
