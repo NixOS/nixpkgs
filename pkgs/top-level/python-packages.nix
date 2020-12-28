@@ -5117,6 +5117,8 @@ in {
 
   pyepsg = callPackage ../development/python-modules/pyepsg { };
 
+  pyerfa = callPackage ../development/python-modules/pyerfa { };
+
   pyexcel = callPackage ../development/python-modules/pyexcel { };
 
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
