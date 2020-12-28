@@ -260,7 +260,7 @@ rec {
     src = fetchzip {
       stripRoot = false;
       url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/10.1/${name}/${name}.zip";
-      sha256 = "q0O6OE2u0bdz1+nOkzXDrrOOzoEbVaXnejx4lX7uZgk=";
+      sha256 = "1hbswcar3a5cw20mwrj82w9pvpkvvj6jrvqqf1lincva0r5sl7h8";
     };
 
     meta = with stdenv.lib; {
