@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchpatch, fetchFromGitHub, cmake, boost17x, ceres-solver, eigen,
+{ mkDerivation, lib, fetchFromGitHub, cmake, boost17x, ceres-solver, eigen,
   freeimage, glog, libGLU, glew, qtbase,
   cudaSupport ? false, cudatoolkit ? null }:
 
