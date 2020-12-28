@@ -4772,6 +4772,8 @@ in
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
+  httpx = callPackage ../tools/security/httpx { };
+
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
 
   humanfriendly = with python3Packages; toPythonApplication humanfriendly;
@@ -6230,6 +6232,8 @@ in
 
   oathToolkit = callPackage ../tools/security/oath-toolkit { };
 
+  oatpp = callPackage ../development/libraries/oatpp { };
+
   obex_data_server = callPackage ../tools/bluetooth/obex-data-server { };
 
   obexd = callPackage ../tools/bluetooth/obexd { };
@@ -6282,6 +6286,8 @@ in
   };
 
   onioncircuits = callPackage ../tools/security/onioncircuits { };
+
+  onlykey-cli = callPackage ../tools/security/onlykey-cli { };
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { };
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { };
@@ -6993,6 +6999,8 @@ in
   rtmpdump_gnutls = rtmpdump.override { gnutlsSupport = true; opensslSupport = false; };
 
   rtptools = callPackage ../tools/networking/rtptools { };
+
+  rtss = callPackage ../development/tools/misc/rtss { };
 
   reaverwps = callPackage ../tools/networking/reaver-wps {};
 
@@ -11550,6 +11558,8 @@ in
 
   fffuu = haskell.lib.justStaticExecutables (haskellPackages.callPackage ../tools/misc/fffuu { });
 
+  ffuf = callPackage ../tools/security/ffuf { };
+
   flow = callPackage ../development/tools/analysis/flow {
     ocamlPackages = ocaml-ng.ocamlPackages_4_07;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -15748,7 +15758,7 @@ in
 
     kreport = callPackage ../development/libraries/kreport { };
 
-    KQuickImageEdit = callPackage ../development/libraries/KQuickImageEdit { };
+    kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
 
     ldutils = callPackage ../development/libraries/ldutils { };
 
@@ -22095,8 +22105,6 @@ in
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
-  spectral = qt5.callPackage ../applications/networking/instant-messengers/spectral { };
-
   spotify-cli-linux = callPackage ../applications/audio/spotify-cli-linux { };
 
   spotifyd = callPackage ../applications/audio/spotifyd {
@@ -23248,6 +23256,8 @@ in
   rep-gtk = callPackage ../development/libraries/rep-gtk { };
 
   sawfish = callPackage ../applications/window-managers/sawfish { };
+
+  sc68 = callPackage ../applications/audio/sc68 { };
 
   sidplayfp = callPackage ../applications/audio/sidplayfp { };
 
@@ -27600,6 +27610,8 @@ in
 
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
+  stellarsolver = libsForQt5.callPackage ../development/libraries/stellarsolver { };
+
   astrolabe-generator = callPackage ../applications/science/astronomy/astrolabe-generator { };
 
   tulip = callPackage ../applications/science/misc/tulip {
@@ -27670,6 +27682,8 @@ in
   apmplanner2 = libsForQt514.callPackage ../applications/science/robotics/apmplanner2 { };
 
   betaflight-configurator = callPackage ../applications/science/robotics/betaflight-configurator { };
+
+  mission-planner = callPackage ../applications/science/robotics/mission-planner { };
 
   ### MISC
 
@@ -29112,6 +29126,8 @@ in
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
 
   navidrome = callPackage ../servers/misc/navidrome {};
+
+  zalgo = callPackage ../tools/misc/zalgo { };
 
   zettlr = callPackage ../applications/misc/zettlr { };
 
