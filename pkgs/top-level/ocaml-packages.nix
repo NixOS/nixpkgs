@@ -796,6 +796,8 @@ let
 
     parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 
+    pcap-format = callPackage ../development/ocaml-modules/pcap-format { };
+
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
     phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
