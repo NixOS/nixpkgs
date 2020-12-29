@@ -25,7 +25,7 @@ in
         default = "weekly";
         example = "3:15";
         description = ''
-          How often or when upgrade occurs. For most desktop and server systems
+          How often or when garbage collection is performed. For most desktop and server systems
           a sufficient garbage collection is once a week.
 
           The format is described in
