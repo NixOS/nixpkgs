@@ -4467,6 +4467,8 @@ in {
 
   naturalsort = callPackage ../development/python-modules/naturalsort { };
 
+  nbclassic = callPackage ../development/python-modules/nbclassic { };
+
   nbclient = callPackage ../development/python-modules/nbclient { };
 
   nbconflux = callPackage ../development/python-modules/nbconflux { };
