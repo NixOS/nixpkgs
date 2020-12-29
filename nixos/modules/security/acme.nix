@@ -62,24 +62,30 @@ let
   # Ensures that directories which are shared across all certs
   # exist and have the correct user and group, since group
   # is configurable on a per-cert basis.
-  userMigrationService = {
-    description = "Fix owner and group of all ACME certificates";
-
+  userMigrationService = let
     script = with builtins; concatStringsSep "\n" (mapAttrsToList (cert: data: ''
-      for fixpath in /var/lib/acme/${escapeShellArg cert} /var/lib/acme/.lego/${escapeShellArg cert}; do
+      chown -R acme .lego/accounts
+      for fixpath in ${escapeShellArg cert} .lego/${escapeShellArg cert}; do
         if [ -d "$fixpath" ]; then
           chmod -R u=rwX,g=rX,o= "$fixpath"
           chown -R acme:${data.group} "$fixpath"
         fi
       done
     '') certConfigs);
+  in {
+    description = "Fix owner and group of all ACME certificates";
 
-    serviceConfig = {
+    serviceConfig = commonServiceConfig // {
       # We don't want this to run every time a renewal happens
       RemainAfterExit = true;
 
       # These StateDirectory entries negate the need for tmpfiles
-      StateDirectory = "acme acme/.lego acme/.lego/accounts";
+      StateDirectory = [ "acme" "acme/.lego" "acme/.lego/accounts" ];
+      StateDirectoryMode = 755;
+      WorkingDirectory = "/var/lib/acme";
+
+      # Run the start script as root
+      ExecStart = "+" + (pkgs.writeShellScript "acme-fixperms" script);
     };
   };
 
@@ -153,7 +159,6 @@ let
   in {
     inherit accountHash cert selfsignedDeps;
 
-    webroot = data.webroot;
     group = data.group;
 
     renewTimer = {
@@ -193,7 +198,10 @@ let
 
         StateDirectory = "acme/${cert}";
 
-        BindPaths = "/var/lib/acme/.minica:/tmp/ca /var/lib/acme/${cert}:/tmp/${keyName}";
+        BindPaths = [
+          "/var/lib/acme/.minica:/tmp/ca"
+          "/var/lib/acme/${cert}:/tmp/${keyName}"
+        ];
       };
 
       # Working directory will be /tmp
@@ -234,17 +242,19 @@ let
         # Keep in mind that these directories will be deleted if the user runs
         # systemctl clean --what=state
         # acme/.lego/${cert} is listed for this reason.
-        StateDirectory =
-          "acme/${cert} " +
-          "acme/.lego/${cert} " +
-          "acme/.lego/${cert}/${certDir} " +
-          "acme/.lego/accounts/${accountHash} ";
+        StateDirectory = [
+          "acme/${cert}"
+          "acme/.lego/${cert}"
+          "acme/.lego/${cert}/${certDir}"
+          "acme/.lego/accounts/${accountHash}"
+        ];
 
         # Needs to be space separated, but can't use a multiline string because that'll include newlines
-        BindPaths =
-          "${accountDir}:/tmp/accounts " +
-          "/var/lib/acme/${cert}:/tmp/out " +
-          "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates ";
+        BindPaths = [
+          "${accountDir}:/tmp/accounts"
+          "/var/lib/acme/${cert}:/tmp/out"
+          "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
+        ];
 
         # Only try loading the credentialsFile if the dns challenge is enabled
         EnvironmentFile = mkIf useDns data.credentialsFile;
@@ -257,7 +267,16 @@ let
             ${data.postRun}
           fi
         '');
-      };
+
+      } // (optionalAttrs (data.webroot != null) {
+        # Lego always tries to create .well-known/acme-challenge, but if webroot is owned
+        # by the wrong user then it will crash and break cert renewal.
+        ExecStartPre = "+" + pkgs.writeShellScript "acme-${cert}-make-webroot" ''
+          mkdir -p '${data.webroot}/.well-known/acme-challenge'
+          cd '${data.webroot}'
+          chown 'acme:${data.group}' . .well-known .well-known/acme-challenge
+        '';
+      });
 
       # Working directory will be /tmp
       script = ''
@@ -675,15 +694,6 @@ in {
       } // (mapAttrs' (cert: conf: nameValuePair "acme-selfsigned-${cert}" conf.selfsignService) certConfigs)));
 
       systemd.timers = mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewTimer) certConfigs;
-
-      systemd.tmpfiles.rules = unique (
-        flatten (
-          mapAttrsToList (
-            cert: conf:
-              optional (conf.webroot != null) "d ${conf.webroot}/.well-known/acme-challenge - acme ${conf.group}"
-          ) certConfigs
-        )
-      );
 
       systemd.targets = let
         # Create some targets which can be depended on to be "active" after cert renewals
