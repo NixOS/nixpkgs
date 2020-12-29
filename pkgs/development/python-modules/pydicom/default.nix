@@ -1,14 +1,27 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, fetchFromGitHub
 , isPy27
 , pytest
-, pytestrunner
 , pytestCheckHook
 , numpy
 , pillow
 }:
+let pydicom-data = buildPythonPackage rec {
+  version = "2020.07.27";
+  pname = "pydicom-data";
 
+  src = fetchFromGitHub {
+    owner = "pydicom";
+    repo = pname;
+    rev = "bbb723879690bb77e077a6d57657930998e92bd5";
+    sha256 = "0fdb3rqjd1s2hjylf1vrlzhhkxnb9837s5cnb2idb95gx6ska8kl";
+  };
+
+  buildInputs = [ pytest ];
+};
+in
 buildPythonPackage rec {
   version = "2.1.1";
   pname = "pydicom";
@@ -21,11 +34,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy pillow ];
 
-  checkInputs = [ pytest pytestrunner pytestCheckHook ];
-  disabledTests = [ "test_invalid_bit_depth_raises" ];
-  # harmless failure; see https://github.com/pydicom/pydicom/issues/1119
+  checkInputs = [ pytestCheckHook pydicom-data ];
+  # This test assumes that the directory for pydicom-data is writable, and
+  # writes to $HOME
+  disabledTests = [ "test_data_manager" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pydicom.github.io";
     description = "Pure-Python package for working with DICOM files";
     license = licenses.mit;
