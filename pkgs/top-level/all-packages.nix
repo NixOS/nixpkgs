@@ -15071,6 +15071,8 @@ in
 
   mbedtls = callPackage ../development/libraries/mbedtls { };
 
+  mdctags = callPackage ../development/tools/misc/mdctags { };
+
   mdds = callPackage ../development/libraries/mdds { };
 
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
@@ -19980,6 +19982,8 @@ in
   material-icons = callPackage ../data/fonts/material-icons { };
 
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
+
+  meslo-lgs-nf = callPackage ../data/fonts/meslo-lgs-nf {};
 
   migmix = callPackage ../data/fonts/migmix {};
 

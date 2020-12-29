@@ -2,20 +2,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-tunein";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "Mopidy-TuneIn";
-    sha256 = "0insasf4w8ajsqjh5zmax7pkzmrk1p245vh4y8ddicldj45p6qfj";
+    sha256 = "1mvfhka8wi835yk9869yn3b6mdkfwqkylp14vpjkbm42d0kj4lkc";
   };
 
   propagatedBuildInputs = [
     mopidy
   ];
-
-  # tests fail with "ValueError: Namespace Gst not available" in mopidy itself
-  doCheck = false;
 
   pythonImportsCheck = [ "mopidy_tunein.tunein" ];
 
