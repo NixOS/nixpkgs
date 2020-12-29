@@ -671,34 +671,6 @@ self: super: {
   # The standard libraries are compiled separately.
   idris = generateOptparseApplicativeCompletion "idris" (dontCheck super.idris);
 
-  # build servant docs from the repository
-  servant =
-    let
-      ver = super.servant.version;
-      docs = pkgs.stdenv.mkDerivation {
-        name = "servant-sphinx-documentation-${ver}";
-        src = "${pkgs.fetchFromGitHub {
-          owner = "haskell-servant";
-          repo = "servant";
-          rev = "v${ver}";
-          sha256 = "0xk3czk3jhqjxhy0g8r2248m8yxgvmqhgn955k92z0h7p02lfs89";
-        }}/doc";
-        # Needed after sphinx 1.7.9 -> 1.8.3
-        postPatch = ''
-          substituteInPlace conf.py --replace "'.md': CommonMarkParser," ""
-        '';
-        nativeBuildInputs = with pkgs.buildPackages.python3Packages; [ sphinx recommonmark sphinx_rtd_theme ];
-        makeFlags = [ "html" ];
-        installPhase = ''
-          mv _build/html $out
-        '';
-      };
-    in overrideCabal super.servant (old: {
-      postInstall = old.postInstall or "" + ''
-        ln -s ${docs} ''${!outputDoc}/share/doc/servant
-      '';
-    });
-
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
 
