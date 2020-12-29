@@ -169,7 +169,9 @@ in {
 
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
-  adguardhome= callPackage ../development/python-modules/adguardhome { };
+  adguardhome = callPackage ../development/python-modules/adguardhome { };
+
+  advantage-air = callPackage ../development/python-modules/advantage-air { };
 
   aenum = callPackage ../development/python-modules/aenum { };
 
