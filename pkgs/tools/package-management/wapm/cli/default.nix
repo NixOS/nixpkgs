@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage rec {
   pname = "wapm-cli";
   version = "0.5.0";
-  cargoSha256 = "1bx9rv6bkmkpysz0zfcwfv88r47d5nbzw0zwakqs3n7mdsyb4q2x";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
