@@ -3,74 +3,27 @@
 
 set -efuo pipefail
 
-print_usage() {
-    echo "Usage: $0 [PATH|FILE]"
-    echo "This file expects a 'fetch.sh' containing"
-    echo "   WGET_ARGS=(<base url>)"
-    echo "in PATH or passed as FILE. If fetches all *.tar.xz.(sig|mirrorlist|sha256) files"
-    echo "from <base url> and constructs a 'srcs.nix' file from them."
-    echo ""
-    echo "Sample invocation: $0 pkgs/development/libraries/kde-frameworks/"
-}
-
-if [ $# -eq 0 ]; then
-    print_usage
-    exit -2
-fi
-
 SRCS=
 if [ -d "$1" ]; then
     SRCS="$(pwd)/$1/srcs.nix"
     . "$1/fetch.sh"
-elif [ -f "$1" ]; then
+else
     SRCS="$(pwd)/$(dirname $1)/srcs.nix"
     . "$1"
-else
-    print_usage
-    exit -1
 fi
 
 tmp=$(mktemp -d)
 pushd $tmp >/dev/null
-wget -nH -r -c --no-parent "${WGET_ARGS[@]}" -A '*.tar.xz.sig' -A '*.tar.xz.mirrorlist' -A '*.tar.xz.sha256' >/dev/null
-# for KDE:
-#  > wget will just find *.sig files - we'll fetch *.mirrorlist files manually and extract sha256 sums from the content
-# for QT:
-#  > wget will "traverse" *.mirrorlist files to find *.sha256 files
-# Keep *.sig files and *.sha256 files only
-
-# Delete *.mirrorlist (they were only needed to find *.sha256 files)
-find -type f -name '*.mirrorlist' -delete
-
-# we need the host to properly construct urls for 'manual' mirrorlist fetching for kde
-host=$(echo ${WGET_ARGS[@]} | cut -d/ -f1-3)
+wget -nH -r -c --no-parent "${WGET_ARGS[@]}" >/dev/null
 
 csv=$(mktemp)
-# KDE sig files
-find . -type f -name '*.sig' | while read src; do
-    filename="${src##*/}"
-    filename="${filename%.sig}"
-    path=$(dirname ${src:2})
-    mirrorlistFile="${filename}.mirrorlist"
-    wget -c "${host}/${path}/${mirrorlistFile}"
-    # "parsing" html - this seems wrong, but could not find sha256 sums anywhere else for kde archives
-    sha256=$(gawk -F "</*tr>|</*td>|<td style=\"[^\"]*\">" "/SHA256/ { print \$5 }" $mirrorlistFile)
+find . -type f | while read src; do
+    # Sanitize file name
+    filename=$(basename "$src" | tr '@' '_')
     nameVersion="${filename%.tar.*}"
     name=$(echo "$nameVersion" | sed -e 's,-[[:digit:]].*,,' | sed -e 's,-opensource-src$,,' | sed -e 's,-everywhere-src$,,')
     version=$(echo "$nameVersion" | sed -e 's,^\([[:alpha:]][[:alnum:]]*-\)\+,,')
-    echo "$name,$version,$sha256,$filename,$path" >>$csv
-done
-
-# QT sha256 files
-find . -type f -name '*.sha256' | while read src; do
-    filename="${src##*/}"
-    filename="${filename%.sha256}"
-    sha256=$(gawk '{ print $1 }' "$src")
-    nameVersion="${filename%.tar.*}"
-    name=$(echo "$nameVersion" | sed -e 's,-[[:digit:]].*,,' | sed -e 's,-opensource-src$,,' | sed -e 's,-everywhere-src$,,')
-    version=$(echo "$nameVersion" | sed -e 's,^\([[:alpha:]][[:alnum:]]*-\)\+,,')
-    path=$(dirname ${src:2})
-    echo "$name,$version,$sha256,$filename,$path" >>$csv
+    echo "$name,$version,$src,$filename" >>$csv
 done
 
 cat >"$SRCS" <<EOF
@@ -84,10 +37,10 @@ EOF
 gawk -F , "{ print \$1 }" $csv | sort | uniq | while read name; do
     versions=$(gawk -F , "/^$name,/ { print \$2 }" $csv)
     latestVersion=$(echo "$versions" | sort -rV | head -n 1)
-    sha256=$(gawk -F , "/^$name,$latestVersion,/ { print \$3 }" $csv)
+    src=$(gawk -F , "/^$name,$latestVersion,/ { print \$3 }" $csv)
     filename=$(gawk -F , "/^$name,$latestVersion,/ { print \$4 }" $csv)
-    path=$(gawk -F , "/^$name,$latestVersion,/ { print \$5 }" $csv)
-    url="$path/$filename"
+    url="${src:2}"
+    sha256=$(nix-hash --type sha256 --base32 --flat "$src")
     cat >>"$SRCS" <<EOF
   $name = {
     version = "$latestVersion";
@@ -106,4 +59,3 @@ popd >/dev/null
 rm -fr $tmp >/dev/null
 
 rm -f $csv >/dev/null
-
