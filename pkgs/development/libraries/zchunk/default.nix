@@ -1,15 +1,17 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkgconfig
 , meson
 , ninja
 , zstd
 , curl
+, argp-standalone
 }:
 
 stdenv.mkDerivation rec {
   pname = "zchunk";
-  version = "1.1.6";
+  version = "1.1.8";
 
   outputs = [ "out" "lib" "dev" ];
 
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "zchunk";
     repo = pname;
     rev = version;
-    sha256 = "1j05f26xppwbkxrm11895blm75i1a6p9q23x7wlkqw198mpnpbbv";
+    sha256 = "0q1jafxh5nqgn2w5ciljkh8h46xma0qia8a5rj9m0pxixcacqj6q";
   };
 
   nativeBuildInputs = [
@@ -29,7 +31,17 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zstd
     curl
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin argp-standalone;
+
+  # Darwin needs a patch for argp-standalone usage and differing endian.h location on macOS
+  # https://github.com/zchunk/zchunk/pull/35
+  patches = [
+  (fetchpatch {
+    name = "darwin-support.patch";
+    url = "https://github.com/zchunk/zchunk/commit/f7db2ac0a95028a7f82ecb89862426bf53a69232.patch";
+    sha256 = "0cm84gyii4ly6nsmagk15g9kbfa13rw395nqk3fdcwm0dpixlkh4";
+  })
+];
 
   meta = with stdenv.lib; {
     description = "File format designed for highly efficient deltas while maintaining good compression";
