@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  dontConfigure = true;
+  dontBuild = true;
+  dontPatchELF = true;
+  dontStrip = true;
 
   installPhase = ''
     mkdir -p $out
@@ -32,12 +35,9 @@ stdenv.mkDerivation rec {
     ln -s $out/share/doc/gcc-arm-none-eabi/man $out/man
   '';
 
-  dontPatchELF = true;
-  dontStrip = true;
-
   preFixup = ''
     find $out -type f | while read f; do
-      patchelf $f > /dev/null 2>&1 || continue
+      patchelf "$f" > /dev/null 2>&1 || continue
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
       patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ "$out" stdenv.cc.cc ncurses5 python27 ]} "$f" || true
     done

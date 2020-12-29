@@ -6,19 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
-  version = "7-2018-q2-update";
-  subdir = "7-2018q2";
+  version = "10-2020-q4-major";
+  subdir = "10-2020q4";
 
   suffix = {
+    aarch64-linux = "aarch64-linux";
     x86_64-darwin = "mac";
-    x86_64-linux  = "linux";
+    x86_64-linux  = "x86_64-linux";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-${suffix}.tar.bz2";
     sha256 = {
-      x86_64-darwin = "0nc7m0mpa39qyhfyydxkkyqm7spfc27xf6ygi2vd2aym4r9azi61";
-      x86_64-linux  = "0sgysp3hfpgrkcbfiwkp0a7ymqs02khfbrjabm52b5z61sgi05xv";
+      aarch64-linux = "0spkbh7vnda1w0nvavk342nb24nqxn8kln3k9j85mzil560qqg9l";
+      x86_64-darwin = "1h5xn0npwkilqxg7ifrymsl7kjpafr9r9gjqgcpb0kjxavijvldy";
+      x86_64-linux  = "066nvhg5zdf3jvy9w23y439ghf1hvbicdyrrw9957gwb8ym4q4r1";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -46,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://developer.arm.com/open-source/gnu-toolchain/gnu-rm";
     license = with licenses; [ bsd2 gpl2 gpl3 lgpl21 lgpl3 mit ];
     maintainers = with maintainers; [ prusnak ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 }

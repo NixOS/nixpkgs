@@ -9488,7 +9488,8 @@ in
   gcc-arm-embedded-7 = callPackage ../development/compilers/gcc-arm-embedded/7 {};
   gcc-arm-embedded-8 = callPackage ../development/compilers/gcc-arm-embedded/8 {};
   gcc-arm-embedded-9 = callPackage ../development/compilers/gcc-arm-embedded/9 {};
-  gcc-arm-embedded = gcc-arm-embedded-9;
+  gcc-arm-embedded-10 = callPackage ../development/compilers/gcc-arm-embedded/10 {};
+  gcc-arm-embedded = gcc-arm-embedded-10;
 
   gdc = gdc9;
   gdc9 = wrapCC (gcc9.cc.override {
