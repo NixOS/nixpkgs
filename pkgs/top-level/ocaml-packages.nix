@@ -1021,6 +1021,8 @@ let
 
     topkg = callPackage ../development/ocaml-modules/topkg { };
 
+    trie = callPackage ../development/ocaml-modules/trie { };
+
     tsdl = callPackage ../development/ocaml-modules/tsdl { };
 
     twt = callPackage ../development/ocaml-modules/twt { };
