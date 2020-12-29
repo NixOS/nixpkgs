@@ -34,6 +34,8 @@ let
 
     apron = callPackage ../development/ocaml-modules/apron { };
 
+    arp = callPackage ../development/ocaml-modules/arp { };
+
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
     astring = callPackage ../development/ocaml-modules/astring { };
