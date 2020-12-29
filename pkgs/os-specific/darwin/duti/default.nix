@@ -12,7 +12,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [autoreconfHook];
   buildInputs = [darwin.apple_sdk.frameworks.ApplicationServices];
-  configureFlags = ["--with-macosx-sdk=/homeless-shelter"];
+  configureFlags = [
+    "--with-macosx-sdk=/homeless-shelter"
+
+    # needed to prevent duti from trying to guess our sdk
+    # NOTE: this is different than stdenv.hostPlatform.config!
+    "--host=x86_64-apple-darwin18"
+  ];
+
   meta = with lib; {
     description = "A command-line tool to select default applications for document types and URL schemes on Mac OS X";
     longDescription = ''
