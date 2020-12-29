@@ -543,6 +543,8 @@ let
       inherit (pkgs) gnuplot;
     };
 
+    mew = callPackage ../development/ocaml-modules/mew { };
+
     mezzo = callPackage ../development/compilers/mezzo { };
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
