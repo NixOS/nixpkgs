@@ -670,6 +670,27 @@ let
       '';
     };
 
+    smokeping = {
+      exporterConfig = {
+        enable = true;
+        hosts = ["127.0.0.1"];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-smokeping-exporter.service")
+        wait_for_open_port(9374)
+        wait_until_succeeds(
+            "curl -sSf localhost:9374/metrics | grep '{}' | grep -qv ' 0$'".format(
+                'smokeping_requests_total{host="127.0.0.1",ip="127.0.0.1"} '
+            )
+        )
+        wait_until_succeeds(
+            "curl -sSf localhost:9374/metrics | grep -q '{}'".format(
+                'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1"}'
+            )
+        )
+      '';
+    };
+
     snmp = {
       exporterConfig = {
         enable = true;
