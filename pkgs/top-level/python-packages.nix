@@ -187,6 +187,8 @@ in {
 
   agate-sql = callPackage ../development/python-modules/agate-sql { };
 
+  agent-py = callPackage ../development/python-modules/agent-py { };
+
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
   aioconsole = callPackage ../development/python-modules/aioconsole { };
