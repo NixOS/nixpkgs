@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, groff, installShellFiles, util-linux }:
+{ stdenv, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, util-linux }:
 
 buildGoPackage rec {
   pname = "hub";
@@ -20,6 +20,8 @@ buildGoPackage rec {
 
   postPatch = ''
     patchShebangs .
+    substituteInPlace git/git.go --replace "cmd.New(\"git\")" "cmd.New(\"${git}/bin/git\")"
+    substituteInPlace commands/args.go --replace "Executable:  \"git\"" "Executable:  \"${git}/bin/git\""
   '';
 
   postInstall = ''
