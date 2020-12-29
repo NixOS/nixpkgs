@@ -15,8 +15,9 @@ let
     lua = self;
     overrides = packageOverrides;
   };
-
-plat = if stdenv.isLinux then "linux"
+luaversion = with sourceVersion; "${major}.${minor}";
+linuxReadlineSuffix = if (lib.versionAtLeast luaversion "5.4") && (readline!=null) then "-readline" else "";
+plat = if stdenv.isLinux then "linux${linuxReadlineSuffix}"
        else if stdenv.isDarwin then "macosx"
        else if stdenv.hostPlatform.isMinGW then "mingw"
        else if stdenv.isFreeBSD then "freebsd"
@@ -27,7 +28,7 @@ plat = if stdenv.isLinux then "linux"
 
 self = stdenv.mkDerivation rec {
   pname = "lua";
-  luaversion = with sourceVersion; "${major}.${minor}";
+  inherit luaversion;
   version = "${luaversion}.${sourceVersion.patch}";
 
   src = fetchurl {
