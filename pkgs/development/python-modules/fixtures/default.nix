@@ -5,6 +5,7 @@
 , testtools
 , mock
 , python
+, isPy39
 }:
 
 buildPythonPackage rec {
@@ -26,5 +27,6 @@ buildPythonPackage rec {
     description = "Reusable state for writing clean tests and more";
     homepage = "https://pypi.python.org/pypi/fixtures";
     license = lib.licenses.asl20;
+    broken = isPy39; # see https://github.com/testing-cabal/fixtures/issues/44
   };
 }
