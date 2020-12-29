@@ -5124,7 +5124,7 @@ in
 
   peruse = libsForQt5.callPackage ../tools/misc/peruse { };
 
-  ksmoothdock = libsForQt514.callPackage ../applications/misc/ksmoothdock { };
+  ksmoothdock = libsForQt5.callPackage ../applications/misc/ksmoothdock { };
 
   kstars = libsForQt514.callPackage ../applications/science/astronomy/kstars { };
 
