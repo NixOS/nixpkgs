@@ -23,7 +23,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.29.2";
+  version = "2.30.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1h87yv117ypnc0yi86941089c14n91gixk8b6shj2y35prp47z7j";
+    sha256 = "06ad6dylgla34k9am7d5z8y3rryc8ln3ibq5z0d74rcm20hm0wsm";
   };
 
   outputs = [ "out" ] ++ stdenv.lib.optional withManual "doc";
@@ -52,12 +52,6 @@ stdenv.mkDerivation {
     ./ssh-path.patch
     ./git-send-email-honor-PATH.patch
     ./installCheck-path.patch
-    (fetchpatch {
-      # https://github.com/git/git/pull/925
-      name = "make-manual-reproducible.patch";
-      url = "https://github.com/git/git/commit/7a68e9e0b8eda91eb576bbbc5ed66298f3ab761c.patch";
-      sha256 = "02naws82pd3vvwrrgqn91kid8qkjihyjaz1ahgjz8qlmnn2avf5n";
-    })
   ];
 
   postPatch = ''
@@ -298,6 +292,7 @@ stdenv.mkDerivation {
     disable_test t0001-init shared
     disable_test t1301-shared-repo
     disable_test t5324-split-commit-graph 'split commit-graph respects core.sharedrepository'
+    disable_test t4129-apply-samemode 'do not use core.sharedRepository for working tree files'
 
     # Our patched gettext never fallbacks
     disable_test t0201-gettext-fallbacks
