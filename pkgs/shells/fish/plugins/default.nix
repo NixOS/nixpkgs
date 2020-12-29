@@ -6,6 +6,8 @@ lib.makeScope newScope (self: with self; {
 
   fishtape = callPackage ./fishtape.nix { };
 
+  foreign-env = callPackage ./foreign-env { };
+
   pure = callPackage ./pure.nix { };
 
 })

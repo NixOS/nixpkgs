@@ -8841,8 +8841,6 @@ in
 
   fishPlugins = recurseIntoAttrs (callPackage ../shells/fish/plugins { });
 
-  fish-foreign-env = callPackage ../shells/fish/fish-foreign-env { };
-
   ion = callPackage ../shells/ion {
     inherit (darwin) Security;
   };
