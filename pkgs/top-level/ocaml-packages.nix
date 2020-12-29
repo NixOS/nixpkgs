@@ -205,7 +205,21 @@ let
 
     dns =  callPackage ../development/ocaml-modules/dns { };
 
+    dns-certify =  callPackage ../development/ocaml-modules/dns/certify.nix { };
+
+    dns-cli =  callPackage ../development/ocaml-modules/dns/cli.nix { };
+
     dns-client =  callPackage ../development/ocaml-modules/dns/client.nix { };
+
+    dns-mirage = callPackage ../development/ocaml-modules/dns/mirage.nix { };
+
+    dns-resolver = callPackage ../development/ocaml-modules/dns/resolver.nix { };
+
+    dns-server = callPackage ../development/ocaml-modules/dns/server.nix { };
+
+    dns-stub = callPackage ../development/ocaml-modules/dns/stub.nix { };
+
+    dns-tsig = callPackage ../development/ocaml-modules/dns/tsig.nix { };
 
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
