@@ -738,6 +738,8 @@ let
 
     syslog = callPackage ../development/ocaml-modules/syslog { };
 
+    syslog-message = callPackage ../development/ocaml-modules/syslog-message { };
+
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
     ocaml-version = callPackage ../development/ocaml-modules/ocaml-version { };
