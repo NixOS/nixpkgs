@@ -68,7 +68,7 @@ in {
         example = "04:40";
         description = ''
           How often or when upgrade occurs. For most desktop and server systems
-          a sufficient trimming frequency is once a day.
+          a sufficient upgrade frequency is once a day.
 
           The format is described in
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
