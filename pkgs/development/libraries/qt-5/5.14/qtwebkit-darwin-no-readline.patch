@@ -28,18 +28,3 @@ diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
  #define HAVE_SYS_TIMEB_H 1
  
  #if !PLATFORM(GTK) && !PLATFORM(QT)
-diff --git a/Source/WTF/wtf/PlatformMac.cmake b/Source/WTF/wtf/PlatformMac.cmake
---- a/Source/WTF/wtf/PlatformMac.cmake
-+++ b/Source/WTF/wtf/PlatformMac.cmake
-@@ -2,11 +2,9 @@ set(WTF_LIBRARY_TYPE SHARED)
- 
- find_library(COCOA_LIBRARY Cocoa)
- find_library(COREFOUNDATION_LIBRARY CoreFoundation)
--find_library(READLINE_LIBRARY Readline)
- list(APPEND WTF_LIBRARIES
-     ${COREFOUNDATION_LIBRARY}
-     ${COCOA_LIBRARY}
--    ${READLINE_LIBRARY}
-     libicucore.dylib
- )
- 
