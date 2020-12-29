@@ -27,6 +27,7 @@ let
     ver = version;
     tag = ver.gitTag;
     atLeast27 = lib.versionAtLeast ver.majMin "2.7";
+    atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     baseruby = self.override {
       useRailsExpress = false;
       docSupport = false;
@@ -109,7 +110,9 @@ let
           (import ./patchsets.nix {
             inherit patchSet useRailsExpress ops fetchpatch;
             patchLevel = ver.patchLevel;
-          }).${ver.majMinTiny};
+          }).${ver.majMinTiny}
+          ++ op atLeast27 ./do-not-regenerate-revision.h.patch
+          ++ op (atLeast30 && useRailsExpress) ./do-not-update-gems-baseruby.patch;
 
         postUnpack = opString rubygemsSupport ''
           rm -rf $sourceRoot/{lib,test}/rubygems*
@@ -121,16 +124,11 @@ let
           sed -i configure.ac -e '/config.guess/d'
           cp --remove-destination ${config}/config.guess tool/
           cp --remove-destination ${config}/config.sub tool/
+        '' + opString (!atLeast30) ''
           # Make the build reproducible for ruby <= 2.7
           # See https://github.com/ruby/io-console/commit/679a941d05d869f5e575730f6581c027203b7b26#diff-d8422f096931c58d4463e2489f62a228b0f24f0492950ba88c8c89a0d741cfe6
           sed -i ext/io/console/io-console.gemspec -e '/s\.date/d'
         '';
-
-        # Force the revision.h generation. Somehow `revision.tmp` is an empty
-        # file and because we don't add `git` to buildInputs, hence the check is
-        # always true.
-        # https://github.com/ruby/ruby/commit/97a5af62a318fcd93a4e5e4428d576c0280ddbae
-        buildFlags = lib.optionals atLeast27 [ "REVISION_LATEST=0" ];
 
         configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby-${version}"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
@@ -149,6 +147,10 @@ let
 
         preConfigure = opString docSupport ''
           configureFlagsArray+=("--with-ridir=$devdoc/share/ri")
+
+          # rdoc creates XDG_DATA_DIR (defaulting to $HOME/.local/share) even if
+          # it's not going to be used.
+          export HOME=$TMPDIR
         '';
 
         # fails with "16993 tests, 2229489 assertions, 105 failures, 14 errors, 89 skips"
@@ -259,6 +261,14 @@ in {
     sha256 = {
       src = "1m63461mxi3fg4y3bspbgmb0ckbbb1ldgf9xi0piwkpfsk80cmvf";
       git = "0kbgznf1yprfp9645k31ra5f4757b7fichzi0hdg6nxkj90853s0";
+    };
+  };
+
+  ruby_3_0 = generic {
+    version = rubyVersion "3" "0" "0" "";
+    sha256 = {
+      src = "0a4fmxafxvkg1m738g2lmkhipwnmd96kzqy1m9kvk3n1l50x2gm1";
+      git = "0fvnxv97m94nridlc5nvvrlg53pr5g042dkfc5ysd327s7xj4cjp";
     };
   };
 }
