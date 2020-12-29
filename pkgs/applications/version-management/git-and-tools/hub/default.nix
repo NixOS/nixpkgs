@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, util-linux }:
+{ stdenv, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, util-linux, nixosTests }:
 
 buildGoPackage rec {
   pname = "hub";
@@ -34,6 +34,8 @@ buildGoPackage rec {
     make man-pages
     installManPage share/man/man[1-9]/*.[1-9]
   '';
+
+  passthru.tests = { inherit (nixosTests) hub; };
 
   meta = with stdenv.lib; {
     description = "Command-line wrapper for git that makes you better at GitHub";
