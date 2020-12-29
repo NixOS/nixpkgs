@@ -432,10 +432,10 @@ let
         regular expression matches.
       '';
 
-      action = mkDefOpt (types.enum ["replace" "keep" "drop"]) "replace" ''
+      action =
+        mkDefOpt (types.enum ["replace" "keep" "drop" "hashmod" "labelmap" "labeldrop" "labelkeep"]) "replace" ''
         Action to perform based on regex matching.
       '';
-
     };
   };
 
