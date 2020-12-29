@@ -101,6 +101,11 @@ in rustPlatform.buildRustPackage {
     };
     inherit grammars;
     inherit builtGrammars;
+
+    tests = {
+      # make sure all grammars build
+      builtGrammars = lib.recurseIntoAttrs builtGrammars;
+    };
   };
 
   meta = {
