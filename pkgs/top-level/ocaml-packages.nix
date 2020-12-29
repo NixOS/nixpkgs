@@ -571,6 +571,8 @@ let
 
     mew = callPackage ../development/ocaml-modules/mew { };
 
+    mew_vi = callPackage ../development/ocaml-modules/mew_vi { };
+
     mezzo = callPackage ../development/compilers/mezzo { };
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
