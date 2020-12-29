@@ -3562,6 +3562,8 @@ in {
 
   jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
 
+  jupyter-packaging = callPackage ../development/python-modules/jupyter-packaging { };
+
   jupyter-repo2docker = callPackage ../development/python-modules/jupyter-repo2docker {
     pkgs-docker = pkgs.docker;
   };
