@@ -611,6 +611,8 @@ let
 
     mirage-unix = callPackage ../development/ocaml-modules/mirage-unix { };
 
+    mirage-vnetif = callPackage ../development/ocaml-modules/mirage-vnetif { };
+
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
