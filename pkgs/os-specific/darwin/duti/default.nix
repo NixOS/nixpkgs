@@ -2,13 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "duti";
-  version = "1.5.4pre";
+  version = "1.5.5pre";
   src = fetchFromGitHub {
     owner = "moretension";
     repo = pname;
-    rev = "7dbcae86f99fedef5a6c4311f032a0f1ca0539cc";
-    sha256 = "1z9sa0yk87vs57d5338y6lvm1v1vvynxb7dy1x5aqzkcr0imhljl";
+    rev = "fe3d3dc411bcea6af7a8cbe53c0e08ed5ecacdb2";
+    sha256 = "1pg4i6ghpib2gy1sqpml7dbnhr1vbr43fs2pqkd09i4w3nmgpic9";
   };
+
   nativeBuildInputs = [autoreconfHook];
   buildInputs = [darwin.apple_sdk.frameworks.ApplicationServices];
   configureFlags = ["--with-macosx-sdk=/homeless-shelter"];
