@@ -13,7 +13,7 @@
     "ads" = ps: with ps; [ pyads ];
     "advantage_air" = ps: with ps; [ ]; # missing inputs: advantage_air
     "aftership" = ps: with ps; [ pyaftership ];
-    "agent_dvr" = ps: with ps; [ ]; # missing inputs: agent-py
+    "agent_dvr" = ps: with ps; [ agent-py ];
     "air_quality" = ps: with ps; [ ];
     "airly" = ps: with ps; [ ]; # missing inputs: airly
     "airvisual" = ps: with ps; [ pyairvisual ];
