@@ -12815,6 +12815,8 @@ in
 
   duckdb = callPackage ../development/libraries/duckdb {};
 
+  duckstation = libsForQt5.callPackage ../misc/emulators/duckstation {};
+
   easyloggingpp = callPackage ../development/libraries/easyloggingpp {};
 
   eccodes = callPackage ../development/libraries/eccodes {
