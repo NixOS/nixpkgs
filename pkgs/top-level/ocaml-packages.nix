@@ -838,6 +838,8 @@ let
 
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
+    tcpip = callPackage ../development/ocaml-modules/tcpip { };
+
     tsort = callPackage ../development/ocaml-modules/tsort { };
 
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
