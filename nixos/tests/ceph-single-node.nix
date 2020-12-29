@@ -31,7 +31,7 @@ let
   generateHost = { pkgs, cephConfig, networkConfig, ... }: {
     virtualisation = {
       memorySize = 512;
-      emptyDiskImages = [ 20480 20480 20480 ];
+      emptyDiskImages = [ 20480 20480 20480 1024 ];
       vlans = [ 1 ];
     };
 
@@ -124,8 +124,8 @@ let
 
     # Bootstrap osd 2 and 3 as bluestore, using ceph-volume
     monA.succeed(
-        "ceph-volume lvm create --no-systemd --data /dev/vdc",
-        "ceph-volume lvm create --no-systemd --data /dev/vdd",
+        "ceph-volume lvm create --no-systemd --bluestore --data /dev/vdc",
+        "ceph-volume lvm create --no-systemd --filestore --data /dev/vdd --journal /dev/vde",
         "systemctl start ceph-osd-${cfg.osd1.name}",
         "systemctl start ceph-osd-${cfg.osd2.name}",
     )
