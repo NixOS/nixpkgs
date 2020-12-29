@@ -685,6 +685,8 @@ in
 
   aide = callPackage ../tools/security/aide { };
 
+  aiodnsbrute = python3Packages.callPackage ../tools/security/aiodnsbrute { };
+
   aircrack-ng = callPackage ../tools/networking/aircrack-ng { };
 
   airfield = callPackage ../tools/networking/airfield { };
