@@ -501,6 +501,8 @@ let
 
     lwt_camlp4 = callPackage ../development/ocaml-modules/lwt/camlp4.nix { };
 
+    lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
+
     lwt_log = callPackage ../development/ocaml-modules/lwt_log { };
 
     lwt_ppx = callPackage ../development/ocaml-modules/lwt/ppx.nix { };
