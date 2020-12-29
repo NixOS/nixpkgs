@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
 
     # msbuild response files to use only the nixos source
     echo "/p:RestoreSources=nixos" > artifacts/mono-msbuild/MSBuild.rsp
-    echo "/p:RestoreSources=nixos" > src/MSBuild/MSBuild.rsp
 
     # not patchShebangs, there is /bin/bash in the body of the script as well
     substituteInPlace ./eng/cibuild_bootstrapped_msbuild.sh --replace /bin/bash ${stdenv.shell}
