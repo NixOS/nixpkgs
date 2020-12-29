@@ -59,6 +59,45 @@ let
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
+  # Additional grammars that are not in the official github orga.
+  # If you need a grammar that already exists in the official orga,
+  # make sure to give it a different name.
+  otherGrammars = {
+    "tree-sitter-lua" = {
+      orga = "nvim-treesitter";
+      repo = "tree-sitter-lua";
+    };
+  };
+
+  allGrammars =
+    let
+      treeSitterOrgaGrammars =
+        lib.listToAttrs (map (repo:
+          { name = repo;
+            value = {
+              orga = "tree-sitter";
+              inherit repo;
+            };
+          })
+        knownTreeSitterOrgGrammarRepos);
+
+    in
+      mergeAttrsUnique otherGrammars treeSitterOrgaGrammars;
+
+  # TODO: move to lib
+  mergeAttrsUnique = left: right:
+    let intersect = lib.intersectLists (lib.attrNames left) (lib.attrNames right); in
+    assert
+      lib.assertMsg (intersect == [])
+        (lib.concatStringsSep "\n" [
+          "mergeAttrsUnique: keys in attrset overlapping:"
+          "left: ${lib.generators.toPretty {} (lib.getAttrs intersect left)}"
+          "right: ${lib.generators.toPretty {} (lib.getAttrs intersect right)}"
+        ]);
+    left // right;
+
+
+
   jsonFile = name: val: (formats.json {}).generate name val;
 
   # check the tree-sitter orga repos
@@ -80,18 +119,18 @@ let
   urlEscape = x: x;
 
   # generic bash script to find the latest github release for a repo
-  latestGithubRelease = { owner, repo }: writeShellScript "latest-github-release" ''
+  latestGithubRelease = { orga, repo }: writeShellScript "latest-github-release" ''
     set -euo pipefail
     res=$(${curl}/bin/curl \
       --silent \
-      "https://api.github.com/repos/${urlEscape owner}/${urlEscape repo}/releases/latest")
+      "https://api.github.com/repos/${urlEscape orga}/${urlEscape repo}/releases/latest")
     if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message?')" =~ "rate limit" ]]; then
       echo "rate limited" >&2
     fi
     release=$(printf "%s" "$res" | ${jq}/bin/jq '.tag_name')
     # github sometimes returns an empty list even tough there are releases
     if [ "$release" = "null" ]; then
-      echo "uh-oh, latest for ${owner + "/" + repo} is not there, using HEAD" >&2
+      echo "uh-oh, latest for ${orga + "/" + repo} is not there, using HEAD" >&2
       release="HEAD"
     fi
     echo "$release"
@@ -113,18 +152,20 @@ let
   '';
 
   # update one tree-sitter grammar repo and print their nix-prefetch-git output
-  updateGrammar = { owner, repo }: writeShellScript "update-grammar.sh" ''
+  updateGrammar = { orga, repo }: writeShellScript "update-grammar.sh" ''
     set -euo pipefail
-    latest="$(${latestGithubRelease { inherit owner repo; }})"
+    latest="$(${latestGithubRelease { inherit orga repo; }})"
     echo "Fetching latest release ($latest) of ${repo} …" >&2
     ${nix-prefetch-git}/bin/nix-prefetch-git \
       --quiet \
       --no-deepClone \
-      --url "https://github.com/${urlEscape owner}/${urlEscape repo}" \
+      --url "https://github.com/${urlEscape orga}/${urlEscape repo}" \
       --rev "$latest"
     '';
 
-  foreachSh = list: f: lib.concatMapStringsSep "\n" f list;
+  foreachSh = attrs: f:
+    lib.concatMapStringsSep "\n" f
+    (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
 
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
     set -euo pipefail
@@ -135,13 +176,13 @@ let
     outputDir="${toString ./.}/grammars"
     echo "writing files to $outputDir" 1>&2
     mkdir -p "$outputDir"
-    ${foreachSh knownTreeSitterOrgGrammarRepos
-      (repo: ''${updateGrammar { owner = "tree-sitter"; inherit repo; }} > $outputDir/${repo}.json'')}
+    ${foreachSh allGrammars
+      ({name, orga, repo}: ''${updateGrammar { inherit orga repo; }} > $outputDir/${name}.json'')}
     ( echo "{"
-      ${foreachSh knownTreeSitterOrgGrammarRepos
-        (repo: ''
+      ${foreachSh allGrammars
+        ({name, ...}: ''
            # indentation hack
-             printf "  %s = (builtins.fromJSON (builtins.readFile ./%s.json));\n" "${repo}" "${repo}"'')}
+             printf "  %s = (builtins.fromJSON (builtins.readFile ./%s.json));\n" "${name}" "${name}"'')}
       echo "}" ) \
       > "$outputDir/default.nix"
   '';
