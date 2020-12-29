@@ -29,12 +29,12 @@ in rec {
   });
 
   lua5_3 = callPackage ./interpreter.nix {
-    sourceVersion = { major = "5"; minor = "3"; patch = "5"; };
-    hash = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac";
+    sourceVersion = { major = "5"; minor = "3"; patch = "6"; };
+    hash = "0q3d8qhd7p0b7a4mh9g7fxqksqfs6mr1nav74vq26qvkp2dxcpzw";
+
     patches =
-      lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ] ++ [
-        ./CVE-2019-6706.patch
-      ];
+      lib.optionals stdenv.isDarwin [ ./5.2.darwin.patch ];
+
     postConfigure = lib.optionalString (!stdenv.isDarwin) ''
       cat ${./lua-5.3-dso.make} >> src/Makefile
       sed -e 's/ALL_T *= */& $(LUA_SO)/' -i src/Makefile
