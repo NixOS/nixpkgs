@@ -270,6 +270,8 @@ let
 
     estring = callPackage ../development/ocaml-modules/estring { };
 
+    ethernet = callPackage ../development/ocaml-modules/ethernet { };
+
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
     ezxmlm = callPackage ../development/ocaml-modules/ezxmlm { };
