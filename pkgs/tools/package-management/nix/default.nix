@@ -37,7 +37,7 @@ common =
 
       VERSION_SUFFIX = suffix;
 
-      outputs = [ "out" "dev" "man" "doc" ];
+      outputs = [ "out" "dev" ] ++ lib.optionals (!(is24 && stdenv.hostPlatform != stdenv.buildPlatform)) [ "man" "doc" ];
 
       nativeBuildInputs =
         [ pkgconfig ]
@@ -54,7 +54,7 @@ common =
           brotli boost editline
         ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive gmock ]
+        ++ lib.optionals is24 [ libarchive gmock lowdown ]
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
@@ -122,7 +122,8 @@ common =
             stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system
         ) ''--with-system=${stdenv.hostPlatform.nix.system}''
            # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-        ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
+        ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing"
+        ++ lib.optional (is24 && stdenv.hostPlatform != stdenv.buildPlatform) "--disable-doc-gen";
 
       makeFlags = [ "profiledir=$(out)/etc/profile.d" ]
         ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0";
