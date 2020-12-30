@@ -3923,6 +3923,12 @@
     githubId = 2179419;
     name = "Arseniy Seroka";
   };
+  jakeisnt = {
+    name = "Jacob Chvatal";
+    email = "jake@isnt.online";
+    github = "jakeisnt";
+    githubId = 29869612;
+  };
   jakelogemann = {
     email = "jake.logemann@gmail.com";
     github = "jakelogemann";
