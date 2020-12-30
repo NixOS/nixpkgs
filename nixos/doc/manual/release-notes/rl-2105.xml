@@ -738,6 +738,13 @@ self: super:
      terminology has been deprecated and should be replaced with Far/Near in the configuration file.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The nix-gc service now accepts randomizedDelaySec (default: 0) and persistent (default: true) parameters.
+     By default nix-gc will now run immediately if it would have been triggered at least
+     once during the time when the timer was inactive.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
