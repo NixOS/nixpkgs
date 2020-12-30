@@ -13,6 +13,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests zeroconf protobuf casttube ];
 
+  pythonImportsCheck = [ "pychromecast" ];
+
   meta = with lib; {
     description = "Library for Python to communicate with the Google Chromecast";
     homepage    = "https://github.com/home-assistant-libs/pychromecast";
