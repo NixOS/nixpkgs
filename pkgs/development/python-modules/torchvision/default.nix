@@ -9,7 +9,7 @@
 , scipy
 , pillow
 , pytorch
-, pytestCheckHook
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -25,19 +25,21 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ libpng ninja which ];
 
-  TORCHVISION_INCLUDE="${libjpeg_turbo.dev}/include/";
-  TORCHVISION_LIBRARY="${libjpeg_turbo}/lib/";
+  TORCHVISION_INCLUDE = "${libjpeg_turbo.dev}/include/";
+  TORCHVISION_LIBRARY = "${libjpeg_turbo}/lib/";
 
   buildInputs = [ libjpeg_turbo libpng ];
 
   propagatedBuildInputs = [ numpy pillow pytorch scipy ];
 
-  # checks fail to import _C.so and various other failures
+  # tries to download many datasets for tests
   doCheck = false;
 
-  checkInputs = [ pytestCheckHook ];
+  checkPhase = ''
+    HOME=$TMPDIR py.test test --ignore=test/test_datasets_download.py
+  '';
 
-  pytestFlagsArray = [ "--ignore=test/test_datasets_download.py" ];
+  checkInputs = [ pytest ];
 
   meta = with stdenv.lib; {
     description = "PyTorch vision library";
