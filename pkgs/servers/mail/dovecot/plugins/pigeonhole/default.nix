@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dovecot, openssl }:
+{ stdenv, fetchpatch, fetchurl, dovecot, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "dovecot-pigeonhole";
@@ -10,6 +10,16 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ dovecot openssl ];
+
+  patches = [
+    # Fix mtime comparison so that scripts can be precompiled
+    # https://github.com/dovecot/pigeonhole/pull/4
+    (fetchpatch {
+      name = "binary-mtime.patch";
+      url = https://github.com/dovecot/pigeonhole/commit/3defbec146e195edad336a2c218f108462b0abd7.patch;
+      sha256 = "09mvdw8gjzq9s2l759dz4aj9man8q1akvllsq2j1xa2qmwjfxarp";
+    })
+  ];
 
   preConfigure = ''
     substituteInPlace src/managesieve/managesieve-settings.c --replace \
