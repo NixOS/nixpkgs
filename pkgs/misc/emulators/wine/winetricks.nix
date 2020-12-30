@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   # coreutils is for sha1sum
   pathAdd = stdenv.lib.concatMapStringsSep ":" (x: x + "/bin")
-    [ wine perl which coreutils zenity curl cabextract unzip p7zip gnused gnugrep bash ];
+    (stdenv.lib.filter (x: x != null)
+      [ wine perl which coreutils zenity curl cabextract unzip p7zip gnused gnugrep bash ]);
 
   makeFlags = [ "PREFIX=$(out)" ];
 
