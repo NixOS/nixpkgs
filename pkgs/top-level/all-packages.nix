@@ -1607,6 +1607,7 @@ in
 
   boringtun = callPackage ../tools/networking/boringtun { };
 
+  # Upstream recommends qt5.12 and it doesn't build with qt5.15
   boomerang = libsForQt512.callPackage ../development/tools/boomerang { };
 
   boost-build = callPackage ../development/tools/boost-build { };
@@ -7390,6 +7391,7 @@ in
 
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
+  # Not updated upstream since 2018, doesn't support qt newer than 5.12
   sleepyhead = libsForQt512.callPackage ../applications/misc/sleepyhead {};
 
   slirp4netns = callPackage ../tools/networking/slirp4netns/default.nix { };
@@ -19239,7 +19241,7 @@ in
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
-  sdrangel = libsForQt512.callPackage ../applications/radio/sdrangel {  };
+  sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel {  };
 
   sepolgen = callPackage ../os-specific/linux/sepolgen { };
 
@@ -23627,6 +23629,7 @@ in
 
   plexamp = callPackage ../applications/audio/plexamp { };
 
+  # Upstream says it supports only qt5.9 which is not packaged, and building with qt newer than 5.12 fails
   plex-media-player = libsForQt512.callPackage ../applications/video/plex-media-player { };
 
   plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
