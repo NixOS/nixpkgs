@@ -3,7 +3,7 @@
 let
 
   baseName = "fdm";
-  version = "1.9.0.20170124";
+  version = "2.0";
 
 in
 
@@ -13,8 +13,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "nicm";
     repo = baseName;
-    rev = "cae4ea37b6b296d1b2e48f62934ea3a7f6085e33";
-    sha256 = "048191wdv1yprwinipmx2152gvd2iq1ssv7xfb1bzh6zirh1ya3n";
+    rev = "370b04f165b0bb2989be378bb7e66b14f042d3f9";
+    sha256 = "0j2n271ni5wslgjq1f4zgz1nsvqjf895dxy3ij5c904bbp8ckcwq";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
