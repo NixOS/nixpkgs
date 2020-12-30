@@ -1508,6 +1508,14 @@
       </listitem>
       <listitem>
         <para>
+          The auto-upgrade service now accepts persistent (default:
+          true) parameter. By default auto-upgrade will now run
+          immediately if it would have been triggered at least once
+          during the time when the timer was inactive.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           If you are using Wayland you can choose to use the Ozone
           Wayland support in Chrome and several Electron apps by setting
           the environment variable <literal>NIXOS_OZONE_WL=1</literal>
