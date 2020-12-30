@@ -34,6 +34,8 @@ let
 
     apron = callPackage ../development/ocaml-modules/apron { };
 
+    arp = callPackage ../development/ocaml-modules/arp { };
+
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
     astring = callPackage ../development/ocaml-modules/astring { };
@@ -284,6 +286,8 @@ let
 
     estring = callPackage ../development/ocaml-modules/estring { };
 
+    ethernet = callPackage ../development/ocaml-modules/ethernet { };
+
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm { };
 
     ezxmlm = callPackage ../development/ocaml-modules/ezxmlm { };
@@ -515,6 +519,8 @@ let
 
     lwt_camlp4 = callPackage ../development/ocaml-modules/lwt/camlp4.nix { };
 
+    lwt-dllist = callPackage ../development/ocaml-modules/lwt-dllist { };
+
     lwt_log = callPackage ../development/ocaml-modules/lwt_log { };
 
     lwt_ppx = callPackage ../development/ocaml-modules/lwt/ppx.nix { };
@@ -597,6 +603,8 @@ let
 
     mirage-logs = callPackage ../development/ocaml-modules/mirage-logs { };
 
+    mirage-nat = callPackage ../development/ocaml-modules/mirage-nat { };
+
     mirage-net = callPackage ../development/ocaml-modules/mirage-net { };
 
     mirage-profile = callPackage ../development/ocaml-modules/mirage-profile { };
@@ -604,6 +612,8 @@ let
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
 
     mirage-random = callPackage ../development/ocaml-modules/mirage-random { };
+
+    mirage-random-test = callPackage ../development/ocaml-modules/mirage-random-test { };
 
     mirage-runtime = callPackage ../development/ocaml-modules/mirage/runtime.nix { };
 
@@ -618,6 +628,8 @@ let
     mirage-types-lwt = callPackage ../development/ocaml-modules/mirage/types-lwt.nix { };
 
     mirage-unix = callPackage ../development/ocaml-modules/mirage-unix { };
+
+    mirage-vnetif = callPackage ../development/ocaml-modules/mirage-vnetif { };
 
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
@@ -802,6 +814,8 @@ let
 
     parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 
+    pcap-format = callPackage ../development/ocaml-modules/pcap-format { };
+
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
     phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
@@ -839,6 +853,8 @@ let
     sosa = callPackage ../development/ocaml-modules/sosa { };
 
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
+
+    tcpip = callPackage ../development/ocaml-modules/tcpip { };
 
     tsort = callPackage ../development/ocaml-modules/tsort { };
 
