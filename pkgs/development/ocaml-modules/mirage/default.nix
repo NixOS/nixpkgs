@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, alcotest
+{ lib, buildDunePackage, ocaml, alcotest
 , functoria, mirage-runtime, bos
 , ipaddr, astring, logs, stdlib-shims
 }:
@@ -27,6 +27,12 @@ buildDunePackage rec {
   checkInputs = [
     alcotest
   ];
+
+  installPhase = ''
+    runHook preInstall
+    dune install --prefix=$out --libdir=$dev/lib/ocaml/${ocaml.version}/site-lib/ ${pname}
+    runHook postInstall
+  '';
 
   meta = mirage-runtime.meta // {
     description = "The MirageOS library operating system";

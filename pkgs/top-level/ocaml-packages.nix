@@ -161,6 +161,8 @@ let
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
 
+    cppo_ocamlbuild = callPackage ../development/tools/ocaml/cppo/ocamlbuild.nix { };
+
     cpu = callPackage ../development/ocaml-modules/cpu { };
 
     cpuid = callPackage ../development/ocaml-modules/cpuid { };
@@ -200,6 +202,8 @@ let
     ctypes = callPackage ../development/ocaml-modules/ctypes { };
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
+
+    diet =  callPackage ../development/ocaml-modules/diet { };
 
     digestif =  callPackage ../development/ocaml-modules/digestif { };
 
@@ -571,6 +575,10 @@ let
 
     mirage-block = callPackage ../development/ocaml-modules/mirage-block { };
 
+    mirage-block-combinators = callPackage ../development/ocaml-modules/mirage-block/combinators.nix { };
+
+    mirage-block-ramdisk = callPackage ../development/ocaml-modules/mirage-block-ramdisk { };
+
     mirage-bootvar-unix = callPackage ../development/ocaml-modules/mirage-bootvar-unix { };
 
     mirage-channel = callPackage ../development/ocaml-modules/mirage-channel { };
@@ -735,6 +743,8 @@ let
     ocaml-syntax-shims = callPackage ../development/ocaml-modules/ocaml-syntax-shims { };
 
     syslog = callPackage ../development/ocaml-modules/syslog { };
+
+    syslog-message = callPackage ../development/ocaml-modules/syslog-message { };
 
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 

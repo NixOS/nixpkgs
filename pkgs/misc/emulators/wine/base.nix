@@ -1,6 +1,7 @@
 { stdenv, lib, pkgArches, callPackage,
   name, version, src, mingwGccs, monos, geckos, platforms,
-  pkgconfig, fontforge, makeWrapper, flex, bison,
+  bison, flex, fontforge, makeWrapper, pkg-config,
+  autoconf, hexdump, perl,
   supportFlags,
   patches,
   buildScript ? null, configureFlags ? []
@@ -18,16 +19,24 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   inherit name src configureFlags;
 
   # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
-  # FIXME Breaks wineStaging builds
-  strictDeps = supportFlags.mingwSupport;
+  strictDeps = true;
 
   nativeBuildInputs = [
-    pkgconfig fontforge makeWrapper flex bison
+    bison
+    flex
+    fontforge
+    makeWrapper
+    pkg-config
+
+    # Required by staging
+    autoconf
+    hexdump
+    perl
   ]
   ++ lib.optionals supportFlags.mingwSupport mingwGccs;
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
-  [ pkgs.freetype ]
+  [ pkgs.freetype pkgs.perl pkgs.xorg.libX11 ]
   ++ lib.optional stdenv.isLinux         pkgs.libcap
   ++ lib.optional pngSupport             pkgs.libpng
   ++ lib.optional jpegSupport            pkgs.libjpeg
@@ -72,8 +81,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ])
   ++ lib.optionals stdenv.isLinux  (with pkgs.xorg; [
      libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
-  ])
-  ++ [ pkgs.xorg.libX11 pkgs.perl ]));
+  ])));
 
   patches = [ ] ++ patches';
 
