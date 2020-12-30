@@ -99,7 +99,7 @@ in stdenv.mkDerivation rec {
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
-    maintainers = with maintainers; [ pradyuman stephenmw zimbatm ];
+    maintainers = with maintainers; [ iammrinal0 pradyuman stephenmw zimbatm ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }
