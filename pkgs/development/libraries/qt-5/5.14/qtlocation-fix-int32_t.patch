@@ -1,0 +1,12 @@
+diff --git a/src/3rdparty/mapbox-gl-native/include/mbgl/util/convert.hpp b/src/3rdparty/mapbox-gl-native/include/mbgl/util/convert.hpp
+index 02ec7fe..a71d881 100644
+--- a/src/3rdparty/mapbox-gl-native/include/mbgl/util/convert.hpp
++++ b/src/3rdparty/mapbox-gl-native/include/mbgl/util/convert.hpp
+@@ -3,6 +3,7 @@
+ #include <array>
+ #include <type_traits>
+ #include <utility>
++#include <cstdint>
+ 
+ namespace mbgl {
+ namespace util {
