@@ -37,6 +37,8 @@ stdenv.mkDerivation {
     ./linux-5.1.patch
     # source: https://salsa.debian.org/Herrie82-guest/broadcom-sta/-/commit/247307926e5540ad574a17c062c8da76990d056f
     ./linux-5.6.patch
+    # source: https://gist.github.com/joanbm/5c640ac074d27fd1d82c74a5b67a1290
+    ./linux-5.9.patch
     ./null-pointer-fix.patch
     ./gcc.patch
   ];
