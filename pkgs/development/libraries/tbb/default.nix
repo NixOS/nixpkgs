@@ -19,10 +19,14 @@ with stdenv.lib; stdenv.mkDerivation rec {
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./glibc-struct-mallinfo.patch;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     cp "build/"*release*"/"*${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib/
     mv include $out/
     rm $out/include/index.html
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
