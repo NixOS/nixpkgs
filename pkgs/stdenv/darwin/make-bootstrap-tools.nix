@@ -180,9 +180,6 @@ in rec {
   unpack = stdenv.mkDerivation (bootstrapFiles // {
     name = "unpack";
 
-    reexportedLibrariesFile =
-      ../../os-specific/darwin/apple-source-releases/Libsystem/reexported_libraries;
-
     # This is by necessity a near-duplicate of unpack-bootstrap-tools.sh. If we refer to it directly,
     # we can't make any changes to it due to our testing stdenv depending on it. Think of this as the
     # unpack-bootstrap-tools.sh for the next round of bootstrap tools.
