@@ -17,7 +17,7 @@ mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Reliable MTP client with minimalistic UI";
     homepage = "https://whoozle.github.io/android-file-transfer-linux/";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     maintainers = [ maintainers.xaverdh ];
     platforms = platforms.linux;
   };
