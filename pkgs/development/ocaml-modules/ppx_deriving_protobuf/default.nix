@@ -19,6 +19,7 @@ buildDunePackage rec {
   buildInputs = [ cppo ppx_tools ppxfind ppx_deriving ];
 
   meta = with lib; {
+    broken = lib.versionAtLeast ppx_deriving.version "5.0";
     homepage = "https://github.com/ocaml-ppx/ppx_deriving_protobuf";
     description = "A Protocol Buffers codec generator for OCaml";
     license = licenses.mit;
