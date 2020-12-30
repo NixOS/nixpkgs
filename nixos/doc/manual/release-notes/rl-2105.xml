@@ -57,6 +57,12 @@
      for the motivation).
     </para>
    </listitem>
+   <listitem>
+    </para>
+    Python optimizations were disabled again. Builds with optimizations enabled
+    are not reproducible. Optimizations can now be enabled with an option.
+    <para>
+   </listitem>
   </itemizedlist>
  </section>
 

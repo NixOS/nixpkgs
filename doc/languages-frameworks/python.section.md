@@ -788,6 +788,23 @@ Each interpreter has the following attributes:
 - `executable`. Name of the interpreter executable, e.g. `python3.8`.
 - `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
+### Optimizations
+
+The Python interpreters are by default not build with optimizations enabled, because
+the builds are in that case not reproducible. To enable optimizations, override the
+interpreter of interest, e.g using
+
+```
+let
+  pkgs = import ./. {};
+  mypython = pkgs.python3.override {
+    enableOptimizations = true;
+    reproducibleBuild = false;
+    self = mypython;
+  };
+in mypython
+```
+
 ### Building packages and applications
 
 Python libraries and applications that use `setuptools` or
