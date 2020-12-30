@@ -3176,6 +3176,8 @@ in {
 
   jsondiff = callPackage ../development/python-modules/jsondiff { };
 
+  jsonfield = callPackage ../development/python-modules/jsonfield { };
+
   jsonlines = callPackage ../development/python-modules/jsonlines { };
 
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
