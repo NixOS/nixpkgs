@@ -196,6 +196,8 @@ in
 
   corgi = callPackage ../development/tools/corgi { };
 
+  colobot = callPackage ../games/colobot {};
+
   colorz = callPackage ../tools/misc/colorz { };
 
   colorpicker = callPackage ../tools/misc/colorpicker { };
@@ -2520,6 +2522,8 @@ in
   nyx = callPackage ../tools/networking/nyx { };
 
   ocrmypdf = callPackage ../tools/text/ocrmypdf { };
+
+  ocrfeeder = callPackage ../applications/graphics/ocrfeeder { };
 
   onboard = callPackage ../applications/misc/onboard { };
 
@@ -5176,7 +5180,7 @@ in
 
   peruse = libsForQt5.callPackage ../tools/misc/peruse { };
 
-  ksmoothdock = libsForQt514.callPackage ../applications/misc/ksmoothdock { };
+  ksmoothdock = libsForQt5.callPackage ../applications/misc/ksmoothdock { };
 
   kstars = libsForQt5.callPackage ../applications/science/astronomy/kstars { };
 
@@ -5436,6 +5440,8 @@ in
   np2kai = callPackage ../misc/emulators/np2kai { };
 
   file-rename = callPackage ../tools/filesystems/file-rename { };
+
+  kcollectd = libsForQt5.callPackage ../tools/misc/kcollectd {};
 
   kea = callPackage ../tools/networking/kea { };
 
@@ -15206,6 +15212,8 @@ in
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
+  notcurses = callPackage ../development/libraries/notcurses { };
+
   ncurses5 = ncurses.override {
     abiVersion = "5";
   };
@@ -22146,6 +22154,8 @@ in
   swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
 
   swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
+
+  tiramisu = callPackage ../applications/misc/tiramisu { };
 
   waybar = callPackage ../applications/misc/waybar {};
 
