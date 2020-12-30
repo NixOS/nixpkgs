@@ -1,21 +1,20 @@
-{ lib, mkDerivation, fetchFromGitHub
-, cmake, ffmpeg, libopus, qtbase, qtmultimedia, qtsvg, pkgconfig, protobuf
+{ lib, mkDerivation, fetchgit
+, cmake, ffmpeg, libopus, qtbase, qtmultimedia, qtsvg, pkg-config, protobuf
 , python3Packages, SDL2 }:
 
 mkDerivation rec {
   pname = "chiaki";
-  version = "1.3.0";
+  version = "2.0.1";
 
-  src = fetchFromGitHub {
+  src = fetchgit {
+    url = "https://git.sr.ht/~thestr4ng3r/chiaki";
     rev = "v${version}";
-    owner = "thestr4ng3r";
-    repo = "chiaki";
     fetchSubmodules = true;
-    sha256 = "07w7srxxr8zjp91p5n1sqf4j8lljfrm78lz1m15s2nzlm579015h";
+    sha256 = "0l532i9j6wmzbxqx7fg69kgfd1zy1r1wlw6f756vpxpgswivi892";
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig protobuf python3Packages.python python3Packages.protobuf
+    cmake pkg-config protobuf python3Packages.python python3Packages.protobuf
   ];
   buildInputs = [ ffmpeg libopus qtbase qtmultimedia qtsvg protobuf SDL2 ];
 
