@@ -1,5 +1,5 @@
 { lib, mkDerivation, fetchgit
-, cmake, ffmpeg, libevdev, libopus, udev, qtbase, qtmultimedia
+, cmake, ffmpeg, libevdev, libopus, udev, qtbase, qtmacextras, qtmultimedia
 , qtsvg , pkg-config, protobuf , python3Packages, SDL2, stdenv }:
 
 with stdenv.lib;
@@ -18,7 +18,8 @@ mkDerivation rec {
     cmake pkg-config protobuf python3Packages.python python3Packages.protobuf
   ];
   buildInputs = [ ffmpeg libopus qtbase qtmultimedia qtsvg protobuf SDL2 ]
-    ++ optionals stdenv.hostPlatform.isLinux [ libevdev udev];
+    ++ optionals stdenv.hostPlatform.isLinux [ libevdev udev]
+    ++ optionals (stdenv.isDarwin) [ qtmacextras ];
 
   doCheck = true;
   installCheckPhase = "$out/bin/chiaki --help";
