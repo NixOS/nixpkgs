@@ -71,7 +71,7 @@
     <para>
 <screen>
 <prompt># </prompt>sudo ssh-keygen -N '' -t ed25519 -f /run/keys/id_ed25519_my_borg_repo
-<prompt># </prompt>cat /run/keys/id_ed25519_my_borg_repo
+<prompt># </prompt>cat /run/keys/id_ed25519_my_borg_repo.pub
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/ root@nixos</screen>
     </para>
     <para>
@@ -117,18 +117,31 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/
   };
 };</programlisting>
   </para>
-  <para>The following few commands (run as root) let you test your backup.
-      <programlisting>
-> nixos-rebuild switch
+  <section xml:id="opt-services-backup-borgbackup-testing">
+   <title>Testing remote backups</title>
+   <para>Every job has a corresponding wrapper script installed into <xref linkend="opt-environment.systemPackages"/>.
+   It sets the same environment variables as the systemd unit.
+   You can inspect them by reading <filename>/run/current-system/sw/bin/borg-job-&lt;name&gt;</filename>.
+   This script can be used to test backups, manage the remote repo, and do restores.
+   It is only guaranteed to work if run as the same user as the systemd unit.
+   </para>
+   <para>The following few commands show how to test your backup.
+<screen>
+<prompt># </prompt> nixos-rebuild switch
 ...restarting the following units: polkit.service
-> systemctl restart borgbackup-job-backupToLocalServer
-> sleep 10
-> systemctl restart borgbackup-job-backupToLocalServer
-> export BORG_PASSPHRASE=topSecrect
-> borg list --rsh='ssh -i /run/keys/id_ed25519_my_borg_repo' borg@nixos:.
+<prompt># </prompt> systemctl start borgbackup-job-backupToLocalServer
+<prompt># </prompt> sleep 10
+<prompt># </prompt> systemctl restart borgbackup-job-backupToLocalServer
+<prompt># </prompt> borg-job-backupToLocalServer list
 nixos-backupToLocalServer-2020-03-30T21:46:17 Mon, 2020-03-30 21:46:19 [84feb97710954931ca384182f5f3cb90665f35cef214760abd7350fb064786ac]
-nixos-backupToLocalServer-2020-03-30T21:46:30 Mon, 2020-03-30 21:46:32 [e77321694ecd160ca2228611747c6ad1be177d6e0d894538898de7a2621b6e68]</programlisting>
-    </para>
+nixos-backupToLocalServer-2020-03-30T21:46:30 Mon, 2020-03-30 21:46:32 [e77321694ecd160ca2228611747c6ad1be177d6e0d894538898de7a2621b6e68]
+<prompt># </prompt> borg-job-backupToLocalServer list --short ::nixos-backupToLocalServer-2020-03-30T21:46:30
+home/
+etc/
+var/
+...</screen>
+   </para>
+  </section>
 </section>
 
  <section xml:id="opt-services-backup-borgbackup-borgbase">
