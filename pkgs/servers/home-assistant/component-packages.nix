@@ -811,7 +811,7 @@
     "system_health" = ps: with ps; [ aiohttp-cors ];
     "system_log" = ps: with ps; [ aiohttp-cors ];
     "systemmonitor" = ps: with ps; [ psutil ];
-    "tado" = ps: with ps; [ ]; # missing inputs: python-tado
+    "tado" = ps: with ps; [ python-tado ];
     "tag" = ps: with ps; [ ];
     "tahoma" = ps: with ps; [ ]; # missing inputs: tahoma-api
     "tank_utility" = ps: with ps; [ ]; # missing inputs: tank_utility

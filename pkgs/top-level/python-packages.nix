@@ -4683,6 +4683,8 @@ in {
 
   python-openems = callPackage ../development/python-modules/python-openems { };
 
+  python-tado = callPackage ../development/python-modules/python-tado { };
+
   pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
