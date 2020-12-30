@@ -2,8 +2,8 @@
 { fetchgit, applyPatches }: let
   src = fetchgit {
     url = "https://github.com/tootsuite/mastodon.git";
-    rev = "v3.2.2";
-    sha256 = "0k9fh2xq2bkwd33i6dy6n1jbkyda5lzvlnfaqmf8j1qq9fslz36k";
+    rev = "v3.3.0";
+    sha256 = "17wvggvy5mmyf3f1i5v1hgvh6wjdhg9hb3wiyfaydx0slsg03qba";
   };
 in applyPatches {
   inherit src;

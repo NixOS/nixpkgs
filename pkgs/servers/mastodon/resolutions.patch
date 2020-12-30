@@ -1,31 +1,31 @@
 diff --git a/package.json b/package.json
-index 37c6d97d3..749c35532 100644
+index 7b8f49dd8..24cdd3498 100644
 --- a/package.json
 +++ b/package.json
-@@ -166,7 +166,8 @@
-     "webpack-bundle-analyzer": "^3.8.0",
+@@ -168,7 +168,8 @@
+     "webpack-bundle-analyzer": "^4.1.0",
      "webpack-cli": "^3.3.12",
-     "webpack-merge": "^4.2.1",
--    "wicg-inert": "^3.0.3"
-+    "wicg-inert": "^3.0.3",
+     "webpack-merge": "^5.4.0",
+-    "wicg-inert": "^3.1.0"
++    "wicg-inert": "^3.1.0",
 +    "kind-of": "^6.0.3"
    },
    "devDependencies": {
-     "@testing-library/jest-dom": "^5.11.0",
-@@ -185,8 +186,5 @@
+     "@testing-library/jest-dom": "^5.11.6",
+@@ -187,8 +188,5 @@
      "sass-lint": "^1.13.1",
      "webpack-dev-server": "^3.11.0",
-     "yargs": "^15.4.0"
+     "yargs": "^16.1.1"
 -  },
 -  "resolutions": {
 -    "kind-of": "^6.0.3"
    }
  }
 diff --git a/yarn.lock b/yarn.lock
-index 5449ae10f..337fd3f76 100644
+index 4aa8f6380..68d2fd8b5 100644
 --- a/yarn.lock
 +++ b/yarn.lock
-@@ -5859,6 +5859,11 @@ is-binary-path@~2.1.0:
+@@ -5689,6 +5689,11 @@ is-binary-path@~2.1.0:
    dependencies:
      binary-extensions "^2.0.0"
  
@@ -34,10 +34,10 @@ index 5449ae10f..337fd3f76 100644
 +  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
 +  integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
 +
- is-buffer@^2.0.2:
-   version "2.0.4"
-   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-2.0.4.tgz#3e572f23c8411a5cfd9557c849e3665e0b290623"
-@@ -6791,7 +6796,26 @@ killable@^1.0.1:
+ is-callable@^1.1.4, is-callable@^1.2.2:
+   version "1.2.2"
+   resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.2.2.tgz#c7c6715cd22d4ddb48d3e19970223aceabb080d9"
+@@ -6639,7 +6644,26 @@ killable@^1.0.1:
    resolved "https://registry.yarnpkg.com/killable/-/killable-1.0.1.tgz#4c8ce441187a061c7474fb87ca08e2a638194892"
    integrity sha512-LzqtLKlUwirEUyl/nicirVmNiPvYs7l5n8wOPP7fyJVpUPkvCnW/vuiXGpylGUlnPDnB7311rARzAt3Mhswpjg==
  

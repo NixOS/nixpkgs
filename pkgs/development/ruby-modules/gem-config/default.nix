@@ -392,6 +392,10 @@ in
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
+  openssl = attrs: {
+    buildInputs = [ openssl ];
+  };
+
   opus-ruby = attrs: {
     dontBuild = false;
     postPatch = ''

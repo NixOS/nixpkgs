@@ -1,5 +1,5 @@
 { nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv,
-  stdenv, yarn, callPackage, imagemagick, ffmpeg, file,
+  stdenv, yarn, callPackage, imagemagick, ffmpeg, file, ruby_2_7,
 
   # Allow building a fork or custom version of Mastodon:
   pname ? "mastodon",
@@ -20,6 +20,7 @@ in stdenv.mkDerivation rec {
   mastodon-gems = bundlerEnv {
     name = "${pname}-gems-${version}";
     inherit version;
+    ruby = ruby_2_7;
     gemdir = src;
     gemset = dependenciesDir + "/gemset.nix";
     # This fix (copied from https://github.com/NixOS/nixpkgs/pull/76765) replaces the gem
@@ -50,6 +51,10 @@ in stdenv.mkDerivation rec {
     buildInputs = [
       mastodon-gems nodejs-slim yarn
     ];
+
+    # FIXME: "production" would require OTP_SECRET to be set, so we use
+    # development here.
+    RAILS_ENV = "development";
 
     buildPhase = ''
       # Support Mastodon forks which don't call themselves 'mastodon' or which
