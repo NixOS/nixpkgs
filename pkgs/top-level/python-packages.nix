@@ -421,6 +421,8 @@ in {
 
   astropy-helpers = callPackage ../development/python-modules/astropy-helpers { };
 
+  astropy-extension-helpers = callPackage ../development/python-modules/astropy-extension-helpers { };
+
   astroquery = callPackage ../development/python-modules/astroquery { };
 
   asttokens = callPackage ../development/python-modules/asttokens { };
@@ -1998,8 +2000,6 @@ in {
   executor = callPackage ../development/python-modules/executor { };
 
   exifread = callPackage ../development/python-modules/exifread { };
-
-  extension-helpers = callPackage ../development/python-modules/extension-helpers { };
 
   extras = callPackage ../development/python-modules/extras { };
 
@@ -5120,6 +5120,8 @@ in {
   pyenchant = callPackage ../development/python-modules/pyenchant { enchant2 = pkgs.enchant2; };
 
   pyepsg = callPackage ../development/python-modules/pyepsg { };
+
+  pyerfa = callPackage ../development/python-modules/pyerfa { };
 
   pyexcel = callPackage ../development/python-modules/pyexcel { };
 

@@ -4930,9 +4930,7 @@ in
 
   ipfs = callPackage ../applications/networking/ipfs { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
-  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
-    buildGoModule = buildGo114Module;
-  };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
   ipget = callPackage ../applications/networking/ipget { };
 
@@ -17394,9 +17392,7 @@ in
 
   unit = callPackage ../servers/http/unit { };
 
-  ncdns = callPackage ../servers/dns/ncdns {
-    buildGoPackage = buildGo114Package;
-  };
+  ncdns = callPackage ../servers/dns/ncdns { };
 
   nginx = nginxStable;
 
@@ -23462,6 +23458,11 @@ in
   opentoonz = (qt514.overrideScope' (_: _: {
     libtiff = callPackage ../applications/graphics/opentoonz/libtiff.nix { };
   })).callPackage ../applications/graphics/opentoonz { };
+
+  opentabletdriver = callPackage ../tools/X11/opentabletdriver {
+    dotnet-sdk = dotnetCorePackages.sdk_5_0;
+    dotnet-netcore = dotnetCorePackages.net_5_0;
+  };
 
   opentx = libsForQt5.callPackage ../applications/misc/opentx { };
 
