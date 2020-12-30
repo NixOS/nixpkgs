@@ -38,9 +38,8 @@ stdenv.mkDerivation rec {
     curl
     check
     gpgme
-  ]
-  # zchunk currently has issues compiling in darwin, fine in linux
-  ++ stdenv.lib.optional stdenv.isLinux zchunk;
+    zchunk
+  ];
 
   # librepo/fastestmirror.h includes curl/curl.h, and pkg-config specfile refers to others in here
   propagatedBuildInputs = [
@@ -51,7 +50,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DPYTHON_DESIRED=${stdenv.lib.substring 0 1 python.pythonVersion}"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "-DWITH_ZCHUNK=OFF";
+  ];
 
   postFixup = ''
     moveToOutput "lib/${python.libPrefix}" "$py"
