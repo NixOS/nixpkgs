@@ -54,6 +54,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    sed -i -e "/<\/projectImportSearchPaths>/a <property name=\"MSBuildExtensionsPath\" value=\"$out/lib/mono/xbuild\"/>" \
+      src/MSBuild/app.config
+  '';
+
   buildPhase = ''
     # nuget would otherwise try to base itself in /homeless-shelter
     export HOME=$(pwd)/fake-home
@@ -93,7 +98,6 @@ stdenv.mkDerivation rec {
     ln -s ${mono}/lib/mono/msbuild/Current/bin/Roslyn $out/lib/mono/msbuild/Current/bin/Roslyn
 
     makeWrapper ${mono}/bin/mono $out/bin/msbuild \
-      --set MSBuildExtensionsPath $out/lib/mono/xbuild \
       --set-default MONO_GC_PARAMS "nursery-size=64m" \
       --add-flags "$out/lib/mono/msbuild/15.0/bin/MSBuild.dll"
 
