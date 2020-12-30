@@ -164,9 +164,9 @@ stdenv.mkDerivation {
     ''
 
     + (if nativeTools then ''
-      echo ${if targetPlatform.isDarwin then cc else nativePrefix} > $out/nix-support/orig-cc
+      echo ${nativePrefix} > $out/nix-support/orig-cc
 
-      ccPath="${if targetPlatform.isDarwin then cc else nativePrefix}/bin"
+      ccPath="${nativePrefix}/bin"
     '' else ''
       echo $cc > $out/nix-support/orig-cc
 
