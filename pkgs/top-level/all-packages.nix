@@ -1207,6 +1207,8 @@ in
 
   gaia = callPackage ../development/libraries/gaia { };
 
+  galene = callPackage ../servers/web-apps/galene {};
+
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
   gammy = qt5.callPackage ../tools/misc/gammy { };
