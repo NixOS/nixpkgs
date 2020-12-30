@@ -17,7 +17,7 @@ let
     (if system == "i686-solaris" then [ "/usr/gnu" ] else []) ++
     (if system == "i686-netbsd" then [ "/usr/pkg" ] else []) ++
     (if system == "x86_64-solaris" then [ "/opt/local/gnu" ] else []) ++
-    ["/" "/usr" "/usr/local"];
+    [ "/usr/local"  "/usr" "/" ];
 
   prehookBase = ''
     # Disable purity tests; it's allowed (even needed) to link to
