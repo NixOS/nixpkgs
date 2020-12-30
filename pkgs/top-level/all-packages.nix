@@ -12865,6 +12865,8 @@ in
 
   duckdb = callPackage ../development/libraries/duckdb {};
 
+  duckstation = libsForQt5.callPackage ../misc/emulators/duckstation {};
+
   easyloggingpp = callPackage ../development/libraries/easyloggingpp {};
 
   eccodes = callPackage ../development/libraries/eccodes {
@@ -25340,6 +25342,8 @@ in
   xpointerbarrier = callPackage ../tools/X11/xpointerbarrier {};
 
   xkb-switch = callPackage ../tools/X11/xkb-switch { };
+
+  xkb-switch-i3 = callPackage ../tools/X11/xkb-switch-i3 { };
 
   xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
 

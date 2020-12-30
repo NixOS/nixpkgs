@@ -26,13 +26,13 @@
 
 mkDerivation rec {
   pname = "neochat";
-  version = "v1.0";
+  version = "1.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "1r9n83kvc5v215lzmzh6hyc5q9i3w6znbf508qk0mdwdzxz4zry9";
   };
 
@@ -61,6 +61,7 @@ mkDerivation rec {
     description = "A client for matrix, the decentralized communication protocol.";
     homepage = "https://apps.kde.org/en/neochat";
     license = licenses.gpl3Only;
+    maintainers = with maintainers; [ mjlbach peterhoeg ];
     platforms = with platforms; linux;
   };
 }
