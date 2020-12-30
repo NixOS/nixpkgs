@@ -17164,6 +17164,7 @@ in
   gofish = callPackage ../servers/gopher/gofish { };
 
   grafana = callPackage ../servers/monitoring/grafana { };
+  grafanaPlugins = dontRecurseIntoAttrs (callPackage ../servers/monitoring/grafana/plugins { });
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
 
