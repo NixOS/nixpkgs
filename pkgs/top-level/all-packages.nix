@@ -28456,6 +28456,8 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
+  sumneko-lua-language-server = callPackage ../development/tools/sumneko-lua-language-server { };
+
   go-swag = callPackage ../development/tools/go-swag { };
 
   go-swagger = callPackage ../development/tools/go-swagger { };
