@@ -237,19 +237,14 @@ stdenv.mkDerivation {
       if [ -n "''${dynamicLinker-}" ]; then
         echo $dynamicLinker > $out/nix-support/dynamic-linker
 
-    '' + (if targetPlatform.isDarwin then ''
-        printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
-      '' else ''
-        if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
-          echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
-        fi
-      ''
-      # The dynamic linker is passed in `ldflagsBefore' to allow
-      # explicit overrides of the dynamic linker by callers to ld
-      # (the *last* value counts, so ours should come first).
-      + ''
-        echo -dynamic-linker "$dynamicLinker" >> $out/nix-support/libc-ldflags-before
-    '') + ''
+        ${if targetPlatform.isDarwin then ''
+          printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
+        '' else ''
+          if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
+            echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+          fi
+          touch $out/nix-support/ld-set-dynamic-linker
+        ''}
       fi
     '')
 
