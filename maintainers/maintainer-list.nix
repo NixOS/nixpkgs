@@ -3693,6 +3693,12 @@
     githubId = 2789926;
     name = "Imran Hossain";
   };
+  iammrinal0 = {
+    email = "nixpkgs@mrinalpurohit.in";
+    github = "iammrinal0";
+    githubId = 890062;
+    name = "Mrinal";
+  };
   iand675 = {
     email = "ian@iankduncan.com";
     github = "iand675";
