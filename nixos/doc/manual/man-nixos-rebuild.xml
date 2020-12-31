@@ -113,6 +113,18 @@
     <replaceable>path</replaceable>
    </arg>
    <arg>
+    <option>-L</option>
+   </arg>
+   <arg>
+    <option>--refresh</option>
+   </arg>
+   <arg>
+    <option>--no-net</option>
+   </arg>
+   <arg>
+    <option>--impure</option>
+   </arg>
+   <arg>
     <group choice='req'>
      <arg choice='plain'><option>--verbose</option></arg>
      <arg choice='plain'><option>-v</option></arg>
@@ -129,6 +141,18 @@
      <arg choice='plain'><option>-j</option></arg>
     </group>
     <replaceable>number</replaceable>
+   </arg>
+   <arg>
+    <option>--fallback</option>
+   </arg>
+   <arg>
+    <option>--repair</option>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--no-build-output</option></arg>
+     <arg choice='plain'><option>-Q</option></arg>
+    </group>
    </arg>
    <arg>
     <group choice='req'>
@@ -567,10 +591,19 @@
 
   <para>
    In addition, <command>nixos-rebuild</command> accepts various Nix-related
-   flags, including <option>--max-jobs</option> / <option>-j</option>,
+   flags: <option>-I</option>, <option>--max-jobs</option> / <option>-j</option>,
    <option>--show-trace</option>, <option>--keep-failed</option>,
-   <option>--keep-going</option>, <option>--impure</option>, and <option>--verbose</option> /
+   <option>--keep-going</option>, <option>--impure</option>,  and <option>--verbose</option> /
+   <option>--builders</option>, <option>--show-trace</option>,
+   <option>--fallback</option>, <option>--repair</option>,
+   <option>--no-build-output</option> / <option>-Q</option>,
+   <option>--keep-failed</option> / <option>-K</option>,
+   <option>--keep-going</option> / <option>-k</option> and <option>--verbose</option> /
    <option>-v</option>. See the Nix manual for details.
+
+   The following Nix flags that are support by the upcoming nix 2.4 version:
+   <option>-L</option>, <option>--refresh</option>, <option>--no-net</option>,
+   <option>--no-net</option>, <option>--impure</option>. See <command>nix --help</command> or <command>nix build --help</command> for details.
   </para>
  </refsection>
 

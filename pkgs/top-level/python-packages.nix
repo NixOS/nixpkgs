@@ -3312,6 +3312,10 @@ in {
 
   keyrings-alt = callPackage ../development/python-modules/keyrings-alt { };
 
+  keystone = callPackage ../development/python-modules/keystone {
+    inherit (pkgs) keystone;
+  };
+
   keyutils = callPackage ../development/python-modules/keyutils { inherit (pkgs) keyutils; };
 
   kicad = disabledIf isPy27 (toPythonModule (pkgs.kicad.override { python3 = python; }).src);
@@ -6215,6 +6219,8 @@ in {
       };
     });
   in if isPy3k then pyxattr' else pyxattr_2;
+
+  pyworld = callPackage ../development/python-modules/pyworld { };
 
   pyx = callPackage ../development/python-modules/pyx { };
 

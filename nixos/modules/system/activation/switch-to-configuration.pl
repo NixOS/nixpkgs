@@ -346,9 +346,10 @@ sub filterUnits {
     return @res;
 }
 
+my $startNscd = delete $unitsToStart{"nscd.service"};
+
 my @unitsToStopFiltered = filterUnits(\%unitsToStop);
 my @unitsToStartFiltered = filterUnits(\%unitsToStart);
-
 
 # Show dry-run actions.
 if ($action eq "dry-activate") {
@@ -359,6 +360,7 @@ if ($action eq "dry-activate") {
     print STDERR "would restart systemd\n" if $restartSystemd;
     print STDERR "would restart the following units: ", join(", ", sort(keys %unitsToRestart)), "\n"
         if scalar(keys %unitsToRestart) > 0;
+    print STDERR "would start nscd\n" if $startNscd;
     print STDERR "would start the following units: ", join(", ", @unitsToStartFiltered), "\n"
         if scalar @unitsToStartFiltered;
     print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
@@ -417,6 +419,13 @@ close $listActiveUsers;
 # Set the new tmpfiles
 print STDERR "setting up tmpfiles\n";
 system("@systemd@/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-prefix=/dev") == 0 or $res = 3;
+
+# We need to start nscd before any other service, since they might need
+# to resolve users/groups only exposed by nss modules (i.e. DynamicUser via nss_systemd)
+if ($startNscd) {
+    print STDERR "starting nscd\n";
+    system("@systemd@/bin/systemctl", "start", "nscd.service") == 0 or $res = 4;
+}
 
 # Reload units that need it. This includes remounting changed mount
 # units.

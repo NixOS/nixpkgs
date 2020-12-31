@@ -243,7 +243,7 @@
     "familyhub" = ps: with ps; [ ]; # missing inputs: python-family-hub-local
     "fan" = ps: with ps; [ ];
     "fastdotcom" = ps: with ps; [ ]; # missing inputs: fastdotcom
-    "feedreader" = ps: with ps; [ ]; # missing inputs: feedparser-homeassistant
+    "feedreader" = ps: with ps; [ feedparser];
     "ffmpeg" = ps: with ps; [ ha-ffmpeg ];
     "ffmpeg_motion" = ps: with ps; [ ha-ffmpeg ];
     "ffmpeg_noise" = ps: with ps; [ ha-ffmpeg ];

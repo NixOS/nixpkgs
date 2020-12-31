@@ -1005,7 +1005,7 @@ in
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
 
-  ec2-utils = callPackage ../tools/virtualization/ec2-utils { };
+  amazon-ec2-utils = callPackage ../tools/virtualization/amazon-ec2-utils { };
 
   exoscale-cli = callPackage ../tools/admin/exoscale-cli { };
 
@@ -21304,6 +21304,8 @@ in
   gspeech = callPackage ../applications/audio/gspeech { };
 
   icesl = callPackage ../applications/misc/icesl { };
+
+  iina = callPackage ../applications/video/iina { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
