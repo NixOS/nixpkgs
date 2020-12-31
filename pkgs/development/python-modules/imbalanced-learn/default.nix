@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy27
-, nose
 , pandas
-, pytest
+, pytestCheckHook
 , scikitlearn
 , tensorflow
 }:
@@ -17,16 +16,17 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ scikitlearn ];
-  checkInputs = [ nose pytest pandas ];
-  checkPhase = ''
+  checkInputs = [ pytestCheckHook pandas ];
+  preCheck = ''
     export HOME=$TMPDIR
-    # skip some tests that fail because of minimal rounding errors
-    # or very large dependencies (keras + tensorflow)
-    py.test imblearn -k 'not estimator \
-                         and not classification \
-                         and not _generator \
-                         and not show_versions'
   '';
+  disabledTests = [
+    "estimator"
+    "classification"
+    "_generator"
+    "show_versions"
+    "test_make_imbalanced_iris"
+  ];
 
   meta = with stdenv.lib; {
     description = "Library offering a number of re-sampling techniques commonly used in datasets showing strong between-class imbalance";
