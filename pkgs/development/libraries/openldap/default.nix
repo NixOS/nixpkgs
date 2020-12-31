@@ -54,19 +54,24 @@ stdenv.mkDerivation rec {
     "moduledir=$(out)/lib/modules"
   ];
 
-  # 1. Fixup broken libtool
-  # 2. Libraries left in the build location confuse `patchelf --shrink-rpath`
+  # 1. Libraries left in the build location confuse `patchelf --shrink-rpath`
   #    Delete these to let patchelf discover the right path instead.
   #    FIXME: that one can be removed when https://github.com/NixOS/patchelf/pull/98
   #    is in Nixpkgs patchelf.
+  # 2. Fixup broken libtool for openssl and cyrus_sasl respectly if they are not
+  #    overridden to be null.
   preFixup = ''
-    sed -e 's,-lsasl2,-L${cyrus_sasl.out}/lib -lsasl2,' \
-        -e 's,-lssl,-L${openssl.out}/lib -lssl,' \
-        -i $out/lib/libldap.la -i $out/lib/libldap_r.la
-
     rm -rf $out/var
     rm -r libraries/*/.libs
     rm -r contrib/slapd-modules/passwd/*/.libs
+
+    for f in $out/lib/libldap.la $out/lib/libldap_r.la; do
+  '' + stdenv.lib.optionalString (cyrus_sasl != null) ''
+      substituteInPlace $f --replace '-lsasl2' '-L${cyrus_sasl.out}/lib -lsasl2'
+  '' + stdenv.lib.optionalString (openssl != null) ''
+      substituteInPlace $f --replace '-lssl' '-L${openssl.out}/lib -lssl'
+  '' + ''
+    done
   '';
 
   postInstall = ''
