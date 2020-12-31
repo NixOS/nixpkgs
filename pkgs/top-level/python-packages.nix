@@ -4679,6 +4679,8 @@ in {
 
   pysbd = callPackage ../development/python-modules/pysbd { };
 
+  pysyncobj = callPackage ../development/python-modules/pysyncobj { };
+
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
