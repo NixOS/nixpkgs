@@ -34,7 +34,6 @@ common =
       version = lib.getVersion name;
 
       is24 = lib.versionAtLeast version "2.4pre";
-      isExactly24 = lib.versionAtLeast version "2.4" && lib.versionOlder version "2.4";
 
       VERSION_SUFFIX = suffix;
 
@@ -94,9 +93,15 @@ common =
             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
           ''}
         '' +
-        # For Nix 2.4, patch around an issue where the Nix configure step pulls in the
-        # build system's bash and other utilities when cross-compiling
-        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly24) ''
+        # On all versions before c9f51e87057652db0013289a95deffba495b35e7,
+        # released with 2.3.8, we need to patch around an issue where the Nix
+        # configure step pulls in the build system's bash and other utilities
+        # when cross-compiling.
+        lib.optionalString (
+          stdenv.buildPlatform != stdenv.hostPlatform &&
+          (lib.versionOlder "2.3.8" (lib.traceVal version) && !is24)
+          # The additional is24 condition is required as versionOlder doesn't understand nixUnstable version strings
+        ) ''
           mkdir tmp/
           substitute corepkgs/config.nix.in tmp/config.nix.in \
             --subst-var-by bash ${bash}/bin/bash \
