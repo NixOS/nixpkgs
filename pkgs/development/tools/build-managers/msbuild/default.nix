@@ -32,9 +32,6 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
-  # https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=msbuild
-  phases = ["unpackPhase" "buildPhase" "installPhase" "installCheckPhase"];
-
   # https://github.com/NixOS/nixpkgs/issues/38991
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
   LOCALE_ARCHIVE = lib.optionalString stdenv.isLinux
