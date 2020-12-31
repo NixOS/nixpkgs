@@ -1,5 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, udev, libusb1
-, darwin }:
+, darwin
+, gnum4
+}:
 
 stdenv.mkDerivation rec {
   pname = "hidapi";
@@ -12,7 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "1nr4z4b10vpbh3ss525r7spz4i43zim2ba5qzfl15dgdxshxxivb";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkgconfig
+    gnum4
+  ];
 
   buildInputs = [ ]
     ++ stdenv.lib.optionals stdenv.isLinux [ libusb1 udev ];
