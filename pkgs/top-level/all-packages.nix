@@ -21957,6 +21957,8 @@ in
 
   heme = callPackage ../applications/editors/heme { };
 
+  herbe = callPackage ../applications/misc/herbe { };
+
   herbstluftwm = callPackage ../applications/window-managers/herbstluftwm {
     asciidoc = asciidoc-full;
   };
