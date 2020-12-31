@@ -75,6 +75,7 @@ let
         ./qtbase.patch.d/0011-fix-header_module.patch
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
+    qtlocation = [ ./qtlocation-gcc-9.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qtwebengine = [
