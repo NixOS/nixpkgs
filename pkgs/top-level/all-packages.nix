@@ -8228,6 +8228,8 @@ in
 
   wimboot = callPackage ../tools/misc/wimboot { };
 
+  wire = callPackage ../development/tools/wire { };
+
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
   woff2 = callPackage ../development/web/woff2 { };
