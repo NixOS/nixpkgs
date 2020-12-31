@@ -6445,7 +6445,6 @@ broken-packages:
   - hmt-diagrams
   - hmumps
   - hnetcdf
-  - hnix-store-remote
   - HNM
   - hnormalise
   - ho-rewriting
