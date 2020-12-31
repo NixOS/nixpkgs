@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qkp2rfi5njyp5c5avajab00aj74pkmkgzkvshv4p2ydkhswgazv";
   };
 
-  nativeBuildInputs = [ m4 perl ] ++ stdenv.lib.optional stdenv.isSunOS help2man;
-  propagatedBuildInputs = [ m4 ];
+  nativeBuildInputs = [ perl ] ++ stdenv.lib.optional stdenv.isSunOS help2man;
+  propagatedNativeBuildInputs = [ m4 ];
 
   doCheck = false; # fails
   doInstallCheck = false; # fails

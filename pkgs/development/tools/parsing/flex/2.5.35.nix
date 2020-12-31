@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ flex bison texinfo help2man autoreconfHook ];
 
-  propagatedBuildInputs = [ m4 ];
+  propagatedNativeBuildInputs = [ m4 ];
 
   preConfigure = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
