@@ -70,13 +70,6 @@ rec {
       sha256 = "0pxn0f8qbdman4gppx93zwml7s5byqfw560n079v68qjgzh2brq2";
 
       /*
-      This feels a little dumb; I assume it's wrongish. I was hoping
-      to be able to filter the source down to knock out parts of the
-      source that I'm not using, but I get errors just trying to get
-      *anything* working with the approaches commented out below.
-
-      On IRC eadwu[m] suggested dropping them in extraPostFetch.
-
       It's not critical to drop most of these; the primary target is
       the vendored fork of Python-2.7.13, which is ~ 55M and over 3200
       files, dozens of which get interpreter script patches in fixup.
@@ -85,30 +78,12 @@ rec {
         #find . -maxdepth 1 -type d | sort
         rm -rf Python-2.7.13 benchmarks metrics py-yajl rfc gold web testdata services demo devtools cpp
         # find . -maxdepth 1 -type d | sort
-      ''; # breakers: doc, pgen2, vendor
+      '';
     };
-
-    # src = stdenv.lib.cleanSourceWith {
-    #   src = fetchFromGitHub {
-    #     owner = "oilshell";
-    #     repo = "oil";
-    #     rev = "ea80cdad7ae1152a25bd2a30b87fe3c2ad32394a";
-    #     sha256 = "0pxn0f8qbdman4gppx93zwml7s5byqfw560n079v68qjgzh2brq2";
-    #   };
-    #   filter = stdenv.lib.cleanSourceFilter;
-    # };
-
-    # src = stdenv.lib.sourceByRegex (fetchFromGitHub {
-    #   owner = "oilshell";
-    #   repo = "oil";
-    #   rev = "ea80cdad7ae1152a25bd2a30b87fe3c2ad32394a";
-    #   sha256 = "0pxn0f8qbdman4gppx93zwml7s5byqfw560n079v68qjgzh2brq2";
-    # }) [".*"];
 
     # TODO: not sure why I'm having to set this for nix-build...
     #       can anyone tell if I'm doing something wrong?
     SOURCE_DATE_EPOCH = 315532800;
-
 
     # These aren't, strictly speaking, nix/nixpkgs specific, but I've
     # had hell upstreaming them. Pulling from resholve source and
@@ -119,7 +94,6 @@ rec {
 
     nativeBuildInputs = [ re2c file ];
 
-    # runtime deps
     propagatedBuildInputs = with pythonPackages; [ six typing ];
 
     doCheck = true;
@@ -129,7 +103,6 @@ rec {
       build/dev.sh all
     '';
 
-    # Patch shebangs so Nix can find all executables
     postPatch = ''
       patchShebangs asdl build core doctools frontend native oil_lang
     '';
