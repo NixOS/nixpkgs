@@ -67,13 +67,11 @@ pythonPackages.buildPythonApplication {
     ./test.sh
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Resolve external shell-script dependencies";
     homepage = "https://github.com/abathur/resholve";
-    license = with stdenv.lib.licenses; [
-      mit
-    ];
-    maintainers = with stdenv.lib.maintainers; [ abathur ];
-    platforms = stdenv.lib.platforms.all;
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ abathur ];
+    platforms = platforms.all;
   };
 }
