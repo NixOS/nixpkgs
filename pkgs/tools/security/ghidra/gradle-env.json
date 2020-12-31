@@ -1,0 +1,2511 @@
+{
+  "": {
+    "name": "ghidra",
+    "version": "9.2",
+    "path": "",
+    "gradle": {
+      "version": "5.6.3",
+      "type": "bin",
+      "url": "https://services.gradle.org/distributions/gradle-5.6.3-bin.zip",
+      "sha256": "60a6d8f687e3e7a4bc901cc6bc3db190efae0f02f0cc697e323e0f9336f224a3",
+      "nativeVersion": "0.18"
+    },
+    "dependencies": {
+      "settings": [],
+      "plugin": [],
+      "buildscript": [],
+      "project": [
+        {
+          "id": {
+            "group": "com.google.code.gson",
+            "name": "gson",
+            "version": "2.8.6",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "gson-2.8.6.jar",
+          "path": "com/google/code/gson/gson/2.8.6",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar",
+            "https://jcenter.bintray.com/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar"
+          ],
+          "sha256": "c8fb4839054d280b3033f800d1f5a97de2f028eb8ba2eb458ad287e536f3f25f"
+        },
+        {
+          "id": {
+            "group": "com.google.code.gson",
+            "name": "gson",
+            "version": "2.8.6",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "gson-2.8.6.pom",
+          "path": "com/google/code/gson/gson/2.8.6",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.8.6/gson-2.8.6.pom",
+            "https://jcenter.bintray.com/com/google/code/gson/gson/2.8.6/gson-2.8.6.pom"
+          ],
+          "sha256": "2174415a647332d30fda04bd1cfc708a3ecc84eaf7517f596188d8244e103911"
+        },
+        {
+          "id": {
+            "group": "com.google.code.gson",
+            "name": "gson-parent",
+            "version": "2.8.6",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "gson-parent-2.8.6.pom",
+          "path": "com/google/code/gson/gson-parent/2.8.6",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/google/code/gson/gson-parent/2.8.6/gson-parent-2.8.6.pom",
+            "https://jcenter.bintray.com/com/google/code/gson/gson-parent/2.8.6/gson-parent-2.8.6.pom"
+          ],
+          "sha256": "3736463859ec19267295e894940ae82a8f684413031122fe35ce7cff7e30a774"
+        },
+        {
+          "id": {
+            "group": "org.jacoco",
+            "name": "org.jacoco.agent",
+            "version": "0.8.2",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "org.jacoco.agent-0.8.2.jar",
+          "path": "org/jacoco/org.jacoco.agent/0.8.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.agent/0.8.2/org.jacoco.agent-0.8.2.jar",
+            "https://jcenter.bintray.com/org/jacoco/org.jacoco.agent/0.8.2/org.jacoco.agent-0.8.2.jar"
+          ],
+          "sha256": "19633e3ef8abb042078ef24746281031d1e736cecf0caeef78d157588a2fde82"
+        },
+        {
+          "id": {
+            "group": "org.jacoco",
+            "name": "org.jacoco.agent",
+            "version": "0.8.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "org.jacoco.agent-0.8.2.pom",
+          "path": "org/jacoco/org.jacoco.agent/0.8.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.agent/0.8.2/org.jacoco.agent-0.8.2.pom",
+            "https://jcenter.bintray.com/org/jacoco/org.jacoco.agent/0.8.2/org.jacoco.agent-0.8.2.pom"
+          ],
+          "sha256": "2e8bdeae7d1251462bf99f9f7683432fcc2b514523d3dbe05c2f50b63426de19"
+        },
+        {
+          "id": {
+            "group": "org.jacoco",
+            "name": "org.jacoco.ant",
+            "version": "0.8.2",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "org.jacoco.ant-0.8.2.jar",
+          "path": "org/jacoco/org.jacoco.ant/0.8.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.ant/0.8.2/org.jacoco.ant-0.8.2.jar",
+            "https://jcenter.bintray.com/org/jacoco/org.jacoco.ant/0.8.2/org.jacoco.ant-0.8.2.jar"
+          ],
+          "sha256": "9706db9a6a16931650d28be7a9bb1883f61b737668d2ee60c56b2d4df733327c"
+        },
+        {
+          "id": {
+            "group": "org.jacoco",
+            "name": "org.jacoco.ant",
+            "version": "0.8.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "org.jacoco.ant-0.8.2.pom",
+          "path": "org/jacoco/org.jacoco.ant/0.8.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.ant/0.8.2/org.jacoco.ant-0.8.2.pom",
+            "https://jcenter.bintray.com/org/jacoco/org.jacoco.ant/0.8.2/org.jacoco.ant-0.8.2.pom"
+          ],
+          "sha256": "5d9d5bd39c2b9918668beac27552d26bad80fc1046ec1e8db325a2551dbf707a"
+        },
+        {
+          "id": {
+            "group": "org.jacoco",
+            "name": "org.jacoco.build",
+            "version": "0.8.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "org.jacoco.build-0.8.2.pom",
+          "path": "org/jacoco/org.jacoco.build/0.8.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.build/0.8.2/org.jacoco.build-0.8.2.pom",
+            "https://jcenter.bintray.com/org/jacoco/org.jacoco.build/0.8.2/org.jacoco.build-0.8.2.pom"
+          ],
+          "sha256": "3098831949c1275967f5d033d65349409f32188c87aa2de173e3ad5a73ac1175"
+        },
+        {
+          "id": {
+            "group": "org.jacoco",
+            "name": "org.jacoco.core",
+            "version": "0.8.2",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "org.jacoco.core-0.8.2.jar",
+          "path": "org/jacoco/org.jacoco.core/0.8.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.core/0.8.2/org.jacoco.core-0.8.2.jar",
+            "https://jcenter.bintray.com/org/jacoco/org.jacoco.core/0.8.2/org.jacoco.core-0.8.2.jar"
+          ],
+          "sha256": "94b45ac715b0053ca9ebdc0a2e0c61d313316a994f728fd0381eaed4405fffa7"
+        },
+        {
+          "id": {
+            "group": "org.jacoco",
+            "name": "org.jacoco.core",
+            "version": "0.8.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "org.jacoco.core-0.8.2.pom",
+          "path": "org/jacoco/org.jacoco.core/0.8.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.core/0.8.2/org.jacoco.core-0.8.2.pom",
+            "https://jcenter.bintray.com/org/jacoco/org.jacoco.core/0.8.2/org.jacoco.core-0.8.2.pom"
+          ],
+          "sha256": "1bf60371594b30ebc836c344a9101c1352c592947efbbacb5d5f8e61e0079dc2"
+        },
+        {
+          "id": {
+            "group": "org.jacoco",
+            "name": "org.jacoco.report",
+            "version": "0.8.2",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "org.jacoco.report-0.8.2.jar",
+          "path": "org/jacoco/org.jacoco.report/0.8.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.report/0.8.2/org.jacoco.report-0.8.2.jar",
+            "https://jcenter.bintray.com/org/jacoco/org.jacoco.report/0.8.2/org.jacoco.report-0.8.2.jar"
+          ],
+          "sha256": "227cc827fc8fad57452354dc1c0ae3cca7ff829f2c698ba05fee72616b1b139f"
+        },
+        {
+          "id": {
+            "group": "org.jacoco",
+            "name": "org.jacoco.report",
+            "version": "0.8.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "org.jacoco.report-0.8.2.pom",
+          "path": "org/jacoco/org.jacoco.report/0.8.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jacoco/org.jacoco.report/0.8.2/org.jacoco.report-0.8.2.pom",
+            "https://jcenter.bintray.com/org/jacoco/org.jacoco.report/0.8.2/org.jacoco.report-0.8.2.pom"
+          ],
+          "sha256": "c4e4f9073d642f5604fe2ab799de8440910b929a77c5fdc1adb449d29f5dcb86"
+        },
+        {
+          "id": {
+            "group": "org.jmockit",
+            "name": "jmockit",
+            "version": "1.44",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jmockit-1.44.jar",
+          "path": "org/jmockit/jmockit/1.44",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jmockit/jmockit/1.44/jmockit-1.44.jar",
+            "https://jcenter.bintray.com/org/jmockit/jmockit/1.44/jmockit-1.44.jar"
+          ],
+          "sha256": "1974993751333248426ddbac370a604944edf665c13d46a4c5e973e4dd8fa94a"
+        },
+        {
+          "id": {
+            "group": "org.jmockit",
+            "name": "jmockit",
+            "version": "1.44",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jmockit-1.44.pom",
+          "path": "org/jmockit/jmockit/1.44",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jmockit/jmockit/1.44/jmockit-1.44.pom",
+            "https://jcenter.bintray.com/org/jmockit/jmockit/1.44/jmockit-1.44.pom"
+          ],
+          "sha256": "b80025dcf7f9dc20efa9e12357caccc8c8da0e69ebc39d07b03f77cc249541d1"
+        },
+        {
+          "id": {
+            "group": "org.ow2",
+            "name": "ow2",
+            "version": "1.5",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "ow2-1.5.pom",
+          "path": "org/ow2/ow2/1.5",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/ow2/1.5/ow2-1.5.pom",
+            "https://jcenter.bintray.com/org/ow2/ow2/1.5/ow2-1.5.pom"
+          ],
+          "sha256": "0f8a1b116e760b8fe6389c51b84e4b07a70fc11082d4f936e453b583dd50b43b"
+        },
+        {
+          "id": {
+            "group": "org.ow2.asm",
+            "name": "asm",
+            "version": "6.2.1",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "asm-6.2.1.jar",
+          "path": "org/ow2/asm/asm/6.2.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/6.2.1/asm-6.2.1.jar",
+            "https://jcenter.bintray.com/org/ow2/asm/asm/6.2.1/asm-6.2.1.jar"
+          ],
+          "sha256": "1460db6c33cc99c84e5cb30e46b017e4d1cc9a7fbc174101d6f84829bb64c085"
+        },
+        {
+          "id": {
+            "group": "org.ow2.asm",
+            "name": "asm",
+            "version": "6.2.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "asm-6.2.1.pom",
+          "path": "org/ow2/asm/asm/6.2.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/6.2.1/asm-6.2.1.pom",
+            "https://jcenter.bintray.com/org/ow2/asm/asm/6.2.1/asm-6.2.1.pom"
+          ],
+          "sha256": "ac205ef9060adf1f2ab2c24bc9429c77bce48a1fb496fdfb5938eaf590f4e3a3"
+        },
+        {
+          "id": {
+            "group": "org.ow2.asm",
+            "name": "asm-analysis",
+            "version": "6.2.1",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "asm-analysis-6.2.1.jar",
+          "path": "org/ow2/asm/asm-analysis/6.2.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-analysis/6.2.1/asm-analysis-6.2.1.jar",
+            "https://jcenter.bintray.com/org/ow2/asm/asm-analysis/6.2.1/asm-analysis-6.2.1.jar"
+          ],
+          "sha256": "4c9342c98e746e9c2d7f2cdc6896f7348317e9b1e5a6c591047fc8969def4b23"
+        },
+        {
+          "id": {
+            "group": "org.ow2.asm",
+            "name": "asm-analysis",
+            "version": "6.2.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "asm-analysis-6.2.1.pom",
+          "path": "org/ow2/asm/asm-analysis/6.2.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-analysis/6.2.1/asm-analysis-6.2.1.pom",
+            "https://jcenter.bintray.com/org/ow2/asm/asm-analysis/6.2.1/asm-analysis-6.2.1.pom"
+          ],
+          "sha256": "8eafbe450549bfa4415a38d133aaa0d42af34d310bc5a649e0bb4c7816b9c312"
+        },
+        {
+          "id": {
+            "group": "org.ow2.asm",
+            "name": "asm-commons",
+            "version": "6.2.1",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "asm-commons-6.2.1.jar",
+          "path": "org/ow2/asm/asm-commons/6.2.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-commons/6.2.1/asm-commons-6.2.1.jar",
+            "https://jcenter.bintray.com/org/ow2/asm/asm-commons/6.2.1/asm-commons-6.2.1.jar"
+          ],
+          "sha256": "3f578d31ef30f94b6d1f44812f41fe4f98a7cd42af35335f5d4866ab3b901865"
+        },
+        {
+          "id": {
+            "group": "org.ow2.asm",
+            "name": "asm-commons",
+            "version": "6.2.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "asm-commons-6.2.1.pom",
+          "path": "org/ow2/asm/asm-commons/6.2.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-commons/6.2.1/asm-commons-6.2.1.pom",
+            "https://jcenter.bintray.com/org/ow2/asm/asm-commons/6.2.1/asm-commons-6.2.1.pom"
+          ],
+          "sha256": "5efe8a905fcf12c0eb59dfc92daccdd7b94fd436622b5300597f2f5e38c5b569"
+        },
+        {
+          "id": {
+            "group": "org.ow2.asm",
+            "name": "asm-tree",
+            "version": "6.2.1",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "asm-tree-6.2.1.jar",
+          "path": "org/ow2/asm/asm-tree/6.2.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/6.2.1/asm-tree-6.2.1.jar",
+            "https://jcenter.bintray.com/org/ow2/asm/asm-tree/6.2.1/asm-tree-6.2.1.jar"
+          ],
+          "sha256": "a520b54c7be4e07e533db8420ddf936fe8341ff56a5df255bab584478dd90aab"
+        },
+        {
+          "id": {
+            "group": "org.ow2.asm",
+            "name": "asm-tree",
+            "version": "6.2.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "asm-tree-6.2.1.pom",
+          "path": "org/ow2/asm/asm-tree/6.2.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-tree/6.2.1/asm-tree-6.2.1.pom",
+            "https://jcenter.bintray.com/org/ow2/asm/asm-tree/6.2.1/asm-tree-6.2.1.pom"
+          ],
+          "sha256": "f47b0ad0a72de304486fd3ec5900ea821b60490070029096d6474868a3dd3103"
+        },
+        {
+          "id": {
+            "group": "org.sonatype.oss",
+            "name": "oss-parent",
+            "version": "7",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "oss-parent-7.pom",
+          "path": "org/sonatype/oss/oss-parent/7",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/oss/oss-parent/7/oss-parent-7.pom",
+            "https://jcenter.bintray.com/org/sonatype/oss/oss-parent/7/oss-parent-7.pom"
+          ],
+          "sha256": "b51f8867c92b6a722499557fc3a1fdea77bdf9ef574722fe90ce436a29559454"
+        },
+        {
+          "id": {
+            "group": "cglib",
+            "name": "cglib-nodep",
+            "version": "2.2",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "cglib-nodep-2.2.jar",
+          "path": "cglib/cglib-nodep/2.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/cglib/cglib-nodep/2.2/cglib-nodep-2.2.jar",
+            "https://jcenter.bintray.com/cglib/cglib-nodep/2.2/cglib-nodep-2.2.jar"
+          ],
+          "sha256": "11aab8e9198a53a3de65aaf4d90f19b124135bb078dd8cdefcbf2fcda00ce599"
+        },
+        {
+          "id": {
+            "group": "cglib",
+            "name": "cglib-nodep",
+            "version": "2.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "cglib-nodep-2.2.pom",
+          "path": "cglib/cglib-nodep/2.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/cglib/cglib-nodep/2.2/cglib-nodep-2.2.pom",
+            "https://jcenter.bintray.com/cglib/cglib-nodep/2.2/cglib-nodep-2.2.pom"
+          ],
+          "sha256": "416694b3ff3b2d7430088a3c387b40b785cdd63584de44b102e2723360a89047"
+        },
+        {
+          "id": {
+            "group": "ch.ethz.ganymed",
+            "name": "ganymed-ssh2",
+            "version": "262",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "ganymed-ssh2-262.jar",
+          "path": "ch/ethz/ganymed/ganymed-ssh2/262",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar",
+            "https://jcenter.bintray.com/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar"
+          ],
+          "sha256": "dc3c036d9d3a54742e01f50a6f4613be5a8e5647e958348932a2bdb0007fa15a"
+        },
+        {
+          "id": {
+            "group": "ch.ethz.ganymed",
+            "name": "ganymed-ssh2",
+            "version": "262",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "ganymed-ssh2-262.pom",
+          "path": "ch/ethz/ganymed/ganymed-ssh2/262",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.pom",
+            "https://jcenter.bintray.com/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.pom"
+          ],
+          "sha256": "e56087e30061ac4698fade211e4a4963336b761c6cfe7d22a4244fb73c9a7e45"
+        },
+        {
+          "id": {
+            "group": "com.google.guava",
+            "name": "guava",
+            "version": "19.0",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "guava-19.0.jar",
+          "path": "com/google/guava/guava/19.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/google/guava/guava/19.0/guava-19.0.jar",
+            "https://jcenter.bintray.com/com/google/guava/guava/19.0/guava-19.0.jar"
+          ],
+          "sha256": "58d4cc2e05ebb012bbac568b032f75623be1cb6fb096f3c60c72a86f7f057de4"
+        },
+        {
+          "id": {
+            "group": "com.google.guava",
+            "name": "guava",
+            "version": "19.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "guava-19.0.pom",
+          "path": "com/google/guava/guava/19.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/google/guava/guava/19.0/guava-19.0.pom",
+            "https://jcenter.bintray.com/com/google/guava/guava/19.0/guava-19.0.pom"
+          ],
+          "sha256": "addc064da7f1077fdf4dc90e5aaa887cd790850d1b74fe2e6e25d5f78551ac63"
+        },
+        {
+          "id": {
+            "group": "com.google.guava",
+            "name": "guava-parent",
+            "version": "19.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "guava-parent-19.0.pom",
+          "path": "com/google/guava/guava-parent/19.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/google/guava/guava-parent/19.0/guava-parent-19.0.pom",
+            "https://jcenter.bintray.com/com/google/guava/guava-parent/19.0/guava-parent-19.0.pom"
+          ],
+          "sha256": "3b76ff43ecdf10f74da36e4aae2b470c9d063e053c5ca026f5512ae94f1c3e10"
+        },
+        {
+          "id": {
+            "group": "commons-io",
+            "name": "commons-io",
+            "version": "2.6",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "commons-io-2.6.jar",
+          "path": "commons-io/commons-io/2.6",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/commons-io/commons-io/2.6/commons-io-2.6.jar",
+            "https://jcenter.bintray.com/commons-io/commons-io/2.6/commons-io-2.6.jar"
+          ],
+          "sha256": "f877d304660ac2a142f3865badfc971dec7ed73c747c7f8d5d2f5139ca736513"
+        },
+        {
+          "id": {
+            "group": "commons-io",
+            "name": "commons-io",
+            "version": "2.6",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "commons-io-2.6.pom",
+          "path": "commons-io/commons-io/2.6",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/commons-io/commons-io/2.6/commons-io-2.6.pom",
+            "https://jcenter.bintray.com/commons-io/commons-io/2.6/commons-io-2.6.pom"
+          ],
+          "sha256": "0c23863893a2291f5a7afdbd8d15923b3948afd87e563fa341cdcf6eae338a60"
+        },
+        {
+          "id": {
+            "group": "javax.help",
+            "name": "javahelp",
+            "version": "2.0.05",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "javahelp-2.0.05.jar",
+          "path": "javax/help/javahelp/2.0.05",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/javax/help/javahelp/2.0.05/javahelp-2.0.05.jar",
+            "https://jcenter.bintray.com/javax/help/javahelp/2.0.05/javahelp-2.0.05.jar"
+          ],
+          "sha256": "fcf4922d38ff85184f1d2328317bb60826e14da948abd606ee3d5b8c6a70debd"
+        },
+        {
+          "id": {
+            "group": "javax.help",
+            "name": "javahelp",
+            "version": "2.0.05",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "javahelp-2.0.05.pom",
+          "path": "javax/help/javahelp/2.0.05",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/javax/help/javahelp/2.0.05/javahelp-2.0.05.pom",
+            "https://jcenter.bintray.com/javax/help/javahelp/2.0.05/javahelp-2.0.05.pom"
+          ],
+          "sha256": "b8812be251aca1397f4b6a423bf4edd3a28444e3453b2203b5349336b9958229"
+        },
+        {
+          "id": {
+            "group": "msv",
+            "name": "isorelax",
+            "version": "20050913",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "isorelax-20050913.jar",
+          "path": "msv/isorelax/20050913",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/msv/isorelax/20050913/isorelax-20050913.jar",
+            "https://jcenter.bintray.com/msv/isorelax/20050913/isorelax-20050913.jar"
+          ],
+          "sha256": "3427152431cf7f967f92e69e5cac16147c5d8fb4b4e5a8a72f5291788efcff8c"
+        },
+        {
+          "id": {
+            "group": "msv",
+            "name": "isorelax",
+            "version": "20050913",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "isorelax-20050913.pom",
+          "path": "msv/isorelax/20050913",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/msv/isorelax/20050913/isorelax-20050913.pom",
+            "https://jcenter.bintray.com/msv/isorelax/20050913/isorelax-20050913.pom"
+          ],
+          "sha256": "bb9e08c589bf6f60714d0f9d31c2ed7703caf677fe9ae39216bccab774a47cd9"
+        },
+        {
+          "id": {
+            "group": "msv",
+            "name": "msv",
+            "version": "20050913",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "msv-20050913.jar",
+          "path": "msv/msv/20050913",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/msv/msv/20050913/msv-20050913.jar",
+            "https://jcenter.bintray.com/msv/msv/20050913/msv-20050913.jar"
+          ],
+          "sha256": "14be3a550e508433b4fe10775d540e9eb58b3ef04ed7456bc7c7d285c90c87a2"
+        },
+        {
+          "id": {
+            "group": "msv",
+            "name": "msv",
+            "version": "20050913",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "msv-20050913.pom",
+          "path": "msv/msv/20050913",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/msv/msv/20050913/msv-20050913.pom",
+            "https://jcenter.bintray.com/msv/msv/20050913/msv-20050913.pom"
+          ],
+          "sha256": "7a86a49ce1ee8179a38022e23191e48cf5b57e4104af6b57489ddb8cdec6a0d6"
+        },
+        {
+          "id": {
+            "group": "msv",
+            "name": "relaxngDatatype",
+            "version": "20050913",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "relaxngDatatype-20050913.jar",
+          "path": "msv/relaxngDatatype/20050913",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/msv/relaxngDatatype/20050913/relaxngDatatype-20050913.jar",
+            "https://jcenter.bintray.com/msv/relaxngDatatype/20050913/relaxngDatatype-20050913.jar"
+          ],
+          "sha256": "4d45a93eb5cdc32631966673c954b83fc9b60a0681bbddcefa2c4976d04cddf2"
+        },
+        {
+          "id": {
+            "group": "msv",
+            "name": "relaxngDatatype",
+            "version": "20050913",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "relaxngDatatype-20050913.pom",
+          "path": "msv/relaxngDatatype/20050913",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/msv/relaxngDatatype/20050913/relaxngDatatype-20050913.pom",
+            "https://jcenter.bintray.com/msv/relaxngDatatype/20050913/relaxngDatatype-20050913.pom"
+          ],
+          "sha256": "17f905ef68196518ac9a3e77a0d5e5198d60f43ffc904b2209ca046617f22df9"
+        },
+        {
+          "id": {
+            "group": "msv",
+            "name": "xsdlib",
+            "version": "20050913",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "xsdlib-20050913.jar",
+          "path": "msv/xsdlib/20050913",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/msv/xsdlib/20050913/xsdlib-20050913.jar",
+            "https://jcenter.bintray.com/msv/xsdlib/20050913/xsdlib-20050913.jar"
+          ],
+          "sha256": "6b8efa18ff570c0916da702c46906b9e8a139e1c05dbf1e4d8bdeba244c1b2b3"
+        },
+        {
+          "id": {
+            "group": "msv",
+            "name": "xsdlib",
+            "version": "20050913",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "xsdlib-20050913.pom",
+          "path": "msv/xsdlib/20050913",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/msv/xsdlib/20050913/xsdlib-20050913.pom",
+            "https://jcenter.bintray.com/msv/xsdlib/20050913/xsdlib-20050913.pom"
+          ],
+          "sha256": "4e2f19e0089f55daddfe03976f2870097bc0689716550fe9debd742b0aca6796"
+        },
+        {
+          "id": {
+            "group": "net.java.dev.timingframework",
+            "name": "timingframework",
+            "version": "1.0",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "timingframework-1.0.jar",
+          "path": "net/java/dev/timingframework/timingframework/1.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/java/dev/timingframework/timingframework/1.0/timingframework-1.0.jar",
+            "https://jcenter.bintray.com/net/java/dev/timingframework/timingframework/1.0/timingframework-1.0.jar"
+          ],
+          "sha256": "7461e9246c3b05191645a7f94c104680cc31865bb4d912082ac02ff77120cf4b"
+        },
+        {
+          "id": {
+            "group": "net.java.dev.timingframework",
+            "name": "timingframework",
+            "version": "1.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "timingframework-1.0.pom",
+          "path": "net/java/dev/timingframework/timingframework/1.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/java/dev/timingframework/timingframework/1.0/timingframework-1.0.pom",
+            "https://jcenter.bintray.com/net/java/dev/timingframework/timingframework/1.0/timingframework-1.0.pom"
+          ],
+          "sha256": "1079b7debf5d45bfcfc86e9eb810af1d186a375d6095a0e91ca28cd9af29c2d0"
+        },
+        {
+          "id": {
+            "group": "net.sf.jung",
+            "name": "jung-algorithms",
+            "version": "2.1.1",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jung-algorithms-2.1.1.jar",
+          "path": "net/sf/jung/jung-algorithms/2.1.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/jung/jung-algorithms/2.1.1/jung-algorithms-2.1.1.jar",
+            "https://jcenter.bintray.com/net/sf/jung/jung-algorithms/2.1.1/jung-algorithms-2.1.1.jar"
+          ],
+          "sha256": "ed138e2f6b2b2f13af61a13f1788bce6f1de8858c42ee70a7d41e6283937a30a"
+        },
+        {
+          "id": {
+            "group": "net.sf.jung",
+            "name": "jung-algorithms",
+            "version": "2.1.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jung-algorithms-2.1.1.pom",
+          "path": "net/sf/jung/jung-algorithms/2.1.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/jung/jung-algorithms/2.1.1/jung-algorithms-2.1.1.pom",
+            "https://jcenter.bintray.com/net/sf/jung/jung-algorithms/2.1.1/jung-algorithms-2.1.1.pom"
+          ],
+          "sha256": "20dc3f0beeed68f902c3f02d3baa89f1e234c4d4967b2212d791c18f0fdae90b"
+        },
+        {
+          "id": {
+            "group": "net.sf.jung",
+            "name": "jung-api",
+            "version": "2.1.1",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jung-api-2.1.1.jar",
+          "path": "net/sf/jung/jung-api/2.1.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/jung/jung-api/2.1.1/jung-api-2.1.1.jar",
+            "https://jcenter.bintray.com/net/sf/jung/jung-api/2.1.1/jung-api-2.1.1.jar"
+          ],
+          "sha256": "6cb735963c36d5155d0de5f19a03485b9a26e67550e160b3dd89009a6f51694e"
+        },
+        {
+          "id": {
+            "group": "net.sf.jung",
+            "name": "jung-api",
+            "version": "2.1.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jung-api-2.1.1.pom",
+          "path": "net/sf/jung/jung-api/2.1.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/jung/jung-api/2.1.1/jung-api-2.1.1.pom",
+            "https://jcenter.bintray.com/net/sf/jung/jung-api/2.1.1/jung-api-2.1.1.pom"
+          ],
+          "sha256": "defb4c56856483a4eb7719e1e168aa60ab639e43c92512866583732f23f13a0b"
+        },
+        {
+          "id": {
+            "group": "net.sf.jung",
+            "name": "jung-graph-impl",
+            "version": "2.1.1",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jung-graph-impl-2.1.1.jar",
+          "path": "net/sf/jung/jung-graph-impl/2.1.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/jung/jung-graph-impl/2.1.1/jung-graph-impl-2.1.1.jar",
+            "https://jcenter.bintray.com/net/sf/jung/jung-graph-impl/2.1.1/jung-graph-impl-2.1.1.jar"
+          ],
+          "sha256": "4911da04d77b4f7bb465a65ae3cc3a000cae4d52b587911e3c0b4c4b643493c1"
+        },
+        {
+          "id": {
+            "group": "net.sf.jung",
+            "name": "jung-graph-impl",
+            "version": "2.1.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jung-graph-impl-2.1.1.pom",
+          "path": "net/sf/jung/jung-graph-impl/2.1.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/jung/jung-graph-impl/2.1.1/jung-graph-impl-2.1.1.pom",
+            "https://jcenter.bintray.com/net/sf/jung/jung-graph-impl/2.1.1/jung-graph-impl-2.1.1.pom"
+          ],
+          "sha256": "0d72e22dde8f881004bbb69a8338eec6d9e9193960f4144338196160f849a8b4"
+        },
+        {
+          "id": {
+            "group": "net.sf.jung",
+            "name": "jung-parent",
+            "version": "2.1.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jung-parent-2.1.1.pom",
+          "path": "net/sf/jung/jung-parent/2.1.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/jung/jung-parent/2.1.1/jung-parent-2.1.1.pom",
+            "https://jcenter.bintray.com/net/sf/jung/jung-parent/2.1.1/jung-parent-2.1.1.pom"
+          ],
+          "sha256": "a2ce53d3fca71ff1d043715f9a1a304a8e4aae1c0645ad9038cae4c521368be4"
+        },
+        {
+          "id": {
+            "group": "net.sf.jung",
+            "name": "jung-visualization",
+            "version": "2.1.1",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jung-visualization-2.1.1.jar",
+          "path": "net/sf/jung/jung-visualization/2.1.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/jung/jung-visualization/2.1.1/jung-visualization-2.1.1.jar",
+            "https://jcenter.bintray.com/net/sf/jung/jung-visualization/2.1.1/jung-visualization-2.1.1.jar"
+          ],
+          "sha256": "933ba26c2308c3bf4566c3828979b68ad7422724571712e5af0de876bdffa2ae"
+        },
+        {
+          "id": {
+            "group": "net.sf.jung",
+            "name": "jung-visualization",
+            "version": "2.1.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jung-visualization-2.1.1.pom",
+          "path": "net/sf/jung/jung-visualization/2.1.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/jung/jung-visualization/2.1.1/jung-visualization-2.1.1.pom",
+            "https://jcenter.bintray.com/net/sf/jung/jung-visualization/2.1.1/jung-visualization-2.1.1.pom"
+          ],
+          "sha256": "6b25113ada64f89828390986b32584d2736c044fbb895cf5068e81416a3d97ec"
+        },
+        {
+          "id": {
+            "group": "org.antlr",
+            "name": "ST4",
+            "version": "4.0.8",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "ST4-4.0.8.jar",
+          "path": "org/antlr/ST4/4.0.8",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/antlr/ST4/4.0.8/ST4-4.0.8.jar",
+            "https://jcenter.bintray.com/org/antlr/ST4/4.0.8/ST4-4.0.8.jar"
+          ],
+          "sha256": "58caabc40c9f74b0b5993fd868e0f64a50c0759094e6a251aaafad98edfc7a3b"
+        },
+        {
+          "id": {
+            "group": "org.antlr",
+            "name": "ST4",
+            "version": "4.0.8",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "ST4-4.0.8.pom",
+          "path": "org/antlr/ST4/4.0.8",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/antlr/ST4/4.0.8/ST4-4.0.8.pom",
+            "https://jcenter.bintray.com/org/antlr/ST4/4.0.8/ST4-4.0.8.pom"
+          ],
+          "sha256": "3c0890dec71174eb3ba3d404ca9e341901ff6b0421808b00713b0dbb1306c17c"
+        },
+        {
+          "id": {
+            "group": "org.antlr",
+            "name": "antlr",
+            "version": "3.5.2",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "antlr-3.5.2.jar",
+          "path": "org/antlr/antlr/3.5.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/antlr/antlr/3.5.2/antlr-3.5.2.jar",
+            "https://jcenter.bintray.com/org/antlr/antlr/3.5.2/antlr-3.5.2.jar"
+          ],
+          "sha256": "5ac36c2acfb0a0f3d37dafe20b5b570f2643e2d000c648d44503c2738be643df"
+        },
+        {
+          "id": {
+            "group": "org.antlr",
+            "name": "antlr",
+            "version": "3.5.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "antlr-3.5.2.pom",
+          "path": "org/antlr/antlr/3.5.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/antlr/antlr/3.5.2/antlr-3.5.2.pom",
+            "https://jcenter.bintray.com/org/antlr/antlr/3.5.2/antlr-3.5.2.pom"
+          ],
+          "sha256": "065e5e80662feb858795d3c01f7714247bdd319459705ee13b1a4b1968fa22e4"
+        },
+        {
+          "id": {
+            "group": "org.antlr",
+            "name": "antlr-master",
+            "version": "3.5.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "antlr-master-3.5.2.pom",
+          "path": "org/antlr/antlr-master/3.5.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/antlr/antlr-master/3.5.2/antlr-master-3.5.2.pom",
+            "https://jcenter.bintray.com/org/antlr/antlr-master/3.5.2/antlr-master-3.5.2.pom"
+          ],
+          "sha256": "42d91a531ea5100eb09b541aa002c3b908e8f282bd73b6e2f52f371ef1331bd6"
+        },
+        {
+          "id": {
+            "group": "org.antlr",
+            "name": "antlr-runtime",
+            "version": "3.5.2",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "antlr-runtime-3.5.2.jar",
+          "path": "org/antlr/antlr-runtime/3.5.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.jar",
+            "https://jcenter.bintray.com/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.jar"
+          ],
+          "sha256": "ce3fc8ecb10f39e9a3cddcbb2ce350d272d9cd3d0b1e18e6fe73c3b9389c8734"
+        },
+        {
+          "id": {
+            "group": "org.antlr",
+            "name": "antlr-runtime",
+            "version": "3.5.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "antlr-runtime-3.5.2.pom",
+          "path": "org/antlr/antlr-runtime/3.5.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.pom",
+            "https://jcenter.bintray.com/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.pom"
+          ],
+          "sha256": "46a9c2200bb8b12bd7124aa7a5097ff49099908329c851a04cb2051420aa7f25"
+        },
+        {
+          "id": {
+            "group": "org.apache",
+            "name": "apache",
+            "version": "16",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "apache-16.pom",
+          "path": "org/apache/apache/16",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/apache/16/apache-16.pom",
+            "https://jcenter.bintray.com/org/apache/apache/16/apache-16.pom"
+          ],
+          "sha256": "9f85ff2fd7d6cb3097aa47fb419ee7f0ebe869109f98aba9f4eca3f49e74a40e"
+        },
+        {
+          "id": {
+            "group": "org.apache",
+            "name": "apache",
+            "version": "18",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "apache-18.pom",
+          "path": "org/apache/apache/18",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/apache/18/apache-18.pom",
+            "https://jcenter.bintray.com/org/apache/apache/18/apache-18.pom"
+          ],
+          "sha256": "7831307285fd475bbc36b20ae38e7882f11c3153b1d5930f852d44eda8f33c17"
+        },
+        {
+          "id": {
+            "group": "org.apache",
+            "name": "apache",
+            "version": "19",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "apache-19.pom",
+          "path": "org/apache/apache/19",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/apache/19/apache-19.pom",
+            "https://jcenter.bintray.com/org/apache/apache/19/apache-19.pom"
+          ],
+          "sha256": "91f7a33096ea69bac2cbaf6d01feb934cac002c48d8c8cfa9c240b40f1ec21df"
+        },
+        {
+          "id": {
+            "group": "org.apache",
+            "name": "apache",
+            "version": "21",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "apache-21.pom",
+          "path": "org/apache/apache/21",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/apache/21/apache-21.pom",
+            "https://jcenter.bintray.com/org/apache/apache/21/apache-21.pom"
+          ],
+          "sha256": "af10c108da014f17cafac7b52b2b4b5a3a1c18265fa2af97a325d9143537b380"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-collections4",
+            "version": "4.1",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "commons-collections4-4.1.jar",
+          "path": "org/apache/commons/commons-collections4/4.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar",
+            "https://jcenter.bintray.com/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar"
+          ],
+          "sha256": "b1fe8b5968b57d8465425357ed2d9dc695504518bed2df5b565c4b8e68c1c8a5"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-collections4",
+            "version": "4.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "commons-collections4-4.1.pom",
+          "path": "org/apache/commons/commons-collections4/4.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.pom"
+          ],
+          "sha256": "c0ad42e9103537960d9a74da58ecc24dd1a37a13d1e4c48f0969be93e4018369"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-compress",
+            "version": "1.19",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "commons-compress-1.19.jar",
+          "path": "org/apache/commons/commons-compress/1.19",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.19/commons-compress-1.19.jar",
+            "https://jcenter.bintray.com/org/apache/commons/commons-compress/1.19/commons-compress-1.19.jar"
+          ],
+          "sha256": "ff2d59fad74e867630fbc7daab14c432654712ac624dbee468d220677b124dd5"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-compress",
+            "version": "1.19",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "commons-compress-1.19.pom",
+          "path": "org/apache/commons/commons-compress/1.19",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-compress/1.19/commons-compress-1.19.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-compress/1.19/commons-compress-1.19.pom"
+          ],
+          "sha256": "9d5a690d1dea6a747e0dd8e74e64447167f395cb8f148010b8241334f58b525b"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-lang3",
+            "version": "3.9",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "commons-lang3-3.9.jar",
+          "path": "org/apache/commons/commons-lang3/3.9",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.9/commons-lang3-3.9.jar",
+            "https://jcenter.bintray.com/org/apache/commons/commons-lang3/3.9/commons-lang3-3.9.jar"
+          ],
+          "sha256": "de2e1dcdcf3ef917a8ce858661a06726a9a944f28e33ad7f9e08bea44dc3c230"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-lang3",
+            "version": "3.9",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "commons-lang3-3.9.pom",
+          "path": "org/apache/commons/commons-lang3/3.9",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.9/commons-lang3-3.9.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-lang3/3.9/commons-lang3-3.9.pom"
+          ],
+          "sha256": "a4022429b98425b430181915721279a52f610f34648bdac487d4cacbbe8dfeb5"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-parent",
+            "version": "38",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "commons-parent-38.pom",
+          "path": "org/apache/commons/commons-parent/38",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/38/commons-parent-38.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/38/commons-parent-38.pom"
+          ],
+          "sha256": "558d961745ebadcc5dc391cfde7d474086d4caaee24dd3e6df931ed9f6b5b495"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-parent",
+            "version": "42",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "commons-parent-42.pom",
+          "path": "org/apache/commons/commons-parent/42",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/42/commons-parent-42.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/42/commons-parent-42.pom"
+          ],
+          "sha256": "cd313494c670b483ec256972af1698b330e598f807002354eb765479f604b09c"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-parent",
+            "version": "47",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "commons-parent-47.pom",
+          "path": "org/apache/commons/commons-parent/47",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/47/commons-parent-47.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/47/commons-parent-47.pom"
+          ],
+          "sha256": "8a8ecb570553bf9f1ffae211a8d4ca9ee630c17afe59293368fba7bd9b42fcb7"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-parent",
+            "version": "48",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "commons-parent-48.pom",
+          "path": "org/apache/commons/commons-parent/48",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/48/commons-parent-48.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/48/commons-parent-48.pom"
+          ],
+          "sha256": "1e1f7de9370a7b7901f128f1dacd1422be74e3f47f9558b0f79e04c0637ca0b4"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-text",
+            "version": "1.6",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "commons-text-1.6.jar",
+          "path": "org/apache/commons/commons-text/1.6",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.6/commons-text-1.6.jar",
+            "https://jcenter.bintray.com/org/apache/commons/commons-text/1.6/commons-text-1.6.jar"
+          ],
+          "sha256": "df45e56549b63e0fe716953c9d43cc158f8bf008baf60498e7c17f3faa00a70b"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-text",
+            "version": "1.6",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "commons-text-1.6.pom",
+          "path": "org/apache/commons/commons-text/1.6",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.6/commons-text-1.6.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-text/1.6/commons-text-1.6.pom"
+          ],
+          "sha256": "fc3edfe076e964d175bb91d9d2a3cd57d616fff460ffb59a0bf9fd30563e72a6"
+        },
+        {
+          "id": {
+            "group": "org.apache.logging.log4j",
+            "name": "log4j",
+            "version": "2.12.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "log4j-2.12.1.pom",
+          "path": "org/apache/logging/log4j/log4j/2.12.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j/2.12.1/log4j-2.12.1.pom",
+            "https://jcenter.bintray.com/org/apache/logging/log4j/log4j/2.12.1/log4j-2.12.1.pom"
+          ],
+          "sha256": "75f1363cf520b6b11acf6a85efc651fa95152f47be60119040dd4d4db557cc70"
+        },
+        {
+          "id": {
+            "group": "org.apache.logging.log4j",
+            "name": "log4j-api",
+            "version": "2.12.1",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "log4j-api-2.12.1.jar",
+          "path": "org/apache/logging/log4j/log4j-api/2.12.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.12.1/log4j-api-2.12.1.jar",
+            "https://jcenter.bintray.com/org/apache/logging/log4j/log4j-api/2.12.1/log4j-api-2.12.1.jar"
+          ],
+          "sha256": "429534d03bdb728879ab551d469e26f6f7ff4c8a8627f59ac68ab6ef26063515"
+        },
+        {
+          "id": {
+            "group": "org.apache.logging.log4j",
+            "name": "log4j-api",
+            "version": "2.12.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "log4j-api-2.12.1.pom",
+          "path": "org/apache/logging/log4j/log4j-api/2.12.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.12.1/log4j-api-2.12.1.pom",
+            "https://jcenter.bintray.com/org/apache/logging/log4j/log4j-api/2.12.1/log4j-api-2.12.1.pom"
+          ],
+          "sha256": "4055a241b5254725e62447becf7ae8626ea9cd6ae56361b4d6adecd651b4dd53"
+        },
+        {
+          "id": {
+            "group": "org.apache.logging.log4j",
+            "name": "log4j-core",
+            "version": "2.12.1",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "log4j-core-2.12.1.jar",
+          "path": "org/apache/logging/log4j/log4j-core/2.12.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.12.1/log4j-core-2.12.1.jar",
+            "https://jcenter.bintray.com/org/apache/logging/log4j/log4j-core/2.12.1/log4j-core-2.12.1.jar"
+          ],
+          "sha256": "885e31a14fc71cb4849e93564d26a221c685a789379ef63cb2d082cedf3c2235"
+        },
+        {
+          "id": {
+            "group": "org.apache.logging.log4j",
+            "name": "log4j-core",
+            "version": "2.12.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "log4j-core-2.12.1.pom",
+          "path": "org/apache/logging/log4j/log4j-core/2.12.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.12.1/log4j-core-2.12.1.pom",
+            "https://jcenter.bintray.com/org/apache/logging/log4j/log4j-core/2.12.1/log4j-core-2.12.1.pom"
+          ],
+          "sha256": "9aa71193651a170d3d95b7cf682871211c8b4b070b695d8f30a6320082ebc709"
+        },
+        {
+          "id": {
+            "group": "org.jdom",
+            "name": "jdom-legacy",
+            "version": "1.1.3",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jdom-legacy-1.1.3.jar",
+          "path": "org/jdom/jdom-legacy/1.1.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jdom/jdom-legacy/1.1.3/jdom-legacy-1.1.3.jar",
+            "https://jcenter.bintray.com/org/jdom/jdom-legacy/1.1.3/jdom-legacy-1.1.3.jar"
+          ],
+          "sha256": "02bd61a725e8af9b0176b43bf29816d0c748b8ab951385bd127be37489325a0a"
+        },
+        {
+          "id": {
+            "group": "org.jdom",
+            "name": "jdom-legacy",
+            "version": "1.1.3",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jdom-legacy-1.1.3.pom",
+          "path": "org/jdom/jdom-legacy/1.1.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jdom/jdom-legacy/1.1.3/jdom-legacy-1.1.3.pom",
+            "https://jcenter.bintray.com/org/jdom/jdom-legacy/1.1.3/jdom-legacy-1.1.3.pom"
+          ],
+          "sha256": "6d65938b70b1172301cb42d8e65ee0573a571ed39f3af1013a9e6e929fdf968c"
+        },
+        {
+          "id": {
+            "group": "org.jgrapht",
+            "name": "jgrapht",
+            "version": "1.4.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jgrapht-1.4.0.pom",
+          "path": "org/jgrapht/jgrapht/1.4.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jgrapht/jgrapht/1.4.0/jgrapht-1.4.0.pom",
+            "https://jcenter.bintray.com/org/jgrapht/jgrapht/1.4.0/jgrapht-1.4.0.pom"
+          ],
+          "sha256": "b015d213a5ff013e0c1f7b419a4161abfa674034bfcedf30bce96edec21c573a"
+        },
+        {
+          "id": {
+            "group": "org.jgrapht",
+            "name": "jgrapht-core",
+            "version": "1.4.0",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jgrapht-core-1.4.0.jar",
+          "path": "org/jgrapht/jgrapht-core/1.4.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jgrapht/jgrapht-core/1.4.0/jgrapht-core-1.4.0.jar",
+            "https://jcenter.bintray.com/org/jgrapht/jgrapht-core/1.4.0/jgrapht-core-1.4.0.jar"
+          ],
+          "sha256": "e6db18743ec01561623c4c6242f8778289da4bf990ac77fa659e09471690856f"
+        },
+        {
+          "id": {
+            "group": "org.jgrapht",
+            "name": "jgrapht-core",
+            "version": "1.4.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jgrapht-core-1.4.0.pom",
+          "path": "org/jgrapht/jgrapht-core/1.4.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jgrapht/jgrapht-core/1.4.0/jgrapht-core-1.4.0.pom",
+            "https://jcenter.bintray.com/org/jgrapht/jgrapht-core/1.4.0/jgrapht-core-1.4.0.pom"
+          ],
+          "sha256": "a5b3ef7341961b71a6bb0b2d6092a7f3909cf768abce8e4eba89725b35c3e2bd"
+        },
+        {
+          "id": {
+            "group": "org.jheaps",
+            "name": "jheaps",
+            "version": "0.11",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jheaps-0.11.jar",
+          "path": "org/jheaps/jheaps/0.11",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jheaps/jheaps/0.11/jheaps-0.11.jar",
+            "https://jcenter.bintray.com/org/jheaps/jheaps/0.11/jheaps-0.11.jar"
+          ],
+          "sha256": "ea2fc1f299bfe85ebbc2f054d6a89eea17f06065192cfa31997f876536a7b383"
+        },
+        {
+          "id": {
+            "group": "org.jheaps",
+            "name": "jheaps",
+            "version": "0.11",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jheaps-0.11.pom",
+          "path": "org/jheaps/jheaps/0.11",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jheaps/jheaps/0.11/jheaps-0.11.pom",
+            "https://jcenter.bintray.com/org/jheaps/jheaps/0.11/jheaps-0.11.pom"
+          ],
+          "sha256": "d7b53ab5e655e3643da3a73ef331e15c0bb852ba6fe3f55321137bab87327d87"
+        },
+        {
+          "id": {
+            "group": "org.sonatype.oss",
+            "name": "oss-parent",
+            "version": "9",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "oss-parent-9.pom",
+          "path": "org/sonatype/oss/oss-parent/9",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/sonatype/oss/oss-parent/9/oss-parent-9.pom",
+            "https://jcenter.bintray.com/org/sonatype/oss/oss-parent/9/oss-parent-9.pom"
+          ],
+          "sha256": "fb40265f982548212ff82e362e59732b2187ec6f0d80182885c14ef1f982827a"
+        },
+        {
+          "id": {
+            "group": "biz.aQute.bnd",
+            "name": "biz.aQute.bndlib",
+            "version": "5.1.2",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "biz.aQute.bndlib-5.1.2.jar",
+          "path": "biz/aQute/bnd/biz.aQute.bndlib/5.1.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/biz/aQute/bnd/biz.aQute.bndlib/5.1.2/biz.aQute.bndlib-5.1.2.jar",
+            "https://jcenter.bintray.com/biz/aQute/bnd/biz.aQute.bndlib/5.1.2/biz.aQute.bndlib-5.1.2.jar"
+          ],
+          "sha256": "1c764d9f3f08c1b56be4cacea33a0a5a21f4a46e14698047748b9ed3d8d752cc"
+        },
+        {
+          "id": {
+            "group": "biz.aQute.bnd",
+            "name": "biz.aQute.bndlib",
+            "version": "5.1.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "biz.aQute.bndlib-5.1.2.pom",
+          "path": "biz/aQute/bnd/biz.aQute.bndlib/5.1.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/biz/aQute/bnd/biz.aQute.bndlib/5.1.2/biz.aQute.bndlib-5.1.2.pom",
+            "https://jcenter.bintray.com/biz/aQute/bnd/biz.aQute.bndlib/5.1.2/biz.aQute.bndlib-5.1.2.pom"
+          ],
+          "sha256": "431aa27f1195f7105de6cb71572e8999af78f15ccaa4126f8b449d61d447f833"
+        },
+        {
+          "id": {
+            "group": "com.github.rotty3000",
+            "name": "phidias",
+            "version": "0.3.7",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "phidias-0.3.7.jar",
+          "path": "com/github/rotty3000/phidias/0.3.7",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/github/rotty3000/phidias/0.3.7/phidias-0.3.7.jar",
+            "https://jcenter.bintray.com/com/github/rotty3000/phidias/0.3.7/phidias-0.3.7.jar"
+          ],
+          "sha256": "c8d0760ce3b0ed1453d435bcdd31e34f0be3ac09024e7e1a98b8a3cebf4a6bb5"
+        },
+        {
+          "id": {
+            "group": "com.github.rotty3000",
+            "name": "phidias",
+            "version": "0.3.7",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "phidias-0.3.7.pom",
+          "path": "com/github/rotty3000/phidias/0.3.7",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/github/rotty3000/phidias/0.3.7/phidias-0.3.7.pom",
+            "https://jcenter.bintray.com/com/github/rotty3000/phidias/0.3.7/phidias-0.3.7.pom"
+          ],
+          "sha256": "158fa40d065f14247907b692222458d79d9e163b13cf5b5fac7be02242cc2bad"
+        },
+        {
+          "id": {
+            "group": "com.google.code.findbugs",
+            "name": "jsr305",
+            "version": "3.0.2",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jsr305-3.0.2.jar",
+          "path": "com/google/code/findbugs/jsr305/3.0.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar",
+            "https://jcenter.bintray.com/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar"
+          ],
+          "sha256": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7"
+        },
+        {
+          "id": {
+            "group": "com.google.code.findbugs",
+            "name": "jsr305",
+            "version": "3.0.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jsr305-3.0.2.pom",
+          "path": "com/google/code/findbugs/jsr305/3.0.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.pom",
+            "https://jcenter.bintray.com/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.pom"
+          ],
+          "sha256": "19889dbdf1b254b2601a5ee645b8147a974644882297684c798afe5d63d78dfe"
+        },
+        {
+          "id": {
+            "group": "junit",
+            "name": "junit",
+            "version": "4.12",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "junit-4.12.jar",
+          "path": "junit/junit/4.12",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12.jar",
+            "https://jcenter.bintray.com/junit/junit/4.12/junit-4.12.jar"
+          ],
+          "sha256": "59721f0805e223d84b90677887d9ff567dc534d7c502ca903c0c2b17f05c116a"
+        },
+        {
+          "id": {
+            "group": "junit",
+            "name": "junit",
+            "version": "4.12",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "junit-4.12.pom",
+          "path": "junit/junit/4.12",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12.pom",
+            "https://jcenter.bintray.com/junit/junit/4.12/junit-4.12.pom"
+          ],
+          "sha256": "90f163f78e3ffb6f1c7ad97de9e7eba4eea25807141b85d6d12be67ca25449c4"
+        },
+        {
+          "id": {
+            "group": "org.apache.felix",
+            "name": "felix-parent",
+            "version": "6",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "felix-parent-6.pom",
+          "path": "org/apache/felix/felix-parent/6",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/felix/felix-parent/6/felix-parent-6.pom",
+            "https://jcenter.bintray.com/org/apache/felix/felix-parent/6/felix-parent-6.pom"
+          ],
+          "sha256": "3608b6b200f6c8f488c77cc159847d515e6966e8333b85d8e04e394a093b5595"
+        },
+        {
+          "id": {
+            "group": "org.apache.felix",
+            "name": "org.apache.felix.framework",
+            "version": "6.0.3",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "org.apache.felix.framework-6.0.3.jar",
+          "path": "org/apache/felix/org.apache.felix.framework/6.0.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/felix/org.apache.felix.framework/6.0.3/org.apache.felix.framework-6.0.3.jar",
+            "https://jcenter.bintray.com/org/apache/felix/org.apache.felix.framework/6.0.3/org.apache.felix.framework-6.0.3.jar"
+          ],
+          "sha256": "817563ea7baae979e288f76c9d0531d90fd0f6ad287578d80adba81fd71469ac"
+        },
+        {
+          "id": {
+            "group": "org.apache.felix",
+            "name": "org.apache.felix.framework",
+            "version": "6.0.3",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "org.apache.felix.framework-6.0.3.pom",
+          "path": "org/apache/felix/org.apache.felix.framework/6.0.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/felix/org.apache.felix.framework/6.0.3/org.apache.felix.framework-6.0.3.pom",
+            "https://jcenter.bintray.com/org/apache/felix/org.apache.felix.framework/6.0.3/org.apache.felix.framework-6.0.3.pom"
+          ],
+          "sha256": "a8d6e984409b98700545b4bcffbb327df47a1d33af036ce266c32e4ec1bc74e0"
+        },
+        {
+          "id": {
+            "group": "org.codehaus",
+            "name": "codehaus-parent",
+            "version": "3",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "codehaus-parent-3.pom",
+          "path": "org/codehaus/codehaus-parent/3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/codehaus-parent/3/codehaus-parent-3.pom",
+            "https://jcenter.bintray.com/org/codehaus/codehaus-parent/3/codehaus-parent-3.pom"
+          ],
+          "sha256": "50eb253acd0b6ee048f432d9fc3a3b36264efb3da1ffa7fb07f6c4d4b7a8ca31"
+        },
+        {
+          "id": {
+            "group": "org.codehaus.mojo",
+            "name": "animal-sniffer-annotations",
+            "version": "1.9",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "animal-sniffer-annotations-1.9.jar",
+          "path": "org/codehaus/mojo/animal-sniffer-annotations/1.9",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.9/animal-sniffer-annotations-1.9.jar",
+            "https://jcenter.bintray.com/org/codehaus/mojo/animal-sniffer-annotations/1.9/animal-sniffer-annotations-1.9.jar"
+          ],
+          "sha256": "cd96feeb47f34b2559704715db7b179a03a3721f9dc4092c345c718e29b42de4"
+        },
+        {
+          "id": {
+            "group": "org.codehaus.mojo",
+            "name": "animal-sniffer-annotations",
+            "version": "1.9",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "animal-sniffer-annotations-1.9.pom",
+          "path": "org/codehaus/mojo/animal-sniffer-annotations/1.9",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.9/animal-sniffer-annotations-1.9.pom",
+            "https://jcenter.bintray.com/org/codehaus/mojo/animal-sniffer-annotations/1.9/animal-sniffer-annotations-1.9.pom"
+          ],
+          "sha256": "fe71090e23578dd19aa6a8fef5186fcfa58f48f8070672a9ac8945862b3b7f3d"
+        },
+        {
+          "id": {
+            "group": "org.codehaus.mojo",
+            "name": "animal-sniffer-parent",
+            "version": "1.9",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "animal-sniffer-parent-1.9.pom",
+          "path": "org/codehaus/mojo/animal-sniffer-parent/1.9",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/mojo/animal-sniffer-parent/1.9/animal-sniffer-parent-1.9.pom",
+            "https://jcenter.bintray.com/org/codehaus/mojo/animal-sniffer-parent/1.9/animal-sniffer-parent-1.9.pom"
+          ],
+          "sha256": "9f20d244de5ee4e65099b277b69884ef1af811139c009725dd3ccfa8fb1ac63b"
+        },
+        {
+          "id": {
+            "group": "org.codehaus.mojo",
+            "name": "mojo-parent",
+            "version": "28",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "mojo-parent-28.pom",
+          "path": "org/codehaus/mojo/mojo-parent/28",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/codehaus/mojo/mojo-parent/28/mojo-parent-28.pom",
+            "https://jcenter.bintray.com/org/codehaus/mojo/mojo-parent/28/mojo-parent-28.pom"
+          ],
+          "sha256": "5ab6df1f925fc61397df2d17352bbc98af1464e853ed217e09e53d20a326f707"
+        },
+        {
+          "id": {
+            "group": "org.hamcrest",
+            "name": "hamcrest-all",
+            "version": "1.3",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "hamcrest-all-1.3.jar",
+          "path": "org/hamcrest/hamcrest-all/1.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-all/1.3/hamcrest-all-1.3.jar",
+            "https://jcenter.bintray.com/org/hamcrest/hamcrest-all/1.3/hamcrest-all-1.3.jar"
+          ],
+          "sha256": "4877670629ab96f34f5f90ab283125fcd9acb7e683e66319a68be6eb2cca60de"
+        },
+        {
+          "id": {
+            "group": "org.hamcrest",
+            "name": "hamcrest-all",
+            "version": "1.3",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "hamcrest-all-1.3.pom",
+          "path": "org/hamcrest/hamcrest-all/1.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-all/1.3/hamcrest-all-1.3.pom",
+            "https://jcenter.bintray.com/org/hamcrest/hamcrest-all/1.3/hamcrest-all-1.3.pom"
+          ],
+          "sha256": "5bff685d8d3093bb6d02e0575af804562d3be709409bcc719d9e34bad65339b0"
+        },
+        {
+          "id": {
+            "group": "org.hamcrest",
+            "name": "hamcrest-core",
+            "version": "1.3",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "hamcrest-core-1.3.jar",
+          "path": "org/hamcrest/hamcrest-core/1.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar",
+            "https://jcenter.bintray.com/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
+          ],
+          "sha256": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9"
+        },
+        {
+          "id": {
+            "group": "org.hamcrest",
+            "name": "hamcrest-core",
+            "version": "1.3",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "hamcrest-core-1.3.pom",
+          "path": "org/hamcrest/hamcrest-core/1.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.pom",
+            "https://jcenter.bintray.com/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.pom"
+          ],
+          "sha256": "fde386a7905173a1b103de6ab820727584b50d0e32282e2797787c20a64ffa93"
+        },
+        {
+          "id": {
+            "group": "org.hamcrest",
+            "name": "hamcrest-parent",
+            "version": "1.3",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "hamcrest-parent-1.3.pom",
+          "path": "org/hamcrest/hamcrest-parent/1.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-parent/1.3/hamcrest-parent-1.3.pom",
+            "https://jcenter.bintray.com/org/hamcrest/hamcrest-parent/1.3/hamcrest-parent-1.3.pom"
+          ],
+          "sha256": "6d535f94efb663bdb682c9f27a50335394688009642ba7a9677504bc1be4129b"
+        },
+        {
+          "id": {
+            "group": "org.osgi",
+            "name": "org.osgi.core",
+            "version": "5.0.0",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "org.osgi.core-5.0.0.jar",
+          "path": "org/osgi/org.osgi.core/5.0.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/osgi/org.osgi.core/5.0.0/org.osgi.core-5.0.0.jar",
+            "https://jcenter.bintray.com/org/osgi/org.osgi.core/5.0.0/org.osgi.core-5.0.0.jar"
+          ],
+          "sha256": "b440c6bff286332afcf5cae067b606962e761c0df00e5fd8a746f0b31265619b"
+        },
+        {
+          "id": {
+            "group": "org.osgi",
+            "name": "org.osgi.core",
+            "version": "5.0.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "org.osgi.core-5.0.0.pom",
+          "path": "org/osgi/org.osgi.core/5.0.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/osgi/org.osgi.core/5.0.0/org.osgi.core-5.0.0.pom",
+            "https://jcenter.bintray.com/org/osgi/org.osgi.core/5.0.0/org.osgi.core-5.0.0.pom"
+          ],
+          "sha256": "e001d997431851eab8b9338b5b7d9fe5e68e1aeb43a5857924b0a15886ee3639"
+        },
+        {
+          "id": {
+            "group": "org.slf4j",
+            "name": "slf4j-api",
+            "version": "1.7.25",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "slf4j-api-1.7.25.jar",
+          "path": "org/slf4j/slf4j-api/1.7.25",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar",
+            "https://jcenter.bintray.com/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar"
+          ],
+          "sha256": "18c4a0095d5c1da6b817592e767bb23d29dd2f560ad74df75ff3961dbde25b79"
+        },
+        {
+          "id": {
+            "group": "org.slf4j",
+            "name": "slf4j-api",
+            "version": "1.7.25",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "slf4j-api-1.7.25.pom",
+          "path": "org/slf4j/slf4j-api/1.7.25",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.pom",
+            "https://jcenter.bintray.com/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.pom"
+          ],
+          "sha256": "7cd9d7a0b5d93dfd461a148891b43509cf403a9c7f9fb49060d3554df1c81e1e"
+        },
+        {
+          "id": {
+            "group": "org.slf4j",
+            "name": "slf4j-nop",
+            "version": "1.7.25",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "slf4j-nop-1.7.25.jar",
+          "path": "org/slf4j/slf4j-nop/1.7.25",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-nop/1.7.25/slf4j-nop-1.7.25.jar",
+            "https://jcenter.bintray.com/org/slf4j/slf4j-nop/1.7.25/slf4j-nop-1.7.25.jar"
+          ],
+          "sha256": "6cb127138f41b5a869f9ecdd061ad17799a0e3fe7204600797154eb0432eeb12"
+        },
+        {
+          "id": {
+            "group": "org.slf4j",
+            "name": "slf4j-nop",
+            "version": "1.7.25",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "slf4j-nop-1.7.25.pom",
+          "path": "org/slf4j/slf4j-nop/1.7.25",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-nop/1.7.25/slf4j-nop-1.7.25.pom",
+            "https://jcenter.bintray.com/org/slf4j/slf4j-nop/1.7.25/slf4j-nop-1.7.25.pom"
+          ],
+          "sha256": "a20a4d57bcfef9bdaca7d115962c0de7c9446be4d466b7bd30d5f19a459cf499"
+        },
+        {
+          "id": {
+            "group": "org.slf4j",
+            "name": "slf4j-parent",
+            "version": "1.7.25",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "slf4j-parent-1.7.25.pom",
+          "path": "org/slf4j/slf4j-parent/1.7.25",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-parent/1.7.25/slf4j-parent-1.7.25.pom",
+            "https://jcenter.bintray.com/org/slf4j/slf4j-parent/1.7.25/slf4j-parent-1.7.25.pom"
+          ],
+          "sha256": "18f5c52120db036e88d6136f8839c832d074bdda95c756c6f429249d2db54ac6"
+        },
+        {
+          "id": {
+            "group": "net.java.dev.javacc",
+            "name": "javacc",
+            "version": "5.0",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "javacc-5.0.jar",
+          "path": "net/java/dev/javacc/javacc/5.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/java/dev/javacc/javacc/5.0/javacc-5.0.jar",
+            "https://jcenter.bintray.com/net/java/dev/javacc/javacc/5.0/javacc-5.0.jar"
+          ],
+          "sha256": "71113161bc8cf6641515541c2818028b87c78ec2e8ffaa75317686ee08967b89"
+        },
+        {
+          "id": {
+            "group": "net.java.dev.javacc",
+            "name": "javacc",
+            "version": "5.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "javacc-5.0.pom",
+          "path": "net/java/dev/javacc/javacc/5.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/java/dev/javacc/javacc/5.0/javacc-5.0.pom",
+            "https://jcenter.bintray.com/net/java/dev/javacc/javacc/5.0/javacc-5.0.pom"
+          ],
+          "sha256": "941660d47822f9c0d80d40ea06d4981fcdc2b87cc625381b545efd7e6b449cef"
+        },
+        {
+          "id": {
+            "group": "com.google.code.findbugs",
+            "name": "jsr305",
+            "version": "1.3.9",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jsr305-1.3.9.jar",
+          "path": "com/google/code/findbugs/jsr305/1.3.9",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar",
+            "https://jcenter.bintray.com/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar"
+          ],
+          "sha256": "905721a0eea90a81534abb7ee6ef4ea2e5e645fa1def0a5cd88402df1b46c9ed"
+        },
+        {
+          "id": {
+            "group": "com.google.code.findbugs",
+            "name": "jsr305",
+            "version": "1.3.9",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jsr305-1.3.9.pom",
+          "path": "com/google/code/findbugs/jsr305/1.3.9",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.pom",
+            "https://jcenter.bintray.com/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.pom"
+          ],
+          "sha256": "feab9191311c3d7aeef2b66d6064afc80d3d1d52d980fb07ae43c78c987ba93a"
+        },
+        {
+          "id": {
+            "group": "commons-cli",
+            "name": "commons-cli",
+            "version": "1.2",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "commons-cli-1.2.jar",
+          "path": "commons-cli/commons-cli/1.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/commons-cli/commons-cli/1.2/commons-cli-1.2.jar",
+            "https://jcenter.bintray.com/commons-cli/commons-cli/1.2/commons-cli-1.2.jar"
+          ],
+          "sha256": "e7cd8951956d349b568b7ccfd4f5b2529a8c113e67c32b028f52ffda371259d9"
+        },
+        {
+          "id": {
+            "group": "commons-cli",
+            "name": "commons-cli",
+            "version": "1.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "commons-cli-1.2.pom",
+          "path": "commons-cli/commons-cli/1.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/commons-cli/commons-cli/1.2/commons-cli-1.2.pom",
+            "https://jcenter.bintray.com/commons-cli/commons-cli/1.2/commons-cli-1.2.pom"
+          ],
+          "sha256": "18f3e92076e08c2fde48317025098e9f6baaa85f6912eb43f2d7e68d570e4561"
+        },
+        {
+          "id": {
+            "group": "net.sf.sevenzipjbinding",
+            "name": "sevenzipjbinding",
+            "version": "16.02-2.01",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "sevenzipjbinding-16.02-2.01.jar",
+          "path": "net/sf/sevenzipjbinding/sevenzipjbinding/16.02-2.01",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/sevenzipjbinding/sevenzipjbinding/16.02-2.01/sevenzipjbinding-16.02-2.01.jar",
+            "https://jcenter.bintray.com/net/sf/sevenzipjbinding/sevenzipjbinding/16.02-2.01/sevenzipjbinding-16.02-2.01.jar"
+          ],
+          "sha256": "133ca3f69c8c735d8997c09477504f48a9f2e61ea7b704b3714a9066b1efb88e"
+        },
+        {
+          "id": {
+            "group": "net.sf.sevenzipjbinding",
+            "name": "sevenzipjbinding",
+            "version": "16.02-2.01",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "sevenzipjbinding-16.02-2.01.pom",
+          "path": "net/sf/sevenzipjbinding/sevenzipjbinding/16.02-2.01",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/sevenzipjbinding/sevenzipjbinding/16.02-2.01/sevenzipjbinding-16.02-2.01.pom",
+            "https://jcenter.bintray.com/net/sf/sevenzipjbinding/sevenzipjbinding/16.02-2.01/sevenzipjbinding-16.02-2.01.pom"
+          ],
+          "sha256": "a5d178586c0dbdce15ddc2a5281684d387a4f235b5d1b9255b396ced369685c1"
+        },
+        {
+          "id": {
+            "group": "net.sf.sevenzipjbinding",
+            "name": "sevenzipjbinding-all-platforms",
+            "version": "16.02-2.01",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "sevenzipjbinding-all-platforms-16.02-2.01.jar",
+          "path": "net/sf/sevenzipjbinding/sevenzipjbinding-all-platforms/16.02-2.01",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/sevenzipjbinding/sevenzipjbinding-all-platforms/16.02-2.01/sevenzipjbinding-all-platforms-16.02-2.01.jar",
+            "https://jcenter.bintray.com/net/sf/sevenzipjbinding/sevenzipjbinding-all-platforms/16.02-2.01/sevenzipjbinding-all-platforms-16.02-2.01.jar"
+          ],
+          "sha256": "72fab53a9d31e16d653fe1f400011d02a7f6bc6a91e8634b5cfad5ce15d467bb"
+        },
+        {
+          "id": {
+            "group": "net.sf.sevenzipjbinding",
+            "name": "sevenzipjbinding-all-platforms",
+            "version": "16.02-2.01",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "sevenzipjbinding-all-platforms-16.02-2.01.pom",
+          "path": "net/sf/sevenzipjbinding/sevenzipjbinding-all-platforms/16.02-2.01",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/net/sf/sevenzipjbinding/sevenzipjbinding-all-platforms/16.02-2.01/sevenzipjbinding-all-platforms-16.02-2.01.pom",
+            "https://jcenter.bintray.com/net/sf/sevenzipjbinding/sevenzipjbinding-all-platforms/16.02-2.01/sevenzipjbinding-all-platforms-16.02-2.01.pom"
+          ],
+          "sha256": "bb7142c5ea484c5fe98426dc15ece1b98bbfdd4653456a88da27421d72670265"
+        },
+        {
+          "id": {
+            "group": "org.apache",
+            "name": "apache",
+            "version": "4",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "apache-4.pom",
+          "path": "org/apache/apache/4",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/apache/4/apache-4.pom",
+            "https://jcenter.bintray.com/org/apache/apache/4/apache-4.pom"
+          ],
+          "sha256": "9e9323a26ba8eb2394efef0c96d31b70df570808630dc147cab1e73541cc5194"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-parent",
+            "version": "11",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "commons-parent-11.pom",
+          "path": "org/apache/commons/commons-parent/11",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-parent/11/commons-parent-11.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-parent/11/commons-parent-11.pom"
+          ],
+          "sha256": "b9e0306f393460105b8a3fa5105250c5291b1efaa99954ace0ec1c783109a02a"
+        },
+        {
+          "id": {
+            "group": "org.ow2",
+            "name": "ow2",
+            "version": "1.3",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "ow2-1.3.pom",
+          "path": "org/ow2/ow2/1.3",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/ow2/1.3/ow2-1.3.pom",
+            "https://jcenter.bintray.com/org/ow2/ow2/1.3/ow2-1.3.pom"
+          ],
+          "sha256": "51215c67d2c068d8b7d2f6f80f51372a098075deccc448d4bdd7b987ba8328fb"
+        },
+        {
+          "id": {
+            "group": "org.ow2.asm",
+            "name": "asm-debug-all",
+            "version": "4.1",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "asm-debug-all-4.1.jar",
+          "path": "org/ow2/asm/asm-debug-all/4.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-debug-all/4.1/asm-debug-all-4.1.jar",
+            "https://jcenter.bintray.com/org/ow2/asm/asm-debug-all/4.1/asm-debug-all-4.1.jar"
+          ],
+          "sha256": "c0f582e1eb589315a62939197116b24412c5f4386c5b78aee7b017a4532312ba"
+        },
+        {
+          "id": {
+            "group": "org.ow2.asm",
+            "name": "asm-debug-all",
+            "version": "4.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "asm-debug-all-4.1.pom",
+          "path": "org/ow2/asm/asm-debug-all/4.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-debug-all/4.1/asm-debug-all-4.1.pom",
+            "https://jcenter.bintray.com/org/ow2/asm/asm-debug-all/4.1/asm-debug-all-4.1.pom"
+          ],
+          "sha256": "3e104388e42c0817886b38bce0d82300d8213224f110334583fa96f38f6ecc29"
+        },
+        {
+          "id": {
+            "group": "org.ow2.asm",
+            "name": "asm-parent",
+            "version": "4.1",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "asm-parent-4.1.pom",
+          "path": "org/ow2/asm/asm-parent/4.1",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/ow2/asm/asm-parent/4.1/asm-parent-4.1.pom",
+            "https://jcenter.bintray.com/org/ow2/asm/asm-parent/4.1/asm-parent-4.1.pom"
+          ],
+          "sha256": "23e985dc959fe75ce3c1b4e9ac8fdf60f5544d29e2955f6e5db1964b100daced"
+        },
+        {
+          "id": {
+            "group": "org.python",
+            "name": "jython-standalone",
+            "version": "2.7.2",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jython-standalone-2.7.2.jar",
+          "path": "org/python/jython-standalone/2.7.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/python/jython-standalone/2.7.2/jython-standalone-2.7.2.jar",
+            "https://jcenter.bintray.com/org/python/jython-standalone/2.7.2/jython-standalone-2.7.2.jar"
+          ],
+          "sha256": "8ceb17b837ba4d092f1d891916f335640ed77d5b2180b1edcfc1c861fe3917d3"
+        },
+        {
+          "id": {
+            "group": "org.python",
+            "name": "jython-standalone",
+            "version": "2.7.2",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jython-standalone-2.7.2.pom",
+          "path": "org/python/jython-standalone/2.7.2",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/python/jython-standalone/2.7.2/jython-standalone-2.7.2.pom",
+            "https://jcenter.bintray.com/org/python/jython-standalone/2.7.2/jython-standalone-2.7.2.pom"
+          ],
+          "sha256": "1c16b6023cabf0def238ebf20d32ede6dee6359e1e13c67faf88a4caff429604"
+        },
+        {
+          "id": {
+            "group": "org.smali",
+            "name": "baksmali",
+            "version": "1.4.0",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "baksmali-1.4.0.jar",
+          "path": "org/smali/baksmali/1.4.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/smali/baksmali/1.4.0/baksmali-1.4.0.jar"
+          ],
+          "sha256": "dde9408172a7883129a18e9b088ab7f7444e055f05d333d8c598d6292a738174"
+        },
+        {
+          "id": {
+            "group": "org.smali",
+            "name": "baksmali",
+            "version": "1.4.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "baksmali-1.4.0.pom",
+          "path": "org/smali/baksmali/1.4.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/smali/baksmali/1.4.0/baksmali-1.4.0.pom"
+          ],
+          "sha256": "46b9a468dfade3dce701cf62c3de4c29538323947a8fb67c48b651fc21ff08eb"
+        },
+        {
+          "id": {
+            "group": "org.smali",
+            "name": "dexlib",
+            "version": "1.4.0",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "dexlib-1.4.0.jar",
+          "path": "org/smali/dexlib/1.4.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/smali/dexlib/1.4.0/dexlib-1.4.0.jar"
+          ],
+          "sha256": "2df45c3c0c31336ff83d98fe17e01c826245a77e591e270b64ca11421b19c841"
+        },
+        {
+          "id": {
+            "group": "org.smali",
+            "name": "dexlib",
+            "version": "1.4.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "dexlib-1.4.0.pom",
+          "path": "org/smali/dexlib/1.4.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/smali/dexlib/1.4.0/dexlib-1.4.0.pom"
+          ],
+          "sha256": "0cefb3a83a489b641093bfb718acb43bdb521634bbde6ab4e8b8af708d5dc6ea"
+        },
+        {
+          "id": {
+            "group": "org.smali",
+            "name": "util",
+            "version": "1.4.0",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "util-1.4.0.jar",
+          "path": "org/smali/util/1.4.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/smali/util/1.4.0/util-1.4.0.jar"
+          ],
+          "sha256": "a17df6eefdd495a1021b5d21e8fa09db036c86ee74503178834bd28979df9122"
+        },
+        {
+          "id": {
+            "group": "org.smali",
+            "name": "util",
+            "version": "1.4.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "util-1.4.0.pom",
+          "path": "org/smali/util/1.4.0",
+          "urls": [
+            "https://jcenter.bintray.com/org/smali/util/1.4.0/util-1.4.0.pom"
+          ],
+          "sha256": "9a21a79a14704529749ad565d16c4c86db3404f43dfe7063b3734f9d6efa44cf"
+        },
+        {
+          "id": {
+            "group": "com.github.tomnelson",
+            "name": "jungrapht-layout",
+            "version": "1.0",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jungrapht-layout-1.0.jar",
+          "path": "com/github/tomnelson/jungrapht-layout/1.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/github/tomnelson/jungrapht-layout/1.0/jungrapht-layout-1.0.jar",
+            "https://jcenter.bintray.com/com/github/tomnelson/jungrapht-layout/1.0/jungrapht-layout-1.0.jar"
+          ],
+          "sha256": "77aec91f949f9fd3e9aeb9ae7db753efb1d3772045485bfa02b53a0995a66031"
+        },
+        {
+          "id": {
+            "group": "com.github.tomnelson",
+            "name": "jungrapht-layout",
+            "version": "1.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jungrapht-layout-1.0.pom",
+          "path": "com/github/tomnelson/jungrapht-layout/1.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/github/tomnelson/jungrapht-layout/1.0/jungrapht-layout-1.0.pom",
+            "https://jcenter.bintray.com/com/github/tomnelson/jungrapht-layout/1.0/jungrapht-layout-1.0.pom"
+          ],
+          "sha256": "2b54ebb147785724fbe4a219b11ce4f86bb517d88f3f1e35fe0f189438aaadc3"
+        },
+        {
+          "id": {
+            "group": "com.github.tomnelson",
+            "name": "jungrapht-visualization",
+            "version": "1.0",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jungrapht-visualization-1.0.jar",
+          "path": "com/github/tomnelson/jungrapht-visualization/1.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/github/tomnelson/jungrapht-visualization/1.0/jungrapht-visualization-1.0.jar",
+            "https://jcenter.bintray.com/com/github/tomnelson/jungrapht-visualization/1.0/jungrapht-visualization-1.0.jar"
+          ],
+          "sha256": "70f613517e8e606d27d273866e6214b8acc752412b94921275370f25c8c1509b"
+        },
+        {
+          "id": {
+            "group": "com.github.tomnelson",
+            "name": "jungrapht-visualization",
+            "version": "1.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jungrapht-visualization-1.0.pom",
+          "path": "com/github/tomnelson/jungrapht-visualization/1.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/github/tomnelson/jungrapht-visualization/1.0/jungrapht-visualization-1.0.pom",
+            "https://jcenter.bintray.com/com/github/tomnelson/jungrapht-visualization/1.0/jungrapht-visualization-1.0.pom"
+          ],
+          "sha256": "fab1f61417eaf8a11edf54d9653c0041a5c1d7cf94f49d1f86f10c608fb7960b"
+        },
+        {
+          "id": {
+            "group": "com.github.tomnelson",
+            "name": "jungrapht-visualization-parent",
+            "version": "1.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jungrapht-visualization-parent-1.0.pom",
+          "path": "com/github/tomnelson/jungrapht-visualization-parent/1.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/com/github/tomnelson/jungrapht-visualization-parent/1.0/jungrapht-visualization-parent-1.0.pom",
+            "https://jcenter.bintray.com/com/github/tomnelson/jungrapht-visualization-parent/1.0/jungrapht-visualization-parent-1.0.pom"
+          ],
+          "sha256": "9078fff40ede4ac37fb909e62a395bb3589a39d05ce8e378111132104f927d8d"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-text",
+            "version": "1.8",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "commons-text-1.8.jar",
+          "path": "org/apache/commons/commons-text/1.8",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.8/commons-text-1.8.jar",
+            "https://jcenter.bintray.com/org/apache/commons/commons-text/1.8/commons-text-1.8.jar"
+          ],
+          "sha256": "6fe7ad4ad5349d6b77e7a0e1c9f6037108a1ee48c42e7e6eb4b18f56d324f7b2"
+        },
+        {
+          "id": {
+            "group": "org.apache.commons",
+            "name": "commons-text",
+            "version": "1.8",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "commons-text-1.8.pom",
+          "path": "org/apache/commons/commons-text/1.8",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.8/commons-text-1.8.pom",
+            "https://jcenter.bintray.com/org/apache/commons/commons-text/1.8/commons-text-1.8.pom"
+          ],
+          "sha256": "f6cfdbaa59c70ad7e3febe714e0911990156ac0905295d8f2a3b751e05e59a12"
+        },
+        {
+          "id": {
+            "group": "org.jgrapht",
+            "name": "jgrapht",
+            "version": "1.5.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jgrapht-1.5.0.pom",
+          "path": "org/jgrapht/jgrapht/1.5.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jgrapht/jgrapht/1.5.0/jgrapht-1.5.0.pom",
+            "https://jcenter.bintray.com/org/jgrapht/jgrapht/1.5.0/jgrapht-1.5.0.pom"
+          ],
+          "sha256": "1256af19edd68a347e336390d38c285e853539011a218b6db61274b1a71353fa"
+        },
+        {
+          "id": {
+            "group": "org.jgrapht",
+            "name": "jgrapht-core",
+            "version": "1.5.0",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jgrapht-core-1.5.0.jar",
+          "path": "org/jgrapht/jgrapht-core/1.5.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jgrapht/jgrapht-core/1.5.0/jgrapht-core-1.5.0.jar",
+            "https://jcenter.bintray.com/org/jgrapht/jgrapht-core/1.5.0/jgrapht-core-1.5.0.jar"
+          ],
+          "sha256": "da02ba38ceba3e5bf46f5cd19682bd8e7a3693ae20d0dfad47c0933681286049"
+        },
+        {
+          "id": {
+            "group": "org.jgrapht",
+            "name": "jgrapht-core",
+            "version": "1.5.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jgrapht-core-1.5.0.pom",
+          "path": "org/jgrapht/jgrapht-core/1.5.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jgrapht/jgrapht-core/1.5.0/jgrapht-core-1.5.0.pom",
+            "https://jcenter.bintray.com/org/jgrapht/jgrapht-core/1.5.0/jgrapht-core-1.5.0.pom"
+          ],
+          "sha256": "8290d3dc889a91950d12f57a4640e96718bdd5aefed61340aec3757661bf50c9"
+        },
+        {
+          "id": {
+            "group": "org.jgrapht",
+            "name": "jgrapht-io",
+            "version": "1.5.0",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jgrapht-io-1.5.0.jar",
+          "path": "org/jgrapht/jgrapht-io/1.5.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jgrapht/jgrapht-io/1.5.0/jgrapht-io-1.5.0.jar",
+            "https://jcenter.bintray.com/org/jgrapht/jgrapht-io/1.5.0/jgrapht-io-1.5.0.jar"
+          ],
+          "sha256": "ba2fb09715bfd11c48ff6d1e4a97a4b9b89cbfc8765b7f6d7c7f4562eab90387"
+        },
+        {
+          "id": {
+            "group": "org.jgrapht",
+            "name": "jgrapht-io",
+            "version": "1.5.0",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jgrapht-io-1.5.0.pom",
+          "path": "org/jgrapht/jgrapht-io/1.5.0",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jgrapht/jgrapht-io/1.5.0/jgrapht-io-1.5.0.pom",
+            "https://jcenter.bintray.com/org/jgrapht/jgrapht-io/1.5.0/jgrapht-io-1.5.0.pom"
+          ],
+          "sha256": "65c8c71d7582bf484dc5241129c2399398b0209e4a739d1de89695462f84316e"
+        },
+        {
+          "id": {
+            "group": "org.jheaps",
+            "name": "jheaps",
+            "version": "0.13",
+            "type": "jar",
+            "extension": "jar"
+          },
+          "name": "jheaps-0.13.jar",
+          "path": "org/jheaps/jheaps/0.13",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jheaps/jheaps/0.13/jheaps-0.13.jar",
+            "https://jcenter.bintray.com/org/jheaps/jheaps/0.13/jheaps-0.13.jar"
+          ],
+          "sha256": "63414290c3497f8ac0f102209207088dec46fd4747e0f56a26c69308e85c6415"
+        },
+        {
+          "id": {
+            "group": "org.jheaps",
+            "name": "jheaps",
+            "version": "0.13",
+            "type": "pom",
+            "extension": "pom"
+          },
+          "name": "jheaps-0.13.pom",
+          "path": "org/jheaps/jheaps/0.13",
+          "urls": [
+            "https://repo.maven.apache.org/maven2/org/jheaps/jheaps/0.13/jheaps-0.13.pom",
+            "https://jcenter.bintray.com/org/jheaps/jheaps/0.13/jheaps-0.13.pom"
+          ],
+          "sha256": "487db125b171098e3fa8338535ac59476922ac2c452b57a14d3cf661f2288430"
+        }
+      ]
+    }
+  }
+}
