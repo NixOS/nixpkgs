@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, udev, libusb1
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, udev
+, libusb1
 , darwin
 , gnum4
 }:
@@ -16,14 +21,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # Could be added always, but added conditionally here to avoid large rebuild
     gnum4
+    pkg-config
   ];
 
-  buildInputs = [ ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libusb1 udev ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ libusb1 udev ];
 
   enableParallelBuilding = true;
 
