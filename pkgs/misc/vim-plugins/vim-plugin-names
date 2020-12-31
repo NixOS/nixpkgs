@@ -399,7 +399,7 @@ nvim-treesitter/nvim-treesitter-textobjects
 nvim-treesitter/playground
 ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
-Olical/conjure
+Olical/conjure@main
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
