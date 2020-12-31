@@ -1,8 +1,8 @@
 907th/vim-auto-save
 aca/completion-tabnine
+ackyshake/Spacegray.vim@main
 airblade/vim-gitgutter
 airblade/vim-rooter
-ajh17/Spacegray.vim
 aklt/plantuml-syntax
 altercation/vim-colors-solarized
 alvan/vim-closetag
@@ -34,7 +34,7 @@ bling/vim-bufferline
 blueyed/vim-diminactive
 bogado/file-line
 bohlender/vim-smt2
-brennanfee/vim-gui-position
+brennanfee/vim-gui-position@main
 bronson/vim-trailing-whitespace
 brooth/far.vim
 buoto/gotests-vim
@@ -399,7 +399,7 @@ nvim-treesitter/nvim-treesitter-textobjects
 nvim-treesitter/playground
 ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
-Olical/conjure
+Olical/conjure@main
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
@@ -507,8 +507,8 @@ slashmili/alchemist.vim
 sodapopcan/vim-twiggy
 solarnz/arcanist.vim
 sonph/onehalf
-steelsojka/completion-buffers
 srcery-colors/srcery-vim
+steelsojka/completion-buffers
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
 sunaku/vim-dasht
