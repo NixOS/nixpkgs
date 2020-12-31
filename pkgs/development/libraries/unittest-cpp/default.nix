@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sxb3835nly1jxn071f59fwbdzmqi74j040r81fanxyw3s1azw0i";
   };
 
-  buildInputs = [cmake];
+  nativeBuildInputs = [ cmake ];
 
   doCheck = false;
 

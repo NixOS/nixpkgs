@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu
+{ stdenv, fetchFromGitHub, cmake, boost, pkg-config, doxygen, qt48Full, libharu
 , pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick, glew, openssl
 , pcre, harfbuzz
 }:
@@ -19,9 +19,9 @@ let
 
       enableParallelBuilding = true;
 
-      nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ cmake pkg-config ];
       buildInputs = [
-        cmake boost doxygen qt48Full libharu
+        boost doxygen qt48Full libharu
         pango fcgi firebird libmysqlclient postgresql graphicsmagick glew
         openssl pcre
       ];

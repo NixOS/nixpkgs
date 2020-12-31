@@ -10,8 +10,8 @@ stdenv.mkDerivation {
     sha256 = "10jn6bvm9vn6492zix2pd724v5h4lccmkqg3lxfw8r0qg3av0yzv";
   };
 
-  buildInputs = [ cmake boost NSPlist pugixml ];
-
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost NSPlist pugixml ];
 
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ matthewbauer ];

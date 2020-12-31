@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1nmsga9m7vcc4y4a6zl53ra3mwlgjwdgsq1j291awkn7zr1az6qs";
   };
 
-  buildInputs = [cmake];
+  nativeBuildInputs = [ cmake ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 

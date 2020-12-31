@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchFromGitHub, cmake, pkgconfig, xorg, libGLU
+{ config, lib, stdenv, fetchFromGitHub, cmake, pkg-config, xorg, libGLU
 , libGL, glew, ocl-icd, python3
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
 , darwin
@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs =
-    [ cmake pkgconfig libGLU libGL python3
+    [ libGLU libGL python3
       # FIXME: these are not actually needed, but the configure script wants them.
       glew xorg.libX11 xorg.libXrandr xorg.libXxf86vm xorg.libXcursor
       xorg.libXinerama xorg.libXi

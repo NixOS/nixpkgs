@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "c91bb19c1a7b53c5339bf2f75ae83839020d337990f237a8b9bc0f4416c120ef";
   };
 
-  buildInputs = [ cmake fcitx gettext ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ fcitx gettext ];
 
   preInstall = ''
    substituteInPlace tables/cmake_install.cmake \

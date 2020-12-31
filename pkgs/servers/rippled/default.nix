@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchgit, fetchurl, runCommand, git, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, fetchgit, fetchurl, runCommand, git, cmake, pkg-config
 , openssl,  zlib, boost, grpc, c-ares, abseil-cpp, protobuf3_8, libnsl }:
 
 let
@@ -129,7 +129,7 @@ in stdenv.mkDerivation rec {
   hardeningDisable = ["format"];
   cmakeFlags = ["-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON"];
 
-  nativeBuildInputs = [ pkgconfig cmake git ];
+  nativeBuildInputs = [ pkg-config cmake git ];
   buildInputs = [ openssl openssl.dev boostSharedStatic zlib grpc c-ares c-ares.cmake-config abseil-cpp protobuf3_8 libnsl ];
 
   preConfigure = ''

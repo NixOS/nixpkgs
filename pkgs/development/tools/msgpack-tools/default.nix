@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, unzip }:
+{ stdenv, fetchurl, fetchFromGitHub, cmake }:
+
 stdenv.mkDerivation rec {
   pname = "msgpack-tools";
   version = "0.6";
@@ -32,8 +33,7 @@ stdenv.mkDerivation rec {
     cp ${mpack} $sourceRoot/contrib/mpack-df17e83f0fa8571b9cd0d8ccf38144fa90e244d1.tar.gz
   '';
 
-
-  buildInputs = [ cmake unzip ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description = "Command-line tools for converting between MessagePack and JSON";

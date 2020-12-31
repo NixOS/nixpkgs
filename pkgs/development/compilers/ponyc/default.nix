@@ -29,7 +29,8 @@ stdenv.mkDerivation (rec {
     name = "v1.5.0.tar.gz";
   };
 
-  buildInputs = [ makeWrapper which libxml2 cmake z3 ];
+  nativeBuildInputs = [ cmake makeWrapper which ];
+  buildInputs = [ libxml2 z3 ];
   propagatedBuildInputs = [ cc ];
 
   # Sandbox disallows network access, so disabling problematic networking tests

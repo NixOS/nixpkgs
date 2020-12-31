@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, fetchFromGitHub, fetchpatch
+{ stdenv, pkg-config, fetchFromGitHub, fetchpatch
 , cmake, boost
 , portmidi, sqlite
 , freetype, libpng, pngpp, zlib
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    cmake boost
+    boost
     portmidi sqlite
     freetype libpng pngpp zlib
     wxGTK30 wxsqlite3

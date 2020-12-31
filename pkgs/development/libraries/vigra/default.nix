@@ -21,7 +21,8 @@ in stdenv.mkDerivation rec {
                                 sha256 = "1i1w6smijgb5z8bg9jaq84ccy00k2sxm87s37lgjpyix901gjlgi"; };
     in [ clangPatch ];
 
-  buildInputs = [ boost cmake fftw fftwSinglePrec hdf5 ilmbase libjpeg libpng
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost fftw fftwSinglePrec hdf5 ilmbase libjpeg libpng
                   libtiff numpy openexr python ];
 
   preConfigure = "cmakeFlags+=\" -DVIGRANUMPY_INSTALL_DIR=$out/lib/${python.libPrefix}/site-packages\"";

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkgconfig, makeWrapper
+{ stdenv, fetchgit, cmake, pkg-config, makeWrapper
 , boost
 , pythonSupport ? true, python, swig
 , airspy
@@ -23,10 +23,9 @@ stdenv.mkDerivation rec {
     sha256 = "0bf9bnc1c3c4yqqqgmg3nhygj6rcfmyk6pybi27f7461d2cw1drv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
   buildInputs = [
-    cmake makeWrapper boost log4cpp
-    airspy gnuradio hackrf libbladeRF rtl-sdr uhd
+    boost log4cpp airspy gnuradio hackrf libbladeRF rtl-sdr uhd
   ] ++ stdenv.lib.optionals stdenv.isLinux [ soapysdr-with-plugins ]
     ++ stdenv.lib.optionals pythonSupport [ python swig python.pkgs.cheetah ];
 

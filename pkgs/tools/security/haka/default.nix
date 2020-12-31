@@ -21,7 +21,8 @@ stdenv.mkDerivation {
     sed -i 's,/etc,'$out'/etc,' doc/user/tool_suite_haka.rst
   '';
 
-  buildInputs = [ cmake swig wireshark check rsync libpcap gawk libedit pcre ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ swig wireshark check rsync libpcap gawk libedit pcre ];
 
   enableParallelBuilding = true;
 

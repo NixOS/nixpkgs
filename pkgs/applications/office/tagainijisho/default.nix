@@ -7,7 +7,8 @@ stdenv.mkDerivation {
     sha256 = "0kmg1940yiqfm4vpifyj680283ids4nsij9s750nrshwxiwwbqvg";
   };
 
-  buildInputs = [ qt4 cmake sqlite ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qt4 sqlite ];
 
   meta = with stdenv.lib; {
     description = "A free, open-source Japanese dictionary and kanji lookup tool";

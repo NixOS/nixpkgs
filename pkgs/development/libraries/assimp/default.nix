@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "00vxzfcrs856qnyk806wqr67nmpjk06mjby0fqmyhm6i1jj2hg1w";
   };
 
-  buildInputs = [ cmake boost zlib ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost zlib ];
 
   meta = with stdenv.lib; {
     description = "A library to import various 3D model formats";

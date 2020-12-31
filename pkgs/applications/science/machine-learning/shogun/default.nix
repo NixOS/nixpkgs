@@ -65,8 +65,9 @@ stdenv.mkDerivation rec {
   CCACHE_DISABLE="1";
   CCACHE_DIR=".ccache";
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = with lib; [
-      blas lapack bzip2 cmake colpack curl ctags eigen hdf5 json_c lp_solve lzma lzo
+      blas lapack bzip2 colpack curl ctags eigen hdf5 json_c lp_solve lzma lzo
       protobuf nlopt snappy swig (libarchive.dev) libxml2 lapack glpk
     ]
     ++ optionals (pythonSupport) (with pythonPackages; [ python ply numpy ])
