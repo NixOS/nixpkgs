@@ -1,8 +1,8 @@
 907th/vim-auto-save
 aca/completion-tabnine
+ackyshake/Spacegray.vim@main
 airblade/vim-gitgutter
 airblade/vim-rooter
-ackyshake/Spacegray.vim@main
 aklt/plantuml-syntax
 altercation/vim-colors-solarized
 alvan/vim-closetag
@@ -507,8 +507,8 @@ slashmili/alchemist.vim
 sodapopcan/vim-twiggy
 solarnz/arcanist.vim
 sonph/onehalf
-steelsojka/completion-buffers
 srcery-colors/srcery-vim
+steelsojka/completion-buffers
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
 sunaku/vim-dasht
