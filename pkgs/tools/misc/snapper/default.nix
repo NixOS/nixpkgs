@@ -1,17 +1,18 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, util-linux, fetchpatch, json_c, nixosTests }:
+, lvm2, pam, python, util-linux, fetchpatch, json_c, nixosTests
+, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.8.14";
+  version = "0.8.15";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "1q687bjwy668klxnhsrc2rlhisa59j8bhmh1jw220rq7z0hm2khr";
+    sha256 = "1rqv1qfxr02qbkix1mpx91s4827irxryxkhby3ii0fdkm3ympsas";
   };
 
   nativeBuildInputs = [
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam python util-linux json_c
+    lvm2 pam python util-linux json_c ncurses
   ];
 
   passthru.tests.snapper = nixosTests.snapper;
