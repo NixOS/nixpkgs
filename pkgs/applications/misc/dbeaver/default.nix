@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dbeaver-ce";
-  version = "7.3.0";
+  version = "7.3.1";
 
   desktopItem = makeDesktopItem {
     name = "dbeaver";
@@ -30,10 +30,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dbeaver.io/files/${version}/dbeaver-ce-${version}-linux.gtk.x86_64.tar.gz";
-    sha256 = "sha256-JhEF2/97vo2FgzpCFkuc31aLl9qjKHV8RYXO5oBU1no=";
+    sha256 = "sha256-4UVC5lBoGsW99L6AgM+1Rs07LCrvp2qVevBrooTbee4=";
   };
 
   installPhase = ''
+    # remove bundled jre
+    rm -rf jre
+
     mkdir -p $out/
     cp -r . $out/dbeaver
 
