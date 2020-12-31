@@ -1,4 +1,5 @@
 { stdenv
+, pythonPackages
 , fetchFromGitHub
 , makeWrapper
 , # re2c deps
@@ -8,7 +9,6 @@
 , # oil deps
   readline
 , cmark
-, python27
 , file
 , glibcLocales
 , oilPatches ? [ ]
@@ -43,9 +43,9 @@ rec {
     '';
   };
 
-  py-yajl = python27.pkgs.buildPythonPackage rec {
-    pname = "oil-pyyajl";
-    version = "unreleased";
+  py-yajl = pythonPackages.buildPythonPackage rec {
+    pname = "oil-pyyajl-unstable";
+    version = "2019-12-05";
     src = fetchFromGitHub {
       owner = "oilshell";
       repo = "py-yajl";
@@ -58,9 +58,10 @@ rec {
   };
 
   # resholve's primary dependency is this developer build of the oil shell.
-  oildev = python27.pkgs.buildPythonPackage rec {
-    pname = "oil";
-    version = "undefined";
+  oildev = pythonPackages.buildPythonPackage rec {
+    pname = "oildev-unstable";
+    version = "2020-03-31";
+    disabled = !pythonPackages.isPy27;
 
     src = fetchFromGitHub {
       owner = "oilshell";
@@ -119,7 +120,7 @@ rec {
     nativeBuildInputs = [ re2c file ];
 
     # runtime deps
-    propagatedBuildInputs = with python27.pkgs; [ python27 six typing ];
+    propagatedBuildInputs = with pythonPackages; [ six typing ];
 
     doCheck = true;
     dontStrip = true;
