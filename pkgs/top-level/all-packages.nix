@@ -5076,6 +5076,8 @@ in
 
   jsduck = callPackage ../development/tools/jsduck { };
 
+  json-schema-for-humans = with python3Packages; toPythonApplication json-schema-for-humans;
+
   jtc = callPackage ../development/tools/jtc { };
 
   jumpapp = callPackage ../tools/X11/jumpapp {};
