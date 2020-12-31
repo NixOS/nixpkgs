@@ -76,6 +76,7 @@ let
         ./qtbase.patch.d/0014-qtbase-pkg-config.patch
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
+    qtlocation = [ ./qtlocation-gcc-9.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qtwebengine = [
