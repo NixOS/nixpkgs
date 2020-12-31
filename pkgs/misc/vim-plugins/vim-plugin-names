@@ -34,7 +34,7 @@ bling/vim-bufferline
 blueyed/vim-diminactive
 bogado/file-line
 bohlender/vim-smt2
-brennanfee/vim-gui-position
+brennanfee/vim-gui-position@main
 bronson/vim-trailing-whitespace
 brooth/far.vim
 buoto/gotests-vim
