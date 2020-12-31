@@ -24821,6 +24821,8 @@ in
 
   vym = qt5.callPackage ../applications/misc/vym { };
 
+  wad = python3Packages.callPackage ../tools/security/wad { };
+
   waon = callPackage ../applications/audio/waon { };
 
   w3m = callPackage ../applications/networking/browsers/w3m { };
