@@ -1,4 +1,9 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv
+, buildGoModule
+, fetchFromGitHub
+, genericUpdater
+, common-updater-scripts
+}:
 
 buildGoModule rec {
   pname = "shellhub-agent";
@@ -16,6 +21,15 @@ buildGoModule rec {
   vendorSha256 = "19gsfhh6idqysdxhpq45sq35gw19adz9lp83krjlhzj1vqm59qma";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.AgentVersion=v${version}" ];
+
+  passthru = {
+    updateScript = genericUpdater {
+      inherit pname version;
+      versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+      rev-prefix = "v";
+      ignoredVersions = ".(rc|beta).*";
+    };
+  };
 
   meta = with stdenv.lib; {
     description =
