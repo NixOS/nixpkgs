@@ -1,16 +1,16 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy3k, curve25519-donna, ed25519
-, cryptography, ecdsa, zeroconf, pytest }:
+, cryptography, ecdsa, zeroconf, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "HAP-python";
-  version = "3.0.0";
+  version = "3.1.0";
 
   # pypi package does not include tests
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07s1kjm9cz4m4ksj506la1ks3dq2b5mk412rjj9rpj98b0mxrr84";
+    sha256 = "1qg38lfjby2xfm09chzc40a7i3b84kgyfs7g4xq8f5m8s39hg6d7";
   };
 
   disabled = !isPy3k;
@@ -23,20 +23,20 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  #disable tests needing network
-  checkPhase = ''
-    pytest -k 'not test_persist \
-    and not test_setup_endpoints \
-    and not test_auto_add_aid_mac \
-    and not test_service_callbacks \
-    and not test_send_events \
-    and not test_not_standalone_aid \
-    and not test_start_stop_async_acc \
-    and not test_external_zeroconf \
-    and not test_start_stop_sync_acc'
-  '';
+  disabledTests = [
+    #disable tests needing network
+    "test_persist"
+    "test_setup_endpoints"
+    "test_auto_add_aid_mac"
+    "test_service_callbacks"
+    "test_send_events"
+    "test_not_standalone_aid"
+    "test_start_stop_async_acc"
+    "test_external_zeroconf"
+    "test_start_stop_sync_acc"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/ikalchev/HAP-python";

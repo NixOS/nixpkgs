@@ -3693,6 +3693,12 @@
     githubId = 2789926;
     name = "Imran Hossain";
   };
+  iammrinal0 = {
+    email = "nixpkgs@mrinalpurohit.in";
+    github = "iammrinal0";
+    githubId = 890062;
+    name = "Mrinal";
+  };
   iand675 = {
     email = "ian@iankduncan.com";
     github = "iand675";
@@ -6698,6 +6704,12 @@
     github = "osener";
     githubId = 111265;
     name = "Ozan Sener";
+  };
+  otavio = {
+    email = "otavio.salvador@ossystems.com.br";
+    github = "otavio";
+    githubId = 25278;
+    name = "Otavio Salvador";
   };
   otwieracz = {
     email = "slawek@otwiera.cz";

@@ -176,10 +176,10 @@ let
           description = ''
             Define which other containers this one depends on. They will be added to both After and Requires for the unit.
 
-            Use the same name as the attribute under <literal>virtualisation.oci-containers</literal>.
+            Use the same name as the attribute under <literal>virtualisation.oci-containers.containers</literal>.
           '';
           example = literalExample ''
-            virtualisation.oci-containers = {
+            virtualisation.oci-containers.containers = {
               node1 = {};
               node2 = {
                 dependsOn = [ "node1" ];
