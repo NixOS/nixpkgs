@@ -1,4 +1,4 @@
-{ stdenvNoCC, elixir, hex, rebar, rebar3, cacert }:
+{ stdenvNoCC, elixir, hex, rebar, rebar3, cacert, git }:
 
 { name, version, sha256, src, mixEnv ? "prod", debug ? false, meta ? { } }:
 
@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation ({
 
   phases = [ "configurePhase" "downloadPhase" ];
 
-  nativeBuildInputs = [ elixir hex cacert ];
+  nativeBuildInputs = [ elixir hex cacert git ];
 
   inherit src;
 
