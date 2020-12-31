@@ -1,6 +1,6 @@
 { pname, ffversion, meta, updateScript ? null
 , src, unpackPhase ? null, patches ? []
-, extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [] }:
+, extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [], tests ? [] }:
 
 { lib, stdenv, pkgconfig, pango, perl, python2, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
@@ -370,6 +370,7 @@ buildStdenv.mkDerivation ({
     inherit gssSupport;
     inherit execdir;
     inherit browserName;
+    inherit tests;
   } // lib.optionalAttrs gtk3Support { inherit gtk3; };
 
   hardeningDisable = [ "format" ]; # -Werror=format-security

@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch }:
+{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests }:
 
 let
   common = opts: callPackage (import ./common.nix opts) {};
@@ -23,6 +23,7 @@ rec {
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = lib.licenses.mpl20;
     };
+    tests = [ nixosTests.firefox ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
       versionKey = "ffversion";
@@ -47,6 +48,7 @@ rec {
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = lib.licenses.mpl20;
     };
+    tests = [ nixosTests.firefox-esr ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-78-unwrapped";
       versionKey = "ffversion";
