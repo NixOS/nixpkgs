@@ -335,6 +335,13 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
        official documentation</link> of the json_exporter.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       All options inside <varname>services.xserver.libinput</varname> module now accepts <literal>null</literal>.
+       When set to <literal>null</literal> the option is not available in the resulting <literal>40-libinput.conf</literal>, using the default from X.org itself and allowing override using <xref linkend="opt-services.xserver.extraConfig" /> or <xref linkend="opt-services.xserver.inputClassSections" />.
+       Most options now defaults to <literal>null</literal>, so the behavior of libinput devices may be different from previous releases.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
