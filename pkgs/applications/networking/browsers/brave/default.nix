@@ -147,6 +147,8 @@ stdenv.mkDerivation rec {
       ln -sf ${xdg_utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with stdenv.lib; {
     homepage = "https://brave.com/";
     description = "Privacy-oriented browser for Desktop and Laptop computers";
