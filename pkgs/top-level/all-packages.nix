@@ -18161,6 +18161,8 @@ in
 
   dstat = callPackage ../os-specific/linux/dstat { };
 
+  erofs-utils = callPackage ../os-specific/linux/erofs-utils { };
+
   # unstable until the first 1.x release
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
   fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
