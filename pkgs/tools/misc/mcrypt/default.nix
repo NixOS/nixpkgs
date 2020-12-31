@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     ./overflow_CVE-2012-4409.patch
     ./segv.patch
     ./sprintf_CVE-2012-4527.patch
+    ./malloc_to_stdlib.patch
   ];
 
   buildInputs = [ libmcrypt libmhash ];
