@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     wrapGAppsHook
-    # To later add plugins to 
+    # To later add plugins to
     xorg.lndir
   ];
 
