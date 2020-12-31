@@ -5776,6 +5776,8 @@ in
 
   microdnf = callPackage ../tools/package-management/microdnf { };
 
+  microplane = callPackage ../tools/misc/microplane { };
+
   microserver = callPackage ../servers/microserver { };
 
   midisheetmusic = callPackage ../applications/audio/midisheetmusic { };
