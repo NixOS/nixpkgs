@@ -20,8 +20,14 @@ let
                  optionalString fixBinary "F";
   in ":${name}:${type}:${offset'}:${magicOrExtension}:${mask'}:${interpreter}:${flags}";
 
-  activationSnippet = name: { interpreter, ... }:
-    "ln -sf ${interpreter} /run/binfmt/${name}";
+  activationSnippet = name: { interpreter, ... }: ''
+    rm -f /run/binfmt/${name}
+    cat > /run/binfmt/${name} << 'EOF'
+    #!/usr/bin/env sh
+    exec -- ${interpreter} "$@"
+    EOF
+    chmod +x /run/binfmt/${name}
+  '';
 
   getEmulator = system: (lib.systems.elaborate { inherit system; }).emulator pkgs;
 
