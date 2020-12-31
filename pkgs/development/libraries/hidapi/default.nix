@@ -1,7 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, udev, libusb1
-, darwin
-, gnum4
-}:
+, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "hidapi";
@@ -14,13 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1nr4z4b10vpbh3ss525r7spz4i43zim2ba5qzfl15dgdxshxxivb";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkgconfig
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # Could be added always, but added conditionally here to avoid large rebuild
-    gnum4
-  ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [ ]
     ++ stdenv.lib.optionals stdenv.isLinux [ libusb1 udev ];
