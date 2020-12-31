@@ -25,9 +25,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyftdi" ];
 
-  meta = {
+  meta = with lib; {
     description = "User-space driver for modern FTDI devices";
+    longDescription = ''
+      PyFtdi aims at providing a user-space driver for popular FTDI devices.
+      This includes UART, GPIO and multi-serial protocols (SPI, I2C, JTAG)
+      bridges.
+    '';
     homepage = "https://github.com/eblot/pyftdi";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
   };
 }
