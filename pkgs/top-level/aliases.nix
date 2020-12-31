@@ -138,7 +138,6 @@ mapAliases ({
   draftsight = throw "draftsight has been removed, no longer available as freeware"; # added 2020-08-14
   dvb_apps = throw "dvb_apps has been removed."; # added 2020-11-03
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
-  ec2-utils = amazon-ec2-utils; # added 2020-12-06
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgFor = emacsPackagesFor; # added 2019-08-07

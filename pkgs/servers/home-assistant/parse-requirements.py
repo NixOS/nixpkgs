@@ -41,10 +41,6 @@ PKG_PREFERENCES = {
     "tensorflow-build_2": "tensorflow",
 }
 
-# packages we have a different name for or we want to replace
-PKG_SUBSTITUTES = {
-    "feedparser-homeassistant": "feedparser"
-}
 
 def run_mypy() -> None:
     cmd = ["mypy", "--ignore-missing-imports", __file__]
@@ -160,8 +156,6 @@ def main() -> None:
             # Therefore, if there's a "#" in the line, only take the part after it
             req = req[req.find("#") + 1 :]
             name = req.split("==")[0]
-            name = PKG_SUBSTITUTES.get(name, name)
-
             attr_path = name_to_attr_path(name, packages)
             if attr_path is not None:
                 # Add attribute path without "python3Packages." prefix

@@ -4,7 +4,7 @@
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
-, makeWrapper, python3, ruby, perl
+, makeWrapper, python, ruby, perl
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
@@ -25,7 +25,7 @@ let
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv lib makeWrapper writeText
-      stdenv python3 ruby perl;
+      stdenv python ruby perl;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
 
@@ -110,7 +110,7 @@ let
         #"ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
 
         # Daily snapshots hosted by one of the texlive release managers
-        "https://texlive.info/tlnet-archive/2020/10/09/tlnet/archive"
+        https://texlive.info/tlnet-archive/2020/10/09/tlnet/archive
       ];
 
       src = fetchurl { inherit urls sha512; };

@@ -9,9 +9,17 @@ with lib;
 
 let
   cfg = config.programs.command-not-found;
-  commandNotFound = pkgs.callPackage ./. {
+  commandNotFound = pkgs.substituteAll {
+    name = "command-not-found";
+    dir = "bin";
+    src = ./command-not-found.pl;
+    isExecutable = true;
+    inherit (pkgs) perl;
     inherit (cfg) dbPath;
+    perlFlags = concatStrings (map (path: "-I ${path}/${pkgs.perl.libPrefix} ")
+      [ pkgs.perlPackages.DBI pkgs.perlPackages.DBDSQLite pkgs.perlPackages.StringShellQuote ]);
   };
+
 in
 
 {
@@ -83,4 +91,5 @@ in
 
     environment.systemPackages = [ commandNotFound ];
   };
+
 }

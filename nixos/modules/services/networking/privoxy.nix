@@ -16,7 +16,7 @@ let
     ${concatMapStrings (f: "actionsfile ${f}\n") cfg.actionsFiles}
     ${concatMapStrings (f: "filterfile ${f}\n") cfg.filterFiles}
   '' + optionalString cfg.enableTor ''
-    forward-socks5t / 127.0.0.1:9063 .
+    forward-socks4a / ${config.services.tor.client.socksListenAddressFaster} .
     toggle 1
     enable-remote-toggle 0
     enable-edit-actions 0
@@ -122,11 +122,6 @@ in
       serviceConfig.ProtectHome = true;
       serviceConfig.ProtectSystem = "full";
     };
-
-    services.tor.settings.SOCKSPort = mkIf cfg.enableTor [
-      # Route HTTP traffic over a faster port (without IsolateDestAddr).
-      { addr = "127.0.0.1"; port = 9063; IsolateDestAddr = false; }
-    ];
 
   };
 

@@ -12,7 +12,7 @@ let
     ${condOption "bind" cfg.bind}
     ${condOption "unixsocket" cfg.unixSocket}
     daemonize no
-    #supervised systemd
+    supervised systemd
     loglevel ${cfg.logLevel}
     logfile ${cfg.logfile}
     syslog-enabled ${redisBool cfg.syslog}
@@ -242,9 +242,7 @@ in
         ExecStart = "${cfg.package}/bin/redis-server /run/redis/redis.conf";
         RuntimeDirectory = "redis";
         StateDirectory = "redis";
-        TimeoutStartSec = "infinity";
-        TimeoutStopSec = "infinity";
-        Type = "simple";
+        Type = "notify";
         User = "redis";
         Group = "redis";
       };
