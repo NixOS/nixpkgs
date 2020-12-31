@@ -9583,6 +9583,13 @@ in
     buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
   });
 
+  go_2-dev = callPackage ../development/compilers/go/2-dev.nix ({
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  } // lib.optionalAttrs stdenv.isAarch64 {
+    stdenv = gcc8Stdenv;
+    buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
+  });
+
   go = go_1_15;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
