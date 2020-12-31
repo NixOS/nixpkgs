@@ -819,6 +819,12 @@ let
 
       # See comments on https://github.com/NixOS/nixpkgs/commit/9b67ea9106102d882f53d62890468071900b9647
       CRYPTO_AEGIS128_SIMD = whenAtLeast "5.4" no;
+
+      # Distros should configure the default as a kernel option.
+      # We previously defined it on the kernel command line as cma=
+      # The kernel command line will override a platform-specific configuration from its device tree.
+      # https://github.com/torvalds/linux/blob/856deb866d16e29bd65952e0289066f6078af773/kernel/dma/contiguous.c#L35-L44
+      CMA_SIZE_MBYTES = freeform "32";
     };
   };
 in

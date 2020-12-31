@@ -18219,6 +18219,8 @@ in
 
   dstat = callPackage ../os-specific/linux/dstat { };
 
+  erofs-utils = callPackage ../os-specific/linux/erofs-utils { };
+
   # unstable until the first 1.x release
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
   fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
@@ -19267,6 +19269,8 @@ in
 
   raspberrypi-eeprom = callPackage ../os-specific/linux/raspberrypi-eeprom {};
 
+  raspberrypi-armstubs = callPackage ../os-specific/linux/firmware/raspberrypi/armstubs.nix {};
+
   regionset = callPackage ../os-specific/linux/regionset { };
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
@@ -19452,6 +19456,8 @@ in
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit
     ubootRaspberryPi3_64bit
+    ubootRaspberryPi4_32bit
+    ubootRaspberryPi4_64bit
     ubootRaspberryPiZero
     ubootRock64
     ubootRockPi4
