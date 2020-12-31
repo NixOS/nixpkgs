@@ -223,6 +223,8 @@ in {
 
   aioitertools = callPackage ../development/python-modules/aioitertools { };
 
+  aiobotocore = callPackage ../development/python-modules/aiobotocore { };
+
   aiohue = callPackage ../development/python-modules/aiohue { };
 
   aioimaplib = callPackage ../development/python-modules/aioimaplib { };
