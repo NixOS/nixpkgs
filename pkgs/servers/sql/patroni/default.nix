@@ -2,21 +2,14 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "patroni";
-  version = "1.6.5";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0iw0ra9fya4bf1vkjq3w5kij4x46yinb90v015pi9c6qfpancfdj";
+    sha256 = "1xxqwdsr91ldfvvwbw0b9b02lhvgn0662k2mq5ib8cn4kas6am12";
   };
-
-  # cdiff renamed to ydiff; remove when patroni source reflects this.
-  postPatch = ''
-    for i in requirements.txt patroni/ctl.py tests/test_ctl.py; do
-      substituteInPlace $i --replace cdiff ydiff
-    done
-  '';
 
   propagatedBuildInputs = with pythonPackages; [
     boto
@@ -28,6 +21,7 @@ pythonPackages.buildPythonApplication rec {
     prettytable
     psutil
     psycopg2
+    pysyncobj
     python-dateutil
     python-etcd
     pyyaml
