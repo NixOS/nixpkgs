@@ -252,7 +252,7 @@ in
 
   # It segfaults if it uses qt5.15
   digitalbitbox = libsForQt514.callPackage ../applications/misc/digitalbitbox {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   gretl = callPackage ../applications/science/math/gretl { };
@@ -1028,7 +1028,7 @@ in
   apg = callPackage ../tools/security/apg { };
 
   apt-dater = callPackage ../tools/package-management/apt-dater {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   autorevision = callPackage ../tools/misc/autorevision { };
@@ -3525,7 +3525,7 @@ in
   duc = callPackage ../tools/misc/duc { };
 
   duff = callPackage ../tools/filesystems/duff {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   dumptorrent = callPackage ../tools/misc/dumptorrent { };
@@ -3591,7 +3591,7 @@ in
   eflite = callPackage ../applications/audio/eflite {};
 
   eid-mw = callPackage ../tools/security/eid-mw {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   epubcheck = callPackage ../tools/text/epubcheck { };
@@ -4305,7 +4305,7 @@ in
   gmvault = callPackage ../tools/networking/gmvault { };
 
   gnash = callPackage ../misc/gnash {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   gnirehtet = callPackage ../tools/networking/gnirehtet { };
@@ -4543,7 +4543,7 @@ in
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol { };
 
   gsmlib = callPackage ../development/libraries/gsmlib {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   gssdp = callPackage ../development/libraries/gssdp { };
@@ -5220,7 +5220,7 @@ in
   };
 
   libcryptui = callPackage ../development/libraries/libcryptui {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   libsmartcols = callPackage ../development/libraries/libsmartcols { };
@@ -5648,7 +5648,7 @@ in
   lv = callPackage ../tools/text/lv { };
 
   lxc = callPackage ../os-specific/linux/lxc {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
   lxcfs = callPackage ../os-specific/linux/lxcfs { };
   lxd = callPackage ../tools/admin/lxd { };
@@ -6423,7 +6423,7 @@ in
   opn2bankeditor = callPackage ../tools/audio/opl3bankeditor/opn2bankeditor.nix { };
 
   orangefs = callPackage ../tools/filesystems/orangefs {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   os-prober = callPackage ../tools/misc/os-prober {};
@@ -6499,7 +6499,7 @@ in
   parastoo-fonts = callPackage ../data/fonts/parastoo-fonts { };
 
   parcellite = callPackage ../tools/misc/parcellite {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   patchutils = callPackage ../tools/text/patchutils { };
@@ -7680,7 +7680,7 @@ in
   sysbench = callPackage ../development/tools/misc/sysbench {};
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
     libxml2 = libxml2Python;
   };
 
@@ -7968,7 +7968,7 @@ in
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
   ttfautohint = libsForQt5.callPackage ../tools/misc/ttfautohint {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
@@ -8689,7 +8689,7 @@ in
   zbackup = callPackage ../tools/backup/zbackup {};
 
   zbar = libsForQt5.callPackage ../tools/graphics/zbar {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   zdelta = callPackage ../tools/compression/zdelta { };
@@ -10320,7 +10320,7 @@ in
   solc = callPackage ../development/compilers/solc { };
 
   souffle = callPackage ../development/compilers/souffle {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   spasm-ng = callPackage ../development/compilers/spasm-ng { };
@@ -10880,7 +10880,7 @@ in
   inherit (callPackage ../development/interpreters/ruby {
     inherit (darwin) libiconv libobjc libunwind;
     inherit (darwin.apple_sdk.frameworks) Foundation;
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
     bison = buildPackages.bison_3_5;
   })
     ruby_2_5
@@ -11599,7 +11599,7 @@ in
 
   fswatch = callPackage ../development/tools/misc/fswatch {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   fujprog = callPackage ../development/tools/misc/fujprog {
@@ -11960,7 +11960,7 @@ in
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
   openocd = callPackage ../development/tools/misc/openocd {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   oprofile = callPackage ../development/tools/profiling/oprofile {
@@ -12560,11 +12560,11 @@ in
   belle-sip = callPackage ../development/libraries/belle-sip { };
 
   libbfd = callPackage ../development/libraries/libbfd {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   libopcodes = callPackage ../development/libraries/libopcodes {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   bicpl = callPackage ../development/libraries/science/biology/bicpl { };
@@ -12827,7 +12827,7 @@ in
     };
 
   dee = callPackage ../development/libraries/dee {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   dhex = callPackage ../applications/editors/dhex { };
@@ -12938,7 +12938,7 @@ in
     inherit (gst_all_1)
       gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
       gst-libav;
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   fcgi = callPackage ../development/libraries/fcgi { };
@@ -13133,7 +13133,7 @@ in
 
   gdal = callPackage ../development/libraries/gdal {
     pythonPackages = python3Packages;
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   gdal_1_11 = callPackage ../development/libraries/gdal/gdal-1_11.nix { };
@@ -13534,7 +13534,7 @@ in
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
   libheimdal = heimdal;
 
@@ -13559,7 +13559,7 @@ in
   hidapi = callPackage ../development/libraries/hidapi {
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   highfive = callPackage ../development/libraries/highfive { };
@@ -13573,7 +13573,7 @@ in
   hiredis-vip = callPackage ../development/libraries/hiredis-vip { };
 
   hivex = callPackage ../development/libraries/hivex {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   hound = callPackage ../development/tools/misc/hound { };
@@ -13890,7 +13890,7 @@ in
   libayatana-appindicator = callPackage ../development/libraries/libayatana-appindicator { };
 
   libarchive = callPackage ../development/libraries/libarchive {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   libasr = callPackage ../development/libraries/libasr { };
@@ -14126,7 +14126,7 @@ in
   libe57format = callPackage ../development/libraries/libe57format { };
 
   libeatmydata = callPackage ../development/libraries/libeatmydata {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   libeb = callPackage ../development/libraries/libeb { };
@@ -14309,7 +14309,7 @@ in
   libgpiod = callPackage ../development/libraries/libgpiod { };
 
   libgpod = callPackage ../development/libraries/libgpod {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   libgssglue = callPackage ../development/libraries/libgssglue { };
@@ -16020,7 +16020,7 @@ in
   sbc = callPackage ../development/libraries/sbc { };
 
   schroedinger = callPackage ../development/libraries/schroedinger {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   SDL = callPackage ../development/libraries/SDL ({
@@ -16435,7 +16435,7 @@ in
   totem-pl-parser = callPackage ../development/libraries/totem-pl-parser { };
 
   tpm2-tss = callPackage ../development/libraries/tpm2-tss {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   tremor = callPackage ../development/libraries/tremor { };
@@ -17108,7 +17108,7 @@ in
   cayley = callPackage ../servers/cayley { };
 
   charybdis = callPackage ../servers/irc/charybdis {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   clamsmtp = callPackage ../servers/mail/clamsmtp { };
@@ -17928,7 +17928,7 @@ in
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
   torque = callPackage ../servers/computing/torque {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   tt-rss = callPackage ../servers/tt-rss { };
@@ -21164,7 +21164,7 @@ in
   elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
 
   elinks = callPackage ../applications/networking/browsers/elinks {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   elvis = callPackage ../applications/editors/elvis { };
@@ -21410,7 +21410,7 @@ in
   fritzing = libsForQt5.callPackage ../applications/science/electronics/fritzing { };
 
   fsv = callPackage ../applications/misc/fsv {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   ft2-clone = callPackage ../applications/audio/ft2-clone { };
@@ -21757,7 +21757,7 @@ in
   getxbook = callPackage ../applications/misc/getxbook { };
 
   gimp = callPackage ../applications/graphics/gimp {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
     gegl = gegl_0_4;
     lcms = lcms2;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
@@ -22877,7 +22877,7 @@ in
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 
   mhwaveedit = callPackage ../applications/audio/mhwaveedit {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
@@ -23102,7 +23102,7 @@ in
   };
 
   mup = callPackage ../applications/audio/mup {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   # TODO: we should probably merge these 2
@@ -23301,7 +23301,7 @@ in
 
   msmtp = callPackage ../applications/networking/msmtp {
     inherit (darwin.apple_sdk.frameworks) Security;
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
@@ -24009,7 +24009,7 @@ in
   rkdeveloptool = callPackage ../misc/rkdeveloptool { };
 
   rofi-unwrapped = callPackage ../applications/misc/rofi {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
   rofi = callPackage ../applications/misc/rofi/wrapper.nix { };
 
@@ -24285,7 +24285,7 @@ in
   soxr = callPackage ../applications/misc/audio/soxr { };
 
   spek = callPackage ../applications/audio/spek {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   spotify-unwrapped = callPackage ../applications/audio/spotify {
@@ -24319,7 +24319,7 @@ in
   sslyze = with python3Packages; toPythonApplication sslyze;
 
   ssr = callPackage ../applications/audio/soundscape-renderer {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   ssrc = callPackage ../applications/audio/ssrc { };
@@ -25612,7 +25612,7 @@ in
   pivx = libsForQt5.callPackage ../applications/blockchains/pivx.nix { withGui = true; };
   pivxd = callPackage ../applications/blockchains/pivx.nix {
     withGui = false;
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   ethabi = callPackage ../applications/blockchains/ethabi.nix { };
@@ -25897,7 +25897,7 @@ in
   freecell-solver = callPackage ../games/freecell-solver { };
 
   freeciv = callPackage ../games/freeciv {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
     qt5 = qt514;
   };
 
@@ -27596,7 +27596,7 @@ in
   boinc = callPackage ../applications/science/misc/boinc { };
 
   celestia = callPackage ../applications/science/astronomy/celestia {
-    autoreconfHook = autoreconfHook269;
+    autoreconfHook = buildPackages.autoreconfHook269;
     lua = lua5_1;
     inherit (pkgs.gnome2) gtkglext;
   };
