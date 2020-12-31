@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     longDescription = ''
       A kernel module for Realtek 8125 2.5G network cards.
     '';
+    # r8125 has been integrated into the kernel as of v5.9.1
+    broken = lib.versionAtLeast kernel.version "5.9.1";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ peelz ];
