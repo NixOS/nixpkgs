@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, isPyPy
 , olefile
-, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
+, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11,libxcb
 , openjpeg, libimagequant
 , pyroma, numpy, pytestCheckHook
 , isPy3k
@@ -30,8 +30,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pyroma numpy ];
 
-  buildInputs = [
-    freetype libjpeg openjpeg libimagequant zlib libtiff libwebp tcl lcms2 ]
+  buildInputs = [ freetype libjpeg openjpeg libimagequant zlib libtiff libwebp tcl lcms2 libxcb ]
     ++ stdenv.lib.optionals (isPyPy) [ tk libX11 ];
 
   # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
@@ -57,8 +56,8 @@ buildPythonPackage rec {
             s|^TIFF_ROOT =.*$|TIFF_ROOT = ${libinclude libtiff}|g ;
             s|^TCL_ROOT=.*$|TCL_ROOT = ${libinclude' tcl}|g ;
             s|self\.disable_platform_guessing = None|self.disable_platform_guessing = True|g ;'
-    export LDFLAGS="-L${libwebp}/lib"
-    export CFLAGS="-I${libwebp}/include"
+    export LDFLAGS="-L${libwebp}/lib -L${libxcb}/lib"
+    export CFLAGS="-I${libwebp}/include -I${libxcb.dev}/include"
   ''
   # Remove impurities
   + stdenv.lib.optionalString stdenv.isDarwin ''
