@@ -27,7 +27,7 @@
 let
   version = "4.4";
 
-  binpath = stdenv.lib.makeBinPath [ 
+  binpath = stdenv.lib.makeBinPath [
     cabextract
     python
     gettext
@@ -70,7 +70,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ 
+  buildInputs = [
     xorg.libX11
     libGL
     python

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   phases = [ "unpackPhase" "installPhase" ];
 
   unpackPhase = ''
-    tar -zxf $src 
+    tar -zxf $src
     '';
 
   installPhase = ''

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     cp $src $out/bin/deadd-notification-center
     chmod +x $out/bin/deadd-notification-center
 
-    sed "s|##PREFIX##|$out|g" ${dbusService} > $out/share/dbus-1/services/com.ph-uhl.deadd.notification.service 
+    sed "s|##PREFIX##|$out|g" ${dbusService} > $out/share/dbus-1/services/com.ph-uhl.deadd.notification.service
   '';
 
   meta = with stdenv.lib; {
