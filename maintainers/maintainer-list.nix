@@ -3619,6 +3619,12 @@
     email = "t@larkery.com";
     name = "Tom Hinton";
   };
+  hirenashah = {
+    email = "hiren@hiren.io";
+    github = "hirenashah";
+    githubId = 19825977;
+    name = "Hiren Shah";
+  };
   hjones2199 = {
     email = "hjones2199@gmail.com";
     github = "hjones2199";
