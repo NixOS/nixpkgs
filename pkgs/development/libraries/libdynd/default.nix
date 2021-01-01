@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     "-Wno-error=deprecated-copy"
   ];
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   outputs = [ "out" "dev" ];
   outputDoc = "dev";

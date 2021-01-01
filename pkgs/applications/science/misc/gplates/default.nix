@@ -10,8 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "1jrcv498vpcs8xklhbsgg12yfa90f96p2mwq6x5sjnrlpf8mh50b";
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    qt4 qwt6_qt4 libGLU libGL glew gdal cgal proj cmake python2
+    qt4 qwt6_qt4 libGLU libGL glew gdal cgal proj python2
     doxygen graphviz gmp mpfr
     (boost.override {
       enablePython = true;

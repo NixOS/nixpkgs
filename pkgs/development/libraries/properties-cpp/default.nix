@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gtest, doxygen
+{ stdenv, fetchurl, cmake, pkg-config, gtest, doxygen
 , graphviz, lcov }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "08vjyv7ibn6jh2ikj5v48kjpr3n6hlkp9qlvdn8r0vpiwzah0m2w";
   };
 
-  buildInputs = [ cmake gtest doxygen pkgconfig graphviz lcov ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ gtest doxygen graphviz lcov ];
 
   patchPhase = ''
     sed -i "/add_subdirectory(tests)/d" CMakeLists.txt

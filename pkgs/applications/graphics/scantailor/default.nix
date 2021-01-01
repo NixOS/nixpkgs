@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1pjx3a6hs16az6rki59bchy3biy7jndjx8r125q01aq7lbf5npgg";
   };
 
-  buildInputs = [ qt4 cmake libjpeg libtiff boost ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qt4 libjpeg libtiff boost ];
 
   enableParallelBuilding = true;
 

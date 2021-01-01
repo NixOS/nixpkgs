@@ -12,7 +12,8 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper cmake ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper ];
 
   cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
                  "-DOPENGL_INCLUDE_DIR=${libGL}/include"

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, jsoncpp, argtable, curl, libmicrohttpd
-, doxygen, catch, pkgconfig
+, doxygen, catch, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -53,8 +53,8 @@ stdenv.mkDerivation rec {
     cp -r Install/* $out
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake jsoncpp argtable curl libmicrohttpd doxygen catch ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ jsoncpp argtable curl libmicrohttpd doxygen catch ];
 
   enableParallelBuilding = true;
 

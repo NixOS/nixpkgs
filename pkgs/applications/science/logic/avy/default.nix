@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ cmake zlib boost.out boost.dev ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib boost.out boost.dev ];
   NIX_CFLAGS_COMPILE = toString ([ "-Wno-narrowing" ]
     # Squelch endless stream of warnings on same few things
     ++ stdenv.lib.optionals stdenv.cc.isClang [

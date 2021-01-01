@@ -9,9 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "09qqk02iny7jvngyk6k2j0kk2sspc6gw8sm3i6nn97njbkihi697";
   };
 
-  buildInputs = [ cmake bison ncurses openssl zlib libaio perl ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake bison perl ];
+  buildInputs = [ ncurses openssl zlib libaio ];
 
   cmakeFlags = [
     "-DFEATURE_SET=community"

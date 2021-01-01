@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, cairo, cmake, libjack2, fftw, fltk13, lash,  libjpeg
-, libXpm, minixml, ntk, pkgconfig, zlib, liblo
+, libXpm, minixml, ntk, pkg-config, zlib, liblo
 }:
 
 stdenv.mkDerivation  rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [ alsaLib cairo libjack2 fftw fltk13 lash libjpeg libXpm minixml ntk zlib liblo ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   patchPhase = ''
     substituteInPlace src/Misc/Config.cpp --replace /usr $out

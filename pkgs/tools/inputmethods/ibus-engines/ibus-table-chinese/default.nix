@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchFromGitHub, pkgconfig,  ibus, ibus-table, python3, cmake }:
+{ stdenv, fetchgit, fetchFromGitHub, pkg-config, ibus, ibus-table, python3, cmake }:
 
 let
   src = fetchFromGitHub {
@@ -51,7 +51,8 @@ in stdenv.mkDerivation {
     rm -rf $HOME
   '';
 
-  buildInputs = [ pkgconfig ibus ibus-table python3 cmake ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ ibus ibus-table python3 ];
 
   meta = with stdenv.lib; {
     isIbusEngine = true;
