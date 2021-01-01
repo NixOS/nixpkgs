@@ -17,17 +17,12 @@ buildPythonPackage rec {
   pname = "asdf";
   version = "2.7.1";
   disabled = isPy27;
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "4ba2e31cb24b974a10dfae3edee23db2e6bea2d00608604d062366aa3af6e81a";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "semantic_version>=2.3.1,<=2.6.0" "semantic_version>=2.3.1" \
-      --replace "doctest_plus = enabled" ""
-  '';
 
   checkInputs = [
     pytest-astropy
@@ -45,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    pytest
+    PY_IGNORE_IMPORTMISMATCH=1 pytest
   '';
 
   meta = with lib; {

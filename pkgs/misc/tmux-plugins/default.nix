@@ -129,12 +129,12 @@ in rec {
 
   dracula = mkDerivation rec {
     pluginName = "dracula";
-    version = "unstable-2020-12-2";
+    version = "unstable-2020-12-28";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
-      rev = "cc310e585acbeaf3304eda662476f7f657010b01";
-      sha256 = "003nbv2rz2ihyqf3ryvdwn43ly0gi5z2r0pnqr9s9vw8dmwx0r3x";
+      rev = "6757a5329948f00addd66b02ea94f61dd94456f5";
+      sha256 = "0wwwzg3bwcrbr2nmf84prz7k4i79yq0960vs6zjp0x8nqn2fvziy";
     };
     meta = with stdenv.lib; {
       homepage = "https://draculatheme.com/tmux";
@@ -208,6 +208,10 @@ in rec {
       rev = "416f613d3eaadbe1f6f9eda77c49430527ebaffb";
       sha256 = "1xbzdyhsgaq2in0f8f491gwjmx6cxpkf2c35d2dk0kg4jfs505sz";
     };
+    postInstall = ''
+      sed -i -e 's|ruby|${pkgs.ruby}/bin/ruby|g' $target/scripts/tmux-jump.sh
+    '';
+    dependencies = [ pkgs.ruby ];
 
     meta = with stdenv.lib; {
       homepage = "https://github.com/schasse/tmux-jump";

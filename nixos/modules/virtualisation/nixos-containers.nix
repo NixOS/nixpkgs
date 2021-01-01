@@ -56,9 +56,9 @@ let
             ip -6 route add $HOST_ADDRESS6 dev eth0
             ip -6 route add default via $HOST_ADDRESS6
           fi
-
-          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
         fi
+
+        ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
 
         # Start the regular stage 1 script.
         exec "$1"
@@ -223,8 +223,8 @@ let
             ${ipcall cfg "ip route" "$LOCAL_ADDRESS" "localAddress"}
             ${ipcall cfg "ip -6 route" "$LOCAL_ADDRESS6" "localAddress6"}
           fi
-          ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
         fi
+        ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
       ''
   );
 

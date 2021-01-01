@@ -27,3 +27,11 @@ sed -i "s/x86_64-linux = \".\{52\}\"/x86_64-linux = \"${VSCODE_LINUX_SHA256}\"/"
 VSCODE_DARWIN_URL="https://vscode-update.azurewebsites.net/${VSCODE_VER}/darwin/stable"
 VSCODE_DARWIN_SHA256=$(nix-prefetch-url ${VSCODE_DARWIN_URL})
 sed -i "s/x86_64-darwin = \".\{52\}\"/x86_64-darwin = \"${VSCODE_DARWIN_SHA256}\"/" "$ROOT/vscode.nix"
+
+VSCODE_LINUX_AARCH64_URL="https://vscode-update.azurewebsites.net/${VSCODE_VER}/linux-arm64/stable"
+VSCODE_LINUX_AARCH64_SHA256=$(nix-prefetch-url ${VSCODE_LINUX_AARCH64_URL})
+sed -i "s/aarch64-linux = \".\{52\}\"/aarch64-linux = \"${VSCODE_LINUX_AARCH64_SHA256}\"/" "$ROOT/vscode.nix"
+
+VSCODE_LINUX_ARMV7L_URL="https://vscode-update.azurewebsites.net/${VSCODE_VER}/linux-armhf/stable"
+VSCODE_LINUX_ARMV7L_SHA256=$(nix-prefetch-url ${VSCODE_LINUX_ARMV7L_URL})
+sed -i "s/armv7l-linux = \".\{52\}\"/armv7l-linux = \"${VSCODE_LINUX_ARMV7L_SHA256}\"/" "$ROOT/vscode.nix"

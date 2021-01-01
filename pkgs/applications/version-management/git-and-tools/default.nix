@@ -38,6 +38,8 @@ let
 
   ghq = callPackage ./ghq { };
 
+  ghr = callPackage ./ghr { };
+
   git = appendToName "minimal" gitBase;
 
   git-absorb = callPackage ./git-absorb {

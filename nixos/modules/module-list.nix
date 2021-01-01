@@ -47,6 +47,7 @@
   ./hardware/digitalbitbox.nix
   ./hardware/device-tree.nix
   ./hardware/sensor/iio.nix
+  ./hardware/keyboard/zsa.nix
   ./hardware/ksm.nix
   ./hardware/ledger.nix
   ./hardware/logitech.nix
@@ -65,6 +66,7 @@
   ./hardware/tuxedo-keyboard.nix
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
+  ./hardware/opentabletdriver.nix
   ./hardware/wooting.nix
   ./hardware/uinput.nix
   ./hardware/video/amdgpu.nix
@@ -140,6 +142,7 @@
   ./programs/light.nix
   ./programs/mosh.nix
   ./programs/mininet.nix
+  ./programs/msmtp.nix
   ./programs/mtr.nix
   ./programs/nano.nix
   ./programs/neovim.nix
@@ -537,6 +540,7 @@
   ./services/monitoring/do-agent.nix
   ./services/monitoring/fusion-inventory.nix
   ./services/monitoring/grafana.nix
+  ./services/monitoring/grafana-image-renderer.nix
   ./services/monitoring/grafana-reporter.nix
   ./services/monitoring/graphite.nix
   ./services/monitoring/hdaps.nix
@@ -742,6 +746,7 @@
   ./services/networking/skydns.nix
   ./services/networking/shadowsocks.nix
   ./services/networking/shairport-sync.nix
+  ./services/networking/shellhub-agent.nix
   ./services/networking/shorewall.nix
   ./services/networking/shorewall6.nix
   ./services/networking/shout.nix

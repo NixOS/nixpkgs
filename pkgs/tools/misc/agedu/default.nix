@@ -1,15 +1,17 @@
 {stdenv, fetchgit, autoreconfHook, halibut}:
 let
-  date = "20200206";
-  rev = "963bc9d";
+  date = "20200705";
+  rev = "2a7d4a2";
 in
 stdenv.mkDerivation {
-  name = "agedu-${date}.${rev}";
+  pname = "agedu";
+  version = "${date}.${rev}";
+
   # upstream provides tarballs but it seems they disappear after the next version is released
   src = fetchgit {
     url = "https://git.tartarus.org/simon/agedu.git";
     inherit rev;
-    sha256 = "1jmvgg2v6aqgbgpxbndrdhgfhlglrq4yv4sdbjaj6bsz9fb8lqhc";
+    sha256 = "gRNscl/vhBoZaHFCs9JjDBHDRoEpILJLtiI4YV+K/b4=";
   };
 
   nativeBuildInputs = [autoreconfHook halibut];

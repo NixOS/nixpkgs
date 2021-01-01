@@ -1,23 +1,25 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "20201207T142850";
+  version = "20201228T020543";
 
   src = fetchurl {
-    url = "https://github.com/snoe/clojure-lsp/releases/download/release-${version}/${pname}";
-    sha256 = "0fxplldpxslm7f5xxazkl09gsj0ysppaal72hmlqbdj6rbgxlrnk";
+    url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/release-${version}/${pname}.jar";
+    sha256 = "0jkpw7dx7976p63c08bp43fiwk6f2h2nxj9vv1zr103hgywpplri";
   };
 
   dontUnpack = true;
 
-  installPhase = ''
-    install -Dm755 $src $out/bin/clojure-lsp
-    sed -i -e '1 s!java!${jre}/bin/java!' $out/bin/clojure-lsp
-  '';
+  buildInputs = [ makeWrapper ];
 
-  # verify shebang patch
-  installCheckPhase = "PATH= clojure-lsp --version";
+  installPhase = ''
+    install -Dm644 $src $out/share/java/${pname}.jar
+    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+      --add-flags "-jar $out/share/java/${pname}.jar" \
+      --add-flags "-Xmx2g" \
+      --add-flags "-server"
+  '';
 
   meta = with stdenv.lib; {
     description = "Language Server Protocol (LSP) for Clojure";
@@ -26,5 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.ericdallo ];
     platforms = jre.meta.platforms;
   };
-
 }

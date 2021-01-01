@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "abodepy";
-  version = "1.2.0";
+  version = "1.2.1";
 
   disabled = !isPy3k;
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "MisterWil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0m2cm90yy7fq7yrjyd999m48gqri65ifi7f6hc0s3pv2hfj89yj0";
+    sha256 = "0n8gczsml6y6anin1zi8j33sjk1bv9ka02zxpksn2fi1v1h0smap";
   };
 
   propagatedBuildInputs = [ colorlog lomond requests ];

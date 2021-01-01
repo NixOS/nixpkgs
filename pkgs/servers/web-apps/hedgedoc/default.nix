@@ -3,13 +3,13 @@
 
 mkYarnPackage rec {
   name = "hedgedoc";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner  = "hedgedoc";
     repo   = "hedgedoc";
     rev    = version;
-    sha256 = "1zz5ni9cp1dhcvcrzks13pww5qm2wna2hh0k59pfz7c897rs1l7v";
+    sha256 = "0axad5581v25pynfj6pgy0h1xp92dyllnc7mk42z6hxbs4sgkrw1";
   };
 
   nativeBuildInputs = [ which makeWrapper ];

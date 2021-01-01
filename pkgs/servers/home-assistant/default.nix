@@ -62,7 +62,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2020.12.1";
+  hassVersion = "2020.12.2";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";

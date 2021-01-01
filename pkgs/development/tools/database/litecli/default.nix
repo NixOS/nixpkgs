@@ -1,8 +1,8 @@
-{ lib, python3Packages, fetchpatch }:
+{ lib, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "litecli";
-  version = "1.4.1";
+  version = "1.5.0";
 
   # Python 2 won't have prompt_toolkit 2.x.x
   # See: https://github.com/NixOS/nixpkgs/blob/f49e2ad3657dede09dc998a4a98fd5033fb52243/pkgs/top-level/python-packages.nix#L3408
@@ -10,16 +10,8 @@ python3Packages.buildPythonApplication rec {
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "FARWjtbS5zi/XQDyAVImUmArLj8xATz1jZ4jnXFdq1w=";
+    sha256 = "b09f0804d26b018360b240778612390810e8e00ea0f79d5412fd0d4775c0e3cd";
   };
-
-  patches = [
-    # Fix compatibility with sqlparse >= 0.4.0. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/dbcli/litecli/commit/37957e401d22f88800bbdec2c690e731f2cc13bd.patch";
-      sha256 = "1x82s2h1rzflyiahyd8pfya30rzs6yx6ij4a4s16f8iix5x35zv9";
-    })
-  ];
 
   propagatedBuildInputs = with python3Packages; [
     cli-helpers
@@ -31,16 +23,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkInputs = with python3Packages; [
-    pytest
+    pytestCheckHook
     mock
   ];
-
-  preCheck = ''
-    export XDG_CONFIG_HOME=$TMP
-    # add missing file
-    mkdir -p tests/data
-    echo -e "t1,11\nt2,22\n" > tests/data/import_data.csv
-  '';
 
   meta = with lib; {
     description = "Command-line interface for SQLite";
@@ -48,6 +33,7 @@ python3Packages.buildPythonApplication rec {
       A command-line client for SQLite databases that has auto-completion and syntax highlighting.
     '';
     homepage = "https://litecli.com";
+    changelog = "https://github.com/dbcli/litecli/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

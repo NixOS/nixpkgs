@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
-  version = "4.4.13";
+  version = "4.4.21";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "1ad7sqc5y4f3gc8glwmb3rvfzapnvhg981g13x90cg4nzikjvka0";
+    sha256 = "0ylv1jsqnfhw23i6p3lfqqzw48lwii8zwkq3y34q0hhnngn26iiw";
   };
 
-  nativeBuildInputs = [ cmake antlr3_4 ];
+  nativeBuildInputs = [ antlr3_4 cmake ];
 
   buildInputs = [ zlib ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://linphone.org/technical-corner/belle-sip";
     description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };

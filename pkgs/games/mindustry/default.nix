@@ -22,14 +22,14 @@ let
   # Note: when raising the version, ensure that all SNAPSHOT versions in
   # build.gradle are replaced by a fixed version
   # (the current one at the time of release) (see postPatch).
-  version = "121.4";
+  version = "122";
   buildVersion = makeBuildVersion version;
 
   src = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "14w0fkn8q5bj84py7vx33wdk9d37ncrq6rdj5ryz4mvlxbix2n4n";
+    sha256 = "19dxqscnny0c5w3pyg88hflrkhsqgd7zx19240kh4h69y3wwaz0m";
   };
 
   desktopItem = makeDesktopItem {
@@ -50,6 +50,13 @@ let
     sed -i 's/com.github.anuken:packr:-SNAPSHOT/com.github.anuken:packr:034efe51781d2d8faa90370492133241bfb0283c/' build.gradle
   '';
 
+  preBuild = ''
+    # Arc is run at build time for sprite packing, and it needs to see
+    # the runtime libraries
+    ${stdenv.lib.optionalString stdenv.isLinux "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${alsaLib}/lib"}
+    export GRADLE_USER_HOME=$(mktemp -d)
+  '';
+
   # The default one still uses jdk8 (#89731)
   gradle_6 = (gradleGen.override (old: { java = jdk14; })).gradle_6_7;
 
@@ -62,7 +69,7 @@ let
     # one hash for 'deps'. Deps can be garbage collected after the build,
     # so this is not really an issue.
     buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
+      ${preBuild}
       gradle --no-daemon desktop:dist -Pbuildversion=${buildVersion}
       gradle --no-daemon server:dist -Pbuildversion=${buildVersion}
     '';
@@ -74,7 +81,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "18n671aa013cnsnp9aaw61llqz4s4vn7zgja8cazd0cg632x8jca";
+    outputHash = "1kymfrd2vd23y1rmx19q47wc212r6qx03x6g58pxbqyylxmcw5zq";
   };
 
   # Separate commands for building and installing the server and the client
@@ -109,7 +116,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gradle_6 makeWrapper ];
 
   buildPhase = with stdenv.lib; ''
-    export GRADLE_USER_HOME=$(mktemp -d)
+    ${preBuild}
     # point to offline repo
     sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" build.gradle
     ${optionalString enableClient buildClient}
@@ -125,11 +132,15 @@ stdenv.mkDerivation rec {
     homepage = "https://mindustrygame.github.io/";
     downloadPage = "https://github.com/Anuken/Mindustry/releases";
     description = "A sandbox tower defense game";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
-    broken = stdenv.isDarwin;
+    # Problems with native libraries in aarch64:
+    # https://github.com/NixOS/nixpkgs/pull/107646
+    # https://logs.nix.ci/?key=nixos/nixpkgs.107646&attempt_id=3032c060-72e9-4a76-8186-4739544397dd
+    broken = stdenv.isDarwin ||
+             stdenv.isAarch64;
   };
 }

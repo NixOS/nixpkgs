@@ -134,13 +134,13 @@ with self; {
 
   vicious = toLuaModule(stdenv.mkDerivation rec {
     pname = "vicious";
-    version = "2.3.1";
+    version = "2.5.0";
 
     src = fetchFromGitHub {
       owner = "Mic92";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "1yzhjn8rsvjjsfycdc993ms6jy2j5jh7x3r2ax6g02z5n0anvnbx";
+      sha256 = "0lb90334mz0my8ydsmnsnkki0xr58kinsg0hf9d6k4b0vjfi0r0a";
     };
 
     buildInputs = [ lua ];

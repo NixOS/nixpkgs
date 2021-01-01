@@ -221,6 +221,10 @@ in {
 
   aiohttp-swagger = callPackage ../development/python-modules/aiohttp-swagger { };
 
+  aioitertools = callPackage ../development/python-modules/aioitertools { };
+
+  aiobotocore = callPackage ../development/python-modules/aiobotocore { };
+
   aiohue = callPackage ../development/python-modules/aiohue { };
 
   aioimaplib = callPackage ../development/python-modules/aioimaplib { };
@@ -421,6 +425,8 @@ in {
 
   astropy-helpers = callPackage ../development/python-modules/astropy-helpers { };
 
+  astropy-extension-helpers = callPackage ../development/python-modules/astropy-extension-helpers { };
+
   astroquery = callPackage ../development/python-modules/astroquery { };
 
   asttokens = callPackage ../development/python-modules/asttokens { };
@@ -594,6 +600,8 @@ in {
   azure-mgmt-core = callPackage ../development/python-modules/azure-mgmt-core { };
 
   azure-mgmt-cosmosdb = callPackage ../development/python-modules/azure-mgmt-cosmosdb { };
+
+  azure-mgmt-databoxedge = callPackage ../development/python-modules/azure-mgmt-databoxedge { };
 
   azure-mgmt-datafactory = callPackage ../development/python-modules/azure-mgmt-datafactory { };
 
@@ -1041,7 +1049,9 @@ in {
 
   cachy = callPackage ../development/python-modules/cachy { };
 
-  cadquery = callPackage ../development/python-modules/cadquery { };
+  cadquery = callPackage ../development/python-modules/cadquery {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   caffe = toPythonModule (pkgs.caffe.override {
     pythonSupport = true;
@@ -1996,8 +2006,6 @@ in {
   executor = callPackage ../development/python-modules/executor { };
 
   exifread = callPackage ../development/python-modules/exifread { };
-
-  extension-helpers = callPackage ../development/python-modules/extension-helpers { };
 
   extras = callPackage ../development/python-modules/extras { };
 
@@ -3175,6 +3183,8 @@ in {
   jsondate = callPackage ../development/python-modules/jsondate { };
 
   jsondiff = callPackage ../development/python-modules/jsondiff { };
+
+  jsonfield = callPackage ../development/python-modules/jsonfield { };
 
   jsonlines = callPackage ../development/python-modules/jsonlines { };
 
@@ -4679,6 +4689,8 @@ in {
 
   python-openems = callPackage ../development/python-modules/python-openems { };
 
+  python-tado = callPackage ../development/python-modules/python-tado { };
+
   pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
@@ -5116,6 +5128,8 @@ in {
   pyenchant = callPackage ../development/python-modules/pyenchant { enchant2 = pkgs.enchant2; };
 
   pyepsg = callPackage ../development/python-modules/pyepsg { };
+
+  pyerfa = callPackage ../development/python-modules/pyerfa { };
 
   pyexcel = callPackage ../development/python-modules/pyexcel { };
 
@@ -5702,6 +5716,8 @@ in {
     inherit (pkgs) bash subversion apr aprutil expat neon openssl;
   };
 
+  pysychonaut = callPackage ../development/python-modules/pysychonaut { };
+
   pytabix = callPackage ../development/python-modules/pytabix { };
 
   pytado = callPackage ../development/python-modules/pytado { };
@@ -6021,8 +6037,10 @@ in {
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
-  pythonocc-core =
-    toPythonModule (callPackage ../development/python-modules/pythonocc-core { inherit (pkgs.xorg) libX11; });
+  pythonocc-core = toPythonModule (callPackage ../development/python-modules/pythonocc-core {
+    inherit (pkgs.xorg) libX11;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+  });
 
   python-olm = callPackage ../development/python-modules/python-olm { };
 
@@ -6553,6 +6571,10 @@ in {
   safety = callPackage ../development/python-modules/safety { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
+
+  sane = callPackage ../development/python-modules/sane {
+    inherit (pkgs) saneBackends;
+  };
 
   sampledata = callPackage ../development/python-modules/sampledata { };
 
@@ -7746,8 +7768,17 @@ in {
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
 
-  vtk = toPythonModule (pkgs.vtk_7.override {
-    inherit (self) python;
+  vtk = self.vtk_7;
+  vtk_7 = toPythonModule (pkgs.vtk_7.override {
+    pythonInterpreter = python;
+    enablePython = true;
+  });
+  vtk_8 = toPythonModule (pkgs.vtk_8.override {
+    pythonInterpreter = python;
+    enablePython = true;
+  });
+  vtk_9 = toPythonModule (pkgs.vtk_9.override {
+    pythonInterpreter = python;
     enablePython = true;
   });
 

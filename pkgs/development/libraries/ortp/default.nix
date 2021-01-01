@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A Real-Time Transport Protocol (RFC3550) stack";
     homepage = "https://linphone.org/technical-corner/ortp";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };

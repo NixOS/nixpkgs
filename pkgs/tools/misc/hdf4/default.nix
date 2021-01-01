@@ -1,6 +1,7 @@
 { stdenv
 , fetchpatch
 , fetchurl
+, fixDarwinDylibNames
 , cmake
 , libjpeg
 , zlib
@@ -17,6 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
   buildInputs = [

@@ -1,4 +1,5 @@
 { stdenv
+, pkgs
 , fetchurl
 , fetchpatch
 , zlib
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ]
     ++ optional (hpnSupport || withGssapiPatches) autoreconfHook
-    ++ optional withKerberos kerberos.dev;
+    ++ optional withKerberos pkgs.kerberos.dev;
   buildInputs = [ zlib openssl libedit pam ]
     ++ optional withFIDO libfido2
     ++ optional withKerberos kerberos;

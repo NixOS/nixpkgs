@@ -65,6 +65,40 @@ let plugins = {
     };
     meta = common_meta // { description = "Plugin to support " + passthru.hw + " scanner in sane"; };
   };
+  v370 = stdenv.mkDerivation rec {
+    name = "iscan-v370-bundle";
+    version = "2.30.4";
+
+    src = fetchurl {
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/perfection-v370/rpm/x64/iscan-perfection-v370-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/https://download2.ebz.epson.net/iscan/plugin/perfection-v370/rpm/x64/iscan-perfection-v370-bundle-${version}.x64.rpm.tar.gz"
+      ];
+      sha256 = "1ff7adp9mha1i2ibllz540xkagpy8r757h4s3h60bgxbyzv2yggr";
+    };
+
+    nativeBuildInputs = [ autoPatchelfHook rpm ];
+
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-plugin-perfection-v370-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+
+
+      mkdir -p $out/share $out/lib
+      cp -r usr/share/{iscan-data,iscan}/ $out/share
+      cp -r usr/lib64/iscan $out/lib
+      mv $out/share/iscan $out/share/esci
+      mv $out/lib/iscan $out/lib/esci
+    '';
+
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x014a "$plugin/lib/esci/libiscan-plugin-perfection-v370 $plugin/share/esci/esfwdd.bin"
+      '';
+      hw = "Perfection V37/V370";
+    };
+    meta = common_meta // { description = "Plugin to support " + passthru.hw + " scanner in sane"; };
+  };
   x770 = stdenv.mkDerivation rec {
     pname = "iscan-gt-x770-bundle";
     version = "2.30.4";

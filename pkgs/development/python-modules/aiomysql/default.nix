@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "PyMySQL>=0.9,<=0.9.2" "PyMySQL"
+      --replace "PyMySQL>=0.9,<=0.9.3" "PyMySQL"
   '';
 
   checkPhase = ''

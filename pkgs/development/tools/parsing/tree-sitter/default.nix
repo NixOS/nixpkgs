@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchgit, fetchFromGitHub, fetchurl
-, writeShellScript, runCommand, which
+, writeShellScript, runCommand, which, formats
 , rustPlatform, jq, nix-prefetch-git, xe, curl, emscripten
 , Security
 , callPackage
@@ -29,7 +29,7 @@ let
   };
 
   update-all-grammars = import ./update.nix {
-    inherit writeShellScript nix-prefetch-git curl jq xe src;
+    inherit writeShellScript nix-prefetch-git curl jq xe src formats lib;
   };
 
   fetchGrammar = (v: fetchgit {inherit (v) url rev sha256 fetchSubmodules; });
@@ -43,14 +43,22 @@ let
 
   builtGrammars = let
     change = name: grammar:
-      callPackage ./library.nix {} {
+      callPackage ./grammar.nix {} {
         language = name;
         inherit version;
         source = fetchGrammar grammar;
       };
   in
-    # typescript doesn't have parser.c in the same place as others
-    lib.mapAttrs change (removeAttrs (import ./grammars) ["typescript"]);
+    lib.mapAttrs change (removeAttrs (import ./grammars) [
+      # TODO these don't have parser.c in the same place as others.
+      # They might require more elaborate builds?
+      #  /nix/…/src/parser.c: No such file or directory
+      "tree-sitter-typescript"
+      #  /nix/…/src/parser.c: No such file or directory
+      "tree-sitter-ocaml"
+      # /nix/…/src/parser.c:1:10: fatal error: tree_sitter/parser.h: No such file or directory
+      "tree-sitter-razor"
+    ]);
 
 in rustPlatform.buildRustPackage {
   pname = "tree-sitter";
@@ -93,6 +101,11 @@ in rustPlatform.buildRustPackage {
     };
     inherit grammars;
     inherit builtGrammars;
+
+    tests = {
+      # make sure all grammars build
+      builtGrammars = lib.recurseIntoAttrs builtGrammars;
+    };
   };
 
   meta = {

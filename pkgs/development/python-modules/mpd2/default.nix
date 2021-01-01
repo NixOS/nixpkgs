@@ -1,17 +1,19 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , python
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "python-mpd2";
-  version = "1.0.0";
+  version = "3.0.1";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "tar.bz2";
     sha256 = "772fa6861273bb9f363a97987c2c45ca3965eb770570f1f02566efec9c89fc5f";
   };
 

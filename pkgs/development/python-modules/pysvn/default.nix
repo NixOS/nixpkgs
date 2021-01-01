@@ -60,10 +60,10 @@ buildPythonPackage rec {
     sed -i "s|/bin/bash|${bash}/bin/bash|" ../Tests/test-*.sh
     make -C ../Tests
 
+    ${python.interpreter} -c "import pysvn"
+
     runHook postCheck
   '';
-
-  pythonImportCheck = [ "pysvn" ];
 
   installPhase = ''
     dest=$(toPythonPath $out)/pysvn
@@ -80,5 +80,4 @@ buildPythonPackage rec {
     homepage = "http://pysvn.tigris.org/";
     license = licenses.asl20;
   };
-
 }

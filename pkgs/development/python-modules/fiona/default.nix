@@ -41,9 +41,7 @@ buildPythonPackage rec {
   checkPhase = ''
     rm -r fiona # prevent importing local fiona
     # Some tests access network, others test packaging
-    pytest -k "not test_*_http \
-           and not test_*_https \
-           and not test_*_wheel"
+    pytest -k "not (http or https or wheel)"
   '';
 
   meta = with lib; {

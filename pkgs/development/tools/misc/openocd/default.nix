@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation rec {
   pname = "openocd";
-  version = "unstable-2020-11-11";
+  version = "0.11.0-rc1";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/openocd/code";
-    rev = "06c7a53f1fff20bcc4be9e63f83ae98664777f34";
-    sha256 = "0g0w7g94r88ylfpwswnhh8czlf5iqvd991ssn4gfcfd725lpdb01";
+    rev = "v${version}";
+    sha256 = "15g8qalyxhdp0imfrg8mxwnp0nimd836fc5laaavajw49gcm65m4";
     fetchSubmodules = true;
   };
 

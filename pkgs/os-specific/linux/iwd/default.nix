@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gzpdgfwzlqj2n3amf2zhi2hlpa412878yphgx79y6b5gn1y1lm2";
   };
 
-  outputs = [ "out" "man" "test" ];
+  outputs = [ "out" "man" ]
+    ++ stdenv.lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -38,7 +39,9 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ openssl ];
 
-  pythonPath = [
+  # wrapPython wraps the scripts in $test. They pull in gobject-introspection,
+  # which doesn't cross-compile.
+  pythonPath = stdenv.lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     python3Packages.dbus-python
     python3Packages.pygobject3
   ];
@@ -61,11 +64,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postInstall = ''
-    mkdir -p $test/bin
-    cp -a test/* $test/bin/
     mkdir -p $out/share
     cp -a doc $out/share/
     cp -a README AUTHORS TODO $out/share/doc/
+  '' + stdenv.lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p $test/bin
+    cp -a test/* $test/bin/
   '';
 
   preFixup = ''

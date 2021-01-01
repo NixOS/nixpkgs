@@ -19,6 +19,7 @@ buildLinux (args // {
   extraMeta = {
     branch = "5.10/master";
     maintainers = with stdenv.lib.maintainers; [ atemu andresilva ];
+    description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads.";
   };
 
 } // (args.argsOverride or {}))
