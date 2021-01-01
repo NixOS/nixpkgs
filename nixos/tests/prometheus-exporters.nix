@@ -96,6 +96,31 @@ let
       '';
     };
 
+    bird = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.bird2.enable = true;
+        services.bird2.config = ''
+          protocol kernel MyObviousTestString {
+            ipv4 {
+              import all;
+              export none;
+            };
+          }
+
+          protocol device {
+          }
+        '';
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-bird-exporter.service")
+        wait_for_open_port(9324)
+        succeed("curl -sSf http://localhost:9324/metrics | grep -q 'MyObviousTestString'")
+      '';
+    };
+
     blackbox = {
       exporterConfig = {
         enable = true;
