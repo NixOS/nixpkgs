@@ -88,11 +88,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.18.75";
+  version = "1.18.77";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "1njgdw7ml30xs517brc7z7piy6lcylrfjhz6wn1dp7gywsxfgx1h";
+    sha256 = "AV3bqtWaoy6AVnt8K/Qo+7hguAIsPJPZhgLSeOvJ7JY=";
   };
 
   dontConfigure = true;
@@ -146,6 +146,8 @@ stdenv.mkDerivation rec {
       ln -sf ${xdg_utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
       ln -sf ${xdg_utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with stdenv.lib; {
     homepage = "https://brave.com/";
