@@ -39,5 +39,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://yoda.hepforge.org";
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    # https://gitlab.com/hepcedar/yoda/-/issues/24
+    broken      = withRootSupport;
   };
 }

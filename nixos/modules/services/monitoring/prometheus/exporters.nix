@@ -23,6 +23,7 @@ let
   exporterOpts = genAttrs [
     "apcupsd"
     "bind"
+    "bird"
     "blackbox"
     "collectd"
     "dnsmasq"
@@ -47,6 +48,7 @@ let
     "rspamd"
     "rtl_433"
     "snmp"
+    "smokeping"
     "sql"
     "surfboard"
     "tor"
