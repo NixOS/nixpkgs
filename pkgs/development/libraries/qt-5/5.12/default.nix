@@ -51,7 +51,7 @@ let
 
   patches = {
     qtbase =
-      optionals stdenv.isDarwin [
+      [
         ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
         ./qtbase.patch.d/0002-qtbase-mac.patch
         ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
@@ -93,7 +93,7 @@ let
         stripLen = 1;
         extraPrefix = "src/3rdparty/";
       })
-    ] ++ optionals stdenv.isDarwin [
+
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-darwin-fix-failed-static-assertion.patch
     ];
@@ -104,7 +104,7 @@ let
         sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
       })
       ./qtwebkit.patch
-    ] ++ optionals stdenv.isDarwin [
+
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch
     ];
