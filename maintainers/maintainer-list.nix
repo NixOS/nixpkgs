@@ -76,6 +76,12 @@
     githubId = 882455;
     name = "Elliot Cameron";
   };
+  _6AA4FD = {
+    email = "f6442954@gmail.com";
+    github = "6AA4FD";
+    githubId = 12578560;
+    name = "Quinn Bohner";
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
