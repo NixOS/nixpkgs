@@ -5448,6 +5448,8 @@ in
 
   lcdf-typetools = callPackage ../tools/misc/lcdf-typetools { };
 
+  ldapdomaindump = python3Packages.callPackage ../tools/security/ldapdomaindump { };
+
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldns = callPackage ../development/libraries/ldns { };
