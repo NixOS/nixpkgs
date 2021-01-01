@@ -13,7 +13,7 @@ mkDerivation rec {
   preBuild = ''
     qmake qt/fstl.pro
   '';
-  
+
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv fstl.app $out/Applications

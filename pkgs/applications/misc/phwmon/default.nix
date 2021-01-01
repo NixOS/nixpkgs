@@ -16,11 +16,11 @@ stdenv.mkDerivation {
   buildInputs = [ pythonPackages.pygtk pythonPackages.psutil ];
 
   pythonPath = [ pythonPackages.pygtk pythonPackages.psutil ];
-  
+
   patchPhase = ''
     substituteInPlace install.sh --replace "/usr/local" "$out"
   '';
-    
+
   installPhase = ''
     mkdir -p $out/bin $out/share/applications
     ./install.sh
