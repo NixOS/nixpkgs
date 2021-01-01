@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-, python
+, python3
 , pkgconfig
 , bison
 , flex
@@ -79,7 +79,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python
+    python3
+    python3.pkgs.wrapPython
     readline
     popt
     dbus
@@ -102,6 +103,8 @@ stdenv.mkDerivation rec {
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
     ++ optional enableAcl acl
     ++ optional enablePam pam;
+
+  pythonPath = [ python3.pkgs.dnspython tdb ];
 
   postPatch = ''
     # Removes absolute paths in scripts
@@ -147,6 +150,9 @@ stdenv.mkDerivation rec {
     patchelf --shrink-rpath "\$BIN";
     EOF
     find $out -type f -name \*.so -exec $SHELL -c "$SCRIPT" \;
+
+    # Fix PYTHONPATH for some tools
+    wrapPythonPrograms
   '';
 
   passthru = {
