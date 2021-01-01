@@ -2008,6 +2008,8 @@ in
 
   discocss = callPackage ../tools/misc/discocss { };
 
+  disfetch = callPackage ../tools/misc/disfetch { };
+
   disk-filltest = callPackage ../tools/system/disk-filltest { };
 
   diskscan = callPackage ../tools/misc/diskscan { };
