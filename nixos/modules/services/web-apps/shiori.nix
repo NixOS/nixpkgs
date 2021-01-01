@@ -87,8 +87,8 @@ in {
         SystemCallFilter = [
           "@system-service"
 
-          "~@chown" "~@cpu-emulation" "~@debug" "~@ipc" "~@keyring" "~@memlock"
-          "~@module" "~@obsolete" "~@privileged" "~@process" "~@raw-io"
+          "~@chown" "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock"
+          "~@module" "~@obsolete" "~@privileged" "~@raw-io"
           "~@resources" "~@setuid"
         ];
       };
