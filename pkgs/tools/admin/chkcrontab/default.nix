@@ -14,7 +14,7 @@ buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "A tool to detect crontab errors";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
     homepage = "https://github.com/lyda/chkcrontab";
   };
 }

@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = " Structure-aware diff for html and xml documents";
     homepage = "https://github.com/christian-oudard/htmltreediff";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }
