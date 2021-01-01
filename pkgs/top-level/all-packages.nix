@@ -17213,6 +17213,8 @@ in
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
+  grafana-image-renderer = callPackage ../servers/monitoring/grafana-image-renderer { };
+
   gerbera = callPackage ../servers/gerbera {};
 
   gobetween = callPackage ../servers/gobetween { };
