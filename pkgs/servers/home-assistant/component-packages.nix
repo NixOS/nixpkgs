@@ -908,7 +908,7 @@
     "vlc" = ps: with ps; [ python-vlc ];
     "vlc_telnet" = ps: with ps; [ ]; # missing inputs: python-telnet-vlc
     "voicerss" = ps: with ps; [ ];
-    "volkszaehler" = ps: with ps; [ ]; # missing inputs: volkszaehler
+    "volkszaehler" = ps: with ps; [ volkszaehler ];
     "volumio" = ps: with ps; [ ]; # missing inputs: pyvolumio
     "volvooncall" = ps: with ps; [ ]; # missing inputs: volvooncall
     "vultr" = ps: with ps; [ vultr ];
