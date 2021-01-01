@@ -4359,6 +4359,8 @@ in {
 
   openrouteservice = callPackage ../development/python-modules/openrouteservice/default.nix { };
 
+  opensensemap-api = callPackage ../development/python-modules/opensensemap-api { };
+
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
   opentracing = callPackage ../development/python-modules/opentracing { };
