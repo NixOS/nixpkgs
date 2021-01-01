@@ -295,6 +295,32 @@
        Based on <xref linkend="opt-system.stateVersion" />, existing installations will continue to work.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       The prometheus json exporter is now managed by the prometheus community. Together with additional features
+       some backwards incompatibilities were introduced.
+       Most importantly the exporter no longer accepts a fixed command-line parameter to specify the URL of the
+       endpoint serving JSON. It now expects this URL to be passed as an URL parameter, when scraping the exporter's
+       <literal>/probe</literal> endpoint.
+       In the prometheus scrape configuration the scrape target might look like this:
+       <programlisting>
+       http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/endpoint
+       </programlisting>
+     </para>
+     <para>
+       Existing configuration for the exporter needs to be updated, but can partially be re-used.
+       Documentation is available in the upstream repository and a small example for NixOS is available
+       in the corresponding NixOS test.
+     </para>
+     <para>
+       These changes also affect <literal>services.prometheus.exporters.rspamd</literal>, which is
+       just a preconfigured instance of the json exporter.
+     </para>
+     <para>
+       For more information, take a look at the <link xlink:href="https://github.com/prometheus-community/json_exporter">
+       official documentation</link> of the json_exporter.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
