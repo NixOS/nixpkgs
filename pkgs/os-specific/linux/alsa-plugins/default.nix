@@ -15,13 +15,14 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ alsaLib libogg ]
     ++ lib.optional (libpulseaudio != null) libpulseaudio
-    ++ lib.optional (libjack2 != null) libjack2;
+    # https://github.com/NixOS/nixpkgs/issues/96548
+    ++ lib.optional (libjack2 != null && (stdenv.buildPlatform == stdenv.hostPlatform)) libjack2;
 
   meta = with lib; {
     description = "Various plugins for ALSA";
     homepage = "http://alsa-project.org/";
     license = licenses.lgpl21;
-    maintainers = [maintainers.marcweber];
+    maintainers = [ maintainers.marcweber ];
     platforms = platforms.linux;
   };
 }
