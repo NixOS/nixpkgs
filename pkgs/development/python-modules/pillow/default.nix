@@ -1,6 +1,6 @@
 { lib, stdenv, buildPythonPackage, fetchPypi, isPyPy, isPy3k
 , olefile, freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
-, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
+, libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
 }@args:
 
 import ./generic.nix (rec {

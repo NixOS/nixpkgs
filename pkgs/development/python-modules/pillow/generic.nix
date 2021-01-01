@@ -29,6 +29,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook pyroma numpy ];
 
   buildInputs = [ freetype libjpeg openjpeg libimagequant zlib libtiff libwebp tcl lcms2 ]
+    ++ lib.optionals (lib.versionAtLeast version "7.1.0") [ libxcb ]
     ++ lib.optionals (isPyPy) [ tk libX11 ];
 
   # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
@@ -56,6 +57,9 @@ buildPythonPackage rec {
             s|self\.disable_platform_guessing = None|self.disable_platform_guessing = True|g ;'
     export LDFLAGS="$LDFLAGS -L${libwebp}/lib"
     export CFLAGS="$CFLAGS -I${libwebp}/include"
+  '' + lib.optionalString (lib.versionAtLeast version "7.1.0") ''
+    export LDFLAGS="$LDFLAGS -L${libxcb}/lib"
+    export CFLAGS="$CFLAGS -I${libxcb.dev}/include"
   '' + lib.optionalString stdenv.isDarwin ''
     # Remove impurities
     substituteInPlace setup.py \
