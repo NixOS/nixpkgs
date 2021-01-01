@@ -4687,6 +4687,8 @@ in {
 
   pysbd = callPackage ../development/python-modules/pysbd { };
 
+  python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
+
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
