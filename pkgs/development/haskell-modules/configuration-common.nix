@@ -1531,11 +1531,6 @@ self: super: {
   # https://github.com/jgm/pandoc/issues/6961
   pandoc = dontCheck super.pandoc;
 
-  # Update pandoc dependencies to fix the build.
-  doctemplates = self.doctemplates_0_9;
-  skylighting = self.skylighting_0_10_2;
-  skylighting-core = self.skylighting-core_0_10_2;
-
   # https://github.com/yesodweb/yesod/issues/1714
   yesod-core = dontCheck super.yesod-core;
 
