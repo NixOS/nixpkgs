@@ -59,7 +59,7 @@ in rustPlatform.buildRustPackage rec {
     hash = "sha256-JXoH9yfhMIFg5qDY5zrF6iWb7XKugjMfk1NxSizfaWg=";
   };
 
-  cargoSha256 = "sha256-u9qitrOxJSABs0VjwHUZgmw7VTQXNbp6l8fKKE/RQ7M=";
+  cargoHash = "sha256-u9qitrOxJSABs0VjwHUZgmw7VTQXNbp6l8fKKE/RQ7M=";
 
   sourceRoot = "source/bindings/python";
 

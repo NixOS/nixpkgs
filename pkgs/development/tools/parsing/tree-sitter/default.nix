@@ -18,7 +18,7 @@ let
   # 3) run the ./result script that is output by that (it updates ./grammars)
   version = "0.17.3";
   sha256 = "sha256-uQs80r9cPX8Q46irJYv2FfvuppwonSS5HVClFujaP+U=";
-  cargoSha256 = "sha256-fonlxLNh9KyEwCj7G5vxa7cM/DlcHNFbQpp0SwVQ3j4=";
+  cargoHash = "sha256-fonlxLNh9KyEwCj7G5vxa7cM/DlcHNFbQpp0SwVQ3j4=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
