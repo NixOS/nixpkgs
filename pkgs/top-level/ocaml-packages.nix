@@ -916,10 +916,7 @@ let
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
-    ppx_blob =
-      if lib.versionAtLeast ocaml.version "4.02"
-      then callPackage ../development/ocaml-modules/ppx_blob {}
-      else null;
+    ppx_blob = callPackage ../development/ocaml-modules/ppx_blob { };
 
     ppx_cstruct = callPackage ../development/ocaml-modules/cstruct/ppx.nix {};
 
