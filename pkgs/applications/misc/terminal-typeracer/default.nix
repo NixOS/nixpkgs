@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "terminal-typeracer";
-  version = "2.0.2";
+  version = "2.0.4";
 
   src = fetchFromGitLab {
     owner = "ttyperacer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "187xrqxalk2gxa22ki5q092llvliddrsc68cg4dvvy2xzq254jfy";
+    sha256 = "RjGHY6KN6thxbg9W5FRwaAmUeD+5/WCeMCvzFHqZ+J4=";
   };
 
-  cargoSha256 = "0ky8m23fjjbv7fr9776fjczpg0d43jxwnjxjpwz56jpynwnihfkl";
+  cargoSha256 = "VSwku0rtQECirCHx2CXe72gCA+p3DdPC4YYwEYu8WfM=";
 
   buildInputs = [ openssl sqlite ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
   nativeBuildInputs = [ pkg-config ];
