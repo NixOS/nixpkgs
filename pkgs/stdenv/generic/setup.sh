@@ -711,7 +711,7 @@ substituteStream() {
 
 consumeEntire() {
     # read returns non-0 on EOF, so we want read to fail
-    if IFS='' read -r -N 0 $1; then
+    if IFS='' read -r -N 2147483647 $1; then
         echo "consumeEntire(): ERROR: Input null bytes, won't process" >&2
         return 1
     fi
