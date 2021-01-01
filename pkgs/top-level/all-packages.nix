@@ -24695,7 +24695,7 @@ in
     gtk3 = if stdenv.isDarwin then gtk3-x11 else gtk3;
   });
 
-  vim_darwin = (vim_configurable.override {
+  vim-darwin = (vim_configurable.override {
     config = {
       vim = {
         gui = "none";
@@ -24703,9 +24703,9 @@ in
       };
     };
   }).overrideAttrs (oldAttrs: rec {
-    pname = "vim_darwin";
+    pname = "vim-darwin";
     meta = {
-      platforms = [ "x86_64-darwin" ];
+      platforms = stdenv.lib.platforms.darwin;
     };
   });
 
