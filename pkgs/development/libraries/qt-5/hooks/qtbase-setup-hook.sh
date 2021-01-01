@@ -1,4 +1,4 @@
-if [[ -n "$__nix_qtbase" ]]; then
+if [[ -n "${__nix_qtbase-}" ]]; then
     # Throw an error if a different version of Qt was already set up.
     if [[ "$__nix_qtbase" != "@dev@" ]]; then
         echo >&2 "Error: detected mismatched Qt dependencies:"
