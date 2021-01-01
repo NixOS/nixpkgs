@@ -5798,6 +5798,8 @@ in
 
   microdnf = callPackage ../tools/package-management/microdnf { };
 
+  microplane = callPackage ../tools/misc/microplane { };
+
   microserver = callPackage ../servers/microserver { };
 
   midisheetmusic = callPackage ../applications/audio/midisheetmusic { };
@@ -8270,6 +8272,8 @@ in
 
   wimboot = callPackage ../tools/misc/wimboot { };
 
+  wire = callPackage ../development/tools/wire { };
+
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
   woff2 = callPackage ../development/web/woff2 { };
@@ -9609,6 +9613,13 @@ in
   });
 
   go_1_15 = callPackage ../development/compilers/go/1.15.nix ({
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  } // lib.optionalAttrs stdenv.isAarch64 {
+    stdenv = gcc8Stdenv;
+    buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
+  });
+
+  go_2-dev = callPackage ../development/compilers/go/2-dev.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs stdenv.isAarch64 {
     stdenv = gcc8Stdenv;
@@ -20693,9 +20704,8 @@ in
   bitwig-studio2 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio2.nix {
     inherit (pkgs) bitwig-studio1;
   };
-  bitwig-studio3 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio3.nix {
-    inherit (pkgs) bitwig-studio1;
-  };
+  bitwig-studio3 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio3.nix { };
+
   bitwig-studio = bitwig-studio3;
 
   bgpdump = callPackage ../tools/networking/bgpdump { };
@@ -22019,6 +22029,8 @@ in
   helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
 
   heme = callPackage ../applications/editors/heme { };
+
+  herbe = callPackage ../applications/misc/herbe { };
 
   herbstluftwm = callPackage ../applications/window-managers/herbstluftwm {
     asciidoc = asciidoc-full;
@@ -24925,6 +24937,8 @@ in
   yeahwm = callPackage ../applications/window-managers/yeahwm { };
 
   vym = qt5.callPackage ../applications/misc/vym { };
+
+  wad = python3Packages.callPackage ../tools/security/wad { };
 
   waon = callPackage ../applications/audio/waon { };
 

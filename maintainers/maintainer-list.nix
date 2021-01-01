@@ -70,6 +70,12 @@
     githubId = 7414843;
     name = "Nicholas von Klitzing";
   };
+  _3noch = {
+    email = "eacameron@gmail.com";
+    github = "3noch";
+    githubId = 882455;
+    name = "Elliot Cameron";
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
