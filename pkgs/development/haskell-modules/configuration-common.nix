@@ -216,11 +216,7 @@ self: super: {
   # building of the executable has been disabled for ghc < 8.10 in hnix.
   # Generating the completions should be activated again, once we default to
   # ghc 8.10.
-  hnix = dontCheck (super.hnix.override {
-    # 2020-09-18: Those packages are all needed by hnix at versions newer than on stackage
-    prettyprinter = self.prettyprinter_1_7_0; # at least 1.7
-
-  });
+  hnix = dontCheck super.hnix;
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -396,7 +392,6 @@ self: super: {
   xsd = dontCheck super.xsd;
   zip-archive = dontCheck super.zip-archive;  # https://github.com/jgm/zip-archive/issues/57
 
-  random_1_2_0 = super.random_1_2_0.override ({ splitmix = self.splitmix_0_1_0_3; });
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
@@ -1532,8 +1527,7 @@ self: super: {
   yesod-core = dontCheck super.yesod-core;
 
   # Add ApplicationServices on darwin
-  # use 0.4.5 instead of 0.4.4 to fix build with glibc >= 2.32
-  apecs-physics = addPkgconfigDepends super.apecs-physics_0_4_5
+  apecs-physics = addPkgconfigDepends super.apecs-physics
     (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.ApplicationServices);
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
