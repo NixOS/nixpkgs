@@ -48,6 +48,7 @@ let
     "rspamd"
     "rtl_433"
     "snmp"
+    "smokeping"
     "sql"
     "surfboard"
     "tor"
