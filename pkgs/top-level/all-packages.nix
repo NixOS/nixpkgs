@@ -21936,6 +21936,8 @@ in
     java = if stdenv.isLinux then jre else jdk;
   };
 
+  qrcodegen = callPackage ../development/libraries/qrcodegen { };
+
   qrencode = callPackage ../development/libraries/qrencode { };
 
   geeqie = callPackage ../applications/graphics/geeqie { };
