@@ -1,5 +1,5 @@
 if [[ -n "$__nix_qtbase" ]]; then
-    if [[ -a "$__nix_qtbase" != "@dev@" ]]; then
+    if [[ "$__nix_qtbase" != "@dev@" ]]; then
         echo >&2 "Error: detected mismatched Qt dependencies:"
         echo >&2 "    @dev@"
         echo >&2 "    $__nix_qtbase"
