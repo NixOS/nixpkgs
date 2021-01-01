@@ -150,6 +150,20 @@ let
     buildInputs = [ pkgs.unzip ];
   };
 
+  AlgorithmLCSS = buildPerlPackage {
+    pname = "Algorithm-LCSS";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JF/JFREEMAN/Algorithm-LCSS-0.01.tar.gz";
+      sha256 = "0y0zc3sq283zpv67vy7a3h3dyvjn5svjxwknanmp38a2g36fyz3i";
+    };
+    propagatedBuildInputs = [ AlgorithmDiff ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   AlgorithmMerge = buildPerlPackage {
     pname = "Algorithm-Merge";
     version = "0.08";
@@ -13598,6 +13612,24 @@ let
       homepage = "https://github.com/mojolicious/mojo-pg";
       description = "Mojolicious <3 PostgreSQL";
       license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  MojoUserAgentCached = buildPerlPackage {
+    pname = "Mojo-UserAgent-Cached";
+    version = "1.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NI/NICOMEN/Mojo-UserAgent-Cached-1.12.tar.gz";
+      sha256 = "08pa3sz63sq2y3g3lbhy2msbnx0myb2igmmc28cm3kaznryvsgwm";
+    };
+    buildInputs = [ ModuleInstall ];
+    propagatedBuildInputs = [ AlgorithmLCSS CHI DataSerializer DevelStackTrace Mojolicious Readonly StringTruncate ];
+    doCheck = !stdenv.isDarwin;
+    meta = {
+      homepage = "https://github.com/nicomen/mojo-useragent-cached";
+      description = "Caching, Non-blocking I/O HTTP, Local file and WebSocket user agent";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
     };
   };
