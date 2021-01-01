@@ -258,6 +258,11 @@ let
 
       substituteInPlace tensorflow/tools/pip_package/setup.py \
         --replace "numpy >= 1.16.0, < 1.19.0" "numpy >= 1.16.0"
+
+      # glibc 2.31+ does not have sys/sysctl.h
+      # see https://github.com/tensorflow/tensorflow/issues/45861
+      substituteInPlace third_party/hwloc/BUILD.bazel\
+        --replace "#define HAVE_SYS_SYSCTL_H 1" "#undef HAVE_SYS_SYSCTL_H"
     '';
 
     preConfigure = let

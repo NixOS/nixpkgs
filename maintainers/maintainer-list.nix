@@ -3619,6 +3619,12 @@
     email = "t@larkery.com";
     name = "Tom Hinton";
   };
+  hirenashah = {
+    email = "hiren@hiren.io";
+    github = "hirenashah";
+    githubId = 19825977;
+    name = "Hiren Shah";
+  };
   hjones2199 = {
     email = "hjones2199@gmail.com";
     github = "hjones2199";
@@ -3934,6 +3940,12 @@
     github = "jagajaga";
     githubId = 2179419;
     name = "Arseniy Seroka";
+  };
+  jakeisnt = {
+    name = "Jacob Chvatal";
+    email = "jake@isnt.online";
+    github = "jakeisnt";
+    githubId = 29869612;
   };
   jakelogemann = {
     email = "jake.logemann@gmail.com";
@@ -9413,6 +9425,12 @@
       longkeyid = "rsa4096/0x874BD6F916FAA742";
       fingerprint = "4D23 ECDF 880D CADF 5ECA  4458 874B D6F9 16FA A742";
     }];
+  };
+  vel = {
+    email = "llathasa@outlook.com";
+    github = "llathasa-veleth";
+    githubId = 61933599;
+    name = "vel";
   };
   velovix = {
     email = "xaviosx@gmail.com";
