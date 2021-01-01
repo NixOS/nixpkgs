@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pyhomematic";
-  version = "0.1.70";
+  version = "0.1.71";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c9ae61c870e37348483966f6aa46f650f339f5f1169e5beb19d681c6434c247";
+    sha256 = "0z09bw2mlhg7n9jyqmcyir306wpxr5nw1qsp5ps2iaw1qnyz5s9n";
   };
 
   # PyPI tarball does not include tests/ directory
