@@ -28,6 +28,8 @@ let
 
     mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
 
+    mopidy-scrobbler = callPackage ./scrobbler.nix { };
+
     mopidy-somafm = callPackage ./somafm.nix { };
 
     mopidy-soundcloud = callPackage ./soundcloud.nix { };
