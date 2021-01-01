@@ -4362,6 +4362,7 @@ broken-packages:
   - currency-convert
   - curry-frontend
   - CurryDB
+  - curryer-rpc
   - cursedcsv
   - cursor-fuzzy-time-gen
   - curves
@@ -5260,6 +5261,7 @@ broken-packages:
   - foscam-filename
   - foscam-sort
   - Foster
+  - fp-ieee
   - fpco-api
   - fplll
   - fpnla-examples
@@ -6593,6 +6595,7 @@ broken-packages:
   - Hs2lib
   - hs2ps
   - hsaml2
+  - hsautogui
   - hsay
   - hsbackup
   - hsbc
@@ -7904,6 +7907,7 @@ broken-packages:
   - minst-idx
   - mios
   - MIP
+  - MIP-glpk
   - mirror-tweet
   - miso
   - miso-action-logger
@@ -9480,6 +9484,7 @@ broken-packages:
   - rosso
   - rotating-log
   - rounded
+  - rounded-hw
   - rounding
   - roundtrip-aeson
   - roundtrip-xml
