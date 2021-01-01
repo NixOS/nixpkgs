@@ -6,6 +6,7 @@
 , bash
 
 , libiconv ? null, ncurses
+, glibcLocales ? null
 
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
@@ -109,6 +110,9 @@ stdenv.mkDerivation (rec {
 
   postPatch = "patchShebangs .";
 
+  # GHC needs the locale configured during the Haddock phase.
+  LANG = "en_US.UTF-8";
+
   # GHC is a bit confused on its cross terminology.
   preConfigure = ''
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
@@ -129,6 +133,8 @@ stdenv.mkDerivation (rec {
 
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
+  '' + stdenv.lib.optionalString (stdenv.isLinux) ''
+    export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
