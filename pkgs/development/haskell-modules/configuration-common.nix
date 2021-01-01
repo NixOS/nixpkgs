@@ -863,8 +863,7 @@ self: super: {
   swagger2 = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontHaddock (dontCheck super.swagger2) else super.swagger2;
 
   # hledger-lib requires the latest version of pretty-simple
-  hledger-lib = super.hledger-lib.override { pretty-simple = self.pretty-simple_4_0_0_0; };
-  pretty-simple_4_0_0_0 = super.pretty-simple_4_0_0_0.overrideScope (self: super: { prettyprinter = self.prettyprinter_1_7_0; });
+  hledger-lib = super.hledger-lib.override { pretty-simple = self.pretty-simple; };
 
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
