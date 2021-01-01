@@ -1,18 +1,5 @@
-From 361a9395704ca1ee170a8bb3823ba860293eecee Mon Sep 17 00:00:00 2001
-From: Thomas Tuegel <ttuegel@mailbox.org>
-Date: Tue, 17 Sep 2019 05:34:00 -0500
-Subject: [PATCH 01/12] qtbase-mkspecs-mac
-
----
- mkspecs/common/mac.conf               |   2 +-
- mkspecs/features/mac/default_post.prf | 202 ----------------------------------
- mkspecs/features/mac/default_pre.prf  |  58 ----------
- mkspecs/features/mac/sdk.mk           |  25 -----
- mkspecs/features/mac/sdk.prf          |  61 ----------
- 5 files changed, 1 insertion(+), 347 deletions(-)
-
 diff --git a/mkspecs/common/mac.conf b/mkspecs/common/mac.conf
-index b77494ec9b..470c38e772 100644
+index b77494ec..470c38e7 100644
 --- a/mkspecs/common/mac.conf
 +++ b/mkspecs/common/mac.conf
 @@ -24,7 +24,7 @@ QMAKE_INCDIR_OPENGL     = \
@@ -25,7 +12,7 @@ index b77494ec9b..470c38e772 100644
  
  QMAKE_LFLAGS_REL_RPATH  =
 diff --git a/mkspecs/features/mac/default_post.prf b/mkspecs/features/mac/default_post.prf
-index 993f4d56a9..b80ec1e801 100644
+index d052808c..b80ec1e8 100644
 --- a/mkspecs/features/mac/default_post.prf
 +++ b/mkspecs/features/mac/default_post.prf
 @@ -68,208 +68,6 @@ qt {
@@ -161,7 +148,7 @@ index 993f4d56a9..b80ec1e801 100644
 -                -isysroot$$xcodeSDKInfo(Path, $$sdk)
 -            QMAKE_XARCH_LFLAGS_$${arch} = $$version_min_flags \
 -                -Xarch_$${arch} \
--                -Wl,-syslibroot,$$xcodeSDKInfo(Path, $$sdk)
+-                -isysroot$$xcodeSDKInfo(Path, $$sdk)
 -
 -            QMAKE_XARCH_CFLAGS += $(EXPORT_QMAKE_XARCH_CFLAGS_$${arch})
 -            QMAKE_XARCH_LFLAGS += $(EXPORT_QMAKE_XARCH_LFLAGS_$${arch})
@@ -182,7 +169,7 @@ index 993f4d56a9..b80ec1e801 100644
 -        version_min_flag = -m$${version_identifier}-version-min=$$deployment_target
 -        QMAKE_CFLAGS += -isysroot $$QMAKE_MAC_SDK_PATH $$version_min_flag
 -        QMAKE_CXXFLAGS += -isysroot $$QMAKE_MAC_SDK_PATH $$version_min_flag
--        QMAKE_LFLAGS += -Wl,-syslibroot,$$QMAKE_MAC_SDK_PATH $$version_min_flag
+-        QMAKE_LFLAGS += -isysroot $$QMAKE_MAC_SDK_PATH $$version_min_flag
 -    }
 -
 -    # Enable precompiled headers for multiple architectures
@@ -238,7 +225,7 @@ index 993f4d56a9..b80ec1e801 100644
      generate_xcode_project.commands = @$(QMAKE) -spec macx-xcode \"$(EXPORT__PRO_FILE_)\" $$QMAKE_ARGS
      generate_xcode_project.target = xcodeproj
 diff --git a/mkspecs/features/mac/default_pre.prf b/mkspecs/features/mac/default_pre.prf
-index e3534561a5..3b01424e67 100644
+index e3534561..3b01424e 100644
 --- a/mkspecs/features/mac/default_pre.prf
 +++ b/mkspecs/features/mac/default_pre.prf
 @@ -1,60 +1,2 @@
@@ -303,7 +290,7 @@ index e3534561a5..3b01424e67 100644
 -xcode_copy_phase_strip_setting.value = NO
 -QMAKE_MAC_XCODE_SETTINGS += xcode_copy_phase_strip_setting
 diff --git a/mkspecs/features/mac/sdk.mk b/mkspecs/features/mac/sdk.mk
-index c40f58c987..e69de29bb2 100644
+index c40f58c9..e69de29b 100644
 --- a/mkspecs/features/mac/sdk.mk
 +++ b/mkspecs/features/mac/sdk.mk
 @@ -1,25 +0,0 @@
@@ -333,7 +320,7 @@ index c40f58c987..e69de29bb2 100644
 -    endif
 -endif
 diff --git a/mkspecs/features/mac/sdk.prf b/mkspecs/features/mac/sdk.prf
-index 3a9c2778bb..e69de29bb2 100644
+index 3a9c2778..e69de29b 100644
 --- a/mkspecs/features/mac/sdk.prf
 +++ b/mkspecs/features/mac/sdk.prf
 @@ -1,61 +0,0 @@
@@ -398,6 +385,3 @@ index 3a9c2778bb..e69de29bb2 100644
 -    $$tool = $$sysrooted $$member(value, 1, -1)
 -    cache($$tool_variable, set stash, $$tool)
 -}
--- 
-2.23.GIT
-
