@@ -13153,9 +13153,11 @@ in
 
   gle = callPackage ../development/libraries/gle { };
 
-  glew = callPackage ../development/libraries/glew { };
+  glew = callPackage ../development/libraries/glew {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
   glew110 = callPackage ../development/libraries/glew/1.10.nix {
-    inherit (darwin.apple_sdk.frameworks) AGL;
+    inherit (darwin.apple_sdk.frameworks) AGL OpenGL;
   };
 
   glfw = glfw3;
@@ -13819,6 +13821,8 @@ in
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
   lib3mf = callPackage ../development/libraries/lib3mf { };
+
+  libAfterImage = callPackage ../development/libraries/libAfterImage { };
 
   libaacs = callPackage ../development/libraries/libaacs { };
 
