@@ -21750,7 +21750,9 @@ in
 
   gitolite = callPackage ../applications/version-management/gitolite { };
 
-  gitoxide = callPackage ../applications/version-management/gitoxide { };
+  gitoxide = callPackage ../applications/version-management/gitoxide {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   inherit (gnome3) gitg;
 
