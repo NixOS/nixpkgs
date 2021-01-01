@@ -1,10 +1,11 @@
-if [ -n "$__nix_qtbase" -a "$__nix_qtbase" != "@dev@" ]; then
-    echo >&2 "Error: detected mismatched Qt dependencies:"
-    echo >&2 "    @dev@"
-    echo >&2 "    $__nix_qtbase"
-    exit 1
-elif [ -z "$__nix_qtbase" ]; then
-
+if [[ -n "$__nix_qtbase" ]]; then
+    if [[ -a "$__nix_qtbase" != "@dev@" ]]; then
+        echo >&2 "Error: detected mismatched Qt dependencies:"
+        echo >&2 "    @dev@"
+        echo >&2 "    $__nix_qtbase"
+        exit 1
+    fi
+else
 __nix_qtbase="@dev@"
 
 qtPluginPrefix=@qtPluginPrefix@
