@@ -23,6 +23,7 @@ let
   exporterOpts = genAttrs [
     "apcupsd"
     "bind"
+    "bird"
     "blackbox"
     "collectd"
     "dnsmasq"
