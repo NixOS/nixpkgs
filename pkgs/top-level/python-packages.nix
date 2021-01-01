@@ -1793,6 +1793,8 @@ in {
 
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
+  dnachisel = callPackage ../development/python-modules/dnachisel { };
+
   dnslib = callPackage ../development/python-modules/dnslib { };
 
   dnspython = if isPy3k then
