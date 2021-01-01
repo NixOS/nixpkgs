@@ -2139,6 +2139,8 @@ in {
 
   flaky = callPackage ../development/python-modules/flaky { };
 
+  flametree = callPackage ../development/python-modules/flametree { };
+
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
 
   flask-admin = callPackage ../development/python-modules/flask-admin { };
