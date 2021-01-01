@@ -21144,6 +21144,8 @@ in
 
   elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
 
+  elfx86exts = callPackage ../applications/misc/elfx86exts { };
+
   elinks = callPackage ../applications/networking/browsers/elinks { };
 
   elvis = callPackage ../applications/editors/elvis { };
