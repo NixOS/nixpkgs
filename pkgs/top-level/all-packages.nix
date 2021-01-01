@@ -5222,7 +5222,7 @@ in
   libcloudproviders = callPackage ../development/libraries/libcloudproviders { };
 
   libcoap = callPackage ../applications/networking/libcoap {
-    autoconf = autoconf269;
+    autoconf = buildPackages.autoconf269;
   };
 
   libcryptui = callPackage ../development/libraries/libcryptui {
@@ -8141,7 +8141,7 @@ in
   verilator = callPackage ../applications/science/electronics/verilator {};
 
   verilog = callPackage ../applications/science/electronics/verilog {
-    autoconf = autoconf269;
+    autoconf = buildPackages.autoconf269;
   };
 
   versus = callPackage ../applications/networking/versus { };
@@ -8251,7 +8251,7 @@ in
 
   watchman = callPackage ../development/tools/watchman {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-    autoconf = autoconf269;
+    autoconf = buildPackages.autoconf269;
   };
 
   wavefunctioncollapse = callPackage ../tools/graphics/wavefunctioncollapse {};
@@ -8377,7 +8377,7 @@ in
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
 
   uim = callPackage ../tools/inputmethods/uim {
-    autoconf = autoconf269;
+    autoconf = buildPackages.autoconf269;
   };
 
   uhub = callPackage ../servers/uhub { };
@@ -8572,7 +8572,7 @@ in
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
     gccCross = pkgsCross.ben-nanonote.buildPackages.gccCrossStageStatic;
-    autoconf = autoconf269;
+    autoconf = buildPackages.autoconf269;
   };
 
   clipnotify = callPackage ../tools/misc/clipnotify { };
@@ -11119,7 +11119,7 @@ in
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
-  autoconf = autoconf270;
+  autoconf = buildPackages.autoconf270;
 
   autoconf-archive = callPackage ../development/tools/misc/autoconf-archive { };
 
@@ -14564,7 +14564,7 @@ in
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
 
   libmatheval = callPackage ../development/libraries/libmatheval {
-    autoconf = autoconf269;
+    autoconf = buildPackages.autoconf269;
     guile = guile_2_0;
   };
 
@@ -24740,7 +24740,7 @@ in
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
   vcprompt = callPackage ../applications/version-management/vcprompt {
-    autoconf = autoconf269;
+    autoconf = buildPackages.autoconf269;
   };
 
   vcs = callPackage ../applications/video/vcs { };
@@ -25207,7 +25207,7 @@ in
   };
 
   x11basic = callPackage ../development/compilers/x11basic {
-    autoconf = autoconf269;
+    autoconf = buildPackages.autoconf269;
   };
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
@@ -25516,7 +25516,7 @@ in
   zeronet = callPackage ../applications/networking/p2p/zeronet { };
 
   zexy = callPackage ../applications/audio/pd-plugins/zexy {
-    autoconf = autoconf269;
+    autoconf = buildPackages.autoconf269;
   };
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
@@ -26909,7 +26909,7 @@ in
   };
 
   kallisto = callPackage ../applications/science/biology/kallisto {
-    autoconf = autoconf269;
+    autoconf = buildPackages.autoconf269;
   };
 
   kssd = callPackage ../applications/science/biology/kssd { };
