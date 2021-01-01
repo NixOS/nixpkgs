@@ -1116,6 +1116,8 @@ in {
 
   cement = callPackage ../development/python-modules/cement { };
 
+  connect-box = callPackage ../development/python-modules/connect_box { };
+
   cerberus = callPackage ../development/python-modules/cerberus { };
 
   certbot = callPackage ../development/python-modules/certbot { };
