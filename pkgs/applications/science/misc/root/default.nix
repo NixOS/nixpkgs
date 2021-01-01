@@ -1,19 +1,20 @@
-{ stdenv, lib, fetchurl, makeWrapper, cmake, gl2ps, gsl, libX11, libXpm, libXft
-, libXext, libGLU, libGL, libxml2, lz4, lzma, pcre, pkgconfig, python, xxHash
-, zlib
+{ stdenv, lib, fetchurl, makeWrapper, cmake, ftgl, gl2ps, glew, gsl, llvm_5
+, libX11, libXpm, libXft, libXext, libGLU, libGL, libxml2, lz4, lzma, pcre
+, pkgconfig, python, xxHash, zlib, zstd
+, libAfterImage, giflib, libjpeg, libtiff, libpng
 , Cocoa, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.18.04";
+  version = "6.22.06";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "196ghma6g5a7sqz52wyjkgvmh4hj4vqwppm0zwdypy33hgy8anii";
+    sha256 = "0mqvj42nax0bmz8h83jjlwjm3xxjy1n0n10inc8csip9ly28fs64";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkgconfig ];
-  buildInputs = [ gl2ps pcre zlib libxml2 lz4 lzma gsl xxHash python.pkgs.numpy ]
+  buildInputs = [ ftgl gl2ps glew pcre zlib zstd llvm_5 libxml2 lz4 lzma gsl xxHash libAfterImage giflib libjpeg libtiff libpng python.pkgs.numpy ]
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
     ;
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-Dalien=OFF"
     "-Dbonjour=OFF"
+    "-Dbuiltin_llvm=OFF"
     "-Dcastor=OFF"
     "-Dchirp=OFF"
     "-Dclad=OFF"
@@ -69,7 +71,14 @@ stdenv.mkDerivation rec {
     "-Dxrootd=OFF"
   ]
   ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.lib.getDev stdenv.cc.libc}/include"
-  ++ stdenv.lib.optional stdenv.isDarwin "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
+  ++ stdenv.lib.optionals stdenv.isDarwin [
+    "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
+    "-DCMAKE_DISABLE_FIND_PACKAGE_Python2=TRUE"
+
+    # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
+    # fatal error: could not build module '_Builtin_intrinsics'
+    "-Druntime_cxxmodules=OFF"
+  ];
 
   enableParallelBuilding = true;
 
