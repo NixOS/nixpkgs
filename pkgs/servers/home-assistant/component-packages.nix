@@ -534,7 +534,7 @@
     "ness_alarm" = ps: with ps; [ ]; # missing inputs: nessclient
     "nest" = ps: with ps; [ aiohttp-cors ha-ffmpeg python-nest ]; # missing inputs: google-nest-sdm
     "netatmo" = ps: with ps; [ aiohttp-cors hass-nabucasa pyatmo ];
-    "netdata" = ps: with ps; [ ]; # missing inputs: netdata
+    "netdata" = ps: with ps; [ netdata ];
     "netgear" = ps: with ps; [ ]; # missing inputs: pynetgear
     "netgear_lte" = ps: with ps; [ ]; # missing inputs: eternalegypt
     "netio" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pynetio
