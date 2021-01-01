@@ -3042,11 +3042,11 @@
       };
     }
     {
-      name = "ini___ini_1.3.5.tgz";
+      name = "ini___ini_1.3.8.tgz";
       path = fetchurl {
-        name = "ini___ini_1.3.5.tgz";
-        url  = "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz";
-        sha1 = "eee25f56db1c9ec6085e0c22778083f596abf927";
+        name = "ini___ini_1.3.8.tgz";
+        url  = "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz";
+        sha1 = "a29da425b48806f34767a4efce397269af28432c";
       };
     }
     {

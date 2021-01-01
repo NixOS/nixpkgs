@@ -194,9 +194,9 @@ in {
     # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "0.8.5";
+    version = "0.8.6";
 
-    sha256 = "0vhd3zs2i83pd59nk0llml4vyk4fc178j6nhg00p6k3f6r0l655b";
+    sha256 = "1mp27midxfhzzbsd84dcc10wrs3fx6hfmkayyw58s3q2mxbrghn2";
   };
 
   zfsUnstable = common {
@@ -204,9 +204,9 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.0.0-rc3";
+    version = "2.0.0";
 
-    sha256 = "00fljxs6vacfhzc13bgsrmq6p3agpzcq6waw4iv2m58dr90jhlcz";
+    sha256 = "1kriz6pg8wj98izvjc60wp23lgcp4k3mzhpkgj74np73rzgy6v8r";
     isUnstable = true;
   };
 }

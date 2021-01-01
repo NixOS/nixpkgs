@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptoverif";
-  version = "2.03pl1";
+  version = "2.04";
 
   src = fetchurl {
     url    = "http://prosecco.gforge.inria.fr/personal/bblanche/cryptoverif/cryptoverif${version}.tar.gz";
-    sha256 = "0q7qa1qm7mbky3m36445gdmgmkb9mrhrdsk7mmwn8fzw0rfc6z00";
+    sha256 = "1mzk6n0g2vdsv38y493zg85lxrpz72b92cmsray3g970xzanqd6s";
   };
 
   buildInputs = [ ocaml ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ** from under $out/libexec. By default, it expects to find the files
   ** in $CWD which doesn't work. */
   patchPhase = ''
-    substituteInPlace ./src/settings.ml \
+    substituteInPlace ./src/syntax.ml \
       --replace \"default\" \"$out/libexec/default\"
   '';
 

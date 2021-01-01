@@ -1344,6 +1344,12 @@ CREATE ROLE postgres LOGIN SUPERUSER;
       that makes it unsuitable to be a default app.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       If you want to manage the configuration of <package>wpa_supplicant</package> outside of NixOS you must ensure that none of <xref linkend="opt-networking.wireless.networks" />, <xref linkend="opt-networking.wireless.extraConfig" /> or <xref linkend="opt-networking.wireless.userControlled.enable" /> is being used or <literal>true</literal>.
+       Using any of those options will cause <package>wpa_supplicant</package> to be started with a NixOS generated configuration file instead of your own.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

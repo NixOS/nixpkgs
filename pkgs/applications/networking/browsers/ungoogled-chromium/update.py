@@ -1,13 +1,15 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python -p python3 nix
+#! nix-shell -i python -p python3 nix nix-prefetch-git
 
 import csv
 import json
+import re
 import subprocess
 import sys
 
 from codecs import iterdecode
 from collections import OrderedDict
+from datetime import datetime
 from os.path import abspath, dirname
 from urllib.request import urlopen
 
@@ -25,6 +27,44 @@ def nix_prefetch_url(url, algo='sha256'):
     print(f'nix-prefetch-url {url}')
     out = subprocess.check_output(['nix-prefetch-url', '--type', algo, url])
     return out.decode('utf-8').rstrip()
+
+def nix_prefetch_git(url, rev):
+    print(f'nix-prefetch-git {url} {rev}')
+    out = subprocess.check_output(['nix-prefetch-git', '--quiet', '--url', url, '--rev', rev])
+    return json.loads(out)
+
+def get_file_revision(revision, file_path):
+    url = f'https://raw.githubusercontent.com/chromium/chromium/{revision}/{file_path}'
+    with urlopen(url) as http_response:
+        return http_response.read()
+
+def get_matching_chromedriver(version):
+    # See https://chromedriver.chromium.org/downloads/version-selection
+    build = re.sub('.[0-9]+$', '', version)
+    chromedriver_version_url = f'https://chromedriver.storage.googleapis.com/LATEST_RELEASE_{build}'
+    with urlopen(chromedriver_version_url) as http_response:
+        chromedriver_version = http_response.read().decode()
+        def get_chromedriver_url(system):
+            return f'https://chromedriver.storage.googleapis.com/{chromedriver_version}/chromedriver_{system}.zip'
+        return {
+            'version': chromedriver_version,
+            'sha256_linux': nix_prefetch_url(get_chromedriver_url('linux64')),
+            'sha256_darwin': nix_prefetch_url(get_chromedriver_url('mac64'))
+        }
+
+def get_channel_dependencies(channel):
+    deps = get_file_revision(channel['version'], 'DEPS')
+    gn_pattern = b"'gn_version': 'git_revision:([0-9a-f]{40})'"
+    gn_commit = re.search(gn_pattern, deps).group(1).decode()
+    gn = nix_prefetch_git('https://gn.googlesource.com/gn', gn_commit)
+    return {
+        'gn': {
+            'version': datetime.fromisoformat(gn['date']).date().isoformat(),
+            'url': gn['url'],
+            'rev': gn['rev'],
+            'sha256': gn['sha256']
+        }
+    }
 
 channels = {}
 last_channels = load_json(JSON_PATH)
@@ -57,6 +97,10 @@ with urlopen(HISTORY_URL) as resp:
             # This build isn't actually available yet.  Continue to
             # the next one.
             continue
+
+        channel['deps'] = get_channel_dependencies(channel)
+        if channel_name == 'stable':
+            channel['chromedriver'] = get_matching_chromedriver(channel['version'])
 
         channels[channel_name] = channel
 

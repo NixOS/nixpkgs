@@ -421,7 +421,7 @@ in {
         inherit startAt;
         restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
         serviceConfig = {
-          ExecStart = "${pythonEnv}/bin/mailman-web runjobs minutely";
+          ExecStart = "${pythonEnv}/bin/mailman-web runjobs ${name}";
           User = cfg.webUser;
           Group = "mailman";
           WorkingDirectory = "/var/lib/mailman-web";

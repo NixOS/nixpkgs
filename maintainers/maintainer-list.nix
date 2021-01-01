@@ -6309,6 +6309,12 @@
     githubId = 111265;
     name = "Ozan Sener";
   };
+  otavio = {
+    email = "otavio.salvador@ossystems.com.br";
+    github = "otavio";
+    githubId = 25278;
+    name = "Otavio Salvador";
+  };
   otwieracz = {
     email = "slawek@otwiera.cz";
     github = "otwieracz";

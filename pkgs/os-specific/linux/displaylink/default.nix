@@ -1,6 +1,5 @@
 { stdenv, lib, unzip, utillinux,
   libusb1, evdi, systemd, makeWrapper, requireFile, substituteAll }:
-
 let
   arch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -39,20 +38,11 @@ in stdenv.mkDerivation rec {
     ./displaylink-driver-${version}.run --target . --noexec --nodiskspace
   '';
 
-  patches = [ (substituteAll {
-    src = ./udev-installer.patch;
-    inherit systemd;
-  })];
-
   installPhase = ''
-    sed -i "s,/opt/displaylink/udev.sh,$out/lib/udev/displaylink.sh,g" udev-installer.sh
-    ( source udev-installer.sh
-      mkdir -p $out/lib/udev/rules.d
-      main systemd "$out/lib/udev/rules.d/99-displaylink.rules" "$out/lib/udev/displaylink.sh"
-    )
-
     install -Dt $out/lib/displaylink *.spkg
     install -Dm755 ${bins}/DisplayLinkManager $out/bin/DisplayLinkManager
+    mkdir -p $out/lib/udev/rules.d
+    cp ${./99-displaylink.rules} $out/lib/udev/rules.d/99-displaylink.rules
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       --set-rpath ${libPath} \

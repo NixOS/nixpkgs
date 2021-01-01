@@ -1,5 +1,9 @@
 { stdenv, fetchurl, python, makeWrapper, gawk, bash, getopt, procps
-, which, jre, version, sha256, coreutils, ...
+, which, jre, coreutils, nixosTests
+# generation is the attribute version suffix such as 3_11 in pkgs.cassandra_3_11
+, generation
+, version, sha256
+, ...
 }:
 
 let
@@ -83,11 +87,20 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
     '';
 
+  passthru = {
+    tests =
+      let
+        test = nixosTests."cassandra_${generation}";
+      in {
+        nixos = test;
+      };
+  };
+
   meta = with stdenv.lib; {
     homepage = "http://cassandra.apache.org/";
     description = "A massively scalable open source NoSQL database";
     platforms = platforms.unix;
     license = licenses.asl20;
-    maintainers = with maintainers; [ cransom ];
+    maintainers = [];
   };
 }

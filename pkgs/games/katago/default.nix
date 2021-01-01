@@ -9,7 +9,7 @@
 , fetchpatch
 , cudnn ? null
 , cudatoolkit ? null
-, libGL_driver ? null
+, mesa ? null
 , opencl-headers ? null
 , ocl-icd ? null
 , gperftools ? null
@@ -25,7 +25,7 @@ assert !enableGPU -> (
   !enableCuda);
 
 assert enableCuda -> (
-  libGL_driver != null &&
+  mesa != null &&
   cudatoolkit != null &&
   cudnn != null);
 
@@ -65,7 +65,7 @@ in env.mkDerivation rec {
     eigen
   ] ++ lib.optionals (enableGPU && enableCuda) [
     cudnn
-    libGL_driver
+    mesa.drivers
   ] ++ lib.optionals (enableGPU && !enableCuda) [
     opencl-headers
     ocl-icd
