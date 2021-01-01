@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./debug-info-from-env.patch
+
+    # backport of a350efd4fb368a35ada608f6bc26ccd3bed0ae6b from upstream
+    # to fix https://github.com/NixOS/nixpkgs/issues/106868
+    ./fix_crash_when_exiting_TUI_with_gdb_-tui.patch
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
   ];

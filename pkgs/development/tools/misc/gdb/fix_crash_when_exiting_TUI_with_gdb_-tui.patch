@@ -1,0 +1,71 @@
+diff -ur gdb-9.2.orig/gdb/tui/tui.c gdb-9.2/gdb/tui/tui.c
+--- gdb-9.2.orig/gdb/tui/tui.c	2020-12-15 21:17:41.571078984 +0000
++++ gdb-9.2/gdb/tui/tui.c	2020-12-15 21:27:54.953799136 +0000
+@@ -324,8 +324,14 @@
+ /* Initialize readline and configure the keymap for the switching
+    key shortcut.  */
+ void
+-tui_initialize_readline (void)
++tui_ensure_readline_initialized (void)
+ {
++  static bool initialized;
++
++  if (initialized)
++    return;
++  initialized = true;
++
+   int i;
+   Keymap tui_ctlx_keymap;
+ 
+@@ -381,6 +387,9 @@
+   rl_bind_key_in_map ('q', tui_rl_next_keymap, tui_keymap);
+   rl_bind_key_in_map ('s', tui_rl_next_keymap, emacs_ctlx_keymap);
+   rl_bind_key_in_map ('s', tui_rl_next_keymap, tui_ctlx_keymap);
++
++  /* Initialize readline after the above.  */
++  rl_initialize ();
+ }
+ 
+ /* Return the TERM variable from the environment, or "<unset>"
+diff -ur gdb-9.2.orig/gdb/tui/tui.h gdb-9.2/gdb/tui/tui.h
+--- gdb-9.2.orig/gdb/tui/tui.h	2020-12-15 21:17:41.571078984 +0000
++++ gdb-9.2/gdb/tui/tui.h	2020-12-15 21:22:03.354662356 +0000
+@@ -52,9 +52,9 @@
+ extern int tui_get_command_dimension (unsigned int *width,
+ 				      unsigned int *height);
+ 
+-/* Initialize readline and configure the keymap for the switching
+-   key shortcut.  */
+-extern void tui_initialize_readline (void);
++/* Initialize readline and configure the keymap for the switching key
++   shortcut.  May be called more than once without issue.  */
++extern void tui_ensure_readline_initialized (void);
+ 
+ /* Enter in the tui mode (curses).  */
+ extern void tui_enable (void);
+diff -ur gdb-9.2.orig/gdb/tui/tui-interp.c gdb-9.2/gdb/tui/tui-interp.c
+--- gdb-9.2.orig/gdb/tui/tui-interp.c	2020-12-15 21:17:41.571078984 +0000
++++ gdb-9.2/gdb/tui/tui-interp.c	2020-12-15 21:18:49.771490624 +0000
+@@ -244,7 +244,7 @@
+   tui_initialize_io ();
+   tui_initialize_win ();
+   if (ui_file_isatty (gdb_stdout))
+-    tui_initialize_readline ();
++    tui_ensure_readline_initialized ();
+ }
+ 
+ void
+diff -ur gdb-9.2.orig/gdb/tui/tui-io.c gdb-9.2/gdb/tui/tui-io.c
+--- gdb-9.2.orig/gdb/tui/tui-io.c	2020-12-15 21:17:41.571078984 +0000
++++ gdb-9.2/gdb/tui/tui-io.c	2020-12-15 21:19:34.994763950 +0000
+@@ -769,6 +769,10 @@
+ 
+   if (mode)
+     {
++      /* Ensure that readline has been initialized before saving any
++         of its variables.  */
++      tui_ensure_readline_initialized ();
++
+       /* Redirect readline to TUI.  */
+       tui_old_rl_redisplay_function = rl_redisplay_function;
+       tui_old_rl_deprep_terminal = rl_deprep_term_function;

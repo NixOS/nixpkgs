@@ -14,6 +14,7 @@ let
       "asciidoctor-pdf"
       "asciidoctor-safe"
       "asciidoctor-epub3"
+      "asciidoctor-revealjs"
     ];
 
     buildInputs = [ makeWrapper ];
