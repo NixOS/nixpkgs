@@ -1,10 +1,4 @@
----
-title: User's Guide for Haskell in Nixpkgs
-author: Peter Simons
-date: 2015-06-01
----
-
-# Haskell
+# Haskell {#haskell}
 
 The documentation for the Haskell infrastructure is published at
 <https://haskell4nix.readthedocs.io/>. The source code for that

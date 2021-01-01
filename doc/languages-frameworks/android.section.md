@@ -1,9 +1,4 @@
----
-title: Android
-author: Sander van der Burg
-date: 2018-11-18
----
-# Android
+# Android {#android}
 
 The Android build environment provides three major features and a number of
 supporting features.
