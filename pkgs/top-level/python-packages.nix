@@ -1793,6 +1793,8 @@ in {
 
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
+  dnachisel = callPackage ../development/python-modules/dnachisel { };
+
   dnslib = callPackage ../development/python-modules/dnslib { };
 
   dnspython = if isPy3k then
@@ -2138,6 +2140,8 @@ in {
   flake8-polyfill = callPackage ../development/python-modules/flake8-polyfill { };
 
   flaky = callPackage ../development/python-modules/flaky { };
+
+  flametree = callPackage ../development/python-modules/flametree { };
 
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
 
@@ -4684,6 +4688,8 @@ in {
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
   pysbd = callPackage ../development/python-modules/pysbd { };
+
+  python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
