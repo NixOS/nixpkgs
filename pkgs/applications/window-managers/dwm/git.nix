@@ -1,16 +1,14 @@
-{ lib, stdenv, fetchgit, libX11, libXinerama, libXft, patches ? [], conf ? null }:
-
-let
-  name = "dwm-git-20180602";
-in
+{ lib, stdenv, fetchgit, libX11, libXinerama, libXft, writeText, patches ? [ ]
+, conf ? null }:
 
 stdenv.mkDerivation {
-  inherit name;
+  pname = "dwm-git";
+  version = "20200303";
 
   src = fetchgit {
     url = "git://git.suckless.org/dwm";
-    rev = "b69c870a3076d78ab595ed1cd4b41cf6b03b2610";
-    sha256 = "10i079h79l4gdch1qy2vrrb2xxxkgkjmgphr5r9a75jbbagwvz0k";
+    rev = "61bb8b2241d4db08bea4261c82e27cd9797099e7";
+    sha256 = "1j3vly8dln35vnwnwwlaa8ql9fmnlmrv43jcyc8dbfhfxiw6f34l";
   };
 
   buildInputs = [ libX11 libXinerama libXft ];
@@ -20,18 +18,19 @@ stdenv.mkDerivation {
   # Allow users set their own list of patches
   inherit patches;
 
-  # Allow users to override the entire config file AFTER appying the patches
-  postPatch = lib.optionalString (conf!=null) ''
-    echo -n '${conf}' > config.def.h
-  '';
-
-  buildPhase = "make";
+  # Allow users to set the config.def.h file containing the configuration
+  postPatch = let
+    configFile = if lib.isDerivation conf || builtins.isPath conf then
+      conf
+    else
+      writeText "config.def.h" conf;
+  in lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
   meta = with lib; {
     homepage = "https://suckless.org/";
     description = "Dynamic window manager for X, development version";
     license = licenses.mit;
-    maintainers = with maintainers; [xeji];
+    maintainers = with maintainers; [ xeji ];
     platforms = platforms.unix;
   };
 }
