@@ -1531,4 +1531,7 @@ self: super: {
   apecs-physics = addPkgconfigDepends super.apecs-physics
     (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.ApplicationServices);
 
+  # Break out of overspecified constraint on QuickCheck.
+  psqueues = doJailbreak super.psqueues;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
