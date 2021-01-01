@@ -1,9 +1,4 @@
----
-title: Agda
-author: Alex Rice (alexarice)
-date: 2020-01-06
----
-# Agda
+# Agda {#agda}
 
 ## How to use Agda
 
