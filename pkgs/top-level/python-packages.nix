@@ -6025,6 +6025,8 @@ in {
 
   python-multipart = callPackage ../development/python-modules/python-multipart { };
 
+  python-mystrom = callPackage ../development/python-modules/python-mystrom { };
+
   python-nest = callPackage ../development/python-modules/python-nest { };
 
   pythonnet = callPackage
