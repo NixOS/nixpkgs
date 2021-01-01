@@ -1528,9 +1528,6 @@ self: super: {
   # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
   pandoc-include-code = doJailbreak super.pandoc-include-code;
 
-  # https://github.com/jgm/pandoc/issues/6961
-  pandoc = dontCheck super.pandoc;
-
   # https://github.com/yesodweb/yesod/issues/1714
   yesod-core = dontCheck super.yesod-core;
 
