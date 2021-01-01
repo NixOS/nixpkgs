@@ -1,3 +1,12 @@
+if [ -n "$__nix_qtbase" -a "$__nix_qtbase" != "@dev@" ]; then
+    echo >&2 "Error: detected mismatched Qt dependencies:"
+    echo >&2 "    @dev@"
+    echo >&2 "    $__nix_qtbase"
+    exit 1
+elif [ -z "$__nix_qtbase" ]; then
+
+__nix_qtbase="@dev@"
+
 qtPluginPrefix=@qtPluginPrefix@
 qtQmlPrefix=@qtQmlPrefix@
 qtDocPrefix=@qtDocPrefix@
@@ -77,4 +86,6 @@ postPatchMkspecs() {
 }
 if [ -z "${dontPatchMkspecs-}" ]; then
     postPhases="${postPhases-}${postPhases:+ }postPatchMkspecs"
+fi
+
 fi
