@@ -42,16 +42,17 @@ let
     pkgs.symlinkJoin {
       name = "firejail-" + pkg.name;
       paths = [ pkg ];
-      buildInputs = with pkgs; [ tree ];
       postBuild = ''
+        [[ -d "$out/share/applications" ]] && grep -q -R Exec=/ "$out/share/applications" && \
+          >&2 echo "WARNING: ${pkg.name} desktop file is not firejailed."
         for bin in $(find "$out/bin" -type l); do
-        oldbin="$(readlink "$bin")" 
-        rm "$bin"
-        cat <<_EOF >"$bin"
-        #!${pkgs.stdenv.shell} -e
-        /run/wrappers/bin/firejail "$oldbin" "\$@"
+          oldbin="$(readlink "$bin")"
+          rm "$bin"
+          cat <<_EOF >"$bin"
+        #! ${pkgs.runtimeShell} -e
+        exec /run/wrappers/bin/firejail "$oldbin" "\$@"
         _EOF
-        chmod 0755 "$bin"
+          chmod 0755 "$bin"
         done
       '';
     }
@@ -119,7 +120,9 @@ in {
         Compared to <option>wrappedBinaries</option>,
         this e.g. has the advantage of providing desktop entries and icons.
         However, you should be careful about using these packages'
-        libraries as they will not be wrapped.
+        libraries as they will not be wrapped. Note also that applications may
+        not be firejailed if invoked via a desktop file that specifies an
+        absolute path to the unwrapped binary.
       '';
     };
   };
