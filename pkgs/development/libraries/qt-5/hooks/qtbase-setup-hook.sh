@@ -44,7 +44,10 @@ export QMAKEPATH
 QMAKEMODULES=
 export QMAKEMODULES
 
+declare -A qmakePathSeen
 qmakePathHook() {
+    [ -n "${qmakePathSeen[$1]}" ] || return 0
+    qmakePathSeen[$1]=1
     if [ -d "$1/mkspecs" ]
     then
         QMAKEMODULES="${QMAKEMODULES}${QMAKEMODULES:+:}/mkspecs"
@@ -59,7 +62,10 @@ envBuildHostHooks+=(qmakePathHook)
 # package depending on the building package. (This is necessary in case
 # the building package does not provide runtime dependencies itself and so
 # would not be propagated to the user environment.)
+declare -A qtEnvHostTargetSeen
 qtEnvHostTargetHook() {
+    [ -n "${qtEnvHostTargetSeen[$1]}" ] || return 0
+    qtEnvHostTargetSeen[$1]=1
     if providesQtRuntime "$1" && [ "z${!outputBin}" != "z${!outputDev}" ]
     then
         propagatedBuildInputs+=" $1"
