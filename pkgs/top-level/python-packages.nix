@@ -6056,6 +6056,8 @@ in {
 
   python-olm = callPackage ../development/python-modules/python-olm { };
 
+  python-opendata-transport = callPackage ../development/python-modules/python-opendata-transport { };
+
   python_openzwave = callPackage ../development/python-modules/python_openzwave { inherit (pkgs) pkgconfig; };
 
   python-otr = callPackage ../development/python-modules/python-otr { };
