@@ -98,7 +98,7 @@ common =
         # when cross-compiling.
         lib.optionalString (
           stdenv.buildPlatform != stdenv.hostPlatform &&
-          (lib.versionOlder "2.3.8" (lib.traceVal version) && !is24)
+          (lib.versionOlder "2.3.8" version && !is24)
           # The additional is24 condition is required as versionOlder doesn't understand nixUnstable version strings
         ) ''
           mkdir tmp/

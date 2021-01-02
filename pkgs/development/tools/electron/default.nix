@@ -13,6 +13,7 @@
 , libdrm
 , mesa
 , libxkbcommon
+, libappindicator-gtk3
 }@args:
 
 let
