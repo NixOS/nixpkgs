@@ -5189,6 +5189,8 @@ in
 
   ldc = callPackage ../development/compilers/ldc { };
 
+  ldgallery = callPackage ../tools/graphics/ldgallery { };
+
   lbreakout2 = callPackage ../games/lbreakout2 { };
 
   lefthook = gitAndTools.lefthook;
