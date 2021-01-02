@@ -76,7 +76,7 @@ default-package-overrides:
   # haskell-language-server 0.5.0.0 doesn't accept newer versions
   - fourmolu ==0.2.*
   - refinery ==0.2.*
-  # Stackage Nightly 2021-01-01
+  # Stackage Nightly 2021-01-02
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -937,11 +937,11 @@ default-package-overrides:
   - ghc-prof ==1.4.1.7
   - ghc-source-gen ==0.4.0.0
   - ghc-syntax-highlighter ==0.0.6.0
-  - ghc-tcplugins-extra ==0.4
+  - ghc-tcplugins-extra ==0.4.1
   - ghc-trace-events ==0.1.2.1
-  - ghc-typelits-extra ==0.4.1
-  - ghc-typelits-knownnat ==0.7.3
-  - ghc-typelits-natnormalise ==0.7.2
+  - ghc-typelits-extra ==0.4.2
+  - ghc-typelits-knownnat ==0.7.4
+  - ghc-typelits-natnormalise ==0.7.3
   - ghc-typelits-presburger ==0.3.0.1
   - ghci-hexcalc ==0.1.1.0
   - ghcid ==0.8.7
@@ -1100,7 +1100,7 @@ default-package-overrides:
   - hoauth2 ==1.16.0
   - hocon ==0.1.0.4
   - hOpenPGP ==2.9.5
-  - hopenpgp-tools ==0.23.3
+  - hopenpgp-tools ==0.23.5
   - hopfli ==0.2.2.1
   - hosc ==0.18.1
   - hostname ==1.0
@@ -2295,7 +2295,7 @@ default-package-overrides:
   - Taxonomy ==2.1.0
   - TCache ==0.12.1
   - tce-conf ==1.3
-  - tdigest ==0.2.1
+  - tdigest ==0.2.1.1
   - template-haskell-compat-v0208 ==0.1.5
   - temporary ==1.3
   - temporary-rc ==1.2.0.3
