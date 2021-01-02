@@ -1532,8 +1532,14 @@ self: super: {
     (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.ApplicationServices);
 
   # Break out of overspecified constraint on QuickCheck.
+  algebraic-graphs = dontCheck super.algebraic-graphs;
   attoparsec = doJailbreak super.attoparsec;      # https://github.com/haskell/attoparsec/pull/168
   cassava = doJailbreak super.cassava;
+  filepath-bytestring = doJailbreak super.filepath-bytestring;
+  ghc-source-gen = doJailbreak super.ghc-source-gen;
+  haddock-library = doJailbreak super.haddock-library;
+  HsYAML = doJailbreak super.HsYAML;
+  http-api-data = doJailbreak super.http-api-data;
   lzma = doJailbreak super.lzma;
   psqueues = doJailbreak super.psqueues;
 
