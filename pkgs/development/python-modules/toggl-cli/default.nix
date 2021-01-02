@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "toggl-cli";
-  version = "2.2.1";
+  version = "2.4.1";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     pname = "togglCli";
     inherit version;
-    sha256 = "1izsxag98lvivkwf7724g2ak6icjak9jdqphaq1a79kwdnqprx1m";
+    sha256 = "19lry8adcznzmzbvghyid3yl4j05db6931bw38af5vrkkyzyf62i";
   };
 
   postPatch = ''
