@@ -15548,6 +15548,8 @@ in
   gnupth = callPackage ../development/libraries/pth { };
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
 
+  pslib = callPackage ../development/libraries/pslib { };
+
   pstreams = callPackage ../development/libraries/pstreams {};
 
   pugixml = callPackage ../development/libraries/pugixml { };
