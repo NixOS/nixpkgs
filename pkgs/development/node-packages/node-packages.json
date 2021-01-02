@@ -175,6 +175,7 @@
 , "purescript-psa"
 , "purty"
 , "pyright"
+, "quicktype"
 , "react-native-cli"
 , "react-tools"
 , "readability-cli"
