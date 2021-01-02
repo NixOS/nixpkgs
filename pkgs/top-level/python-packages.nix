@@ -7784,6 +7784,8 @@ in {
 
   vobject = callPackage ../development/python-modules/vobject { };
 
+  volkszaehler = callPackage ../development/python-modules/volkszaehler { };
+
   voluptuous = callPackage ../development/python-modules/voluptuous { };
 
   voluptuous-serialize = callPackage ../development/python-modules/voluptuous-serialize { };
