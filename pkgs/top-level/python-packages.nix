@@ -5273,6 +5273,8 @@ in {
 
   pyhs100 = callPackage ../development/python-modules/pyhs100 { };
 
+  pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
+
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
   PyICU = callPackage ../development/python-modules/pyicu { };
