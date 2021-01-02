@@ -21270,7 +21270,7 @@ in
 
   etherape = callPackage ../applications/networking/sniffers/etherape { };
 
-  evilpixie = libsForQt514.callPackage ../applications/graphics/evilpixie { };
+  evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
 
   exercism = callPackage ../applications/misc/exercism { };
 
