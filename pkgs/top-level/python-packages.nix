@@ -1332,6 +1332,8 @@ in {
 
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka { };
 
+  confuse = callPackage ../development/python-modules/confuse { };
+
   connexion = callPackage ../development/python-modules/connexion { };
 
   consonance = callPackage ../development/python-modules/consonance { };
@@ -3807,6 +3809,8 @@ in {
   MechanicalSoup = callPackage ../development/python-modules/MechanicalSoup { };
 
   mechanize = callPackage ../development/python-modules/mechanize { };
+
+  mediafile = callPackage ../development/python-modules/mediafile { };
 
   meinheld = callPackage ../development/python-modules/meinheld { };
 
