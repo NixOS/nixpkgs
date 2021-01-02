@@ -243,6 +243,8 @@ in {
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
+  aiopulse = callPackage ../development/python-modules/aiopulse { };
+
   aioredis = callPackage ../development/python-modules/aioredis { };
 
   aioresponses = callPackage ../development/python-modules/aioresponses { };
