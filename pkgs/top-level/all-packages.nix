@@ -2455,6 +2455,8 @@ in
 
   mons = callPackage ../tools/misc/mons {};
 
+  monsoon = callPackage ../tools/security/monsoon {};
+
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (pkgs.xorg) libX11 libXtst libXfixes;
   };
