@@ -11,7 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1xd3maiipfbxmhc9rrblc5x52nxvkwxp14npg31y5njqvkvzax9b";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    # TODO: Remove when version > 0.4.0
+    (fetchpatch {
+      name = "glog-Add_pkg-config_file.patch";
+      url = "https://github.com/google/glog/commit/82d0860b76cf7a35d6911fecdccae15a4296cfd2.patch";
+      sha256 = "1nabfhih1h30ligzyr8aykva34zsajrqcngflsprmja8sj7y4dnz";
+    })
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # TODO: Remove at next release that includes this commit.
     (fetchpatch {
       name = "glog-Fix-symbolize_unittest-for-musl-builds.patch";
