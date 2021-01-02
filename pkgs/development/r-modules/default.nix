@@ -283,7 +283,6 @@ let
     odbc = [ pkgs.unixODBC ];
     pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
-    pbdNCDF4 = [ pkgs.netcdf ];
     pbdPROF = [ pkgs.openmpi ];
     pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
     pdftools = [ pkgs.poppler.dev ];
@@ -478,7 +477,6 @@ let
     "Demerelate"
     "detrendeR"
     "dgmb"
-    "DivMelt"
     "dpa"
     "DSpat"
     "dynamicGraph"
@@ -498,14 +496,12 @@ let
     "forensim"
     "FreeSortR"
     "fscaret"
-    "fSRM"
     "gcmr"
     "geomorph"
     "geoR"
     "georob"
     "GGEBiplotGUI"
     "gnm"
-    "GPCSIV"
     "GrapheR"
     "GroupSeq"
     "gsubfn"
@@ -580,7 +576,6 @@ let
     "RcmdrPlugin_orloca"
     "RcmdrPlugin_plotByGroup"
     "RcmdrPlugin_pointG"
-    "RcmdrPlugin_qual"
     "RcmdrPlugin_ROC"
     "RcmdrPlugin_sampling"
     "RcmdrPlugin_SCDA"
@@ -606,7 +601,6 @@ let
     "soundecology"
     "spatsurv"
     "sqldf"
-    "SRRS"
     "SSDforR"
     "statcheck"
     "StatDA"
@@ -623,8 +617,6 @@ let
     "tcltk2"
     "TestScorer"
     "TIMP"
-    "titan"
-    "tkrgl"
     "tkrplot"
     "tmap"
     "tspmeta"
