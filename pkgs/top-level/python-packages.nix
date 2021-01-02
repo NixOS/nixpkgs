@@ -3578,6 +3578,8 @@ in {
 
   linuxfd = callPackage ../development/python-modules/linuxfd { };
 
+  liquidctl = callPackage ../development/python-modules/liquidctl { };
+
   lirc = disabledIf isPy27 (toPythonModule (pkgs.lirc.override { python3 = python; }));
 
   littleutils = callPackage ../development/python-modules/littleutils { };
