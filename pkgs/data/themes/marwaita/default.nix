@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita";
-  version = "7.7";
+  version = "8.0";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "09r9ggngskazddhcm9c2n0cjc4qs9215vyri4i02cbp1jl82kwvg";
+    sha256 = "0ljigm5z13r0idfkjgy5ysq9pzdj66ql269p5phhp47aagmjcv3s";
   };
 
   buildInputs = [
