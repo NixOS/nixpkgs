@@ -33,10 +33,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     asttokens
     pycryptodome
-    pytest_xdist
-    pytestcov
-    recommonmark
     semantic-version
+
+    # docs
+    recommonmark
     sphinx
     sphinx_rtd_theme
   ];
