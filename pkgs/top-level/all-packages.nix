@@ -26705,6 +26705,8 @@ in
     let
       mkPlasma5 = import ../desktops/plasma-5;
       attrs = {
+        # ATTN: The Qt version used in the NixOS Plasma module must be updated
+        # whenever this changes!
         inherit libsForQt5;
         inherit lib fetchurl;
         gconf = gnome2.GConf;
