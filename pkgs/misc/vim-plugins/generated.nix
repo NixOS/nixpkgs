@@ -1292,6 +1292,18 @@ let
     meta.homepage = "https://github.com/konfekt/fastfold/";
   };
 
+  fern-vim = buildVimPluginFrom2Nix {
+    pname = "fern-vim";
+    version = "2020-12-22";
+    src = fetchFromGitHub {
+      owner = "lambdalisue";
+      repo = "fern.vim";
+      rev = "f936fdf27d9b0c288e4854c3ca0ea53f5f52be89";
+      sha256 = "0hdk7v4ag763lwr2gc2vcryhq8nhy0fp52vmb0ws203h4nkkilaf";
+    };
+    meta.homepage = "https://github.com/lambdalisue/fern.vim/";
+  };
+
   ferret = buildVimPluginFrom2Nix {
     pname = "ferret";
     version = "2020-12-08";
