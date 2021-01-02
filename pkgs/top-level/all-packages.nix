@@ -3684,6 +3684,8 @@ in
 
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
+  wlcs = callPackage ../tools/wayland/wlcs { };
+
   wlsunset = callPackage ../tools/wayland/wlsunset { };
 
   wob = callPackage ../tools/misc/wob { };
