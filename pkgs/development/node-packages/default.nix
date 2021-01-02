@@ -77,6 +77,13 @@ let
       buildInputs = [ self.node-gyp-build pkgs.unbound ];
     };
 
+    ijavascript = super.ijavascript.override (oldAttrs: {
+      preRebuild = ''
+        export NPM_CONFIG_ZMQ_EXTERNAL=true
+      '';
+      buildInputs = oldAttrs.buildInputs ++ [ self.node-gyp-build pkgs.zeromq ];
+    });
+
     insect = super.insect.override (drv: {
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
