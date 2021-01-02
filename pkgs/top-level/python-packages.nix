@@ -6365,6 +6365,8 @@ in {
 
   reedsolo = callPackage ../development/python-modules/reedsolo { };
 
+  reflink = callPackage ../development/python-modules/reflink { };
+
   regex = callPackage ../development/python-modules/regex { };
 
   regional = callPackage ../development/python-modules/regional { };
