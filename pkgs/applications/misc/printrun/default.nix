@@ -1,13 +1,14 @@
 { stdenv, python27Packages, fetchFromGitHub }:
 
 python27Packages.buildPythonApplication rec {
-  name = "printrun-20150310";
+  pname = "printrun";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "kliment";
     repo = "Printrun";
-    rev = name;
-    sha256 = "09ijv8h4k5h15swg64s7igamvynawz7gdi7hiymzrzywdvr0zwsa";
+    rev = "${pname}-${version}";
+    sha256 = "0nhcx1bi1hals0a6d6994y0kcwsfqx3hplwbmn9136hgrplg0l2l";
   };
 
   propagatedBuildInputs = with python27Packages; [

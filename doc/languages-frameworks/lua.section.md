@@ -1,10 +1,4 @@
----
-title: Lua
-author: Matthieu Coudron
-date: 2019-02-05
----
-
-# User's Guide to Lua Infrastructure
+# User's Guide to Lua Infrastructure {#users-guide-to-lua-infrastructure}
 
 ## Using Lua
 

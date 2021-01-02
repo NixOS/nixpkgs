@@ -1,10 +1,4 @@
----
-title: Rust
-author: Matthias Beyer
-date: 2017-03-05
----
-
-# Rust
+# Rust {#rust}
 
 To install the rust compiler and cargo put
 

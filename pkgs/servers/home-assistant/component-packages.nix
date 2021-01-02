@@ -586,7 +586,7 @@
     "opengarage" = ps: with ps; [ ]; # missing inputs: open-garage
     "openhardwaremonitor" = ps: with ps; [ ];
     "openhome" = ps: with ps; [ ]; # missing inputs: openhomedevice
-    "opensensemap" = ps: with ps; [ ]; # missing inputs: opensensemap-api
+    "opensensemap" = ps: with ps; [ opensensemap-api ];
     "opensky" = ps: with ps; [ ];
     "opentherm_gw" = ps: with ps; [ ]; # missing inputs: pyotgw
     "openuv" = ps: with ps; [ ]; # missing inputs: pyopenuv
@@ -796,7 +796,7 @@
     "supla" = ps: with ps; [ ]; # missing inputs: asyncpysupla
     "surepetcare" = ps: with ps; [ ]; # missing inputs: surepy
     "swiss_hydrological_data" = ps: with ps; [ ]; # missing inputs: swisshydrodata
-    "swiss_public_transport" = ps: with ps; [ ]; # missing inputs: python_opendata_transport
+    "swiss_public_transport" = ps: with ps; [ python-opendata-transport ];
     "swisscom" = ps: with ps; [ ];
     "switch" = ps: with ps; [ ];
     "switchbot" = ps: with ps; [ ]; # missing inputs: PySwitchbot

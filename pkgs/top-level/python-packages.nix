@@ -1332,6 +1332,8 @@ in {
 
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka { };
 
+  confuse = callPackage ../development/python-modules/confuse { };
+
   connexion = callPackage ../development/python-modules/connexion { };
 
   consonance = callPackage ../development/python-modules/consonance { };
@@ -1793,6 +1795,8 @@ in {
 
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
+  dnachisel = callPackage ../development/python-modules/dnachisel { };
+
   dnslib = callPackage ../development/python-modules/dnslib { };
 
   dnspython = if isPy3k then
@@ -2138,6 +2142,8 @@ in {
   flake8-polyfill = callPackage ../development/python-modules/flake8-polyfill { };
 
   flaky = callPackage ../development/python-modules/flaky { };
+
+  flametree = callPackage ../development/python-modules/flametree { };
 
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
 
@@ -3804,6 +3810,8 @@ in {
 
   mechanize = callPackage ../development/python-modules/mechanize { };
 
+  mediafile = callPackage ../development/python-modules/mediafile { };
+
   meinheld = callPackage ../development/python-modules/meinheld { };
 
   meld3 = callPackage ../development/python-modules/meld3 { };
@@ -4359,6 +4367,8 @@ in {
 
   openrouteservice = callPackage ../development/python-modules/openrouteservice/default.nix { };
 
+  opensensemap-api = callPackage ../development/python-modules/opensensemap-api { };
+
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
   opentracing = callPackage ../development/python-modules/opentracing { };
@@ -4684,6 +4694,8 @@ in {
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
   pysbd = callPackage ../development/python-modules/pysbd { };
+
+  python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
@@ -6043,6 +6055,8 @@ in {
   });
 
   python-olm = callPackage ../development/python-modules/python-olm { };
+
+  python-opendata-transport = callPackage ../development/python-modules/python-opendata-transport { };
 
   python_openzwave = callPackage ../development/python-modules/python_openzwave { inherit (pkgs) pkgconfig; };
 

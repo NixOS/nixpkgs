@@ -5205,6 +5205,8 @@ in
 
   ldc = callPackage ../development/compilers/ldc { };
 
+  ldgallery = callPackage ../tools/graphics/ldgallery { };
+
   lbreakout2 = callPackage ../games/lbreakout2 { };
 
   lefthook = gitAndTools.lefthook;
@@ -21207,6 +21209,8 @@ in
 
   elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
 
+  elfx86exts = callPackage ../applications/misc/elfx86exts { };
+
   elinks = callPackage ../applications/networking/browsers/elinks {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
@@ -25053,6 +25057,8 @@ in
   chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {};
 
   weston = callPackage ../applications/window-managers/weston { pipewire = pipewire_0_2; };
+
+  wio = callPackage ../applications/window-managers/wio { };
 
   whitebox-tools = callPackage ../applications/gis/whitebox-tools {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -29141,6 +29147,8 @@ in
     gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
     gcc-armhf-embedded = pkgsCross.armhf-embedded.buildPackages.gcc;
   };
+
+  new-session-manager = callPackage ../applications/audio/new-session-manager { };
 
   newlib = callPackage ../development/misc/newlib { };
   newlibCross = callPackage ../development/misc/newlib {
