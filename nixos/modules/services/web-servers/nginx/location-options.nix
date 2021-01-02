@@ -101,6 +101,16 @@ with lib;
       '';
     };
 
+    fastcgiParams = mkOption {
+      type = types.attrsOf types.str;
+      default = {};
+      description = ''
+        FastCGI parameters to override.  Unlike in the Nginx
+        configuration file, overriding only some default parameters
+        won't unset the default values for other parameters.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
