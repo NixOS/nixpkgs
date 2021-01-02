@@ -5694,6 +5694,8 @@ in {
 
   pyspice = callPackage ../development/python-modules/pyspice { };
 
+  pyspiflash = callPackage ../development/python-modules/pyspiflash { };
+
   pyspinel = callPackage ../development/python-modules/pyspinel { };
 
   pyspotify = callPackage ../development/python-modules/pyspotify { };
