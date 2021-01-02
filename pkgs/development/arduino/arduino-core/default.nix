@@ -112,7 +112,10 @@ stdenv.mkDerivation rec {
   };
 
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  # the glib setup hook will populate GSETTINGS_SCHEMAS_PATH,
+  # wrapGAppHooks (among other things) adds it to XDG_DATA_DIRS
+  # so 'save as...' works:
+  nativeBuildInputs = [ glib wrapGAppsHook ];
   buildInputs = [
     jdk
     ant

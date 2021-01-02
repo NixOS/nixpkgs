@@ -1,11 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, intervaltree, pyflakes, requests, lxml, google-i18n-address
-, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint, pyyaml, jinja2
-, stdenv
+{ stdenv, fetchPypi, buildPythonPackage, pythonAtLeast, intervaltree, pyflakes, requests, lxml, google-i18n-address
+, pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint, pyyaml, jinja2, ConfigArgParse, appdirs
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
   version = "3.5.0";
+  disabled = pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,6 +27,8 @@ buildPythonPackage rec {
     pypdf2
     dict2xml
     weasyprint
+    ConfigArgParse
+    appdirs
   ];
 
   preCheck = ''
@@ -35,8 +37,9 @@ buildPythonPackage rec {
 
   # lxml tries to fetch from the internet
   doCheck = false;
+  pythonImportsCheck = [ "xml2rfc" ];
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Tool generating IETF RFCs and drafts from XML sources";
     homepage = "https://tools.ietf.org/tools/xml2rfc/trac/";
     # Well, parts might be considered unfree, if being strict; see:

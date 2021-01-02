@@ -243,6 +243,8 @@ in {
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
+  aiopulse = callPackage ../development/python-modules/aiopulse { };
+
   aioredis = callPackage ../development/python-modules/aioredis { };
 
   aioresponses = callPackage ../development/python-modules/aioresponses { };
@@ -282,6 +284,8 @@ in {
   altair = callPackage ../development/python-modules/altair { };
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
+
+  ambiclimate = callPackage ../development/python-modules/ambiclimate { };
 
   amply = callPackage ../development/python-modules/amply { };
 
@@ -916,6 +920,8 @@ in {
 
   blivet = callPackage ../development/python-modules/blivet { };
 
+  blockchain = callPackage ../development/python-modules/blockchain { };
+
   blockdiag = callPackage ../development/python-modules/blockdiag { };
 
   blockdiagcontrib-cisco = throw "blockdiagcontrib-cisco is not compatible with blockdiag 2.0.0 and has been removed."; # Added 2020-11-29
@@ -1115,6 +1121,8 @@ in {
   celery = callPackage ../development/python-modules/celery { };
 
   cement = callPackage ../development/python-modules/cement { };
+
+  connect-box = callPackage ../development/python-modules/connect_box { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
 
@@ -2834,8 +2842,6 @@ in {
 
   html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
-  htmltreediff = callPackage ../development/python-modules/htmltreediff { };
-
   HTSeq = callPackage ../development/python-modules/HTSeq { };
 
   httmock = callPackage ../development/python-modules/httmock { };
@@ -4135,6 +4141,8 @@ in {
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
+  netdata = callPackage ../development/python-modules/netdata { };
+
   netdisco = callPackage ../development/python-modules/netdisco { };
 
   netifaces = callPackage ../development/python-modules/netifaces { };
@@ -5275,6 +5283,8 @@ in {
 
   pyhs100 = callPackage ../development/python-modules/pyhs100 { };
 
+  pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
+
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
   PyICU = callPackage ../development/python-modules/pyicu { };
@@ -5696,6 +5706,8 @@ in {
 
   pyspice = callPackage ../development/python-modules/pyspice { };
 
+  pyspiflash = callPackage ../development/python-modules/pyspiflash { };
+
   pyspinel = callPackage ../development/python-modules/pyspinel { };
 
   pyspotify = callPackage ../development/python-modules/pyspotify { };
@@ -6038,6 +6050,8 @@ in {
   python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
 
   python-multipart = callPackage ../development/python-modules/python-multipart { };
+
+  python-mystrom = callPackage ../development/python-modules/python-mystrom { };
 
   python-nest = callPackage ../development/python-modules/python-nest { };
 
@@ -6621,6 +6635,8 @@ in {
   schedule = callPackage ../development/python-modules/schedule { };
 
   schema = callPackage ../development/python-modules/schema { };
+
+  schiene = callPackage ../development/python-modules/schiene { };
 
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
 
@@ -7773,6 +7789,8 @@ in {
   vncdo = callPackage ../development/python-modules/vncdo { };
 
   vobject = callPackage ../development/python-modules/vobject { };
+
+  volkszaehler = callPackage ../development/python-modules/volkszaehler { };
 
   voluptuous = callPackage ../development/python-modules/voluptuous { };
 
