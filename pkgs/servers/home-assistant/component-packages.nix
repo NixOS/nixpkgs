@@ -7,7 +7,7 @@
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
     "acer_projector" = ps: with ps; [ pyserial ];
-    "acmeda" = ps: with ps; [ ]; # missing inputs: aiopulse
+    "acmeda" = ps: with ps; [ aiopulse ];
     "actiontec" = ps: with ps; [ ];
     "adguard" = ps: with ps; [ adguardhome ];
     "ads" = ps: with ps; [ pyads ];
