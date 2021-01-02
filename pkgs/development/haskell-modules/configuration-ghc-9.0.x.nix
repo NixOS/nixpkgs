@@ -72,6 +72,7 @@ self: super: {
   split = doJailbreak super.split;
   tar = doJailbreak super.tar;
   time-compat = doJailbreak super.time-compat;
+  primitive = doJailbreak (dontCheck super.primitive);
   vector = doJailbreak (dontCheck super.vector);
   zlib = doJailbreak super.zlib;
 
