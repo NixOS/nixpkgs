@@ -2840,8 +2840,6 @@ in {
 
   html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
-  htmltreediff = callPackage ../development/python-modules/htmltreediff { };
-
   HTSeq = callPackage ../development/python-modules/HTSeq { };
 
   httmock = callPackage ../development/python-modules/httmock { };
