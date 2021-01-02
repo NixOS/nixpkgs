@@ -1532,11 +1532,10 @@ self: super: {
     (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.ApplicationServices);
 
   # Break out of overspecified constraint on QuickCheck.
+  attoparsec = doJailbreak super.attoparsec;      # https://github.com/haskell/attoparsec/pull/168
+  cassava = doJailbreak super.cassava;
+  lzma = doJailbreak super.lzma;
   psqueues = doJailbreak super.psqueues;
-
-  # Break out of overspecified constraint on QuickCheck.
-  # https://github.com/haskell/attoparsec/pull/168
-  attoparsec = doJailbreak super.attoparsec;
 
   # Break out of overspecified constraint on QuickCheck.
   # https://github.com/Gabriel439/Haskell-Nix-Derivation-Library/pull/10
