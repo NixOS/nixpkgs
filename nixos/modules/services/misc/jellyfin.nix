@@ -41,6 +41,8 @@ in
       serviceConfig = rec {
         User = cfg.user;
         Group = cfg.group;
+        # Allows access to drm devices for transcoding with hardware acceleration
+        SupplementaryGroups = [ "video" ];
         StateDirectory = "jellyfin";
         CacheDirectory = "jellyfin";
         ExecStart = "${cfg.package}/bin/jellyfin --datadir '/var/lib/${StateDirectory}' --cachedir '/var/cache/${CacheDirectory}'";
@@ -54,12 +56,12 @@ in
         CapabilityBoundingSet = "";
 
         # ProtectClock= adds DeviceAllow=char-rtc r
-        DeviceAllow = "";
+        # char-drm Allows ffmpeg to transcode with hardware acceleration
+        DeviceAllow = [ "char-drm rw" ];
 
         LockPersonality = true;
 
         PrivateTmp = true;
-        PrivateDevices = true;
         PrivateUsers = true;
 
         ProtectClock = true;
