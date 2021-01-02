@@ -6007,7 +6007,10 @@ in {
 
   pythonIRClib = callPackage ../development/python-modules/pythonirclib { };
 
-  pythonix = callPackage ../development/python-modules/pythonix { inherit (pkgs) meson pkgconfig; };
+  pythonix = callPackage ../development/python-modules/pythonix {
+    inherit (pkgs) pkg-config;
+    meson = pkgs.meson.override { python3 = self.python; };
+  };
 
   python-jenkins = callPackage ../development/python-modules/python-jenkins { };
 
