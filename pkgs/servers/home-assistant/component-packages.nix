@@ -76,7 +76,7 @@
     "beewi_smartclim" = ps: with ps; [ ]; # missing inputs: beewi_smartclim
     "bh1750" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "binary_sensor" = ps: with ps; [ ];
-    "bitcoin" = ps: with ps; [ ]; # missing inputs: blockchain
+    "bitcoin" = ps: with ps; [ blockchain ];
     "bizkaibus" = ps: with ps; [ ]; # missing inputs: bizkaibus
     "blackbird" = ps: with ps; [ ]; # missing inputs: pyblackbird
     "blebox" = ps: with ps; [ ]; # missing inputs: blebox_uniapi
