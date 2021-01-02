@@ -5080,6 +5080,8 @@ in
 
   jumpapp = callPackage ../tools/X11/jumpapp {};
 
+  jove = callPackage ../applications/editors/jove {};
+
   jucipp = callPackage ../applications/editors/jucipp { };
 
   jugglinglab = callPackage ../tools/misc/jugglinglab { };
