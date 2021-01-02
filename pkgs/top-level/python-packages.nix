@@ -3383,9 +3383,13 @@ in {
 
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
+  ldap = callPackage ../development/python-modules/ldap {
+    inherit (pkgs) openldap cyrus_sasl;
+  };
+
   ldap3 = callPackage ../development/python-modules/ldap3 { };
 
-  ldap = callPackage ../development/python-modules/ldap { inherit (pkgs) openldap cyrus_sasl; };
+  ldapdomaindump = callPackage ../development/python-modules/ldapdomaindump { };
 
   ldappool = callPackage ../development/python-modules/ldappool { };
 
