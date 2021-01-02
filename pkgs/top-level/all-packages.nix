@@ -1616,6 +1616,8 @@ in
 
   boot = callPackage ../development/tools/build-managers/boot { };
 
+  bowtie = callPackage ../applications/science/biology/bowtie { };
+
   bowtie2 = callPackage ../applications/science/biology/bowtie2 { };
 
   boxfs = callPackage ../tools/filesystems/boxfs { };
