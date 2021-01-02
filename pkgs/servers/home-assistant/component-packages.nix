@@ -612,7 +612,7 @@
     "person" = ps: with ps; [ aiohttp-cors pillow ];
     "philips_js" = ps: with ps; [ ]; # missing inputs: ha-philipsjs
     "pi4ioe5v9xxxx" = ps: with ps; [ ]; # missing inputs: pi4ioe5v9xxxx
-    "pi_hole" = ps: with ps; [ ]; # missing inputs: hole
+    "pi_hole" = ps: with ps; [ hole ];
     "picotts" = ps: with ps; [ ];
     "piglow" = ps: with ps; [ ]; # missing inputs: piglow
     "pilight" = ps: with ps; [ ]; # missing inputs: pilight
