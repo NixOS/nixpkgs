@@ -61,8 +61,8 @@ let
 
     hxcpp = buildHaxeLib rec {
       libname = "hxcpp";
-      version = "3.4.64";
-      sha256 = "04gyjm6wqmsm0ifcfkxmq1yv8xrfzys3z5ajqnvvjrnks807mw8q";
+      version = "4.1.15";
+      sha256 = "1ybxcvwi4655563fjjgy6xv5c78grjxzadmi3l1ghds48k1rh50p";
       postFixup = ''
         for f in $out/lib/haxe/${withCommas libname}/${withCommas version}/{,project/libs/nekoapi/}bin/Linux{,64}/*; do
           chmod +w "$f"
