@@ -5,6 +5,10 @@
 , alsaLib
 , SDL2
 , libiconv
+, CoreAudio
+, CoreMIDI
+, CoreServices
+, Cocoa
 }:
 
 stdenv.mkDerivation rec {
@@ -18,10 +22,28 @@ stdenv.mkDerivation rec {
     sha256 = "0w3c1rgm8qlqi50gavrcjz40xb0nkis4i9mvpwmvzmdv9nipxry9";
   };
 
+  # Adapt the linux-only CMakeLists to darwin (more reliable than make-macos.sh)
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i -e 's@__LINUX_ALSA__@__MACOSX_CORE__@' -e 's@asound@@' CMakeLists.txt
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ]
     ++ stdenv.lib.optional stdenv.isLinux alsaLib
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+    ++ stdenv.lib.optionals stdenv.isDarwin [
+         libiconv
+         CoreAudio
+         CoreMIDI
+         CoreServices
+         Cocoa
+       ];
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin [
+    "-framework CoreAudio"
+    "-framework CoreMIDI"
+    "-framework CoreServices"
+    "-framework Cocoa"
+  ];
 
   passthru.tests = {
     ft2-clone-starts = nixosTests.ft2-clone;
