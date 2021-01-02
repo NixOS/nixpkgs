@@ -6620,6 +6620,8 @@ in {
 
   schema = callPackage ../development/python-modules/schema { };
 
+  schiene = callPackage ../development/python-modules/schiene { };
+
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
