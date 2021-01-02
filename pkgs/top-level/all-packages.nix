@@ -26329,6 +26329,7 @@ in
   space-orbit = callPackage ../games/space-orbit { };
 
   spring = callPackage ../games/spring {
+    asciidoc = asciidoc-full;
     boost = boost155;
   };
 
