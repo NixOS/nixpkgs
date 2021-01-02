@@ -879,7 +879,7 @@
     "unifiled" = ps: with ps; [ ]; # missing inputs: unifiled
     "universal" = ps: with ps; [ ];
     "upb" = ps: with ps; [ ]; # missing inputs: upb_lib
-    "upc_connect" = ps: with ps; [ ]; # missing inputs: connect-box
+    "upc_connect" = ps: with ps; [ connect-box ];
     "upcloud" = ps: with ps; [ ]; # missing inputs: upcloud-api
     "updater" = ps: with ps; [ distro ];
     "upnp" = ps: with ps; [ async-upnp-client ];
