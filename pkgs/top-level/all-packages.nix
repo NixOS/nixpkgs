@@ -6436,6 +6436,8 @@ in
 
   overmind = callPackage ../applications/misc/overmind { };
 
+  ovh-ttyrec = callPackage ../tools/misc/ovh-ttyrec { };
+
   owncloud-client = libsForQt514.callPackage ../applications/networking/owncloud-client { };
 
   oxidized = callPackage ../tools/admin/oxidized { };
@@ -7964,8 +7966,6 @@ in
   tty-share = callPackage ../applications/misc/tty-share { };
 
   ttyplot = callPackage ../tools/misc/ttyplot { };
-
-  ttyrec = callPackage ../tools/misc/ttyrec { };
 
   ttygif = callPackage ../tools/misc/ttygif { };
 
