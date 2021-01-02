@@ -1538,4 +1538,8 @@ self: super: {
   # https://github.com/haskell/attoparsec/pull/168
   attoparsec = doJailbreak super.attoparsec;
 
+  # Break out of overspecified constraint on QuickCheck.
+  # https://github.com/Gabriel439/Haskell-Nix-Derivation-Library/pull/10
+  nix-derivation = doJailbreak super.nix-derivation;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
