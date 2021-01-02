@@ -5690,6 +5690,10 @@ in {
 
   pysptk = callPackage ../development/python-modules/pysptk { };
 
+  pysqlcipher3 = callPackage ../development/python-modules/pysqlcipher3 {
+    inherit (pkgs) sqlcipher;
+  };
+
   pysqlite = callPackage ../development/python-modules/pysqlite { };
 
   pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
