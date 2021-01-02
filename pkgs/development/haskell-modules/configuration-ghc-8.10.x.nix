@@ -83,12 +83,6 @@ self: super: {
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   });
 
-  # Version 4.7.2 is broken by the bytestring library shipped by ghc-8.10.3.
-  ListLike = appendPatch super.ListLike (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/ListLike-4.7.2.patch";
-    sha256 = "1v392a74w0sxyn6x0bqixpmjbgla0i2b5hxzkcn1vaa3gaya7ag4";
-  });
-
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
   hnix = generateOptparseApplicativeCompletion "hnix"
     (overrideCabal super.hnix (drv: {
@@ -98,4 +92,11 @@ self: super: {
 
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
+
+  # Agda 2.6.1.2 only declares a transformers dependency for ghc < 8.10.3.
+  # https://github.com/agda/agda/issues/5109
+  Agda = appendPatch super.Agda (pkgs.fetchpatch {
+    url = "https://github.com/agda/agda/commit/76278c23d447b49f59fac581ca4ac605792aabbc.patch";
+    sha256 = "1g34g8a09j73h89pk4cdmri0nb0qg664hkff45amcr9kyz14a9f3";
+  });
 }
