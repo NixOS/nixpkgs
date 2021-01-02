@@ -76,6 +76,7 @@
 , "escape-string-regexp"
 , "eslint"
 , "eslint_d"
+, "esy"
 , "expo-cli"
 , {"fast-cli": "1.x"}
 , "fauna-shell"
