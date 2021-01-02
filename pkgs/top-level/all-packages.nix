@@ -11128,7 +11128,7 @@ in
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
-  autoconf = buildPackages.autoconf270;
+  autoconf = autoconf270;
 
   autoconf-archive = callPackage ../development/tools/misc/autoconf-archive { };
 
