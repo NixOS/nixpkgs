@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       offers a software transactional memory system and reactive Agent
       system that ensure clean, correct, multithreaded designs.
     '';
-    maintainers = with maintainers; [ jlesquembre ];
+    maintainers = with maintainers; [ jlesquembre thiagokokada ];
     platforms = platforms.unix;
   };
 }
