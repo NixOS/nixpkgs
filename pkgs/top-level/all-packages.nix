@@ -2990,6 +2990,8 @@ in
 
   piglit = callPackage ../tools/graphics/piglit { };
 
+  pihole-ftl = callPackage ../tools/networking/pihole-ftl { };
+
   playerctl = callPackage ../tools/audio/playerctl { };
 
   poweralertd = callPackage ../tools/misc/poweralertd { };
