@@ -19,7 +19,7 @@ qtDocPrefix=@qtDocPrefix@
 # Disable debug symbols if qtbase was built without debugging.
 # This stops -dev paths from leaking into other outputs.
 if [ -z "@debug@" ]; then
-    NIX_CFLAGS_COMPILE="${NIX_CFLAGS_COMPILE}${NIX_CFLAGS_COMPILE:+ }-DQT_NO_DEBUG"
+    NIX_CFLAGS_COMPILE="${NIX_CFLAGS_COMPILE-}${NIX_CFLAGS_COMPILE:+ }-DQT_NO_DEBUG"
 fi
 
 # Integration with CMake:
