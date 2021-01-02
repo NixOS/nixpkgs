@@ -76,6 +76,7 @@ self: super: {
   time-compat = doJailbreak super.time-compat;
   vector = doJailbreak (dontCheck super.vector);
   vector-binary-instances = doJailbreak super.vector-binary-instances;
+  vector-th-unbox = doJailbreak super.vector-th-unbox;
   zlib = doJailbreak super.zlib;
 
   # Apply patches from head.hackage.
