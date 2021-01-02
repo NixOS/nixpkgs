@@ -59,6 +59,7 @@ self: super: {
   # Jailbreaks & Version Updates
   async = doJailbreak super.async;
   ChasingBottoms = markBrokenVersion "1.3.1.9" super.ChasingBottoms;
+  data-fix = doJailbreak super.data-fix;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   hashable = overrideCabal (doJailbreak (dontCheck super.hashable)) (drv: { postPatch = "sed -i -e 's,integer-gmp .*<1.1,integer-gmp < 2,' hashable.cabal"; });
@@ -66,14 +67,15 @@ self: super: {
   integer-logarithms = overrideCabal (doJailbreak super.integer-logarithms) (drv: { postPatch = "sed -i -e 's,integer-gmp <1.1,integer-gmp < 2,' integer-logarithms.cabal"; });
   lukko = doJailbreak super.lukko;
   parallel = doJailbreak super.parallel;
+  primitive = doJailbreak (dontCheck super.primitive);
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
   split = doJailbreak super.split;
   tar = doJailbreak super.tar;
   time-compat = doJailbreak super.time-compat;
-  primitive = doJailbreak (dontCheck super.primitive);
   vector = doJailbreak (dontCheck super.vector);
+  vector-binary-instances = doJailbreak super.vector-binary-instances;
   zlib = doJailbreak super.zlib;
 
   # Apply patches from head.hackage.
