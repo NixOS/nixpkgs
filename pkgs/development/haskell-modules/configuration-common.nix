@@ -1534,4 +1534,8 @@ self: super: {
   # Break out of overspecified constraint on QuickCheck.
   psqueues = doJailbreak super.psqueues;
 
+  # Break out of overspecified constraint on QuickCheck.
+  # https://github.com/haskell/attoparsec/pull/168
+  attoparsec = doJailbreak super.attoparsec;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
