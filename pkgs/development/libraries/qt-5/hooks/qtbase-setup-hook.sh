@@ -25,9 +25,9 @@ fi
 # Integration with CMake:
 # Set the CMake build type corresponding to how qtbase was built.
 if [ -n "@debug@" ]; then
-    cmakeFlags="${cmakeFlags}${cmakeFlags:+ }-DCMAKE_BUILD_TYPE=Debug"
+    cmakeFlags="${cmakeFlags-}${cmakeFlags:+ }-DCMAKE_BUILD_TYPE=Debug"
 else
-    cmakeFlags="${cmakeFlags}${cmakeFlags:+ }-DCMAKE_BUILD_TYPE=Release"
+    cmakeFlags="${cmakeFlags-}${cmakeFlags:+ }-DCMAKE_BUILD_TYPE=Release"
 fi
 
 providesQtRuntime() {
