@@ -161,7 +161,7 @@
     "denon" = ps: with ps; [ ];
     "denonavr" = ps: with ps; [ denonavr getmac ];
     "derivative" = ps: with ps; [ ];
-    "deutsche_bahn" = ps: with ps; [ ]; # missing inputs: schiene
+    "deutsche_bahn" = ps: with ps; [ schiene ];
     "device_automation" = ps: with ps; [ ];
     "device_sun_light_trigger" = ps: with ps; [ aiohttp-cors pillow ];
     "device_tracker" = ps: with ps; [ ];
