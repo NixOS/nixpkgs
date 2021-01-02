@@ -283,6 +283,8 @@ in {
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
 
+  ambiclimate = callPackage ../development/python-modules/ambiclimate { };
+
   amply = callPackage ../development/python-modules/amply { };
 
   amqp = callPackage ../development/python-modules/amqp { };
