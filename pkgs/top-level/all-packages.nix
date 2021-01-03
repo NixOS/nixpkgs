@@ -12465,6 +12465,7 @@ in
 
   abseil-cpp = callPackage ../development/libraries/abseil-cpp { };
 
+  accountsservice_0642 = callPackage ../development/libraries/accountsservice/0.6.42.nix { };
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
   acl = callPackage ../development/libraries/acl { };
