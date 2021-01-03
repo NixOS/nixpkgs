@@ -7560,6 +7560,8 @@ in
 
   solaar = callPackage ../applications/misc/solaar {};
 
+  solanum = callPackage ../servers/irc/solanum {};
+
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
   spacebar = callPackage ../os-specific/darwin/spacebar {
