@@ -296,7 +296,7 @@ in pythonPackages.buildPythonApplication rec {
     description = "Music tagger and library organizer";
     homepage = "http://beets.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ aszlig domenkozar lovesegfault pjones ];
+    maintainers = with maintainers; [ aszlig domenkozar doronbehar lovesegfault pjones ];
     platforms = platforms.linux;
   };
 }
