@@ -304,7 +304,7 @@
        <literal>/probe</literal> endpoint.
        In the prometheus scrape configuration the scrape target might look like this:
        <programlisting>
-       http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/endpoint
+http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/endpoint
        </programlisting>
      </para>
      <para>
@@ -313,7 +313,7 @@
        in the corresponding NixOS test.
      </para>
      <para>
-       These changes also affect <literal>services.prometheus.exporters.rspamd</literal>, which is
+       These changes also affect <xref linkend="opt-services.prometheus.exporters.rspamd.enable" />, which is
        just a preconfigured instance of the json exporter.
      </para>
      <para>

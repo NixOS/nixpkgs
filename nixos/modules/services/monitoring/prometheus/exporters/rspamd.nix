@@ -85,15 +85,14 @@ in
     (mkRemovedOptionModule [ "url" ] ''
       This option was removed. The URL of the rspamd metrics endpoint
       must now be provided to the exporter by prometheus via the url
-      parameter <literal>target</literal>.
+      parameter `target'.
 
       In prometheus a scrape URL would look like this:
-      <programlisting>
-      http://some.rspamd-exporter.host:7980/probe?target=http://some.rspamd.host:11334/stat
-      </programlisting>
 
-      For more information, take a look at the <link xlink:href="https://github.com/prometheus-community/json_exporter">
-      official documentation</link> of the json_exporter.
+        http://some.rspamd-exporter.host:7980/probe?target=http://some.rspamd.host:11334/stat
+
+      For more information, take a look at the official documentation
+      (https://github.com/prometheus-community/json_exporter) of the json_exporter.
     '')
      ({ options.warnings = options.warnings; options.assertions = options.assertions; })
   ];
