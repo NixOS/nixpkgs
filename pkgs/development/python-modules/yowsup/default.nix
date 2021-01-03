@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tgalal/yowsup";
     description = "The python WhatsApp library";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

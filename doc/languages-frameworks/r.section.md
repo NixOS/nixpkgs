@@ -1,5 +1,4 @@
-R
-=
+# R {#r}
 
 ## Installation
 

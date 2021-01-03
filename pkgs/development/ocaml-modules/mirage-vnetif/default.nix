@@ -35,6 +35,6 @@ buildDunePackage rec {
     description = "Virtual network interface and software switch for Mirage";
     homepage = "https://github.com/mirage/${pname}";
     license = licenses.isc;
-    mantainers = [ maintainers.sternenseemann ];
+    maintainers = [ maintainers.sternenseemann ];
   };
 }

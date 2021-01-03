@@ -1,4 +1,4 @@
-# Emscripten
+# Emscripten {#emscripten}
 
 [Emscripten](https://github.com/kripken/emscripten): An LLVM-to-JavaScript Compiler
 

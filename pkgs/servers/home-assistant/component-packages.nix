@@ -7,7 +7,7 @@
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
     "acer_projector" = ps: with ps; [ pyserial ];
-    "acmeda" = ps: with ps; [ ]; # missing inputs: aiopulse
+    "acmeda" = ps: with ps; [ aiopulse ];
     "actiontec" = ps: with ps; [ ];
     "adguard" = ps: with ps; [ adguardhome ];
     "ads" = ps: with ps; [ pyads ];
@@ -25,7 +25,7 @@
     "almond" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pyalmond
     "alpha_vantage" = ps: with ps; [ ]; # missing inputs: alpha_vantage
     "amazon_polly" = ps: with ps; [ boto3 ];
-    "ambiclimate" = ps: with ps; [ aiohttp-cors ]; # missing inputs: ambiclimate
+    "ambiclimate" = ps: with ps; [ aiohttp-cors ambiclimate ];
     "ambient_station" = ps: with ps; [ ]; # missing inputs: aioambient
     "amcrest" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: amcrest
     "ampio" = ps: with ps; [ ]; # missing inputs: asmog
@@ -76,7 +76,7 @@
     "beewi_smartclim" = ps: with ps; [ ]; # missing inputs: beewi_smartclim
     "bh1750" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
     "binary_sensor" = ps: with ps; [ ];
-    "bitcoin" = ps: with ps; [ ]; # missing inputs: blockchain
+    "bitcoin" = ps: with ps; [ blockchain ];
     "bizkaibus" = ps: with ps; [ ]; # missing inputs: bizkaibus
     "blackbird" = ps: with ps; [ ]; # missing inputs: pyblackbird
     "blebox" = ps: with ps; [ ]; # missing inputs: blebox_uniapi
@@ -161,7 +161,7 @@
     "denon" = ps: with ps; [ ];
     "denonavr" = ps: with ps; [ denonavr getmac ];
     "derivative" = ps: with ps; [ ];
-    "deutsche_bahn" = ps: with ps; [ ]; # missing inputs: schiene
+    "deutsche_bahn" = ps: with ps; [ schiene ];
     "device_automation" = ps: with ps; [ ];
     "device_sun_light_trigger" = ps: with ps; [ aiohttp-cors pillow ];
     "device_tracker" = ps: with ps; [ ];
@@ -522,7 +522,7 @@
     "mycroft" = ps: with ps; [ ]; # missing inputs: mycroftapi
     "myq" = ps: with ps; [ ]; # missing inputs: pymyq
     "mysensors" = ps: with ps; [ aiohttp-cors paho-mqtt ]; # missing inputs: pymysensors
-    "mystrom" = ps: with ps; [ aiohttp-cors ]; # missing inputs: python-mystrom
+    "mystrom" = ps: with ps; [ aiohttp-cors python-mystrom ];
     "mythicbeastsdns" = ps: with ps; [ ]; # missing inputs: mbddns
     "n26" = ps: with ps; [ ]; # missing inputs: n26
     "nad" = ps: with ps; [ ]; # missing inputs: nad_receiver
@@ -534,7 +534,7 @@
     "ness_alarm" = ps: with ps; [ ]; # missing inputs: nessclient
     "nest" = ps: with ps; [ aiohttp-cors ha-ffmpeg python-nest ]; # missing inputs: google-nest-sdm
     "netatmo" = ps: with ps; [ aiohttp-cors hass-nabucasa pyatmo ];
-    "netdata" = ps: with ps; [ ]; # missing inputs: netdata
+    "netdata" = ps: with ps; [ netdata ];
     "netgear" = ps: with ps; [ ]; # missing inputs: pynetgear
     "netgear_lte" = ps: with ps; [ ]; # missing inputs: eternalegypt
     "netio" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pynetio
@@ -586,7 +586,7 @@
     "opengarage" = ps: with ps; [ ]; # missing inputs: open-garage
     "openhardwaremonitor" = ps: with ps; [ ];
     "openhome" = ps: with ps; [ ]; # missing inputs: openhomedevice
-    "opensensemap" = ps: with ps; [ ]; # missing inputs: opensensemap-api
+    "opensensemap" = ps: with ps; [ opensensemap-api ];
     "opensky" = ps: with ps; [ ];
     "opentherm_gw" = ps: with ps; [ ]; # missing inputs: pyotgw
     "openuv" = ps: with ps; [ ]; # missing inputs: pyopenuv
@@ -612,7 +612,7 @@
     "person" = ps: with ps; [ aiohttp-cors pillow ];
     "philips_js" = ps: with ps; [ ]; # missing inputs: ha-philipsjs
     "pi4ioe5v9xxxx" = ps: with ps; [ ]; # missing inputs: pi4ioe5v9xxxx
-    "pi_hole" = ps: with ps; [ ]; # missing inputs: hole
+    "pi_hole" = ps: with ps; [ hole ];
     "picotts" = ps: with ps; [ ];
     "piglow" = ps: with ps; [ ]; # missing inputs: piglow
     "pilight" = ps: with ps; [ ]; # missing inputs: pilight
@@ -796,7 +796,7 @@
     "supla" = ps: with ps; [ ]; # missing inputs: asyncpysupla
     "surepetcare" = ps: with ps; [ ]; # missing inputs: surepy
     "swiss_hydrological_data" = ps: with ps; [ ]; # missing inputs: swisshydrodata
-    "swiss_public_transport" = ps: with ps; [ ]; # missing inputs: python_opendata_transport
+    "swiss_public_transport" = ps: with ps; [ python-opendata-transport ];
     "swisscom" = ps: with ps; [ ];
     "switch" = ps: with ps; [ ];
     "switchbot" = ps: with ps; [ ]; # missing inputs: PySwitchbot
@@ -879,7 +879,7 @@
     "unifiled" = ps: with ps; [ ]; # missing inputs: unifiled
     "universal" = ps: with ps; [ ];
     "upb" = ps: with ps; [ ]; # missing inputs: upb_lib
-    "upc_connect" = ps: with ps; [ ]; # missing inputs: connect-box
+    "upc_connect" = ps: with ps; [ connect-box ];
     "upcloud" = ps: with ps; [ ]; # missing inputs: upcloud-api
     "updater" = ps: with ps; [ distro ];
     "upnp" = ps: with ps; [ async-upnp-client ];
@@ -908,7 +908,7 @@
     "vlc" = ps: with ps; [ python-vlc ];
     "vlc_telnet" = ps: with ps; [ ]; # missing inputs: python-telnet-vlc
     "voicerss" = ps: with ps; [ ];
-    "volkszaehler" = ps: with ps; [ ]; # missing inputs: volkszaehler
+    "volkszaehler" = ps: with ps; [ volkszaehler ];
     "volumio" = ps: with ps; [ ]; # missing inputs: pyvolumio
     "volvooncall" = ps: with ps; [ ]; # missing inputs: volvooncall
     "vultr" = ps: with ps; [ vultr ];

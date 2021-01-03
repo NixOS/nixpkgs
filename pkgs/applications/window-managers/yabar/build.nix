@@ -50,6 +50,6 @@ stdenv.mkDerivation {
     homepage    = "https://github.com/geommer/yabar";
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

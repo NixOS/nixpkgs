@@ -1,10 +1,4 @@
----
-title: Maven
-author: Farid Zakaria
-date: 2020-10-15
----
-
-# Maven
+# Maven {#maven}
 
 Maven is a well-known build tool for the Java ecosystem however it has some challenges when integrating into the Nix build system.
 

@@ -36,9 +36,6 @@ update `upstream-info.json`. After updates it is important to test at least
 `nixosTests.chromium` (or basic manual testing) and `google-chrome` (which
 reuses `upstream-info.json`).
 
-After updating, please also update pkgs/development/tools/selenium/chromedriver/default.nix
-to a matching version.
-
 ## Backports
 
 All updates are considered security critical and should be ported to the stable

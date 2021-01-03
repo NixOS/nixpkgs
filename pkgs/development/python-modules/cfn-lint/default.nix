@@ -14,25 +14,25 @@
 , requests
 , setuptools
 , six
-# Test inputs
-, pytestCheckHook
 , mock
 , pydot
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.35.1";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
-    repo  = "cfn-python-lint";
+    repo = "cfn-python-lint";
     rev = "v${version}";
-    sha256 = "1ajb0412hw9fg9m4b3xbpfbp8cixmnpjxrkaks6k749xinzsv7qk";
+    sha256 = "0cqpq7pxpslpd7am6mp6nmwhsb2p2a5lq3hjjxi8imv3wv7zql98";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace 'importlib_resources~=1.4;python_version<"3.7" and python_version!="3.4"' 'importlib_resources;python_version<"3.7"'
+    substituteInPlace setup.py \
+      --replace 'importlib_resources~=1.4;python_version<"3.7" and python_version!="3.4"' 'importlib_resources;python_version<"3.7"'
   '';
 
   propagatedBuildInputs = [
@@ -47,6 +47,21 @@ buildPythonPackage rec {
     setuptools
     six
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
+
+  checkInputs = [
+    mock
+    pydot
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
+  disabledTests = [
+    # requires git directory
+    "test_update_docs"
+  ];
 
   pythonImportsCheck = [
     "cfnlint"
@@ -63,9 +78,6 @@ buildPythonPackage rec {
     "cfnlint.template"
     "cfnlint.transform"
   ];
-
-  checkInputs = [ pytestCheckHook mock pydot ];
-  preCheck = "export PATH=$out/bin:$PATH";
 
   meta = with lib; {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";

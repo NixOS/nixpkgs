@@ -5205,6 +5205,8 @@ in
 
   ldc = callPackage ../development/compilers/ldc { };
 
+  ldgallery = callPackage ../tools/graphics/ldgallery { };
+
   lbreakout2 = callPackage ../games/lbreakout2 { };
 
   lefthook = gitAndTools.lefthook;
@@ -5622,6 +5624,8 @@ in
   limesurvey = callPackage ../servers/limesurvey { };
 
   linuxquota = callPackage ../tools/misc/linuxquota { };
+
+  liquidctl = with python3Packages; toPythonApplication liquidctl;
 
   localtime = callPackage ../tools/system/localtime { };
 
@@ -6459,6 +6463,8 @@ in
   overcommit = callPackage ../development/tools/overcommit { };
 
   overmind = callPackage ../applications/misc/overmind { };
+
+  ovh-ttyrec = callPackage ../tools/misc/ovh-ttyrec { };
 
   owncloud-client = libsForQt514.callPackage ../applications/networking/owncloud-client { };
 
@@ -7554,6 +7560,8 @@ in
 
   solaar = callPackage ../applications/misc/solaar {};
 
+  solanum = callPackage ../servers/irc/solanum {};
+
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
   spacebar = callPackage ../os-specific/darwin/spacebar {
@@ -7993,8 +8001,6 @@ in
   tty-share = callPackage ../applications/misc/tty-share { };
 
   ttyplot = callPackage ../tools/misc/ttyplot { };
-
-  ttyrec = callPackage ../tools/misc/ttyrec { };
 
   ttygif = callPackage ../tools/misc/ttygif { };
 
@@ -9178,7 +9184,8 @@ in
     then ../development/compilers/gcc/6
     else ../development/compilers/gcc/10);
   gcc = if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
-    then gcc6 else gcc10;
+    then gcc6 else
+      if stdenv.targetPlatform.isAarch64 then gcc9 else gcc10;
   gcc-unwrapped = gcc.cc;
 
   gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
@@ -11125,7 +11132,7 @@ in
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
-  autoconf = buildPackages.autoconf270;
+  autoconf = autoconf270;
 
   autoconf-archive = callPackage ../development/tools/misc/autoconf-archive { };
 
@@ -15599,6 +15606,8 @@ in
   gnupth = callPackage ../development/libraries/pth { };
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
 
+  pslib = callPackage ../development/libraries/pslib { };
+
   pstreams = callPackage ../development/libraries/pstreams {};
 
   pugixml = callPackage ../development/libraries/pugixml { };
@@ -17523,9 +17532,13 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
 
-  pulseaudio = callPackage ../servers/pulseaudio {
+  pulseaudio = callPackage ../servers/pulseaudio ({
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
-  };
+  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    # Default autoreconfHook (2.70) fails on darwin,
+    # with "configure: error: *** Compiler does not support -std=gnu11"
+    autoreconfHook = buildPackages.autoreconfHook269;
+  });
 
   qpaeq = libsForQt5.callPackage ../servers/pulseaudio/qpaeq.nix { };
 
@@ -18916,7 +18929,7 @@ in
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
     let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
-      linux_latest_for_hardened = pkgs.linux_5_9;
+      linux_latest_for_hardened = pkgs.linux_5_10;
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
@@ -21202,6 +21215,8 @@ in
   elementary-planner = callPackage ../applications/office/elementary-planner { };
 
   elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector { };
+
+  elfx86exts = callPackage ../applications/misc/elfx86exts { };
 
   elinks = callPackage ../applications/networking/browsers/elinks {
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -25050,6 +25065,8 @@ in
 
   weston = callPackage ../applications/window-managers/weston { pipewire = pipewire_0_2; };
 
+  wio = callPackage ../applications/window-managers/wio { };
+
   whitebox-tools = callPackage ../applications/gis/whitebox-tools {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -26411,6 +26428,7 @@ in
   space-orbit = callPackage ../games/space-orbit { };
 
   spring = callPackage ../games/spring {
+    asciidoc = asciidoc-full;
     boost = boost155;
   };
 
@@ -26786,6 +26804,8 @@ in
     let
       mkPlasma5 = import ../desktops/plasma-5;
       attrs = {
+        # ATTN: The Qt version used in the NixOS Plasma module must be updated
+        # whenever this changes!
         inherit libsForQt5;
         inherit lib fetchurl;
         gconf = gnome2.GConf;
@@ -29137,6 +29157,8 @@ in
     gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
     gcc-armhf-embedded = pkgsCross.armhf-embedded.buildPackages.gcc;
   };
+
+  new-session-manager = callPackage ../applications/audio/new-session-manager { };
 
   newlib = callPackage ../development/misc/newlib { };
   newlibCross = callPackage ../development/misc/newlib {

@@ -550,7 +550,6 @@ self: super: builtins.intersectAttrs super {
 
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
-  splitmix_0_1_0_3 = dontCheck super.splitmix_0_1_0_3;
 
   # Break infinite recursion cycle between tasty and clock.
   clock = dontCheck super.clock;
