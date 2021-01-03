@@ -21668,12 +21668,16 @@ in
 
   wireshark = callPackage ../applications/networking/sniffers/wireshark {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices SystemConfiguration;
+    libpcap = libpcap.override { withBluez = stdenv.isLinux; };
   };
   wireshark-qt = wireshark;
 
   # The GTK UI is deprecated by upstream. You probably want the QT version.
   wireshark-gtk = throw "wireshark-gtk is not supported anymore. Use wireshark-qt or wireshark-cli instead.";
-  wireshark-cli = wireshark.override { withQt = false; };
+  wireshark-cli = wireshark.override {
+    withQt = false;
+    libpcap = libpcap.override { withBluez = stdenv.isLinux; };
+  };
 
   sngrep = callPackage ../applications/networking/sniffers/sngrep {};
 
