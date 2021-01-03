@@ -12,6 +12,7 @@ let
     ubuntu-app-launch = callPackage ./ubuntu-app-launch { };
     ubuntu-ui-toolkit = callPackage ./ubuntu-ui-toolkit { };
     libqtdbusmock = callPackage ./libqtdbusmock { };
+    click = callPackage ./click { };
     dbus-cpp = callPackage ./dbus-cpp { };
     trust-store = callPackage ./trust-store{ };
   };
