@@ -11,7 +11,7 @@ let
     port ${toString cfg.port}
     ${condOption "bind" cfg.bind}
     ${condOption "unixsocket" cfg.unixSocket}
-    unixsocketperm 770
+    ${condOption "unixsocketperm" cfg.unixSocketPerm}
     daemonize no
     supervised systemd
     loglevel ${cfg.logLevel}
@@ -101,6 +101,17 @@ in
         default = null;
         description = "The path to the socket to bind to.";
         example = "/run/redis/redis.sock";
+      };
+
+      unixSocketPerm = mkOption {
+        type = with types; nullOr int;
+        default = null;
+        description = ''
+          The permissions of the socket to bind to.
+
+          See <link xlink:href="https://raw.githubusercontent.com/redis/redis/${cfg.package.version}/redis.conf" />.
+        '';
+        example = 700;
       };
 
       logLevel = mkOption {
