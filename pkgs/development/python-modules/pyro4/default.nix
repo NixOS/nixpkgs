@@ -37,15 +37,16 @@ buildPythonPackage rec {
   preCheck = "PYTHONPATH=tests/PyroTests:$PYTHONPATH";
 
   # ignore network related tests, which fail in sandbox
-  pytestFlagsArray = [ "--ignore=tests/PyroTests/test_naming.py" ]
-    # test hangs on darwin with sandbox enabled
-    ++ lib.optionals stdenv.isDarwin [ "--ignore=tests/PyroTests/test_daemon.py" ];
+  pytestFlagsArray = [ "--ignore=tests/PyroTests/test_naming.py" ];
 
   disabledTests = [
     "StartNSfunc"
     "Broadcast"
     "GetIP"
   ];
+
+  # otherwise the tests hang the build
+  __darwinAllowLocalNetworking = true;
 
   meta = with stdenv.lib; {
     description = "Distributed object middleware for Python (RPC)";
