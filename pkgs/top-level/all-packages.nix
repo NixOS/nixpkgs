@@ -23114,6 +23114,9 @@ in
 
   mailspring = callPackage ../applications/networking/mailreaders/mailspring {};
 
+  mir_1 = callPackage ../applications/window-managers/mir/1.x.nix { };
+  mir = callPackage ../applications/window-managers/mir { };
+
   mm = callPackage ../applications/networking/instant-messengers/mm { };
 
   mm-common = callPackage ../development/libraries/mm-common { };
