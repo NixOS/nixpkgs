@@ -16,5 +16,6 @@ let
     dbus-cpp = callPackage ./dbus-cpp { };
     trust-store = callPackage ./trust-store { };
     system-settings = callPackage ./system-settings { };
+    url-dispatcher = callPackage ./url-dispatcher{ };
   };
 in makeScope libsForQt5.newScope packages
