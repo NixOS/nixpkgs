@@ -26774,6 +26774,11 @@ in
 
   kakasi = callPackage ../tools/text/kakasi { };
 
+  lomiri = recurseIntoAttrs (import ../desktops/lomiri {
+    inherit pkgs libsForQt5;
+    inherit (lib) makeScope;
+  });
+
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 
   lxqt = recurseIntoAttrs (import ../desktops/lxqt {
