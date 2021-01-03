@@ -64,7 +64,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1l2syrslba4mrxjzj0iblflz72siw3ibqri6p5hf59fk7rmm30a8";
+      sha256 = "0w71kbz127fcli24sxsvd48l5xamwamjwhr18x9alam5cldqkkz1";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -130,7 +130,8 @@ self: super: {
   ABList = dontCheck super.ABList;
 
   # sse2 flag due to https://github.com/haskell/vector/issues/47.
-  vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
+  # Jailbreak is necessary for QuickCheck dependency.
+  vector = doJailbreak (if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector);
 
   conduit-extra = if pkgs.stdenv.isDarwin
     then super.conduit-extra.overrideAttrs (drv: { __darwinAllowLocalNetworking = true; })
@@ -216,11 +217,7 @@ self: super: {
   # building of the executable has been disabled for ghc < 8.10 in hnix.
   # Generating the completions should be activated again, once we default to
   # ghc 8.10.
-  hnix = dontCheck (super.hnix.override {
-    # 2020-09-18: Those packages are all needed by hnix at versions newer than on stackage
-    prettyprinter = self.prettyprinter_1_7_0; # at least 1.7
-
-  });
+  hnix = dontCheck super.hnix;
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -363,9 +360,6 @@ self: super: {
   punycode = dontCheck super.punycode;
   pwstore-cli = dontCheck super.pwstore-cli;
   quantities = dontCheck super.quantities;
-  QuickCheck_2_14_2 = super.QuickCheck_2_14_2.override( {
-    splitmix = self.splitmix_0_1_0_3;
-  });
   redis-io = dontCheck super.redis-io;
   rethinkdb = dontCheck super.rethinkdb;
   Rlang-QQ = dontCheck super.Rlang-QQ;
@@ -399,7 +393,6 @@ self: super: {
   xsd = dontCheck super.xsd;
   zip-archive = dontCheck super.zip-archive;  # https://github.com/jgm/zip-archive/issues/57
 
-  random_1_2_0 = super.random_1_2_0.override ({ splitmix = self.splitmix_0_1_0_3; });
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
@@ -863,8 +856,7 @@ self: super: {
   swagger2 = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontHaddock (dontCheck super.swagger2) else super.swagger2;
 
   # hledger-lib requires the latest version of pretty-simple
-  hledger-lib = super.hledger-lib.override { pretty-simple = self.pretty-simple_4_0_0_0; };
-  pretty-simple_4_0_0_0 = super.pretty-simple_4_0_0_0.overrideScope (self: super: { prettyprinter = self.prettyprinter_1_7_0; });
+  hledger-lib = super.hledger-lib.override { pretty-simple = self.pretty-simple; };
 
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
@@ -1532,20 +1524,27 @@ self: super: {
   # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
   pandoc-include-code = doJailbreak super.pandoc-include-code;
 
-  # https://github.com/jgm/pandoc/issues/6961
-  pandoc = dontCheck super.pandoc;
-
-  # Update pandoc dependencies to fix the build.
-  doctemplates = self.doctemplates_0_9;
-  skylighting = self.skylighting_0_10_2;
-  skylighting-core = self.skylighting-core_0_10_2;
-
   # https://github.com/yesodweb/yesod/issues/1714
   yesod-core = dontCheck super.yesod-core;
 
   # Add ApplicationServices on darwin
-  # use 0.4.5 instead of 0.4.4 to fix build with glibc >= 2.32
-  apecs-physics = addPkgconfigDepends super.apecs-physics_0_4_5
+  apecs-physics = addPkgconfigDepends super.apecs-physics
     (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.ApplicationServices);
+
+  # Break out of overspecified constraint on QuickCheck.
+  algebraic-graphs = dontCheck super.algebraic-graphs;
+  attoparsec = doJailbreak super.attoparsec;      # https://github.com/haskell/attoparsec/pull/168
+  cassava = doJailbreak super.cassava;
+  filepath-bytestring = doJailbreak super.filepath-bytestring;
+  ghc-source-gen = doJailbreak super.ghc-source-gen;
+  haddock-library = doJailbreak super.haddock-library;
+  HsYAML = doJailbreak super.HsYAML;
+  http-api-data = doJailbreak super.http-api-data;
+  lzma = doJailbreak super.lzma;
+  psqueues = doJailbreak super.psqueues;
+
+  # Break out of overspecified constraint on QuickCheck.
+  # https://github.com/Gabriel439/Haskell-Nix-Derivation-Library/pull/10
+  nix-derivation = doJailbreak super.nix-derivation;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

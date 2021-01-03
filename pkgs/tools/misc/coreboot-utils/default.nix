@@ -1,7 +1,7 @@
 { stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
-  version = "4.12";
+  version = "4.13";
 
   commonMeta = with stdenv.lib; {
     description = "Various coreboot-related tools";
@@ -16,7 +16,7 @@ let
 
     src = fetchurl {
       url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
-      sha256 = "1qibds9lsk22wf1sxwg0jg32fgcvc9an39vf74y1hwwvxq0d1jpd";
+      sha256 = "0sl50aajnah4a138sr3jjm3ydc8gfh5vvlhviz3ypp95b9jdlya7";
     };
 
     enableParallelBuilding = true;
@@ -89,7 +89,7 @@ let
       nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
       installPhase = "install -Dm755 acpidump-all $out/bin/acpidump-all";
-      postFixup = let 
+      postFixup = let
         binPath = [ coreutils  acpica-tools iasl gnugrep  gnused  file ];
       in "wrapProgram $out/bin/acpidump-all --set PATH ${stdenv.lib.makeBinPath binPath}";
     };

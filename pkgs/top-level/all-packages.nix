@@ -5625,6 +5625,8 @@ in
 
   linuxquota = callPackage ../tools/misc/linuxquota { };
 
+  liquidctl = with python3Packages; toPythonApplication liquidctl;
+
   localtime = callPackage ../tools/system/localtime { };
 
   logcheck = callPackage ../tools/system/logcheck { };
@@ -6461,6 +6463,8 @@ in
   overcommit = callPackage ../development/tools/overcommit { };
 
   overmind = callPackage ../applications/misc/overmind { };
+
+  ovh-ttyrec = callPackage ../tools/misc/ovh-ttyrec { };
 
   owncloud-client = libsForQt514.callPackage ../applications/networking/owncloud-client { };
 
@@ -7995,8 +7999,6 @@ in
   tty-share = callPackage ../applications/misc/tty-share { };
 
   ttyplot = callPackage ../tools/misc/ttyplot { };
-
-  ttyrec = callPackage ../tools/misc/ttyrec { };
 
   ttygif = callPackage ../tools/misc/ttygif { };
 
@@ -15602,6 +15604,8 @@ in
   gnupth = callPackage ../development/libraries/pth { };
   pth = if stdenv.hostPlatform.isMusl then npth else gnupth;
 
+  pslib = callPackage ../development/libraries/pslib { };
+
   pstreams = callPackage ../development/libraries/pstreams {};
 
   pugixml = callPackage ../development/libraries/pugixml { };
@@ -18923,7 +18927,7 @@ in
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
     let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
-      linux_latest_for_hardened = pkgs.linux_5_9;
+      linux_latest_for_hardened = pkgs.linux_5_10;
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {

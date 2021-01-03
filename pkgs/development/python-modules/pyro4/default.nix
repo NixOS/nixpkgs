@@ -32,10 +32,15 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ pytestCheckHook ];
+
   # add testsupport.py to PATH
   preCheck = "PYTHONPATH=tests/PyroTests:$PYTHONPATH";
+
   # ignore network related tests, which fail in sandbox
-  pytestFlagsArray = [ "--ignore=tests/PyroTests/test_naming.py" ];
+  pytestFlagsArray = [ "--ignore=tests/PyroTests/test_naming.py" ]
+    # test hangs on darwin with sandbox enabled
+    ++ lib.optionals stdenv.isDarwin [ "--ignore=tests/PyroTests/test_daemon.py" ];
+
   disabledTests = [
     "StartNSfunc"
     "Broadcast"
@@ -47,5 +52,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/irmen/Pyro4";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
-    };
+  };
 }
