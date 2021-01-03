@@ -846,6 +846,8 @@ let
 
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
+    ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix { };
+
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
