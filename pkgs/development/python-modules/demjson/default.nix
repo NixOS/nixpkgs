@@ -10,6 +10,9 @@ buildPythonPackage rec {
     sha256 = "0ygbddpnvp5lby6mr5kz60la3hkvwwzv3wwb3z0w9ngxl0w21pii";
   };
 
+  doCheck = false;
+  pythonImportsCheck = [ "demjson" ];
+
   meta = with stdenv.lib; {
     description = "Encoder/decoder and lint/validator for JSON (JavaScript Object Notation)";
     homepage = "https://github.com/dmeranda/demjson";
