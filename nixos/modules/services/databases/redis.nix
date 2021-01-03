@@ -11,6 +11,7 @@ let
     port ${toString cfg.port}
     ${condOption "bind" cfg.bind}
     ${condOption "unixsocket" cfg.unixSocket}
+    unixsocketperm 770
     daemonize no
     supervised systemd
     loglevel ${cfg.logLevel}

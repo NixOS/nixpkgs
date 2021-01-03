@@ -1,4 +1,8 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }:
+let
+  redisSocket = "/run/redis/redis.sock";
+in
+{
   name = "redis";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ flokli ];
@@ -10,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
       {
         services.redis.enable = true;
-        services.redis.unixSocket = "/run/redis/redis.sock";
+        services.redis.unixSocket = redisSocket;
       };
   };
 
@@ -18,7 +22,16 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     start_all()
     machine.wait_for_unit("redis")
     machine.wait_for_open_port("6379")
+
+    # Test that the unix socket is accessible to the redis group
+    machine.succeed(
+        'perms="$(stat -c \'%a\' ${redisSocket})" && test "$perms" -eq 770'
+    )
+    machine.succeed(
+        'owner="$(stat -c \'%U:%G\' ${redisSocket})" && test "$owner" = "redis:redis"'
+    )
+
     machine.succeed("redis-cli ping | grep PONG")
-    machine.succeed("redis-cli -s /run/redis/redis.sock ping | grep PONG")
+    machine.succeed("redis-cli -s ${redisSocket} ping | grep PONG")
   '';
 })
