@@ -20,5 +20,6 @@ let
     libqofono = callPackage ./libqofono { };
     gmenuharness = callPackage ./gmenuharness { };
     indicator-network = callPackage ./indicator-network { };
+    deviceinfo = callPackage ./deviceinfo { };
   };
 in makeScope libsForQt5.newScope packages
