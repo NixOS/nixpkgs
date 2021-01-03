@@ -1,0 +1,92 @@
+Index: trunk/src/VBox/Runtime/r0drv/linux/memobj-r0drv-linux.c
+===================================================================
+--- a/src/VBox/Runtime/r0drv/linux/memobj-r0drv-linux.c
++++ b/src/VBox/Runtime/r0drv/linux/memobj-r0drv-linux.c
+@@ -57,6 +57,16 @@
+  * This is a must for 5.8+, but we enable it all the way back to 3.2.x for
+  * better W^R compliance (fExecutable flag). */
+-#if RTLNX_VER_MIN(3,2,0) || defined(DOXYGEN_RUNNING)
++#if RTLNX_VER_RANGE(3,2,0, 5,10,0) || defined(DOXYGEN_RUNNING)
+ # define IPRT_USE_ALLOC_VM_AREA_FOR_EXEC
++#endif
++/** @def IPRT_USE_APPLY_TO_PAGE_RANGE_FOR_EXEC
++ * alloc_vm_area was removed with 5.10 so we have to resort to a different way
++ * to allocate executable memory.
++ * It would be possible to remove IPRT_USE_ALLOC_VM_AREA_FOR_EXEC and use
++ * this path execlusively for 3.2+ but no time to test it really works on every
++ * supported kernel, so better play safe for now.
++ */
++#if RTLNX_VER_MIN(5,10,0) || defined(DOXYGEN_RUNNING)
++# define IPRT_USE_APPLY_TO_PAGE_RANGE_FOR_EXEC
+ #endif
+ 
+@@ -501,4 +511,40 @@
+     }
+ }
++
++
++#ifdef IPRT_USE_APPLY_TO_PAGE_RANGE_FOR_EXEC
++/**
++ * User data passed to the apply_to_page_range() callback.
++ */
++typedef struct LNXAPPLYPGRANGE
++{
++    /** Pointer to the memory object. */
++    PRTR0MEMOBJLNX pMemLnx;
++    /** The page protection flags to apply. */
++    pgprot_t       fPg;
++} LNXAPPLYPGRANGE;
++/** Pointer to the user data. */
++typedef LNXAPPLYPGRANGE *PLNXAPPLYPGRANGE;
++/** Pointer to the const user data. */
++typedef const LNXAPPLYPGRANGE *PCLNXAPPLYPGRANGE;
++
++/**
++ * Callback called in apply_to_page_range().
++ *
++ * @returns Linux status code.
++ * @param   pPte                Pointer to the page table entry for the given address.
++ * @param   uAddr               The address to apply the new protection to.
++ * @param   pvUser              The opaque user data.
++ */
++static DECLCALLBACK(int) rtR0MemObjLinuxApplyPageRange(pte_t *pPte, unsigned long uAddr, void *pvUser)
++{
++    PCLNXAPPLYPGRANGE pArgs = (PCLNXAPPLYPGRANGE)pvUser;
++    PRTR0MEMOBJLNX pMemLnx = pArgs->pMemLnx;
++    size_t idxPg = (uAddr - (unsigned long)pMemLnx->Core.pv) >> PAGE_SHIFT;
++
++    set_pte(pPte, mk_pte(pMemLnx->apPages[idxPg], pArgs->fPg));
++    return 0;
++}
++#endif
+ 
+ 
+@@ -585,4 +631,9 @@
+ # endif
+         {
++#  if defined(IPRT_USE_APPLY_TO_PAGE_RANGE_FOR_EXEC)
++            if (fExecutable)
++                pgprot_val(fPg) |= _PAGE_NX; /* Uses RTR0MemObjProtect to clear NX when memory ready, W^X fashion. */
++#  endif
++
+ # ifdef VM_MAP
+             pMemLnx->Core.pv = vmap(&pMemLnx->apPages[0], pMemLnx->cPages, VM_MAP, fPg);
+@@ -1852,4 +1903,19 @@
+         return VINF_SUCCESS;
+     }
++# elif defined(IPRT_USE_APPLY_TO_PAGE_RANGE_FOR_EXEC)
++    PRTR0MEMOBJLNX pMemLnx = (PRTR0MEMOBJLNX)pMem;
++    if (   pMemLnx->fExecutable
++        && pMemLnx->fMappedToRing0)
++    {
++        LNXAPPLYPGRANGE Args;
++        Args.pMemLnx = pMemLnx;
++        Args.fPg = rtR0MemObjLinuxConvertProt(fProt, true /*fKernel*/);
++        int rcLnx = apply_to_page_range(current->active_mm, (unsigned long)pMemLnx->Core.pv + offSub, cbSub,
++                                        rtR0MemObjLinuxApplyPageRange, (void *)&Args);
++        if (rcLnx)
++            return VERR_NOT_SUPPORTED;
++
++        return VINF_SUCCESS;
++    }
+ # endif

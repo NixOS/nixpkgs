@@ -104,6 +104,12 @@ in stdenv.mkDerivation {
     })
   ++ [
     ./qtx11extras.patch
+    # Building for 5.10 fails without these patches
+    # Ref: https://www.virtualbox.org/ticket/20055
+    # Ref: https://github.com/sergiomb2/VirtualBox/commit/b6c765d693a0833b94cb2e91b32842570c3458d2
+    ./linux-5.10-r0drv-memobj-fix-r0.patch # https://www.virtualbox.org/changeset/87074/vbox
+    ./linux-5.10-regops.patch # https://www.virtualbox.org/changeset/87053/vbox
+    ./linux-5.10-drm.patch # https://www.virtualbox.org/changeset/87092/vbox
   ];
 
   postPatch = ''

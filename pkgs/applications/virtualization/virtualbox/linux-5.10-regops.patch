@@ -1,0 +1,24 @@
+Index: trunk/src/VBox/Additions/linux/sharedfolders/regops.c
+===================================================================
+--- a/src/VBox/Additions/linux/sharedfolders/regops.c
++++ b/src/VBox/Additions/linux/sharedfolders/regops.c
+@@ -148,5 +148,9 @@
+         if (paIov->iov_len > 0) {
+             if (access_ok(VERIFY_READ, paIov->iov_base, paIov->iov_len))
++#if RTLNX_VER_MIN(5,10,0)
++                return (uintptr_t)paIov->iov_base >= TASK_SIZE_MAX ? ITER_KVEC : 0;
++#else
+                 return (uintptr_t)paIov->iov_base >= USER_DS.seg ? ITER_KVEC : 0;
++#endif
+             AssertMsgFailed(("%p LB %#zx\n", paIov->iov_base, paIov->iov_len));
+             break;
+@@ -1402,5 +1406,8 @@
+      * Check that this is valid user memory that is actually in the kernel range.
+      */
+-#if RTLNX_VER_MIN(5,0,0) || RTLNX_RHEL_MIN(8,1)
++#if RTLNX_VER_MIN(5,10,0)
++    if (   access_ok((void *)uPtrFrom, cPages << PAGE_SHIFT)
++        && uPtrFrom >= TASK_SIZE_MAX)
++#elif RTLNX_VER_MIN(5,0,0) || RTLNX_RHEL_MIN(8,1)
+     if (   access_ok((void *)uPtrFrom, cPages << PAGE_SHIFT)
+         && uPtrFrom >= USER_DS.seg)
