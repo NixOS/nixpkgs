@@ -1,5 +1,6 @@
-{ stdenv, rustPlatform, fetchFromGitHub
-, pkg-config, libevdev, openssl, llvmPackages_latest, linuxHeaders }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub
+, pkg-config, libevdev, openssl, llvmPackages, linuxHeaders
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rkvm-unstable";
@@ -14,15 +15,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-/VNnqKSPqAYXS312GaTtpl5j0uOHLfUX8u7LuEDhUTg=";
 
-  postPatch = ''
-    sed -i 's|.clang_arg("-I/usr/include/libevdev-1.0/")|.clang_arg("-I${libevdev}/include/libevdev-1.0").clang_arg("-I${linuxHeaders}/include")|g' ./input/build.rs
-  '';
-
-  nativeBuildInputs = [ pkg-config openssl llvmPackages_latest.libclang ];
-  LIBCLANG_PATH = "${llvmPackages_latest.libclang}/lib";
+  nativeBuildInputs = [ llvmPackages.clang pkg-config openssl ];
   buildInputs = [ libevdev openssl linuxHeaders ];
 
-  meta = with stdenv.lib; {
+  BINDGEN_EXTRA_CLANG_ARGS = "-I${lib.getDev libevdev}/include/libevdev-1.0";
+  LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
+
+  # The libevdev bindings preserve comments from libev, some of which
+  # contain indentation which Cargo tries to interpret as doc tests.
+  doCheck = false;
+
+  meta = with lib; {
     description = "Virtual KVM switch for Linux machines";
     homepage = "https://github.com/htrefil/rkvm";
     license = licenses.mit;
