@@ -1313,6 +1313,8 @@ in {
 
   colour = callPackage ../development/python-modules/colour { };
 
+  commandparse = callPackage ../development/python-modules/commandparse { };
+
   CommonMark = callPackage ../development/python-modules/commonmark { };
 
   compiledb = callPackage ../development/python-modules/compiledb { };
