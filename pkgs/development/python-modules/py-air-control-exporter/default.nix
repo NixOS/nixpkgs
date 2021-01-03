@@ -1,5 +1,6 @@
-{ buildPythonPackage, fetchPypi, flask, isPy27, lib, prometheus_client
-, py-air-control, pytestCheckHook, pytestcov, pytestrunner, setuptools_scm }:
+{ buildPythonPackage, fetchPypi, flask, isPy27, lib, nixosTests
+, prometheus_client, py-air-control, pytestCheckHook, pytestcov, pytestrunner
+, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "py-air-control-exporter";
@@ -14,6 +15,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools_scm ];
   checkInputs = [ pytestCheckHook pytestcov pytestrunner ];
   propagatedBuildInputs = [ flask prometheus_client py-air-control ];
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) py-air-control; };
 
   meta = with lib; {
     description = "Exports Air Quality Metrics to Prometheus.";
