@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, xorgproto, libXt, libX11, gifview ? false, static ? false }:
+{ stdenv, fetchurl, xorgproto, libXt, libX11
+, gifview ? false
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 with stdenv.lib;
 

@@ -7,7 +7,8 @@
 , gnutlsSupport ? false, gnutls ? null
 , wolfsslSupport ? false, wolfssl ? null
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
-, gssSupport ? !stdenv.hostPlatform.isWindows, libkrb5 ? null
+, # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
+  gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic, libkrb5 ? null
 , c-aresSupport ? false, c-ares ? null
 , brotliSupport ? false, brotli ? null
 }:
