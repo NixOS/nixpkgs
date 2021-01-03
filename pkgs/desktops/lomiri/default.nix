@@ -10,5 +10,6 @@ let
     dbus-test-runner = callPackage ./dbus-test-runner{ };
     qmenumodel = callPackage ./qmenumodel { };
     ubuntu-app-launch = callPackage ./ubuntu-app-launch { };
+    ubuntu-ui-toolkit = callPackage ./ubuntu-ui-toolkit { };
   };
 in makeScope libsForQt5.newScope packages
