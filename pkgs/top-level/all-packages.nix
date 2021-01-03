@@ -20801,8 +20801,6 @@ in
 
   bristol = callPackage ../applications/audio/bristol { };
 
-  bs1770gain = callPackage ../applications/audio/bs1770gain { };
-
   bjumblr = callPackage ../applications/audio/bjumblr { };
 
   bschaffl = callPackage ../applications/audio/bschaffl { };
