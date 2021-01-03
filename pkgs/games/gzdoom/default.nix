@@ -53,8 +53,6 @@ let
       zmusic
     ];
 
-    enableParallelBuilding = true;
-
     NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
 
     installPhase = ''

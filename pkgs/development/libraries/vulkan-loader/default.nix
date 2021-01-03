@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ python3 xlibsWrapper libxcb libXrandr libXext wayland ];
-  enableParallelBuilding = true;
 
   preConfigure = ''
     substituteInPlace loader/vulkan.pc.in \

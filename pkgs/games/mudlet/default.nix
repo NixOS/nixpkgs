@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
   WITH_FONTS = "NO";
   WITH_UPDATER = "NO";
 
-  enableParallelBuilding = true;
-
   installPhase =  ''
     mkdir -pv $out/lib
     cp 3rdparty/edbee-lib/edbee-lib/qslog/lib/libQsLog.so $out/lib

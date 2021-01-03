@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     json_c fontconfig gtkmm3 pangomm glew libGLU
     xorg.libpthreadstubs xorg.libXdmcp pcre
   ];
-  enableParallelBuilding = true;
 
   preConfigure = ''
     patch CMakeLists.txt <<EOF

@@ -14,8 +14,6 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake qttools qtsvg ];
   buildInputs = [ qtbase ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
     homepage = "https://github.com/flameshot-org/flameshot";

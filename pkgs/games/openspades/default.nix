@@ -55,8 +55,6 @@ stdenv.mkDerivation rec {
     cp $notoFont $out/share/games/openspades/Resources/
   '';
 
-  enableParallelBuilding = true;
-
   NIX_CFLAGS_LINK = "-lopenal";
 
   meta = with stdenv.lib; {

@@ -119,8 +119,6 @@ stdenv.mkDerivation rec {
   # libstdc++ in our RPATH. Sigh.
   NIX_LDFLAGS = optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
 
-  enableParallelBuilding = true;
-
   blenderExecutable =
     placeholder "out" + (if stdenv.isDarwin then "/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
   # --python-expr is used to workaround https://developer.blender.org/T74304

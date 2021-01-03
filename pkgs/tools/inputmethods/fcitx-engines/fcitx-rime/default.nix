@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
        --replace ${fcitx} $out
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-rime";

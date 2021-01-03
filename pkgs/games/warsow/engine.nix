@@ -32,8 +32,6 @@ in stdenv.mkDerivation (libs // rec {
 
   cmakeFlags = [ "-DQFUSION_GAME=Warsow" ];
 
-  enableParallelBuilding = true;
-
   installPhase = ''
     mkdir -p $out/lib
     cp -r libs $out/lib/warsow

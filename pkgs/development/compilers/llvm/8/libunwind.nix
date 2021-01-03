@@ -19,7 +19,5 @@ stdenv.mkDerivation {
     })
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = stdenv.lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF";
 }

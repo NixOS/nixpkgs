@@ -24,8 +24,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ swig wireshark check rsync libpcap gawk libedit pcre ];
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "A collection of tools that allows capturing TCP/IP packets and filtering them based on Lua policy files";
     homepage = "http://www.haka-security.org/";

@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ libsodium openssl protobuf protobufc ];
 
   separateDebugInfo = true;
-  enableParallelBuilding = true;
   outputs = [ "out" "dev" ];
 
   meta = with stdenv.lib; {

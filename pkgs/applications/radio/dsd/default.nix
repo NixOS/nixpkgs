@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
     mbelib libsndfile itpp
   ] ++ stdenv.lib.optionals portaudioSupport [ portaudio ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD

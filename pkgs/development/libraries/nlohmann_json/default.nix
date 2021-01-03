@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DBuildTests=${if doCheck then "ON" else "OFF"}"
     "-DJSON_MultipleHeaders=ON"

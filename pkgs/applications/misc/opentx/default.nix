@@ -15,8 +15,6 @@ mkDerivation rec {
     sha256 = "1pp3k1802gl1rji98clv17wj0619dliq821mpi4446lk22q692yq";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];
 
   buildInputs = [ qtbase qtmultimedia qttranslations SDL ];

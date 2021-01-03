@@ -17,8 +17,6 @@ stdenv.mkDerivation rec
   nativeBuildInputs = [ unzip cmake ];
   buildInputs = [ openexr hdf5-threadsafe ];
 
-  enableParallelBuilding = true;
-
   buildPhase = ''
     cmake -DUSE_HDF5=ON -DCMAKE_INSTALL_PREFIX=$out/ -DUSE_TESTS=OFF .
 

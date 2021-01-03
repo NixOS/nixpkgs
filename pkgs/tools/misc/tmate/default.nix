@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libtool zlib openssl libevent ncurses ruby msgpack libssh ];
   nativeBuildInputs = [ autoreconfHook cmake pkgconfig ];
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage    = "https://tmate.io/";

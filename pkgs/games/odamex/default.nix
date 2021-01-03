@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ SDL SDL_mixer SDL_net wxGTK30 ];
 
-  enableParallelBuilding = true;
-
   meta = {
     homepage = "http://odamex.net/";
     description = "A client/server port for playing old-school Doom online";

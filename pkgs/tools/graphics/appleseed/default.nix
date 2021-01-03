@@ -47,7 +47,6 @@ in stdenv.mkDerivation rec {
       "-DUSE_SSE=ON"
       "-DUSE_SSE42=ON"
   ];
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Open source, physically-based global illumination rendering engine";

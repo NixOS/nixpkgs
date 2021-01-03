@@ -32,8 +32,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ qt4 fftw graphicsmagick_q16 lcms2 lensfun libjpeg exiv2 liblqr1 ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     license = licenses.gpl3;

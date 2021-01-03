@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
     cp $src/src/zopfli/*.h $dev/include/
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "Very good, but slow, deflate or zlib compression";

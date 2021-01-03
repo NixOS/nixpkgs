@@ -31,8 +31,6 @@ in stdenv.mkDerivation rec {
             ++ stdenv.lib.optionals (stdenv.hostPlatform.system == "x86_64-linux")
                   [ "-DCMAKE_CXX_FLAGS=-fPIC" "-DCMAKE_C_FLAGS=-fPIC" ];
 
-  enableParallelBuilding = true;
-
   # fails with "./test_watersheds3d: error while loading shared libraries: libvigraimpex.so.11: cannot open shared object file: No such file or directory"
   doCheck = false;
 

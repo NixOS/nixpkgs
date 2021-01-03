@@ -17,8 +17,6 @@ let
         inherit sha256;
       };
 
-      enableParallelBuilding = true;
-
       nativeBuildInputs = [ cmake pkg-config ];
       buildInputs = [
         boost doxygen qt48Full libharu

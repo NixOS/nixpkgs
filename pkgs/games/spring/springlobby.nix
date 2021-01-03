@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     wrapProgram $out/bin/springlobby \
       --prefix PATH : "${spring}/bin" \

@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase qtscript qtwebengine ];
 
-  enableParallelBuilding = true;
-
   postPatch = ''
     substituteInPlace src/platform/digmanager.cpp \
       --replace '"dig"' '"${dnsutils}/bin/dig"'

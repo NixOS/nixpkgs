@@ -7,8 +7,6 @@ stdenv.mkDerivation rec {
   pname = "prusa-slicer";
   version = "2.2.0";
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     cmake
     pkgconfig

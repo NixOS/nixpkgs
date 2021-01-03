@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
   #see issue https://github.com/zeek/zeek/issues/804 to modify hardlinking duplicate files.
   inherit preConfigure;
 
-  enableParallelBuilding = true;
-
   patches = stdenv.lib.optionals stdenv.cc.isClang [
     # Fix pybind c++17 build with Clang. See: https://github.com/pybind/pybind11/issues/1604
     (fetchpatch {

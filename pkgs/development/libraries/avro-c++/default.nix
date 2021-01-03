@@ -19,8 +19,6 @@ stdenv.mkDerivation {
     substituteInPlace test/buffertest.cc --replace "BOOST_MESSAGE" "BOOST_TEST_MESSAGE"
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "A C++ library which implements parts of the Avro Specification";
     homepage = "https://avro.apache.org/";

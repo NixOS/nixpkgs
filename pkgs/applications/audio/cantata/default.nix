@@ -75,8 +75,6 @@ in mkDerivation {
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = lib.flatten [
     (fstats withTaglib        [ "TAGLIB" "TAGLIB_EXTRAS" ])
     (fstats withReplaygain    [ "FFMPEG" "MPG123" "SPEEXDSP" ])

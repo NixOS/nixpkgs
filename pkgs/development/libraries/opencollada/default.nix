@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libxml2 pcre ];
 
-  enableParallelBuilding = true;
-
   patchPhase = ''
     patch -p1 < ${./pcre.patch}
   '' + lib.optionalString stdenv.isDarwin ''

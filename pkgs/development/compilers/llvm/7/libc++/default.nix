@@ -38,8 +38,6 @@ stdenv.mkDerivation {
   ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1"
   ++ stdenv.lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF" ;
 
-  enableParallelBuilding = true;
-
   passthru = {
     isLLVM = true;
   };

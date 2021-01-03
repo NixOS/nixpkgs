@@ -37,7 +37,6 @@ stdenv.mkDerivation {
     "-DImageMagick_mogrify_EXECUTABLE=${imagemagick.out}/bin/mogrify"
   ];
 
-  enableParallelBuilding = true;
   dontWrapQtApps = true;
 
   postInstall = ''

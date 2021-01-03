@@ -11,8 +11,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qt4 libjpeg libtiff boost ];
 
-  enableParallelBuilding = true;
-
   meta = {
     homepage = "http://scantailor.org/";
     description = "Interactive post-processing tool for scanned pages";

@@ -146,7 +146,6 @@ let
       ln -s ${ruby}/lib/libruby-*.so $out/hack/libruby.so
     '';
 
-    enableParallelBuilding = true;
   };
 in
 

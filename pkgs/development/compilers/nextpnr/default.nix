@@ -43,7 +43,6 @@ with stdenv; mkDerivation rec {
     ++ (lib.optional enableGui qtbase)
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
-  enableParallelBuilding = true;
   cmakeFlags =
     [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
       "-DARCH=generic;ice40;ecp5"

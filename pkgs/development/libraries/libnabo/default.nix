@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ eigen boost ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3"
   ];

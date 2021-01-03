@@ -88,8 +88,6 @@ stdenv.mkDerivation rec {
     (flag "OpenCV" opencvSupport)
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "A toolbox which offers a wide range of efficient and unified machine learning methods";
     homepage = "http://shogun-toolbox.org/";

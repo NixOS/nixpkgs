@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     "-DUSE_DLIB_USE_CUDA=${if cudaSupport then "1" else "0"}"
     "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}" ];
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ libpng libjpeg ] ++ lib.optional guiSupport libX11;
 

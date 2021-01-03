@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
     sha256 = "1n639xr1qxx6rhqs0c6sjxp3bv8cwkmw1vfk1cji7514gj2a9v3p";
   };
 
-  enableParallelBuilding = true;
-
   patches = [
     (fetchpatch {
       url = "https://github.com/lenmus/lenmus/commit/421760d84694a0e6e72d0e9b1d4fd30a7e129c6f.patch";

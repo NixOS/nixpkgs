@@ -38,8 +38,6 @@ in stdenv.mkDerivation {
     openssh
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DOPENMP=ON"
     "-DGA=ON"

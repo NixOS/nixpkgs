@@ -42,8 +42,6 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ curl openssl zlib ];
   buildInputs = [ libiconv ];
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     moveToOutput bin/mariadb_config "$dev"
   '';

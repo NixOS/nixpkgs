@@ -79,8 +79,6 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DGLSLANG_INSTALL_DIR=${localGlslang}"
     "-DBUILD_LAYER_SUPPORT_FILES=ON"

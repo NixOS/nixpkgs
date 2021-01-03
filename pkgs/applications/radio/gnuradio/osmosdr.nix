@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Gnuradio block for OsmoSDR and rtl-sdr";
     homepage = "https://sdr.osmocom.org/trac/wiki/GrOsmoSDR";

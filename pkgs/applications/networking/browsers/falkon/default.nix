@@ -47,8 +47,6 @@ mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "QtWebEngine based cross-platform web browser";
     homepage    = "https://community.kde.org/Incubator/Projects/Falkon";
