@@ -1173,6 +1173,8 @@ in
 
   doona = callPackage ../tools/security/doona { };
 
+  droidcam = callPackage ../applications/video/droidcam { };
+
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
   sedutil = callPackage ../tools/security/sedutil { };
