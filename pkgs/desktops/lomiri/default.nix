@@ -11,5 +11,6 @@ let
     qmenumodel = callPackage ./qmenumodel { };
     ubuntu-app-launch = callPackage ./ubuntu-app-launch { };
     ubuntu-ui-toolkit = callPackage ./ubuntu-ui-toolkit { };
+    libqtdbusmock = callPackage ./libqtdbusmock { };
   };
 in makeScope libsForQt5.newScope packages
