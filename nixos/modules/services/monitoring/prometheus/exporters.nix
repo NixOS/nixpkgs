@@ -36,6 +36,7 @@ let
     "mikrotik"
     "minio"
     "modemmanager"
+    "mpd"
     "nextcloud"
     "nginx"
     "nginxlog"
