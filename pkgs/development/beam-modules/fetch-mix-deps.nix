@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation ({
   configurePhase = ''
     mkdir -p $out/deps
     mkdir -p $out/.hex
-    export HEX_HOME="$out/.hex";
+    export HEX_HOME="$TEMPDIR/.hex";
     export MIX_HOME="$TEMPDIR/.mix";
     export MIX_DEPS_PATH="$out/deps";
   '';
