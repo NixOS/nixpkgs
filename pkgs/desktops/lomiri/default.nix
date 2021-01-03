@@ -12,5 +12,6 @@ let
     ubuntu-app-launch = callPackage ./ubuntu-app-launch { };
     ubuntu-ui-toolkit = callPackage ./ubuntu-ui-toolkit { };
     libqtdbusmock = callPackage ./libqtdbusmock { };
+    dbus-cpp = callPackage ./dbus-cpp { };
   };
 in makeScope libsForQt5.newScope packages
