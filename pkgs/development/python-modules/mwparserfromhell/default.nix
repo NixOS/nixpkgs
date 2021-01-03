@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "mwparserfromhell";
-  version = "0.5.4";
+  version = "0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aaf5416ab9b75e99e286f8a4216f77a2f7d834afd4c8f81731e701e59bf99305";
+    sha256 = "75787b6ab140ab267b313d37d045f3276f5dc6a9741074eddfbabc1635cb2efc";
   };
 
   meta = with stdenv.lib; {
