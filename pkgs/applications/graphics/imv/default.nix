@@ -18,20 +18,30 @@
 , pkgconfig
 , stdenv
 , wayland
+, meson
+, ninja
+, inih
 }:
 
 stdenv.mkDerivation rec {
   pname = "imv";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "eXeC64";
     repo = "imv";
     rev = "v${version}";
-    sha256 = "0gk8g178i961nn3bls75a8qpv6wvfvav6hd9lxca1skaikd33zdx";
+    sha256 = "07pcpppmfvvj0czfvp1cyq03ha0jdj4whl13lzvw37q3vpxs5qqh";
   };
 
-  nativeBuildInputs = [ asciidoc cmocka docbook_xsl libxslt ];
+  nativeBuildInputs = [
+    asciidoc
+    cmocka
+    docbook_xsl
+    libxslt
+    meson
+    ninja
+  ];
 
   buildInputs = [
     freeimage
@@ -44,11 +54,11 @@ stdenv.mkDerivation rec {
     pango
     pkgconfig
     wayland
+    inih
+    libtiff
+    libheif
+    libpng
   ];
-
-  installFlags = [ "PREFIX=$(out)" "CONFIGPREFIX=$(out)/etc" ];
-
-  makeFlags = [ "BACKEND_LIBJPEG=yes" "BACKEND_LIBNSGIF=yes" ];
 
   postFixup = ''
     # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
