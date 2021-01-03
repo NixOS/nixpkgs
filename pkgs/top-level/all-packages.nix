@@ -23803,6 +23803,10 @@ in
 
   qiv = callPackage ../applications/graphics/qiv { };
 
+  process-cpp = callPackage ../development/libraries/process-cpp {
+    inherit (lomiri) cmake-extras;
+  };
+
   processing = callPackage ../applications/graphics/processing {
     jdk = oraclejdk8;
   };
