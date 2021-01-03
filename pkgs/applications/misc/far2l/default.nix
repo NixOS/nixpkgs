@@ -76,8 +76,6 @@ stdenv.mkDerivation rec {
 
   stripDebugList = [ "bin" "share" ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "An orthodox file manager";
     homepage = "https://github.com/elfmz/far2l";

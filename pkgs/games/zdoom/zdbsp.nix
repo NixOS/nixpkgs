@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [cmake unzip];
   buildInputs = [zlib];
-  sourceRoot = ".";
-  enableParallelBuilding = true;
+
   installPhase = ''
     install -Dm755 zdbsp $out/bin/zdbsp
   '';

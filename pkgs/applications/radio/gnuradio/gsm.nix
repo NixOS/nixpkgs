@@ -27,8 +27,6 @@ stdenv.mkDerivation {
     done
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Gnuradio block for gsm";
     homepage = "https://github.com/ptrkrysik/gr-gsm";

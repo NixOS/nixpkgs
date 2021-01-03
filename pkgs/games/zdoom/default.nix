@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  enableParallelBuilding = true;
-
   NIX_CFLAGS_LINK = [ "-lopenal" "-lfluidsynth" ];
 
   preConfigure = ''

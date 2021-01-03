@@ -15,15 +15,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-	(boost168.override { enablePython = true; })
+    (boost168.override { enablePython = true; })
     SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg libGLU libGL glew ];
 
   nativeBuildInputs = [ cmake doxygen graphviz makeWrapper ];
-
-  enableParallelBuilding = true;
-
-  patches = [
-  ];
 
   postInstall = ''
     mkdir -p $out/fixpaths

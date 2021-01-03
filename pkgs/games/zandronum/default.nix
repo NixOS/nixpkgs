@@ -51,8 +51,6 @@ in stdenv.mkDerivation rec {
     then [ "-DSERVERONLY=ON" ]
     else [ "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so" ]);
 
-  enableParallelBuilding = true;
-
   hardeningDisable = [ "format" ];
 
   installPhase = ''

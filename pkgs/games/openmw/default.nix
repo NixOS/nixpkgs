@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
     sha256 = "0rm32zsmxvr6b0jjihfj543skhicbw5kg6shjx312clhlm035w2x";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ boost ffmpeg_3 bullet mygui openscenegraph_ SDL2 unshield openal libXt qtbase ];
 

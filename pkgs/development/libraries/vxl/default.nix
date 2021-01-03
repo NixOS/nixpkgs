@@ -24,8 +24,6 @@ stdenv.mkDerivation {
     "-DCMAKE_C_FLAGS=-fPIC"
   ];
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "C++ Libraries for Computer Vision Research and Implementation";
     homepage = "http://vxl.sourceforge.net/";

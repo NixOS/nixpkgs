@@ -41,8 +41,6 @@ stdenv.mkDerivation {
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ] ++ stdenv.lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies - Mono build";
     homepage    = "http://llvm.org/";

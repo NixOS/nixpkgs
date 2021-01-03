@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ libX11 libXxf86vm libXrandr vulkan-headers libGL ];
-  enableParallelBuilding = true;
 
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 

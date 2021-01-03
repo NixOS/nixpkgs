@@ -41,8 +41,6 @@ stdenv.mkDerivation rec {
       "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
     ];
 
-  enableParallelBuilding = true;
-
   postInstall = "rm $out/lib/*.a";
 
   meta = {

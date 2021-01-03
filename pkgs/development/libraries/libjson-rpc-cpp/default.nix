@@ -56,8 +56,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ jsoncpp argtable curl libmicrohttpd doxygen catch ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "C++ framework for json-rpc (json remote procedure call)";
     homepage = "https://github.com/cinemast/libjson-rpc-cpp";

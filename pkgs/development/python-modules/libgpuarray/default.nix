@@ -63,8 +63,6 @@ buildPythonPackage rec {
     Mako
   ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [

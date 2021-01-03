@@ -77,8 +77,6 @@ stdenv.mkDerivation rec {
   ]
   ++ stdenv.lib.optional stdenv.isDarwin "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
 
-  enableParallelBuilding = true;
-
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {

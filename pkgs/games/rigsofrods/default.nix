@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
     sha256 = "0cb1il7qm45kfhh6h6jwfpxvjlh2dmg8z1yz9kj4d6098myf2lg4";
   };
 
-  enableParallelBuilding = true;
-
   installPhase = ''
     sed -e "s@/usr/local/lib/OGRE@${ogre}/lib/OGRE@" -i ../tools/linux/binaries/plugins.cfg
     mkdir -p $out/share/rigsofrods

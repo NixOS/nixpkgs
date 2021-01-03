@@ -83,8 +83,6 @@ stdenv.mkDerivation (rec {
     ++ stdenv.lib.optionals stdenv.isDarwin [ "bits=64" ]
     ++ stdenv.lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];

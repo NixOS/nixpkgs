@@ -4,8 +4,6 @@ stdenv.mkDerivation rec {
   pname = "tasksh";
   version = "1.2.0";
 
-  enableParallelBuilding = true;
-
   src = fetchurl {
     url = "https://taskwarrior.org/download/${pname}-${version}.tar.gz";
     sha256 = "1z8zw8lld62fjafjvy248dncjk0i4fwygw0ahzjdvyyppx4zjhkf";

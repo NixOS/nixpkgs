@@ -35,9 +35,6 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Production"
   ];
 
-
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "A high-performance theorem prover and SMT solver";
     homepage    = "http://cvc4.cs.stanford.edu/web/";

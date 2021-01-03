@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Go engine modeled after AlphaGo Zero";
     homepage    = "https://github.com/gcp/leela-zero";

@@ -93,8 +93,6 @@ in stdenv.mkDerivation {
     cp ../wiretap/*.h $dev/include/wiretap
   '');
 
-  enableParallelBuilding = true;
-
   dontFixCmake = true;
 
   shellHook = ''

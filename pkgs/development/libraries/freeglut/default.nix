@@ -23,8 +23,6 @@ in stdenv.mkDerivation {
                  "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
                ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Create and manage windows containing OpenGL contexts";
     longDescription = ''

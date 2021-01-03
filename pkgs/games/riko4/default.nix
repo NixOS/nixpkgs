@@ -15,7 +15,6 @@ let
     };
     buildInputs = [ SDL2 libGLU ];
     nativeBuildInputs = [ cmake ];
-    enableParallelBuilding = true;
 
     meta = with stdenv.lib; {
       homepage = "https://github.com/grimfang4/sdl-gpu";
@@ -56,8 +55,6 @@ stdenv.mkDerivation rec {
     EOF
     chmod +x $out/bin/riko4
   '';
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/incinirate/Riko4";

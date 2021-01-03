@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
     export DOCBOOKDIR="${docbook_xsl}/xml/xsl/docbook/"
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "A simple and powerful audio tag editor";
     longDescription = ''

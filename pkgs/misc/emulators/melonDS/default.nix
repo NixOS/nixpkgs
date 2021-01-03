@@ -21,7 +21,6 @@ mkDerivation rec {
     sha256 = "0m45m1ch0az8l3d3grjbqvi5vvydbffxwka9w3k3qiia50m7fnph";
   };
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook ];
   buildInputs = [
     SDL2

@@ -48,7 +48,6 @@ in
     ];
 
     dontFixCmake = true;
-    enableParallelBuilding = true;
 
     buildInputs = [
       gperf

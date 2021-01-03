@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
     export CUDA_PATH="${cudatoolkit}"
   '';
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     cmake
     pkgconfig

@@ -29,7 +29,6 @@ in stdenv.mkDerivation rec {
     "-DRTLSDR_INCLUDE_DIRS=${rtl-sdr}/include"
     "../src"
   ];
-  enableParallelBuilding = true;
   dontWrapQtApps = true;
 
   nativeBuildInputs = [ cmake pkgconfig doxygen groff wrapQtAppsHook ];

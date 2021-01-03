@@ -27,8 +27,6 @@ let
 
     nativeBuildInputs = [ cmake doxygen ];
 
-    enableParallelBuilding = true;
-
     preCheck = ''
       # The GUI tests require a running X server, disable them
       sed -i ../test/CMakeLists.txt \

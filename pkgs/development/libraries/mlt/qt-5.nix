@@ -75,8 +75,6 @@ mkDerivation rec {
 
   CXXFLAGS = "-std=c++11";
 
-  enableParallelBuilding = true;
-
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
     "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"

@@ -90,8 +90,6 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     # Newer cub is included with cudatoolkit now and it breaks the build.
     # https://github.com/Microsoft/CNTK/issues/3191
