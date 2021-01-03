@@ -12,6 +12,7 @@
 , pycurl
 , pyparsing
 , pytest
+, pytestCheckHook
 , setuptools
 , six
 , stdenv
@@ -44,15 +45,15 @@ buildPythonPackage rec {
   checkInputs = [
     netaddr
     pytest
+    pytestCheckHook
   ] ++ lib.optionals isPy27 [
     mock
   ];
 
+  preCheck = "export HOME=$(mktemp -d)";
   # The skipped tests are requiring a local web server
-  checkPhase = ''
-    HOME=$TMPDIR pytest \
-      tests/test_{moduleman,filterintro,reqresp,api,clparser}.py
-  '';
+  pytestFlagsArray = [ "tests/test_{moduleman,filterintro,reqresp,api,clparser}.py" ];
+  pythonImportsCheck = [ "wfuzz" ];
 
   meta = with lib; {
     description = "Web content fuzzer to facilitate web applications assessments";
