@@ -7,5 +7,6 @@ let
     libqtdbustest = callPackage ./libqtdbustest { };
     unity-api = callPackage ./unity-api { };
     geonames = callPackage ./geonames { };
+    dbus-test-runner = callPackage ./dbus-test-runner{ };
   };
 in makeScope libsForQt5.newScope packages
