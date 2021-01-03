@@ -892,6 +892,8 @@ in {
 
   bitarray = callPackage ../development/python-modules/bitarray { };
 
+  bitbox02 = callPackage ../development/python-modules/bitbox02 { };
+
   bitbucket_api = callPackage ../development/python-modules/bitbucket-api { };
 
   bitbucket-cli = callPackage ../development/python-modules/bitbucket-cli { };
