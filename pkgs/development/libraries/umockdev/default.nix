@@ -17,22 +17,18 @@
 
 stdenv.mkDerivation rec {
   pname = "umockdev";
-  version = "0.15.2";
+  version = "0.15.4";
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "19f21qb9ckwvlm7yzpnc0vcp092qbkms2yrafc26b9a63v4imj52";
+    sha256 = "09k8jwvsphd97hcagf0zaf0hwzlzq2r8jfgbmvj55k7ylrg8hjxg";
   };
 
   mesonFlags = [
     "-Dgtk_doc=true"
   ];
-
-  preCheck = ''
-    patchShebangs tests/test-static-code
-  '';
 
   buildInputs = [ glib systemd libgudev ];
 
@@ -50,10 +46,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Test fail with libusb 1.0.24
-  # https://github.com/NixOS/nixpkgs/issues/107420
-  # https://github.com/martinpitt/umockdev/issues/115
-  doCheck = false;
+  doCheck = true;
 
   postInstall = ''
     mkdir -p $doc/share/doc/umockdev/
