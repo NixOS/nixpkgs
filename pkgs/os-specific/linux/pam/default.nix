@@ -1,4 +1,6 @@
-{ stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4 }:
+{ stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "linux-pam";
@@ -62,6 +64,10 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = false; # fails
+
+  passthru.tests = {
+    inherit (nixosTests) pam-oath-login pam-u2f shadow;
+  };
 
   meta = with stdenv.lib; {
     homepage = "http://www.linux-pam.org/";
