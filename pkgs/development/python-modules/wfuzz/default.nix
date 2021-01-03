@@ -1,5 +1,6 @@
 { buildPythonPackage
 , chardet
+, colorama
 , configparser
 , fetchFromGitHub
 , future
@@ -8,38 +9,49 @@
 , mock
 , netaddr
 , pkgs
-, pyparsing
 , pycurl
+, pyparsing
 , pytest
+, setuptools
 , six
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "wfuzz";
-  version = "2.4.2";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "xmendez";
     repo = pname;
-    rev = "v.${version}";
-    sha256 = "15dihrc7jsvpxcmb4fp254s633mkjm7ksjfkr9pqaai49qmnddyf";
+    rev = "v${version}";
+    sha256 = "1izasczm2zwknwzxbfzqhlf4zp02jvb54ha1hfk4rlwiz0rr1kj4";
   };
-
-  buildInputs = [ pyparsing configparser ];
 
   propagatedBuildInputs = [
     chardet
-    future
     pycurl
     six
+    setuptools
+    pyparsing
+  ] ++ lib.optionals isPy27 [
+    mock
+    future
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
+    colorama
   ];
 
-  checkInputs = [ netaddr pytest ] ++ lib.optionals isPy27 [ mock ];
+  checkInputs = [
+    netaddr
+    pytest
+  ] ++ lib.optionals isPy27 [
+    mock
+  ];
 
-  # Skip tests requiring a local web server.
+  # The skipped tests are requiring a local web server
   checkPhase = ''
     HOME=$TMPDIR pytest \
-      tests/test_{moduleman,filterintro,reqresp,api,clparser,dotdict}.py
+      tests/test_{moduleman,filterintro,reqresp,api,clparser}.py
   '';
 
   meta = with lib; {
