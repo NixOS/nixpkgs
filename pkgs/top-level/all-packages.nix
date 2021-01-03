@@ -8292,6 +8292,8 @@ in
 
   whois = callPackage ../tools/networking/whois { };
 
+  wifish = callPackage ../tools/networking/wifish { };
+
   wifite2 = callPackage ../tools/networking/wifite2 { };
 
   wimboot = callPackage ../tools/misc/wimboot { };
