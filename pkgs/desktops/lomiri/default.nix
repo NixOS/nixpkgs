@@ -19,5 +19,6 @@ let
     url-dispatcher = callPackage ./url-dispatcher { };
     libqofono = callPackage ./libqofono { };
     gmenuharness = callPackage ./gmenuharness { };
+    indicator-network = callPackage ./indicator-network { };
   };
 in makeScope libsForQt5.newScope packages
