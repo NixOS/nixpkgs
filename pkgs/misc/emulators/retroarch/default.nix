@@ -32,8 +32,9 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  nativeBuildInputs = [ pkgconfig wayland ]
-                      ++ optional withVulkan makeWrapper;
+  nativeBuildInputs = [ pkgconfig ]
+                      ++ optional withVulkan makeWrapper
+                      ++ optional stdenv.isLinux wayland;
 
   buildInputs = [ ffmpeg_3 freetype libxml2 libGLU libGL python3 SDL2 which ]
                 ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
