@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, nixosTests }:
+{ lib, python3, fetchFromGitHub, nixosTests, fetchpatch }:
 
 let
   python = python3.override {
@@ -25,7 +25,7 @@ in with python.pkgs; buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
@@ -42,6 +42,14 @@ in with python.pkgs; buildPythonApplication rec {
   checkPhase = ''
     pytest
   '';
+
+  patches = [
+    # Use poetry-core instead of poetry. Fixed in 1.2.3
+    (fetchpatch {
+      url = "https://github.com/supakeen/pinnwand/commit/38ff5729c59abb97e4b416d3ca66466528b0eac7.patch";
+      sha256 = "F3cZe29z/7glmS3KWzcfmZnhYmC0LrLLS0zHk7WS2rQ=";
+    })
+  ];
 
   passthru.tests = nixosTests.pinnwand;
 
