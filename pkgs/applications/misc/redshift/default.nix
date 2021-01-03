@@ -10,7 +10,7 @@
 , withGeolocation ? true
 , withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
 , withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
-, withAppIndicator ? true, libappindicator, libayatana-appindicator
+, withAppIndicator ? stdenv.isLinux, libappindicator, libayatana-appindicator
 }:
 
 let
