@@ -13,5 +13,6 @@ let
     ubuntu-ui-toolkit = callPackage ./ubuntu-ui-toolkit { };
     libqtdbusmock = callPackage ./libqtdbusmock { };
     dbus-cpp = callPackage ./dbus-cpp { };
+    trust-store = callPackage ./trust-store{ };
   };
 in makeScope libsForQt5.newScope packages
