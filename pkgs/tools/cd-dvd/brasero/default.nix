@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${binpath}" --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH")
+    gappsWrapperArgs+=(--prefix PATH : "${binpath}")
   '';
 
   meta = with stdenv.lib; {

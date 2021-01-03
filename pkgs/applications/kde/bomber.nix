@@ -4,7 +4,7 @@
 }:
 
 mkDerivation {
-  name = "bomber";
+  pname = "bomber";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.bomber";
     description = "A single player arcade game";

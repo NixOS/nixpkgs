@@ -8,7 +8,7 @@
 }:
 
 mkDerivation {
-  name = "k3b";
+  pname = "k3b";
   meta = with lib; {
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ sander phreedom ];

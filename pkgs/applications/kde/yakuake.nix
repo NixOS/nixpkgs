@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "yakuake";
+  pname = "yakuake";
 
   buildInputs = [
     karchive kcrash kdbusaddons ki18n kiconthemes knewstuff knotifications

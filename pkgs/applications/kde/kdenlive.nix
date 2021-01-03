@@ -35,7 +35,7 @@
 }:
 
 mkDerivation {
-  name = "kdenlive";
+  pname = "kdenlive";
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools

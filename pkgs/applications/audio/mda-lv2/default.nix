@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fftwSinglePrec, lv2, pkgconfig, wafHook }:
+{ stdenv, fetchurl, fftwSinglePrec, lv2, pkgconfig, wafHook, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "mda-lv2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a3cv6w5xby9yn11j695rbh3c4ih7rxfxmkca9s1324ljphh06m8";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
+  nativeBuildInputs = [ pkgconfig wafHook python3 ];
   buildInputs = [ fftwSinglePrec lv2 ];
 
   meta = with stdenv.lib; {

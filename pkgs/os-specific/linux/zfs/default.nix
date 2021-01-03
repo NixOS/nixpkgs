@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch
-, autoreconfHook, util-linux, nukeReferences, coreutils
+, autoreconfHook269, util-linux, nukeReferences, coreutils
 , perl, buildPackages
 , configFile ? "all"
 
@@ -89,7 +89,7 @@ let
           "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
       '';
 
-      nativeBuildInputs = [ autoreconfHook nukeReferences ]
+      nativeBuildInputs = [ autoreconfHook269 nukeReferences ]
         ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ])
         ++ optional buildUser pkgconfig;
       buildInputs = optionals buildUser [ zlib libuuid attr libtirpc ]

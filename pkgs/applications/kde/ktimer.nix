@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio }:
 
 mkDerivation {
-  name = "ktimer";
+  pname = "ktimer";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/utilities/org.kde.ktimer";
     description = "A little tool to execute programs after some time";

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-pam";
-  version = "1.3.1";
+  version = "1.5.1";
 
   src = fetchurl {
-    url    = "https://github.com/linux-pam/linux-pam/releases/download/v1.3.1/Linux-PAM-${version}.tar.xz";
-    sha256 = "1nyh9kdi3knhxcbv5v4snya0g3gff0m671lnvqcbygw3rm77mx7g";
+    url    = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
+    sha256 = "sha256-IB1AcwsRNbGzzeoJ8sKKxjTXMYHM0Bcs7d7jZJxXkvw=";
   };
 
   patches = stdenv.lib.optionals (stdenv.hostPlatform.libc == "musl") [

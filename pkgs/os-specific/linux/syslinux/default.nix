@@ -47,6 +47,7 @@ stdenv.mkDerivation {
       url = mkURL "26f0e7b2" "0018-prevent-pow-optimization.patch";
       sha256 = "1c8g0jz5yj9a0rsmryx9vdjsw4hw8mjfcg05c9pmyjg85w3dfp3m";
     })
+    ./gcc10.patch
   ];
 
   postPatch = ''

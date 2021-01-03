@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , pkgconfig
 , wafHook
+, python3
 , asciidoc
 , docbook_xml_dtd_45
 , docbook_xsl
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig
     wafHook
+    python3
     asciidoc
     docbook_xml_dtd_45
     docbook_xsl
