@@ -8,5 +8,6 @@ let
     unity-api = callPackage ./unity-api { };
     geonames = callPackage ./geonames { };
     dbus-test-runner = callPackage ./dbus-test-runner{ };
+    qmenumodel = callPackage ./qmenumodel { };
   };
 in makeScope libsForQt5.newScope packages
