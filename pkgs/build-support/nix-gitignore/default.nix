@@ -20,13 +20,14 @@ let
 in rec {
   # [["good/relative/source/file" true] ["bad.tmpfile" false]] -> root -> path
   filterPattern = patterns: root:
-    let
-      filters = map (pair: relPath: if match (head pair) relPath == null then true else last pair) patterns;
-    in
-      name: _type:
-        let
-          relPath = lib.removePrefix ((toString root) + "/") name;
-        in foldl' (acc: f: if acc == true then f relPath else acc) true filters;
+    (name: _type:
+      let
+        relPath = lib.removePrefix ((toString root) + "/") name;
+        matches = pair: (match (head pair) relPath) != null;
+        matched = map (pair: [(matches pair) (last pair)]) patterns;
+      in
+        last (last ([[true true]] ++ (filter head matched)))
+    );
 
   # string -> [[regex bool]]
   gitignoreToPatterns = gitignore:
@@ -90,9 +91,7 @@ in rec {
       (filter (l: !isList l && !isComment l)
       (split "\n" gitignore));
 
-  gitignoreFilter = ign: let
-    patterns = gitignoreToPatterns ign;
-  in root: filterPattern patterns root;
+  gitignoreFilter = ign: root: filterPattern (gitignoreToPatterns ign) root;
 
   # string|[string|file] (→ [string|file] → [string]) -> string
   gitignoreCompileIgnore = file_str_patterns: root:
@@ -101,10 +100,9 @@ in rec {
       str_patterns = map (onPath readFile) (lib.toList file_str_patterns);
     in concatStringsSep "\n" str_patterns;
 
-  gitignoreFilterPure = filter: patterns: root: let
-    compiledFilter = gitignoreCompileIgnore patterns root;
-    filterFn = gitignoreFilter compiledFilter;
-  in name: type: filterFn root name type && filter name type;
+  gitignoreFilterPure = filter: patterns: root: name: type:
+    gitignoreFilter (gitignoreCompileIgnore patterns root) root name type
+    && filter name type;
 
   # This is a very hacky way of programming this!
   # A better way would be to reuse existing filtering by making multiple gitignore functions per each root.
