@@ -31,21 +31,21 @@ in
       example = "https://example.com/api";
     };
 
-    apubProxyRewrites= mkOption {
+    apubProxyRewrites = mkOption {
       default = false;
       type = types.bool;
-      description = "Set to `true` to make signatures work with the proxy setup.";
+      description = "Set to <literal>true</literal> to make signatures work with the proxy setup.";
     };
 
     allowForwarded = mkOption {
-      default = null;
-      type = types.str;
-      description = "Set to true to make ratelimiting work with the proxy setup.";
+      default = false;
+      type = types.bool;
+      description = "Set to <literal>true</literal> to make ratelimiting work with the proxy setup.";
     };
 
     smtpUrl = mkOption {
       default = null;
-      type = types.str;
+      type = with types; nullOr str;
       description = "URL used to access SMTP server, required for sending email.";
 
       example = "smtps://username:password@smtp.example.com";
@@ -53,13 +53,13 @@ in
 
     smtpFrom = mkOption {
       default = null;
-      type = types.str;
+      type = with types; nullOr str;
       description = "From value used in sent emails, required for sending email.";
     };
 
     mediaLocation = mkOption {
       default = null;
-      type = types.str;
+      type = with types; nullOr str;
       description = ''
         Directory on disk used for storing uploaded images. If not set, image uploads will be disabled.
         Must be created before this service is started.
@@ -74,17 +74,18 @@ in
       description = "lotide Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ];
-      environment = {
-        DATABASE_URL         = cfg.databaseUrl;
-        HOST_URL_ACTIVITYPUB = cfg.hostUrlActivityPub;
-        HOST_URL_API         = cfg.hostUrlAPI;
-        SMTP_URL             = cfg.smtpUrl;
-        SMTP_FROM            = cfg.smtpFrom;
-        MEDIA_LOCATION       = cfg.mediaLocation;
-      }
-      // lib.optional cfg.apubProxyRewrites { APUB_PROXY_REWRITES = "true"; }
-      // lib.optional cfg.allowForwarded    { ALLOW_FORWARDED     = "true"; }
-      ;
+      environment = lib.mkMerge [
+        {
+          ALLOW_FORWARDED = boolToString cfg.allowForwarded;
+          APUB_PROXY_REWRITES = boolToString cfg.apubProxyRewrites;
+          DATABASE_URL = cfg.databaseUrl;
+          HOST_URL_ACTIVITYPUB = cfg.hostUrlActivityPub;
+          HOST_URL_API = cfg.hostUrlAPI;
+        }
+        (mkIf (cfg.mediaLocation != null) { MEDIA_LOCATION = cfg.mediaLocation; })
+        (mkIf (cfg.smtpUrl != null) { SMTP_URL = cfg.smtpUrl; })
+        (mkIf (cfg.smtpFrom != null) { SMTP_FROM = cfg.smtpFrom; })
+      ];
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${pkgs.lotide}/bin/lotide";
