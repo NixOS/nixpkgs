@@ -21,5 +21,6 @@ let
     gmenuharness = callPackage ./gmenuharness { };
     indicator-network = callPackage ./indicator-network { };
     deviceinfo = callPackage ./deviceinfo { };
+    qdjango = callPackage ./qdjango { };
   };
 in makeScope libsForQt5.newScope packages
