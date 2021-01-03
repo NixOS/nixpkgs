@@ -55,9 +55,14 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Web content fuzzer, to facilitate web applications assessments";
+    description = "Web content fuzzer to facilitate web applications assessments";
+    longDescription = ''
+      Wfuzz provides a framework to automate web applications security assessments
+      and could help you to secure your web applications by finding and exploiting
+      web application vulnerabilities.
+    '';
     homepage = "https://wfuzz.readthedocs.io";
-    license = licenses.gpl2;
+    license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ pamplemousse ];
   };
 }
