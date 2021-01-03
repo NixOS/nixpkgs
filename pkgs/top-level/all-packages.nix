@@ -23815,7 +23815,9 @@ in
     python = python3;
   } // (config.profanity or {}));
 
-  properties-cpp = callPackage ../development/libraries/properties-cpp { };
+  properties-cpp = callPackage ../development/libraries/properties-cpp {
+    inherit (lomiri) cmake-extras;
+  };
 
   protonmail-bridge = callPackage ../applications/networking/protonmail-bridge { };
 
