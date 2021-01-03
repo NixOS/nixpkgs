@@ -9,5 +9,6 @@ let
     geonames = callPackage ./geonames { };
     dbus-test-runner = callPackage ./dbus-test-runner{ };
     qmenumodel = callPackage ./qmenumodel { };
+    ubuntu-app-launch = callPackage ./ubuntu-app-launch { };
   };
 in makeScope libsForQt5.newScope packages
