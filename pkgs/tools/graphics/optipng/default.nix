@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, libpng, static ? false
+{ stdenv, fetchurl, libpng
+, static ? stdenv.hostPlatform.isStatic
 }:
 
 # This package comes with its own copy of zlib, libpng and pngxtern

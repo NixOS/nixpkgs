@@ -1,4 +1,7 @@
-{ stdenv, callPackage, fetchFromGitHub, enableStatic ? false, enableShared ? true }:
+{ stdenv, callPackage, fetchFromGitHub
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 let
   yesno = b: if b then "yes" else "no";
 in stdenv.mkDerivation rec {

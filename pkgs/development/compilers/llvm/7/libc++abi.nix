@@ -1,7 +1,8 @@
 { stdenv, cmake, fetch, libcxx, llvm, version
 , standalone ? false
   # on musl the shared objects don't build
-, enableShared ? ! stdenv.hostPlatform.isMusl }:
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation {
   pname = "libc++abi";

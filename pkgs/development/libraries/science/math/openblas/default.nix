@@ -15,8 +15,8 @@
 # Select a specific optimization target (other than the default)
 # See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
 , target ? null
-, enableStatic ? false
-, enableShared ? true
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 with stdenv.lib;
