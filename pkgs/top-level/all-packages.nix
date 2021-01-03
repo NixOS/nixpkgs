@@ -15598,6 +15598,8 @@ in
   libpng_apng = libpng.override { apngSupport = true; };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
 
+  libpostal = callPackage ../development/libraries/libpostal { };
+
   libpaper = callPackage ../development/libraries/libpaper { };
 
   libpfm = callPackage ../development/libraries/libpfm { };
