@@ -5533,6 +5533,7 @@ in
   kakoune = wrapKakoune kakoune-unwrapped {
     plugins = [ ];  # override with the list of desired plugins
   };
+  kakouneUtils = callPackage ../applications/editors/kakoune/plugins/kakoune-utils.nix { };
 
   kak-lsp = callPackage ../tools/misc/kak-lsp {
     inherit (darwin.apple_sdk.frameworks) Security;
