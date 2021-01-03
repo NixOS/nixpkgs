@@ -6,15 +6,16 @@
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
   # The version must match that in vulkan-headers
-  version = "1.2.141.0";
+  version = "1.2.162.0";
 
-  src = (assert version == vulkan-headers.version; fetchFromGitHub {
-    owner = "LunarG";
-    repo = "VulkanTools";
-    rev = "sdk-${version}";
-    sha256 = "1zsgc1hdmivdahzrarx7a5byhgnmm5ahz366l92fmdb8pffgq42g";
-    fetchSubmodules = true;
-  });
+  src = (assert version == vulkan-headers.version;
+    fetchFromGitHub {
+      owner = "LunarG";
+      repo = "VulkanTools";
+      rev = "sdk-${version}";
+      sha256 = "13v4202bfd7d7nwi8w12ja9k1vi10p9xxypzkpi063hmsgzxm5k5";
+      fetchSubmodules = true;
+    });
 
   nativeBuildInputs = [ cmake pkgconfig python3 jq ];
 

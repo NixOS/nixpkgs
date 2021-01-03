@@ -1624,6 +1624,8 @@ in
 
   boot = callPackage ../development/tools/build-managers/boot { };
 
+  bowtie = callPackage ../applications/science/biology/bowtie { };
+
   bowtie2 = callPackage ../applications/science/biology/bowtie2 { };
 
   boxfs = callPackage ../tools/filesystems/boxfs { };
@@ -10074,7 +10076,10 @@ in
 
   neko = callPackage ../development/compilers/neko { };
 
-  nextpnr = libsForQt5.callPackage ../development/compilers/nextpnr {
+  nextpnr = callPackage ../development/compilers/nextpnr { };
+
+  nextpnrWithGui = libsForQt5.callPackage ../development/compilers/nextpnr {
+    enableGui = true;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
 
@@ -21346,7 +21351,7 @@ in
 
   etherape = callPackage ../applications/networking/sniffers/etherape { };
 
-  evilpixie = libsForQt514.callPackage ../applications/graphics/evilpixie { };
+  evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
 
   exercism = callPackage ../applications/misc/exercism { };
 
