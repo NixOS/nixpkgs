@@ -5,18 +5,18 @@
 
 stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "2020.11.25";
+  version = "2021.01.02";
 
   # git describe --tags
   realVersion = with stdenv.lib; with builtins;
-    "1.0-476-g${substring 0 7 (elemAt srcs 0).rev}";
+    "1.0-482-g${substring 0 7 (elemAt srcs 0).rev}";
 
   srcs = [
     (fetchFromGitHub {
        owner  = "SymbiFlow";
        repo   = "prjtrellis";
-       rev    = "a441cd9d0390648e96bf27096626eb2c904096de";
-       sha256 = "1rsck44n4mf9v3vfac51ksrhcs84s7q297nq1kjkzzvmsx09gd9k";
+       rev    = "60c05b3f4e71fd78d4fba5c31f9974694245199e";
+       sha256 = "1k37mxwxv9fpm6xnrxlqqap7zqh2dvgqncphj3asi2rz0kh07ppf";
        name   = "trellis";
      })
 

@@ -22,14 +22,14 @@ let
   # Note: when raising the version, ensure that all SNAPSHOT versions in
   # build.gradle are replaced by a fixed version
   # (the current one at the time of release) (see postPatch).
-  version = "122";
+  version = "122.1";
   buildVersion = makeBuildVersion version;
 
   src = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "19dxqscnny0c5w3pyg88hflrkhsqgd7zx19240kh4h69y3wwaz0m";
+    sha256 = "18m4s81cfb2cr2fj61nf6spiln7cbvx25g42w6fypfikflv3qd8y";
   };
 
   desktopItem = makeDesktopItem {
@@ -81,7 +81,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1kymfrd2vd23y1rmx19q47wc212r6qx03x6g58pxbqyylxmcw5zq";
+    outputHash = "0vzck6hsrvs438s3ikk66qmpak88bmqcb8inqbbjwy7x87d2qsvj";
   };
 
   # Separate commands for building and installing the server and the client
