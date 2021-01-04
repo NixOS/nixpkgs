@@ -7186,7 +7186,9 @@ in {
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 
-  starlette = callPackage ../development/python-modules/starlette { };
+  starlette = callPackage ../development/python-modules/starlette {
+    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 

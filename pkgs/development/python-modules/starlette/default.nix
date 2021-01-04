@@ -10,6 +10,7 @@
 , python-multipart
 , pyyaml
 , requests
+, ujson
 , aiosqlite
 , databases
 , pytestCheckHook
@@ -21,15 +22,14 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-
-  version = "0.14.1";
+  version = "0.13.8";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "0s0zl0ylxc5d9666zkvbwqfhngvjd79al1y69k674i0pkq2zg50j";
+    sha256 = "11i0yd8cqwscixajl734g11vf8pghki11c81chzfh8ifmj6mf9jk";
   };
 
   propagatedBuildInputs = [
@@ -40,17 +40,17 @@ buildPythonPackage rec {
     python-multipart
     pyyaml
     requests
+    ujson
   ] ++ lib.optional stdenv.isDarwin [ ApplicationServices ];
 
   checkInputs = [
     aiosqlite
     databases
-    graphene
     pytestCheckHook
-    pytest-asyncio
-    pytestcov
     typing-extensions
   ];
+
+  pytestFlagsArray = [ "--ignore=tests/test_graphql.py" ];
 
   pythonImportsCheck = [ "starlette" ];
 
