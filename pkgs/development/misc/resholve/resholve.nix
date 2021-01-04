@@ -59,10 +59,11 @@ python27Packages.buildPythonApplication {
   checkInputs = [ bats ];
   RESHOLVE_PATH = "${stdenv.lib.makeBinPath resolveTimeDeps}";
 
-  # explicit interpreter for test suite; maybe some better way...
-  INTERP = "${bash}/bin/bash";
+  
   checkPhase = ''
-    PATH=$out/bin:$PATH
+    # explicit interpreter for test suite
+    export INTERP="${bash}/bin/bash";
+    export PATH=$out/bin:$PATH
     patchShebangs .
     ./test.sh
   '';
