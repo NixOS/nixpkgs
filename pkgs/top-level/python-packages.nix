@@ -2466,6 +2466,8 @@ in {
 
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
 
+  glances-api = callPackage ../development/python-modules/glances-api { };
+
   glasgow = callPackage ../development/python-modules/glasgow { };
 
   glob2 = callPackage ../development/python-modules/glob2 { };
