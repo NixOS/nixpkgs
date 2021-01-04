@@ -35,6 +35,9 @@ stdenv.mkDerivation {
     gst_all_1.gstreamermm
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
     hicolor-icon-theme
     libsigcxx
     libxmlxx

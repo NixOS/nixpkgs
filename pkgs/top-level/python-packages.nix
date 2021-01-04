@@ -167,6 +167,10 @@ in {
 
   adb-shell = callPackage ../development/python-modules/adb-shell { };
 
+  adblock = callPackage ../development/python-modules/adblock {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
   adguardhome= callPackage ../development/python-modules/adguardhome { };
@@ -454,6 +458,8 @@ in {
   async-timeout = callPackage ../development/python-modules/async_timeout { };
 
   async-upnp-client = callPackage ../development/python-modules/async-upnp-client { };
+
+  asyncwhois = callPackage ../development/python-modules/asyncwhois { };
 
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
 
@@ -6157,6 +6163,8 @@ in {
 
   python-vlc = callPackage ../development/python-modules/python-vlc { };
 
+  python-whois = callPackage ../development/python-modules/python-whois { };
+
   python-wifi = callPackage ../development/python-modules/python-wifi { };
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
@@ -7782,6 +7790,8 @@ in {
 
   vidstab = callPackage ../development/python-modules/vidstab { };
 
+  ViennaRNA = toPythonModule pkgs.ViennaRNA;
+
   viewstate = callPackage ../development/python-modules/viewstate { };
 
   vine = callPackage ../development/python-modules/vine { };
@@ -7907,6 +7917,8 @@ in {
   whisper = callPackage ../development/python-modules/whisper { };
 
   whitenoise = callPackage ../development/python-modules/whitenoise { };
+
+  whois = callPackage ../development/python-modules/whois { };
 
   whoosh = callPackage ../development/python-modules/whoosh { };
 
