@@ -64,8 +64,9 @@ stdenv.mkDerivation rec {
     # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
     # so we have to fix those to the binaries we installed into the /nix/store
 
-    sed -i "s|\bimv-wayland\b|$out/bin/imv-wayland|" $out/bin/imv
-    sed -i "s|\bimv-x11\b|$out/bin/imv-x11|" $out/bin/imv
+    substituteInPlace "$out/bin/imv" \
+      --replace "imv-wayland" "$out/bin/imv-wayland" \
+      --replace "imv-x11" "$out/bin/imv-x11"
   '';
 
   doCheck = true;
