@@ -14,13 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "08696ab8ldi22s9ch030sdyzp3m8llszcvhm6span41h782708lm";
   };
 
-  # TODO better fix?
-  postPatch = ''
-    for Werrorfile in {src,libdbustest,tests}/Makefile.am; do
-      substituteInPlace $Werrorfile \
-        --replace "-Werror" ""
-    done
-  '';
+  buildFlags = [ "CFLAGS=-Wno-error" ];
 
   enableParallelBuilding = true;
 
