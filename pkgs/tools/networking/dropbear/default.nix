@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, glibc, zlib
-, enableStatic ? false
+, enableStatic ? stdenv.hostPlatform.isStatic
 , sftpPath ? "/run/current-system/sw/libexec/sftp-server"
 }:
 

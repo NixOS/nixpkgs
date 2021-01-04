@@ -15768,9 +15768,9 @@ in
 
     inherit (kdeApplications.override { libsForQt5 = self; })
       libkdcraw libkexiv2 libkipi libkomparediff2 libksane libkcddb akonadi-contacts
-      akonadi-calendar akonadi-notes akonadi-search kidentitymanagement kontactinterface
-      kldap akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs filelight
-      granatier gwenview k3b kaddressbook kalzium kapptemplate kapman kate katomic
+      akonadi-calendar akonadi-notes akonadi-search kaccounts-integration kidentitymanagement
+      kontactinterface kldap akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs
+      filelight granatier gwenview k3b kaddressbook kalzium kapptemplate kapman kate katomic
       kblackbox kblocks kbounce kcachegrind kcalc kcharselect kcolorchooser
       kdenlive kdf kdialog kdiamond keditbookmarks kfind kfloppy kget kgpg khelpcenter
       kig kigo killbots kitinerary kleopatra klettres klines kmag kmail kmines kmix kmplot
@@ -15918,6 +15918,8 @@ in
     # Not a library, but we do want it to be built for every qt version there
     # is, to allow users to choose the right build if needed.
     sddm = callPackage ../applications/display-managers/sddm { };
+
+    signond = callPackage ../development/libraries/signond {};
   };
 
   qtEnv = qt5.env;
@@ -20799,8 +20801,6 @@ in
 
   bristol = callPackage ../applications/audio/bristol { };
 
-  bs1770gain = callPackage ../applications/audio/bs1770gain { };
-
   bjumblr = callPackage ../applications/audio/bjumblr { };
 
   bschaffl = callPackage ../applications/audio/bschaffl { };
@@ -21666,12 +21666,16 @@ in
 
   wireshark = callPackage ../applications/networking/sniffers/wireshark {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices SystemConfiguration;
+    libpcap = libpcap.override { withBluez = stdenv.isLinux; };
   };
   wireshark-qt = wireshark;
 
   # The GTK UI is deprecated by upstream. You probably want the QT version.
   wireshark-gtk = throw "wireshark-gtk is not supported anymore. Use wireshark-qt or wireshark-cli instead.";
-  wireshark-cli = wireshark.override { withQt = false; };
+  wireshark-cli = wireshark.override {
+    withQt = false;
+    libpcap = libpcap.override { withBluez = stdenv.isLinux; };
+  };
 
   sngrep = callPackage ../applications/networking/sniffers/sngrep {};
 

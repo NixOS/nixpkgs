@@ -11,7 +11,7 @@
 , python3
 , util-linux
 , check
-, enableStatic ? false
+, enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {

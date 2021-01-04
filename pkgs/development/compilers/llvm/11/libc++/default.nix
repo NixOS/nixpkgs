@@ -1,5 +1,6 @@
 { lib, stdenv, fetch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
-, enableShared ? true }:
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation {
   pname = "libc++";

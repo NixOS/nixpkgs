@@ -35,8 +35,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "go";
-  version = "2";
+  pname = "go2-unstable";
+  version = "2020-12-08";
 
   src = fetchgit {
     url = https://go.googlesource.com/go;

@@ -1,7 +1,8 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, fixDarwinDylibNames
 , autoconf, boost, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4
 , perl, python3, rapidjson, snappy, thrift, utf8proc, which, zlib, zstd
-, enableShared ? true }:
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 let
   arrow-testing = fetchFromGitHub {
