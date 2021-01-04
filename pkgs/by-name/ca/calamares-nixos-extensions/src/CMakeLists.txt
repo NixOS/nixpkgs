@@ -32,7 +32,27 @@ project(calamares-extensions
 
 find_package(Calamares 3.2.26 REQUIRED)
 
-find_package(YAMLCPP REQUIRED)
+find_package(YAMLCPP REQUIRED)  # Needed to untangle some dependencies before Calamares 3.2.36
+
+### CMAKE SETUP
+#
+# Enable IN_LIST
+if( POLICY CMP0057 )
+    cmake_policy( SET CMP0057 NEW )
+endif()
+# Let ``AUTOMOC`` and ``AUTOUIC`` process ``GENERATED`` files.
+if( POLICY CMP0071 )
+    cmake_policy( SET CMP0071 NEW )
+endif()
+# Recognize more macros to trigger automoc
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.10.0")
+    list(APPEND CMAKE_AUTOMOC_MACRO_NAMES
+        "K_PLUGIN_FACTORY_WITH_JSON"
+        "K_EXPORT_PLASMA_DATAENGINE_WITH_JSON"
+        "K_EXPORT_PLASMA_RUNNER"
+    )
+endif()
+
 
 ### BRANDING
 #
@@ -67,6 +87,9 @@ calamares_add_module_subdirectory( modules/slowpython )  # Python job
 # which builds a list of explanations; show that list.
 calamares_explain_skipped_modules( ${SKIPPED_MODULES} )
 
+### RELEASE SUPPORT
+#
+#
 set( CALAMARES_VERSION ${calamares-extensions_VERSION_MAJOR}.${calamares-extensions_VERSION_MINOR}.${calamares-extensions_VERSION_PATCH} )
 # In rare cases we have hotfix-releases with a tweak
 if( calamares-extensions_VERSION_TWEAK )
