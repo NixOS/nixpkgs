@@ -28764,6 +28764,8 @@ in
     giflib = giflib_4_1;
   };
 
+  ViennaRNA = callPackage ../applications/science/molecular-dynamics/viennarna { };
+
   viewnior = callPackage ../applications/graphics/viewnior { };
 
   vimUtils = callPackage ../misc/vim-plugins/vim-utils.nix { };
