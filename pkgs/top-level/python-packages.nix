@@ -5946,6 +5946,8 @@ in {
 
   pytest-services = callPackage ../development/python-modules/pytest-services { };
 
+  pytest-snapshot = callPackage ../development/python-modules/pytest-snapshot { };
+
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
 
   pytest-socket = callPackage ../development/python-modules/pytest-socket { };
