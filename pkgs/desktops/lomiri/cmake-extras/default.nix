@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "A collection of add-ons for the CMake build tool";
     homepage = "https://gitlab.com/ubports/core/cmake-extras";
     license = licenses.gpl3Only;
-    maintainers = with maintianers; [ OPNA2608 ];
+    maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.linux;
   };
 }
