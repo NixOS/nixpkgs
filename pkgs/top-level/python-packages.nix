@@ -7910,6 +7910,8 @@ in {
 
   wasabi = callPackage ../development/python-modules/wasabi { };
 
+  wasmer = callPackage ../development/python-modules/wasmer { };
+
   watchdog = callPackage ../development/python-modules/watchdog { };
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
