@@ -1,27 +1,59 @@
-{ asciidoc
+{ stdenv
+, lib
+, fetchFromGitHub
+, asciidoc
 , cmocka
 , docbook_xsl
-, fetchFromGitHub
+, libxslt
 , fontconfig
-, freeimage
+, meson
+, ninja
+, pkgconfig
 , icu
+, pango
+, inih
+, withWindowSystem ? "all"
+, xorg
+, libxkbcommon
 , libGLU
-, libheif
+, wayland
+, withBackends ? [ "freeimage" "libtiff" "libjpeg" "libpng" "librsvg" "libnsgif" "libheif" ]
+, freeimage
+, libtiff
 , libjpeg_turbo
 , libpng
 , librsvg
-, libtiff
-, libxkbcommon
-, libxslt
 , netsurf
-, pango
-, pkgconfig
-, stdenv
-, wayland
-, meson
-, ninja
-, inih
+, libheif
 }:
+
+let
+  windowSystems = {
+    all = windowSystems.x11 ++ windowSystems.wayland;
+    x11 = [ libGLU xorg.libxcb xorg.libX11 ];
+    wayland = [ wayland ];
+  };
+
+  backends = {
+    inherit freeimage libtiff libpng librsvg libheif;
+    libjpeg = libjpeg_turbo;
+    inherit (netsurf) libnsgif;
+  };
+
+  backendFlags = builtins.map
+    (b: if builtins.elem b withBackends
+        then "-D${b}=enabled"
+        else "-D${b}=disabled")
+    (builtins.attrNames backends);
+in
+
+# check that given window system is valid
+assert lib.assertOneOf "withWindowSystem" withWindowSystem
+  (builtins.attrNames windowSystems);
+# check that every given backend is valid
+assert builtins.all
+  (b: lib.assertOneOf "each backend" b (builtins.attrNames backends))
+  withBackends;
 
 stdenv.mkDerivation rec {
   pname = "imv";
@@ -34,6 +66,12 @@ stdenv.mkDerivation rec {
     sha256 = "07pcpppmfvvj0czfvp1cyq03ha0jdj4whl13lzvw37q3vpxs5qqh";
   };
 
+  mesonFlags = [
+    "-Dwindows=${withWindowSystem}"
+    "-Dtest=enabled"
+    "-Dman=enabled"
+  ] ++ backendFlags;
+
   nativeBuildInputs = [
     asciidoc
     cmocka
@@ -41,26 +79,18 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
+    pkgconfig
   ];
 
   buildInputs = [
-    freeimage
     icu
-    libGLU
-    libjpeg_turbo
-    librsvg
     libxkbcommon
-    netsurf.libnsgif
     pango
-    pkgconfig
-    wayland
     inih
-    libtiff
-    libheif
-    libpng
-  ];
+  ] ++ windowSystems."${withWindowSystem}"
+    ++ builtins.map (b: backends."${b}") withBackends;
 
-  postFixup = ''
+  postFixup = lib.optionalString (withWindowSystem == "all") ''
     # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
     # so we have to fix those to the binaries we installed into the /nix/store
 
