@@ -31,7 +31,6 @@ let
       "${rSrc}/0004-disable-internal-py-yajl-for-nix-built.patch"
     ];
   };
-  resolveTimeDeps = [ file findutils gettext ];
 in
 python27Packages.buildPythonApplication {
   pname = "resholve";
@@ -55,7 +54,7 @@ python27Packages.buildPythonApplication {
   '';
   inherit doCheck;
   checkInputs = [ bats ];
-  RESHOLVE_PATH = "${stdenv.lib.makeBinPath resolveTimeDeps}";
+  RESHOLVE_PATH = "${stdenv.lib.makeBinPath [ file findutils gettext ]}";
 
   
   checkPhase = ''
