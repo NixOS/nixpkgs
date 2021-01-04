@@ -11,12 +11,12 @@
 , doCheck ? true
 }:
 let
-  version = "0.3.0";
+  version = "0.4.0";
   rSrc = fetchFromGitHub {
     owner = "abathur";
     repo = "resholve";
     rev = "v${version}";
-    hash = "sha256-K6S0a6y/2oBLW1oB3PO4di4KZEKDb0Yv3myUP8PwvXc=";
+    hash = "sha256-wfxcX3wMZqoi5bWjXYRa21UDDJmTDfE+21p4mL2IJog=";
   };
   deps = callPackage ./deps.nix {
     /*
