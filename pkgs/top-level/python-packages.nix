@@ -2673,6 +2673,8 @@ in {
 
   graphql-core = callPackage ../development/python-modules/graphql-core { };
 
+  graphql-relay = callPackage ../development/python-modules/graphql-relay { };
+
   graphql-server-core = callPackage ../development/python-modules/graphql-server-core { };
 
   graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix { inherit (pkgs) pkg-config; };
