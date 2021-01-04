@@ -6147,6 +6147,8 @@ in {
 
   python-vlc = callPackage ../development/python-modules/python-vlc { };
 
+  python-whois = callPackage ../development/python-modules/python-whois { };
+
   python-wifi = callPackage ../development/python-modules/python-wifi { };
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
