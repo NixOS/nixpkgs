@@ -4,8 +4,6 @@ stdenv.mkDerivation rec {
   pname = "gdub";
   version = "0.2.0";
 
-  nativeBuildInputs = [ makeWrapper ];
-
   src = fetchFromGitHub {
     owner = "dougborg";
     repo = "gdub";
