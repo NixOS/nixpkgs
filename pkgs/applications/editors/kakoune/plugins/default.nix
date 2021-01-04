@@ -1,4 +1,4 @@
-{ callPackage, kakouneUtils }:
+{ callPackage, config, kakouneUtils, lib }:
 
 let
 
@@ -18,6 +18,8 @@ let
     inherit buildKakounePluginFrom2Nix;
   };
 
+  aliases = lib.optionalAttrs (config.allowAliases or true) (import ./aliases.nix lib plugins);
+
 in
 
-plugins
+plugins // aliases
