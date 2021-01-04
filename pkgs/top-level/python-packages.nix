@@ -7898,6 +7898,8 @@ in {
 
   whitenoise = callPackage ../development/python-modules/whitenoise { };
 
+  whois = callPackage ../development/python-modules/whois { };
+
   whoosh = callPackage ../development/python-modules/whoosh { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
