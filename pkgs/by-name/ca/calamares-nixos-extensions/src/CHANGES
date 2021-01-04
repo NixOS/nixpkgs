@@ -1,0 +1,28 @@
+<!-- SPDX-FileCopyrightText: no
+     SPDX-License-Identifier: CC0-1.0
+-->
+
+This is the changelog for Calamares-Extensions. For each release, the major
+changes and contributors are listed. Note that Calamares-Extensions does not
+have a historical changelog -- this log starts with version 1.0.0.
+
+
+# 1.1.0 (2021-01-04) #
+
+This release contains contributions from (alphabetically by first name):
+ - Oliver Smith
+
+Changes and new modules in this release:
+ - *mobile* module bugfixes
+ - *mobile* module SSH daemon can be disabled
+
+
+# 1.0.0 (2020-12-05) #
+
+This release contains contributions from (alphabetically by first name):
+ - Oliver Smith
+ - ShalokShalom
+
+Initial release of Calamares-Extensions as such, with one new module
+ - *mobile*, for PostmarketOS initial configuration
+
