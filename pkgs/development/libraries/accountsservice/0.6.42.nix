@@ -1,8 +1,21 @@
-  # system-settings depends on older accountsservice version with specific patches
-  # expression mostly copied from https://github.com/NixOS/nixpkgs/commit/755be7ef793cd29394d821e72656ac0276ea1c9b
-  # https://github.com/ubports/system-settings/issues/65
-  { stdenv, fetchurl, fetchzip, fetchpatch, pkg-config, glib, intltool, makeWrapper, shadow
-, libtool, gobject-introspection, polkit, systemd, coreutils }:
+# system-settings depends on older accountsservice version with specific patches
+# expression mostly copied from https://github.com/NixOS/nixpkgs/commit/755be7ef793cd29394d821e72656ac0276ea1c9b
+# https://github.com/ubports/system-settings/issues/65
+{ stdenv
+, fetchurl
+, fetchzip
+, fetchpatch
+, pkg-config
+, glib
+, intltool
+, makeWrapper
+, shadow
+, libtool
+, gobject-introspection
+, polkit
+, systemd
+, coreutils
+}:
 
 let
   ubuntu-patches = fetchzip {
@@ -25,15 +38,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib gobject-introspection polkit systemd ];
 
-  configureFlags = [ "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-                     "--localstatedir=/var" ];
+  configureFlags = [
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--localstatedir=/var"
+  ];
   prePatch = ''
-    substituteInPlace src/daemon.c --replace '"/usr/sbin/useradd"' '"${shadow}/bin/useradd"' \
-                                   --replace '"/usr/sbin/userdel"' '"${shadow}/bin/userdel"'
-    substituteInPlace src/user.c   --replace '"/usr/sbin/usermod"' '"${shadow}/bin/usermod"' \
-                                   --replace '"/usr/bin/chage"' '"${shadow}/bin/chage"' \
-                                   --replace '"/usr/bin/passwd"' '"${shadow}/bin/passwd"' \
-                                   --replace '"/bin/cat"' '"${coreutils}/bin/cat"'
+    substituteInPlace src/daemon.c \
+      --replace '"/usr/sbin/useradd"' '"${shadow}/bin/useradd"' \
+      --replace '"/usr/sbin/userdel"' '"${shadow}/bin/userdel"'
+    substituteInPlace src/user.c \
+      --replace '"/usr/sbin/usermod"' '"${shadow}/bin/usermod"' \
+      --replace '"/usr/bin/chage"' '"${shadow}/bin/chage"' \
+      --replace '"/usr/bin/passwd"' '"${shadow}/bin/passwd"' \
+      --replace '"/bin/cat"' '"${coreutils}/bin/cat"'
   '';
 
   patches = [
@@ -45,10 +62,12 @@ stdenv.mkDerivation rec {
     ("${ubuntu-patches}/patches/0015-debian-nologin-path.patch")
     ("${ubuntu-patches}/patches/CVE-2018-14036.patch")
 
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/NixOS/nixpkgs/755be7ef793cd29394d821e72656ac0276ea1c9b/pkgs/development/libraries/accountsservice/no-create-dirs.patch";
-      sha256 = "1rk2kyk49jk0bk14qv1l48vnqbxi4ykb2wmhy8i4j0gcdyi8lzqx";
-    })
+    (
+      fetchpatch {
+        url = "https://raw.githubusercontent.com/NixOS/nixpkgs/755be7ef793cd29394d821e72656ac0276ea1c9b/pkgs/development/libraries/accountsservice/no-create-dirs.patch";
+        sha256 = "1rk2kyk49jk0bk14qv1l48vnqbxi4ykb2wmhy8i4j0gcdyi8lzqx";
+      }
+    )
     # ./Add-nixbld-to-user-blacklist.patch ?
     ./Disable-methods-that-change-files-in-etc.patch
   ];
