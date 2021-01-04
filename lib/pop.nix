@@ -84,10 +84,11 @@ rec {
 
   # instantiateMeta :: ? -> Meta A B -> A
   instantiateMeta = {computePrecedenceList, mergeInstance, bottomInstance, topProto,
-                     getSupers, getDefaults, getProto, ...}: meta:
-    let precedenceList = computePrecedenceList getSupers meta;
+                     getSupers, getDefaults, getProto, ...}@instantiator: meta:
+    let precedenceList = computePrecedenceList instantiator meta;
         defaults = lib.foldr mergeInstance bottomInstance (map getDefaults precedenceList);
-        proto = composeProtos ([(topProto meta)] ++ (map getProto precedenceList)); in
+        __meta__ = meta // { inherit precedenceList; };
+        proto = composeProtos ([(topProto __meta__)] ++ (map getProto precedenceList)); in
         instantiateProto proto defaults;
 /*  foldr works much better in a lazy setting, by providing short-cut behavior
     when child behavior shadows parent behavior without calling super.
@@ -95,58 +96,65 @@ rec {
     because // is stricter than it could be and thus calls super anyway.
 */
 
-/*  The below topological sorting algorithm to linearize the inheritance DAG
-    into a precedenceList is optimized for code size: we just walk the structure
-    depth-first and adds supers LIFO into the tail. By contrast, CLOS
-    specifies a more elaborate algorithm that walks the structure breadth-first
-    and accumulate supers FIFO into the head.
-       http://www.lispworks.com/documentation/HyperSpec/Body/04_cea.htm
-    The C3 algorithm is used by Dylan, Python, Raku, Parrot, Solidity:
+/*  Below we use the C3 linearization to topological sort the inheritance DAG
+    into a precedenceList, as do all modern languages with multiple inheritance:
+    Dylan, Python, Raku, Parrot, Solidity, PGF/TikZ.
        https://en.wikipedia.org/wiki/C3_linearization
-    I'm not sure what C++ and other languages with multiple inheritance use.
-    Yet another option could be to optimize for stability by having a global
-    ordering in which to include classes, either at the head or tail.
+       https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.19.3910
 */
-  # simplePrecedenceList :: (? -> Meta ? ?) -> (Meta ? ?) -> List (Meta ? ?)
-  simplePrecedenceList = getSupers: meta: walkSimplePrecedenceList getSupers [] meta [];
+  # isEmpty :: (List X) -> Bool
+  isEmpty = l: builtins.length l == 0;
 
-  # walkSimplePrecedenceList :: (List (Meta ? ?)) (Meta ? ?) (List (Meta ? ?)) -> List (Meta ? ?)
-  walkSimplePrecedenceList = getSupers: heads: meta: tails:
-    if builtins.elem meta tails then
-      tails
-    else if builtins.elem meta heads then
-      throw ("circular precedence list: " +
-             builtins.concatStringsSep " < "
-               (map (m: m.name) (heads ++ [meta])))
-    else
-      # The prefix handling ensure that `supers` will be contained *in order*
-      # within the final `precedenceList`.
-      [meta] ++
-      foldrPrefixes (childmost-supers:
-                      walkSimplePrecedenceList getSupers (heads ++ [meta] ++ childmost-supers))
-                    (getSupers meta) tails;
+  # isNonEmpty :: (List X) -> Bool
+  isNonEmpty = l: builtins.length l > 0;
 
-  # Fold a function `f` over the elements of a list `bs`, from the end,
-  # each time passing to the folding function `f`:
-  # (1) the list `prefix` of elements that precede the current element,
-  # (2) the current element `b`, and (3) the accumulator `a`.
-  # Return the final value of the accumulator.
-  # foldrPrefixes :: ([b] b a -> a) [b] a -> a
-  foldrPrefixes = f: bs: a:
-    let i = (builtins.length bs) - 1; in
-    if i < 0 then a else
-    let b = builtins.elemAt bs i; prefix = lib.lists.sublist 0 i bs; in
-    foldrPrefixes f prefix (f prefix b a);
-/*  Note that the argument order was chosen specifically to enable
-    eta-conversion in the recursive call of `walkPrecedenceList`.
-*/
+  # remove_empties :: (List (List X)) -> (List (NonEmptyList X))
+  removeEmpties = builtins.filter isNonEmpty;
 
+  # removeNext :: X (List (NonEmptyList X)) -> (List (NonEmptyList X))
+  removeNext = next: tails:
+    removeEmpties (map (l: if (builtins.elemAt l 0 == next) then builtins.tail l else l) tails);
+
+  # every :: (X -> Bool) (List X) -> Bool
+  every = pred: l:
+    let loop = i: i == 0 || (let j = i - 1; in pred (builtins.elemAt l j) && loop j); in
+    loop (builtins.length l);
+
+  # Given a getSupers function, compute the precedence list without any caching.
+  # getPrecedenceList_of_getSupers :: (X -> (List X)) -> (X -> (NonEmptyList X))
+  getPrecedenceList_of_getSupers = getSupers:
+    let getPrecedenceList = c3ComputePrecedenceList { inherit getSupers getPrecedenceList; }; in
+    getPrecedenceList;
+
+  # c3computePrecedenceList ::
+  #   { getSupers: (A -> (List A)); getPrecedenceList: ?(A -> (NonEmptyList A)); } A -> (NonEmptyList A)
+  c3ComputePrecedenceList =
+    {getSupers, getPrecedenceList ? (getPrecedenceList_of_getSupers getSupers), ...}: x:
+    let
+      # super :: (List A)
+      supers = getSupers x;
+      # superPrecedenceLists :: (List (NonEmptyList A))
+      superPrecedenceLists = map getPrecedenceList supers;
+      # c3SelectNext :: (NonEmptyList (NonEmptyList X)) -> X
+      c3SelectNext = tails:
+        let isCandidate = c: every (tail: !(builtins.elem c (builtins.tail tail))) tails;
+          loop = ts: if isEmpty ts then throw ["Inconsistent precedence graph" x] else
+                     let c = builtins.elemAt (builtins.elemAt ts 0) 0; in
+                     if isCandidate c then c else loop (builtins.tail ts); in
+          loop tails;
+      # loop :: (NonEmptyList X) (List (NonEmptyList X)) -> (NonEmptyList X)
+      loop = head: tails:
+        if isEmpty tails then head else
+        if builtins.length tails == 1 then head ++ (builtins.elemAt tails 0) else
+        let next = c3SelectNext tails; in
+        loop (head ++ [next]) (removeNext next tails); in
+      loop [x] (removeEmpties (superPrecedenceLists ++ [supers]));
 
 /*  Extensions as prototypes to be merged into attrsets.
     This is the same notion of extensions as in `lib.fixedPoints`,
     with the exact same calling convention.
 */
-  # mergeAttrsets :: A B -> B // A | A <: Attrset, B <: Attrset
+  # mergeAttrset :: A B -> B // A | A <: Attrset, B <: Attrset
   mergeAttrset = a: b: b // a; # NB: bindings from `a` override those from `b`
 
   # mergeAttrsets :: IndexedList I A -> Union I A | forall I i: (A i) <: Attrset
@@ -168,20 +176,21 @@ rec {
     bottom, but the empty object `{}` (plus an appropriate `__meta__` field).
 */
 
-
 /*  Finally, here are our objects with both CLOS-style multiple inheritance and
     the winning Jsonnet-style combination of instance and meta information into
     a same entity, the object.
 */
   # Parameter to specialize `instantiateMeta` above.
   PopInstantiator = rec {
-    computePrecedenceList = simplePrecedenceList;
+    computePrecedenceList = c3ComputePrecedenceList;
     mergeInstance = mergeAttrset;
     bottomInstance = {};
     topProto = __meta__: self: super: super // { inherit __meta__; };
-    getSupers = m: m.supers;
+    getSupers = {supers ? [], ...}: supers;
+    getPrecedenceList = m: m.precedenceList;
     getDefaults = m: m.defaults;
     getProto = m: extensionProto m.extension;
+    getName = m: m.name;
   };
 /*  TODO: make that an object too, put it in the `__meta__` of `__meta__`, and
     bootstrap an entire meta-object protocol in the style of the CLOS MOP.
@@ -196,7 +205,7 @@ rec {
   # a `kPop` of its value as instance.
   # getMeta :: Pop A B -> Meta A B
   getMeta = p: if p ? __meta__ then p.__meta__ else
-    { supers=[]; extension=_: _: p; defaults={}; name="attrs"; };
+    let m = { supers=[]; precedenceList=[m]; extension=_: _: p; defaults={}; name="attrs"; }; in m;
 
   # General purpose constructor for a `pop` object, based on an optional `name`,
   # an optional list `supers` of super pops, an `extension` as above, and
