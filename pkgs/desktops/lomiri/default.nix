@@ -24,5 +24,6 @@ let
     qdjango = callPackage ./qdjango { };
     libusermetrics = callPackage ./libusermetrics { };
     ubuntu-download-manager = callPackage ./ubuntu-download-manager { };
+    unity8 = callPackage ./unity8 { };
   };
 in makeScope libsForQt5.newScope packages
