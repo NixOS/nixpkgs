@@ -453,6 +453,8 @@ in {
 
   async-upnp-client = callPackage ../development/python-modules/async-upnp-client { };
 
+  asyncwhois = callPackage ../development/python-modules/asyncwhois { };
+
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
 
   atom = callPackage ../development/python-modules/atom { };
