@@ -49,7 +49,7 @@ python27Packages.buildPythonApplication {
   '';
 
   installPhase = ''
-    install -dm 755 resholve $out/bin/
+    install -Dm755 resholve $out/bin/resholve
     installManPage resholve.1
   '';
 
