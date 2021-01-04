@@ -75,9 +75,7 @@ rec {
       files, dozens of which get interpreter script patches in fixup.
       */
       extraPostFetch = ''
-        #find . -maxdepth 1 -type d | sort
         rm -rf Python-2.7.13 benchmarks metrics py-yajl rfc gold web testdata services demo devtools cpp
-        # find . -maxdepth 1 -type d | sort
       '';
     };
 
