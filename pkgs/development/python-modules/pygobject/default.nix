@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, python, buildPythonPackage, pkgconfig, glib, isPy3k }:
+{ stdenv, fetchurl, python, buildPythonPackage, pkgconfig, glib, isPy3k, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "pygobject";
   version = "2.28.7";
   format = "other";
+  disabled = pythonAtLeast "3.9";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/2.28/${pname}-${version}.tar.xz";
