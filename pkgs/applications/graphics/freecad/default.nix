@@ -26,9 +26,6 @@ in mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  # extra python pkgs for WorkBenches
-  # propagatedBuildInputs = [ yaml ];
-
   buildInputs = [
     cmake coin3d xercesc ode eigen opencascade-occt gts
     zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
