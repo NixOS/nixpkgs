@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  buildInputs = [ lua pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ lua ]
     ++ stdenv.lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) systemd
     ++ stdenv.lib.optionals tlsSupport [ openssl ];
   # More cross-compiling fixes.
