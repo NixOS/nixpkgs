@@ -87,9 +87,9 @@ rec {
     # passing in from resholve.nix
     patches = oilPatches;
 
-    buildInputs = [ readline cmark py-yajl makeWrapper ];
+    buildInputs = [ readline cmark py-yajl ];
 
-    nativeBuildInputs = [ re2c file ];
+    nativeBuildInputs = [ re2c file makeWrapper ];
 
     propagatedBuildInputs = with python27Packages; [ six typing ];
 
