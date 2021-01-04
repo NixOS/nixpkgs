@@ -3634,7 +3634,9 @@ in {
     llvm = pkgs.llvm_9;
   }; # llvmlite always requires a specific version of llvm.
 
-  lmdb = callPackage ../development/python-modules/lmdb { };
+  lmdb = callPackage ../development/python-modules/lmdb {
+    inherit (pkgs) lmdb;
+  };
 
   lml = callPackage ../development/python-modules/lml { };
 
