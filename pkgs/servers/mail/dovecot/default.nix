@@ -89,5 +89,6 @@ stdenv.mkDerivation rec {
   };
   passthru.tests = {
     opensmtpd-interaction = nixosTests.opensmtpd;
+    inherit (nixosTests) dovecot;
   };
 }
