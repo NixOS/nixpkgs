@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, zlib, kmod, which
-, static ? stdenv.targetPlatform.isStatic
+, static ? stdenv.hostPlatform.isStatic
 , darwin ? null
 }:
 

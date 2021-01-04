@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, enableShared ? true }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 let
   generic = { version, sha256, patches ? [ ] }:

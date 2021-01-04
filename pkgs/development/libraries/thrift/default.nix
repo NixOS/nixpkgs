@@ -1,5 +1,7 @@
 { stdenv, fetchurl, fetchpatch, boost, zlib, libevent, openssl, python, cmake, pkgconfig
-, bison, flex, twisted, static ? false }:
+, bison, flex, twisted
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "thrift";

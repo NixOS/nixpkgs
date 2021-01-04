@@ -12,7 +12,6 @@ with stdenv.lib;
 let
   version = "3.4.2";
   variant = if withQt then "qt" else "cli";
-  pcap = libpcap.override { withBluez = stdenv.isLinux; };
 
 in stdenv.mkDerivation {
   pname = "wireshark-${variant}";
@@ -39,7 +38,7 @@ in stdenv.mkDerivation {
   ] ++ optional withQt qt5.wrapQtAppsHook;
 
   buildInputs = [
-    gettext pcre perl pcap lua5 libssh nghttp2 openssl libgcrypt
+    gettext pcre perl libpcap lua5 libssh nghttp2 openssl libgcrypt
     libgpgerror gnutls geoip c-ares python3 glib zlib makeWrapper
   ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
     ++ optionals stdenv.isLinux  [ libcap libnl ]

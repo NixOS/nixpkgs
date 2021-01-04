@@ -112,86 +112,22 @@ in {
     enableApp = false;
   };
 
-  ncurses = super.ncurses.override {
-    enableStatic = true;
-  };
-  libxml2 = super.libxml2.override ({
-    enableShared = false;
-    enableStatic = true;
-  } // optionalAttrs super.stdenv.hostPlatform.isDarwin {
-    pythonSupport = false;
-  });
   zlib = super.zlib.override {
-    static = true;
-    shared = false;
-    splitStaticOutput = false;
-
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
   };
-  xz = super.xz.override {
-    enableStatic = true;
-  };
-  busybox = super.busybox.override {
-    enableStatic = true;
-  };
-  libiberty = super.libiberty.override {
-    staticBuild = true;
-  };
-  libpfm = super.libpfm.override {
-    enableShared = false;
-  };
-  ipmitool = super.ipmitool.override {
-    static = true;
-  };
-  neon = super.neon.override {
-    static = true;
-    shared = false;
-  };
-  fmt = super.fmt.override {
-    enableShared = false;
-  };
   gifsicle = super.gifsicle.override {
     static = true;
   };
-  bzip2 = super.bzip2.override {
-    linkStatic = true;
-  };
-  optipng = super.optipng.override {
-    static = true;
-  };
-  openblas = super.openblas.override {
-    enableStatic = true;
-    enableShared = false;
-  };
-  mkl = super.mkl.override { enableStatic = true; };
-  nix = super.nix.override { enableStatic = true; };
-  nixUnstable = super.nixUnstable.override { enableStatic = true; };
-  openssl = (super.openssl_1_1.override { static = true; }).overrideAttrs (o: {
+  openssl = super.openssl_1_1.overrideAttrs (o: {
     # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
     configureFlags = (removeUnknownConfigureFlags o.configureFlags);
   });
-  arrow-cpp = super.arrow-cpp.override {
-    enableShared = false;
-  };
   boost = super.boost.override {
-    enableStatic = true;
-    enableShared = false;
-
     # Don’t use new stdenv for boost because it doesn’t like the
     # --disable-shared flag
     stdenv = super.stdenv;
-  };
-  thrift = super.thrift.override {
-    static = true;
-    twisted = null;
-  };
-  gmp = super.gmp.override {
-    withStatic = true;
-  };
-  gflags = super.gflags.override {
-    enableShared = false;
   };
   cdo = super.cdo.override {
     enable_all_static = true;
@@ -201,13 +137,6 @@ in {
   };
   crc32c = super.crc32c.override {
     staticOnly = true;
-  };
-  parted = super.parted.override {
-    enableStatic = true;
-  };
-  libiconvReal = super.libiconvReal.override {
-    enableShared = false;
-    enableStatic = true;
   };
   perl = super.perl.override {
     # Don’t use new stdenv zlib because
@@ -220,23 +149,8 @@ in {
   snappy = super.snappy.override {
     static = true;
   };
-  lz4 = super.lz4.override {
-    enableShared = false;
-    enableStatic = true;
-  };
   libressl = super.libressl.override {
     buildShared = false;
-  };
-  libjpeg_turbo = super.libjpeg_turbo.override {
-    enableStatic = true;
-    enableShared = false;
-  };
-
-  darwin = super.darwin // {
-    libiconv = super.darwin.libiconv.override {
-      enableShared = false;
-      enableStatic = true;
-    };
   };
 
   kmod = super.kmod.override {
@@ -260,21 +174,6 @@ in {
     static = true;
   };
 
-  llvmPackages_8 = super.llvmPackages_8 // {
-    libraries = super.llvmPackages_8.libraries // rec {
-      libcxxabi = super.llvmPackages_8.libraries.libcxxabi.override {
-        enableShared = false;
-      };
-      libcxx = super.llvmPackages_8.libraries.libcxx.override {
-        enableShared = false;
-        inherit libcxxabi;
-      };
-      libunwind = super.llvmPackages_8.libraries.libunwind.override {
-        enableShared = false;
-      };
-    };
-  };
-
   ocaml-ng = self.lib.mapAttrs (_: set:
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;
@@ -288,13 +187,6 @@ in {
 
   # Note: -static doesn’t work on darwin
   libev = super.libev.override { static = !super.stdenv.hostPlatform.isDarwin; };
-
-  libexecinfo = super.libexecinfo.override { enableShared = false; };
-
-  tree-sitter = super.tree-sitter.override {
-    enableShared = false;
-    enableStatic = true;
-  };
 
   xorg = super.xorg.overrideScope' (xorgself: xorgsuper: {
     libX11 = xorgsuper.libX11.overrideAttrs (attrs: {
@@ -319,6 +211,4 @@ in {
       configureFlags = attrs.configureFlags ++ [ "--disable-shared" ];
     });
   });
-
-  libcap = super.libcap.override { pam = null; };
 }
