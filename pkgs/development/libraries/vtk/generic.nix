@@ -1,5 +1,5 @@
 { majorVersion, minorVersion, sourceSha256, patchesToFetch ? [] }:
-{ stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libtiff
+{ gcc9Stdenv, stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libtiff
 , fetchpatch
 , enableQt ? false, wrapQtAppsHook, qtbase, qtx11extras, qttools
 , enablePython ? false, pythonInterpreter ? throw "vtk: Python support requested, but no python interpreter was given."
@@ -13,7 +13,7 @@ let
 
   pythonMajor = lib.substring 0 1 pythonInterpreter.pythonVersion;
 
-in stdenv.mkDerivation rec {
+in gcc9Stdenv.mkDerivation rec {
   pname = "vtk${optionalString enableQt "-qvtk"}";
   version = "${majorVersion}.${minorVersion}";
 

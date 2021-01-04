@@ -26,6 +26,9 @@ in mkDerivation rec {
     wrapQtAppsHook
   ];
 
+  # extra python pkgs for WorkBenches
+  # propagatedBuildInputs = [ yaml ];
+
   buildInputs = [
     cmake coin3d xercesc ode eigen opencascade-occt gts
     zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
@@ -33,6 +36,7 @@ in mkDerivation rec {
   ] ++ (with pythonPackages; [
     matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
     GitPython # for addon manager
+    scipy pyyaml # (at least for) PyrateWorkbench
   ]);
 
   cmakeFlags = [
