@@ -27,8 +27,6 @@ stdenv.mkDerivation {
     install -D ../emulationstation $out/bin/emulationstation
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "A flexible emulator front-end supporting keyboardless navigation and custom system themes";
     homepage = "https://emulationstation.org";

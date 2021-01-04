@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib
 , ncurses, openssl, aspell, gnutls, gettext
-, zlib, curl, pkgconfig, libgcrypt
+, zlib, curl, pkg-config, libgcrypt
 , cmake, makeWrapper, libobjc, libresolv, libiconv
 , asciidoctor # manpages
 , guileSupport ? true, guile
@@ -37,7 +37,6 @@ let
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
-      enableParallelBuilding = true;
       cmakeFlags = with stdenv.lib; [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
@@ -48,10 +47,10 @@ let
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
 
+      nativeBuildInputs = [ cmake pkg-config makeWrapper asciidoctor ];
       buildInputs = with stdenv.lib; [
-          ncurses openssl aspell gnutls gettext zlib curl pkgconfig
-          libgcrypt makeWrapper cmake asciidoctor
-          ]
+          ncurses openssl aspell gnutls gettext zlib curl
+          libgcrypt ]
         ++ optionals stdenv.isDarwin [ libobjc libresolv ]
         ++ concatMap (p: p.buildInputs) enabledPlugins
         ++ extraBuildInputs;

@@ -23,8 +23,6 @@ mkDerivation rec {
     qtbase qtsvg gnuradio boost gr-osmosdr rtl-sdr hackrf
   ] ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ];
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     install -vD $src/gqrx.desktop -t "$out/share/applications/"
     install -vD $src/resources/icons/gqrx.svg -t "$out/share/pixmaps/"

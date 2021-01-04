@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
       "-DINSTALL_LIBENCFS=ON"
     ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "An encrypted filesystem in user-space via FUSE";
     homepage = "https://vgough.github.io/encfs";

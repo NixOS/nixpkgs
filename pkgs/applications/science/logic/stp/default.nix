@@ -24,9 +24,6 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  # seems to build fine now, may revert if concurrency does become an issue
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Simple Theorem Prover";
     maintainers = with maintainers; [ ];

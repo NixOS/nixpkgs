@@ -23,7 +23,8 @@ stdenv.mkDerivation {
     ln -sv "${externals}" externals
   '';
 
-  buildInputs = [ cmake qt4 libGLU libGL ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qt4 libGLU libGL ];
 
   NIX_LDFLAGS = "-lGLU";
 

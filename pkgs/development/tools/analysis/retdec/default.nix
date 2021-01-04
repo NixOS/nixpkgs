@@ -216,8 +216,6 @@ in stdenv.mkDerivation rec {
     substituteInPlace scripts/retdec-unpacker.py --replace "'upx'" "'${upx}/bin/upx'"
   '';
 
-  enableParallelBuilding = true;
-
   doInstallCheck = true;
   installCheckPhase = ''
     ${python3.interpreter} "$out/bin/retdec-tests-runner.py"

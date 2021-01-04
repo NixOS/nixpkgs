@@ -36,7 +36,6 @@ let
           ++ lib.optional useClang [ llvmPackages.lld ];
 
         separateDebugInfo = true;
-        enableParallelBuilding = true;
         dontFixCmake = true;
 
         cmakeFlags =
@@ -66,7 +65,7 @@ let
         # fix up the use of the very weird and custom 'fdb_install' command by just
         # replacing it with cmake's ordinary version.
         postPatch = ''
-          for x in bindings/c/CMakeLists.txt fdbserver/CMakeLists.txt fdbmonitor/CMakeLists.txt fdbbackup/CMakeLists.txt fdbcli/CMakeLists.txt; do 
+          for x in bindings/c/CMakeLists.txt fdbserver/CMakeLists.txt fdbmonitor/CMakeLists.txt fdbbackup/CMakeLists.txt fdbcli/CMakeLists.txt; do
             substituteInPlace $x --replace 'fdb_install' 'install'
           done
         '';

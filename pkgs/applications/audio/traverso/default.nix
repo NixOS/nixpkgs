@@ -18,7 +18,6 @@ mkDerivation {
 
   cmakeFlags = [ "-DWANT_PORTAUDIO=1" "-DWANT_PULSEAUDIO=1" "-DWANT_MP3_ENCODE=1" "-DWANT_LV2=0" ];
 
-  enableParallelBuilding = true;
   hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {

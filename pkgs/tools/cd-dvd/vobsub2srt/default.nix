@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, libtiff, pkgconfig, tesseract }:
+{ stdenv, fetchgit, cmake, libtiff, pkg-config, tesseract }:
 
 let rev = "a6abbd61127a6392d420bbbebdf7612608c943c2";
     shortRev = builtins.substring 0 7 rev;
@@ -12,8 +12,8 @@ stdenv.mkDerivation {
     sha256 = "1rpanrv8bgdh95v2320qbd44xskncvq6y84cbbfc86gw0qxpd9cb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake libtiff ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ libtiff ];
   propagatedBuildInputs = [ tesseract ];
 
   meta = {

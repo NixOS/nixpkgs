@@ -83,7 +83,6 @@ let
         repo  = name;
         inherit rev sha256;
       };
-      enableParallelBuilding = true;
     } // attrs');
 
   ffmpeg = kodiDependency rec {
@@ -241,8 +240,6 @@ in stdenv.mkDerivation {
       "-DCORE_PLATFORM_NAME=gbm"
       "-DGBM_RENDER_SYSTEM=gles"
     ];
-
-    enableParallelBuilding = true;
 
     # 14 tests fail but the biggest issue is that every test takes 30 seconds -
     # I'm guessing there is a thing waiting to time out

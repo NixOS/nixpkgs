@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1blzyh1646955d580f71slgdvz0nqx0qacryx0jc9w02yrag17cs";
   };
 
-  buildInputs = [ cmake qt4 qscintilla ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qt4 qscintilla ];
 
   prePatch = ''
     sed -i 's,m_file(0),m_file(QString()),' Sqliteman/sqliteman/main.cpp

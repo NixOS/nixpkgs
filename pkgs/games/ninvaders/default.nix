@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wmwws1zsap4bfc2439p25vnja0hnsf57k293rdxw626gly06whi";
   };
 
-  buildInputs = [ cmake ncurses ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ ncurses ];
 
   meta = with stdenv.lib; {
     description = "Space Invaders clone based on ncurses";

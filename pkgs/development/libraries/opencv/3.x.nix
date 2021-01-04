@@ -245,8 +245,6 @@ stdenv.mkDerivation {
     "-DEIGEN_INCLUDE_PATH=${eigen}/include/eigen3"
   ];
 
-  enableParallelBuilding = true;
-
   postBuild = lib.optionalString enableDocs ''
     make doxygen
   '';

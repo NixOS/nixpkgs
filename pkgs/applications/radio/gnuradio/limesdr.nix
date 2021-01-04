@@ -28,8 +28,6 @@ in stdenv.mkDerivation {
   ] ++ stdenv.lib.optionals pythonSupport [ python ];
 
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Gnuradio source and sink blocks for LimeSDR";
     homepage = "https://wiki.myriadrf.org/Gr-limesdr_Plugin_for_GNURadio";

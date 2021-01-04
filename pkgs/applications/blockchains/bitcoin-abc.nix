@@ -32,8 +32,6 @@ mkDerivation rec {
     find ./. -type f -iname "*.sh" -exec chmod +x {} \;
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Peer-to-peer electronic cash system (Cash client)";
     longDescription= ''

@@ -40,8 +40,6 @@ let
       substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
     '';
 
-    enableParallelBuilding = true;
-
     outputs = [ "bin" "dev" "out" "man" "nc" ];
 
     postFixup = ''

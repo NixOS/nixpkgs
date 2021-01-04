@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
-  enableParallelBuilding = true;
-
   # we need unar to for multi-archive extraction
   postFixup = stdenv.lib.optionalString withGog ''
     wrapProgram $out/bin/innoextract \

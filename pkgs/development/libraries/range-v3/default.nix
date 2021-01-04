@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isAarch64;
   checkTarget = "test";
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Experimental range library for C++11/14/17";
     homepage = "https://github.com/ericniebler/range-v3";

@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     moveToOutput include "$dev"
     moveToOutput lib "$dev"

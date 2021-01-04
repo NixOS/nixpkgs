@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     cp $louiz_catch/single_include/catch.hpp tests/
   '';
 
-  enableParallelBuilding = true;
   doCheck = true;
 
   meta = with stdenv.lib; {

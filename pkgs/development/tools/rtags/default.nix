@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
            LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib"
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "C/C++ client-server indexer based on clang";
     homepage = "https://github.com/andersbakken/rtags";

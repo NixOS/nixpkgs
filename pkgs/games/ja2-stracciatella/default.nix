@@ -30,7 +30,8 @@ stdenv.mkDerivation {
   inherit src;
   inherit version;
 
-  buildInputs = [ cmake SDL2 fltk boost ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ SDL2 fltk boost ];
 
   patches = [
     ./remove-rust-buildstep.patch
@@ -40,8 +41,6 @@ stdenv.mkDerivation {
     sed -i -e 's|rust-stracciatella|${libstracciatella}/lib/libstracciatella.so|g' CMakeLists.txt
     cmakeFlagsArray+=("-DEXTRA_DATA_DIR=$out/share/ja2")
   '';
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "Jagged Alliance 2, with community fixes";

@@ -92,8 +92,6 @@ stdenv.mkDerivation rec {
     EOW
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Framework for the simulation of distributed applications";
     longDescription = ''

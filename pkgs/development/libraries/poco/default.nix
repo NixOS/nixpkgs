@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
     "-DPOCO_UNBUNDLED=ON"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = "https://pocoproject.org/";
     description = "Cross-platform C++ libraries with a network/internet focus";

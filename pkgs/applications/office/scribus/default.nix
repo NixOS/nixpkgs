@@ -18,8 +18,6 @@ in stdenv.mkDerivation rec {
     sha256 = "0bq433myw6h1siqlsakxv6ghb002rp3mfz5k12bg68s0k6skn992";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = with xorg;
     [ freetype lcms libtiff libxml2 libart_lgpl qt4

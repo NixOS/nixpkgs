@@ -100,8 +100,6 @@ common = rec { # attributes common to both builds
     rm -r $out/share/aclocal
   '';
 
-  enableParallelBuilding = true;
-
   passthru.mysqlVersion = "5.7";
 
   passthru.tests = {

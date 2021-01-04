@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
     unix/cmake/configure --prefix=$out --enable-mpg-{mmx,pthreads}
   '';
 
-  enableParallelBuilding = true;
-
   hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {

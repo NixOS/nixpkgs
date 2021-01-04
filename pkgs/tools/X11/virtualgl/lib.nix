@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
       --replace "LD_PRELOAD=libgefaker" "LD_PRELOAD=$out/lib/libgefaker"
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = "http://www.virtualgl.org/";
     description = "X11 GL rendering in a remote computer with full 3D hw acceleration";

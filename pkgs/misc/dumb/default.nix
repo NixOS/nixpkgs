@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "dumb";
   version = "2.0.3";
-  enableParallelBuilding = true;
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ allegro SDL2 ];
 

@@ -41,8 +41,6 @@ let
         --add-flags "-L $COREDIR/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
     '';
 
-    enableParallelBuilding = true;
-
     passthru = {
       inherit (a) core;
       libretroCore = "/lib/retroarch/cores";

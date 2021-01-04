@@ -47,8 +47,6 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  enableParallelBuilding = true;
-
   buildInputs = [
     catch2
     zlib

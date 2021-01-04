@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, cmake, openssl, sqlite, pkgconfig, systemd
+{ stdenv, fetchpatch, fetchFromGitHub, cmake, openssl, sqlite, pkg-config, systemd
 , tlsSupport ? false }:
 
 assert tlsSupport -> openssl != null;
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0zdbxfvw7apmfhqgsfkfp4pn9iflzwdn0zwvzymm5inswfc00pxg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake sqlite systemd ] ++ stdenv.lib.optional tlsSupport openssl;
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ sqlite systemd ] ++ stdenv.lib.optional tlsSupport openssl;
 
   outputs = [ "out"
     "mod_example"

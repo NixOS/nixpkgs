@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     interpreter=${stdenv.glibc}/lib/ld-linux-x86-64.so.2
     patchelf --set-interpreter "$interpreter" $pgm
 
-    wrapProgram $pgm --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ openssl stdenv.cc.cc ]} 
+    wrapProgram $pgm --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ openssl stdenv.cc.cc ]}
 
     rm $out/usr/bin/minergate-cli
     mkdir -p $out/bin

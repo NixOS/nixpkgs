@@ -50,8 +50,6 @@ stdenv.mkDerivation {
 
   dontUseCmakeBuildDir = true;
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "A library for computer-vision scientists and especially targeted to the Multi-View Stereo reconstruction community";
     homepage = "http://cdcseacave.github.io/openMVS/";

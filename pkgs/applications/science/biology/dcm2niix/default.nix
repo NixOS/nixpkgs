@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     sha256 = "1cncfwhyhmg18n970lkn6yvp0i74ajznsl8dqz00asqfzmg681n1";
   };
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ cmake git ];
   buildInputs = [ libyamlcpp ];
 

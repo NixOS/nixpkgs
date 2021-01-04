@@ -8,7 +8,7 @@
 , gflags
 , gnuradio
 , orc
-, pkgconfig
+, pkg-config
 , pythonPackages
 , uhd
 , log4cpp
@@ -29,17 +29,16 @@ stdenv.mkDerivation rec {
     sha256 = "0a3k47fl5dizzhbqbrbmckl636lznyjby2d2nz6fz21637hvrnby";
   };
 
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     armadillo
     boost.dev
-    cmake
     glog
     gmock
     openssl.dev
     gflags
     gnuradio
     orc
-    pkgconfig
     pythonPackages.Mako
     pythonPackages.six
 
@@ -52,8 +51,6 @@ stdenv.mkDerivation rec {
     pugixml
     protobuf
   ];
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DGFlags_ROOT_DIR=${gflags}/lib"

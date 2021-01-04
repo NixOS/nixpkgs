@@ -54,8 +54,6 @@ stdenv.mkDerivation rec {
     sha256 = "1fir1a13ac07mqhm4sr34cixiqj2difxq0870qv1wr7a7cbfw6vp";
   };
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DENABLE_LIBUHD=ON"
     "-DENABLE_USB=ON"

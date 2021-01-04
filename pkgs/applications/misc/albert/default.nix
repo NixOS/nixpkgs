@@ -18,8 +18,6 @@ mkDerivation rec {
 
   buildInputs = [ qtbase qtdeclarative qtsvg qtx11extras muparser python3 qtcharts ];
 
-  enableParallelBuilding = true;
-
   # We don't have virtualbox sdk so disable plugin
   cmakeFlags = [ "-DBUILD_VIRTUALBOX=OFF" "-DCMAKE_INSTALL_LIBDIR=libs" ];
 

@@ -43,8 +43,6 @@ stdenv.mkDerivation rec {
     rm "$out"/lib/*.a
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Lightweight, Portable, Flexible Distributed/Mobile Deep Learning with Dynamic, Mutation-aware Dataflow Dep Scheduler";
     homepage = "https://mxnet.incubator.apache.org/";

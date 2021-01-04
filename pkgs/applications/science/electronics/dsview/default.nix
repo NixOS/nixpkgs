@@ -34,8 +34,6 @@ mkDerivation rec {
     python3
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "A GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";
     homepage = "https://www.dreamsourcelab.com/";

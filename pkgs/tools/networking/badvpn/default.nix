@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, openssl, nss, pkgconfig, nspr, bash, debug ? false}:
+{stdenv, fetchurl, cmake, openssl, nss, pkg-config, nspr, bash, debug ? false}:
 let
   s = # Generated upstream information
   rec {
@@ -10,15 +10,15 @@ let
     sha256="02b1fra43l75mljkhrq45vcrrqv0znicjn15g7nbqx3jppzbpm5z";
   };
 
-  buildInputs = [
-    cmake openssl nss nspr
-  ];
+
   compileFlags = "-O3 ${stdenv.lib.optionalString (!debug) "-DNDEBUG"}";
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  nativeBuildInputs = [ pkgconfig ];
-  inherit buildInputs;
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+    openssl nss nspr
+  ];
   src = fetchurl {
     inherit (s) url sha256;
   };

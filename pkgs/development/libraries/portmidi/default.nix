@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
     ln -s libportmidi.so "$out/lib/libporttime.so"
   '';
 
-  buildInputs = [ unzip cmake /*jdk*/ alsaLib ];
+  nativeBuildInputs = [ unzip cmake ];
+  buildInputs = [ alsaLib ];
 
   hardeningDisable = [ "format" ];
 

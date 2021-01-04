@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Libraries to natively talk to Microsoft SQL Server and Sybase databases";
     homepage    = "https://www.freetds.org";

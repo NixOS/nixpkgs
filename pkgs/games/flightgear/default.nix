@@ -69,8 +69,6 @@ stdenv.mkDerivation rec {
     "--set FG_ROOT ${data}/share/FlightGear"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Flight simulator";
     maintainers = with maintainers; [ raskin ];

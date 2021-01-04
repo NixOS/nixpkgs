@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl qt ]
     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
-  enableParallelBuilding = true;
-
   # tells CMake to use this CA bundle file if it is accessible
   preConfigure = ''
     export QC_CERTSTORE_PATH=/etc/ssl/certs/ca-certificates.crt

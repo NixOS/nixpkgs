@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake texinfo ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DBUILD_DOCS:BOOL=ON"

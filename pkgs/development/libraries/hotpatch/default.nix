@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
     sha256 = "169vdh55wsbn6fl58lpzqx64v6ifzh7krykav33x1d9hsk98qjqh";
   };
 
-  enableParallelBuilding = true;
   doCheck = true;
 
   nativeBuildInputs = [ cmake ];

@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ python3 vulkan-headers vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
-  enableParallelBuilding = true;
 
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
 

@@ -31,7 +31,6 @@ in stdenv.mkDerivation {
   };
 
   dontAddPrefix = true;
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ makeWrapper cmake ];
   buildInputs = [ libjpeg zlib libpng libGL SDL2 ];

@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
     pango lzma nasm llvm glibmm
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Open source Flash Player implementation";
     homepage = "https://lightspark.github.io/";

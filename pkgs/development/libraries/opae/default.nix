@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [ "-DBUILD_ASE=1" ];
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Open Programmable Acceleration Engine SDK";

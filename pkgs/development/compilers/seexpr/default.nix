@@ -12,7 +12,8 @@ stdenv.mkDerivation {
     sha256 = "0a44k56jf6dl36fwgg4zpc252wq5lf9cblg74mp73k82hxw439l4";
   };
 
-  buildInputs = [ cmake libGLU libpng zlib qt4 pythonPackages.pyqt4 bison flex ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libGLU libpng zlib qt4 pythonPackages.pyqt4 bison flex ];
   meta = with stdenv.lib; {
     description = "Embeddable expression evaluation engine from Disney Animation";
     homepage = "https://www.disneyanimation.com/technology/seexpr.html";

@@ -22,8 +22,6 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  enableParallelBuilding = true;
-
   patchPhase = ''
     cp -fv ${fakegit}/bin/checkout-git.sh libraries/checkout-git.sh
     cp -fv ${fakegit}/bin/checkout-svn.sh libraries/checkout-svn.sh

@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "067562s71kfsnbp2zb2bmq8zj3jk96g5a4rcc5qc3n8nfyayhldk";
   };
 
-
-  buildInputs = [ cmake ogre freetype boost expat ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ ogre freetype boost expat ];
 
   meta = with stdenv.lib; {
     homepage = "http://cegui.org.uk/";

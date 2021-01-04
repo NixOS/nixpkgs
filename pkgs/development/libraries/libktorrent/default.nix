@@ -23,8 +23,6 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gmp boost ];
 
-  enableParallelBuilding = true;
-
   passthru = {
     inherit mainVersion;
   };

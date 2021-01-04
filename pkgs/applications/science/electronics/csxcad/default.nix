@@ -37,8 +37,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "A C++ library to describe geometrical objects";
     homepage = "https://github.com/thliebig/CSXCAD";

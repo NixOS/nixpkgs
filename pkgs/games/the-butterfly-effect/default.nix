@@ -17,7 +17,6 @@ mkDerivation rec {
     qt5.qtbase qt5.qtsvg qt5.qttranslations box2d which cmake
     gettext
   ];
-  enableParallelBuilding = true;
 
   installPhase = ''
     make DESTDIR=.. install

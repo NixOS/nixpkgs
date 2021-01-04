@@ -12,8 +12,8 @@ stdenv.mkDerivation {
     sha256 = "1xv3j487zhh1zf2b4v19xzw63s2sgjhg8d62a0kxxyknfmdf3khl";
   };
 
-  buildInputs = [ gmp mpfr cmake python gperftools ninja makeWrapper ];
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake makeWrapper ninja ];
+  buildInputs = [ gmp mpfr python gperftools ];
 
   preConfigure = ''
     patchShebangs bin/leantags

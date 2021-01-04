@@ -37,7 +37,6 @@ let
   buildLib = has12Bit: stdenv.mkDerivation rec {
     name = "libx265-${if has12Bit then "12" else "10"}-${version}";
     inherit src;
-    enableParallelBuilding = true;
 
     postPatch = ''
       sed -i 's/unknown/${version}/g' source/cmake/version.cmake
@@ -67,8 +66,6 @@ in
 stdenv.mkDerivation rec {
   pname = "x265";
   inherit version src;
-
-  enableParallelBuilding = true;
 
   postPatch = ''
     sed -i 's/unknown/${version}/g' source/cmake/version.cmake

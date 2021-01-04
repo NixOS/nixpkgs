@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchurl
-, cmake, pkgconfig, dbus, makeWrapper
+, cmake, pkg-config, dbus, makeWrapper
 , gtest
 , boost
 , libcap
@@ -55,11 +55,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    cmake
+    pkg-config
     makeWrapper
   ];
 
   buildInputs = [
-    cmake pkgconfig dbus boost libcap gtest systemd mesa glib
+    dbus boost libcap gtest systemd mesa glib
     SDL2 SDL2_image protobuf protobufc properties-cpp lxc python
     libGL
   ];

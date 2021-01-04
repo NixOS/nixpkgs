@@ -96,8 +96,6 @@ stdenv.mkDerivation rec {
     rm -rf "$out"/include "$out"/lib
   '';
 
-  enableParallelBuilding = true;
-
   passthru = { inherit skia; };
 
   meta = with lib; {

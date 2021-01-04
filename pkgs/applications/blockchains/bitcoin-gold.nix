@@ -19,7 +19,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  
+
   pname = "bitcoin" + toString (optional (!withGui) "d") + "-gold";
   version = "0.15.2";
 

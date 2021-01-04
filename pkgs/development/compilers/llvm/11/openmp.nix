@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ llvm ];
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Components required to build an executable OpenMP program";
     homepage    = "https://openmp.llvm.org/";

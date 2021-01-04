@@ -24,6 +24,5 @@ buildPythonPackage {
 
   checkInputs = [ pytest more-itertools ];
 
-  enableParallelBuilding = true;
   dontUseCmakeConfigure = true;
 }

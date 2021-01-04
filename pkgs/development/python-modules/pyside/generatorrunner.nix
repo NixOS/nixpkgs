@@ -13,8 +13,6 @@ in stdenv.mkDerivation {
     sha256 = "0vzk3cp0pfbhd921r8f1xkcz96znla39dhj074k623x9k26lj2sj";
   };
 
-  enableParallelBuilding = true;
-
   outputs = [ "out" "dev" ];
 
   preConfigure = ''

@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
 
   installPhase = ''

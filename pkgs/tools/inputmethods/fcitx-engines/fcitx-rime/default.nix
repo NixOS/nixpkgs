@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, fcitx, librime, brise, hicolor-icon-theme }:
+{ stdenv, fetchurl, cmake, pkg-config, fcitx, librime, brise, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-rime";
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0bd8snfa6jr8dhnm0s0z021iryh5pbaf7p15rhkgbigw2pssczpr";
   };
 
-  buildInputs = [ cmake pkgconfig fcitx librime brise hicolor-icon-theme ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ fcitx librime brise hicolor-icon-theme ];
 
   # cmake cannont automatically find our nonstandard brise install location
   cmakeFlags = [ "-DRIME_DATA_DIR=${brise}/share/rime-data" ];
@@ -20,8 +21,6 @@ stdenv.mkDerivation rec {
     substituteInPlace data/cmake_install.cmake \
        --replace ${fcitx} $out
   '';
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     isFcitxEngine = true;

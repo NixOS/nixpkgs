@@ -4,7 +4,7 @@
 , util-linux, qtbase ? null, qttools ? null
 , enableUpnp ? false
 , disableWallet ? false
-, disableDaemon ? false 
+, disableDaemon ? false
 , withGui ? false }:
 
 with stdenv.lib;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
                     ++ optionals withGui [ "--with-gui=yes"
                                            "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                          ];
-  
+
   enableParallelBuilding = true;
   doChecks = true;
   postBuild = ''

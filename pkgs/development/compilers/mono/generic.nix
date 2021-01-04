@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python3, version, sha256, autoconf, libtool, automake, cmake, which
+{ stdenv, fetchurl, bison, pkg-config, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python3, version, sha256, autoconf, libtool, automake, cmake, which
 , gnumake42
 , enableParallelBuilding ? true
 , srcArchiveSuffix ? "tar.bz2"
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     url = "https://download.mono-project.com/sources/mono/${pname}-${version}.${srcArchiveSuffix}";
   };
 
-  nativeBuildInputs = [ gnumake42 ];
+  nativeBuildInputs = [ automake bison cmake pkg-config which gnumake42 ];
   buildInputs =
-    [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib python3 autoconf libtool automake cmake which
+    [ glib gettext perl libgdiplus libX11 ncurses zlib python3 autoconf libtool
     ]
     ++ (stdenv.lib.optionals stdenv.isDarwin [ Foundation libobjc ]);
 

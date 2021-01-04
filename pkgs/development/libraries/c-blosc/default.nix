@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "A blocking, shuffling and loss-less compression library";
     homepage = "https://www.blosc.org";

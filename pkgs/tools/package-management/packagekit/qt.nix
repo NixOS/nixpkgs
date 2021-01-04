@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 
-  enableParallelBuilding = true;
-
   meta = packagekit.meta // {
     description = "System to facilitate installing and updating packages - Qt";
   };

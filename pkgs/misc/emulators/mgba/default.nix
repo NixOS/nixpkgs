@@ -24,7 +24,6 @@ in stdenv.mkDerivation rec {
     sha256 = "0nqj4bnn5c2z1bq4bnbw1wznc0wpmq4sy3w8pipd6n6620b9m4qq";
   };
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ wrapQtAppsHook pkgconfig cmake ];
 
   buildInputs = [

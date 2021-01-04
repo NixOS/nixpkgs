@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   cmakeFlags = [ "-DGKLIB_PATH=../GKlib" ];
-  buildInputs = [ unzip cmake ];
+  nativeBuildInputs = [ unzip cmake ];
 
   meta = {
     description = "Serial graph partitioning and fill-reducing matrix ordering";

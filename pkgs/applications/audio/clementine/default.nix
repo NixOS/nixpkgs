@@ -79,8 +79,6 @@ let
       "-DSPOTIFY_BLOB=OFF"
     ];
 
-    enableParallelBuilding = true;
-
     passthru.unfree = unfree;
 
     postInstall = ''
@@ -122,7 +120,7 @@ let
         ln -s "${free}/share/$dir" "$out/share/$dir"
       done
     '';
-    enableParallelBuilding = true;
+
     meta = with stdenv.lib; {
       homepage = "https://www.clementine-player.org";
       description = "Spotify integration for Clementine";

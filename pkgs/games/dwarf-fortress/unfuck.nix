@@ -79,8 +79,6 @@ stdenv.mkDerivation {
     install -D -m755 ../build/libgraphics.so $out/lib/libgraphics.so
   '';
 
-  enableParallelBuilding = true;
-
   # Breaks dfhack because of inlining.
   hardeningDisable = [ "fortify" ];
 

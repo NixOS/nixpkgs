@@ -31,7 +31,8 @@ let
   core = stdenv.mkDerivation {
     name = "${pname}-${version}";
     inherit src patches;
-    buildInputs = [ cmake zlib gmp jdk8 ];
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ zlib gmp jdk8 ];
 
     cmakeFlags = [
       "-DBUILD_STATIC=OFF"

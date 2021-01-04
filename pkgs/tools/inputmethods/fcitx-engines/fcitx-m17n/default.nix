@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fcitx, gettext, m17n_lib, m17n_db, pkgconfig }:
+{ stdenv, fetchurl, cmake, fcitx, gettext, m17n_lib, m17n_db, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-m17n";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "15s52h979xz967f8lm0r0qkplig2w3wjck1ymndbg9kvj25ib0ng";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake fcitx gettext m17n_lib m17n_db ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ fcitx gettext m17n_lib m17n_db ];
 
   preInstall = ''
     substituteInPlace im/cmake_install.cmake \

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkgconfig
+{ fetchurl, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkg-config
 , makeWrapper, enet, libXcursor, bullet, openal }:
 
 stdenv.mkDerivation rec {
@@ -26,12 +26,10 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake boost ogre mygui ois SDL2 libvorbis 
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ boost ogre mygui ois SDL2 libvorbis
     makeWrapper enet libXcursor bullet openal
   ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";

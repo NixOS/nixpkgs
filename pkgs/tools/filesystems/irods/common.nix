@@ -5,9 +5,8 @@
 with stdenv;
 
 {
-  enableParallelBuilding = true;
-
-  buildInputs = [ bzip2 zlib autoconf automake cmake gnumake help2man texinfo libtool cppzmq libarchive avro-cpp jansson zeromq openssl pam libiodbc kerberos gcc boost libcxx which catch2 ];
+  nativeBuildInputs = [ autoconf automake cmake gnumake help2man texinfo which gcc ];
+  buildInputs = [ bzip2 zlib libtool cppzmq libarchive avro-cpp jansson zeromq openssl pam libiodbc kerberos boost libcxx catch2 ];
 
   cmakeFlags = [
     "-DIRODS_EXTERNALS_FULLPATH_CLANG=${stdenv.cc}"

@@ -4,8 +4,6 @@ stdenv.mkDerivation rec {
   pname = "taskserver";
   version = "1.1.0";
 
-  enableParallelBuilding = true;
-
   src = fetchurl {
     url = "http://www.taskwarrior.org/download/taskd-${version}.tar.gz";
     sha256 = "1d110q9vw8g5syzihxymik7hd27z1592wkpz55kya6lphzk8i13v";
@@ -30,8 +28,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildInputs = [ makeWrapper ];
-  nativeBuildInputs = [ cmake libuuid gnutls ];
+  buildInputs = [ libuuid gnutls ];
+  nativeBuildInputs = [ cmake makeWrapper ];
 
   meta = {
     description = "Server for synchronising Taskwarrior clients";

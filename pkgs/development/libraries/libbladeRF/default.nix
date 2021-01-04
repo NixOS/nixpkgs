@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake, git, doxygen, help2man, ncurses, tecla
+{ stdenv, lib, fetchFromGitHub, pkg-config, cmake, git, doxygen, help2man, ncurses, tecla
 , libusb1, udev }:
 
 let
@@ -23,9 +23,9 @@ in stdenv.mkDerivation {
     sha256 = "0g89al4kwfbx1l3zjddgb9ay4mhr7zk0ndchca3sm1vq2j47nf4l";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config git doxygen help2man ];
   # ncurses used due to https://github.com/Nuand/bladeRF/blob/ab4fc672c8bab4f8be34e8917d3f241b1d52d0b8/host/utilities/bladeRF-cli/CMakeLists.txt#L208
-  buildInputs = [ cmake git doxygen help2man tecla libusb1 ]
+  buildInputs = [ tecla libusb1 ]
     ++ lib.optionals stdenv.isLinux [ udev ]
     ++ lib.optionals stdenv.isDarwin [ ncurses ];
 

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1f4wnxzx0qdmxzc7hqk28m0sva7z9p9xmxm6aifvjlp0ha6pmfxs";
   };
 
-  buildInputs = [ cmake qt4 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qt4 ];
 
   meta = with stdenv.lib; {
     description = "Lightweight data-interchange format";

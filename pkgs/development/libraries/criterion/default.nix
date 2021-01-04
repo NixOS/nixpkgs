@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [

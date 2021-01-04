@@ -37,8 +37,6 @@ stdenv.mkDerivation {
     "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1";
 
-  enableParallelBuilding = true;
-
   passthru = {
     isLLVM = true;
   };

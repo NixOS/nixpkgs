@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
       ./prevent-kill-on-shutdown.patch
     ];
 
-  buildInputs = [ cmake fuse ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ fuse ];
 
   # Put the unionfs mount helper in place as mount.unionfs-fuse. This makes it
   # possible to do:

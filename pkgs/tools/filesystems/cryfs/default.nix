@@ -48,8 +48,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost cryptopp curl fuse openssl ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DCRYFS_UPDATE_CHECKS:BOOL=FALSE"
     "-DBoost_USE_STATIC_LIBS:BOOL=FALSE" # this option is case sensitive

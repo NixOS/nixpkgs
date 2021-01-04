@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake xxd ];
   buildInputs = [ openssl libwebsockets json_c libuv zlib ];
-  enableParallelBuilding = true;
 
   outputs = [ "out" "man" ];
 

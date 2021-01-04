@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "An ultra-fast single-node solution for large and complex metagenomics assembly via succinct de Bruijn graph";
     license     = licenses.gpl3;

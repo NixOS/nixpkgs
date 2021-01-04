@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
     echo "set(HG_VERSION $version)" > $sourceRoot/ReleaseInfo.cmake
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "RAW converter and digital photo processing software";
     homepage = "http://www.rawtherapee.com/";

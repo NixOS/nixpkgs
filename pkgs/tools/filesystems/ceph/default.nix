@@ -195,8 +195,6 @@ in rec {
       test -f $out/bin/ceph-volume
     '';
 
-    enableParallelBuilding = true;
-
     outputs = [ "out" "lib" "dev" "doc" "man" ];
 
     doCheck = false; # uses pip to install things from the internet

@@ -16,9 +16,8 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  enableParallelBuilding = true;
-
-  buildInputs = [ cmake qt4 fftw ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qt4 fftw ];
 
   cmakeFlags = [ "-DUSE_SYSTEM_FFTW=ON" ];
 

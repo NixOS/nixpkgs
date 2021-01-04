@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake gcc ];
   buildInputs = [ boost eigen libxml2 openmpi python3 python3.pkgs.numpy ];
-  enableParallelBuilding = true;
 
   meta = {
     description = "preCICE stands for Precise Code Interaction Coupling Environment";

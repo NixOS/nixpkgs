@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "00b7xgyrcb2qq63pp3cnw5q1xqx2d9rfn65lai6n6r89s1vh3vg6";
   };
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake python3 ];
 

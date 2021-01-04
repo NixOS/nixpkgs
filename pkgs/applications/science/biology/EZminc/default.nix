@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
                  "-DEZMINC_BUILD_MRFSEG=TRUE"
                  "-DEZMINC_BUILD_DD=TRUE" ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = "https://github.com/BIC-MNI/${pname}";
     description = "Collection of Perl and shell scripts for processing MINC files";

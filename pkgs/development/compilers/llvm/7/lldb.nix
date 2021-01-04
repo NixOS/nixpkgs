@@ -52,8 +52,6 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-I${libxml2.dev}/include/libxml2";
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     mkdir -p $out/share/man/man1
     cp ../docs/lldb.1 $out/share/man/man1/

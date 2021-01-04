@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
     # to the `RUNPATH` of dispatcher libraries `dlopen()` ing OpenGL drivers.
     # `RUNPATH` doesn't propagate throughout the whole application, but only
     # from the module performing the `dlopen()`.
-    # 
+    #
     # Apitrace wraps programs by running them with `LD_PRELOAD` pointing to `.so`
     # files in $out/lib/apitrace/wrappers.
-    # 
+    #
     # Theses wrappers effectively wrap the `dlopen()` calls from `libglvnd`
     # and other dispatcher libraries, and run `dlopen()`  by themselves.
-    # 
+    #
     # As `RUNPATH` doesn't propagate through the whole library, and they're now the
     # library doing the real `dlopen()`, they also need to have
     # `/run-opengl-driver[-32]` added to their `RUNPATH`.

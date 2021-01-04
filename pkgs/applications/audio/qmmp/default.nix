@@ -51,8 +51,6 @@ mkDerivation rec {
       libsamplerate
     ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Qt-based audio player that looks like Winamp";
     homepage = "http://qmmp.ylsoftware.com/";

@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
   NIX_ENFORCE_NO_NATIVE=! enableAVX;
   __AVX2__ = if enableAVX then 1 else 0;
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = "https://github.com/yahoojapan/NGT";
     description = "Nearest Neighbor Search with Neighborhood Graph and Tree for High-dimensional Data";

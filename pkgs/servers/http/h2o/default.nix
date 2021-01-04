@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "dev" "lib" ];
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig cmake ninja ];
   buildInputs = [ openssl libuv zlib ];
 

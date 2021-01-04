@@ -37,8 +37,6 @@ let
       rev = "${lib.toUpper id}_${builtins.replaceStrings ["."] ["_"] version}";
     };
 
-    enableParallelBuilding = true;
-
     nativeBuildInputs = [ cmake ];
 
     installPhase = ''

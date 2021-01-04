@@ -36,8 +36,6 @@ stdenv.mkDerivation {
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
     ] ++ stdenv.lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
-  enableParallelBuilding = true;
-
   passthru = {
     isLLVM = true;
   };

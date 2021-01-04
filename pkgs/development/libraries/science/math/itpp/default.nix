@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
     "-DGTEST_DIR:PATH=${gtest.src}/googletest"
   ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
 
   checkPhase = ''

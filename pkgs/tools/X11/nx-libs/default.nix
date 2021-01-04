@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
-  enableParallelBuilding = true;
-
   postPatch = ''
     patchShebangs .
     find . -type f -name Makefile -exec sed -i 's|^\(SHELL:=\)/bin/bash$|\1${stdenv.shell}|g' {} \;

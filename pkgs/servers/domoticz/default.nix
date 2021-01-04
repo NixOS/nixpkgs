@@ -41,8 +41,6 @@ stdenv.mkDerivation rec {
     cp -r ${minizip-src}/* $sourceRoot/extern/minizip
   '';
 
-  enableParallelBuilding = true;
-
   buildInputs = [
     openssl
     python3

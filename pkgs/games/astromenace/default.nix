@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1rkz6lwjcd5mwv72kf07ghvx6z46kf3xs250mjbmnmjpn7r5sxwv";
   };
 
-  buildInputs = [ cmake xlibsWrapper libGLU libGL SDL openal freealut libogg libvorbis ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ xlibsWrapper libGLU libGL SDL openal freealut libogg libvorbis ];
 
   buildPhase = ''
     cmake ./

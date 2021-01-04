@@ -30,8 +30,6 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
-  enableParallelBuilding = true;
-
   # The tests use cmake's findPackage to find the installed version of
   # pangolin, which isn't what we want (or available).
   doCheck = false;

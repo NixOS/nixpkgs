@@ -91,8 +91,6 @@ in stdenv.mkDerivation {
     "-DNO_PRINTING=OFF"
   ];
 
-  enableParallelBuilding = true;
-
   passthru = { inherit version libdc googlemaps; };
 
   meta = with stdenv.lib; {

@@ -9,9 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "00v4n8pvi5qi2psjnrw611w5gg5bdlaxbsny535fsci3smyygpc0";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
-    cmake
     expat
     openssl
     zlib

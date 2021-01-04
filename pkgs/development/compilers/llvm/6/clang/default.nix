@@ -72,8 +72,6 @@ let
       rm $out/bin/c-index-test
     '';
 
-    enableParallelBuilding = true;
-
     passthru = {
       isClang = true;
       inherit llvm;

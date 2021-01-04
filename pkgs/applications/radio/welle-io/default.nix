@@ -39,8 +39,6 @@ in mkDerivation {
     "-DRTLSDR=true" "-DSOAPYSDR=true"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "A DAB/DAB+ Software Radio";
     homepage = "https://www.welle.io/";

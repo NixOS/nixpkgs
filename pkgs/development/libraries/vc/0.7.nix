@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
   postPatch = ''
     sed -i '/OptimizeForArchitecture()/d' cmake/VcMacros.cmake
     sed -i '/AutodetectHostArchitecture()/d' print_target_architecture.cmake

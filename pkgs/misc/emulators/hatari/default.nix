@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   # For pthread_cancel
   cmakeFlags = [ "-DCMAKE_EXE_LINKER_FLAGS=-lgcc_s" ];
 
-  buildInputs = [ zlib SDL cmake ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib SDL ];
 
   meta = {
     homepage = "http://hatari.tuxfamily.org/";

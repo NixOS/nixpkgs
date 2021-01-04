@@ -2,7 +2,7 @@
 , cmake, libGLU, libGL
 , freetype, freeimage, zziplib, xorgproto, libXrandr
 , libXaw, freeglut, libXt, libpng, boost, ois
-, libX11, libXmu, libSM, pkgconfig
+, libX11, libXmu, libSM, pkg-config
 , libXxf86vm, libICE
 , unzip
 , libXrender
@@ -23,18 +23,16 @@ stdenv.mkDerivation rec {
            ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
     ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
 
-  enableParallelBuilding = true;
 
+  nativeBuildInputs = [ cmake unzip pkg-config ];
   buildInputs =
    [ cmake libGLU libGL
      freetype freeimage zziplib xorgproto libXrandr
      libXaw freeglut libXt libpng boost ois
-     libX11 libXmu libSM pkgconfig
+     libX11 libXmu libSM
      libXxf86vm libICE
      libXrender
    ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
-
-  nativeBuildInputs = [ unzip ];
 
   meta = {
     description = "A 3D engine";

@@ -15,8 +15,6 @@ mkDerivation rec {
 
   buildInputs = [ kitemmodels libiberty libelf libdwarf libopcodes ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     homepage = "https://invent.kde.org/sdk/elf-dissector";
     description = "Tools for inspecting, analyzing and optimizing ELF files";

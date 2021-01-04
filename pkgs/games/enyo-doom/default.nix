@@ -15,8 +15,6 @@ mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
-  enableParallelBuilding = true;
-
   meta = {
     homepage = "https://gitlab.com/sdcofer70/enyo-doom";
     description = "Frontend for Doom engines";

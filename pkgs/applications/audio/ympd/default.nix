@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, mpd_clientlib, openssl }:
+{ stdenv, fetchFromGitHub, cmake, pkg-config, mpd_clientlib, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "ympd";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1nvb19jd556v2h2bi7w4dcl507p3p8xvjkqfzrcsy7ccy3502brq";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake mpd_clientlib openssl ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ mpd_clientlib openssl ];
 
   meta = {
     homepage = "https://www.ympd.org";

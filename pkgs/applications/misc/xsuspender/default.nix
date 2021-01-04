@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
   buildInputs = [ glib libwnck3 ];
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     wrapProgram $out/bin/xsuspender \
       --prefix PATH : "${makeBinPath [ procps ]}"

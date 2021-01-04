@@ -24,7 +24,8 @@ stdenv.mkDerivation {
     sha256 = "07wd1cs3fdvzb1lv41b655z5zk34f47j8fgd9ljjimi5j9pj71f7";
   };
 
-  buildInputs = [ perl groff cmake libxml2 python2 libffi ] ++ lib.optional stdenv.isLinux valgrind;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ perl groff libxml2 python2 libffi ] ++ lib.optional stdenv.isLinux valgrind;
 
   propagatedBuildInputs = [ ncurses zlib ];
 
@@ -39,8 +40,6 @@ stdenv.mkDerivation {
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ] ++ stdenv.lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies - Mono build";

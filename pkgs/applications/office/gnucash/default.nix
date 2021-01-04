@@ -82,8 +82,6 @@ stdenv.mkDerivation rec {
   '';
   doCheck = false;
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Personal and small-business financial-accounting application";
 

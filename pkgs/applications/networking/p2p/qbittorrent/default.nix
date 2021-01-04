@@ -44,8 +44,6 @@ mkDerivation rec {
     else "qbittorrent-nox"
   } --prefix PATH : ${makeBinPath [ python3 ]}";
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Featureful free software BitTorrent client";
     homepage    = "https://www.qbittorrent.org/";

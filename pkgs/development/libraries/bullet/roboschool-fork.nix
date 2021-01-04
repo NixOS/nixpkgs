@@ -42,8 +42,6 @@ stdenv.mkDerivation {
     "-DBUILD_UNIT_TESTS=OFF"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "A professional free 3D Game Multiphysics Library";
     longDescription = ''

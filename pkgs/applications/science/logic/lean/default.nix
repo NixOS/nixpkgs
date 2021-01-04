@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ gmp ];
-  enableParallelBuilding = true;
 
   cmakeDir = "../src";
 

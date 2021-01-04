@@ -33,8 +33,6 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     inherit version;
     description = "Linear Algebra PACKage";

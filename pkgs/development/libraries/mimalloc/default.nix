@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ninja ];
-  enableParallelBuilding = true;
   cmakeFlags = stdenv.lib.optional secureBuild [ "-DMI_SECURE=ON" ];
 
   postInstall = let

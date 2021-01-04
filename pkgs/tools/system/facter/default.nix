@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost cpp-hocon curl leatherman libwhereami libyamlcpp openssl ruby util-linux ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = "https://github.com/puppetlabs/facter";
     description = "A system inventory tool";

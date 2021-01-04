@@ -8,7 +8,8 @@ stdenv.mkDerivation {
 
   inherit (llvm) src;
 
-  buildInputs = [ python cmake ocaml findlib ctypes ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ python ocaml findlib ctypes ];
   propagatedBuildInputs = [ llvm ];
 
   patches = [ (fetchpatch {

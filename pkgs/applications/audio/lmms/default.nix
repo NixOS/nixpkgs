@@ -37,7 +37,6 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DWANT_QT5=ON" ];
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "DAW similar to FL Studio (music production software)";

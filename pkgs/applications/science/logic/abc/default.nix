@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ readline ];
 
-  enableParallelBuilding = true;
   installPhase = "mkdir -p $out/bin && mv abc $out/bin";
 
   # needed by yosys

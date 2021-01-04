@@ -54,8 +54,6 @@ stdenv.mkDerivation rec {
     "-DWITH_LUASCRIPTS=ON"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "A cross-platform program that uses the Direct Connect and ADC protocols";
     homepage = "https://github.com/eiskaltdcpp/eiskaltdcpp";

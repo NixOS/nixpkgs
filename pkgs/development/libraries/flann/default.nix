@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ unzip cmake python ];
+  nativeBuildInputs = [ unzip cmake python ];
 
   meta = {
     homepage = "http://people.cs.ubc.ca/~mariusm/flann/";

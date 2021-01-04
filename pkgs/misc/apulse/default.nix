@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
     sha256 = "1p6fh6ah5v3qz7dxhcsixx38bxg44ypbim4m03bxk3ls5i9xslmn";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ alsaLib glib ];

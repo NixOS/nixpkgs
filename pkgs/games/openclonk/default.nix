@@ -24,8 +24,6 @@ in stdenv.mkDerivation rec {
     ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
   '';
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [

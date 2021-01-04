@@ -253,8 +253,6 @@ stdenv.mkDerivation {
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
   ];
 
-  enableParallelBuilding = true;
-
   postBuild = lib.optionalString enableDocs ''
     make doxygen
   '';

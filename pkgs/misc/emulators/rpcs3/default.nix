@@ -44,8 +44,6 @@ mkDerivation {
     ++ lib.optional alsaSupport alsaLib
     ++ lib.optional waylandSupport wayland;
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";

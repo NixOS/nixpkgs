@@ -49,8 +49,6 @@ stdenv.mkDerivation rec {
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
   ];
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     # man page
     mkdir -p $out/share/man/man1

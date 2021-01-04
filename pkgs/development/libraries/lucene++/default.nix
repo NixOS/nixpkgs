@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [ "-DGTEST_INCLUDE_DIR=${gtest}/include" ];
-  buildInputs = [ cmake boost gtest ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost gtest ];
 
-  enableParallelBuilding = true;
   doCheck = true;
   checkTarget = "test";
 

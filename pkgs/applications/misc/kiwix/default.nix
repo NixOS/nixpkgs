@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig
+{ stdenv, fetchurl, makeWrapper, pkg-config
 , zip, python, zlib, which, icu, libmicrohttpd, lzma, aria2, wget, bc
 , libuuid, libX11, libXext, libXt, libXrender, glib, dbus, dbus-glib
 , gtk2, gdk-pixbuf, pango, cairo, freetype, fontconfig, alsaLib, atk, cmake
@@ -38,7 +38,7 @@ let
       sha256 = "0sqk0vdwjq44jxbbkj1cy8qykrmafs1sickzldb2w2nshsnjshhg";
     };
 
-    buildInputs = [ cmake ];
+    nativeBuildInputs = [ cmake ];
 
     unpackPhase = ''
       # not a nice src archive: all the files are in the root :(
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     sha256 = "0577phhy2na59cpcqjgldvksp0jwczyg0l6c9ghnr19i375l7yqc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     zip python zlib xapian which icu libmicrohttpd
     lzma zimlib ctpp2 aria2 wget bc libuuid makeWrapper pugixml

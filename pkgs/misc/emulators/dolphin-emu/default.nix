@@ -69,8 +69,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_LTO=True"
   ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     pkgconfig
     cmake

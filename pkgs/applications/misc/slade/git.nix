@@ -14,8 +14,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkgconfig zip ];
   buildInputs = [ wxGTK gtk2 sfml fluidsynth curl freeimage ftgl glew ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Doom editor";
     homepage = "http://slade.mancubus.net/";

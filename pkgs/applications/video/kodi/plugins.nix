@@ -47,7 +47,8 @@ let self = rec {
       sha256 = "1r3gs3c6zczmm66qcxh9mr306clwb3p7ykzb70r3jv5jqggiz199";
     };
 
-    buildInputs = [ cmake kodiPlain libcec_platform tinyxml ];
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ kodiPlain libcec_platform tinyxml ];
   };
 
   mkKodiPlugin = { plugin, namespace, version, sourceDir ? null, ... }@args:
@@ -75,8 +76,8 @@ let self = rec {
 
     dontStrip = true;
 
-    buildInputs = [ cmake kodiPlain kodi-platform libcec_platform ]
-               ++ extraBuildInputs;
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ kodiPlain kodi-platform libcec_platform ] ++ extraBuildInputs;
 
     inherit extraRuntimeDependencies;
 

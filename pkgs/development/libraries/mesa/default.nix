@@ -31,7 +31,7 @@ with stdenv.lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.3.1";
+  version = "20.3.2";
   branch  = versions.major version;
 in
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "03vqm9kqrcpijg6bxldj0bg360z8d7c767n3b16jdc1apd4inxdg";
+    sha256 = "0gakhsj5qgm4wran7nlnz7kzgg3aj0a8f4q4dfbznfnjhnv03q6c";
   };
 
   prePatch = "patchShebangs .";
@@ -65,10 +65,9 @@ stdenv.mkDerivation {
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
       sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
     })
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    # Fix for pre macOS SDK 10.13
-    # TODO(r-burns) can be applied unconditionally, at the cost of a mass linux rebuild
-    (fetchpatch {
+    # Fix for pre macOS SDK 10.13:
+    (fetchpatch { # util: Disable memstream for Apple builds
+      # MR: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/8269
       url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/f4403f70fe5bf2ec41af5546122f0d78caffa984.patch";
       sha256 = "03j2aj255m7ms848nkb41vj3s3yb72zb5rz3w3fzp5l9wzzargw5";
     })

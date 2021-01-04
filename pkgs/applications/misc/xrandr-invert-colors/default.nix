@@ -22,5 +22,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zoltanp/xrandr-invert-colors";
     maintainers = [stdenv.lib.maintainers.magnetophon ];
     platforms = platforms.linux;
-  }; 
+  };
 }

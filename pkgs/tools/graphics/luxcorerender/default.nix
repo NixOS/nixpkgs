@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, python36
+{ stdenv, fetchFromGitHub, cmake, boost165, pkg-config, python36
 , tbb, openimageio, libjpeg, libpng, zlib, libtiff, ilmbase
 , freetype, openexr, libXdmcp, libxkbcommon, epoxy, at-spi2-core
 , dbus, doxygen, qt5, c-blosc, libGLU, gnome3, dconf, gtk3, pcre
@@ -30,17 +30,17 @@ in stdenv.mkDerivation {
     inherit sha256;
   };
 
+  nativeBuildInputs = [ cmake flex bison doxygen makeWrapper pkg-config ];
   buildInputs =
-   [ embree2 pkgconfig cmake zlib boost_static libjpeg
+   [ embree2 zlib boost_static libjpeg
      libtiff libpng ilmbase freetype openexr openimageio
-     tbb qt5.full c-blosc libGLU pcre bison
-     flex libX11 libpthreadstubs python libXdmcp libxkbcommon
-     epoxy at-spi2-core dbus doxygen
+     tbb qt5.full c-blosc libGLU pcre
+     libX11 libpthreadstubs python libXdmcp libxkbcommon
+     epoxy at-spi2-core dbus
      # needed for GSETTINGS_SCHEMAS_PATH
      gsettings-desktop-schemas glib gtk3
      # needed for XDG_ICON_DIRS
      gnome3.adwaita-icon-theme
-     makeWrapper
      (stdenv.lib.getLib dconf)
    ] ++ stdenv.lib.optionals withOpenCL [opencl-headers ocl-icd opencl-clhpp];
 

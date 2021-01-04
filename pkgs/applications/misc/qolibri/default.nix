@@ -17,8 +17,6 @@ mkDerivation {
     libeb lzo qtbase qtmultimedia qttools qtwebengine
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     homepage = "https://github.com/ludios/qolibri";
     description = "EPWING reader for viewing Japanese dictionaries";

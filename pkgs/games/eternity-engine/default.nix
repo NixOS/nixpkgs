@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libGL SDL SDL_mixer SDL_net ];
 
-  enableParallelBuilding = true;
-
   installPhase = ''
     install -Dm755 source/eternity $out/lib/eternity/eternity
     cp -r $src/base $out/lib/eternity/base

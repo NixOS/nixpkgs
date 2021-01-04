@@ -27,7 +27,7 @@ in mkDerivation rec {
   ];
 
   buildInputs = [
-    cmake coin3d xercesc ode eigen opencascade-occt gts
+    coin3d xercesc ode eigen opencascade-occt gts
     zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
     libGLU libXmu qtbase qttools qtwebengine qtxmlpatterns
   ] ++ (with pythonPackages; [
