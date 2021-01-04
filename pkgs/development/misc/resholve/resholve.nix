@@ -50,8 +50,7 @@ python27Packages.buildPythonApplication {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    install resholve $out/bin/
+    install -Dm755 resholve $out/bin/
     installManPage resholve.1
   '';
   inherit doCheck;
