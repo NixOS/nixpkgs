@@ -23,5 +23,6 @@ let
     deviceinfo = callPackage ./deviceinfo { };
     qdjango = callPackage ./qdjango { };
     libusermetrics = callPackage ./libusermetrics { };
+    ubuntu-download-manager = callPackage ./ubuntu-download-manager { };
   };
 in makeScope libsForQt5.newScope packages
