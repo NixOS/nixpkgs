@@ -16,8 +16,24 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase qtdeclarative ];
 
   installPhase = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    cp -r DwarfTherapist.app $out/Applications
+    local applications="$out/Applications"
+    mkdir -p "$applications"
+
+    local dt_app="$applications/DwarfTherapist.app"
+    cp -r DwarfTherapist.app "$dt_app"
+
+    local app_dir="$dt_app/Contents"
+    local res_dir="$app_dir/Resources"
+
+    local memory_layouts="$res_dir/memory_layouts"
+    mkdir -p "$memory_layouts"
+    cp -r ../share/memory_layouts/osx "$memory_layouts/"
+
+    # Linux compatibility
+    mkdir -p "$out/bin"
+    ln -s "$app_dir/MacOS/DwarfTherapist" "$out/bin/dwarftherapist"
+    mkdir -p "$out/share"
+    ln -s "$res_dir" "$out/share/dwarftherapist"
   '' else null;
 
   meta = with stdenv.lib; {
