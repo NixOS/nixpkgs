@@ -31,12 +31,18 @@ class Config : public QObject
     Q_PROPERTY( QString fdePassword READ fdePassword WRITE setFdePassword NOTIFY fdePasswordChanged )
     Q_PROPERTY( bool isFdeEnabled READ isFdeEnabled WRITE setIsFdeEnabled )
 
+    /* filesystem selection */
+    Q_PROPERTY( QString fsType READ fsType WRITE setFsType NOTIFY fsTypeChanged )
+    Q_PROPERTY( bool featureFsType READ featureFsType CONSTANT FINAL )
+    Q_PROPERTY( QStringList fsList READ fsList CONSTANT FINAL )
+    Q_PROPERTY( QString defaultFs READ defaultFs CONSTANT FINAL )
+    Q_PROPERTY( int fsIndex READ fsIndex WRITE setFsIndex NOTIFY fsIndexChanged )
+
     /* partition job */
     Q_PROPERTY( bool runPartitionJobThenLeave READ runPartitionJobThenLeaveDummy WRITE runPartitionJobThenLeave )
     Q_PROPERTY( QString cmdInternalStoragePrepare READ cmdInternalStoragePrepare CONSTANT FINAL )
     Q_PROPERTY( QString cmdLuksFormat READ cmdLuksFormat CONSTANT FINAL )
     Q_PROPERTY( QString cmdLuksOpen READ cmdLuksOpen CONSTANT FINAL )
-    Q_PROPERTY( QString cmdMkfsRoot READ cmdMkfsRoot CONSTANT FINAL )
     Q_PROPERTY( QString cmdMount READ cmdMount CONSTANT FINAL )
     Q_PROPERTY( QString targetDeviceRoot READ targetDeviceRoot CONSTANT FINAL )
     Q_PROPERTY( QString targetDeviceRootInternal READ targetDeviceRootInternal CONSTANT FINAL )
@@ -79,13 +85,25 @@ public:
     void setFdePassword( const QString& fdePassword );
     void setIsFdeEnabled( bool isFdeEnabled );
 
+    /* filesystem selection */
+    bool featureFsType() { return m_featureFsType; };
+    QString fsType() const { return m_fsType; };
+    void setFsType( int idx );
+    void setFsType( const QString& fsType );
+    QStringList fsList() const { return m_fsList; };
+    int fsIndex() const { return m_fsIndex; };
+    void setFsIndex( const int fsIndex );
+    QString defaultFs() const { return m_defaultFs; };
+
     /* partition job */
     bool runPartitionJobThenLeaveDummy() { return 0; }
     void runPartitionJobThenLeave( bool b );
     QString cmdInternalStoragePrepare() const { return m_cmdInternalStoragePrepare; }
     QString cmdLuksFormat() const { return m_cmdLuksFormat; }
     QString cmdLuksOpen() const { return m_cmdLuksOpen; }
-    QString cmdMkfsRoot() const { return m_cmdMkfsRoot; }
+    QString cmdMkfsRootBtrfs() const { return m_cmdMkfsRootBtrfs; }
+    QString cmdMkfsRootExt4() const { return m_cmdMkfsRootExt4; }
+    QString cmdMkfsRootF2fs() const { return m_cmdMkfsRootF2fs; }
     QString cmdMount() const { return m_cmdMount; }
     QString targetDeviceRoot() const { return m_targetDeviceRoot; }
     QString targetDeviceRootInternal() const { return m_targetDeviceRootInternal; }
@@ -120,11 +138,21 @@ private:
     QString m_fdePassword = "";
     bool m_isFdeEnabled = false;
 
+    /* filesystem selection */
+    bool m_featureFsType;
+    QString m_defaultFs;
+    QString m_fsType;
+    // Index of the currently selected filesystem in UI.
+    int m_fsIndex;
+    QStringList m_fsList;
+
     /* partition job */
     QString m_cmdInternalStoragePrepare;
     QString m_cmdLuksFormat;
     QString m_cmdLuksOpen;
-    QString m_cmdMkfsRoot;
+    QString m_cmdMkfsRootBtrfs;
+    QString m_cmdMkfsRootExt4;
+    QString m_cmdMkfsRootF2fs;
     QString m_cmdMount;
     QString m_targetDeviceRoot;
     QString m_targetDeviceRootInternal;
@@ -148,4 +176,7 @@ signals:
 
     /* full disk encryption */
     void fdePasswordChanged( QString fdePassword );
+
+    void fsTypeChanged( QString fsType );
+    void fsIndexChanged( int fsIndex );
 };

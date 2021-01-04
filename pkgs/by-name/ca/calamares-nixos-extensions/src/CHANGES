@@ -10,7 +10,11 @@ have a historical changelog -- this log starts with version 1.0.0.
 # 1.x.x (unreleased) #
 
 This release contains contributions from (alphabetically by first name):
- - No external contributors yet
+ - Undef
+
+Changes and new modules in this release:
+ - *mobile* add ability to select target filesystem.
+ - *mobile* rename cmdMkfsRoot to cmdMkfsRootExt4
 
 
 # 1.1.0 (2021-01-04) #

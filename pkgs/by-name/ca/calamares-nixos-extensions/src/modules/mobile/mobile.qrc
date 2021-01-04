@@ -10,6 +10,7 @@
   <file>default_pin.qml</file> <!-- default user: pin -->
   <file>ssh_confirm.qml</file> <!-- sshd: enable or not? -->
   <file>ssh_credentials.qml</file> <!-- sshd user: username, password -->
+  <file>fs_selection.qml</file> <!-- filesystem selection -->
 
   <file>fde_confirm.qml</file> <!-- enable FDE or not? -->
   <file>fde_pass.qml</file> <!-- FDE password (optional) -->
