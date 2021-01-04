@@ -377,13 +377,13 @@ rec {
 
   drools = buildEclipseUpdateSite rec {
     name = "drools-${version}";
-    version = "7.17.0.Final";
+    version = "7.47.0.Final";
 
     srcUrl = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
 
     src = fetchzip {
       url = srcUrl;
-      hash = "sha512-dWTS72R2VRgGnG6JafMwZ+wd+1e13pil0SAz2HDMXUmtgYa9iLLtma3SjcDJeWdOoblzWHRu7Ihblx3+Ogb2sQ==";
+      sha512 = "1s9vnbap7mxfmjya0p7xsa2rjcpm5n15yfiqwv540jdyjf08fmy1pxj7q7g5z1z55a4yzcy7akgdc959j24k727709acafs6y0zy308";
       postFetch = ''
         # update site is a couple levels deep, alongside some other irrelevant stuff
         cd $out;
@@ -400,7 +400,7 @@ rec {
     #in configuration.nix
     runtime = fetchzip {
       url = srcUrl;
-      sha512 = "17id5biqgfjxv7qfjx4i6x1dkp4b2lsr42sgxyy8dp71ankajjiwhz499wmyl869873n1kgz790la04jya8b0nkdqsq4vyr3i591l07";
+      sha512 = "34fq2yxlcrmgxdcclz4nmk8kkwkr7az61bh00avayxaiqny1fzcya1cbw0vn5wrbkxrz2j50ykp1ihfmwqgyg13057ia8fcrj19n6wi";
       postFetch = ''
         chmod go-w $out;
 
