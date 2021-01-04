@@ -25,6 +25,8 @@ mkDerivation rec {
   buildInputs = [ qtbase glib libnih qtpim qtquickcontrols2 qtsystems lttng-ust qtgraphicaleffects qtfeedback python3 ];
 
   postPatch = ''
+    substituteInPlace features/ubuntu_common.prf \
+      --replace 'CONFIG += warnings_are_errors' 'CONFIG += warnings_are_errors''\nQMAKE_CXXFLAGS_WARN_ON += -Wno-error=deprecated-declarations'
     substituteInPlace tests/unit/plugin_dependency.pri \
       --replace '-Werror' '-Werror -Wno-error=deprecated-declarations'
     substituteInPlace tests/tests.pro \
@@ -75,4 +77,25 @@ mkDerivation rec {
         --replace "includedir=${qtbase.dev}" 'includedir=''\${prefix}'
     done
   '';
+
+  meta = with lib; {
+    description = "The Ubuntu UI toolkit used in Ubuntu Touch";
+    longDescription = ''
+      This project consists of a set of QML components to ease the creation of
+      beautiful applications in QML for Ubuntu.
+
+      QML alone lacks built-in components for basic widgets like Button, Slider,
+      Scrollbar, etc, meaning a developer has to build them from scratch.
+      This toolkit aims to stop this duplication of work, supplying beautiful
+      components ready-made and with a clear and consistent API.
+
+      These components are fully themeable so the look and feel can be easily
+      customized. Resolution independence technology is built in so UIs are scaled to
+      best suit the display.
+    '';
+    homepage = "https://launchpad.net/ubuntu-ui-toolkit";
+    license = with licenses; [ lgpl3Only cc-by-sa-30 ];
+    maintainers = with maintainers; [ OPNA2608 ];
+    platforms = platforms.linux;
+  };
 }
