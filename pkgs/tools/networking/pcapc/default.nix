@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  enableParallelBuilding = true;
-
   doCheck = false;
 
   meta = with stdenv.lib; {

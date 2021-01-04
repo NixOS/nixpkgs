@@ -68,8 +68,6 @@ stdenv.mkDerivation {
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
-  enableParallelBuilding = true;
-
   preFixup = "ln -s $out/share/openrct2 $out/bin/data";
 
   meta = with stdenv.lib; {

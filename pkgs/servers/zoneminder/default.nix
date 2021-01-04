@@ -159,8 +159,6 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DWITH_SYSTEMD=ON"
     "-DZM_LOGDIR=/var/log/${dirName}"

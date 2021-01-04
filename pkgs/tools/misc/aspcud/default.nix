@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vrf7h7g99vw1mybqfrpxamsnf89p18czlzgjmxl1zkiwc7vjpzw";
   };
 
-  buildInputs = [ boost clasp cmake gringo re2c ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost clasp gringo re2c ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"

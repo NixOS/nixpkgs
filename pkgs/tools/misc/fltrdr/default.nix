@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ icu openssl ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = "https://octobanana.com/software/fltrdr";
     description = "A TUI text reader for the terminal";

@@ -27,8 +27,6 @@ mkDerivation rec {
     kconfig kinit kio kparts kwidgetsaddons
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "A Graphviz dot graph viewer for KDE";
     license     = licenses.gpl2;

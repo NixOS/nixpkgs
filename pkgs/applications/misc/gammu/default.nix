@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
   ++ optionals dbiSupport [ libdbi libdbiDrivers ]
   ++ optionals postgresSupport [ postgresql ];
 
-  enableParallelBuilding = true;
-
   meta = {
     homepage = "https://wammu.eu/gammu/";
     description = "Command line utility and library to control mobile phones";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fcitx, anthy, gettext, pkgconfig }:
+{ stdenv, fetchurl, cmake, fcitx, anthy, gettext, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-anthy";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "01jx7wwq0mifqrzkswfglqhwkszbfcl4jinxgdgqx9kc6mb4k6zd";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake fcitx anthy gettext ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ fcitx anthy gettext ];
 
   preInstall = ''
     substituteInPlace src/cmake_install.cmake \

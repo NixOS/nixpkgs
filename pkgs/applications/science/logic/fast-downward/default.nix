@@ -16,8 +16,6 @@ stdenv.mkDerivation {
   cmakeFlags =
     lib.optional osi.withCplex [ "-DDOWNWARD_CPLEX_ROOT=${cplex}/cplex" ];
 
-  enableParallelBuilding = true;
-
   configurePhase = ''
     python build.py release
   '';

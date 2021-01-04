@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "0dqk8ff82gmy4v5ns5nr9gpzkc1p7c2y8c8fkid102r47wsjk44s";
   };
 
-  buildInputs = [ cmake libpng libtiff libjpeg panotools libxml2 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libpng libtiff libjpeg panotools libxml2 ];
 
   patches = [
     (fetchurl {

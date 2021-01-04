@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
     sha256 = "0y4qgm2cpccrsm20rnh92hqplddqsc5q5zhw9nqn2igm3h9i0z7h";
   };
 
-  enableParallelBuilding = true;
-
   buildInputs = with llvmPackages;
     [ llvm clang-unwrapped
       kernel elfutils libelf bcc

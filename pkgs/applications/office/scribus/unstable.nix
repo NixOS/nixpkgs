@@ -43,8 +43,6 @@ mkDerivation rec {
     sha256 = "sha256-1CV2lVOc+kDerYq9rwTFHjTU10vK1aLJNNCObp1Dt6s=";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     cmake
     pkgconfig

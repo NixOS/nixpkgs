@@ -39,8 +39,6 @@ mkDerivation {
     install -m644 ../OSX/README.txt $out/share/doc/heimdall/README.osx
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage    = "http://www.glassechidna.com.au/products/heimdall/";
     description = "A cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";

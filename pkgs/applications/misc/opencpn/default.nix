@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, gtk2, wxGTK30, libpulseaudio, curl,
+{ stdenv, fetchFromGitHub, pkg-config, cmake, gtk2, wxGTK30, libpulseaudio, curl,
   gettext, glib, portaudio }:
 
 stdenv.mkDerivation rec {
@@ -12,16 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "0yiqahkzwcbzgabc5xgxmwlngapkfiaqyva3mwz29xj0c5lg2bdk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake gtk2 wxGTK30 libpulseaudio curl gettext
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ gtk2 wxGTK30 libpulseaudio curl gettext
                   glib portaudio ];
 
   cmakeFlags = [
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
   ];
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "A concise ChartPlotter/Navigator";

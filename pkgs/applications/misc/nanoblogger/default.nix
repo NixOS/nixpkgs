@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -r * $out
-    cat > $out/bin/nb << EOF 
+    cat > $out/bin/nb << EOF
     #!${bash}/bin/bash
     $out/nb "\$@"
     EOF

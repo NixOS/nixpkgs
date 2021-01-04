@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio, uhd
+{ stdenv, fetchFromGitHub, cmake, pkg-config, boost, gnuradio, uhd
 , makeWrapper, libsodium, cppunit, log4cpp
 , pythonSupport ? true, python, swig
 }:
@@ -16,9 +16,9 @@ stdenv.mkDerivation {
     sha256 = "018np0qlk61l7mlv3xxx5cj1rax8f1vqrsrch3higsl25yydbv7v";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    cmake boost gnuradio uhd makeWrapper libsodium cppunit log4cpp
+    boost gnuradio uhd makeWrapper libsodium cppunit log4cpp
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''
@@ -26,8 +26,6 @@ stdenv.mkDerivation {
         wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:$(toPythonPath "$out")
     done
   '';
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Gnuradio block for encryption";

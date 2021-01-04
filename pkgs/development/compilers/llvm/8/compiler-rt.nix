@@ -87,5 +87,4 @@ stdenv.mkDerivation {
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '';
 
-  enableParallelBuilding = true;
 }

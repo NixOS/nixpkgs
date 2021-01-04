@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ eigen zlib ];
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = "http://cmictig.cs.ucl.ac.uk/research/software/software-nifty/niftyseg";

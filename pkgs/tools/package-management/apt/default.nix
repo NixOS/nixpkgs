@@ -42,8 +42,6 @@ stdenv.mkDerivation rec {
     "-DUSE_NLS=${if withNLS then "ON" else "OFF"}"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Command-line package management tools used on Debian-based systems";
     homepage = "https://salsa.debian.org/apt-team/apt";

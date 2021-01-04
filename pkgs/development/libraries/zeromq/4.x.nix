@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake asciidoc pkg-config ];
   buildInputs = [ libsodium ];
 
-  enableParallelBuilding = true;
-
   doCheck = false; # fails all the tests (ctest)
 
   cmakeFlags = stdenv.lib.optional enableDrafts "-DENABLE_DRAFTS=ON";

@@ -26,8 +26,6 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = true;
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib ; {
     description = "Management of analyses and data in DNA metabarcoding";
     homepage = "https://git.metabarcoding.org/obitools/obitools3";

@@ -24,8 +24,6 @@ let
       sha256 = "1dszbvxlh1npq4nv9s4wv4lcyfgb01k92ncxrrczsxy1dddg86pp";
     };
 
-    enableParallelBuilding = true;
-
     nativeBuildInputs = [ cmake ];
 
     buildInputs = [ SDL2 libGL curl ]

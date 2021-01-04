@@ -61,8 +61,6 @@ mkDerivation rec {
     addOpenGLRunpath $out/lib/librenderdoc.so
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "A single-frame graphics debugger";
     homepage = "https://renderdoc.org/";

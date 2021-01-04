@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DENABLE_TOOLS=${if enableTools then "ON" else "OFF"}" ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "The Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";
     longDescription = ''

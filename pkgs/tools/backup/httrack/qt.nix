@@ -14,8 +14,6 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
 
-  enableParallelBuilding = true;
-
   prePatch = ''
     substituteInPlace cmake/HTTRAQTFindHttrack.cmake \
       --replace /usr/include/httrack/ ${httrack}/include/httrack/

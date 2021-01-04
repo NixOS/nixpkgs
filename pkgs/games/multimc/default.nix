@@ -16,8 +16,6 @@ in mkDerivation rec {
   nativeBuildInputs = [ cmake file makeWrapper ];
   buildInputs = [ qtbase jdk zlib ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [ "-DMultiMC_LAYOUT=lin-system" ];
 
   postInstall = ''

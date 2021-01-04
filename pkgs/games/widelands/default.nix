@@ -53,6 +53,4 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/applications/"
     cp -v "../debian/org.widelands.widelands.desktop" "$out/share/applications/"
   '';
-
-  enableParallelBuilding = true;
 }

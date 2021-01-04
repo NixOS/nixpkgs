@@ -25,7 +25,8 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/system/SysAccess.c --replace /usr/share $out/share
   '';
 
-  buildInputs = [ cmake SDL qt4 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ SDL qt4 ];
 
   meta = with stdenv.lib; {
     homepage    = "http://www.holdingnuts.net/";

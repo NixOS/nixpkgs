@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     # TODO: should this be in stdenv instead?
     "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share"
   ];
-  enableParallelBuilding = true;
 
   preConfigure = with builtins; ''
     rmdir database && ln -sfv ${elemAt srcs 1} ./database

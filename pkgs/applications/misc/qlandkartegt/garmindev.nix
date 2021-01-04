@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libusb-compat-0_1 ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = "http://www.qlandkarte.org/";
     description = "Garmin Device Drivers for QlandkarteGT";
