@@ -38,7 +38,6 @@ python27Packages.buildPythonApplication {
   inherit version;
   src = rSrc;
   format = "other";
-  disabled = !python27Packages.isPy27;
 
   nativeBuildInputs = [ installShellFiles ];
 
