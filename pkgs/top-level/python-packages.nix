@@ -2669,6 +2669,8 @@ in {
 
   graph_nets = callPackage ../development/python-modules/graph_nets { };
 
+  graphene = callPackage ../development/python-modules/graphene { };
+
   graphql-core = callPackage ../development/python-modules/graphql-core { };
 
   graphql-server-core = callPackage ../development/python-modules/graphql-server-core { };
