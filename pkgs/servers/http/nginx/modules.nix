@@ -22,6 +22,17 @@ in
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
   ngx_aws_auth = throw "ngx_aws_auth was renamed to aws-auth";
 
+  akamai-token-validate = {
+    src = fetchFromGitHub {
+      name = "akamai-token-validate";
+      owner = "kaltura";
+      repo = "nginx-akamai-token-validate-module";
+      rev = "34fd0c94d2c43c642f323491c4f4a226cd83b962";
+      sha256 = "0yf34s11vgkcl03wbl6gjngm3p9hs8vvm7hkjkwhjh39vkk2a7cy";
+    };
+    inputs = [ pkgs.openssl ];
+  };
+
   aws-auth = {
     src = fetchFromGitHub {
       name = "aws-auth";
