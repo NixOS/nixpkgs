@@ -87,7 +87,18 @@ stdenv.mkDerivation rec {
     let
       productTargetPath = "product/standalone/target/products/org.jkiss.dbeaver.core.product";
     in
-    ''
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications $out/bin
+      cp -r ${productTargetPath}/macosx/cocoa/x86_64/DBeaver.app $out/Applications
+
+      sed -i "/^-vm/d; /bin\/java/d" $out/Applications/DBeaver.app/Contents/Eclipse/dbeaver.ini
+
+      ln -s $out/Applications/DBeaver.app/Contents/MacOS/dbeaver $out/bin/dbeaver
+
+      wrapProgram $out/Applications/DBeaver.app/Contents/MacOS/dbeaver \
+        --prefix JAVA_HOME : ${jdk.home} \
+        --prefix PATH : ${jdk}/bin
+    '' else ''
       mkdir -p $out/
       cp -r ${productTargetPath}/linux/gtk/x86_64/dbeaver $out/dbeaver
 
@@ -118,7 +129,7 @@ stdenv.mkDerivation rec {
       Teradata, Firebird, Derby, etc.
     '';
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ jojosch ];
   };
 }
