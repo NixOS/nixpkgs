@@ -94,7 +94,6 @@ rec {
     propagatedBuildInputs = with python27Packages; [ six typing ];
 
     doCheck = true;
-    dontStrip = true;
 
     preBuild = ''
       build/dev.sh all
