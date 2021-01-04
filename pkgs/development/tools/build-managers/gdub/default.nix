@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   phases = "installPhase";
 
+  nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
     outdir=$out/share/gdub/bin
     mkdir -p $outdir
