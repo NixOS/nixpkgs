@@ -2071,6 +2071,8 @@ in {
 
   fastcache = callPackage ../development/python-modules/fastcache { };
 
+  fastdiff = callPackage ../development/python-modules/fastdiff { };
+
   fastdtw = callPackage ../development/python-modules/fastdtw { };
 
   fastecdsa = callPackage ../development/python-modules/fastecdsa { };
