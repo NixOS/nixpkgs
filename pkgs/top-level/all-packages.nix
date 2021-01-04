@@ -6971,7 +6971,7 @@ in
 
   rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };
 
-  resholve = recurseIntoAttrs (callPackage ../development/misc/resholve { });
+  resholve = callPackage ../development/misc/resholve { };
 
   reuse = callPackage ../tools/package-management/reuse { };
 

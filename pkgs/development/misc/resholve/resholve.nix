@@ -49,18 +49,17 @@ python27Packages.buildPythonApplication {
   '';
 
   installPhase = ''
-    install -Dm755 resholve $out/bin/
+    install -dm 755 resholve $out/bin/
     installManPage resholve.1
   '';
+
   inherit doCheck;
   checkInputs = [ bats ];
   RESHOLVE_PATH = "${stdenv.lib.makeBinPath [ file findutils gettext ]}";
 
-  
   checkPhase = ''
     # explicit interpreter for test suite
-    export INTERP="${bash}/bin/bash";
-    export PATH=$out/bin:$PATH
+    export INTERP="${bash}/bin/bash" PATH="$out/bin:$PATH"
     patchShebangs .
     ./test.sh
   '';

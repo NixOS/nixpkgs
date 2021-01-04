@@ -117,7 +117,9 @@ let
     inherit pname version src;
     buildInputs = [ resholve ];
 
-    #LOGLEVEL="INFO";
+    # enable below for verbose debug info if needed
+    # supports default python.logging levels
+    # LOGLEVEL="INFO";
     preFixup = ''
       pushd "$out"
       ${builtins.concatStringsSep "\n" (makeCommands solutions)}
