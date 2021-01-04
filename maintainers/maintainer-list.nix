@@ -4828,6 +4828,7 @@
   larusso = {
     email = "manfred.endres@tslarusso.de";
     github = "larusso";
+    githubId = 2523575;
     name = "Manfred Endres";
   };
   lasandell = {
