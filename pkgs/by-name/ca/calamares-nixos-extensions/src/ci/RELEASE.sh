@@ -31,6 +31,7 @@
 #   * `-B` do not build (before tagging)
 #   * `-P` do not package (tag, sign, tarball)
 #   * `-T` do not respect string freeze
+#   * `-C <args>` set extra arguments to pass to CMake
 #
 # The build / package settings can be influenced via environment variables:
 #   * BUILD_DEFAULT set to `false` to avoid first build with gcc
