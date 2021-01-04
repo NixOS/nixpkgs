@@ -10740,6 +10740,7 @@ in
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
+  cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
   cargo-watch = callPackage ../development/tools/rust/cargo-watch {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
