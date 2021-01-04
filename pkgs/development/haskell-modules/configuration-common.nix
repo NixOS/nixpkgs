@@ -1547,4 +1547,9 @@ self: super: {
   # https://github.com/Gabriel439/Haskell-Nix-Derivation-Library/pull/10
   nix-derivation = doJailbreak super.nix-derivation;
 
+  # Break out of overspecified constraint on QuickCheck.
+  # Fixed by https://github.com/haskell-servant/servant/commit/08579ca0039410e04d6c36c975ddc20165819db6
+  servant-client      = doJailbreak super.servant-client;
+  servant-client-core = doJailbreak super.servant-client-core;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
