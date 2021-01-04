@@ -1,14 +1,20 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper
-, fontconfig, freetype, glib, gtk3
-, jdk, libX11, libXrender, libXtst, zlib }:
-
-# The build process is almost like eclipse's.
-# See `pkgs/applications/editors/eclipse/*.nix`
-
-stdenv.mkDerivation rec {
-  pname = "dbeaver-ce";
-  version = "7.3.2";
-
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, fontconfig
+, freetype
+, glib
+, gtk3
+, jdk
+, libX11
+, libXrender
+, libXtst
+, zlib
+, maven
+}:
+let
   desktopItem = makeDesktopItem {
     name = "dbeaver";
     exec = "dbeaver";
@@ -18,44 +24,89 @@ stdenv.mkDerivation rec {
     genericName = "SQL Integrated Development Environment";
     categories = "Development;";
   };
+in
+stdenv.mkDerivation rec {
+  pname = "dbeaver-ce";
+  version = "7.3.2"; # When updating also update fetchedMavenDeps.sha256
+
+  src = fetchFromGitHub {
+    owner = "dbeaver";
+    repo = "dbeaver";
+    rev = version;
+    sha256 = "sha256-gh3++IEQzWOKGsazqeMp0aHuZ835etAou62cgz0GoNQ=";
+  };
+
+  fetchedMavenDeps = stdenv.mkDerivation {
+    name = "dbeaver-${version}-maven-deps";
+    inherit src;
+
+    buildInputs = [
+      maven
+    ];
+
+    buildPhase = "mvn package -Dmaven.repo.local=$out/.m2";
+
+    # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
+    installPhase = ''
+      find $out -type f \
+        -name \*.lastUpdated -or \
+        -name resolver-status.properties -or \
+        -name _remote.repositories \
+        -delete
+    '';
+
+    # don't do any fixup
+    dontFixup = true;
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = "sha256-uTKevwZvKiYOBz0hshh1rLEj7htYF7FQiTq6vZiVs7Q=";
+  };
 
   buildInputs = [
-    fontconfig freetype glib gtk3
-    jdk libX11 libXrender libXtst zlib
+    fontconfig
+    freetype
+    glib
+    gtk3
+    jdk
+    libX11
+    libXrender
+    libXtst
+    makeWrapper
+    zlib
   ];
 
   nativeBuildInputs = [
-    makeWrapper
+    maven
   ];
 
-  src = fetchurl {
-    url = "https://dbeaver.io/files/${version}/dbeaver-ce-${version}-linux.gtk.x86_64.tar.gz";
-    sha256 = "sha256-4BVXcR8/E4uIrPQJe9KU9577j4XLTxJWTO8g0vCHWts=";
-  };
-
-  installPhase = ''
-    # remove bundled jre
-    rm -rf jre
-
-    mkdir -p $out/
-    cp -r . $out/dbeaver
-
-    # Patch binaries.
-    interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
-    patchelf --set-interpreter $interpreter $out/dbeaver/dbeaver
-
-    makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
-      --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst ])} \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-
-    # Create desktop item.
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
-
-    mkdir -p $out/share/pixmaps
-    ln -s $out/dbeaver/icon.xpm $out/share/pixmaps/dbeaver.xpm
+  buildPhase = ''
+    mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
   '';
+
+  installPhase =
+    let
+      productTargetPath = "product/standalone/target/products/org.jkiss.dbeaver.core.product";
+    in
+    ''
+      mkdir -p $out/
+      cp -r ${productTargetPath}/linux/gtk/x86_64/dbeaver $out/dbeaver
+
+      # Patch binaries.
+      interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
+      patchelf --set-interpreter $interpreter $out/dbeaver/dbeaver
+
+      makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
+        --prefix PATH : ${jdk}/bin \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst ])} \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+
+      # Create desktop item.
+      mkdir -p $out/share/applications
+      cp ${desktopItem}/share/applications/* $out/share/applications
+
+      mkdir -p $out/share/pixmaps
+      ln -s $out/dbeaver/icon.xpm $out/share/pixmaps/dbeaver.xpm
+    '';
 
   meta = with lib; {
     homepage = "https://dbeaver.io/";
@@ -68,6 +119,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.jojosch ];
+    maintainers = with maintainers; [ jojosch ];
   };
 }
