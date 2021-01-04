@@ -5502,6 +5502,8 @@ in {
 
   pyopengl = callPackage ../development/python-modules/pyopengl { };
 
+  pyopengl-accelerate = callPackage ../development/python-modules/pyopengl-accelerate { };
+
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
 
   pyosf = callPackage ../development/python-modules/pyosf { };
@@ -5830,6 +5832,7 @@ in {
 
   pytest-black = callPackage ../development/python-modules/pytest-black { };
 
+  pytest-cache = self.pytestcache; # added 2021-01-04
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
   pytest-catchlog = callPackage ../development/python-modules/pytest-catchlog { };
@@ -5840,6 +5843,7 @@ in {
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
 
+  pytest-cov = self.pytestcov; # self 2021-01-04
   pytestcov = callPackage ../development/python-modules/pytest-cov { };
 
   pytest-cram = callPackage ../development/python-modules/pytest-cram { };
@@ -5876,8 +5880,6 @@ in {
 
   pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 
-  pyopengl-accelerate = callPackage ../development/python-modules/pyopengl-accelerate { };
-
   pytest-html = callPackage ../development/python-modules/pytest-html { };
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
@@ -5905,6 +5907,7 @@ in {
 
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
 
+  pytest-pep8 = self.pytestpep8; # added 2021-01-04
   pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
@@ -5913,6 +5916,7 @@ in {
 
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
 
+  pytest-quickcheck = self.pytestquickcheck;
   pytestquickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
 
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
@@ -5929,6 +5933,7 @@ in {
 
   pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
+  pytest-runner = self.pytestrunner; # added 2021-01-04
   pytestrunner = callPackage ../development/python-modules/pytestrunner { };
 
   pytest-sanic = callPackage ../development/python-modules/pytest-sanic { };
@@ -5965,6 +5970,7 @@ in {
 
   pytest-watch = callPackage ../development/python-modules/pytest-watch { };
 
+  pytest-xdist = self.pytest_xdist; # added 2021-01-04
   pytest_xdist = if isPy27 then
     callPackage ../development/python-modules/pytest-xdist/1.nix { }
   else
@@ -6833,6 +6839,7 @@ in {
 
   setuptools-rust = callPackage ../development/python-modules/setuptools-rust { };
 
+  setuptools-scm = self.setuptools_scm; # added 2021-01-04
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
   setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
