@@ -61,7 +61,6 @@ rec {
   oildev = python27Packages.buildPythonPackage rec {
     pname = "oildev-unstable";
     version = "2020-03-31";
-    disabled = !python27Packages.isPy27;
 
     src = fetchFromGitHub {
       owner = "oilshell";
