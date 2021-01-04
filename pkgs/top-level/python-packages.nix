@@ -167,6 +167,10 @@ in {
 
   adb-shell = callPackage ../development/python-modules/adb-shell { };
 
+  adblock = callPackage ../development/python-modules/adblock {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
   adguardhome= callPackage ../development/python-modules/adguardhome { };
