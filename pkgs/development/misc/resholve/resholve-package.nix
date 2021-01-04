@@ -4,39 +4,6 @@
 , src
 , version
 , passthru ? { }
-  /* Each "solution" (k=v pair) describes one resholve invocation.
-   * See 'man resholve' for option details.
-   *
-   * Example:
-   * {
-   *   # name the script(s) for overrides & error messages
-   *   shortname = {
-   *     # required
-   *     # $out-relative paths to try resolving
-   *     scripts = [ "bin/shunit2" ];
-   *     # packages to resolve executables from
-   *     inputs = [ coreutils gnused gnugrep findutils ];
-   *     # path for shebang, or 'none' to omit shebang
-   *     interpreter = "${bash}/bin/bash";
-   *
-   *     # optional
-   *     # to translate fake/fix/keep directives, convert:
-   *     # - `key:value1;value2` to `key: [ value1 value2 ];`
-   *     # - `value` to `value = true;`
-   *     fake = { fake directives };
-   *     fix = { fix directives };
-   *     keep = { keep directives };
-   *     # file to inject before first code-line of script
-   *     prologue = file;
-   *     # file to inject after last code-line of script
-   *     epilogue = file;
-   *     # extra command-line flags passed to resholve; generally this API
-   *     # should align with what resholve supports, but flags may help if
-   *     # you need to override the version of resholve.
-   *     flags = [ ];
-   *   };
-   * }
-   */
 , solutions
 , ...
 }@attrs:
