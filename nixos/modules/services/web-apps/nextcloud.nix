@@ -360,6 +360,10 @@ in {
           nextcloud19. If not, please upgrade to nextcloud18 first since Nextcloud doesn't
           support upgrades that skip multiple versions (i.e. an upgrade from 17 to 19 isn't
           possible, but an upgrade from 18 to 19).
+        '')
+        ++ (optional (versionOlder cfg.package.version "20") ''
+          The latest Nextcloud release is v20 which can be installed by setting
+          `services.nextcloud.package` to `pkgs.nextcloud20`.
         '');
 
       services.nextcloud.package = with pkgs;
