@@ -109,6 +109,7 @@ in {
     eggBuildHook
     eggInstallHook
     flitBuildHook
+    maturinWheelHook
     pipBuildHook
     pipInstallHook
     pytestCheckHook

@@ -37,6 +37,15 @@ in rec {
       deps = [ ];
     } ./egg-unpack-hook.sh) {};
 
+  maturinWheelHook = callPackage ({ }:
+    makeSetupHook {
+      name = "maturin-unpack-hook";
+      deps = [ ];
+      substitutions = {
+        inherit pythonInterpreter;
+      };
+    } ./maturin-unpack-hook.sh) {};
+
   flitBuildHook = callPackage ({ flit }:
     makeSetupHook {
       name = "flit-build-hook";

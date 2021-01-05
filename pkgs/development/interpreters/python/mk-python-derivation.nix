@@ -12,6 +12,7 @@
 , update-python-libraries
 , setuptools
 , flitBuildHook
+, maturinWheelHook
 , pipBuildHook
 , pipInstallHook
 , pythonCatchConflictsHook
@@ -125,6 +126,8 @@ let
       setuptoolsBuildHook
     ] ++ lib.optionals (format == "flit") [
       flitBuildHook
+    ] ++ lib.optionals (format == "maturin") [
+      maturinWheelHook
     ] ++ lib.optionals (format == "pyproject") [
       pipBuildHook
     ] ++ lib.optionals (format == "wheel") [
