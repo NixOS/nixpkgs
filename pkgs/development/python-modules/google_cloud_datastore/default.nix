@@ -3,31 +3,44 @@
 , fetchPypi
 , google_api_core
 , google_cloud_core
-, pytest
+, libcst
+, proto-plus
 , mock
+, pytestCheckHook
+, pytest-asyncio
+, google_cloud_testutils
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ebf3b0bcb483e066dfe73679e019e2d7b8c1652e26984702cf5e3f020592f6a";
+    sha256 = "1yyk9ix1jms5q4kk76cfxzy42wzzyl5qladdswjy5l0pg6iypr8i";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_api_core google_cloud_core ];
+  propagatedBuildInputs = [ google_api_core google_cloud_core libcst proto-plus ];
 
-  checkPhase = ''
+  checkInputs = [ google_cloud_testutils mock pytestCheckHook pytest-asyncio ];
+
+  preCheck = ''
+    # directory shadows imports
     rm -r google
-    pytest tests/unit
+    # requires credentials
+    rm tests/system/test_system.py
   '';
+
+  pythonImportsCheck = [
+    "google.cloud.datastore"
+    "google.cloud.datastore_admin_v1"
+    "google.cloud.datastore_v1"
+  ];
 
   meta = with stdenv.lib; {
     description = "Google Cloud Datastore API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-datastore";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
