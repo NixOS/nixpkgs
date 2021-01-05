@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, gnused, bash, coreutils }:
+{ lib, buildFishPlugin, fetchFromGitHub, gnused, bash, coreutils }:
 
-stdenv.mkDerivation {
-  pname = "fish-foreign-env";
+buildFishPlugin {
+  pname = "foreign-env";
   version = "git-20200209";
 
   src = fetchFromGitHub {
@@ -11,18 +11,16 @@ stdenv.mkDerivation {
     sha256 = "00xqlyl3lffc5l0viin1nyp819wf81fncqyz87jx8ljjdhilmgbs";
   };
 
-  installPhase = ''
-    mkdir -p $out/share/fish-foreign-env/functions/
-    cp functions/* $out/share/fish-foreign-env/functions/
+  patches = [ ./suppress-harmless-warnings.patch ];
+
+  preInstall = ''
     sed -e "s|sed|${gnused}/bin/sed|" \
         -e "s|bash|${bash}/bin/bash|" \
         -e "s|\| tr|\| ${coreutils}/bin/tr|" \
-        -i $out/share/fish-foreign-env/functions/*
+        -i functions/*
   '';
 
-  patches = [ ./suppress-harmless-warnings.patch ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A foreign environment interface for Fish shell";
     license = licenses.mit;
     maintainers = with maintainers; [ jgillich ];

@@ -310,6 +310,14 @@
      </para>
    </listitem>
    <listitem>
+    <para>
+     <package>fish-foreign-env</package> is now an alias for the
+     <package>fishPlugins.foreign-env</package> package, in which the fish
+     functions have been relocated to the
+     <literal>vendor_functions.d</literal> directory to be loaded automatically.
+    </para>
+   </listitem>
+   <listitem>
      <para>
        The prometheus json exporter is now managed by the prometheus community. Together with additional features
        some backwards incompatibilities were introduced.
