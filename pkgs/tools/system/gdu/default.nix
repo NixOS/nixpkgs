@@ -5,16 +5,18 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0239ppiilr8d43z9v27c9h7b5xkj2n9aacpf5a0h3rz4j0dkcwf7";
+    sha256 = "0gk36z8xzj7blwzs080fqsz76hn56c89xcsyil6n5cfkbyf85c6i";
   };
 
   vendorSha256 = "1jqbsda9bch3awdq816w4jybv7wz9mfflmvs5y2wsa2qnhn9nbyp";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.AppVersion=${version}" ];
 
   meta = with stdenv.lib; {
     description = "Disk usage analyzer with console interface";
