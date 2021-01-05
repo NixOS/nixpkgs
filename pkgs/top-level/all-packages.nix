@@ -2486,6 +2486,8 @@ in
 
   monetdb = callPackage ../servers/sql/monetdb { };
 
+  monado = callPackage ../applications/graphics/monado {};
+
   mons = callPackage ../tools/misc/mons {};
 
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
