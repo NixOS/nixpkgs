@@ -1,12 +1,12 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , grpc_google_iam_v1
 , google_api_core
 , google_cloud_access_context_manager
 , google_cloud_org_policy
 , google_cloud_os_config
+, google_cloud_testutils
 , libcst
 , proto-plus
 , pytest
@@ -34,14 +34,7 @@ buildPythonPackage rec {
     proto-plus
   ];
 
-  checkInputs = [ mock pytest-asyncio pytestCheckHook ];
-
-  # Remove tests intended to be run in VPC
-  preCheck = ''
-    rm -rf tests/system
-  '';
-
-  disabledTests = [ "asset_service_transport_auth_adc" ];
+  checkInputs = [ google_cloud_testutils mock pytest-asyncio pytestCheckHook ];
 
   pythonImportsCheck = [
     "google.cloud.asset"
@@ -56,6 +49,6 @@ buildPythonPackage rec {
     description = "Python Client for Google Cloud Asset API";
     homepage = "https://github.com/googleapis/python-asset";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
