@@ -1,5 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
-, google_api_core, libcst, mock, proto-plus, pytest-asyncio }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, google_api_core
+, libcst
+, mock
+, proto-plus
+, pytest-asyncio
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
@@ -7,18 +15,22 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1de60f880487b898b499345f46f7acf38651f5356ebca8673116003a57f25393";
+    sha256 = "14sky9bkl00n65ksig3f6psm31pkmkvlcprlk6s9if470j40zrhx";
   };
 
-  disabled = pythonOlder "3.6";
+  propagatedBuildInputs = [ google_api_core libcst proto-plus ];
 
   checkInputs = [ mock pytest-asyncio pytestCheckHook ];
-  propagatedBuildInputs = [ google_api_core libcst proto-plus ];
+
+  pythonImportsCheck = [
+    "google.cloud.websecurityscanner_v1alpha"
+    "google.cloud.websecurityscanner_v1beta"
+  ];
 
   meta = with stdenv.lib; {
     description = "Google Cloud Web Security Scanner API client library";
     homepage = "https://github.com/googleapis/python-websecurityscanner";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
