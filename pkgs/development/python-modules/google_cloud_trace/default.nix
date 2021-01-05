@@ -3,8 +3,11 @@
 , fetchPypi
 , google_api_core
 , google_cloud_core
-, pytest
+, google_cloud_testutils
 , mock
+, proto-plus
+, pytestCheckHook
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
@@ -13,20 +16,29 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bd1ee5c274a584929913d9118134e01afe106644cb749ccc3111e1a38a96cd3";
+    sha256 = "1lvcm4w1l7hiqg64kdscch3f3bq19q9ii49xj4lljn2a4xffxl8v";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_api_core google_cloud_core ];
+  propagatedBuildInputs = [ google_api_core google_cloud_core proto-plus ];
 
-  checkPhase = ''
-    pytest tests/unit
-  '';
+  checkInputs = [ google_cloud_testutils mock pytestCheckHook pytest-asyncio ];
+
+  disabledTests = [
+    # require credentials
+    "test_batch_write_spans"
+    "test_list_traces"
+  ];
+
+  pythonImportsCheck = [
+    "google.cloud.trace"
+    "google.cloud.trace_v1"
+    "google.cloud.trace_v2"
+  ];
 
   meta = with stdenv.lib; {
-    description = "Stackdriver Trace API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    description = "Cloud Trace API client library";
+    homepage = "https://github.com/googleapis/python-trace";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
