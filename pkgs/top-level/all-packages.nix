@@ -1068,6 +1068,8 @@ in
 
   bonfire = callPackage ../tools/misc/bonfire { };
 
+  bookstack = callPackage ../servers/web-apps/bookstack { };
+
   boulder = callPackage ../tools/admin/boulder { };
 
   btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
