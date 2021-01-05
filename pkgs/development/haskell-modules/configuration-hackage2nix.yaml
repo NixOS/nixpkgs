@@ -3200,7 +3200,6 @@ broken-packages:
   - arbor-monad-counter
   - arbor-monad-metric
   - arbor-monad-metric-datadog
-  - arbtt
   - arch-hs
   - archive-libarchive
   - archiver
