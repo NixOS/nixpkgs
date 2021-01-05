@@ -10174,6 +10174,16 @@
     github = "ymarkus";
     githubId = 62380378;
   };
+  ymatsiuk = {
+    name = "Yurii Matsiuk";
+    email = "ymatsiuk@users.noreply.github.com";
+    github = "ymatsiuk";
+    githubId = 24990891;
+    keys = [{
+      longkeyid = "rsa4096/0x61302290298601AA";
+      fingerprint = "7BB8 84B5 74DA FDB1 E194  ED21 6130 2290 2986 01AA";
+    }];
+  };
   ymeister = {
     name = "Yuri Meister";
     email = "47071325+ymeister@users.noreply.github.com";
