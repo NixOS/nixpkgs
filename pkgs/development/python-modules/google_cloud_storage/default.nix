@@ -1,48 +1,64 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
-, google_api_core, google_auth, google-cloud-iam, google_cloud_core
-, google_cloud_kms, google_cloud_testutils, google_resumable_media, mock
-, requests }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, google_auth
+, google_cloud_iam
+, google_cloud_core
+, google_cloud_kms
+, google_cloud_testutils
+, google_resumable_media
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "1.33.0";
+  version = "1.35.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "900ba027bdee6b97f21cd22d1db3d1a6233ede5de2db4754db860438bdad72d2";
+    sha256 = "17kal75wmyjpva7g04cb9yg7qbyrgwfn575z4gqijd4gz2r0sp2m";
   };
 
-  disabled = pythonOlder "3.5";
-
   propagatedBuildInputs = [
-    google_api_core
     google_auth
     google_cloud_core
     google_resumable_media
-    requests
   ];
+
   checkInputs = [
-    google-cloud-iam
+    google_cloud_iam
     google_cloud_kms
     google_cloud_testutils
     mock
     pytestCheckHook
   ];
 
-  # disable tests which require credentials
-  disabledTests = [ "create" "get" "post" "test_build_api_url" ];
+  # disable tests which require credentials and network access
+  disabledTests = [
+    "create"
+    "download"
+    "get"
+    "post"
+    "test_build_api_url"
+  ];
+
+  pytestFlagsArray = [
+    "--ignore=tests/unit/test_bucket.py"
+    "--ignore=tests/system/test_system.py"
+  ];
 
   # prevent google directory from shadowing google imports
-  # remove tests which require credentials
   preCheck = ''
     rm -r google
-    rm tests/system/test_system.py tests/unit/test_client.py
   '';
+
+  pythonImportsCheck = [ "google.cloud.storage" ];
 
   meta = with lib; {
     description = "Google Cloud Storage API client library";
     homepage = "https://github.com/googleapis/python-storage";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
