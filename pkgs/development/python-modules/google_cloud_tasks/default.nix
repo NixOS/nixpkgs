@@ -1,33 +1,44 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, enum34
-, grpc_google_iam_v1
 , google_api_core
-, pytest
+, grpc_google_iam_v1
+, libcst
 , mock
+, proto-plus
+, pytestCheckHook
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a9dd004057fc441eee8c18bb2dc3bb20ba7b85f353d66894c61e42aeb8764e76";
+    sha256 = "1jsf7y88lvln9r08pmx673ibmgw397qmir5drrcfvlmgqvszp7qx";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ enum34 grpc_google_iam_v1 google_api_core ];
+  propagatedBuildInputs = [ google_api_core grpc_google_iam_v1 libcst proto-plus ];
 
-  checkPhase = ''
-    pytest tests/unit
-  '';
+  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+
+  disabledTests = [
+    # requires credentials
+    "test_list_queues"
+  ];
+
+  pythonImportsCheck = [
+    "google.cloud.tasks"
+    "google.cloud.tasks_v2"
+    "google.cloud.tasks_v2beta2"
+    "google.cloud.tasks_v2beta3"
+  ];
 
   meta = with stdenv.lib; {
     description = "Cloud Tasks API API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-tasks";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
