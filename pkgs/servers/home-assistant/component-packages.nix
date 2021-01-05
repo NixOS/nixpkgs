@@ -234,7 +234,7 @@
     "essent" = ps: with ps; [ ]; # missing inputs: PyEssent
     "etherscan" = ps: with ps; [ ]; # missing inputs: python-etherscan-api
     "eufy" = ps: with ps; [ ]; # missing inputs: lakeside
-    "everlights" = ps: with ps; [ ]; # missing inputs: pyeverlights
+    "everlights" = ps: with ps; [ pyeverlights ];
     "evohome" = ps: with ps; [ ]; # missing inputs: evohome-async
     "ezviz" = ps: with ps; [ ]; # missing inputs: pyezviz
     "facebook" = ps: with ps; [ ];
