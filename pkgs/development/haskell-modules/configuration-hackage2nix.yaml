@@ -10584,7 +10584,6 @@ broken-packages:
   - Thingie
   - thorn
   - threadmanager
-  - threadscope
   - threepenny-editors
   - threepenny-gui-contextmenu
   - threepenny-gui-flexbox
