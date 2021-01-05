@@ -516,6 +516,8 @@ in {
 
   av = callPackage ../development/python-modules/av { inherit (pkgs) pkgconfig; };
 
+  avea = callPackage ../development/python-modules/avea { };
+
   avro3k = callPackage ../development/python-modules/avro3k { };
 
   avro = callPackage ../development/python-modules/avro { };
