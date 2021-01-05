@@ -7099,6 +7099,9 @@ in
 
   rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };
 
+  inherit (callPackage ../development/misc/resholve { })
+    resholve resholvePackage;
+
   reuse = callPackage ../tools/package-management/reuse { };
 
   rewritefs = callPackage ../os-specific/linux/rewritefs { };
