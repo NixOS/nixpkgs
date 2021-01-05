@@ -1,35 +1,64 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, aiounittest
 , google_api_core
+, google_cloud_testutils
 , google_cloud_core
-, pytest
+, mock
+, proto-plus
+, pytestCheckHook
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ae1f58d9174a6fb2c9fd2758c6d4fd237fb4f0decc632b80c217bfbceda38eb6";
+    sha256 = "1q5s2gpkibnjxal9zrz02jfnazf7rxk0bi0ln5a3di6i47kjnga9";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ google_api_core google_cloud_core ];
+  propagatedBuildInputs = [
+    google_api_core
+    google_cloud_core
+    proto-plus
+  ];
 
-  # tests were not included with release
-  # See issue https://github.com/googleapis/google-cloud-python/issues/6380
-  doCheck = false;
+  checkInputs = [
+    aiounittest
+    google_cloud_testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
-  checkPhase = ''
-    pytest tests/unit
+  preCheck = ''
+    # do not shadow imports
+    rm -r google
   '';
+
+  pytestFlagsArray = [
+    # tests are broken
+    "--ignore=tests/system/test_system.py"
+    "--ignore=tests/system/test_system_async.py"
+  ];
+
+  disabledTests = [
+    # requires credentials
+    "test_collections"
+  ];
+
+  pythonImportsCheck = [
+    "google.cloud.firestore_v1"
+    "google.cloud.firestore_admin_v1"
+  ];
 
   meta = with stdenv.lib; {
     description = "Google Cloud Firestore API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-firestore";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
