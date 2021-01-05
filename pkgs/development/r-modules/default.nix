@@ -379,6 +379,7 @@ let
     rmutil = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     robustbase = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     SparseM = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
+    hexbin = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     svKomodo = [ pkgs.which ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
@@ -690,7 +691,6 @@ let
     data_table = old.data_table.overrideDerivation (attrs: {
       NIX_CFLAGS_COMPILE = attrs.NIX_CFLAGS_COMPILE + " -fopenmp";
       patchPhase = "patchShebangs configure";
-      postInstall = "mv $out/library/data.table/libs/{data.table,datatable}.so";
     });
 
     ModelMetrics = old.ModelMetrics.overrideDerivation (attrs: {
