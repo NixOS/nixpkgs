@@ -1,6 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytestCheckHook
-, google_api_core, google_cloud_testutils, grpc_google_iam_v1, libcst, mock
-, proto-plus, pytest-asyncio }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, google_api_core
+, google_cloud_testutils
+, grpc_google_iam_v1
+, libcst
+, mock
+, proto-plus
+, pytest-asyncio
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
@@ -8,19 +17,17 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bc50a60803f5c409a295ec0e31cdd4acc271611ce3f4963a072036bbfa5ccde5";
+    sha256 = "1rfdbkxbndi00wx9dx733ihp3hmcsk6k23pcjni0ki7m0c4acl5w";
   };
 
-  disabled = pythonOlder "3.6";
+  propagatedBuildInputs = [ grpc_google_iam_v1 google_api_core libcst proto-plus ];
 
   checkInputs = [ google_cloud_testutils mock pytestCheckHook pytest-asyncio ];
-  propagatedBuildInputs =
-    [ grpc_google_iam_v1 google_api_core libcst proto-plus ];
 
-  # prevent google directory from shadowing google imports
-  # Tests in pubsub_v1 attempt to contact pubsub.googleapis.com
   preCheck = ''
+    # prevent google directory from shadowing google imports
     rm -r google
+    # Tests in pubsub_v1 attempt to contact pubsub.googleapis.com
     rm -r tests/unit/pubsub_v1
   '';
 
@@ -30,6 +37,6 @@ buildPythonPackage rec {
     description = "Google Cloud Pub/Sub API client library";
     homepage = "https://pypi.org/project/google-cloud-pubsub";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
