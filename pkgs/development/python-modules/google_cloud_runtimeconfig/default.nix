@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
-, google_api_core, google_cloud_core, mock }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, google_api_core
+, google_cloud_core
+, mock
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-runtimeconfig";
@@ -7,28 +13,27 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "57143ec3c5ed3e0bee590a98857eec06c68aa2eacbce477403226a0d2e85a8ad";
+    sha256 = "1bd8hlp0ssi20ds4gknbxai8mih6xiz8b60ab7p0ngpdqp1kw52p";
   };
 
-  disabled = pythonOlder "3.5";
-
-  checkInputs = [ mock pytestCheckHook ];
   propagatedBuildInputs = [ google_api_core google_cloud_core ];
 
-  # api_url test broken, fix not yet released
-  # https://github.com/googleapis/python-resource-manager/pull/31
+  checkInputs = [ mock pytestCheckHook ];
+
   # Client tests require credentials
-  disabledTests = [ "build_api_url_w_custom_endpoint" "client_options" ];
+  disabledTests = [ "client_options" ];
 
   # prevent google directory from shadowing google imports
   preCheck = ''
     rm -r google
   '';
 
+  pythonImportsCheck = [ "google.cloud.runtimeconfig" ];
+
   meta = with stdenv.lib; {
     description = "Google Cloud RuntimeConfig API client library";
     homepage = "https://pypi.org/project/google-cloud-runtimeconfig";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
