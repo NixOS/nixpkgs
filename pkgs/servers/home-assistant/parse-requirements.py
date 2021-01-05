@@ -30,7 +30,7 @@ from urllib.request import urlopen
 COMPONENT_PREFIX = "homeassistant.components"
 PKG_SET = "python3Packages"
 
-# If some requirements are matched by multiple python packages,
+# If some requirements are matched by multiple Python packages,
 # the following can be used to choose one of them
 PKG_PREFERENCES = {
     # Use python3Packages.youtube-dl-light instead of python3Packages.youtube-dl
