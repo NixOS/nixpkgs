@@ -1,33 +1,39 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, enum34
 , grpc_google_iam_v1
 , google_api_core
-, pytest
+, libcst
 , mock
+, proto-plus
+, pytestCheckHook
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "45d47a4389f2f19958a9db8e5c2f169c9b9385e74338fef0a4e49160153df7f7";
+    sha256 = "1lgz6qpsfv4b7p5ff4sdpjpaddxpbazdvlcrqr1i0c0qil2lkm2i";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ enum34 grpc_google_iam_v1 google_api_core ];
+  propagatedBuildInputs = [ grpc_google_iam_v1 google_api_core libcst proto-plus ];
 
-  checkPhase = ''
-    pytest tests/unit
-  '';
+  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+
+  pythonImportsCheck = [
+    "google.cloud.securitycenter"
+    "google.cloud.securitycenter_v1"
+    "google.cloud.securitycenter_v1beta1"
+    "google.cloud.securitycenter_v1p1beta1"
+  ];
 
   meta = with stdenv.lib; {
     description = "Cloud Security Command Center API API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-securitycenter";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
