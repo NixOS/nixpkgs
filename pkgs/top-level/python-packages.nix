@@ -445,6 +445,8 @@ in {
 
   async_generator = callPackage ../development/python-modules/async_generator { };
 
+  asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
+
   asyncio-throttle = callPackage ../development/python-modules/asyncio-throttle { };
 
   asyncpg = callPackage ../development/python-modules/asyncpg { };
@@ -6264,6 +6266,8 @@ in {
   pywick = callPackage ../development/python-modules/pywick { };
 
   pywinrm = callPackage ../development/python-modules/pywinrm { };
+
+  pywizlight = callPackage ../development/python-modules/pywizlight { };
 
   pyxattr = let
     pyxattr' = callPackage ../development/python-modules/pyxattr { };
