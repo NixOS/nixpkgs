@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, google_auth, pytest, six }:
+{ stdenv, buildPythonPackage, fetchPypi, google_auth, six }:
 
 buildPythonPackage rec {
   pname = "google-cloud-testutils";
@@ -11,13 +11,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ google_auth six ];
 
-  # There are no tests
+  # does not contain tests
   doCheck = false;
+
+  pythonImportsCheck = [ "test_utils" ];
 
   meta = with stdenv.lib; {
     description = "System test utilities for google-cloud-python";
     homepage = "https://github.com/googleapis/python-test-utils";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
