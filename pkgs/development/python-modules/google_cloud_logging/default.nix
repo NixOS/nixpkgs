@@ -1,38 +1,59 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder, django
-, flask, google_api_core, google_cloud_core, google_cloud_testutils, mock
-, webapp2 }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, django
+, flask
+, google_api_core
+, google_cloud_core
+, google_cloud_testutils
+, mock
+, proto-plus
+, pytestCheckHook
+, pytest-asyncio
+, webapp2
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "2.0.0";
+  version = "2.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8e4869ec22aa7958ff937c1acbd34d7a2a8a446af9a09ce442f24128eee063c";
+    sha256 = "0s09vs4rnq4637j8zw7grv3f4j7njqprm744b1knzldj91rg0vmi";
   };
 
-  disabled = pythonOlder "3.5";
+  propagatedBuildInputs = [ google_api_core google_cloud_core proto-plus ];
 
-  checkInputs =
-    [ django flask google_cloud_testutils mock pytestCheckHook webapp2 ];
-  propagatedBuildInputs = [ google_api_core google_cloud_core ];
+  checkInputs = [
+    django
+    flask
+    google_cloud_testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
-  # api_url test broken, fix not yet released
-  # https://github.com/googleapis/python-logging/pull/66
-  disabledTests =
-    [ "test_build_api_url_w_custom_endpoint" "test_write_log_entries" ];
+  disabledTests = [
+    # requires credentials
+    "test_write_log_entries"
+  ];
 
-  # prevent google directory from shadowing google imports
-  # remove system integration tests
   preCheck = ''
+    # prevent google directory from shadowing google imports
     rm -r google
-    rm tests/system/test_system.py
+    # requires credentials
+    rm tests/system/test_system.py tests/unit/test__gapic.py
   '';
+
+  pythonImortsCheck = [
+    "google.cloud.logging"
+    "google.cloud.logging_v2"
+  ];
 
   meta = with stdenv.lib; {
     description = "Stackdriver Logging API client library";
     homepage = "https://github.com/googleapis/python-logging";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
