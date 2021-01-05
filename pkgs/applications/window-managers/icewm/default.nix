@@ -1,30 +1,86 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, perl, asciidoc
-, libjpeg, libtiff, libungif, libpng, imlib, expat
-, freetype, fontconfig, pkgconfig, gdk-pixbuf, gdk-pixbuf-xlib, glib
-, mkfontdir, libX11, libXft, libXext, libXinerama
-, libXrandr, libICE, libSM, libXpm, libXdmcp, libxcb
-, libpthreadstubs, pcre, libXdamage, libXcomposite, libXfixes
-, libsndfile, fribidi }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, perl
+, asciidoc
+, expat
+, fontconfig
+, freetype
+, fribidi
+, gdk-pixbuf
+, gdk-pixbuf-xlib
+, gettext
+, glib
+, imlib2
+, libICE
+, libSM
+, libX11
+, libXcomposite
+, libXdamage
+, libXdmcp
+, libXext
+, libXfixes
+, libXft
+, libXinerama
+, libXpm
+, libXrandr
+, libjpeg
+, libpng
+, libpthreadstubs
+, libsndfile
+, libtiff
+, libungif
+, libxcb
+, mkfontdir
+, pcre
+}:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "icewm";
-  version = "1.9.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner  = "bbidulock";
     repo = pname;
     rev = version;
-    sha256 = "16a9ikknjmhrrlc5r6z2ilkjj5vzyfk4ypwab39mg7vcmd7jzc41";
+    sha256 = "sha256-WdRAWAQEf9c66MVrLAs5VgBDK5r4JKM2GrjAV4cuGfA=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig perl asciidoc ];
+  nativeBuildInputs = [ cmake pkg-config perl asciidoc ];
 
   buildInputs = [
-    gettext libjpeg libtiff libungif libpng imlib expat freetype fontconfig
-    gdk-pixbuf gdk-pixbuf-xlib glib mkfontdir libX11 libXft libXext libXinerama
-    libXrandr libICE libSM libXpm libXdmcp libxcb libpthreadstubs pcre
-    libsndfile fribidi libXdamage libXcomposite libXfixes ];
+    expat
+    fontconfig
+    freetype
+    fribidi
+    gdk-pixbuf
+    gdk-pixbuf-xlib
+    gettext
+    glib
+    imlib2
+    libICE
+    libSM
+    libX11
+    libXcomposite
+    libXdamage
+    libXdmcp
+    libXext
+    libXfixes
+    libXft
+    libXinerama
+    libXpm
+    libXrandr
+    libjpeg
+    libpng
+    libpthreadstubs
+    libsndfile
+    libtiff
+    libungif
+    libxcb
+    mkfontdir
+    pcre
+  ];
 
   cmakeFlags = [ "-DPREFIX=$out" "-DCFGDIR=/etc/icewm" ];
 
@@ -33,11 +89,20 @@ stdenv.mkDerivation rec {
     cp -r ../lib/themes/{gtk2,Natural,nice,nice2,warp3,warp4,yellowmotif} $out/share/icewm/themes/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A simple, lightweight X window manager";
     longDescription = ''
-      IceWM is a window manager for the X Window System. The goal of
-      IceWM is speed, simplicity, and not getting in the user's way.
+      IceWM is a window manager for the X Window System. The goal of IceWM is
+      speed, simplicity, and not getting in the user’s way. It comes with a
+      taskbar with pager, global and per-window keybindings and a dynamic menu
+      system. Application windows can be managed by keyboard and mouse. Windows
+      can be iconified to the taskbar, to the tray, to the desktop or be made
+      hidden. They are controllable by a quick switch window (Alt+Tab) and in a
+      window list. A handful of configurable focus models are
+      menu-selectable. Setups with multiple monitors are supported by RandR and
+      Xinerama. IceWM is very configurable, themeable and well documented. It
+      includes an optional external background wallpaper manager with
+      transparency support, a simple session manager and a system tray.
     '';
     homepage = "https://www.ice-wm.org/";
     license = licenses.lgpl2;
