@@ -34,6 +34,8 @@
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
+, maturinBuildFlags ? []
+, buildTool ? "cargo"
 , buildType ? "release"
 , meta ? {}
 , target ? rust.toRustTargetSpec stdenv.hostPlatform
@@ -53,6 +55,7 @@
 , ... } @ args:
 
 assert cargoVendorDir == null -> !(cargoSha256 == "" && cargoHash == "");
+assert buildTool == "cargo" || buildType == "maturin";
 assert buildType == "release" || buildType == "debug";
 
 let
@@ -205,7 +208,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optional
     runHook postConfigure
   '';
 
-  buildPhase = with builtins; args.buildPhase or ''
+  buildPhase = with builtins; args.buildPhase or (''
     ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
     runHook preBuild
 
@@ -216,10 +219,14 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optional
       "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
       "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
       "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
-      cargo build -j $NIX_BUILD_CORES \
+    '' + stdenv.lib.optionalString (buildTool == "cargo") ''
+      cargo build -j $NIX_BUILD_CORES --frozen ${concatStringsSep " " cargoBuildFlags} \
+    '' + stdenv.lib.optionalString (buildTool == "maturin") ''
+      maturin build --manylinux off --strip \
+        --cargo-extra-args="-j $NIX_BUILD_CORES --frozen ${concatStringsSep " " maturinBuildFlags}" \
+    '' + ''
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
-        --target ${target} \
-        --frozen ${concatStringsSep " " cargoBuildFlags}
+        --target ${target}
     )
 
     runHook postBuild
@@ -235,7 +242,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optional
       -maxdepth 1 \
       -type f \
       -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \))
-  '';
+  '');
 
   checkPhase = args.checkPhase or (let
     argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${target} --frozen";
@@ -255,9 +262,9 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optional
 
   inherit releaseDir tmpDir;
 
-  installPhase = args.installPhase or ''
+  installPhase = args.installPhase or (''
     runHook preInstall
-
+  '' + stdenv.lib.optionalString (buildTool == "cargo") ''
     # rename the output dir to a architecture independent one
     mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${tmpDir}$')
     for target in "''${targets[@]}"; do
@@ -272,8 +279,11 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optional
       -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \
       -print0 | xargs -r -0 cp -t $out/lib
     rmdir --ignore-fail-on-non-empty $out/lib $out/bin
+  '' + stdenv.lib.optionalString (buildTool == "maturin") ''
+    install -Dm644 -t $out target/wheels/*.whl
+  '' + ''
     runHook postInstall
-  '';
+  '');
 
   passthru = { inherit cargoDeps; } // (args.passthru or {});
 
