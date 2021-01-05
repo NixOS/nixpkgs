@@ -14942,6 +14942,8 @@ in
     inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
 
+  libuvc = callPackage ../development/libraries/libuvc { };
+
   libv4l = lowPrio (v4l-utils.override {
     withUtils = false;
   });
