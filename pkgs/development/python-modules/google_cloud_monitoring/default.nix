@@ -2,8 +2,11 @@
 , buildPythonPackage
 , fetchPypi
 , google_api_core
-, pandas
-, pytest
+, google_cloud_testutils
+, libcst
+, proto-plus
+, pytestCheckHook
+, pytest-asyncio
 , mock
 }:
 
@@ -13,20 +16,27 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1debfa046ab9518d46b68712c03d86d0ddb11d1aad428aed62c6465752f2201f";
+    sha256 = "07r0y995fin6cbnqlhmd38fv3pfhhqyw04l7nr38sldrd82gmsqx";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_api_core pandas ];
+  propagatedBuildInputs = [ libcst google_api_core proto-plus ];
 
-  checkPhase = ''
-    pytest tests/unit
-  '';
+  checkInputs = [ google_cloud_testutils mock pytestCheckHook pytest-asyncio ];
+
+  disabledTests = [
+    # requires credentials
+    "test_list_monitored_resource_descriptors"
+  ];
+
+  pythonImportsCheck = [
+    "google.cloud.monitoring"
+    "google.cloud.monitoring_v3"
+  ];
 
   meta = with stdenv.lib; {
     description = "Stackdriver Monitoring API client library";
     homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
