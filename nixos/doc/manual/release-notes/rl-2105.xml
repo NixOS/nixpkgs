@@ -539,6 +539,11 @@ self: super:
      <package>imagemagick6Big</package> if you need the older version.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <xref linkend="opt-services.xserver.videoDrivers" /> no longer uses the deprecated <literal>cirrus</literal> and <literal>vesa</literal> device dependent X drivers by default. It also enables both <literal>amdgpu</literal> and <literal>nouveau</literal> drivers by default now.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
