@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  autologinArg = optionalString (config.services.mingetty.autologinUser != null) "--autologin ${config.services.mingetty.autologinUser}";
+  autologinArg = optionalString (config.services.getty.autologinUser != null) "--autologin ${config.services.getty.autologinUser}";
   gettyCmd = extraArgs: "@${pkgs.util-linux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login ${autologinArg} ${extraArgs}";
 
 in
@@ -13,9 +13,13 @@ in
 
   ###### interface
 
+  imports = [
+    (mkRenamedOptionModule [ "services" "mingetty" ] [ "services" "getty" ])
+  ];
+
   options = {
 
-    services.mingetty = {
+    services.getty = {
 
       autologinUser = mkOption {
         type = types.nullOr types.str;
@@ -29,7 +33,7 @@ in
       greetingLine = mkOption {
         type = types.str;
         description = ''
-          Welcome line printed by mingetty.
+          Welcome line printed by agetty.
           The default shows current NixOS version label, machine type and tty.
         '';
       };
@@ -38,7 +42,7 @@ in
         type = types.lines;
         default = "";
         description = ''
-          Help line printed by mingetty below the welcome line.
+          Help line printed by agetty below the welcome line.
           Used by the installation CD to give some hints on
           how to proceed.
         '';
@@ -65,7 +69,7 @@ in
   config = {
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
-    services.mingetty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>'';
+    services.getty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>'';
 
     systemd.services."getty@" =
       { serviceConfig.ExecStart = [
@@ -76,7 +80,7 @@ in
       };
 
     systemd.services."serial-getty@" =
-      let speeds = concatStringsSep "," (map toString config.services.mingetty.serialSpeed); in
+      let speeds = concatStringsSep "," (map toString config.services.getty.serialSpeed); in
       { serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
           (gettyCmd "%I ${speeds} $TERM")
@@ -106,8 +110,8 @@ in
       { # Friendly greeting on the virtual consoles.
         source = pkgs.writeText "issue" ''
 
-          [1;32m${config.services.mingetty.greetingLine}[0m
-          ${config.services.mingetty.helpLine}
+          [1;32m${config.services.getty.greetingLine}[0m
+          ${config.services.getty.helpLine}
 
         '';
       };
