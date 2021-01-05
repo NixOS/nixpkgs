@@ -446,6 +446,11 @@
      The option's description was incorrect regarding ownership management and has been simplified greatly.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The GNOME desktop manager once again installs <package>gnome3.epiphany</package> by default.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
