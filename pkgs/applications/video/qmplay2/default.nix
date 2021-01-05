@@ -22,7 +22,7 @@
 
 let
   pname = "qmplay2";
-  version = "20.07.04";
+  version = "20.12.16";
 in stdenv.mkDerivation {
   inherit pname version;
 
@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
     owner = "zaps166";
     repo = "QMPlay2";
     rev = version;
-    sha256 = "sha256-sUDucxSvsdD2C2FSVrrXeHdNdrjECtJSXVr106OdHzA=";
+    sha256 = "sha256-+XXlQI9MyENioYmzqbbZYQ6kaMATBjPrPaErR2Vqhus=";
     fetchSubmodules = true;
   };
 
