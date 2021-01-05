@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
