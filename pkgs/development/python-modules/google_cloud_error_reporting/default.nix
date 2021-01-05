@@ -1,6 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
-, google_cloud_logging, google_cloud_testutils, libcst, mock, proto-plus
-, pytest-asyncio }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, google_cloud_logging
+, google_cloud_testutils
+, libcst
+, mock
+, proto-plus
+, pytest-asyncio
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
@@ -11,13 +19,16 @@ buildPythonPackage rec {
     sha256 = "2fd6fe25343f7017c22e2733a0358c64b3171edc1669d0c8a1e1f07f86a048c4";
   };
 
-  disabled = pythonOlder "3.6";
-
-  checkInputs = [ google_cloud_testutils mock pytestCheckHook pytest-asyncio ];
   propagatedBuildInputs = [ google_cloud_logging libcst proto-plus ];
 
-  # Disable tests that require credentials
-  disabledTests = [ "test_report_error_event" "test_report_exception" ];
+  checkInputs = [ google_cloud_testutils mock pytestCheckHook pytest-asyncio ];
+
+  disabledTests = [
+    # require credentials
+    "test_report_error_event"
+    "test_report_exception"
+  ];
+
   # prevent google directory from shadowing google imports
   preCheck = ''
     rm -r google
@@ -27,6 +38,6 @@ buildPythonPackage rec {
     description = "Stackdriver Error Reporting API client library";
     homepage = "https://github.com/googleapis/python-error-reporting";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
