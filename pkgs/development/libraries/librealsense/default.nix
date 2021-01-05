@@ -1,4 +1,4 @@
-{ stdenv, config, lib, fetchFromGitHub, cmake, libusb1, ninja, pkgconfig, gcc
+{ stdenv, config, lib, fetchFromGitHub, cmake, libusb1, ninja, pkg-config, gcc
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
 , enablePython ? false, pythonPackages ? null }:
 
@@ -7,7 +7,7 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "librealsense";
-  version = "2.40.0";
+  version = "2.41.0";
 
   outputs = [ "out" "dev" ];
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "IntelRealSense";
     repo = pname;
     rev = "v${version}";
-    sha256 = "KZNriNDxRKR14KFJrAbzZLfSQ3iiZ8PKC80fVh0AQls=";
+    sha256 = "0ngv9fgja72vg7hq1aiwpa7x4dhniawhpd8mqm85pqkjxiph8s1k";
   };
 
   buildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   cmakeFlags = [
