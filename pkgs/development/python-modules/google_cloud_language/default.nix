@@ -1,10 +1,12 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, enum34
 , google_api_core
-, pytest
+, libcst
 , mock
+, proto-plus
+, pytestCheckHook
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
@@ -13,20 +15,23 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "abe7abcd64d25ffdf6d063385869ef8f34a7de421d5676541cd6df63b3c37b88";
+    sha256 = "123vqfrn7pyn3ia7cmhx8bgafd4gxxlmhf33s3vgspyjck6sprxb";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ enum34 google_api_core ];
+  propagatedBuildInputs = [ google_api_core libcst proto-plus ];
 
-  checkPhase = ''
-    pytest tests/unit
-  '';
+  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+
+  pythonImportsCheck = [
+    "google.cloud.language"
+    "google.cloud.language_v1"
+    "google.cloud.language_v1beta2"
+  ];
 
   meta = with stdenv.lib; {
     description = "Google Cloud Natural Language API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-language";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
