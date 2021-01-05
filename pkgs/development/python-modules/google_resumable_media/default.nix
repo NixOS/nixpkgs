@@ -1,38 +1,46 @@
 { lib
 , buildPythonPackage
-, isPy3k
 , fetchPypi
-, six
-, requests
-, setuptools
-, pytest
+, google_auth
+, google_cloud_testutils
+, google_crc32c
 , mock
-, crcmod
-, google-crc32c
+, pytestCheckHook
+, pytest-asyncio
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dcdab13e95bc534d268f87d5293e482cce5bc86dfce6ca0f2e2e89cbb73ef38c";
+    sha256 = "0hwxdgsqh6933kp4jkv6hwwdcqs7bgjn9j08ga399njv3s9b367f";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ requests setuptools six ]
-    ++ lib.optional isPy3k google-crc32c
-    ++ lib.optional (!isPy3k) crcmod;
+  propagatedBuildInputs = [ google_auth google_crc32c requests ];
 
-  checkPhase = ''
-    py.test tests/unit
+  checkInputs = [ google_auth google_cloud_testutils mock pytestCheckHook pytest-asyncio ];
+
+  preCheck = ''
+    # prevent shadowing imports
+    rm -r google
+    # fixture 'authorized_transport' not found
+    rm tests/system/requests/test_upload.py
+    # requires network
+    rm tests/system/requests/test_download.py
   '';
+
+  pythonImportsCheck = [
+    "google._async_resumable_media"
+    "google.resumable_media"
+  ];
 
   meta = with lib; {
     description = "Utilities for Google Media Downloads and Resumable Uploads";
     homepage = "https://github.com/GoogleCloudPlatform/google-resumable-media-python";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
