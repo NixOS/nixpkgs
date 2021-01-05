@@ -6256,6 +6256,18 @@ let
     meta.homepage = "https://github.com/fcpg/vim-osc52/";
   };
 
+  vim-oscyank = buildVimPluginFrom2Nix {
+    pname = "vim-oscyank";
+    version = "2021-01-05";
+    src = fetchFromGitHub {
+      owner = "ojroques";
+      repo = "vim-oscyank";
+      rev = "755561cd3e4532009dc75c997f8cb0e5f50c9ed7";
+      sha256 = "18vgmmnds5zfnn1v285g4s0yq7zpj9nwkdm1l5rcnx986rdrbgyw";
+    };
+    meta.homepage = "https://github.com/ojroques/vim-oscyank/";
+  };
+
   vim-over = buildVimPluginFrom2Nix {
     pname = "vim-over";
     version = "2020-01-26";

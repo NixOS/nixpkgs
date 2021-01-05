@@ -402,6 +402,7 @@ nvim-treesitter/nvim-treesitter-textobjects
 nvim-treesitter/playground
 ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
+ojroques/vim-oscyank@main
 Olical/conjure
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
