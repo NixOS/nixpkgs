@@ -2029,11 +2029,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videonouveau = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-nouveau-1.0.15";
+    name = "xf86-video-nouveau-1.0.16";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-nouveau-1.0.15.tar.bz2";
-      sha256 = "0k0xah72ryjwak4dc4crszxrlkmi9x1s7p3sd4la642n77yi1pmf";
+      url = "mirror://xorg/individual/driver/xf86-video-nouveau-1.0.16.tar.bz2";
+      sha256 = "01mz8gnq7j6bvrqb2ljm3d1wpjhi9p2z2w8zbkdrqmqmcj060h1h";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
