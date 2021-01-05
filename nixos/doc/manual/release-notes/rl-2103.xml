@@ -335,6 +335,11 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
        official documentation</link> of the json_exporter.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       <xref linkend="opt-services.xserver.videoDrivers" /> no longer uses the <literal>cirrus</literal> and <literal>vesa</literal> device dependent X drivers by default.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
