@@ -1,9 +1,12 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, enum34
 , google_api_core
+, libcst
 , mock
+, proto-plus
+, pytestCheckHook
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
@@ -12,22 +15,27 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6a067d9a661df2e9b356b2772051decfea1971f8d659c246412a165baf827c61";
+    sha256 = "0qbwhapmn5ia853c4nfnz1qiksngvr8j0xxjasrykwhxcsd7s1ka";
   };
 
-  checkInputs = [ mock ];
-  propagatedBuildInputs = [ enum34 google_api_core ];
+  propagatedBuildInputs = [ libcst google_api_core proto-plus];
 
-  # pytest seems to pick up some file which overrides PYTHONPATH
-  checkPhase = ''
-    cd tests/unit
-    python -m unittest discover
-  '';
+  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+
+  pythonImportsCheck = [
+    "google.cloud.vision"
+    "google.cloud.vision_helpers"
+    "google.cloud.vision_v1"
+    "google.cloud.vision_v1p1beta1"
+    "google.cloud.vision_v1p2beta1"
+    "google.cloud.vision_v1p3beta1"
+    "google.cloud.vision_v1p4beta1"
+  ];
 
   meta = with stdenv.lib; {
     description = "Cloud Vision API API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-vision";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
