@@ -610,6 +610,10 @@ Using the example above, the analagous pytestCheckHook usage would be:
     "download"
     "update"
   ];
+
+  disabledTestFiles = [
+    "tests/test_failing.py"
+  ];
 ```
 
 This is expecially useful when tests need to be conditionallydisabled,
