@@ -1,6 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi
-, grpc_google_iam_v1, google_api_core, libcst, proto-plus
-, pytest, mock
+{ lib
+, buildPythonPackage
+, fetchPypi
+, google_api_core
+, grpc_google_iam_v1
+, libcst
+, mock
+, proto-plus
+, pytestCheckHook
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
@@ -9,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2f08b49164aca8623b2e4ee07352980b3ffca909ce205c03568e203bbc455c30";
+    sha256 = "0c2w8ny3n84faq1mq86f16lzqgqbk1977q2f5qxn5a5ccj8v821g";
   };
 
   propagatedBuildInputs = [
@@ -21,16 +28,20 @@ buildPythonPackage rec {
 
   checkInputs = [
     mock
-    pytest
+    pytestCheckHook
+    pytest-asyncio
   ];
-  checkPhase = ''
-    pytest
-  '';
+
+  pythonImportsCheck = [
+    "google.cloud.secretmanager"
+    "google.cloud.secretmanager_v1"
+    "google.cloud.secretmanager_v1beta1"
+  ];
 
   meta = with lib; {
-    description = "Secret Manager API: Stores, manages, and secures access to application secrets";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    description = "Secret Manager API API client library";
+    homepage = "https://github.com/googleapis/python-secret-manager";
     license = licenses.asl20;
-    maintainers = with maintainers; [ siriobalmelli ];
+    maintainers = with maintainers; [ siriobalmelli SuperSandro2000 ];
   };
 }
