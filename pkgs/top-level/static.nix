@@ -50,15 +50,6 @@ self: super: let
     # ++ optional (super.stdenv.hostPlatform.libc == "glibc") ((flip overrideInStdenv) [ self.stdenv.glibc.static ])
   ;
 
-  # Force everything to link statically.
-  haskellStaticAdapter = self: super: {
-    mkDerivation = attrs: super.mkDerivation (attrs // {
-      enableSharedLibraries = false;
-      enableSharedExecutables = false;
-      enableStaticLibraries = true;
-    });
-  };
-
   removeUnknownConfigureFlags = f: with self.lib;
     remove "--disable-shared"
     (remove "--enable-static" f);
@@ -101,12 +92,6 @@ in {
   gcc9Stdenv = foldl (flip id) super.gcc9Stdenv staticAdapters;
   clangStdenv = foldl (flip id) super.clangStdenv staticAdapters;
   libcxxStdenv = foldl (flip id) super.libcxxStdenv staticAdapters;
-
-  haskell = super.haskell // {
-    packageOverrides = composeExtensions
-      (super.haskell.packageOverrides or (_: _: {}))
-      haskellStaticAdapter;
-  };
 
   zlib = super.zlib.override {
     # Don’t use new stdenv zlib because
