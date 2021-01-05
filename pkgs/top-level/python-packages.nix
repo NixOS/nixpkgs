@@ -2553,7 +2553,7 @@ in {
 
   google_cloud_firestore = callPackage ../development/python-modules/google_cloud_firestore { };
 
-  google-cloud-iam = callPackage ../development/python-modules/google-cloud-iam { };
+  google_cloud_iam = callPackage ../development/python-modules/google_cloud_iam { };
 
   google_cloud_iot = callPackage ../development/python-modules/google_cloud_iot { };
 
