@@ -1,5 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytestCheckHook, pythonOlder
-, google_api_core, libcst, mock, proto-plus, pytest-asyncio, }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, google_api_core
+, libcst
+, mock
+, proto-plus
+, pytest-asyncio
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
@@ -7,21 +15,29 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cbbd397e72b6189668134f3c8e8c303198188334a4e6a5f77cc90c3220772f9e";
+    sha256 = "17igfwh34369gkvsbrm46j1ii61i6268wg2g2dl9c65nf9z3kgfb";
   };
 
-  disabled = pythonOlder "3.5";
+  propagatedBuildInputs = [ libcst google_api_core proto-plus ];
 
   checkInputs = [ mock pytest-asyncio pytestCheckHook ];
-  propagatedBuildInputs = [ google_api_core libcst proto-plus ];
 
-  # Disable tests that require credentials
-  disabledTests = ["test_synthesize_speech" "test_list_voices"];
+  disabledTests = [
+    # Disable tests that require credentials
+    "test_list_voices"
+    "test_synthesize_speech"
+  ];
+
+  pythonImportsCheck = [
+    "google.cloud.texttospeech"
+    "google.cloud.texttospeech_v1"
+    "google.cloud.texttospeech_v1beta1"
+  ];
 
   meta = with stdenv.lib; {
     description = "Google Cloud Text-to-Speech API client library";
     homepage = "https://github.com/googleapis/python-texttospeech";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
