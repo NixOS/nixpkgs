@@ -6269,6 +6269,8 @@ in {
 
   pywick = callPackage ../development/python-modules/pywick { };
 
+  pywilight = callPackage ../development/python-modules/pywilight { };
+
   pywinrm = callPackage ../development/python-modules/pywinrm { };
 
   pywizlight = callPackage ../development/python-modules/pywizlight { };
