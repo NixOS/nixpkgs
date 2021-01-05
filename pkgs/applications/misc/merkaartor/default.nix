@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "merkaartor";
-  version = "unstable-2019-11-12";
+  version = "unstable-2020-07-07";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "merkaartor";
-    rev = "29b3388680a03f1daac0037a2b504ea710da879a";
-    sha256 = "0h3d3srzl06p2ajq911j05zr4vkl88qij18plydx45yqmvyvh0xz";
+    rev = "0db9132ef4d1ee7910d45c3c00302440297c4603";
+    sha256 = "sha256-Y2pZby/iN4uFv9zh5x9frOqkrGydi3X6i9peEop0C8k=";
   };
 
   nativeBuildInputs = [ makeWrapper qmake pkgconfig ];
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "OpenStreetMap editor";
     homepage = "http://merkaartor.be/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ erictapen ];
   };
 }
