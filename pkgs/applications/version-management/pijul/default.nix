@@ -1,26 +1,28 @@
 { stdenv
+, darwin
 , fetchCrate
-, rustPlatform
-, pkg-config
 , libsodium
 , openssl
+, pkg-config
+, rustPlatform
 , xxHash
 , zstd
-, darwin
-, gitImportSupport ? true
-, libgit2 ? null
+# Optionals
+, gitImportSupport ? true, libgit2 ? null
 }:
+
+assert gitImportSupport -> libgit2 != null;
 
 rustPlatform.buildRustPackage rec {
   pname = "pijul";
-  version = "1.0.0-alpha.24";
+  version = "1.0.0-alpha.31";
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "1h1vgx0zlymnhalqsgmp9gv6sxbizmyryldx5vzl6djl23dvzd6s";
+    sha256 = "1zj55qpc4fwjx97yq2lilhvxkx0lip5nmb6flcxlzl6d0aa10b3m";
   };
 
-  cargoSha256 = "1yx7qqfyabhrf6mcca4frdcp9a426khp90nznhshhm71liqr9y44";
+  cargoSha256 = "040m7fid4wq50dmfymvk9250fr3h5j83m90rshzm7qv8gxnkj2az";
 
   cargoBuildFlags = stdenv.lib.optional gitImportSupport "--features=git";
 
@@ -36,6 +38,6 @@ rustPlatform.buildRustPackage rec {
     description = "A distributed version control system";
     homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ gal_bolle dywedir ];
+    maintainers = with maintainers; [ dywedir fabianhjr gal_bolle ];
   };
 }
