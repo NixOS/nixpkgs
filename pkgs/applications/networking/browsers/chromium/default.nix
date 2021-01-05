@@ -16,6 +16,7 @@
 , enableWideVine ? false
 , useVaapi ? false # Deprecated, use enableVaapi instead!
 , enableVaapi ? false # Disabled by default due to unofficial support
+, ungoogled ? false # Whether to build chromium or ungoogled-chromium
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
@@ -34,7 +35,7 @@ let
 
     mkChromiumDerivation = callPackage ./common.nix ({
       inherit channel gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs
-              cupsSupport pulseSupport;
+              cupsSupport pulseSupport ungoogled;
       gnChromium = gn.overrideAttrs (oldAttrs: {
         inherit (upstream-info.deps.gn) version;
         src = fetchgit {
@@ -43,14 +44,17 @@ let
       });
     });
 
-    browser = callPackage ./browser.nix { inherit channel enableWideVine; };
+    browser = callPackage ./browser.nix { inherit channel enableWideVine ungoogled; };
 
     plugins = callPackage ./plugins.nix {
       inherit enablePepperFlash;
     };
+
+    ungoogled-chromium = callPackage ./ungoogled.nix {};
   };
 
-  pkgSuffix = if channel == "dev" then "unstable" else channel;
+  pkgSuffix = if channel == "dev" then "unstable" else
+    (if channel == "ungoogled-chromium" then "stable" else channel);
   pkgName = "google-chrome-${pkgSuffix}";
   chromeSrc = fetchurl {
     urls = map (repo: "${repo}/${pkgName}/${pkgName}_${version}-1_amd64.deb") [
@@ -72,7 +76,7 @@ let
 
     unpackCmd = let
       widevineCdmPath =
-        if channel == "stable" then
+        if (channel == "stable" || channel == "ungoogled-chromium") then
           "./opt/google/chrome/WidevineCdm"
         else if channel == "beta" then
           "./opt/google/chrome-beta/WidevineCdm"
@@ -114,7 +118,9 @@ let
     };
   };
 
-  suffix = if channel != "stable" then "-" + channel else "";
+  suffix = if (channel == "stable" || channel == "ungoogled-chromium")
+    then ""
+    else "-" + channel;
 
   sandboxExecutableName = chromium.browser.passthru.sandboxExecutableName;
 
@@ -141,7 +147,8 @@ let
       (enableVaapi)
       "--add-flags --enable-accelerated-video-decode";
 in stdenv.mkDerivation {
-  name = "chromium${suffix}-${version}";
+  name = lib.optionalString ungoogled "ungoogled-"
+    + "chromium${suffix}-${version}";
   inherit version;
 
   buildInputs = [
