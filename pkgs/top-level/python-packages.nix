@@ -2567,6 +2567,8 @@ in {
 
   google_cloud_org_policy = callPackage ../development/python-modules/google_cloud_org_policy { };
 
+  google_cloud_os_config = callPackage ../development/python-modules/google_cloud_os_config { };
+
   google_cloud_pubsub = callPackage ../development/python-modules/google_cloud_pubsub { };
 
   google_cloud_redis = callPackage ../development/python-modules/google_cloud_redis { };
