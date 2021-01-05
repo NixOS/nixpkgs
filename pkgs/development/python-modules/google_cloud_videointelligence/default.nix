@@ -1,9 +1,12 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, google_api_core
-, pytest
 , mock
+, google_api_core
+, google_cloud_testutils
+, proto-plus
+, pytestCheckHook
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
@@ -12,20 +15,31 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02a91a25b3890a743bde21e03abddf11dcaf7966cc44f09bc8d507f2e28f15fa";
+    sha256 = "1yhmizig41ymr2dz0i6ccrwszp0ivyykmq11vqxp82l9ncjima82";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_api_core ];
+  propagatedBuildInputs = [ google_api_core proto-plus ];
 
-  checkPhase = ''
-    pytest tests/unit
-  '';
+  checkInputs = [ google_cloud_testutils mock pytestCheckHook pytest-asyncio ];
+
+  disabledTests = [
+    # require credentials
+    "test_annotate_video"
+  ];
+
+  pythonImportsCheck = [
+    "google.cloud.videointelligence"
+    "google.cloud.videointelligence_v1"
+    "google.cloud.videointelligence_v1beta2"
+    "google.cloud.videointelligence_v1p1beta1"
+    "google.cloud.videointelligence_v1p2beta1"
+    "google.cloud.videointelligence_v1p3beta1"
+  ];
 
   meta = with stdenv.lib; {
     description = "Google Cloud Video Intelligence API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-videointelligence";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
