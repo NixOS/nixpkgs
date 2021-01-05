@@ -1,10 +1,12 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, enum34
 , google_api_core
-, pytest
+, libcst
 , mock
+, proto-plus
+, pytestCheckHook
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
@@ -13,26 +15,23 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c783118462d9272fb9f519ef43b6ce383e99ad631e922a1f06fbef7148aec7b8";
+    sha256 = "1f67mr473vzv0qgjm4hycfnrjgiqrsv47vqrynwjy9yrca2130y7";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ enum34 google_api_core ];
+  propagatedBuildInputs = [ google_api_core libcst proto-plus ];
 
-  # requires old version of google-api-core (override)
-  preBuild = ''
-    sed -i "s/'google-api-core\[grpc\] >= 0.1.0, < 0.2.0dev'/'google-api-core'/g" setup.py
-    sed -i "s/google-api-core\[grpc\]<0.2.0dev,>=0.1.0/google-api-core/g" google_cloud_redis.egg-info/requires.txt
-  '';
+  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
 
-  checkPhase = ''
-    pytest tests/unit
-  '';
+  pythonImportsCheck = [
+    "google.cloud.redis"
+    "google.cloud.redis_v1"
+    "google.cloud.redis_v1beta1"
+  ];
 
   meta = with stdenv.lib; {
     description = "Google Cloud Memorystore for Redis API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-redis";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
