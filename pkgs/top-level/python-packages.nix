@@ -6169,6 +6169,8 @@ in {
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
+  pyeverlights = callPackage ../development/python-modules/pyeverlights { };
+
   pytimeparse = callPackage ../development/python-modules/pytimeparse { };
 
   pytmx = callPackage ../development/python-modules/pytmx { };
