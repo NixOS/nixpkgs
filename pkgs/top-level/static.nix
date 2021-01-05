@@ -108,17 +108,10 @@ in {
       haskellStaticAdapter;
   };
 
-  nghttp2 = super.nghttp2.override {
-    enableApp = false;
-  };
-
   zlib = super.zlib.override {
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
-  };
-  gifsicle = super.gifsicle.override {
-    static = true;
   };
   openssl = super.openssl_1_1.overrideAttrs (o: {
     # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
@@ -129,86 +122,13 @@ in {
     # --disable-shared flag
     stdenv = super.stdenv;
   };
-  cdo = super.cdo.override {
-    enable_all_static = true;
-  };
-  gsm = super.gsm.override {
-    staticSupport = true;
-  };
-  crc32c = super.crc32c.override {
-    staticOnly = true;
-  };
   perl = super.perl.override {
     # Don’t use new stdenv zlib because
     # it doesn’t like the --disable-shared flag
     stdenv = super.stdenv;
   };
-  woff2 = super.woff2.override {
-    static = true;
-  };
-  snappy = super.snappy.override {
-    static = true;
-  };
-  libressl = super.libressl.override {
-    buildShared = false;
-  };
-
-  kmod = super.kmod.override {
-    withStatic = true;
-  };
-
-  curl = super.curl.override {
-    # a very sad story: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
-    gssSupport = false;
-  };
-
-  e2fsprogs = super.e2fsprogs.override {
-    shared = false;
-  };
-
-  brotli = super.brotli.override {
-    staticOnly = true;
-  };
-
-  zstd = super.zstd.override {
-    static = true;
-  };
 
   ocaml-ng = self.lib.mapAttrs (_: set:
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;
-
-  python27 = super.python27.override { static = true; };
-  python36 = super.python36.override { static = true; };
-  python37 = super.python37.override { static = true; };
-  python38 = super.python38.override { static = true; };
-  python39 = super.python39.override { static = true; };
-  python3Minimal = super.python3Minimal.override { static = true; };
-
-  # Note: -static doesn’t work on darwin
-  libev = super.libev.override { static = !super.stdenv.hostPlatform.isDarwin; };
-
-  xorg = super.xorg.overrideScope' (xorgself: xorgsuper: {
-    libX11 = xorgsuper.libX11.overrideAttrs (attrs: {
-      depsBuildBuild = attrs.depsBuildBuild ++ [ (self.buildPackages.stdenv.cc.libc.static or null) ];
-    });
-    xauth = xorgsuper.xauth.overrideAttrs (attrs: {
-      # missing transitive dependencies
-      preConfigure = attrs.preConfigure or "" + ''
-        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lxcb -lXau -lXdmcp"
-      '';
-    });
-    xdpyinfo = xorgsuper.xdpyinfo.overrideAttrs (attrs: {
-      # missing transitive dependencies
-      preConfigure = attrs.preConfigure or "" + ''
-        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lXau -lXdmcp"
-      '';
-    });
-    libxcb = xorgsuper.libxcb.overrideAttrs (attrs: {
-      configureFlags = attrs.configureFlags ++ [ "--disable-shared" ];
-    });
-    libXi= xorgsuper.libXi.overrideAttrs (attrs: {
-      configureFlags = attrs.configureFlags ++ [ "--disable-shared" ];
-    });
-  });
 }
