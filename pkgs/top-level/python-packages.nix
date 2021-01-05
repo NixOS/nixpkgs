@@ -2525,7 +2525,7 @@ in {
 
   google-auth-oauthlib = callPackage ../development/python-modules/google-auth-oauthlib { };
 
-  google-cloud-access-context-manager = callPackage ../development/python-modules/google-cloud-access-context-manager { };
+  google_cloud_access_context_manager = callPackage ../development/python-modules/google_cloud_access_context_manager { };
 
   google_cloud_asset = callPackage ../development/python-modules/google_cloud_asset { };
 
