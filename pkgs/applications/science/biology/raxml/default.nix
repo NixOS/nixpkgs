@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jqjzhch0rips0vp04prvb8vmc20c5pdmsqn8knadcf91yy859fh";
   };
 
-  buildInputs = if mpi then [ pkgs.openmpi ] else [];
+  buildInputs = stdenv.lib.optionals mpi [ pkgs.openmpi ];
 
   # TODO darwin, AVX and AVX2 makefile targets
   buildPhase = if mpi then ''
