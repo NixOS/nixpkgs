@@ -3,7 +3,7 @@
 , fetchPypi
 , google_api_core
 , google_cloud_core
-, pytest
+, pytestCheckHook
 , mock
 }:
 
@@ -13,21 +13,29 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7264e58067b55535ee859e124bd3da29337698ef6bb293da667d0316ddbe8606";
+    sha256 = "01l6pvfic0vxcvd97ckbxyc7ccr9vb9ln4lyhpp3amdmcy0far3j";
   };
 
-  checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ google_api_core google_cloud_core ];
 
-  checkPhase = ''
+  checkInputs = [ mock pytestCheckHook ];
+
+  preCheck = ''
+    # don#t shadow python imports
     rm -r google
-    pytest tests/unit
   '';
+
+  disabledTests = [
+    # requires credentials
+    "test_quota"
+  ];
+
+  pythonImportsCheck = [ "google.cloud.dns" ];
 
   meta = with stdenv.lib; {
     description = "Google Cloud DNS API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://github.com/googleapis/python-dns";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
