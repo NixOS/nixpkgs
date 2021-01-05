@@ -3816,6 +3816,8 @@ in
 
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
+  deemix = with python3Packages; toPythonApplication deemix;
+
   deer = callPackage ../shells/zsh/zsh-deer { };
 
   delta = callPackage ../applications/version-management/git-and-tools/delta {

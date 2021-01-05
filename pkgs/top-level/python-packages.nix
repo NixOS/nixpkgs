@@ -1729,6 +1729,8 @@ in {
 
   decorator = callPackage ../development/python-modules/decorator { };
 
+  deemix = callPackage ../development/python-modules/deemix { };
+
   deep_merge = callPackage ../development/python-modules/deep_merge { };
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
