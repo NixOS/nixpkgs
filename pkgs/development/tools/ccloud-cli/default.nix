@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.25.0";
 
   # To get the latest version:
-  # curl -L 'https://s3-us-west-2.amazonaws.com/confluent.cloud?prefix=ccloud-cli/archives/&delimiter=/' | nix run nixpkgs.libxml2 -c xmllint --format -
+  # curl -L https://cnfl.io/ccloud-cli | sh -s -- -l | grep -v latest | sort -V | tail -n1
   src = fetchurl (if stdenv.hostPlatform.isDarwin then {
       url = "https://s3-us-west-2.amazonaws.com/confluent.cloud/ccloud-cli/archives/${version}/ccloud_v${version}_darwin_amd64.tar.gz";
       sha256 = "0306jg36dpccwyy239r2xvw3bvsrnrdc88390g26fhcb0048qmgb";
