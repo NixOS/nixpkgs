@@ -8843,6 +8843,8 @@ in
 
   fish = callPackage ../shells/fish { };
 
+  wrapFish = callPackage ../shells/fish/wrapper.nix { };
+
   fishPlugins = recurseIntoAttrs (callPackage ../shells/fish/plugins { });
 
   ion = callPackage ../shells/ion {
