@@ -135,13 +135,21 @@ in
         User = "spamd";
         Group = "spamd";
         StateDirectory = "spamassassin";
-        ExecStart = [
-          "${pkgs.spamassassin}/bin/sa-update --verbose --gpghomedir=%S/spamassassin/sa-update-keys/"
-          "${pkgs.spamassassin}/bin/sa-compile"
-        ];
         ExecStartPost = "+${pkgs.systemd}/bin/systemctl -q --no-block try-reload-or-restart spamd.service";
         SuccessExitStatus = "1";
       };
+
+      script = ''
+        set +e
+        ${pkgs.spamassassin}/bin/sa-update --verbose --gpghomedir=%S/spamassassin/sa-update-keys/
+        rc=$?
+        set -e
+
+        if [[ $rc -eq 0 ]]; then
+          # An update was available and installed.
+          ${pkgs.spamassassin}/bin/sa-compile
+        fi
+      '';
     };
 
     systemd.timers.sa-update = {
