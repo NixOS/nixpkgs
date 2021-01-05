@@ -6,13 +6,14 @@
 with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
+  lib = pkgs.lib;
+
   # Makes a test for a PostgreSQL package, given by name and looked up from `pkgs`.
   makePostgresqlWalReceiverTest = postgresqlPackage:
   {
     name = postgresqlPackage;
     value =
       let
-
         pkg = pkgs."${postgresqlPackage}";
         postgresqlDataDir = "/var/lib/postgresql/${pkg.psqlSchema}";
         replicationUser = "wal_receiver_user";
