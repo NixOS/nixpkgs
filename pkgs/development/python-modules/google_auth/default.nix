@@ -1,20 +1,29 @@
-{ stdenv, buildPythonPackage, fetchpatch, fetchPypi, pythonOlder
-, pytestCheckHook, cachetools, flask, freezegun, mock, oauth2client
-, pyasn1-modules, pytest, pytest-localserver, requests, responses, rsa
-, setuptools, six, urllib3 }:
+{ stdenv
+, buildPythonPackage
+, fetchpatch
+, fetchPypi
+, pytestCheckHook
+, cachetools
+, flask
+, freezegun
+, mock
+, oauth2client
+, pyasn1-modules
+, pytest-localserver
+, responses
+, rsa
+}:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "1.23.0";
+  version = "1.24.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5176db85f1e7e837a646cd9cede72c3c404ccf2e3373d9ee14b2db88febad440";
+    sha256 = "0bmdqkyv8k8n6s8dss4zpbcq1cdxwicpb42kwybd02ia85mh43hb";
   };
 
-  disabled = pythonOlder "3.5";
-
-  propagatedBuildInputs = [ six pyasn1-modules cachetools rsa setuptools ];
+  propagatedBuildInputs = [ pyasn1-modules cachetools rsa ];
 
   checkInputs = [
     flask
@@ -23,9 +32,12 @@ buildPythonPackage rec {
     oauth2client
     pytestCheckHook
     pytest-localserver
-    requests
     responses
-    urllib3
+  ];
+
+  pythonImportsCheck = [
+    "google.auth"
+    "google.oauth2"
   ];
 
   meta = with stdenv.lib; {
@@ -35,10 +47,8 @@ buildPythonPackage rec {
       authentication mechanisms to access Google APIs.
     '';
     homepage = "https://github.com/googleapis/google-auth-library-python";
-    changelog =
-      "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
-    # Documentation: https://googleapis.dev/python/google-auth/latest/index.html
+    changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
