@@ -39,6 +39,7 @@ PKG_PREFERENCES = {
     "tensorflow-bin_2": "tensorflow",
     "tensorflowWithoutCuda": "tensorflow",
     "tensorflow-build_2": "tensorflow",
+    "whois": "python-whois",
 }
 
 
