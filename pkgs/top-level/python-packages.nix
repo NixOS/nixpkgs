@@ -2605,7 +2605,7 @@ in {
 
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
-  google-crc32c = callPackage ../development/python-modules/google-crc32c {
+  google_crc32c = callPackage ../development/python-modules/google_crc32c {
     inherit (pkgs) crc32c;
   };
 
