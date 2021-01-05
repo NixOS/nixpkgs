@@ -2,13 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
-  version = "1.12.0";
+  # Fixes https://github.com/google/flatbuffers/issues/5950
+  # Compilation errors [gcc 10.1, Linux 5.6]
+  version = "795408115ac4a54b6cde291f4703473d5ff0bf8a"; # post 1.12.0
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
-    rev = "v${version}";
-    sha256 = "0f7xd66vc1lzjbn7jzd5kyqrgxpsfxi4zc7iymhb5xrwyxipjl1g";
+    rev = version;
+    sha256 = "1zaqqcjpmh8vp1bm4vms6csl1jazyflvsrn9wrmw04kayb707ily";
   };
 
   preConfigure = stdenv.lib.optional stdenv.buildPlatform.isDarwin ''
