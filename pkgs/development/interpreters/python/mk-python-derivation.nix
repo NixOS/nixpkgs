@@ -26,6 +26,9 @@
 , eggUnpackHook
 , eggBuildHook
 , eggInstallHook
+
+, rustPlatform
+, maturin
 }:
 
 { name ? "${attrs.pname}-${attrs.version}"
@@ -94,8 +97,15 @@
 
 , doCheck ? config.doCheckByDefault or false
 
+# maturin
+, maturinDoCheck ? false
+, maturinBuildInputs ? []
+
 , ... } @ attrs:
 
+if (format == "maturin" && python.pythonOlderThan "3.6" && (!python.isPyPy))
+then throw "Format maturin requires at least Python 3.6"
+else
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
 if disabled
@@ -108,6 +118,20 @@ let
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
   ]) // {
+
+    src = if (format == "maturin") then
+      rustPlatform.buildRustPackage rec {
+         inherit (attrs);
+
+         name = "${name}-maturin-wheel";
+         src = attrs.src;
+         buildTool = "maturin";
+
+         nativeBuildInputs = [ maturin python ] ++ nativeBuildInputs;
+
+         buildInputs = maturinBuildInputs;
+      }
+    else attrs.src;
 
     name = namePrefix + name;
 
