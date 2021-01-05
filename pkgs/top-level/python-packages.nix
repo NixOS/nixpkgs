@@ -7902,6 +7902,8 @@ in {
 
   webtest = callPackage ../development/python-modules/webtest { };
 
+  webthing = callPackage ../development/python-modules/webthing { };
+
   werkzeug = callPackage ../development/python-modules/werkzeug { };
 
   west = callPackage ../development/python-modules/west { };
