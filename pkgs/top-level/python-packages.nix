@@ -7560,6 +7560,8 @@ in {
 
   tubeup = callPackage ../development/python-modules/tubeup { };
 
+  tumpa = callPackage ../development/python-modules/tumpa { };
+
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
 
   tvnamer = callPackage ../development/python-modules/tvnamer { };
