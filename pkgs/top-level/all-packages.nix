@@ -967,6 +967,8 @@ in
 
   aws-google-auth = python3Packages.callPackage ../tools/admin/aws-google-auth { };
 
+  aws-nuke = callPackage ../tools/admin/aws-nuke { };
+
   aws-okta = callPackage ../tools/security/aws-okta { };
 
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
@@ -18637,6 +18639,7 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
+      kernelPatches.wireless_syntax_error
     ];
   };
 
