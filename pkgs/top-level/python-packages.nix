@@ -2565,7 +2565,7 @@ in {
 
   google_cloud_monitoring = callPackage ../development/python-modules/google_cloud_monitoring { };
 
-  google-cloud-org-policy = callPackage ../development/python-modules/google-cloud-org-policy { };
+  google_cloud_org_policy = callPackage ../development/python-modules/google_cloud_org_policy { };
 
   google_cloud_pubsub = callPackage ../development/python-modules/google_cloud_pubsub { };
 

@@ -9,8 +9,6 @@ buildPythonPackage rec {
     sha256 = "0ncgcnbvmgqph54yh2pjx2hh82gnkhsrw5yirp4wlf7jclh6j9xh";
   };
 
-  disabled = pythonOlder "3.5";
-
   propagatedBuildInputs = [ google_api_core ];
 
   # No tests in repo
