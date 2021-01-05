@@ -20,6 +20,6 @@ buildPythonPackage rec {
     description = "Protobufs for Google Cloud Organization Policy.";
     homepage = "https://github.com/googleapis/python-org-policy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler ];
+    maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
   };
 }
