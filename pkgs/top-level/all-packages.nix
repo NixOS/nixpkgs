@@ -23831,6 +23831,8 @@ in
     portaudio = null;
   };
 
+  losslesscut-bin = callPackage ../applications/video/losslesscut-bin { };
+
   loxodo = callPackage ../applications/misc/loxodo { };
 
   lsd2dsl = libsForQt5.callPackage ../applications/misc/lsd2dsl { };
