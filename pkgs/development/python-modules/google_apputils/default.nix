@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , pytz
 , gflags
 , dateutil
@@ -11,10 +12,11 @@
 buildPythonPackage rec {
   pname = "google-apputils";
   version = "0.4.2";
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "47959d0651c32102c10ad919b8a0ffe0ae85f44b8457ddcf2bdc0358fb03dc29";
+    sha256 = "0afw0gxmh0yw5g7xsmw49gs8bbp0zyhbh6fr1b0h48f3a439v5a7";
   };
 
   preConfigure = ''
@@ -34,6 +36,6 @@ buildPythonPackage rec {
     description = "Google Application Utilities for Python";
     homepage = "https://github.com/google/google-apputils";
     license = licenses.asl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
-
 }
