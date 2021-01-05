@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytest }:
+{ stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytestCheckHook }:
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
@@ -12,7 +12,7 @@ if isPyPy then null else buildPythonPackage rec {
   outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [ libffi pycparser ];
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   # On Darwin, the cffi tests want to hit libm a lot, and look for it in a global
   # impure search path. It's obnoxious how much repetition there is, and how difficult
@@ -33,12 +33,32 @@ if isPyPy then null else buildPythonPackage rec {
     "-Wno-unused-command-line-argument -Wno-unreachable-code";
 
   doCheck = !stdenv.hostPlatform.isMusl && !stdenv.isDarwin; # TODO: Investigate
-  checkPhase = ''
-    py.test -k "not test_char_pointer_conversion"
-  '';
+  disabledTests = [
+    # unix gets mistaken as windows because find_library returns None
+    "test_load_FILE"
+    "test_FILE"
+    "test_load_library"
+    "test_load_and_call_function"
+    "test_read_variable"
+    "test_load_read_variable"
+    "test_write_variable"
+    "windows"
+    # these tests assume glibc dlopen behavior, and assert that they were able
+    # to find a library using normal dlopen conventions. However,
+    # this behavior of ctypes.utils.find_library is disabled in nixpkgs
+    "test_sin"
+    "dlopen"
+    "dlclose"
+    "test_function_typedef"
+    "test_missing_function"
+    "test_wraps_from_stdlib"
+    "test_remove_comments"
+    "line_continuation"
+    "test_simple"
+  ];
 
   meta = with stdenv.lib; {
-    maintainers = with maintainers; [ domenkozar lnl7 ];
+    maintainers = with maintainers; [ jonringer domenkozar lnl7 ];
     homepage = "https://cffi.readthedocs.org/";
     license = with licenses; [ mit ];
     description = "Foreign Function Interface for Python calling C code";
