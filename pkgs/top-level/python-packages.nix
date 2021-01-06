@@ -782,6 +782,8 @@ in {
 
   backports_csv = callPackage ../development/python-modules/backports_csv { };
 
+  backports-datetime-fromisoformat = callPackage ../development/python-modules/backports-datetime-fromisoformat { };
+
   backports_functools_lru_cache = callPackage ../development/python-modules/backports_functools_lru_cache { };
 
   backports_lzma = callPackage ../development/python-modules/backports_lzma { };
