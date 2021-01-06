@@ -155,6 +155,8 @@ makeScope newScope (self:
       inherit (pkgs) netcdf;
     };
 
+    nurbs = callPackage ../development/octave-modules/nurbs { };
+
     signal = callPackage ../development/octave-modules/signal { };
 
     symbolic = callPackage ../development/octave-modules/symbolic {
