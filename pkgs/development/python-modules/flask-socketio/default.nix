@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flask
 , python-socketio
 , coverage
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   pname = "Flask-SocketIO";
   version = "5.0.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "09r2gpj2nbn72v2zaf6xsvlazln77pgqzp2pg2021nja47sijhsw";
+  src = fetchFromGitHub {
+    owner = "miguelgrinberg";
+    repo = "Flask-SocketIO";
+    rev = "v${version}";
+    sha256 = "01zf6cy95pgc4flgn0740z2my90l7rxwliahp6rb2xbp7rh32cng";
   };
 
   propagatedBuildInputs = [
