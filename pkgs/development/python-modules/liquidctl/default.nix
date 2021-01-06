@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   # does not contain tests
-  disableCheck = false;
+  doCheck = false;
   pythonImportsCheck = [ "liquidctl" ];
 
   meta = with lib; {
