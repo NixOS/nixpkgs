@@ -134,6 +134,8 @@ makeScope newScope (self:
       inherit (pkgs) fftwFloat fftwLongDouble;
     };
 
+    mapping = callPackage ../development/octave-modules/mapping { };
+
     signal = callPackage ../development/octave-modules/signal { };
 
     symbolic = callPackage ../development/octave-modules/symbolic {
