@@ -111,6 +111,8 @@ makeScope newScope (self:
       inherit (pkgs) gsl;
     };
 
+    image = callPackage ../development/octave-modules/image { };
+
     io = callPackage ../development/octave-modules/io {
       inherit (octave) enableJava;
     };
