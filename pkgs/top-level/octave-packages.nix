@@ -65,9 +65,7 @@ makeScope newScope (self:
 
     cgi = callPackage ../development/octave-modules/cgi { };
 
-    communications = callPackage ../development/octave-modules/communications {
-      hdf5 = pkgs.hdf5;
-    };
+    communications = callPackage ../development/octave-modules/communications { };
 
     control = callPackage ../development/octave-modules/control { };
 
