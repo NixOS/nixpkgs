@@ -78,6 +78,9 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:/run/opengl-driver-32/lib
     cp ${./config.toml} $out/etc/config.toml
     substituteInPlace $out/etc/config.toml --subst-var-by glibcbin ${lib.getBin glibc}
+
+    cp ${./podman-config.toml} $out/etc/podman-config.toml
+    substituteInPlace $out/etc/podman-config.toml --subst-var-by glibcbin ${lib.getBin glibc}
   '';
 
   meta = {
