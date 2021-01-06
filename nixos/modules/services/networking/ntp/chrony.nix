@@ -10,7 +10,7 @@ let
   keyFile = "${stateDir}/chrony.keys";
 
   configFile = pkgs.writeText "chrony.conf" ''
-    ${concatMapStringsSep "\n" (server: "server " + server + " iburst") cfg.servers}
+    ${concatMapStringsSep "\n" (server: "server " + server + " iburst" + optionalString (cfg.enableNTS) " nts") cfg.servers}
 
     ${optionalString
       (cfg.initstepslew.enabled && (cfg.servers != []))
@@ -19,6 +19,7 @@ let
 
     driftfile ${driftFile}
     keyfile ${keyFile}
+    ${optionalString (cfg.enableNTS) "ntsdumpdir ${stateDir}"}
 
     ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
 
@@ -43,6 +44,15 @@ in
         default = config.networking.timeServers;
         description = ''
           The set of NTP servers from which to synchronise.
+        '';
+      };
+
+      enableNTS = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable Network Time Security authentication.
+          Make sure it is supported by your selected NTP server(s).
         '';
       };
 
