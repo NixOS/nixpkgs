@@ -3,9 +3,9 @@
 , ffmpeg_3, python, ruby }:
 
 let
-  major = "14";
-  update = "";
-  build = "-ga";
+  major = "15";
+  update = ".0.1";
+  build = "+1";
   repover = "${major}${update}${build}";
   gradle_ = (gradleGen.override {
     java = openjdk11_headless;
@@ -18,7 +18,7 @@ let
       owner = "openjdk";
       repo = "jfx";
       rev = repover;
-      sha256 = "16aj15xksc266gv3y42m0g277pfvp71901lrngndcnpr7i2zshnr";
+      sha256 = "019glq8rhn6amy3n5jc17vi2wpf1pxpmmywvyz1ga8n09w7xscq1";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg_3 ];
@@ -64,8 +64,10 @@ let
     outputHashMode = "recursive";
     # Downloaded AWT jars differ by platform.
     outputHash = {
-      x86_64-linux = "077zss95iq6iskx7ghz1c57ymydpzj0wm7r1pkznw99l9xwvdmqi";
-      i686-linux = "03gglr2sh77cyg16qw9g45ji33dg7i93s5s30hz3mh420g112qa0";
+      x86_64-linux = "0hmyr5nnjgwyw3fcwqf0crqg9lny27jfirycg3xmkzbcrwqd6qkw";
+      # The build-time dependencies don't currently build for i686, so no
+      # reason to fetch this one correctly either...
+      i686-linux = "0000000000000000000000000000000000000000000000000000";
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
