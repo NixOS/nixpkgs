@@ -5419,6 +5419,8 @@ in {
 
   pymetno = callPackage ../development/python-modules/pymetno { };
 
+  pymodbus = callPackage ../development/python-modules/pymodbus { };
+
   pymongo = callPackage ../development/python-modules/pymongo { };
 
   pympler = callPackage ../development/python-modules/pympler { };
