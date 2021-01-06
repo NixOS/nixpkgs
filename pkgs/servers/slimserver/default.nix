@@ -14,6 +14,7 @@ perlPackages.buildPerlPackage rec {
     makeWrapper
     perlPackages.perl
     perlPackages.AnyEvent
+    perlPackages.ArchiveZip
     perlPackages.AudioScan
     perlPackages.CarpClan
     perlPackages.CGI
