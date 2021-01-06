@@ -83,6 +83,12 @@ makeScope newScope (self:
 
     econometrics = callPackage ../development/octave-modules/econometrics { };
 
+    fem-fenics = callPackage ../development/octave-modules/fem-fenics {
+      # PLACEHOLDER until KarlJoad gets dolfin packaged.
+      dolfin = null;
+      ffc = null;
+    };
+
     general = callPackage ../development/octave-modules/general {
       nettle = pkgs.nettle;
     };
