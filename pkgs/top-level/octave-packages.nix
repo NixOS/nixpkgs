@@ -140,6 +140,11 @@ makeScope newScope (self:
 
     miscellaneous = callPackage ../development/octave-modules/miscellaneous { };
 
+    msh = callPackage ../development/octave-modules/msh {
+      # PLACEHOLDER until KarlJoad gets dolfin packaged.
+      dolfin = null;
+    };
+
     signal = callPackage ../development/octave-modules/signal { };
 
     symbolic = callPackage ../development/octave-modules/symbolic {
