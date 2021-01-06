@@ -1,4 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
 , aiohttp
 , eventlet
 , iana-etc
@@ -14,18 +16,14 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "3.13.2";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "v${version}";
-    sha256 = "1hn5nnxp7y2dpf52vrwdxza2sqmzj8admcnwgjkmcxk65s2dhvy1";
+    sha256 = "00x9pmmnl1yd59wd96ivkiqh4n5nphl8cwk43hf4nqr0icgsyhar";
   };
-
-  propagatedBuildInputs = [
-    six
-  ];
 
   checkInputs = [
     aiohttp
