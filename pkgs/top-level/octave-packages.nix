@@ -147,6 +147,8 @@ makeScope newScope (self:
 
     mvn = callPackage ../development/octave-modules/mvn { };
 
+    nan = callPackage ../development/octave-modules/nan { };
+
     signal = callPackage ../development/octave-modules/signal { };
 
     symbolic = callPackage ../development/octave-modules/symbolic {
