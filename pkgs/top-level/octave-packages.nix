@@ -69,6 +69,12 @@ makeScope newScope (self:
 
     control = callPackage ../development/octave-modules/control { };
 
+    data-smoothing = callPackage ../development/octave-modules/data-smoothing { };
+
+    general = callPackage ../development/octave-modules/general {
+      nettle = pkgs.nettle;
+    };
+
     io = callPackage ../development/octave-modules/io {
       inherit (octave) enableJava;
     };
