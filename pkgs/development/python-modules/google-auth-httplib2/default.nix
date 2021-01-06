@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , flask
-, google_auth
+, google-auth
 , httplib2
 , mock
 , pytestCheckHook
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    google_auth
+    google-auth
     httplib2
   ];
 

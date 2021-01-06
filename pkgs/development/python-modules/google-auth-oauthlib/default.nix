@@ -4,7 +4,7 @@
 , click
 , mock
 , pytestCheckHook
-, google_auth
+, google-auth
 , requests_oauthlib
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    google_auth
+    google-auth
     requests_oauthlib
   ];
 

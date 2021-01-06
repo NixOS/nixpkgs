@@ -5,7 +5,7 @@
 , buildPythonPackage
 , isPy37
 , protobuf
-, google_apputils
+, google-apputils
 , six
 , pyext
 , libcxx
@@ -29,9 +29,9 @@ buildPythonPackage {
 
   outputs = [ "out" "dev" ];
 
-  propagatedBuildInputs = [ six ] ++ optionals isPy27 [ google_apputils ];
+  propagatedBuildInputs = [ six ] ++ optionals isPy27 [ google-apputils ];
   propagatedNativeBuildInputs = [ buildPackages.protobuf ]; # For protoc.
-  nativeBuildInputs = [ pyext ] ++ optionals isPy27 [ google_apputils ];
+  nativeBuildInputs = [ pyext ] ++ optionals isPy27 [ google-apputils ];
   buildInputs = [ protobuf ];
 
   patches = optional (isPy37 && (versionOlder protobuf.version "3.6.1.2"))

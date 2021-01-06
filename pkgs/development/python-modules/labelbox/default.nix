@@ -8,7 +8,7 @@
 , shapely
 , ndjson
 , backoff
-, google_api_core
+, google-api-core
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jinja2 requests pillow rasterio shapely ndjson backoff
-    google_api_core
+    google-api-core
   ];
 
   # Test cases are not running on pypi or GitHub
