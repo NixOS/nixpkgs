@@ -211,4 +211,8 @@ makeScope newScope (self:
 
     video = callPackage ../development/octave-modules/video { };
 
+    vrml = callPackage ../development/octave-modules/vrml {
+      freewrl = null;
+    };
+
   })
