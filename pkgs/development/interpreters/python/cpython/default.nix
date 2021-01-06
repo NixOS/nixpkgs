@@ -216,8 +216,8 @@ in with passthru; stdenv.mkDerivation {
       else
         ./3.7/fix-finding-headers-when-cross-compiling.patch
     )
-  ] ++ optionals (isPy37) [
-    # Backport a fix for ctypes.util.find_library.
+  ] ++ optionals (isPy37 || (isPy38 && pythonOlder "3.8.7")) [
+    # Backport a fix for ctypes.util.find_library. This patch was applied to python3.8 in 3.8.7
     ./3.7/find_library.patch
   ];
 
