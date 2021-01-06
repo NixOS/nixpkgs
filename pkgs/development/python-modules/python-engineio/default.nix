@@ -48,9 +48,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "engineio" ];
 
   meta = with stdenv.lib; {
-    description = "Engine.IO server";
+    description = "Python based Engine.IO client and server";
+    longDescription = ''
+      Engine.IO is a lightweight transport protocol that enables real-time
+      bidirectional event-based communication between clients and a server.
+    '';
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
-    license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }
