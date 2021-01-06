@@ -10276,6 +10276,12 @@
       fingerprint = "8597 4506 EC69 5392 0443  0805 9D98 CDAC FF04 FD78";
     }];
   };
+  superherointj = {
+    name = "Sérgio G.";
+    email = "5861043+superherointj@users.noreply.github.com";
+    github = "superherointj";
+    githubId = 5861043;
+  };
   hloeffler = {
     name = "Hauke Löffler";
     email = "nix@hauke-loeffler.de";
