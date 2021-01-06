@@ -169,6 +169,8 @@ makeScope newScope (self:
 
     optiminterp = callPackage ../development/octave-modules/optiminterp { };
 
+    parallel = callPackage ../development/octave-modules/parallel { };
+
     signal = callPackage ../development/octave-modules/signal { };
 
     symbolic = callPackage ../development/octave-modules/symbolic {
