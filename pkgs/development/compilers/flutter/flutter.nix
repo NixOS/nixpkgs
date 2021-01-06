@@ -12,7 +12,6 @@
 , cacert
 , coreutils
 , git
-, makeWrapper
 , runCommand
 , stdenv
 , fetchurl
@@ -43,7 +42,7 @@ let
       sha256 = sha256Hash;
     };
 
-    buildInputs = [ makeWrapper git ];
+    buildInputs = [ git ];
 
     inherit patches;
 
@@ -58,28 +57,27 @@ let
       SNAPSHOT_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.snapshot"
       STAMP_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.stamp"
       SCRIPT_PATH="$FLUTTER_TOOLS_DIR/bin/flutter_tools.dart"
-      DART_SDK_PATH="$FLUTTER_ROOT/bin/cache/dart-sdk"
-
-      DART="$DART_SDK_PATH/bin/dart"
-      PUB="$DART_SDK_PATH/bin/pub"
+      DART_SDK_PATH="${dart}"
 
       HOME=../.. # required for pub upgrade --offline, ~/.pub-cache
                  # path is relative otherwise it's replaced by /build/flutter
 
-      (cd "$FLUTTER_TOOLS_DIR" && "$PUB" upgrade --offline)
+      (cd "$FLUTTER_TOOLS_DIR" && ${dart}/bin/pub upgrade --offline)
 
       local revision="$(cd "$FLUTTER_ROOT"; git rev-parse HEAD)"
-      "$DART" --snapshot="$SNAPSHOT_PATH" --packages="$FLUTTER_TOOLS_DIR/.packages" "$SCRIPT_PATH"
+      ${dart}/bin/dart --snapshot="$SNAPSHOT_PATH" --packages="$FLUTTER_TOOLS_DIR/.packages" "$SCRIPT_PATH"
       echo "$revision" > "$STAMP_PATH"
       echo -n "${version}" > version
 
-      rm -rf bin/cache/{artifacts,downloads}
+      rm -rf bin/cache/{artifacts,dart-sdk,downloads}
       rm -f  bin/cache/*.stamp
     '';
 
     installPhase = ''
       mkdir -p $out
       cp -r . $out
+      mkdir -p $out/bin/cache/
+      ln -sf ${dart} $out/bin/cache/dart-sdk
     '';
   };
 
@@ -155,8 +153,4 @@ runCommand drvName
 
   echo -n "$startScript" > $out/bin/${pname}
   chmod +x $out/bin/${pname}
-
-  mkdir -p $out/bin/cache/dart-sdk/
-  cp -r ${dart}/* $out/bin/cache/dart-sdk/
-  ln $out/bin/cache/dart-sdk/bin/dart $out/bin/dart
 ''
