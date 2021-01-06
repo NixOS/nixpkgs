@@ -64,7 +64,6 @@ in stdenv.mkDerivation rec {
   preConfigure = optionalString withCloud ''
     mkdir -p externaldeps
     cp -r "${mosquitto}/lib" externaldeps/mosquitto
-    cp -r "${libwebsockets_3_2}/lib" externaldeps/libwebsockets
   '' + optionalString (!stdenv.isDarwin) ''
     substituteInPlace collectors/python.d.plugin/python_modules/third_party/lm_sensors.py \
       --replace 'ctypes.util.find_library("sensors")' '"${lm_sensors.out}/lib/libsensors${stdenv.hostPlatform.extensions.sharedLibrary}"'
