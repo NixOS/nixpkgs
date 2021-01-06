@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-common, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, aws-c-common, openssl, Security }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-cal";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ aws-c-common openssl ];
+  buildInputs = [ aws-c-common openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

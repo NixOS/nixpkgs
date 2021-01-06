@@ -12586,7 +12586,9 @@ in
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreServices;
   };
 
-  aws-c-cal = callPackage ../development/libraries/aws-c-cal { };
+  aws-c-cal = callPackage ../development/libraries/aws-c-cal {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   aws-c-common = callPackage ../development/libraries/aws-c-common { };
 
