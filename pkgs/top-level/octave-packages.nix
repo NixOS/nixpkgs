@@ -127,6 +127,8 @@ makeScope newScope (self:
 
     linear-algebra = callPackage ../development/octave-modules/linear-algebra { };
 
+    lssa = callPackage ../development/octave-modules/lssa { };
+
     ltfat = callPackage ../development/octave-modules/ltfat {
       inherit (octave) fftw fftwSinglePrec portaudio jdk;
       inherit (pkgs) fftwFloat fftwLongDouble;
