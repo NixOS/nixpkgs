@@ -79,6 +79,8 @@ makeScope newScope (self:
 
     divand = callPackage ../development/octave-modules/divand { };
 
+    doctest = callPackage ../development/octave-modules/doctest { };
+
     general = callPackage ../development/octave-modules/general {
       nettle = pkgs.nettle;
     };
