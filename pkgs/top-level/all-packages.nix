@@ -24574,6 +24574,8 @@ in
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
 
+  taskwarrior-tui = callPackage ../applications/misc/taskwarrior-tui { };
+
   dstask = callPackage ../applications/misc/dstask { };
 
   tasksh = callPackage ../applications/misc/tasksh { };
