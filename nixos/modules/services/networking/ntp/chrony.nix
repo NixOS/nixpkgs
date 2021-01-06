@@ -10,7 +10,7 @@ let
   keyFile = "${stateDir}/chrony.keys";
 
   configFile = pkgs.writeText "chrony.conf" ''
-    ${concatMapStringsSep "\n" (server: "server " + server + " iburst" + optionalString (cfg.enableNTS) " nts") cfg.servers}
+    ${concatMapStringsSep "\n" (server: "server " + server + " " + cfg.serverOption + optionalString (cfg.enableNTS) " nts") cfg.servers}
 
     ${optionalString
       (cfg.initstepslew.enabled && (cfg.servers != []))
@@ -44,6 +44,20 @@ in
         default = config.networking.timeServers;
         description = ''
           The set of NTP servers from which to synchronise.
+        '';
+      };
+
+      serverOption = mkOption {
+        default = "iburst";
+        type = types.enum [ "iburst" "offline" ];
+        description = ''
+          Set option for server directives.
+
+          Use "iburst" to rapidly poll on startup. Recommended if your machine
+          is consistently online.
+
+          Use "offline" to prevent polling on startup. Recommended if your
+          machine boots offline or is otherwise frequently offline.
         '';
       };
 
