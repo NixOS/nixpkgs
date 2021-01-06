@@ -81,6 +81,8 @@ makeScope newScope (self:
 
     doctest = callPackage ../development/octave-modules/doctest { };
 
+    econometrics = callPackage ../development/octave-modules/econometrics { };
+
     general = callPackage ../development/octave-modules/general {
       nettle = pkgs.nettle;
     };
