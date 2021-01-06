@@ -71,6 +71,8 @@ makeScope newScope (self:
 
     data-smoothing = callPackage ../development/octave-modules/data-smoothing { };
 
+    database = callPackage ../development/octave-modules/database { };
+
     general = callPackage ../development/octave-modules/general {
       nettle = pkgs.nettle;
     };
