@@ -12365,6 +12365,8 @@ in
 
   ttyd = callPackage ../servers/ttyd { };
 
+  turbogit = callPackage ../development/tools/turbogit { };
+
   tweak = callPackage ../applications/editors/tweak { };
 
   tychus = callPackage ../development/tools/tychus {
