@@ -6140,17 +6140,17 @@ in
   nomad_0_11 = callPackage ../applications/networking/cluster/nomad/0.11.nix {
     buildGoPackage = buildGo114Package;
     inherit (linuxPackages) nvidia_x11;
-    nvidiaGpuSupport = config.cudaSupport or (!stdenv.isLinux);
+    nvidiaGpuSupport = config.cudaSupport or false;
   };
   nomad_0_12 = callPackage ../applications/networking/cluster/nomad/0.12.nix {
     buildGoPackage = buildGo114Package;
     inherit (linuxPackages) nvidia_x11;
-    nvidiaGpuSupport = config.cudaSupport or (!stdenv.isLinux);
+    nvidiaGpuSupport = config.cudaSupport or false;
   };
   nomad_1_0 = callPackage ../applications/networking/cluster/nomad/1.0.nix {
     buildGoPackage = buildGo115Package;
     inherit (linuxPackages) nvidia_x11;
-    nvidiaGpuSupport = config.cudaSupport or (!stdenv.isLinux);
+    nvidiaGpuSupport = config.cudaSupport or false;
   };
 
   notable = callPackage ../applications/misc/notable { };
