@@ -55,8 +55,6 @@ makeScope newScope (self:
 
     arduino = callPackage ../development/octave-modules/arduino {
       inherit (pkgs) arduino;
-      # Full arduino right now. Might be able to use pkgs.arduino-core
-      # Needs arduinoIDE as a runtime dependency.
     };
 
     audio = callPackage ../development/octave-modules/audio {
