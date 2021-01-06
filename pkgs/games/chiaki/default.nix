@@ -6,6 +6,7 @@
 , python3Packages
 , ffmpeg
 , libopus
+, mkDerivation
 , qtbase
 , qtmultimedia
 , qtsvg
@@ -15,7 +16,7 @@
 , qtmacextras
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "chiaki";
   version = "2.0.1";
 
