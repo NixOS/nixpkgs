@@ -28,6 +28,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [ "socketio" ];
+
   meta = with lib; {
     description = "Socket.IO server";
     homepage = "https://github.com/miguelgrinberg/python-socketio/";
