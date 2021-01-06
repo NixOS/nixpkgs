@@ -89,6 +89,8 @@ makeScope newScope (self:
       ffc = null;
     };
 
+    fits = callPackage ../development/octave-modules/fits { };
+
     financial = callPackage ../development/octave-modules/financial { };
 
     general = callPackage ../development/octave-modules/general {
