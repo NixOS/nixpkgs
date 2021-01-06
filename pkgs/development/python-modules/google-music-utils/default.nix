@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , audio-metadata
 , multidict
-, wrapt
 , poetry
 , pytestCheckHook
 }:
@@ -28,7 +27,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry ];
 
-  propagatedBuildInputs = [ audio-metadata multidict /*wrapt*/ ];
+  propagatedBuildInputs = [ audio-metadata multidict ];
 
   checkInputs = [ pytestCheckHook ];
 
