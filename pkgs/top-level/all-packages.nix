@@ -27557,6 +27557,8 @@ in
 
   csxcad = callPackage ../applications/science/electronics/csxcad { };
 
+  diylc = callPackage ../applications/science/electronics/diylc { };
+
   flatcam = callPackage ../applications/science/electronics/flatcam { };
 
   fparser = callPackage ../applications/science/electronics/fparser { };
