@@ -6,6 +6,8 @@ let
 
   cfg = config.services.redshift;
   lcfg = config.location;
+  isGeoclue2 = lcfg.provider == "geoclue2";
+  isManual = lcfg.provider == "manual";
 
 in {
 
@@ -23,6 +25,7 @@ in {
           throw "services.redshift.longitude is set to null, you can remove this"
           else builtins.fromJSON value))
     (mkRenamedOptionModule [ "services" "redshift" "provider" ] [ "location" "provider" ])
+    (mkRenamedOptionModule [ "services" "redshift" "extraOptions" ] [ "services" "redshift" "extraConfig" ])
   ];
 
   options.services.redshift = {
@@ -56,21 +59,48 @@ in {
 
     brightness = {
       day = mkOption {
-        type = types.str;
-        default = "1";
+        type = types.float;
+        default = 1.0;
         description = ''
           Screen brightness to apply during the day,
           between <literal>0.1</literal> and <literal>1.0</literal>.
         '';
       };
       night = mkOption {
-        type = types.str;
-        default = "1";
+        type = types.float;
+        default = 1.0;
         description = ''
           Screen brightness to apply during the night,
           between <literal>0.1</literal> and <literal>1.0</literal>.
         '';
       };
+    };
+
+    gamma = {
+      day = mkOption {
+        type = types.float;
+        default = 1.0;
+        description = ''
+          Screen gamma to apply during the day,
+          between <literal>0.1</literal> and <literal>1.0</literal>.
+        '';
+      };
+      night = mkOption {
+        type = types.float;
+        default = 1.0;
+        description = ''
+          Screen gamma to apply during the night,
+          between <literal>0.1</literal> and <literal>1.0</literal>.
+        '';
+      };
+    };
+
+    fade = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Disable the smooth fade between temperatures when Redshift starts and stops.
+      '';
     };
 
     package = mkOption {
@@ -91,13 +121,27 @@ in {
       '';
     };
 
-    extraOptions = mkOption {
-      type = types.listOf types.str;
-      default = [];
-      example = [ "-v" "-m randr" ];
+    extraConfig = mkOption {
+      type = types.attrs;
+      default = {};
+      example = {
+        redshift = {
+          elevation-high = 3;
+          elevation-low = -6;
+        };
+        randr = {
+          screen = 0;
+        };
+      };
       description = ''
-        Additional command-line arguments to pass to
-        <command>redshift</command>.
+        Additional configuration to be appended to <literal>redshift</literal>
+        config file.
+
+        Available options described in
+        <citerefentry>
+          <refentrytitle>redshift</refentrytitle>
+          <manvolnum>1</manvolnum>
+        </citerefentry>.
       '';
     };
   };
@@ -106,31 +150,51 @@ in {
     # needed so that .desktop files are installed, which geoclue cares about
     environment.systemPackages = [ cfg.package ];
 
-    services.geoclue2.appConfig.redshift = {
+    services.geoclue2.appConfig.redshift = mkIf isGeoclue2 {
       isAllowed = true;
       isSystem = true;
     };
 
     systemd.user.services.redshift =
     let
-      providerString = if lcfg.provider == "manual"
-        then "${toString lcfg.latitude}:${toString lcfg.longitude}"
-        else lcfg.provider;
+      mainSection = if strings.hasInfix "gammastep" cfg.executable
+        # https://gitlab.com/chinstrap/gammastep/-/commit/1608ed61154cc652b087e85c4ce6125643e76e2f
+        then "general"
+        else "redshift";
+
+      locationConfig = if isManual
+        then {
+          manual = {
+            lat = lcfg.latitude;
+            lon = lcfg.longitude;
+          };
+        } else {};
+
+      mainConfig = {
+        ${mainSection} = {
+          temp-day = cfg.temperature.day;
+          temp-night = cfg.temperature.night;
+          fade = if cfg.fade then "1" else "0";
+          location-provider = lcfg.provider;
+          brightness-day = cfg.brightness.day;
+          brightness-night = cfg.brightness.night;
+          gamma-day = cfg.gamma.day;
+          gamma-night = cfg.gamma.night;
+        };
+      };
+
+      fullConfig = mainConfig // locationConfig // cfg.extraConfig;
+      iniText = generators.toINI {} fullConfig;
+      configFile = pkgs.writeText "redshift.conf" iniText;
     in
     {
       description = "Redshift colour temperature adjuster";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
       serviceConfig = {
-        ExecStart = ''
-          ${cfg.package}${cfg.executable} \
-            -l ${providerString} \
-            -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
-            -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \
-            ${lib.strings.concatStringsSep " " cfg.extraOptions}
-        '';
+        ExecStart = "${cfg.package}${cfg.executable} -c ${configFile}";
         RestartSec = 3;
-        Restart = "always";
+        Restart = "on-failure";
       };
     };
   };
