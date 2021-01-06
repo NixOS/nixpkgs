@@ -93,6 +93,8 @@ makeScope newScope (self:
 
     financial = callPackage ../development/octave-modules/financial { };
 
+    fpl = callPackage ../development/octave-modules/fpl { };
+
     general = callPackage ../development/octave-modules/general {
       nettle = pkgs.nettle;
     };
