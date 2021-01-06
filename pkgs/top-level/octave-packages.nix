@@ -121,6 +121,8 @@ makeScope newScope (self:
       inherit (octave) enableJava;
     };
 
+    interval = callPackage ../development/octave-modules/interval { };
+
     level-set = callPackage ../development/octave-modules/level-set { };
 
     linear-algebra = callPackage ../development/octave-modules/linear-algebra { };
