@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.chrony;
 
-  stateDir = "/var/lib/chrony";
+  stateDir = cfg.directory;
   driftFile = "${stateDir}/chrony.drift";
   keyFile = "${stateDir}/chrony.keys";
 
@@ -80,6 +80,12 @@ in
           boot time, and to correct the system clock by stepping before normal
           operation begins.
         '';
+      };
+
+      directory = mkOption {
+        type = types.str;
+        default = "/var/lib/chrony";
+        description = "Directory where chrony state is stored.";
       };
 
       extraConfig = mkOption {
