@@ -19056,6 +19056,8 @@ in
 
   libsmbios = callPackage ../os-specific/linux/libsmbios { };
 
+  libsurvive = callPackage ../development/libraries/libsurvive { };
+
   lm_sensors = callPackage ../os-specific/linux/lm-sensors { };
 
   lockdep = callPackage ../os-specific/linux/lockdep { };
