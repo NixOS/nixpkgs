@@ -73,6 +73,8 @@ makeScope newScope (self:
 
     database = callPackage ../development/octave-modules/database { };
 
+    dataframe = callPackage ../development/octave-modules/dataframe { };
+
     general = callPackage ../development/octave-modules/general {
       nettle = pkgs.nettle;
     };
