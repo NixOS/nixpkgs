@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
+, coverage
 , fetchFromGitHub
 , flask
+, pytestCheckHook
 , python-socketio
-, coverage
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,10 @@ buildPythonPackage rec {
     python-socketio
   ];
 
-  checkInputs = [ coverage ];
-  # tests only on github, but lates release there is not tagged
-  doCheck = false;
+  checkInputs = [
+    coverage
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Socket.IO integration for Flask applications";
