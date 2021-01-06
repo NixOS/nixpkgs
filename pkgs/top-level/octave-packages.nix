@@ -171,6 +171,8 @@ makeScope newScope (self:
 
     parallel = callPackage ../development/octave-modules/parallel { };
 
+    quaternion = callPackage ../development/octave-modules/quaternion { };
+
     signal = callPackage ../development/octave-modules/signal { };
 
     struct = callPackage ../development/octave-modules/struct { };
