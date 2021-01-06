@@ -10089,6 +10089,8 @@ in
 
   nrpl = callPackage ../development/tools/nrpl { };
 
+  nimlsp = callPackage ../development/tools/misc/nimlsp { };
+
   neko = callPackage ../development/compilers/neko { };
 
   nextpnr = callPackage ../development/compilers/nextpnr { };
