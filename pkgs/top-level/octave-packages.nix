@@ -75,6 +75,8 @@ makeScope newScope (self:
 
     dataframe = callPackage ../development/octave-modules/dataframe { };
 
+    dicom = callPackage ../development/octave-modules/dicom { };
+
     general = callPackage ../development/octave-modules/general {
       nettle = pkgs.nettle;
     };
