@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     homepage = "https://github.com/yshui/picom";
-    maintainers = with maintainers; [ ertes enzime twey ];
+    maintainers = with maintainers; [ ertes twey ];
     platforms = platforms.linux;
   };
 }
