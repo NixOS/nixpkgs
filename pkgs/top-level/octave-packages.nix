@@ -203,4 +203,10 @@ makeScope newScope (self:
 
     tsa = callPackage ../development/octave-modules/tsa { };
 
+    vibes = callPackage ../development/octave-modules/vibes {
+      vibes = null;
+      # TODO: Need to package vibes:
+      # https://github.com/ENSTABretagneRobotics/VIBES
+    };
+
   })
