@@ -12578,9 +12578,13 @@ in
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreServices;
   };
 
+  aws-c-cal = callPackage ../development/libraries/aws-c-cal { };
+
   aws-c-common = callPackage ../development/libraries/aws-c-common { };
 
   aws-c-event-stream = callPackage ../development/libraries/aws-c-event-stream { };
+
+  aws-c-io = callPackage ../development/libraries/aws-c-io { };
 
   aws-checksums = callPackage ../development/libraries/aws-checksums { };
 
@@ -16149,6 +16153,8 @@ in
   shhopt = callPackage ../development/libraries/shhopt { };
 
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
+
+  s2n = callPackage ../development/libraries/s2n { };
 
   simavr = callPackage ../development/tools/simavr {
     avrgcc = pkgsCross.avr.buildPackages.gcc;
