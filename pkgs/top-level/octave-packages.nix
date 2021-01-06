@@ -136,6 +136,8 @@ makeScope newScope (self:
 
     mapping = callPackage ../development/octave-modules/mapping { };
 
+    matgeom = callPackage ../development/octave-modules/matgeom { };
+
     signal = callPackage ../development/octave-modules/signal { };
 
     symbolic = callPackage ../development/octave-modules/symbolic {
