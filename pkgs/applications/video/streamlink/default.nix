@@ -48,6 +48,6 @@ pythonPackages.buildPythonApplication rec {
     '';
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ dezgeg zraexy enzime ];
+    maintainers = with maintainers; [ dezgeg zraexy ];
   };
 }
