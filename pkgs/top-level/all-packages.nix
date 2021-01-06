@@ -4570,6 +4570,8 @@ in
 
   gssdp = callPackage ../development/libraries/gssdp { };
 
+  grype = callPackage ../tools/security/grype { };
+
   gt5 = callPackage ../tools/system/gt5 { };
 
   gtest = callPackage ../development/libraries/gtest { };
