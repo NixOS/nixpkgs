@@ -151,6 +151,10 @@ makeScope newScope (self:
 
     ncarray = callPackage ../development/octave-modules/ncarray { };
 
+    netcdf = callPackage ../development/octave-modules/netcdf {
+      inherit (pkgs) netcdf;
+    };
+
     signal = callPackage ../development/octave-modules/signal { };
 
     symbolic = callPackage ../development/octave-modules/symbolic {
