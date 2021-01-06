@@ -199,4 +199,6 @@ makeScope newScope (self:
       inherit (octave) python;
     };
 
+    tisean = callPackage ../development/octave-modules/tisean { };
+
   })
