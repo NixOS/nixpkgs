@@ -95,6 +95,8 @@ makeScope newScope (self:
 
     fpl = callPackage ../development/octave-modules/fpl { };
 
+    fuzzy-logic-toolkit = callPackage ../development/octave-modules/fuzzy-logic-toolkit { };
+
     general = callPackage ../development/octave-modules/general {
       nettle = pkgs.nettle;
     };
