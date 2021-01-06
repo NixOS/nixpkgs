@@ -11,6 +11,9 @@ buildPythonPackage rec {
     sha256 = "sha256-3JMWugAiVDq/NBgX8ft2Bchim2g493jy7wZvvXrX+Ws=";
   };
 
+  # there is nothing to strip in this package
+  dontStrip = true;
+
   # no Python tests implemented
   doCheck = false;
 

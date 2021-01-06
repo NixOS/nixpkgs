@@ -71,6 +71,9 @@ in with py.pkgs; buildPythonApplication rec {
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
   disabled = pythonOlder "3.7.1";
 
+  # don't try and fail to strip 6600+ python files, it takes minutes!
+  dontStrip = true;
+
   inherit availableComponents;
 
   # PyPI tarball is missing tests/ directory
