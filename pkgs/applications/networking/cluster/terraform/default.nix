@@ -137,8 +137,8 @@ let
   ];
 in rec {
   terraform_0_12 = pluggable (generic {
-    version = "0.12.29";
-    sha256 = "18i7vkvnvfybwzhww8d84cyh93xfbwswcnwfrgvcny1qwm8rsaj8";
+    version = "0.12.30";
+    sha256 = "0mv2nsy2ygb1kgkw98xckihcdqxpzhdmks5p2gi2l7wb7lx51yz2";
     patches = [
         ./provider-path.patch
         (fetchpatch {
@@ -150,16 +150,16 @@ in rec {
   });
 
   terraform_0_13 = pluggable (generic {
-    version = "0.13.5";
-    sha256 = "1fnydzm5h65pdy2gkq403sllx05cvpldkdzdpcy124ywljb4x9d8";
+    version = "0.13.6";
+    sha256 = "04vas8i894ssfhncdvljdvmvj2qzfrcs20zcv71l1wmnnv9ibs6l";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
 
   terraform_0_14 = pluggable (generic {
-    version = "0.14.3";
-    sha256 = "0w2j1phjv989bspbyvkhr25bdz1zjch3zggwk2lgjyk77mdw5h20";
-    vendorSha256 = "03dg703pw3h98vfvi2mnd2lw0mv6hlhvmc1l7ngrqdyv54cmihnp";
+    version = "0.14.4";
+    sha256 = "0kjbx1gshp1lvhnjfigfzza0sbl3m6d9qb3in7q5vc6kdkiplb66";
+    vendorSha256 = "10vb6gsw7mha99lvx3lbgd80vf0imcqyc0va0y64f6wzaw557n7v";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
