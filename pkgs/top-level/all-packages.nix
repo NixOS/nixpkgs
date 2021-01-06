@@ -2486,6 +2486,8 @@ in
 
   monetdb = callPackage ../servers/sql/monetdb { };
 
+  monado = callPackage ../applications/graphics/monado {};
+
   mons = callPackage ../tools/misc/mons {};
 
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
@@ -14951,6 +14953,8 @@ in
   libuv = callPackage ../development/libraries/libuv {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
+
+  libuvc = callPackage ../development/libraries/libuvc { };
 
   libv4l = lowPrio (v4l-utils.override {
     withUtils = false;
