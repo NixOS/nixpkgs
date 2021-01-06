@@ -187,6 +187,8 @@ makeScope newScope (self:
 
     stk = callPackage ../development/octave-modules/stk { };
 
+    splines = callPackage ../development/octave-modules/splines { };
+
     struct = callPackage ../development/octave-modules/struct { };
 
     symbolic = callPackage ../development/octave-modules/symbolic {
