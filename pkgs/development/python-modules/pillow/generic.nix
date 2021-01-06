@@ -22,6 +22,10 @@ buildPythonPackage rec {
     "test_grab"
     "test_grabclipboard"
     "test_save"
+
+    # pillow-simd
+    "test_roundtrip"
+    "test_basic"
   ];
 
   propagatedBuildInputs = [ olefile ];
