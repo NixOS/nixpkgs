@@ -173,6 +173,8 @@ makeScope newScope (self:
 
     signal = callPackage ../development/octave-modules/signal { };
 
+    struct = callPackage ../development/octave-modules/struct { };
+
     symbolic = callPackage ../development/octave-modules/symbolic {
       inherit (octave) python;
     };
