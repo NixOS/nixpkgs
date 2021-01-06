@@ -217,4 +217,8 @@ makeScope newScope (self:
 
     windows = callPackage ../development/octave-modules/windows { };
 
+    zeromq = callPackage ../development/octave-modules/zeromq {
+      inherit (pkgs) zeromq;
+    };
+
   })
