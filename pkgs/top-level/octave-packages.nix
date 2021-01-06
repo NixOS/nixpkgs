@@ -159,6 +159,8 @@ makeScope newScope (self:
 
     ocl = callPackage ../development/octave-modules/ocl { };
 
+    octclip = callPackage ../development/octave-modules/octclip { };
+
     signal = callPackage ../development/octave-modules/signal { };
 
     symbolic = callPackage ../development/octave-modules/symbolic {
