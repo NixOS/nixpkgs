@@ -57,9 +57,7 @@ makeScope newScope (self:
       inherit (pkgs) arduino;
     };
 
-    audio = callPackage ../development/octave-modules/audio {
-      rtmidi = pkgs.rtmidi;
-    };
+    audio = callPackage ../development/octave-modules/audio { };
 
     bim = callPackage ../development/octave-modules/bim { };
 
