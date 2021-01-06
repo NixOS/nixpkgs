@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.chrony;
+  chronyPkg = cfg.package;
 
   stateDir = cfg.directory;
   driftFile = "${stateDir}/chrony.drift";
@@ -37,6 +38,15 @@ in
         description = ''
           Whether to synchronise your machine's time using chrony.
           Make sure you disable NTP if you enable this service.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.chrony;
+        defaultText = "pkgs.chrony";
+        description = ''
+          Which chrony package to use.
         '';
       };
 
@@ -109,7 +119,7 @@ in
   config = mkIf cfg.enable {
     meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 
-    environment.systemPackages = [ pkgs.chrony ];
+    environment.systemPackages = [ chronyPkg ];
 
     users.groups.chrony.gid = config.ids.gids.chrony;
 
@@ -139,12 +149,12 @@ in
         after    = [ "network.target" ];
         conflicts = [ "ntpd.service" "systemd-timesyncd.service" ];
 
-        path = [ pkgs.chrony ];
+        path = [ chronyPkg ];
 
         unitConfig.ConditionCapability = "CAP_SYS_TIME";
         serviceConfig =
           { Type = "simple";
-            ExecStart = "${pkgs.chrony}/bin/chronyd ${chronyFlags}";
+            ExecStart = "${chronyPkg}/bin/chronyd ${chronyFlags}";
 
             ProtectHome = "yes";
             ProtectSystem = "full";
