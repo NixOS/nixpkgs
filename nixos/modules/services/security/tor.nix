@@ -901,7 +901,6 @@ in
         } // optionalAttrs cfg.client.dns.enable {
           DNSPort = [{ addr = "127.0.0.1"; port = 9053; }];
           AutomapHostsOnResolve = true;
-          AutomapHostsSuffixes = cfg.client.dns.automapHostsSuffixes;
         } // optionalAttrs (flatten (mapAttrsToList (n: o: o.clientAuthorizations) cfg.client.onionServices) != []) {
           ClientOnionAuthDir = runDir + "/ClientOnionAuthDir";
         }
