@@ -1,9 +1,10 @@
 { lib
+, bidict
 , buildPythonPackage
 , fetchFromGitHub
-, bidict
-, python-engineio
 , mock
+, pytestCheckHook
+, python-engineio
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,10 @@ buildPythonPackage rec {
     python-engineio
   ];
 
-  checkInputs = [ mock ];
-  # tests only on github, but latest github release not tagged
-  doCheck = false;
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Socket.IO server";
