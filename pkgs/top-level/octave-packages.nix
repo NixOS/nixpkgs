@@ -103,6 +103,8 @@ makeScope newScope (self:
       nettle = pkgs.nettle;
     };
 
+    generate_html = callPackage ../development/octave-modules/generate_html { };
+
     io = callPackage ../development/octave-modules/io {
       inherit (octave) enableJava;
     };
