@@ -209,4 +209,6 @@ makeScope newScope (self:
       # https://github.com/ENSTABretagneRobotics/VIBES
     };
 
+    video = callPackage ../development/octave-modules/video { };
+
   })
