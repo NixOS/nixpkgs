@@ -145,6 +145,8 @@ makeScope newScope (self:
       dolfin = null;
     };
 
+    mvn = callPackage ../development/octave-modules/mvn { };
+
     signal = callPackage ../development/octave-modules/signal { };
 
     symbolic = callPackage ../development/octave-modules/symbolic {
