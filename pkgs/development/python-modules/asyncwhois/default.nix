@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "0.2.0";
+  version = "0.2.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rdmg59jzzfz59b3ckg5187lc0wk9r0pzp9x09nq3xs21mcwqjxz";
+    sha256 = "59ed35fbe646491b6c3e1dcf6db9b4870c3d44c6c023a1c3badd6226551d7b7e";
   };
 
   propagatedBuildInputs = [
