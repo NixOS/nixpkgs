@@ -45,6 +45,7 @@ buildPythonPackage rec {
 
   # somehow effective log level does not change?
   disabledTests = [ "test_logger" ];
+  pythonImportsCheck = [ "engineio" ];
 
   meta = with stdenv.lib; {
     description = "Engine.IO server";
