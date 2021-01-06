@@ -107,6 +107,10 @@ makeScope newScope (self:
 
     geometry = callPackage ../development/octave-modules/geometry { };
 
+    gsl = callPackage ../development/octave-modules/gsl {
+      inherit (pkgs) gsl;
+    };
+
     io = callPackage ../development/octave-modules/io {
       inherit (octave) enableJava;
     };
