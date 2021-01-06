@@ -165,6 +165,8 @@ makeScope newScope (self:
 
     optics = callPackage ../development/octave-modules/optics { };
 
+    optim = callPackage ../development/octave-modules/optim { };
+
     signal = callPackage ../development/octave-modules/signal { };
 
     symbolic = callPackage ../development/octave-modules/symbolic {
