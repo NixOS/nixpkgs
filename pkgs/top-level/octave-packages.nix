@@ -113,6 +113,8 @@ makeScope newScope (self:
 
     image = callPackage ../development/octave-modules/image { };
 
+    image-acquisition = callPackage ../development/octave-modules/image-acquisition { };
+
     io = callPackage ../development/octave-modules/io {
       inherit (octave) enableJava;
     };
