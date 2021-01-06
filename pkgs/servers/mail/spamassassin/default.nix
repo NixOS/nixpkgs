@@ -2,11 +2,11 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = fetchurl {
     url = "mirror://apache/spamassassin/source/Mail-${pname}-${version}.tar.bz2";
-    sha256 = "1380cmrgjsyidnznr844c5yr9snz36dw7xchdfryi2s61vjzvf55";
+    sha256 = "0ga5mi2nv2v91kakk9xakkg71rnxnddlzv76ca13vfyd4jgcfasf";
   };
 
   buildInputs = [ makeWrapper ] ++ (with perlPackages; [
