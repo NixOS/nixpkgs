@@ -1,5 +1,4 @@
 { callPackage, dart }:
-
 let
   dart_stable = dart.override { version = "2.10.0"; };
   dart_beta = dart.override { version = "2.10.0"; };
@@ -8,7 +7,8 @@ let
   getPatches = dir:
     let files = builtins.attrNames (builtins.readDir dir);
     in map (f: dir + ("/" + f)) files;
-in {
+in
+{
   mkFlutter = mkFlutter;
   stable = mkFlutter rec {
     pname = "flutter";
