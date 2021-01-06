@@ -1,10 +1,37 @@
-{ channel, pname, version, sha256Hash, patches, dart
-, filename ? "flutter_linux_${version}-${channel}.tar.xz"}:
+{ channel
+, pname
+, version
+, sha256Hash
+, patches
+, dart
+, filename ? "flutter_linux_${version}-${channel}.tar.xz"
+}:
 
-{ bash, buildFHSUserEnv, cacert, coreutils, git, makeWrapper, runCommand, stdenv
-, fetchurl, alsaLib, dbus, expat, libpulseaudio, libuuid, libX11, libxcb
-, libXcomposite, libXcursor, libXdamage, libXfixes, libGL, nspr, nss, systemd }:
-
+{ bash
+, buildFHSUserEnv
+, cacert
+, coreutils
+, git
+, makeWrapper
+, runCommand
+, stdenv
+, fetchurl
+, alsaLib
+, dbus
+, expat
+, libpulseaudio
+, libuuid
+, libX11
+, libxcb
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXfixes
+, libGL
+, nspr
+, nss
+, systemd
+}:
 let
   drvName = "flutter-${channel}-${version}";
   flutter = stdenv.mkDerivation {
@@ -100,7 +127,9 @@ let
       ];
   };
 
-in runCommand drvName {
+in
+runCommand drvName
+{
   startScript = ''
     #!${bash}/bin/bash
     export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
