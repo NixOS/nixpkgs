@@ -64,7 +64,7 @@
     "avion" = ps: with ps; [ ]; # missing inputs: avion
     "avri" = ps: with ps; [ pycountry ]; # missing inputs: avri-api
     "awair" = ps: with ps; [ ]; # missing inputs: python_awair
-    "aws" = ps: with ps; [ ]; # missing inputs: aiobotocore
+    "aws" = ps: with ps; [ aiobotocore ];
     "axis" = ps: with ps; [ aiohttp-cors paho-mqtt ]; # missing inputs: axis
     "azure_devops" = ps: with ps; [ ]; # missing inputs: aioazuredevops
     "azure_event_hub" = ps: with ps; [ ]; # missing inputs: azure-eventhub
@@ -243,7 +243,7 @@
     "familyhub" = ps: with ps; [ ]; # missing inputs: python-family-hub-local
     "fan" = ps: with ps; [ ];
     "fastdotcom" = ps: with ps; [ ]; # missing inputs: fastdotcom
-    "feedreader" = ps: with ps; [ feedparser ];
+    "feedreader" = ps: with ps; [ ]; # missing inputs: feedparser-homeassistant
     "ffmpeg" = ps: with ps; [ ha-ffmpeg ];
     "ffmpeg_motion" = ps: with ps; [ ha-ffmpeg ];
     "ffmpeg_noise" = ps: with ps; [ ha-ffmpeg ];
