@@ -179,6 +179,8 @@ makeScope newScope (self:
 
     sockets = callPackage ../development/octave-modules/sockets { };
 
+    stk = callPackage ../development/octave-modules/stk { };
+
     struct = callPackage ../development/octave-modules/struct { };
 
     symbolic = callPackage ../development/octave-modules/symbolic {
