@@ -20,7 +20,7 @@ mkDerivation rec {
   meta = {
     homepage = "https://gitlab.com/sdcofer70/enyo-doom";
     description = "Frontend for Doom engines";
-    license = stdenv.lib.licenses.gpl2;
+    license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.tadfisher ];
   };

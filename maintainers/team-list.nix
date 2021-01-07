@@ -36,6 +36,14 @@ with lib.maintainers; {
     scope = "Maintain Cinnamon desktop environment and applications made by the LinuxMint team.";
   };
 
+  deshaw = {
+    # Verify additions to this team with at least one already existing member of the team.
+    members = [
+      limeytexan
+    ];
+    scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
+  };
+
   freedesktop = {
     members = [ jtojnar worldofpeace ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";

@@ -22,6 +22,8 @@ buildPythonPackage rec {
     export PKGVER=${version}
   '';
 
+  dontUseSetuptoolsCheck = true;
+
   meta = with stdenv.lib; {
     homepage = "https://git.sr.ht/~sircmpwn/hub.sr.ht";
     description = "Project hub service for the sr.ht network";

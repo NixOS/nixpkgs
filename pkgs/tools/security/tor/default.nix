@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
 , libseccomp, systemd, libcap, lzma, zstd, scrypt, nixosTests
+, writeShellScript
 
 # for update.nix
 , writeScript
@@ -12,7 +13,21 @@
 , gnused
 , nix
 }:
+let
+  tor-client-auth-gen = writeShellScript "tor-client-auth-gen" ''
+    PATH="${stdenv.lib.makeBinPath [coreutils gnugrep openssl]}"
+    pem="$(openssl genpkey -algorithm x25519)"
 
+    printf private_key=descriptor:x25519:
+    echo "$pem" | grep -v " PRIVATE KEY" |
+    base64 -d | tail --bytes=32 | base32 | tr -d =
+
+    printf public_key=descriptor:x25519:
+    echo "$pem" | openssl pkey -in /dev/stdin -pubout |
+    grep -v " PUBLIC KEY" |
+    base64 -d | tail --bytes=32 | base32 | tr -d =
+  '';
+in
 stdenv.mkDerivation rec {
   pname = "tor";
   version = "0.4.4.6";
@@ -52,6 +67,7 @@ stdenv.mkDerivation rec {
     mkdir -p $geoip/share/tor
     mv $out/share/tor/geoip{,6} $geoip/share/tor
     rm -rf $out/share/tor
+    ln -s ${tor-client-auth-gen} $out/bin/tor-client-auth-gen
   '';
 
   passthru = {

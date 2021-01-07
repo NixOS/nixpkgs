@@ -24,6 +24,8 @@ buildPythonPackage rec {
     export PKGVER=${version}
   '';
 
+  dontUseSetuptoolsCheck = true;
+
   meta = with stdenv.lib; {
     homepage = "https://dispatch.sr.ht/~sircmpwn/dispatch.sr.ht";
     description = "Task dispatcher and service integration tool for the sr.ht network";

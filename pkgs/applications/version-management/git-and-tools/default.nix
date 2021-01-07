@@ -172,6 +172,8 @@ let
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  git-when-merged = callPackage ./git-when-merged { };
+
   git-workspace = callPackage ./git-workspace {
     inherit (darwin.apple_sdk.frameworks) Security;
   };

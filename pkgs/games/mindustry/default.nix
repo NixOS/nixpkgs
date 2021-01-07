@@ -3,7 +3,7 @@
 , makeDesktopItem
 , fetchFromGitHub
 , gradleGen
-, jdk14
+, jdk
 , perl
 , jre
 , alsaLib
@@ -58,7 +58,7 @@ let
   '';
 
   # The default one still uses jdk8 (#89731)
-  gradle_6 = (gradleGen.override (old: { java = jdk14; })).gradle_6_7;
+  gradle_6 = (gradleGen.override (old: { java = jdk; })).gradle_6_7;
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {

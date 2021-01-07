@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "voluptuous";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p5j3fgbpqj31fajkaisdrz10ah9667sijz4kp3m0sbgw6ag4kis";
+    sha256 = "0js4avmhmmys78z376xk1w9305hq5nad8zqrnksgmpc1j90p4db6";
   };
 
   checkInputs = [ nose ];

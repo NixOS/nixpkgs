@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, uthash, asciidoc, docbook_xml_dtd_45
+{ stdenv, lib, fetchFromGitHub, pkg-config, uthash, asciidoc, docbook_xml_dtd_45
 , docbook_xsl, libxslt, libxml2, makeWrapper, meson, ninja
 , xorgproto, libxcb ,xcbutilrenderutil, xcbutilimage, pixman, libev
 , dbus, libconfig, libdrm, libGL, pcre, libX11
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja
-    pkgconfig
+    pkg-config
     uthash
     asciidoc
     docbook_xml_dtd_45
@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     libxdg_basedir
   ];
 
-  NIX_CFLAGS_COMPILE = "-fno-strict-aliasing";
+  mesonBuildType = "release";
 
   mesonFlags = [
-    "-Dbuild_docs=true"
+    "-Dwith_docs=true"
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     homepage = "https://github.com/yshui/picom";
-    maintainers = with maintainers; [ ertes enzime twey ];
+    maintainers = with maintainers; [ ertes twey thiagokokada ];
     platforms = platforms.linux;
   };
 }

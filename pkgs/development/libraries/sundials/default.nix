@@ -1,6 +1,7 @@
 { stdenv
 , cmake
 , fetchurl
+, fetchpatch
 , python
 , blas
 , lapack
@@ -12,7 +13,25 @@
 
 stdenv.mkDerivation rec {
   pname = "sundials";
-  version = "5.3.0";
+  version = "5.6.1";
+
+  outputs = [ "out" "examples" ];
+
+  src = fetchurl {
+    url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
+    sha256 = "Frd5mex+fyFXqh0Eyh3kojccqBUOBW0klR0MWJZvKoM=";
+  };
+
+  patches = [
+    # Fixing an upstream regression in treating cmake prefix directories:
+    # https://github.com/LLNL/sundials/pull/58
+    (fetchpatch {
+      url = "https://github.com/LLNL/sundials/commit/dd32ff9baa05618f36e44aadb420bbae4236ea1e.patch";
+      sha256 = "kToAuma+2iHFyL1v/l29F3+nug4AdK5cPG6IcXv2afc=";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     python
@@ -31,36 +50,24 @@ stdenv.mkDerivation rec {
     suitesparse
   ];
 
-  nativeBuildInputs = [ cmake ];
-
-  src = fetchurl {
-    url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
-    sha256 = "19xwi7pz35s2nqgldm6r0jl2k0bs36zhbpnmmzc56s1n3bhzgpw8";
-  };
-
-  patches = [
-    (fetchurl {
-      # https://github.com/LLNL/sundials/pull/19
-      url = "https://github.com/LLNL/sundials/commit/1350421eab6c5ab479de5eccf6af2dcad1eddf30.patch";
-      sha256 = "0g67lixp9m85fqpb9rzz1hl1z8ibdg0ldwq5z6flj5zl8a7cw52l";
-    })
-  ];
-
   cmakeFlags = [
-    "-DEXAMPLES_INSTALL_PATH=${placeholder "out"}/share/examples"
+    "-DEXAMPLES_INSTALL_PATH=${placeholder "examples"}/share/examples"
   ] ++ stdenv.lib.optionals (lapackSupport) [
-    "-DLAPACK_ENABLE=ON"
+    "-DENABLE_LAPACK=ON"
     "-DLAPACK_LIBRARIES=${lapack}/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}"
   ] ++ stdenv.lib.optionals (kluSupport) [
-    "-DKLU_ENABLE=ON"
+    "-DENABLE_KLU=ON"
     "-DKLU_INCLUDE_DIR=${suitesparse.dev}/include"
     "-DKLU_LIBRARY_DIR=${suitesparse}/lib"
-  ] ++ stdenv.lib.optionals (lapackSupport && !lapack.isILP64) [
-    # Use the correct index type according to lapack which is supposed to be
-    # the same index type compatible with blas, thanks to the assertion of
-    # buildInputs
-    "-DSUNDIALS_INDEX_TYPE=int32_t"
-  ]
+  ] ++ [(
+    # Use the correct index type according to lapack and blas used. They are
+    # already supposed to be compatible but we check both for extra safety. 64
+    # should be the default but we prefer to be explicit, for extra safety.
+    if blas.isILP64 then
+      "-DSUNDIALS_INDEX_SIZE=64"
+    else
+      "-DSUNDIALS_INDEX_SIZE=32"
+  )]
   ;
 
   doCheck = true;

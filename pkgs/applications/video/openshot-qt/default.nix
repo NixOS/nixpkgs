@@ -55,8 +55,5 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     license = with licenses; gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
-    # Cannot use a newer Qt (5.15) version because it requires qtwebkit
-    # and our qtwebkit fails to build with 5.15. 01bcfd3579219d60e5d07df309a000f96b2b658b
-    broken = true;
   };
 }

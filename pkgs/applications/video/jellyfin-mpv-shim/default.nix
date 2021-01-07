@@ -53,6 +53,10 @@ buildPythonApplication rec {
     pywebview
   ];
 
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "jellyfin_mpv_shim" ];
+
   meta = with stdenv.lib; {
     homepage = "https://github.com/iwalton3/jellyfin-mpv-shim";
     description = "Allows casting of videos to MPV via the jellyfin mobile and web app";

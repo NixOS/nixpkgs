@@ -103,6 +103,9 @@ stdenv.mkDerivation rec {
 
     # adapt sage's Image class to pillow 8.0.1 (https://trac.sagemath.org/ticket/30971)
     ./patches/pillow-update.patch
+
+    # fix test output with sympy 1.7 (https://trac.sagemath.org/ticket/30985)
+    ./patches/sympy-1.7-update.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

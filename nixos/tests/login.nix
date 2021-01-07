@@ -50,7 +50,7 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
       with subtest("Virtual console logout"):
           machine.send_chars("exit\n")
           machine.wait_until_fails("pgrep -u alice bash")
-          machine.screenshot("mingetty")
+          machine.screenshot("getty")
 
       with subtest("Check whether ctrl-alt-delete works"):
           machine.send_key("ctrl-alt-delete")

@@ -45,6 +45,8 @@ in buildPythonPackage rec {
     cp ${buildWorker "${src}/worker"}/bin/worker $out/bin/builds.sr.ht-worker
   '';
 
+  dontUseSetuptoolsCheck = true;
+
   meta = with stdenv.lib; {
     homepage = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     description = "Continuous integration service for the sr.ht network";

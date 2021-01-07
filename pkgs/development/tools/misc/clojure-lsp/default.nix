@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "20201228T020543";
+  version = "2021.01.03-00.42.23";
 
   src = fetchurl {
-    url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/release-${version}/${pname}.jar";
-    sha256 = "0jkpw7dx7976p63c08bp43fiwk6f2h2nxj9vv1zr103hgywpplri";
+    url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/${pname}.jar";
+    sha256 = "06h69hwm3kl1nr94l43j91pnvkzgnacsg6a6cly4abrg041qhbv3";
   };
 
   dontUnpack = true;
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm644 $src $out/share/java/${pname}.jar
     makeWrapper ${jre}/bin/java $out/bin/${pname} \
-      --add-flags "-jar $out/share/java/${pname}.jar" \
       --add-flags "-Xmx2g" \
-      --add-flags "-server"
+      --add-flags "-server" \
+      --add-flags "-jar $out/share/java/${pname}.jar"
   '';
 
   meta = with stdenv.lib; {

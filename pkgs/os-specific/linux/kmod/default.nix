@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkgconfig
 , libxslt, xz, elf-header
-, withStatic ? false }:
+, withStatic ? stdenv.hostPlatform.isStatic
+}:
 
 let
   systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];

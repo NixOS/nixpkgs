@@ -158,6 +158,7 @@ mapAliases ({
   firefoxWrapper = firefox;           # 2015-09
 
   firestr = throw "firestr has been removed."; # added 2019-12-08
+  fish-foreign-env = fishPlugins.foreign-env; # added 2020-12-29
   flameGraph = flamegraph; # added 2018-04-25
   flvtool2 = throw "flvtool2 has been removed."; # added 2020-11-03
   foldingathome = fahclient; # added 2020-09-03

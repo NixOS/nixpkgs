@@ -19,40 +19,41 @@ stdenv.mkDerivation rec {
     python3Packages.python
   ];
 
-  pythonPath = [
-    python3Packages.libtorrent-rasterbar
-    python3Packages.twisted
-    python3Packages.netifaces
-    python3Packages.pycrypto
-    python3Packages.pyasn1
-    python3Packages.requests
-    python3Packages.m2crypto
-    python3Packages.pyqt5
-    python3Packages.chardet
-    python3Packages.cherrypy
-    python3Packages.cryptography
-    python3Packages.libnacl
-    python3Packages.configobj
-    python3Packages.decorator
-    python3Packages.feedparser
-    python3Packages.service-identity
-    python3Packages.psutil
-    python3Packages.pillow
-    python3Packages.networkx
-    python3Packages.pony
-    python3Packages.lz4
-    python3Packages.pyqtgraph
+  pythonPath = with python3Packages; [
+    libtorrent-rasterbar
+    twisted
+    netifaces
+    pycrypto
+    pyasn1
+    requests
+    m2crypto
+    pyqt5
+    chardet
+    cherrypy
+    cryptography
+    libnacl
+    configobj
+    decorator
+    feedparser
+    service-identity
+    psutil
+    pillow
+    networkx
+    pony
+    lz4
+    pyqtgraph
 
     # there is a BTC feature, but it requires some unclear version of
     # bitcoinlib, so this doesn't work right now.
-    # python3Packages.bitcoinlib
+    # bitcoinlib
   ];
 
   postPatch = ''
     ${stdenv.lib.optionalString enablePlayer ''
       substituteInPlace "./TriblerGUI/vlc.py" --replace "ctypes.CDLL(p)" "ctypes.CDLL('${libvlc}/lib/libvlc.so')"
-      substituteInPlace "./TriblerGUI/widgets/videoplayerpage.py" --replace "if vlc and vlc.plugin_path" "if vlc"
-      substituteInPlace "./TriblerGUI/widgets/videoplayerpage.py" --replace "os.environ['VLC_PLUGIN_PATH'] = vlc.plugin_path" "os.environ['VLC_PLUGIN_PATH'] = '${libvlc}/lib/vlc/plugins'"
+      substituteInPlace "./TriblerGUI/widgets/videoplayerpage.py" \
+        --replace "if vlc and vlc.plugin_path" "if vlc" \
+        --replace "os.environ['VLC_PLUGIN_PATH'] = vlc.plugin_path" "os.environ['VLC_PLUGIN_PATH'] = '${libvlc}/lib/vlc/plugins'"
     ''}
   '';
 

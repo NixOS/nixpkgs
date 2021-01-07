@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "xlib";
-  version = "0.28";
+  version = "0.29";
 
   src = fetchFromGitHub {
     owner = "python-xlib";
     repo = "python-xlib";
     rev = version;
-    sha256 = "13551vi65034pjf2g7zkw5dyjqcjfyk32a640g5jr055ssf0bjkc";
+    sha256 = "sha256-zOG1QzRa5uN36Ngv8i5s3mq+VIoRzxFj5ltUbKdonJ0=";
   };
 
   checkPhase = ''

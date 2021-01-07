@@ -35,7 +35,7 @@
 , rebuildBytecode ? true
 , stripBytecode ? false
 , includeSiteCustomize ? true
-, static ? false
+, static ? stdenv.hostPlatform.isStatic
 # Not using optimizations on Darwin
 # configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.
 , enableOptimizations ? (!stdenv.isDarwin)

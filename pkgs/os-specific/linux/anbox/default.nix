@@ -1,24 +1,28 @@
 { stdenv, fetchFromGitHub, fetchurl
-, cmake, pkgconfig, dbus, makeWrapper
-, gtest
+, cmake, pkg-config, dbus, makeWrapper
 , boost
+, elfutils # for libdw
+, git
+, glib
+, glm
+, gtest
+, libbfd
 , libcap
-, systemd
-, mesa
+, libdwarf
 , libGL
 , libglvnd
-, glib
-, git
-, SDL2
-, SDL2_image
+, lxc
+, mesa
 , properties-cpp
 , protobuf
 , protobufc
-, python
-, lxc
+, python3
+, runtimeShell
+, SDL2
+, SDL2_image
+, systemd
 , writeText
 , writeScript
-, runtimeShell
 }:
 
 let
@@ -45,13 +49,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "anbox";
-  version = "unstable-2019-11-15";
+  version = "unstable-2020-11-29";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "0a49ae08f76de7f886a3dbed4422711c2fa39d10";
-    sha256 = "09l56nv9cnyhykclfmvam6bkcxlamwbql6nrz9n022553w92hkjf";
+    rev = "6c10125a7f13908d2cbe56d2d9ab09872755f265";
+    sha256 = "00bqssh4zcs0jj6w07b91719xkrpdw75vpcplwrvlhwsvl55f901";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -59,12 +64,26 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cmake pkgconfig dbus boost libcap gtest systemd mesa glib
-    SDL2 SDL2_image protobuf protobufc properties-cpp lxc python
+    boost
+    cmake
+    dbus
+    elfutils # libdw
+    glib
+    glm
+    gtest
+    libbfd
+    libcap
+    libdwarf
     libGL
+    lxc
+    mesa
+    pkg-config
+    properties-cpp
+    protobuf protobufc
+    python3
+    SDL2 SDL2_image
+    systemd
   ];
-
-  NIX_CFLAGS_COMPILE = "-Wno-error=missing-field-initializers";
 
   patchPhase = ''
     patchShebangs scripts

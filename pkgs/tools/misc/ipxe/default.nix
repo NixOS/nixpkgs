@@ -19,7 +19,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ipxe";
-  version = "1.20.1";
+  version = "1.21.1";
 
   nativeBuildInputs = [ perl cdrkit syslinux xz openssl gnu-efi mtools ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "ipxe";
     repo = "ipxe";
     rev = "v${version}";
-    sha256 = "0w7h7y97gj9nqvbmsg1zp6zj5mpbbpckqbbx7bpp6k3ahy5fk8zp";
+    sha256 = "1pkf1n1c0rdlzfls8fvjvi1sd9xjd9ijqlyz3wigr70ijcv6x8i9";
   };
 
   # not possible due to assembler code

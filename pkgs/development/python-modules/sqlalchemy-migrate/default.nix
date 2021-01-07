@@ -5,11 +5,11 @@
 }:
 buildPythonPackage rec {
   pname = "sqlalchemy-migrate";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bngmbcry97kwhrxwm0d74zg9qg7gmiws6rd78xshyfgpcqdmylc";
+    sha256 = "1y0lcqii7b4vp7yh9dyxrl4i77hi8jkkw7d06mgdw2h458ljxh0b";
   };
 
   # See: https://review.openstack.org/#/c/608382/

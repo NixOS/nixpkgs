@@ -852,7 +852,7 @@
   ./services/torrent/peerflix.nix
   ./services/torrent/rtorrent.nix
   ./services/torrent/transmission.nix
-  ./services/ttys/agetty.nix
+  ./services/ttys/getty.nix
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
   ./services/wayland/cage.nix

@@ -36,7 +36,7 @@ EOF
         exec("nix-shell", "-p", $package, "--run", shell_quote("exec", @ARGV));
     } else {
         print STDERR <<EOF;
-The program '$program' is not in your PATH. You can make it available in a
+The program '$program' is not in your PATH. You can make it available in an
 ephemeral shell by typing:
   nix-shell -p $package
 EOF
@@ -44,7 +44,7 @@ EOF
 } else {
     print STDERR <<EOF;
 The program '$program' is not in your PATH. It is provided by several packages.
-You can make it available in a ephemeral shell by typing one of the following:
+You can make it available in an ephemeral shell by typing one of the following:
 EOF
     print STDERR "  nix-shell -p $_->{package}\n" foreach @$res;
 }
