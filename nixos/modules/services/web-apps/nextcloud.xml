@@ -10,6 +10,10 @@
   <link linkend="opt-services.nextcloud.enable">services.nextcloud</link>. A
   desktop client is packaged at <literal>pkgs.nextcloud-client</literal>.
  </para>
+ <para>
+  The current default by NixOS is <package>nextcloud20</package> which is also the latest
+  major version available.
+ </para>
  <section xml:id="module-services-nextcloud-basic-usage">
   <title>Basic usage</title>
 
@@ -210,7 +214,7 @@
   nextcloud17 = generic {
     version = "17.0.x";
     sha256 = "0000000000000000000000000000000000000000000000000000";
-    insecure = true;
+    eol = true;
   };
 }</programlisting>
   </para>
