@@ -2672,6 +2672,8 @@ in
 
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
 
+  svt-av1 = callPackage ../tools/video/svt-av1 { };
+
   inherit (callPackages ../servers/rainloop { })
     rainloop-community
     rainloop-standard;
@@ -13038,6 +13040,7 @@ in
   ffmpeg = ffmpeg_4;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
+    svt-av1 = if stdenv.isAarch64 then null else svt-av1;
     # The following need to be fixed on Darwin
     libjack2 = if stdenv.isDarwin then null else libjack2;
     libmodplug = if stdenv.isDarwin then null else libmodplug;
