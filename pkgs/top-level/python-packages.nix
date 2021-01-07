@@ -2157,6 +2157,8 @@ in {
 
   fitbit = callPackage ../development/python-modules/fitbit { };
 
+  fixerio = callPackage ../development/python-modules/fixerio { };
+
   fixtures = callPackage ../development/python-modules/fixtures { };
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };

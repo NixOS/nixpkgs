@@ -256,7 +256,7 @@
     "fireservicerota" = ps: with ps; [ ]; # missing inputs: pyfireservicerota
     "firmata" = ps: with ps; [ ]; # missing inputs: pymata-express
     "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
-    "fixer" = ps: with ps; [ ]; # missing inputs: fixerio
+    "fixer" = ps: with ps; [ fixerio ];
     "fleetgo" = ps: with ps; [ ]; # missing inputs: ritassist
     "flexit" = ps: with ps; [ pymodbus ]; # missing inputs: pyflexit
     "flic" = ps: with ps; [ ]; # missing inputs: pyflic-homeassistant
