@@ -7,7 +7,7 @@ with lib.strings;
 let
   withPackages' = {
     pkgs,
-    ghc ? ghcWithPackages (p: with p; [ ieee ])
+    ghc ? ghcWithPackages (p: with p; [ ieee754 ])
   }: let
     pkgs' = if builtins.isList pkgs then pkgs else pkgs self;
     library-file = writeText "libraries" ''
