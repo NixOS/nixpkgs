@@ -2,7 +2,7 @@
 
 mkDerivation rec {
   pname = "adwaita-qt";
-  version = "1.1.4";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "FedoraQt";
