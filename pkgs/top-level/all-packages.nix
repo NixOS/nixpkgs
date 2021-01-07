@@ -2512,6 +2512,8 @@ in
 
   mpd-mpris = callPackage ../tools/audio/mpd-mpris { };
 
+  mpris-scrobbler = callPackage ../tools/audio/mpris-scrobbler { };
+
   mq-cli = callPackage ../tools/system/mq-cli { };
 
   nextdns = callPackage ../applications/networking/nextdns { };
