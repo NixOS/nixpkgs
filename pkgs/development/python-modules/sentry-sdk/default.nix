@@ -42,12 +42,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ urllib3 certifi ];
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/getsentry/sentry-python";
-    description = "New Python SDK for Sentry.io";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ gebner ];
-  };
 
   # The Sentry tests need access to `/etc/protocols` (the tests call
   # `socket.getprotobyname('tcp')`, which reads from this file). Normally
@@ -57,5 +51,17 @@ buildPythonPackage rec {
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols
     export LD_PRELOAD=${libredirect}/lib/libredirect.so
   '';
+
   postCheck = "unset NIX_REDIRECTS LD_PRELOAD";
+
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "sentry_sdk" ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/getsentry/sentry-python";
+    description = "New Python SDK for Sentry.io";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ gebner ];
+  };
 }

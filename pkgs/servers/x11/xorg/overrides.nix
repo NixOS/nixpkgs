@@ -69,7 +69,8 @@ self: super:
   mkfontdir = self.mkfontscale;
 
   libxcb = super.libxcb.overrideAttrs (attrs: {
-    configureFlags = [ "--enable-xkb" "--enable-xinput" ];
+    configureFlags = [ "--enable-xkb" "--enable-xinput" ]
+      ++ stdenv.lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
     outputs = [ "out" "dev" "man" "doc" ];
   });
 
@@ -77,15 +78,18 @@ self: super:
     outputs = [ "out" "dev" "man" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    depsBuildBuild = [
+      buildPackages.stdenv.cc
+    ] ++ stdenv.lib.optionals stdenv.hostPlatform.isStatic [
+      (self.buildPackages.stdenv.cc.libc.static or null)
+    ];
     preConfigure = ''
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
-    postInstall =
-      ''
-        # Remove useless DocBook XML files.
-        rm -rf $out/share/doc
-      '';
+    postInstall = ''
+      # Remove useless DocBook XML files.
+      rm -rf $out/share/doc
+    '';
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.xorgproto ];
   });
@@ -133,6 +137,11 @@ self: super:
   xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
+    preConfigure = attrs.preConfigure or ""
+    # missing transitive dependencies
+    + stdenv.lib.optionalString stdenv.hostPlatform.isStatic ''
+      export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lXau -lXdmcp"
+    '';
   });
 
   # Propagate some build inputs because of header file dependencies.
@@ -218,8 +227,9 @@ self: super:
   libXi = super.libXi.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" "doc" ];
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.libXfixes ];
-    configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-      "xorg_cv_malloc0_returns_null=no";
+    configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "xorg_cv_malloc0_returns_null=no"
+    ] ++ stdenv.lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
   });
 
   libXinerama = super.libXinerama.overrideAttrs (attrs: {
@@ -740,6 +750,11 @@ self: super:
 
   xauth = super.xauth.overrideAttrs (attrs: {
     doCheck = false; # fails
+    preConfigure = attrs.preConfigure or ""
+    # missing transitive dependencies
+    + stdenv.lib.optionalString stdenv.hostPlatform.isStatic ''
+      export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lxcb -lXau -lXdmcp"
+    '';
   });
 
   xcursorthemes = super.xcursorthemes.overrideAttrs (attrs: {

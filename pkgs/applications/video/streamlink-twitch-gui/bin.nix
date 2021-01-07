@@ -1,8 +1,29 @@
-{ autoPatchelfHook, fetchurl, lib, makeDesktopItem, makeWrapper, stdenv, wrapGAppsHook
-, at-spi2-core, atk, alsaLib, cairo, cups, dbus, expat, gcc-unwrapped
-, gdk-pixbuf, glib, pango, gtk3-x11, libudev0-shim, libuuid, nss, nspr, xorg
-, streamlink }:
-
+{ autoPatchelfHook
+, fetchurl
+, lib
+, makeDesktopItem
+, makeWrapper
+, stdenv
+, wrapGAppsHook
+, at-spi2-core
+, atk
+, alsaLib
+, cairo
+, cups
+, dbus
+, expat
+, gcc-unwrapped
+, gdk-pixbuf
+, glib
+, pango
+, gtk3-x11
+, libudev0-shim
+, libuuid
+, nss
+, nspr
+, xorg
+, streamlink
+}:
 let
   basename = "streamlink-twitch-gui";
   runtimeLibs = lib.makeLibraryPath [ libudev0-shim ];
@@ -16,16 +37,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${basename}-bin";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchurl {
     url = "https://github.com/streamlink/${basename}/releases/download/v${version}/${basename}-v${version}-${arch}.tar.gz";
     sha256 =
       if arch == "linux64"
       then
-        "17s9zbzj4pgz9mxxwjbp3788afkddc9s3p7xp28y5084z9wwzph2"
+        "0y96nziavvpdvrpn58p6a175kaa8cgadp19rnbm250x9cypn1d9y"
       else
-        "1pww05hr48m6v0g1sz48g1c7p615lig3s12l21xgyz4gkjzmjy22";
+        "0sfmhqf55w7wavqy4idsqpkf5p7l8sapjxap6xvyzpz4z5z6xr7y";
   };
 
   nativeBuildInputs = with xorg; [

@@ -4,7 +4,7 @@
 , dbus, doxygen, qt5, c-blosc, libGLU, gnome3, dconf, gtk3, pcre
 , bison, flex, libpthreadstubs, libX11
 , embree2, makeWrapper, gsettings-desktop-schemas, glib
-, withOpenCL ? true , opencl-headers, ocl-icd, opencl-clhpp
+, withOpenCL ? true , opencl-headers, ocl-icd, opencl-clhpp, rocm-opencl-runtime
 }:
 
 let
@@ -31,18 +31,18 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake flex bison doxygen makeWrapper pkg-config ];
-  buildInputs =
-   [ embree2 zlib boost_static libjpeg
-     libtiff libpng ilmbase freetype openexr openimageio
-     tbb qt5.full c-blosc libGLU pcre
-     libX11 libpthreadstubs python libXdmcp libxkbcommon
-     epoxy at-spi2-core dbus
-     # needed for GSETTINGS_SCHEMAS_PATH
-     gsettings-desktop-schemas glib gtk3
-     # needed for XDG_ICON_DIRS
-     gnome3.adwaita-icon-theme
-     (stdenv.lib.getLib dconf)
-   ] ++ stdenv.lib.optionals withOpenCL [opencl-headers ocl-icd opencl-clhpp];
+  buildInputs = [
+    embree2 zlib boost_static libjpeg
+    libtiff libpng ilmbase freetype openexr openimageio
+    tbb qt5.full c-blosc libGLU pcre
+    libX11 libpthreadstubs python libXdmcp libxkbcommon
+    epoxy at-spi2-core dbus
+    # needed for GSETTINGS_SCHEMAS_PATH
+    gsettings-desktop-schemas glib gtk3
+    # needed for XDG_ICON_DIRS
+    gnome3.adwaita-icon-theme
+    (stdenv.lib.getLib dconf)
+  ] ++ stdenv.lib.optionals withOpenCL [ opencl-headers ocl-icd opencl-clhpp rocm-opencl-runtime ];
 
   cmakeFlags = [
     "-DOpenEXR_Iex_INCLUDE_DIR=${openexr.dev}/include/OpenEXR"
@@ -55,7 +55,8 @@ in stdenv.mkDerivation {
     "-DEMBREE_LIBRARY=${embree2}/lib/libembree.so"
     "-DBoost_PYTHON_LIBRARY_RELEASE=${boost_static}/lib/libboost_python3-mt.so"
   ] ++ stdenv.lib.optional withOpenCL
-       "-DOPENCL_INCLUDE_DIR=${opencl-headers}/include";
+    "-DOPENCL_INCLUDE_DIR=${opencl-headers}/include";
+
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -isystem ${python}/include/python${python.pythonVersion}"
     NIX_LDFLAGS+=" -lpython3"

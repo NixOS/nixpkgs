@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, protobuf, pytest, setuptools }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, grpc
+, protobuf
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
@@ -7,18 +12,26 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "560716c807117394da12cecb0a54da5a451b5cf9866f1d37e9a5e2329a665351";
+    sha256 = "0lakcsd35qm5x4visvw6z5f1niasv9a0mjyf2bd98wqi0z41c1sn";
   };
 
-  propagatedBuildInputs = [ protobuf setuptools ];
-  checkInputs = [ pytest ];
+  propagatedBuildInputs = [ grpc protobuf ];
 
-  doCheck = false;  # there are no tests
+  # does not contain tests
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "google.api"
+    "google.logging"
+    "google.longrunning"
+    "google.rpc"
+    "google.type"
+  ];
 
   meta = with stdenv.lib; {
     description = "Common protobufs used in Google APIs";
-    homepage = "https://github.com/googleapis/googleapis";
+    homepage = "https://github.com/googleapis/python-api-common-protos";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

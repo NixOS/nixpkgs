@@ -1,4 +1,6 @@
-{ brotli, cmake, pkgconfig, fetchFromGitHub, stdenv, static ? false }:
+{ brotli, cmake, pkgconfig, fetchFromGitHub, stdenv
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "woff2";

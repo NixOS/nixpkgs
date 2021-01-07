@@ -1,20 +1,20 @@
 { stdenv, fetchurl, fetchsvn, makeWrapper, unzip, jre, libXxf86vm }:
 let
   pname = "josm";
-  version = "17329";
+  version = "17428";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      sha256 = "0hra146akadqz9acj1xa2vzrmipfzf8li7sgsmk169xr991y653k";
+      sha256 = "0fhnq0836jp72br808hhw1ki70zc9wqcwfhnizb8pzjvs4wgx36w";
     };
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macosx-${version}.zip";
-      sha256 = "0i09jnfqbcirmic9vayrp78lnyk4mfh7ax3v3cs8kyqhk930pscf";
+      sha256 = "126yy6y7mkpqzkrkqkzzn3mwnl1yjkmd5k895k7mmk2inmcsvqgm";
     };
     pkg = fetchsvn {
       url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
       rev = version;
-      sha256 = "0ybjca6dhnbwl3xqwrc91c444fzs1zrlnz7qr3l79s1vll9r4qd1";
+      sha256 = "198kq490y5wzxz0a5prb9anykq6dzg0imxfkchsas233inbzggql";
     };
   };
 in

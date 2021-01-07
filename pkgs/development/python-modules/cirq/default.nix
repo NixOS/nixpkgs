@@ -5,7 +5,7 @@
 , fetchFromGitHub
 , fetchpatch
 , freezegun
-, google_api_core
+, google-api-core
 , matplotlib
 , networkx
 , numpy
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     freezegun
-    google_api_core
+    google-api-core
     numpy
     matplotlib
     networkx

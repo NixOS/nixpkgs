@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , ifaddr
@@ -29,7 +30,10 @@ buildPythonPackage rec {
     "test_launch_and_close_v4_v6"
     "test_launch_and_close_v6_only"
     "test_integration_with_listener_ipv6"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_lots_of_names"
   ];
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "zeroconf" ];
 

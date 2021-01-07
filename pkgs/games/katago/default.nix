@@ -14,11 +14,12 @@
 , ocl-icd ? null
 , gperftools ? null
 , eigen ? null
-, enableAVX2 ? false
+, enableAVX2 ? stdenv.hostPlatform.avx2Support
 , enableBigBoards ? false
 , enableCuda ? false
 , enableGPU ? true
-, enableTcmalloc ? true}:
+, enableTcmalloc ? true
+}:
 
 assert !enableGPU -> (
   eigen != null &&

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, pkgconfig
+{ gcc9Stdenv, fetchurl, autoconf, automake, pkgconfig, lib
 , perl, flex, bison, readline, libexif
 , x11Support ? true, SDL
 , svgSupport ? true, inkscape
@@ -9,7 +9,7 @@
 , pngSupport ? true, libpng
 }:
 
-stdenv.mkDerivation rec {
+gcc9Stdenv.mkDerivation rec {
   pname = "fim";
   version = "0.6";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake pkgconfig ];
 
-  buildInputs = with stdenv.lib;
+  buildInputs = with lib;
     [ perl flex bison readline libexif ]
     ++ optional x11Support SDL
     ++ optional svgSupport inkscape
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
     ++ optional jpegSupport libjpeg
     ++ optional pngSupport libpng;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString x11Support "-lSDL";
+  NIX_CFLAGS_COMPILE = lib.optionalString x11Support "-lSDL";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight, highly customizable and scriptable image viewer";
     longDescription = ''
       FIM (Fbi IMproved) is a lightweight, console based image viewer that aims

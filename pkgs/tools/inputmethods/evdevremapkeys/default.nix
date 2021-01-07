@@ -1,11 +1,8 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
-let
-  pythonPackages = python3Packages;
-
-in pythonPackages.buildPythonPackage rec {
-  name = "${pname}-0.1.0";
+python3Packages.buildPythonPackage rec {
   pname = "evdevremapkeys";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "philipl";
@@ -14,12 +11,17 @@ in pythonPackages.buildPythonPackage rec {
     sha256 = "0c9slflakm5jqd8s1zpxm7gmrrk0335m040d7m70hnsak42jvs2f";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ 
+  propagatedBuildInputs = with python3Packages; [
     pyyaml
     pyxdg
     python-daemon
     evdev
   ];
+
+  # hase no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "evdevremapkeys" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/philipl/evdevremapkeys";
