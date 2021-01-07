@@ -196,6 +196,11 @@ let
       INET_UDP_DIAG     = module;
       INET_RAW_DIAG     = whenAtLeast "4.14" module;
       INET_DIAG_DESTROY = whenAtLeast "4.9" yes;
+
+      # enable multipath-tcp
+      MPTCP           = whenAtLeast "5.6" yes;
+      MPTCP_IPV6      = whenAtLeast "5.6" yes;
+      INET_MPTCP_DIAG = whenAtLeast "5.9" module;
     };
 
     wireless = {
