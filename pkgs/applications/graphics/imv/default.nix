@@ -1,61 +1,102 @@
-{ asciidoc
+{ stdenv
+, lib
+, fetchFromGitHub
+, asciidoc
 , cmocka
 , docbook_xsl
-, fetchFromGitHub
+, libxslt
 , fontconfig
-, freeimage
+, meson
+, ninja
+, pkgconfig
 , icu
+, pango
+, inih
+, withWindowSystem ? "all"
+, xorg
+, libxkbcommon
 , libGLU
-, libheif
+, wayland
+, withBackends ? [ "freeimage" "libtiff" "libjpeg" "libpng" "librsvg" "libnsgif" "libheif" ]
+, freeimage
+, libtiff
 , libjpeg_turbo
 , libpng
 , librsvg
-, libtiff
-, libxkbcommon
-, libxslt
 , netsurf
-, pango
-, pkgconfig
-, stdenv
-, wayland
+, libheif
 }:
+
+let
+  windowSystems = {
+    all = windowSystems.x11 ++ windowSystems.wayland;
+    x11 = [ libGLU xorg.libxcb xorg.libX11 ];
+    wayland = [ wayland ];
+  };
+
+  backends = {
+    inherit freeimage libtiff libpng librsvg libheif;
+    libjpeg = libjpeg_turbo;
+    inherit (netsurf) libnsgif;
+  };
+
+  backendFlags = builtins.map
+    (b: if builtins.elem b withBackends
+        then "-D${b}=enabled"
+        else "-D${b}=disabled")
+    (builtins.attrNames backends);
+in
+
+# check that given window system is valid
+assert lib.assertOneOf "withWindowSystem" withWindowSystem
+  (builtins.attrNames windowSystems);
+# check that every given backend is valid
+assert builtins.all
+  (b: lib.assertOneOf "each backend" b (builtins.attrNames backends))
+  withBackends;
 
 stdenv.mkDerivation rec {
   pname = "imv";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "eXeC64";
     repo = "imv";
     rev = "v${version}";
-    sha256 = "0gk8g178i961nn3bls75a8qpv6wvfvav6hd9lxca1skaikd33zdx";
+    sha256 = "07pcpppmfvvj0czfvp1cyq03ha0jdj4whl13lzvw37q3vpxs5qqh";
   };
 
-  nativeBuildInputs = [ asciidoc cmocka docbook_xsl libxslt ];
+  mesonFlags = [
+    "-Dwindows=${withWindowSystem}"
+    "-Dtest=enabled"
+    "-Dman=enabled"
+  ] ++ backendFlags;
 
-  buildInputs = [
-    freeimage
-    icu
-    libGLU
-    libjpeg_turbo
-    librsvg
-    libxkbcommon
-    netsurf.libnsgif
-    pango
+  nativeBuildInputs = [
+    asciidoc
+    cmocka
+    docbook_xsl
+    libxslt
+    meson
+    ninja
     pkgconfig
-    wayland
   ];
 
-  installFlags = [ "PREFIX=$(out)" "CONFIGPREFIX=$(out)/etc" ];
+  buildInputs = [
+    icu
+    libxkbcommon
+    pango
+    inih
+  ] ++ windowSystems."${withWindowSystem}"
+    ++ builtins.map (b: backends."${b}") withBackends;
 
-  makeFlags = [ "BACKEND_LIBJPEG=yes" "BACKEND_LIBNSGIF=yes" ];
-
-  postFixup = ''
+  postFixup = lib.optionalString (withWindowSystem == "all") ''
     # The `bin/imv` script assumes imv-wayland or imv-x11 in PATH,
     # so we have to fix those to the binaries we installed into the /nix/store
 
-    sed -i "s|\bimv-wayland\b|$out/bin/imv-wayland|" $out/bin/imv
-    sed -i "s|\bimv-x11\b|$out/bin/imv-x11|" $out/bin/imv
+    substituteInPlace "$out/bin/imv" \
+      --replace "imv-wayland" "$out/bin/imv-wayland" \
+      --replace "imv-x11" "$out/bin/imv-x11"
   '';
 
   doCheck = true;
