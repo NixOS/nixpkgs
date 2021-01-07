@@ -2962,7 +2962,10 @@ in {
 
   identify = callPackage ../development/python-modules/identify { };
 
-  idna = callPackage ../development/python-modules/idna { };
+  idna = if isPy27 then
+    callPackage ../development/python-modules/idna/2.10.nix { }
+  else
+    callPackage ../development/python-modules/idna { };
 
   idna-ssl = callPackage ../development/python-modules/idna-ssl { };
 
