@@ -5365,6 +5365,8 @@ in {
 
   pykwalify = callPackage ../development/python-modules/pykwalify { };
 
+  pylacrosse = callPackage ../development/python-modules/pylacrosse { };
+
   pylama = callPackage ../development/python-modules/pylama { };
 
   pylast = callPackage ../development/python-modules/pylast { };
