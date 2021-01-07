@@ -1,4 +1,5 @@
-{ rustPlatform
+{ stdenv
+, rustPlatform
 , lib
 , fetchFromGitHub
 
@@ -7,6 +8,11 @@
 , python3
 , openssl
 , perl
+
+# Apple frameworks
+, CoreGraphics
+, Cocoa
+, Foundation
 
 , dbus
 , libX11
@@ -24,7 +30,12 @@
 , zlib
 }:
 let
-  runtimeDeps = [
+  commonRuntimeDeps = [
+    zlib
+    fontconfig
+    freetype
+  ];
+  linuxRuntimeDeps = [
     libX11
     xcbutil
     libxcb
@@ -33,14 +44,14 @@ let
     libxkbcommon
     dbus
     libglvnd
-    zlib
     egl-wayland
     wayland
     libGLU
     libGL
-    fontconfig
-    freetype
   ];
+  runtimeDeps = commonRuntimeDeps
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) linuxRuntimeDeps
+    ++ stdenv.lib.optionals (stdenv.isDarwin) [ Foundation CoreGraphics Cocoa ];
   pname = "wezterm";
 in
 
@@ -68,7 +79,9 @@ rustPlatform.buildRustPackage {
 
   installPhase = ''
     for artifact in wezterm wezterm-gui wezterm-mux-server strip-ansi-escapes; do
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
       patchelf --set-rpath "${lib.makeLibraryPath runtimeDeps}" $releaseDir/$artifact
+  '' + ''
       install -D $releaseDir/$artifact -t $out/bin
     done
   '';

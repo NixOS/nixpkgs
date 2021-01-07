@@ -811,7 +811,9 @@ in
 
   wayst = callPackage ../applications/terminal-emulators/wayst { };
 
-  wezterm = callPackage ../applications/terminal-emulators/wezterm { };
+  wezterm = callPackage ../applications/terminal-emulators/wezterm {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation;
+  };
 
   x3270 = callPackage ../applications/terminal-emulators/x3270 { };
 
