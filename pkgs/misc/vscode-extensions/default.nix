@@ -155,7 +155,7 @@ let
         };
       };
 
-      mikestead.dotenv = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
+      mikestead.dotenv = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dotenv";
           publisher = "mikestead";
