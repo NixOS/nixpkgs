@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub
+{ stdenv
+, fetchFromGitHub
 , bison
 , cmake
 , jq
@@ -10,7 +11,7 @@
 }:
 # glslang requires custom versions of spirv-tools and spirb-headers.
 # The exact versions are taken from:
-# https://github.com/KhronosGroup/glslang/blob/master/known_good.json
+# https://github.com/KhronosGroup/glslang/blob/${version}/known_good.json
 
 let
   localSpirv-tools = if argSpirv-tools == null
@@ -18,8 +19,8 @@ let
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Tools";
-        rev = "fd8e130510a6b002b28eee5885a9505040a9bdc9";
-        sha256 = "00b7xgyrcb2qq63pp3cnw5q1xqx2d9rfn65lai6n6r89s1vh3vg6";
+        rev = "b27b1afd12d05bf238ac7368bb49de73cd620a8e";
+        sha256 = "0v26ws6qx23jn4dcpsq6rqmdxgyxpl5pcvfm90wb3nz6iqbqx294";
       };
     })
     else argSpirv-tools;
@@ -29,8 +30,8 @@ let
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Headers";
-        rev = "f8bf11a0253a32375c32cad92c841237b96696c0";
-        sha256 = "1znwjy02dl9rshqzl87rqsv9mfczw7gvwfhcirbl81idahgp4p6l";
+        rev = "f027d53ded7e230e008d37c8b47ede7cd308e19d";
+        sha256 = "12gp2mqcar6jj57jw9isfr62yn72kmvdcl0zga4gvrlyfhnf582q";
       };
     })
     else argSpirv-headers;
@@ -38,13 +39,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glslang";
-  version = "8.13.3743";
+  version = "11.1.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
     rev = version;
-    sha256 = "0d20wfpp2fmbnz1hnsjr9xc62lxpj86ik2qyviqbni0pqj212cry";
+    sha256 = "1j81pghy7whyr8ygk7lx6g6qph61rky7fkkc8xp87c7n695a48rw";
   };
 
   # These get set at all-packages, keep onto them for child drvs
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "Khronos reference front-end for GLSL and ESSL";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.ralith ];
   };
 }
