@@ -5024,6 +5024,8 @@ in {
 
   pyannotate = callPackage ../development/python-modules/pyannotate { };
 
+  pyarlo = callPackage ../development/python-modules/pyarlo { };
+
   pyarrow = callPackage ../development/python-modules/pyarrow { inherit (pkgs) arrow-cpp cmake pkgconfig; };
 
   pyasn1 = callPackage ../development/python-modules/pyasn1 { };
