@@ -154,7 +154,7 @@ let
           license = stdenv.lib.licenses.bsd3;
         };
       };
-      
+
       mikestead.dotenv = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dotenv";
