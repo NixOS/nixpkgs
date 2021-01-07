@@ -43,13 +43,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  # Ignore the examples as they are prefixed with test_
+  pytestFlagsArray = [ "--ignore examples/" ];
+  pythonImportsCheck = [ "pyairvisual" ];
 
   meta = with lib; {
     description = "A simple, clean, well-tested Python library for interacting with AirVisual©";
-    license = licenses.mit;
+    license = licenses.mit;	
     homepage = "https://github.com/bachya/pyairvisual";
   };
 }
