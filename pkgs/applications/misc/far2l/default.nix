@@ -1,28 +1,21 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkg-config, wxGTK30, glib, pcre, m4, bash,
-  xdg-utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
+  xdg-utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin,
+  libuchardet, spdlog, xercesc, fmt }:
 
-let
-  newer-colorer-schemes = fetchFromGitHub {
-    owner = "colorer";
-    repo = "Colorer-schemes";
-    rev = "7c831f5e94a90530ace8b2bb9916210e3a2fcda6"; # 2019-11-28 (far2l has older Colorer-schemes)
-    sha256 = "18vaahdz5i7xdf00c9h9kjjswm4jszywm8zkhva4c4ivr4qqnv2c";
-  };
-in
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2019-12-14.git${builtins.substring 0 7 src.rev}";
+  version = "2020-12-30.git${builtins.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
-    rev = "dceaa3918ea2c5e43600bad3fc63f861b8d26fc4";
-    sha256 = "1ssd3hwz4b7vl4r858d9whl61cn23pgcamcjmvfa6ysf4x2b7sgi";
+    rev = "52c1372441443aafd1a7dff6f17969a6ec19885d";
+    sha256 = "0s7427fgxzj5zkyy6mhb4y5hqa6adsr30m0bigycp12b0495ryx0";
   };
 
   nativeBuildInputs = [ cmake pkg-config m4 makeWrapper imagemagick ];
 
-  buildInputs = [ wxGTK30 glib pcre ]
+  buildInputs = [ wxGTK30 glib pcre libuchardet spdlog xercesc fmt ]
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
   postPatch = lib.optionalString stdenv.isLinux ''
@@ -48,10 +41,6 @@ stdenv.mkDerivation rec {
       --replace '"gzip '      '"${gzip}/bin/gzip '         \
       --replace '"bzip2 '     '"${bzip2}/bin/bzip2 '       \
       --replace '"tar '       '"${gnutar}/bin/tar '
-
-    cp ${newer-colorer-schemes}/hrc/hrc/base/nix.hrc     colorer/configs/base/hrc/base/
-    cp ${newer-colorer-schemes}/hrc/hrc/base/cpp.hrc     colorer/configs/base/hrc/base/
-    cp ${newer-colorer-schemes}/hrc/hrc/inet/jscript.hrc colorer/configs/base/hrc/base/
   '';
 
   installPhase = ''
