@@ -399,7 +399,7 @@
     "iperf3" = ps: with ps; [ ]; # missing inputs: iperf3
     "ipma" = ps: with ps; [ ]; # missing inputs: pyipma
     "ipp" = ps: with ps; [ pyipp ];
-    "iqvia" = ps: with ps; [ numpy ]; # missing inputs: pyiqvia
+    "iqvia" = ps: with ps; [ numpy pyiqvia ];
     "irish_rail_transport" = ps: with ps; [ ]; # missing inputs: pyirishrail
     "islamic_prayer_times" = ps: with ps; [ ]; # missing inputs: prayer_times_calculator
     "iss" = ps: with ps; [ ]; # missing inputs: pyiss
