@@ -89,15 +89,6 @@ let
         sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
       })
 
-      # Fix build with bison-3.7: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=1a53f599
-      (fetchpatch {
-        name = "qtwebengine-bison-3.7-build.patch";
-        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=1a53f599";
-        sha256 = "1nqpyn5fq37q7i9nasag6i14lnz0d7sld5ikqhlm8qwq9d7gbmjy";
-        stripLen = 1;
-        extraPrefix = "src/3rdparty/";
-      })
-
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-darwin-fix-failed-static-assertion.patch
     ];
