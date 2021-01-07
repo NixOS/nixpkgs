@@ -24,6 +24,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/ymattw/ydiff";
     license = licenses.bsd3;
-    maintainers = [ maintainers.limeytexan ];
+    maintainers = teams.deshaw.members;
   };
 }

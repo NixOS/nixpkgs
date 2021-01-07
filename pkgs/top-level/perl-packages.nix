@@ -14,7 +14,7 @@
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.30.3 or above
 assert stdenv.lib.versionAtLeast perl.version "5.30.3";
 let
-  inherit (stdenv.lib) maintainers;
+  inherit (stdenv.lib) maintainers teams;
   self = _self // (overrides pkgs);
   _self = with self; {
 
@@ -1395,7 +1395,7 @@ let
       sha256 = "0g8c7825ng2m0yz5sy6838rvfdl8j3vm29524wjgf66ccfhgn74x";
     };
     meta = {
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
       description = "BSD process resource limit and priority functions";
       license = stdenv.lib.licenses.artistic2;
     };
@@ -2796,7 +2796,7 @@ let
     meta = {
       description = "Base class for hierarchally ordered objects";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
     };
   };
 
@@ -3405,7 +3405,7 @@ let
     meta = {
       description = "A module for reading .ini-style configuration files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
     };
   };
 
@@ -7843,7 +7843,7 @@ let
       sha256 = "05p9m7kpmjv8bmmbs5chb5fqyshcgmskbbzq5c9qpskbx2w5894n";
     };
     meta = {
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
       description = "simple filename and pathname matching";
       license = stdenv.lib.licenses.free; # Same as Perl
     };
@@ -7858,7 +7858,7 @@ let
     };
     meta = {
       description = "Find matches to a pattern in a series of files and related functions";
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
     };
   };
 
@@ -8061,7 +8061,7 @@ let
     meta = {
       license = stdenv.lib.licenses.free; # Same as Perl
       description = "Pid File Manipulation";
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
     };
   };
 
@@ -8234,7 +8234,7 @@ let
     meta = {
       description = "Perl extension for reading from continously updated files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
     };
   };
 
@@ -8249,7 +8249,7 @@ let
       homepage = "https://github.com/neilb/File-Touch";
       description = "Update file access and modification times, optionally creating files if needed";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
     };
   };
 
@@ -8630,7 +8630,7 @@ let
     };
     propagatedBuildInputs = [ Error ];
     meta = {
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
       description = "This is the Git.pm, plus the other files in the perl/Git directory, from github's git/git";
       license = stdenv.lib.licenses.free;
     };
@@ -8941,7 +8941,7 @@ let
     };
     propagatedBuildInputs = [ pkgs.krb5Full.dev ];
     meta = {
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
       description = "Perl extension providing access to the GSSAPIv2 library";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -11153,7 +11153,7 @@ let
     buildInputs = [ pkgs.acl ];
     NIX_CFLAGS_LINK = "-L${pkgs.acl.out}/lib -lacl";
     meta = {
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
       description = "Perl extension for reading and setting Access Control Lists for files by libacl linux library";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -12047,7 +12047,7 @@ let
       perl -I blib/lib -MMail::Sendmail -e 'print "1..1\nok 1\n"'
     '';
     meta = {
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
       description = "Simple platform independent mailer";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -15830,7 +15830,7 @@ let
       rm t/45_class.t
     '';
     meta = {
-      maintainers = with maintainers; [ limeytexan ztzg ];
+      maintainers = teams.deshaw.members ++ [ maintainers.ztzg ];
       homepage = "https://github.com/mark-5/p5-net-zookeeper";
       license = stdenv.lib.licenses.asl20;
     };
@@ -16039,7 +16039,7 @@ let
     meta = {
       description = "General function library for safer, more secure programming";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
     };
   };
 
@@ -16134,7 +16134,7 @@ let
     meta = {
       description = "Parser/Generator of human-readable conf files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
     };
   };
 
@@ -16543,7 +16543,7 @@ let
       homepage = "http://ldap.perl.org/";
       description = "LDAP client library";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
     };
   };
 
@@ -16597,7 +16597,7 @@ let
     meta = {
       description = "Pure-Perl Core-Only replacement for pkg-config";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
     };
   };
 
@@ -16813,7 +16813,7 @@ let
     # not present (see below).
     propagatedBuildInputs = [ pkgs.cacert IOPipely IOTty POETestLoops ];
     meta = {
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
       description = "Portable multitasking and networking framework for any event loop";
       license = stdenv.lib.licenses.artistic2;
     };
@@ -16843,7 +16843,7 @@ let
       sha256 = "0yx4wsljfmdzsiv0ni98x6lw975cm82ahngbwqvzv60wx5pwkl5y";
     };
     meta = {
-      maintainers = [ maintainers.limeytexan ];
+      maintainers = teams.deshaw.members;
       description = "Reusable tests for POE::Loop authors";
       license = stdenv.lib.licenses.artistic2;
     };
