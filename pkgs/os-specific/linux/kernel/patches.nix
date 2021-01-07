@@ -41,7 +41,8 @@
   hardened = let
     mkPatch = kernelVersion: src: {
       name = lib.removeSuffix ".patch" src.name;
-      patch = fetchurl src;
+      patch = fetchurl (lib.filterAttrs (k: v: k != "extra") src);
+      extra = src.extra;
     };
     patches = builtins.fromJSON (builtins.readFile ./hardened/patches.json);
   in lib.mapAttrs mkPatch patches;
