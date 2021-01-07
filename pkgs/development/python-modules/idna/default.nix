@@ -1,16 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "idna";
-  version = "2.10";
+  version = "3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6";
+    sha256 = "1qal827pcllmqjk3gj4jfm82sq9kp1xiygqadc795a8yw13j3c65";
   };
+
+  checkInput = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/kjd/idna/";
