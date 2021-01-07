@@ -78,19 +78,25 @@ in {
 
     gamma = {
       day = mkOption {
-        type = types.float;
+        type = with types; either float str;
         default = 1.0;
         description = ''
           Screen gamma to apply during the day,
           between <literal>0.1</literal> and <literal>1.0</literal>.
+
+          It is also possible to set screen gamma for each color channel
+          individually, using <literal>"0.8:0.7:0.8"</literal>.
         '';
       };
       night = mkOption {
-        type = types.float;
+        type = with types; either float str;
         default = 1.0;
         description = ''
           Screen gamma to apply during the night,
           between <literal>0.1</literal> and <literal>1.0</literal>.
+
+          It is also possible to set screen gamma for each color channel
+          individually, using <literal>"0.8:0.7:0.8"</literal>.
         '';
       };
     };
@@ -122,7 +128,7 @@ in {
     };
 
     extraConfig = mkOption {
-      type = types.attrs;
+      type = with types; attrsOf (attrsOf (oneOf [float int str]));
       default = {};
       example = {
         redshift = {
