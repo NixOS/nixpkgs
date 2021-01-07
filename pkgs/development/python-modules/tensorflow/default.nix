@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.3.1";
+  version = "2.3.2";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -103,7 +103,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "1lvmrqfnwzh24fl5rdkksiqfv2bn0ld5gvzq1z57rphfkf0zg996";
+      sha256 = "sha256-ncwIkqLDqrB33pB9/FTlBklsIJUEvnDUmyAeUfufCFs=";
     };
 
     patches = [
@@ -236,6 +236,9 @@ let
       rm -f .bazelversion
     '';
 
+    # https://github.com/tensorflow/tensorflow/pull/39470
+    NIX_CFLAGS_COMPILE = [ "-Wno-stringop-truncation" ];
+
     preConfigure = let
       opt_flags = []
         ++ lib.optionals sse42Support ["-msse4.2"]
@@ -281,9 +284,9 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "11blnw3ghp1kdi9hh9pdqa4qni9ysc3nk9iqqk9bg4dlr9zl1yld"
+        "sha256-lEdPA9vhYO6vd5FgPMbFp2PkRvDBurPidYsxtJLXcbQ="
       else
-        "1kkghhwhl8frs68kv28r408lps7mpgq1xvq6hc3k0j35asv1g2kc";
+        "sha256-ZEY/bWo5M3Juw1x3CwhXYXZHD4q5LzWDlhgXnh4P95U=";
     };
 
     buildAttrs = {
