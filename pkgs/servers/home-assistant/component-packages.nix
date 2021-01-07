@@ -258,7 +258,7 @@
     "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
     "fixer" = ps: with ps; [ ]; # missing inputs: fixerio
     "fleetgo" = ps: with ps; [ ]; # missing inputs: ritassist
-    "flexit" = ps: with ps; [ ]; # missing inputs: pyflexit pymodbus
+    "flexit" = ps: with ps; [ pymodbus ]; # missing inputs: pyflexit
     "flic" = ps: with ps; [ ]; # missing inputs: pyflic-homeassistant
     "flick_electric" = ps: with ps; [ ]; # missing inputs: PyFlick
     "flo" = ps: with ps; [ ]; # missing inputs: aioflo
@@ -503,7 +503,7 @@
     "mjpeg" = ps: with ps; [ ];
     "mobile_app" = ps: with ps; [ pynacl aiohttp-cors emoji hass-nabucasa pillow ];
     "mochad" = ps: with ps; [ ]; # missing inputs: pymochad
-    "modbus" = ps: with ps; [ ]; # missing inputs: pymodbus
+    "modbus" = ps: with ps; [ pymodbus ];
     "modem_callerid" = ps: with ps; [ ]; # missing inputs: basicmodem
     "mold_indicator" = ps: with ps; [ ];
     "monoprice" = ps: with ps; [ ]; # missing inputs: pymonoprice
@@ -785,7 +785,7 @@
     "statistics" = ps: with ps; [ sqlalchemy ];
     "statsd" = ps: with ps; [ statsd ];
     "steam_online" = ps: with ps; [ ]; # missing inputs: steamodd
-    "stiebel_eltron" = ps: with ps; [ ]; # missing inputs: pymodbus pystiebeleltron
+    "stiebel_eltron" = ps: with ps; [ pymodbus ]; # missing inputs: pystiebeleltron
     "stookalert" = ps: with ps; [ ]; # missing inputs: stookalert
     "stream" = ps: with ps; [ aiohttp-cors av ];
     "streamlabswater" = ps: with ps; [ ]; # missing inputs: streamlabswater
