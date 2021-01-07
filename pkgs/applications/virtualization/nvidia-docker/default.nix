@@ -62,7 +62,10 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     mkdir bin
+
     cp nvidia-docker bin
+    substituteInPlace bin/nvidia-docker --subst-var-by VERSION ${version}
+
     cp ${libnvidia-container}/bin/nvidia-container-cli bin
     cp ${nvidia-container-toolkit}/bin/nvidia-container-{toolkit,runtime-hook} bin
     cp ${nvidia-container-runtime}/bin/nvidia-container-runtime bin
