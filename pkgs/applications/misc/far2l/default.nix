@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkg-config, wxGTK30, glib, pcre, m4, bash,
-  xdg-utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin,
-  libuchardet, spdlog, xercesc, fmt }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkg-config, wxGTK30, glib, pcre, m4, bash
+, xdg-utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick
+, libuchardet, spdlog, xercesc, fmt, openssl, libssh, samba, neon, libnfs, libarchive }:
 
 stdenv.mkDerivation rec {
   pname = "far2l";
@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config m4 makeWrapper imagemagick ];
 
-  buildInputs = [ wxGTK30 glib pcre libuchardet spdlog xercesc fmt ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  buildInputs = [ wxGTK30 glib pcre libuchardet spdlog xercesc fmt ] # base requirements of the build
+    ++ [ openssl libssh samba neon libnfs libarchive ]; # optional feature packages, like protocol support for Network panel, or archive formats
+    #++ lib.optional stdenv.isDarwin Cocoa # Mac support -- disabled, see "meta.broken" below
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace far2l/bootstrap/trash.sh \
@@ -66,10 +67,13 @@ stdenv.mkDerivation rec {
   stripDebugList = [ "bin" "share" ];
 
   meta = with lib; {
-    description = "An orthodox file manager";
+    description = "Linux port of FAR Manager v2, a program for managing files and archives in Windows operating systems";
     homepage = "https://github.com/elfmz/far2l";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.volth ];
+    license = licenses.gpl2Plus; # NOTE: might change in far2l repo soon, check next time
+    maintainers = with maintainers; [ volth hypersw ];
     platforms = platforms.all;
+    # fails to compile with:
+    # error: no member named 'st_ctim' in 'stat'
+    broken = stdenv.isDarwin;
   };
 }
