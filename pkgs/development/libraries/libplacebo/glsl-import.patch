@@ -1,0 +1,13 @@
+diff --git a/src/glsl/glslang.cc b/src/glsl/glslang.cc
+index f701acc..c64cbf5 100644
+--- a/src/glsl/glslang.cc
++++ b/src/glsl/glslang.cc
+@@ -26,7 +26,7 @@ extern "C" {
+ 
+ #include <glslang/Include/ResourceLimits.h>
+ #include <glslang/Public/ShaderLang.h>
+-#include <SPIRV/GlslangToSpv.h>
++#include <glslang/SPIRV/GlslangToSpv.h>
+ 
+ #include "glslang.h"
+ 
