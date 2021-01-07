@@ -8496,6 +8496,8 @@ in
 
   urjtag = callPackage ../tools/misc/urjtag { };
 
+  urlhunter = callPackage ../tools/security/urlhunter { };
+
   urlwatch = callPackage ../tools/networking/urlwatch { };
 
   valum = callPackage ../development/web/valum { };
