@@ -1,4 +1,4 @@
-{ lib, python3Packages, gtk3, gobject-introspection, ffmpeg_3, wrapGAppsHook }:
+{ stdenv, lib, python3Packages, gtk3, gobject-introspection, ffmpeg_3, wrapGAppsHook }:
 
 with python3Packages;
 buildPythonApplication rec {
@@ -24,5 +24,6 @@ buildPythonApplication rec {
     description = "A native Linux GUI for Chromecasting local files";
     homepage = "https://github.com/keredson/gnomecast";
     license = with licenses; [ gpl3 ];
+    broken = stdenv.isDarwin;
   };
 }

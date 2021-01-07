@@ -45,6 +45,8 @@ buildPythonPackage rec {
         "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block"}
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with stdenv.lib; {
     homepage = "https://www.cherrypy.org";
     description = "A pythonic, object-oriented HTTP framework";

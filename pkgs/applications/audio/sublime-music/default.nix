@@ -1,5 +1,4 @@
 { lib, python3Packages, gobject-introspection, gtk3, pango, wrapGAppsHook
-
 , chromecastSupport ? false
 , serverSupport ? false
 , keyringSupport ? true
@@ -50,6 +49,10 @@ python3Packages.buildPythonApplication rec {
   # hook for gobject-introspection doesn't like strictDeps
   # https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
+
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "sublime" ];
 
   meta = with lib; {
     description = "GTK3 Subsonic/Airsonic client";

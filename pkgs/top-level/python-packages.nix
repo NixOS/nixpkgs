@@ -782,6 +782,8 @@ in {
 
   backports_csv = callPackage ../development/python-modules/backports_csv { };
 
+  backports-datetime-fromisoformat = callPackage ../development/python-modules/backports-datetime-fromisoformat { };
+
   backports_functools_lru_cache = callPackage ../development/python-modules/backports_functools_lru_cache { };
 
   backports_lzma = callPackage ../development/python-modules/backports_lzma { };
@@ -891,6 +893,8 @@ in {
   bip_utils = callPackage ../development/python-modules/bip_utils { };
 
   bitarray = callPackage ../development/python-modules/bitarray { };
+
+  bitbox02 = callPackage ../development/python-modules/bitbox02 { };
 
   bitbucket_api = callPackage ../development/python-modules/bitbucket-api { };
 
@@ -2069,6 +2073,8 @@ in {
 
   fastcache = callPackage ../development/python-modules/fastcache { };
 
+  fastdiff = callPackage ../development/python-modules/fastdiff { };
+
   fastdtw = callPackage ../development/python-modules/fastdtw { };
 
   fastecdsa = callPackage ../development/python-modules/fastecdsa { };
@@ -2665,7 +2671,11 @@ in {
 
   graph_nets = callPackage ../development/python-modules/graph_nets { };
 
+  graphene = callPackage ../development/python-modules/graphene { };
+
   graphql-core = callPackage ../development/python-modules/graphql-core { };
+
+  graphql-relay = callPackage ../development/python-modules/graphql-relay { };
 
   graphql-server-core = callPackage ../development/python-modules/graphql-server-core { };
 
@@ -4245,6 +4255,8 @@ in {
 
   noise = callPackage ../development/python-modules/noise { };
 
+  noiseprotocol = callPackage ../development/python-modules/noiseprotocol { };
+
   nose2 = callPackage ../development/python-modules/nose2 { };
 
   nose = callPackage ../development/python-modules/nose { };
@@ -5498,6 +5510,8 @@ in {
 
   pyopengl = callPackage ../development/python-modules/pyopengl { };
 
+  pyopengl-accelerate = callPackage ../development/python-modules/pyopengl-accelerate { };
+
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
 
   pyosf = callPackage ../development/python-modules/pyosf { };
@@ -5826,6 +5840,7 @@ in {
 
   pytest-black = callPackage ../development/python-modules/pytest-black { };
 
+  pytest-cache = self.pytestcache; # added 2021-01-04
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
   pytest-catchlog = callPackage ../development/python-modules/pytest-catchlog { };
@@ -5836,6 +5851,7 @@ in {
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
 
+  pytest-cov = self.pytestcov; # self 2021-01-04
   pytestcov = callPackage ../development/python-modules/pytest-cov { };
 
   pytest-cram = callPackage ../development/python-modules/pytest-cram { };
@@ -5872,8 +5888,6 @@ in {
 
   pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 
-  pyopengl-accelerate = callPackage ../development/python-modules/pyopengl-accelerate { };
-
   pytest-html = callPackage ../development/python-modules/pytest-html { };
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
@@ -5901,6 +5915,7 @@ in {
 
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
 
+  pytest-pep8 = self.pytestpep8; # added 2021-01-04
   pytestpep8 = throw "pytestpep8 was removed because it is abandoned and no longer compatible with pytest v6.0"; # added 2020-12-10
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
@@ -5909,6 +5924,7 @@ in {
 
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
 
+  pytest-quickcheck = self.pytestquickcheck;
   pytestquickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
 
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
@@ -5925,6 +5941,7 @@ in {
 
   pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
+  pytest-runner = self.pytestrunner; # added 2021-01-04
   pytestrunner = callPackage ../development/python-modules/pytestrunner { };
 
   pytest-sanic = callPackage ../development/python-modules/pytest-sanic { };
@@ -5932,6 +5949,8 @@ in {
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
   pytest-services = callPackage ../development/python-modules/pytest-services { };
+
+  pytest-snapshot = callPackage ../development/python-modules/pytest-snapshot { };
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
 
@@ -5961,6 +5980,7 @@ in {
 
   pytest-watch = callPackage ../development/python-modules/pytest-watch { };
 
+  pytest-xdist = self.pytest_xdist; # added 2021-01-04
   pytest_xdist = if isPy27 then
     callPackage ../development/python-modules/pytest-xdist/1.nix { }
   else
@@ -6829,6 +6849,7 @@ in {
 
   setuptools-rust = callPackage ../development/python-modules/setuptools-rust { };
 
+  setuptools-scm = self.setuptools_scm; # added 2021-01-04
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
   setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
@@ -6965,6 +6986,8 @@ in {
   snapcast = callPackage ../development/python-modules/snapcast { };
 
   snapperGUI = callPackage ../development/python-modules/snappergui { };
+
+  snapshottest = callPackage ../development/python-modules/snapshottest { };
 
   sniffio = callPackage ../development/python-modules/sniffio { };
 
@@ -7175,7 +7198,9 @@ in {
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 
-  starlette = callPackage ../development/python-modules/starlette { };
+  starlette = callPackage ../development/python-modules/starlette {
+    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
@@ -7886,6 +7911,8 @@ in {
   warrant = callPackage ../development/python-modules/warrant { };
 
   wasabi = callPackage ../development/python-modules/wasabi { };
+
+  wasmer = callPackage ../development/python-modules/wasmer { };
 
   watchdog = callPackage ../development/python-modules/watchdog { };
 
