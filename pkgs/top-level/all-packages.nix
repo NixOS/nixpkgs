@@ -17106,6 +17106,8 @@ in
 
   readline80 = callPackage ../development/libraries/readline/8.0.nix { };
 
+  readline81 = callPackage ../development/libraries/readline/8.1.nix { };
+
   readosm = callPackage ../development/libraries/readosm { };
 
   rinutils = callPackage ../development/libraries/rinutils { };
