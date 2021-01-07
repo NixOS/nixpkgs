@@ -22,17 +22,5 @@
         "name": "linux-hardened-5.4.87.a.patch",
         "sha256": "01hpww6lm00iry8z4z86hh86x66h3xbmxknxhmmhh2zwz6ahkmfd",
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.87.a/linux-hardened-5.4.87.a.patch"
-    },
-    "5.8": {
-        "extra": "",
-        "name": "linux-hardened-5.8.18.a.patch",
-        "sha256": "1r2n74nbyi3dp5zql9sk504xkpil6ylbyd99zqqva4nd3qg17c99",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.8.18.a/linux-hardened-5.8.18.a.patch"
-    },
-    "5.9": {
-        "extra": "",
-        "name": "linux-hardened-5.9.16.a.patch",
-        "sha256": "024wdzc9bwgr4nd4z0l6bazcl35jczhsmdl2lb26bvffjwg207rw",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.9.16.a/linux-hardened-5.9.16.a.patch"
     }
 }
