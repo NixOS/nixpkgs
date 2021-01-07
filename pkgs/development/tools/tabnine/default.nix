@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchurl }:
+{ stdenv, lib, fetchurl, unzip }:
 
 let
-  version = "3.1.1";
+  version = "3.2.63";
   src =
     if stdenv.hostPlatform.system == "x86_64-darwin" then
       fetchurl {
-        url = "https://update.tabnine.com/${version}/x86_64-apple-darwin/TabNine";
-        sha256 = "w+Ufy4pICfQmseKCeohEQIP0VD6YrkYTEn41HX40Zlw=";
+        url = "https://update.tabnine.com/bundles/${version}/x86_64-apple-darwin/TabNine.zip";
+        sha256 = "0y0wb3jdr2qk4k21c11w8c9a5fl0h2rm1wm7m8hqdywy4lz9ppgy";
       }
     else if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
-        url = "https://update.tabnine.com/${version}/x86_64-unknown-linux-musl/TabNine";
-        sha256 = "hSltZWQz2BRFut0NDI4fS/N8XxFJaYGHRtV3llBVOY4=";
+        url = "https://update.tabnine.com/bundles/${version}/x86_64-unknown-linux-musl/TabNine.zip";
+        sha256 = "0zzk2w5azk5f0svjxlj2774x01xdflb767xxvbglj4223dgyx2x5";
       }
     else throw "Not supported on ${stdenv.hostPlatform.system}";
 in stdenv.mkDerivation rec {
@@ -20,10 +20,15 @@ in stdenv.mkDerivation rec {
   inherit version src;
 
   dontBuild = true;
-  dontUnpack = true;
+
+  # Work around the "unpacker appears to have produced no directories"
+  # case that happens when the archive doesn't have a subdirectory.
+  setSourceRoot = "sourceRoot=`pwd`";
+
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
-    install -Dm755 $src $out/bin/TabNine
+    install -Dm755 TabNine $out/bin/TabNine
   '';
 
   meta = with lib; {
