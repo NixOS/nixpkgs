@@ -45,6 +45,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # zigpy-znp was too slow to sync up with the zigpy 0.29 release and has API breakage, remove >0.3.0
+    "test_force_remove"
+  ];
+
   meta = with stdenv.lib; {
     description = "A library for zigpy which communicates with TI ZNP radios";
     homepage = "https://github.com/zha-ng/zigpy-znp";
