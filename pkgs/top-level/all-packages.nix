@@ -7002,6 +7002,7 @@ in
 
   rdma-core = callPackage ../os-specific/linux/rdma-core { };
 
+  rdrview = callPackage ../tools/networking/rdrview {};
 
   real_time_config_quick_scan = callPackage ../applications/audio/real_time_config_quick_scan { };
 
