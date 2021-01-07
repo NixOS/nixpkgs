@@ -176,11 +176,6 @@ let
         maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin mic92 ];
       };
     };
-
-  linux-rt-patch = fetchpatch {
-    url = "https://github.com/openzfs/zfs/commit/ab4fb9b74e9d089fc9a261c4f41e19697ad6a4ca.patch";
-    sha256 = "1nrxmb4rhrkgncav6dzwm66l0700fi72qkkcs0w6pkm850srws36";
-  };
 in {
   # also check if kernel version constraints in
   # ./nixos/modules/tasks/filesystems/zfs.nix needs
@@ -190,11 +185,11 @@ in {
     # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "2.0.0";
+    version = "2.0.1";
 
-    sha256 = "1kriz6pg8wj98izvjc60wp23lgcp4k3mzhpkgj74np73rzgy6v8r";
+    sha256 = "0wmw823ildwm9rcfyk22pvzg100yhps3y9hfjlrpspfd1hhkbp0d";
 
-    extraPatches = [ linux-rt-patch ];
+    extraPatches = [ ];
   };
 
   zfsUnstable = common {
@@ -202,10 +197,10 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.0.0";
+    version = "2.0.1";
 
-    sha256 = "1kriz6pg8wj98izvjc60wp23lgcp4k3mzhpkgj74np73rzgy6v8r";
+    sha256 = "0wmw823ildwm9rcfyk22pvzg100yhps3y9hfjlrpspfd1hhkbp0d";
 
-    extraPatches = [ linux-rt-patch ];
+    extraPatches = [ ];
   };
 }
