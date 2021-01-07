@@ -91,6 +91,7 @@ dpelle/vim-LanguageTool
 dracula/vim as dracula-vim
 drewtempelmeyer/palenight.vim
 drmingdrmer/xptemplate
+dstein64/nvim-scrollview@main
 dylanaraps/wal.vim
 eagletmt/ghcmod-vim
 eagletmt/neco-ghc
@@ -402,7 +403,8 @@ nvim-treesitter/nvim-treesitter-textobjects
 nvim-treesitter/playground
 ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
-Olical/conjure@main
+ojroques/vim-oscyank@main
+Olical/conjure
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
