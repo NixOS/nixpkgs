@@ -17806,6 +17806,7 @@ in
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  prometheus-wakatime-exporter = callPackage ../servers/monitoring/prometheus/wakatime-exporter.nix { };
   prometheus-xmpp-alerts = callPackage ../servers/monitoring/prometheus/xmpp-alerts.nix {
     pythonPackages = python3Packages;
   };
