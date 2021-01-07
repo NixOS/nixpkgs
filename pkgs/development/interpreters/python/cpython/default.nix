@@ -370,7 +370,7 @@ in with passthru; stdenv.mkDerivation {
 
   # Add CPython specific setup-hook that configures distutils.sysconfig to
   # always load sysconfigdata from host Python.
-  postFixup = ''
+  postFixup = stdenv.lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     cat << "EOF" >> "$out/nix-support/setup-hook"
     ${sysconfigdataHook}
     EOF
