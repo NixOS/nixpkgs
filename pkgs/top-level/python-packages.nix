@@ -1384,6 +1384,8 @@ in {
 
   cornice = callPackage ../development/python-modules/cornice { };
 
+  coronavirus = callPackage ../development/python-modules/coronavirus { };
+
   cot = callPackage ../development/python-modules/cot { };
 
   covCore = callPackage ../development/python-modules/cov-core { };
