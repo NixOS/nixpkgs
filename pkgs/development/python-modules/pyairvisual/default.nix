@@ -48,8 +48,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyairvisual" ];
 
   meta = with lib; {
-    description = "A simple, clean, well-tested Python library for interacting with AirVisual©";
-    license = licenses.mit;	
+    description = "Python library for interacting with AirVisual";
     homepage = "https://github.com/bachya/pyairvisual";
+    changelog = "https://github.com/bachya/pyairvisual/releases/tag/${version}";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
 }
