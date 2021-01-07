@@ -547,6 +547,7 @@ tommcdo/vim-ninja-feet
 tomtom/tcomment_vim
 tomtom/tlib_vim
 tpope/vim-abolish
+tpope/vim-capslock
 tpope/vim-commentary
 tpope/vim-dadbod
 tpope/vim-dispatch
