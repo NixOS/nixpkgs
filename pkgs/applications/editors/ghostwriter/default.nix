@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "ghostwriter";
-  version = "1.8.1";
+  version = "2.0.0-rc3";
 
   src = fetchFromGitHub {
     owner = "wereturtle";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0jc6szfh5sdnafhwsr1xv7cn1fznniq58bix41hb9wlbkvq7wzi6";
+    rev = version;
+    sha256 = "sha256-Ag97iE++f3nG2zlwqn0qxSL9RpF8O3XWH9NtQ5kFuWg=";
   };
 
   nativeBuildInputs = [ qmake pkgconfig qttools ];
@@ -20,6 +20,7 @@ mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda erictapen ];
+    broken = stdenv.isDarwin;
   };
 }
