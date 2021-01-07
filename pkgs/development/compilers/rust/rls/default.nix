@@ -39,9 +39,9 @@ rustPlatform.buildRustPackage {
     $out/bin/rls --version
   '';
 
-  RUST_SRC_PATH = rustPlatform.rustcSrc;
+  RUST_SRC_PATH = rustPlatform.rustLibSrc;
   postInstall = ''
-    wrapProgram $out/bin/rls --set-default RUST_SRC_PATH ${rustPlatform.rustcSrc}
+    wrapProgram $out/bin/rls --set-default RUST_SRC_PATH ${rustPlatform.rustLibSrc}
   '';
 
   meta = with stdenv.lib; {
