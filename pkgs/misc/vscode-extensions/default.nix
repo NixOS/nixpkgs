@@ -154,6 +154,18 @@ let
           license = stdenv.lib.licenses.bsd3;
         };
       };
+      
+      mikestead.dotenv = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "dotenv";
+          publisher = "mikestead";
+          version = "1.0.1";
+          sha256 = "sha256-dieCzNOIcZiTGu4Mv5zYlG7jLhaEsJR05qbzzzQ7RWc=";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
 
       mskelton.one-dark-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
