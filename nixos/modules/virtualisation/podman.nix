@@ -2,6 +2,7 @@
 let
   cfg = config.virtualisation.podman;
   toml = pkgs.formats.toml { };
+  nvidia-docker = pkgs.nvidia-docker.override { containerRuntimePath = "${pkgs.runc}/bin/runc"; };
 
   inherit (lib) mkOption types;
 
@@ -99,8 +100,8 @@ in
         containersConf.extraConfig = lib.optionalString cfg.enableNvidia
           (builtins.readFile (toml.generate "podman.nvidia.containers.conf" {
             engine = {
-              conmon_env_vars = [ "PATH=${lib.makeBinPath [ pkgs.nvidia-docker ]}" ];
-              runtimes.nvidia = [ "${pkgs.nvidia-docker}/bin/nvidia-container-runtime" ];
+              conmon_env_vars = [ "PATH=${lib.makeBinPath [ nvidia-docker ]}" ];
+              runtimes.nvidia = [ "${nvidia-docker}/bin/nvidia-container-runtime" ];
             };
           }));
       };
@@ -117,7 +118,7 @@ in
       ];
     }
     (lib.mkIf cfg.enableNvidia {
-      environment.etc."nvidia-container-runtime/config.toml".source = "${pkgs.nvidia-docker}/etc/podman-config.toml";
+      environment.etc."nvidia-container-runtime/config.toml".source = "${nvidia-docker}/etc/podman-config.toml";
     })
   ]);
 }
