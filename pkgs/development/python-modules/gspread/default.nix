@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , requests
-, google_auth
+, google-auth
 , google-auth-oauthlib
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "e04f1a6267b3929fc1600424c5ec83906d439672cafdd61a9d5b916a139f841c";
   };
 
-  propagatedBuildInputs = [ requests google_auth google-auth-oauthlib ];
+  propagatedBuildInputs = [ requests google-auth google-auth-oauthlib ];
 
   meta = with stdenv.lib; {
     description = "Google Spreadsheets client library";

@@ -2502,7 +2502,7 @@ in {
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
-  google_api_core = callPackage ../development/python-modules/google_api_core { };
+  google-api-core = callPackage ../development/python-modules/google-api-core { };
 
   google_api_python_client =
     let google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
@@ -2519,9 +2519,9 @@ in {
 
   googleapis_common_protos = callPackage ../development/python-modules/googleapis_common_protos { };
 
-  google_apputils = callPackage ../development/python-modules/google_apputils { };
+  google-apputils = callPackage ../development/python-modules/google-apputils { };
 
-  google_auth = callPackage ../development/python-modules/google_auth { };
+  google-auth = callPackage ../development/python-modules/google-auth { };
 
   google-auth-httplib2 = callPackage ../development/python-modules/google-auth-httplib2 { };
 
@@ -2529,79 +2529,81 @@ in {
 
   google-cloud-access-context-manager = callPackage ../development/python-modules/google-cloud-access-context-manager { };
 
-  google_cloud_asset = callPackage ../development/python-modules/google_cloud_asset { };
+  google-cloud-asset = callPackage ../development/python-modules/google-cloud-asset { };
 
-  google_cloud_automl = callPackage ../development/python-modules/google_cloud_automl { };
+  google-cloud-automl = callPackage ../development/python-modules/google-cloud-automl { };
 
-  google_cloud_bigquery = callPackage ../development/python-modules/google_cloud_bigquery { };
+  google-cloud-bigquery = callPackage ../development/python-modules/google-cloud-bigquery { };
 
-  google_cloud_bigquery_datatransfer = callPackage ../development/python-modules/google_cloud_bigquery_datatransfer { };
+  google-cloud-bigquery-datatransfer = callPackage ../development/python-modules/google-cloud-bigquery-datatransfer { };
 
-  google_cloud_bigtable = callPackage ../development/python-modules/google_cloud_bigtable { };
+  google-cloud-bigtable = callPackage ../development/python-modules/google-cloud-bigtable { };
 
-  google_cloud_container = callPackage ../development/python-modules/google_cloud_container { };
+  google-cloud-container = callPackage ../development/python-modules/google-cloud-container { };
 
-  google_cloud_core = callPackage ../development/python-modules/google_cloud_core { };
+  google-cloud-core = callPackage ../development/python-modules/google-cloud-core { };
 
-  google_cloud_dataproc = callPackage ../development/python-modules/google_cloud_dataproc { };
+  google-cloud-dataproc = callPackage ../development/python-modules/google-cloud-dataproc { };
 
-  google_cloud_datastore = callPackage ../development/python-modules/google_cloud_datastore { };
+  google-cloud-datastore = callPackage ../development/python-modules/google-cloud-datastore { };
 
-  google_cloud_dlp = callPackage ../development/python-modules/google_cloud_dlp { };
+  google-cloud-dlp = callPackage ../development/python-modules/google-cloud-dlp { };
 
-  google_cloud_dns = callPackage ../development/python-modules/google_cloud_dns { };
+  google-cloud-dns = callPackage ../development/python-modules/google-cloud-dns { };
 
-  google_cloud_error_reporting = callPackage ../development/python-modules/google_cloud_error_reporting { };
+  google-cloud-error-reporting = callPackage ../development/python-modules/google-cloud-error-reporting { };
 
-  google_cloud_firestore = callPackage ../development/python-modules/google_cloud_firestore { };
+  google-cloud-firestore = callPackage ../development/python-modules/google-cloud-firestore { };
 
   google-cloud-iam = callPackage ../development/python-modules/google-cloud-iam { };
 
-  google_cloud_iot = callPackage ../development/python-modules/google_cloud_iot { };
+  google-cloud-iot = callPackage ../development/python-modules/google-cloud-iot { };
 
-  google_cloud_kms = callPackage ../development/python-modules/google_cloud_kms { };
+  google-cloud-kms = callPackage ../development/python-modules/google-cloud-kms { };
 
-  google_cloud_language = callPackage ../development/python-modules/google_cloud_language { };
+  google-cloud-language = callPackage ../development/python-modules/google-cloud-language { };
 
-  google_cloud_logging = callPackage ../development/python-modules/google_cloud_logging { };
+  google-cloud-logging = callPackage ../development/python-modules/google-cloud-logging { };
 
-  google_cloud_monitoring = callPackage ../development/python-modules/google_cloud_monitoring { };
+  google-cloud-monitoring = callPackage ../development/python-modules/google-cloud-monitoring { };
 
   google-cloud-org-policy = callPackage ../development/python-modules/google-cloud-org-policy { };
 
-  google_cloud_pubsub = callPackage ../development/python-modules/google_cloud_pubsub { };
+  google-cloud-os-config = callPackage ../development/python-modules/google-cloud-os-config { };
 
-  google_cloud_redis = callPackage ../development/python-modules/google_cloud_redis { };
+  google-cloud-pubsub = callPackage ../development/python-modules/google-cloud-pubsub { };
 
-  google_cloud_resource_manager = callPackage ../development/python-modules/google_cloud_resource_manager { };
+  google-cloud-redis = callPackage ../development/python-modules/google-cloud-redis { };
 
-  google_cloud_runtimeconfig = callPackage ../development/python-modules/google_cloud_runtimeconfig { };
+  google-cloud-resource-manager = callPackage ../development/python-modules/google-cloud-resource-manager { };
 
-  google_cloud_secret_manager = callPackage ../development/python-modules/google_cloud_secret_manager { };
+  google-cloud-runtimeconfig = callPackage ../development/python-modules/google-cloud-runtimeconfig { };
 
-  google_cloud_securitycenter = callPackage ../development/python-modules/google_cloud_securitycenter { };
+  google-cloud-secret-manager = callPackage ../development/python-modules/google-cloud-secret-manager { };
 
-  google_cloud_spanner = callPackage ../development/python-modules/google_cloud_spanner { };
+  google-cloud-securitycenter = callPackage ../development/python-modules/google-cloud-securitycenter { };
 
-  google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
+  google-cloud-spanner = callPackage ../development/python-modules/google-cloud-spanner { };
 
-  google_cloud_storage = callPackage ../development/python-modules/google_cloud_storage { };
+  google-cloud-speech = callPackage ../development/python-modules/google-cloud-speech { };
 
-  google_cloud_tasks = callPackage ../development/python-modules/google_cloud_tasks { };
+  google-cloud-storage = callPackage ../development/python-modules/google-cloud-storage { };
 
-  google_cloud_testutils = callPackage ../development/python-modules/google_cloud_testutils { };
+  google-cloud-tasks = callPackage ../development/python-modules/google-cloud-tasks { };
 
-  google_cloud_texttospeech = callPackage ../development/python-modules/google_cloud_texttospeech { };
+  google-cloud-testutils = callPackage ../development/python-modules/google-cloud-testutils { };
 
-  google_cloud_trace = callPackage ../development/python-modules/google_cloud_trace { };
+  google-cloud-texttospeech = callPackage ../development/python-modules/google-cloud-texttospeech { };
 
-  google_cloud_translate = callPackage ../development/python-modules/google_cloud_translate { };
+  google-cloud-trace = callPackage ../development/python-modules/google-cloud-trace { };
 
-  google_cloud_videointelligence = callPackage ../development/python-modules/google_cloud_videointelligence { };
+  google-cloud-translate = callPackage ../development/python-modules/google-cloud-translate { };
 
-  google_cloud_vision = callPackage ../development/python-modules/google_cloud_vision { };
+  google-cloud-videointelligence = callPackage ../development/python-modules/google-cloud-videointelligence { };
 
-  google_cloud_websecurityscanner = callPackage ../development/python-modules/google_cloud_websecurityscanner { };
+  google-cloud-vision = callPackage ../development/python-modules/google-cloud-vision { };
+
+  google-cloud-websecurityscanner = callPackage ../development/python-modules/google-cloud-websecurityscanner { };
 
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
@@ -2621,7 +2623,7 @@ in {
 
   google-pasta = callPackage ../development/python-modules/google-pasta { };
 
-  google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
+  google-resumable-media = callPackage ../development/python-modules/google-resumable-media { };
 
   googletrans = callPackage ../development/python-modules/googletrans { };
 
@@ -3636,7 +3638,9 @@ in {
     llvm = pkgs.llvm_9;
   }; # llvmlite always requires a specific version of llvm.
 
-  lmdb = callPackage ../development/python-modules/lmdb { };
+  lmdb = callPackage ../development/python-modules/lmdb {
+    inherit (pkgs) lmdb;
+  };
 
   lml = callPackage ../development/python-modules/lml { };
 

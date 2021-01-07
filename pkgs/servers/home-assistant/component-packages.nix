@@ -310,10 +310,10 @@
     "gogogate2" = ps: with ps; [ ]; # missing inputs: gogogate2-api
     "google" = ps: with ps; [ google_api_python_client httplib2 oauth2client ];
     "google_assistant" = ps: with ps; [ aiohttp-cors ];
-    "google_cloud" = ps: with ps; [ google_cloud_texttospeech ];
+    "google_cloud" = ps: with ps; [ google-cloud-texttospeech ];
     "google_domains" = ps: with ps; [ ];
     "google_maps" = ps: with ps; [ ]; # missing inputs: locationsharinglib
-    "google_pubsub" = ps: with ps; [ google_cloud_pubsub ];
+    "google_pubsub" = ps: with ps; [ google-cloud-pubsub ];
     "google_translate" = ps: with ps; [ gtts ];
     "google_travel_time" = ps: with ps; [ googlemaps ];
     "google_wifi" = ps: with ps; [ ];

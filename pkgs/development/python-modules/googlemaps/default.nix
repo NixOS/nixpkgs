@@ -1,6 +1,11 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
 , requests
-, responses, pytestCheckHook, pytest, pytestcov, isPy27
+, responses
+, pytestCheckHook
+, pytestcov
+, isPy27
 }:
 
 buildPythonPackage rec {

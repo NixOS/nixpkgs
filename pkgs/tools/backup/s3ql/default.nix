@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   checkInputs = [ which ] ++ (with python3Packages; [ cython pytest ]);
   propagatedBuildInputs = with python3Packages; [
     sqlite apsw pycrypto requests defusedxml dugong llfuse
-    cython pytest pytest-catchlog google_auth google-auth-oauthlib
+    cython pytest pytest-catchlog google-auth google-auth-oauthlib
   ];
 
   preBuild = ''
