@@ -45,7 +45,7 @@ self: super:
 
   # These packages are core libraries in GHC 8.6..x, but not here.
   bin-package-db = null;
-  haskeline = self.haskeline_0_7_5_0;
+  haskeline = self.haskeline_0_8_1_0;
   hpc = self.hpc_0_6_0_3;
   terminfo = self.terminfo_0_4_1_4;
   xhtml = self.xhtml_3000_2_2_1;
