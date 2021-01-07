@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2020.12.2";
+  version = "2021.1.0";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -45,7 +45,7 @@
     "arcam_fmj" = ps: with ps; [ ]; # missing inputs: arcam-fmj
     "arduino" = ps: with ps; [ ]; # missing inputs: PyMata
     "arest" = ps: with ps; [ ];
-    "arlo" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: pyarlo
+    "arlo" = ps: with ps; [ ha-ffmpeg pyarlo ];
     "arris_tg2492lg" = ps: with ps; [ ]; # missing inputs: arris-tg2492lg
     "aruba" = ps: with ps; [ pexpect ];
     "arwn" = ps: with ps; [ aiohttp-cors paho-mqtt ];
@@ -60,9 +60,8 @@
     "aurora_abb_powerone" = ps: with ps; [ ]; # missing inputs: aurorapy
     "auth" = ps: with ps; [ aiohttp-cors ];
     "automation" = ps: with ps; [ aiohttp-cors ];
-    "avea" = ps: with ps; [ ]; # missing inputs: avea
+    "avea" = ps: with ps; [ avea ];
     "avion" = ps: with ps; [ ]; # missing inputs: avion
-    "avri" = ps: with ps; [ pycountry ]; # missing inputs: avri-api
     "awair" = ps: with ps; [ ]; # missing inputs: python_awair
     "aws" = ps: with ps; [ aiobotocore ];
     "axis" = ps: with ps; [ aiohttp-cors paho-mqtt ]; # missing inputs: axis
@@ -528,7 +527,7 @@
     "nad" = ps: with ps; [ ]; # missing inputs: nad_receiver
     "namecheapdns" = ps: with ps; [ defusedxml ];
     "nanoleaf" = ps: with ps; [ pynanoleaf ];
-    "neato" = ps: with ps; [ pybotvac ];
+    "neato" = ps: with ps; [ aiohttp-cors pybotvac ];
     "nederlandse_spoorwegen" = ps: with ps; [ ]; # missing inputs: nsapi
     "nello" = ps: with ps; [ ]; # missing inputs: pynello
     "ness_alarm" = ps: with ps; [ ]; # missing inputs: nessclient
@@ -624,7 +623,7 @@
     "plex" = ps: with ps; [ aiohttp-cors plexapi plexauth plexwebsocket pysonos ];
     "plugwise" = ps: with ps; [ ]; # missing inputs: plugwise
     "plum_lightpad" = ps: with ps; [ ]; # missing inputs: plumlightpad
-    "pocketcasts" = ps: with ps; [ ]; # missing inputs: pocketcasts
+    "pocketcasts" = ps: with ps; [ ]; # missing inputs: pycketcasts
     "point" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pypoint
     "poolsense" = ps: with ps; [ ]; # missing inputs: poolsense
     "powerwall" = ps: with ps; [ ]; # missing inputs: tesla-powerwall
