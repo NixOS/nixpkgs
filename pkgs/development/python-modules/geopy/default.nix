@@ -6,8 +6,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "geopy-unstable";
-  version = "2019-11-10";
+  pname = "geopy";
+  version = "2.1.0";
 
   disabled = !isPy3k; # only Python 3
   doCheck = false; # Needs network access
@@ -15,10 +15,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ geographiclib ];
 
   src = fetchFromGitHub {
-    owner = "geopy";
-    repo = "geopy";
-    rev = "531b7de6126838a3e69370227aa7f2086ba52b89";
-    sha256 = "07l1pblzg3hb3dbvd9rq8x78ly5dv0zxbc5hwskqil0bhv5v1p39";
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "0239a4achk49ngagb6aqy6cgzfwgbxir07vwi13ysbpx78y0l4g9";
   };
 
   meta = with lib; {
