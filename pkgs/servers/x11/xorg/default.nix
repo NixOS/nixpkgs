@@ -2029,11 +2029,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videonouveau = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-nouveau-1.0.15";
+    name = "xf86-video-nouveau-1.0.16";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-nouveau-1.0.15.tar.bz2";
-      sha256 = "0k0xah72ryjwak4dc4crszxrlkmi9x1s7p3sd4la642n77yi1pmf";
+      url = "mirror://xorg/individual/driver/xf86-video-nouveau-1.0.16.tar.bz2";
+      sha256 = "01mz8gnq7j6bvrqb2ljm3d1wpjhi9p2z2w8zbkdrqmqmcj060h1h";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
@@ -2289,11 +2289,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86videovesa = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-video-vesa-2.4.0";
+    name = "xf86-video-vesa-2.5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-vesa-2.4.0.tar.bz2";
-      sha256 = "1373vsxn6qh00na0s9c09kf09gj78rzi98zq93id8v5zsya3qi5z";
+      url = "mirror://xorg/individual/driver/xf86-video-vesa-2.5.0.tar.bz2";
+      sha256 = "0nf6ai74c60xk96kgr8q9mx6lrxm5id3765ws4d801irqzrj85hz";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

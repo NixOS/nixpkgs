@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , python
 , buildPythonPackage
 , fetchpatch
@@ -20,30 +21,37 @@
 , cffi
 , tzlocal
 , simplegeneric
-, pytest
+, pytestCheckHook
 , extraRPackages ? []
 }:
 
 buildPythonPackage rec {
-    version = "3.3.6";
+    version = "3.4.1";
     pname = "rpy2";
 
     disabled = isPyPy;
     src = fetchPypi {
       inherit version pname;
-      sha256 = "0xvfkxvh01r5ibd5mpisp8bz385hgpn27b988y8v65z7hqr3y1nf";
+      sha256 = "1qnjjlgh6i31z45jykwd29n1336gq678fn9zw7gh0rv5d6sn0hv4";
     };
 
+    patches = [
+      # R_LIBS_SITE is used by the nix r package to point to the installed R libraries.
+      # This patch sets R_LIBS_SITE when rpy2 is imported.
+      ./rpy2-3.x-r-libs-site.patch
+    ];
+
+    postPatch = ''
+      substituteInPlace 'rpy2/rinterface_lib/embedded.py' --replace '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
+      substituteInPlace 'requirements.txt' --replace 'pytest' ""
+    '';
+
     buildInputs = [
-      R
       pcre
       lzma
       bzip2
       zlib
       icu
-
-      # is in the upstream `requires` although it shouldn't be -- this is easier than patching it away
-      pytest
     ] ++ (with rPackages; [
       # packages expected by the test framework
       ggplot2
@@ -58,22 +66,9 @@ buildPythonPackage rec {
       tidyr
     ]) ++ extraRPackages ++ rWrapper.recommendedPackages;
 
-    checkPhase = ''
-      pytest
-    '';
-
     nativeBuildInputs = [
       R # needed at setup time to detect R_HOME (alternatively set R_HOME explicitly)
     ];
-
-    patches = [
-      # R_LIBS_SITE is used by the nix r package to point to the installed R libraries.
-      # This patch sets R_LIBS_SITE when rpy2 is imported.
-      ./rpy2-3.x-r-libs-site.patch
-    ];
-    postPatch = ''
-      substituteInPlace 'rpy2/rinterface_lib/embedded.py' --replace '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
-    '';
 
     propagatedBuildInputs = [
       ipython
@@ -86,8 +81,10 @@ buildPythonPackage rec {
       simplegeneric
     ];
 
+    doCheck = !stdenv.isDarwin;
+
     checkInputs = [
-      pytest
+      pytestCheckHook
     ];
 
     meta = {

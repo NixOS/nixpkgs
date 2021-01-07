@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "waypipe-unstable";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
     rev = "v${version}";
-    sha256 = "00skyxmbssfxksb8wlqdr8gajpysadirjcn230fd5gaf5msvllx7";
+    sha256 = "sha256-LtfrSEwZikOXp/fdyJ/+EylRx19zdsHMkrl1eEf1/aY=";
   };
 
   postPatch = ''

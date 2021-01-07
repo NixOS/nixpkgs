@@ -46,6 +46,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with stdenv.lib; {
     description = "A python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";

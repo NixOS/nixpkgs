@@ -1,10 +1,10 @@
 { stdenv, fetchurl, fetchpatch
-, ncurses }:
+, ncurses
+}:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "tcsh";
-  version = "6.22.02";
+  version = "6.22.03";
 
   src = fetchurl {
     urls = [
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
       "ftp://ftp.astron.com/pub/tcsh/${pname}-${version}.tar.gz"
       "ftp://ftp.funet.fi/pub/unix/shells/tcsh/${pname}-${version}.tar.gz"
     ];
-    sha256 = "0nw8prz1n0lmr82wnpyhrzmki630afn7p9cfgr3vl00vr9c72a7d";
+    sha256 = "sha256-viz9ZT0qDH9QbS3RTBIyS6dJvUhAN75t9Eo5c/UiYrc=";
   };
 
   buildInputs = [ ncurses ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       sha256 = "1qc6ydxhdfizsbkaxhpn3wib8sfphrw10xnnsxx2prvzg9g2zp67";
     });
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An enhanced version of the Berkeley UNIX C shell (csh)";
     longDescription = ''
       tcsh is an enhanced but completely compatible version of the

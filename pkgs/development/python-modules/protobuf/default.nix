@@ -1,6 +1,18 @@
-{ buildPackages, stdenv, fetchpatch, python, buildPythonPackage, isPy37
-, protobuf, google_apputils, pyext, libcxx, isPy27
-, disabled, doCheck ? true }:
+{ buildPackages
+, stdenv
+, fetchpatch
+, python
+, buildPythonPackage
+, isPy37
+, protobuf
+, google-apputils
+, six
+, pyext
+, libcxx
+, isPy27
+, disabled
+, doCheck ? true
+}:
 
 with stdenv.lib;
 
@@ -17,9 +29,9 @@ buildPythonPackage {
 
   outputs = [ "out" "dev" ];
 
-  propagatedBuildInputs = [ google_apputils ];
-  propagatedNativeBuildInputs = [ buildPackages.protobuf ];  # For protoc.
-  nativeBuildInputs = [ google_apputils pyext ];
+  propagatedBuildInputs = [ six ] ++ optionals isPy27 [ google-apputils ];
+  propagatedNativeBuildInputs = [ buildPackages.protobuf ]; # For protoc.
+  nativeBuildInputs = [ pyext ] ++ optionals isPy27 [ google-apputils ];
   buildInputs = [ protobuf ];
 
   patches = optional (isPy37 && (versionOlder protobuf.version "3.6.1.2"))

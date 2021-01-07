@@ -45,10 +45,10 @@ with lib;
     };
 
     # Automatically log in at the virtual consoles.
-    services.mingetty.autologinUser = "nixos";
+    services.getty.autologinUser = "nixos";
 
     # Some more help text.
-    services.mingetty.helpLine = ''
+    services.getty.helpLine = ''
       The "nixos" and "root" accounts have empty passwords.
 
       An ssh daemon is running. You then must set a password

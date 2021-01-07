@@ -67,6 +67,8 @@ in buildPythonPackage rec {
     cp ${buildAPI "${src}/api"}/bin/api $out/bin/gitsrht-api
   '';
 
+  dontUseSetuptoolsCheck = true;
+
   meta = with stdenv.lib; {
     homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Git repository hosting service for the sr.ht network";

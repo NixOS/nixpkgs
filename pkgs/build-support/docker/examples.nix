@@ -416,4 +416,15 @@ rec {
     contents = crossPkgs.hello;
   };
 
+  # layered image where a store path is itself a symlink
+  layeredStoreSymlink =
+  let
+    target = pkgs.writeTextDir "dir/target" "Content doesn't matter.";
+    symlink = pkgs.runCommandNoCC "symlink" {} "ln -s ${target} $out";
+  in
+    pkgs.dockerTools.buildLayeredImage {
+      name = "layeredstoresymlink";
+      tag = "latest";
+      contents = [ pkgs.bash symlink ];
+    } // { passthru = { inherit symlink; }; };
 }

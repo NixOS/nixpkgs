@@ -2,9 +2,9 @@
 
 buildGoModule rec {
   pname = "kustomize";
-  version = "3.8.7";
+  version = "3.9.1";
   # rev is the 3.8.7 commit, mainly for kustomize version command output
-  rev = "ad092cc7a91c07fdf63a2e4b7f13fa588a39af4f";
+  rev = "7439f1809e5ccd4677ed52be7f98f2ad75122a93";
 
   buildFlagsArray = let t = "sigs.k8s.io/kustomize/api/provenance"; in
     ''
@@ -17,13 +17,13 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "kustomize/v${version}";
-    sha256 = "1942cyaj6knf8mc3q2vcz6rqqc6lxdd6nikry9m0idk5l1b09x1m";
+    sha256 = "1v8yfiwzg84bpdh3k3h5v2smxx0dymq717r2mh3pjz3nifkg3ilm";
   };
 
   # avoid finding test and development commands
   sourceRoot = "source/kustomize";
 
-  vendorSha256 = "0y77ykfcbn4l0x85c3hb1lgjpy64kimx3s1qkn38gpmi4lphvkkl";
+  vendorSha256 = "1nixkmyqzq7387rwam0bsa6qjd40k5p15npq0iz1z2k1ws8pvrg6";
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";
@@ -34,6 +34,6 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/kubernetes-sigs/kustomize";
     license = licenses.asl20;
-    maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime ];
+    maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime Chili-Man];
   };
 }

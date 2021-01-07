@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "ppx_tools_versioned";
   version = "5.4.0";
 
+  useDune2 = true;
+
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
     repo = pname;

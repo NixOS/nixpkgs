@@ -2,6 +2,7 @@
 , ocaml, findlib, ocamlbuild, ocaml_oasis,
  bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp,
  utop, libxml2,
+ ppx_bitstring,
  ppx_tools_versioned,
  which, makeWrapper, writeText
 , z3
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which makeWrapper ];
 
   buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis
-                  llvm ppx_tools_versioned
+                  llvm ppx_bitstring ppx_tools_versioned
                   z3
                   utop libxml2 ];
 
@@ -62,6 +63,10 @@ stdenv.mkDerivation rec {
   disableIda = "--disable-ida";
 
   patches = [ ./dont-add-curses.patch ];
+
+  preConfigure = ''
+    substituteInPlace oasis/elf --replace bitstring.ppx ppx_bitstring
+  '';
 
   configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm}/bin/llvm-config" ];
 

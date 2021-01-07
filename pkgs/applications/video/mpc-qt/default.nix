@@ -29,6 +29,7 @@ mkDerivation rec {
     homepage = "https://gitlab.com/mpc-qt/mpc-qt";
     license = licenses.gpl2;
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ romildo ];
   };
 }

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
-  version = "4.8.0";
+  version = "4.6.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1369iig7w0x45sr9yd4a5xxqrwsfwq90hlnknarhz62h5hpykjwi";
+    sha256 = "08z5hgc6dwdp9fczm75axwh8q9665iz4y2lxp92xp62r3k0v9fvd";
   };
 
   outputs = [ "out" "dev" ];
