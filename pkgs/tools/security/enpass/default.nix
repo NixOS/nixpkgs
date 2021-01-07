@@ -79,7 +79,9 @@ let
       # lsof must be in PATH for proper operation
       wrapProgram $out/bin/Enpass \
         --set LD_LIBRARY_PATH "${libPath}" \
-        --prefix PATH : ${lsof}/bin
+        --prefix PATH : ${lsof}/bin \
+        --unset QML2_IMPORT_PATH \
+        --unset QT_PLUGIN_PATH
     '';
   };
   updater = {
