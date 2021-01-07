@@ -11,6 +11,10 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ screeninfo paramiko pynput libevdev ];
 
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "remarkable_mouse" ];
+
   meta = with stdenv.lib; {
     description = "A program to use a reMarkable as a graphics tablet";
     homepage = "https://github.com/evidlo/remarkable_mouse";
