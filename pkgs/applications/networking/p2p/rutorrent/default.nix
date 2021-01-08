@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rutorrent";
-  version = "3.10-beta";
+  version = "3.10";
 
   src = fetchFromGitHub {
     owner = "Novik";
     repo = "ruTorrent";
     rev = "v${version}";
-    sha256 = "0qim3g6xfl9hdyhg6nfyzn594p5b3wbcdzmifdmfpj4kfngwjv1v";
+    sha256 = "1gnqbvyax8w84frx60adm58ixh6nycpm24lqmqa996sy6fpknmg4";
   };
 
   installPhase = ''
