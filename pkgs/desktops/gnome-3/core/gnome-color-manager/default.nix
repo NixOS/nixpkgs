@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkgconfig
@@ -9,24 +10,26 @@
 , gnome3
 , glib
 , gtk3
-, libexif
-, libtiff
 , colord
-, colord-gtk
-, libcanberra-gtk3
 , lcms2
-, vte
-, exiv2
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-color-manager";
-  version = "3.32.0";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1vpxa2zjz3lkq9ldjg0fl65db9s6b4kcs8nyaqfz3jygma7ifg3w";
+    sha256 = "nduea2Ry4RmAE4H5CQUzLsHUJYmBchu6gxyiRs6zrTs=";
   };
+
+  patches = [
+    # Drop forgotten include
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-color-manager/commit/66aea36411477f284fa8a379b3bde282385d281c.patch";
+      sha256 = "m44XfVPGZV9kgm/vIvF9SbsilXNKl2ZwE8SwrhAbU1A=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -40,14 +43,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    libexif
-    libtiff
     colord
-    colord-gtk
-    libcanberra-gtk3
     lcms2
-    vte
-    exiv2
   ];
 
   passthru = {
