@@ -1,19 +1,33 @@
-{ stdenv, fetchFromGitHub, cmake, jsoncpp, argtable, curl, libmicrohttpd
-, doxygen, catch, pkgconfig
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, argtable
+, catch2
+, curl
+, doxygen
+, hiredis
+, jsoncpp
+, libmicrohttpd
+, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
   pname = "libjson-rpc-cpp";
-  version = "0.7.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "cinemast";
     repo = "libjson-rpc-cpp";
-    sha256 = "07bg4nyvx0yyhy8c4x9i22kwqpx5jlv36dvpabgbb46ayyndhr7a";
+    sha256 = "1p5kb2dij1ycimkpx6n097y83imj1vlhss1r5vq9lcjzm65a81hh";
     rev = "v${version}";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${catch}/include/catch";
+  patches = [
+    ./microhttpd-mhd-result.patch
+  ];
+
+  NIX_CFLAGS_COMPILE = "-I${catch2}/include/catch2";
 
   postPatch = ''
     for f in cmake/FindArgtable.cmake \
@@ -45,7 +59,7 @@ stdenv.mkDerivation rec {
 
     make install
 
-    sed -i -re "s#-([LI]).*/Build/Install(.*)#-\1$out\2#g" Install/lib/pkgconfig/*.pc
+    sed -i -re "s#-([LI]).*/Build/Install(.*)#-\1$out\2#g" Install/lib*/pkgconfig/*.pc
     for f in Install/lib/*.so* $(find Install/bin -executable -type f); do
       fixRunPath $f
     done
@@ -54,7 +68,16 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake jsoncpp argtable curl libmicrohttpd doxygen catch ];
+  buildInputs = [
+    cmake
+    argtable
+    catch2
+    curl
+    doxygen
+    hiredis
+    jsoncpp
+    libmicrohttpd
+  ];
 
   enableParallelBuilding = true;
 
