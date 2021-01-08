@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "timewarrior";
@@ -15,6 +15,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+  buildInputs = [ python3 ];
+  postInstall = ''
+    for x in $out/share/doc/timew/ext/*; do
+      chmod +x "$x"
+    done
+  '';
+  patchPhase = ''
+    patchShebangs .
+  '';
 
   meta = with stdenv.lib; {
     description = "A command-line time tracker";
@@ -24,4 +33,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
-
