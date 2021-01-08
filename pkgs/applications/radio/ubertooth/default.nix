@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ubertooth";
-  version = "2018-12-R1";
+  version = "2020-12-R1";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = pname;
     rev = version;
-    sha256 = "1da5fsjwc5szclq6h5wznvgwikd1qqv8gbmv38h0fpc12lwn85c4";
+    sha256 = "11r5ag2l5xn4pr7ycicm30w9c3ldn9yiqj1sqnjc79csxl2vrcfw";
   };
 
   sourceRoot = "source/host";
