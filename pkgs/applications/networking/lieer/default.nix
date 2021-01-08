@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "lieer";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "gauteh";
     repo = "lieer";
     rev = "v${version}";
-    sha256 = "0qp8sycclzagkiszqk1pw2fr8s8s195bzy8r27dj7f5zx350nxk5";
+    sha256 = "12sl7d381l1gjaam419xc8gxmsprxf0hgksz1f974qmmijvr02bh";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -16,6 +16,7 @@ python3Packages.buildPythonApplication rec {
     oauth2client
     google_api_python_client
     tqdm
+    setuptools
   ];
 
   meta = with stdenv.lib; {
