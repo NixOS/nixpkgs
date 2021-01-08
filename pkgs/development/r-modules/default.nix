@@ -3,7 +3,7 @@
 { R, pkgs, overrides }:
 
 let
-  inherit (pkgs) cacert fetchurl stdenv lib;
+  inherit (pkgs) cacert fetchurl fetchgit stdenv lib;
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix {
     inherit R;
@@ -36,11 +36,31 @@ let
     meta.platforms = R.meta.platforms;
     meta.hydraPlatforms = hydraPlatforms;
     meta.broken = broken;
-  });
+    });
 
   # Templates for generating Bioconductor and CRAN packages
   # from the name, version, sha256, and optional per-package arguments above
   #
+  deriveGithub = args :
+    lib.makeOverridable ({
+      name, version, sha256, url, rev,
+        depends ? [],
+        doCheck ? true,
+        requireX ? false,
+        broken ? false,
+        hydraPlatforms ? R.meta.hydraPlatforms
+      }: buildRPackage {
+     name = "${name}-${version}";
+     src = pkgs.fetchgit { inherit url; rev = rev; inherit sha256; };
+    inherit doCheck requireX;
+    propagatedBuildInputs = depends;
+    nativeBuildInputs = depends;
+    meta.homepage = url;
+    meta.platforms = R.meta.platforms;
+    meta.hydraPlatforms = hydraPlatforms;
+    meta.broken = broken;
+    });
+
   deriveBioc = mkDerive {
     mkHomepage = {name, biocVersion, ...}: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
     mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
@@ -218,6 +238,7 @@ let
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
   _self = { inherit buildRPackage; } //
+          import ./github-packages.nix { inherit self; derive = deriveGithub; } //
           import ./bioc-packages.nix { inherit self; derive = deriveBioc; } //
           import ./bioc-annotation-packages.nix { inherit self; derive = deriveBiocAnn; } //
           import ./bioc-experiment-packages.nix { inherit self; derive = deriveBiocExp; } //
