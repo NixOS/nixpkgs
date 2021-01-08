@@ -1,7 +1,7 @@
 { stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
-, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
+, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl, AppKit, Cocoa, CoreAudioKit, ForceFeedback, Foundation, MetalKit, libiconv
 , buildPackages }:
 
 let
@@ -72,8 +72,8 @@ in with stdenv.lib.licenses;
     core = "atari800";
     src = fetchRetro {
       repo = "libretro-" + core;
-      rev = "f9bf53b864344b8bbe8d425ed2f3c628eb10519c";
-      sha256 = "0sgk93zs423pwiqzvj0x1gfwcn9gacnlrrdq53ps395k64lig6lk";
+      rev = "8ce851fbca0d360763a267322f6a76c3c80ddae6";
+      sha256 = "026yjihqv2zda7lgxgawyy7c5h4v28v5qjsw7p0mxg1fqikzr7ga";
     };
     description = "Port of Atari800 to libretro";
     license = gpl2;
@@ -179,6 +179,7 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Mednafen's PSX Engine (with HW accel) core to libretro";
     license = gpl2;
+    broken = stdenv.isDarwin; # WIP
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
     makeFlags = [ "HAVE_VULKAN=1" "HAVE_OPENGL=1" "HAVE_HW=1" "HAVE_LIGHTREC=1" ];
@@ -290,8 +291,10 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Citra to libretro";
     license = gpl2Plus;
+    broken = stdenv.isDarwin; # WIP
     extraNativeBuildInputs = [ cmake pkgconfig ];
-    extraBuildInputs = [ libGLU libGL boost ];
+    extraBuildInputs = [ libGLU libGL boost ]
+      ++ stdenv.lib.optional stdenv.isDarwin libiconv;
     makefile = "Makefile";
     cmakeFlags = [
       "-DENABLE_LIBRETRO=ON"
@@ -345,16 +348,14 @@ in with stdenv.lib.licenses;
     license = gpl2Plus;
 
     extraNativeBuildInputs = [ cmake curl pkgconfig ];
-    extraBuildInputs = [
-      libGLU libGL pcre sfml
-      gettext hidapi
-      libevdev udev
-    ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ]);
+    extraBuildInputs = [ libGLU libGL pcre sfml gettext hidapi ]
+      ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ])
+      ++ stdenv.lib.optionals stdenv.isLinux [ libevdev udev ]
+      ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa CoreAudioKit ForceFeedback Foundation ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DCMAKE_BUILD_TYPE=Release"
       "-DLIBRETRO=ON"
-      "-DLIBRETRO_STATIC=1"
       "-DENABLE_QT=OFF"
       "-DENABLE_LTO=OFF"
       "-DUSE_UPNP=OFF"
@@ -394,6 +395,7 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Final Burn Alpha ~2012 to libretro";
     license = "Non-commercial";
+    broken = stdenv.isDarwin; # WIP
     makefile = "makefile.libretro";
     preBuild = "cd svn-current/trunk";
   };
@@ -408,6 +410,7 @@ in with stdenv.lib.licenses;
     description = "Port of FBNeo to libretro";
     license = "Non-commercial";
     makefile = "Makefile";
+    broken = stdenv.isDarwin; # WIP
     postPatch = ''
       sed -i -e 's:-Wall:-Wall -Wno-format-security:g' src/burner/libretro/Makefile
     '';
@@ -550,13 +553,16 @@ in with stdenv.lib.licenses;
     description = "Port of MAME to libretro";
     license = gpl2Plus;
 
-    extraBuildInputs = [ alsaLib libGLU libGL portaudio python27 xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL portaudio python27 xorg.libX11 ]
+      ++ stdenv.lib.optional stdenv.isLinux alsaLib
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libpcap Cocoa CoreAudioKit ForceFeedback Foundation MetalKit ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
       mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
     '';
     makefile = "Makefile.libretro";
+    makeFlags = [ "CC=cc" "CXX=c++" "LD=c++" ];
   };
 
   mame2000 = mkLibRetroCore rec {
@@ -606,7 +612,8 @@ in with stdenv.lib.licenses;
     description = "Port of MAME ~2010 to libretro";
     license = gpl2Plus;
     makefile = "Makefile";
-    makeFlags = stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
+    makeFlags = [ "CC_AS=cc" "CC=c++" "LD=c++" ]
+      ++ stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
   };
 
   mame2015 = mkLibRetroCore rec {
@@ -619,8 +626,9 @@ in with stdenv.lib.licenses;
     description = "Port of MAME ~2015 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
-    extraBuildInputs = [ alsaLib ];
+    extraBuildInputs = stdenv.lib.optional stdenv.isLinux alsaLib;
     makefile = "Makefile";
+    makeFlags = [ "REALCC=cc" "NATIVECC=c++" "CXX=c++" ];
   };
 
   mame2016 = mkLibRetroCore rec {
@@ -636,15 +644,31 @@ in with stdenv.lib.licenses;
         url = "https://github.com/libretro/mame2016-libretro/commit/5874fae3d124f5e7c8a91634f5473a8eac902e47.patch";
         sha256 = "061f1lcm72glksf475ikl8w10pnbgqa7049ylw06nikis2qdjlfn";
       })
+      (fetchpatch {
+        name = "fix_darwin_something.patch";
+        url = "https://github.com/mamedev/mame/commit/72869d504cbfabc88642998aee989bbbc361000e.patch";
+        sha256 = "0j5jlln6yba6lzxjgf4hs3ll4clqg6nsavf6liplcg756avl2y8b";
+        postFetch = ''
+          # Upstream dropped the double parentheses here since libretro
+          # made their snapshot.
+          sed -ri 's/LOG_DRIVE\((.+)\)/LOG_DRIVE((\1))/' $out
+        '';
+      })
     ];
     description = "Port of MAME ~2016 to libretro";
     license = gpl2Plus;
     extraNativeBuildInputs = [ python27 ];
-    extraBuildInputs = [ alsaLib ];
+    extraBuildInputs =
+      stdenv.lib.optional stdenv.isLinux alsaLib
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libpcap Cocoa CoreAudioKit ForceFeedback ];
     postPatch = ''
       # Prevent the failure during the parallel building of:
       # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
       mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
+      # Don't override the toolchain.  While makefile allows us to pass
+      # OVERRIDE_* to fix this, Makefile.libreto (which is our entry
+      # point) does not pass those along to makefile.
+      sed -ri '/^(CC|CXX|LD)\s*:?=/d' makefile 3rdparty/genie/build/*/genie.make
     '';
   };
 
@@ -695,6 +719,7 @@ in with stdenv.lib.licenses;
     };
     description = "Libretro port of Mupen64 Plus, GL only";
     license = gpl2;
+    broken = stdenv.isDarwin; # libretro/mupen64plus-libretro-nx#146
 
     extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
     makefile = "Makefile";
@@ -807,6 +832,7 @@ in with stdenv.lib.licenses;
     };
     description = "Fast MegaDrive/MegaCD/32X emulator";
     license = "MAME";
+    broken = stdenv.isDarwin; # WIP
 
     extraBuildInputs = [ libpng SDL ];
     SDL_CONFIG = "${SDL.dev}/bin/sdl-config";
@@ -824,8 +850,9 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Play! to libretro";
     license = bsd2;
-    extraBuildInputs = [ boost ];
     extraNativeBuildInputs = [ cmake openssl curl icu libGL libGLU xorg.libX11 ];
+    extraBuildInputs = [ boost ]
+      ++ stdenv.lib.optional stdenv.isDarwin Foundation;
     makefile = "Makefile";
     cmakeFlags = [ "-DBUILD_PLAY=OFF -DBUILD_LIBRETRO_CORE=ON" ];
     postBuild = "mv Source/ui_libretro/play_libretro${stdenv.hostPlatform.extensions.sharedLibrary} play_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -841,9 +868,16 @@ in with stdenv.lib.licenses;
     description = "ppsspp libretro port";
     license = gpl2;
     extraNativeBuildInputs = [ cmake pkgconfig ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg_3 python37 snappy xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL libzip ffmpeg_3 python37 snappy xorg.libX11 ]
+      ++ stdenv.lib.optional stdenv.isDarwin AppKit;
     makefile = "Makefile";
     cmakeFlags = [ "-DLIBRETRO=ON -DUSE_SYSTEM_FFMPEG=ON -DUSE_SYSTEM_SNAPPY=ON -DUSE_SYSTEM_LIBZIP=ON -DOpenGL_GL_PREFERENCE=GLVND" ];
+    postPatch = ''
+      ${stdenv.lib.optionalString stdenv.isDarwin ''
+      # -Bsymbolic is not supported by the macOS toolchain.
+      sed -i 's/-Wl,-Bsymbolic//' libretro/CMakeLists.txt
+      ''}
+    '';
     postBuild = "mv lib/ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary} ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";
   };
 
@@ -1068,6 +1102,7 @@ in with stdenv.lib.licenses;
     };
     description = "Port of Vecx to libretro";
     license = gpl3;
+    makeFlags = [ "ARCHFLAGS=" ];
   };
 
   virtualjaguar = mkLibRetroCore rec {
