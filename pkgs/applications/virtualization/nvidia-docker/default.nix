@@ -22,7 +22,7 @@ with lib; let
   ];
 
   nvidia-container-runtime = buildGoPackage rec {
-    pname = "nvidia-container-toolkit";
+    pname = "nvidia-container-runtime";
     version = "3.4.0";
     src = fetchFromGitHub {
       owner = "NVIDIA";
