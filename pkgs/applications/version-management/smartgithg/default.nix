@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , makeDesktopItem
-, jre
+, jdk11
 , gtk3
 , glib
 , gnome3
@@ -12,40 +12,39 @@
 
 stdenv.mkDerivation rec {
   pname = "smartgithg";
-  version = "19.1.1";
+  version = "20.1.4";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    sha256 = "0i0dvyy9d63f4hk8czlyk83ai0ywhqp7wbdkq3s87l7irwgs42jy";
+    sha256 = "107llzr8bf20h6kifqkjfdkpfmk89xh65gjack5rvqd37km6rc8r";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [ jre gnome3.adwaita-icon-theme gtk3 ];
+  buildInputs = [ jdk11 gnome3.adwaita-icon-theme gtk3 ];
 
   preFixup = with stdenv.lib; ''
     gappsWrapperArgs+=( \
-      --prefix PATH : ${makeBinPath [ jre which ]} \
+      --prefix PATH : ${makeBinPath [ jdk11 which ]} \
       --prefix LD_LIBRARY_PATH : ${makeLibraryPath [
         gtk3
         glib
         libXtst
       ]} \
-      --prefix JRE_HOME : ${jre} \
-      --prefix JAVA_HOME : ${jre} \
-      --prefix SMARTGITHG_JAVA_HOME : ${jre} \
+      --prefix JRE_HOME : ${jdk11} \
+      --prefix JAVA_HOME : ${jdk11} \
+      --prefix SMARTGITHG_JAVA_HOME : ${jdk11} \
     ) \
   '';
 
   installPhase = ''
     runHook preInstall
-
     sed -i '/ --login/d' bin/smartgit.sh
     mkdir -pv $out/{bin,share/applications,share/icons/hicolor/scalable/apps/}
     cp -av ./{dictionaries,lib} $out/
     cp -av bin/smartgit.sh $out/bin/smartgit
+    sed -i '1s/^/SWT_GTK3=0\n/' $out/bin/smartgit
     ln -sfv $out/bin/smartgit $out/bin/smartgithg
-
     cp -av $desktopItem/share/applications/* $out/share/applications/
     for icon_size in 32 48 64 128 256; do
         path=$icon_size'x'$icon_size
@@ -53,9 +52,7 @@ stdenv.mkDerivation rec {
         mkdir -p $out/share/icons/hicolor/$path/apps
         cp $icon $out/share/icons/hicolor/$path/apps/smartgit.png
     done
-
     cp -av bin/smartgit.svg $out/share/icons/hicolor/scalable/apps/
-
     runHook postInstall
   '';
 
@@ -89,6 +86,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.syntevo.com/smartgit/";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ jraygauthier ];
+    maintainers = with stdenv.lib.maintainers; [ jraygauthier novafacing ];
   };
 }
+
