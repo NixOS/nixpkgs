@@ -6506,7 +6506,7 @@ in
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
-  packagekit = callPackage ../tools/package-management/packagekit { };
+  packagekit = callPackage ../tools/package-management/packagekit { nix = nixUnstable; };
 
   packetdrill = callPackage ../tools/networking/packetdrill { };
 

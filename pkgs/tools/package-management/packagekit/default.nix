@@ -1,52 +1,63 @@
 { stdenv, fetchFromGitHub, lib
 , intltool, glib, pkgconfig, polkit, python3, sqlite
-, gobject-introspection, vala, gtk-doc, autoreconfHook, autoconf-archive
-, nix, enableNixBackend ? false, boost
+, gobject-introspection, vala, gtk-doc
+, nix, boost, meson, ninja, nlohmann_json
+, libxslt, libxml2, gst_all_1, gtk3
 , enableCommandNotFound ? false
 , enableBashCompletion ? false, bash-completion ? null
 , enableSystemd ? stdenv.isLinux, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "packagekit";
-  version = "1.1.13";
+  version = "1.2.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
-    owner = "hughsie";
+    owner = "matthewbauer";
     repo = "PackageKit";
-    rev = "PACKAGEKIT_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "0xmgac27p5z8wr56yw3cqhywnlvaf8kvyv1g0nzxnq167xj5vxam";
+    rev = "9a17f5e31d29df998c6254666cb0253536b3ab95";
+    sha256 = "009b1w06v0igqvsk0l8sndi28m6kqv3clbgx574gs8hv01gffwjn";
   };
 
-  buildInputs = [ glib polkit python3 gobject-introspection ]
-                  ++ lib.optional enableSystemd systemd
-                  ++ lib.optional enableBashCompletion bash-completion;
-  propagatedBuildInputs =
-    [ sqlite boost ]
-    ++ lib.optional enableNixBackend nix;
-  nativeBuildInputs = [ vala intltool pkgconfig autoreconfHook autoconf-archive gtk-doc ];
+  buildInputs = [
+    glib
+    polkit
+    python3
+    gobject-introspection
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gtk3
+    nlohmann_json
+  ] ++ lib.optional enableSystemd systemd
+    ++ lib.optional enableBashCompletion bash-completion;
+  propagatedBuildInputs = [
+    sqlite
+    boost
+    nix
+  ];
+  nativeBuildInputs = [
+    vala
+    intltool
+    pkgconfig
+    gtk-doc
+    meson
+    libxslt
+    libxml2
+    ninja
+  ];
 
-  preAutoreconf = ''
-    gtkdocize
-    intltoolize
-  '';
-
-  configureFlags = [
-    (if enableSystemd then "--enable-systemd" else "--disable-systemd")
-    "--disable-dummy"
-    "--disable-cron"
-    "--enable-introspection"
-    "--disable-offline-update"
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-    "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+  mesonFlags = [
+    (if enableSystemd then "-Dsystemd=true" else "-Dsystem=false")
+    "-Dpackaging_backend=nix"
+    "-Ddbus_sys=${placeholder "out"}/share/dbus-1/system.d"
+    "-Ddbus_services=${placeholder "out"}/share/dbus-1/system-services"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "-Dcron=false"
+    "-Dman_pages=false"
   ]
-  ++ lib.optional enableNixBackend "--enable-nix"
-  ++ lib.optional (!enableBashCompletion) "--disable-bash-completion"
-  ++ lib.optional (!enableCommandNotFound) "--disable-command-not-found";
+  ++ lib.optional (!enableBashCompletion) "-Dbash_completion=false"
+  ++ lib.optional (!enableCommandNotFound) "-Dbash_command_not_found=false";
 
   enableParallelBuilding = true;
 

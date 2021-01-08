@@ -6,10 +6,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   machine = { ... }: {
     environment.systemPackages = with pkgs; [ dbus ];
-    services.packagekit = {
-      enable = true;
-      backend = "test_nop";
-    };
+    services.packagekit.enable = true;
   };
 
   testScript = ''
