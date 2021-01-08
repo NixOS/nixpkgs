@@ -2,7 +2,7 @@
 , libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch
+, alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch, gsoap, zlib
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin ? null
@@ -14,6 +14,7 @@
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
+, enableWebService ? false
 }:
 
 with stdenv.lib;
@@ -59,7 +60,8 @@ in stdenv.mkDerivation {
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
     ++ optionals (headless) [ libXrandr libGL ]
-    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ];
+    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ]
+    ++ optionals (enableWebService) [ gsoap zlib ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
 
@@ -141,6 +143,10 @@ in stdenv.mkDerivation {
     PATH_QT5_X11_EXTRAS_INC        := ${getDev qtx11extras}/include
     TOOL_QT5_LRC                   := ${getDev qttools}/bin/lrelease
     ''}
+    ${optionalString (enableWebService) ''
+    # fix gsoap missing zlib include and produce errors with --as-needed
+    VBOX_GSOAP_CXX_LIBS := gsoapssl++ z
+    ''}
     LOCAL_CONFIG
 
     ./configure \
@@ -150,6 +156,7 @@ in stdenv.mkDerivation {
       ${optionalString (!pulseSupport) "--disable-pulse"} \
       ${optionalString (!enableHardening) "--disable-hardening"} \
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
+      ${optionalString (enableWebService) "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
@@ -176,7 +183,7 @@ in stdenv.mkDerivation {
       -name src -o -exec cp -avt "$libexec" {} +
 
     mkdir -p $out/bin
-    for file in ${optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
+    for file in ${optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} ${optionalString (enableWebService) "vboxwebsrv"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
         echo "Linking $file to /bin"
         test -x "$libexec/$file"
         ln -s "$libexec/$file" $out/bin/$file

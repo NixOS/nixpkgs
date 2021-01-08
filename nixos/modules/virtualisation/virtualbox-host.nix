@@ -6,7 +6,7 @@ let
   cfg = config.virtualisation.virtualbox.host;
 
   virtualbox = cfg.package.override {
-    inherit (cfg) enableHardening headless;
+    inherit (cfg) enableHardening headless enableWebService;
     extensionPack = if cfg.enableExtensionPack then pkgs.virtualboxExtpack else null;
   };
 
@@ -78,6 +78,14 @@ in
       description = ''
         Use VirtualBox installation without GUI and Qt dependency. Useful to enable on servers
         and when virtual machines are controlled only via SSH.
+      '';
+    };
+
+    enableWebService = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Build VirtualBox web service tool (vboxwebsrv) to allow managing VMs via other webpage frontend tools. Useful for headless servers.
       '';
     };
   };
