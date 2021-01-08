@@ -13,6 +13,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests zeroconf protobuf casttube ];
 
+  # no tests available
+  doCheck = false;
   pythonImportsCheck = [ "pychromecast" ];
 
   meta = with lib; {
