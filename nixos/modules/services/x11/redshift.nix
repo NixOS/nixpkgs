@@ -12,6 +12,8 @@ let
 
 in {
 
+  meta.maintainers = with maintainers; [ thiagokokada ];
+
   imports = [
     (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
       (config:
