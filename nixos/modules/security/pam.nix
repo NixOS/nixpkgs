@@ -125,7 +125,7 @@ let
       };
 
       fprintAuth = mkOption {
-        default = config.services.fprintd.enable;
+        default = config.services.fprintd.enable && config.services.fprintd.global;
         type = types.bool;
         description = ''
           If set, fingerprint reader will be used (if exists and
