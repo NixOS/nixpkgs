@@ -1,14 +1,29 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ stdenv, fetchFromGitHub, buildPythonPackage,
+  tkinter, xmlschema, docutils, pygments, pyyaml, enum34, enum-compat, pillow, lxml,
+  python }:
 
 buildPythonPackage rec {
   pname = "robotframework";
   version = "3.2.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a0786a916d0572bd9d6afe26e95c6021e3df5dcafa0ece6b302e36366e58c24e";
-    extension = "zip";
+  src = fetchFromGitHub {
+    owner = "robotframework";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0drsw2jm6qlx9j15lj71l5bwgmsqa36pcqq61rk02xy6zvsp68dd";
   };
+
+  propagatedBuildInputs = [ tkinter xmlschema docutils pygments pyyaml enum34 enum-compat pillow lxml ];
+
+  patches = [ ./unit-testing.patch ];
+
+  checkPhase = ''
+    # Unit tests (quick)
+    ${python.interpreter} utest/run.py
+
+    # Acceptance tests (these take a long time)
+    # ${python.interpreter} atest/run.py ${python.interpreter} --exclude no-ci atest/robot
+  '';
 
   meta = with stdenv.lib; {
     description = "Generic test automation framework";
