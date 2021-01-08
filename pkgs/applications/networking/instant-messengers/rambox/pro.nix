@@ -1,41 +1,8 @@
-{ autoPatchelfHook, electron_7, fetchurl, makeDesktopItem, makeWrapper, nodePackages, nss, stdenv, xdg_utils, xorg }:
+{ appimageTools, fetchurl, makeDesktopItem }:
 
 let
-  electron = electron_7;
-in
-stdenv.mkDerivation rec {
-  pname = "rambox-pro";
+  name = "ramboxpro";
   version = "1.4.1";
-
-  dontBuild = true;
-  dontStrip = true;
-
-  buildInputs = [ nss xorg.libXext xorg.libxkbfile xorg.libXScrnSaver ];
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper nodePackages.asar ];
-
-  src = fetchurl {
-    url = "https://github.com/ramboxapp/download/releases/download/v${version}/RamboxPro-${version}-linux-x64.tar.gz";
-    sha256 = "1bd4fba3ac8c20fa557ebfb110f6503d36e6c3dba0401d1073529dcae2c2ec1e";
-  };
-
-  installPhase = ''
-    mkdir -p $out/{bin,resources/dist/renderer/assets/images/app,share/applications,share/icons/hicolor/256x256/apps}
-
-    asar e resources/app.asar $out/resources
-
-    substituteInPlace "$out/resources/dist/electron/main.js" \
-      --replace ",isHidden:" ",path:\"$out/bin/ramboxpro\",isHidden:"
-
-    cp $desktopItem/share/applications/* $out/share/applications
-    cp $out/resources/dist/electron/imgs/256x256.png $out/share/icons/hicolor/256x256/apps/ramboxpro.png
-    cp $out/resources/dist/electron/imgs/256x256.png $out/resources/dist/renderer/assets/images/app/icon.png
-  '';
-
-  postFixup = ''
-    makeWrapper ${electron}/bin/electron $out/bin/ramboxpro \
-      --add-flags "$out/resources --without-update" \
-      --prefix PATH : ${xdg_utils}/bin
-  '';
 
   desktopItem = makeDesktopItem {
     name = "rambox-pro";
@@ -44,6 +11,23 @@ stdenv.mkDerivation rec {
     type = "Application";
     desktopName = "Rambox Pro";
     categories = "Network;";
+  };
+
+  src = fetchurl {
+    url = "https://github.com/ramboxapp/download/releases/download/v${version}/RamboxPro-${version}-linux-x64.AppImage";
+    name = "${name}.AppImage";
+    sha256 = "18383v3g26hd1czvw06gmjn8bdw2w9c7zb04zkfl6szgakrv26x4";
+  };
+
+  appimageContents = appimageTools.extract { inherit name src; };
+in appimageTools.wrapType2 rec {
+    inherit name src;
+
+    extraInstallCommands = ''
+      mkdir -p $out/share/applications $out/share/icons/hicolor/256x256/apps
+      cp ${desktopItem}/share/applications/* $out/share/applications
+      cp ${appimageContents}/usr/share/icons/hicolor/256x256/apps/ramboxpro.png $out/share/icons/hicolor/256x256/apps/ramboxpro.png
+    '';
   };
 
   meta = with stdenv.lib; {
