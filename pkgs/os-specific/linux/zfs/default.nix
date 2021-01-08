@@ -142,7 +142,8 @@ let
         done
 
         # Remove tests because they add a runtime dependency on gcc
-        rm -rf $out/share/zfs/zfs-tests
+        # TODO(mindavi): Should we optionally remove these? How does that work?
+        #rm -rf $out/share/zfs/zfs-tests
 
         # Add Bash completions.
         install -v -m444 -D -t $out/share/bash-completion/completions contrib/bash_completion.d/zfs
