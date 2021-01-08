@@ -3,9 +3,19 @@
 with lib;
 
 let
+  cfg = config.services.getty;
 
-  autologinArg = optionalString (config.services.getty.autologinUser != null) "--autologin ${config.services.getty.autologinUser}";
-  gettyCmd = extraArgs: "@${pkgs.util-linux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login ${autologinArg} ${extraArgs}";
+  loginArgs = [
+    "--login-program" "${pkgs.shadow}/bin/login"
+  ] ++ optionals (cfg.autologinUser != null) [
+    "--autologin" cfg.autologinUser
+  ] ++ optionals (cfg.loginOptions != null) [
+    "--login-options" cfg.loginOptions
+  ];
+
+  gettyCmd = extraArgs:
+    "@${pkgs.util-linux}/sbin/agetty agetty ${escapeShellArgs loginArgs} "
+      + extraArgs;
 
 in
 
@@ -28,6 +38,23 @@ in
           Username of the account that will be automatically logged in at the console.
           If unspecified, a login prompt is shown as usual.
         '';
+      };
+
+      loginOptions = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Template for arguments to be passed to
+          <citerefentry><refentrytitle>login</refentrytitle>
+          <manvolnum>1</manvolnum></citerefentry>.
+
+          See <citerefentry><refentrytitle>agetty</refentrytitle>
+          <manvolnum>1</manvolnum></citerefentry> for details,
+          including security considerations.  If unspecified, agetty
+          will not be invoked with a <option>--login-options</option>
+          option.
+        '';
+        example = "-h darkstar -- \u";
       };
 
       greetingLine = mkOption {

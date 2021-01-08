@@ -4453,6 +4453,18 @@ let
     meta.homepage = "https://github.com/qpkorr/vim-bufkill/";
   };
 
+  vim-capslock = buildVimPluginFrom2Nix {
+    pname = "vim-capslock";
+    version = "2021-01-07";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-capslock";
+      rev = "84c9e467a7b8e5aabf33674ed17c6356cf98777c";
+      sha256 = "1c2fr8s9im3vxrszsrzm6wvad6disbdslmq6lqdp4603ialy4kja";
+    };
+    meta.homepage = "https://github.com/tpope/vim-capslock/";
+  };
+
   vim-carbon-now-sh = buildVimPluginFrom2Nix {
     pname = "vim-carbon-now-sh";
     version = "2020-10-28";

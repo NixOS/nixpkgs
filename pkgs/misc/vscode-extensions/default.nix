@@ -63,12 +63,36 @@ let
         };
       };
 
+      brettm12345.nixfmt-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "nixfmt-vscode";
+          publisher = "brettm12345";
+          version = "0.0.1";
+          sha256 = "07w35c69vk1l6vipnq3qfack36qcszqxn8j3v332bl0w6m02aa7k";
+        };
+        meta = with stdenv.lib; {
+          license = licenses.mpl20;
+        };
+      };
+
       cmschuetz12.wal = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "wal";
           publisher = "cmschuetz12";
           version = "0.1.0";
           sha256 = "0q089jnzqzhjfnv0vlb5kf747s3mgz64r7q3zscl66zb2pz5q4zd";
+        };
+        meta = with stdenv.lib; {
+          license = licenses.mit;
+        };
+      };
+
+      coenraads.bracket-pair-colorizer-2 = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "bracket-pair-colorizer-2";
+          publisher = "CoenraadS";
+          version = "0.2.0";
+          sha256 = "0nppgfbmw0d089rka9cqs3sbd5260dhhiipmjfga3nar9vp87slh";
         };
         meta = with stdenv.lib; {
           license = licenses.mit;
@@ -107,6 +131,18 @@ let
         };
       };
 
+      formulahendry.auto-rename-tag = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "auto-rename-tag";
+          publisher = "formulahendry";
+          version = "0.1.6";
+          sha256 = "0cqg9mxkyf41brjq2c764w42lzyn6ffphw6ciw7xnqk1h1x8wwbs";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       golang.Go = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Go";
@@ -131,6 +167,18 @@ let
         };
       };
 
+      ibm.output-colorizer = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "output-colorizer";
+          publisher = "IBM";
+          version = "0.1.2";
+          sha256 = "0i9kpnlk3naycc7k8gmcxas3s06d67wxr3nnyv5hxmsnsx5sfvb7";
+        };
+        meta = with stdenv.lib; {
+          license = licenses.mit;
+        };
+      };
+
       james-yu.latex-workshop = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "latex-workshop";
@@ -140,6 +188,18 @@ let
         };
         meta = with stdenv.lib; {
           license = licenses.mit;
+        };
+      };
+
+      jnoortheen.nix-ide = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "nix-ide";
+          publisher = "jnoortheen";
+          version = "0.1.7";
+          sha256 = "1bw4wyq9abimxbhl7q9g8grvj2ax9qqq6mmqbiqlbsi2arvk0wrm";
+        };
+        meta =  {
+          license = stdenv.lib.licenses.mit;
         };
       };
 
@@ -297,8 +357,32 @@ let
         };
       };
 
+      tyriar.sort-lines = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "sort-lines";
+          publisher = "Tyriar";
+          version = "1.9.0";
+          sha256 = "0l4wibsjnlbzbrl1wcj18vnm1q4ygvxmh347jvzziv8f1l790qjl";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       vadimcn.vscode-lldb = callPackage ./vscode-lldb {
         lldb = llvmPackages_latest.lldb;
+      };
+
+      vincaslt.highlight-matching-tag = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "highlight-matching-tag";
+          publisher = "vincaslt";
+          version = "0.10.0";
+          sha256 = "1albwz3lc9i20if77inm1ipwws8apigvx24rbag3d1h3p4vwda49";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
       };
 
       ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare {};
