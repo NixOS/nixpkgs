@@ -3,6 +3,7 @@
 , lib
 , envoy
 , zip
+, nixosTests
 }:
 
 let
@@ -64,6 +65,10 @@ buildGoModule rec {
     install -Dm0755 $GOPATH/bin/pomerium $out/bin/pomerium
     install -Dm0755 $GOPATH/bin/pomerium-cli $out/bin/pomerium-cli
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) pomerium;
+  };
 
   meta = with lib; {
     homepage = "https://pomerium.io";

@@ -6,6 +6,7 @@
 , go
 , ninja
 , python3
+, nixosTests
 }:
 
 let
@@ -109,6 +110,11 @@ buildBazelPackage rec {
     "--cxxopt=-Wno-maybe-uninitialized"
     "--cxxopt=-Wno-uninitialized"
   ];
+
+  passthru.tests = {
+    # No tests for Envoy itself (yet), but it's tested as a core component of Pomerium.
+    inherit (nixosTests) pomerium;
+  };
 
   meta = with lib; {
     homepage = "https://envoyproxy.io";
