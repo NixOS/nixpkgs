@@ -66,6 +66,12 @@ let
             ++ optional service.debugTraceDisabled
             "--debug-trace-disabled"
             ++ map (e: "--env ${escapeShellArg e}") (mapAttrsToList (name: value: "${name}=${value}") service.environmentVariables)
+            ++ optionals (service.executor == "docker+machine") (
+              assert (
+                assertMsg (service.dockerImage != null)
+                  "dockerImage option is required for docker+machine executor (${name})");
+              [ "--docker-image ${service.dockerImage}" ]
+            )
             ++ optionals (service.executor == "docker") (
               assert (
                 assertMsg (service.dockerImage != null)
