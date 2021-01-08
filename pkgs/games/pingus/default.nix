@@ -18,5 +18,7 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
     maintainers = [stdenv.lib.maintainers.raskin];
     license = stdenv.lib.licenses.gpl3;
+    screenshotThumb = "https://screenshots.debian.net/thumbnail/pingus";
+    screenshotLarge = "https://screenshots.debian.net/screenshot/pingus";
   };
 }
