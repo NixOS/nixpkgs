@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
+{ stdenv, pkg-config, curl, darwin, libiconv, libgit2, libssh2,
   openssl, sqlite, zlib, dbus, dbus-glib, gdk-pixbuf, cairo, python3,
   libsodium, postgresql, gmp, foundationdb, ... }:
 
@@ -16,20 +16,20 @@ in
   };
 
   libz-sys = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ zlib ];
     extraLinkFlags = ["-L${zlib.out}/lib"];
   };
 
   curl-sys = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ zlib curl ];
     propagatedBuildInputs = [ curl zlib ];
     extraLinkFlags = ["-L${zlib.out}/lib"];
   };
 
   dbus = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ dbus ];
   };
 
@@ -65,22 +65,22 @@ in
 
   libgit2-sys = attrs: {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl zlib libgit2 ];
   };
 
   libsqlite3-sys = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ sqlite ];
   };
 
   libssh2-sys = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl zlib libssh2 ];
   };
 
   libdbus-sys = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ dbus ];
   };
 
@@ -89,12 +89,12 @@ in
   };
 
   openssl-sys = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl ];
   };
 
   pq-sys = attr: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ postgresql ];
   };
 
@@ -112,7 +112,7 @@ in
   };
 
   thrussh-libsodium = attrs: {
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libsodium ];
   };
 
