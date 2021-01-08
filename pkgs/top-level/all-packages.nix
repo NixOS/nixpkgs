@@ -10128,6 +10128,8 @@ in
 
   nrpl = callPackage ../development/tools/nrpl { };
 
+  nimlsp = callPackage ../development/tools/misc/nimlsp { };
+
   neko = callPackage ../development/compilers/neko { };
 
   nextpnr = callPackage ../development/compilers/nextpnr { };
@@ -20643,6 +20645,8 @@ in
 
   appeditor = callPackage ../applications/misc/appeditor { };
 
+  appgate-sdp = callPackage ../applications/networking/appgate-sdp { };
+
   apostrophe = callPackage ../applications/editors/apostrophe {
     pythonPackages = python3Packages;
   };
@@ -22298,6 +22302,8 @@ in
   swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
 
   tiramisu = callPackage ../applications/misc/tiramisu { };
+
+  rootbar = callPackage ../applications/misc/rootbar {};
 
   waybar = callPackage ../applications/misc/waybar {};
 
