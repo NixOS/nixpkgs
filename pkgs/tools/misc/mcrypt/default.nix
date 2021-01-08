@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     ./overflow_CVE-2012-4409.patch
     ./segv.patch
     ./sprintf_CVE-2012-4527.patch
+    ./malloc_to_stdlib.patch
   ];
 
   buildInputs = [ libmcrypt libmhash ];
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
       ever-wider range of algorithms and modes.
     '';
     homepage = "http://mcrypt.sourceforge.net";
-    license = stdenv.lib.licenses.gpl2;
+    license = stdenv.lib.licenses.gpl3Only;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.qknight ];
   };

@@ -5157,6 +5157,8 @@ in {
 
   pydenticon = callPackage ../development/python-modules/pydenticon { };
 
+  pydexcom = callPackage ../development/python-modules/pydexcom { };
+
   pydicom = callPackage ../development/python-modules/pydicom { };
 
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
