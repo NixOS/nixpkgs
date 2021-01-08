@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, getopt, lua, boost, pkgconfig, swig, perl, gcc }:
+{ stdenv, fetchFromGitLab, getopt, lua, boost, pkgconfig, swig, perl, gcc, buildPackages }:
 
 with stdenv.lib;
 
@@ -20,10 +20,13 @@ let
 
     buildInputs = [ getopt lua boost ];
 
-    prePatch = stdenv.lib.optionalString stdenv.cc.isClang ''
+    prePatch = (stdenv.lib.optionalString stdenv.cc.isClang ''
       substituteInPlace src/makefile \
           --replace 'CXX=g++' 'CXX=clang++'
-    '';
+    '') + (stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      substituteInPlace src/makefile \
+          --replace 'shell pkg-config' 'shell ${buildPackages.pkgconfig}/bin/${buildPackages.pkgconfig.targetPrefix}pkg-config'
+    '');
 
     preConfigure = ''
       makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/ CXX=$CXX AR=$AR"
