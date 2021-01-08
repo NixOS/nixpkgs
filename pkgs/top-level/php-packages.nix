@@ -388,10 +388,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         buildInputs = [ pcre' ] ++ lib.optionals (lib.versionAtLeast php.version "8.0") [
           valgrind.dev
         ];
-        # HAVE_OPCACHE_FILE_CACHE is defined in config.h, which is
-        # included from ZendAccelerator.h, but ZendAccelerator.h is
-        # included after the ifdef...
-        patches = [] ++ lib.optional (lib.versionAtLeast php.version "8.0") [ ../development/interpreters/php/fix-opcache-configure.patch ] ++lib.optional (lib.versionOlder php.version "7.4") [
+        patches = [] ++ lib.optional (lib.versionOlder php.version "7.4") [
           (pkgs.writeText "zend_file_cache_config.patch" ''
             --- a/ext/opcache/zend_file_cache.c
             +++ b/ext/opcache/zend_file_cache.c
