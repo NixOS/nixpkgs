@@ -46,6 +46,15 @@ in rec {
       };
     } ./flit-build-hook.sh) {};
 
+  buildBuildHook = callPackage ({ build, wheel }:
+    makeSetupHook {
+      name = "build-build-hook.sh";
+      deps = [ build wheel ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+      };
+    } ./build-build-hook.sh) {};
+
   pipBuildHook = callPackage ({ pip, wheel }:
     makeSetupHook {
       name = "pip-build-hook.sh";
