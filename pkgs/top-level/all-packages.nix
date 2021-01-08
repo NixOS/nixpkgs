@@ -22302,6 +22302,8 @@ in
 
   tiramisu = callPackage ../applications/misc/tiramisu { };
 
+  rootbar = callPackage ../applications/misc/rootbar {};
+
   waybar = callPackage ../applications/misc/waybar {};
 
   hikari = callPackage ../applications/window-managers/hikari { };
