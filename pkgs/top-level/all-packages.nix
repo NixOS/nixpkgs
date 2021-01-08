@@ -18511,6 +18511,8 @@ in
   };
   pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
+  pomerium = callPackage ../servers/http/pomerium { };
+
   postgrey = callPackage ../servers/mail/postgrey { };
 
   pshs = callPackage ../servers/http/pshs { };
