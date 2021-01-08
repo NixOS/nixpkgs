@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitLab, writeText }:
-
 let
   localConfig = writeText "config.local.php" ''
     <?php
@@ -9,13 +8,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jirafeau";
-  version = "4.1.1";
+  version = "4.3.0";
 
   src = fetchFromGitLab {
     owner = "mojo42";
     repo = "Jirafeau";
     rev = version;
-    sha256 = "09gq5zhynygpqj0skq7ifnn9yjjg7qnc6kjvaas7f53av2707z4c";
+    hash = "sha256-9v6rtxViXsolx5AKSp2HxcFyU1XJWFSiqzTBl+dQBD4=";
   };
 
   installPhase = ''
