@@ -8331,7 +8331,6 @@ broken-packages:
   - NoSlow
   - not-gloss-examples
   - notcpp
-  - nothunks
   - notifications-tray-icon
   - notmuch-haskell
   - notmuch-web
