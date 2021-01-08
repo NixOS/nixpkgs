@@ -106,10 +106,26 @@ in
         ];
       };
     };
-    security.acme.certs = mkIf (cfg.useACMEHost != null) {
-      ${cfg.useACMEHost}.postRun = mkAfter ''
-        /run/current-system/systemd/bin/systemctl -q is-active pomerium.service && /run/current-system/systemd/bin/systemctl restart pomerium.service
-      '';
+
+    # postRun hooks on cert renew can't be used to restart Nginx since renewal
+    # runs as the unprivileged acme user. sslTargets are added to wantedBy + before
+    # which allows the acme-finished-$cert.target to signify the successful updating
+    # of certs end-to-end.
+    systemd.services.pomerium-config-reload = mkIf (cfg.useACMEHost != null) {
+      # TODO(lukegb): figure out how to make config reloading work with credentials.
+
+      wantedBy = [ "acme-finished-${cfg.useACMEHost}.target" "multi-user.target" ];
+      # Before the finished targets, after the renew services.
+      before = [ "acme-finished-${cfg.useACMEHost}.target" ];
+      after = [ "acme-${cfg.useACMEHost}.service" ];
+      # Block reloading if not all certs exist yet.
+      unitConfig.ConditionPathExists = [ "${certs.${cfg.useACMEHost}.directory}/fullchain.pem" ];
+      serviceConfig = {
+        Type = "oneshot";
+        TimeoutSec = 60;
+        ExecCondition = "/run/current-system/systemd/bin/systemctl -q is-active pomerium.service";
+        ExecStart = "/run/current-system/systemd/bin/systemctl restart pomerium.service";
+      };
     };
   });
 }
