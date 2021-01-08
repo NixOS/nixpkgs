@@ -87,6 +87,18 @@ let
         };
       };
 
+      coenraads.bracket-pair-colorizer-2 = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "bracket-pair-colorizer-2";
+          publisher = "CoenraadS";
+          version = "0.2.0";
+          sha256 = "0nppgfbmw0d089rka9cqs3sbd5260dhhiipmjfga3nar9vp87slh";
+        };
+        meta = with stdenv.lib; {
+          license = licenses.mit;
+        };
+      };
+
       dhall.dhall-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dhall-lang";
