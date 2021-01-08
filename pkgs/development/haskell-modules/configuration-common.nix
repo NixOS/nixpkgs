@@ -1552,4 +1552,8 @@ self: super: {
   servant-client      = doJailbreak super.servant-client;
   servant-client-core = doJailbreak super.servant-client-core;
 
+  # overly strict dependency on aeson
+  # https://github.com/jaspervdj/profiteur/issues/33
+  profiteur = doJailbreak super.profiteur;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -8982,7 +8982,6 @@ broken-packages:
   - prof-flamegraph
   - prof2dot
   - prof2pretty
-  - profiteur
   - profunctor-monad
   - progress
   - progress-meter
