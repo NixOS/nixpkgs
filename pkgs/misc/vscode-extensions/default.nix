@@ -313,6 +313,18 @@ let
         lldb = llvmPackages_latest.lldb;
       };
 
+      vincaslt.highlight-matching-tag = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "highlight-matching-tag";
+          publisher = "vincaslt";
+          version = "0.10.0";
+          sha256 = "1albwz3lc9i20if77inm1ipwws8apigvx24rbag3d1h3p4vwda49";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare {};
 
       vscodevim.vim = buildVscodeMarketplaceExtension {
