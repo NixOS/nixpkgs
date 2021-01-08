@@ -3885,6 +3885,8 @@ in {
 
   minidb = callPackage ../development/python-modules/minidb { };
 
+  minidump = callPackage ../development/python-modules/minidump { };
+
   minimock = callPackage ../development/python-modules/minimock { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override { inherit python; })).py;
