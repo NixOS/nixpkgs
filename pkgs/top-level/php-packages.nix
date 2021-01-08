@@ -78,6 +78,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     mongodb = callPackage ../development/php-packages/mongodb { };
 
+    msgpack = callPackage ../development/php-packages/msgpack { };
+
     oci8 = callPackage ../development/php-packages/oci8 { };
 
     pcov = callPackage ../development/php-packages/pcov { };
@@ -127,6 +129,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     redis = callPackage ../development/php-packages/redis { };
 
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
+
+    ssh2 = callPackage ../development/php-packages/ssh2 { };
 
     v8 = buildPecl {
       version = "0.2.2";
