@@ -19,8 +19,8 @@
 } @ args:
 
 import ./default.nix {
-  rustcVersion = "1.48.0";
-  rustcSha256 = "0fz4gbb5hp5qalrl9lcl8yw4kk7ai7wx511jb28nypbxninkwxhf";
+  rustcVersion = "1.49.0";
+  rustcSha256 = "sha256-tQrvqN8f38m8yv2/N67mEcjf6Bv1ZI1fQ2mcUCidx3k=";
 
   llvmSharedForBuild = pkgsBuildBuild.llvm_11.override { enableSharedLibraries = true; };
   llvmSharedForHost = pkgsBuildHost.llvm_11.override { enableSharedLibraries = true; };
@@ -33,20 +33,20 @@ import ./default.nix {
 
   # Note: the version MUST be one version prior to the version we're
   # building
-  bootstrapVersion = "1.47.0";
+  bootstrapVersion = "1.48.0";
 
   # fetch hashes by running `print-hashes.sh 1.45.2`
   bootstrapHashes = {
-    i686-unknown-linux-gnu = "84bf092130ea5216fc701871e633563fc1c01b6528f60cb0767e96cd8eec30bf";
-    x86_64-unknown-linux-gnu = "d0e11e1756a072e8e246b05d54593402813d047d12e44df281fbabda91035d96";
-    arm-unknown-linux-gnueabihf = "82e12affb47596b68d0ca64045f4eb698c10ff15406afca604e12cdd07e17b26";
-    armv7-unknown-linux-gnueabihf = "19d0fe3892a8e98f99c5aa84f4d6f260853147650cb71f2bae985c91de6c29af";
-    aarch64-unknown-linux-gnu = "753c905e89a714ab9bce6fe1397b721f29c0760c32f09d2f328af3d39919c8e6";
-    x86_64-apple-darwin = "84e5be6c5c78734deba911dcf80316be1e4c7da2c59413124d039ad96620612f";
-    powerpc64le-unknown-linux-gnu = "5760c3b1897ea70791320c2565f3eef700a3d54059027b84bbe6b8d6157f81c8";
+    i686-unknown-linux-gnu = "7fdb8836a1f0427d5b47e6a2d496f67ebff04350407411f57cf20c9b3544e26f";
+    x86_64-unknown-linux-gnu = "950420a35b2dd9091f1b93a9ccd5abc026ca7112e667f246b1deb79204e2038b";
+    arm-unknown-linux-gnueabihf = "e68a81eebd4570343a0fc35cb8ee24cad911d6cee2e374f284b76546ca6636d5";
+    armv7-unknown-linux-gnueabihf = "3aed4a63ebdd57690a31d11afbe95e6407edc224a6769be5694a1ed43bf899cb";
+    aarch64-unknown-linux-gnu = "c4769418d8d89f432e4a3a21ad60f99629e4b13bbfc29aef7d9d51c4e8ee8a8a";
+    x86_64-apple-darwin = "20e727cad10f43e3abcedb2a80979ae26923038e0e8a855e8a783da255054113";
+    powerpc64le-unknown-linux-gnu = "e6457a0214f3b1b04bd5b2618bba7e3826e254216420dede2971b571a1c13bb1";
   };
 
-  selectRustPackage = pkgs: pkgs.rust_1_48;
+  selectRustPackage = pkgs: pkgs.rust_1_49;
 
   rustcPatches = [
   ];
