@@ -111,8 +111,8 @@ let
         mktplcRef = {
           name = "auto-rename-tag";
           publisher = "formulahendry";
-          version = "0.1.5";
-          sha256 = "1ic3nxpcan8wwwzwm099plkn7fdy0zz2575rh4znc4sqgcqywh2i";
+          version = "0.1.6";
+          sha256 = "0cqg9mxkyf41brjq2c764w42lzyn6ffphw6ciw7xnqk1h1x8wwbs";
         };
         meta = {
           license = stdenv.lib.licenses.mit;
