@@ -1,14 +1,21 @@
-{ stdenv, fetchFromGitHub, python2Packages, gnupg1orig, openssl, git }:
+{ stdenv
+, fetchFromGitHub
+, python2Packages
+, gnupg
+, openssl
+, git
+, tor
+}:
 
 python2Packages.buildPythonApplication rec {
   pname = "mailpile";
-  version = "1.0.0rc2";
+  version = "1.0.0rc6";
 
   src = fetchFromGitHub {
     owner = "mailpile";
     repo = "Mailpile";
     rev = version;
-    sha256 = "1z5psh00fjr8gnl4yjcl4m9ywfj24y1ffa2rfb5q8hq4ksjblbdj";
+    sha256 = "13pj494dx5gjf6x4bazh586vqmaqq8ycvw2k65280md1yc79b6l1";
   };
 
   postPatch = ''
@@ -22,17 +29,27 @@ python2Packages.buildPythonApplication rec {
     appdirs
     cryptography
     fasteners
-    gnupg1orig
+    gnupg
     jinja2
     pgpdump
     pillow
-    python2Packages.lxml
+    lxml
     spambayes
+    stem
+    pysocks
+    icalendar
+    imgsize
   ];
+
+  patches = [ ./underscores.patch ];
 
   postInstall = ''
     wrapProgram $out/bin/mailpile \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg1orig openssl ]}" \
+      --set-default MAILPILE_GNUPG "${gnupg}/bin/gpg" \
+      --set-default MAILPILE_GNUPG_GA "${gnupg}/bin/gpg-agent" \
+      --set-default MAILPILE_GNUPG_DM "${gnupg}/bin/dirmngr" \
+      --set-default MAILPILE_OPENSSL "${openssl}/bin/openssl" \
+      --set-default MAILPILE_TOR "${tor}/bin/tor" \
       --set-default MAILPILE_SHARED "$out/share/mailpile"
   '';
 
@@ -45,8 +62,5 @@ python2Packages.buildPythonApplication rec {
     license = [ licenses.asl20 licenses.agpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
-    knownVulnerabilities = [
-      "Numerous and uncounted, upstream has requested we not package it. See more: https://github.com/NixOS/nixpkgs/pull/23058#issuecomment-283515104"
-    ];
   };
 }
