@@ -321,6 +321,18 @@ let
         };
       };
 
+      tyriar.sort-lines = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "sort-lines";
+          publisher = "Tyriar";
+          version = "1.9.0";
+          sha256 = "0l4wibsjnlbzbrl1wcj18vnm1q4ygvxmh347jvzziv8f1l790qjl";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       vadimcn.vscode-lldb = callPackage ./vscode-lldb {
         lldb = llvmPackages_latest.lldb;
       };
