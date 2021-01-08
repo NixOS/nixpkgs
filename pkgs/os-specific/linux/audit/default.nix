@@ -1,8 +1,14 @@
-{
-  stdenv, buildPackages, fetchurl, fetchpatch,
-  runCommand,
-  autoconf, automake, libtool,
-  enablePython ? false, python ? null,
+{ stdenv
+, buildPackages
+, fetchurl
+, fetchpatch
+, runCommand
+, autoconf
+, automake
+, libtool
+, enablePython ? false
+, python ? null
+,
 }:
 
 assert enablePython -> python != null;
@@ -33,25 +39,29 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # TODO: Remove the musl patches when
-  #         https://github.com/linux-audit/audit-userspace/pull/25
-  #       is available with the next release.
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl [
+  patches = [
+    # This patch allows us to use binary/directory permissions 0555 or 0550,
+    # which are the default ones for the nix store.
+    ./allowed-permissions.patch
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl [
+    # TODO: Remove the musl patches when
+    #         https://github.com/linux-audit/audit-userspace/pull/25
+    #       is available with the next release.
     (
       let patch = fetchpatch {
-            url = "https://github.com/linux-audit/audit-userspace/commit/d579a08bb1cde71f939c13ac6b2261052ae9f77e.patch";
-            name = "Add-substitue-functions-for-strndupa-rawmemchr.patch";
-            sha256 = "015bvzflg1s1k5viap30nznlpjj44a66khyc8yq0waa68qwvdlsd";
-          };
+        url = "https://github.com/linux-audit/audit-userspace/commit/d579a08bb1cde71f939c13ac6b2261052ae9f77e.patch";
+        name = "Add-substitue-functions-for-strndupa-rawmemchr.patch";
+        sha256 = "015bvzflg1s1k5viap30nznlpjj44a66khyc8yq0waa68qwvdlsd";
+      };
       in
-        runCommand "Add-substitue-functions-for-strndupa-rawmemchr.patch-fix-copyright-merge-conflict" {} ''
+      runCommand "Add-substitue-functions-for-strndupa-rawmemchr.patch-fix-copyright-merge-conflict" { } ''
           cp ${patch} $out
           substituteInPlace $out --replace \
               '-* Copyright (c) 2007-09,2011-16,2018 Red Hat Inc., Durham, North Carolina.' \
               '-* Copyright (c) 2007-09,2011-16 Red Hat Inc., Durham, North Carolina.'
         ''
-    )
-  ];
+      )
+    ];
 
   prePatch = ''
     sed -i 's,#include <sys/poll.h>,#include <poll.h>\n#include <limits.h>,' audisp/audispd.c
