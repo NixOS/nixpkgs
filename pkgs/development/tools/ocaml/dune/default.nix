@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, opaline }:
+{ stdenv, fetchurl, ocaml, findlib }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
 then throw "dune is not available for OCaml ${ocaml.version}"
@@ -15,14 +15,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ];
 
   buildFlags = [ "release" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "LIBDIR=$(OCAMLFIND_DESTDIR)"
+  ];
 
   dontAddPrefix = true;
-
-  installPhase = ''
-    runHook preInstall
-    ${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR
-    runHook postInstall
-  '';
 
   meta = {
     homepage = "https://dune.build/";
