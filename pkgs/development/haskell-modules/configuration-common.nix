@@ -217,7 +217,24 @@ self: super: {
   # building of the executable has been disabled for ghc < 8.10 in hnix.
   # Generating the completions should be activated again, once we default to
   # ghc 8.10.
-  hnix = dontCheck super.hnix;
+  hnix = dontCheck (super.hnix.override {
+
+    #  2021-01-07: NOTE: hnix-store-core pinned at ==0.2 in Stackage Nightly.
+    # https://github.com/haskell-nix/hnix-store/issues/104
+    # Until unpin, which may hold off in time due to Stackage maintenence bottleneck
+    # the 0_4_0_0 is used
+    hnix-store-core = self.hnix-store-core_0_4_0_0; # at least 1.7
+
+  });
+
+  #  2021-01-07: NOTE: hnix-store-core pinned at ==0.2 in Stackage Nightly.
+  # https://github.com/haskell-nix/hnix-store/issues/104
+  # Until unpin, which may hold off in time due to Stackage maintenence bottleneck
+  # the 0_4_0_0 is used
+  hnix-store-remote = (super.hnix-store-remote.override {
+    hnix-store-core = self.hnix-store-core_0_4_0_0; # at least 1.7
+  });
+
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -805,11 +822,20 @@ self: super: {
   # Needs QuickCheck <2.10, HUnit <1.6 and base <4.10
   pointfree = doJailbreak super.pointfree;
 
-  # Depends on base <4.12
-  # See https://github.com/haskell-hvr/cryptohash-sha512/pull/3
-  # , https://github.com/haskell-hvr/cryptohash-sha512/issues/4
-  # and https://github.com/haskell-hvr/cryptohash-sha512/pull/5
-  cryptohash-sha512 = doJailbreak super.cryptohash-sha512;
+  # The project is stale
+  #
+  # Archiving request: https://github.com/haskell-hvr/cryptohash-sha512/issues/6
+  #
+  # doJailbreak since base <4.12 && bytestring <0.11
+  # Request to support:
+  # https://github.com/haskell-hvr/cryptohash-sha512/issues/4
+  # PRs to support base <4.12:
+  # https://github.com/haskell-hvr/cryptohash-sha512/pull/3
+  # https://github.com/haskell-hvr/cryptohash-sha512/pull/5
+  #
+  # dontCheck since test suite does not support new `base16-bytestring` >= 1 format
+  # https://github.com/haskell-hvr/cryptohash-sha512/pull/5#issuecomment-752796913
+  cryptohash-sha512 = dontCheck (doJailbreak super.cryptohash-sha512);
 
   # Depends on tasty < 1.x, which we don't have.
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
