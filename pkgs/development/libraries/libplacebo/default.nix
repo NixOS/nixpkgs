@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
   pname = "libplacebo";
   version = "2.72.2";
 
+  patches = [
+    ./glsl-import.patch
+  ];
+
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
