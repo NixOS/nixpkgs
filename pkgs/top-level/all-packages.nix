@@ -813,7 +813,9 @@ in
 
   wayst = callPackage ../applications/terminal-emulators/wayst { };
 
-  wezterm = callPackage ../applications/terminal-emulators/wezterm { };
+  wezterm = callPackage ../applications/terminal-emulators/wezterm {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics Foundation;
+  };
 
   x3270 = callPackage ../applications/terminal-emulators/x3270 { };
 
@@ -2509,6 +2511,8 @@ in
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
 
   mpd-mpris = callPackage ../tools/audio/mpd-mpris { };
+
+  mpris-scrobbler = callPackage ../tools/audio/mpris-scrobbler { };
 
   mq-cli = callPackage ../tools/system/mq-cli { };
 
@@ -6599,6 +6603,8 @@ in
 
   pbzip2 = callPackage ../tools/compression/pbzip2 { };
 
+  pcimem = callPackage ../os-specific/linux/pcimem { };
+
   pciutils = callPackage ../tools/system/pciutils { };
 
   pcsclite = callPackage ../tools/security/pcsclite {
@@ -7711,6 +7717,8 @@ in
 
   su = shadow.su;
 
+  subjs = callPackage ../tools/security/subjs { };
+
   subsonic = callPackage ../servers/misc/subsonic { };
 
   subfinder = callPackage ../tools/networking/subfinder { };
@@ -7761,6 +7769,10 @@ in
   t = callPackage ../tools/misc/t { };
 
   tabnine = callPackage ../development/tools/tabnine { };
+
+  tab-rs = callPackage ../tools/misc/tab-rs {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   t1utils = callPackage ../tools/misc/t1utils { };
 
@@ -9038,6 +9050,8 @@ in
   bluespec = callPackage ../development/compilers/bluespec {
     gmp-static = gmp.override { withStatic = true; };
   };
+
+  cakelisp = callPackage ../development/compilers/cakelisp { };
 
   ciao = callPackage ../development/compilers/ciao { };
 
@@ -14819,6 +14833,8 @@ in
 
   libs3 = callPackage ../development/libraries/libs3 { };
 
+  libschrift = callPackage ../development/libraries/libschrift { };
+
   libsearpc = callPackage ../development/libraries/libsearpc { };
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
@@ -19002,7 +19018,7 @@ in
         kernelPatches.tag_hardened
         kernelPatches.hardened.${kernel.meta.branch}
       ];
-      modDirVersionArg = kernel.modDirVersion + "-hardened";
+      modDirVersionArg = kernel.modDirVersion + (kernelPatches.hardened.${kernel.meta.branch}).extra + "-hardened";
       isHardened = true;
   });
 
@@ -21553,7 +21569,7 @@ in
 
   geoipupdate = callPackage ../applications/misc/geoipupdate/default.nix { };
 
-  ghostwriter = libsForQt514.callPackage ../applications/editors/ghostwriter { };
+  ghostwriter = libsForQt5.callPackage ../applications/editors/ghostwriter { };
 
   gitweb = callPackage ../applications/version-management/git-and-tools/gitweb { };
 
@@ -23525,6 +23541,12 @@ in
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
 
   muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
+
+  nufraw = callPackage ../applications/graphics/nufraw/default.nix { };
+
+  nufraw-thumbnailer = callPackage ../applications/graphics/nufraw/default.nix {
+    addThumbnailer = true;
+  };
 
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
@@ -25656,7 +25678,19 @@ in
 
   zscroll = callPackage ../applications/misc/zscroll {};
 
-  zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
+  zynaddsubfx = zyn-fusion;
+
+  zynaddsubfx-fltk = callPackage ../applications/audio/zynaddsubfx {
+    guiModule = "fltk";
+  };
+
+  zynaddsubfx-ntk = callPackage ../applications/audio/zynaddsubfx {
+    guiModule = "ntk";
+  };
+
+  zyn-fusion = callPackage ../applications/audio/zynaddsubfx {
+    guiModule = "zest";
+  };
 
   ### BLOCKCHAINS / CRYPTOCURRENCIES / WALLETS
 
@@ -27004,6 +27038,8 @@ in
   ezminc = callPackage ../applications/science/biology/EZminc { };
 
   exonerate = callPackage ../applications/science/biology/exonerate { };
+
+  fastp = callPackage ../applications/science/biology/fastp { };
 
   hisat2 = callPackage ../applications/science/biology/hisat2 { };
 

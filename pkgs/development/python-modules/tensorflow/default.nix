@@ -1,13 +1,13 @@
-{ stdenv, pkgs, bazel_0_26, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+{ stdenv, pkgs, bazel_3, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
 , addOpenGLRunpath
 # Python deps
 , buildPythonPackage, isPy3k, isPy27, pythonOlder, pythonAtLeast, python
 # Python libraries
-, numpy, tensorflow-tensorboard_1, backports_weakref, mock, enum34, absl-py
+, numpy, tensorflow-tensorboard_2, backports_weakref, mock, enum34, absl-py
 , future, setuptools, wheel, keras-preprocessing, keras-applications, google-pasta
 , functools32
-, opt-einsum
-, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_1
+, opt-einsum, astunparse, h5py
+, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_2
 # Common deps
 , git, swig, which, binutils, glibcLocales, cython
 # Common libraries
@@ -17,12 +17,12 @@
 # that in nix as well. It would make some things easier and less confusing, but
 # it would also make the default tensorflow package unfree. See
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
-, cudaSupport ? false, nvidia_x11 ? null, cudatoolkit ? null, cudnn ? null, nccl ? null
+, cudaSupport ? false, cudatoolkit ? null, cudnn ? null, nccl ? null
 , mklSupport ? false, mkl ? null
 # XLA without CUDA is broken
 , xlaSupport ? cudaSupport
 # Default from ./configure script
-, cudaCapabilities ? [ "3.5" "5.2" ]
+, cudaCapabilities ? [ "sm_35" "sm_50" "sm_60" "sm_70" "sm_75" "compute_80" ]
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
 , avx2Support  ? stdenv.hostPlatform.avx2Support
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
@@ -30,8 +30,7 @@
 , Foundation, Security
 }:
 
-assert cudaSupport -> nvidia_x11 != null
-                   && cudatoolkit != null
+assert cudaSupport -> cudatoolkit != null
                    && cudnn != null;
 
 # unsupported combination
@@ -47,6 +46,7 @@ let
     paths = [
       cudatoolkit.lib
       cudatoolkit.out
+    ] ++ lib.optionals (lib.versionOlder cudatoolkit.version "11") [
       # for some reason some of the required libs are in the targets/x86_64-linux
       # directory; not sure why but this works around it
       "${cudatoolkit}/targets/${stdenv.system}"
@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "1.15.4";
+  version = "2.3.2";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -97,51 +97,26 @@ let
 
   bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
-    bazel = bazel_0_26;
+    bazel = bazel_3;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "0lg8ahyr2k7dmp0yfypk8ivl9a0xcg3j0f0dakmn5ljk8nsji0bj";
+      sha256 = "sha256-ncwIkqLDqrB33pB9/FTlBklsIJUEvnDUmyAeUfufCFs=";
     };
 
     patches = [
-      # Work around https://github.com/tensorflow/tensorflow/issues/24752
-      ../no-saved-proto.patch
       # Fixes for NixOS jsoncpp
-      ../system-jsoncpp.patch
+      ./system-jsoncpp.patch
 
-      # https://github.com/tensorflow/tensorflow/pull/29673
-      (fetchpatch {
-        name = "fix-compile-with-cuda-and-mpi.patch";
-        url = "https://github.com/tensorflow/tensorflow/pull/29673/commits/498e35a3bfe38dd75cf1416a1a23c07c3b59e6af.patch";
-        sha256 = "1m2qmwv1ysqa61z6255xggwbq6mnxbig749bdvrhnch4zydxb4di";
-      })
-      (fetchpatch {
-        name = "backport-pr-18950.patch";
-        url = "https://github.com/tensorflow/tensorflow/commit/73640aaec2ab0234d9fff138e3c9833695570c0a.patch";
-        sha256 = "1n9ypbrx36fc1kc9cz5b3p9qhg15xxhq4nz6ap3hwqba535nakfz";
-      })
+      ./relax-dependencies.patch
 
+      # see https://github.com/tensorflow/tensorflow/issues/40688
       (fetchpatch {
-        # be compatible with gast >0.2 instead of only gast 0.2.2
-        name = "gast-update.patch";
-        url = "https://github.com/tensorflow/tensorflow/commit/85751ad6c7f5fd12c6c79545d96896cba92fa8b4.patch";
-        sha256 = "077cpj0kzyqxzdya1dwh8df17zfzhqn7c685hx6iskvw2979zg2n";
-      })
-      ./lift-gast-restriction.patch
-
-      (fetchpatch {
-        # fix compilation with numpy >= 1.19
-        name = "add-const-overload.patch";
         url = "https://github.com/tensorflow/tensorflow/commit/75ea0b31477d6ba9e990e296bbbd8ca4e7eebadf.patch";
         sha256 = "1xp1icacig0xm0nmb05sbrf4nw4xbln9fhc308birrv8286zx7wv";
       })
-
-      # cuda 10.2 does not have "-bin2c-path" option anymore
-      # https://github.com/tensorflow/tensorflow/issues/34429
-      ../cuda-10.2-no-bin2c-path.patch
     ];
 
     # On update, it can be useful to steal the changes from gentoo
@@ -158,7 +133,7 @@ let
       git
 
       # libs taken from system through the TF_SYS_LIBS mechanism
-      # grpc
+      grpc
       sqlite
       openssl
       jsoncpp
@@ -176,7 +151,6 @@ let
     ] ++ lib.optionals cudaSupport [
       cudatoolkit
       cudnn
-      nvidia_x11
     ] ++ lib.optionals mklSupport [
       mkl
     ] ++ lib.optionals stdenv.isDarwin [
@@ -193,25 +167,26 @@ let
     TF_SYSTEM_LIBS = lib.concatStringsSep "," [
       "absl_py"
       "astor_archive"
+      "astunparse_archive"
       "boringssl"
       # Not packaged in nixpkgs
       # "com_github_googleapis_googleapis"
       # "com_github_googlecloudplatform_google_cloud_cpp"
+      "com_github_grpc_grpc"
       "com_google_protobuf"
       "com_googlesource_code_re2"
       "curl"
       "cython"
       "double_conversion"
+      "enum34_archive"
       "flatbuffers"
+      "functools32_archive"
       "gast_archive"
-      "gif_archive"
-      # Lots of errors, requires an older version
-      # "grpc"
+      "gif"
       "hwloc"
       "icu"
-      "jpeg"
       "jsoncpp_git"
-      "keras_applications_archive"
+      "libjpeg_turbo"
       "lmdb"
       "nasm"
       # "nsync" # not packaged in nixpkgs
@@ -219,13 +194,14 @@ let
       "org_sqlite"
       "pasta"
       "pcre"
-      "png_archive"
+      "png"
+      "pybind11"
       "six_archive"
       "snappy"
       "swig"
       "termcolor_archive"
       "wrapt"
-      "zlib_archive"
+      "zlib"
     ];
 
     INCLUDEDIR = "${includes_joined}/include";
@@ -248,22 +224,20 @@ let
     TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
 
     postPatch = ''
-      # https://github.com/tensorflow/tensorflow/issues/20919
-      sed -i '/androidndk/d' tensorflow/lite/kernels/internal/BUILD
-
       # Tensorboard pulls in a bunch of dependencies, some of which may
       # include security vulnerabilities. So we make it optional.
       # https://github.com/tensorflow/tensorflow/issues/20280#issuecomment-400230560
       sed -i '/tensorboard >=/d' tensorflow/tools/pip_package/setup.py
 
-      substituteInPlace tensorflow/tools/pip_package/setup.py \
-        --replace "numpy >= 1.16.0, < 1.19.0" "numpy >= 1.16.0"
+      # numpy 1.19 added in https://github.com/tensorflow/tensorflow/commit/75ea0b31477d6ba9e990e296bbbd8ca4e7eebadf.patch
+      sed -i 's/numpy >= 1.16.0, < 1.19.0/numpy >= 1.16.0/' tensorflow/tools/pip_package/setup.py
 
-      # glibc 2.31+ does not have sys/sysctl.h
-      # see https://github.com/tensorflow/tensorflow/issues/45861
-      substituteInPlace third_party/hwloc/BUILD.bazel\
-        --replace "#define HAVE_SYS_SYSCTL_H 1" "#undef HAVE_SYS_SYSCTL_H"
+      # bazel 3.3 should work just as well as bazel 3.1
+      rm -f .bazelversion
     '';
+
+    # https://github.com/tensorflow/tensorflow/pull/39470
+    NIX_CFLAGS_COMPILE = [ "-Wno-stringop-truncation" ];
 
     preConfigure = let
       opt_flags = []
@@ -293,15 +267,8 @@ let
       runHook postConfigure
     '';
 
-    # FIXME: Tensorflow uses dlopen() for CUDA libraries.
-    NIX_LDFLAGS = lib.optionalString cudaSupport "-lcudart -lcublas -lcufft -lcurand -lcusolver -lcusparse -lcudnn";
-
     hardeningDisable = [ "format" ];
 
-    bazelFlags = [
-      # temporary fixes to make the build work with bazel 0.27
-      "--incompatible_no_support_tools_in_action_inputs=false"
-    ];
     bazelBuildFlags = [
       "--config=opt" # optimize using the flags set in the configure phase
     ]
@@ -309,15 +276,17 @@ let
 
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
 
+    removeRulesCC = false;
+
     fetchAttrs = {
       # So that checksums don't depend on these.
       TF_SYSTEM_LIBS = null;
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "1bi6aydidgi943hiqj0d279jbz2g173hvafdqla1ifw2qdsm73pb"
+        "sha256-lEdPA9vhYO6vd5FgPMbFp2PkRvDBurPidYsxtJLXcbQ="
       else
-        "0l5510fr8n22c4hx9llr0vqqhx9wlgkyxl55fxbixhssd0ai05r4";
+        "sha256-ZEY/bWo5M3Juw1x3CwhXYXZHD4q5LzWDlhgXnh4P95U=";
     };
 
     buildAttrs = {
@@ -368,7 +337,7 @@ let
 
 in buildPythonPackage {
   inherit version pname;
-  disabled = isPy27 || (pythonAtLeast "3.8");
+  disabled = isPy27;
 
   src = bazel-build.python;
 
@@ -393,11 +362,13 @@ in buildPythonPackage {
     numpy
     six
     protobuf
-    tensorflow-estimator_1
+    tensorflow-estimator_2
     termcolor
     wrapt
     grpcio
     opt-einsum
+    astunparse
+    h5py
   ] ++ lib.optionals (!isPy3k) [
     mock
     future
@@ -405,7 +376,7 @@ in buildPythonPackage {
   ] ++ lib.optionals (pythonOlder "3.4") [
     backports_weakref enum34
   ] ++ lib.optionals withTensorboard [
-    tensorflow-tensorboard_1
+    tensorflow-tensorboard_2
   ];
 
   nativeBuildInputs = lib.optional cudaSupport addOpenGLRunpath;
@@ -413,6 +384,8 @@ in buildPythonPackage {
   postFixup = lib.optionalString cudaSupport ''
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       addOpenGLRunpath "$lib"
+
+      patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:${cudnn}/lib:${nccl}/lib:$(patchelf --print-rpath "$lib")" "$lib"
     done
   '';
 
@@ -424,13 +397,12 @@ in buildPythonPackage {
     # A simple "Hello world"
     import tensorflow as tf
     hello = tf.constant("Hello, world!")
-    sess = tf.Session()
-    sess.run(hello)
+    tf.print(hello)
 
     # Fit a simple model to random data
     import numpy as np
     np.random.seed(0)
-    tf.random.set_random_seed(0)
+    tf.random.set_seed(0)
     model = tf.keras.models.Sequential([
         tf.keras.layers.Dense(1, activation="linear")
     ])
@@ -439,18 +411,14 @@ in buildPythonPackage {
     x = np.random.uniform(size=(1,1))
     y = np.random.uniform(size=(1,))
     model.fit(x, y, epochs=1)
-
-    # regression test for #77626
-    from tensorflow.contrib import tensor_forest
     EOF
   '';
+  # Regression test for #77626 removed because not more `tensorflow.contrib`.
 
   passthru = {
     deps = bazel-build.deps;
     libtensorflow = bazel-build.out;
   };
 
-  meta = bazel-build.meta // {
-    broken = gast.version != "0.3.2";
-  };
+  inherit (bazel-build) meta;
 }

@@ -11,7 +11,7 @@
     "actiontec" = ps: with ps; [ ];
     "adguard" = ps: with ps; [ adguardhome ];
     "ads" = ps: with ps; [ pyads ];
-    "advantage_air" = ps: with ps; [ ]; # missing inputs: advantage_air
+    "advantage_air" = ps: with ps; [ advantage_air ];
     "aftership" = ps: with ps; [ pyaftership ];
     "agent_dvr" = ps: with ps; [ ]; # missing inputs: agent-py
     "air_quality" = ps: with ps; [ ];
@@ -423,7 +423,7 @@
     "konnected" = ps: with ps; [ aiohttp-cors ]; # missing inputs: konnected
     "kulersky" = ps: with ps; [ ]; # missing inputs: pykulersky
     "kwb" = ps: with ps; [ ]; # missing inputs: pykwb
-    "lacrosse" = ps: with ps; [ ]; # missing inputs: pylacrosse
+    "lacrosse" = ps: with ps; [ pylacrosse ];
     "lametric" = ps: with ps; [ ]; # missing inputs: lmnotify
     "lannouncer" = ps: with ps; [ ];
     "lastfm" = ps: with ps; [ pylast ];

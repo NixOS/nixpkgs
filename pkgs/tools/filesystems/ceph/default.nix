@@ -81,7 +81,7 @@ let
      inherit description;
      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
      maintainers = with maintainers; [ adev ak johanot krav ];
-     platforms = [ "x86_64-linux" ];
+     platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
 
   ceph-common = python3Packages.buildPythonPackage rec{
