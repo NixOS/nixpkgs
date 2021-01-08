@@ -1,0 +1,19 @@
+Find libpulse.so via direct reference.
+
+Author: Bjørn Forsman <bjorn.forsman@gmail.com>
+diff --git a/shell-volume-mixer@derhofbauer.at/pautils/pa.py b/shell-volume-mixer@derhofbauer.at/pautils/pa.py
+index 7d058bd..00edd6a 100644
+--- a/shell-volume-mixer@derhofbauer.at/pautils/pa.py
++++ b/shell-volume-mixer@derhofbauer.at/pautils/pa.py
+@@ -16,9 +16,9 @@
+ from ctypes import *
+ 
+ try:
+-    lib = CDLL('libpulse.so.0')
++    lib = CDLL('@pulseaudio@/lib/libpulse.so.0')
+ except:
+-    lib = CDLL('libpulse.so')
++    lib = CDLL('@pulseaudio@/lib/libpulse.so')
+ 
+ STRING = c_char_p
+ WSTRING = c_wchar_p
