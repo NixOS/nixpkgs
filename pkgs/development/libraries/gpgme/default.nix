@@ -34,7 +34,9 @@ stdenv.mkDerivation rec {
       sha256 = "00d4sxq63601lzdp2ha1i8fvybh7dzih4531jh8bx07fab3sw65g";
     })
     # Disable python tests on Darwin as they use gpg (see configureFlags below)
-  ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch;
+  ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch
+  # Fix _AC_UNDECLARED_WARNING for autoconf≥2.70. See https://lists.gnupg.org/pipermail/gnupg-devel/2020-November/034643.html
+  ++ lib.optional stdenv.cc.isClang ./fix-clang-autoconf-undeclared-warning.patch;
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
