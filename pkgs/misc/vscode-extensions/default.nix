@@ -119,6 +119,18 @@ let
         };
       };
 
+      formulahendry.auto-rename-tag = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "auto-rename-tag";
+          publisher = "formulahendry";
+          version = "0.1.6";
+          sha256 = "0cqg9mxkyf41brjq2c764w42lzyn6ffphw6ciw7xnqk1h1x8wwbs";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       golang.Go = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Go";
