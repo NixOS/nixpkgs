@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sile-typesetter.org/";
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;   # https://github.com/NixOS/nixpkgs/issues/23018
     maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
   };
