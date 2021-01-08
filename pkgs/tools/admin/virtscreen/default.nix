@@ -1,4 +1,13 @@
-{ stdenv, fetchFromGitHub, python3Packages, x11vnc, xrandr, libGL }:
+{
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  x11vnc,
+  xrandr,
+  libGL,
+  wrapQtAppsHook,
+  full
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "virtscreen";
@@ -18,10 +27,17 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     netifaces
-    pyqt5
     quamash
     x11vnc
     xrandr
+    full
+  ];
+
+  nativeBuildInputs = [ wrapQtAppsHook ];
+  dontWrapQtApps = true;
+
+  makeWrapperArgs = [
+    "\${qtWrapperArgs[@]}"
   ];
 
   postPatch = let
