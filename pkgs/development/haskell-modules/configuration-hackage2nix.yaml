@@ -3950,7 +3950,6 @@ broken-packages:
   - ChristmasTree
   - chromatin
   - chronograph
-  - chronos
   - chronos-bench
   - chu2
   - chunks
@@ -4061,7 +4060,6 @@ broken-packages:
   - cmt
   - cmv
   - cnc-spec-compiler
-  - co-log
   - co-log-polysemy
   - co-log-polysemy-formatting
   - co-log-sys
