@@ -1,24 +1,32 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ stdenv, fetchPypi, buildPythonPackage, halo
 , boto3, requests, gradient_statsd, terminaltables
 , click-completion , click-didyoumean, click-help-colors
-, colorama, requests_toolbelt, gradient_sdk, progressbar2
+, colorama, requests_toolbelt, gradient-utils, progressbar2
+, websocket_client, pyyaml, marshmallow2, attrs
 }:
 
 buildPythonPackage rec {
-  pname = "paperspace";
-  version = "0.2.0";
+  pname = "gradient";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7959305128fea6da8ca0cdc528783a89859dacb9b54bf8eb89fd04a518872191";
+    sha256 = "zzsKTl4UZMFvJ+k4mgY3LmXSaupMTJsbzisXsT7ba9Q=";
   };
+
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "attrs<=19" "attrs" \
+      --replace "colorama==0.4.3" "colorama"
+  '';
 
   propagatedBuildInputs = [ boto3 requests gradient_statsd terminaltables
     click-completion click-didyoumean click-help-colors requests_toolbelt
-    colorama gradient_sdk progressbar2
+    colorama gradient-utils progressbar2 halo websocket_client pyyaml
+    marshmallow2 attrs
   ];
 
-  # tries to use /homeless-shelter to mimic container usage, etc
+  # Tests are broken
   doCheck = false;
 
   meta = with stdenv.lib; {

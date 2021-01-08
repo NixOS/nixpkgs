@@ -2659,7 +2659,9 @@ in {
 
   gpyopt = callPackage ../development/python-modules/gpyopt { };
 
-  gradient_sdk = callPackage ../development/python-modules/gradient_sdk { };
+  gradient = callPackage ../development/python-modules/gradient { };
+
+  gradient-utils = callPackage ../development/python-modules/gradient-utils { };
 
   gradient_statsd = callPackage ../development/python-modules/gradient_statsd { };
 
@@ -2778,6 +2780,8 @@ in {
   habanero = callPackage ../development/python-modules/habanero { };
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
+
+  halo = callPackage ../development/python-modules/halo { };
 
   handout = callPackage ../development/python-modules/handout { };
 
@@ -3678,6 +3682,8 @@ in {
 
   logster = callPackage ../development/python-modules/logster { };
 
+  log-symbols = callPackage ../development/python-modules/log-symbols { };
+
   loguru = callPackage ../development/python-modules/loguru { };
 
   logutils = callPackage ../development/python-modules/logutils { };
@@ -3807,6 +3813,8 @@ in {
   Markups = callPackage ../development/python-modules/Markups { };
 
   marshmallow = callPackage ../development/python-modules/marshmallow { };
+
+  marshmallow2 = callPackage ../development/python-modules/marshmallow/2.nix { };
 
   marshmallow-enum = callPackage ../development/python-modules/marshmallow-enum { };
 
@@ -4511,8 +4519,6 @@ in {
   panel = callPackage ../development/python-modules/panel { };
 
   papermill = callPackage ../development/python-modules/papermill { };
-
-  paperspace = callPackage ../development/python-modules/paperspace { };
 
   openpaperwork-core = callPackage ../applications/office/paperwork/openpaperwork-core.nix { };
   openpaperwork-gtk = callPackage ../applications/office/paperwork/openpaperwork-gtk.nix { };
@@ -7142,6 +7148,8 @@ in {
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
   spidev = callPackage ../development/python-modules/spidev { };
+
+  spinners = callPackage ../development/python-modules/spinners { };
 
   splinter = callPackage ../development/python-modules/splinter { };
 
