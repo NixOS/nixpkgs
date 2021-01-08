@@ -355,7 +355,7 @@ mountFS() {
 
     checkFS "$device" "$fsType"
 
-    # Optionally expand the filesystem.
+    # Optionally expand the partition.
     case $options in
         *x-nixos.autoexpand*)
             # Given a device of /dev/disk/by-label/NIXOS_SD
