@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sauerbraten";
-  version = "2020-12-04";
+  version = "2020-12-27";
 
   src = fetchzip {
     url = "mirror://sourceforge/sauerbraten/sauerbraten_${builtins.replaceStrings [ "-" ] [ "_" ] version}_linux.tar.bz2";
-    sha256 = "1hknwpnvsakz6s7l7j1r5aqmgrzp4wcbn8yg8nxmvsddbhxdj1kc";
+    sha256 = "0llknzj23vx6f3y452by9c7wlhzclyq4bqi22qd52m3l916z2mn5";
   };
 
   nativeBuildInputs = [
