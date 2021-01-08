@@ -1554,6 +1554,6 @@ self: super: {
 
   # overly strict dependency on aeson
   # https://github.com/jaspervdj/profiteur/issues/33
-  profiteur = doJailbreak (super.profiteur);
+  profiteur = doJailbreak super.profiteur;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
