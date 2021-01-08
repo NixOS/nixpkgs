@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-xpVihdSpjO/mJWM5nzVg9CND3oAEdfCwXQW0jqLVDBA=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional withGPerfTools gperftools;
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = lib.optionals withGPerfTools [ gperftools ];
 
   outputs = [ "bin" "dev" "out" ];
 
