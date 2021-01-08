@@ -4019,8 +4019,6 @@ in {
 
   mozrunner = callPackage ../development/python-modules/marionette-harness/mozrunner.nix { };
 
-  mozsvc = callPackage ../development/python-modules/mozsvc { };
-
   mozterm = callPackage ../development/python-modules/mozterm { };
 
   moztest = callPackage ../development/python-modules/marionette-harness/moztest.nix { };
@@ -6847,8 +6845,6 @@ in {
 
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 
-  serversyncstorage = callPackage ../development/python-modules/serversyncstorage { };
-
   service-identity = callPackage ../development/python-modules/service_identity { };
 
   setproctitle = callPackage ../development/python-modules/setproctitle { };
@@ -7517,8 +7513,6 @@ in {
   tokenizers = disabledIf (!isPy3k) (toPythonModule (callPackage ../development/python-modules/tokenizers { }));
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
-
-  tokenserver = callPackage ../development/python-modules/tokenserver { };
 
   toml = callPackage ../development/python-modules/toml { };
 

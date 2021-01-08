@@ -18039,8 +18039,6 @@ in
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
-  syncserver = callPackage ../servers/syncserver { };
-
   tailscale = callPackage ../servers/tailscale { };
 
   thanos = callPackage ../servers/monitoring/thanos { };
