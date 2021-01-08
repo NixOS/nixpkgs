@@ -155,6 +155,18 @@ let
         };
       };
 
+      ibm.output-colorizer = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "output-colorizer";
+          publisher = "IBM";
+          version = "0.1.2";
+          sha256 = "0i9kpnlk3naycc7k8gmcxas3s06d67wxr3nnyv5hxmsnsx5sfvb7";
+        };
+        meta = with stdenv.lib; {
+          license = licenses.mit;
+        };
+      };
+
       james-yu.latex-workshop = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "latex-workshop";
