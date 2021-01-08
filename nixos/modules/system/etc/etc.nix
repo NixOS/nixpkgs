@@ -12,16 +12,13 @@ let
     name = "etc";
 
     builder = ./make-etc.sh;
+    nativeBuildInputs = [ pkgs.jq ];
 
     preferLocalBuild = true;
     allowSubstitutes = false;
 
-    /* !!! Use toXML. */
-    sources = map (x: x.source) etc';
-    targets = map (x: x.target) etc';
-    modes = map (x: x.mode) etc';
-    users  = map (x: x.user) etc';
-    groups  = map (x: x.group) etc';
+    data = pkgs.writeText "etc-data" (lib.generators.toJSON {} etc');
+    passthru.targets = map (x: x.target) etc';
   };
 
 in

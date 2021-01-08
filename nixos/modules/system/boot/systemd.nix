@@ -1039,7 +1039,7 @@ in
           done
         '' + concatMapStrings (name: optionalString (hasPrefix "tmpfiles.d/" name) ''
           rm -f $out/${removePrefix "tmpfiles.d/" name}
-        '') config.system.build.etc.targets;
+        '') config.system.build.etc.passthru.targets;
       }) + "/*";
 
       "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
