@@ -831,6 +831,8 @@ in
 
   alpine-make-vm-image = callPackage ../tools/virtualization/alpine-make-vm-image { };
 
+  amazon-ec2-utils = callPackage ../tools/admin/amazon-ec2-utils { };
+
   amazon-ecs-cli = callPackage ../tools/virtualization/amazon-ecs-cli { };
 
   amber = callPackage ../tools/text/amber {
