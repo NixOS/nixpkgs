@@ -21,8 +21,7 @@ buildPythonPackage rec {
     pygments qtpy pyzmq chardet pyqtwebengine
   ];
 
-  # tests fail with a segfault
-  doCheck = false;
+  patches = [ ./3_no_app.patch ];
 
   postPatch = ''
     # remove dependency on pyqtwebengine
@@ -30,6 +29,14 @@ buildPythonPackage rec {
     sed -i /pyqtwebengine/d setup.py
     substituteInPlace setup.py --replace "pyqt5<5.13" "pyqt5"
   '';
+
+  # tests fail with a segfault
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "spyder.utils.icon_manager"
+    "spyder.widgets.sourcecode.codeeditor"
+  ];
 
   meta = with stdenv.lib; {
     description = "Library providing a scientific python development environment";
