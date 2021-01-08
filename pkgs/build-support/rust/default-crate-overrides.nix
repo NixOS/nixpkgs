@@ -1,6 +1,7 @@
 { stdenv, pkg-config, curl, darwin, libiconv, libgit2, libssh2,
   openssl, sqlite, zlib, dbus, dbus-glib, gdk-pixbuf, cairo, python3,
-  libsodium, postgresql, gmp, foundationdb, ... }:
+  libsodium, postgresql, gmp, foundationdb, capnproto, nettle, clang,
+  llvmPackages, ... }:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -8,6 +9,10 @@ in
 {
   cairo-rs = attrs: {
     buildInputs = [ cairo ];
+  };
+
+  capnp-rpc = attrs: {
+    nativeBuildInputs = [ capnproto ];
   };
 
   cargo = attrs: {
@@ -84,6 +89,12 @@ in
     buildInputs = [ dbus ];
   };
 
+  nettle-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ nettle clang ];
+    LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  };
+
   openssl = attrs: {
     buildInputs = [ openssl ];
   };
@@ -105,6 +116,36 @@ in
 
   security-framework-sys = attr: {
     propagatedBuildInputs = [ Security ];
+  };
+
+  sequoia-openpgp = attrs: {
+    buildInputs = [ gmp ];
+  };
+
+  sequoia-openpgp-ffi = attrs: {
+    buildInputs = [ gmp ];
+  };
+
+  sequoia-ipc = attrs: {
+    buildInputs = [ gmp ];
+  };
+
+  sequoia-guide = attrs: {
+    buildInputs = [ gmp ];
+  };
+
+  sequoia-store = attrs: {
+    nativeBuildInputs = [ capnproto ];
+    buildInputs = [ sqlite gmp ];
+  };
+
+  sequoia-sq = attrs: {
+    buildInputs = [ sqlite gmp ];
+  };
+
+  sequoia-tool = attrs: {
+    nativeBuildInputs = [ capnproto ];
+    buildInputs = [ sqlite gmp ];
   };
 
   serde_derive = attrs: {
