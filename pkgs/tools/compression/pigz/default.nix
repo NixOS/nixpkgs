@@ -1,31 +1,27 @@
-{ stdenv, fetchurl, zlib, util-linux }:
+{ stdenv, fetchurl, zlib, utillinux }:
 
-let name = "pigz";
-    version = "2.4";
-in
-stdenv.mkDerivation {
-  name = name + "-" + version;
+stdenv.mkDerivation rec {
+  pname = "pigz";
+  version = "2.4";
 
   src = fetchurl {
-    url = "https://www.zlib.net/${name}/${name}-${version}.tar.gz";
+    url = "https://www.zlib.net/pigz/pigz-${version}.tar.gz";
     sha256 = "0wsgw5vwl23jrnpsvd8v3xcp5k4waw5mk0164fynjhkv58i1dy54";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [zlib] ++ stdenv.lib.optional stdenv.isLinux util-linux;
+  buildInputs = [ zlib ] ++ stdenv.lib.optional stdenv.isLinux utillinux;
 
   makeFlags = [ "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ];
 
   doCheck = stdenv.isLinux;
   checkTarget = "tests";
-  installPhase =
-  ''
-      install -Dm755 pigz "$out/bin/pigz"
-      ln -s pigz "$out/bin/unpigz"
-      install -Dm755 pigz.1 "$out/share/man/man1/pigz.1"
-      ln -s pigz.1 "$out/share/man/man1/unpigz.1"
-      install -Dm755 pigz.pdf "$out/share/doc/pigz/pigz.pdf"
+
+  installPhase = ''
+    install -Dm755 pigz "$out/bin/pigz"
+    install -Dm755 pigz.1 "$out/share/man/man1/pigz.1"
+    install -Dm755 pigz.pdf "$out/share/doc/pigz/pigz.pdf"
   '';
 
   meta = with stdenv.lib; {

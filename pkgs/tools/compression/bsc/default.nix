@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, openmp ? null }:
+{ stdenv, fetchFromGitHub, openmp ? null }:
 
 stdenv.mkDerivation rec {
   pname = "bsc";
   version = "3.1.0";
 
-  src = fetchurl {
-    url = "https://github.com/IlyaGrebnov/libbsc/archive/${version}.tar.gz";
-    sha256 = "01yhizaf6qjv1plyrx0fcib264maa5qwvgfvvid9rzlzj9fxjib6";
+  src = fetchFromGitHub {
+    owner = "IlyaGrebnov";
+    repo = "libbsc";
+    rev = version;
+    sha256 = "0c0jmirh9y23kyi1jnrm13sa3xsjn54jazfr84ag45pai279fciz";
   };
 
   enableParallelBuilding = true;
@@ -14,13 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.optional stdenv.isDarwin openmp;
 
   prePatch = ''
-    substituteInPlace makefile \
-        --replace 'g++' '$(CXX)'
+    substituteInPlace makefile --replace 'g++' '$(CXX)'
   '';
 
-  preInstall = ''
-    makeFlagsArray+=("PREFIX=$out")
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "High performance block-sorting data compression library";
