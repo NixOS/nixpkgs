@@ -8,7 +8,8 @@
 , zlib
 , szip ? null
 }:
-
+let uselibtirpc = stdenv.isLinux;
+in
 stdenv.mkDerivation rec {
   pname = "hdf";
   version = "4.2.15";
@@ -49,12 +50,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libjpeg
-    libtirpc
     szip
     zlib
+  ] ++ stdenv.lib.optionals uselibtirpc [
+    libtirpc
   ];
 
-  preConfigure = ''
+  preConfigure = stdenv.lib.optionalString uselibtirpc ''
     # Make tirpc discovery work with CMAKE_PREFIX_PATH
     substituteInPlace config/cmake/FindXDR.cmake \
       --replace 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
