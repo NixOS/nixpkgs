@@ -3791,6 +3791,7 @@ broken-packages:
   - cache-polysemy
   - cached
   - caching
+  - caching-vault
   - cacophony
   - cafeteria-prelude
   - caffegraph
@@ -6445,6 +6446,7 @@ broken-packages:
   - hmt-diagrams
   - hmumps
   - hnetcdf
+  - hnix
   - hnix-store-remote
   - HNM
   - hnormalise
@@ -6454,6 +6456,7 @@ broken-packages:
   - hobbes
   - hobbits
   - hocilib
+  - hocker
   - hodatime
   - HODE
   - hoe
@@ -9018,6 +9021,7 @@ broken-packages:
   - protocol-buffers-descriptor-fork
   - protocol-buffers-fork
   - protolude-lifted
+  - proton
   - proton-haskell
   - prototype
   - prove-everywhere-server
@@ -9846,6 +9850,8 @@ broken-packages:
   - showdown
   - Shpadoinkle-backend-pardiff
   - Shpadoinkle-backend-static
+  - Shpadoinkle-developer-tools
+  - Shpadoinkle-disembodied
   - Shpadoinkle-examples
   - Shpadoinkle-html
   - Shpadoinkle-router
@@ -10335,6 +10341,7 @@ broken-packages:
   - svg2q
   - svgcairo
   - SVGFonts
+  - svgone
   - svgutils
   - svm-light-utils
   - svm-simple
