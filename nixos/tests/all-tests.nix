@@ -326,6 +326,7 @@ in
   radicale = handleTest ./radicale.nix {};
   redis = handleTest ./redis.nix {};
   redmine = handleTest ./redmine.nix {};
+  redshift = handleTest ./redshift.nix {};
   restic = handleTest ./restic.nix {};
   ripgrep = handleTest ./ripgrep.nix {};
   robustirc-bridge = handleTest ./robustirc-bridge.nix {};
