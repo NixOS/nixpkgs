@@ -1412,6 +1412,8 @@ in
     novacomd = callPackage ../development/mobile/webos/novacomd.nix { };
   };
 
+  apprise = with python3Packages; toPythonApplication apprise;
+
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
     inherit (python3Packages) sphinx;
@@ -22161,6 +22163,9 @@ in
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
   hello = callPackage ../applications/misc/hello { };
+
+  hello-wayland = callPackage ../applications/graphics/hello-wayland { };
+
   hello-unfree = callPackage ../applications/misc/hello-unfree { };
 
   helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
@@ -27427,7 +27432,7 @@ in
   cadical = callPackage ../applications/science/logic/cadical {};
 
   inherit (callPackage ./coq-packages.nix {
-    inherit (ocaml-ng) ocamlPackages_4_05 ocamlPackages_4_09;
+    inherit (ocaml-ng) ocamlPackages_4_05 ocamlPackages_4_09 ocamlPackages_4_10;
   }) mkCoqPackages
     coqPackages_8_5  coq_8_5
     coqPackages_8_6  coq_8_6

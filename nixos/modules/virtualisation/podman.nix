@@ -1,6 +1,8 @@
 { config, lib, pkgs, utils, ... }:
 let
   cfg = config.virtualisation.podman;
+  toml = pkgs.formats.toml { };
+  nvidia-docker = pkgs.nvidia-docker.override { containerRuntimePath = "${pkgs.runc}/bin/runc"; };
 
   inherit (lib) mkOption types;
 
@@ -53,6 +55,14 @@ in
       '';
     };
 
+    enableNvidia = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable use of NVidia GPUs from within podman containers.
+      '';
+    };
+
     extraPackages = mkOption {
       type = with types; listOf package;
       default = [ ];
@@ -78,21 +88,37 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.enable (lib.mkMerge [
+    {
+      environment.systemPackages = [ cfg.package ]
+        ++ lib.optional cfg.dockerCompat dockerCompat;
 
-    environment.systemPackages = [ cfg.package ]
-      ++ lib.optional cfg.dockerCompat dockerCompat;
+      environment.etc."cni/net.d/87-podman-bridge.conflist".source = utils.copyFile "${pkgs.podman-unwrapped.src}/cni/87-podman-bridge.conflist";
 
-    environment.etc."cni/net.d/87-podman-bridge.conflist".source = utils.copyFile "${pkgs.podman-unwrapped.src}/cni/87-podman-bridge.conflist";
+      virtualisation.containers = {
+        enable = true; # Enable common /etc/containers configuration
+        containersConf.extraConfig = lib.optionalString cfg.enableNvidia
+          (builtins.readFile (toml.generate "podman.nvidia.containers.conf" {
+            engine = {
+              conmon_env_vars = [ "PATH=${lib.makeBinPath [ nvidia-docker ]}" ];
+              runtimes.nvidia = [ "${nvidia-docker}/bin/nvidia-container-runtime" ];
+            };
+          }));
+      };
 
-    # Enable common /etc/containers configuration
-    virtualisation.containers.enable = true;
-
-    assertions = [{
-      assertion = cfg.dockerCompat -> !config.virtualisation.docker.enable;
-      message = "Option dockerCompat conflicts with docker";
-    }];
-
-  };
-
+      assertions = [
+        {
+          assertion = cfg.dockerCompat -> !config.virtualisation.docker.enable;
+          message = "Option dockerCompat conflicts with docker";
+        }
+        {
+          assertion = cfg.enableNvidia -> !config.virtualisation.docker.enableNvidia;
+          message = "Option enableNvidia conflicts with docker.enableNvidia";
+        }
+      ];
+    }
+    (lib.mkIf cfg.enableNvidia {
+      environment.etc."nvidia-container-runtime/config.toml".source = "${nvidia-docker}/etc/podman-config.toml";
+    })
+  ]);
 }
