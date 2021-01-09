@@ -11,7 +11,7 @@ let
       enabled
       ++ (with all; [ apcu redis memcached imagick ]) # Necessary for vanilla nextcloud
       ++ cfg.phpExtraExtensions all; # Enabled by user
-    extraConfig = phpOptionsStr;
+    extraConfig = toKeyValue phpOptions;
   };
 
   toKeyValue = generators.toKeyValue {
@@ -23,7 +23,6 @@ let
     post_max_size = cfg.maxUploadSize;
     memory_limit = cfg.maxUploadSize;
   } // cfg.phpOptions;
-  phpOptionsStr = toKeyValue phpOptions;
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.runtimeShell}
@@ -522,7 +521,6 @@ in {
         pools.nextcloud = {
           user = "nextcloud";
           group = "nextcloud";
-          phpOptions = phpOptionsStr;
           phpPackage = phpPackage;
           phpEnv = {
             NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
