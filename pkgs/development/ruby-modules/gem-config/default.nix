@@ -392,7 +392,8 @@ in
   nokogiri = attrs: {
     buildFlags = [
       "--use-system-libraries"
-      "--with-zlib-dir=${zlib.dev}"
+      "--with-zlib-lib=${zlib.out}/lib"
+      "--with-zlib-include=${zlib.dev}/include"
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
       "--with-xslt-lib=${libxslt.out}/lib"
