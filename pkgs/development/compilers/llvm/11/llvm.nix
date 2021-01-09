@@ -32,12 +32,12 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "0s94lwil98w7zb7cjrbnxli0z7gklb312pkw74xs1d6zk346hgwi";
-  polly_src = fetch "polly" "0h442ivcslr3dv3q3g1nw5avh77f8cxsp6zild1hgspj266xpynw";
+  src = fetch pname "0a5mb65xa5bal8q6cb37xgkqis2bip87fsafgq3wbsva9cjprn6c";
+  polly_src = fetch "polly" "1smrqm9s0r2g9h0v0nil6y9wn2ih4l5bddk4dhgn538ngc7cxpq8";
 
   unpackPhase = ''
     unpackFile $src
-    mv llvm-${version}* llvm
+    mv llvm-${release_version}* llvm
     sourceRoot=$PWD/llvm
   '' + optionalString enablePolly ''
     unpackFile $polly_src
