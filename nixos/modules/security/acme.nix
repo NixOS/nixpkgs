@@ -63,15 +63,16 @@ let
   # exist and have the correct user and group, since group
   # is configurable on a per-cert basis.
   userMigrationService = let
-    script = with builtins; concatStringsSep "\n" (mapAttrsToList (cert: data: ''
+    script = with builtins; ''
       chown -R acme .lego/accounts
+    '' + (concatStringsSep "\n" (mapAttrsToList (cert: data: ''
       for fixpath in ${escapeShellArg cert} .lego/${escapeShellArg cert}; do
         if [ -d "$fixpath" ]; then
           chmod -R u=rwX,g=rX,o= "$fixpath"
           chown -R acme:${data.group} "$fixpath"
         fi
       done
-    '') certConfigs);
+    '') certConfigs));
   in {
     description = "Fix owner and group of all ACME certificates";
 
@@ -704,6 +705,14 @@ in {
         }) certConfigs;
 
         # Create targets to limit the number of simultaneous account creations
+        # How it works:
+        # - Pick a "leader" cert service, which will be in charge of creating the account,
+        #   and run first (requires + after)
+        # - Make all other cert services sharing the same account wait for the leader to
+        #   finish before starting (requiredBy + before).
+        # Using a target here is fine - account creation is a one time event. Even if
+        # systemd clean --what=state is used to delete the account, so long as the user
+        # then runs one of the cert services, there won't be any issues.
         accountTargets = mapAttrs' (hash: confs: let
           leader = "acme-${(builtins.head confs).cert}.service";
           dependantServices = map (conf: "acme-${conf.cert}.service") (builtins.tail confs);
