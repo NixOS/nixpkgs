@@ -27,9 +27,6 @@
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
-# Disabled flag
-, disabled ? false
-
 # Do not enable this without good reason
 # IE: programs coupled with the compiler
 , allowGoReference ? false
@@ -243,9 +240,7 @@ let
                     [ lib.maintainers.kalbasit ];
     };
   });
-in if disabled then
-  throw "${package.name} not supported for go ${go.meta.branch}"
-else if (goPackagePath != null) then
+in if (goPackagePath != null) then
   throw "`goPackagePath` not needed with `buildGoModule`"
 else
   package

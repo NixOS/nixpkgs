@@ -10,9 +10,6 @@
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
-# Disabled flag
-, disabled ? false
-
 # Go import path of the package
 , goPackagePath
 
@@ -249,7 +246,5 @@ let
       platforms = go.meta.platforms or lib.platforms.all;
     } // meta;
   });
-in if disabled then
-  throw "${package.name} not supported for go ${go.meta.branch}"
-else
+in
   package
