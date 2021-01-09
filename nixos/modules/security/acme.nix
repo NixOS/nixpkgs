@@ -268,20 +268,18 @@ let
             ${data.postRun}
           fi
         '');
-
-      } // (optionalAttrs (data.webroot != null) {
-        # Lego always tries to create .well-known/acme-challenge, but if webroot is owned
-        # by the wrong user then it will crash and break cert renewal.
-        ExecStartPre = "+" + pkgs.writeShellScript "acme-${cert}-make-webroot" ''
-          mkdir -p '${data.webroot}/.well-known/acme-challenge'
-          cd '${data.webroot}'
-          chown 'acme:${data.group}' . .well-known .well-known/acme-challenge
-        '';
-      });
+      };
 
       # Working directory will be /tmp
       script = ''
         set -euo pipefail
+
+        ${optionalString (data.webroot != null) ''
+          # Ensure the webroot exists
+          mkdir -p '${data.webroot}/.well-known/acme-challenge'
+          chown 'acme:${data.group}' ${data.webroot}/{.well-known,.well-known/acme-challenge} \
+          || echo "Please fix the permissions under ${data.webroot}/.well-known/acme-challenge" && exit 1
+        ''}
 
         echo '${domainHash}' > domainhash.txt
 
