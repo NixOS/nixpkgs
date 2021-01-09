@@ -92,6 +92,12 @@ python3Packages.buildPythonApplication {
     # https://bugs.launchpad.net/hplip/+bug/1788706
     # https://bugs.launchpad.net/hplip/+bug/1787289
     ./image-processor.patch
+
+    # HPLIP's getSystemPPDs() function relies on searching for PPDs below common FHS
+    # paths, and hp-setup crashes if none of these paths actually exist (which they
+    # don't on NixOS).  Add the equivalent NixOS path, /var/lib/cups/path/share.
+    # See: https://github.com/NixOS/nixpkgs/issues/21796
+    ./hplip-3.20.11-nixos-cups-ppd-search-path.patch
   ];
 
   prePatch = ''
