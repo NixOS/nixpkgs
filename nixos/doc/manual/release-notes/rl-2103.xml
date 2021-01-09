@@ -95,6 +95,15 @@
     </para>
    </listitem>
    <listitem>
+    <para>
+     The <varname>networking.wireless.iwd</varname> module now installs
+     the upstream-provided 80-iwd.link file, which sets the NamePolicy=
+     for all wlan devices to "keep kernel", to avoid race conditions
+     between iwd and networkd. If you don't want this, you can set
+     <literal>systemd.network.links."80-iwd" = lib.mkForce {}</literal>.
+    </para>
+   </listitem>
+   <listitem>
      <para>
        <literal>rubyMinimal</literal> was removed due to being unused and
        unusable. The default ruby interpreter includes JIT support, which makes
