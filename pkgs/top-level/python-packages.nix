@@ -373,6 +373,8 @@ in {
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
 
+  archinfo = callPackage ../development/python-modules/archinfo { };
+
   area = callPackage ../development/python-modules/area { };
 
   arelle = callPackage ../development/python-modules/arelle { gui = true; };
@@ -3904,6 +3906,8 @@ in {
   milksnake = callPackage ../development/python-modules/milksnake { };
 
   minidb = callPackage ../development/python-modules/minidb { };
+
+  minidump = callPackage ../development/python-modules/minidump { };
 
   minimock = callPackage ../development/python-modules/minimock { };
 

@@ -35,7 +35,7 @@ import ./default.nix {
   # building
   bootstrapVersion = "1.48.0";
 
-  # fetch hashes by running `print-hashes.sh 1.45.2`
+  # fetch hashes by running `print-hashes.sh ${bootstrapVersion}`
   bootstrapHashes = {
     i686-unknown-linux-gnu = "7fdb8836a1f0427d5b47e6a2d496f67ebff04350407411f57cf20c9b3544e26f";
     x86_64-unknown-linux-gnu = "950420a35b2dd9091f1b93a9ccd5abc026ca7112e667f246b1deb79204e2038b";

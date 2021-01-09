@@ -1503,6 +1503,11 @@ self: super: {
     sha256 = "0g2m0y46zr3xs9fswkm4h9adhsg6gzl5zwgidshsjh3k3rq4h7b1";
   });
 
+  # https://github.com/ekmett/half/issues/35
+  half = if pkgs.stdenv.isAarch64
+    then dontCheck super.half
+    else super.half;
+
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/heist/pull/124
   heist = doJailbreak super.heist;
 

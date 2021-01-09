@@ -227,6 +227,18 @@ let
         };
       };
 
+      mechatroner.rainbow-csv = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "rainbow-csv";
+          publisher = "mechatroner";
+          version = "1.7.1";
+          sha256 = "0w5mijs4ll5qjkpyw7qpn1k40pq8spm0b3q72x150ydbcini5hxw";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       ms-azuretools.vscode-docker = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-docker";
