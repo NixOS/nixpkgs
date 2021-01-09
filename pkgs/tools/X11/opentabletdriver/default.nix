@@ -17,6 +17,7 @@
 , copyDesktopItems
 , makeDesktopItem
 , makeWrapper
+, nixosTests
 , wrapGAppsHook
 }:
 
@@ -153,6 +154,10 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
   dontStrip = true;
+
+  passthru.tests = {
+    otd-runs = nixosTests.opentabletdriver;
+  };
 
   meta = with lib; {
     description = "Open source, cross-platform, user-mode tablet driver";
