@@ -8,7 +8,6 @@
 , rpcsvc-proto
 , libtirpc
 , makeWrapper
-
 }:
 let
   modp-ver = "450.57";
