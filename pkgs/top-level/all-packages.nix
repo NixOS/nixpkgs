@@ -26503,6 +26503,8 @@ in
 
   blobby = callPackage ../games/blobby { };
 
+  blobwars = callPackage ../games/blobwars { };
+
   boohu = callPackage ../games/boohu { };
 
   braincurses = callPackage ../games/braincurses { };
