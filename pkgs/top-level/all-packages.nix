@@ -7568,6 +7568,8 @@ in
 
   sozu = callPackage ../servers/sozu { };
 
+  spacenavd = callPackage ../misc/drivers/spacenavd { };
+
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
   spectre-meltdown-checker = callPackage ../tools/security/spectre-meltdown-checker { };
