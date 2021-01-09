@@ -5446,6 +5446,8 @@ in {
 
   pyls-mypy = callPackage ../development/python-modules/pyls-mypy { };
 
+  pyls-spyder = callPackage ../development/python-modules/pyls-spyder { };
+
   PyLTI = callPackage ../development/python-modules/pylti { };
 
   pymacaroons = callPackage ../development/python-modules/pymacaroons { };
