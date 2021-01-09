@@ -402,7 +402,12 @@ in
   nokogiri = attrs: {
     buildFlags = [
       "--use-system-libraries"
+    ] ++ lib.optionals (lib.versionAtLeast attrs.version "1.11") [
+      "--with-zlib-lib=${zlib.out}/lib"
+      "--with-zlib-include=${zlib.dev}/include"
+    ] ++ lib.optionals (lib.versionOlder attrs.version "1.11") [
       "--with-zlib-dir=${zlib.dev}"
+    ] ++ [
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
       "--with-xslt-lib=${libxslt.out}/lib"
