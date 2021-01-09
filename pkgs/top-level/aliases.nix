@@ -737,8 +737,6 @@ mapAliases ({
   riot-desktop = throw "riot-desktop is now element-desktop!";
   riot-web = throw "riot-web is now element-web";
 
-  ant-dracula-theme = throw "ant-dracula-theme is now dracula-theme, and theme name is Dracula instead of Ant-Dracula.";
-
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */
