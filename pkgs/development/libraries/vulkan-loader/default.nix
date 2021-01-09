@@ -15,18 +15,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ python3 xlibsWrapper libxcb libXrandr libXext wayland ];
 
-  preConfigure = ''
-    substituteInPlace loader/vulkan.pc.in \
-      --replace 'includedir=''${prefix}/include' 'includedir=${vulkan-headers}/include' \
-      --replace 'libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@' 'libdir=@CMAKE_INSTALL_LIBDIR@'
-  '';
-
   cmakeFlags = [
     "-DSYSCONFDIR=${addOpenGLRunpath.driverLink}/share"
     "-DVULKAN_HEADERS_INSTALL_DIR=${vulkan-headers}"
+    "-DCMAKE_INSTALL_INCLUDEDIR=${vulkan-headers}/include"
   ];
 
   outputs = [ "out" "dev" ];
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    grep -q "${vulkan-headers}/include" $dev/lib/pkgconfig/vulkan.pc || {
+      echo vulkan-headers include directory not found in pkg-config file
+      exit 1
+    }
+  '';
 
   meta = with lib; {
     description = "LunarG Vulkan loader";
