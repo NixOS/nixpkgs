@@ -32,14 +32,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/{bin,etc}
-    cp -r bin $out
-
-    cp ${./config.toml} $out/etc/config.toml
-    substituteInPlace $out/etc/config.toml --subst-var-by glibcbin ${lib.getBin glibc}
-
-    cp ${./podman-config.toml} $out/etc/podman-config.toml
-    substituteInPlace $out/etc/podman-config.toml --subst-var-by glibcbin ${lib.getBin glibc}
+    mkdir -p $out/bin
+    cp bin/nvidia-docker $out/bin
   '';
 
   meta = {
