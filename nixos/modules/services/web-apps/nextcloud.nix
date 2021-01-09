@@ -39,7 +39,7 @@ let
     export NEXTCLOUD_CONFIG_DIR="${cfg.home}/config"
     $sudo \
       ${phpPackage}/bin/php \
-      occ $*
+      occ "$@"
   '';
 
   inherit (config.system) stateVersion;

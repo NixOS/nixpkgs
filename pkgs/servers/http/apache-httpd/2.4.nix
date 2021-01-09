@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit apr aprutil sslSupport proxySupport ldapSupport;
+    inherit apr aprutil sslSupport proxySupport ldapSupport luaSupport lua5;
   };
 
   meta = with stdenv.lib; {

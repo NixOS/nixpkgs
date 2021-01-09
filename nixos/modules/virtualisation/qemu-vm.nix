@@ -605,10 +605,6 @@ in
 
     virtualisation.bootDevice = mkDefault (driveDeviceName 1);
 
-    virtualisation.useEFIBoot = mkDefault
-      (config.boot.loader.systemd-boot.enable ||
-       config.boot.loader.efi.canTouchEfiVariables);
-
     virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
     # FIXME: Consolidate this one day.

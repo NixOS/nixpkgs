@@ -27,7 +27,7 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
     platforms = with platforms; linux ++ darwin;
     hydraPlatforms = [];

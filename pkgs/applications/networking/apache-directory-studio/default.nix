@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk14, makeWrapper, autoPatchelfHook, makeDesktopItem, glib, libsecret }:
+{ stdenv, fetchurl, jdk, makeWrapper, autoPatchelfHook, makeDesktopItem, glib, libsecret }:
 
 let
   desktopItem = makeDesktopItem {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper "$dest/ApacheDirectoryStudio" \
         "$out/bin/ApacheDirectoryStudio" \
-        --prefix PATH : "${jdk14}/bin"
+        --prefix PATH : "${jdk}/bin"
     install -D icon.xpm "$out/share/pixmaps/apache-directory-studio.xpm"
     install -D -t "$out/share/applications" ${desktopItem}/share/applications/*
   '';

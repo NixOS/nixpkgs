@@ -86,7 +86,7 @@ index 30e3cfd..6d12a50 100644
          if (info->libs == NULL)
                  goto fail;
          if (ldcache_resolve(&ld, LIB_ARCH, root, libs,
--            info->libs, info->nlibs, select_libraries, info) < 0)
+-            info->libs, info->nlibs, select_libraries_fn, info) < 0)
 +            info->libs, info->nlibs, info->nvrm_version) < 0)
                  goto fail;
  
@@ -95,7 +95,7 @@ index 30e3cfd..6d12a50 100644
          if (info->libs32 == NULL)
                  goto fail;
          if (ldcache_resolve(&ld, LIB32_ARCH, root, libs,
--            info->libs32, info->nlibs32, select_libraries, info) < 0)
+-            info->libs32, info->nlibs32, select_libraries_fn, info) < 0)
 +            info->libs32, info->nlibs32, info->nvrm_version) < 0)
                  goto fail;
          rv = 0;

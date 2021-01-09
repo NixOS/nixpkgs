@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "clickhouse-driver";
-  version = "0.1.5";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1827cm5z2zd6mxn9alq54bbzw6vhz4a30a54vacqn7nz691qs1gd";
+    sha256 = "62d37f93872d5a13eb6b0d52bab2b593ed0e14cf9200949aa2d02f9801064c0f";
   };
 
   propagatedBuildInputs = [

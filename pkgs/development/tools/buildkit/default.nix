@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "buildkit";
-  version = "0.8.0";
+  version = "0.8.1";
 
   goPackagePath = "github.com/moby/buildkit";
   subPackages = [ "cmd/buildctl" ] ++ stdenv.lib.optionals stdenv.isLinux [ "cmd/buildkitd" ];
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "moby";
     repo = "buildkit";
     rev = "v${version}";
-    sha256 = "0qcgq93wj77i912xqhwrzkzaqz608ilczfn5kcsrf9jk2m1gnx7m";
+    sha256 = "0lqfz097nyb6q6bn5mmfg6vl1nmgb6k4lmwxc8anza6zp8qh7wif";
   };
 
   buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/version.Version=${version} -X ${goPackagePath}/version.Revision=${src.rev}" ];

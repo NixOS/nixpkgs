@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, linkStatic ? (stdenv.hostPlatform.system == "i686-cygwin")
+, linkStatic ? with stdenv.hostPlatform; isStatic || isCygwin
 , autoreconfHook
 }:
 

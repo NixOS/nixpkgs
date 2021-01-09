@@ -19,7 +19,7 @@ mkDerivation {
   name = "plasma-desktop";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    boost fontconfig ibus libcanberra_kde libpulseaudio libXcursor libXft
+    boost fontconfig ibus libcanberra_kde libpulseaudio libXcursor libXft xorgserver
     libxkbfile phonon xf86inputevdev xf86inputsynaptics xinput xkeyboard_config
 
     qtdeclarative qtquickcontrols qtquickcontrols2 qtsvg qtx11extras
@@ -35,7 +35,7 @@ mkDerivation {
     ./tzdir.patch
   ];
   postPatch = ''
-    sed '1i#include <cmath>' -i kcms/touchpad/src/backends/x11/synapticstouchpad.cpp
+    sed '1i#include <cmath>' -i kcms/touchpad/backends/x11/synapticstouchpad.cpp
   '';
   CXXFLAGS = [
     "-I${lib.getDev xorgserver}/include/xorg"

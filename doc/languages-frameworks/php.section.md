@@ -135,3 +135,21 @@ Example of building `composer` with additional extensions:
   enabled ++ (with all; [ imagick redis ]))
 ).packages.composer
 ```
+
+### Overriding PHP packages {#ssec-php-user-guide-overriding-packages}
+
+`php-packages.nix` form a scope, allowing us to override the packages defined within. For example, to apply a patch to a `mysqlnd` extension, you can simply pass an overlay-style function to `php`’s `packageOverrides` argument:
+
+```nix
+php.override {
+  packageOverrides = final: prev: {
+    extensions = prev.extensions // {
+      mysqlnd = prev.extensions.mysqlnd.overrideAttrs (attrs: {
+        patches = attrs.patches or [] ++ [
+          …
+        ];
+      });
+    };
+  };
+}
+```

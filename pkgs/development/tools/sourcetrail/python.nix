@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "CoatiSoftware";
     repo = pname;
     rev = version;
-    sha256 = "05hlpd3am029pv1wi6mys3q0ggp64axmg8bdf1fabl9cl9jffscq";
+    sha256 = "01jaigxigq6dvfwq018gn9qw7i6p4jm0y71lqzschfv9vwf6ga45";
     fetchSubmodules = true;
   };
 
@@ -64,5 +64,7 @@ stdenv.mkDerivation rec {
     description = "Python indexer for Sourcetrail";
     homepage = "https://github.com/CoatiSoftware/SourcetrailPythonIndexer";
     license = licenses.gpl3;
+    broken = stdenv.isDarwin;
+    # https://github.com/NixOS/nixpkgs/pull/107533#issuecomment-751063675
   };
 }

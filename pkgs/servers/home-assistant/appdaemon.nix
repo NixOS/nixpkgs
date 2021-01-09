@@ -59,11 +59,15 @@ in python.pkgs.buildPythonApplication rec {
       --replace "deepdiff==4.3.1" "deepdiff" \
       --replace "voluptuous==0.11.7" "voluptuous" \
       --replace "astral==1.10.1" "astral" \
-      --replace "python-socketio==4.4.0" "python-socketio"
+      --replace "python-socketio==4.4.0" "python-socketio" \
+      --replace "feedparser==5.2.1" "feedparser>=5.2.1" \
+      --replace "aiohttp_jinja2==1.2.0" "aiohttp_jinja2>=1.2.0" \
+      --replace "pygments==2.6.1" "pygments>=2.6.1" \
+      --replace "paho-mqtt==1.5.0" "paho-mqtt>=1.5.0"
   '';
 
   meta = with lib; {
-    description = "Sandboxed python execution environment for writing automation apps for Home Assistant";
+    description = "Sandboxed Python execution environment for writing automation apps for Home Assistant";
     homepage = "https://github.com/home-assistant/appdaemon";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg dotlambda ];

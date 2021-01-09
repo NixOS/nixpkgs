@@ -1,12 +1,15 @@
 { stdenv
 , fetchpatch
 , fetchurl
+, fixDarwinDylibNames
 , cmake
 , libjpeg
+, libtirpc
 , zlib
 , szip ? null
 }:
-
+let uselibtirpc = stdenv.isLinux;
+in
 stdenv.mkDerivation rec {
   pname = "hdf";
   version = "4.2.15";
@@ -15,17 +18,52 @@ stdenv.mkDerivation rec {
     sha256 = "04nbgfxyj5jg4d6sr28162cxbfwqgv0sa7vz1ayzvm8wbbpkbq5x";
   };
 
+  patches = [
+    # Note that the PPC, SPARC and s390 patches are only needed so the aarch64 patch applies cleanly
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-ppc.patch";
+      sha256 = "0dbbfpsvvqzy9zyfv38gd81zzc44gxjib9sd8scxqnkkqprj6jq0";
+    })
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-4.2.4-sparc.patch";
+      sha256 = "0ip4prcjpa404clm87ib7l71605mws54x9492n9pbz5yb51r9aqh";
+    })
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-s390.patch";
+      sha256 = "0aiqbr4s1l19y3r3y4wjd5fkv9cfc8rlr4apbh1p0d57wyvqa7i3";
+    })
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-arm.patch";
+      sha256 = "157k1avvkpf3x89m1fv4a1kgab6k3jv74rskazrmjivgzav4qaw3";
+    })
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-aarch64.patch";
+      sha256 = "112svcsilk16ybbsi8ywnxfl2p1v44zh3rfn4ijnl8z08vfqrvvs";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
   ];
 
   buildInputs = [
     libjpeg
     szip
     zlib
+  ] ++ stdenv.lib.optionals uselibtirpc [
+    libtirpc
   ];
 
-  preConfigure = stdenv.lib.optionalString (szip != null) "export SZIP_INSTALL=${szip}";
+  preConfigure = stdenv.lib.optionalString uselibtirpc ''
+    # Make tirpc discovery work with CMAKE_PREFIX_PATH
+    substituteInPlace config/cmake/FindXDR.cmake \
+      --replace 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
+                'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATH_SUFFIXES include/tirpc)'
+  '' + stdenv.lib.optionalString (szip != null) ''
+    export SZIP_INSTALL=${szip}
+  '';
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

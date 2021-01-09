@@ -92,4 +92,11 @@ self: super: {
 
   # Break out of "Cabal < 3.2" constraint.
   stylish-haskell = doJailbreak super.stylish-haskell;
+
+  # Agda 2.6.1.2 only declares a transformers dependency for ghc < 8.10.3.
+  # https://github.com/agda/agda/issues/5109
+  Agda = appendPatch super.Agda (pkgs.fetchpatch {
+    url = "https://github.com/agda/agda/commit/76278c23d447b49f59fac581ca4ac605792aabbc.patch";
+    sha256 = "1g34g8a09j73h89pk4cdmri0nb0qg664hkff45amcr9kyz14a9f3";
+  });
 }

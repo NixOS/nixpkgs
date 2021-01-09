@@ -20,13 +20,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
-  version = "5.8.1";
+  version = "5.9.0";
 
   disabled = python3Packages.isPy27;
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
-    sha256 = "1hgzfiwfk3dd50jmp184y754ydzmfv22qcv7z40gxj6pc67ahx3r";
+    sha256 = "sha256-jRCrkJcjUHDd3wF+Hkxg0QaW7YgIh7zM/KZ4TAH84/U=";
   };
 
   nativeBuildInputs = with python3Packages; [

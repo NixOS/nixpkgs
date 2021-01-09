@@ -10,13 +10,13 @@
 
 mkDerivation rec {
   pname = "qtermwidget";
-  version = "0.15.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "07wvcc650998yav9hr4hpm842j0iqdvls3mn9n2n4v8xvm7cii2m";
+    sha256 = "0kpg4b60h6dads8ncwlk0zj1c8y7xpb0kz28j0v9fqjbmxja7x6w";
   };
 
   nativeBuildInputs = [

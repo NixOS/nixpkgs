@@ -35,7 +35,7 @@
 , rebuildBytecode ? true
 , stripBytecode ? false
 , includeSiteCustomize ? true
-, static ? false
+, static ? stdenv.hostPlatform.isStatic
 # Not using optimizations on Darwin
 # configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.
 , enableOptimizations ? (!stdenv.isDarwin)
@@ -165,6 +165,9 @@ in with passthru; stdenv.mkDerivation {
   ] ++ [
     # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
+  ] ++ optionals (isPy37 || isPy38) [
+    # Backport a fix for ctypes.util.find_library.
+    ./3.7/find_library.patch
   ];
 
   postPatch = ''

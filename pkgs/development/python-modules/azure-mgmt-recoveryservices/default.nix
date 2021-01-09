@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservices";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "3c90e6b2e358dbe6d5c6d7204955bdf52c3e977c6f8b727cbbb8811427d7fd52";
+    sha256 = "203ebbd6b698a99975092a72d6d47285646a0264b9085fecef1e7b7c98c5d52e";
   };
 
   propagatedBuildInputs = [

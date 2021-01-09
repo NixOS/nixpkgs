@@ -2,15 +2,7 @@
 , python
 , buildPythonPackage
 , fetchPypi
-, pytest
 , python-utils
-, sphinx
-, flake8
-, pytest-flakes
-, pytestcov
-, pytestcache
-, pytestrunner
-, freezegun
 }:
 
 buildPythonPackage rec {
@@ -23,17 +15,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ python-utils ];
-  nativeBuildInputs = [ pytestrunner ];
-  checkInputs = [
-    pytest sphinx flake8 pytest-flakes pytestcov
-    pytestcache freezegun
-  ];
-  # ignore tests on the nix wrapped setup.py
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} setup.py test
-    runHook postCheck
-  '';
+
+  # depends on unmaintained pytest-pep8
+  # https://github.com/WoLpH/python-progressbar/issues/241
+  doCheck = false;
+
+  pythonImportsCheck = [ "progressbar" ];
 
   meta = with stdenv.lib; {
     homepage = "https://progressbar-2.readthedocs.io/en/latest/";

@@ -1,46 +1,51 @@
 {
-  stdenv, extra-cmake-modules, fetchurl,
+  lib, mkDerivation, extra-cmake-modules, fetchurl,
 
   kconfig, kdoctools, kguiaddons, ki18n, kinit, kiconthemes, kio,
-  knewstuff, kplotting, kwidgetsaddons, kxmlgui, wrapQtAppsHook,
+  knewstuff, kplotting, kwidgetsaddons, kxmlgui, knotifyconfig,
 
-  qtx11extras, qtwebsockets,
+
+  qtx11extras, qtwebsockets, qtkeychain, libsecret,
 
   eigen, zlib,
 
-  cfitsio, indilib, xplanet, libnova, gsl
+  cfitsio, indilib, xplanet, libnova, libraw, gsl, wcslib, stellarsolver
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "kstars";
-  version = "3.4.3";
+  version = "3.5.0";
 
   src = fetchurl {
-    url = "https://mirrors.mit.edu/kde/stable/kstars/kstars-${version}.tar.xz";
-    sha256 = "0j5yxg6ay6sic194skz6vjzg6yvrpb3gvypvs0frjrcjbsl1j4f8";
+    url = "mirror://kde/stable/kstars/kstars-${version}.tar.xz";
+    sha256 = "0fpkm75abn0hhdhfyvpfl6n0fr7gvw63xhb4hvwdrglhkf2nxam1";
   };
 
   patches = [
-    ./indi-fix.patch
+    # Patches ksutils.cpp to use nix store prefixes to find program binaries of
+    # indilib and xplanet dependencies. Without the patch, Ekos is unable to spawn
+    # indi servers for local telescope/camera control.
+    ./fs-fixes.patch
   ];
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kdoctools kguiaddons ki18n kinit kiconthemes kio
-    knewstuff kplotting kwidgetsaddons kxmlgui
+    knewstuff kplotting kwidgetsaddons kxmlgui knotifyconfig
 
-    qtx11extras qtwebsockets
+    qtx11extras qtwebsockets qtkeychain libsecret
 
     eigen zlib
 
-    cfitsio indilib xplanet libnova gsl
+    cfitsio indilib xplanet libnova libraw gsl wcslib stellarsolver
   ];
 
   cmakeFlags = [
     "-DINDI_NIX_ROOT=${indilib}"
+    "-DXPLANET_NIX_ROOT=${xplanet}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual planetarium astronomy software";
     homepage = "https://kde.org/applications/education/org.kde.kstars";
     longDescription = ''
@@ -50,6 +55,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ timput ];
+    maintainers = with maintainers; [ timput hjones2199 ];
   };
 }

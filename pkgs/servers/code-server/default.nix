@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, runCommand
+{ stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
 , moreutils, jq, git, zip, rsync, pkgconfig, yarn, python2
 , nodejs-12_x, libsecret, xorg, ripgrep, nettools }:
 
@@ -12,15 +12,29 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "code-server";
-  version = "3.4.1";
-  commit = "d3773c11f147bdd7a4f5acfefdee23c26f069e76";
+  version = "3.6.0";
+  commit = "a4a03c14922ccaec2a9ff8d1b7b2af8522a4214d";
 
   src = fetchFromGitHub {
     owner = "cdr";
     repo = "code-server";
-    rev = version;
-    sha256 = "PfDD0waloppGZ09zCQ9ggBeVL/Dhfv6QmEs/fs7QLtA=";
+    rev = "v${version}";
+    sha256 = "1c0p1s0bl3az5ysl97mz3gbynyndz6jd2jj7lx2snz6jqqd43y9p";
     fetchSubmodules = true;
+  };
+
+  cloudAgent = buildGoModule rec {
+    pname = "cloud-agent";
+    version = "0.1.0";
+
+    src = fetchFromGitHub {
+      owner = "cdr";
+      repo = "cloud-agent";
+      rev = version;
+      sha256 = "1p20cvgvs38604km9ixylz0r3k7blkd80lncmma3z05y5n5fqps1";
+    };
+
+    vendorSha256 = "0yky1v1ak3ysykjf3gm1hd7qyj5rm4fw7amga81sb31x0357jlzr";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -45,10 +59,10 @@ in stdenv.mkDerivation rec {
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
 
-    # to get hash values use nix-build -A code-server.yarnPrefetchCache
+    # to get hash values use nix-build -A code-server.prefetchYarnCache
     outputHash = {
-      x86_64-linux = "Zze2hEm2Np+SyQ0KXy5CZr5wilZbHBYXNYcRJBUUkQo=";
-      aarch64-linux = "LiIvGuBismWSL2yV2DuKUWDjIzuIQU/VVxtiD4xJ+6Q=";
+      x86_64-linux = "1443qwkllb714s4qw3b9y1mcc6p2ykgc02pw2k3z2gczvvr0g8qv";
+      aarch64-linux = "1443qwkllb714s4qw3b9y1mcc6p2ykgc02pw2k3z2gczvvr0g8qv";
     }.${system} or (throw "Unsupported system ${system}");
   };
 
@@ -64,7 +78,7 @@ in stdenv.mkDerivation rec {
   ];
   buildInputs = [ libsecret xorg.libX11 xorg.libxkbfile ];
 
-  patchPhase = ''
+  postPatch = ''
     export HOME=$PWD
 
     patchShebangs ./ci
@@ -75,6 +89,21 @@ in stdenv.mkDerivation rec {
     # allow offline install for vscode
     substituteInPlace lib/vscode/build/npm/postinstall.js \
       --replace '--ignore-optional' '--offline'
+
+    # remove unnecessary git config command
+    substituteInPlace lib/vscode/build/npm/postinstall.js \
+      --replace "cp.execSync('git config pull.rebase true');" ""
+
+    # allow offline install for postinstall scripts in extensions
+    grep -rl "yarn install" --include package.json lib/vscode/extensions \
+      | xargs sed -i 's/yarn install/yarn install --offline/g'
+
+    # remove download of coder-cloud agent
+    sed -i ':a;N;$!ba;s/OS=.*agent//' ci/build/npm-postinstall.sh
+
+    # use offline cache when installing release packages
+    substituteInPlace ci/build/npm-postinstall.sh \
+      --replace 'yarn --production' 'yarn --production --offline'
 
     # fix path to ifconfig, so vscode can get mac address
     substituteInPlace lib/vscode/src/vs/base/node/macAddress.ts \
@@ -111,8 +140,14 @@ in stdenv.mkDerivation rec {
     # set nodedir, so we can build binaries later
     npm config set nodedir "${nodeSources}"
 
+    # link coder-cloud agent from nix store
+    ln -s "${cloudAgent}/bin/cloud-agent" ./lib/coder-cloud-agent
+
     # skip browser downloads for playwright
     export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD="true"
+
+    # skip unnecessary electron download
+    export ELECTRON_SKIP_BINARY_DOWNLOAD=1
   '';
 
   buildPhase = ''
@@ -161,6 +196,9 @@ in stdenv.mkDerivation rec {
 
     # install only production dependencies
     yarn --offline --cwd "$out/libexec/code-server" --production
+
+    # link coder-cloud agent from nix store
+    ln -s "${cloudAgent}/bin/cloud-agent" $out/libexec/code-server/lib/coder-cloud-agent
 
     # create wrapper
     makeWrapper "${nodejs-12_x}/bin/node" "$out/bin/code-server" \

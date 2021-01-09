@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, enableShared ? true }:
+{ stdenv, fetchurl
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation (rec {
   version = "4.11.0";

@@ -13,6 +13,9 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ mpv requests python-mpv-jsonipc ];
 
+  # does not contain tests
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = "https://github.com/iwalton3/plex-mpv-shim";
     description = "Allows casting of videos to MPV via the Plex mobile and web app";

@@ -1,6 +1,9 @@
 { haskell
 , haskellPackages
 , lib
+
+# The following are only needed for the passthru.tests:
+, git
 , nodejs
 , purescript
 , runCommand
@@ -32,6 +35,7 @@ spago.overrideAttrs (oldAttrs: {
         {
           __noChroot = true;
           nativeBuildInputs = [
+            git
             nodejs
             purescript
             spago

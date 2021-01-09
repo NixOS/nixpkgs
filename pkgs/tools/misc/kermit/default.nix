@@ -16,12 +16,12 @@ stdenv.mkDerivation {
     tar xvzf $src
   '';
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's@-I/usr/include/ncurses@@' \
       -e 's@/usr/local@'"$out"@ makefile
   '';
 
-  buildPhase = "make -f makefile linux LNKFLAGS='-lcrypt -lresolv'";
+  buildPhase = "make -f makefile linux KFLAGS='-D_IO_file_flags' LNKFLAGS='-lcrypt -lresolv'";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -35,6 +35,5 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;
-    broken = true;
   };
 }

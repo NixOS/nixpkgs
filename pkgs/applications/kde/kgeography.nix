@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kgeography";
+  pname = "kgeography";
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.globin ];

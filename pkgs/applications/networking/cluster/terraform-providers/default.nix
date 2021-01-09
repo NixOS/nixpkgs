@@ -65,6 +65,7 @@ let
     lxd = callPackage ./lxd {};
     shell = callPackage ./shell {};
     vpsadmin = callPackage ./vpsadmin {};
+    vercel = callPackage ./vercel {};
   };
 in
   automated-providers // special-providers

@@ -80,15 +80,6 @@ let
   }) { inherit system; });
 
 in with pkgs; {
-  kafka_0_9  = makeKafkaTest "kafka_0_9"  apacheKafka_0_9;
-  kafka_0_10 = makeKafkaTest "kafka_0_10" apacheKafka_0_10;
-  kafka_0_11 = makeKafkaTest "kafka_0_11" apacheKafka_0_11;
-  kafka_1_0  = makeKafkaTest "kafka_1_0"  apacheKafka_1_0;
-  kafka_1_1  = makeKafkaTest "kafka_1_1"  apacheKafka_1_1;
-  kafka_2_0  = makeKafkaTest "kafka_2_0"  apacheKafka_2_0;
-  kafka_2_1  = makeKafkaTest "kafka_2_1"  apacheKafka_2_1;
-  kafka_2_2  = makeKafkaTest "kafka_2_2"  apacheKafka_2_2;
-  kafka_2_3  = makeKafkaTest "kafka_2_3"  apacheKafka_2_3;
   kafka_2_4  = makeKafkaTest "kafka_2_4"  apacheKafka_2_4;
   kafka_2_5  = makeKafkaTest "kafka_2_5"  apacheKafka_2_5;
 }

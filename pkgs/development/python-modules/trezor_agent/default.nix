@@ -24,6 +24,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools trezor libagent ecdsa ed25519 mnemonic keepkey semver wheel pinentry ];
 
+  doCheck = false;
+  pythonImportsCheck = [ "libagent" ];
+
   meta = with stdenv.lib; {
     description = "Using Trezor as hardware SSH agent";
     homepage = "https://github.com/romanz/trezor-agent";

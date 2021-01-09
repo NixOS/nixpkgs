@@ -4,7 +4,7 @@
 , fetchPypi
 , pytest
 , markupsafe
-, setuptools 
+, setuptools
 }:
 
 buildPythonPackage rec {

@@ -13,13 +13,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2020.1204.0";
+  version = "2020.1225.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "1yr9rkkmm15lgbfbrvpyp0d66i5v2xs39abw8yv6qlf70qh4bsg5";
+    sha256 = "BISczC4xYcF6m5l3ye/bdZxs/aK0Jz6sFVFOgNDo0v0=";
   };
 
   patches = [ ./bypass-tamper-detection.patch ];
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
 
     export HOME=$(mktemp -d)
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+    export DOTNET_NOLOGO=1
 
     nuget sources Add -Name nixos -Source "$PWD/nixos"
     nuget init "$nugetDeps" "$PWD/nixos"
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $HOME/.nuget/NuGet
     cp $HOME/.config/NuGet/NuGet.Config $HOME/.nuget/NuGet
 
-    dotnet restore --source "$PWD/nixos" osu.Desktop
+    dotnet restore --source "$PWD/nixos" osu.Desktop --runtime ${runtimeId}
 
     runHook postConfigure
   '';
@@ -59,6 +59,7 @@ in stdenv.mkDerivation rec {
     dotnet build osu.Desktop \
       --no-restore \
       --configuration Release \
+      --runtime ${runtimeId} \
       -p:Version=${version}
     runHook postBuild
   '';
@@ -69,10 +70,9 @@ in stdenv.mkDerivation rec {
     dotnet publish osu.Desktop \
       --no-build \
       --configuration Release \
+      --runtime ${runtimeId} \
       --no-self-contained \
       --output $out/lib/osu
-    shopt -s extglob
-    rm -r $out/lib/osu/runtimes/!(${runtimeId})
 
     makeWrapper $out/lib/osu/osu\! $out/bin/osu\! \
       --set DOTNET_ROOT "${dotnet-netcore}" \
@@ -91,6 +91,13 @@ in stdenv.mkDerivation rec {
     }}/share/applications $out/share
 
     runHook postInstall
+  '';
+
+  fixupPhase = ''
+    runHook preFixup
+    cp -f ${./osu.runtimeconfig.json} "$out/lib/osu/osu!.runtimeconfig.json"
+    ln -sft $out/lib/osu ${SDL2}/lib/libSDL2${stdenv.hostPlatform.extensions.sharedLibrary}
+    runHook postFixup
   '';
 
   # Strip breaks the executable.

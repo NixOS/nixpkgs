@@ -100,6 +100,10 @@ in
       packages = [ cfg.lxcPackage ];
     };
 
+    # TODO: remove once LXD gets proper support for cgroupsv2
+    # (currently most of the e.g. CPU accounting stuff doesn't work)
+    systemd.enableUnifiedCgroupHierarchy = false;
+
     systemd.services.lxd = {
       description = "LXD Container Management Daemon";
 

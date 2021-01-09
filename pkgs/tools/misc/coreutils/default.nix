@@ -76,8 +76,7 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ perl xz.bin ]
-    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
-    ++ optionals stdenv.hostPlatform.isMusl [ autoreconfHook bison ];   # due to patch
+    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ];  # due to patch
   configureFlags = [ "--with-packager=https://NixOS.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")

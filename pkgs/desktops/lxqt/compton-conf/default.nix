@@ -11,13 +11,13 @@
 
 mkDerivation rec {
   pname = "compton-conf";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1wqnajarkrpmc60jr1zw5w39lvlf9ii4ri9wgyn55hh1rkbzi7py";
+    sha256 = "0gcvyn7aabdz5yj0jzv14hlgjgbm8d9ib5r73i842f0hv4cv9m0q";
   };
 
   nativeBuildInputs = [

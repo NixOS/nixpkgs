@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, makeWrapper, imagemagick, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "ttygif";
@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "CC:=$(CC)" "PREFIX=${placeholder "out"}" ];
+
+  nativeBuildInputs = [ makeWrapper ];
+  postInstall = ''
+    wrapProgram $out/bin/ttygif \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ imagemagick xorg.xwd ]}
+  '';
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/icholy/ttygif";

@@ -10,11 +10,11 @@ assert enablePython -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.16.8";
+  version = "9.16.10";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0ccdbqmpvnxlbrxjsx2w8ir4xh961svzcw7n87n8dglj6rb9r6wy";
+    sha256 = "sha256-vEf8AZxiBeamv7g5xUShRyMh3wU3upBbhGpMv/4zYrM=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -22,11 +22,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./dont-keep-configure-flags.patch
     ./remove-mkdir-var.patch
-    # Fix cross-compilation (will be included in next release after 9.16.8)
-    (fetchpatch {
-      url = "https://gitlab.isc.org/isc-projects/bind9/-/commit/35ca6df07277adff4df7472a0b01ea5438cdf1ff.patch";
-      sha256 = "1sj0hcd0wgkam7hrbp2vw2yymmni4azr9ixd9shz1l6ja90bdj9h";
-    })
   ];
 
   nativeBuildInputs = [ perl pkg-config ];

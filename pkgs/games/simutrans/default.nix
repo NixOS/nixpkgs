@@ -52,7 +52,7 @@ let
     "pak128.german" = {
       url = "mirror://sourceforge/simutrans/PAK128.german/"
         + "pak128.german_1.2_for_ST_121.0/PAK128.german_1.2_for_ST_121-0.zip";
-      sha256 = "1jxjckz4b02yv1mv1zc3pmajpq740dfnlvhr0x762lbrybymvagi";
+      sha256 = "1cv1rzl1a3i5dvk476zq094wawk9hhdh2f0y4xrdny5gn17mb2xi";
     };
 
     /* This release contains accented filenames that prevent unzipping.

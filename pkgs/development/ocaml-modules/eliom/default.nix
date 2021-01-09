@@ -1,6 +1,7 @@
 { stdenv, fetchzip, which, ocsigen_server, ocaml,
   lwt_react,
   opaline, ppx_deriving, findlib
+, ppx_tools_versioned
 , js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
 , js_of_ocaml-lwt
 , js_of_ocaml-tyxml
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec
   };
 
   buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opaline
+    ppx_tools_versioned
   ];
 
   propagatedBuildInputs = [

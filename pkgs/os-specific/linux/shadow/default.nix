@@ -1,5 +1,5 @@
-{ stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt, libxml2
-, docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison
+{ stdenv, nixosTests, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt
+, libxml2 , docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison
 , pam ? null, glibcCross ? null
 }:
 
@@ -86,5 +86,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     shellPath = "/bin/nologin";
+    tests = { inherit (nixosTests) shadow; };
   };
 }

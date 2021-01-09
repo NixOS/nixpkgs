@@ -4,6 +4,7 @@ mkXfceDerivation {
   category = "apps";
   pname = "mousepad";
   version = "0.4.2";
+  odd-unstable = false;
 
   sha256 = "0a35vaq4l0d8vzw7hqpvbgkr3wj1sqr2zvj7bc5z4ikz2cppqj7p";
 

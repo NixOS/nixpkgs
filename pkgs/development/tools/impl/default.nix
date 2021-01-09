@@ -1,23 +1,20 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
-}:
+{ buildGoModule, lib, fetchFromGitHub }:
 
-buildGoPackage rec {
-  pname = "impl-unstable";
-  version = "2019-11-19";
-  rev = "6b9658ad00c7fbd61a7b50c195754413f6c4142c";
-
-  goPackagePath = "github.com/josharian/impl";
+buildGoModule rec {
+  pname = "impl";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "josharian";
     repo = "impl";
-    sha256 = "1d4fvj7fgiykznx1z4fmcc06x5hsqp9wn62m5qm1ds8m0rjqaxwi";
+    rev = "v${version}";
+    sha256 = "0l21fkcgiaaf6ka91dmz8hx0l3nbp0kqi8p25kij1s5zb796z0dy";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "0xkalwy02w62px01jdwwr3vwwsh50f22dsxf8lrrwmw6k0rq57zv";
+
+  # go: cannot find GOROOT directory: go
+  doCheck = false;
 
   meta = with lib; {
     description = "Generate method stubs for implementing an interface";

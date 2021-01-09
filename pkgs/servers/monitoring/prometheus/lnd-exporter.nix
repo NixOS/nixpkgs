@@ -1,17 +1,17 @@
 { stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
-  pname = "lndmon-unstable";
-  version = "2020-01-09";
+  pname = "lndmon";
+  version = "unstable-2020-12-04";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lndmon";
-    sha256 = "0d4z8yv2459wsi4c91qs5an13acn73fd8s321xya5vxxiyf51q24";
-    rev = "2c7c5ce0fcb4e7eef4df60efe8a644587a309f6c";
+    sha256 = "0q72jbkhw1vpwxd0r80l1v4ab71sakc315plfqbijy7al9ywq5nl";
+    rev = "f07d574320dd1a6a428fecd47f3a5bb46a0fc4d1";
   };
 
-  vendorSha256 = "083h2ksnqmcr48958r5pag9a28xvljpc3prip6wn70ifp2wpjpin";
+  vendorSha256 = "06if387b9m02ciqgcissih1x06l33djp87vgspwzz589f77vczk8";
 
   doCheck = false;
 

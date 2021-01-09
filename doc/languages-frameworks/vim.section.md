@@ -1,9 +1,4 @@
----
-title: User's Guide for Vim in Nixpkgs
-author: Marc Weber
-date: 2016-06-25
----
-# Vim
+# Vim {#vim}
 
 Both Neovim and Vim can be configured to include your favorite plugins
 and additional libraries.

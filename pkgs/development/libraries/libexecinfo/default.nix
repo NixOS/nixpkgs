@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, enableStatic ? true, enableShared ? true }:
+{ stdenv, fetchurl, fetchpatch
+, enableStatic ? true
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "libexecinfo";

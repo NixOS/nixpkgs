@@ -48,6 +48,8 @@ in buildPythonPackage rec {
     cp ${buildAPI "${src}/api"}/bin/api $out/bin/metasrht-api
   '';
 
+  dontUseSetuptoolsCheck = true;
+
   meta = with stdenv.lib; {
     homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";

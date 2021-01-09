@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c
+{ stdenv, lib, pkgs, fetchgit, phpPackage, autoconf, pkgconfig, re2c
 , gettext, bzip2, curl, libxml2, openssl, gmp, icu64, oniguruma, libsodium
 , html-tidy, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl
 , uwimap, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng
@@ -6,7 +6,7 @@
 , readline, rsync, fetchpatch, valgrind
 }:
 
-let
+lib.makeScope pkgs.newScope (self: with self; {
   buildPecl = import ../build-support/build-pecl.nix {
     php = php.unwrapped;
     inherit lib;
@@ -21,15 +21,10 @@ let
 
   pcre' = if (lib.versionAtLeast php.version "7.3") then pcre2 else pcre;
 
-  callPackage = pkgs.newScope {
-    inherit mkDerivation php buildPecl pcre';
-  };
-in
-{
-  inherit buildPecl;
+  php = phpPackage;
 
   # This is a set of interactive tools based on PHP.
-  packages = {
+  tools = {
     box = callPackage ../development/php-packages/box { };
 
     composer = callPackage ../development/php-packages/composer { };
@@ -550,4 +545,4 @@ in
 
     # Produce the final attribute set of all extensions defined.
   in builtins.listToAttrs namedExtensions);
-}
+})

@@ -26,6 +26,8 @@ buildPythonPackage rec {
     export PKGVER=${version}
   '';
 
+  dontUseSetuptoolsCheck = true;
+
   meta = with stdenv.lib; {
     homepage = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     description = "Mailing list service for the sr.ht network";

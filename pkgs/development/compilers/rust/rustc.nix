@@ -1,6 +1,7 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
+, llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget
 , fetchurl, file, python3
-, llvm_10, darwin, cmake, rust, rustPlatform
+, darwin, cmake, rust, rustPlatform
 , pkgconfig, openssl
 , which, libffi
 , withBundledLLVM ? false
@@ -13,13 +14,6 @@
 let
   inherit (stdenv.lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
-
-  llvmSharedForBuild = pkgsBuildBuild.llvm_10.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvm_10.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvm_10.override { enableSharedLibraries = true; };
-
-  # For use at runtime
-  llvmShared = llvm_10.override { enableSharedLibraries = true; };
 in stdenv.mkDerivation rec {
   pname = "rustc";
   inherit version;
@@ -154,6 +148,11 @@ in stdenv.mkDerivation rec {
     python x.py dist rustc-dev
     tar xf build/dist/rustc-dev*tar.gz
     cp -r rustc-dev*/rustc-dev*/lib/* $out/lib/
+    rm $out/lib/rustlib/install.log
+    for m in $out/lib/rustlib/manifest-rust*
+    do
+      sort --output=$m < $m
+    done
 
   '' + ''
     # remove references to llvm-config in lib/rustlib/x86_64-unknown-linux-gnu/codegen-backends/librustc_codegen_llvm-llvm.so

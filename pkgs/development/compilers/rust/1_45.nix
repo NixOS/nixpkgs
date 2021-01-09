@@ -11,14 +11,23 @@
 , buildPackages
 , newScope, callPackage
 , CoreFoundation, Security
-, llvmPackages
-, pkgsBuildTarget, pkgsBuildBuild
+, pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost
 , makeRustPlatform
+, llvmPackages_5, llvm_10
 } @ args:
 
 import ./default.nix {
   rustcVersion = "1.45.2";
   rustcSha256 = "0273a1g3f59plyi1n0azf21qjzwml1yqdnj5z472crz37qggr8xp";
+
+  llvmSharedForBuild = pkgsBuildBuild.llvm_10.override { enableSharedLibraries = true; };
+  llvmSharedForHost = pkgsBuildHost.llvm_10.override { enableSharedLibraries = true; };
+  llvmSharedForTarget = pkgsBuildTarget.llvm_10.override { enableSharedLibraries = true; };
+
+  llvmBootstrapForDarwin = llvmPackages_5;
+
+  # For use at runtime
+  llvmShared = llvm_10.override { enableSharedLibraries = true; };
 
   # Note: the version MUST be one version prior to the version we're
   # building
@@ -41,4 +50,4 @@ import ./default.nix {
   ];
 }
 
-(builtins.removeAttrs args [ "fetchpatch" ])
+(builtins.removeAttrs args [ "fetchpatch" "pkgsBuildHost" "llvmPackages_5" "llvm_10" ])

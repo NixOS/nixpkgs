@@ -1,4 +1,6 @@
-{ stdenv, version, fetch, cmake, fetchpatch, enableShared ? true }:
+{ stdenv, version, fetch, cmake, fetchpatch
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";

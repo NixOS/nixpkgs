@@ -20,6 +20,9 @@ buildPythonPackage rec {
     ledgerblue libagent setuptools wheel
   ];
 
+  # no tests
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Using Ledger as hardware-based SSH/PGP agent";
     homepage = "https://github.com/romanz/trezor-agent";

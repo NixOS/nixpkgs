@@ -4,6 +4,7 @@
 , qtbase, qtdeclarative, qtgraphicaleffects
 , qtmultimedia, qtxmlpatterns
 , qtquickcontrols, qtquickcontrols2
+, qtmacextras
 , monero, miniupnpc, unbound, readline
 , boost, libunwind, libsodium, pcsclite
 , randomx, zeromq, libgcrypt, libgpgerror
@@ -27,13 +28,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.1.6";
+  version = "0.17.1.8";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "0kn5wvx2psbdaqmy1cxlbf5l1mdpvh0b6hh9drah3s7nj3654a3r";
+    sha256 = "13cjrfdkr7c2ff8j2rg8hvhlc00af38vcs67wlx2109i2baq4pp3";
   };
 
   nativeBuildInputs = [
@@ -49,7 +50,8 @@ stdenv.mkDerivation rec {
     randomx libgcrypt libgpgerror
     boost libunwind libsodium pcsclite
     zeromq hidapi rapidjson
-  ] ++ optionals trezorSupport [ libusb1 protobuf python3 ];
+  ] ++ optionals trezorSupport [ libusb1 protobuf python3 ]
+    ++ optionals stdenv.isDarwin [ qtmacextras ];
 
   postUnpack = ''
     # copy monero sources here
@@ -105,7 +107,6 @@ stdenv.mkDerivation rec {
     homepage     = "https://getmonero.org/";
     license      = licenses.bsd3;
     platforms    = platforms.all;
-    badPlatforms = platforms.darwin;
     maintainers  = with maintainers; [ rnhmjoj ];
   };
 }

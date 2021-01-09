@@ -44,7 +44,6 @@
 , libsecret
 , libcap_ng
 , numactl
-, xen
 , libapparmor
 , json-glib
 , webkitgtk
@@ -117,7 +116,6 @@ stdenv.mkDerivation rec {
     tracker-miners
     vte
     webkitgtk
-    xen
     yajl
   ];
 

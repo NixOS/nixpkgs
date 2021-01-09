@@ -8,7 +8,8 @@
 , shapely
 , ndjson
 , backoff
-, google_api_core
+, google-api-core
+, backports-datetime-fromisoformat
 }:
 
 buildPythonPackage rec {
@@ -22,12 +23,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jinja2 requests pillow rasterio shapely ndjson backoff
-    google_api_core
+    google-api-core backports-datetime-fromisoformat
   ];
 
   # Test cases are not running on pypi or GitHub
   doCheck = false;
-
   pythonImportsCheck = [ "labelbox" ];
 
   meta = with lib; {

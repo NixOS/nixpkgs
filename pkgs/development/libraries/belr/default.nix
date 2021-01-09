@@ -6,17 +6,15 @@
 
 stdenv.mkDerivation rec {
   pname = "belr";
-  # Using master branch for linphone-desktop caused a chain reaction that many
-  # of its dependencies needed to use master branch too.
-  version = "unstable-2020-03-09";
+  version = "4.3.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = pname;
-    rev = "326d030ca9db12525c2a6d2a65f386f36f3c2ed5";
-    sha256 = "1cdblb9smncq3al0crqp5651b02k1g6whlw1ib769p61gad0rs3v";
+    rev = version;
+    sha256 = "1lda0f89vas38xgmc4yvnrigmrbril3dyqxgb5jh1zfx1xczfh1q";
   };
 
   buildInputs = [ bctoolbox ];
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Belledonne Communications' language recognition library";
     homepage = "https://gitlab.linphone.org/BC/public/belr";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];
   };

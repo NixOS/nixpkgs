@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-toolchain.patch
+    ./0001-Fix-GCC-10-compile-problem.patch
   ];
 
   buildInputs = [ gnu-efi ];

@@ -1,22 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkg-config
 , uhd, boost, soapysdr
 } :
 
-let
-  version = "0.3.6";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "soapyuhd";
-  inherit version;
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyUHD";
     rev = "soapy-uhd-${version}";
-    sha256 = "11kp5iv21k8lqwjjydzqmcxdgpm6yicw6d3jhzvcvwcavd41crs7";
+    sha256 = "14rk9ap9ayks2ma6mygca08yfds9bgfmip8cvwl87l06hwhnlwhj";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ uhd boost soapysdr ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
@@ -28,7 +25,7 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = "https://github.com/pothosware/SoapyAirspy";
     description = "SoapySDR plugin for UHD devices";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ markuskowa ];
     platforms = platforms.linux;
   };

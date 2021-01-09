@@ -29,7 +29,7 @@ diff --git a/config/config.go b/config/config.go
 index 32d07fc..8ffd3e8 100644
 --- a/config/config.go
 +++ b/config/config.go
-@@ -355,6 +355,11 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
+@@ -472,6 +472,11 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
  			return nil, err
  		}
  	}
@@ -41,10 +41,11 @@ index 32d07fc..8ffd3e8 100644
  	file.NameMapper = mapName
  	config := &AercConfig{
  		Bindings: BindingConfig{
-@@ -423,6 +428,9 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
+@@ -546,6 +428,9 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
  	if err = config.LoadConfig(file); err != nil {
  		return nil, err
  	}
+
 +	for i, filter := range config.Filters {
 +		config.Filters[i].Command = strings.ReplaceAll(filter.Command, "@SHAREDIR@", sharedir)
 +	}

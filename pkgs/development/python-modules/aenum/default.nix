@@ -22,11 +22,10 @@ buildPythonPackage rec {
   runHook postCheck
   '';
 
-
   meta = {
     description = "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants";
     maintainers = with stdenv.lib.maintainers; [ vrthra ];
     license = with stdenv.lib.licenses; [ bsd3 ];
-    homepage = "https://bitbucket.org/stoneleaf/aenum";
+    homepage = "https://github.com/ethanfurman/aenum";
   };
 }

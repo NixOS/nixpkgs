@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
+{ config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python3Packages
@@ -13,9 +13,14 @@
 }:
 
 with lib;
+let
+  python = python3Packages.python;
+  optix = fetchzip {
+    url = "https://developer.download.nvidia.com/redist/optix/v7.0/OptiX-7.0.0-include.zip";
+    sha256 = "1b3ccd3197anya2bj3psxdrvrpfgiwva5zfv2xmyrl73nb2dvfr7";
+  };
 
-let python = python3Packages.python; in
-
+in
 stdenv.mkDerivation rec {
   pname = "blender";
   version = "2.91.0";
@@ -111,7 +116,11 @@ stdenv.mkDerivation rec {
     # Clang doesn't support "-export-dynamic"
     ++ optional stdenv.cc.isClang "-DPYTHON_LINKFLAGS="
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON";
+    ++ optional cudaSupport [
+      "-DWITH_CYCLES_CUDA_BINARIES=ON"
+      "-DWITH_CYCLES_DEVICE_OPTIX=ON"
+      "-DOPTIX_ROOT_DIR=${optix}"
+    ];
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}";
 
@@ -144,7 +153,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.blender.org";
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
-    license = licenses.gpl2Plus;
+    # OptiX, enabled with cudaSupport, is non-free.
+    license = with licenses; [ gpl2Plus ] ++ optional cudaSupport unfree;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ goibhniu veprbl ];
   };

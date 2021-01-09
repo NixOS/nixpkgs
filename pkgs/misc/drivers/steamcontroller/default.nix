@@ -21,9 +21,11 @@ buildPythonApplication {
   '';
 
   buildInputs = [ libusb1 ];
-  propagatedBuildInputs =
-    [ psutil python3Packages.libusb1 ]
+  propagatedBuildInputs = [ psutil python3Packages.libusb1 ]
     ++ lib.optionals GyroplotSupport [ pyqtgraph pyside ];
+
+  doCheck = false;
+  pythonImportsCheck = [ "steamcontroller" ];
 
   meta = with stdenv.lib; {
     description = "A standalone Steam controller driver";

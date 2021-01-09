@@ -5,19 +5,30 @@
 
 buildGoModule rec {
   pname = "dasel";
-  version = "1.10.0";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "TomWright";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1n2c6lcn4gad7w1zrh69rjdn5slnf6p7s5rkkkbpvs0jjwri11md";
+    sha256 = "/WB/SsOih0N5P4cUAD6zkCajplzZ/Jez0H80+CG08rc=";
   };
 
-  vendorSha256 = "1il1vnv0v97qh8f47md5i6qaac2k8par0pd0z7zqg67vxq6gim85";
+  vendorSha256 = "BdX4DO77mIf/+aBdkNVFUzClsIml1UMcgvikDbbdgcY=";
 
   buildFlagsArray = ''
     -ldflags=-s -w -X github.com/tomwright/dasel/internal.Version=${version}
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    if [[ "$("$out/bin/${pname}" --version)" == "${pname} version ${version}" ]]; then
+      echo "" | $out/bin/dasel put object -p yaml -t string -t int "my.favourites" colour=red number=3 | grep -q red
+      echo '${pname} smoke check passed'
+    else
+      echo '${pname} smoke check failed'
+      return 1
+    fi
   '';
 
   meta = with stdenv.lib; {

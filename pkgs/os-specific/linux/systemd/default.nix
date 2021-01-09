@@ -111,7 +111,7 @@ assert withCryptsetup ->
 let
   wantCurl = withRemote || withImportd;
 
-  version = "247";
+  version = "247.2";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -120,9 +120,9 @@ stdenv.mkDerivation {
   # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
-    repo = "systemd";
+    repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "1nwsr6p65zy5jpabvjbszq5g556l1npaf2xsik4p4pvjjwnn1nx6";
+    sha256 = "091pwrvxz3gcf80shlp28d6l4gvjzc6pb61v4mwxmk9d71qaq7ry";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a

@@ -14,6 +14,9 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
+  doCheck = false;
+  pythonImportsCheck = [ "setuptools_scm_git_archive" ];
+
   meta = with stdenv.lib; {
     description = "setuptools_scm plugin for git archives";
     homepage = "https://github.com/Changaco/setuptools_scm_git_archive";

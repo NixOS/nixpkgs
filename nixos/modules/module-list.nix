@@ -47,6 +47,7 @@
   ./hardware/digitalbitbox.nix
   ./hardware/device-tree.nix
   ./hardware/sensor/iio.nix
+  ./hardware/keyboard/zsa.nix
   ./hardware/ksm.nix
   ./hardware/ledger.nix
   ./hardware/logitech.nix
@@ -65,6 +66,7 @@
   ./hardware/tuxedo-keyboard.nix
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
+  ./hardware/opentabletdriver.nix
   ./hardware/wooting.nix
   ./hardware/uinput.nix
   ./hardware/video/amdgpu.nix
@@ -140,6 +142,7 @@
   ./programs/light.nix
   ./programs/mosh.nix
   ./programs/mininet.nix
+  ./programs/msmtp.nix
   ./programs/mtr.nix
   ./programs/nano.nix
   ./programs/neovim.nix
@@ -537,6 +540,7 @@
   ./services/monitoring/do-agent.nix
   ./services/monitoring/fusion-inventory.nix
   ./services/monitoring/grafana.nix
+  ./services/monitoring/grafana-image-renderer.nix
   ./services/monitoring/grafana-reporter.nix
   ./services/monitoring/graphite.nix
   ./services/monitoring/hdaps.nix
@@ -742,6 +746,7 @@
   ./services/networking/skydns.nix
   ./services/networking/shadowsocks.nix
   ./services/networking/shairport-sync.nix
+  ./services/networking/shellhub-agent.nix
   ./services/networking/shorewall.nix
   ./services/networking/shorewall6.nix
   ./services/networking/shout.nix
@@ -847,7 +852,7 @@
   ./services/torrent/peerflix.nix
   ./services/torrent/rtorrent.nix
   ./services/torrent/transmission.nix
-  ./services/ttys/agetty.nix
+  ./services/ttys/getty.nix
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
   ./services/wayland/cage.nix
@@ -856,7 +861,6 @@
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
-  ./services/web-apps/codimd.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/documize.nix
@@ -865,6 +869,7 @@
   ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/grocy.nix
+  ./services/web-apps/hedgedoc.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix
   ./services/web-apps/ihatemoney

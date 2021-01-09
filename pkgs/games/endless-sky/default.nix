@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, fetchpatch
 , SDL2, libpng, libjpeg, glew, openal, scons, libmad
 }:
 
@@ -17,6 +17,15 @@ stdenv.mkDerivation {
     sha256 = "1hly68ljm7yv01jfxyr7g6jivhj0igg6xx7vi92zqymick0hlh7a";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "endless-sky-gcc10.patch";
+      url = "https://github.com/endless-sky/endless-sky/commit/bc3cab5992694547f9c6c067b5579ef06224781b.patch";
+      sha256 = "0v3913jyzhh1d81dxv738kcd3xhh7mrl06qnmj7a3ya2xd9pq4dk";
+    })
+    ./fixes.patch
+  ];
+
   enableParallelBuilding = true;
 
   buildInputs = [
@@ -24,10 +33,6 @@ stdenv.mkDerivation {
   ];
 
   prefixKey = "PREFIX=";
-
-  patches = [
-    ./fixes.patch
-  ];
 
   meta = with stdenv.lib; {
     description = "A sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";

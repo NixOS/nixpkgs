@@ -1,6 +1,7 @@
 { stdenv, lib, pkgArches, callPackage,
   name, version, src, mingwGccs, monos, geckos, platforms,
-  pkgconfig, fontforge, makeWrapper, flex, bison,
+  bison, flex, fontforge, makeWrapper, pkg-config,
+  autoconf, hexdump, perl,
   supportFlags,
   patches,
   buildScript ? null, configureFlags ? []
@@ -18,16 +19,24 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   inherit name src configureFlags;
 
   # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
-  # FIXME Breaks wineStaging builds
-  strictDeps = supportFlags.mingwSupport;
+  strictDeps = true;
 
   nativeBuildInputs = [
-    pkgconfig fontforge makeWrapper flex bison
+    bison
+    flex
+    fontforge
+    makeWrapper
+    pkg-config
+
+    # Required by staging
+    autoconf
+    hexdump
+    perl
   ]
   ++ lib.optionals supportFlags.mingwSupport mingwGccs;
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
-  [ pkgs.freetype ]
+  [ pkgs.freetype pkgs.perl pkgs.xorg.libX11 ]
   ++ lib.optional stdenv.isLinux         pkgs.libcap
   ++ lib.optional pngSupport             pkgs.libpng
   ++ lib.optional jpegSupport            pkgs.libjpeg
@@ -72,8 +81,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ])
   ++ lib.optionals stdenv.isLinux  (with pkgs.xorg; [
      libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
-  ])
-  ++ [ pkgs.xorg.libX11 pkgs.perl ]));
+  ])));
 
   patches = [ ] ++ patches';
 
@@ -90,14 +98,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH
   # elements specified above.
   dontPatchELF = true;
-
-  # Disable stripping to avoid breaking placeholder DLLs/EXEs.
-  # Symptoms of broken placeholders are: when the wineprefix is created
-  # drive_c/windows/system32 will only contain a few files instead of
-  # hundreds, there will be an error about winemenubuilder and MountMgr
-  # on startup of Wine, and the Drives tab in winecfg will show an error.
-  # TODO: binutils 2.34 contains a fix for this bug, re-enable stripping once available.
-  dontStrip = true;
 
   ## FIXME
   # Add capability to ignore known failing tests
