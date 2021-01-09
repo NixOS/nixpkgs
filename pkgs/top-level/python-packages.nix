@@ -7971,6 +7971,8 @@ in {
 
   willow = callPackage ../development/python-modules/willow { };
 
+  winacl = callPackage ../development/python-modules/winacl { };
+
   wled = callPackage ../development/python-modules/wled { };
 
   word2vec = callPackage ../development/python-modules/word2vec { };
