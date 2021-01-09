@@ -1570,4 +1570,8 @@ self: super: {
   # https://github.com/jaspervdj/profiteur/issues/33
   profiteur = doJailbreak super.profiteur;
 
+  # Test suite has overly strict bounds on tasty.
+  # https://github.com/input-output-hk/nothunks/issues/9
+  nothunks = doJailbreak super.nothunks;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
