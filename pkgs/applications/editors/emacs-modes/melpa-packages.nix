@@ -143,11 +143,6 @@ let
 
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
-        gnuplot = super.gnuplot.overrideAttrs (old: {
-          nativeBuildInputs =
-            (old.nativeBuildInputs or [ ]) ++ [ pkgs.autoreconfHook ];
-        });
-
         pdf-tools = super.pdf-tools.overrideAttrs (old: {
           nativeBuildInputs = [ external.pkgconfig ];
           buildInputs = with external; old.buildInputs ++ [ autoconf automake libpng zlib poppler ];
