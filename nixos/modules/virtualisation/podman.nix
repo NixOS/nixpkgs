@@ -111,10 +111,6 @@ in
           assertion = cfg.dockerCompat -> !config.virtualisation.docker.enable;
           message = "Option dockerCompat conflicts with docker";
         }
-        {
-          assertion = cfg.enableNvidia -> !config.virtualisation.docker.enableNvidia;
-          message = "Option enableNvidia conflicts with docker.enableNvidia";
-        }
       ];
     }
   ]);
