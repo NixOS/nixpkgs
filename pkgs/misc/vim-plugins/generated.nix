@@ -2110,6 +2110,18 @@ let
     meta.homepage = "https://github.com/junegunn/limelight.vim/";
   };
 
+  lsp-status-nvim = buildVimPluginFrom2Nix {
+    pname = "lsp-status-nvim";
+    version = "2021-01-05";
+    src = fetchFromGitHub {
+      owner = "nvim-lua";
+      repo = "lsp-status.nvim";
+      rev = "5215ea78a5949b42b86bf474d33608de6b7594a3";
+      sha256 = "05h8n0ggi55g4ri9jsa4210knds0rxp8ym2knlq3njy40q0jjaxd";
+    };
+    meta.homepage = "https://github.com/nvim-lua/lsp-status.nvim/";
+  };
+
   lsp_extensions-nvim = buildVimPluginFrom2Nix {
     pname = "lsp_extensions-nvim";
     version = "2020-11-30";
