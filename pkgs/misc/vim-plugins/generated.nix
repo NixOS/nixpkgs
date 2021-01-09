@@ -5185,6 +5185,18 @@ let
     meta.homepage = "https://github.com/lambdalisue/vim-gista/";
   };
 
+  vim-git = buildVimPluginFrom2Nix {
+    pname = "vim-git";
+    version = "2020-07-13";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-git";
+      rev = "4be54a3e2e300a94f6f7dfa7a6ee9e81245c9886";
+      sha256 = "1061l9igdywfbqgwpf2f25yby78phb512hjbyzvqz5l1p7dw1xyd";
+    };
+    meta.homepage = "https://github.com/tpope/vim-git/";
+  };
+
   vim-gitbranch = buildVimPluginFrom2Nix {
     pname = "vim-gitbranch";
     version = "2017-05-27";

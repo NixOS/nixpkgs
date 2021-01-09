@@ -560,6 +560,7 @@ tpope/vim-eunuch
 tpope/vim-fireplace
 tpope/vim-flagship
 tpope/vim-fugitive
+tpope/vim-git
 tpope/vim-liquid
 tpope/vim-obsession
 tpope/vim-pathogen
