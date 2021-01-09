@@ -6297,6 +6297,8 @@ in
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
+  nzbhydra2 = callPackage ../servers/nzbhydra2 { };
+
   oathToolkit = callPackage ../tools/security/oath-toolkit { };
 
   oatpp = callPackage ../development/libraries/oatpp { };
