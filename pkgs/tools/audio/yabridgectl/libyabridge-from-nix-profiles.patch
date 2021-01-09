@@ -1,0 +1,64 @@
+diff --git a/tools/yabridgectl/src/config.rs b/tools/yabridgectl/src/config.rs
+index fbb6b97..5499b6c 100644
+--- a/tools/yabridgectl/src/config.rs
++++ b/tools/yabridgectl/src/config.rs
+@@ -20,8 +20,10 @@ use anyhow::{anyhow, Context, Result};
+ use rayon::prelude::*;
+ use serde_derive::{Deserialize, Serialize};
+ use std::collections::{BTreeMap, BTreeSet};
++use std::env;
+ use std::fmt::Display;
+ use std::fs;
++use std::iter;
+ use std::path::{Path, PathBuf};
+ use which::which;
+ use xdg::BaseDirectories;
+@@ -176,14 +178,15 @@ impl Config {
+                 }
+             }
+             None => {
+-                // Search in the two common installation locations if no path was set explicitely.
+-                // We'll also search through `/usr/local/lib` just in case but since we advocate
+-                // against isntalling yabridge there we won't list this path in the error message
+-                // when `libyabridge.so` can't be found.
+-                let system_path = Path::new("/usr/lib");
+-                let system_path_alt = Path::new("/usr/local/lib");
++                // Search through NIX_PROFILES & data home directory if no path was set explicitly.
++                let nix_profiles = env::var("NIX_PROFILES");
+                 let user_path = yabridge_directories()?.get_data_home();
+-                for directory in &[system_path, system_path_alt, &user_path] {
++                let lib_directories = nix_profiles.iter()
++                    .flat_map(|profiles| profiles.split(' ')
++                              .map(|profile| Path::new(profile).join("lib")))
++                    .chain(iter::once(user_path.clone()));
++
++                for directory in lib_directories {
+                     let candidate = directory.join(LIBYABRIDGE_NAME);
+                     if candidate.exists() {
+                         return Ok(candidate);
+@@ -191,10 +194,9 @@ impl Config {
+                 }
+ 
+                 Err(anyhow!(
+-                    "Could not find '{}' in either '{}' or '{}'. You can override the default \
+-                     search path using 'yabridgectl set --path=<path>'.",
++                    "Could not find '{}' through 'NIX_PROFILES' or '{}'. You can override the \
++                     default search path using 'yabridgectl set --path=<path>'.",
+                     LIBYABRIDGE_NAME,
+-                    system_path.display(),
+                     user_path.display()
+                 ))
+             }
+diff --git a/tools/yabridgectl/src/main.rs b/tools/yabridgectl/src/main.rs
+index 649ce4e..0f1f0e7 100644
+--- a/tools/yabridgectl/src/main.rs
++++ b/tools/yabridgectl/src/main.rs
+@@ -102,7 +102,7 @@ fn main() -> Result<()> {
+                         .about("Path to the directory containing 'libyabridge.so'")
+                         .long_about(
+                             "Path to the directory containing 'libyabridge.so'. If this is \
+-                             not set, then yabridgectl will look in both '/usr/lib' and \
++                             not set, then yabridgectl will look through 'NIX_PROFILES' and \
+                              '~/.local/share/yabridge' by default.",
+                         )
+                         .validator(validate_path)

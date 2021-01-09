@@ -752,6 +752,8 @@ in
     wine = wineWowPackages.minimal;
   };
 
+  yabridgectl = callPackage ../tools/audio/yabridgectl { };
+
   ### APPLICATIONS/TERMINAL-EMULATORS
 
   alacritty = callPackage ../applications/terminal-emulators/alacritty {

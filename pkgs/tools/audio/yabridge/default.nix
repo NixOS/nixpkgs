@@ -46,6 +46,7 @@ in stdenv.mkDerivation rec {
   pname = "yabridge";
   version = "2.2.1";
 
+  # NOTE: Also update yabridgectl's cargoSha256 when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = pname;
