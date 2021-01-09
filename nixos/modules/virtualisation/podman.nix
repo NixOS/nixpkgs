@@ -117,8 +117,5 @@ in
         }
       ];
     }
-    (lib.mkIf cfg.enableNvidia {
-      environment.etc."nvidia-container-runtime/config.toml".source = "${nvidia-docker}/etc/podman-config.toml";
-    })
   ]);
 }
