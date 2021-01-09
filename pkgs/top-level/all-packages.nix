@@ -2494,7 +2494,9 @@ in
 
   monetdb = callPackage ../servers/sql/monetdb { };
 
-  monado = callPackage ../applications/graphics/monado {};
+  monado = callPackage ../applications/graphics/monado {
+    inherit (gst_all_1) gstreamer gst-plugins-base;
+  };
 
   mons = callPackage ../tools/misc/mons {};
 
@@ -25559,6 +25561,8 @@ in
   xrectsel = callPackage ../tools/X11/xrectsel { };
 
   xrestop = callPackage ../tools/X11/xrestop { };
+
+  xrgears = callPackage ../applications/graphics/xrgears { };
 
   xsd = callPackage ../development/libraries/xsd { };
 
