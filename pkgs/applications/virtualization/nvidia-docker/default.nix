@@ -1,18 +1,4 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, callPackage
-, makeWrapper
-, buildGoModule
-, buildGoPackage
-, glibc
-, docker
-, linkFarm
-}:
-
-with lib; let
-in
+{ stdenv, lib, fetchFromGitHub, callPackage }:
 stdenv.mkDerivation rec {
   pname = "nvidia-docker";
   version = "2.5.0";
