@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A high performance, transport independent, multi-platform implementation of RFC3720";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     homepage = "https://www.open-iscsi.com";
     platforms = platforms.linux;
     maintainers = with maintainers; [ cleverca22 zaninime ];
