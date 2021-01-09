@@ -6,17 +6,13 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
-  phpPackage =
-    let
-      base = pkgs.php74;
-    in
-      base.buildEnv {
-        extensions = { enabled, all }: with all;
-          enabled ++ [
-            apcu redis memcached imagick
-          ];
-        extraConfig = phpOptionsStr;
-      };
+  phpPackage = pkgs.php74.buildEnv {
+    extensions = { enabled, all }:
+      enabled
+      ++ (with all; [ apcu redis memcached imagick ]) # Necessary for vanilla nextcloud
+      ++ cfg.phpExtraExtensions all; # Enabled by user
+    extraConfig = phpOptionsStr;
+  };
 
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
@@ -113,6 +109,21 @@ in {
       description = ''
         Enable this option if you plan on using the webfinger plugin.
         The appropriate nginx rewrite rules will be added to your configuration.
+      '';
+    };
+
+    phpExtraExtensions = mkOption {
+      type = with types; functionTo (listOf package);
+      default = all: [];
+      defaultText = "all: []";
+      description = ''
+        Additional PHP extensions to use for nextcloud.
+        By default, only extensions necessary for a vanilla nextcloud installation are enabled,
+        but you may choose from the list of available extensions and add further ones.
+        This is sometimes necessary to be able to install a certain nextcloud app that has additional requirements.
+      '';
+      example = literalExample ''
+        all: [ all.pdlib all.bz2 ]
       '';
     };
 
