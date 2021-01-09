@@ -45,7 +45,9 @@
     '' else ''
       mv "$unpackDir" "$out"
     '')
-    + extraPostFetch
+    + ''
+    ${extraPostFetch}
+    ''
     # Remove write permissions for files unpacked with write bits set
     # Fixes https://github.com/NixOS/nixpkgs/issues/38649
     #
