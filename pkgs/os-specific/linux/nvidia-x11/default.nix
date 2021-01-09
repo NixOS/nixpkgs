@@ -26,7 +26,7 @@ rec {
       sha256_64bit = "0qb0f8djys55b7qgvpbwafw5lkwvmcslqz3i2kr3jm354gy248ag";
       settingsVersion = "460.27.04";
       settingsSha256 = "1z9ibkhyjqzhhzi3gj88f5jlpc1d76jsncsy6wxpnbdbak8ljkw5";
-      persistencedSha256 = "36sM+djZmv77lGe7cdZ5tppzgkQD4IA0FJgCGsdZRI8=";
+      persistencedSha256 = "1zrnmwlwqg3pgy1jvldy9iv994wr823rl7vjr1kqnngdmn7bflxl";
     }
     else legacy_390;
 
