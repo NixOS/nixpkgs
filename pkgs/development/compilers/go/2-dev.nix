@@ -252,7 +252,6 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ goBootstrap ];
 
   meta = with stdenv.lib; {
-    branch = "dev.go2go";
     homepage = "http://golang.org/";
     description = "The Go Programming language";
     license = licenses.bsd3;
