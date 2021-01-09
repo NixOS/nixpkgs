@@ -178,6 +178,15 @@ args.stdenv.mkDerivation (args // {
 </programlisting>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Prefer using the top-level <varname>lib</varname> over its alias
+     <literal>stdenv.lib</literal>.  <varname>lib</varname> is unrelated to
+     <varname>stdenv</varname>, and so <literal>stdenv.lib</literal> should only
+     be used as a convenience alias when developing to avoid having to modify
+     the function inputs just to test something out.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
  <section xml:id="sec-package-naming">
