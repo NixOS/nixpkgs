@@ -963,7 +963,10 @@ self: super: {
 
   # Generate cli completions for dhall.
   dhall = generateOptparseApplicativeCompletion "dhall" super.dhall;
-  dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] super.dhall-json;
+  # For reasons that are not quire clear 'dhall-json' won't compile without 'tasty 1.4' due to its tests
+  # https://github.com/commercialhaskell/stackage/issues/5795
+  # This issue can be mitigated with 'dontCheck' which skips the tests and their compilation.
+  dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (dontCheck super.dhall-json);
   dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" super.dhall-nix;
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
