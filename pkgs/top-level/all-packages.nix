@@ -831,6 +831,8 @@ in
 
   alpine-make-vm-image = callPackage ../tools/virtualization/alpine-make-vm-image { };
 
+  amazon-ec2-utils = callPackage ../tools/admin/amazon-ec2-utils { };
+
   amazon-ecs-cli = callPackage ../tools/virtualization/amazon-ecs-cli { };
 
   amber = callPackage ../tools/text/amber {
@@ -25765,6 +25767,8 @@ in
 
   lnd = callPackage ../applications/blockchains/lnd.nix { };
 
+  lndconnect = callPackage ../applications/blockchains/lndconnect { };
+
   monero = callPackage ../applications/blockchains/monero {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
     boost = boost17x;
@@ -28813,6 +28817,8 @@ in
   vnote = libsForQt5.callPackage ../applications/office/vnote { };
 
   ssh-audit = callPackage ../tools/security/ssh-audit { };
+
+  autocpu-freq = callPackage ../tools/system/autocpu-freq {  };
 
   thermald = callPackage ../tools/system/thermald { };
 

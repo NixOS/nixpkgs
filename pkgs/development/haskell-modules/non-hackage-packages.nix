@@ -25,6 +25,8 @@ self: super: {
   hls-tactics-plugin = self.callPackage ../tools/haskell/haskell-language-server/hls-tactics-plugin.nix { };
   hls-explicit-imports-plugin = self.callPackage ../tools/haskell/haskell-language-server/hls-explicit-imports-plugin.nix { };
   hls-retrie-plugin = self.callPackage ../tools/haskell/haskell-language-server/hls-retrie-plugin.nix { };
+  hls-class-plugin = self.callPackage ../tools/haskell/haskell-language-server/hls-class-plugin.nix { };
+  hls-eval-plugin = self.callPackage ../tools/haskell/haskell-language-server/hls-eval-plugin.nix { };
 
   nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
 

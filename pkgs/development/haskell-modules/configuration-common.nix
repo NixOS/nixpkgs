@@ -217,7 +217,24 @@ self: super: {
   # building of the executable has been disabled for ghc < 8.10 in hnix.
   # Generating the completions should be activated again, once we default to
   # ghc 8.10.
-  hnix = dontCheck super.hnix;
+  hnix = dontCheck (super.hnix.override {
+
+    #  2021-01-07: NOTE: hnix-store-core pinned at ==0.2 in Stackage Nightly.
+    # https://github.com/haskell-nix/hnix-store/issues/104
+    # Until unpin, which may hold off in time due to Stackage maintenence bottleneck
+    # the 0_4_0_0 is used
+    hnix-store-core = self.hnix-store-core_0_4_0_0; # at least 1.7
+
+  });
+
+  #  2021-01-07: NOTE: hnix-store-core pinned at ==0.2 in Stackage Nightly.
+  # https://github.com/haskell-nix/hnix-store/issues/104
+  # Until unpin, which may hold off in time due to Stackage maintenence bottleneck
+  # the 0_4_0_0 is used
+  hnix-store-remote = (super.hnix-store-remote.override {
+    hnix-store-core = self.hnix-store-core_0_4_0_0; # at least 1.7
+  });
+
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -805,11 +822,20 @@ self: super: {
   # Needs QuickCheck <2.10, HUnit <1.6 and base <4.10
   pointfree = doJailbreak super.pointfree;
 
-  # Depends on base <4.12
-  # See https://github.com/haskell-hvr/cryptohash-sha512/pull/3
-  # , https://github.com/haskell-hvr/cryptohash-sha512/issues/4
-  # and https://github.com/haskell-hvr/cryptohash-sha512/pull/5
-  cryptohash-sha512 = doJailbreak super.cryptohash-sha512;
+  # The project is stale
+  #
+  # Archiving request: https://github.com/haskell-hvr/cryptohash-sha512/issues/6
+  #
+  # doJailbreak since base <4.12 && bytestring <0.11
+  # Request to support:
+  # https://github.com/haskell-hvr/cryptohash-sha512/issues/4
+  # PRs to support base <4.12:
+  # https://github.com/haskell-hvr/cryptohash-sha512/pull/3
+  # https://github.com/haskell-hvr/cryptohash-sha512/pull/5
+  #
+  # dontCheck since test suite does not support new `base16-bytestring` >= 1 format
+  # https://github.com/haskell-hvr/cryptohash-sha512/pull/5#issuecomment-752796913
+  cryptohash-sha512 = dontCheck (doJailbreak super.cryptohash-sha512);
 
   # Depends on tasty < 1.x, which we don't have.
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
@@ -1309,7 +1335,7 @@ self: super: {
   commonmark-extensions = dontCheck super.commonmark-extensions;
 
   # Testsuite trying to run `which haskeline-examples-Test`
-  haskeline_0_8_1_0 = dontCheck super.haskeline_0_8_1_0;
+  haskeline_0_8_1_1 = dontCheck super.haskeline_0_8_1_1;
 
   # Tests for list-t, superbuffer, and stm-containers
   # depend on HTF and it is broken, 2020-08-23
@@ -1483,22 +1509,7 @@ self: super: {
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/snap/pull/219
   snap = doJailbreak super.snap;
 
-  # 2020-11-21: cachix + chachix-api needs a patch for ghc 8.10 compat. Can be removed once released
-  # https://github.com/cachix/cachix/pull/331
-  cachix-api = appendPatch super.cachix-api (pkgs.fetchpatch {
-    url = https://github.com/cachix/cachix/commit/bfeec151a03afad72401815fe8bbb1b0d5d63b0d.patch;
-    sha256 = "0rglyd77g4j72l5g0sj9zpq2hy3v992bm6nhj58pmj4j2aj67y74";
-    stripLen = 2;
-    extraPrefix = "";
-    includes = [ "src/Cachix/Types/Session.hs" "src/Cachix/API/Signing.hs" ];
-  });
-  cachix = generateOptparseApplicativeCompletion "cachix" (appendPatch super.cachix (pkgs.fetchpatch {
-    url = https://github.com/cachix/cachix/commit/bfeec151a03afad72401815fe8bbb1b0d5d63b0d.patch;
-    sha256 = "06jmpz8l5vh9cch5aqdbrln7bm3fghxsicwy1m93avli320kp8pp";
-    stripLen = 2;
-    extraPrefix = "";
-    excludes = [ "stack.yaml" "sources.json" "src/Cachix/Types/Session.hs" "src/Cachix/API/Signing.hs" "cachix-api.cabal" "workflows/test.yml" ];
-  }));
+  cachix = generateOptparseApplicativeCompletion "cachix" super.cachix;
 
   # 2020-11-23: Jailbreaking until: https://github.com/michaelt/text-pipes/pull/29
   pipes-text = doJailbreak super.pipes-text;
@@ -1551,5 +1562,9 @@ self: super: {
   # Fixed by https://github.com/haskell-servant/servant/commit/08579ca0039410e04d6c36c975ddc20165819db6
   servant-client      = doJailbreak super.servant-client;
   servant-client-core = doJailbreak super.servant-client-core;
+
+  # overly strict dependency on aeson
+  # https://github.com/jaspervdj/profiteur/issues/33
+  profiteur = doJailbreak super.profiteur;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

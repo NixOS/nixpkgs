@@ -4654,6 +4654,12 @@
     githubId = 2029444;
     name = "James Kent";
   };
+  ketzacoatl = {
+    email = "ketzacoatl@protonmail.com";
+    github = "ketzacoatl";
+    githubId = 10122937;
+    name = "ketzacoatl";
+  };
   kevincox = {
     email = "kevincox@kevincox.ca";
     github = "kevincox";
@@ -8848,6 +8854,12 @@
     github = "tckmn";
     githubId = 2389333;
     name = "Andy Tockman";
+  };
+  Technical27 = {
+    email = "38222826+Technical27@users.noreply.github.com";
+    github = "Technical27";
+    githubId = 38222826;
+    name = "Aamaruvi Yogamani";
   };
   teh = {
     email = "tehunger@gmail.com";
