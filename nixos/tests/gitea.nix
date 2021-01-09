@@ -8,7 +8,8 @@ with pkgs.lib;
 
 let
   supportedDbTypes = [ "mysql" "postgres" "sqlite3" ];
-  makeGiteaTest = type: nameValuePair type (makeTest {
+  supportedCacheTypes = [ "memory" "redis" "memcache" ];
+  makeGiteaTest = type: cache: nameValuePair "${type}${if (cache != null) then "-${cache}" else ""} " (makeTest {
     name = "gitea-${type}";
     meta.maintainers = with maintainers; [ aanderse kolaente ma27 ];
 
@@ -19,6 +20,14 @@ let
           enable = true;
           database = { inherit type; };
           disableRegistration = true;
+          cache = if (cache == "redis") then {
+            redis.enable = true;
+          } else if (cache == "memcache") then {
+            memcached.enable = true;
+          } else if (cache == "memory") then {
+            memory.enable = true;
+          } else {
+          };
         };
         environment.systemPackages = [ pkgs.gitea pkgs.jq ];
         services.openssh.enable = true;
@@ -106,5 +115,4 @@ let
     '';
   });
 in
-
-listToAttrs (map makeGiteaTest supportedDbTypes)
+  listToAttrs ((map (db: makeGiteaTest db null) supportedDbTypes) ++ (map (cache: makeGiteaTest "sqlite3" cache) supportedCacheTypes))

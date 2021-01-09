@@ -6,8 +6,12 @@ let
   cfg = config.services.gitea;
   gitea = cfg.package;
   pg = config.services.postgresql;
+  redis = config.services.redis;
+  memcached = config.services.memcached;
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
+  useRedisUnixSocket = with cfg.cache.redis; enable && network == "unix";
+  useLocalMemcached = with cfg.cache.memcached; enable && cfg.cache.memcached.caches == { host = memcached.listen; port = memcached.port; };
   useSqlite = cfg.database.type == "sqlite3";
   configFile = pkgs.writeText "app.ini" ''
     APP_NAME = ${cfg.appName}
@@ -40,6 +44,81 @@ in
         default = false;
         type = types.bool;
         description = "Do not generate a configuration and use gitea' installation wizard instead. The first registered user will be administrator.";
+      };
+
+      cache = {
+        redis = {
+          enable = mkEnableOption "Enable the redis cache";
+          network = mkOption {
+            description = "Socket type";
+            type = types.enum [ "tcp" "unix" ];
+            example = "tcp";
+            default = "unix";
+          };
+          user = mkOption {
+            description = "Redis database user";
+            type = with types; nullOr str;
+            default = null;
+            example = "macaron";
+          };
+          host = mkOption {
+            description = "Redis database host";
+            type = with types; nullOr str;
+            default = null;
+            example = "127.0.0.1";
+          };
+          port = mkOption {
+            description = "Redis database port";
+            type = with types; nullOr int;
+            default = null;
+            example = 6379;
+          };
+          database = mkOption {
+            description = "Redis database name";
+            type = types.str;
+            default = "0";
+            example = "1";
+          };
+          poolSize = mkOption {
+            description = "Redis database pool size";
+            type = types.int;
+            default = 100;
+            example = 100;
+          };
+          idleTimeout = mkOption {
+            description = "Redis database connection timeout";
+            type = types.str;
+            default = "180s";
+            example = "180s";
+          };
+        };
+        memcached = {
+          enable = mkEnableOption "Enable memcached cache";
+          caches = mkOption {
+            description = "Memcached caches";
+            type = types.listOf (types.submodule (
+              { ... }: {
+                options = {
+                  host = mkOption {
+                    description = "Memcached host";
+                    type = types.str;
+                    default = memcached.listen;
+                    example = "127.0.0.1";
+                  };
+                  port = mkOption {
+                    description = "Memcached port";
+                    type = types.int;
+                    default = memcached.port;
+                    example = 9091;
+                  };
+                };
+              }));
+              default = [ { } ];
+          };
+        };
+        memory = {
+          enable = mkEnableOption "Enable the built-in memory cache";
+        };
       };
 
       stateDir = mkOption {
@@ -320,9 +399,44 @@ in
       { assertion = cfg.database.createDatabase -> cfg.database.user == cfg.user;
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
       }
+      { assertion = cfg.cache.redis.enable -> !cfg.cache.memcached.enable && !cfg.cache.memory.enable;
+        message = "Only one of services.gitea.cache.redis.enable, services.gitea.cache.memcached.enable or services.gitea.cache.memory.enable may be true";
+      }
+      { assertion = cfg.cache.memcached.enable -> !cfg.cache.memory.enable && !cfg.cache.redis.enable;
+        message = "Only one of services.gitea.cache.redis.enable, services.gitea.cache.memcached.enable or services.gitea.cache.memory.enable may be true";
+      }
+      { assertion = cfg.cache.memory.enable -> !cfg.cache.redis.enable && !cfg.cache.memcached.enable;
+        message = "Only one of services.gitea.cache.redis.enable, services.gitea.cache.memcached.enable or services.gitea.cache.memcache.enable may be true";
+      }
     ];
 
     services.gitea.settings = {
+      cache =
+        # Redis cache
+        if cfg.cache.redis.enable then with cfg.cache.redis; mkMerge [
+          {
+            ENABLE = true;
+            ADAPTER = "redis";
+          }
+          (if (network == "unix") then {
+            HOST = "network=unix,addr=${redis.unixSocket},db=${database},pool_size=${toString poolSize},idle_timeout=${idleTimeout}";
+          } else if (network == "tcp") then {
+            HOST = "redis://:${if (user != null) then "${user}@" else ""}${host}${if (port != null) then ":${toString port}" else ""}/${database}?pool_size=${poolSize}&idle_timeout=${idleTimeout}";
+          } else {
+            # See allowed values in cfg.cache.redis.network
+          })
+        ]
+
+        # Memcache
+        else if cfg.cache.memcached.enable then {
+          ENABLE = true;
+          ADAPTER = "memcache";
+          HOST = concatStringSep ";" (foreach cfg.memcached.caches (c: "${c.host}:${c.port}"));
+        } else {
+          ENABLE = true;
+          ADAPTER = "memory";
+        };
+
       database = mkMerge [
         {
           DB_TYPE = cfg.database.type;
@@ -591,7 +705,20 @@ in
         useDefaultShell = true;
         group = "gitea";
         isSystemUser = true;
+        extraGroups = mkIf (useRedisUnixSocket) [
+          "redis"
+        ];
       };
+    };
+
+    services.redis = mkIf (useRedisUnixSocket) {
+      enable = true;
+      settings.unixsocketperm = "770";
+      unixSocket = mkDefault "/run/redis/redis.sock";
+    };
+
+    services.memcached = mkIf (useLocalMemcached) {
+      enable = true;
     };
 
     users.groups.gitea = {};
