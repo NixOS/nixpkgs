@@ -1828,6 +1828,8 @@ in
 
   cloud-init = python3.pkgs.callPackage ../tools/virtualization/cloud-init { };
 
+  cloudbrute = callPackage ../tools/security/cloudbrute { };
+
   cloudflared = callPackage ../applications/networking/cloudflared { };
 
   cloudmonkey = callPackage ../tools/virtualization/cloudmonkey { };
