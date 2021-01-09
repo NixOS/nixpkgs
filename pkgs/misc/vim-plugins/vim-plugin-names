@@ -158,6 +158,7 @@ hecal3/vim-leader-guide
 henrik/vim-indexed-search
 HerringtonDarkholme/yats.vim
 honza/vim-snippets
+hoob3rt/lualine.nvim
 hotwatermorning/auto-git-diff
 hrsh7th/vim-vsnip
 hrsh7th/vim-vsnip-integ

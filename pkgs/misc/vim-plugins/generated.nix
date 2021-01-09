@@ -2134,6 +2134,18 @@ let
     meta.homepage = "https://github.com/nvim-lua/lsp_extensions.nvim/";
   };
 
+  lualine-nvim = buildVimPluginFrom2Nix {
+    pname = "lualine-nvim";
+    version = "2021-01-09";
+    src = fetchFromGitHub {
+      owner = "hoob3rt";
+      repo = "lualine.nvim";
+      rev = "8742b6e466dff01657b1cd4187f2f25aa57d2916";
+      sha256 = "00i0mx18apx48lhzmc4fik0mbqm3vsfdp4pbl2z8d0fnmldhqx75";
+    };
+    meta.homepage = "https://github.com/hoob3rt/lualine.nvim/";
+  };
+
   lushtags = buildVimPluginFrom2Nix {
     pname = "lushtags";
     version = "2017-04-19";
