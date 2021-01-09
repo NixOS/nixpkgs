@@ -87,6 +87,18 @@ let
     meta.homepage = "https://github.com/vim-scripts/align/";
   };
 
+  aniseed = buildVimPluginFrom2Nix {
+    pname = "aniseed";
+    version = "2021-01-08";
+    src = fetchFromGitHub {
+      owner = "Olical";
+      repo = "aniseed";
+      rev = "50adbc5ed5bb97b73b0b0c3241d9e62621ca59f9";
+      sha256 = "1wy5jd86273q7sxa50kv88flqdgmg9z2m4b6phpw3xnl5d1sj9f7";
+    };
+    meta.homepage = "https://github.com/Olical/aniseed/";
+  };
+
   ansible-vim = buildVimPluginFrom2Nix {
     pname = "ansible-vim";
     version = "2020-10-15";
@@ -5183,6 +5195,18 @@ let
       sha256 = "0q08hs4y9d4c4zdd0lh4k054133y0455fkn47gi7h16m01g92imc";
     };
     meta.homepage = "https://github.com/lambdalisue/vim-gista/";
+  };
+
+  vim-git = buildVimPluginFrom2Nix {
+    pname = "vim-git";
+    version = "2020-07-13";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-git";
+      rev = "4be54a3e2e300a94f6f7dfa7a6ee9e81245c9886";
+      sha256 = "1061l9igdywfbqgwpf2f25yby78phb512hjbyzvqz5l1p7dw1xyd";
+    };
+    meta.homepage = "https://github.com/tpope/vim-git/";
   };
 
   vim-gitbranch = buildVimPluginFrom2Nix {
