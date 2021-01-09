@@ -19,8 +19,8 @@
     },
     "5.4": {
         "extra": ".a",
-        "name": "linux-hardened-5.4.87.a.patch",
-        "sha256": "01hpww6lm00iry8z4z86hh86x66h3xbmxknxhmmhh2zwz6ahkmfd",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.87.a/linux-hardened-5.4.87.a.patch"
+        "name": "linux-hardened-5.4.88.a.patch",
+        "sha256": "0fz44izfmcsj205l7hjmkp78f5isy96fcjsz2bvrpb4x3h98bm5i",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.88.a/linux-hardened-5.4.88.a.patch"
     }
 }
