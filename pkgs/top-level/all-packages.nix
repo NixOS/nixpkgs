@@ -1412,6 +1412,8 @@ in
     novacomd = callPackage ../development/mobile/webos/novacomd.nix { };
   };
 
+  apprise = with python3Packages; toPythonApplication apprise;
+
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
     inherit (python3Packages) sphinx;
