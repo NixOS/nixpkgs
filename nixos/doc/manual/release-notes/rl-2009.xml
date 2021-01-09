@@ -1343,6 +1343,14 @@ CREATE ROLE postgres LOGIN SUPERUSER;
       It was chosen to do this as it has a usability breaking issue (see issue <link xlink:href="https://github.com/NixOS/nixpkgs/issues/98819">#98819</link>)
       that makes it unsuitable to be a default app.
     </para>
+    <note>
+      <para>
+        Issue <link
+        xlink:href="https://github.com/NixOS/nixpkgs/issues/98819">#98819</link>
+        is now fixed and <package>gnome3.epiphany</package> is once
+        again installed by default.
+      </para>
+    </note>
    </listitem>
    <listitem>
      <para>
