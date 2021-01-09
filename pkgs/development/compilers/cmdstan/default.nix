@@ -1,15 +1,29 @@
-{ stdenv, fetchurl, python, runtimeShell }:
+{ stdenv, fetchurl, python, runtimeShell, bash }:
 
-stdenv.mkDerivation {
-  name = "cmdstan-2.17.1";
+let
+  name = "cmdstan";
+  version = "2.25.0";
+in stdenv.mkDerivation {
+  name = "${name}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/stan-dev/cmdstan/releases/download/v2.17.1/cmdstan-2.17.1.tar.gz";
-    sha256 = "1vq1cnrkvrvbfl40j6ajc60jdrjcxag1fi6kff5pqmadfdz9564j";
+    url =
+      "https://github.com/stan-dev/cmdstan/releases/download/v2.25.0/${name}-${version}.tar.gz";
+    sha256 = "sha256:0jjsp65cc5jm16c74378lcm17c4d7xn163vm0whg51nk2djhrnbb";
   };
 
   buildFlags = [ "build" ];
   enableParallelBuilding = true;
+
+  # Hack to avoid TMPDIR in RPATHs.
+  # Copied from https://github.com/NixOS/nixpkgs/commit/f5c568446a12dbf58836925c5487e5cdad1fa578
+  preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+
+  patchPhase = ''
+    substituteInPlace stan/lib/stan_math/make/libraries --replace "/usr/bin/env bash" ${bash}/bin/bash
+
+    patchShebangs .
+      '';
 
   doCheck = true;
   checkInputs = [ python ];
