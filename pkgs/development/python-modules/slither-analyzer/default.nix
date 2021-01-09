@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.6.14";
+  version = "0.7.0";
 
   disabled = pythonOlder "3.6";
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "79f5098d27c149ca9cce2b8008ed29e2e0c8cee8fa3414c7e5455cb73c90a9a8";
+    sha256 = "10r479xidgxvas4wb0z6injp59jrn7rfq8d7bxlcalc2dy4mawr0";
   };
 
   nativeBuildInputs = [ makeWrapper ];
