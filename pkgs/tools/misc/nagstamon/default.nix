@@ -20,6 +20,8 @@ pythonPackages.buildPythonApplication rec {
     homepage = "https://nagstamon.ifw-dresden.de/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
-    inherit version;
+    # fails to install with:
+    # TypeError: cannot unpack non-iterable bool object
+    broken = true;
   };
 }
