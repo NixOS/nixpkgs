@@ -838,7 +838,7 @@
     "threshold" = ps: with ps; [ ];
     "tibber" = ps: with ps; [ ]; # missing inputs: pyTibber
     "tikteck" = ps: with ps; [ ]; # missing inputs: tikteck
-    "tile" = ps: with ps; [ ]; # missing inputs: pytile
+    "tile" = ps: with ps; [ pytile ];
     "time_date" = ps: with ps; [ ];
     "timer" = ps: with ps; [ ];
     "tmb" = ps: with ps; [ ]; # missing inputs: tmb
