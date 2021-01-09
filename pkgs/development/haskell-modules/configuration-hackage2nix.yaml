@@ -4581,7 +4581,6 @@ broken-packages:
   - derive-gadt
   - derive-IG
   - derive-monoid
-  - derive-storable-plugin
   - derive-trie
   - derp-lib
   - describe
