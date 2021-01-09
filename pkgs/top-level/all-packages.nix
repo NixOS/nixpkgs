@@ -7786,6 +7786,8 @@ in
 
   targetcli = callPackage ../os-specific/linux/targetcli { };
 
+  target-isns = callPackage ../os-specific/linux/target-isns { };
+
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
