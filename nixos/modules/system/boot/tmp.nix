@@ -30,6 +30,12 @@ with lib;
 
   config = {
 
+    systemd.additionalUpstreamSystemUnits = optional config.boot.tmpOnTmpfs "tmp.mount";
+
+    # we override the mount options, because systemd defaults to a size of 10% and an inode limit of 400k since 246
+    # the 10% size was reverted in 247, but the inode limit kept
+    # for large (e.g. chromium or libreoffice) or many concurrent builds in /tmp, running into this is quite easy
+    # the override works with regular systemd unit merging logic
     systemd.mounts = mkIf config.boot.tmpOnTmpfs [
       {
         what = "tmpfs";
