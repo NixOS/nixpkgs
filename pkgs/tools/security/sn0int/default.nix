@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Semi-automatic OSINT framework and package manager";
     homepage = "https://github.com/kpcyrd/sn0int";
-    license = licenses.gpl3;
+    license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ xrelkd ];
     platforms = platforms.linux;
   };
