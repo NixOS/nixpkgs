@@ -9,33 +9,9 @@
 , glibc
 , docker
 , linkFarm
-, containerRuntimePath ? "${docker}/libexec/docker/runc"
 }:
 
 with lib; let
-  isolatedContainerRuntimePath = linkFarm "isolated_container_runtime_path" [
-    {
-      name = "runc";
-      path = containerRuntimePath;
-    }
-  ];
-
-  nvidia-container-runtime = buildGoPackage rec {
-    pname = "nvidia-container-runtime";
-    version = "3.4.0";
-    src = fetchFromGitHub {
-      owner = "NVIDIA";
-      repo = "nvidia-container-runtime";
-      rev = "v${version}";
-      sha256 = "095mks0r4079vawi50pk4zb5jk0g6s9idg2s1w55a0d27jkknldr";
-    };
-    goPackagePath = "github.com/nvidia-container-runtime/src";
-    buildFlagsArray = [ "-ldflags=" "-s -w" ];
-    postInstall = ''
-      mv $out/bin/{src,nvidia-container-runtime}
-    '';
-  };
-
   nvidia-container-toolkit = buildGoModule rec {
     pname = "nvidia-container-toolkit";
     version = "1.3.0";
@@ -65,8 +41,6 @@ stdenv.mkDerivation rec {
     sha256 = "1n1k7fnimky67s12p2ycaq9mgk245fchq62vgd7bl3bzfcbg0z4h";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
   buildPhase = ''
     mkdir bin
 
@@ -74,15 +48,11 @@ stdenv.mkDerivation rec {
     substituteInPlace bin/nvidia-docker --subst-var-by VERSION ${version}
 
     cp ${nvidia-container-toolkit}/bin/nvidia-container-{toolkit,runtime-hook} bin
-    cp ${nvidia-container-runtime}/bin/nvidia-container-runtime bin
   '';
 
   installPhase = ''
     mkdir -p $out/{bin,etc}
     cp -r bin $out
-
-    # nvidia-container-runtime invokes docker-runc or runc if that isn't available on PATH
-    wrapProgram $out/bin/nvidia-container-runtime --prefix PATH : ${isolatedContainerRuntimePath}
 
     cp ${./config.toml} $out/etc/config.toml
     substituteInPlace $out/etc/config.toml --subst-var-by glibcbin ${lib.getBin glibc}
