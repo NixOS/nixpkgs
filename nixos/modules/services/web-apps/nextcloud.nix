@@ -6,17 +6,10 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
-  phpPackage =
-    let
-      base = pkgs.php74;
-    in
-      base.buildEnv {
-        extensions = { enabled, all }: with all;
-          enabled ++ [
-            apcu redis memcached imagick
-          ];
-        extraConfig = phpOptionsStr;
-      };
+  phpPackage = cfg.phpPackage.buildEnv {
+    extensions = { enabled, all }: enabled ++ (with all; [ apcu redis memcached imagick ]);
+    extraConfig = phpOptionsStr;
+  };
 
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
@@ -113,6 +106,25 @@ in {
       description = ''
         Enable this option if you plan on using the webfinger plugin.
         The appropriate nginx rewrite rules will be added to your configuration.
+      '';
+    };
+
+    phpPackage = mkOption {
+      type = types.package;
+      default = pkgs.php74;
+      defaultText = "pkgs.php74";
+      description = ''
+        The base PHP package to use for nextcloud.
+
+        <note><para>
+          Various modifications will automatically be applied to this package by the
+          Nextcloud module, such as setting <literal>upload_max_filesize</literal>,
+          including the <package>pkgs.php.extensions.imagick</package> extension,
+          etc...
+        </para></note>
+      '';
+      example = literalExample ''
+        pkgs.php74.withExtensions ({ enabled, all }: enabled ++ [ all.pdlib ])
       '';
     };
 
