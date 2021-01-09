@@ -13,7 +13,6 @@
 }:
 
 with lib; let
-  libnvidia-container = callPackage ./libnvc.nix { };
   isolatedContainerRuntimePath = linkFarm "isolated_container_runtime_path" [
     {
       name = "runc";
@@ -74,7 +73,6 @@ stdenv.mkDerivation rec {
     cp nvidia-docker bin
     substituteInPlace bin/nvidia-docker --subst-var-by VERSION ${version}
 
-    cp ${libnvidia-container}/bin/nvidia-container-cli bin
     cp ${nvidia-container-toolkit}/bin/nvidia-container-{toolkit,runtime-hook} bin
     cp ${nvidia-container-runtime}/bin/nvidia-container-runtime bin
   '';
@@ -82,9 +80,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/{bin,etc}
     cp -r bin $out
-
-    wrapProgram $out/bin/nvidia-container-cli \
-      --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:/run/opengl-driver-32/lib
 
     # nvidia-container-runtime invokes docker-runc or runc if that isn't available on PATH
     wrapProgram $out/bin/nvidia-container-runtime --prefix PATH : ${isolatedContainerRuntimePath}
