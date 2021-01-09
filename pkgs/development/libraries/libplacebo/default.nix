@@ -11,11 +11,13 @@
 , glslang
 , lcms2
 , epoxy
+, libGL
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "2.72.2";
+  version = "3.104.0";
 
   patches = [
     ./glsl-import.patch
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ijqpx1pagc6qg63ynqrinvckwc8aaw1i0lx48gg5szwk8afib4i";
+    sha256 = "0p5mx8ch7cp7b54yrkl4fs8bcvqma1h461gx6ps4kagn4dsx8asb";
   };
 
   nativeBuildInputs = [
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
     glslang
     lcms2
     epoxy
+    libGL
+    xorg.libX11
   ];
 
   mesonFlags = [
