@@ -1,11 +1,11 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
-# SHA of ${version} for the tool's help output
+# SHA of ${version} for the tool's help output. Unfortunately this is needed in build flags.
 let rev = "f6e19140201d6bf2f1274bf6567087bc25154210";
 in
 buildGoModule rec {
   pname = "sonobuoy";
-  version = "0.20.0";
+  version = "0.20.0"; # Do not forget to update `rev` above
 
   goPackagePath = "github.com/vmware-tanzu/sonobuoy";
 
