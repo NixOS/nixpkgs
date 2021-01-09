@@ -748,6 +748,10 @@ in
 
   metapixel = callPackage ../tools/graphics/metapixel { };
 
+  yabridge = callPackage ../tools/audio/yabridge {
+    wine = wineWowPackages.minimal;
+  };
+
   ### APPLICATIONS/TERMINAL-EMULATORS
 
   alacritty = callPackage ../applications/terminal-emulators/alacritty {
