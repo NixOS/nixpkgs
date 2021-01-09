@@ -7497,6 +7497,8 @@ in {
 
   threadpoolctl = callPackage ../development/python-modules/threadpoolctl { };
 
+  three-merge = callPackage ../development/python-modules/three-merge { };
+
   thrift = callPackage ../development/python-modules/thrift { };
 
   thumbor = callPackage ../development/python-modules/thumbor { };
