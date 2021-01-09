@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = "nvidia-docker";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1n1k7fnimky67s12p2ycaq9mgk245fchq62vgd7bl3bzfcbg0z4h";
   };
