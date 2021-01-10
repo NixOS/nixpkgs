@@ -267,6 +267,8 @@ in {
 
   aiounittest = callPackage ../development/python-modules/aiounittest { };
 
+  aiowinreg = callPackage ../development/python-modules/aiowinreg { };
+
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
 
   ajpy = callPackage ../development/python-modules/ajpy { };
