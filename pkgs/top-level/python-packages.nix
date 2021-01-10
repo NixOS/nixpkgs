@@ -6230,6 +6230,8 @@ in {
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
 
+  pytile = callPackage ../development/python-modules/pytile { };
+
   pytimeparse = callPackage ../development/python-modules/pytimeparse { };
 
   pytmx = callPackage ../development/python-modules/pytmx { };
