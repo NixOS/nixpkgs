@@ -181,7 +181,7 @@ luaposix = buildLuarocksPackage {
   disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
   propagatedBuildInputs = [ bit32 lua std_normalize ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/luaposix/luaposix/";
     description = "Lua bindings for POSIX";
     maintainers = with maintainers; [ vyp lblasc ];
@@ -243,4 +243,3 @@ Following rules should be respected:
 
 * Make sure libraries build for all Lua interpreters.
 * Commit names of Lua libraries should reflect that they are Lua libraries, so write for example `luaPackages.luafilesystem: 1.11 -> 1.12`.
-
