@@ -2,9 +2,6 @@
 , mpv, python-mpv-jsonipc, jellyfin-apiclient-python
 , pillow, tkinter, pystray, jinja2, pywebview, pydantic }:
 
-let
-  shaderPack = callPackage ./shader-pack.nix {};
-in
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
   version = "1.8.1";
@@ -18,11 +15,6 @@ buildPythonApplication rec {
     patches/disable-desktop-client.patch
     patches/disable-update-check.patch
   ];
-
-  postPatch = ''
-    # link the default shader pack
-    ln -s ${shaderPack} jellyfin_mpv_shim/default_shader_pack
-  '';
 
   propagatedBuildInputs = [
     jellyfin-apiclient-python
