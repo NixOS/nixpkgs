@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
     # make sure the test starts even if we have less than 4 cores
     export OMPI_MCA_rmaps_base_oversubscribe=1
 
+    # Fix to make mpich run in a sandbox
+    export HYDRA_IFACE=lo
+
     # Run single threaded
     export OMP_NUM_THREADS=1
 
