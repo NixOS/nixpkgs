@@ -309,6 +309,18 @@ let
         };
       };
 
+      ryu1kn.partial-diff = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "partial-diff";
+          publisher = "ryu1kn";
+          version = "1.4.1";
+          sha256 = "1r4kg4slgxncdppr4fn7i5vfhvzcg26ljia2r97n6wvwn8534vs9";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
+
       scala-lang.scala = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "scala";

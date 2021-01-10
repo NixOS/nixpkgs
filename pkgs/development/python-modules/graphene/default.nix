@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "graphene";
-  version = "3.0.0b6";
+  version = "3.0.0b7";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphene";
     rev = "v${version}";
-    sha256 = "1q6qmyc4jbi9cws4d98x7bgi7gppd09dmzijkb19fwbh4giy938r";
+    sha256 = "sha256-bVCCLPnV5F8PqLMg3GwcpwpGldrxsU+WryL6gj6y338=";
   };
 
   propagatedBuildInputs = [

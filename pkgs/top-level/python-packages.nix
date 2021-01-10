@@ -1898,6 +1898,8 @@ in {
 
   dropbox = callPackage ../development/python-modules/dropbox { };
 
+  ds-store = callPackage ../development/python-modules/ds-store { };
+
   ds4drv = callPackage ../development/python-modules/ds4drv { inherit (pkgs) fetchFromGitHub bluez; };
 
   dtopt = callPackage ../development/python-modules/dtopt { };
@@ -6229,6 +6231,8 @@ in {
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
+
+  pytile = callPackage ../development/python-modules/pytile { };
 
   pytimeparse = callPackage ../development/python-modules/pytimeparse { };
 

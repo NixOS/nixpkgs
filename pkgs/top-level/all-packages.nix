@@ -2888,6 +2888,8 @@ in
 
   bup = callPackage ../tools/backup/bup { };
 
+  bupstash = callPackage ../tools/backup/bupstash { };
+
   burp = callPackage ../tools/backup/burp { };
 
   buku = callPackage ../applications/misc/buku { };
@@ -3089,6 +3091,8 @@ in
   anthy = callPackage ../tools/inputmethods/anthy { };
 
   evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
+
+  evscript = callPackage ../tools/inputmethods/evscript { };
 
   gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { };
 
@@ -3943,6 +3947,24 @@ in
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
 
   chewing-editor = libsForQt5.callPackage ../applications/misc/chewing-editor { };
+
+  fcitx5 = libsForQt5.callPackage ../tools/inputmethods/fcitx5 { };
+
+  fcitx5-with-addons = libsForQt5.callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
+
+  fcitx5-chinese-addons = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
+
+  fcitx5-configtool = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
+
+  fcitx5-lua = callPackage ../tools/inputmethods/fcitx5/fcitx5-lua.nix { };
+
+  fcitx5-gtk = callPackage ../tools/inputmethods/fcitx5/fcitx5-gtk.nix { };
+
+  fcitx5-rime = callPackage ../tools/inputmethods/fcitx5/fcitx5-rime.nix { };
+
+  fcitx5-table-extra = callPackage ../tools/inputmethods/fcitx5/fcitx5-table-extra.nix { };
+
+  fcitx5-table-other = callPackage ../tools/inputmethods/fcitx5/fcitx5-table-other.nix { };
 
   fcppt = callPackage ../development/libraries/fcppt { };
 
@@ -10619,7 +10641,7 @@ in
 
   dhall-text = haskell.lib.justStaticExecutables haskellPackages.dhall-text;
 
-  dhallPackages = callPackages ./dhall-packages.nix { };
+  dhallPackages = callPackage ./dhall-packages.nix { };
 
   duktape = callPackage ../development/interpreters/duktape { };
 
@@ -12473,6 +12495,8 @@ in
   webdis = callPackage ../development/tools/database/webdis { };
 
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
+
+  xcb-imdkit = callPackage ../development/libraries/xcb-imdkit { };
 
   xcodebuild = callPackage ../development/tools/xcbuild/wrapper.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
@@ -14435,8 +14459,13 @@ in
   libgudev = callPackage ../development/libraries/libgudev { };
 
   libguestfs-appliance = callPackage ../development/libraries/libguestfs/appliance.nix {};
-  libguestfs = callPackage ../development/libraries/libguestfs { };
-  libguestfs-with-appliance = libguestfs.override { appliance = libguestfs-appliance; };
+  libguestfs = callPackage ../development/libraries/libguestfs {
+    autoreconfHook = buildPackages.autoreconfHook264;
+  };
+  libguestfs-with-appliance = libguestfs.override {
+    appliance = libguestfs-appliance;
+    autoreconfHook = buildPackages.autoreconfHook264;
+  };
 
 
   libhangul = callPackage ../development/libraries/libhangul { };
@@ -14612,6 +14641,8 @@ in
   libiec61883 = callPackage ../development/libraries/libiec61883 { };
 
   libimagequant = callPackage ../development/libraries/libimagequant {};
+
+  libime = callPackage ../development/libraries/libime { };
 
   libinfinity = callPackage ../development/libraries/libinfinity { };
 
@@ -15871,6 +15902,8 @@ in
     drumstick = callPackage ../development/libraries/drumstick { };
 
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
+
+    fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
 
     qgpgme = callPackage ../development/libraries/gpgme { };
 
@@ -23574,6 +23607,8 @@ in
     inherit (gnome2) libglade;
   };
 
+  oberon-risc-emu = callPackage ../misc/emulators/oberon-risc-emu { };
+
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio { };
 
   obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
@@ -27038,6 +27073,8 @@ in
   conglomerate = callPackage ../applications/science/biology/conglomerate { };
 
   dcm2niix = callPackage ../applications/science/biology/dcm2niix { };
+
+  deepsea = callPackage ../tools/security/deepsea { };
 
   deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };
 
