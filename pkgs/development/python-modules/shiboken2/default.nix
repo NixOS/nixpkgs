@@ -1,5 +1,5 @@
-{ buildPythonPackage, python, fetchurl, stdenv, pyside2,
-  cmake, qt5, llvmPackages }:
+{ buildPythonPackage, python, fetchurl, stdenv, pyside2
+, cmake, qt5, llvmPackages }:
 
 stdenv.mkDerivation {
   pname = "shiboken2";
@@ -32,5 +32,6 @@ stdenv.mkDerivation {
     license = with licenses; [ gpl2 lgpl21 ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
+    broken = stdenv.isDarwin;
   };
 }

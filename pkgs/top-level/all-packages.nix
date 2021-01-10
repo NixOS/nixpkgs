@@ -16697,6 +16697,7 @@ in
   vte_290 = callPackage ../development/libraries/vte/2.90.nix { };
 
   vtk_7 = libsForQt515.callPackage ../development/libraries/vtk/7.x.nix {
+    stdenv = gcc9Stdenv;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
@@ -16704,6 +16705,7 @@ in
                                           CoreText IOSurface ImageIO OpenGL GLUT;
   };
   vtk_8 = libsForQt515.callPackage ../development/libraries/vtk/8.x.nix {
+    stdenv = gcc9Stdenv;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.libs) xpc;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices DiskArbitration
