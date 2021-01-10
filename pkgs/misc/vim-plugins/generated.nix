@@ -2824,8 +2824,8 @@ let
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvim-lspconfig";
-      rev = "4e7a2c32628e674348d0bf8029e1c580b05e5cc4";
-      sha256 = "1jkaca623fi7ap8ib97rbvi090b9d9ah1zkb2257gfna9xgfk8vf";
+      rev = "8c68dc78d00fc9b55312108d48c4191ec3851f6a";
+      sha256 = "09mzkn7psfv4iaq3myi7mq5qymxz0jnisr0d0k927z64ca3vzjbq";
     };
     meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
   };
