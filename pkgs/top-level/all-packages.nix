@@ -14634,7 +14634,9 @@ in
 
   libjreen = callPackage ../development/libraries/libjreen { };
 
-  libjson-rpc-cpp = callPackage ../development/libraries/libjson-rpc-cpp { };
+  libjson-rpc-cpp = callPackage ../development/libraries/libjson-rpc-cpp {
+    libmicrohttpd = libmicrohttpd_0_9_72;
+  };
 
   libkate = callPackage ../development/libraries/libkate { };
 
