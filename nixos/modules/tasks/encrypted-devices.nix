@@ -46,6 +46,12 @@ let
           so the keyfile path should usually start with "/mnt-root/".
         '';
       };
+
+      allowDiscards = mkOption {
+        default = false;
+        type = types.bool;
+        description = "cryptsetup argument --allow-discard on open";
+      };
     };
   };
 in
@@ -74,13 +80,13 @@ in
         devices =
           builtins.listToAttrs (map (dev: {
             name = dev.encrypted.label;
-            value = { device = dev.encrypted.blkDev; };
+            value = { device = dev.encrypted.blkDev; inherit (dev.encrypted) allowDiscards; };
           }) keylessEncDevs);
         forceLuksSupportInInitrd = true;
       };
       postMountCommands =
         concatMapStrings (dev:
-          "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label};\n"
+          "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label} ${optionalString dev.encrypted.allowDiscards "--allow-discards"};\n"
         ) keyedEncDevs;
     };
   };

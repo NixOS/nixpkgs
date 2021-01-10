@@ -124,6 +124,14 @@ let
         internal = true;
       };
 
+      discard = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Use swapon -d, and if randomEncryption, make the encrypted mapping with --allow-discards.
+          If you use encrypted.enable, add also encrypted.allowDiscards.
+        '';
+      };
     };
 
     config = rec {
@@ -204,7 +212,7 @@ in
                   fi
                 ''}
                 ${optionalString sw.randomEncryption.enable ''
-                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} ${sw.device} ${sw.deviceName}
+                  cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} ${sw.device} ${optionalString sw.discard "--allow-discards"} ${sw.deviceName}
                   mkswap ${sw.realDevice}
                 ''}
               '';

@@ -261,7 +261,7 @@ in
 
         # Swap devices.
         ${flip concatMapStrings config.swapDevices (sw:
-            "${sw.realDevice} none swap${prioOption sw.priority}\n"
+            "${sw.realDevice} none swap${prioOption sw.priority} ${optionalString sw.discard "discard"}\n"
         )}
       '';
 
