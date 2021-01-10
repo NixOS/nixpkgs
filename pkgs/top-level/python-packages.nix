@@ -8,10 +8,11 @@
 
 { pkgs
 , stdenv
+, lib
 , python
 }:
 
-with pkgs.lib;
+with lib;
 
 self:
 
@@ -64,7 +65,7 @@ let
 
   # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
   # providing Python modules.
-  makePythonPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
+  makePythonPath = drvs: lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
 
   removePythonPrefix = name:
     removePrefix namePrefix name;
