@@ -22215,6 +22215,8 @@ in
 
   hdl-dump = callPackage ../tools/misc/hdl-dump { };
 
+  hpack = haskell.lib.justStaticExecutables haskellPackages.hpack;
+
   hpcg = callPackage ../tools/misc/hpcg/default.nix { };
 
   hpl = callPackage ../tools/misc/hpl { mpi = openmpi; };
