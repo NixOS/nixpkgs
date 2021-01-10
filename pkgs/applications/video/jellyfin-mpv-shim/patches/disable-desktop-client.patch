@@ -1,0 +1,16 @@
+---
+ setup.py |    1 -
+ 1 file changed, 1 deletion(-)
+
+Index: b/setup.py
+===================================================================
+--- a/setup.py
++++ b/setup.py
+@@ -25,7 +25,6 @@ setup(
+     entry_points={
+         "console_scripts": [
+             "jellyfin-mpv-shim=jellyfin_mpv_shim.mpv_shim:main",
+-            "jellyfin-mpv-desktop=jellyfin_mpv_shim.mpv_shim:main_desktop",
+         ]
+     },
+     classifiers=[

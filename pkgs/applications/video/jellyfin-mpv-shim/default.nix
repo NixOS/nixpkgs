@@ -1,37 +1,23 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, callPackage
+{ stdenv, buildPythonApplication, fetchPypi, callPackage
 , mpv, python-mpv-jsonipc, jellyfin-apiclient-python
-, pillow, tkinter, pystray, jinja2, pywebview }:
+, pillow, tkinter, pystray, jinja2, pywebview, pydantic }:
 
 let
   shaderPack = callPackage ./shader-pack.nix {};
 in
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "1.7.1";
+  version = "1.8.1";
 
-  src = fetchFromGitHub {
-    owner = "iwalton3";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0alrh5h3f8pq9mrq09jmpqa0yslxsjqwij6kwn24ggbwc10zkq75";
-    fetchSubmodules = true; # needed for display_mirror css file
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "5fb50be6e51e81db4773c3c6b9c2dcf0e4295a7c347f157cf33e24e45826204d";
   };
 
   patches = [
-    ./disable-desktop-client.patch
-    ./disable-update-check.patch
+    patches/disable-desktop-client.patch
+    patches/disable-update-check.patch
   ];
-
-  # override $HOME directory:
-  #   error: [Errno 13] Permission denied: '/homeless-shelter'
-  #
-  # remove jellyfin_mpv_shim/win_utils.py:
-  #   ModuleNotFoundError: No module named 'win32gui'
-  preCheck = ''
-    export HOME=$TMPDIR
-
-    rm jellyfin_mpv_shim/win_utils.py
-  '';
 
   postPatch = ''
     # link the default shader pack
@@ -43,6 +29,7 @@ buildPythonApplication rec {
     mpv
     pillow
     python-mpv-jsonipc
+    pydantic
 
     # gui dependencies
     pystray

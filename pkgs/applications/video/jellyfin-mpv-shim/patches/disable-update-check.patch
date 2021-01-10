@@ -1,0 +1,19 @@
+---
+ jellyfin_mpv_shim/conf.py |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+Index: b/jellyfin_mpv_shim/conf.py
+===================================================================
+--- a/jellyfin_mpv_shim/conf.py
++++ b/jellyfin_mpv_shim/conf.py
+@@ -105,8 +105,8 @@ class Settings(BaseModel):
+     sync_revert_seek: bool = True
+     sync_osd_message: bool = True
+     screenshot_menu: bool = True
+-    check_updates: bool = True
+-    notify_updates: bool = True
++    check_updates: bool = False
++    notify_updates: bool = False
+     lang: Optional[str] = None
+     desktop_scale: float = 1.0
+     discord_presence: bool = False
