@@ -6,7 +6,7 @@ let
   cfg = config.services.rutorrent;
 
   pluginDependencies = with pkgs; {
-    _task = [ pgrep ];
+    _task = [ procps ];
     unpack = [ unzip unrar ];
     rss = [ curl ];
     mediainfo = [ mediainfo ];
