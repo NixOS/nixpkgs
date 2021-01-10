@@ -19,24 +19,24 @@ let
 in {
   options = {
     services.rutorrent = {
-      enable = mkEnableOption "rutorrent";
+      enable = mkEnableOption "ruTorrent";
 
       hostName = mkOption {
         type = types.str;
-        description = "FQDN for the rutorrent instance.";
+        description = "FQDN for the ruTorrent instance.";
       };
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/rutorrent";
-        description = "Storage path of rutorrent.";
+        description = "Storage path of ruTorrent.";
       };
 
       user = mkOption {
         type = types.str;
         default = "rutorrent";
         description = ''
-          User which runs the rutorrent service.
+          User which runs the ruTorrent service.
         '';
       };
 
@@ -44,7 +44,7 @@ in {
         type = types.str;
         default = "rutorrent";
         description = ''
-          Group which runs the rutorrent service.
+          Group which runs the ruTorrent service.
         '';
       };
 
@@ -78,7 +78,7 @@ in {
           "pm.max_requests" = 500;
         };
         description = ''
-          Options for rutorrent's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
+          Options for ruTorrent's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
         '';
       };
 
@@ -227,7 +227,7 @@ in {
           home = cfg.dataDir;
           group = cfg.group;
           extraGroups = [ config.services.rtorrent.group ];
-          description = "rutorrent Daemon user";
+          description = "ruTorrent Daemon user";
           isSystemUser = true;
         };
 
