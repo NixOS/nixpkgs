@@ -9,28 +9,26 @@ This function is analogous to the `docker build` command, in that it can be used
 The parameters of `buildImage` with relative example values are described below:
 
 ```nix
-    buildImage {
-      name = "redis";
-      tag = "latest";
+buildImage {
+  name = "redis";
+  tag = "latest";
 
-      fromImage = someBaseImage;
-      fromImageName = null;
-      fromImageTag = "latest";
+  fromImage = someBaseImage;
+  fromImageName = null;
+  fromImageTag = "latest";
 
-      contents = pkgs.redis;
-      runAsRoot = ''
-        #!${pkgs.runtimeShell}
-        mkdir -p /data
-      '';
+  contents = pkgs.redis;
+  runAsRoot = ''
+    #!${pkgs.runtimeShell}
+    mkdir -p /data
+  '';
 
-      config = {
-        Cmd = [ "/bin/redis-server" ];
-        WorkingDir = "/data";
-        Volumes = {
-          "/data" = {};
-        };
-      };
-    }
+  config = {
+    Cmd = [ "/bin/redis-server" ];
+    WorkingDir = "/data";
+    Volumes = { "/data" = { }; };
+  };
+}
 ```
 
 The above example will build a Docker image `redis/latest` from the given base image. Loading and running this image in Docker results in `redis-server` being started automatically.
@@ -76,14 +74,14 @@ hello        latest   08c791c7846e   48 years ago   25.2MB
 You can break binary reproducibility but have a sorted, meaningful `CREATED` column by setting `created` to `now`.
 
 ```nix
-    pkgs.dockerTools.buildImage {
-      name = "hello";
-      tag = "latest";
-      created = "now";
-      contents = pkgs.hello;
+pkgs.dockerTools.buildImage {
+  name = "hello";
+  tag = "latest";
+  created = "now";
+  contents = pkgs.hello;
 
-      config.Cmd = [ "/bin/hello" ];
-    }
+  config.Cmd = [ "/bin/hello" ];
+}
 ```
 
 and now the Docker CLI will display a reasonable date and sort the images as expected:
@@ -147,18 +145,18 @@ Each path directly listed in `contents` will have a symlink in the root of the i
 For example:
 
 ```nix
-    pkgs.dockerTools.buildLayeredImage {
-      name = "hello";
-      contents = [ pkgs.hello ];
-    }
+pkgs.dockerTools.buildLayeredImage {
+  name = "hello";
+  contents = [ pkgs.hello ];
+}
 ```
 
 will create symlinks for all the paths in the `hello` package:
 
 ```ShellSession
-    /bin/hello -> /nix/store/h1zb1padqbbb7jicsvkmrym3r6snphxg-hello-2.10/bin/hello
-    /share/info/hello.info -> /nix/store/h1zb1padqbbb7jicsvkmrym3r6snphxg-hello-2.10/share/info/hello.info
-    /share/locale/bg/LC_MESSAGES/hello.mo -> /nix/store/h1zb1padqbbb7jicsvkmrym3r6snphxg-hello-2.10/share/locale/bg/LC_MESSAGES/hello.mo
+/bin/hello -> /nix/store/h1zb1padqbbb7jicsvkmrym3r6snphxg-hello-2.10/bin/hello
+/share/info/hello.info -> /nix/store/h1zb1padqbbb7jicsvkmrym3r6snphxg-hello-2.10/share/info/hello.info
+/share/locale/bg/LC_MESSAGES/hello.mo -> /nix/store/h1zb1padqbbb7jicsvkmrym3r6snphxg-hello-2.10/share/locale/bg/LC_MESSAGES/hello.mo
 ```
 
 ### Automatic inclusion of `config` references {#dockerTools-buildLayeredImage-arg-config}
@@ -168,10 +166,10 @@ The closure of `config` is automatically included in the closure of the final im
 This allows you to make very simple Docker images with very little code. This container will start up and run `hello`:
 
 ```nix
-    pkgs.dockerTools.buildLayeredImage {
-      name = "hello";
-      config.Cmd = [ "${pkgs.hello}/bin/hello" ];
-    }
+pkgs.dockerTools.buildLayeredImage {
+  name = "hello";
+  config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+}
 ```
 
 ### Adjusting `maxLayers` {#dockerTools-buildLayeredImage-arg-maxLayers}
@@ -209,15 +207,16 @@ This function is analogous to the `docker pull` command, in that it can be used 
 Its parameters are described in the example below:
 
 ```nix
-    pullImage {
-      imageName = "nixos/nix";
-      imageDigest = "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b";
-      finalImageName = "nix";
-      finalImageTag = "1.11";
-      sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8";
-      os = "linux";
-      arch = "x86_64";
-    }
+pullImage {
+  imageName = "nixos/nix";
+  imageDigest =
+    "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b";
+  finalImageName = "nix";
+  finalImageTag = "1.11";
+  sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8";
+  os = "linux";
+  arch = "x86_64";
+}
 ```
 
 - `imageName` specifies the name of the image to be downloaded, which can also include the registry namespace (e.g. `nixos`). This argument is required.
@@ -261,13 +260,13 @@ This function is analogous to the `docker export` command, in that it can be use
 The parameters of `exportImage` are the following:
 
 ```nix
-    exportImage {
-      fromImage = someLayeredImage;
-      fromImageName = null;
-      fromImageTag = null;
+exportImage {
+  fromImage = someLayeredImage;
+  fromImageName = null;
+  fromImageTag = null;
 
-      name = someLayeredImage.name;
-    }
+  name = someLayeredImage.name;
+}
 ```
 
 The parameters relative to the base image have the same synopsis as described in [buildImage](#ssec-pkgs-dockerTools-buildImage), except that `fromImage` is the only required argument in this case.
@@ -279,18 +278,18 @@ The `name` argument is the name of the derivation output, which defaults to `fro
 This constant string is a helper for setting up the base files for managing users and groups, only if such files don\'t exist already. It is suitable for being used in a `runAsRoot` [co_title](#ex-dockerTools-buildImage-runAsRoot) script for cases like in the example below:
 
 ```nix
-    buildImage {
-      name = "shadow-basic";
+buildImage {
+  name = "shadow-basic";
 
-      runAsRoot = ''
-        #!${pkgs.runtimeShell}
-        ${shadowSetup}
-        groupadd -r redis
-        useradd -r -g redis redis
-        mkdir /data
-        chown redis:redis /data
-      '';
-    }
+  runAsRoot = ''
+    #!${pkgs.runtimeShell}
+    ${shadowSetup}
+    groupadd -r redis
+    useradd -r -g redis redis
+    mkdir /data
+    chown redis:redis /data
+  '';
+}
 ```
 
 Creating base files like `/etc/passwd` or `/etc/login.defs` is necessary for shadow-utils to manipulate users and groups.
