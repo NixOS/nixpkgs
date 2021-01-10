@@ -109,6 +109,13 @@ in
         description = "Host to bind to. Defaults binding on all addresses.";
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.murmur;
+        defaultText = "pkgs.murmur";
+        description = "Overridable attribute of the murmur package to use.";
+      };
+
       password = mkOption {
         type = types.str;
         default = "";
@@ -268,7 +275,7 @@ in
         RuntimeDirectory = mkIf forking "murmur";
         User      = "murmur";
         Group     = "murmur";
-        ExecStart = "${pkgs.murmur}/bin/murmurd -ini ${configFile}";
+        ExecStart = "${cfg.package}/bin/murmurd -ini ${configFile}";
       };
     };
   };
