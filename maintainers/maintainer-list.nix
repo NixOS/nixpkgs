@@ -8879,6 +8879,12 @@
     githubId = 649832;
     name = "Teo Klestrup Röijezon";
   };
+  terin = {
+    email = "terinjokes@gmail.com";
+    github = "terinjokes";
+    githubId = 273509;
+    name = "Terin Stock";
+  };
   terlar = {
     email = "terlar@gmail.com";
     github = "terlar";
