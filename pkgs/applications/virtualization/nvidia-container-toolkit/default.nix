@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
-, callPackage
 , makeWrapper
 , nvidia-container-runtime
 }:
