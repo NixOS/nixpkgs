@@ -568,7 +568,7 @@ let
       # Use `mkOption` instead of `mkOpt` for project and zone because they are
       # required configuration values for `gce_sd_config`.
       project = mkOption {
-        type =  types.str;
+        type = types.str;
         description = ''
           The GCP Project.
         '';
