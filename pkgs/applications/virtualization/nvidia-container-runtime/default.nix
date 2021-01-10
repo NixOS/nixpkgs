@@ -65,7 +65,7 @@ buildGoPackage rec {
   meta = with lib; {
     homepage = "https://github.com/NVIDIA/nvidia-container-runtime";
     description = "NVIDIA container runtime";
-    license = licenses.bsd3;
+    license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cpcloud ];
   };
