@@ -15421,7 +15421,7 @@ in
         inherit containerRuntimePath configTemplate;
       };
     in symlinkJoin {
-      name = "nvidia-containers-${name}";
+      inherit name;
       paths = [
         (callPackage ../applications/virtualization/libnvidia-container { })
         nvidia-container-runtime
@@ -15432,14 +15432,14 @@ in
     };
 
   nvidia-docker = mkNvidiaContainerPkg {
-    name = "docker";
+    name = "nvidia-docker";
     containerRuntimePath = "${docker}/libexec/docker/runc";
     configTemplate = ../applications/virtualization/nvidia-docker/config.toml;
     additionalPaths = [ (callPackage ../applications/virtualization/nvidia-docker { }) ];
   };
 
   nvidia-podman = mkNvidiaContainerPkg {
-    name = "podman";
+    name = "nvidia-podman";
     containerRuntimePath = "${runc}/bin/runc";
     configTemplate = ../applications/virtualization/nvidia-podman/config.toml;
   };
