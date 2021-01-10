@@ -600,7 +600,11 @@ let
       '';
 
       tag_separator = mkDefOpt types.str "," ''
-        The tag separator is used to separate the tags on concatenation.
+        The tag separator used to separate concatenated GCE instance network tags.
+
+        See the GCP documentation on network tags for more information: <link
+        xlink:href="https://cloud.google.com/vpc/docs/add-remove-network-tags"
+        />
       '';
     };
   };
