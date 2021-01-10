@@ -11868,6 +11868,8 @@ in
 
   jbake = callPackage ../development/tools/jbake { };
 
+  jbang = callPackage ../development/tools/jbang { };
+
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
   jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
