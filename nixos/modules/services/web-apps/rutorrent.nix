@@ -26,7 +26,7 @@ in {
         description = "FQDN for the rutorrent instance.";
       };
 
-      home = mkOption {
+      dataDir = mkOption {
         type = types.str;
         default = "/var/lib/rutorrent";
         description = "Storage path of rutorrent.";
@@ -143,7 +143,7 @@ in {
                 $schedule_rand = 10;			// rand for schedulers start, +0..X seconds
 
                 $do_diagnostic = true;
-                $log_file = '${cfg.home}/logs/errors.log';		// path to log file (comment or leave blank to disable logging)
+                $log_file = '${cfg.dataDir}/logs/errors.log';		// path to log file (comment or leave blank to disable logging)
 
                 $saveUploadedTorrents = true;		// Save uploaded torrents to profile/torrents directory or not
                 $overwriteUploadedTorrents = false;     // Overwrite existing uploaded torrents in profile/torrents directory or make unique name
@@ -184,31 +184,31 @@ in {
             wantedBy = [ "multi-user.target" ];
             before = [ "phpfpm-rutorrent.service" ];
             script = ''
-              ln -sf ${pkgs.rutorrent}/{css,images,js,lang,index.html} ${cfg.home}/
-              mkdir -p ${cfg.home}/{conf,logs,plugins} ${cfg.home}/share/{settings,torrents,users}
-              ln -sf ${pkgs.rutorrent}/conf/{access.ini,plugins.ini} ${cfg.home}/conf/
-              ln -sf ${rutorrentConfig} ${cfg.home}/conf/config.php
+              ln -sf ${pkgs.rutorrent}/{css,images,js,lang,index.html} ${cfg.dataDir}/
+              mkdir -p ${cfg.dataDir}/{conf,logs,plugins} ${cfg.dataDir}/share/{settings,torrents,users}
+              ln -sf ${pkgs.rutorrent}/conf/{access.ini,plugins.ini} ${cfg.dataDir}/conf/
+              ln -sf ${rutorrentConfig} ${cfg.dataDir}/conf/config.php
 
-              cp -r ${pkgs.rutorrent}/php ${cfg.home}/
+              cp -r ${pkgs.rutorrent}/php ${cfg.dataDir}/
 
               ${optionalString (cfg.plugins != [])
-                ''cp -r ${concatMapStringsSep " " (p: "${pkgs.rutorrent}/plugins/${p}") cfg.plugins} ${cfg.home}/plugins/''}
+                ''cp -r ${concatMapStringsSep " " (p: "${pkgs.rutorrent}/plugins/${p}") cfg.plugins} ${cfg.dataDir}/plugins/''}
 
-              chown -R rutorrent:rutorrent ${cfg.home}/{conf,share,logs,plugins}
-              chmod -R 755 ${cfg.home}/{conf,share,logs,plugins}
+              chown -R rutorrent:rutorrent ${cfg.dataDir}/{conf,share,logs,plugins}
+              chmod -R 755 ${cfg.dataDir}/{conf,share,logs,plugins}
             '';
             serviceConfig.Type = "oneshot";
           };
         };
 
-        tmpfiles.rules = [ "d '${cfg.home}' 0775 rutorrent rutorrent -" ];
+        tmpfiles.rules = [ "d '${cfg.dataDir}' 0775 rutorrent rutorrent -" ];
       };
 
       users.groups.rutorrent = {};
 
       users.users = {
         rutorrent = {
-          home = cfg.home;
+          home = cfg.dataDir;
           group = "rutorrent";
           extraGroups = [ config.services.rtorrent.group ];
           description = "rutorrent Daemon user";
@@ -239,7 +239,7 @@ in {
             enable = true;
             virtualHosts = {
               ${cfg.hostName} = {
-                root = cfg.home;
+                root = cfg.dataDir;
                 locations = {
                   "~ [^/]\.php(/|$)" = {
                     extraConfig = ''
