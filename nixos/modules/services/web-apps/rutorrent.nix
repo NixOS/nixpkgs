@@ -287,9 +287,7 @@ in {
           '';
         };
 
-        services.rtorrent.configText = ''
-          schedule = scgi_group,0,0,"execute.nothrow=chown,\":nginx\",(cfg.rpcsock)"
-        '';
+        services.rtorrent.rpcGroup = "nginx";
       })
     ]))
   ]);
