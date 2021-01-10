@@ -114,6 +114,19 @@
   org-mac-link =
     callPackage ./org-mac-link { };
 
+  ott-mode = self.trivialBuild {
+    pname = "ott-mod";
+
+    inherit (external.ott) src version;
+
+    postUnpack = "mv $sourceRoot/emacs/ott-mode.el $sourceRoot";
+
+    meta = {
+      description = "Standalone package providing ott-mode without building ott and with compiled bytecode.";
+      inherit (external.Agda.meta) homepage license;
+    };
+  };
+
   perl-completion =
     callPackage ./perl-completion { };
 
