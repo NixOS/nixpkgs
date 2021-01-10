@@ -31,7 +31,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/NVIDIA/nvidia-container-toolkit";
     description = "NVIDIA container runtime hook";
-    license = licenses.bsd3;
+    license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cpcloud ];
   };
