@@ -101,6 +101,7 @@
   ./misc/version.nix
   ./misc/nixops-autoluks.nix
   ./programs/adb.nix
+  ./programs/appgate-sdp.nix
   ./programs/atop.nix
   ./programs/autojump.nix
   ./programs/bandwhich.nix
