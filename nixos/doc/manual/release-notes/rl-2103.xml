@@ -108,6 +108,15 @@
     </para>
    </listitem>
    <listitem>
+    <para>
+     The <varname>networking.wireless.iwd</varname> module now installs
+     the upstream-provided 80-iwd.link file, which sets the NamePolicy=
+     for all wlan devices to "keep kernel", to avoid race conditions
+     between iwd and networkd. If you don't want this, you can set
+     <literal>systemd.network.links."80-iwd" = lib.mkForce {}</literal>.
+    </para>
+   </listitem>
+   <listitem>
      <para>
        <literal>rubyMinimal</literal> was removed due to being unused and
        unusable. The default ruby interpreter includes JIT support, which makes
@@ -321,8 +330,8 @@
    </listitem>
    <listitem>
     <para>
-     <package>fish-foreign-env</package> is now an alias for the
-     <package>fishPlugins.foreign-env</package> package, in which the fish
+     The <package>fish-foreign-env</package> package has been replaced with
+     <package>fishPlugins.foreign-env</package>, in which the fish
      functions have been relocated to the
      <literal>vendor_functions.d</literal> directory to be loaded automatically.
     </para>

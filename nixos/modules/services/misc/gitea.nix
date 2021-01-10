@@ -605,5 +605,5 @@ in
       timerConfig.OnCalendar = cfg.dump.interval;
     };
   };
-  meta.maintainers = with lib.maintainers; [ srhb ];
+  meta.maintainers = with lib.maintainers; [ srhb ma27 ];
 }

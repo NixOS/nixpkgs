@@ -78,7 +78,13 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     mongodb = callPackage ../development/php-packages/mongodb { };
 
-    oci8 = callPackage ../development/php-packages/oci8 { };
+    oci8 = callPackage ../development/php-packages/oci8 ({
+      version = "2.2.0";
+      sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
+    } // lib.optionalAttrs (lib.versionAtLeast php.version "8.0") {
+      version = "3.0.1";
+      sha256 = "108ds92620dih5768z19hi0jxfa7wfg5hdvyyvpapir87c0ap914";
+    });
 
     pdlib = callPackage ../development/php-packages/pdlib { };
 
