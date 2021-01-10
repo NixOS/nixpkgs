@@ -1898,6 +1898,8 @@ in {
 
   dropbox = callPackage ../development/python-modules/dropbox { };
 
+  ds-store = callPackage ../development/python-modules/ds-store { };
+
   ds4drv = callPackage ../development/python-modules/ds4drv { inherit (pkgs) fetchFromGitHub bluez; };
 
   dtopt = callPackage ../development/python-modules/dtopt { };
