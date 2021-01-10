@@ -5,6 +5,7 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, lib
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,10 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-asyncio
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_multiprocessing"
   ];
 
   meta = with stdenv.lib; {
