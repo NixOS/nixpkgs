@@ -5360,6 +5360,8 @@ in {
 
   pyipp = callPackage ../development/python-modules/pyipp { };
 
+  pyiqvia = callPackage ../development/python-modules/pyiqvia { };
+
   pyjet = callPackage ../development/python-modules/pyjet { };
 
   pyjks = callPackage ../development/python-modules/pyjks { };
