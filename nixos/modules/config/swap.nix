@@ -128,8 +128,11 @@ let
         default = false;
         type = types.bool;
         description = ''
-          Use swapon -d, and if randomEncryption, make the encrypted mapping with --allow-discards.
-          If you use encrypted.enable, add also encrypted.allowDiscards.
+          Use swapon -d, and if randomEncryption, make the encrypted mapping
+          with --allow-discards.
+
+          If you use encrypted.enable for this swap device, you should enable
+          there encrypted.allowDiscards.
         '';
       };
     };

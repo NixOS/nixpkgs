@@ -50,7 +50,11 @@ let
       allowDiscards = mkOption {
         default = false;
         type = types.bool;
-        description = "cryptsetup argument --allow-discard on open";
+        description = ''
+          Whether to allow TRIM requests to the underlying device. This option
+          has security implications; please read the LUKS documentation before
+          activating it.
+        '';
       };
     };
   };
