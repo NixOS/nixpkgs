@@ -1496,6 +1496,8 @@ in
 
   babeld = callPackage ../tools/networking/babeld { };
 
+  badchars = python3Packages.callPackage ../tools/security/badchars { };
+
   badvpn = callPackage ../tools/networking/badvpn {};
 
   barcode = callPackage ../tools/graphics/barcode {};
