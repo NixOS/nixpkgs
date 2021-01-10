@@ -1,8 +1,9 @@
-{ fetchurl, mkDerivation, fetchpatch, stdenv, lib, pkgconfig, autoreconfHook, wrapGAppsHook
+{ fetchurl, texinfo, fetchgit, mkDerivation, fetchpatch, stdenv, lib, pkgconfig, autoreconfHook, wrapGAppsHook
 , libgpgerror, libassuan, qtbase, wrapQtAppsHook
 , ncurses, gtk2, gcr
+, callPackage, efl ? null
 , libcap ? null, libsecret ? null
-, enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "emacs" ] ++ lib.optionals stdenv.isLinux [ "gnome3" ]
+, enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "emacs" "efl" ] ++ lib.optionals stdenv.isLinux [ "gnome3" ]
 }:
 
 with stdenv.lib;
@@ -35,20 +36,22 @@ let
     gnome3 = { bin = "gnome3"; flag = "gnome3"; buildInputs = [ gcr ]; nativeBuildInputs = [ wrapGAppsHook ]; };
     qt = { bin = "qt"; flag = "qt"; buildInputs = [ qtbase ]; nativeBuildInputs = [ wrapQtAppsHook ]; };
     emacs = { bin = "emacs"; flag = "emacs"; buildInputs = []; };
+    efl = { bin = "efl"; flag = "efl"; buildInputs = [ efl ]; };
   };
 
 in
 
 pinentryMkDerivation rec {
   pname = "pinentry";
-  version = "1.1.0";
+  version = "unstable-2020-07-17";
 
-  src = fetchurl {
-    url = "mirror://gnupg/pinentry/${pname}-${version}.tar.bz2";
-    sha256 = "0w35ypl960pczg5kp6km3dyr000m1hf0vpwwlh72jjkjza36c1v8";
+  src = fetchgit {
+    url = "https://dev.gnupg.org/source/pinentry.git";
+    rev = "ae584040d14a4d7d6eed8be77844126130ef0118";
+    sha256 = "1k8j8c1v8f641p7gc8l6p3mjabqpshx4f9wqyvhzk8hz18dvhhjf";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ]
+  nativeBuildInputs = [ pkgconfig autoreconfHook texinfo ]
     ++ concatMap(f: flavorInfo.${f}.nativeBuildInputs or []) enabledFlavors;
   buildInputs = [ libgpgerror libassuan libcap libsecret ]
     ++ concatMap(f: flavorInfo.${f}.buildInputs or []) enabledFlavors;
@@ -57,7 +60,6 @@ pinentryMkDerivation rec {
   dontWrapQtApps = true;
 
   patches = [
-    ./autoconf-ar.patch
   ] ++ optionals (elem "gtk2" enabledFlavors) [
     (fetchpatch {
       url = "https://salsa.debian.org/debian/pinentry/raw/debian/1.1.0-1/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch";
@@ -66,6 +68,7 @@ pinentryMkDerivation rec {
   ];
 
   configureFlags = [
+    "--enable-maintainer-mode" # run the missing script https://autotools.io/automake/maintainer.html
     (mkWith   (libcap != null)    "libcap")
     (mkEnable (libsecret != null) "libsecret")
   ] ++ (map mkEnablePinentry (attrNames flavorInfo));
