@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
@@ -16,9 +17,12 @@ buildPythonPackage rec {
     sha256 = "1zkmjvq47zw2fsbnzhr5mh9rsazx0z1f8m528ash25jrxsza5crm";
   };
 
+  # OSError: AF_UNIX path too long
+  doCheck = !stdenv.isDarwin;
+
   checkInputs = [
     pytestCheckHook
-    pytest-asyncio  
+    pytest-asyncio
   ];
 
   disabledTests = [ "test_protocol_pause_resume" ];

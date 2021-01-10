@@ -5,7 +5,7 @@ let
   password4 = "asdf123";
 in import ./make-test-python.nix ({ pkgs, ... }: {
   name = "shadow";
-  meta = with pkgs.stdenv.lib.maintainers; { maintainers = [ nequissimus ]; };
+  meta = with pkgs.lib.maintainers; { maintainers = [ nequissimus ]; };
 
   nodes.shadow = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.shadow ];

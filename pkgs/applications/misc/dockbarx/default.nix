@@ -28,6 +28,9 @@ pythonPackages.buildPythonApplication rec {
     ++ (with gnome2; [ gnome_python gnome_python_desktop ])
     ++ [ keybinder ];
 
+    # no tests
+    doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = "https://launchpad.net/dockbar/";
     description = "Lightweight taskbar / panel replacement for Linux which works as a stand-alone dock";
