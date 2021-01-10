@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , pkgs
 , buildDotnetPackage
 , fetchurl
@@ -363,7 +364,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "An intermediate verification language";
       homepage = "https://github.com/boogie-org/boogie";
       longDescription = ''
@@ -437,7 +438,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       rm -f $out/lib/dotnet/${baseName}/dafny{,-server}
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A programming language with built-in specification constructs";
       homepage = "https://research.microsoft.com/dafny";
       maintainers = with maintainers; [ layus ];
@@ -477,9 +478,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "Excel-DNA is an independent project to integrate .NET into Excel";
       homepage = "https://excel-dna.net/";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -506,9 +507,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "This library implements helper functions to assist and modify the Excel-DNA function registration";
       homepage = "https://github.com/Excel-DNA/Registration";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -540,9 +541,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "ExtCore is an extended core library for F#";
       homepage = "https://github.com/jack-pappas/ExtCore";
-      license = stdenv.lib.licenses.asl20;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
       broken = true;
     };
   };
@@ -576,9 +577,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         service for rich editing or 'intellisense' features for editors.
         '';
       homepage = "https://github.com/fsharp/FSharp.AutoComplete";
-      license = stdenv.lib.licenses.asl20;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -603,9 +604,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "The F# compiler services package is a component derived from the F# compiler source code that exposes additional functionality for implementing F# language bindings";
       homepage = "https://fsharp.github.io/FSharp.Compiler.Service/";
-      license = stdenv.lib.licenses.asl20;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -647,9 +648,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "F# Data: Library for Data Access";
       homepage = "https://fsharp.github.io/FSharp.Data/";
-      license = stdenv.lib.licenses.asl20;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -679,9 +680,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #   meta = {
   #     description = "FSharpx.Extras is a collection of libraries and tools for use with F#";
   #     homepage = "https://fsprojects.github.io/FSharpx.Extras/";
-  #     license = stdenv.lib.licenses.asl20;
-  #     maintainers = with stdenv.lib.maintainers; [ obadz ];
-  #     platforms = with stdenv.lib.platforms; linux;
+  #     license = lib.licenses.asl20;
+  #     maintainers = with lib.maintainers; [ obadz ];
+  #     platforms = with lib.platforms; linux;
   #   };
   # };
 
@@ -724,7 +725,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "GitVersionTree/bin/Release/*" ];
     exeFiles = [ "GitVersionTree.exe" ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A tool to help visualize git revisions and branches";
       homepage = "https://github.com/crc8/GitVersionTree";
       license = licenses.gpl2;
@@ -751,9 +752,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono";
       homepage = "https://numerics.mathdotnet.com/";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -785,7 +786,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         A generic framework for creating extensible applications,
         and for creating libraries which extend those applications.
       '';
-      license = stdenv.lib.licenses.mit;
+      license = lib.licenses.mit;
     };
   };
 
@@ -840,9 +841,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #   meta = {
   #     description = "F# addin for MonoDevelop 5.9";
   #     homepage = "https://github.com/fsharp/fsharpbinding/tree/5.9";
-  #     license = stdenv.lib.licenses.asl20;
-  #     maintainers = with stdenv.lib.maintainers; [ obadz ];
-  #     platforms = with stdenv.lib.platforms; linux;
+  #     license = lib.licenses.asl20;
+  #     maintainers = with lib.maintainers; [ obadz ];
+  #     platforms = with lib.platforms; linux;
   #   };
   # };
 
@@ -872,9 +873,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "A callback-based program option parser for C#";
       homepage = "http://www.ndesk.org/Options";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -939,9 +940,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "A command-line tool for manipulating F# project files";
       homepage = "https://github.com/kjnilsson/projekt";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 
@@ -967,9 +968,9 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "A declarative CLI argument/XML configuration parser for F# applications";
       homepage = "https://nessos.github.io/UnionArgParser/";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ obadz ];
+      platforms = with lib.platforms; linux;
     };
   };
 

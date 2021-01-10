@@ -24,7 +24,7 @@ with pkgs;
       pythonPackages = callPackage
         ({ pkgs, stdenv, python, overrides }: let
           pythonPackagesFun = import ../../../top-level/python-packages.nix {
-            inherit stdenv pkgs;
+            inherit stdenv pkgs lib;
             python = self;
           };
           otherSplices = {
