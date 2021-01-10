@@ -6894,6 +6894,8 @@ in
     openssl = openssl_1_0_2;
   };
 
+  psw = callPackage ../tools/misc/psw { };
+
   pws = callPackage ../tools/misc/pws { };
 
   cntlm = callPackage ../tools/networking/cntlm { };
