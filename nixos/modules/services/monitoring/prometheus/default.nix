@@ -594,7 +594,7 @@ let
         Refresh interval to re-read the cloud instance list.
       '';
 
-      port = mkDefOpt types.int "80" ''
+      port = mkDefOpt types.port "80" ''
         The port to scrape metrics from. If using the public IP address, this
         must instead be specified in the relabeling rule.
       '';
