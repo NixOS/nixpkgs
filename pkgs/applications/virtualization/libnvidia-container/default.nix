@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/NVIDIA/libnvidia-container";
     description = "NVIDIA container runtime library";
-    license = licenses.bsd3;
+    license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cpcloud ];
   };
