@@ -14,16 +14,19 @@ stdenvNoCC.mkDerivation ({
   inherit src;
 
   MIX_ENV = mixEnv;
-  MIX_REBAR = "${rebar}/bin/rebar";
-  MIX_REBAR3 = "${rebar3}/bin/rebar3";
   MIX_DEBUG = if debug then 1 else 0;
+  DEBUG = if debug then 1 else 0; # for rebar3
 
   configurePhase = ''
-    mkdir -p $out/deps
-    mkdir -p $out/.hex
     export HEX_HOME="$TEMPDIR/.hex";
     export MIX_HOME="$TEMPDIR/.mix";
-    export MIX_DEPS_PATH="$out/deps";
+    export MIX_DEPS_PATH="$out";
+
+    # Rebar
+    mix local.rebar rebar "${rebar}/bin/rebar"
+    mix local.rebar rebar3 "${rebar3}/bin/rebar3"
+    export REBAR_GLOBAL_CONFIG_DIR="$TMPDIR/rebar3"
+    export REBAR_CACHE_DIR="$TMPDIR/rebar3.cache"
   '';
 
   downloadPhase = ''
