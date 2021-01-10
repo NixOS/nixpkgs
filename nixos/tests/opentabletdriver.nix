@@ -1,7 +1,7 @@
 import ./make-test-python.nix ( { pkgs, ... }: {
   name = "opentabletdriver";
   meta = {
-    maintainers = with pkgs.stdenv.lib.maintainers; [ thiagokokada ];
+    maintainers = with pkgs.lib.maintainers; [ thiagokokada ];
   };
 
   machine = { pkgs, ... }:

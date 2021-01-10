@@ -7,7 +7,7 @@ let
 in {
   name = "gitdaemon";
 
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ tilpner ];
   };
 

@@ -128,6 +128,9 @@ buildPythonApplication rec {
   # UTF-8 locale needed for testing
   LC_ALL = "en_US.UTF-8";
 
+  # tests fail with to many open files
+  doCheck = !stdenv.isDarwin;
+
   # - Anki writes some files to $HOME during tests
   # - Skip tests using network
   checkPhase = ''

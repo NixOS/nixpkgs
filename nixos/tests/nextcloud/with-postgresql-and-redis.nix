@@ -3,7 +3,7 @@ import ../make-test-python.nix ({ pkgs, ...}: let
   adminuser = "custom-admin-username";
 in {
   name = "nextcloud-with-postgresql-and-redis";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eqyiel ];
   };
 

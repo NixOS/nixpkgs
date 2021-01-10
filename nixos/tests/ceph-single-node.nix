@@ -184,7 +184,7 @@ let
   '';
 in {
   name = "basic-single-node-ceph-cluster";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ lejonet johanot ];
   };
 
