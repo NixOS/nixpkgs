@@ -157,11 +157,11 @@ in {
                 $XMLRPCMountPoint = "/RPC2";		// DO NOT DELETE THIS LINE!!! DO NOT COMMENT THIS LINE!!!
 
                 $pathToExternals = array(
-                  "php" 	=> ''',			// Something like /usr/bin/php. If empty, will be found in PATH.
-                  "curl"	=> ''',			// Something like /usr/bin/curl. If empty, will be found in PATH.
-                  "gzip"	=> ''',			// Something like /usr/bin/gzip. If empty, will be found in PATH.
-                  "id"	=> ''',			// Something like /usr/bin/id. If empty, will be found in PATH.
-                  "stat"	=> ''',			// Something like /usr/bin/stat. If empty, will be found in PATH.
+                  "php" 	=> "${pkgs.php}/bin/php",			// Something like /usr/bin/php. If empty, will be found in PATH.
+                  "curl"	=> "${pkgs.curl}/bin/curl",			// Something like /usr/bin/curl. If empty, will be found in PATH.
+                  "gzip"	=> "${pkgs.gzip}/bin/gzip",			// Something like /usr/bin/gzip. If empty, will be found in PATH.
+                  "id"	=> "${pkgs.coreutils}/bin/id",			// Something like /usr/bin/id. If empty, will be found in PATH.
+                  "stat"	=> "${pkgs.coreutils}/bin/stat",			// Something like /usr/bin/stat. If empty, will be found in PATH.
                 );
 
                 $localhosts = array( 			// list of local interfaces
@@ -231,7 +231,6 @@ in {
                 "listen.owner" = config.services.nginx.user;
                 "listen.group" = config.services.nginx.group;
               } // cfg.poolSettings;
-              phpEnv."PATH" = with pkgs; lib.makeBinPath [ php curl procps gzip ];
             };
           };
 
