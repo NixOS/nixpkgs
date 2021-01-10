@@ -2888,6 +2888,8 @@ in
 
   bup = callPackage ../tools/backup/bup { };
 
+  bupstash = callPackage ../tools/backup/bupstash { };
+
   burp = callPackage ../tools/backup/burp { };
 
   buku = callPackage ../applications/misc/buku { };
