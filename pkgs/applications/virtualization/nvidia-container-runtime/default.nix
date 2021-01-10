@@ -26,15 +26,18 @@ in
 buildGoPackage rec {
   pname = "nvidia-container-runtime";
   version = "3.4.0";
+
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = pname;
     rev = "v${version}";
     sha256 = "095mks0r4079vawi50pk4zb5jk0g6s9idg2s1w55a0d27jkknldr";
   };
+
   goPackagePath = "github.com/${pname}/src";
   buildFlagsArray = [ "-ldflags=" "-s -w" ];
   nativeBuildInputs = [ makeWrapper ];
+
   postInstall = ''
     mv $out/bin/{src,nvidia-container-runtime}
     mkdir -p $out/etc/nvidia-container-runtime
@@ -58,6 +61,7 @@ buildGoPackage rec {
     substituteInPlace $out/etc/nvidia-container-runtime/config.toml \
       --subst-var-by glibcbin ${lib.getBin glibc}
   '';
+
   meta = with lib; {
     homepage = "https://github.com/NVIDIA/nvidia-container-runtime";
     description = "NVIDIA container runtime";
