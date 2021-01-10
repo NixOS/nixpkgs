@@ -1,10 +1,8 @@
-{ buildPecl, lib, pkgs }:
-
+{ buildPecl, lib, pkgs, version, sha256 }:
 buildPecl {
   pname = "oci8";
 
-  version = "2.2.0";
-  sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
+  inherit version sha256;
 
   buildInputs = [ pkgs.oracle-instantclient ];
   configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
