@@ -15845,7 +15845,7 @@ in
     ;
 
     inherit ((plasma5.override { libsForQt5 = self; }).thirdParty)
-      plasma-applet-caffeine-plus kwin-dynamic-workspaces kwin-tiling krohnkite
+      plasma-applet-caffeine-plus kwin-lowlatency kwin-dynamic-workspaces kwin-tiling krohnkite
     ;
 
     ### KDE APPLICATIONS

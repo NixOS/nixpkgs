@@ -851,6 +851,7 @@ mapAliases ({
   ;
   inherit (plasma5.thirdParty)
     plasma-applet-caffeine-plus
+    kwin-lowlatency
     kwin-dynamic-workspaces
     kwin-tiling
     krohnkite
