@@ -28560,6 +28560,8 @@ in
 
   OSCAR = qt5.callPackage ../applications/misc/OSCAR { };
 
+  pcem = callPackage ../misc/emulators/pcem { };
+
   pgmanage = callPackage ../applications/misc/pgmanage { };
 
   pgadmin = callPackage ../applications/misc/pgadmin {
