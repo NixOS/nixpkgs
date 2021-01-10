@@ -32,6 +32,22 @@ in {
         description = "Storage path of rutorrent.";
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "rutorrent";
+        description = ''
+          User which runs the rutorrent service.
+        '';
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "rutorrent";
+        description = ''
+          Group which runs the rutorrent service.
+        '';
+      };
+
       rpcSocket = mkOption {
         type = types.str;
         default = config.services.rtorrent.rpcSocket;
@@ -194,29 +210,29 @@ in {
               ${optionalString (cfg.plugins != [])
                 ''cp -r ${concatMapStringsSep " " (p: "${pkgs.rutorrent}/plugins/${p}") cfg.plugins} ${cfg.dataDir}/plugins/''}
 
-              chown -R rutorrent:rutorrent ${cfg.dataDir}/{conf,share,logs,plugins}
+              chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}/{conf,share,logs,plugins}
               chmod -R 755 ${cfg.dataDir}/{conf,share,logs,plugins}
             '';
             serviceConfig.Type = "oneshot";
           };
         };
 
-        tmpfiles.rules = [ "d '${cfg.dataDir}' 0775 rutorrent rutorrent -" ];
+        tmpfiles.rules = [ "d '${cfg.dataDir}' 0775 ${cfg.user} ${cfg.group} -" ];
       };
 
-      users.groups.rutorrent = {};
+      users.groups."${cfg.group}" = {};
 
       users.users = {
-        rutorrent = {
+        "${cfg.user}" = {
           home = cfg.dataDir;
-          group = "rutorrent";
+          group = cfg.group;
           extraGroups = [ config.services.rtorrent.group ];
           description = "rutorrent Daemon user";
           isSystemUser = true;
         };
 
         "${config.services.rtorrent.user}" = {
-          extraGroups = [ "rutorrent" ];
+          extraGroups = [ cfg.group ];
         };
       };
     }
@@ -225,8 +241,8 @@ in {
       { services = {
           phpfpm = {
             pools.rutorrent = {
-              user = "rutorrent";
-              group = "rtorrent";
+              user = cfg.user;
+              group = config.services.rtorrent.group;
               settings = mapAttrs (name: mkDefault) {
                 "listen.owner" = config.services.nginx.user;
                 "listen.group" = config.services.nginx.group;
