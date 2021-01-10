@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "dnachisel";
-  version = "3.2.5";
+  version = "3.2.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35301c5eda0baca5902403504e0b5a22eb65da92c2bbd23199d95c4a6bf0ef37";
+    sha256 = "1i49cfpvjvf9610gg4jz06dl5clc8vmcpjmhnm2d1j7lhpp1ksbb";
   };
 
   propagatedBuildInputs = [
