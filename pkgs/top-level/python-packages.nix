@@ -469,6 +469,8 @@ in {
 
   asyncwhois = callPackage ../development/python-modules/asyncwhois { };
 
+  asysocks = callPackage ../development/python-modules/asysocks { };
+
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
 
   atom = callPackage ../development/python-modules/atom { };
@@ -3910,6 +3912,8 @@ in {
   minidb = callPackage ../development/python-modules/minidb { };
 
   minidump = callPackage ../development/python-modules/minidump { };
+
+  minikerberos = callPackage ../development/python-modules/minikerberos { };
 
   minimock = callPackage ../development/python-modules/minimock { };
 
@@ -7970,6 +7974,10 @@ in {
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
   willow = callPackage ../development/python-modules/willow { };
+
+  winacl = callPackage ../development/python-modules/winacl { };
+
+  winsspi = callPackage ../development/python-modules/winsspi { };
 
   wled = callPackage ../development/python-modules/wled { };
 
