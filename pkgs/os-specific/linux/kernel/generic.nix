@@ -24,6 +24,10 @@
   # Additional make flags passed to kbuild
 , extraMakeFlags ? []
 
+, # List of packages needed to build this specific kernel extra, additionally
+  # the default tools
+  nativeBuildInputs ? []
+
 , # kernel intermediate config overrides, as a set
  structuredExtraConfig ? {}
 
@@ -112,6 +116,7 @@ let
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ perl gmp libmpc mpfr ]
+      ++ nativeBuildInputs
       ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ];
 
     platformName = stdenv.hostPlatform.linux-kernel.name;
@@ -181,7 +186,7 @@ let
   }; # end of configfile derivation
 
   kernel = (callPackage ./manual-config.nix { inherit buildPackages;  }) {
-    inherit version modDirVersion src kernelPatches randstructSeed lib stdenv extraMakeFlags extraMeta configfile;
+    inherit version modDirVersion src kernelPatches randstructSeed lib stdenv extraMakeFlags extraMeta configfile nativeBuildInputs;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };
