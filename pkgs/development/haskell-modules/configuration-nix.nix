@@ -798,7 +798,4 @@ self: super: builtins.intersectAttrs super {
 
   # tests depend on a specific version of solc
   hevm = dontCheck (doJailbreak super.hevm);
-
-  # waiting for https://github.com/haskell/ThreadScope/pull/115
-  threadscope = doJailbreak super.threadscope;
 }
