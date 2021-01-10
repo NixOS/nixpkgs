@@ -321,8 +321,8 @@
    </listitem>
    <listitem>
     <para>
-     <package>fish-foreign-env</package> is now an alias for the
-     <package>fishPlugins.foreign-env</package> package, in which the fish
+     The <package>fish-foreign-env</package> package has been replaced with
+     <package>fishPlugins.foreign-env</package>, in which the fish
      functions have been relocated to the
      <literal>vendor_functions.d</literal> directory to be loaded automatically.
     </para>
