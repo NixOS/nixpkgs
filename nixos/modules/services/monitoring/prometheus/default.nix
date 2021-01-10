@@ -591,7 +591,7 @@ let
       '';
 
       refresh_interval = mkDefOpt types.str "60s" ''
-        Refresh interval to re-read the instance list.
+        Refresh interval to re-read the cloud instance list.
       '';
 
       port = mkDefOpt types.int "80" ''
