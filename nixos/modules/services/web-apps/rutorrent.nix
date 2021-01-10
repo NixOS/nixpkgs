@@ -169,7 +169,7 @@ in {
                   "localhost",
                 );
 
-                $profilePath = '../share';		// Path to user profiles
+                $profilePath = '${cfg.dataDir}/share';		// Path to user profiles
                 $profileMask = 0770;			// Mask for files and directory creation in user profiles.
                 // Both Webserver and rtorrent users must have read-write access to it.
                 // For example, if Webserver and rtorrent users are in the same group then the value may be 0770.
