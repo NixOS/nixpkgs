@@ -81,6 +81,7 @@ in
   corerad = handleTest ./corerad.nix {};
   couchdb = handleTest ./couchdb.nix {};
   cri-o = handleTestOn ["x86_64-linux"] ./cri-o.nix {};
+  custom-ca = handleTest ./custom-ca.nix {};
   deluge = handleTest ./deluge.nix {};
   dhparams = handleTest ./dhparams.nix {};
   dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
