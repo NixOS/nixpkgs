@@ -4899,6 +4899,8 @@ in {
   else
     callPackage ../development/python-modules/prettytable/1.nix { };
 
+  primer3 = callPackage ../development/python-modules/primer3 { };
+
   priority = callPackage ../development/python-modules/priority { };
 
   prison = callPackage ../development/python-modules/prison { };
