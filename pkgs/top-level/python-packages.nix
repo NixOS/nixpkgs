@@ -2422,6 +2422,8 @@ in {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  genome-collector = callPackage ../development/python-modules/genome-collector { };
+
   genpy = callPackage ../development/python-modules/genpy { };
 
   genshi = callPackage ../development/python-modules/genshi { };
