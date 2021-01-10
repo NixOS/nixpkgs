@@ -3026,6 +3026,8 @@ in
 
   cmt = callPackage ../applications/audio/cmt {};
 
+  crlfuzz = callPackage ../tools/security/crlfuzz {};
+
   hedgedoc = callPackage ../servers/web-apps/hedgedoc { };
 
   colord = callPackage ../tools/misc/colord { };
