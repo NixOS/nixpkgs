@@ -1828,6 +1828,8 @@ in
 
   cloud-init = python3.pkgs.callPackage ../tools/virtualization/cloud-init { };
 
+  cloudbrute = callPackage ../tools/security/cloudbrute { };
+
   cloudflared = callPackage ../applications/networking/cloudflared { };
 
   cloudmonkey = callPackage ../tools/virtualization/cloudmonkey { };
@@ -4973,9 +4975,7 @@ in
 
   ipfs = callPackage ../applications/networking/ipfs { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
-  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
-    buildGoModule = buildGo114Module;
-  };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
   ipget = callPackage ../applications/networking/ipget { };
 
@@ -6298,6 +6298,8 @@ in
   nym = callPackage ../applications/networking/nym { };
 
   nzbget = callPackage ../tools/networking/nzbget { };
+
+  nzbhydra2 = callPackage ../servers/nzbhydra2 { };
 
   oathToolkit = callPackage ../tools/security/oath-toolkit { };
 

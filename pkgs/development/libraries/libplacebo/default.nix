@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
   version = "3.104.0";
 
   patches = [
-    ./glsl-import.patch
+    (fetchpatch {
+      # support glslang>=11.0.0; Upstream MR: https://code.videolan.org/videolan/libplacebo/-/merge_requests/131
+      url = "https://code.videolan.org/videolan/libplacebo/-/commit/affd15a2faa1340d40dcf277a8acffe2987f517c.patch";
+      sha256 = "1nm27mdm9rn3wsbjdif46pici6mbzmfb6521ijl8ah4mxn9p1ikc";
+    })
   ];
 
   src = fetchFromGitLab {
