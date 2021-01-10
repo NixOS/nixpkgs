@@ -3,14 +3,8 @@
 , buildGoModule
 , callPackage
 , makeWrapper
-, containerRuntimePath
-, configTemplate
+, nvidia-container-runtime
 }:
-let
-  nvidia-container-runtime = callPackage ../nvidia-container-runtime {
-    inherit containerRuntimePath configTemplate;
-  };
-in
 buildGoModule rec {
   pname = "nvidia-container-toolkit";
   version = "1.3.0";

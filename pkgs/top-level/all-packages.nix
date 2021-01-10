@@ -15416,15 +15416,17 @@ in
   nv-codec-headers = callPackage ../development/libraries/nv-codec-headers { };
 
   mkNvidiaContainerPkg = { name, containerRuntimePath, configTemplate, additionalPaths ? [] }:
-    symlinkJoin {
+    let
+      nvidia-container-runtime = callPackage ../applications/virtualization/nvidia-container-runtime {
+        inherit containerRuntimePath configTemplate;
+      };
+    in symlinkJoin {
       name = "nvidia-containers-${name}";
       paths = [
         (callPackage ../applications/virtualization/libnvidia-container { })
-        (callPackage ../applications/virtualization/nvidia-container-runtime {
-          inherit containerRuntimePath configTemplate;
-        })
+        nvidia-container-runtime
         (callPackage ../applications/virtualization/nvidia-container-toolkit {
-          inherit containerRuntimePath configTemplate;
+          inherit nvidia-container-runtime;
         })
       ] ++ additionalPaths;
     };
