@@ -5911,6 +5911,12 @@
     githubId = 1387206;
     name = "Mike Sperber";
   };
+  milesbreslin = {
+    email = "milesbreslin@gmail.com";
+    github = "milesbreslin";
+    githubId = 38543128;
+    name = "Miles Breslin";
+  };
   millerjason = {
     email = "mailings-github@millerjason.com";
     github = "millerjason";
