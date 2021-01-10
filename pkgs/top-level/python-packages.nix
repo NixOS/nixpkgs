@@ -273,6 +273,8 @@ in {
 
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
 
+  airly = callPackage ../development/python-modules/airly { };
+
   ajpy = callPackage ../development/python-modules/ajpy { };
 
   alabaster = callPackage ../development/python-modules/alabaster { };
