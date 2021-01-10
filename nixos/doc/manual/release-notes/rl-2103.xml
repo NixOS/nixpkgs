@@ -420,6 +420,26 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
    </listitem>
    <listitem>
      <para>
+       The attribute <varname>mpi</varname> is now consistently used to
+       provide a default, system-wide MPI implementation.
+       The default implementation is openmpi, which has been used before by
+       all derivations affects by this change.
+       Note that all packages that have used <varname>mpi ? null</varname> in the input
+       for optional MPI builds, have been changed to the boolean input paramater
+       <varname>useMpi</varname> to enable building with MPI.
+
+       Building all packages with <varname>mpich</varname> instead
+       of the default <varname>openmpi</varname> can now be achived like this:
+       <programlisting>
+self: super:
+{
+ mpi = super.mpich;
+}
+       </programlisting>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
       The Searx module has been updated with the ability to configure the
       service declaratively and uWSGI integration.
       The option <literal>services.searx.configFile</literal> has been renamed
