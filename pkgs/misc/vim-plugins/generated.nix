@@ -1425,6 +1425,18 @@ let
     meta.homepage = "https://github.com/shumphrey/fugitive-gitlab.vim/";
   };
 
+  fzf-lsp-nvim = buildVimPluginFrom2Nix {
+    pname = "fzf-lsp-nvim";
+    version = "2020-12-24";
+    src = fetchFromGitHub {
+      owner = "gfanto";
+      repo = "fzf-lsp.nvim";
+      rev = "de69b03c9feaa4b574e4a3e053a9a33467848227";
+      sha256 = "09kpcmnvzgsdbwd5nsnkm93khqhncb8bjl67519wjgx39g73pq50";
+    };
+    meta.homepage = "https://github.com/gfanto/fzf-lsp.nvim/";
+  };
+
   fzf-vim = buildVimPluginFrom2Nix {
     pname = "fzf-vim";
     version = "2021-01-07";

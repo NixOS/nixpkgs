@@ -129,6 +129,7 @@ fszymanski/deoplete-emoji
 garbas/vim-snipmate
 gentoo/gentoo-syntax
 GEverding/vim-hocon
+gfanto/fzf-lsp.nvim@main
 gibiansky/vim-textobj-haskell
 glts/vim-textobj-comment
 godlygeek/csapprox
