@@ -140,7 +140,7 @@ in {
 
     # Try cleaning up the previously default location of cache file.
     # Note that /var/cache/* should always be safe to remove.
-    # TODO: remove later, probably between 20.09 and 21.03
+    # TODO: remove later, probably between 20.09 and 21.05
     systemd.tmpfiles.rules = [ "R /var/cache/kresd" ];
   };
 }
