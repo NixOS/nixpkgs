@@ -905,13 +905,13 @@ in
 
   apitrace = libsForQt514.callPackage ../applications/graphics/apitrace {};
 
+  argtable = callPackage ../development/libraries/argtable { };
+
   arguments = callPackage ../development/libraries/arguments { };
 
   argus = callPackage ../tools/networking/argus {};
 
   argus-clients = callPackage ../tools/networking/argus-clients {};
-
-  argtable = callPackage ../tools/misc/argtable {};
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
@@ -14671,7 +14671,9 @@ in
 
   libjreen = callPackage ../development/libraries/libjreen { };
 
-  libjson-rpc-cpp = callPackage ../development/libraries/libjson-rpc-cpp { };
+  libjson-rpc-cpp = callPackage ../development/libraries/libjson-rpc-cpp {
+    libmicrohttpd = libmicrohttpd_0_9_72;
+  };
 
   libkate = callPackage ../development/libraries/libkate { };
 
@@ -14710,6 +14712,7 @@ in
 
   libmicrohttpd_0_9_70 = callPackage ../development/libraries/libmicrohttpd/0.9.70.nix { };
   libmicrohttpd_0_9_71 = callPackage ../development/libraries/libmicrohttpd/0.9.71.nix { };
+  libmicrohttpd_0_9_72 = callPackage ../development/libraries/libmicrohttpd/0.9.72.nix { };
   libmicrohttpd = libmicrohttpd_0_9_71;
 
   libmikmod = callPackage ../development/libraries/libmikmod {
