@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.1.0";
+  version = "2021.1.1";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -11,7 +11,7 @@
     "actiontec" = ps: with ps; [ ];
     "adguard" = ps: with ps; [ adguardhome ];
     "ads" = ps: with ps; [ pyads ];
-    "advantage_air" = ps: with ps; [ advantage_air ];
+    "advantage_air" = ps: with ps; [ advantage-air ];
     "aftership" = ps: with ps; [ pyaftership ];
     "agent_dvr" = ps: with ps; [ ]; # missing inputs: agent-py
     "air_quality" = ps: with ps; [ ];
@@ -827,7 +827,7 @@
     "telnet" = ps: with ps; [ ];
     "temper" = ps: with ps; [ ]; # missing inputs: temperusb
     "template" = ps: with ps; [ ];
-    "tensorflow" = ps: with ps; [ numpy pillow tensorflow-build_2 ]; # missing inputs: pycocotools tf-models-official
+    "tensorflow" = ps: with ps; [ numpy pillow tensorflow ]; # missing inputs: pycocotools tf-models-official
     "tesla" = ps: with ps; [ teslajsonpy ];
     "tfiac" = ps: with ps; [ ]; # missing inputs: pytfiac
     "thermoworks_smoke" = ps: with ps; [ stringcase ]; # missing inputs: thermoworks_smoke
