@@ -92,32 +92,43 @@ mkDerivation {
 }
 ```
 ## Adding a library to Nixpkgs
-   Add a Qt library to all-packages.nix by adding it to the collection inside `mkLibsForQt5`. This ensures that the library is built with every available version of Qt as needed.
+Qt libraries are added to `qt5-packages.nix` and are made available for every Qt
+version supported.
+### Example adding a Qt library {#qt-library-all-packages-nix}
 
-### Example Adding a Qt library to all-packages.nix {#qt-library-all-packages-nix}
-
+The following represents the contents of `qt5-packages.nix`.
 ```
 {
   # ...
 
-  mkLibsForQt5 = self: with self; {
-    # ...
-
-    mylib = callPackage ../path/to/mylib {};
-  };
+  mylib = callPackage ../path/to/mylib {};
 
   # ...
 }
 ```
 ## Adding an application to Nixpkgs
-Add a Qt application to *all-packages.nix* using `libsForQt5.callPackage` instead of the usual `callPackage`. The former ensures that all dependencies are built with the same version of Qt.
+Applications that use Qt are also added to `qt5-packages.nix`. An alias is added
+in the top-level `all-packages.nix` pointing to the package with the desired Qt5 version.
 
-### Example Adding a QT application to all-packages.nix {#qt-application-all-packages-nix}
-```nix
+### Example adding a Qt application {#qt-application-all-packages-nix}
+
+The following represents the contents of `qt5-packages.nix`.
+```
 {
   # ...
 
-  myapp = libsForQt5.callPackage ../path/to/myapp/ {};
+  myapp = callPackage ../path/to/myapp {};
+
+  # ...
+}
+```
+
+The following represents the contents of `all-packages.nix`.
+```
+{
+  # ...
+
+  myapp = libsForQt5.myapp;
 
   # ...
 }
