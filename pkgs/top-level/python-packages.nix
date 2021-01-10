@@ -2764,6 +2764,8 @@ in {
 
   guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
+  gviz-api = callPackage ../development/python-modules/gviz-api {};
+
   gwyddion = disabledIf isPy3k (toPythonModule (pkgs.gwyddion.override {
     pythonSupport = true;
     pythonPackages = self;
@@ -7372,6 +7374,10 @@ in {
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
+  tensorboard-plugin-profile = callPackage ../development/python-modules/tensorboard-plugin-profile { };
+
+  tensorboard-plugin-wit = callPackage ../development/python-modules/tensorboard-plugin-wit {};
+
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
   tensorflow-bin_2 = callPackage ../development/python-modules/tensorflow/bin.nix {
@@ -7388,9 +7394,10 @@ in {
     cudatoolkit = pkgs.cudatoolkit_11_0;
     cudnn = pkgs.cudnn_cudatoolkit_11_0;
     nccl = pkgs.nccl_cudatoolkit_11;
-    openssl = pkgs.openssl_1_1;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
-    inherit (pkgs) flatbuffers;
+    flatbuffers-core = pkgs.flatbuffers;
+    flatbuffers-python = self.flatbuffers;
+    lmdb-core = pkgs.lmdb;
   };
 
   tensorflow-build = self.tensorflow-build_2;
