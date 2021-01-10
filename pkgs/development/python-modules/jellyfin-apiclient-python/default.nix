@@ -1,16 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests
+{ lib, buildPythonPackage, fetchPypi, requests
 , websocket_client, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "jellyfin-apiclient-python";
-  version = "1.6.1";
+  version = "1.6.2";
   disabled = pythonOlder "3.6";
 
-  src = fetchFromGitHub {
-    owner = "iwalton3";
-    repo = "jellyfin-apiclient-python";
-    rev = "v${version}";
-    sha256 = "0f7czq83ic22fz1vnf0cavb7l3grcxxd5yyw9wcjz3g1j2d76735";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "b4560c4186e7153253919b49f9901258beaab1ffc22bb1334d8ba4666ff00602";
   };
 
   propagatedBuildInputs = [ requests websocket_client ];
