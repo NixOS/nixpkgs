@@ -153,6 +153,14 @@ in
         description = "Enable the Plasma 5 (KDE 5) desktop environment.";
       };
 
+      kwinPackage = mkOption {
+        type = types.package;
+        default = pkgs.kwin;
+        defaultText = "pkgs.kwin";
+        example = literalExample "pkgs.kwin-lowlatency";
+        description = "KWin package to use.";
+      };
+
       phononBackend = mkOption {
         type = types.enum [ "gstreamer" "vlc" ];
         default = "gstreamer";
@@ -201,7 +209,7 @@ in
         kcheckpass.source = "${lib.getBin plasma5.kscreenlocker}/libexec/kcheckpass";
         start_kdeinit.source = "${lib.getBin pkgs.kdeFrameworks.kinit}/libexec/kf5/start_kdeinit";
         kwin_wayland = {
-          source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
+          source = "${lib.getBin cfg.kwinPackage}/bin/kwin_wayland";
           capabilities = "cap_sys_nice+ep";
         };
       };
@@ -274,7 +282,6 @@ in
           kscreenlocker
           ksysguard
           kwayland
-          kwin
           kwrited
           libkscreen
           libksysguard
@@ -284,6 +291,7 @@ in
           polkit-kde-agent
           spectacle
           systemsettings
+          cfg.kwinPackage
 
           plasma-desktop
           plasma-workspace
