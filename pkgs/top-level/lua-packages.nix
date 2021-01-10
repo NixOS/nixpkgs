@@ -32,7 +32,7 @@ let
 
   callPackage = pkgs.newScope self;
 
-  requiredLuaModules = drvs: with stdenv.lib; let
+  requiredLuaModules = drvs: with lib; let
     modules =  filter hasLuaModule drvs;
   in unique ([lua] ++ modules ++ concatLists (catAttrs "requiredLuaModules" modules));
 
@@ -123,7 +123,7 @@ with self; {
         );
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Lightweight UNIX I/O and POSIX binding for Lua";
       homepage = "https://www.gitano.org.uk/luxio/";
       license = licenses.mit;
@@ -151,7 +151,7 @@ with self; {
       printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A modular widget library for the awesome window manager";
       homepage    = "https://github.com/Mic92/vicious";
       license     = licenses.gpl2;
