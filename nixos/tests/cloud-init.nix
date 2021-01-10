@@ -40,7 +40,7 @@ let
   };
 in makeTest {
   name = "cloud-init";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ lewo ];
   };
   machine = { ... }:
