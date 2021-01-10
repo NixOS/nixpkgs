@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
   version = "0.3.5";
 
   src = fetchgit {
-    rev = "v${version}";
     url = "https://gitlab.common-lisp.net/clpm/clpm";
-    sha256 = "0jivnnp3z148yf4c2nzzr5whz76w5kjhsb97z2vs5maiwf79y2if";
+    rev = "v${version}";
     fetchSubmodules = true;
+    sha256 = "0jivnnp3z148yf4c2nzzr5whz76w5kjhsb97z2vs5maiwf79y2if";
   };
 
   buildInputs = [
@@ -21,13 +21,9 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  libssl = openssl.out;
-
   buildPhase = ''
-    # Libs are copied working directory to avoid error when build script tries to deploy them
-    cp $libssl/lib/libcrypto.so.* .
-    cp $libssl/lib/libssl.so.* .
-
+    ln -s ${openssl.out}/lib/libcrypto.so.* .
+    ln -s ${openssl.out}/lib/libssl.so.* .
     common-lisp.sh --script scripts/build.lisp
   '';
 
