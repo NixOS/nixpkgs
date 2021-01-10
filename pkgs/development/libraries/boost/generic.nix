@@ -14,7 +14,8 @@
 , enableNumpy ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
-, mpi ? null
+, useMpi ? false
+, mpi
 , extraB2Args ? []
 
 # Attributes inherit from specific versions
@@ -94,7 +95,7 @@ let
     ++ optional (variant == "release") "debug-symbols=off"
     ++ optional (toolset != null) "toolset=${toolset}"
     ++ optional (!enablePython) "--without-python"
-    ++ optional (mpi != null || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
+    ++ optional (useMpi || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
     ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
   ] ++ extraB2Args
@@ -140,7 +141,7 @@ stdenv.mkDerivation {
         substituteInPlace tools/build/src/tools/clang-darwin.jam \
           --replace '@rpath/$(<[1]:D=)' "$out/lib/\$(<[1]:D=)";
     fi;
-  '' + optionalString (mpi != null) ''
+  '' + optionalString useMpi ''
     cat << EOF >> user-config.jam
     using mpi : ${mpi}/bin/mpiCC ;
     EOF

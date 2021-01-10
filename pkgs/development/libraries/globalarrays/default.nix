@@ -1,5 +1,5 @@
 { lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
-, blas, gfortran, openssh, openmpi
+, blas, gfortran, openssh, mpi
 } :
 
 let
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openmpi blas gfortran openssh ];
+  buildInputs = [ mpi blas gfortran openssh ];
 
   preConfigure = ''
     configureFlagsArray+=( "--enable-i8" \

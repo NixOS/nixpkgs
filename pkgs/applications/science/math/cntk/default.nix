@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, fetchFromGitHub, cmake
-, openblas, blas, lapack, opencv3, libzip, boost, protobuf, openmpi
+, openblas, blas, lapack, opencv3, libzip, boost, protobuf, mpi
 , onebitSGDSupport ? false
 , cudaSupport ? false, addOpenGLRunpath, cudatoolkit, nvidia_x11
 , cudnnSupport ? cudaSupport, cudnn
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   # Force OpenMPI to use g++ in PATH.
   OMPI_CXX = "g++";
 
-  buildInputs = [ openblas opencv3 libzip boost protobuf openmpi ]
+  buildInputs = [ openblas opencv3 libzip boost protobuf mpi ]
              ++ lib.optional cudaSupport cudatoolkit
              ++ lib.optional cudnnSupport cudnn;
 
@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     "--with-openblas=${openblas}"
     "--with-boost=${boost.dev}"
     "--with-protobuf=${protobuf}"
-    "--with-mpi=${openmpi}"
+    "--with-mpi=${mpi}"
     "--cuda=${if cudaSupport then "yes" else "no"}"
     # FIXME
     "--asgd=no"
