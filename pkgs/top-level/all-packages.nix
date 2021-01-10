@@ -2118,6 +2118,8 @@ in
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
+  dduper = callPackage ../tools/filesystems/dduper { };
+
   dvc = callPackage ../applications/version-management/dvc { };
 
   dvc-with-remotes = callPackage ../applications/version-management/dvc {

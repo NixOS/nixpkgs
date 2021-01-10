@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, attr, acl, zlib, libuuid, e2fsprogs, lzo
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3
+, patches ? []
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
+
+  inherit patches;
 
   meta = with lib; {
     description = "Utilities for the btrfs filesystem";
