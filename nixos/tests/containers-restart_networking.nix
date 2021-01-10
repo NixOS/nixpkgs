@@ -19,7 +19,7 @@ let
 in import ./make-test-python.nix ({ pkgs, ...} :
 {
   name = "containers-restart_networking";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ kampfschlaefer ];
   };
 
