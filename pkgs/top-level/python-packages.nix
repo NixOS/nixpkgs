@@ -7427,6 +7427,8 @@ in {
 
   termstyle = callPackage ../development/python-modules/termstyle { };
 
+  teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
+
   tess = callPackage ../development/python-modules/tess { };
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };

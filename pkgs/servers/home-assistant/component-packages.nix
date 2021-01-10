@@ -828,7 +828,7 @@
     "temper" = ps: with ps; [ ]; # missing inputs: temperusb
     "template" = ps: with ps; [ ];
     "tensorflow" = ps: with ps; [ numpy pillow tensorflow-build_2 ]; # missing inputs: pycocotools tf-models-official
-    "tesla" = ps: with ps; [ ]; # missing inputs: teslajsonpy
+    "tesla" = ps: with ps; [ teslajsonpy ];
     "tfiac" = ps: with ps; [ ]; # missing inputs: pytfiac
     "thermoworks_smoke" = ps: with ps; [ stringcase ]; # missing inputs: thermoworks_smoke
     "thethingsnetwork" = ps: with ps; [ ];
