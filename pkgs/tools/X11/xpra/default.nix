@@ -110,7 +110,10 @@ in buildPythonApplication rec {
 
   enableParallelBuilding = true;
 
-  passthru = { inherit xf86videodummy; };
+  passthru = {
+    inherit xf86videodummy;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     homepage = "http://xpra.org/";
