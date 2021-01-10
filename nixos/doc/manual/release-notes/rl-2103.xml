@@ -558,6 +558,12 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
        The GNOME desktop manager once again installs <package>gnome3.epiphany</package> by default.
      </para>
    </listitem>
+   <listitem>
+    <para>
+     NixOS now generates empty <literal>/etc/netgroup</literal>.
+     <literal>/etc/netgroup</literal> defines network-wide groups and may affect to setups using NIS.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
