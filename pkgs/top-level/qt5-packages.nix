@@ -1,5 +1,5 @@
 
-# Qt libraries set.
+# Qt packages set.
 #
 # Attributes in this file are packages requiring Qt and will be made available
 # for every Qt version. Qt applications are called from `all-packages.nix` via
