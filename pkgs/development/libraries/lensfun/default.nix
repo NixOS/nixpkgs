@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ flokli ];
     license = stdenv.lib.licenses.lgpl3;
     description = "An opensource database of photographic lenses and their characteristics";
     homepage = "https://lensfun.github.io";
