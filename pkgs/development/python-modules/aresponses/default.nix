@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "aresponses";
-  version = "2.0.0";
+  version = "2.1.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58693a6b715edfa830a20903ee1d1b2a791251923f311b3bebf113e8ff07bb35";
+    sha256 = "1jn7x7ldqsz5cd190jqjil0kqyimd1d0yxfzzp41ky0p72lvd68a";
   };
 
   propagatedBuildInputs = [
