@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = "Cryptographic algorithms library";
     maintainers = with maintainers; [ raskin ];
-    platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+    platforms = platforms.unix;
     license = licenses.bsd2;
   };
   passthru.updateInfo.downloadPage = "http://files.randombit.net/botan/";
