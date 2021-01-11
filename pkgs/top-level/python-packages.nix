@@ -212,6 +212,8 @@ in {
 
   aioftp = callPackage ../development/python-modules/aioftp { };
 
+  aioguardian = callPackage ../development/python-modules/aioguardian { };
+
   aioh2 = callPackage ../development/python-modules/aioh2 { };
 
   aioharmony = callPackage ../development/python-modules/aioharmony { };
@@ -271,6 +273,8 @@ in {
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   aiounittest = callPackage ../development/python-modules/aiounittest { };
+
+  aiowinreg = callPackage ../development/python-modules/aiowinreg { };
 
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
 
@@ -3253,6 +3257,8 @@ in {
 
   json-merge-patch = callPackage ../development/python-modules/json-merge-patch { };
 
+  json-schema-for-humans = callPackage ../development/python-modules/json-schema-for-humans { };
+
   jsonnet = buildPythonPackage { inherit (pkgs.jsonnet) name src; };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
@@ -5360,6 +5366,8 @@ in {
 
   pyipp = callPackage ../development/python-modules/pyipp { };
 
+  pyiqvia = callPackage ../development/python-modules/pyiqvia { };
+
   pyjet = callPackage ../development/python-modules/pyjet { };
 
   pyjks = callPackage ../development/python-modules/pyjks { };
@@ -7425,6 +7433,8 @@ in {
 
   termstyle = callPackage ../development/python-modules/termstyle { };
 
+  teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
+
   tess = callPackage ../development/python-modules/tess { };
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
@@ -7901,6 +7911,8 @@ in {
   vulture = callPackage ../development/python-modules/vulture { };
 
   vxi11 = callPackage ../development/python-modules/vxi11 { };
+
+  vyper = callPackage ../development/compilers/vyper { };
 
   w3lib = callPackage ../development/python-modules/w3lib { };
 
