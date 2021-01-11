@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, buildDunePackage, defaultVersion ? "0.11.0" }:
+{ lib, fetchFromGitHub, buildDunePackage, defaultVersion ? "0.11.0" }:
 
 { pname, version ? defaultVersion, hash, ...}@args:
 

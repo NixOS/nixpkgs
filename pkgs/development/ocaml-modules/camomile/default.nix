@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, buildDunePackage, cppo }:
+{ lib, fetchFromGitHub, buildDunePackage, cppo }:
 
 buildDunePackage rec {
   pname = "camomile";
