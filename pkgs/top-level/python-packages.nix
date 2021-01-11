@@ -7737,6 +7737,8 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
+  unifiled = callPackage ../development/python-modules/unifiled { };
+
   units = callPackage ../development/python-modules/units { };
 
   unittest2 = callPackage ../development/python-modules/unittest2 { };
