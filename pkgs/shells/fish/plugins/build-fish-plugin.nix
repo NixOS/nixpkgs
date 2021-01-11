@@ -18,7 +18,7 @@ attrs@{
   # plugin packages to add to the vendor paths of the test fish shell
   checkPlugins ? [],
   # vendor directories to add to the function path of the test fish shell
-  checkFunctionPath ? [],
+  checkFunctionDirs ? [],
   # test script to be executed in a fish shell
   checkPhase ? "",
   doCheck ? checkPhase != "",
@@ -57,7 +57,7 @@ stdenv.mkDerivation (attrs // {
 
   checkInputs = [ (wrapFish {
     pluginPkgs = checkPlugins;
-    functionDirs = checkFunctionPath;
+    functionDirs = checkFunctionDirs;
   }) ] ++ checkInputs;
 
   checkPhase = ''

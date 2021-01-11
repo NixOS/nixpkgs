@@ -27,7 +27,7 @@ scripts from `$src/{completions,conf,conf.d,functions}` to the standard vendor
 installation paths. It also sets up the test environment so that the optional
 `checkPhase` is executed in a Fish shell with other already packaged plugins
 and package-local Fish functions specified in `checkPlugins` and
-`checkFunctionPath` respectively.
+`checkFunctionDirs` respectively.
 
 See `pkgs/shells/fish/plugins/pure.nix` for an example of Fish plugin package
 using `buildFishPlugin` and running unit tests with the `fishtape` test runner.
