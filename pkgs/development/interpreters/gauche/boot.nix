@@ -1,24 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, gaucheBootstrap, pkg-config, texinfo
-,  libiconv, gdbm, openssl, zlib, mbedtls, cacert }:
+{ stdenv, lib, fetchurl, pkg-config, texinfo, libiconv, gdbm, openssl, zlib
+, mbedtls, cacert }:
 
 stdenv.mkDerivation rec {
-  pname = "gauche";
-  version = "0.9.10";
+  pname = "gauche-bootstrap";
+  version = "0.9.9";
 
-  src = fetchFromGitHub {
-    owner = "shirok";
-    repo = pname;
-    rev = "release${lib.replaceChars [ "." ] [ "_" ] version}";
-    sha256 = "0ki1w7sa10ivmg51sqjskby0gsznb0d3738nz80x589033km5hmb";
+  src = fetchurl {
+    url = "mirror://sourceforge/gauche/Gauche-${version}.tgz";
+    sha256 = "1yzpszhw52vkpr65r5d4khf3489mnnvnw58dd2wsvvx7499k5aac";
   };
 
-  nativeBuildInputs = [ gaucheBootstrap pkg-config texinfo autoreconfHook ];
+  nativeBuildInputs = [ pkg-config texinfo ];
 
   buildInputs = [ libiconv gdbm openssl zlib mbedtls cacert ];
-
-  autoreconfPhase = ''
-    ./DIST gen
-  '';
 
   postPatch = ''
     patchShebangs .
