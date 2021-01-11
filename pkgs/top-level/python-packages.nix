@@ -5450,6 +5450,8 @@ in {
 
   pyls-mypy = callPackage ../development/python-modules/pyls-mypy { };
 
+  pyls-spyder = callPackage ../development/python-modules/pyls-spyder { };
+
   PyLTI = callPackage ../development/python-modules/pylti { };
 
   pymacaroons = callPackage ../development/python-modules/pymacaroons { };
@@ -7507,6 +7509,8 @@ in {
   threadpool = callPackage ../development/python-modules/threadpool { };
 
   threadpoolctl = callPackage ../development/python-modules/threadpoolctl { };
+
+  three-merge = callPackage ../development/python-modules/three-merge { };
 
   thrift = callPackage ../development/python-modules/thrift { };
 

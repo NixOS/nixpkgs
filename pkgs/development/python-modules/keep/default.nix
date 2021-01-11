@@ -24,6 +24,7 @@ buildPythonPackage rec {
   ];
 
   # no tests
+  doCheck = false;
   pythonImportsCheck = [ "keep" ];
 
   meta = with lib; {

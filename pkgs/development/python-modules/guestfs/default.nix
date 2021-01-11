@@ -11,6 +11,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ libguestfs qemu ];
 
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "guestfs" ];
+
   meta = with lib; {
     homepage = "https://libguestfs.org/guestfs-python.3.html";
     description = "Use libguestfs from Python";

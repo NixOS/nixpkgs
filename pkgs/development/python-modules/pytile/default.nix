@@ -43,6 +43,8 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "--ignore examples/" ];
   pythonImportsCheck = [ "pytile" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = " Python API for Tile Bluetooth trackers";
     longDescription = ''
