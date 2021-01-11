@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, fetchpatch
+{ lib, stdenv, fetchFromGitHub, cmake, fetchpatch
 , staticOnly ? stdenv.hostPlatform.isStatic
 }:
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     cp ../docs/*.3 $out/share/man/man3/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
 
     description = "A generic-purpose lossless compression algorithm and tool";

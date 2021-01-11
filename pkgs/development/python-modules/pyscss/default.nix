@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pytest
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Scss compiler for Python";
     homepage = "https://pyscss.readthedocs.org/en/latest/";
     license = licenses.mit;

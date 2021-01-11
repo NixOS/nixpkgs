@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "numad-0.5";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A user-level daemon that monitors NUMA topology and processes resource consumption to facilitate good NUMA resource access";
     homepage = "https://fedoraproject.org/wiki/Features/numad";
     license = licenses.lgpl21;

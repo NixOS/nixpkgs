@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # Testing is very, very long.
   # doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ghostscript and cups printer drivers";
     homepage = "https://sourceforge.net/projects/gimp-print/";
     license = licenses.gpl2;

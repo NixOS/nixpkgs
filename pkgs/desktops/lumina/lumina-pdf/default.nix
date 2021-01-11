@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qmake, qtbase, qttools, poppler }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, qtbase, qttools, poppler }:
 
 mkDerivation rec {
   pname = "lumina-pdf";
@@ -28,7 +28,7 @@ mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PDF viewer for the Lumina Desktop";
     homepage = "https://github.com/lumina-desktop/lumina-pdf";
     license = licenses.bsd3;

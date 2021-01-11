@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage
+{ lib, stdenv, buildPythonPackage
 , fetchPypi, isPy3k, linuxPackages
 , fastrlock, numpy, six, wheel, pytest, mock, setuptools
 , cudatoolkit, cudnn, nccl
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , cmake
 , fetchPypi
@@ -25,7 +25,7 @@ buildPythonPackage rec {
       --subst-var-by libh3_path ${h3}/lib/libh3${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/uber/h3-py";
     description = "This library provides Python bindings for the H3 Core Library.";
     license = licenses.asl20;

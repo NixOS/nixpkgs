@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , meson
 , ninja
 , gettext
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Epiphany";
     description = "WebKit based web browser for GNOME";
     maintainers = teams.gnome.members;

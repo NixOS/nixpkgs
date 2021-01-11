@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
 , atomicwrites
 , attrs
 , funcsigs
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     "pytest"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.pytest.org";
     description = "Framework for writing tests";
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];

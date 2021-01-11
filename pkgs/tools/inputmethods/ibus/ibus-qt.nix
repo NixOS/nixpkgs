@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ibus, cmake, pkg-config, qt4, icu, doxygen }:
+{ lib, stdenv, fetchurl, ibus, cmake, pkg-config, qt4, icu, doxygen }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-qt";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DQT_PLUGINS_DIR=lib/qt4/plugins" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://github.com/ibus/ibus-qt/";
     description = "Qt4 interface to the ibus input method";
     platforms   = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule, go }:
+{ lib, stdenv, fetchFromGitHub, buildGoModule, go }:
 
 buildGoModule rec {
   pname = "kubelogin";
@@ -19,7 +19,7 @@ buildGoModule rec {
         -X main.goVersion=${stdenv.lib.getVersion go}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Kubernetes credential plugin implementing Azure authentication";
     inherit (src.meta) homepage;
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jdk, makeWrapper }:
+{ lib, stdenv, fetchzip, jdk, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "sshoogr";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       --prefix JAVA_HOME : ${jdk}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       A Groovy-based DSL for working with remote SSH servers
     '';

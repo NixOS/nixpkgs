@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 with python3.pkgs;
 
@@ -37,7 +37,7 @@ buildPythonApplication rec {
   # Tests need a DISPLAY
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python IDE for beginners";
     longDescription = ''
       Thonny is a Python IDE for beginners. It supports different ways

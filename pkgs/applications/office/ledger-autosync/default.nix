@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub, ledger, hledger, useLedger ? true, useHledger ? true }:
+{ lib, stdenv, python3Packages, fetchFromGitHub, ledger, hledger, useLedger ? true, useHledger ? true }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ledger-autosync";
@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
     nosetests -a generic -a ledger -a hledger
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/egh/ledger-autosync";
     description = "OFX/CSV autosync for ledger and hledger";
     license = licenses.gpl3;

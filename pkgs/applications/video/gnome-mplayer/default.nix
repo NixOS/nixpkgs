@@ -1,4 +1,4 @@
-{stdenv, substituteAll, fetchFromGitHub, pkgconfig, gettext, glib, gtk3, gmtk, dbus, dbus-glib
+{lib, stdenv, substituteAll, fetchFromGitHub, pkgconfig, gettext, glib, gtk3, gmtk, dbus, dbus-glib
 , libnotify, libpulseaudio, mplayer, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gnome MPlayer, a simple GUI for MPlayer";
     homepage = "https://sites.google.com/site/kdekorte2/gnomemplayer";
     license = licenses.gpl2;

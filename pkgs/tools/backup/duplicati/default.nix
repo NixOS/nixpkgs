@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, mono, sqlite, makeWrapper }:
+{ lib, stdenv, fetchzip, mono, sqlite, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "duplicati";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
           sqlite ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free backup client that securely stores encrypted, incremental, compressed backups on cloud storage services and remote file servers";
     homepage = "https://www.duplicati.com/";
     license = licenses.lgpl21;

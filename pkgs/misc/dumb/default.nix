@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, allegro, SDL2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, allegro, SDL2 }:
 
 stdenv.mkDerivation rec {
   pname = "dumb";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_EXAMPLES='OFF'"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kode54/dumb";
     description = "Module/tracker based music format parser and player library";
     license = licenses.free;  # Derivative of GPL

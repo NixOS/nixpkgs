@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "gnuvd-1.0.12";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0mpy76a0pxy62zjiihlzmvl4752hiwxhfs8rm1v5zgdr78acxyxz";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line dutch dictionary application";
     homepage = "https://www.djcbsoftware.nl/code/gnuvd/";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, nix, boost, graphviz, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, nix, boost, graphviz, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-du";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     nix
   ] ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to determine which gc-roots take space in your nix store";
     homepage = "https://github.com/symphorien/nix-du";
     license = licenses.lgpl3;

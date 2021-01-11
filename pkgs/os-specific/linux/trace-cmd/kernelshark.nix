@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchgit, qtbase, cmake, asciidoc, docbook_xsl, json_c, mesa_glu, freeglut, trace-cmd, pkg-config }:
+{ lib, stdenv, mkDerivation, fetchgit, qtbase, cmake, asciidoc, docbook_xsl, json_c, mesa_glu, freeglut, trace-cmd, pkg-config }:
 mkDerivation {
   pname = "kernelshark";
   version = "1.1.0";
@@ -30,7 +30,7 @@ mkDerivation {
     pushd kernel-shark/build
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for trace-cmd which is an interface for the Linux kernel ftrace subsystem";
     homepage    = "https://kernelshark.org/";
     license     = licenses.gpl2;

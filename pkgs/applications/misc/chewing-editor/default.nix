@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, libchewing, qtbase
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, libchewing, qtbase
 , qttools }:
 
 mkDerivation rec {
@@ -17,7 +17,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ libchewing qtbase qttools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross platform chewing user phrase editor";
     longDescription = ''
       chewing-editor is a cross platform chewing user phrase editor. It provides a easy way to manage user phrase. With it, user can customize their user phrase to increase input performance.

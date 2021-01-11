@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # No tests on PyPi
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/scikit-hep/uproot3-methods";
     description = "Pythonic mix-ins for ROOT classes";
     license = licenses.bsd3;

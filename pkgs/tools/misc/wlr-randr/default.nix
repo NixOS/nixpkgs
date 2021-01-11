@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, cmake, pkgconfig, wayland }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, cmake, pkgconfig, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "wlr-randr";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja cmake pkgconfig ];
   buildInputs = [ wayland ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     description = "An xrandr clone for wlroots compositors";
     homepage = "https://github.com/emersion/wlr-randr";

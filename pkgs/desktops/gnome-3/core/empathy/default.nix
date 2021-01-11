@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , intltool
 , fetchurl
 , webkitgtk
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Empathy";
     description = "Messaging program which supports text, voice, video chat, and file transfers over many different protocols";
     maintainers = teams.gnome.members;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem
+{ lib, stdenv, fetchurl, makeDesktopItem
 , ghostscript, atk, gtk2, glib, fontconfig, freetype
 , libgnomecanvas, libgnomeprint, libgnomeprintui
 , pango, libX11, xorgproto, zlib, poppler
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       cp $out/share/xournal/pixmaps/xournal.png $out/share/icons
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://xournal.sourceforge.net/";
     description = "Note-taking application (supposes stylus)";
     maintainers = [ maintainers.guibert ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , autoreconfHook
 , glib
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     cp src/cgg{,-dirgen} $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://cgg.bzatek.net/";
     description = "A simple static web photo gallery, designed to be clean and easily usable";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gperf
+{ lib, stdenv, fetchurl, pkgconfig, gperf
 , buildsystem
 , libdom
 , libhubbub
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "NetSurf SVG decoder";
     license = licenses.mit;

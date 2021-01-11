@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchPypi
 , buildPythonPackage
 , isPy27
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     "--pyargs pecan "
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pecan";
     homepage = "http://www.pecanpy.org/";
     changelog = "https://pecan.readthedocs.io/en/latest/changes.html";

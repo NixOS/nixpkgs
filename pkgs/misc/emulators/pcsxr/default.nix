@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, intltool, pkgconfig, gtk3, SDL2, xorg
+{ lib, stdenv, fetchurl, autoreconfHook, intltool, pkgconfig, gtk3, SDL2, xorg
 , wrapGAppsHook, libcdio, nasm, ffmpeg, file
 , fetchpatch }:
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
        "$out/share/doc/${pname}-${version}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Playstation 1 emulator";
     homepage = "https://pcsxr.codeplex.com/";
     maintainers = with maintainers; [ rardiol ];

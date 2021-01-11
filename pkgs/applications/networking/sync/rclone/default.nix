@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles }:
 
 buildGoModule rec {
   pname = "rclone";
@@ -36,7 +36,7 @@ buildGoModule rec {
       done
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, pkgconfig, pcre, libxml2, zlib, bzip2, which, file
+{ lib, stdenv, buildPackages, fetchurl, pkgconfig, pcre, libxml2, zlib, bzip2, which, file
 , openssl, enableMagnet ? false, lua5_1 ? null
 , enableMysql ? false, libmysqlclient ? null
 , enableLdap ? false, openldap ? null
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     rm "$out/share/lighttpd/doc/config/vhosts.d/Makefile"*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight high-performance web server";
     homepage = "http://www.lighttpd.net/";
     license = stdenv.lib.licenses.bsd3;

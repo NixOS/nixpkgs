@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, qwt6_qt4, libGLU, libGL, glew, gdal, cgal
+{ lib, stdenv, fetchurl, qt4, qwt6_qt4, libGLU, libGL, glew, gdal, cgal
 , proj, boost, cmake, python2, doxygen, graphviz, gmp, mpfr }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_LINK="-ldl -lpthread -lutil";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop software for the interactive visualisation of plate-tectonics";
     homepage = "https://www.gplates.org";
     license = licenses.gpl2;

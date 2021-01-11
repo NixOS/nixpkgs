@@ -28,7 +28,7 @@ buildGoModule rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Like Prometheus, but for logs";
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/loki/";

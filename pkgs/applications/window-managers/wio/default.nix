@@ -1,4 +1,4 @@
-{ stdenv, fetchgit
+{ lib, stdenv, fetchgit
 , meson
 , ninja
 , pkg-config
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${stdenv.lib.makeBinPath [ alacritty cage ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "That Plan 9 feel, for Wayland";
     longDescription = ''
       Wio is a Wayland compositor for Linux and FreeBSD which has a similar look

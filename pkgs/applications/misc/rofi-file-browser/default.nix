@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, rofi, gtk3 }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, rofi, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-file-browser-extended";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeBuildDir = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Use rofi to quickly open files";
     homepage = "https://github.com/marvinkreis/rofi-file-browser-extended";
     license = licenses.mit;

@@ -24,7 +24,7 @@ in pythonPackages.buildPythonApplication rec {
     wrapProgram "$out/bin/dtrx" --prefix PATH : "${archivers}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Do The Right Extraction: A tool for taking the hassle out of extracting archives";
     homepage = "https://brettcsmith.org/2007/dtrx/";
     license = licenses.gpl3Plus;

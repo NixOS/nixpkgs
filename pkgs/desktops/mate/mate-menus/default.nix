@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, glib, gobject-introspection, python3 }:
+{ lib, stdenv, fetchurl, pkgconfig, gettext, glib, gobject-introspection, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-menus";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Menu system for MATE";
     homepage = "https://github.com/mate-desktop/mate-menus";
     license = with licenses; [ gpl2 lgpl2 ];

@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, substituteAll, udev
+{ lib, stdenv, mkDerivation, fetchFromGitHub, substituteAll, udev
 , pkgconfig, qtbase, cmake, zlib, kmod }:
 
 mkDerivation rec {
@@ -39,7 +39,7 @@ mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Driver and configuration tool for Corsair keyboards and mice";
     homepage = "https://github.com/ckb-next/ckb-next";
     license = licenses.gpl2;

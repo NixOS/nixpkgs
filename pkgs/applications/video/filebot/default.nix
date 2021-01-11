@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openjdk11, makeWrapper, autoPatchelfHook
+{ lib, stdenv, fetchurl, openjdk11, makeWrapper, autoPatchelfHook
 , zlib, libzen, libmediainfo, curl, libmms, glib
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/filebot.sh $out/bin/filebot
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The ultimate TV and Movie Renamer";
     longDescription = ''
       FileBot is the ultimate tool for organizing and renaming your Movies, TV

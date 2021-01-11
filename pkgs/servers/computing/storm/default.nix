@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://storm.apache.org";
     description = "Distributed realtime computation system";
     license = licenses.asl20;

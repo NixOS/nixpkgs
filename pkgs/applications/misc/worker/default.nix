@@ -1,4 +1,4 @@
-{ stdenv, libX11, fetchurl }:
+{ lib, stdenv, libX11, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "worker";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A two-pane file manager with advanced file manipulation features";
     homepage = "http://www.boomerangsworld.de/cms/worker/index.html";
     license =  licenses.gpl2;

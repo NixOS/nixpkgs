@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool
+{ lib, stdenv, fetchurl, pkgconfig, intltool
 , gtk3, glib, curl, goocanvas2, gpsd
 , hamlib, wrapGAppsHook
 }:
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
   buildInputs = [ curl glib gtk3 goocanvas2 gpsd hamlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Real time satellite tracking and orbit prediction";
     longDescription = ''
       Gpredict is a real time satellite tracking and orbit prediction program

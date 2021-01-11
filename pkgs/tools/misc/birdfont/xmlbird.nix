@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, pkgconfig, vala, glib, gobject-introspection }:
+{ lib, stdenv, fetchurl, python3, pkgconfig, vala, glib, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "xmlbird";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   installPhase = "./install.py";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XML parser for Vala and C programs";
     homepage = "https://birdfont.org/xmlbird.php";
     license = licenses.lgpl3;

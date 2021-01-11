@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -54,7 +54,7 @@ buildPythonPackage rec {
       --replace 'locale_env = dict(LC_ALL=locale, LANG=locale)' 'locale_env = dict(LC_ALL=locale, LANG=locale, LOCALE_ARCHIVE=os.getenv("LOCALE_ARCHIVE"))'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Securely transfer data between computers";
     homepage = "https://github.com/warner/magic-wormhole";
     license = licenses.mit;

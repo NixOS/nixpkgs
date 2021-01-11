@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , automake
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ readline ncurses which libtool ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simulation environment for empirically-based simulations of neurons and networks of neurons";
 
     longDescription = "NEURON is a simulation environment for developing and exercising models of

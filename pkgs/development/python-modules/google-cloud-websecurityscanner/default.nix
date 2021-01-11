@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     "google.cloud.websecurityscanner_v1beta"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Cloud Web Security Scanner API client library";
     homepage = "https://github.com/googleapis/python-websecurityscanner";
     license = licenses.asl20;

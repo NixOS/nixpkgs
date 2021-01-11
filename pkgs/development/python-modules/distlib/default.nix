@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "distlib";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   # Tests use pypi.org.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Low-level components of distutils2/packaging";
     homepage = "https://distlib.readthedocs.io";
     license = licenses.psfl;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opaline }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, opaline }:
 
 let
   inherit (stdenv.lib) getVersion versionAtLeast;
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   installPhase = "opaline -libdir $OCAMLFIND_DESTDIR";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Basic types for computer graphics in OCaml";
     longDescription = ''
       Gg is an OCaml module providing basic types for computer graphics. It

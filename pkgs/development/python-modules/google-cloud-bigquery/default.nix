@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     "google.cloud.bigquery_v2"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google BigQuery API client library";
     homepage = "https://github.com/googleapis/python-bigquery";
     license = licenses.asl20;

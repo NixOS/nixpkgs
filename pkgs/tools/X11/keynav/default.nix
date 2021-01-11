@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libX11, xorgproto, libXtst, libXi, libXext
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libX11, xorgproto, libXtst, libXi, libXext
 , libXinerama, libXrandr, glib, cairo, xdotool }:
 
 let release = "20180821"; in
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
       cp keynavrc $out/share/keynav/doc
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate X11 mouse clicks from keyboard";
     homepage = "https://www.semicomplete.com/projects/keynav/";
     license = licenses.bsd3;

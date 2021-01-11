@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple Mastodon client designed for elementary OS, originally developed by @bleakgrey";
     homepage = "https://github.com/cleac/olifant";
     license = licenses.gpl3;

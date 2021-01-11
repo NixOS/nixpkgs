@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 }:
@@ -27,7 +27,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Nuke a whole AWS account and delete all its resources";
     homepage = "https://github.com/rebuy-de/aws-nuke";
     license = licenses.mit;

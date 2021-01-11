@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, autoreconfHook, libcrafter, libpcap, lua }:
+{ lib, stdenv, fetchzip, autoreconfHook, libcrafter, libpcap, lua }:
 
 stdenv.mkDerivation rec {
   pname = "tracebox";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sed '/libcrafter/d' -i src/tracebox/Makefile.am
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.tracebox.org/";
     description = "A middlebox detection tool";
     license = stdenv.lib.licenses.gpl2;

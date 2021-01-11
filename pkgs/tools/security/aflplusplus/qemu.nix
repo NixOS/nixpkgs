@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, aflplusplus, python2, zlib, pkgconfig, glib, perl
+{ lib, stdenv, fetchurl, aflplusplus, python2, zlib, pkgconfig, glib, perl
 , texinfo, libuuid, flex, bison, pixman, autoconf
 }:
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
       "--localstatedir=/var"
     ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.qemu.org/";
     description = "Fork of QEMU with AFL++ instrumentation support";
     license = licenses.gpl2Plus;

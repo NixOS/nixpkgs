@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, pkg-config, qt4, taglib, chromaprint, ffmpeg }:
+{ lib, stdenv, fetchurl, fetchpatch, cmake, pkg-config, qt4, taglib, chromaprint, ffmpeg }:
 
 stdenv.mkDerivation rec {
   pname = "acoustid-fingerprinter";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ./ffmpeg.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://acoustid.org/fingerprinter";
     description = "Audio fingerprinting tool using chromaprint";
     license = stdenv.lib.licenses.gpl2Plus;

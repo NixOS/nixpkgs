@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, libxml2, file, p7zip, unrar, unzip}:
+{lib, stdenv, fetchFromGitHub, libxml2, file, p7zip, unrar, unzip}:
 
 stdenv.mkDerivation {
   pname = "rarcrack";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This program can crack zip,7z and rar file passwords";
     longDescription = ''
     If you forget your password for compressed archive (rar, 7z, zip), this program is the solution.

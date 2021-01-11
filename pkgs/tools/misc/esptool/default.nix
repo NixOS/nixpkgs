@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, openssl }:
+{ lib, stdenv, fetchFromGitHub, python3, openssl }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ESP8266 and ESP32 serial bootloader utility";
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "go-shadowsocks2";
@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fresh implementation of Shadowsocks in Go";
     homepage = "https://github.com/shadowsocks/go-shadowsocks2/";
     license = licenses.asl20;

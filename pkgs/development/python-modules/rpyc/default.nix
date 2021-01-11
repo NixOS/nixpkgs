@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , nose
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     nosetests -I test_deploy -I test_gevent_server -I test_ssh -I test_registry
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";
     homepage = "https://rpyc.readthedocs.org";
     license = licenses.mit;

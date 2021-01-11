@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     make check
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.capstone-engine.org/";
     license = licenses.bsdOriginal;
     description = "Python bindings for Capstone disassembly engine";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchpatch
 , fetchurl
 , pkgconfig
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.installer = nixosTests.installer.lvm;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = platforms.linux;

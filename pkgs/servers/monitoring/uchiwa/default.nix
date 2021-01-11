@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildBowerComponents, buildGoPackage, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, buildBowerComponents, buildGoPackage, makeWrapper }:
 
 let
   inherit (import ./src.nix) version sha256;
@@ -43,7 +43,7 @@ in stdenv.mkDerivation {
     ln -s ${frontend.out}/bower_components $out/public/bower_components
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Dashboard for the sensu monitoring framework";
     homepage    = "http://sensuapp.org/";
     license     = licenses.mit;

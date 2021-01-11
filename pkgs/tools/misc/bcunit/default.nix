@@ -1,6 +1,6 @@
 { cmake
 , fetchFromGitLab
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1237hpmkls2igp60gdfkbknxpgwvxn1vmv2m41vyl25xw1d3g35w";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     description = "A fork of CUnit test framework";
     homepage = "https://gitlab.linphone.org/BC/public/bcunit";

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, meson, ninja, pkgconfig, nix-update-script
+{ lib, stdenv, fetchgit, meson, ninja, pkgconfig, nix-update-script
 , python3, gtk3, libsecret, gst_all_1, webkitgtk, glib
 , glib-networking, gtkspell3, hunspell, desktop-file-utils
 , gobject-introspection, wrapGAppsHook, gnome3 }:
@@ -72,7 +72,7 @@ python3.pkgs.buildPythonApplication rec {
 
   strictDeps = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A new GNOME web browser";
     homepage = "https://wiki.gnome.org/Apps/Eolie";
     license  = licenses.gpl3Plus;

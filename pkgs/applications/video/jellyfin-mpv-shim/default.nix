@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, callPackage
+{ lib, stdenv, buildPythonApplication, fetchFromGitHub, callPackage
 , mpv, python-mpv-jsonipc, jellyfin-apiclient-python
 , pillow, tkinter, pystray, jinja2, pywebview }:
 
@@ -57,7 +57,7 @@ buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "jellyfin_mpv_shim" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/iwalton3/jellyfin-mpv-shim";
     description = "Allows casting of videos to MPV via the jellyfin mobile and web app";
     license = licenses.gpl3;

@@ -1,6 +1,6 @@
 # Updating? Keep $out/etc synchronized with passthru keys
 
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchFromGitHub
 , substituteAll
@@ -329,7 +329,7 @@ let
       };
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://fwupd.org/";
       maintainers = with maintainers; [ jtojnar ];
       license = licenses.lgpl21Plus;

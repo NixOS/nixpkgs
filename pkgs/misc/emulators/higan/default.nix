@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pkgconfig
 , libX11, libXv
 , udev
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/higan-init.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source, cycle-accurate multi-system emulator";
     longDescription = ''
       higan is a multi-system game console emulator. The purpose of higan is to

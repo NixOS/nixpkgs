@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, jre
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, jre
 , useCCTweaked ? true
 }:
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modular ComputerCraft emulator";
     homepage = "https://github.com/CCEmuX/CCEmuX";
     license = licenses.mit;

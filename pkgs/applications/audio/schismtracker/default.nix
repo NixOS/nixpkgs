@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook
 , alsaLib, python, SDL }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL ] ++ stdenv.lib.optional stdenv.isLinux alsaLib;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Music tracker application, free reimplementation of Impulse Tracker";
     homepage = "http://schismtracker.org/";
     license = licenses.gpl2;

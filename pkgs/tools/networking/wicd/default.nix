@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages
+{ lib, stdenv, fetchurl, python2Packages
 , wpa_supplicant, dhcp, dhcpcd, wirelesstools
 , nettools, openresolv, iproute, iputils }:
 
@@ -102,7 +102,7 @@ in stdenv.mkDerivation rec {
     echo "wpa2-ttls" >> "$out/etc/encryption/templates/active"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://wicd.net/";
     description = "A wiredless and wired network manager";
     longDescription=''

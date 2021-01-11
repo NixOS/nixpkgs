@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, makeWrapper, pkgconfig,
+{ lib, stdenv, fetchgit, makeWrapper, pkgconfig,
   gnome2, glib, pango, cairo, gdk-pixbuf, atk, freetype, xorg,
   configH ? ""
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     make
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VTE based, highly customizable terminal emulator";
     homepage = "http://www.calno.com/evilvte";
     license = licenses.gpl2;

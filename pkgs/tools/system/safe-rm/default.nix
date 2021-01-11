@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl, coreutils }:
+{ lib, stdenv, fetchgit, perl, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "safe-rm";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     pod2man safe-rm > $out/share/man/man1/safe-rm.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool intended to prevent the accidental deletion of important files";
     homepage = "https://launchpad.net/safe-rm";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest mpd.tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python client module for the Music Player Daemon";
     homepage = "https://github.com/Mic92/python-mpd2";
     license = licenses.lgpl3Plus;

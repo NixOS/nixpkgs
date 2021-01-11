@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchFromGitHub, bash, makeWrapper, bat
+{ lib, stdenv, callPackage, fetchFromGitHub, bash, makeWrapper, bat
 # batdiff, batgrep, and batwatch
 , coreutils
 , less
@@ -76,7 +76,7 @@ let
     # The per-script derivations will go ahead and patch the files they actually install.
     dontPatchShebangs = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Bash scripts that integrate bat with various command line tools";
       homepage    = "https://github.com/eth-p/bat-extras";
       license     = with licenses; [ mit ];

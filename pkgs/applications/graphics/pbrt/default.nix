@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, flex, bison, cmake, git, zlib}:
+{lib, stdenv, fetchFromGitHub, flex, bison, cmake, git, zlib}:
 
 stdenv.mkDerivation {
   version = "2018-08-15";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ flex bison cmake ];
   buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pbrt.org";
     description = "The renderer described in the third edition of the book 'Physically Based Rendering: From Theory To Implementation'";
     platforms = platforms.linux;

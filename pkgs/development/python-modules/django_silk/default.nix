@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , python
 , fetchFromGitHub
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     DB=sqlite3 DB_NAME=db.sqlite3 ${python.interpreter} manage.py test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Silky smooth profiling for the Django Framework";
     homepage = "https://github.com/jazzband/django-silk";
     license = licenses.mit;

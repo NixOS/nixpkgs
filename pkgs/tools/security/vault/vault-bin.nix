@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 let
   version = "1.6.1";
@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
     echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.vaultproject.io";
     description = "A tool for managing secrets, this binary includes the UI";
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];

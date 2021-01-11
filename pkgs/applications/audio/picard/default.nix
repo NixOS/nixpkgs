@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5
+{ lib, stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5
 , enablePlayback ? true
 , gst_all_1
 }:
@@ -54,7 +54,7 @@ in pythonPackages.buildPythonApplication rec {
     ''
   ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://picard.musicbrainz.org/";
     description = "The official MusicBrainz tagger";
     maintainers = with maintainers; [ ehmry ];

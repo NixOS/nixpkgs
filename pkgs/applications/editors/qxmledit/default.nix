@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub,
+{ lib, stdenv, fetchFromGitHub,
   qmake, qtbase, qtxmlpatterns, qtsvg, qtscxml, qtquick1, libGLU }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     export QXMLEDIT_INST_DOC_DIR="$doc"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple XML editor based on qt libraries" ;
     homepage = "https://sourceforge.net/projects/qxmledit";
     license = licenses.lgpl2;

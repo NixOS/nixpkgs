@@ -159,7 +159,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/opt/appgate/appgate-driver --prefix PATH : ${stdenv.lib.makeBinPath [ iproute networkmanager dnsmasq ]}
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Appgate SDP (Software Defined Perimeter) desktop client";
     homepage = https://www.appgate.com/support/software-defined-perimeter-support;
     license = licenses.unfree;

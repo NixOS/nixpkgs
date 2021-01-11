@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create simple and beautiful presentations";
     homepage = "https://github.com/Philip-Scott/Spice-up";
     maintainers = with maintainers; [ samdroid-apps xiorcale ] ++ pantheon.maintainers;

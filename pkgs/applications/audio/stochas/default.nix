@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, libX11, libXrandr, libXinerama, libXext, libXcursor, freetype, alsaLib, libjack2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, libXrandr, libXinerama, libXext, libXcursor, freetype, alsaLib, libjack2 }:
 
 stdenv.mkDerivation rec {
   pname = "stochas";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     cp -r stochas_artefacts/Release/VST3/Stochas.vst3 $out/lib/vst3
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Probabilistic polyrhythmic sequencer plugin";
     homepage = "https://stochas.org/";
     license = licenses.gpl3Plus;

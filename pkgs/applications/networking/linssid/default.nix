@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtbase, qtsvg, qmake, pkgconfig, boost, wirelesstools, iw, qwt, wrapQtAppsHook }:
+{ lib, stdenv, fetchurl, qtbase, qtsvg, qmake, pkgconfig, boost, wirelesstools, iw, qwt, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "linssid";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   qtWrapperArgs =
     [ ''--prefix PATH : ${stdenv.lib.makeBinPath [ wirelesstools iw ]}'' ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical wireless scanning for Linux";
     homepage = "https://sourceforge.net/projects/linssid/";
     license = licenses.gpl3;

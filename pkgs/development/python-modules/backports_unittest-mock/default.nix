@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, setuptools_scm, mock }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools_scm, mock }:
 
 buildPythonPackage rec {
   pname = "backports.unittest_mock";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "backports.unittest_mock" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides a function install() which makes the mock module";
     homepage = "https://github.com/jaraco/backports.unittest_mock";
     license = licenses.mit;

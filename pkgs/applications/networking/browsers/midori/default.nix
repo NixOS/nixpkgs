@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , ninja
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libarchive
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight WebKitGTK web browser";
     homepage = "https://www.midori-browser.org/";
     license = with licenses; [ lgpl21Plus ];

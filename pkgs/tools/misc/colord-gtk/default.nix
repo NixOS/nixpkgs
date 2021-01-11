@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , colord
 , gettext
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/software/colord/intro.html";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, alsaLib, libX11, libXi, SDL2 }:
+{ lib, stdenv, fetchurl, unzip, alsaLib, libX11, libXi, SDL2 }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc alsaLib libX11 libXi SDL2 ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ln -s "$bin" $out/bin/sunvox
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small, fast and powerful modular synthesizer with pattern-based sequencer";
     license = licenses.unfreeRedistributable;
     homepage = "http://www.warmplace.ru/soft/sunvox/";

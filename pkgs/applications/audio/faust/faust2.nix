@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , coreutils
 , fetchFromGitHub
 , makeWrapper
@@ -30,7 +30,7 @@ let
     fetchSubmodules = true;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://faust.grame.fr/";
     downloadPage = "https://github.com/grame-cncm/faust/";
     license = licenses.gpl2;

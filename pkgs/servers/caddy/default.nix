@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "caddy";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) caddy; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://caddyserver.com";
     description = "Fast, cross-platform HTTP/2 web server with automatic HTTPS";
     license = licenses.asl20;

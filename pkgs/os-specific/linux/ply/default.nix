@@ -1,4 +1,4 @@
-{ stdenv, kernel, fetchFromGitHub, autoreconfHook, yacc, flex, p7zip, rsync }:
+{ lib, stdenv, kernel, fetchFromGitHub, autoreconfHook, yacc, flex, p7zip, rsync }:
 
 assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.0";
 
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
     ./autogen.sh --prefix=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "dynamic Tracing in Linux";
     homepage = "https://wkz.github.io/ply/";
     license = [ licenses.gpl2 ];

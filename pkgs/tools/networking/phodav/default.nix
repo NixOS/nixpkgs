@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pkgconfig, libsoup, meson, ninja }:
 
 let
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WebDav server implementation and library using libsoup";
     homepage = "https://wiki.gnome.org/phodav";
     license = licenses.lgpl21;

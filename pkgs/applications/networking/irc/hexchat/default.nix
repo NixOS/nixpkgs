@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk2, lua, perl, python3
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk2, lua, perl, python3
 , pciutils, dbus-glib, libcanberra-gtk2, libproxy
 , enchant2, libnotify, openssl, isocodes
 , desktop-file-utils
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dwith-lua=lua" "-Dwith-text=true" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A popular and easy to use graphical IRC (chat) client";
     homepage = "https://hexchat.github.io/";
     license = licenses.gpl2;

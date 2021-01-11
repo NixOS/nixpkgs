@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, libXtst, pkgconfig, xorgproto, libXi }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXtst, pkgconfig, xorgproto, libXi }:
 
 stdenv.mkDerivation rec {
   pname = "ksuperkey";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libX11 libXtst xorgproto libXi ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to be able to bind the super key as a key rather than a modifier";
     homepage = "https://github.com/hanschen/ksuperkey";
     license = licenses.gpl3;

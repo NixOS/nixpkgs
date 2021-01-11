@@ -174,7 +174,7 @@ in buildPythonPackage {
     "tensorflow.python.framework"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Computation using data flow graphs for scalable machine learning";
     homepage = "http://tensorflow.org";
     license = licenses.asl20;

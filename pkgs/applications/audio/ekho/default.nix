@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , libsndfile, libpulseaudio
 }:
 
@@ -8,7 +8,7 @@ in stdenv.mkDerivation rec {
   pname = "ekho";
   inherit version;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Chinese text-to-speech software";
     homepage    = "http://www.eguidedog.net/ekho.php";
     longDescription = ''

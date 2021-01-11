@@ -3711,6 +3711,8 @@ in {
 
   lsi = callPackage ../development/python-modules/lsi { };
 
+  lsassy = callPackage ../development/python-modules/lsassy { };
+
   ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
@@ -4073,6 +4075,8 @@ in {
   msgpack = callPackage ../development/python-modules/msgpack { };
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
+
+  msldap = callPackage ../development/python-modules/msldap { };
 
   mss = callPackage ../development/python-modules/mss { };
 
@@ -5611,6 +5615,8 @@ in {
   pypubsub = callPackage ../development/python-modules/pypubsub { };
 
   pypugjs = callPackage ../development/python-modules/pypugjs { };
+
+  pypykatz = callPackage ../development/python-modules/pypykatz { };
 
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 

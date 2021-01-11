@@ -131,7 +131,7 @@ _EOF
     cd build
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://handbrake.fr/";
     description = "A tool for converting video files and ripping DVDs";
     longDescription = ''

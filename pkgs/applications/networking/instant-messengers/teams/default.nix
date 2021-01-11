@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     done;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Microsoft Teams";
     homepage = "https://teams.microsoft.com";
     downloadPage = "https://teams.microsoft.com/downloads";

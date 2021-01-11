@@ -177,7 +177,7 @@ in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     inherit nativeComp;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The extensible, customizable GNU text editor";
     homepage    = "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;

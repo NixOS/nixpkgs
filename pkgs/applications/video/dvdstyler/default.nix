@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , flex, bison, gettext
 , xineUI, wxSVG
 , fontconfig
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${binPath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A DVD authoring software";
     longDescription = ''
     DVDStyler is a cross-platform free DVD authoring application for the

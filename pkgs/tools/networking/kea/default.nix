@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, openssl, botan2, log4cplus
+{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, openssl, botan2, log4cplus
 , boost, python3, postgresql, libmysqlclient, gmp, bzip2 }:
 
 let inherit (stdenv) lib; in
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://kea.isc.org/";
     description = "High-performance, extensible DHCP server by ISC";
     longDescription = ''

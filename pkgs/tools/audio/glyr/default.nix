@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , curl, glib, sqlite, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ sqlite glib curl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.lgpl3;
     description = "A music related metadata searchengine";
     homepage = "https://github.com/sahib/glyr";

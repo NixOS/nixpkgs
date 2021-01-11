@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, pkgconfig, gtk2
+{ lib, stdenv, fetchurl, perlPackages, pkgconfig, gtk2
 , scrollkeeper, libglade, libXmu, libX11, libXext, gettext
 , lame, libXfixes, libXdamage }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   # !!! don't know why this is necessary
   NIX_LDFLAGS = "-lXext -lX11 -lz -lgcc_s";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Screencast video catpuring tool";
     homepage = "http://xvidcap.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2;

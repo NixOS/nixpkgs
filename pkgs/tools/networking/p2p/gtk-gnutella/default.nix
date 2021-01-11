@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , bison
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     install -Dm0444 src/${pname}.man $out/share/man/man1/${pname}.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GTK Gnutella client, optimized for speed and scalability";
     homepage = "http://gtk-gnutella.sourceforge.net/"; # Code: https://github.com/gtk-gnutella/gtk-gnutella
     changelog = "https://raw.githubusercontent.com/gtk-gnutella/gtk-gnutella/v${version}/ChangeLog";

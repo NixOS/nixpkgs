@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, xpdf, imagemagick, tesseract }:
+{ lib, stdenv, python3Packages, xpdf, imagemagick, tesseract }:
 
 python3Packages.buildPythonPackage rec {
   pname = "invoice2data";
@@ -16,7 +16,7 @@ python3Packages.buildPythonPackage rec {
   # Tests fails even when ran manually on my ubuntu machine !!
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Data extractor for PDF invoices";
     homepage = "https://github.com/invoice-x/invoice2data";
     license = licenses.mit;

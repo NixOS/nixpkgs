@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , appstream-glib
 , desktop-file-utils
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for writing an ISO file to multiple USB devices at once";
     homepage = "https://wiki.gnome.org/Apps/MultiWriter";
     license = licenses.gpl2Plus;

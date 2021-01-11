@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , grpc
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     "google.type"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Common protobufs used in Google APIs";
     homepage = "https://github.com/googleapis/python-api-common-protos";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , which
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for the Nautilus Extension API";
     homepage = "https://wiki.gnome.org/Projects/NautilusPython";
     license = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, boost, gnuradio
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, boost, gnuradio
 , makeWrapper, cppunit, gr-osmosdr, log4cpp
 , pythonSupport ? true, python, swig
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gnuradio block for ais";
     homepage = "https://github.com/bistromath/gr-ais";
     license = licenses.gpl3Plus;

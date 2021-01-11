@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, which, dmd, ldc, zlib }:
+{ lib, stdenv, fetchFromGitHub, python3, which, dmd, ldc, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "sambamba";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp bin/sambamba-${version} $out/bin/sambamba
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SAM/BAM processing tool";
     homepage = "https://lomereiter.github.io/sambamba/";
     maintainers = with maintainers; [ jbedo ];

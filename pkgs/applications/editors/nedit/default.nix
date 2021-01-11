@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibsWrapper, motif, libXpm }:
+{ lib, stdenv, fetchurl, xlibsWrapper, motif, libXpm }:
 
 stdenv.mkDerivation rec {
   pname = "nedit";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp -p source/nedit source/nc $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/nedit";
     description = "A fast, compact Motif/X11 plain text editor";
     platforms = with platforms; linux ++ darwin;

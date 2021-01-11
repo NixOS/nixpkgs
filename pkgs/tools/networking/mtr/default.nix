@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A network diagnostics tool";
     homepage    = "https://www.bitwizard.nl/mtr/";
     license     = licenses.gpl2;

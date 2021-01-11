@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rpmextract, autoreconfHook, file, libjpeg, cups }:
+{ lib, stdenv, fetchurl, rpmextract, autoreconfHook, file, libjpeg, cups }:
 
 let
   version = "1.0.1";
@@ -48,7 +48,7 @@ in
       cp -a README $out/doc/README.driver
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://www.openprinting.org/driver/epson-201106w";
       description = "Epson printer driver (BX535WD, BX630FW, BX635FWD, ME940FW, NX530, NX635, NX635, SX535WD, WorkForce 545, WorkForce 645";
       longDescription = ''

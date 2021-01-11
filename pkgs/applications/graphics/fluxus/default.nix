@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , alsaLib
 , bzip2
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     cp -r build$out/* $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Livecoding environment for 3D graphics, sound, and games";
     license = licenses.gpl2;
     homepage = "http://www.pawfal.org/fluxus/";

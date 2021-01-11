@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, perlPackages, makeWrapper }:
+{ lib, stdenv, fetchurl, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "swaks";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.jetmore.org/john/code/swaks/";
     description = "A featureful, flexible, scriptable, transaction-oriented SMTP test tool";
     license = licenses.gpl2;

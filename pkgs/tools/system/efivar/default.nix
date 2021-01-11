@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchFromGitHub, fetchurl, pkgconfig, popt }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, fetchurl, pkgconfig, popt }:
 
 stdenv.mkDerivation rec {
   pname = "efivar";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     "PCDIR=$(dev)/lib/pkgconfig"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Tools and library to manipulate EFI variables";
     platforms = platforms.linux;

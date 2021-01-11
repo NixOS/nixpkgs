@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild
 , topkg, result, lwt, cmdliner, fmt }:
 let
   pname = "logs";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) installPhase;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Logging infrastructure for OCaml";
     homepage = webpage;
     inherit (ocaml.meta) platforms;

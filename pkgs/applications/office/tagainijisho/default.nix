@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, cmake, sqlite }:
+{ lib, stdenv, fetchurl, qt4, cmake, sqlite }:
 
 stdenv.mkDerivation {
   name = "tagainijisho-1.0.3";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qt4 sqlite ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, open-source Japanese dictionary and kanji lookup tool";
     homepage = "https://www.tagaini.net/";
     license = with licenses; [

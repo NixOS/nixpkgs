@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "0fg93vhwpx113fpw8qg4ram4bdh6a8x3a36pr1c962s4vhrabwy2";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and multi-purpose HTTP toolkit";
     longDescription = ''
       httpx is a fast and multi-purpose HTTP toolkit allow to run multiple

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkgconfig, zlib, libpng, cairo, freetype
+{ lib, stdenv, fetchgit, cmake, pkgconfig, zlib, libpng, cairo, freetype
 , json_c, fontconfig, gtkmm3, pangomm, glew, libGLU, xorg, pcre
 , wrapGAppsHook
 }:
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/ $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A parametric 3d CAD program";
     license = licenses.gpl3;
     maintainers = [ maintainers.edef ];

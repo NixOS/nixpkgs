@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, libGLU, libGL, qt5, boost}:
+{lib, stdenv, fetchurl, cmake, libGLU, libGL, qt5, boost}:
 
 stdenv.mkDerivation rec {
   version = "201707";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libGLU libGL qt5.qtbase boost ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A toolset for model-checking concurrent systems and protocols";
     longDescription = ''
       A formal specification language with an associated toolset,

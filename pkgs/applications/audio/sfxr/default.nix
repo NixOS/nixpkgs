@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , desktop-file-utils
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.drpetter.se/project_sfxr.html";
     description = "A videogame sound effect generator";
     license = licenses.mit;

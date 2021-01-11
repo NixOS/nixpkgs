@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext, autoconf, automake, jansson
+{ lib, stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext, autoconf, automake, jansson
 , AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   #   lisp/net/tramp-tests.log
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The extensible, customizable text editor";
     homepage    = "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;

@@ -12,7 +12,7 @@
 , libxml2
 , lzma
 , pkgconfig
-, stdenv
+, lib, stdenv
 , upower
 }:
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     cp ./data/thermal-conf.xml $out/etc/thermald/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thermal Daemon";
     homepage = "https://01.org/linux-thermal-daemon";
     changelog = "https://github.com/intel/thermal_daemon/blob/master/README.txt";

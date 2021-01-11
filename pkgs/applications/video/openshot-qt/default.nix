@@ -1,4 +1,4 @@
-{ stdenv, mkDerivationWith, fetchFromGitHub, fetchpatch
+{ lib, stdenv, mkDerivationWith, fetchFromGitHub, fetchpatch
 , doxygen, python3Packages, libopenshot
 , wrapGAppsHook, gtk3
 , qtsvg }:
@@ -42,7 +42,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://openshot.org/";
     description = "Free, open-source video editor";
     longDescription = ''

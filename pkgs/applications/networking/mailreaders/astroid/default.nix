@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gnome3, gmime3, webkitgtk
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, gnome3, gmime3, webkitgtk
 , libsass, notmuch, boost, wrapGAppsHook, glib-networking, protobuf, vim_configurable
 , gtkmm3, libpeas, gsettings-desktop-schemas
 , python3, python3Packages
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/astroid" --set CHARSET=en_us.UTF-8
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://astroidmail.github.io/";
     description = "GTK frontend to the notmuch mail system";
     maintainers = with maintainers; [ bdimcheff SuprDewd ];

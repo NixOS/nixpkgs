@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gr-osmosdr
+{ lib, stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gr-osmosdr
 , mkDerivation
 # drivers (optional):
 , rtl-sdr, hackrf
@@ -28,7 +28,7 @@ mkDerivation rec {
     install -vD $src/resources/icons/gqrx.svg -t "$out/share/pixmaps/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software defined radio (SDR) receiver";
     longDescription = ''
       Gqrx is a software defined radio receiver powered by GNU Radio and the Qt

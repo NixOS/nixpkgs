@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, bison, ncurses, openssl, zlib, libaio, perl }:
+{ lib, stdenv, fetchurl, cmake, bison, ncurses, openssl, zlib, libaio, perl }:
 
 stdenv.mkDerivation rec {
   pname = "percona-server";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   passthru.mysqlVersion = "5.6";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.percona.com";
     description = "a free, fully compatible, enhanced, open source drop-in replacement for MySQL that provides superior performance, scalability and instrumentation";
     platforms = platforms.linux;

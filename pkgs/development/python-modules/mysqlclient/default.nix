@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, libmysqlclient }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, libmysqlclient }:
 
 buildPythonPackage rec {
   pname = "mysqlclient";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "f6ebea7c008f155baeefe16c56cd3ee6239f7a5a9ae42396c2f1860f08a7c432";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python interface to MySQL";
     homepage = "https://github.com/PyMySQL/mysqlclient-python";
     license = licenses.gpl1;

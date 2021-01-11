@@ -17,7 +17,7 @@
 , rq
 , sanic
 , sqlalchemy
-, stdenv
+, lib, stdenv
 , tornado
 , urllib3
 , trytond
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "sentry_sdk" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/getsentry/sentry-python";
     description = "New Python SDK for Sentry.io";
     license = licenses.bsd2;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , cmake
 , ffmpeg
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = with python.pkgs; [ sphinx numpy sip pyqt5 matplotlib ase ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scientific visualization and analysis software for atomistic simulation data";
     homepage = "https://www.ovito.org";
     license = with licenses; [ gpl3Only mit ];

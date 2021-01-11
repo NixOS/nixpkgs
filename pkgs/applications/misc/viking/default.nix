@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, makeWrapper
+{ fetchurl, fetchpatch, lib, stdenv, makeWrapper
 , pkgconfig, intltool, gettext, gtk2, expat, curl
 , gpsd, bc, file, gnome-doc-utils, libexif, libxml2, libxslt, scrollkeeper
 , docbook_xml_dtd_412, gexiv2, gpsbabel, expect
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${expect}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GPS data editor and analyzer";
     longDescription = ''
       Viking is a free/open source program to manage GPS data.  You

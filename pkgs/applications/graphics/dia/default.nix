@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, gtk2, pkgconfig, perlPackages,
+{ lib, stdenv, fetchgit, autoconf, automake, libtool, gtk2, pkgconfig, perlPackages,
 libxml2, gettext, python, libxml2Python, docbook5, docbook_xsl,
 libxslt, intltool, libart_lgpl, withGNOME ? false, libgnomeui,
 gtk-mac-integration-gtk2 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gnome Diagram drawing software";
     homepage = "http://live.gnome.org/Dia";
     maintainers = with maintainers; [ raskin ];

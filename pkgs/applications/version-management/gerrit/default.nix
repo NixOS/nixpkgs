@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "gerrit";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gerritcodereview.com/index.md";
     license = licenses.asl20;
     description = "A web based code review and repository management for the git version control system";

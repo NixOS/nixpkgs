@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "openscad.kak";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     install -Dm644 rc/openscad.kak -t $out/share/kak/autoload/plugins/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Syntax highlighting for OpenSCAD files";
     homepage = "https://github.com/mayjs/openscad.kak";
     license = licenses.unlicense;

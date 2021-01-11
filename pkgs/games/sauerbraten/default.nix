@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, SDL2, SDL2_image, SDL2_mixer
+{ lib, stdenv, fetchzip, SDL2, SDL2_image, SDL2_mixer
 , zlib, makeWrapper
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       --add-flags "-q\''${HOME}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free multiplayer & singleplayer first person shooter, the successor of the Cube FPS";
     maintainers = with maintainers; [ raskin ajs124 ];
     hydraPlatforms =

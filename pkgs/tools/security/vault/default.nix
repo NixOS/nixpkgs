@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, installShellFiles, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, buildGoPackage, installShellFiles, nixosTests }:
 
 buildGoPackage rec {
   pname = "vault";
@@ -26,7 +26,7 @@ buildGoPackage rec {
 
   passthru.tests.vault = nixosTests.vault;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.vaultproject.io/";
     description = "A tool for managing secrets";
     changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";

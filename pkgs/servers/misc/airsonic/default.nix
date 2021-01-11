@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "airsonic";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     cp "$src" "$out/webapps/airsonic.war"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Personal media streamer";
     homepage = "https://airsonic.github.io";
     license = stdenv.lib.licenses.gpl3;

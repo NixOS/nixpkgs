@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, knightos-scas, readline, SDL2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, knightos-scas, readline, SDL2 }:
 
 stdenv.mkDerivation rec {
   pname = "z80e";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-Denable-sdl=YES" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://knightos.org/";
     description = "A Z80 calculator emulator and debugger";
     license     = licenses.mit;

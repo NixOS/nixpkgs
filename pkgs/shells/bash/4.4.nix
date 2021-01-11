@@ -1,4 +1,4 @@
-{ stdenv, buildPackages
+{ lib, stdenv, buildPackages
 , fetchurl, binutils ? null, bison, autoconf, util-linux
 
 # patch for cygwin requires readline support
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
       rm -rf "$out/share" "$out/bin/bashbug"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/bash/";
     description =
       "GNU Bourne-Again Shell, the de facto standard shell on Linux" +

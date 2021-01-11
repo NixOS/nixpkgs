@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cntr";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-lblvun2T1qpFiowld77Ti2MFPzhs5pOWWRbErORXYCM=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A container debugging tool based on FUSE";
     homepage = "https://github.com/Mic92/cntr";
     license = licenses.mit;

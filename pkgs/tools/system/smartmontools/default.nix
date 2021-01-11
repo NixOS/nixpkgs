@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook
+{ lib, stdenv, fetchurl, autoreconfHook
 , mailutils, inetutils
 , IOKit ? null , ApplicationServices ? null }:
 
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [IOKit ApplicationServices];
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for monitoring the health of hard drives";
     homepage    = "https://www.smartmontools.org/";
     license     = licenses.gpl2Plus;

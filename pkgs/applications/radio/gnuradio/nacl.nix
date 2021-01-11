@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, boost, gnuradio, uhd
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, boost, gnuradio, uhd
 , makeWrapper, libsodium, cppunit, log4cpp
 , pythonSupport ? true, python, swig
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gnuradio block for encryption";
     homepage = "https://github.com/stwunsch/gr-nacl";
     license = licenses.gpl3Plus;

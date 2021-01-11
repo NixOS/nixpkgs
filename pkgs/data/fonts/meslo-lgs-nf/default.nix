@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "meslo-lgs-nf";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp $src/*.ttf $out/share/fonts/truetype
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Meslo Nerd Font patched for Powerlevel10k";
     homepage = "https://github.com/romkatv/powerlevel10k-media";
     license = licenses.asl20;

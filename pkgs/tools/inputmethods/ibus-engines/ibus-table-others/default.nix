@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ibus, ibus-table, pkgconfig, python3 }:
+{ lib, stdenv, fetchurl, ibus, ibus-table, pkgconfig, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-table-others";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     rm -rf $HOME
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description  = "Various table-based input methods for IBus";
     homepage     = "https://github.com/moebiuscurve/ibus-table-others";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libiconv }:
+{ lib, stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation rec {
   version = "3.14";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libiconv ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Encrypt files with Advanced Encryption Standard (AES)";
     homepage    = "https://www.aescrypt.com/";
     license     = licenses.gpl2;

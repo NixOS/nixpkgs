@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, zlib, libpng, ncurses, ed, automake }:
+{ lib, stdenv, fetchurl, flex, bison, zlib, libpng, ncurses, ed, automake }:
 
 stdenv.mkDerivation {
   name = "tetex-3.0";
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     substituteInPlace ./tetex-src-3.0/configure --replace /usr/bin/install $(type -P install)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description  = "A full-featured (La)TeX distribution";
     homepage     = "http://www.tug.org/tetex/";
     maintainers  = with maintainers; [ lovek323 ];

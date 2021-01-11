@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchurl, dpkg, jre_headless, nixosTests }:
+{ pkgs, lib, stdenv, fetchurl, dpkg, jre_headless, nixosTests }:
 
 let
   pname = "jicofo";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     single-node-smoke-test = nixosTests.jitsi-meet;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A server side focus component used in Jitsi Meet conferences";
     longDescription = ''
       JItsi COnference FOcus is a server side focus component used in Jitsi Meet conferences.

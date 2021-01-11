@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, stdenv, fetchFromGitHub, buildGoModule }:
 buildGoModule rec {
   pname = "terraform-provider-shell";
   version = "1.6.0";
@@ -20,7 +20,7 @@ buildGoModule rec {
   # if the versions are not provided via file paths.
   postInstall = "mv $out/bin/${pname}{,_v${version}}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Terraform provider for executing shell commands and saving output to state file";
     changelog = "https://github.com/scottwinkler/terraform-provider-shell/releases/tag/v${version}";

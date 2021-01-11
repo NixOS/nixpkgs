@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, installShellFiles, rustPlatform, pkgconfig, openssl, darwin }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, rustPlatform, pkgconfig, openssl, darwin }:
 
 with rustPlatform;
 
@@ -26,7 +26,7 @@ buildRustPackage rec {
     installManPage $releaseDir/build/git-ignore-*/out/git-ignore.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quickly and easily fetch .gitignore templates from gitignore.io";
     homepage = "https://github.com/sondr3/git-ignore";
     license = licenses.gpl3Plus;

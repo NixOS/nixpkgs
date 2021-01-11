@@ -136,7 +136,7 @@ in rec {
       rev = "6757a5329948f00addd66b02ea94f61dd94456f5";
       sha256 = "0wwwzg3bwcrbr2nmf84prz7k4i79yq0960vs6zjp0x8nqn2fvziy";
     };
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
       description = "A feature packed Dracula theme for tmux!";
       license = licenses.mit;
@@ -213,7 +213,7 @@ in rec {
     '';
     dependencies = [ pkgs.ruby ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/schasse/tmux-jump";
       description = "Vimium/Easymotion like navigation for tmux";
       license = licenses.gpl3;
@@ -430,7 +430,7 @@ in rec {
       sha256 = "1x58h3bg9d69j40fh8rcjpxvg0i6j04pj8p3jk57l3cghxis5j05";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/jabirali/tmux-tilish";
       description = "Plugin which makes tmux work and feel like i3wm";
       license = licenses.mit;
@@ -510,7 +510,7 @@ in rec {
       sha256 = "130l73v18md95djkc4s9d0fr018f8f183sjcgy7dgldwdaxlqdi1";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/tmux-plugins/vim-tmux-focus-events";
       description = "Makes FocusGained and FocusLost autocommand events work in vim when using tmux";
       license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , vala
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Gitg";
     description = "GNOME GUI client to view git repositories";
     maintainers = with maintainers; [ domenkozar ];

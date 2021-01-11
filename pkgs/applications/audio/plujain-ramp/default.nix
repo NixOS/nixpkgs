@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lv2  }:
+{ lib, stdenv, fetchFromGitHub, lv2  }:
 
 stdenv.mkDerivation rec {
   version = "v1.1.3";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "INSTALL_PATH=$(out)/lib/lv2" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A mono rhythmic tremolo LV2 Audio Plugin";
     homepage = "https://github.com/Houston4444/plujain-ramp";
     license = licenses.gpl2Only;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, xmlrpc_c, glib, zlib }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, xmlrpc_c, glib, zlib }:
 stdenv.mkDerivation rec {
   pname = "subberthehut";
   version = "20";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -Dm644 bash_completion $out/share/bash-completion/completions/subberthehut
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mus65/subberthehut";
     description = "An OpenSubtitles.org downloader";
     license = licenses.gpl2;

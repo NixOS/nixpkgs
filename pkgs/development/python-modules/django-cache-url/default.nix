@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # tests not included with pypi release
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ghickman/django-cache-url";
     description = "Use Cache URLs in your Django application";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, jam, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, jam, pkgconfig
 , zlib, libxml2, libxslt, xorgproto, libX11, libGLU, libGL, SDL
 , SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, physfs
 }:
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "City building game";
     license = licenses.gpl2;
     maintainers = with maintainers; [ raskin ];

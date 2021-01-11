@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, sqlite, which }:
+{ lib, stdenv, fetchFromGitHub, python3Packages, sqlite, which }:
 
 python3Packages.buildPythonApplication rec {
   pname = "s3ql";
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     pytest tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A full-featured file system for online data storage";
     homepage = "https://github.com/s3ql/s3ql/";
     license = licenses.gpl3;

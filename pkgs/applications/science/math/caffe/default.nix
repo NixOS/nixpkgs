@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
       -weights "${test_model_weights}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Deep learning framework";
     longDescription = ''
       Caffe is a deep learning framework made with expression, speed, and

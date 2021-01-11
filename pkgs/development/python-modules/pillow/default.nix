@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPyPy
 , olefile
 , freetype, libjpeg, zlib, libtiff, libwebp, tcl, lcms2, tk, libX11
 , openjpeg, libimagequant
@@ -67,7 +67,7 @@ buildPythonPackage rec {
       --replace '"/System/Library/Frameworks"' ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://python-pillow.org/";
     description = "The friendly PIL fork (Python Imaging Library)";
     longDescription = ''

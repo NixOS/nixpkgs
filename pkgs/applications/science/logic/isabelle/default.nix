@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, nettools, java, polyml, z3, rlwrap }:
+{ lib, stdenv, fetchurl, perl, nettools, java, polyml, z3, rlwrap }:
 # nettools needed for hostname
 
 stdenv.mkDerivation rec {
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     bin/isabelle install $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A generic proof assistant";
 
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, meson, ninja, pkgconfig, desktop-file-utils, appstream-glib, libxslt
+{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, pkgconfig, desktop-file-utils, appstream-glib, libxslt
 , libxml2, gettext, itstool, wrapGAppsHook, docbook_xsl, docbook_xml_dtd_43
 , gnome3, gtk3, glib, gsettings-desktop-schemas }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Dictionary";
     description = "Dictionary is the GNOME application to look up definitions";
     maintainers = teams.gnome.members;

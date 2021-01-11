@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, fetchpatch, nasm, perl, python3, libuuid, mtools, makeWrapper }:
+{ lib, stdenv, fetchgit, fetchurl, fetchpatch, nasm, perl, python3, libuuid, mtools, makeWrapper }:
 
 stdenv.mkDerivation {
   pname = "syslinux";
@@ -91,7 +91,7 @@ stdenv.mkDerivation {
     rm -rf $out/share/syslinux/com32
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.syslinux.org/";
     description = "A lightweight bootloader";
     license = licenses.gpl2;

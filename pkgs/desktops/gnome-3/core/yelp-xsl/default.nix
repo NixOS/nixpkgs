@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , gettext
 , fetchurl
 , pkgconfig
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Yelp";
     description = "Yelp's universal stylesheets for Mallard and DocBook";
     maintainers = teams.gnome.members;

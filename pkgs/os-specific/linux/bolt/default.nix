@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , meson
 , ninja
 , pkgconfig
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thunderbolt 3 device management daemon";
     homepage = "https://gitlab.freedesktop.org/bolt/bolt";
     license = licenses.lgpl21Plus;

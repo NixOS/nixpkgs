@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
+{ lib, stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
 , perl, pixman, vde2, alsaLib, texinfo, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
@@ -6,7 +6,7 @@
 , CoreServices, Cocoa, Hypervisor, rez, setfile
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
-, alsaSupport ? stdenv.lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
+, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
 , pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2
 , gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
@@ -23,7 +23,7 @@
 , tpmSupport ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
-                    then (stdenv.lib.optional stdenv.isx86_64 "i386-softmmu"
+                    then (lib.optional stdenv.isx86_64 "i386-softmmu"
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
                     else null)
 , nixosTestRunner ? false
@@ -180,7 +180,7 @@ stdenv.mkDerivation rec {
     qemu-system-i386 = "bin/qemu-system-i386";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.qemu.org/";
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkgconfig, gtk2, libgnomecanvas, libglade, gtksourceview }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkgconfig, gtk2, libgnomecanvas, libglade, gtksourceview }:
 
 let param =
   let check = stdenv.lib.versionAtLeast ocaml.version; in
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
       maggesi roconnor vbgl

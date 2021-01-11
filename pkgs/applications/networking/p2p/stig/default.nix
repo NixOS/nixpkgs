@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python3Packages
 }:
@@ -59,7 +59,7 @@ python3Packages.buildPythonApplication rec {
     "--deselect=tests/client_test/aiotransmission_test/rpc_test.py"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TUI and CLI for the BitTorrent client Transmission";
     homepage = "https://github.com/rndusr/stig";
     license = licenses.gpl3;

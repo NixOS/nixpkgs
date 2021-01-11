@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openssl, check, pcsclite, PCSC
+{ lib, stdenv, fetchurl, pkgconfig, openssl, check, pcsclite, PCSC
 , withApplePCSC ? stdenv.isDarwin
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-backend=${if withApplePCSC then "macscard" else "pcsc"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://developers.yubico.com/yubico-piv-tool/";
     description = ''
       Used for interacting with the Privilege and Identification Card (PIV)

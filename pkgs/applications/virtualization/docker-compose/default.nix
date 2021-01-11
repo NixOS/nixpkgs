@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchPypi, pythonOlder
+{ lib, stdenv, buildPythonApplication, fetchPypi, pythonOlder
 , installShellFiles
 , mock, pytest, nose
 , pyyaml, backports_ssl_match_hostname, colorama, docopt
@@ -39,7 +39,7 @@ buildPythonApplication rec {
     installShellCompletion --zsh contrib/completion/zsh/_docker-compose
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.docker.com/compose/";
     description = "Multi-container orchestration for Docker";
     license = licenses.asl20;

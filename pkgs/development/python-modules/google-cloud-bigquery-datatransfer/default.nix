@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , google-api-core
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     "google.cloud.bigquery_datatransfer_v1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "BigQuery Data Transfer API client library";
     homepage = "https://github.com/googleapis/python-bigquery-datatransfer";
     license = licenses.asl20;

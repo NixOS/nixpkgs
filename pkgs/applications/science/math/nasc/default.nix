@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkgconfig
 , python3
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Do maths like a normal person, designed for elementary OS";
     longDescription = ''
       It’s an app where you do maths like a normal person. It lets you

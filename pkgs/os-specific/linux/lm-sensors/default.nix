@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, bison, flex, which, perl
+{ lib, stdenv, fetchzip, bison, flex, which, perl
 , sensord ? false, rrdtool ? null
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "AR=${stdenv.cc.targetPrefix}ar"
   ] ++ stdenv.lib.optional sensord "PROG_EXTRA=sensord";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://hwmon.wiki.kernel.org/lm_sensors";
     changelog = "https://raw.githubusercontent.com/lm-sensors/lm-sensors/V${dashedVersion}/CHANGES";
     description = "Tools for reading hardware sensors";

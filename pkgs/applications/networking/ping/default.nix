@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A helpful tool that lets you debug what part of your API is causing you issues";
     homepage = "https://github.com/jeremyvaartjes/ping";
     maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;

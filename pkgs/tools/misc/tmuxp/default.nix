@@ -1,4 +1,4 @@
-{ stdenv, python }:
+{ lib, stdenv, python }:
 
 with python.pkgs;
 
@@ -27,7 +27,7 @@ buildPythonApplication rec {
     click colorama kaptan libtmux
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Manage tmux workspaces from JSON and YAML";
     homepage = "https://tmuxp.git-pull.com/";
     license = licenses.bsd3;

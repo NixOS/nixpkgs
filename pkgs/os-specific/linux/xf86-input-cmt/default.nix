@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, xorgserver, xorgproto,
+{ lib, stdenv, fetchFromGitHub, pkgconfig, xorgserver, xorgproto,
   utilmacros, libgestures, libevdevc }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "--with-sdkdir=${placeholder "out"}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Chromebook touchpad driver";
     license = licenses.bsd3;
     platforms = platforms.linux;

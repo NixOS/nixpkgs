@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, openldap, openssl, popt, glib, ncurses, readline, pkgconfig, cyrus_sasl, autoconf, automake }:
+{ lib, stdenv, fetchgit, openldap, openssl, popt, glib, ncurses, readline, pkgconfig, cyrus_sasl, autoconf, automake }:
 
 stdenv.mkDerivation {
   pname = "ldapvi";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interactive LDAP client for Unix terminals";
     longDescription = ''
       ldapvi is an interactive LDAP client for Unix terminals. Using it, you

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, gfortran, blas, lapack, openmpi, petsc, python3 }:
+{ lib, stdenv, fetchurl, cmake, gfortran, blas, lapack, openmpi, petsc, python3 }:
 
 stdenv.mkDerivation rec {
   name = "getdp-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake gfortran ];
   buildInputs = [ blas lapack openmpi petsc python3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A General Environment for the Treatment of Discrete Problems";
     longDescription = ''
       GetDP is a free finite element solver using mixed elements to discretize

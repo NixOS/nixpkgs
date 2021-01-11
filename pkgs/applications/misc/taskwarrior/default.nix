@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libuuid, gnutls }:
+{ lib, stdenv, fetchFromGitHub, cmake, libuuid, gnutls }:
 
 stdenv.mkDerivation rec {
   pname = "taskwarrior";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ln -s "../../../share/doc/task/scripts/zsh/_task" "$out/share/zsh/site-functions/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
     license = licenses.mit;

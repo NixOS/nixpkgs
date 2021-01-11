@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , isPy27
@@ -107,7 +107,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Man-in-the-middle proxy";
     homepage    = "https://mitmproxy.org/";
     license     = licenses.mit;

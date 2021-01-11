@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake
+{ lib, stdenv, fetchFromGitHub, qmake
 , coreutils, xdg_utils, bash
 , makeWrapper, perlPackages, mkDerivation }:
 
@@ -47,7 +47,7 @@ mkDerivation {
       --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.URI ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical disk usage analyzer";
     homepage = src.meta.homepage;
     license = licenses.gpl2;

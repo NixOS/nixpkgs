@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , dbus-glib
 , fetchurl
 , glib
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon that displays passive pop-up notifications";
     homepage = "https://launchpad.net/notify-osd";
     license = licenses.gpl3;

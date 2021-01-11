@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     $out/bin/rustup completions zsh cargo >  "$out/share/zsh/site-functions/_cargo"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
     license = with licenses; [ asl20 /* or */ mit ];

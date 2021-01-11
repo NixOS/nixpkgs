@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, libjack2, lilv, lv2, pkgconfig, python
+{ lib, stdenv, fetchurl, gtk2, libjack2, lilv, lv2, pkgconfig, python
 , serd, sord , sratom, suil, wafHook }:
 
 stdenv.mkDerivation  rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation  rec {
     gtk2 libjack2 lilv lv2 python serd sord sratom suil
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple but fully featured LV2 host for Jack";
     homepage = "http://drobilla.net/software/jalv";
     license = licenses.isc;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, glib, itstool, libxml2, mate, dconf, gtk3, vte, pcre2, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkgconfig, gettext, glib, itstool, libxml2, mate, dconf, gtk3, vte, pcre2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-terminal";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The MATE Terminal Emulator";
     homepage = "https://mate-desktop.org";
     license = licenses.gpl3;

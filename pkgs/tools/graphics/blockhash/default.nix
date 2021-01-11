@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, pkgconfig, imagemagick, wafHook }:
+{ lib, stdenv, fetchFromGitHub, python, pkgconfig, imagemagick, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "blockhash";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python pkgconfig wafHook ];
   buildInputs = [ imagemagick ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://blockhash.io/";
     description = ''
       This is a perceptual image hash calculation tool based on algorithm

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
 
 stdenv.mkDerivation {
   pname = "jwm-settings-manager";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
       --replace 'DESTINATION usr/share' "DESTINATION share"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A full configuration manager for JWM";
     homepage = "https://joewing.net/projects/jwm";
     license = licenses.gpl3;

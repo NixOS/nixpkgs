@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, ncurses
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, ncurses
 , mpd_clientlib, gettext, boost
 , pcreSupport ? false
 , pcre ? null
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "-Ddocumentation=disabled"
   ] ++ optional (!pcreSupport) "-Dregex=disabled";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Curses-based interface for MPD (music player daemon)";
     homepage    = "https://www.musicpd.org/clients/ncmpc/";
     license     = licenses.gpl2Plus;

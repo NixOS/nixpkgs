@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, htslib, zlib, bzip2, lzma, ncurses, boost }:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, htslib, zlib, bzip2, lzma, ncurses, boost }:
 
 stdenv.mkDerivation rec {
   pname = "delly";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Structural variant caller for mapped DNA sequenced data";
     license = licenses.bsd3;
     maintainers = with maintainers; [ scalavision ];

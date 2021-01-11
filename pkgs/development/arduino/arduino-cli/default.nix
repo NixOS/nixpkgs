@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, buildFHSUserEnv }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, buildFHSUserEnv }:
 
 let
 
@@ -23,7 +23,7 @@ let
       "-ldflags=-s -w -X github.com/arduino/arduino-cli/version.versionString=${version} -X github.com/arduino/arduino-cli/version.commit=unknown"
     ] ++ stdenv.lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       inherit (src.meta) homepage;
       description = "Arduino from the command line";
       license = licenses.gpl3Only;

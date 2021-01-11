@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "terraform-provider-vercel";
@@ -15,7 +15,7 @@ buildGoModule rec {
 
   postInstall = "mv $out/bin/terraform-provider-vercel{,_v${version}}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ondrejsika/terraform-provider-vercel";
     description = "Terraform provider for Vercel";
     maintainers = with maintainers; [ mmahut ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf-archive, gettext, libtool, intltool, autoconf, automake
+{ lib, stdenv, fetchFromGitHub, autoconf-archive, gettext, libtool, intltool, autoconf, automake
 , glib, gtk3, gtk-doc, libgudev, pkgconfig, systemd }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Proxy for sending IIO sensor data to D-Bus";
     homepage = "https://github.com/hadess/iio-sensor-proxy";
     license = licenses.gpl3 ;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , which
 , autoreconfHook
@@ -52,7 +52,7 @@ let
   patchdir = "${src}/contrib/src";
 
   restbed = import ./restbed.nix {
-    inherit stdenv fetchFromGitHub cmake asio openssl;
+    inherit stdenv lib fetchFromGitHub cmake asio openssl;
     patches = [
     "${patchdir}/restbed/CMakeLists.patch"
     "${patchdir}/restbed/strand.patch"
@@ -132,7 +132,7 @@ stdenv.mkDerivation {
     ln -s $out/dringctrl/dringctrl.py $out/bin/dringctrl.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Voice-over-IP software phone";
     longDescription = ''
       As the SIP/audio daemon and the user interface are separate processes, it

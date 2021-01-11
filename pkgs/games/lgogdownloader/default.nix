@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkgconfig
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost curl htmlcxx jsoncpp liboauth rhash tinyxml-2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unofficial downloader to GOG.com for Linux users. It uses the same API as the official GOGDownloader";
     homepage = "https://github.com/Sude-/lgogdownloader";
     license = licenses.wtfpl;

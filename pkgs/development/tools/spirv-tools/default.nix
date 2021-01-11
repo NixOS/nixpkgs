@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3, spirv-headers }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, spirv-headers }:
 let
   # Update spirv-headers rev in lockstep according to DEPs file
   version = "2020.2";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSPIRV-Headers_SOURCE_DIR=${spirv-headers.src}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "The SPIR-V Tools project provides an API and commands for processing SPIR-V modules";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, fetchPypi, buildPythonPackage
+{ lib, stdenv, pkgconfig, fetchPypi, buildPythonPackage
 , buildPackages
 , zstd, pytest }:
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple python bindings to Yann Collet ZSTD compression library";
     homepage = "https://github.com/sergey-dryabzhinsky/python-zstd";
     license = licenses.bsd2;

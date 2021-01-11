@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, mpd_clientlib, sphinx, libiconv }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, mpd_clientlib, sphinx, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "mpc";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig sphinx ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A minimalist command line interface to MPD";
     homepage = "https://www.musicpd.org/clients/mpc/";
     license = licenses.gpl2;

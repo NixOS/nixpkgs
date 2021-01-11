@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libglade, gtk2, guile, libxml2, perl
+{ lib, stdenv, fetchurl, libglade, gtk2, guile, libxml2, perl
 , intltool, libtool, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp drgeo.desktop.in drgeo.desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interactive geometry program";
     homepage = "https://sourceforge.net/projects/ofset";
     license = licenses.gpl2;

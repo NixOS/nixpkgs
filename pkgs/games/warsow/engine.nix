@@ -40,7 +40,7 @@ in stdenv.mkDerivation (libs // rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multiplayer FPS game designed for competitive gaming (engine only)";
     homepage = "http://www.warsow.net";
     license = licenses.gpl2;

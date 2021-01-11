@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , sqlite
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$(pwd)/3rdparty/googletest/googletest:$(pwd)/neopg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://neopg.io/";
     description = "Modern replacement for GnuPG 2";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoreconfHook
 , fetchurl
 , gettext
@@ -188,7 +188,7 @@ let
         '';
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "GNOME 2.x-like session for GNOME 3";
       homepage = "https://wiki.gnome.org/Projects/GnomeFlashback";
       license = licenses.gpl2;

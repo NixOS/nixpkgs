@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , alsaLib
 , aubio
@@ -162,7 +162,7 @@ stdenv.mkDerivation rec {
 
   LINKFLAGS = "-lpthread";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-track hard disk recording software";
     longDescription = ''
       Ardour is a digital audio workstation (DAW), You can use it to

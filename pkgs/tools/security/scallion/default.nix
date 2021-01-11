@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, mono, openssl_1_0_2, ocl-icd }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, mono, openssl_1_0_2, ocl-icd }:
 
 stdenv.mkDerivation rec {
   version = "2.1";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --add-flags $out/share/scallion.exe
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GPU-based tor hidden service name generator";
     homepage = src.meta.homepage;
     license = licenses.mit;

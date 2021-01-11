@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , dpkg
 , writeScript
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://plex.tv/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" ];

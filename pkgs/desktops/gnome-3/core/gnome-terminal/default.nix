@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gnome3, dconf, nautilus
+{ lib, stdenv, fetchurl, pkgconfig, libxml2, gnome3, dconf, nautilus
 , gtk3, gsettings-desktop-schemas, vte, gettext, which, libuuid, vala
 , desktop-file-utils, itstool, wrapGAppsHook, glib, pcre2
 , libxslt, docbook-xsl-nons }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GNOME Terminal Emulator";
     homepage = "https://wiki.gnome.org/Apps/Terminal";
     platforms = platforms.linux;

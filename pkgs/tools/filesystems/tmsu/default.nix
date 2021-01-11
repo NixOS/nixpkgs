@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fuse, installShellFiles }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, fuse, installShellFiles }:
 
 buildGoPackage rec {
   pname = "tmsu";
@@ -30,7 +30,7 @@ buildGoPackage rec {
     installShellCompletion --zsh src/misc/zsh/_tmsu
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://www.tmsu.org";
     description = "A tool for tagging your files using a virtual filesystem";
     maintainers = with maintainers; [ pSub ];

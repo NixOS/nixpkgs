@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, pkgconfig }:
+{ lib, stdenv, fetchurl, glib, pkgconfig }:
 
 stdenv.mkDerivation rec {
   version = "2.4.0";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generic tool for sequence alignment";
     homepage = "https://www.ebi.ac.uk/about/vertebrate-genomics/software/exonerate";
     license = licenses.gpl3;

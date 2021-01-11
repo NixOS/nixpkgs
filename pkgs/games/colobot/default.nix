@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, SDL2, SDL2_image, SDL2_ttf, libpng
+{ lib, stdenv, fetchFromGitHub, cmake, boost, SDL2, SDL2_image, SDL2_ttf, libpng
 , glew, gettext, libsndfile, libvorbis, libogg, physfs, openal
 , xmlstarlet, doxygen, python3, callPackage }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://colobot.info/";
     description = "Colobot: Gold Edition is a real-time strategy game, where you can program your bots";
     license = licenses.gpl3;

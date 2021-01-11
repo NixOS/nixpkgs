@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, opencv, zlib
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, opencv, zlib
 , libxml2, freetype, libjpeg, libtiff, swig, openexr
 , ilmbase, boost165
 , withPython ? true, python3
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       swig openexr ilmbase
     ] ++ stdenv.lib.optional withPython python3;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A free, open source raytracer";
       homepage = "http://www.yafaray.org";
       maintainers = with maintainers; [ hodapp ];

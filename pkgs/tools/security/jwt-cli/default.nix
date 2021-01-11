@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jwt-cli";
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
   installCheckPhase = "$out/bin/jwt --version";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Super fast CLI tool to decode and encode JWTs";
     homepage = "https://github.com/mike-engel/jwt-cli";
     license = with licenses; [ mit ];

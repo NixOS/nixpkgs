@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, installShellFiles }:
+{ lib, stdenv, fetchurl, installShellFiles }:
 
 stdenv.mkDerivation rec {
   version = "1.12";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     installManPage doc/beanstalkd.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://kr.github.io/beanstalkd/";
     description = "A simple, fast work queue";
     license = licenses.mit;

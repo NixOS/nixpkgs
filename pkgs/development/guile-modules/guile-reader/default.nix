@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig
 , gperf, guile, guile-lib, libffi }:
 
 with stdenv.lib;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-guilemoduledir=$(out)/share/guile/site" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple framework for building readers for GNU Guile";
     longDescription = ''
        Guile-Reader is a simple framework for building readers for GNU

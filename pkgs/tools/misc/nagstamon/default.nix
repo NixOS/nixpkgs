@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ lib, stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "nagstamon";
@@ -15,7 +15,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [ configparser pyqt5 psutil requests
      beautifulsoup4 keyring requests-kerberos kerberos lxml ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A status monitor for the desktop";
     homepage = "https://nagstamon.ifw-dresden.de/";
     license = licenses.gpl2;

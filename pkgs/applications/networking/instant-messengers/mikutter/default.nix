@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , bundlerEnv, ruby
 , alsaUtils, libnotify, which, wrapGAppsHook, gtk2, atk, gobject-introspection
 }:
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
       --replace "$out/bin/.mikutter-wrapped" "$out/mikutter.rb"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An extensible Twitter client";
     homepage = "https://mikutter.hachune.net";
     platforms = ruby.meta.platforms;

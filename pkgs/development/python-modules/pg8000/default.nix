@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , scramp
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ passlib scramp ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tlocke/pg8000";
     description = "PostgreSQL interface library, for asyncio";
     maintainers = with maintainers; [ domenkozar ];

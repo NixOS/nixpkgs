@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , meson
 , ninja
 , pkg-config
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Display and control Android devices over USB or TCP/IP";
     homepage = "https://github.com/Genymobile/scrcpy";
     license = licenses.asl20;

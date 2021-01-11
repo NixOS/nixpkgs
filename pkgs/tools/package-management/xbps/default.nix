@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, which, zlib, openssl, libarchive }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, which, zlib, openssl, libarchive }:
 
 stdenv.mkDerivation rec {
   pname = "xbps";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/void-linux/xbps";
     description = "The X Binary Package System";
     platforms = platforms.linux; # known to not work on Darwin, at least

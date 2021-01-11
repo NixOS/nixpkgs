@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 # native
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./build-aux/meson/postinstall.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-network-displays";
     description = "Miracast implementation for GNOME";
     maintainers = with maintainers; [ doronbehar ];

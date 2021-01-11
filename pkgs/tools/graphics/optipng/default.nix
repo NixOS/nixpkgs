@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpng
+{ lib, stdenv, fetchurl, libpng
 , static ? stdenv.hostPlatform.isStatic
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     mv "$out"/bin/optipng{,.exe}
   '' else null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://optipng.sourceforge.net/";
     description = "A PNG optimizer";
     license = licenses.zlib;

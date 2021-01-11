@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, substituteAll, pkgconfig, gnome3, python3, gobject-introspection
+{ fetchurl, lib, stdenv, substituteAll, pkgconfig, gnome3, python3, gobject-introspection
 , intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata, libcanberra-gtk3, gcr
 , p11-kit, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking, pcre
 , vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unified backend for programs that work with contacts, tasks, and calendar information";
     homepage = "https://wiki.gnome.org/Apps/Evolution";
     license = licenses.lgpl2;

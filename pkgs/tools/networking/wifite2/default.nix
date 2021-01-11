@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs = propagatedBuildInputs;
   checkPhase = "python -m unittest discover tests -v";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/derv82/wifite2";
     description = "Rewrite of the popular wireless network auditor, wifite";
     license = licenses.gpl2;

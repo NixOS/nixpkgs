@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildEnv, makeWrapper, glib, alsaLib , dbus, gtk2, atk
+{ lib, stdenv, fetchurl, buildEnv, makeWrapper, glib, alsaLib , dbus, gtk2, atk
 , pango, freetype, fontconfig, gdk-pixbuf , cairo, cups, expat, nspr, gconf, nss
 , xorg, libcap, unzip
 }:
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     ln -s $out/libexec/thrust/thrust_shell $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Chromium-based cross-platform / cross-language application framework";
     homepage = "https://github.com/breach/thrust";
     license = licenses.mit;

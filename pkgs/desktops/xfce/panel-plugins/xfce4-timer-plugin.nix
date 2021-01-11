@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk3, hicolor-icon-theme, xfce }:
+{ lib, stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk3, hicolor-icon-theme, xfce }:
 
 let
   category = "panel-plugins";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.archiveLister category pname;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-timer-plugin";
     description = "Simple countdown and alarm plugin for the Xfce panel";
     platforms = platforms.linux;

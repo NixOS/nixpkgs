@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel, bc }:
+{ lib, stdenv, fetchFromGitHub, kernel, bc }:
 stdenv.mkDerivation rec {
   name = "rtl8821cu-${kernel.version}-${version}";
   version = "unstable-2020-12-21";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Realtek rtl8821cu driver";
     homepage = "https://github.com/brektrou/rtl8821CU";
     license = licenses.gpl2;

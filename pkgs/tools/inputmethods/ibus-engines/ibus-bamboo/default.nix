@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , gettext
 , xorg
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description = "A Vietnamese IME for IBus";
     homepage = "https://github.com/BambooEngine/ibus-bamboo";

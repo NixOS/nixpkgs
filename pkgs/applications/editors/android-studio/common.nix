@@ -41,6 +41,7 @@
 , pkgsi686Linux
 , ps
 , setxkbmap
+, lib
 , stdenv
 , systemd
 , unzip
@@ -182,7 +183,7 @@ in runCommand
     passthru = {
       unwrapped = androidStudio;
     };
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "The Official IDE for Android (${channel} channel)";
       longDescription = ''
         Android Studio is the official IDE for Android app development, based on

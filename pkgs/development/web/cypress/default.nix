@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/cypress/Cypress $out/bin/Cypress
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nixosTests
+{ lib, stdenv, fetchFromGitHub, nixosTests
 , libnfnetlink, libnl, net-snmp, openssl
 , pkgconfig, autoreconfHook }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "--enable-snmp"
  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://keepalived.org";
     description = "Routing software written in C";
     license = licenses.gpl2;

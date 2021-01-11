@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, sassc, gdk-pixbuf, librsvg, gtk_engines, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, sassc, gdk-pixbuf, librsvg, gtk_engines, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "amber-theme";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK, gnome-shell and Xfce theme based on Ubuntu Ambiance";
     homepage = "https://github.com/lassekongo83/amber-theme";
     license = licenses.gpl3Only;

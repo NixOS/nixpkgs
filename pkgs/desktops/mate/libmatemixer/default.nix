@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, pkgconfig, gettext, glib
+{ config, lib, stdenv, fetchurl, pkgconfig, gettext, glib
 , alsaSupport ? stdenv.isLinux, alsaLib
 , pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
 , ossSupport ? false
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mixer library for MATE";
     homepage = "https://github.com/mate-desktop/libmatemixer";
     license = with licenses; [ gpl2 lgpl2 ];

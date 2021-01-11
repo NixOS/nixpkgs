@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, wxGTK30, pkgconfig, file, gettext,
+{ lib, stdenv, fetchzip, wxGTK30, pkgconfig, file, gettext,
   libvorbis, libmad, libjack2, lv2, lilv, serd, sord, sratom, suil, alsaLib, libsndfile, soxr, flac, lame,
   expat, libid3tag, ffmpeg_3, soundtouch, /*, portaudio - given up fighting their portaudio.patch */
   cmake
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
   doCheck = false; # Test fails
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sound editor with graphical UI";
     homepage = "https://www.audacityteam.org/";
     license = licenses.gpl2Plus;

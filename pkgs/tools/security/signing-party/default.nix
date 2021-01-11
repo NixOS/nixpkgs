@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, autoconf, automake, makeWrapper
+{ lib, stdenv, fetchFromGitLab, autoconf, automake, makeWrapper
 , python3, perl, perlPackages
 , libmd, gnupg, which, getopt, libpaper, nettools, qprint
 , sendmailPath ? "/run/wrappers/bin/sendmail" }:
@@ -196,7 +196,7 @@ in stdenv.mkDerivation rec {
       ${with perlPackages; makePerlPath [ GD ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://salsa.debian.org/signing-party-team/signing-party";
     description = "A collection of several projects relating to OpenPGP";
     longDescription = ''

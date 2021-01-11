@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, icu, openssl, spidermonkey_68
+{ lib, stdenv, fetchurl, erlang, icu, openssl, spidermonkey_68
 , coreutils, bash, makeWrapper, python3 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cp -r rel/couchdb/* $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
     homepage = "http://couchdb.apache.org";
     license = licenses.asl20;

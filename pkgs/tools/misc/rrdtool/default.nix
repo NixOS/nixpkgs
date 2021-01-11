@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo, groff
+{ fetchurl, lib, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo, groff
 , tcl-8_5, darwin }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     mv $out/lib/perl/5* $out/${perl.libPrefix}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://oss.oetiker.ch/rrdtool/";
     description = "High performance logging in Round Robin Databases";
     license = licenses.gpl2;

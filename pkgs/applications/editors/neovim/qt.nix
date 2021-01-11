@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, doxygen, makeWrapper
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, doxygen, makeWrapper
 , msgpack, neovim, pythonPackages, qtbase }:
 
 let
@@ -35,7 +35,7 @@ let
 
     doCheck = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Neovim client library and GUI, in Qt5";
       homepage = "https://github.com/equalsraf/neovim-qt";
       license     = licenses.isc;

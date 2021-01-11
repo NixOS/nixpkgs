@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
 , fetchurl
 , fetchgit
@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2Plus;
     maintainers = pantheon.maintainers;
     platforms = platforms.linux;

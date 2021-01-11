@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, libtool, automake, pkgconfig, git
+{ lib, stdenv, fetchgit, autoconf, libtool, automake, pkgconfig, git
 , bison, flex, postgresql }:
 
 let
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Implements the Stellar Consensus Protocol, a federated consensus protocol";
     longDescription = ''
       Stellar-core is the backbone of the Stellar network. It maintains a

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, boost, gnuradio, log4cpp
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, boost, gnuradio, log4cpp
 , makeWrapper, pythonSupport ? true, python, swig
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gnuradio block for radio data system";
     homepage = "https://github.com/bastibl/gr-rds";
     license = licenses.gpl2Plus;

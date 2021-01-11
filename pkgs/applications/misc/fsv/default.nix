@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook
+{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook
 , libtool, pkgconfig, gtk2, libGLU, file
 }:
 
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook libtool pkgconfig ];
   buildInputs       = [ file gtk2 libGLU gtkglarea ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description     = "File system visualizer in cyberspace";
     longDescription = ''
       fsv (pronounced eff-ess-vee) is a file system visualizer in cyberspace.

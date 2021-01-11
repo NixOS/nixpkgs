@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dune, Reinvented";
     homepage = "https://github.com/OpenDUNE/OpenDUNE";
     license = licenses.gpl2;

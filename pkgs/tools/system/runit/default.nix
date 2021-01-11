@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, darwin
+{ lib, stdenv, fetchurl, darwin
 
 # Build runit-init as a static binary
 , static ? false
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     cp -r ../man $man/share/man/man8
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "UNIX init scheme with service supervision";
     license = licenses.bsd3;
     homepage = "http://smarden.org/runit";

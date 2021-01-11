@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , dnspython
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple DNS library for managing zone files";
     homepage = "https://localzone.iomaestro.com";
     license = licenses.bsd3;

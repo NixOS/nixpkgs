@@ -8933,6 +8933,8 @@ in
 
   fish = callPackage ../shells/fish { };
 
+  wrapFish = callPackage ../shells/fish/wrapper.nix { };
+
   fishPlugins = recurseIntoAttrs (callPackage ../shells/fish/plugins { });
 
   ion = callPackage ../shells/ion {
@@ -21321,6 +21323,8 @@ in
   evilpixie = libsForQt5.callPackage ../applications/graphics/evilpixie { };
 
   exercism = callPackage ../applications/misc/exercism { };
+
+  expenses = callPackage ../applications/misc/expenses { };
 
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
 

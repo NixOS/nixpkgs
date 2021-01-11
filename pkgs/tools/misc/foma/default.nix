@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, flex, bison, readline }:
+{ lib, stdenv, fetchFromGitHub, zlib, flex, bison, readline }:
 
 stdenv.mkDerivation rec {
   pname = "foma";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --replace '/usr/local' '$(out)'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multi-purpose finite-state toolkit designed for applications ranging from natural language processing to research in automata theory";
     homepage = "https://github.com/mhulden/foma";
     license = licenses.asl20;

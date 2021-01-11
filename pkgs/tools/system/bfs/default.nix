@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libcap, acl }:
+{ lib, stdenv, fetchFromGitHub, libcap, acl }:
 
 stdenv.mkDerivation rec {
   pname = "bfs";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
   buildFlags = [ "release" ]; # "release" enables compiler optimizations
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A breadth-first version of the UNIX find command";
     longDescription = ''
       bfs is a variant of the UNIX find command that operates breadth-first rather than

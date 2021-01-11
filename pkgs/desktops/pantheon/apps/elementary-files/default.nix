@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
       --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File browser designed for elementary OS";
     homepage = "https://github.com/elementary/files";
     license = licenses.lgpl3;

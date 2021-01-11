@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, imlib2
+{ lib, stdenv, fetchFromGitHub, libX11, imlib2
 , enableXinerama ? true, libXinerama ? null
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple X background setter inspired by imlibsetroot and feh";
     homepage = "https://github.com/ttzhou/setroot";
     license = licenses.gpl3Plus;

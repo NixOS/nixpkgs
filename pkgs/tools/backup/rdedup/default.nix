@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libsodium
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libsodium
 , llvmPackages, clang, lzma
 , Security }:
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     export LIBCLANG_PATH="${llvmPackages.libclang}/lib"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Data deduplication with compression and public key encryption";
     homepage = "https://github.com/dpc/rdedup";
     license = licenses.mpl20;

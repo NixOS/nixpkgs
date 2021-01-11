@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "0vpkzykfg1rq4qi1v5lsa0drpil9i6ccfw96k48ppi9hiwzpq94w";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Phishing tool for red teams and pentesters";
     longDescription = ''
       DeepSea phishing gear aims to help RTOs and pentesters with the

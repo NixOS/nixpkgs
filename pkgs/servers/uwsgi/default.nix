@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://uwsgi-docs.readthedocs.org/en/latest/";
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     license = licenses.gpl2;

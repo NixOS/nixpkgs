@@ -1,6 +1,6 @@
 { buildVersion, x32sha256, x64sha256, dev ? false }:
 
-{ fetchurl, stdenv, xorg, glib, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
+{ fetchurl, lib, stdenv, xorg, glib, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
 , pkexecPath ? "/run/wrappers/bin/pkexec"
 , writeScript, common-updater-scripts, curl, gnugrep
 , openssl, bzip2, bash, unzip, zip
@@ -148,7 +148,7 @@ in stdenv.mkDerivation (rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = "https://www.sublimetext.com/";
     maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];

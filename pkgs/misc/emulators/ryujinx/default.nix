@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
 , dotnet-sdk_3, dotnetPackages, dotnetCorePackages
 , SDL2, libX11, openal
 , gtk3, gobject-introspection, wrapGAppsHook
@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
   # Strip breaks the executable.
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Experimental Nintendo Switch Emulator written in C#";
     homepage = "https://ryujinx.org/";
     license = licenses.mit;

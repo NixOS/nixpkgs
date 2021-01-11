@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "wrapio" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Exahilosys/wrapio";
     description = "Handling event-based streams";
     license = licenses.mit;

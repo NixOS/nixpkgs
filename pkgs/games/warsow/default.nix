@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, warsow-engine, makeWrapper }:
+{ lib, stdenv, fetchurl, warsow-engine, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "warsow";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multiplayer FPS game designed for competitive gaming";
     longDescription = ''
       Set in a futuristic cartoon-like world where rocketlauncher-wielding

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unzip }:
+{ fetchurl, lib, stdenv, unzip }:
 
 let
   version = "2.9";
@@ -41,7 +41,7 @@ in stdenv.mkDerivation {
     cp -r *.txt *.html docs/* $out/share/kindlegen/doc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     broken = true; # download links got removed
     description = "Convert documents to .mobi for use with Amazon Kindle";
     homepage = "https://www.amazon.com/gp/feature.html?docId=1000765211";

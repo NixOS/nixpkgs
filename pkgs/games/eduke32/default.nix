@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, nasm, makeDesktopItem
+{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, nasm, makeDesktopItem
 , alsaLib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
 , SDL2, SDL2_mixer }:
 
@@ -66,7 +66,7 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enhanched port of Duke Nukem 3D for various platforms";
     homepage = "http://eduke32.com";
     license = licenses.gpl2Plus;

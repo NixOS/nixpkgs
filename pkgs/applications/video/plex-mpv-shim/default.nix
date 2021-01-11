@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, mpv, requests, python-mpv-jsonipc }:
+{ lib, stdenv, buildPythonApplication, fetchFromGitHub, mpv, requests, python-mpv-jsonipc }:
 
 buildPythonApplication rec {
   pname = "plex-mpv-shim";
@@ -16,7 +16,7 @@ buildPythonApplication rec {
   # does not contain tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/iwalton3/plex-mpv-shim";
     description = "Allows casting of videos to MPV via the Plex mobile and web app";
     license = licenses.mit;

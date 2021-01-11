@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchurl
 , autoreconfHook
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python is Not a CAS -- modified version of Ginac";
     longDescription = ''
       Pynac -- "Python is Not a CAS" is a modified version of Ginac that

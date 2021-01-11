@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     polkit
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Polkit Agent for the Pantheon Desktop";
     homepage = "https://github.com/elementary/pantheon-agent-polkit";
     license = licenses.lgpl21Plus;

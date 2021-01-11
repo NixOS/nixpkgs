@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cups, pkgsi686Linux, dpkg, psutils, makeWrapper, ghostscript, bash }:
+{ lib, stdenv, fetchurl, cups, pkgsi686Linux, dpkg, psutils, makeWrapper, ghostscript, bash }:
 
 let
   version = "1.2-0";
@@ -49,7 +49,7 @@ in
         --suffix PATH : "\$PATH:${psutils}/bin:${ghostscript}/bin:${bash}/bin:/var/lib/cups/path/bin"
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
       description = "Epson AcuLaser C1100 Driver";
       longDescription = ''

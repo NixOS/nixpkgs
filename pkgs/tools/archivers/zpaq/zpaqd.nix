@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 let
   # Generated upstream information
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     cp readme_zpaqd.txt "$out/share/doc/zpaq"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ZPAQ archive (de)compressor and algorithm development tool";
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin ];

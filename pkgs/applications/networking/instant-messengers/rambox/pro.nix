@@ -1,4 +1,4 @@
-{ autoPatchelfHook, electron_7, fetchurl, makeDesktopItem, makeWrapper, nodePackages, nss, stdenv, xdg_utils, xorg }:
+{ autoPatchelfHook, electron_7, fetchurl, makeDesktopItem, makeWrapper, nodePackages, nss, lib, stdenv, xdg_utils, xorg }:
 
 let
   electron = electron_7;
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     categories = "Network;";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Messaging and emailing app that combines common web applications into one";
     homepage = "https://rambox.pro";
     license = licenses.unfree;

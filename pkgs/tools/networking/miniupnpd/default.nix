@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://miniupnp.free.fr/";
     description = "A daemon that implements the UPnP Internet Gateway Device (IGD) specification";
     platforms = platforms.linux;

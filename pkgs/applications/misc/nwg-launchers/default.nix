@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , gtkmm3
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${swaylock}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK-based launchers: application grid, button bar, dmenu for sway and other window managers";
     homepage = "https://github.com/nwg-piotr/nwg-launchers";
     license = licenses.gpl3;

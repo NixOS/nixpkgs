@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
   pname = "adapta-backgrounds";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig glib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wallpaper collection for adapta-project";
     homepage = "https://github.com/adapta-project/adapta-backgrounds";
     license = with licenses; [ gpl2 cc-by-sa-40 ];

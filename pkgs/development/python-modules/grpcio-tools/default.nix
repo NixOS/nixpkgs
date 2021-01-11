@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, protobuf, grpcio, setuptools }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, protobuf, grpcio, setuptools }:
 
 buildPythonPackage rec {
   pname = "grpcio-tools";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # no tests in the package
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Protobuf code generator for gRPC";
     license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";

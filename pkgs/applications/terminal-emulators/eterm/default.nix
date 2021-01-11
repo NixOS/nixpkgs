@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , libX11, libXext, libXaw
 , pkgconfig, imlib2, libast }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libXext libXaw imlib2 ];
   propagatedBuildInputs = [ libast ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terminal emulator";
     homepage = "http://www.eterm.org";
     license = licenses.bsd2;

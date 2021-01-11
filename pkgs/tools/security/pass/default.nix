@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
     withExtensions = env;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage    = "https://www.passwordstore.org/";
     license     = licenses.gpl2Plus;

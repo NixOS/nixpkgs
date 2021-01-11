@@ -2,7 +2,7 @@
 , libX11
 , libGLU, libGL
 , makeWrapper
-, stdenv
+, lib, stdenv
 }:
 
 let
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
       --run "mkdir -p ${inidir}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert STL files into Gcode";
     homepage = "http://www.kisslicer.com";
     license = licenses.unfree;

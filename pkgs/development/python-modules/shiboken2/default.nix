@@ -1,4 +1,4 @@
-{ buildPythonPackage, python, fetchurl, stdenv, pyside2
+{ buildPythonPackage, python, fetchurl, lib, stdenv, pyside2
 , cmake, qt5, llvmPackages }:
 
 stdenv.mkDerivation {
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     rm $out/bin/shiboken_tool.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generator for the PySide2 Qt bindings";
     license = with licenses; [ gpl2 lgpl21 ];
     homepage = "https://wiki.qt.io/Qt_for_Python";

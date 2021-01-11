@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gtk, pkgconfig, libofx, intltool, wrapGAppsHook
+{ fetchurl, lib, stdenv, gtk, pkgconfig, libofx, intltool, wrapGAppsHook
 , libsoup, gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk libofx intltool libsoup
     gnome3.adwaita-icon-theme ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free, easy, personal accounting for everyone";
     homepage = "http://homebank.free.fr/";
     license = licenses.gpl2Plus;

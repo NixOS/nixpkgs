@@ -1,4 +1,4 @@
-{ stdenv, recurseIntoAttrs, fetchgit, writeText, pkgconfig, autoreconfHook
+{ lib, stdenv, recurseIntoAttrs, fetchgit, writeText, pkgconfig, autoreconfHook
 , autoconf, automake, libiconv, libtool, texinfo, gettext, gawk, rapidjson, gd
 , shapelib, libharu, lmdb, gmp, glibcLocales, mpfr, more, postgresql, hiredis
 , expat, tre, makeWrapper }:
@@ -40,7 +40,7 @@ let
         inherit doCheck;
         checkInputs = [ more ];
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           homepage = "https://sourceforge.net/projects/gawkextlib/";
           description = "Dynamically loaded extension libraries for GNU AWK";
           longDescription = ''

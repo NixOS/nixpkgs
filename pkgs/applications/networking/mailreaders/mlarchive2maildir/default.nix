@@ -1,4 +1,4 @@
-{ stdenv, python3, notmuch }:
+{ lib, stdenv, python3, notmuch }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mlarchive2maildir";
@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
     six
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/flokli/mlarchive2maildir";
     description = "Imports mail from (pipermail) archives into a maildir";
     license = licenses.mit;

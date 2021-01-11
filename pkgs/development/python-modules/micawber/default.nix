@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, beautifulsoup4 }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, beautifulsoup4 }:
 
 buildPythonPackage rec {
   pname = "micawber";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ beautifulsoup4 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://micawber.readthedocs.io/en/latest/";
     description = "A small library for extracting rich content from urls";
     license = licenses.mit;

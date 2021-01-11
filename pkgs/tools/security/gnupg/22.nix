@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+{ fetchurl, fetchpatch, lib, stdenv, pkgconfig, libgcrypt, libassuan, libksba
 , libgpgerror, libiconv, npth, gettext, texinfo, buildPackages
 
 # Each of the dependencies below are optional.
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     ln -s -t $out/bin $out/libexec/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gnupg.org";
     description = "Modern (2.1) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;

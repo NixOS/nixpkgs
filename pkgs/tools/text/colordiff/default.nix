@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl /*, xmlto */}:
+{ lib, stdenv, fetchurl, perl /*, xmlto */}:
 
 stdenv.mkDerivation rec {
   name = "colordiff-1.0.19";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''make INSTALL_DIR=/bin MAN_DIR=/share/man/man1 DESTDIR="$out" install'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wrapper for 'diff' that produces the same output but with pretty 'syntax' highlighting";
     homepage = "https://www.colordiff.org/";
     license = licenses.gpl3;

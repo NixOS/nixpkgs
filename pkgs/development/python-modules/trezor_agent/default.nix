@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , trezor
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "libagent" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Using Trezor as hardware SSH agent";
     homepage = "https://github.com/romanz/trezor-agent";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, requireFile
+{ lib, stdenv, fetchFromGitHub, requireFile
 , openal, curl, libogg, libvorbis
 , SDL2, SDL2_image, zlib
 , unfree_assets ? false }:
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     ${stdenv.lib.optionalString unfree_assets "cp -r data $out/share"}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A dungeon management rogue-like";
     homepage = "https://keeperrl.com/";
     license = licenses.gpl2;

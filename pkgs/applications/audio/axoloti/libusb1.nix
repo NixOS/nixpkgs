@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sed 's,-ludev,-L${lib.getLib systemd}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.libusb.info";
     description = "User-space USB library";
     platforms = platforms.unix;

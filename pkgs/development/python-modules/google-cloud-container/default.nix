@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , google-api-core
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     "google.cloud.container_v1beta1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Container Engine API client library";
     homepage = "https://github.com/googleapis/python-container";
     license = licenses.asl20;

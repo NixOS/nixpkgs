@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , installShellFiles
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --zsh ../zsh_completion/_osmium
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multipurpose command line tool for working with OpenStreetMap data based on the Osmium library";
     homepage = "https://osmcode.org/osmium-tool/";
     license = with licenses; [ gpl3Plus mit bsd3 ];

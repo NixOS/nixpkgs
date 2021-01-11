@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , libaio, python, zlib
 , withGnuplot ? false, gnuplot ? null }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${stdenv.lib.makeBinPath [ gnuplot ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flexible IO Tester - an IO benchmark tool";
     homepage = "https://git.kernel.dk/cgit/fio/";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, flake8, pytest, pytestcov, pexpect }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, flake8, pytest, pytestcov, pexpect }:
 
 buildPythonPackage rec {
   pname = "readchar";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ flake8 ];
   checkInputs = [ pytest pytestcov pexpect ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/magmax/python-readchar";
     description = "Python library to read characters and key strokes";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, fixDarwinDylibNames }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   version = "2.19";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja ]
   ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client library for MPD (music player daemon)";
     homepage = "https://www.musicpd.org/libs/libmpdclient/";
     license = licenses.gpl2;

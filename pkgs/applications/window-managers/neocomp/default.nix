@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , asciidoc
 , docbook_xml_dtd_45
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       "#define MAX_PATH_LENGTH 128"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage        = "https://github.com/DelusionalLogic/NeoComp";
     license         = licenses.gpl3;
     maintainers     = with maintainers; [ twey ];

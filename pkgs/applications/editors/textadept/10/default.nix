@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out) WGET=true PIXMAPS_DIR=$(out)/share/pixmaps"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An extensible text editor based on Scintilla with Lua scripting";
     homepage = "http://foicica.com/textadept";
     license = licenses.mit;

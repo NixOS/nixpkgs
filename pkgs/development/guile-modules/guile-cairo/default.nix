@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, guile, guile-lib, cairo, expat }:
+{ lib, stdenv, fetchurl, pkgconfig, guile, guile-lib, cairo, expat }:
 
 stdenv.mkDerivation rec {
   pname = "guile-cairo";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # Cannot find unit-test module from guile-lib
   checkInputs = [ guile-lib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cairo bindings for GNU Guile";
     longDescription = ''
       Guile-Cairo wraps the Cairo graphics library for Guile Scheme.

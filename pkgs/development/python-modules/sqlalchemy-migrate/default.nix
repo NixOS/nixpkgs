@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
 , unittest2, scripttest, pytz, mock
 , testtools, pbr, tempita, decorator, sqlalchemy
 , six, sqlparse, testrepository
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/openstack/sqlalchemy-migrate";
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;

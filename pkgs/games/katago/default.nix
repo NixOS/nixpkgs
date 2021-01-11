@@ -104,7 +104,7 @@ in env.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "/run/opengl-driver/lib"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Go engine modeled after AlphaGo Zero";
     homepage    = "https://github.com/lightvector/katago";
     license     = licenses.mit;

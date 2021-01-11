@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python3, xmlbird,
+{ lib, stdenv, fetchurl, pkgconfig, python3, xmlbird,
 cairo, gdk-pixbuf, libgee, glib, gtk3, webkitgtk, libnotify, sqlite, vala_0_44,
 gobject-introspection, gsettings-desktop-schemas, wrapGAppsHook }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   installPhase = "./install.py";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Font editor which can generate fonts in TTF, EOT, SVG and BIRDFONT format";
     homepage = "https://birdfont.org";
     license = licenses.gpl3;

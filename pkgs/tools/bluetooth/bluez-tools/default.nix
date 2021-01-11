@@ -1,4 +1,4 @@
-{ stdenv, autoreconfHook, readline
+{ lib, stdenv, autoreconfHook, readline
 , fetchFromGitHub, glib, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline glib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line bluetooth manager for Bluez5";
     license = licenses.gpl2;
     maintainers = [ maintainers.dasuxullebt ];

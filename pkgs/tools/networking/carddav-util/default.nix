@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, python, pythonPackages, makeWrapper }:
+{ lib, stdenv, fetchgit, python, pythonPackages, makeWrapper }:
 
 stdenv.mkDerivation {
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       --prefix PATH : "$prefix/bin:$PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ljanyst/carddav-util";
     description = "A CardDAV import/export utility";
     platforms = platforms.unix;

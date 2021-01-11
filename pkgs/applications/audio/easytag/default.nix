@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, glib, libid3tag, id3lib, taglib
+{ lib, stdenv, fetchurl, pkgconfig, intltool, gtk3, glib, libid3tag, id3lib, taglib
 , libvorbis, libogg, opusfile, flac, itstool, libxml2, gsettings-desktop-schemas
 , gnome3, wrapGAppsHook
 }:
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "View and edit tags for various audio files";
     homepage = "https://wiki.gnome.org/Apps/EasyTAG";
     license = licenses.gpl2Plus;

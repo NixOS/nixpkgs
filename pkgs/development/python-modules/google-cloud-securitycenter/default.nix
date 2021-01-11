@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , grpc_google_iam_v1
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     "google.cloud.securitycenter_v1p1beta1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cloud Security Command Center API API client library";
     homepage = "https://github.com/googleapis/python-securitycenter";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, python3
+{ lib, stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, python3
 , gettext, gnome3, glib, gtk3, libgnome-games-support, gdk-pixbuf }:
 
 let
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Puzzle game where you move atoms to build a molecule";
     homepage = "https://wiki.gnome.org/Apps/Atomix";
     license = licenses.gpl2Plus;

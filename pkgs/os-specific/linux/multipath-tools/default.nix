@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, lvm2, libaio, gzip, readline, systemd, liburcu, json_c }:
+{ lib, stdenv, fetchurl, pkgconfig, perl, lvm2, libaio, gzip, readline, systemd, liburcu, json_c }:
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "SYSTEMDPATH=lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for the Linux multipathing driver";
     homepage = "http://christophe.varoqui.free.fr/";
     license = licenses.gpl2;

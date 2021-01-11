@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , rustPlatform
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     $out/bin/grex --help > /dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command-line tool for generating regular expressions from user-provided test cases";
     homepage = "https://github.com/pemistahl/grex";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy27
 , pandas, shapely, fiona, descartes, pyproj
 , pytestCheckHook, Rtree, fetchpatch }:
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pyproj
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
     license = licenses.bsd3;

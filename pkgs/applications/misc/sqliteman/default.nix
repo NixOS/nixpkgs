@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, qt4, qscintilla }:
+{ lib, stdenv, fetchFromGitHub, cmake, qt4, qscintilla }:
 
 stdenv.mkDerivation rec {
   pname = "sqliteman";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sed -i 's,PATHS ''${QT_LIBRARY_DIR},PATHS ${qscintilla}/libs,' cmake/modules/FindQScintilla.cmake
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple but powerful Sqlite3 GUI database manager";
     homepage = "http://sqliteman.yarpen.cz/";
     license = licenses.gpl2Plus;

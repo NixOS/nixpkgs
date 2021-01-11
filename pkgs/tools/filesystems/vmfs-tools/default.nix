@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkgconfig
 , asciidoc
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/doc/${pname} AUTHORS LICENSE README TODO
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FUSE-based VMFS (vmware) file system tools";
     maintainers = with maintainers; [ peterhoeg ];
     license = licenses.gpl2;

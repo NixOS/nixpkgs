@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchpatch, fetchurl, autoconf, automake, gettext, libtool, pkgconfig
+{ lib, stdenv, buildPackages, fetchpatch, fetchurl, autoconf, automake, gettext, libtool, pkgconfig
 , icu, libuuid, readline, inih
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     find . -type d -name .libs | xargs rm -rf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://xfs.org/";
     description = "SGI XFS utilities";
     license = licenses.lgpl21;

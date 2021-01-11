@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "intermodal";
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   # include_hidden test tries to use `chflags` on darwin
   checkFlagsArray = stdenv.lib.optionals stdenv.isDarwin [ "--skip=subcommand::torrent::create::tests::include_hidden" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "User-friendly and featureful command-line BitTorrent metainfo utility";
     homepage = "https://github.com/casey/intermodal";
     license = licenses.cc0;

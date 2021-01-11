@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python3, sqlite, libedit, zlib }:
+{ lib, stdenv, fetchurl, pkgconfig, python3, sqlite, libedit, zlib }:
 
 stdenv.mkDerivation rec {
   version = "5.8.0";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "--disable-java-bindings"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Grammar Checking library";
     homepage = "https://www.abisource.com/projects/link-grammar/";
     license = licenses.lgpl21;

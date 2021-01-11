@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , gettext
 , meson
 , ninja
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://help.gnome.org/users/gnome-user-share/3.8";
     description = "Service that exports the contents of the Public folder in your home directory on the local network";
     maintainers = teams.gnome.members;

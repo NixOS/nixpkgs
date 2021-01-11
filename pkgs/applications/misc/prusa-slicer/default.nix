@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     categories = "Development;";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "G-code generator for 3D printer";
     homepage = "https://github.com/prusa3d/PrusaSlicer";
     license = licenses.agpl3;

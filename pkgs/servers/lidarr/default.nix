@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, chromaprint, makeWrapper }:
+{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, chromaprint, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "lidarr";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
           curl sqlite libmediainfo ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Usenet/BitTorrent music downloader";
     homepage = "https://lidarr.audio/";
     license = licenses.gpl3;

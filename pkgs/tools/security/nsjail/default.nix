@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, bison, flex, libtool, pkgconfig, which
+{ lib, stdenv, fetchFromGitHub, autoconf, bison, flex, libtool, pkgconfig, which
 , libnl, protobuf, protobufc, shadow
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     install nsjail.1 $out/share/man/man1/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A light-weight process isolation tool, making use of Linux namespaces and seccomp-bpf syscall filters";
     homepage    = "http://nsjail.com/";
     license     = licenses.asl20;

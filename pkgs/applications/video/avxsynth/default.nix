@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , cairo, ffmpeg_3, ffms, libjpeg, log4cpp, pango
 , avxeditSupport ? false, qt4 ? null
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   buildInputs = [ cairo ffmpeg_3 ffms libjpeg log4cpp pango ]
     ++ optional avxeditSupport qt4;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A script system that allows advanced non-linear editing";
     homepage = "https://github.com/avxsynth/avxsynth";
     license = licenses.gpl2Plus;

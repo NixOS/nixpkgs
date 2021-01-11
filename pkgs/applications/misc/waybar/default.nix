@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, meson, pkgconfig, ninja, wrapGAppsHook
 , wayland, wlroots, gtkmm3, libsigcxx, jsoncpp, fmt, scdoc, spdlog, gtk-layer-shell
 , howard-hinnant-date, cmake
 , traySupport  ? true,  libdbusmenu-gtk3
@@ -61,7 +61,7 @@
         --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";
       license = licenses.mit;
       maintainers = with maintainers; [ FlorianFranzen minijackson synthetica ];

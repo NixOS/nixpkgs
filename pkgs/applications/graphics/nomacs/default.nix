@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchFromGitHub
 , fetchpatch
@@ -50,7 +50,7 @@ mkDerivation rec {
                 "-DENABLE_TRANSLATIONS=ON"
                 "-DUSE_SYSTEM_QUAZIP=ON"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://nomacs.org";
     description = "Qt-based image viewer";
     maintainers = with stdenv.lib.maintainers; [ mindavi ];

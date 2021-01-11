@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , makeWrapper
 , fetchurl
 , cabextract
@@ -103,7 +103,7 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for managing Windows programs under linux";
     homepage = "https://www.playonlinux.com/";
     license = licenses.gpl3;

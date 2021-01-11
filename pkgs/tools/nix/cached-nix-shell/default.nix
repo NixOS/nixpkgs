@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, pkgconfig, ronn, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, openssl, pkgconfig, ronn, rustPlatform }:
 
 let
   blake3-src = fetchFromGitHub {
@@ -36,7 +36,7 @@ in rustPlatform.buildRustPackage rec {
     make -f nix/Makefile post-install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Instant startup time for nix-shell";
     homepage = "https://github.com/xzfc/cached-nix-shell";
     license = with licenses; [ unlicense /* or */ mit ];

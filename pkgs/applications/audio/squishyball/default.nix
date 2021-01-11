@@ -1,4 +1,4 @@
-{ stdenv, autoreconfHook, fetchsvn, flac, libao, libvorbis, ncurses
+{ lib, stdenv, autoreconfHook, fetchsvn, flac, libao, libvorbis, ncurses
 , opusfile, pkgconfig
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cp squishyball.1 $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to perform sample comparison testing on the command line";
     longDescription = ''
        squishyball is a simple command-line utility for performing

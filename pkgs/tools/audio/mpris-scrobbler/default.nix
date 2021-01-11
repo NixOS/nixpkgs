@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , curl
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minimalistic scrobbler for libre.fm & last.fm";
     homepage    = "https://github.com/mariusor/mpris-scrobbler";
     license     = licenses.mit;

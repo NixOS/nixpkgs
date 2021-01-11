@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, zlib, python3, parallel }:
+{ lib, stdenv, fetchurl, unzip, zlib, python3, parallel }:
 
 stdenv.mkDerivation rec {
   pname = "last";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Genomic sequence aligner";
     homepage = "http://last.cbrc.jp/";
     license = licenses.gpl3;

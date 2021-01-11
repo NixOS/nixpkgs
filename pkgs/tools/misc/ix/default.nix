@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, curl }:
+{ lib, stdenv, fetchurl, makeWrapper, curl }:
 
 stdenv.mkDerivation {
   pname = "ix";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/ix --prefix PATH : "${stdenv.lib.makeBinPath [ curl ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://ix.io";
     description = "Command line pastebin";
     maintainers = with maintainers; [ asymmetric ];

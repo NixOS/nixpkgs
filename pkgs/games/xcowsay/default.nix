@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkg-config
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config
 , dbus, dbus-glib, gtk3, gdk-pixbuf, librsvg
 , fortune
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.doof.me.uk/xcowsay";
     description =
       "A program based on cowsay that displays a cute cow and message on your desktop";

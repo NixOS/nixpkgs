@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub
+{ lib, stdenv, mkDerivation, fetchFromGitHub
 , pkg-config, cmake, alsaLib, libjack2, dbus, qtbase, qttools, qtx11extras
 # Enable jack session support
 , jackSession ? false
@@ -36,7 +36,7 @@ mkDerivation rec {
     "-DCONFIG_JACK_SESSION=${toString jackSession}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Qt application to control the JACK sound server daemon";
     homepage = "https://github.com/rncbc/qjackctl";
     license = licenses.gpl2Plus;

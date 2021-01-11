@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkg-config, fcitx, gettext, libpinyin, glib, pcre, dbus, qtwebengine, qtbase, fcitx-qt5 }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, fcitx, gettext, libpinyin, glib, pcre, dbus, qtwebengine, qtbase, fcitx-qt5 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-libpinyin";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       cp -rv ${store_path} $NIX_BUILD_TOP/$name/data/${ZHUYIN_DATA_FILE_NAME}
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     description  = "Fcitx Wrapper for libpinyin, Library to deal with pinyin";
     homepage     = "https://github.com/fcitx/fcitx-libpinyin";

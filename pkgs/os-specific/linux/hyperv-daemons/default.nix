@@ -98,7 +98,7 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Integration Services for running NixOS under HyperV";
     longDescription = ''
       This packages contains the daemons that are used by the Hyper-V hypervisor

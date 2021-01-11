@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , gettext
 , libxml2
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A searchable command palette in every modern GTK application";
     homepage = "https://github.com/p-e-w/plotinus";
     maintainers = with maintainers; [ samdroid-apps ];

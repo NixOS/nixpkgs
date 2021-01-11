@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, boost, pkgconfig, cmake, catch2 }:
+{ lib, stdenv, fetchFromGitHub, boost, pkgconfig, cmake, catch2 }:
 
 stdenv.mkDerivation rec {
   pname = "grip-search";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/general/config.h --replace "CUSTOM-BUILD" "${version}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, indexed regexp search over large file trees";
     homepage = "https://github.com/sc0ty/grip";
     license = licenses.gpl3;

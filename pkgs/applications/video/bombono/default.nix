@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkgconfig
 , fetchpatch
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "a DVD authoring program for personal computers";
     homepage = "https://www.bombono.org/";
     license = licenses.gpl2Only;

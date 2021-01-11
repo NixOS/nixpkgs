@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, stdenv, fetchPypi, buildPythonPackage
 , setuptools, six, traits
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   doCheck = false; # Needs X server
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Traits-capable windowing framework";
     homepage = "https://github.com/enthought/pyface";
     maintainers = with stdenv.lib.maintainers; [ knedlsepp ];

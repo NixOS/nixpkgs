@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , unstableGitUpdater
 , makeWrapper
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bash shell-script implementation of SuperGenPass password generation";
     longDescription = ''
       Bash shell-script implementation of SuperGenPass password generation

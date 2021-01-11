@@ -1,4 +1,4 @@
-{ stdenv, runCommand, fetchzip, fetchurl, fetchpatch, fetchFromGitHub
+{ lib, stdenv, runCommand, fetchzip, fetchurl, fetchpatch, fetchFromGitHub
 , cmake, pkgconfig, zlib, libpng, makeWrapper
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
@@ -161,7 +161,7 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/k2pdfopt --set-default TESSDATA_PREFIX ${tesseract4}/share/tessdata
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Optimizes PDF/DJVU files for mobile e-readers (e.g. the Kindle) and smartphones";
     homepage = "http://www.willus.com/k2pdfopt";
     license = licenses.gpl3;

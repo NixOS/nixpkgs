@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , openssl
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     ++ stdenv.lib.optionals stdenv.isLinux [ openssl ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Expose your local web server to the internet with a public URL";
     homepage = "https://tunnelto.dev";
     license = licenses.mit;

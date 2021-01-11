@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fcitx, gettext, pkg-config }:
+{ lib, stdenv, fetchurl, cmake, fcitx, gettext, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-unikey";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --replace ${fcitx} $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-unikey";
     downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , attr, judy, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   # mystery, though. :-(
   enableParallelBuilding = (!stdenv.isi686);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stress test a computer system";
     longDescription = ''
       stress-ng will stress test a computer system in various selectable ways. It

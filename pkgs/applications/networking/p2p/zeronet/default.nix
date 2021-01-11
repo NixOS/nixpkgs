@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "zeronet";
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
       --set PATH ${python3Packages.python}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Decentralized websites using Bitcoin crypto and BitTorrent network";
     homepage = "https://zeronet.io/";
     license = licenses.gpl2;

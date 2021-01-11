@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib, stdenv,
   fetchgit,
   python3Packages,
   pkgconfig,
@@ -91,7 +91,7 @@ gcc8Stdenv.mkDerivation {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NoSQL data store using the seastar framework, compatible with Apache Cassandra";
     homepage = "https://scylladb.com";
     license = licenses.agpl3;

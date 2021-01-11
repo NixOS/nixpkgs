@@ -87,7 +87,7 @@ python3.pkgs.buildPythonApplication rec {
     $out/bin/${pname} --help > /dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Comic book reader and image viewer; python3 fork of mcomix";
     longDescription = ''
       User-friendly, customizable image viewer, specifically designed to handle

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "proto" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Beautiful, idiomatic protocol buffers in Python";
     homepage = "https://github.com/googleapis/proto-plus-python";
     license = licenses.asl20;

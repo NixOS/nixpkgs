@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : $out/bin:${lib.makeBinPath [ cryptsetup gettext gnupg pinentry util-linux e2fsprogs ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File encryption on GNU/Linux";
     homepage    = "https://www.dyne.org/software/tomb/";
     license     = licenses.gpl3;

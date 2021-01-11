@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, zlib, botan, libidn
+{ lib, stdenv, fetchurl, boost, zlib, botan, libidn
 , lua, pcre, sqlite, perl, pkgconfig, expect
 , bzip2, gmp, openssl
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   #doCheck = true; # some tests fail (and they take VERY long)
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free distributed version control system";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;

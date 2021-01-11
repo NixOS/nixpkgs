@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "ncrack";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network authentication tool";
     homepage = "https://nmap.org/ncrack/";
     license = licenses.gpl2Only;

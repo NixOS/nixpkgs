@@ -2,7 +2,7 @@
 , fetchpatch
 , substituteAll
 , runCommand
-, stdenv
+, lib, stdenv
 , pkgconfig
 , gnome3
 , gettext
@@ -146,7 +146,7 @@ let self = stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A window manager for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     license = licenses.gpl2;

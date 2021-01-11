@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, enableNLS ? false, libnatspec ? null, libiconv }:
+{ lib, stdenv, fetchurl, enableNLS ? false, libnatspec ? null, libiconv }:
 
 assert enableNLS -> libnatspec != null;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   buildInputs = stdenv.lib.optional enableNLS libnatspec
     ++ stdenv.lib.optional stdenv.isCygwin libiconv;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compressor/archiver for creating and modifying zipfiles";
     homepage = "http://www.info-zip.org";
     license = licenses.bsdOriginal;

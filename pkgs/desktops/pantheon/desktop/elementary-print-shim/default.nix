@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple shim for printing support via Contractor";
     homepage = "https://github.com/elementary/print";
     license = licenses.gpl3Plus;

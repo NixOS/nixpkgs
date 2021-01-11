@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, coreutils, ncurses }:
+{ lib, stdenv, fetchurl, makeWrapper, coreutils, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "pipes";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --set PATH "${stdenv.lib.makeBinPath [ coreutils ncurses ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pipeseroni/pipes.sh";
     description = "Animated pipes terminal screensaver";
     license = licenses.mit;

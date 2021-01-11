@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, yajl, cmake, libgcrypt, curl, expat, boost, libiberty }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, yajl, cmake, libgcrypt, curl, expat, boost, libiberty }:
 
 stdenv.mkDerivation rec {
   version = "0.5.1";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libgcrypt yajl curl expat stdenv boost libiberty ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A console Google Drive client";
     homepage = "https://github.com/vitalif/grive2";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   ];
   checkPhase = "nosetests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/andreafrancia/trash-cli";
     description = "Command line tool for the desktop trash can";
     maintainers = [ maintainers.rycee ];

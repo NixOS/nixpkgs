@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, slurm } :
+{ lib, stdenv, fetchFromGitHub, slurm } :
 let
   version = "0.2.5";
 in
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
       install -m 755 x11.so $out/lib
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/hautreux/slurm-spank-x11";
     description = "Plugin for SLURM to allow for interactive X11 sessions";
     platforms = platforms.linux;

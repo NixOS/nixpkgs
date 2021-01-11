@@ -18333,7 +18333,7 @@ let
     propagatedBuildInputs = [ SQLAbstract ];
     meta = {
       description = "Generate SQL from Perl data structures";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

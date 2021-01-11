@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cairo
 , meson
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "-Dsystemd_user_unit_dir=${placeholder "out"}/lib/systemd/user"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Mutter/RemoteDesktop";
     description = "GNOME Remote Desktop server";
     maintainers = teams.gnome.members;

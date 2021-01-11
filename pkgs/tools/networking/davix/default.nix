@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, openssl, libxml2, boost, python3, libuuid }:
+{ lib, stdenv, fetchurl, cmake, pkgconfig, openssl, libxml2, boost, python3, libuuid }:
 
 stdenv.mkDerivation rec {
   version = "0.7.6";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Toolkit for Http-based file management";
 
     longDescription = "Davix is a toolkit designed for file

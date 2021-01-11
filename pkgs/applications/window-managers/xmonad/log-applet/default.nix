@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, glib, dbus-glib
+{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, glib, dbus-glib
 , desktopSupport ? "gnomeflashback", xorg
 , gtk2
 , gtk3, gnome3, mate
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   # --define-variable=prefix=$prefix
   PKG_CONFIG_LIBXFCE4PANEL_1_0_LIBDIR = "$(out)/lib";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kalj/xmonad-log-applet";
     license = licenses.bsd3;
     broken = desktopSupport == "gnomeflashback";

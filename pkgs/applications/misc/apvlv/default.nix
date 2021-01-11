@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, pcre, libxkbcommon, epoxy
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, pcre, libxkbcommon, epoxy
 , gtk3, poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence, wrapGAppsHook
 }:
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     install -D ../apvlv.desktop $out/share/applications/apvlv.desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://naihe2010.github.io/apvlv/";
     description = "PDF viewer with Vim-like behaviour";
     longDescription = ''

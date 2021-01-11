@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , darwin
 , grpc
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grpc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HTTP/2-based RPC framework";
     license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";

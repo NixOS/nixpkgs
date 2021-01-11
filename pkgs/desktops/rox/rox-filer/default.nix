@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gtk, libSM, shared-mime-info }:
+{ lib, stdenv, fetchurl, pkgconfig, libxml2, gtk, libSM, shared-mime-info }:
 
 let
   version = "2.11";
@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
     ln -sv application-{msword,rtf}.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, lightweight, gtk2 file manager";
     homepage = "http://rox.sourceforge.net/desktop";
     license = with licenses; [ gpl2 lgpl2 ];

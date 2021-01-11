@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ssmsh";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-w -s -X main.Version=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bwhaley/ssmsh";
     description = "An interactive shell for AWS Parameter Store";
     license = licenses.mit;

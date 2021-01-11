@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, pkgconfig, gtk2, pcre, glib, libxml2
+{ lib, stdenv, fetchurl, which, pkgconfig, gtk2, pcre, glib, libxml2
 , libsoup ? null
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     rmdir "$out/usr"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://hardinfo.org/";
     description = "Display information about your hardware and operating system";
     license = licenses.gpl2;

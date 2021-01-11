@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, perl, makeWrapper, procps, coreutils }:
+{ fetchurl, lib, stdenv, perl, makeWrapper, procps, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "parallel-20200922";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shell tool for executing jobs in parallel";
     longDescription =
       '' GNU Parallel is a shell tool for executing jobs in parallel.  A job

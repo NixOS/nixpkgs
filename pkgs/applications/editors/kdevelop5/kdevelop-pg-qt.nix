@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, extra-cmake-modules, qtbase }:
+{ lib, stdenv, fetchurl, cmake, pkgconfig, extra-cmake-modules, qtbase }:
 
 let
   pname = "kdevelop-pg-qt";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = [ maintainers.ambrop72 ];
     platforms = platforms.linux;
     description = "Parser-generator from KDevplatform";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, exo, libXtst, xorgproto, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk3, hicolor-icon-theme, xfce }:
+{ lib, stdenv, fetchurl, pkgconfig, intltool, glib, exo, libXtst, xorgproto, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk3, hicolor-icon-theme, xfce }:
 
 let
   category = "panel-plugins";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.archiveLister category pname;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-cpugraph-plugin";
     description = "CPU graph show for Xfce panel";
     license = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, ocaml, fetchurl, type_conv }:
+{ lib, stdenv, buildOcaml, ocaml, fetchurl, type_conv }:
 
 if stdenv.lib.versionAtLeast ocaml.version "4.06"
 then throw "variantslib-109.15.03 is not available for OCaml ${ocaml.version}"
@@ -17,7 +17,7 @@ buildOcaml rec {
 
   propagatedBuildInputs = [ type_conv ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/janestreet/variantslib";
     description = "OCaml variants as first class values";
     license = licenses.asl20;

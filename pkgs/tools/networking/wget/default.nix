@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, pkgconfig, perlPackages
+{ lib, stdenv, fetchurl, gettext, pkgconfig, perlPackages
 , libidn2, zlib, pcre, libuuid, libiconv, libintl
 , python3, lzip
 , libpsl ? null
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for retrieving files using HTTP, HTTPS, and FTP";
 
     longDescription =

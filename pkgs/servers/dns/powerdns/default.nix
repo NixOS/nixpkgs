@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, nixosTests
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, nixosTests
 , boost, libyamlcpp, libsodium, sqlite, protobuf, openssl, systemd
 , mysql57, postgresql, lua, openldap, geoip, curl, unixODBC
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     nixos = nixosTests.powerdns;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Authoritative DNS server";
     homepage = "https://www.powerdns.com";
     platforms = platforms.unix;

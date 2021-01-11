@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , aiohttp
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   disabledTests = [ "test_logger" ];
   pythonImportsCheck = [ "engineio" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python based Engine.IO client and server";
     longDescription = ''
       Engine.IO is a lightweight transport protocol that enables real-time

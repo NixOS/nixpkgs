@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, which, docutils, freetype, pango }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, which, docutils, freetype, pango }:
 
 stdenv.mkDerivation rec {
   pname = "abcm2ps";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ freetype pango ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://moinejf.free.fr/";
     license = licenses.gpl3;
     description = "A command line program which converts ABC to music sheet in PostScript or SVG format";

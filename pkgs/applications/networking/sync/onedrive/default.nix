@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --zsh  --name _${pname} contrib/completions/complete.zsh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A complete tool to interact with OneDrive on Linux";
     homepage = "https://github.com/abraunegg/onedrive";
     license = licenses.gpl3;

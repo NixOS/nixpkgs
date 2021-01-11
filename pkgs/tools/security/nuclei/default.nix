@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -20,7 +20,7 @@ buildGoModule rec {
     mv v2/* .
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for configurable targeted scanning";
     longDescription = ''
       Nuclei is used to send requests across targets based on a template

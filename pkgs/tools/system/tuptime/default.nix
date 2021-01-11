@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , makeWrapper, installShellFiles
 , python3, sqlite }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${stdenv.lib.makeBinPath [ sqlite ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Total uptime & downtime statistics utility";
     homepage = "https://github.com/rfrail3/tuptime";
     license = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig
 , avahi, dbus, gettext, git, gnutar, gzip, bzip2, ffmpeg_3, libiconv, openssl, python
 , v4l-utils, which, zlib }:
 
@@ -68,7 +68,7 @@ in stdenv.mkDerivation {
       --prefix PATH : ${stdenv.lib.makeBinPath [ bzip2 ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TV streaming server";
     longDescription = ''
         Tvheadend is a TV streaming server and recorder for Linux, FreeBSD and Android

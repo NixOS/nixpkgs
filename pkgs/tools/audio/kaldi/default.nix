@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , openblas
 , blas
 , lapack
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     cp -r ../egs $out/share/kaldi
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Speech Recognition Toolkit";
     homepage = "https://kaldi-asr.org";
     license = licenses.mit;

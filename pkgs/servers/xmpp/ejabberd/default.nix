@@ -110,7 +110,7 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source XMPP application server written in Erlang";
     license = licenses.gpl2;
     homepage = "https://www.ejabberd.im";

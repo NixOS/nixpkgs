@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , autoreconfHook
 , pkgconfig
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Infrastructure for building mobile telephony (GSM/UMTS) applications";
     homepage = "https://01.org/ofono";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libXrandr}:
+{ fetchurl, lib, stdenv, libXrandr}:
 
 stdenv.mkDerivation rec {
   version = "0.01";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     install xrandr-invert-colors $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Inverts the colors of your screen";
     license = stdenv.lib.licenses.gpl3Plus;
     homepage = "https://github.com/zoltanp/xrandr-invert-colors";

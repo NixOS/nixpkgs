@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, libpulseaudio }:
 
 stdenv.mkDerivation {
   name = "gbsplay-2016-12-17";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "tests=" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "gameboy sound player";
     license = licenses.gpl1;
     platforms = ["i686-linux" "x86_64-linux"];

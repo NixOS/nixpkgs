@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       $out/bin/openbazaard
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Decentralized Peer to Peer Marketplace for Bitcoin - daemon";
     homepage = "https://www.openbazaar.org/";
     license = licenses.mit;

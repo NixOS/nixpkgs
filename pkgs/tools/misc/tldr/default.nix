@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, curl, libzip, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, curl, libzip, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "tldr";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simplified and community-driven man pages";
     longDescription = ''
       tldr pages gives common use cases for commands, so you don't need to hunt

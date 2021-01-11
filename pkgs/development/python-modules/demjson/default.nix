@@ -1,4 +1,4 @@
-{ stdenv, python, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, stdenv, python, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "demjson";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     ${python.interpreter} test/test_demjson.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Encoder/decoder and lint/validator for JSON (JavaScript Object Notation)";
     homepage = "https://github.com/dmeranda/demjson";
     license = licenses.lgpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
+{ lib, stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2
 , for_HP_laptop ? false
 }:
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GRUB 2.0 extended with TCG (TPM) support for integrity measured boot process (trusted boot)";
     homepage = "https://github.com/Sirrix-AG/TrustedGRUB2";
     license = licenses.gpl3Plus;

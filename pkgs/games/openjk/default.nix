@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, libGL, SDL2 }:
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, libGL, SDL2 }:
 
 let
   jamp = makeDesktopItem rec {
@@ -53,7 +53,7 @@ in stdenv.mkDerivation {
     ln -s ${jasp}/share/applications/* $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source engine for Star Wars Jedi Academy game";
     homepage = "https://github.com/JACoders/OpenJK";
     license = licenses.gpl2;

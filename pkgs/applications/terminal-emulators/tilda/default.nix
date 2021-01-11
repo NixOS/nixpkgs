@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Gtk based drop down terminal for Linux and Unix";
     homepage = "https://github.com/lanoxx/tilda/";
     license = licenses.gpl3Plus;

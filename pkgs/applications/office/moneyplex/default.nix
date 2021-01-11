@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, coreutils, pcsclite
+{ lib, stdenv, fetchurl, patchelf, coreutils, pcsclite
 , zlib, glib, gdk-pixbuf, gtk2, cairo, pango, libX11, atk, openssl
 , runtimeShell }:
 
@@ -111,7 +111,7 @@ stdenv.mkDerivation {
     '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Moneyplex online banking software";
     maintainers = with maintainers; [ tstrobel ];
     platforms = platforms.linux;

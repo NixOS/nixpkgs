@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper
 , fontconfig, freetype, glib, gtk3
 , jdk, libX11, libXrender, libXtst, zlib }:
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     ln -s $out/dbeaver/icon.xpm $out/share/pixmaps/dbeaver.xpm
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://dbeaver.io/";
     description = "Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more";
     longDescription = ''

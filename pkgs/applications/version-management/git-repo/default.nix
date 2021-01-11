@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , python3, git, gnupg, less
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       "${stdenv.lib.makeBinPath [ git gnupg less ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Android's repo management tool";
     longDescription = ''
       Repo is a Python script based on Git that helps manage many Git

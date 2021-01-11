@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchzip
 , alsaLib
 , glib
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       $out/bin/KodeLife
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://hexler.net/products/kodelife";
     description = "Real-time GPU shader editor";
     license = licenses.unfree;

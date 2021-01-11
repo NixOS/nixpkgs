@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , google-api-core
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.runtimeconfig" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Cloud RuntimeConfig API client library";
     homepage = "https://pypi.org/project/google-cloud-runtimeconfig";
     license = licenses.asl20;

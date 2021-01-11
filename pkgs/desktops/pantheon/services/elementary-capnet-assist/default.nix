@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small WebKit app that assists a user with login when a captive portal is detected";
     homepage = "https://github.com/elementary/capnet-assist";
     license = licenses.gpl2Plus;

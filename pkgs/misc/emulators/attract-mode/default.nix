@@ -1,5 +1,5 @@
 { expat, fetchFromGitHub, ffmpeg_3, fontconfig, freetype, libarchive, libjpeg
-, libGLU, libGL, openal, pkgconfig, sfml, stdenv, zlib
+, libGLU, libGL, openal, pkgconfig, sfml, lib, stdenv, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     expat ffmpeg_3 fontconfig freetype libarchive libjpeg libGLU libGL openal sfml zlib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A frontend for arcade cabinets and media PCs";
     homepage = "http://attractmode.org";
     license = licenses.gpl3Plus;

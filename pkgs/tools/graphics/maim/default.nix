@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig
 , zlib, libpng, libjpeg, libGLU, libGL, glm
 , libX11, libXext, libXfixes, libXrandr, libXcomposite, slop, icu
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "A command-line screenshot utility";
     longDescription = ''

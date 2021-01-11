@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchsvn
 , jdk
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
     cp -r dist/examples $out/share/mkgmap/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";
     homepage = "http://www.mkgmap.org.uk";
     license = licenses.gpl2Only;

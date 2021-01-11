@@ -1,4 +1,4 @@
-{ stdenv, kernel, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, kernel, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "zenpower";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     install -D zenpower.ko -t "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon/zenpower/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux kernel driver for reading temperature, voltage(SVI2), current(SVI2) and power(SVI2) for AMD Zen family CPUs.";
     homepage = "https://github.com/ocerman/zenpower";
     license = licenses.gpl2;

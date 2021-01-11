@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , makeWrapper, makeDesktopItem, mkYarnPackage
 , electron_9, element-web
 }:
@@ -72,7 +72,7 @@ in mkYarnPackage rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A feature-rich client for Matrix.org";
     homepage = "https://element.io/";
     license = licenses.asl20;

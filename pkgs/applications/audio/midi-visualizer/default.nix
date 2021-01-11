@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, libX11, glfw, makeWrapper,
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libX11, glfw, makeWrapper,
   libXrandr, libXinerama, libXcursor, gtk3, ffmpeg-full, ...}:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small MIDI visualizer tool, using OpenGL";
     homepage = "https://github.com/kosua20/MIDIVisualizer";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "API documentation browser for GNOME";
     homepage = "https://wiki.gnome.org/Apps/Devhelp";
     license = licenses.gpl3Plus;

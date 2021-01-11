@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook, intltool
 , gtk, pkgconfig, flex }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
   buildInputs = [ gtk flex ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GTK 2/3 algebraic and RPN calculator";
     longDescription = ''
       galculator is a GTK 2 / GTK 3 based calculator. Its main features include:

@@ -40,7 +40,7 @@ let
       }
     ''}
 
-    ${credentialsPlaceholder cfg.credentials}
+    ${optionalString (cfg.credentials != []) (credentialsPlaceholder cfg.credentials)}
 
     ${cfg.extraConfig}
   '';
@@ -234,9 +234,10 @@ in {
           ExecStartPre = pkgs.writeShellScript "mpd-start-pre" ''
             set -euo pipefail
             install -m 600 ${mpdConf} /run/mpd/mpd.conf
-            ${pkgs.replace}/bin/replace-literal -fe ${
+            ${optionalString (cfg.credentials != [])
+            "${pkgs.replace}/bin/replace-literal -fe ${
               concatStringsSep " -a " (imap0 (i: c: "\"{{password-${toString i}}}\" \"$(cat ${c.passwordFile})\"") cfg.credentials)
-            } /run/mpd/mpd.conf
+            } /run/mpd/mpd.conf"}
           '';
           RuntimeDirectory = "mpd";
           Type = "notify";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchurl, fetchFromGitHub, pkgconfig
 , libtool, autoconf, automake, cppunit
 , libtorrent, ncurses, libsigcxx, curl
 , zlib, openssl, xmlrpc_c
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     mv doc/rtorrent.rc $out/share/doc/rtorrent/rtorrent.rc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://rakshasa.github.io/rtorrent/";
     description = "An ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
 

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , grpc_google_iam_v1
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pytest tests/unit -k 'not policy'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Cloud Bigtable API client library";
     homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;

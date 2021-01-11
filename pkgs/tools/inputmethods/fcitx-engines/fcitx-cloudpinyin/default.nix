@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkg-config, fcitx, gettext, curl }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, fcitx, gettext, curl }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-cloudpinyin";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace ${fcitx} $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     description  = "A standalone module for fcitx that uses web API to provide better pinyin result";
     homepage     = "https://github.com/fcitx/fcitx-cloudpinyin";

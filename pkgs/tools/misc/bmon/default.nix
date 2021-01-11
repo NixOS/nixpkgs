@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, ncurses, libconfuse
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, ncurses, libconfuse
 , libnl }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network bandwidth monitor";
     homepage = "https://github.com/tgraf/bmon";
     # Licensed unter BSD and MIT

@@ -1,5 +1,5 @@
 { mkXfceDerivation
-, stdenv
+, lib, stdenv
 , intltool
 , libxfce4ui
 , xfce4-panel
@@ -26,7 +26,7 @@ mkXfceDerivation {
     xfce4-panel
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shows the date and time in the panel, and a calendar appears when you left-click on it";
     maintainers = [ maintainers.AndersonTorres ];
   };

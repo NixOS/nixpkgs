@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
 , librsvg, gsound, gettext, itstool, libxml2
 , meson, ninja, vala, python3, desktop-file-utils
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Taquin";
     description = "Move tiles so that they reach their places";
     maintainers = teams.gnome.members;

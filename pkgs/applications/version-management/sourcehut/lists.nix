@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ lib, stdenv, fetchgit, buildPythonPackage
 , python
 , srht, asyncpg, aiosmtpd, pygit2, emailthreads }:
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     description = "Mailing list service for the sr.ht network";
     license = licenses.agpl3;

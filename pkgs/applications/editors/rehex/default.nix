@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , capstone
 , jansson
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ] ++ (stdenv.lib.optionals stdenv.isDarwin [ "-f Makefile.osx" ]);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reverse Engineers' Hex Editor";
     longDescription = ''
       A cross-platform (Windows, Linux, Mac) hex editor for reverse

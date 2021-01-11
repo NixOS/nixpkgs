@@ -21,7 +21,7 @@ mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://citra-emu.org";
     description = "An open-source emulator for the Nintendo 3DS";
     license = licenses.gpl2;

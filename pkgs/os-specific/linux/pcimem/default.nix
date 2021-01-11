@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "pcimem";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     install -D README "$doc/doc/README"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple method of reading and writing to memory registers on a PCI card";
     homepage = "https://github.com/billfarrow/pcimem";
     license = licenses.gpl2Only;

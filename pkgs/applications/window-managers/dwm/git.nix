@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libX11, libXinerama, libXft, patches ? [], conf ? null }:
+{ lib, stdenv, fetchgit, libX11, libXinerama, libXft, patches ? [], conf ? null }:
 
 let
   name = "dwm-git-20180602";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   buildPhase = "make";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://suckless.org/";
     description = "Dynamic window manager for X, development version";
     license = licenses.mit;

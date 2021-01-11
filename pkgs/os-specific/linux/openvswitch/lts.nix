@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, util-linux, which
+{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, util-linux, which
 , procps, libcap_ng, openssl, python2, iproute , perl
 , automake, autoconf, libtool, kernel ? null }:
 
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
       --replace "self.cert_dir" "root_prefix + self.cert_dir"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     description = "A multilayer virtual switch";
     longDescription =

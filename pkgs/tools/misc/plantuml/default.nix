@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, graphviz }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, graphviz }:
 
 stdenv.mkDerivation rec {
   version = "1.2020.22";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     $out/bin/plantuml -help
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Draw UML diagrams using a simple and human readable text description";
     homepage = "http://plantuml.sourceforge.net/";
     # "plantuml -license" says GPLv3 or later

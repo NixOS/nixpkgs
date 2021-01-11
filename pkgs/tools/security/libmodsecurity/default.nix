@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , doxygen, perl, valgrind
 , curl, geoip, libxml2, lmdb, lua, pcre, yajl }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       ModSecurity v3 library component.
     '';

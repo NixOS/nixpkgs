@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, substituteAll, libtool, pkgconfig, gettext, gnused
+{ lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, libtool, pkgconfig, gettext, gnused
 , gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
 , expat, libxslt, docbook_xsl, util-linux, mdadm, libgudev, libblockdev, parted
 , gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43, autoconf, automake
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A daemon, tools and libraries to access and manipulate disks, storage devices and technologies";
     homepage = "https://www.freedesktop.org/wiki/Software/udisks/";
     license = with licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the tools & daemon

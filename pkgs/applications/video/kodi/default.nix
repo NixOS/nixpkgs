@@ -282,7 +282,7 @@ in stdenv.mkDerivation {
       pythonPackages = python2Packages;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Media center";
       homepage    = "https://kodi.tv/";
       license     = licenses.gpl2;

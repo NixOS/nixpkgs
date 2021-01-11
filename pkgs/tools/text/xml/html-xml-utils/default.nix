@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, curl, libiconv }:
+{ lib, stdenv, fetchurl, curl, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "html-xml-utils";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [curl libiconv];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities for manipulating HTML and XML files";
     homepage = "http://www.w3.org/Tools/HTML-XML-utils/";
     license = licenses.w3c;

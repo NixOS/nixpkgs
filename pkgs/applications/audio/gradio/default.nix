@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkgconfig
 , python3
 , gsettings-desktop-schemas
 , desktop-file-utils
@@ -62,7 +62,7 @@ in stdenv.mkDerivation {
 
   patches = [ ./0001-Remove-post-install-script-that-hardcodes-paths.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/haecker-felix/gradio";
     description = "A GTK3 app for finding and listening to internet radio stations";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 let
   version = "0.16.3";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     mv octant $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Highly extensible platform for developers to better understand the complexity of Kubernetes clusters.";
     longDescription = ''
       Octant is a tool for developers to understand how applications run on a Kubernetes cluster.

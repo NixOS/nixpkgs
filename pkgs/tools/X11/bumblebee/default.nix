@@ -133,7 +133,7 @@ in stdenv.mkDerivation rec {
       --prefix PATH : "${virtualgl}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Bumblebee-Project/Bumblebee";
     description = "Daemon for managing Optimus videocards (power-on/off, spawns xservers)";
     platforms = platforms.linux;

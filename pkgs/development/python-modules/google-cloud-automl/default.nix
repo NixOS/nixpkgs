@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     "google.cloud.automl_v1beta1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cloud AutoML API client library";
     homepage = "https://github.com/googleapis/python-automl";
     license = licenses.asl20;

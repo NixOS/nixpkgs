@@ -58,7 +58,7 @@ let
           version = "1.0.1";
           sha256 = "0zd0n9f5z1f0ckzfjr38xw2zzmcxg1gjrava7yahg5cvdcw6l35b";
         };
-        meta = with stdenv.lib; {
+        meta = with lib; {
           license = licenses.mit;
         };
       };
@@ -70,7 +70,7 @@ let
           version = "0.0.1";
           sha256 = "07w35c69vk1l6vipnq3qfack36qcszqxn8j3v332bl0w6m02aa7k";
         };
-        meta = with stdenv.lib; {
+        meta = with lib; {
           license = licenses.mpl20;
         };
       };
@@ -82,7 +82,7 @@ let
           version = "0.1.0";
           sha256 = "0q089jnzqzhjfnv0vlb5kf747s3mgz64r7q3zscl66zb2pz5q4zd";
         };
-        meta = with stdenv.lib; {
+        meta = with lib; {
           license = licenses.mit;
         };
       };
@@ -94,7 +94,7 @@ let
           version = "0.2.0";
           sha256 = "0nppgfbmw0d089rka9cqs3sbd5260dhhiipmjfga3nar9vp87slh";
         };
-        meta = with stdenv.lib; {
+        meta = with lib; {
           license = licenses.mit;
         };
       };
@@ -162,7 +162,7 @@ let
           version = "1.1.0";
           sha256 = "1wg06lyk0qn9jd6gi007sg7v0z9z8gwq7x2449d4ihs9n3w5l0gb";
         };
-        meta = with stdenv.lib; {
+        meta = with lib; {
           license = licenses.mit;
         };
       };
@@ -174,7 +174,7 @@ let
           version = "0.1.2";
           sha256 = "0i9kpnlk3naycc7k8gmcxas3s06d67wxr3nnyv5hxmsnsx5sfvb7";
         };
-        meta = with stdenv.lib; {
+        meta = with lib; {
           license = licenses.mit;
         };
       };
@@ -186,7 +186,7 @@ let
           version = "8.2.0";
           sha256 = "1ai16aam4v5jzhxgms589q0l24kyk1a9in6z4i7g05b3sahyxab2";
         };
-        meta = with stdenv.lib; {
+        meta = with lib; {
           license = licenses.mit;
         };
       };
@@ -364,7 +364,7 @@ let
           version = "0.2.1";
           sha256 = "0y1ivymn81ranmir25zk83kdjpjwcqpnc9r3jwfykjd9x0jib2hl";
         };
-        meta = with stdenv.lib; {
+        meta = with lib; {
           license = licenses.mit;
         };
       };
@@ -430,7 +430,7 @@ let
           version = "1.9.0";
           sha256 = "abd0ef9176eff864f278c548c944032b8f4d8ec97d9ac6e7383d60c92e258c2f";
         };
-        meta = with stdenv.lib; {
+        meta = with lib; {
           license = licenses.mit;
           maintainers = [ maintainers.zeratax ];
         };

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, libpsm2 }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, libpsm2 }:
 
 stdenv.mkDerivation rec {
   pname = "libfabric";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-psm2=${libpsm2}" ] ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://libfabric.org/";
     description = "Open Fabric Interfaces";
     license = with licenses; [ gpl2 bsd2 ];

@@ -1,4 +1,5 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , dbus-python
 , fetchFromGitHub
 , numpy
@@ -7,7 +8,7 @@
 }:
 
 let
-  common = import ./common.nix { inherit stdenv fetchFromGitHub; };
+  common = import ./common.nix { inherit stdenv lib fetchFromGitHub; };
 in
 buildPythonPackage (common // rec {
   pname = "openrazer";

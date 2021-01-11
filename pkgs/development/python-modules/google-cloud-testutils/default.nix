@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, google-auth, six }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, google-auth, six }:
 
 buildPythonPackage rec {
   pname = "google-cloud-testutils";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "test_utils" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System test utilities for google-cloud-python";
     homepage = "https://github.com/googleapis/python-test-utils";
     license = licenses.asl20;

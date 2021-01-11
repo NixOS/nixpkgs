@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, openssl, curl, coreutils, gawk, bash, which }:
+{ lib, stdenv, fetchgit, openssl, curl, coreutils, gawk, bash, which }:
 
 stdenv.mkDerivation {
   name = "esniper-2.35.0-21-g6379846";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     chmod 555 "$out/bin/snipe"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple, lightweight tool for sniping eBay auctions";
     homepage    = "http://esniper.sourceforge.net";
     license     = licenses.gpl2;

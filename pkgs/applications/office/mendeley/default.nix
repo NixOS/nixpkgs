@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, mkDerivation, dpkg, which
+{ fetchurl, lib, stdenv, mkDerivation, dpkg, which
 , makeWrapper
 , alsaLib
 , desktop-file-utils
@@ -136,7 +136,7 @@ mkDerivation {
 
   updateScript = import ./update.nix { inherit writeScript runtimeShell; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mendeley.com";
     description = "A reference manager and academic social network";
     license = licenses.unfree;

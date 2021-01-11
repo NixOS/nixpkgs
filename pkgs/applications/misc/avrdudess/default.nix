@@ -1,4 +1,4 @@
-{ stdenv, runtimeShell, fetchurl, unzip, mono, avrdude, gtk2, xdg_utils }:
+{ lib, stdenv, runtimeShell, fetchurl, unzip, mono, avrdude, gtk2, xdg_utils }:
 
 stdenv.mkDerivation {
   name = "avrdudess-2.2.20140102";
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     chmod a+x "$out/bin/"*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for AVRDUDE (AVR microcontroller programmer)";
     homepage = "https://github.com/zkemble/AVRDUDESS";
     license = licenses.gpl3;

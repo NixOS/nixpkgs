@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, git, doxygen, graphviz
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, git, doxygen, graphviz
 , boost, miniupnpc, openssl, unbound, cppzmq
 , zeromq, pcsclite, readline, libsodium
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "fortify" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Private, secure, untraceable currency";
     homepage = "http://www.aeon.cash/";
     license = licenses.bsd3;

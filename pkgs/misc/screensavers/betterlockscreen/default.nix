@@ -1,5 +1,5 @@
 {
-  stdenv, makeWrapper, fetchFromGitHub,
+  lib, stdenv, makeWrapper, fetchFromGitHub,
   imagemagick, i3lock-color, xdpyinfo, xrandr, bc, feh, procps, xrdb
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       wrapProgram "$out/bin/betterlockscreen" --prefix PATH : "$out/bin:${PATH}"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple minimal lock screen which allows you to cache images with different filters and lockscreen with blazing speed";
     homepage = "https://github.com/pavanjadhaw/betterlockscreen";
     license = licenses.mit;

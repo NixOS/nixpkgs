@@ -1,4 +1,4 @@
-{stdenv, fetchgit, autoreconfHook, halibut}:
+{lib, stdenv, fetchgit, autoreconfHook, halibut}:
 let
   date = "20200705";
   rev = "2a7d4a2";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [autoreconfHook halibut];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Unix utility for tracking down wasted disk space";
     longDescription = ''
        Most Unix file systems, in their default mode, helpfully record when a

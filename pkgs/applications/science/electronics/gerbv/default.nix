@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, gettext, libtool, automake, autoconf, cairo, gtk2, autoreconfHook }:
+{ lib, stdenv, fetchgit, pkgconfig, gettext, libtool, automake, autoconf, cairo, gtk2, autoreconfHook }:
 
 stdenv.mkDerivation {
   pname = "gerbv";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   configureFlags = ["--disable-update-desktop-database"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Gerber (RS-274X) viewer";
     homepage = "http://gerbv.geda-project.org/";
     maintainers = with maintainers; [ mog ];

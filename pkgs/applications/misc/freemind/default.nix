@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, jre, ant }:
+{ lib, stdenv, fetchurl, jdk, jre, ant }:
 
 stdenv.mkDerivation rec {
   pname = "freemind";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/{bin/freemind,nix-support/dist/freemind.sh}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mind-mapping software";
     homepage = "http://freemind.sourceforge.net/wiki/index.php/Main_Page";
     license = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "corerad";
@@ -31,7 +31,7 @@ buildGoModule rec {
     inherit (nixosTests) corerad;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mdlayher/corerad";
     description = "Extensible and observable IPv6 NDP RA daemon";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , jdk
 , ant, cunit, ncurses
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     cp lib/libwrapper.so $out/lib/libwrapper.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enables a Java Application to be run as a Windows Service or Unix Daemon";
     homepage = "https://wrapper.tanukisoftware.com/";
     license = licenses.gpl2;

@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "03wf9r2csi6jpa7v5sw5lpxkrk4wfzwmzx7k3991q3bdjzcwnnwp";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = licenses.unlicense;
@@ -58,13 +58,13 @@ then be taken from the failed build. A fake hash can be used for
 `cargoSha256` as follows:
 
 ```
-  cargoSha256 = stdenv.lib.fakeSha256;
+  cargoSha256 = lib.fakeSha256;
 ```
 
 For `cargoHash` you can use:
 
 ```
-  cargoHash = stdenv.lib.fakeHash;
+  cargoHash = lib.fakeHash;
 ```
 
 Per the instructions in the [Cargo Book](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html)

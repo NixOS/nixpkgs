@@ -1,4 +1,4 @@
-{ stdenv, xorg, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, xorg, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "go-sct";
@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   buildInputs = [ xorg.libX11 xorg.libXrandr ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Color temperature setting library and CLI that operates in a similar way to f.lux and Redshift";
     license = licenses.mit;
     maintainers = with maintainers; [ rvolosatovs cstrahan ];

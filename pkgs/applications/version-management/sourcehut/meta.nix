@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ lib, stdenv, fetchgit, buildPythonPackage
 , python
 , buildGoModule
 , pgpy, srht, redis, bcrypt, qrcode, stripe, zxcvbn, alembic, pystache
@@ -50,7 +50,7 @@ in buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";
     license = licenses.agpl3;

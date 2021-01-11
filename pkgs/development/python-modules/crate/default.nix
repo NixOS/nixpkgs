@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchPypi
 , buildPythonPackage
 , urllib3
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/crate/crate-python";
     description = "A Python client library for CrateDB";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, go-rice }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, go-rice }:
 
 buildGoModule rec {
   pname = "cfssl";
@@ -40,7 +40,7 @@ buildGoModule rec {
       -X github.com/cloudflare/cfssl/cli/version.version=v${version}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cfssl.org/";
     description = "Cloudflare's PKI and TLS toolkit";
     license = licenses.bsd2;

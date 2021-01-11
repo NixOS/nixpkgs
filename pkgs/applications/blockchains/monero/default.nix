@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "source" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Private, secure, untraceable currency";
     homepage    = "https://getmonero.org/";
     license     = licenses.bsd3;

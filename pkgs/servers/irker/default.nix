@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, python, pkgconfig
+{ lib, stdenv, fetchFromGitLab, python, pkgconfig
 , xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_412 }:
 
 stdenv.mkDerivation {
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     "DESTDIR=$$out"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "IRC client that runs as a daemon accepting notification requests";
     homepage = "https://gitlab.com/esr/irker";
     license = licenses.bsd2;

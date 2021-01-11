@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, pkgconfig
 , openssl, ldns
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     cp ./dnsperf-src-*/doc/*.pdf "$doc/share/doc/dnsperf/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     outputsToInstall = outputs; # The man pages and docs are likely useful to most.
 
     description = "Tools for DNS benchmaring";

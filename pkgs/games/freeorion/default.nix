@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, doxygen, graphviz, makeWrapper
+{ lib, stdenv, fetchFromGitHub, cmake, doxygen, graphviz, makeWrapper
 , boost168, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff
 , libjpeg, libGLU, libGL, glew, libxslt
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : $out/lib/freeorion
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, open source, turn-based space empire and galactic conquest (4X) computer game";
     homepage = "http://www.freeorion.org";
     license = with licenses; [ gpl2 cc-by-sa-30 ];

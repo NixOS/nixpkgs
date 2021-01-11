@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glib, gnome3, gettext }:
+{ lib, stdenv, fetchFromGitHub, glib, gnome3, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-topicons-plus";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   uuid = "TopIcons@phocean.net";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Brings all icons back to the top panel, so that it's easier to keep track of apps running in the backround";
     license = licenses.gpl2;
     maintainers = with maintainers; [ eperuffo ];

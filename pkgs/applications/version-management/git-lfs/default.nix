@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, ronn, installShellFiles }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, ronn, installShellFiles }:
 
 buildGoPackage rec {
   pname = "git-lfs";
@@ -27,7 +27,7 @@ buildGoPackage rec {
     installManPage go/src/${goPackagePath}/man/*.{1,5}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Git extension for versioning large files";
     homepage    = "https://git-lfs.github.com/";
     changelog   = "https://github.com/git-lfs/git-lfs/blob/v${version}/CHANGELOG.md";

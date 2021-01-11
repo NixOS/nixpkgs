@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python2, makeWrapper }:
 
 python2.pkgs.buildPythonApplication rec {
   pname = "headphones";
@@ -24,7 +24,7 @@ python2.pkgs.buildPythonApplication rec {
     makeWrapper $out/Headphones.py $out/bin/headphones
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic music downloader for SABnzbd";
     license     = licenses.gpl3;
     homepage    = "https://github.com/rembo10/headphones";

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, dune, cppo, easy-format, biniou }:
+{ lib, stdenv, fetchzip, ocaml, findlib, dune, cppo, easy-format, biniou }:
 let
   pname = "yojson";
   param =
@@ -34,7 +34,7 @@ stdenv.mkDerivation ({
   propagatedBuildInputs = [ easy-format biniou ];
   configurePlatforms = [];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An optimized parsing and printing library for the JSON format";
     homepage = "https://github.com/ocaml-community/${pname}";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The file manager for GNOME";
     homepage = "https://wiki.gnome.org/Apps/Files";
     license = licenses.gpl3Plus;

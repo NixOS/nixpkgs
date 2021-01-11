@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ncurses5 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses5 }:
 
 stdenv.mkDerivation rec {
   pname = "angband";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses5 ];
   installFlags = [ "bindir=$(out)/bin" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://rephial.org/";
     description = "A single-player roguelike dungeon exploration game";
     maintainers = [ maintainers.chattered ];

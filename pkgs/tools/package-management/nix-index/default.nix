@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, makeWrapper, openssl, curl
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkgconfig, makeWrapper, openssl, curl
 , nix, Security
 }:
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : "${stdenv.lib.makeBinPath [ nix ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A files database for nixpkgs";
     homepage = "https://github.com/bennofs/nix-index";
     license = with licenses; [ bsd3 ];

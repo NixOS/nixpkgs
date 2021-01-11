@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkgconfig
 , libX11, libxcb, cairo, gtk2, pango, python27, python3
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postFixup = "chmod -x $out/share/lighthouse/.config/lighthouse/google.py";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple flexible popup dialog to run on X";
     homepage = "https://github.com/emgram769/lighthouse";
     license = licenses.mit;

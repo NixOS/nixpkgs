@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, automake, pkgconfig
+{ lib, stdenv, fetchurl, autoreconfHook, automake, pkgconfig
 , cairo, ghostscript, ngspice, tcl, tk, xorg, zlib }:
 
 let
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
 
   buildInputs = with xorg; [ cairo ghostscript libSM libXt libICE libX11 libXpm tcl tk zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generic drawing program tailored to circuit diagrams";
     homepage = "http://opencircuitdesign.com/xcircuit";
     license = licenses.gpl2;

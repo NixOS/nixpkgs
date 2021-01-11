@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, writeText, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, writeText, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "limesurvey";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     smoke-test = nixosTests.limesurvey;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source survey application";
     license = licenses.gpl2;
     homepage = "https://www.limesurvey.org";

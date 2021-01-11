@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchPypi, python3Packages }:
+{ lib, stdenv, buildPythonApplication, fetchPypi, python3Packages }:
 
 buildPythonApplication rec {
   pname = "remarkable-mouse";
@@ -15,7 +15,7 @@ buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "remarkable_mouse" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A program to use a reMarkable as a graphics tablet";
     homepage = "https://github.com/evidlo/remarkable_mouse";
     license = licenses.gpl3;

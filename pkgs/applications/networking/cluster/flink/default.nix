@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre
+{ lib, stdenv, fetchurl, makeWrapper, jre
 , version ? "1.6" }:
 
 let
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A distributed stream processing framework";
     homepage = "https://flink.apache.org";
     downloadPage = "https://flink.apache.org/downloads.html";
