@@ -2,19 +2,24 @@
 , Security
 }:
 
-rustPlatform.buildRustPackage {
-  name = "uutils-coreutils-2019-05-03";
+let
+  pname = "uutils-coreutils";
+  version = "0.0.2";
+
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
-    rev = "036dd812958ace22d973acf7b370f58072049dac";
-    sha256 = "0d9w3iiphhsk7l5l34682wayp90rgq5a3d94l3qdvhcqkfmpg727";
+    rev = version;
+    sha256 = "0rlvwmyk8c597x1krvlyyqhk1m7g2pz2rkwsam8yj3ksb670g53j";
   };
+in
+rustPlatform.buildRustPackage {
+  inherit pname version src;
 
   # too many impure/platform-dependent tests
   doCheck = false;
 
-  cargoSha256 = "186hwzdpy7j0gw7491qx02vy4di5md47hipf1xxi1qccvmcfghwh";
+  cargoSha256 = "102gx1fm37zrvi1jmbv2fj9ds7j7s00aqa9880pja3sh6ykqk0rb";
 
   makeFlags =
     [ "CARGO=${cargo}/bin/cargo" "PREFIX=$(out)" "PROFILE=release" "INSTALLDIR_MAN=$(out)/share/man/man1" ]
