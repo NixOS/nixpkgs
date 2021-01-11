@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkgconfig
 , wafHook
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CLI downloader optimized for speed and early preview";
     homepage = "https://saldl.github.io";
     license = licenses.agpl3;

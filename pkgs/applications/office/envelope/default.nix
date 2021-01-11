@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Personal finance manager for elementary OS";
     homepage = "https://github.com/cjfloss/envelope";
     maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, ffmpeg-full, graphicsmagick
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, ffmpeg-full, graphicsmagick
 , quicktemplate, go-bindata, easyjson }:
 
 buildGoPackage {
@@ -18,7 +18,7 @@ buildGoPackage {
 
   buildInputs = [ ffmpeg-full graphicsmagick quicktemplate easyjson ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bakape/hydron";
     description = "High performance media tagger and organizer";
     license = licenses.lgpl3Plus;

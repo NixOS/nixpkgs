@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
   pname = "ipmicfg";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
    dontPatchShebangs = true; # There are no scripts and it complains about null bytes.
 
-   meta = with stdenv.lib; {
+   meta = with lib; {
      description = "Supermicro IPMI configuration tool";
      homepage = "http://www.supermicro.com/products/nfo/ipmi.cfm";
      license = licenses.unfree;

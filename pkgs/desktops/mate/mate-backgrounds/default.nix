@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, gettext }:
+{ lib, stdenv, fetchurl, meson, ninja, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "mate-backgrounds";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Background images and data for MATE";
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2;

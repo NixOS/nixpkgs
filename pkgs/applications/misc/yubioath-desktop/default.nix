@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mkDerivation
+{ lib, stdenv, fetchurl, mkDerivation
 , qmake, qtbase, qtquickcontrols2, qtgraphicaleffects
 , python3, pyotherside
 , pcsclite, yubikey-personalization
@@ -51,7 +51,7 @@ mkDerivation rec {
         --replace 'Icon=yubioath' "Icon=$out/share/yubioath/icons/com.yubico.yubioath.png"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yubico Authenticator";
     longDescription = ''
       Application for generating Open Authentication (OATH) time-based TOTP and

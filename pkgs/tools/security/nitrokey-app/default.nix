@@ -1,4 +1,4 @@
-{ stdenv, bash-completion, cmake, fetchFromGitHub, hidapi, libusb1, pkgconfig
+{ lib, stdenv, bash-completion, cmake, fetchFromGitHub, hidapi, libusb1, pkgconfig
 , qtbase, qttranslations, qtsvg, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description      = "Provides extra functionality for the Nitrokey Pro and Storage";
     longDescription  = ''
        The nitrokey-app provides a QT system tray widget with wich you can

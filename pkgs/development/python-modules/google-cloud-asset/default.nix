@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , grpc_google_iam_v1
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     "google.cloud.asset_v1p5beta1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Client for Google Cloud Asset API";
     homepage = "https://github.com/googleapis/python-asset";
     license = licenses.asl20;

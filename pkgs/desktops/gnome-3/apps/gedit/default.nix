@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , meson
 , fetchurl
 , python3
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Gedit";
     description = "Official text editor of the GNOME desktop environment";
     maintainers = teams.gnome.members;

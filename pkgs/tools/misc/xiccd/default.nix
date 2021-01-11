@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libX11, libXrandr, glib, colord }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libX11, libXrandr, glib, colord }:
 
 stdenv.mkDerivation rec {
   pname = "xiccd";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libX11 libXrandr glib colord ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "X color profile daemon";
     homepage = "https://github.com/agalakhov/xiccd";
     license = licenses.gpl3;

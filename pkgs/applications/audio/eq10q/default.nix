@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, fftw, gtkmm2, libxcb, lv2, pkgconfig
+{ stdenv, fetchurl, fetchpatch, cmake, fftw, gtkmm2, libxcb, lv2, pkg-config
 , xorg }:
 stdenv.mkDerivation rec {
   pname = "eq10q";
@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "16mhcav8gwkp29k9ki4dlkajlcgh1i2wvldabxb046d37dq4qzrk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake fftw gtkmm2 libxcb lv2 xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ fftw gtkmm2 libxcb lv2 xorg.libpthreadstubs xorg.libXdmcp xorg.libxshmfence ];
 
   patches = [
     (fetchpatch {

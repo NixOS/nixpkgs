@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, rustPlatform, cmake, pkgconfig, openssl
+{ lib, stdenv, fetchFromGitLab, rustPlatform, cmake, pkgconfig, openssl
 , darwin, installShellFiles
 
 , x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD
@@ -45,7 +45,7 @@ buildRustPackage rec {
   '';
   # There's also .elv and .ps1 completion files but I don't know where to install those
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Easily and securely share files from the command line. A fully featured Firefox Send client";
     longDescription = ''
       Easily and securely share files and directories from the command line through a safe, private

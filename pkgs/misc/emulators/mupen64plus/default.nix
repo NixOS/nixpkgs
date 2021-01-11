@@ -1,4 +1,4 @@
-{stdenv, fetchurl, boost, dash, freetype, libpng, pkgconfig, SDL, which, zlib, nasm }:
+{lib, stdenv, fetchurl, boost, dash, freetype, libpng, pkgconfig, SDL, which, zlib, nasm }:
 
 stdenv.mkDerivation rec {
   pname = "mupen64plus";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     dash m64p_install.sh DESTDIR="$out" PREFIX=""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Nintendo 64 Emulator";
     license = licenses.gpl2Plus;
     homepage = "http://www.mupen64plus.org/";

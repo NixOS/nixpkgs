@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cppcheck, libmrss, libiconv }:
+{ lib, stdenv, fetchFromGitHub, cppcheck, libmrss, libiconv }:
 
 stdenv.mkDerivation {
   pname = "rsstail";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Monitor RSS feeds for new entries";
     longDescription = ''
       RSSTail is more or less an RSS reader: it monitors an RSS feed and if it

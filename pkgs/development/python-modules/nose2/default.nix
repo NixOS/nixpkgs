@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , six
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # AttributeError: 'module' object has no attribute 'collector'
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "nose2 is the next generation of nicer testing for Python";
     homepage = "https://github.com/nose-devs/nose2";
     license = licenses.bsd0;

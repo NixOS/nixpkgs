@@ -55,7 +55,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake python3 bison jq ];
-  enableParallelBuilding = true;
 
   postPatch = ''
     cp --no-preserve=mode -r "${localSpirv-tools.src}" External/spirv-tools

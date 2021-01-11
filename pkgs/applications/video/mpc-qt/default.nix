@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitLab, fetchpatch, pkg-config, qmake, qtx11extras, qttools, mpv }:
+{ lib, stdenv, mkDerivation, fetchFromGitLab, fetchpatch, pkg-config, qmake, qtx11extras, qttools, mpv }:
 
 mkDerivation rec {
   pname = "mpc-qt";
@@ -24,7 +24,7 @@ mkDerivation rec {
 
   qmakeFlags = [ "QMAKE_LUPDATE=${qttools.dev}/bin/lupdate" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Media Player Classic Qute Theater";
     homepage = "https://gitlab.com/mpc-qt/mpc-qt";
     license = licenses.gpl2;

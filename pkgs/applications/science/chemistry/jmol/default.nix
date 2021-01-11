@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
      description = "A Java 3D viewer for chemical structures";
      homepage = "https://sourceforge.net/projects/jmol";
      license = licenses.lgpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, vpnc, intltool, pkgconfig, networkmanager, libsecret
+{ lib, stdenv, fetchurl, substituteAll, vpnc, intltool, pkgconfig, networkmanager, libsecret
 , gtk3, withGnome ? true, gnome3, glib, kmod, file, fetchpatch, libnma }:
 let
   pname = "NetworkManager-vpnc";
@@ -41,7 +41,7 @@ in stdenv.mkDerivation {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NetworkManager's VPNC plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;

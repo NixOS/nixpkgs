@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 , packr
@@ -54,7 +54,7 @@ buildGoModule rec {
     cp -r $src/static/css/ $out/share/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
     license = licenses.agpl3;

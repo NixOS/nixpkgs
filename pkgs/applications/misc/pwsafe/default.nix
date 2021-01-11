@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, zip, gettext, perl
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, zip, gettext, perl
 , wxGTK30, libXext, libXi, libXt, libXtst, xercesc
 , qrencode, libuuid, libyubikey, yubikey-personalization
 , curl, openssl, file
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     "-DNO_GTEST=ON"
     "-DCMAKE_CXX_FLAGS=-I${yubikey-personalization}/include/ykpers-1"
   ];
-  enableParallelBuilding = true;
 
   postPatch = ''
     # Fix perl scripts used during the build.
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A password database utility";
     longDescription = ''
       Password Safe is a password database utility. Like many other

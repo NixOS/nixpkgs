@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     cp -r api/inc $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Programming library and toolkit for the creation and playback of interactive audio";
     homepage    = "http://www.fmod.org/";
     license     = licenses.unfreeRedistributable;

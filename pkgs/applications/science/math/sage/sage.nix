@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , makeWrapper
 , sage-tests
 , sage-with-env
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     kernelspec = jupyter-kernel-definition;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Source Mathematics Software, free alternative to Magma, Maple, Mathematica, and Matlab";
     license = licenses.gpl2;
     maintainers = teams.sage.members;

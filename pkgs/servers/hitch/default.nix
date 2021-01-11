@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, docutils, libev, openssl, pkgconfig, nixosTests }:
+{ lib, stdenv, fetchurl, docutils, libev, openssl, pkgconfig, nixosTests }:
 stdenv.mkDerivation rec {
   version = "1.7.0";
   pname = "hitch";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.hitch = nixosTests.hitch;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Libev-based high performance SSL/TLS proxy by Varnish Software";
     homepage = "https://hitch-tls.org/";
     license = licenses.bsd2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, jdk
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, jdk
 
 # Enable ECDSA pubkey recovery module
 , enableRecovery ? true
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   doCheck = true;
   checkPhase = "./tests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Optimized C library for EC operations on curve secp256k1";
     longDescription = ''
       Optimized C library for EC operations on curve secp256k1. Part of

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, libnfc }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, libnfc }:
 
 stdenv.mkDerivation rec {
   pname = "mfoc";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libnfc ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mifare Classic Offline Cracker";
     license = licenses.gpl2;
     homepage = "https://github.com/nfc-tools/mfoc";

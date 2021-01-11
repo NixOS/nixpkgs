@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk, perl, gnugrep, which}:
+{lib, stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk, perl, gnugrep, which}:
 
 let
   version = "3.2.0-1";
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
       --prefix PATH ":" ${ stdenv.lib.makeBinPath [ ghostscript a2ps file gnused gnugrep coreutils which ] }
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.brother.com/";
     description = "Brother hl-l2340dw printer driver";
     license = licenses.unfree;

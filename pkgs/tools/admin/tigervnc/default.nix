@@ -6,39 +6,44 @@
 , libGLU
 , gnutls, pam, nettle
 , xterm, openssh, perl
-, makeWrapper}:
+, makeWrapper
+}:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.10.1";
+  version = "1.11.0";
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
-    rev = "v1.10.1";
-    sha256 = "001n189d2f3psn7nxgl8188ml6f7jbk26cxn2835y3mnlk5lmhgr";
+    rev = "v${version}";
+    sha256 = "sha256-IX39oEhTyk7NV+9dD9mFtes22fBdMTAVIv5XkqFK560=";
   };
 
   inherit fontDirectories;
 
-  patches = [ ./u_xorg-server-1.20.7-ddxInputThreadInit.patch ];
-
   postPatch = ''
-    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver
+    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
     fontPath=
     for i in $fontDirectories; do
       for j in $(find $i -name fonts.dir); do
         addToSearchPathWithCustomDelimiter "," fontPath $(dirname $j)
       done
     done
-    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -fp '"$fontPath"'";' unix/vncserver
+    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -fp '"$fontPath"'";' unix/vncserver/vncserver.in
     substituteInPlace vncviewer/vncviewer.cxx \
        --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
   '';
 
   dontUseCmakeBuildDir = true;
+
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
+    "-DCMAKE_INSTALL_SBINDIR=${placeholder "out"}/bin"
+    "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "out"}/bin"
+  ];
 
   postBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast -Wno-error=pointer-to-int-cast"
@@ -92,8 +97,6 @@ stdenv.mkDerivation rec {
     ++ xorg.xorgserver.nativeBuildInputs;
 
   propagatedBuildInputs = xorg.xorgserver.propagatedBuildInputs;
-
-  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://tigervnc.org/";

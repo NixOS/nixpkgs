@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnome3, intltool, itstool, libxml2 }:
+{ lib, stdenv, fetchurl, gnome3, intltool, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-devel-docs";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ intltool itstool libxml2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/GNOME/gnome-devel-docs";
     description = "Developer documentation for GNOME";
     maintainers = teams.gnome.members;

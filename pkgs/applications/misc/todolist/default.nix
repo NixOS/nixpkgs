@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "todolist";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "0dazfymby5xm4482p9cyj23djmkz5q7g79cqm2d85mczvz7vks8p";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple GTD-style todo list for the command line";
     homepage = "http://todolist.site";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, makeWrapper, pkgconfig
+{ lib, stdenv, fetchgit, autoreconfHook, makeWrapper, pkgconfig
 , lrzsz, ncurses, libiconv }:
 
 stdenv.mkDerivation {
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modem control and terminal emulation program";
     homepage = "https://salsa.debian.org/minicom-team/minicom";
     license = licenses.gpl2;

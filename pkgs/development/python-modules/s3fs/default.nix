@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, docutils, aiobotocore, fsspec }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, docutils, aiobotocore, fsspec }:
 
 buildPythonPackage rec {
   pname = "s3fs";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # pythonPackages.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "S3FS builds on boto3 to provide a convenient Python filesystem interface for S3.";
     homepage = "https://github.com/dask/s3fs/";
     license = licenses.bsd3;

@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig gettext ];
   buildInputs = [ dbus dbus-glib libgaminggear libgudev lua ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DUDEVDIR=\${out}/lib/udev/rules.d"
     "-DCMAKE_MODULE_PATH=${libgaminggear.dev}/lib/cmake"

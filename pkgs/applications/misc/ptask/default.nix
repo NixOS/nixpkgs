@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, makeWrapper, gtk3, json_c, taskwarrior }:
+{ lib, stdenv, fetchurl, pkgconfig, makeWrapper, gtk3, json_c, taskwarrior }:
 
 stdenv.mkDerivation rec {
   name = "ptask-1.0.0";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${taskwarrior}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://wpitchoune.net/ptask/";
     description = "GTK-based GUI for taskwarrior";
     license = licenses.gpl2;

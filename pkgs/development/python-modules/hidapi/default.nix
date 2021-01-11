@@ -1,4 +1,4 @@
-{ stdenv, libusb1, udev, darwin, fetchPypi, buildPythonPackage, cython }:
+{ lib, stdenv, libusb1, udev, darwin, fetchPypi, buildPythonPackage, cython }:
 
 buildPythonPackage rec {
   pname = "hidapi";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hid" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Cython interface to the hidapi from https://github.com/libusb/hidapi";
     homepage = "https://github.com/trezor/cython-hidapi";
     # license can actually be either bsd3 or gpl3

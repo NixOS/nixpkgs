@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig,
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkgconfig,
   libtool, check, bison, git, gperf,
   perl, texinfo, help2man, gettext, ncurses
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Directed Graph Shell";
     homepage = "http://www.dmst.aueb.gr/dds/sw/dgsh";
     license = with licenses; asl20;

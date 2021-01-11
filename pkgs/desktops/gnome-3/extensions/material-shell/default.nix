@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   uuid = "material-shell@papyelgringo";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern desktop interface for Linux";
     license = licenses.mit;
     maintainers = with maintainers; [ benley ];

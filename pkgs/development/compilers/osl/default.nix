@@ -18,13 +18,13 @@ in clangStdenv.mkDerivation rec {
   };
 
   cmakeFlags = [ "-DUSE_BOOST_WAVE=ON" "-DENABLERTTI=ON" ];
-  enableParallelBuilding = true;
 
   preConfigure = '' patchShebangs src/liboslexec/serialize-bc.bash '';
-  
+
+  nativeBuildInputs = [ cmake boost_static flex bison];
   buildInputs = [
-     cmake zlib openexr openimageio llvm
-     boost_static flex bison partio pugixml
+     zlib openexr openimageio llvm
+     partio pugixml
      util-linux # needed just for hexdump
      python # CMake doesn't check this?
   ];

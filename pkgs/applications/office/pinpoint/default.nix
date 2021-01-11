@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, autoconf, automake, clutter, clutter-gst
+{ fetchurl, lib, stdenv, pkgconfig, autoconf, automake, clutter, clutter-gst
 , gdk-pixbuf, cairo, clutter-gtk }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ autoconf automake clutter clutter-gst gdk-pixbuf
                   cairo clutter-gtk ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/action/show/Apps/Pinpoint";
     description = "A tool for making hackers do excellent presentations";
     license = licenses.lgpl21;

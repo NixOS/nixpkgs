@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
   pname = "ldc";
   inherit version;
 
-  enableParallelBuilding = true;
-
   src = fetchurl {
     url = "https://github.com/ldc-developers/ldc/releases/download/v${version}/ldc-${version}-src.tar.gz";
     sha256 = ldcSha256;

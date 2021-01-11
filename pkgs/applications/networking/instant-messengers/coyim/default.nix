@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig,
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, pkgconfig,
   cairo, gdk-pixbuf, glib, gnome3, wrapGAppsHook, gtk3 }:
 
 buildGoPackage rec {
@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   buildInputs = [ glib cairo gdk-pixbuf gtk3 gnome3.adwaita-icon-theme ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "a safe and secure chat client";
     homepage = "https://coy.im/";
     license = licenses.gpl3;

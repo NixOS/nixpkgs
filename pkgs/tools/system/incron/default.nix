@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bash }:
+{ lib, stdenv, fetchFromGitHub, bash }:
 
 stdenv.mkDerivation rec {
   name = "incron-0.5.12";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cp incrond incrontab $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cron-like daemon which handles filesystem events";
     homepage = "https://github.com/ar-/incron";
     license = licenses.gpl2;

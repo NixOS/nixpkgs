@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, ocaml, fetchurl, ounit }:
+{ lib, stdenv, buildOcaml, ocaml, fetchurl, ounit }:
 
 if stdenv.lib.versionAtLeast ocaml.version "4.06"
 then throw "pa_ounit is not available for OCaml ${ocaml.version}"
@@ -15,7 +15,7 @@ buildOcaml rec {
 
   propagatedBuildInputs = [ ounit ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/janestreet/pa_ounit";
     description = "OCaml inline testing";
     license = licenses.asl20;

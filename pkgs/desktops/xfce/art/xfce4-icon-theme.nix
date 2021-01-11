@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, gnome-icon-theme, tango-icon-theme, hicolor-icon-theme, xfce }:
+{ lib, stdenv, fetchurl, pkgconfig, intltool, gtk3, gnome-icon-theme, tango-icon-theme, hicolor-icon-theme, xfce }:
 
 let
   category = "art";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.archiveLister category pname;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.xfce.org/";
     description = "Icons for Xfce";
     license = licenses.gpl2Plus;

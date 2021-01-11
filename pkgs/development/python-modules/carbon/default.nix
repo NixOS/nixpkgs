@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
 , twisted, whisper, txamqp, cachetools, urllib3
 }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ twisted whisper txamqp cachetools urllib3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://graphiteapp.org/";
     description = "Backend data caching and persistence daemon for Graphite";
     maintainers = with maintainers; [ offline basvandijk ];

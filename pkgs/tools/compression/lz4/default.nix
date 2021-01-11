@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, valgrind, fetchpatch
+{ lib, stdenv, fetchFromGitHub, valgrind, fetchpatch
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       moveToOutput bin "$bin"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extremely fast compression algorithm";
     longDescription = ''
       Very fast lossless compression algorithm, providing compression speed

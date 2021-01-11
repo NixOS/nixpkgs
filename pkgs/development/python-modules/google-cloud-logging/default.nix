@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , django
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     "google.cloud.logging_v2"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stackdriver Logging API client library";
     homepage = "https://github.com/googleapis/python-logging";
     license = licenses.asl20;

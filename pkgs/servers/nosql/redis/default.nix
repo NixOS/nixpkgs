@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, lua, pkgconfig, systemd, jemalloc, nixosTests }:
+{ lib, stdenv, fetchurl, lua, pkgconfig, systemd, jemalloc, nixosTests
+, tlsSupport ? true, openssl
+}:
 
 stdenv.mkDerivation rec {
   version = "6.0.6";
@@ -18,14 +20,19 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  buildInputs = [ lua pkgconfig ] ++ stdenv.lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) systemd;
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ lua ]
+    ++ stdenv.lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) systemd
+    ++ stdenv.lib.optionals tlsSupport [ openssl ];
   # More cross-compiling fixes.
   # Note: this enables libc malloc as a temporary fix for cross-compiling.
   # Due to hardcoded configure flags in jemalloc, we can't cross-compile vendored jemalloc properly, and so we're forced to use libc allocator.
   # It's weird that the build isn't failing because of failure to compile dependencies, it's from failure to link them!
   makeFlags = [ "PREFIX=$(out)" ]
     ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" "MALLOC=libc" ]
-    ++ stdenv.lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) ["USE_SYSTEMD=yes"];
+    ++ stdenv.lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) ["USE_SYSTEMD=yes"]
+    ++ stdenv.lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
 
@@ -33,7 +40,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.redis = nixosTests.redis;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://redis.io";
     description = "An open source, advanced key-value store";
     license = licenses.bsd3;

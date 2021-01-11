@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pkgconfig, cmake, autoconf, automake, libtool, makeWrapper
 , wget, xxd, desktop-file-utils, file
 , gnupg, glib, zlib, cairo, openssl, fuse, xz, squashfuse, inotify-tools, libarchive
@@ -109,7 +109,7 @@ in stdenv.mkDerivation rec {
     squashfuse = appimagekit_squashfuse;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to package desktop applications as AppImages";
     longDescription = ''
       AppImageKit is an implementation of the AppImage format that

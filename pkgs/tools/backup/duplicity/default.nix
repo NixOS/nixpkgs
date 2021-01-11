@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchpatch
 , fetchurl
 , pythonPackages
@@ -112,7 +112,7 @@ pythonPackages.buildPythonApplication rec {
   # > OSError: out of pty devices
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
     homepage = "https://www.nongnu.org/duplicity";
     license = licenses.gpl2Plus;

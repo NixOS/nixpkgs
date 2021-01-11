@@ -1,4 +1,4 @@
-{ stdenv, bundlerEnv, ruby, makeWrapper, bundlerUpdateScript
+{ lib, stdenv, bundlerEnv, ruby, makeWrapper, bundlerUpdateScript
 , git }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = bundlerUpdateScript "gollum";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, Git-powered wiki with a sweet API and local frontend";
     homepage = "https://github.com/gollum/gollum";
     changelog = "https://github.com/gollum/gollum/blob/v${version}/HISTORY.md";

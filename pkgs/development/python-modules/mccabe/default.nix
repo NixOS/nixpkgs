@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, pytestrunner }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "mccabe";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest pytestrunner ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "McCabe checker, plugin for flake8";
     homepage = "https://github.com/flintwork/mccabe";
     license = licenses.mit;

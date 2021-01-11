@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nodejs, which, python27, util-linux, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, nodejs, which, python27, util-linux, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "cjdns";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.basic = nixosTests.cjdns;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cjdelisle/cjdns";
     description = "Encrypted networking for regular people";
     license = licenses.gpl3Plus;

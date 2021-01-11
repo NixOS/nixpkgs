@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
+{ lib, stdenv, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, python3, libcap, glib
 , libssh, nghttp2, zlib, cmake, fetchpatch, makeWrapper
 , withQt ? true, qt5 ? null
@@ -92,8 +92,6 @@ in stdenv.mkDerivation {
     cp ../wiretap/*.h $dev/include/wiretap
   '');
 
-  enableParallelBuilding = true;
-
   dontFixCmake = true;
 
   shellHook = ''
@@ -101,7 +99,7 @@ in stdenv.mkDerivation {
     export WIRESHARK_RUN_FROM_BUILD_DIRECTORY=1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.wireshark.org/";
     description = "Powerful network protocol analyzer";
     license = licenses.gpl2;

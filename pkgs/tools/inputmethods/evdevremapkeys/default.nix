@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
   pname = "evdevremapkeys";
@@ -23,7 +23,7 @@ python3Packages.buildPythonPackage rec {
 
   pythonImportsCheck = [ "evdevremapkeys" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/philipl/evdevremapkeys";
     description = "Daemon to remap events on linux input devices";
     license = licenses.mit;

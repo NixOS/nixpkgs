@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, util-linux, keyutils, nss, nspr, python2, pam, enablePython ? false
+{ lib, stdenv, fetchurl, pkgconfig, perl, util-linux, keyutils, nss, nspr, python2, pam, enablePython ? false
 , intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which, lsof }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enterprise-class stacked cryptographic filesystem";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ obadz ];

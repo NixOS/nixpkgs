@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , mbelib, libsndfile, itpp
 , portaudioSupport ? true, portaudio ? null
 }:
@@ -21,15 +21,13 @@ stdenv.mkDerivation rec {
     mbelib libsndfile itpp
   ] ++ stdenv.lib.optionals portaudioSupport [ portaudio ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
     export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Digital Speech Decoder";
     longDescription = ''
       DSD is able to decode several digital voice formats from discriminator

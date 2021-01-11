@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mkDerivation, pkgconfig, qtbase, qmake, imagemagick
+{ lib, stdenv, fetchurl, mkDerivation, pkgconfig, qtbase, qmake, imagemagick
 , libyubikey, yubikey-personalization }:
 
 mkDerivation rec {
@@ -32,7 +32,7 @@ mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-personalization-gui";
     description = "A QT based cross-platform utility designed to facilitate reconfiguration of the Yubikey";
     license = licenses.bsd2;

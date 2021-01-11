@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "12rznbnswfw0w7qfbvmmffr9r317gl1rqg36nijwzsklkjgks4fq";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://yapsy.sourceforge.net/";
     description = "Yet another plugin system";
     license = licenses.bsd0;

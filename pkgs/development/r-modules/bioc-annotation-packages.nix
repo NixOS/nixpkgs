@@ -7,7 +7,7 @@
 let derive2 = derive { biocVersion = "3.11"; };
 in with self; {
   AHCytoBands = derive2 { name="AHCytoBands"; version="0.99.0"; sha256="0g92nz33rx14zl5can7s701bipdgz7rxqygvvc22c4a0qj52ijnq"; depends=[]; };
-  AHEnsDbs = derive2 { name="AHEnsDbs"; version="1.0.14"; sha256="0fb94bxk6ggx09a0icraaxfzncvvgxk223146b17lbxsyl6i02z8"; depends=[AnnotationHubData ensembldb]; };
+  AHEnsDbs = derive2 { name="AHEnsDbs"; version="1.0.15"; sha256="0by0y2nyqhihpwzm36lggkc0dqvxz22k6ck1wcmrf7sck8xg54ji"; depends=[AnnotationHubData ensembldb]; };
   BSgenome_Alyrata_JGI_v1 = derive2 { name="BSgenome.Alyrata.JGI.v1"; version="1.0.0"; sha256="06549kkzy36n378zb61lrf9zardncp7i20r73rmmiq1pnfjp3gww"; depends=[BSgenome]; };
   BSgenome_Amellifera_BeeBase_assembly4 = derive2 { name="BSgenome.Amellifera.BeeBase.assembly4"; version="1.4.0"; sha256="02zs16q441zcbfp7xvv1gny5nn02ivfr8md1wh5s5rpnj6sdl6kj"; depends=[BSgenome]; };
   BSgenome_Amellifera_UCSC_apiMel2 = derive2 { name="BSgenome.Amellifera.UCSC.apiMel2"; version="1.4.0"; sha256="1967w7aly7qydykk7rar712kvgsav3zjr4kirybkj17nwiynd74g"; depends=[BSgenome]; };

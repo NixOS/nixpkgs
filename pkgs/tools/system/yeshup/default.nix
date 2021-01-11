@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "yeshup";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp -v yeshup $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/RhysU/yeshup";
     platforms = platforms.linux;
     license = licenses.cc-by-sa-30; # From Stackoverflow answer

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libxml2, curl, libseccomp }:
+{ lib, stdenv, fetchFromGitHub, libxml2, curl, libseccomp }:
 
 stdenv.mkDerivation {
   name = "rdrview";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     install -Dm755 rdrview -t $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line tool to extract main content from a webpage";
     homepage = "https://github.com/eafer/rdrview";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, autoreconfHook, makeWrapper
+{ lib, stdenv, fetchFromGitHub, fetchurl, autoreconfHook, makeWrapper
 , perlPackages, coreutils, gnused, gnugrep }:
 
 let
@@ -42,7 +42,7 @@ let
       done
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage    = "https://labs.consol.de/";
       license     = licenses.gpl2;
       maintainers = with maintainers; [ peterhoeg ];

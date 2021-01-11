@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , gettext
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple multi-page document viewer for the MATE desktop";
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2;

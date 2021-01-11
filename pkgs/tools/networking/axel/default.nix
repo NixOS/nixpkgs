@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, autoconf-archive
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf-archive
 , pkgconfig, gettext, libssl, txt2man }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "ETCDIR=${placeholder "out"}/etc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Console downloading program with some features for parallel connections for faster downloading";
     homepage = "https://github.com/axel-download-accelerator/axel";
     maintainers = with maintainers; [ pSub ];

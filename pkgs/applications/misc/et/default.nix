@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libnotify, gdk-pixbuf }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libnotify, gdk-pixbuf }:
 
 stdenv.mkDerivation rec {
   pname = "et";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp et-status.sh $out/bin/et-status
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minimal libnotify-based (egg) timer";
     homepage = "https://github.com/oxzi/et";
     license = licenses.gpl3;

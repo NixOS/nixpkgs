@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, cmake, zlib }:
+{ lib, stdenv, fetchzip, cmake, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "zdbsp";
@@ -10,14 +10,19 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib ];
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    zlib
+  ];
 
   installPhase = ''
     install -Dm755 zdbsp $out/bin/zdbsp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ZDoom's internal node builder for DOOM maps";
     homepage = "https://zdoom.org/wiki/ZDBSP";
     license = licenses.gpl2Plus;

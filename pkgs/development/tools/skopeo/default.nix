@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 , gpgme
@@ -47,7 +47,7 @@ buildGoModule rec {
       --prefix PATH : ${stdenv.lib.makeBinPath [ fuse-overlayfs ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line utility for various operations on container images and image repositories";
     homepage = "https://github.com/containers/skopeo";
     maintainers = with maintainers; [ lewo ] ++ teams.podman.members;

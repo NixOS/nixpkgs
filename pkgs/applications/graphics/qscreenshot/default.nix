@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dos2unix, which, qt, Carbon }:
+{ lib, stdenv, fetchurl, dos2unix, which, qt, Carbon }:
 
 stdenv.mkDerivation rec {
   name = "qscreenshot-1.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -i "s|lrelease-qt4|lrelease|" src/src.pro
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple creation and editing of screenshots";
     homepage = "https://sourceforge.net/projects/qscreenshot/";
     license = licenses.gpl2;

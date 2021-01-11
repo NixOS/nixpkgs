@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   buildInputs = [ pytest pytestrunner ];
   propagatedBuildInputs = [ future ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parse human-readable date/time text";
     homepage = "https://github.com/bear/parsedatetime";
     license = licenses.asl20;

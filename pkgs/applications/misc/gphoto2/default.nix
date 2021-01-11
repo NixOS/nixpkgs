@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , gettext
 , libexif
 , libgphoto2
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A ready to use set of digital camera software applications";
     longDescription = ''
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python2
+{ lib, stdenv, fetchurl, fetchpatch, cmake, pcre, pkg-config, python2
 , libX11, libXpm, libXft, libXext, libGLU, libGL, zlib, libxml2, lz4, lzma, gsl_1, xxHash
 , Cocoa, OpenGL, noSplash ? false }:
 
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ln448lszw4d6jmbdphkr2plwxxlhmjkla48vmmq750xc1lxlfrc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake pcre python2 zlib libxml2 lz4 lzma gsl_1 xxHash ]
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ pcre python2 zlib libxml2 lz4 lzma gsl_1 xxHash ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
     ;
@@ -77,11 +77,9 @@ stdenv.mkDerivation rec {
   ]
   ++ stdenv.lib.optional stdenv.isDarwin "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
 
-  enableParallelBuilding = true;
-
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = platforms.unix;

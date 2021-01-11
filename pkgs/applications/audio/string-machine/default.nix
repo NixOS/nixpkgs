@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, boost, cairo, lv2, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, boost, cairo, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "string-machine";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jpcima/string-machine";
     description = "Digital model of electronic string ensemble instrument";
     maintainers = [ maintainers.magnetophon ];

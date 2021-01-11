@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, makeWrapper, python
+{ lib, stdenv, fetchurl, cmake, makeWrapper, python
 , boost, lzma
 , withGog ? false, unar ? null }:
 
@@ -14,15 +14,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
-  enableParallelBuilding = true;
-
   # we need unar to for multi-archive extraction
   postFixup = stdenv.lib.optionalString withGog ''
     wrapProgram $out/bin/innoextract \
       --prefix PATH : ${stdenv.lib.makeBinPath [ unar ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to unpack installers created by Inno Setup";
     homepage = "https://constexpr.org/innoextract/";
     license = licenses.zlib;

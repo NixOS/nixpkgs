@@ -30,8 +30,6 @@ stdenv.mkDerivation rec {
     sed -i '/TrueFalseTest/d' tests/CMakeLists.txt
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Command line parser for C++11";
     homepage = "https://github.com/CLIUtils/CLI11";

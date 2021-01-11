@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fftwSinglePrec, lv2, pkgconfig, wafHook, python3 }:
+{ lib, stdenv, fetchurl, fftwSinglePrec, lv2, pkgconfig, wafHook, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "mda-lv2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig wafHook python3 ];
   buildInputs = [ fftwSinglePrec lv2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://drobilla.net/software/mda-lv2/";
     description = "An LV2 port of the MDA plugins by Paul Kellett";
     license = licenses.gpl2Plus;

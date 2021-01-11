@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , eventlet
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     ${python.interpreter} runtests.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "aioeventlet implements the asyncio API (PEP 3156) on top of eventlet. It makes";
     homepage = "https://pypi.org/project/aioeventlet/";
     license = licenses.asl20;

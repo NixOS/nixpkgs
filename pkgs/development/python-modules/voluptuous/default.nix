@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, nose }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, nose }:
 
 buildPythonPackage rec {
   pname = "voluptuous";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Voluptuous is a Python data validation library";
     homepage = "http://alecthomas.github.io/voluptuous/";
     license = licenses.bsd3;

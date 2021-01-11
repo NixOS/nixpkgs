@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bison, meson, ninja, pkgconfig
+{ lib, stdenv, fetchFromGitHub, bison, meson, ninja, pkgconfig
 , libuecc, libsodium, libcap, json_c, openssl }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and Secure Tunneling Daemon";
     homepage = "https://projects.universe-factory.net/projects/fastd/wiki";
     license = with licenses; [ bsd2 bsd3 ];

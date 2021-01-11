@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, binutils-unwrapped, patchelf, asterisk }:
+{ lib, stdenv, fetchFromGitHub, binutils-unwrapped, patchelf, asterisk }:
 stdenv.mkDerivation rec {
   pname = "asterisk-module-sccp";
   version = "4.3.2-epsilon";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "$p:${stdenv.lib.makeLibraryPath [ binutils-unwrapped ]}" "$p"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Replacement for the SCCP channel driver in Asterisk";
     license = licenses.gpl1Only;
     maintainers = with maintainers; [ das_j ];

@@ -1,4 +1,4 @@
-{ writeText, stdenv, fetchurl, ncurses }:
+{ writeText, lib, stdenv, fetchurl, ncurses }:
 
 let
   version = "0.6.1";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   # This code uses inline in the gnu89 sense: see http://clang.llvm.org/compatibility.html#inline
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-std=gnu89";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small and simple console-based live network and disk io bandwidth monitor";
     homepage = "http://www.gropp.org/?id=projects&sub=bwm-ng";
     license = licenses.gpl2;

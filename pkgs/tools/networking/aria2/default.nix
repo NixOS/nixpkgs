@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchpatch, fetchFromGitHub, pkgconfig, autoreconfHook
 , openssl, c-ares, libxml2, sqlite, zlib, libssh2
 , cppunit, sphinx
 , Security
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://aria2.github.io";
     description = "A lightweight, multi-protocol, multi-source, command-line download utility";
     license = licenses.gpl2Plus;

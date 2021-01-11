@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, unzip, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, unzip, runtimeShell }:
 
 stdenv.mkDerivation rec {
   major = "14";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/umlet"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free, open-source UML tool with a simple user interface";
     longDescription = ''
       UMLet is a free, open-source UML tool with a simple user interface:

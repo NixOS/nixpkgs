@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "pbgopy";
@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "09hn92bi2rmixpsgckbi8f70widls40fwqqm7y7rqglyjqi7rdmw";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Copy and paste between devices";
     homepage = "https://github.com/nakabonne/pbgopy";
     license = licenses.mit;

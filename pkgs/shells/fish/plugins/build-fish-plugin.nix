@@ -1,23 +1,6 @@
-{ stdenv, lib, writeShellScriptBin, writeScript, fish }:
+{ stdenv, lib, writeScript, wrapFish }:
 
-let
-  rtpPath = "share/fish";
-
-  mapToFuncPath = v:
-    if lib.isString v
-    then v
-    else "${v}/${rtpPath}/vendor_functions.d";
-
-  fishWithFunctionPath = plugins: let
-    funcPaths = map mapToFuncPath plugins;
-  in writeShellScriptBin "fish" ''
-    ${fish}/bin/fish \
-      --init-command \
-        "set --prepend fish_function_path ${lib.escapeShellArgs funcPaths}" \
-      "$@"
-  '';
-
-in attrs@{
+attrs@{
   pname,
   version,
   src,
@@ -32,8 +15,10 @@ in attrs@{
   installPath ? lib.getName pname,
 
   checkInputs ? [],
-  # plugins or paths to add to the function path of the test fish shell
-  checkFunctionPath ? [],
+  # plugin packages to add to the vendor paths of the test fish shell
+  checkPlugins ? [],
+  # vendor directories to add to the function path of the test fish shell
+  checkFunctionDirs ? [],
   # test script to be executed in a fish shell
   checkPhase ? "",
   doCheck ? checkPhase != "",
@@ -52,7 +37,7 @@ stdenv.mkDerivation (attrs // {
     (
       install_vendor_files() {
         source="$1"
-        target="$out/${rtpPath}/vendor_$2.d"
+        target="$out/share/fish/vendor_$2.d"
 
         [ -d $source ] || return 0
         mkdir -p $target
@@ -69,7 +54,12 @@ stdenv.mkDerivation (attrs // {
   '';
 
   inherit doCheck;
-  checkInputs = [ (fishWithFunctionPath checkFunctionPath) ] ++ checkInputs;
+
+  checkInputs = [ (wrapFish {
+    pluginPkgs = checkPlugins;
+    functionDirs = checkFunctionDirs;
+  }) ] ++ checkInputs;
+
   checkPhase = ''
     export HOME=$(mktemp -d)  # fish wants a writable home
     fish "${writeScript "${name}-test" checkPhase}"

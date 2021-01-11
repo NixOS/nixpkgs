@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkgconfig, autoconf, automake, libiconv, drake
+{ lib, stdenv, fetchFromGitLab, pkgconfig, autoconf, automake, libiconv, drake
 , ruby, docbook_xsl, file, xdg_utils, gettext, expat, boost, libebml, zlib
 , fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark, pcre2
 , withGUI ? true
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/mkvtoolnix-gui
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform tools for Matroska";
     homepage    = "http://www.bunkus.org/videotools/mkvtoolnix/";
     license     = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPyPy
 , dnspython
 , geoip2
 , ipython
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple and extensible IRC bot";
     homepage = "http://sopel.chat";
     license = licenses.efl20;

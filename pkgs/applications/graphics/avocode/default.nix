@@ -1,4 +1,4 @@
-{ stdenv, makeDesktopItem, fetchurl, unzip
+{ lib, stdenv, makeDesktopItem, fetchurl, unzip
 , gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome3
 , xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core
 }:
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://avocode.com/";
     description = "The bridge between designers and developers";
     license = licenses.unfree;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 stdenv.mkDerivation rec {
   pname = "psftools";
   version = "1.0.14";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
   outputs = ["out" "man" "dev" "lib"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.seasip.info/Unix/PSF";
     description = "Conversion tools for .PSF fonts";
     longDescription = ''

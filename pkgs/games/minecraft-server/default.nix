@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nixosTests, jre_headless }:
+{ lib, stdenv, fetchurl, nixosTests, jre_headless }:
 stdenv.mkDerivation {
   pname = "minecraft-server";
   version = "1.16.4";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minecraft Server";
     homepage = "https://minecraft.net";
     license = licenses.unfreeRedistributable;

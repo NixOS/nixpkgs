@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , python
@@ -134,7 +134,7 @@ in buildPythonPackage rec {
     export PATH=$(pwd):$PATH
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;

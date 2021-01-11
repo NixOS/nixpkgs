@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, libao, libmad, libid3tag, zlib, alsaLib
+{lib, stdenv, fetchurl, fetchpatch, libao, libmad, libid3tag, zlib, alsaLib
 # Specify default libao output plugin to use (e.g. "alsa", "pulse" …).
 # If null, it will use the libao system default.
 , defaultAudio ? null
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line MP3 player";
     homepage = "http://mpg321.sourceforge.net/";
     license = licenses.gpl2;

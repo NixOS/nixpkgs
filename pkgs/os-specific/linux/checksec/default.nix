@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, file, findutils
+{ lib, stdenv, fetchFromGitHub, makeWrapper, file, findutils
 , binutils-unwrapped, glibc, coreutils, sysctl, openssl
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${path}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for checking security bits on executables";
     homepage    = "http://www.trapkit.de/tools/checksec.html";
     license     = licenses.bsd3;

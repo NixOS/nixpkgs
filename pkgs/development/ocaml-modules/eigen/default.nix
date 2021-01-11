@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, ctypes, libcxx }:
+{ lib, stdenv, buildDunePackage, fetchFromGitHub, ctypes, libcxx }:
 
 buildDunePackage rec {
   pname = "eigen";
@@ -19,7 +19,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ctypes ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Minimal/incomplete Ocaml interface to Eigen3, mostly for Owl";
     platforms = platforms.x86_64;

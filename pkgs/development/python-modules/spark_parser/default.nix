@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   buildInputs = [ nose ];
   propagatedBuildInputs = [ click ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''An Early-Algorithm Context-free grammar Parser'';
     homepage = "https://github.com/rocky/python-spark";
     license = licenses.mit;

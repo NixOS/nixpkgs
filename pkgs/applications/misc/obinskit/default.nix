@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib libxkbcommon (lib.getLib systemd) xorg.libXt ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical configurator for Anne Pro and Anne Pro II keyboards";
     homepage = "http://en.obins.net/obinskit/"; # https is broken
     license = licenses.unfree;

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "dnscrypt-proxy2";
@@ -15,7 +15,7 @@ buildGoModule rec {
     sha256 = "08bg60j5z349blj5sip1f8f793q12ix3zmqkayym5nf69s1pfm7l";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool that provides secure DNS resolution";
 
     license = licenses.isc;

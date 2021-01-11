@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , gfortran, fftw, blas, lapack
 , mpi ? null
 }:
@@ -27,7 +27,7 @@ configureFlags = if (mpi != null) then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${g
 
   makeFlags = [ "all" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Electronic-structure calculations and materials modeling at the nanoscale";
     longDescription = ''
         Quantum ESPRESSO is an integrated suite of Open-Source computer codes for

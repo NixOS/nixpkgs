@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gtk3, mate, python3Packages }:
+{ lib, stdenv, fetchurl, pkgconfig, gettext, gtk3, mate, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "python-caja";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python binding for Caja components";
     homepage = "https://github.com/mate-desktop/python-caja";
     license = [ licenses.gpl2Plus ];

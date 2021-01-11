@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Date & Time Plug";
     homepage = "https://github.com/elementary/switchboard-plug-datetime";
     license = licenses.gpl3Plus;

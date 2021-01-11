@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ eigen boost libnabo ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3"
   ];

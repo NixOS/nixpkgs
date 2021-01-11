@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
 
   passthru.libSuffix = lib.replaceStrings ["."] [""] majorVersion;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Optimization solver for mathematical programming";
     homepage = "https://www.gurobi.com";
     license = licenses.unfree;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoconf
 , automake
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     autoconf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card readers";
     longDescription = ''
       acsccid is a PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card

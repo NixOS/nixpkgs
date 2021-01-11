@@ -14,8 +14,6 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qtbase qttools qtsvg qwt ];
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Open source EDA software focused on easy of use and portability";
     homepage = "http://caneda.org";

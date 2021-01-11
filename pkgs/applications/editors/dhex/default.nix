@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses ];
- 
+
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1

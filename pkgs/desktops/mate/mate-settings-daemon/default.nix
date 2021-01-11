@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, glib, dbus-glib, libxklavier,
+{ lib, stdenv, fetchurl, pkgconfig, gettext, glib, dbus-glib, libxklavier,
   libcanberra-gtk3, libnotify, nss, polkit, dconf, gtk3, mate,
   pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
   wrapGAppsHook }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MATE settings daemon";
     homepage = "https://github.com/mate-desktop/mate-settings-daemon";
     license = with licenses; [ gpl2 lgpl21 ];

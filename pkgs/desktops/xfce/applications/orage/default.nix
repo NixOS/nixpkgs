@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkg-config, intltool, dbus-glib, gtk2, libical, libnotify, tzdata
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, intltool, dbus-glib, gtk2, libical, libnotify, tzdata
 , popt, libxfce4ui, xfce4-panel, withPanelPlugin ? true, wrapGAppsHook, xfce }:
 
 assert withPanelPlugin -> libxfce4ui != null && xfce4-panel != null;
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.archiveLister "apps" pname;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple calendar application with reminders";
     homepage = "https://git.xfce.org/archive/orage/";
     license = licenses.gpl2Plus;

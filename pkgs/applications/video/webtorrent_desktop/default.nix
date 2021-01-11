@@ -2,7 +2,7 @@
   alsaLib, atk, cairo, cups, dbus, dpkg, expat, fetchurl, fetchzip, fontconfig, freetype,
   gdk-pixbuf, glib, gnome3, libX11, libXScrnSaver, libXcomposite, libXcursor,
   libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst,
-  libxcb, nspr, nss, stdenv, udev, libuuid, pango, at-spi2-atk, at-spi2-core
+  libxcb, nspr, nss, lib, stdenv, udev, libuuid, pango, at-spi2-atk, at-spi2-core
 }:
 
   let
@@ -84,7 +84,7 @@
         --replace /opt/webtorrent-desktop $out/libexec
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Streaming torrent app for Mac, Windows, and Linux";
       homepage = "https://webtorrent.io/desktop";
       license = licenses.mit;

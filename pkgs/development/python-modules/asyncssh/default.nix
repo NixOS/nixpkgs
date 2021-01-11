@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
 , cryptography
 , bcrypt, gssapi, libnacl, libsodium, nettle, pyopenssl
 , openssl, openssh, pytestCheckHook }:
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_expired_root" "test_confirm" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides an asynchronous client and server implementation of the SSHv2 protocol on top of the Python asyncio framework";
     homepage = "https://asyncssh.readthedocs.io/en/latest";
     license = licenses.epl20;

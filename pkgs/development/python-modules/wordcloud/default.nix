@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub
 , matplotlib
 , mock
 , numpy
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A little word cloud generator in Python";
     homepage = "https://github.com/amueller/word_cloud";
     license = licenses.mit;

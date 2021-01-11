@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, nixosTests, python3, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, nixosTests, python3, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "wsdd";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     tests.samba-wsdd = nixosTests.samba-wsdd;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/christgau/wsdd";
     description = "A Web Service Discovery (WSD) host daemon for SMB/Samba";
     maintainers = with maintainers; [ izorkin ];

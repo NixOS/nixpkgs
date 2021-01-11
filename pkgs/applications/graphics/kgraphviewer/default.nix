@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchurl, cmake, extra-cmake-modules, pkgconfig, wrapGAppsHook
+{ lib, stdenv, mkDerivation, fetchurl, cmake, extra-cmake-modules, pkgconfig, wrapGAppsHook
 , kconfig, kinit, kdoctools, kio, kparts, kwidgetsaddons
 , qtbase, qtsvg
 , boost, graphviz
@@ -27,9 +27,7 @@ mkDerivation rec {
     kconfig kinit kio kparts kwidgetsaddons
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Graphviz dot graph viewer for KDE";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lethalman ];

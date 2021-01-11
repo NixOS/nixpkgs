@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , aiohttp
@@ -36,6 +36,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  doCheck = !stdenv.isDarwin;
+
   preCheck = stdenv.lib.optionalString stdenv.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
@@ -47,7 +49,7 @@ buildPythonPackage rec {
   disabledTests = [ "test_logger" ];
   pythonImportsCheck = [ "engineio" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python based Engine.IO client and server";
     longDescription = ''
       Engine.IO is a lightweight transport protocol that enables real-time

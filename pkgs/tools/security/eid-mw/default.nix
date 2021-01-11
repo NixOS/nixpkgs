@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig
 , gtk3, nssTools, pcsclite
 , libxml2, libproxy
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Belgian electronic identity card (eID) middleware";
     homepage = "https://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/";
     license = licenses.lgpl3;

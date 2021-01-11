@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, curl, ncurses, pkgconfig, readline
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, curl, ncurses, pkgconfig, readline
 , cmake }:
 let
   version = "0.3.2";
@@ -40,7 +40,7 @@ buildGoPackage {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GRV is a terminal interface for viewing Git repositories";
     homepage = "https://github.com/rgburke/grv";
     license = licenses.gpl3;

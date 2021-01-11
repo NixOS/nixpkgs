@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, pkgconfig, libxslt, ninja, gnome3, gtk3, glib
+{ lib, stdenv, fetchurl, substituteAll, pkgconfig, libxslt, ninja, gnome3, gtk3, glib
 , gettext, libxml2, xkeyboard_config, isocodes, meson, wayland
 , libseccomp, systemd, bubblewrap, gobject-introspection, gtk-doc, docbook_xsl, gsettings-desktop-schemas }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library with common API for various GNOME modules";
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fuse, samba, pkgconfig, glib, autoconf, attr, libsecret }:
+{ lib, stdenv, fetchurl, fuse, samba, pkgconfig, glib, autoconf, attr, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "smbnetfs";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/function.c --replace "attr/xattr.h" "sys/xattr.h"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A FUSE FS for mounting Samba shares";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

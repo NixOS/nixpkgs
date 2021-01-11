@@ -171,8 +171,6 @@ stdenv.mkDerivation rec {
     openspecfun pcre2
   ]);
 
-  enableParallelBuilding = true;
-
   doCheck = !stdenv.isDarwin;
   checkTarget = "testall";
   # Julia's tests require read/write access to $HOME

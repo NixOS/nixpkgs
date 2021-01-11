@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pcre
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     (stdenv.lib.enableFeature enableCuckoo "cuckoo")
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The pattern matching swiss knife for malware researchers";
     homepage = "http://Virustotal.github.io/yara/";
     license = licenses.asl20;

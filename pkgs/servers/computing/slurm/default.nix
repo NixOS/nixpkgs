@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libtool, curl
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libtool, curl
 , python3, munge, perl, pam, zlib, shadow, coreutils
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
 , readline, freeipmi, xorg, lz4, rdma-core, nixosTests
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.slurm = nixosTests.slurm;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.schedmd.com/";
     description = "Simple Linux Utility for Resource Management";
     platforms = platforms.linux;

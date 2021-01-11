@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libjpeg, libX11, libXxf86vm, curl, libogg
+{ lib, stdenv, fetchurl, pkgconfig, libjpeg, libX11, libXxf86vm, curl, libogg
 , libvorbis, freetype, openal, libGL }:
 
 stdenv.mkDerivation {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
       --replace libGL.so.1 ${libGL}/lib/libGL.so.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, stand-alone first-person shooter computer game";
     longDescription = ''
       Do you like old school deathmatch with modern features? How

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, which, ocaml, findlib
+{ lib, stdenv, fetchzip, which, ocaml, findlib
 , camlzip, extlib
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ camlzip extlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library that parses Java .class files into OCaml data structures";
     homepage = "https://javalib-team.github.io/javalib/";
     license = licenses.lgpl3;

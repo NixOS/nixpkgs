@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     "-Duse_dmabuf=${lib.boolToString dmabufSupport}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An obs-studio plugin that allows you to screen capture on wlroots based wayland compositors";
     homepage = "https://hg.sr.ht/~scoopta/wlrobs";
     maintainers = with maintainers; [ grahamc ];

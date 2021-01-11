@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, ocaml, findlib}:
+{lib, stdenv, fetchurl, zlib, ocaml, findlib}:
 
 let
   param =
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     ln -s $out/lib/ocaml/${ocaml.version}/site-lib/{,caml}zip
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://cristal.inria.fr/~xleroy/software.html#camlzip";
     description = "A library for handling ZIP and GZIP files in OCaml";
     longDescription = ''

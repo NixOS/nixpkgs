@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, pcre, perl }:
+{ fetchurl, lib, stdenv, pkgconfig, pcre, perl }:
 
 stdenv.mkDerivation {
   name = "maildrop-2.6.0";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   doCheck = false; # fails with "setlocale: LC_ALL: cannot change locale (en_US.UTF-8)"
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.courier-mta.org/maildrop/";
     description = "Mail filter/mail delivery agent that is used by the Courier Mail Server";
     license = licenses.gpl3;

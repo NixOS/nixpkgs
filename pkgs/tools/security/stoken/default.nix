@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig
 , libxml2, nettle
 , withGTK3 ? true, gtk3 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libxml2 nettle
   ] ++ stdenv.lib.optional withGTK3 gtk3;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software Token for Linux/UNIX";
     homepage = "https://github.com/cernekee/stoken";
     license = licenses.lgpl21Plus;

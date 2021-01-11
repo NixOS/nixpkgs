@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , grpc_google_iam_v1
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     "google.cloud.iot_v1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cloud IoT API API client library";
     homepage = "https://github.com/googleapis/python-iot";
     license = licenses.asl20;

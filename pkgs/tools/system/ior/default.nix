@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openmpi, perl, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, openmpi, perl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "ior";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ior.readthedocs.io/en/latest/";
     description = "Parallel file system I/O performance test";
     license = licenses.gpl2;

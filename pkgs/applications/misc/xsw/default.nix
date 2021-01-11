@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     ./parse.patch # Fixes compilation error by avoiding redundant definitions.
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "A slide show presentation tool";
 

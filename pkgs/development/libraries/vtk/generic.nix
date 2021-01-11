@@ -85,8 +85,6 @@ in stdenv.mkDerivation rec {
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
   '';
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = "https://www.vtk.org/";

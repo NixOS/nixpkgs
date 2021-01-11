@@ -62,8 +62,6 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  enableParallelBuilding = true;
-
   # Same as vulkan-validation-layers
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
   dontPatchELF = true;
@@ -73,7 +71,7 @@ stdenv.mkDerivation rec {
     export XDG_CONFIG_DIRS=@out@/etc''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LunarG Vulkan Tools and Utilities";
     longDescription = ''
       Tools to aid in Vulkan development including useful layers, trace and

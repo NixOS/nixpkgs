@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, fetchFromGitHub, taskwarrior, gettext, runtimeShell, gnome3 }:
+{ lib, stdenv, substituteAll, fetchFromGitHub, taskwarrior, gettext, runtimeShell, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-taskwhisperer";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME Shell TaskWarrior GUI";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jonafato ];

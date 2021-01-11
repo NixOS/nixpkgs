@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, wrapGAppsHook
 , SDL2, zlib, gtk3, libxml2, libXv, epoxy, minizip, pulseaudio, portaudio }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "cd gtk";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.snes9x.com";
     description = "Super Nintendo Entertainment System (SNES) emulator";
 

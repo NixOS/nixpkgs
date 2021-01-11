@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook,
+{ lib, stdenv, fetchurl, autoreconfHook,
   gzip, bzip2, pkgconfig, flex, check,
   pam, coreutils
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "setowner=" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "ftp://ftp.altlinux.org/pub/people/legion/kbd/";
     description = "Linux keyboard utilities and keyboard maps";
     platforms = platforms.linux;

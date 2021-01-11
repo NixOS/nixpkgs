@@ -1,4 +1,4 @@
-{ stdenv, python37, fetchFromGitHub }:
+{ lib, stdenv, python37, fetchFromGitHub }:
 let
   python = python37.override {
     self = python;
@@ -40,7 +40,7 @@ with python.pkgs; buildPythonApplication rec {
     bash ./tests/offline-tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Crawler for web archiving with WARC output";
     homepage = "https://github.com/ArchiveTeam/grab-site";
     license = licenses.mit;

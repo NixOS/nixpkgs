@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, lessSecure ? false }:
+{ lib, stdenv, fetchurl, ncurses, lessSecure ? false }:
 
 stdenv.mkDerivation rec {
   pname = "less";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.greenwoodsoftware.com/less/";
     description = "A more advanced file pager than ‘more’";
     platforms = platforms.unix;

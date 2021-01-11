@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl
+{ lib, stdenv, fetchFromGitHub, fetchurl
 , cmake, pkg-config, dbus, makeWrapper
 , boost
 , elfutils # for libdw
@@ -60,12 +60,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    cmake
+    pkg-config
     makeWrapper
   ];
 
   buildInputs = [
     boost
-    cmake
     dbus
     elfutils # libdw
     glib
@@ -77,7 +78,6 @@ stdenv.mkDerivation rec {
     libGL
     lxc
     mesa
-    pkg-config
     properties-cpp
     protobuf protobufc
     python3
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
       };
     }.${stdenv.system} or null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://anbox.io";
     description = "Android in a box";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, pkgconfig, alsaLib, dbus, libjack2
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, pkgconfig, alsaLib, dbus, libjack2
 , python3Packages , meson, ninja }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/a2j --replace "a2j_control" "$out/bin/a2j_control"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon for exposing legacy ALSA sequencer applications in JACK MIDI system";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , python3, boost
 , cmake
 }:
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     # TODO: should this be in stdenv instead?
     "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share"
   ];
-  enableParallelBuilding = true;
 
   preConfigure = with builtins; ''
     rmdir database && ln -sfv ${elemAt srcs 1} ./database
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
     cd libtrellis
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description     = "Documentation and bitstream tools for Lattice ECP5 FPGAs";
     longDescription = ''
       Project Trellis documents the Lattice ECP5 architecture

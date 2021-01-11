@@ -11,7 +11,6 @@ mkDerivation {
     sha256 = "0c1zn1f84h4f6n6p0aqz905yvv5qpdmkj2z58yla6bfgbzabfyrj";
   };
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 qtbase qtmultimedia boost ];
 
@@ -22,7 +21,7 @@ mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://citra-emu.org";
     description = "An open-source emulator for the Nintendo 3DS";
     license = licenses.gpl2;

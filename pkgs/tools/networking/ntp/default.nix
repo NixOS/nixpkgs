@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/doc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.ntp.org/";
     description = "An implementation of the Network Time Protocol";
     license = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glibc, python3, cudatoolkit,
+{ lib, stdenv, fetchFromGitHub, glibc, python3, cudatoolkit,
   withCuda ? true
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cp FIRESTARTER $out/bin/firestarter
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tu-dresden.de/zih/forschung/projekte/firestarter";
     description = "Processor Stress Test Utility";
     platforms = platforms.linux;

@@ -7,7 +7,7 @@
 , gtk2-x11
 , makeWrapper
 , pango
-, stdenv
+, lib, stdenv
 , xorg
 }:
 
@@ -22,7 +22,7 @@ let
 
     name = "${toolName}-${version}";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://bitscope.com/software/";
       license = licenses.unfree;
       platforms = [ "x86_64-linux" ];

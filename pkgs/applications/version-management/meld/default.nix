@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gettext
 , itstool
@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Visual diff and merge tool";
     homepage = "http://meldmerge.org/";
     license = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, gtk2, keybinder, fetchFromGitLab }:
+{ lib, stdenv, pkgconfig, gtk2, keybinder, fetchFromGitLab }:
 
 stdenv.mkDerivation {
   name = "fehlstart-9f4342d7";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     export PREFIX=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small desktop application launcher with reasonable memory footprint";
     homepage = "https://gitlab.com/fehlstart/fehlstart";
     license = licenses.gpl3;

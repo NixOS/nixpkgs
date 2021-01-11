@@ -37,6 +37,9 @@ if test "$noSysDirs" = "1"; then
             # Figure out what extra flags when linking to pass to the gcc
             # compilers being generated to make sure that they use our libc.
             extraLDFlags=($(< "${!curBintools}/nix-support/libc-ldflags") $(< "${!curBintools}/nix-support/libc-ldflags-before" || true))
+            if [ -e ${!curBintools}/nix-support/ld-set-dynamic-linker ]; then
+                extraLDFlags=-dynamic-linker=$(< ${!curBintools}/nix-support/dynamic-linker)
+            fi
 
             # The path to the Libc binaries such as `crti.o'.
             libc_libdir="$(< "${!curBintools}/nix-support/orig-libc")/lib"
@@ -252,7 +255,7 @@ postInstall() {
 
     if [[ targetConfig == *"linux"* ]]; then
         # For some reason, when building for linux on darwin, the libs retain
-	# RPATH to $out.
+        # RPATH to $out.
         for i in "$lib"/"$targetConfig"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
             PREV_RPATH=`patchelf --print-rpath "$i"`
             NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`

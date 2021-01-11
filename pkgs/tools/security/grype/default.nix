@@ -1,7 +1,7 @@
 { buildGoModule
 , docker
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -22,7 +22,7 @@ buildGoModule rec {
   # tests require a running Docker instance
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vulnerability scanner for container images and filesystems";
     longDescription = ''
       As a vulnerability scanner is grype abale to scan the contents of a container

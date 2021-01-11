@@ -1,7 +1,7 @@
 { fetchurl
 , fetchpatch
 , substituteAll
-, stdenv
+, lib, stdenv
 , pkgconfig
 , gnome3
 , pantheon
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A window manager for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     license = licenses.gpl2;

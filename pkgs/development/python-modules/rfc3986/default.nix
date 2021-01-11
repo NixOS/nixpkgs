@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, idna, pytestCheckHook }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, idna, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "rfc3986";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Validating URI References per RFC 3986";
     homepage = "https://rfc3986.readthedocs.org";
     license = licenses.asl20;

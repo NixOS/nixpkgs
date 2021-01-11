@@ -12,7 +12,7 @@
 , cudatoolkit
 , python
 , mkDerivation
-, stdenv
+, lib, stdenv
 }:
 let
   compyte = import ./compyte.nix {
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     Mako
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/inducer/pycuda/";
     description = "CUDA integration for Python.";
     license = licenses.mit;

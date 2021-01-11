@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 }:
@@ -18,7 +18,7 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.AppVersion=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Disk usage analyzer with console interface";
     longDescription = ''
       Gdu is intended primarily for SSD disks where it can fully

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre, git, gradle_5, perl, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, jre, git, gradle_5, perl, makeWrapper }:
 
 let
   name = "ma1sd-${version}";
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     makeWrapper ${jre}/bin/java $out/bin/ma1sd --add-flags "-jar $out/lib/ma1sd.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "a federated matrix identity server; fork of mxisd";
     homepage = "https://github.com/ma1uta/ma1sd";
     license = licenses.agpl3;

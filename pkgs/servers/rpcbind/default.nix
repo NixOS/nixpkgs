@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, pkgconfig, libnsl, libtirpc, autoreconfHook
+{ fetchgit, lib, stdenv, pkgconfig, libnsl, libtirpc, autoreconfHook
 , useSystemd ? true, systemd }:
 
 stdenv.mkDerivation {
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ONC RPC portmapper";
     license = licenses.bsd3;
     platforms = platforms.unix;

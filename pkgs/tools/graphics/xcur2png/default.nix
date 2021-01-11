@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libpng, xorg }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libpng, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "xcur2png";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     xorg.xorgproto
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/eworm-de/xcur2png/releases";
     description = "Convert X cursors to PNG images";
     license = licenses.gpl3;

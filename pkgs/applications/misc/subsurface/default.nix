@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkgconfig, qmake
+{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkgconfig, qmake
 , curl, grantlee, libgit2, libusb-compat-0_1, libssh2, libxml2, libxslt, libzip, zlib
 , qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
 }:
@@ -27,7 +27,7 @@ let
 
     enableParallelBuilding = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://www.libdivecomputer.org";
       description = "A cross-platform and open source library for communication with dive computers from various manufacturers";
       maintainers = with maintainers; [ mguentner ];
@@ -63,7 +63,7 @@ let
 
     enableParallelBuilding = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       inherit (src.meta) homepage;
       description = "QtLocation plugin for Google maps tile API";
       maintainers = with maintainers; [ orivej ];
@@ -91,11 +91,9 @@ in stdenv.mkDerivation {
     "-DNO_PRINTING=OFF"
   ];
 
-  enableParallelBuilding = true;
-
   passthru = { inherit version libdc googlemaps; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A divelog program";
     longDescription = ''
       Subsurface can track single- and multi-tank dives using air, Nitrox or TriMix.

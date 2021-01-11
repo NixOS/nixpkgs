@@ -43,7 +43,7 @@ buildPythonPackage rec {
     sed -i -e "s|test_write_pty|skip_test_write_pty|g" tests/test_events.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Port of the asyncio project to Python 2.7";
     homepage = "https://github.com/vstinner/trollius";
     license = licenses.asl20;

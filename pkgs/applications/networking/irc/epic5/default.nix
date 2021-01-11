@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, ncurses, libiconv, tcl, coreutils, fetchpatch }:
+{ lib, stdenv, fetchurl, openssl, ncurses, libiconv, tcl, coreutils, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "epic5";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --replace /bin/chmod ${coreutils}/bin/chmod \
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://epicsol.org";
     description = "A IRC client that offers a great ircII interface";
     license = licenses.bsd3;

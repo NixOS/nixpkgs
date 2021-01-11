@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, amoeba-data, alsaLib, expat, freetype, gtk2, libvorbis, libGLU, xorg, pkgconfig }:
+{ lib, stdenv, fetchurl, amoeba-data, alsaLib, expat, freetype, gtk2, libvorbis, libGLU, xorg, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "amoeba-${version}-${debver}";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     cp ../debian/amoeba.1 $out/share/man/man1/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast-paced, polished OpenGL demonstration by Excess";
     homepage = "https://packages.qa.debian.org/a/amoeba.html";
     license = licenses.gpl2; # Engine is GPLv2, data files in amoeba-data nonfree

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gtk3, ncurses
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, gtk3, ncurses
 , libcpuid, pciutils, procps, wrapGAppsHook, nasm, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${stdenv.lib.makeBinPath [ stdenv.cc ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free software that gathers information on CPU, motherboard and more";
     homepage = src.meta.homepage;
     license = licenses.gpl3;

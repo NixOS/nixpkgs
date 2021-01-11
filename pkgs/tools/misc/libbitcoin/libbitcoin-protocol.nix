@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
 , boost, libbitcoin, secp256k1, zeromq }:
 
 let
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
     "--with-boost-libdir=${boost.out}/lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bitcoin Blockchain Query Protocol";
     homepage = "https://libbitcoin.org/";
     platforms = platforms.linux ++ platforms.darwin;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "simpleproxy";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1my9g4vp19dikx3fsbii4ichid1bs9b9in46bkg05gbljhj340f6";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/vzaliva/simpleproxy";
     description = "A simple TCP proxy";
     license = licenses.gpl2;

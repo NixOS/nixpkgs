@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , six
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fully functional X client library for Python programs";
     homepage = "http://python-xlib.sourceforge.net/";
     license = licenses.gpl2Plus;

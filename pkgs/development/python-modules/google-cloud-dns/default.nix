@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , google-api-core
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.dns" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Cloud DNS API client library";
     homepage = "https://github.com/googleapis/python-dns";
     license = licenses.asl20;

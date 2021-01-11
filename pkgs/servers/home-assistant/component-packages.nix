@@ -15,7 +15,7 @@
     "aftership" = ps: with ps; [ pyaftership ];
     "agent_dvr" = ps: with ps; [ ]; # missing inputs: agent-py
     "air_quality" = ps: with ps; [ ];
-    "airly" = ps: with ps; [ ]; # missing inputs: airly
+    "airly" = ps: with ps; [ airly ];
     "airvisual" = ps: with ps; [ pyairvisual ];
     "aladdin_connect" = ps: with ps; [ ]; # missing inputs: aladdin_connect
     "alarm_control_panel" = ps: with ps; [ ];
@@ -328,7 +328,7 @@
     "growatt_server" = ps: with ps; [ ]; # missing inputs: growattServer
     "gstreamer" = ps: with ps; [ ]; # missing inputs: gstreamer-player
     "gtfs" = ps: with ps; [ ]; # missing inputs: pygtfs
-    "guardian" = ps: with ps; [ ]; # missing inputs: aioguardian
+    "guardian" = ps: with ps; [ aioguardian ];
     "habitica" = ps: with ps; [ ]; # missing inputs: habitipy
     "hangouts" = ps: with ps; [ ]; # missing inputs: hangups
     "harman_kardon_avr" = ps: with ps; [ ]; # missing inputs: hkavr
@@ -398,7 +398,7 @@
     "iperf3" = ps: with ps; [ ]; # missing inputs: iperf3
     "ipma" = ps: with ps; [ ]; # missing inputs: pyipma
     "ipp" = ps: with ps; [ pyipp ];
-    "iqvia" = ps: with ps; [ numpy ]; # missing inputs: pyiqvia
+    "iqvia" = ps: with ps; [ numpy pyiqvia ];
     "irish_rail_transport" = ps: with ps; [ ]; # missing inputs: pyirishrail
     "islamic_prayer_times" = ps: with ps; [ ]; # missing inputs: prayer_times_calculator
     "iss" = ps: with ps; [ ]; # missing inputs: pyiss
@@ -828,7 +828,7 @@
     "temper" = ps: with ps; [ ]; # missing inputs: temperusb
     "template" = ps: with ps; [ ];
     "tensorflow" = ps: with ps; [ numpy pillow tensorflow-build_2 ]; # missing inputs: pycocotools tf-models-official
-    "tesla" = ps: with ps; [ ]; # missing inputs: teslajsonpy
+    "tesla" = ps: with ps; [ teslajsonpy ];
     "tfiac" = ps: with ps; [ ]; # missing inputs: pytfiac
     "thermoworks_smoke" = ps: with ps; [ stringcase ]; # missing inputs: thermoworks_smoke
     "thethingsnetwork" = ps: with ps; [ ];
@@ -838,7 +838,7 @@
     "threshold" = ps: with ps; [ ];
     "tibber" = ps: with ps; [ ]; # missing inputs: pyTibber
     "tikteck" = ps: with ps; [ ]; # missing inputs: tikteck
-    "tile" = ps: with ps; [ ]; # missing inputs: pytile
+    "tile" = ps: with ps; [ pytile ];
     "time_date" = ps: with ps; [ ];
     "timer" = ps: with ps; [ ];
     "tmb" = ps: with ps; [ ]; # missing inputs: tmb

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , pcsclite, talloc, python2, gnutls
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of Osmocom core libraries";
     homepage = "https://github.com/osmocom/libosmocore";
     license = licenses.gpl2Plus;

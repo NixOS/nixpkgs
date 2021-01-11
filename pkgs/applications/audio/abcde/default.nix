@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyeD3
+{ lib, stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyeD3
 , lame, flac, glyr
 , perlPackages
 , makeWrapper }:
@@ -45,7 +45,7 @@ in
       done
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://abcde.einval.com/wiki/";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ gebner ];

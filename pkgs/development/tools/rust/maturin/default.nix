@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, dbus, gmp, openssl, pkgconfig
+{ lib, stdenv, fetchFromGitHub, rustPlatform, dbus, gmp, openssl, pkgconfig
 , darwin }:
 
 let
@@ -25,7 +25,7 @@ in rustPlatform.buildRustPackage rec {
   # Requires network access, fails in sandbox.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Build and publish crates with pyo3 bindings as python packages";
     homepage = "https://github.com/PyO3/maturin";
     license = licenses.mit;

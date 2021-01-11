@@ -578,7 +578,8 @@ let
         };
 
         vterm = super.vterm.overrideAttrs (old: {
-          buildInputs = old.buildInputs ++ [ self.emacs pkgs.cmake pkgs.libvterm-neovim ];
+          nativeBuildInputs = [ pkgs.cmake ];
+          buildInputs = old.buildInputs ++ [ self.emacs pkgs.libvterm-neovim ];
           cmakeFlags = [
             "-DEMACS_SOURCE=${self.emacs.src}"
             "-DUSE_SYSTEM_LIBVTERM=ON"

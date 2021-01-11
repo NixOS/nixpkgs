@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libcaca }:
+{ lib, stdenv, fetchurl, pkgconfig, libcaca }:
 
 stdenv.mkDerivation rec {
   pname = "toilet";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libcaca ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Display large colourful characters in text mode";
     homepage = "http://caca.zoy.org/wiki/toilet";
     license = licenses.wtfpl;

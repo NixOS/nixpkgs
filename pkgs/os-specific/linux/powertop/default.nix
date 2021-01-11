@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gettext, libnl, ncurses, pciutils, pkgconfig, zlib }:
+{ lib, stdenv, fetchurl, fetchpatch, gettext, libnl, ncurses, pciutils, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "powertop";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/tuning/bluetooth.cpp --replace "/usr/bin/hcitool" "hcitool"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Analyze power consumption on Intel-based laptops";
     homepage = "https://01.org/powertop";
     license = licenses.gpl2;

@@ -1,6 +1,6 @@
 # FIXME: Unify with pkgs/development/python-modules/blivet/default.nix.
 
-{ stdenv, fetchurl, buildPythonApplication, pykickstart, pyparted, pyblock
+{ lib, stdenv, fetchurl, buildPythonApplication, pykickstart, pyparted, pyblock
 , libselinux, cryptsetup, multipath_tools, lsof, util-linux
 , useNixUdev ? true, systemd ? null
 # useNixUdev is here for bw compatibility
@@ -41,7 +41,7 @@ buildPythonApplication rec {
   # tests are currently _heavily_ broken upstream
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fedoraproject.org/wiki/Blivet";
     description = "Module for management of a system's storage configuration";
     license = with licenses; [ gpl2Plus lgpl21Plus ];

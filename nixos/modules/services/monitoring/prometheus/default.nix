@@ -370,6 +370,14 @@ let
         List of file service discovery configurations.
       '';
 
+      gce_sd_configs = mkOpt (types.listOf promTypes.gce_sd_config) ''
+        List of Google Compute Engine service discovery configurations.
+
+        See <link
+        xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#gce_sd_config">the
+        relevant Prometheus configuration docs</link> for more detail.
+      '';
+
       static_configs = mkOpt (types.listOf promTypes.static_config) ''
         List of labeled target groups for this job.
       '';
@@ -551,6 +559,52 @@ let
 
       refresh_interval = mkDefOpt types.str "5m" ''
         Refresh interval to re-read the files.
+      '';
+    };
+  };
+
+  promTypes.gce_sd_config = types.submodule {
+    options = {
+      # Use `mkOption` instead of `mkOpt` for project and zone because they are
+      # required configuration values for `gce_sd_config`.
+      project = mkOption {
+        type = types.str;
+        description = ''
+          The GCP Project.
+        '';
+      };
+
+      zone = mkOption {
+        type = types.str;
+        description = ''
+          The zone of the scrape targets. If you need multiple zones use multiple
+          gce_sd_configs.
+        '';
+      };
+
+      filter = mkOpt types.str ''
+        Filter can be used optionally to filter the instance list by other
+        criteria Syntax of this filter string is described here in the filter
+        query parameter section: <link
+        xlink:href="https://cloud.google.com/compute/docs/reference/latest/instances/list"
+        />.
+      '';
+
+      refresh_interval = mkDefOpt types.str "60s" ''
+        Refresh interval to re-read the cloud instance list.
+      '';
+
+      port = mkDefOpt types.port "80" ''
+        The port to scrape metrics from. If using the public IP address, this
+        must instead be specified in the relabeling rule.
+      '';
+
+      tag_separator = mkDefOpt types.str "," ''
+        The tag separator used to separate concatenated GCE instance network tags.
+
+        See the GCP documentation on network tags for more information: <link
+        xlink:href="https://cloud.google.com/vpc/docs/add-remove-network-tags"
+        />
       '';
     };
   };

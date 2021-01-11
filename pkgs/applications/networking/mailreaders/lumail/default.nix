@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, lua, file, ncurses, gmime, pcre-cpp
+{ lib, stdenv, fetchurl, pkgconfig, lua, file, ncurses, gmime, pcre-cpp
 , perl, perlPackages, makeWrapper
 , debugBuild ? false
 , alternativeGlobalConfigFilePath ? null
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
     "LUMAIL_LIBS=$(out)/etc/lumail2"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Console-based email client";
     homepage = "https://lumail.org/";
     license = licenses.gpl2;

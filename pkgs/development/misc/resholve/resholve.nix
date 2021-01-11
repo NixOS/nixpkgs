@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , callPackage
 , python27Packages
 , installShellFiles
@@ -64,7 +64,7 @@ python27Packages.buildPythonApplication {
     ./test.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Resolve external shell-script dependencies";
     homepage = "https://github.com/abathur/resholve";
     license = with licenses; [ mit ];

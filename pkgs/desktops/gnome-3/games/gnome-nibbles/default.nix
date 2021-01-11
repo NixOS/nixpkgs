@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
 , librsvg, gsound, clutter-gtk, gettext, itstool, vala, python3
 , libxml2, libgee, libgnome-games-support, meson, ninja
 , desktop-file-utils, hicolor-icon-theme}:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Guide a worm around a maze";
     homepage = "https://wiki.gnome.org/Apps/Nibbles";
     license = licenses.gpl2;

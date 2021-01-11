@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , uhd, boost, soapysdr
 } :
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sed -i "s:DESTINATION .*uhd/modules:DESTINATION $out/lib/uhd/modules:" CMakeLists.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pothosware/SoapyAirspy";
     description = "SoapySDR plugin for UHD devices";
     license = licenses.gpl3Only;

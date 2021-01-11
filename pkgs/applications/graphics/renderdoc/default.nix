@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, mkDerivation
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, mkDerivation
 , qtbase, qtx11extras, qtsvg, makeWrapper
 , vulkan-loader, libglvnd, xorg, python3, python3Packages
 , bison, pcre, automake, autoconf, addOpenGLRunpath
@@ -61,9 +61,7 @@ mkDerivation rec {
     addOpenGLRunpath $out/lib/librenderdoc.so
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A single-frame graphics debugger";
     homepage = "https://renderdoc.org/";
     license = licenses.mit;

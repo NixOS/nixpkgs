@@ -231,7 +231,7 @@ self: super: {
   });
 
   vimsence = super.vimsence.overrideAttrs(old: {
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Discord rich presence for Vim";
       homepage = "https://github.com/hugolgst/vimsence";
       maintainers = with stdenv.lib.maintainers; [ hugolgst ];
@@ -321,7 +321,7 @@ self: super: {
       # remove unnecessary duplicated bin wrapper script
       rm -r plugin/vimacs
     '';
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Vim-Improved eMACS: Emacs emulation plugin for Vim";
       homepage = "http://algorithm.com.au/code/vimacs";
       license = licenses.gpl2Plus;
@@ -557,7 +557,7 @@ self: super: {
       ln -s ${ycmd}/lib/ycmd third_party
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A code-completion engine for Vim";
       homepage = "https://github.com/Valloric/YouCompleteMe";
       license = licenses.gpl3;

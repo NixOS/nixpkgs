@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , python
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     moveToOutput "lib/${python.libPrefix}" "$py"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library providing C and Python (libcURL like) API for downloading linux repository metadata and packages";
     homepage = "https://rpm-software-management.github.io/librepo/";
     license = licenses.lgpl2Plus;

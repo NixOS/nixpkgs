@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub , gtk3, breeze-icons, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub , gtk3, breeze-icons, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec  {
   pname = "kora-icon-theme";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec  {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An SVG icon theme in four variants";
     homepage = "https://github.com/bikass/kora";
     license = with licenses; [ gpl3Only ];

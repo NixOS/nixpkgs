@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, llvmPackages }:
+{ lib, stdenv, fetchurl, unzip, llvmPackages }:
 
 stdenv.mkDerivation rec {
   pname = "bayescan";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     cp -r ../*pdf ../input_examples ../"R functions" $out/share/doc/bayescan
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Detecting natural selection from population-based genetic data";
     homepage = "http://cmpg.unibe.ch/software/BayeScan";
     license = licenses.gpl3;

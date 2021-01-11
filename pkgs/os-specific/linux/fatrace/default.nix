@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python3
 , which
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Report system-wide file access events";
     homepage = "https://github.com/martinpitt/fatrace";
     license = licenses.gpl3Plus;

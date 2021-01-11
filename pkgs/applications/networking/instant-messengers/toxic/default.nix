@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libsodium, ncurses, curl
+{ lib, stdenv, fetchFromGitHub, libsodium, ncurses, curl
 , libtoxcore, openal, libvpx, freealut, libconfig, pkgconfig, libopus
 , qrencode, gdk-pixbuf, libnotify }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ pkgconfig libconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reference CLI for Tox";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];

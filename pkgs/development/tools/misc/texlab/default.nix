@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hiy8klig7j0if4iqbb0432iqsnds00aya6p4xmm913qfpsyh6cq";
+    sha256 = "06x7j4ppgw24xbsnyj1icaksngqbvq6mk8wfcqikzmvmifjspx9m";
   };
 
-  cargoSha256 = "0pf8j202rpglcxamsr8r3wwmgsdgih24m52vh1q85l93vj7jkm1v";
+  cargoSha256 = "0gzxylpn2hps0kxczd6wwcqhnvm6ir971bfvpgjr6rxi12hs47ky";
 
   nativeBuildInputs = [ installShellFiles ];
 

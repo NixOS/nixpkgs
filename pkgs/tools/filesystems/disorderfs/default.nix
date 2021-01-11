@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fuse, attr, asciidoc }:
+{ lib, stdenv, fetchurl, pkgconfig, fuse, attr, asciidoc }:
 
 stdenv.mkDerivation rec {
   pname = "disorderfs";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An overlay FUSE filesystem that introduces non-determinism into filesystem metadata";
     license = licenses.gpl3;
     platforms = platforms.linux;

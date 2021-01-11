@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion completions/dog.{bash,fish,zsh}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line DNS client";
     homepage = "https://dns.lookup.dog";
     license = licenses.eupl12;

@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, udev
+{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, udev
 , qtmultimedia, qtscript, alsaLib, ola, libftdi1, libusb-compat-0_1
 , libsndfile, libmad
 }:
@@ -35,7 +35,7 @@ mkDerivation rec {
     ln -sf $out/lib/*/libqlcplus* $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
     maintainers = [ maintainers.globin ];
     license = licenses.asl20;

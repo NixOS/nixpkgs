@@ -8,10 +8,11 @@
 
 { pkgs
 , stdenv
+, lib
 , python
 }:
 
-with pkgs.lib;
+with lib;
 
 self:
 
@@ -64,7 +65,7 @@ let
 
   # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
   # providing Python modules.
-  makePythonPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
+  makePythonPath = drvs: lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
 
   removePythonPrefix = name:
     removePrefix namePrefix name;
@@ -211,6 +212,8 @@ in {
 
   aioftp = callPackage ../development/python-modules/aioftp { };
 
+  aioguardian = callPackage ../development/python-modules/aioguardian { };
+
   aioh2 = callPackage ../development/python-modules/aioh2 { };
 
   aioharmony = callPackage ../development/python-modules/aioharmony { };
@@ -265,11 +268,17 @@ in {
 
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
 
+  aiostream = callPackage ../development/python-modules/aiostream { };
+
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   aiounittest = callPackage ../development/python-modules/aiounittest { };
 
+  aiowinreg = callPackage ../development/python-modules/aiowinreg { };
+
   aiozeroconf = callPackage ../development/python-modules/aiozeroconf { };
+
+  airly = callPackage ../development/python-modules/airly { };
 
   ajpy = callPackage ../development/python-modules/ajpy { };
 
@@ -373,6 +382,8 @@ in {
 
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
 
+  archinfo = callPackage ../development/python-modules/archinfo { };
+
   area = callPackage ../development/python-modules/area { };
 
   arelle = callPackage ../development/python-modules/arelle { gui = true; };
@@ -464,6 +475,8 @@ in {
   async-upnp-client = callPackage ../development/python-modules/async-upnp-client { };
 
   asyncwhois = callPackage ../development/python-modules/asyncwhois { };
+
+  asysocks = callPackage ../development/python-modules/asysocks { };
 
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
 
@@ -1339,6 +1352,8 @@ in {
 
   colour = callPackage ../development/python-modules/colour { };
 
+  commandparse = callPackage ../development/python-modules/commandparse { };
+
   CommonMark = callPackage ../development/python-modules/commonmark { };
 
   compiledb = callPackage ../development/python-modules/compiledb { };
@@ -1889,6 +1904,8 @@ in {
   drms = callPackage ../development/python-modules/drms { };
 
   dropbox = callPackage ../development/python-modules/dropbox { };
+
+  ds-store = callPackage ../development/python-modules/ds-store { };
 
   ds4drv = callPackage ../development/python-modules/ds4drv { inherit (pkgs) fetchFromGitHub bluez; };
 
@@ -3240,6 +3257,8 @@ in {
 
   json-merge-patch = callPackage ../development/python-modules/json-merge-patch { };
 
+  json-schema-for-humans = callPackage ../development/python-modules/json-schema-for-humans { };
+
   jsonnet = buildPythonPackage { inherit (pkgs.jsonnet) name src; };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
@@ -3692,6 +3711,8 @@ in {
 
   lsi = callPackage ../development/python-modules/lsi { };
 
+  lsassy = callPackage ../development/python-modules/lsassy { };
+
   ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
@@ -3905,6 +3926,10 @@ in {
 
   minidb = callPackage ../development/python-modules/minidb { };
 
+  minidump = callPackage ../development/python-modules/minidump { };
+
+  minikerberos = callPackage ../development/python-modules/minikerberos { };
+
   minimock = callPackage ../development/python-modules/minimock { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override { inherit python; })).py;
@@ -4050,6 +4075,8 @@ in {
   msgpack = callPackage ../development/python-modules/msgpack { };
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
+
+  msldap = callPackage ../development/python-modules/msldap { };
 
   mss = callPackage ../development/python-modules/mss { };
 
@@ -5343,6 +5370,8 @@ in {
 
   pyipp = callPackage ../development/python-modules/pyipp { };
 
+  pyiqvia = callPackage ../development/python-modules/pyiqvia { };
+
   pyjet = callPackage ../development/python-modules/pyjet { };
 
   pyjks = callPackage ../development/python-modules/pyjks { };
@@ -5586,6 +5615,8 @@ in {
   pypubsub = callPackage ../development/python-modules/pypubsub { };
 
   pypugjs = callPackage ../development/python-modules/pypugjs { };
+
+  pypykatz = callPackage ../development/python-modules/pypykatz { };
 
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
@@ -6217,6 +6248,8 @@ in {
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
+
+  pytile = callPackage ../development/python-modules/pytile { };
 
   pytimeparse = callPackage ../development/python-modules/pytimeparse { };
 
@@ -7406,6 +7439,8 @@ in {
 
   termstyle = callPackage ../development/python-modules/termstyle { };
 
+  teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
+
   tess = callPackage ../development/python-modules/tess { };
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
@@ -7883,6 +7918,8 @@ in {
 
   vxi11 = callPackage ../development/python-modules/vxi11 { };
 
+  vyper = callPackage ../development/compilers/vyper { };
+
   w3lib = callPackage ../development/python-modules/w3lib { };
 
   wadllib = callPackage ../development/python-modules/wadllib { };
@@ -7964,6 +8001,10 @@ in {
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
   willow = callPackage ../development/python-modules/willow { };
+
+  winacl = callPackage ../development/python-modules/winacl { };
+
+  winsspi = callPackage ../development/python-modules/winsspi { };
 
   wled = callPackage ../development/python-modules/wled { };
 

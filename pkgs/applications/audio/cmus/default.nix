@@ -1,4 +1,4 @@
-{ config, stdenv, fetchFromGitHub, runCommand, ncurses, pkgconfig
+{ config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkgconfig
 , libiconv, CoreAudio
 
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "LD=$(CC)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small, fast and powerful console music player for Linux and *BSD";
     homepage = "https://cmus.github.io/";
     license = licenses.gpl2;

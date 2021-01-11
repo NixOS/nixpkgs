@@ -1,4 +1,4 @@
-{ stdenv, afl}:
+{ lib, stdenv, afl}:
 
 stdenv.mkDerivation {
   version = stdenv.lib.getVersion afl;
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/get-libdislocator-so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://lcamtuf.coredump.cx/afl/";
     description = ''
       Drop-in replacement for the libc allocator which improves

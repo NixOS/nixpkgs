@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flac, fuse, lame, libid3tag, pkgconfig }:
+{ lib, stdenv, fetchurl, flac, fuse, lame, libid3tag, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "mp3fs";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FUSE file system that transparently transcodes to MP3";
     longDescription = ''
       A read-only FUSE filesystem which transcodes between audio formats

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl}:
+{ lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   pname = "amazon-ecs-cli";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       chmod +x $out/bin/ecs-cli
     '';  # */
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI.html";
     description = "The Amazon ECS command line interface";
     longDescription = "The Amazon Elastic Container Service (Amazon ECS) command line interface (CLI) provides high-level commands to simplify creating, updating, and monitoring clusters and tasks from a local development environment.";

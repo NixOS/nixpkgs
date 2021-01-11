@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl }:
+{ lib, stdenv, fetchgit, perl }:
 
 stdenv.mkDerivation {
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     cp vtwheel $out/lib/urxvt/perl
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pass mouse wheel commands to secondary screens (screen, less, nano, etc)";
     homepage = "https://aur.archlinux.org/packages/urxvt-vtwheel";
     license = licenses.mit;

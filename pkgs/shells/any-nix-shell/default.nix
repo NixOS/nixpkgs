@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "any-nix-shell";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/any-nix-shell --prefix PATH ":" $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "fish and zsh support for nix-shell";
     license = licenses.mit;
     homepage = "https://github.com/haslersn/any-nix-shell";

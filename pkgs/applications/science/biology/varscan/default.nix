@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jre, makeWrapper}:
+{lib, stdenv, fetchurl, jre, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "varscan";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/varscan --add-flags "-jar $out/libexec/varscan/varscan.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Variant calling and somatic mutation/CNV detection for next-generation sequencing data";
     # VarScan 2 is free for non-commercial use by academic,
     # government, and non-profit/not-for-profit institutions. A

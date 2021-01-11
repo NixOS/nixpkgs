@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , desktop-file-utils
 , nix-update-script
 , elementary-gtk-theme
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/elementary/sideload";
     description = "Flatpak installer, designed for elementary OS";
     license = licenses.gpl3Plus;

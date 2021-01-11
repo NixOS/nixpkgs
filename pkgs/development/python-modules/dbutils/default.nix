@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytestCheckHook }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   version = "2.0";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Database connections for multi-threaded environments";
     homepage = "https://webwareforpython.github.io/DBUtils/";
     license = licenses.mit;

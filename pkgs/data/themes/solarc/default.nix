@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig,
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkgconfig,
   gtk-engine-murrine, gtk3
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     ./autogen.sh --prefix=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Solarized version of the Arc theme";
     homepage = "https://github.com/schemar/solarc-theme";
     license = licenses.gpl3;

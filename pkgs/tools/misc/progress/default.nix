@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, which }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, ncurses, which }:
 
 stdenv.mkDerivation rec {
   pname = "progress";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Xfennec/progress";
     description = "Tool that shows the progress of coreutils programs";
     license = licenses.gpl3;

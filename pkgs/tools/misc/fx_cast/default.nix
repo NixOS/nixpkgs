@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg }:
+{ lib, stdenv, fetchurl, dpkg }:
 
 stdenv.mkDerivation rec {
   pname = "fx_cast_bridge";
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Implementation of the Chrome Sender API (Chromecast) within Firefox";
     homepage = "https://hensm.github.io/fx_cast/";
     license = licenses.mit;

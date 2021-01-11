@@ -116,7 +116,7 @@ The first step will be to build the Maven project as a fixed-output derivation i
 > Traditionally the Maven repository is at `~/.m2/repository`. We will override this to be the `$out` directory.
 
 ```nix
-{ stdenv, maven }:
+{ stdenv, lib, maven }:
 stdenv.mkDerivation {
   name = "maven-repository";
   buildInputs = [ maven ];
@@ -139,7 +139,7 @@ stdenv.mkDerivation {
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
   # replace this with the correct SHA256
-  outputHash = stdenv.lib.fakeSha256;
+  outputHash = lib.fakeSha256;
 }
 ```
 

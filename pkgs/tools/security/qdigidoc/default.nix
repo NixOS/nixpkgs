@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkgconfig
+{ lib, stdenv, mkDerivation, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkgconfig
 , libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations, qtsvg }:
 
 mkDerivation rec {
@@ -40,7 +40,7 @@ mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     "google.cloud.kms_v1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cloud Key Management Service (KMS) API API client library";
     homepage = "https://github.com/googleapis/python-kms";
     license = licenses.asl20;

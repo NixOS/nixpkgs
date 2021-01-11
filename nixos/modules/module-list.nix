@@ -82,6 +82,7 @@
   ./hardware/xpadneo.nix
   ./i18n/input-method/default.nix
   ./i18n/input-method/fcitx.nix
+  ./i18n/input-method/fcitx5.nix
   ./i18n/input-method/hime.nix
   ./i18n/input-method/ibus.nix
   ./i18n/input-method/nabi.nix
@@ -101,6 +102,7 @@
   ./misc/version.nix
   ./misc/nixops-autoluks.nix
   ./programs/adb.nix
+  ./programs/appgate-sdp.nix
   ./programs/atop.nix
   ./programs/autojump.nix
   ./programs/bandwhich.nix
@@ -226,6 +228,7 @@
   ./services/audio/icecast.nix
   ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
+  ./services/audio/mpdscribble.nix
   ./services/audio/mopidy.nix
   ./services/audio/roon-server.nix
   ./services/audio/slimserver.nix
@@ -492,6 +495,7 @@
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/novacomd.nix
   ./services/misc/nzbget.nix
+  ./services/misc/nzbhydra2.nix
   ./services/misc/octoprint.nix
   ./services/misc/osrm.nix
   ./services/misc/packagekit.nix

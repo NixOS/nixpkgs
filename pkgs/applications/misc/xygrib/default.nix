@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wrapQtAppsHook, cmake, bzip2, qtbase, qttools, libnova, proj, libpng, openjpeg } :
+{ lib, stdenv, fetchFromGitHub, wrapQtAppsHook, cmake, bzip2, qtbase, qttools, libnova, proj, libpng, openjpeg } :
 
 stdenv.mkDerivation rec {
   version = "1.2.6.1";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ln -s $out/XyGrib/XyGrib $out/bin/xygrib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://opengribs.org";
     description = "Weather Forecast Visualization";
     longDescription = ''XyGrib is a leading opensource weather visualization package.

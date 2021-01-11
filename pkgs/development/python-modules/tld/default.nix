@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, python }:
+{ lib, stdenv, fetchPypi, python }:
 
 python.pkgs.buildPythonPackage rec {
   pname   = "tld";
@@ -29,7 +29,7 @@ python.pkgs.buildPythonPackage rec {
     "tld"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/barseghyanartur/tld";
     description = "Extracts the top level domain (TLD) from the URL given";
     license = licenses.lgpl21;

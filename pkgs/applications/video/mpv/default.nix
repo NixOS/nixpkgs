@@ -1,4 +1,4 @@
-{ config, stdenv, fetchFromGitHub
+{ config, lib, stdenv, fetchFromGitHub, fetchpatch
 , addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
 , ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null
@@ -103,6 +103,14 @@ in stdenv.mkDerivation rec {
     rev    = "v${version}";
     sha256 = "sha256-3l32qQBpvWVjbLp5CZtO039oDQeH7C/cNAKtJxrzlRk=";
   };
+
+  patches = [
+    # To make mpv build with libplacebo 3.104.0:
+    (fetchpatch { # vo_gpu: placebo: update for upstream API changes
+      url = "https://github.com/mpv-player/mpv/commit/7c4465cefb27d4e0d07535d368febdf77b579566.patch";
+      sha256 = "1yfc6220ak5kc5kf7zklmsa944nr9q0qaa27l507pgrmvcyiyzrx";
+    })
+  ];
 
   postPatch = ''
     patchShebangs ./TOOLS/
@@ -209,7 +217,7 @@ in stdenv.mkDerivation rec {
     addOpenGLRunpath $out/bin/mpv
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = "https://mpv.io";
     license = licenses.gpl2Plus;

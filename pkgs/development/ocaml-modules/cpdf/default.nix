@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, camlpdf, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, camlpdf, ncurses }:
 
 let version = "2.3.1"; in
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     cp cpdfmanual.pdf $out/share/doc/cpdf/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.coherentpdf.com/";
     platforms = ocaml.meta.platforms or [];
     description = "PDF Command Line Tools";

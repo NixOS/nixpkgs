@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, openssl, pkgconfig, python3, xorg, cmake, libgit2, darwin
+{ lib, stdenv, fetchFromGitHub, rustPlatform, openssl, pkgconfig, python3, xorg, cmake, libgit2, darwin
 , curl }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   # Tests need to write to the theme directory in HOME.
   preCheck = "export HOME=`mktemp -d`";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern text editor inspired by Vim";
     homepage = "https://amp.rs";
     license = [ licenses.gpl3 ];

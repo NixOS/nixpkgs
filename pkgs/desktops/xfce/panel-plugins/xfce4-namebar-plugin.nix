@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, fetchFromGitHub, python3, vala_0_46
+{ lib, stdenv, pkgconfig, fetchFromGitHub, python3, vala_0_46
 , gtk3, libwnck3, libxfce4util, xfce4-panel, wafHook, xfce }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/HugLifeTiZ/xfce4-namebar-plugin";
     description = "Plugin which integrates titlebar and window controls into the xfce4-panel";
     license = licenses.mit;

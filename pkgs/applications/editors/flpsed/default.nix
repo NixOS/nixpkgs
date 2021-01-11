@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fltk13, ghostscript }:
+{ lib, stdenv, fetchurl, fltk13, ghostscript }:
 
 stdenv.mkDerivation rec {
   pname = "flpsed";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
         -i src/GsWidget.cxx
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WYSIWYG PostScript annotator";
     homepage = "https://flpsed.org/flpsed.html";
     license = licenses.gpl3;

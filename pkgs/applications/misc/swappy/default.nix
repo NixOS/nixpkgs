@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson
 , ninja
 , wayland
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jtheoof/swappy";
     description = "A Wayland native snapshot editing tool, inspired by Snappy on macOS ";
     license = licenses.mit;

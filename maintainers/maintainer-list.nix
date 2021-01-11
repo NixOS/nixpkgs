@@ -5490,6 +5490,12 @@
     githubId = 346094;
     name = "Michael Alyn Miller";
   };
+  manojkarthick = {
+    email = "smanojkarthick@gmail.com";
+    github = "manojkarthick";
+    githubId = 7802795;
+    name = "Manoj Karthick";
+  };
   manveru = {
     email = "m.fellinger@gmail.com";
     github = "manveru";
@@ -5910,6 +5916,12 @@
     github = "mikesperber";
     githubId = 1387206;
     name = "Mike Sperber";
+  };
+  milesbreslin = {
+    email = "milesbreslin@gmail.com";
+    github = "milesbreslin";
+    githubId = 38543128;
+    name = "Miles Breslin";
   };
   millerjason = {
     email = "mailings-github@millerjason.com";

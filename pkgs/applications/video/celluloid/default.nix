@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple GTK frontend for the mpv video player";
     longDescription = ''
       GNOME MPV interacts with mpv via the client API exported by libmpv,

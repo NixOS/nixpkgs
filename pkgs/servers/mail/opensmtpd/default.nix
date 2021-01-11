@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, bison
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, bison
 , libasr, libevent, zlib, libressl, db, pam, nixosTests
 }:
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "localstatedir=\${TMPDIR}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.opensmtpd.org/";
     description = ''
       A free implementation of the server-side SMTP protocol as defined by

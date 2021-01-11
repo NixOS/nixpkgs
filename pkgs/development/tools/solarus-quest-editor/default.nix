@@ -21,10 +21,10 @@ mkDerivation rec {
     })
   ];
 
-  buildInputs = [ cmake luajit SDL2
-    SDL2_image SDL2_ttf physfs
-    openal libmodplug libvorbis
-    solarus qtbase qttools glm ];
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ luajit SDL2 SDL2_image SDL2_ttf physfs openal
+    libmodplug libvorbis solarus qtbase qttools glm ];
 
   meta = with lib; {
     description = "The editor for the Zelda-like ARPG game engine, Solarus";

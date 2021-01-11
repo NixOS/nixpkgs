@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , meson
 , ninja
 , gettext
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Note editor designed to remain simple to use";
     homepage = "https://wiki.gnome.org/Apps/Notes";
     license = licenses.gpl3;

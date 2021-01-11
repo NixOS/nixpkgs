@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, xorg, pkgconfig}:
+{lib, stdenv, fetchFromGitHub, xorg, pkgconfig}:
 
 stdenv.mkDerivation rec {
   pname = "hhpc";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       cp hhpc $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Hides the mouse pointer in X11";
     maintainers = with maintainers; [ nico202 ];
     platforms = platforms.unix;

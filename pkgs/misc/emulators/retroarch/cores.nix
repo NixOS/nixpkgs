@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
+{ lib, stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
 , miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
@@ -41,14 +41,12 @@ let
         --add-flags "-L $COREDIR/${d2u core}_libretro${stdenv.hostPlatform.extensions.sharedLibrary} $@"
     '';
 
-    enableParallelBuilding = true;
-
     passthru = {
       inherit (a) core;
       libretroCore = "/lib/retroarch/cores";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       inherit (a) description license;
       broken = a.broken or false;
       homepage = "https://www.libretro.com/";

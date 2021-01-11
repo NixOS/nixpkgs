@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , substituteAll
@@ -135,7 +135,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Git for operating system binaries";
     homepage = "https://ostree.readthedocs.io/en/latest/";
     license = licenses.lgpl2Plus;

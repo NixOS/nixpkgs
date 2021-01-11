@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , flex
@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
   #see issue https://github.com/zeek/zeek/issues/804 to modify hardlinking duplicate files.
   inherit preConfigure;
 
-  enableParallelBuilding = true;
-
   patches = stdenv.lib.optionals stdenv.cc.isClang [
     # Fix pybind c++17 build with Clang. See: https://github.com/pybind/pybind11/issues/1604
     (fetchpatch {
@@ -53,7 +51,7 @@ stdenv.mkDerivation rec {
     "-DINSTALL_AUX_TOOLS=true"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful network analysis framework much different from a typical IDS";
     homepage = "https://www.zeek.org";
     changelog = "https://github.com/zeek/zeek/blob/v${version}/CHANGES";

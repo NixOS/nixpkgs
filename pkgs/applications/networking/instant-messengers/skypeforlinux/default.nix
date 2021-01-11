@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg
+{ lib, stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome3
 , gtk3, libappindicator-gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
 , at-spi2-atk, libuuid, at-spi2-core }:
@@ -114,7 +114,7 @@ in stdenv.mkDerivation {
       --replace /usr/bin/ $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux client for skype";
     homepage = "https://www.skype.com";
     license = licenses.unfree;

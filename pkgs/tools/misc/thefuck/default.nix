@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonApplication
+{ lib, stdenv, fetchFromGitHub, buildPythonApplication
 , colorama, decorator, psutil, pyte, six
 , pytest, pytest-mock
 }:
@@ -28,7 +28,7 @@ buildPythonApplication rec {
 
   doCheck = false; # The above is only enough for tests to pass outside the sandbox.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/nvbn/thefuck";
     description = "Magnificent app which corrects your previous console command";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitLab, qmake, qtbase, qttools, qtserialport, libGLU }:
+{ lib, stdenv, mkDerivation, fetchFromGitLab, qmake, qtbase, qttools, qtserialport, libGLU }:
 mkDerivation rec {
   pname = "OSCAR";
   version = "1.2.0";
@@ -34,7 +34,7 @@ mkDerivation rec {
     install -T Building/Linux/OSCAR.desktop $out/share/applications/OSCAR.desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.sleepfiles.com/OSCAR/";
     description = "Software for reviewing and exploring data produced by CPAP and related machines used in the treatment of sleep apnea";
     license = licenses.gpl3;

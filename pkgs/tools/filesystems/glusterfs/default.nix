@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, fuse, bison, flex_2_5_35, openssl, python3, ncurses, readline,
+{lib, stdenv, fetchFromGitHub, fuse, bison, flex_2_5_35, openssl, python3, ncurses, readline,
  autoconf, automake, libtool, pkgconfig, zlib, libaio, libxml2, acl, sqlite,
  liburcu, attr, makeWrapper, coreutils, gnused, gnugrep, which,
  openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
@@ -180,7 +180,7 @@ in stdenv.mkDerivation rec {
     rm -r $out/bin/conf.py
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Distributed storage system";
     homepage = "https://www.gluster.org";
     license = licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2

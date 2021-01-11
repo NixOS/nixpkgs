@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libsndfile, libsamplerate, flex, bison, boost, gettext
+{ lib, stdenv, fetchFromGitHub, cmake, libsndfile, libsamplerate, flex, bison, boost, gettext
 , alsaLib ? null
 , libpulseaudio ? null
 , libjack2 ? null
@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
   # version and remove fluidsynth 1.x from nixpkgs again.
   version = "6.15.0";
 
-  enableParallelBuilding = true;
-
   hardeningDisable = [ "format" ];
 
   src = fetchFromGitHub {
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
       liblo ladspa-sdk fluidsynth eigen
       curl tcltk fltk ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sound design, audio synthesis, and signal processing system, providing facilities for music composition and performance on all major operating systems and platforms";
     homepage = "http://www.csounds.com/";
     license = licenses.gpl2;

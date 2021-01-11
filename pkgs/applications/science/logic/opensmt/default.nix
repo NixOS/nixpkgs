@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, automake, libtool, autoconf, intltool, perl
+{ lib, stdenv, fetchurl, automake, libtool, autoconf, intltool, perl
 , gmpxx, flex, bison
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ automake libtool autoconf intltool perl gmpxx flex bison ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A satisfiability modulo theory (SMT) solver";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

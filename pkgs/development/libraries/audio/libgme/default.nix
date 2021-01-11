@@ -20,9 +20,7 @@ in stdenv.mkDerivation {
     sha256 = "100ahb4n4pvgcry9xzlf2fr4j57n5h9x7pvyhhxys4dcy8axqqsy";
   };
 
-  buildInputs = [ cmake ];
-
-  nativeBuildInputs = [ removeReferencesTo ];
+  nativeBuildInputs = [ cmake removeReferencesTo ];
 
   # It used to reference it, in the past, but thanks to the postFixup hook, now
   # it doesn't.

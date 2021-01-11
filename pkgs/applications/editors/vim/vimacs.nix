@@ -1,4 +1,4 @@
-{ stdenv, config, vim_configurable, macvim, vimPlugins
+{ lib, stdenv, config, vim_configurable, macvim, vimPlugins
 , useMacvim ? stdenv.isDarwin && (config.vimacs.macvim or true)
 , vimacsExtraArgs ? "" }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vim-Improved eMACS: Emacs emulation for Vim";
     homepage = "http://algorithm.com.au/code/vimacs";
     license = licenses.gpl2Plus;

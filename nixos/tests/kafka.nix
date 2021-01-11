@@ -8,7 +8,7 @@ with pkgs.lib;
 let
   makeKafkaTest = name: kafkaPackage: (import ./make-test-python.nix ({
     inherit name;
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ nequissimus ];
     };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zsh }:
+{ lib, stdenv, fetchFromGitHub, zsh }:
 
 # To make use of this derivation, use the `programs.zsh.enableAutoSuggestions` option
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       $out/share/zsh-autosuggestions/zsh-autosuggestions.zsh
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fish shell autosuggestions for Zsh";
     homepage = "https://github.com/zsh-users/zsh-autosuggestions";
     license = licenses.mit;

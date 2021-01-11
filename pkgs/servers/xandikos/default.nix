@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python3Packages
 , installShellFiles
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     installManPage xandikos.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight CalDAV/CardDAV server";
     homepage = "https://github.com/jelmer/xandikos";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2, xorg, glib, xneur, libglade, GConf, libappindicator-gtk2, pcre }:
+{ lib, stdenv, fetchurl, pkgconfig, intltool, gtk2, xorg, glib, xneur, libglade, GConf, libappindicator-gtk2, pcre }:
 
 stdenv.mkDerivation {
   name = "gxneur-0.20.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     libglade GConf pcre libappindicator-gtk2
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for XNEUR keyboard layout switcher";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 gpl3 ];

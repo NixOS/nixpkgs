@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , glibcLocales
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "prettytable" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
     homepage = "http://code.google.com/p/prettytable/";
     license = licenses.bsd3;

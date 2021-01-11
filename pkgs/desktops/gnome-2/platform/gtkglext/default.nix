@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , pkgconfig
 , gtk-doc
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://projects.gnome.org/gtkglext/";
     description = "GtkGLExt, an OpenGL extension to GTK";
     longDescription = ''

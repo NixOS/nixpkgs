@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libowfat, libcap, zlib, openssl }:
+{ lib, stdenv, fetchurl, libowfat, libcap, zlib, openssl }:
 
 let
   version = "0.16";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     make gatling
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high performance web server";
     homepage = "http://www.fefe.de/gatling/";
     license = stdenv.lib.licenses.gpl2;

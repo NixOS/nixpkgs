@@ -1,7 +1,7 @@
 { fetchurl
 , fetchFromGitLab
 , fetchpatch
-, stdenv
+, lib, stdenv
 , substituteAll
 , accountsservice
 , adwaita-icon-theme
@@ -188,7 +188,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities to configure the GNOME desktop";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

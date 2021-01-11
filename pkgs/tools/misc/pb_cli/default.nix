@@ -1,5 +1,5 @@
 { screenshots ? true, video ? false, clipboard ? true
-, stdenv, jq, curl, fetchFromGitHub, makeWrapper, maim ? null, xclip ? null, capture ? null }:
+, lib, stdenv, jq, curl, fetchFromGitHub, makeWrapper, maim ? null, xclip ? null, capture ? null }:
 
 assert screenshots -> maim != null;
 assert video -> capture != null;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : '${stdenv.lib.makeBinPath liveDeps}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A no bullshit 0x0.st client";
     homepage = "https://github.com/ptpb/pb_cli";
     maintainers = [ maintainers.ar1a ];

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, pyxdg, pytest }:
+{ lib, stdenv, buildPythonApplication, fetchFromGitHub, pyxdg, pytest }:
 
 buildPythonApplication rec {
   pname   = "pass-git-helper";
@@ -17,7 +17,7 @@ buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/languitar/pass-git-helper";
     description = "A git credential helper interfacing with pass, the standard unix password manager";
     license = licenses.gpl3Plus;

@@ -114,7 +114,7 @@ stdenv.mkDerivation {
       --set PYTHONPATH "$PYTHONPATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Node-graph based, open-source compositing software";
     longDescription = ''
       Node-graph based, open-source compositing software. Similar in

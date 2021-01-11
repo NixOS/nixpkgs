@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, zlib, libusb1
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, zlib, libusb1
 , enableGUI ? false, qtbase ? null
 }:
 
@@ -39,9 +39,7 @@ mkDerivation {
     install -m644 ../OSX/README.txt $out/share/doc/heimdall/README.osx
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://www.glassechidna.com.au/products/heimdall/";
     description = "A cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
     license     = licenses.mit;

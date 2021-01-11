@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , buildPythonApplication, python
 , pytestCheckHook, mock, pathpy, pyhamcrest, pytest-html
 , glibcLocales
@@ -37,7 +37,7 @@ buildPythonApplication rec {
     ${python.interpreter} bin/behave -f progress3 --stop --tags='~@xfail' issue.features/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/behave/behave";
     description = "behaviour-driven development, Python style";
     license = licenses.bsd2;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , PyGithub
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # no tests
   pythonImportsCheck = [ "keep" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/orkohunter/keep";
     description = "A Meta CLI toolkit: Personal shell command keeper and snippets manager";
     platforms = platforms.all;

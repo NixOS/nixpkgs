@@ -24,7 +24,7 @@ in mkDerivation {
   patchPhase = ''
     patchShebangs configure
   '';
-  
+
   installPhase = if stdenv.isDarwin then ''
     mkdir -p $out/Applications
     cp -r sleepyhead/SleepyHead.app $out/Applications
@@ -37,7 +37,7 @@ in mkDerivation {
     wrapQtApp "$out/Applications/SleepyHead.app/Contents/MacOS/SleepyHead"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sleepyhead.jedimark.net/";
     description = "Review and explore data produced by CPAP and related machines";
     longDescription = ''

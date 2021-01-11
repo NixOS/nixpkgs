@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, makeWrapper
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, makeWrapper
 , SDL2, alsaLib, libjack2, lhasa, perl, rtmidi, zlib, zziplib }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     install -Dm644 $src/resources/milkytracker.appdata $out/share/appdata/milkytracker.appdata.xml
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Music tracker application, similar to Fasttracker II";
     homepage = "http://milkytracker.org";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, curl, fuse, libxml2, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, curl, fuse, libxml2, pkgconfig }:
 
 let
   srcs = {
@@ -44,7 +44,7 @@ in stdenv.mkDerivation {
     install boxfs boxfs-init $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FUSE file system for box.com accounts";
     longDescription = ''
       Store files on box.com (an account is required). The first time you run

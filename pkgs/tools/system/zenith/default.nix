@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, IOKit }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, IOKit }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sort of like top or htop but with zoom-able charts, network, and disk usage";
     homepage = "https://github.com/bvaisvil/zenith";
     license = licenses.mit;

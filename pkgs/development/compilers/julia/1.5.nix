@@ -119,8 +119,6 @@ stdenv.mkDerivation rec {
     openspecfun pcre2 lapack
   ];
 
-  enableParallelBuilding = true;
-
   # Julia's tests require read/write access to $HOME
   preCheck = ''
     export HOME="$NIX_BUILD_TOP"

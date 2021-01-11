@@ -1,4 +1,4 @@
-{ stdenv, dpkg, fetchurl }:
+{ lib, stdenv, dpkg, fetchurl }:
 
 let
   generic = { version, sha256, suffix ? "" }:
@@ -29,7 +29,7 @@ let
       runHook postInstall
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://www.ubnt.com/";
       description = "Controller for Ubiquiti UniFi access points";
       license = licenses.unfree;

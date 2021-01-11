@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchurl
 , fetchpatch
 , autoreconfHook
 , perl
@@ -11,11 +11,13 @@ stdenv.mkDerivation rec {
   pname = "bash-completion";
   version = "2.11";
 
-  src = fetchFromGitHub {
-    owner = "scop";
-    repo = "bash-completion";
-    rev = version;
-    sha256 = "0m3brd5jx7w07h8vxvvcmbyrlnadrx6hra3cvx6grzv6rin89liv";
+  # Using fetchurl because fetchGithub or fetchzip will have trouble on
+  # e.g. APFS filesystems (macOS) because of non UTF-8 characters in some of the
+  # test fixtures that are part of the repository.
+  # See discussion in https://github.com/NixOS/nixpkgs/issues/107768
+  src = fetchurl {
+    url = "https://github.com/scop/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
+    sha256 = "1b0iz7da1sgifx1a5wdyx1kxbzys53v0kyk8nhxfipllmm5qka3k";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -61,7 +63,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's/readlink -f/readlink/g' bash_completion completions/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/scop/bash-completion";
     description = "Programmable completion for the bash shell";
     license = licenses.gpl2Plus;

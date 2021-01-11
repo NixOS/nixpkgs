@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu, lzfse }:
+{ lib, stdenv, fetchFromGitHub, cmake, fuse, zlib, bzip2, openssl, libxml2, icu, lzfse }:
 
 stdenv.mkDerivation rec {
   pname = "darling-dmg";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "-llzfse"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.darlinghq.org/";
     description = "Darling lets you open macOS dmgs on Linux";
     platforms = platforms.linux;

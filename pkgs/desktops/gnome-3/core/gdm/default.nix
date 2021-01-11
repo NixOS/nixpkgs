@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , substituteAll
@@ -172,7 +172,7 @@ stdenv.mkDerivation rec {
     initialVT = "7";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A program that manages graphical display servers and handles graphical user logins";
     homepage = "https://wiki.gnome.org/Projects/GDM";
     license = licenses.gpl2Plus;

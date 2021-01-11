@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , gpm, openssl, pkgconfig, libev # Misc.
 , libpng, libjpeg, libtiff, librsvg # graphic formats
 , bzip2, zlib, xz # Transfer encodings
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional enableFB "--with-fb"
     ++ stdenv.lib.optional enableDirectFB "--with-directfb";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://links.twibright.com/";
     description = "A small browser with some graphics support";
     maintainers = with maintainers; [ raskin ];

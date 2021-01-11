@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , libX11, libXmu, libXpm, gtk2, libpng, libjpeg, libtiff, librsvg, gdk-pixbuf, gdk-pixbuf-xlib
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS="-lX11";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A stand-alone panel";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

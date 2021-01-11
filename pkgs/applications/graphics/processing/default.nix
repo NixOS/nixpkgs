@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, xmlstarlet, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, xmlstarlet, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "processing";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A language and IDE for electronic arts";
     homepage = "https://processing.org";
     license = licenses.gpl2Plus;

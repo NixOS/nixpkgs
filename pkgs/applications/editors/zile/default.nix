@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, glib, libgee, pkg-config, ncurses, boehmgc, perl, help2man, vala }:
+{ fetchurl, lib, stdenv, glib, libgee, pkg-config, ncurses, boehmgc, perl, help2man, vala }:
 
 stdenv.mkDerivation rec {
   name = "zile-2.6.0.90";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
   gl_cv_func_fstatat_zero_flag="yes";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight Emacs clone";
 
     longDescription = ''

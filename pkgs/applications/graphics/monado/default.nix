@@ -1,23 +1,29 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , fetchpatch
+, writeText
 , cmake
+, doxygen
+, glslang
 , pkg-config
 , python3
 , SDL2
 , dbus
 , eigen
 , ffmpeg
-, glslang
+, gst-plugins-base
+, gstreamer
 , hidapi
 , libGL
 , libXau
 , libXdmcp
 , libXrandr
 , libffi
+, libjpeg
 # , librealsense
 , libsurvive
 , libusb1
+, libuv
 , libuvc
 , libv4l
 , libxcb
@@ -29,6 +35,11 @@
 , wayland
 , wayland-protocols
 , zlib
+# Set as 'false' to build monado without service support, i.e. allow VR
+# applications linking against libopenxr_monado.so to use OpenXR standalone
+# instead of via the monado-service program. For more information see:
+# https://gitlab.freedesktop.org/monado/monado/-/blob/master/doc/targets.md#xrt_feature_service-disabled
+, serviceSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -51,23 +62,36 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config python3 ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    glslang
+    pkg-config
+    python3
+  ];
+
+  cmakeFlags = [
+    "-DXRT_FEATURE_SERVICE=${if serviceSupport then "ON" else "OFF"}"
+  ];
 
   buildInputs = [
     SDL2
     dbus
     eigen
     ffmpeg
-    glslang
+    gst-plugins-base
+    gstreamer
     hidapi
     libGL
     libXau
     libXdmcp
     libXrandr
+    libjpeg
     libffi
     # librealsense.dev - see below
     libsurvive
     libusb1
+    libuv
     libuvc
     libv4l
     libxcb
@@ -91,11 +115,16 @@ stdenv.mkDerivation rec {
   # for some reason cmake is trying to use ${librealsense}/include
   # instead of ${librealsense.dev}/include as an include directory
 
-  meta = with stdenv.lib; {
+  # Help openxr-loader find this runtime
+  setupHook = writeText "setup-hook" ''
+    export XDG_CONFIG_DIRS=@out@/etc/xdg''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
+  '';
+
+  meta = with lib; {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";
     license = licenses.boost;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [ expipiplus1 prusnak ];
     platforms = platforms.linux;
   };
 }

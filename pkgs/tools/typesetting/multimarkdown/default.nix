@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl }:
+{ lib, stdenv, fetchgit, perl }:
 
 stdenv.mkDerivation {
   pname = "multimarkdown";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   checkPhase = "make test-all";
   installPhase = "make pkg-install prefix='' DESTDIR=$out; make pkg-install-scripts prefix='' DESTDIR=$out";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A derivative of Markdown that adds new syntax features";
     longDescription = ''
       MultiMarkdown is a lightweight markup language created by

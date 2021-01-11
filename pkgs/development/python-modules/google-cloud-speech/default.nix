@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , google-api-core
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     "google.cloud.speech_v1p1beta1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Cloud Speech API client library";
     homepage = "https://github.com/googleapis/python-speech";
     license = licenses.asl20;

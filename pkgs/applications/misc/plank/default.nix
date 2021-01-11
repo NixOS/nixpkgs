@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , vala
 , atk
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/file" "${file}/bin/file"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Elegant, simple, clean dock";
     homepage = "https://launchpad.net/plank";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, curl, jansson, autoconf, automake
+{ lib, stdenv, fetchFromGitHub, curl, jansson, autoconf, automake
 , aesni ? stdenv.hostPlatform.aesSupport }:
 
 let
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   configureFlags = [ (if aesni then "--enable-aes-ni" else "--disable-aes-ni") ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-algo CPUMiner";
     homepage = "https://github.com/wolf9466/cpuminer-multi";
     license = licenses.gpl2;

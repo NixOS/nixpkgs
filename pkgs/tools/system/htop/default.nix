@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses
   ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interactive process viewer for Linux";
     homepage = "https://htop.dev";
     license = licenses.gpl2Only;

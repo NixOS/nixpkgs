@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, cmake, gtk3, wxGTK30-gtk3,
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk3, wxGTK30-gtk3,
   curl, gettext, glib, indilib, libnova, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     mv $out/bin/.phd2.bin-wrapped $out/bin/.phd2-wrapped.bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://openphdguiding.org/";
     description = "Telescope auto-guidance application";
     license = licenses.bsd3;

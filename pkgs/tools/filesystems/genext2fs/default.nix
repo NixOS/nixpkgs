@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "genext2fs-1.4.1";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sed -e 's@4 [*] (EXT2_TIND_BLOCK+1)@-1+&@' -i genext2fs.c
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://genext2fs.sourceforge.net/";
     description = "A tool to generate ext2 filesystem images without requiring root privileges";
     license = licenses.gpl2;

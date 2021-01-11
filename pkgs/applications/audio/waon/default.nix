@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, gtk2, libao, libsamplerate
+{ lib, stdenv, fetchFromGitHub, fftw, gtk2, libao, libsamplerate
 , libsndfile, ncurses, pkgconfig
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin waon pv gwaon
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Wave-to-Notes transcriber";
     homepage = "https://kichiki.github.io/WaoN/";
     license = licenses.gpl2;

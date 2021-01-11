@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ lib, stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "radicale";
@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = !pythonPackages.isPy3k;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.radicale.org/";
     description = "CalDAV CardDAV server";
     longDescription = ''

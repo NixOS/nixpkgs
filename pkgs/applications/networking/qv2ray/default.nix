@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchFromGitHub
 , qmake
@@ -56,7 +56,7 @@ mkDerivation rec {
     qttools
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An GUI frontend to v2ray";
     homepage = "https://qv2ray.github.io/en/";
     license = licenses.gpl3;

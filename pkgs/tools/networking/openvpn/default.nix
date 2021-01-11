@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , makeWrapper
@@ -68,7 +68,7 @@ let
 
         enableParallelBuilding = true;
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "A robust and highly flexible tunneling application";
           downloadPage = "https://openvpn.net/community-downloads/";
           homepage = "https://openvpn.net/";

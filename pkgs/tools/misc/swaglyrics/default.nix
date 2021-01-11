@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     [ blinker swspotify pytestCheckHook flask mock flask_testing ]
     ++ [ ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lyrics fetcher for currently playing Spotify song";
     homepage = "https://github.com/SwagLyrics/SwagLyrics-For-Spotify";
     license = licenses.mit;

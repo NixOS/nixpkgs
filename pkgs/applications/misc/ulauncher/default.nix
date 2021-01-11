@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , nix-update-script
 , python3Packages
@@ -110,7 +110,7 @@ python3Packages.buildPythonApplication rec {
   };
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast application launcher for Linux, written in Python, using GTK";
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;

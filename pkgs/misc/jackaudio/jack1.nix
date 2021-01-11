@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 
 # Optional Dependencies
 , alsaLib ? null, db ? null, libuuid ? null, libffado ? null, celt ? null
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ optAlsaLib optDb optLibffado optCelt ];
   propagatedBuildInputs = [ optLibuuid ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "JACK audio connection kit";
     homepage = "https://jackaudio.org";
     license = with licenses; [ gpl2 lgpl21 ];

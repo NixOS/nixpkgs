@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libevent, libasr,
+{ lib, stdenv, fetchurl, openssl, libevent, libasr,
   python2, pkgconfig, lua5, perl, libmysqlclient, postgresql, sqlite, hiredis,
   enablePython ? true,
   enableLua ? true,
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     + stdenv.lib.optionalString enableMysql
       " -L${libmysqlclient}/lib/mysql";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.opensmtpd.org/";
     description = "Extra plugins for the OpenSMTPD mail server";
     license = licenses.isc;

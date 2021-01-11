@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , pytestCheckHook
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
   pytestFlagsArray = [ "--ignore=docs" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Integration of factory_boy into the pytest runner.";
     homepage = "https://pytest-factoryboy.readthedocs.io/en/latest/";
     maintainers = with maintainers; [ winpat ];

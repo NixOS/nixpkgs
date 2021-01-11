@@ -1,5 +1,5 @@
 { fetchurl
-, stdenv
+, lib, stdenv
 , substituteAll
 , aspellWithDicts
 , at-spi2-core ? null
@@ -172,7 +172,7 @@ python3.pkgs.buildPythonApplication rec {
     rm -rf  $out/share/icons/ubuntu-mono-*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://launchpad.net/onboard";
     description = "Onscreen keyboard useful for tablet PC users and for mobility impaired users";
     maintainers = with maintainers; [ johnramsden ];

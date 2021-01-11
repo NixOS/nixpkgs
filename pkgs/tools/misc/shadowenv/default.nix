@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowenv";
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh sh/completions/_shadowenv
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://shopify.github.io/shadowenv/";
     description = "reversible directory-local environment variable manipulations";
     license = licenses.mit;

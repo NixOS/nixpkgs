@@ -11,7 +11,8 @@ mkDerivation {
     sha256 = "7hIgaWjjOck5i4QbeVeQK7yrjK4yDoAZ5qY9RhM5ABY=";
   };
 
-  buildInputs = [ cmake qtbase qttools file solid ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qtbase qttools file solid ];
 
   cmakeFlags = [ "-DQT5BUILD=true" ];
 

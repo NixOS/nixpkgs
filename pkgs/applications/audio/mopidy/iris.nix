@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, mopidy }:
+{ lib, stdenv, python3Packages, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Iris";
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jaedb/Iris";
     description = "A fully-functional Mopidy web client encompassing Spotify and many other backends";
     license = licenses.asl20;

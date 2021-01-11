@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gmp-static, gperf, autoreconfHook, libpoly }:
+{ lib, stdenv, fetchFromGitHub, gmp-static, gperf, autoreconfHook, libpoly }:
 
 stdenv.mkDerivation rec {
   pname = "yices";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       ln -sfr $out/lib/libyices.so.{${version},${ver_XdotY}}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";
     homepage    = "http://yices.csl.sri.com";
     license     = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , makeWrapper
 , fetchurl
 , cabextract
@@ -27,7 +27,7 @@
 let
   version = "4.4";
 
-  binpath = stdenv.lib.makeBinPath [ 
+  binpath = stdenv.lib.makeBinPath [
     cabextract
     python
     gettext
@@ -70,7 +70,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ 
+  buildInputs = [
     xorg.libX11
     libGL
     python
@@ -103,7 +103,7 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for managing Windows programs under linux";
     homepage = "https://www.playonlinux.com/";
     license = licenses.gpl3;

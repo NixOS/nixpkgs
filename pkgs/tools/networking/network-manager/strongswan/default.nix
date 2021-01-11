@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, networkmanager, strongswanNM
+{ lib, stdenv, fetchurl, intltool, pkgconfig, networkmanager, strongswanNM
 , gtk3, gnome3, libsecret, libnma }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   PKG_CONFIG_LIBNM_VPNSERVICEDIR = "$(out)/lib/NetworkManager/VPN";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NetworkManager's strongswan plugin";
     inherit (networkmanager.meta) platforms;
     license = licenses.gpl2Plus;

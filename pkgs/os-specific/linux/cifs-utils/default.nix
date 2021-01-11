@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "root_sbindir=$(out)/sbin" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.samba.org/linux-cifs/cifs-utils/";
     description = "Tools for managing Linux CIFS client filesystems";
     platforms = platforms.linux;

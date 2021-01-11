@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem }:
+{ lib, stdenv, fetchurl, unzip, jre, coreutils, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "basex";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XML database and XPath/XQuery processor";
     longDescription = ''
       BaseX is a very fast and light-weight, yet powerful XML database and

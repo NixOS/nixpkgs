@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, sassc, gtk3, gnome3, gdk-pixbuf, librsvg, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, sassc, gtk3, gnome3, gdk-pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "lounge-gtk-theme";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     gtk-update-icon-cache "$out"/share/icons/Lounge-aux;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple and clean GTK theme with vintage scrollbars, inspired by Absolute, based on Adwaita";
     homepage = "https://github.com/monday15/lounge-gtk-theme";
     license = licenses.gpl3Plus;

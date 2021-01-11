@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     # The arc-project test fails on aarch64.
   + lib.optionalString stdenv.isAarch64 "rm -v testo.d/arc-project.test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert, upload and download data from GPS and Map programs";
     longDescription = ''
       GPSBabel converts waypoints, tracks, and routes between popular

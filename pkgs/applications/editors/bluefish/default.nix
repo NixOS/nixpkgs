@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, wrapGAppsHook, pkgconfig , gtk, libxml2
+{ lib, stdenv, fetchurl, intltool, wrapGAppsHook, pkgconfig , gtk, libxml2
 , enchant, gucharmap, python, gnome3
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnome3.adwaita-icon-theme gtk libxml2
     enchant gucharmap python ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A powerful editor targeted towards programmers and webdevelopers";
     homepage = "http://bluefish.openoffice.nl/";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit, autoconf, automake, pkgconfig, help2man
 , openssl, libuuid, gnu-efi, libbfd
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     make install
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for maintaining UEFI signature databases";
     homepage    = "http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases";
     maintainers = [ maintainers.tstrobel ];

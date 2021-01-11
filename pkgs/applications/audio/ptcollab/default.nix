@@ -1,5 +1,5 @@
 { mkDerivation
-, stdenv
+, lib, stdenv
 , fetchFromGitHub
 , qmake
 , qtbase
@@ -22,7 +22,7 @@ mkDerivation rec {
 
   buildInputs = [ qtbase qtmultimedia libvorbis ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Experimental pxtone editor where you can collaborate with friends";
     homepage = "https://yuxshao.github.io/ptcollab/";
     license = licenses.mit;

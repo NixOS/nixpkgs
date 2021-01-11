@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, curl, zlib, ffmpeg_3, glew, pcre
+{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake, curl, zlib, ffmpeg_3, glew, pcre
 , rtmpdump, cairo, boost, SDL2, SDL2_mixer, libjpeg, pango, lzma, nasm
 , llvm, glibmm
 }:
@@ -25,9 +25,7 @@ stdenv.mkDerivation rec {
     pango lzma nasm llvm glibmm
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source Flash Player implementation";
     homepage = "https://lightspark.github.io/";
     license = licenses.lgpl3;

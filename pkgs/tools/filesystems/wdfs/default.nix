@@ -1,4 +1,4 @@
-{stdenv, fetchurl, glib, neon, fuse, pkgconfig}:
+{lib, stdenv, fetchurl, glib, neon, fuse, pkgconfig}:
 
 stdenv.mkDerivation {
   name = "wdfs-fuse-1.4.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [fuse glib neon];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://noedler.de/projekte/wdfs/";
     license = licenses.gpl2;
     description = "User-space filesystem that allows to mount a webdav share";

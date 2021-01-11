@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkgconfig, flex, bison
 , llvmPackages, kernel, elfutils
 , libelf, libbfd, libbpf, libopcodes, bcc
@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
     rev    = "refs/tags/v${version}";
     sha256 = "0y4qgm2cpccrsm20rnh92hqplddqsc5q5zhw9nqn2igm3h9i0z7h";
   };
-
-  enableParallelBuilding = true;
 
   buildInputs = with llvmPackages;
     [ llvm clang-unwrapped
@@ -54,7 +52,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
     homepage    = "https://github.com/iovisor/bpftrace";
     license     = licenses.asl20;

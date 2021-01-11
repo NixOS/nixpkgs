@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 }:
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small utility to create JSON objects";
     homepage = "https://github.com/skanehira/gjo";
     license = licenses.mit;

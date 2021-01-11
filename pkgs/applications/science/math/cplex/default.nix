@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, openjdk, gtk2, xorg, glibcLocales, releasePath ? null }:
+{ lib, stdenv, makeWrapper, openjdk, gtk2, xorg, glibcLocales, releasePath ? null }:
 
 # To use this package, you need to download your own cplex installer from IBM
 # and override the releasePath attribute to point to the location of the file.  
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     libSuffix = "${version}0";
   };
   
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Optimization solver for mathematical programming";
     homepage = "https://www.ibm.com/be-en/marketplace/ibm-ilog-cplex";
     license = licenses.unfree;

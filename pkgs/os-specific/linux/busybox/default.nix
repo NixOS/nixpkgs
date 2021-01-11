@@ -48,14 +48,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.32.0";
+  pname = "busybox";
+  version = "1.32.1";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
-    url = "https://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "w12H8dBLKxU9M8J1wmMuQNOIqI8ZqecXJ+C7v/Uf5ok=";
+    url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
+    sha256 = "1vhd59qmrdyrr1q7rvxmyl96z192mxl089hi87yl0hcp6fyw8mwx";
   };
 
   hardeningDisable = [ "format" "pie" ]
@@ -128,7 +129,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tries to access the net
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
     license = licenses.gpl2;

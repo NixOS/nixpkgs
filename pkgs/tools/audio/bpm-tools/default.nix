@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib, stdenv,
   fetchurl,
   gnuplot,
   sox,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/bpm-graph --prefix PATH : "${path}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.pogo.org.uk/~mark/bpm-tools/";
     description = "Automatically calculate BPM (tempo) of music files";
     license = licenses.gpl2;

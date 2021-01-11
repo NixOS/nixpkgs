@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, wayland, scdoc, makeWrapper
 , wlroots, wayland-protocols, pixman, libxkbcommon
 , cairo , pango, fontconfig, pandoc, systemd
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.basic = nixosTests.cagebreak;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Wayland tiling compositor inspired by ratpoison";
     homepage = "https://github.com/project-repo/cagebreak";
     license = licenses.mit;

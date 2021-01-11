@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bison, boost, cmake, makeWrapper, pkgconfig
+{ lib, stdenv, fetchFromGitHub, bison, boost, cmake, makeWrapper, pkgconfig
 , curl, cyrus_sasl, libaio, libedit, libev, libevent, libgcrypt, libgpgerror, lz4
 , ncurses, numactl, openssl, protobuf, valgrind, xxd, zlib
 , perlPackages
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     rm -r "$out"/lib/plugin/debug
   '' + extraPostInstall;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Non-blocking backup tool for MySQL";
     homepage = "http://www.percona.com/software/percona-xtrabackup";
     license = licenses.lgpl2;

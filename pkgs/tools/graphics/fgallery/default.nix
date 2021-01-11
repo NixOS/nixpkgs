@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper, perlPackages
+{ lib, stdenv, fetchurl, unzip, makeWrapper, perlPackages
 , coreutils, zip, imagemagick, pngcrush, lcms2
 , facedetect, fbida }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
                      [ coreutils zip imagemagick pngcrush lcms2 facedetect fbida ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Static photo gallery generator";
     homepage = "http://www.thregr.org/~wavexx/software/fgallery/";
     license = licenses.gpl2;

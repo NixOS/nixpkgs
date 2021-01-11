@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, gnu-config, IOKit, Carbon }:
+{ lib, stdenv, fetchurl, autoreconfHook, gnu-config, IOKit, Carbon }:
 
 stdenv.mkDerivation rec {
   name = "cdparanoia-III-10.2";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     cp ${gnu-config}/config.guess configure.guess
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://xiph.org/paranoia";
     description = "A tool and library for reading digital audio from CDs";
     license = with licenses; [ gpl2Plus lgpl21Plus ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , talloc, docutils, swig, python, coreutils, enablePython ? true }:
 
 stdenv.mkDerivation {
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     install -Dm644 doc/proot/man.1 $out/share/man/man1/proot.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://proot-me.github.io";
     description = "User-space implementation of chroot, mount --bind and binfmt_misc";
     platforms = platforms.linux;

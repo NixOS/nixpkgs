@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libxml2, flex, bison, vips, gnome2,
+{ lib, stdenv, fetchurl, pkgconfig, glib, libxml2, flex, bison, vips, gnome2,
 fftw, gsl, goffice, libgsf }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     gnome2.gtk fftw gsl goffice libgsf
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/libvips/nip2";
     description = "Graphical user interface for VIPS image processing system";
     license = licenses.gpl2Plus;

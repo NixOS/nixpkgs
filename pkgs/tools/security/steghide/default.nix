@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjpeg, libmcrypt, zlib, libmhash, gettext, libtool}:
+{ lib, stdenv, fetchurl, libjpeg, libmcrypt, zlib, libmhash, gettext, libtool}:
 
 stdenv.mkDerivation rec {
   buildInputs = [ libjpeg libmcrypt zlib libmhash gettext libtool ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     export AM_CXXFLAGS="$CXXFLAGS -std=c++0x"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://steghide.sourceforge.net/";
     description = "Steganography program that is able to hide data in various kinds of image- and audio-files";
     license = licenses.gpl2;

@@ -1,5 +1,5 @@
 { config
-, stdenv
+, lib, stdenv
 , fetchurl
 , intltool
 , pkgconfig
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     gsl
     libpng
     sfml
-  ] 
+  ]
     ++ stdenv.lib.optionals (pulseaudioSupport) [ libpulseaudio ]
     ++ stdenv.lib.optionals (useGtk) [ gtk3 ]
     ++ stdenv.lib.optionals (useQt) [
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (useQt) [ "--enable-qt5" ]
   ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple interface for devices supported by the linux UVC driver";
     homepage = "http://guvcview.sourceforge.net";
     maintainers = [ maintainers.coconnor ];

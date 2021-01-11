@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{lib, stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
   name = "ent-1.1";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     cp ent $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pseudorandom Number Sequence Test Program";
     homepage = "http://www.fourmilab.ch/random/";
     platforms = platforms.all;

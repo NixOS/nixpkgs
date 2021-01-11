@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkgconfig
@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
 
   buildInputs = [ qtbase qtscript qtwebengine ];
-
-  enableParallelBuilding = true;
 
   postPatch = ''
     substituteInPlace src/platform/digmanager.cpp \
@@ -53,7 +51,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt frontend for nmap";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];

@@ -1,4 +1,4 @@
-{ stdenv, gcc, libav_12, fetchFromGitHub }:
+{ lib, stdenv, gcc, libav_12, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "untrunc";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
         -I$libavConfiguredSrc -lavformat -lavcodec -lavutil
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Restore a damaged (truncated) mp4, m4v, mov, 3gp video from a similar, undamaged video";
     license = licenses.gpl2;
     homepage = "https://github.com/ponchio/untrunc";

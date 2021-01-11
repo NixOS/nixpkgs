@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fontforge }:
+{ lib, stdenv, fetchurl, fontforge }:
 
 stdenv.mkDerivation {
   name = "linux-libertine-5.3.0";
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     install -m444 -Dt $out/share/texmf/fonts/map       *.map
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux Libertine Fonts";
     homepage = "http://linuxlibertine.sf.net";
     maintainers = [ maintainers.volth ];

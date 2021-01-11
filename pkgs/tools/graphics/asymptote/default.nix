@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
 , autoreconfHook, bison, glm, yacc, flex
 , freeglut, ghostscriptX, imagemagick, fftw
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =  "A tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin maintainers.peti ];

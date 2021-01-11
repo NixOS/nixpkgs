@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 }:
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "11zpy3whzir9mlbvf0jyscqwj9z44a6s5i1bc2cnxyciqy9b57md";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A terminal user interface for taskwarrior ";
     homepage = "https://github.com/kdheepak/taskwarrior-tui";
     license = with licenses; [ mit ];

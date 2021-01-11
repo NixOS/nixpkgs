@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, fuse }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, fuse }:
 
 stdenv.mkDerivation rec {
   pname = "exfat";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ fuse ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free exFAT file system implementation";
     inherit (src.meta) homepage;
     license = licenses.gpl2Plus;

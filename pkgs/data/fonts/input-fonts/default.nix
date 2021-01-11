@@ -1,4 +1,4 @@
-{ stdenv, requireFile, unzip }:
+{ lib, stdenv, requireFile, unzip }:
 
 stdenv.mkDerivation {
   pname = "input-fonts";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = "15sdhqqqd4jgk80fw7ncx49avi9cxbdgyrvnrfya0066x4q4r6lv";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fonts for Code, from Font Bureau";
     longDescription = ''
       Input is a font family designed for computer programming, data,

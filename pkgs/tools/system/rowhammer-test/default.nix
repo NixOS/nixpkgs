@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "rowhammer-test-20150811";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     cp rowhammer_test double_sided_rowhammer $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Test DRAM for bit flips caused by the rowhammer problem";
     homepage = "https://github.com/google/rowhammer-test";
     license = licenses.asl20;

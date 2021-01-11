@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ python3 vulkan-headers vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
-  enableParallelBuilding = true;
 
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
 
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_RPATH=${libraryPath}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Khronos official Vulkan Tools and Utilities";
     longDescription = ''
       This project provides Vulkan tools and utilities that can assist

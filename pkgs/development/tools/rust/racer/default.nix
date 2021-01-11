@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, substituteAll, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, substituteAll, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "racer";
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     $out/bin/racer --version
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
     homepage = "https://github.com/racer-rust/racer";
     license = licenses.mit;

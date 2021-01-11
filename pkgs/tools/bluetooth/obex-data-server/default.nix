@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libusb-compat-0_1, glib, dbus-glib, bluez, openobex, dbus }:
+{ lib, stdenv, fetchurl, pkgconfig, libusb-compat-0_1, glib, dbus-glib, bluez, openobex, dbus }:
 
 stdenv.mkDerivation rec {
   name = "obex-data-server-0.4.6";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   export PKG_CONFIG_PATH="${dbus.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://wiki.muiline.com/obex-data-server";
     platforms = platforms.linux;
     license = licenses.gpl2;

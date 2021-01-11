@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python2
+{ fetchurl, lib, stdenv, python2
 
 , enableStandardFeatures ? false
 , sourceHighlight ? null
@@ -261,7 +261,7 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/etc/vim";
   makeFlags = stdenv.lib.optional stdenv.isCygwin "DESTDIR=/.";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Text-based document generation system";
     longDescription = ''
       AsciiDoc is a text document format for writing notes, documentation,

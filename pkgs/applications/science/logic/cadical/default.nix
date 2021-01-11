@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "cadical";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     install -Dm0755 {LICEN?E,README*,VERSION} "$out/share/doc/${pname}-${version}/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simplified Satisfiability Solver";
     maintainers = with maintainers; [ shnarazk ];
     platforms = platforms.unix;

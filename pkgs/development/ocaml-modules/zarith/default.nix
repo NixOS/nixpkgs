@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , ocaml, findlib, pkgconfig, perl
 , gmp
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   preInstall = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, arbitrary precision OCaml integers";
     homepage    = "http://forge.ocamlcore.org/projects/zarith";
     license     = licenses.lgpl2;

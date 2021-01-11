@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, util-linux, which
+{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, util-linux, which
 , procps, libcap_ng, openssl, python3 , perl
 , kernel ? null }:
 
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = false; # bash-completion test fails with "compgen: command not found"
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     description = "A multilayer virtual switch";
     longDescription =

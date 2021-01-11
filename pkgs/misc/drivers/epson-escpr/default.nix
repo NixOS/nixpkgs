@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cups }:
+{ lib, stdenv, fetchurl, cups }:
 
 stdenv.mkDerivation {
   pname = "epson-escpr";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ cups ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
     description = "ESC/P-R Driver (generic driver)";
     longDescription = ''

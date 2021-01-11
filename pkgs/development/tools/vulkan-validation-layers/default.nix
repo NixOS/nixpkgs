@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , writeText
@@ -80,8 +80,6 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DGLSLANG_INSTALL_DIR=${localGlslang}"
     "-DSPIRV_HEADERS_INSTALL_DIR=${localSpirvHeaders}"
@@ -99,7 +97,7 @@ stdenv.mkDerivation rec {
     sed "s|\([[:space:]]*set(INSTALL_DEFINES \''${INSTALL_DEFINES} -DRELATIVE_LAYER_BINARY=\"\)\(\$<TARGET_FILE_NAME:\''${TARGET_NAME}>\")\)|\1$out/lib/\2|" -i layers/CMakeLists.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The official Khronos Vulkan validation layers";
     homepage    = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
     platforms   = platforms.linux;

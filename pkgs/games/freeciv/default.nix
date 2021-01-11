@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkgconfig, python3
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkgconfig, python3
 , zlib, bzip2, curl, lzma, gettext, libiconv
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
 , gtkClient ? false, gtk3
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multiplayer (or single player), turn-based strategy game";
 
     longDescription = ''

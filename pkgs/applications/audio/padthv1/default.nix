@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libjack2, alsaLib, libsndfile, liblo, lv2, qt5, fftwFloat, mkDerivation }:
+{ lib, stdenv, fetchurl, pkgconfig, libjack2, alsaLib, libsndfile, liblo, lv2, qt5, fftwFloat, mkDerivation }:
 
 mkDerivation rec {
   pname = "padthv1";
@@ -13,7 +13,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "polyphonic additive synthesizer";
     homepage = "http://padthv1.sourceforge.net/";
     license = licenses.gpl2Plus;

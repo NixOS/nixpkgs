@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, libav, lua5_1, curl
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, libav, lua5_1, curl
 , libpng, xorg, pkgconfig, flam3, libgtop, boost, tinyxml, freeglut, libGLU, libGL
 , glee }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     sed -i "s|/usr|$out|" Makefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Electric Sheep, a distributed screen saver for evolving artificial organisms";
     homepage = "https://electricsheep.org/";
     maintainers = with maintainers; [ nand0p fpletz ];

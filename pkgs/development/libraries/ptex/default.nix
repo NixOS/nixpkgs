@@ -14,9 +14,8 @@ stdenv.mkDerivation rec
 
   outputs = [ "bin" "dev" "out" "lib" ];
 
-  buildInputs = [ zlib python cmake pkg-config ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib python pkg-config ];
 
   # Can be removed in the next release
   # https://github.com/wdas/ptex/pull/42

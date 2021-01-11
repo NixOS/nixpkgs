@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK theme designed to be smooth, attractive, fast, and usable";
     homepage = "https://github.com/elementary/stylesheet";
     license = licenses.gpl3;

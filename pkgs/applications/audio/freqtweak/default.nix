@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkg-config, fftwFloat, libjack2, libsigcxx, libxml2, wxGTK }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, fftwFloat, libjack2, libsigcxx, libxml2, wxGTK }:
 
 stdenv.mkDerivation rec {
   pname = "freqtweak";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://essej.net/freqtweak/;
     description = "Realtime audio frequency spectral manipulation";
     maintainers = [ maintainers.magnetophon ];

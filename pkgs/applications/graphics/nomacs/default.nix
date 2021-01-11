@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchFromGitHub
 , fetchpatch
@@ -27,8 +27,6 @@ mkDerivation rec {
     sha256 = "1bq7bv4p7w67172y893lvpk90d6fgdpnylynbj2kn8m2hs6khya4";
   };
 
-  enableParallelBuilding = true;
-
   setSourceRoot = ''
     sourceRoot=$(echo */ImageLounge)
   '';
@@ -52,7 +50,7 @@ mkDerivation rec {
                 "-DENABLE_TRANSLATIONS=ON"
                 "-DUSE_SYSTEM_QUAZIP=ON"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://nomacs.org";
     description = "Qt-based image viewer";
     maintainers = with stdenv.lib.maintainers; [ mindavi ];

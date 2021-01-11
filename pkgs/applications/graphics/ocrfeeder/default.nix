@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , gtk3
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${enginesPath}")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/OCRFeeder";
     description = "Complete Optical Character Recognition and Document Analysis and Recognition program";
     maintainers = with maintainers; [ doronbehar ];

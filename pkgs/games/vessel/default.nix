@@ -1,4 +1,4 @@
-{ stdenv, requireFile, SDL, libpulseaudio, alsaLib, runtimeShell }:
+{ lib, stdenv, requireFile, SDL, libpulseaudio, alsaLib, runtimeShell }:
 
 stdenv.mkDerivation rec {
   name = "vessel-12082012";
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/Vessel
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fluid physics based puzzle game";
     longDescription = ''
       Living liquid machines have overrun this world of unstoppable progress,

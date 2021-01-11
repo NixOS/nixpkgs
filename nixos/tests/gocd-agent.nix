@@ -11,7 +11,7 @@ in
 
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "gocd-agent";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ grahamc swarren83 ];
 
     # gocd agent needs to register with the autoregister key created on first server startup,

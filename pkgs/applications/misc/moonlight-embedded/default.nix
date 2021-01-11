@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, perl
+{ lib, stdenv, fetchFromGitHub, cmake, perl
 , alsaLib, libevdev, libopus, udev, SDL2
 , ffmpeg_3, pkgconfig, xorg, libvdpau, libpulseaudio, libcec
 , curl, expat, avahi, enet, libuuid, libva
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     xorg.libpthreadstubs curl expat avahi enet libuuid libva
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source implementation of NVIDIA's GameStream";
     homepage = "https://github.com/irtimmer/moonlight-embedded";
     license = licenses.gpl3;

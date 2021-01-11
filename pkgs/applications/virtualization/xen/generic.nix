@@ -1,5 +1,5 @@
 config:
-{ stdenv, cmake, pkgconfig, which
+{ stdenv, cmake, pkg-config, which
 
 # Xen
 , bison, bzip2, checkpolicy, dev86, figlet, flex, gettext, glib
@@ -66,7 +66,7 @@ stdenv.mkDerivation (rec {
 
   hardeningDisable = [ "stackprotector" "fortify" "pic" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cmake which
 

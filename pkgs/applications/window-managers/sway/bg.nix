@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, scdoc
 , wayland, wayland-protocols, cairo, gdk-pixbuf
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wallpaper tool for Wayland compositors";
     longDescription = ''
       A wallpaper utility for Wayland compositors, that is compatible with any

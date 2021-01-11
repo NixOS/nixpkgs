@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, which
+{ lib, stdenv, fetchurl, pkgconfig, gettext, which
 , glib, gtk2
 , enableSoftening ? true
 }:
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://dvdisaster.net/";
     description = "Data loss/scratch/aging protection for CD/DVD media";
     longDescription = ''

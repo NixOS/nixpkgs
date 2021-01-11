@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , tokyocabinet, ncurses
 , cairo ? null, pango ? null
 , enableCairo ? stdenv.isLinux
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     stdenv.lib.optionals (!enableCairo) [ "--disable-x11" "--disable-cairo" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://duc.zevv.nl/";
     description = "Collection of tools for inspecting and visualizing disk usage";
     license = licenses.gpl2;

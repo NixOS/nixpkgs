@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "docker-credential-gcr";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "0m7jx669yf27z2g9gw9vwncpwldrcb3ldlf1xhvbwbijnc2jk866";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Docker credential helper for GCR (https://gcr.io) users";
     longDescription = ''
       docker-credential-gcr is Google Container Registry's Docker credential

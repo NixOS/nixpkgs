@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchPypi }:
+{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "pyhomematic";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # Unreliable timing: https://github.com/danielperna84/pyhomematic/issues/126
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python 3 Interface to interact with Homematic devices";
     homepage = "https://github.com/danielperna84/pyhomematic";
     license = licenses.mit;

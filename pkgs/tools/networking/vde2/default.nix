@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, openssl, libpcap, python2, withPython ? false }:
+{ lib, stdenv, fetchurl, fetchpatch, openssl, libpcap, python2, withPython ? false }:
 
 stdenv.mkDerivation rec {
   name = "vde2-2.3.2";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/virtualsquare/vde-2";
     description = "Virtual Distributed Ethernet, an Ethernet compliant virtual network";
     platforms = platforms.unix;

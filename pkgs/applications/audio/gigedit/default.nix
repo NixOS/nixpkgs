@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, intltool, libtool, pkgconfig, which
+{ lib, stdenv, fetchurl, autoconf, automake, intltool, libtool, pkgconfig, which
 , docbook_xml_dtd_45, docbook_xsl, gtkmm2, libgig, libsndfile, libxslt
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.linuxsampler.org";
     description = "Gigasampler file access library";
     license = licenses.gpl2;

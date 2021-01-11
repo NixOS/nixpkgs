@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DPAGEDGEOMETRY_BUILD_SAMPLES=OFF" ];
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Paged Geometry for Ogre3D";
     homepage = "https://github.com/RigsOfRods/ogre-paged";

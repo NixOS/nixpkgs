@@ -1,4 +1,4 @@
-{ stdenv, gtk, pkgconfig, fetchFromGitHub }:
+{ lib, stdenv, gtk, pkgconfig, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "dragon-drop";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -D dragon -t $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple drag-and-drop source/sink for X";
     homepage = "https://github.com/mwh/dragon";
     maintainers = with maintainers; [ jb55 markus1189 ];

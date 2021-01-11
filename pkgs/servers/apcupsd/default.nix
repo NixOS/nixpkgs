@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, systemd, util-linux, coreutils, wall, hostname, man
+{ lib, stdenv, fetchurl, pkgconfig, systemd, util-linux, coreutils, wall, hostname, man
 , enableCgiScripts ? true, gd
 }:
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon for controlling APC UPSes";
     homepage = "http://www.apcupsd.com/";
     license = licenses.gpl2;

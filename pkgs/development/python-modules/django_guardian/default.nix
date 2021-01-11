@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , django_environ, mock, django
 , pytest, pytestrunner, pytest-django
 }:
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest pytestrunner pytest-django django_environ mock ];
   propagatedBuildInputs = [ django ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Per object permissions for Django";
     homepage = "https://github.com/django-guardian/django-guardian";
     license = [ licenses.mit licenses.bsd2 ];

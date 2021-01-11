@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab
+{ lib, stdenv, fetchFromGitLab
 , meson, ninja, pkg-config, scdoc
 , openssh
 , mesa, lz4, zstd, ffmpeg, libva
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     mesa lz4 zstd ffmpeg libva
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A network proxy for Wayland clients (applications)";
     longDescription = ''
       waypipe is a proxy for Wayland clients. It forwards Wayland messages and

@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkgconfig
 , libXtst, libvorbis, hunspell, lzo, xz, bzip2, libiconv
 , qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake
 , withCC ? true, opencc
@@ -59,7 +59,7 @@ mkDerivation rec {
     wrapQtApp $out/Applications/GoldenDict.app/Contents/MacOS/GoldenDict
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://goldendict.org/";
     description = "A feature-rich dictionary lookup program";
     platforms = with platforms; linux ++ darwin;

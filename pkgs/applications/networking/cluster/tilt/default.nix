@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "tilt";
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-X main.version=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Local development tool to manage your developer instance when your team deploys to Kubernetes in production";
     homepage = "https://tilt.dev/";
     license = licenses.asl20;

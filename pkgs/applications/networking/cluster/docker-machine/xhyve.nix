@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch, pkgconfig, cctools, Hypervisor, vmnet }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, fetchpatch, pkgconfig, cctools, Hypervisor, vmnet }:
 
 buildGoPackage rec {
   pname = "docker-machine-xhyve";
@@ -29,7 +29,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ Hypervisor vmnet ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/machine-drivers/docker-machine-driver-xhyve";
     description = "Xhyve driver for docker-machine";
     license = licenses.bsd3;

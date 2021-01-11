@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libuuid, popt, icu, ncurses }:
+{ fetchurl, lib, stdenv, libuuid, popt, icu, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "gptfdisk";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
     license = licenses.gpl2;
     homepage = "https://www.rodsbooks.com/gdisk/";

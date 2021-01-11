@@ -1,5 +1,5 @@
 { fetchurl
-, stdenv
+, lib, stdenv
 , meson
 , ninja
 , gettext
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     gtkmm3
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PulseAudio Preferences";
 
     longDescription = ''

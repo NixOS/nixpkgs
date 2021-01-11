@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, python, makeWrapper, ghostscript, pngnq, pillow, djvulibre
+{lib, stdenv, fetchurl, unzip, python, makeWrapper, ghostscript, pngnq, pillow, djvulibre
 , optipng, unrar}:
 
 stdenv.mkDerivation {
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
       --prefix PATH : ${stdenv.lib.makeBinPath [ ghostscript pngnq djvulibre unrar optipng ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PDF/DJVU to ebook format converter";
     homepage = "https://www.mobileread.com/forums/showthread.php?t=21906";
     license = licenses.mit;

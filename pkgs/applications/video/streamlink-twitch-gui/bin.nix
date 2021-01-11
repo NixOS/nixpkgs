@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     categories = "AudioVideo;Network;";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Twitch.tv browser for Streamlink";
     longDescription = "Browse Twitch.tv and watch streams in your videoplayer of choice";
     homepage = "https://streamlink.github.io/streamlink-twitch-gui/";

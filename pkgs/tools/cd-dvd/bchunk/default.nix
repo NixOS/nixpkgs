@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "bchunk";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     install -Dt $out/share/man/man1 bchunk.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://he.fi/bchunk/";
     description = "A program that converts CD images in BIN/CUE format into a set of ISO and CDR tracks";
     platforms = platforms.unix;

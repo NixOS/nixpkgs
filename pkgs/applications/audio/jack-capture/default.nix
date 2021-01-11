@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjack2, libsndfile, pkgconfig }:
+{ lib, stdenv, fetchurl, libjack2, libsndfile, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "jack_capture";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A program for recording soundfiles with jack";
     homepage = "http://archive.notam02.no/arkiv/src";
     license = licenses.gpl2;

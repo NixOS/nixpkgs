@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libIDL, libintl }:
+{ lib, stdenv, fetchurl, pkgconfig, glib, libIDL, libintl }:
 
 stdenv.mkDerivation rec {
   name = "ORBit2-${minVer}.19";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/orbit2-config" "$dev"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://projects.gnome.org/ORBit2/";
     description = "A CORBA 2.4-compliant Object Request Broker";
     platforms   = platforms.unix;

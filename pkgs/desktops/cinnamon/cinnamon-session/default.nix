@@ -14,7 +14,7 @@
 , ninja
 , pkgconfig
 , python3
-, stdenv
+, lib, stdenv
 , systemd
 , wrapGAppsHook
 , xapps
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-session";
     description = "The Cinnamon session manager";
     license = licenses.gpl2;

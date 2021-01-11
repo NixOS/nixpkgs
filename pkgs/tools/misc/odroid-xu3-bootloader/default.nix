@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       $out/bin/sd_fuse-xu3
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     license = licenses.unfreeRedistributableFirmware;
     description = "Secure boot enabled boot loader for ODROID-XU{3,4}";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, glib, gnome3, unzip }:
+{ lib, stdenv, fetchFromGitLab, glib, gnome3, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-night-theme-switcher";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically change the GTK theme to dark variant when Night Light activates";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jonafato ];

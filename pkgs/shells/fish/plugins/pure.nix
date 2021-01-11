@@ -12,7 +12,7 @@ buildFishPlugin rec {
   };
 
   checkInputs = [ git ];
-  checkFunctionPath = [ fishtape ];
+  checkPlugins = [ fishtape ];
   checkPhase = ''
     # https://github.com/rafaelrinaldi/pure/issues/264
     rm tests/_pure_string_width.test.fish

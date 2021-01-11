@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoconf
 , automake
 , c-ares
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     "--with-termcap"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MEGA Command Line Interactive and Scriptable Application";
     homepage    = "https://mega.nz/";
     license     = licenses.unfree;

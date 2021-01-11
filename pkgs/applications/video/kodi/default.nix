@@ -83,7 +83,6 @@ let
         repo  = name;
         inherit rev sha256;
       };
-      enableParallelBuilding = true;
     } // attrs');
 
   ffmpeg = kodiDependency rec {
@@ -242,8 +241,6 @@ in stdenv.mkDerivation {
       "-DGBM_RENDER_SYSTEM=gles"
     ];
 
-    enableParallelBuilding = true;
-
     # 14 tests fail but the biggest issue is that every test takes 30 seconds -
     # I'm guessing there is a thing waiting to time out
     doCheck = false;
@@ -285,7 +282,7 @@ in stdenv.mkDerivation {
       pythonPackages = python2Packages;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Media center";
       homepage    = "https://kodi.tv/";
       license     = licenses.gpl2;

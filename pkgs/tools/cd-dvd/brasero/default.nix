@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${binpath}")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Gnome CD/DVD Burner";
     homepage = "https://wiki.gnome.org/Apps/Brasero";
     maintainers = [ maintainers.bdimcheff ];

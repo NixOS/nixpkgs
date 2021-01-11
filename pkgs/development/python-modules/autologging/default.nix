@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "Autologging";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://ninthtest.info/python-autologging/";
     description = "Easier logging and tracing for Python classes";
     license = licenses.mit;

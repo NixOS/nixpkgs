@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, curl, gnutls, libgcrypt, libuuid, fuse }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, curl, gnutls, libgcrypt, libuuid, fuse }:
 
 stdenv.mkDerivation rec {
   pname = "blobfuse";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl gnutls libgcrypt libuuid fuse ];
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mount an Azure Blob storage as filesystem through FUSE";
     license = licenses.mit;
     maintainers = with maintainers; [ jbgi ];

@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
+{ lib, stdenv, mkDerivation, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
 , libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsaLib, freetype
 , perl, pkgconfig , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
 , libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders
@@ -32,7 +32,7 @@ mkDerivation rec {
   configureFlags = 
     [ "--dvb-path=${linuxHeaders}/include" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mythtv.org/";
     description = "Open Source DVR";
     license = licenses.gpl2Plus;

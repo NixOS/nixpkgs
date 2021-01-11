@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, fetchpatch, pam, xmlsec, autoreconfHook, pkgconfig, libxml2, gtk-doc, perl, gengetopt, bison, help2man }:
+{ lib, stdenv, fetchFromGitLab, fetchpatch, pam, xmlsec, autoreconfHook, pkgconfig, libxml2, gtk-doc, perl, gengetopt, bison, help2man }:
 
 let
   securityDependency =
@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
     touch ChangeLog
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Components for building one-time password authentication systems";
     homepage = "https://www.nongnu.org/oath-toolkit/";
     platforms = with platforms; linux ++ darwin;

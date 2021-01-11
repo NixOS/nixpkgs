@@ -33,7 +33,7 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gtk-sharp-2_0 gtk-sharp-2_0.gtk gnome2.GConf ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Tomboy";
     description = "A simple note-taking application with synchronization";
     platforms = platforms.linux;

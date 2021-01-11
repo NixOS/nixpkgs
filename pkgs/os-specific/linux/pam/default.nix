@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4
 , nixosTests
 }:
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) pam-oath-login pam-u2f shadow;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.linux-pam.org/";
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
     platforms = platforms.linux;

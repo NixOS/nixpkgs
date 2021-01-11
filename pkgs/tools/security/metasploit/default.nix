@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, ruby, bundlerEnv }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, ruby, bundlerEnv }:
 
 let
   env = bundlerEnv {
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
   # run with: nix-shell maintainers/scripts/update.nix --argstr path metasploit
   passthru.updateScript = ./update.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Metasploit Framework - a collection of exploits";
     homepage = "https://github.com/rapid7/metasploit-framework/wiki";
     platforms = platforms.unix;

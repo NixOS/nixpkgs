@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig
 , mpg123, SDL2, gnome3, faad2, pcre
 } :
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faad2 mpg123 SDL2 gnome3.gtkmm pcre ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Play DAB/DAB+ from ETI-NI aligned stream";
     homepage = "https://github.com/Opendigitalradio/dablin";
     license = with licenses; [ gpl3 lgpl21 ];

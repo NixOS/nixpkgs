@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , pythonAtLeast
 , buildPythonPackage
 , fetchPypi
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose coverage ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/metagriffin/globre";
     description = "A python glob-like regular expression generation library.";
     maintainers = with maintainers; [ glittershark ];

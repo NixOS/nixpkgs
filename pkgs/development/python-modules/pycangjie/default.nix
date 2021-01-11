@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, autoconf, automake, libtool, pkgconfig, libcangjie
+{ lib, stdenv, fetchurl, bash, autoconf, automake, libtool, pkgconfig, libcangjie
 , sqlite, buildPythonPackage, cython
 }:
 
@@ -26,7 +26,7 @@ in buildPythonPackage {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python wrapper to libcangjie";
     homepage = "http://cangjians.github.io/projects/pycangjie/";
     license = licenses.lgpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre, git, gradle, perl, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, jre, git, gradle, perl, makeWrapper }:
 
 let
   name = "mxisd-${version}";
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     makeWrapper ${jre}/bin/java $out/bin/mxisd --add-flags "-jar $out/lib/mxisd.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "a federated matrix identity server";
     homepage = "https://github.com/kamax-matrix/mxisd";
     license = licenses.agpl3;

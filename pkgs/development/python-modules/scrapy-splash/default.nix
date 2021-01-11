@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest, hypothesis, scrapy }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, pytest, hypothesis, scrapy }:
 
 buildPythonPackage rec {
   pname = "scrapy-splash";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest hypothesis scrapy ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scrapy+Splash for JavaScript integration";
     homepage = "https://github.com/scrapy-plugins/scrapy-splash";
     license = licenses.bsd3;

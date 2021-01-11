@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "terraform-provider-hcloud";
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   postInstall = "mv $out/bin/terraform-provider-hcloud{,_v${version}}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cloudfoundry-community/terraform-provider-cloudfoundry";
     description = "Terraform provider for cloudfoundry";
     license = licenses.mpl20;

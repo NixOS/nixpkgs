@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "neofetch";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "SYSCONFDIR=${placeholder "out"}/etc"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast, highly customizable system info script";
     homepage = "https://github.com/dylanaraps/neofetch";
     license = licenses.mit;

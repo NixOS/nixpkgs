@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
       --replace /opt/draw.io/drawio $out/bin/drawio
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A desktop application for creating diagrams";
     homepage = "https://about.draw.io/";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, mpd_clientlib, curl }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, mpd_clientlib, curl }:
 
 stdenv.mkDerivation rec {
   pname = "mpdas";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CONFIG=/etc" "DESTDIR=" "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Music Player Daemon AudioScrobbler";
     homepage = "https://50hz.ws/mpdas/";
     license = licenses.bsd3;

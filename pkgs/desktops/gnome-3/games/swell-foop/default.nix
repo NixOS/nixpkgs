@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, vala, glib, gtk3, gnome3, desktop-file-utils
+{ lib, stdenv, fetchurl, meson, ninja, pkgconfig, vala, glib, gtk3, gnome3, desktop-file-utils
 , clutter, clutter-gtk, gettext, itstool, libxml2, wrapGAppsHook, python3 }:
 
 let
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Swell%20Foop";
     description = "Puzzle game, previously known as Same GNOME";
     maintainers = teams.gnome.members;

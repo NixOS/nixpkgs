@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, attr, libuuid, libscrypt, libsodium, keyutils
+{ lib, stdenv, fetchFromGitHub, pkgconfig, attr, libuuid, libscrypt, libsodium, keyutils
 , liburcu, zlib, libaio, udev, zstd, lz4, valgrind, python3Packages
 , fuseSupport ? false, fuse3 ? null }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, scons, pkgconfig, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, scons, pkgconfig, wrapGAppsHook
 , glfw3, gtk3, libpng12 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     install -D ./goxel $out/bin/goxel
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Source 3D voxel editor";
     homepage = "https://guillaumechereau.github.io/goxel/";
     license = licenses.gpl3;

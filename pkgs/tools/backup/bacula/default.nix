@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline
+{ lib, stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline
 , CoreFoundation, IOKit
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ln -s $out/sbin/* $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enterprise ready, Network Backup Tool";
     homepage    = "http://bacula.org/";
     license     = licenses.gpl2;

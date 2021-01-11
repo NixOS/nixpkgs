@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, gettext, makeWrapper, coreutils, gnused, gnome3
+{ lib, stdenv, fetchurl, intltool, gettext, makeWrapper, coreutils, gnused, gnome3
 , gnugrep, parted, glib, libuuid, pkgconfig, gtkmm3, libxml2
 , gpart, hdparm, procps, util-linux, polkit, wrapGAppsHook, substituteAll
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       $out/share/polkit-1/actions/org.gnome.gparted.policy
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical disk partitioning tool";
     longDescription = ''
       GNOME Partition Editor for creating, reorganizing, and deleting disk

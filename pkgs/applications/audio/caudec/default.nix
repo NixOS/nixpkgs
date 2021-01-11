@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, bash, bc, findutils, flac, lame, opusTools, procps, sox }:
+{ lib, stdenv, fetchurl, makeWrapper, bash, bc, findutils, flac, lame, opusTools, procps, sox }:
 
 let
   version = "1.7.5";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     done
   '';
 
-   meta = with stdenv.lib; {
+   meta = with lib; {
     homepage = "http://caudec.net/";
     description = "A multiprocess audio converter that supports many formats (FLAC, MP3, Ogg Vorbis, Windows codecs and many more)";
     license     = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, libiconv, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-trim";
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   # fails with sandbox
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically trims your branches whose tracking remote refs are merged or gone";
     homepage = "https://github.com/foriequal0/git-trim";
     license = licenses.mit;

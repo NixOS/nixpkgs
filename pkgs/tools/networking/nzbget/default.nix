@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, ncurses, libsigcxx, libpar2
+{ lib, stdenv, fetchurl, pkgconfig, libxml2, ncurses, libsigcxx, libpar2
 , gnutls, libgcrypt, zlib, openssl }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://nzbget.net";
     license = licenses.gpl2Plus;
     description = "A command line tool for downloading files from news servers";

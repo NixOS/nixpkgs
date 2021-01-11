@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, callPackage, makeWrapper, makeDesktopItem
+{ lib, stdenv, fetchFromGitHub, callPackage, makeWrapper, makeDesktopItem
 , nodejs, yarn, electron_7, jre8, tor }:
 
 let
@@ -94,7 +94,7 @@ in stdenv.mkDerivation rec {
     outputHash = stdenv.lib.fakeSha256;
   });
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop GUI for Whirlpool by Samourai-Wallet";
     homepage = https://www.samouraiwallet.com/whirlpool;
     license = licenses.unlicense;

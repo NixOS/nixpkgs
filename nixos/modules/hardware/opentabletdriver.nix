@@ -5,6 +5,8 @@ let
   cfg = config.hardware.opentabletdriver;
 in
 {
+  meta.maintainers = with lib.maintainers; [ thiagokokada ];
+
   options = {
     hardware.opentabletdriver = {
       enable = mkOption {

@@ -114,7 +114,7 @@ in
           --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = ''
         An IDE for Kha based on Visual Studio Code
       '';

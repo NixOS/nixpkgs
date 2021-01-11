@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pazi";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0sja0q9i0b1zb3a0a6z561yg9lqykylwr3iwin4r6cmi7j2sw5j6";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An autojump \"zap to directory\" helper";
     homepage = "https://github.com/euank/pazi";
     license = licenses.gpl3;

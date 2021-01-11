@@ -1,4 +1,4 @@
-{ stdenv, itstool, fetchurl, gdk-pixbuf, adwaita-icon-theme
+{ lib, stdenv, itstool, fetchurl, gdk-pixbuf, adwaita-icon-theme
 , telepathy-glib, gjs, meson, ninja, gettext, telepathy-idle, libxml2, desktop-file-utils
 , pkgconfig, gtk3, glib, libsecret, libsoup, webkitgtk, gobject-introspection, appstream-glib
 , gnome3, wrapGAppsHook, telepathy-logger, gspell, gsettings-desktop-schemas }:
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Polari";
     description = "IRC chat client designed to integrate with the GNOME desktop";
     maintainers = teams.gnome.members;

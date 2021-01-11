@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxslt, telepathy-glib, libxml2, dbus-glib, dbus
+{ lib, stdenv, fetchurl, pkgconfig, libxslt, telepathy-glib, libxml2, dbus-glib, dbus
 , sqlite, libsoup, libnice, gnutls}:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://telepathy.freedesktop.org/components/telepathy-gabble/";
     description = "Jabber/XMPP connection manager for the Telepathy framework";
     license = licenses.lgpl21Plus;

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/testssl.sh --prefix PATH ':' ${lib.makeBinPath buildInputs}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CLI tool to check a server's TLS/SSL capabilities";
     longDescription = ''
       CLI tool which checks a server's service on any port for the support of

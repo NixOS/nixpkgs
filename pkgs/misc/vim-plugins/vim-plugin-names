@@ -129,6 +129,7 @@ fszymanski/deoplete-emoji
 garbas/vim-snipmate
 gentoo/gentoo-syntax
 GEverding/vim-hocon
+gfanto/fzf-lsp.nvim@main
 gibiansky/vim-textobj-haskell
 glts/vim-textobj-comment
 godlygeek/csapprox
@@ -158,6 +159,7 @@ hecal3/vim-leader-guide
 henrik/vim-indexed-search
 HerringtonDarkholme/yats.vim
 honza/vim-snippets
+hoob3rt/lualine.nvim
 hotwatermorning/auto-git-diff
 hrsh7th/vim-vsnip
 hrsh7th/vim-vsnip-integ
@@ -230,6 +232,7 @@ justincampbell/vim-eighties
 justinj/vim-pico8-syntax
 justinmk/vim-dirvish
 justinmk/vim-sneak
+jvoorhis/coq.vim
 KabbAmine/vCoolor.vim
 KabbAmine/zeavim.vim
 kalbasit/vim-colemak
@@ -392,6 +395,7 @@ numirias/semshi
 nvie/vim-flake8
 nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
+nvim-lua/lsp-status.nvim
 nvim-lua/lsp_extensions.nvim
 nvim-lua/plenary.nvim
 nvim-lua/popup.nvim
@@ -404,6 +408,7 @@ nvim-treesitter/playground
 ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
 ojroques/vim-oscyank@main
+Olical/aniseed
 Olical/conjure
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
@@ -559,6 +564,7 @@ tpope/vim-eunuch
 tpope/vim-fireplace
 tpope/vim-flagship
 tpope/vim-fugitive
+tpope/vim-git
 tpope/vim-liquid
 tpope/vim-obsession
 tpope/vim-pathogen

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , cmake
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     installManPage man/*.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "mksh";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     install -D -m 644 dot.mkshrc $out/share/mksh/mkshrc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MirBSD Korn Shell";
     longDescription = ''
       The MirBSD Korn Shell is a DFSG-free and OSD-compliant (and OSI

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, ncurses}:
+{lib, stdenv, fetchurl, zlib, ncurses}:
 
 stdenv.mkDerivation rec {
   pname = "atop";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/{bin,sbin}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
     description = ''Console system performance monitor'';

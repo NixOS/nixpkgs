@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , rpmextract
 , patchelf
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/lib64/snowflake/snowsql \
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line client for the Snowflake database";
     homepage = "https://www.snowflake.com";
     license = licenses.unfree;

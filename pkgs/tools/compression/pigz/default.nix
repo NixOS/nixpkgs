@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, util-linux }:
+{ lib, stdenv, fetchurl, zlib, util-linux }:
 
 let name = "pigz";
     version = "2.4";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       install -Dm755 pigz.pdf "$out/share/doc/pigz/pigz.pdf"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.zlib.net/pigz/";
     description = "A parallel implementation of gzip for multi-core machines";
     license = licenses.zlib;

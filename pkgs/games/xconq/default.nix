@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpio, xorgproto, libX11, libXmu, libXaw, libXt, tcl, tk
+{ lib, stdenv, fetchurl, cpio, xorgproto, libX11, libXmu, libXaw, libXt, tcl, tk
 , libXext, fontconfig, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A programmable turn-based strategy game";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

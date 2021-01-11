@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, wxGTK, gtk2, sfml, fluidsynth, curl, freeimage, ftgl, glew, zip }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, wxGTK, gtk2, sfml, fluidsynth, curl, freeimage, ftgl, glew, zip }:
 
 stdenv.mkDerivation {
   name = "slade-git-3.1.2.2018.01.29";
@@ -14,9 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkgconfig zip ];
   buildInputs = [ wxGTK gtk2 sfml fluidsynth curl freeimage ftgl glew ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Doom editor";
     homepage = "http://slade.mancubus.net/";
     license = licenses.gpl2Plus;

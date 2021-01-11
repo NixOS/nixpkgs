@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cairo, libjpeg, meson, ninja, wayland, pkgconfig, scdoc, wayland-protocols }:
+{ lib, stdenv, fetchFromGitHub, cairo, libjpeg, meson, ninja, wayland, pkgconfig, scdoc, wayland-protocols }:
 
 stdenv.mkDerivation rec {
   pname = "grim";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Grab images from a Wayland compositor";
     homepage = "https://github.com/emersion/grim";
     license = licenses.mit;

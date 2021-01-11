@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , gawk, gnused, util-linux, file
 , wget, python3, qemu-utils, euca2ools
 , e2fsprogs, cdrkit
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.unix;
     license = licenses.gpl3;
   };

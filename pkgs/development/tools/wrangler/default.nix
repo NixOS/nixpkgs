@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, darwin, perl }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, darwin, perl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wrangler";
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   # tries to use "/homeless-shelter" and fails
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A CLI tool designed for folks who are interested in using Cloudflare Workers";
     homepage = "https://github.com/cloudflare/wrangler";
     license = with licenses; [ asl20 /* or */ mit ];

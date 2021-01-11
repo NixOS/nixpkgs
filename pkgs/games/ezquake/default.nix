@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, curl, expat
+{ lib, stdenv, fetchFromGitHub, curl, expat
 , jansson, libpng, libjpeg, libGLU, libGL, libXxf86vm, pcre
 , pkgconfig, SDL2, vim, speex }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://ezquake.github.io/";
     description = "A modern QuakeWorld client focused on competitive online play";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, fetchpatch }:
+{ lib, stdenv, fetchurl, openssl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "pure-ftpd-1.0.49";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-tls" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, secure, production-quality and standard-conformant FTP server";
     homepage = "https://www.pureftpd.org";
     license = licenses.isc; # with some parts covered by BSD3(?)

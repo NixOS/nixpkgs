@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel }:
+{ lib, stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "vhba";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides a Virtual (SCSI) HBA";
     homepage = "http://cdemu.sourceforge.net/about/vhba/";
     platforms = platforms.linux;

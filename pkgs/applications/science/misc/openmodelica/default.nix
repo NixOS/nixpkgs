@@ -1,4 +1,4 @@
-{stdenv, fetchgit, fetchsvn, autoconf, automake, libtool, gfortran, clang, cmake, gnumake,
+{lib, stdenv, fetchgit, fetchsvn, autoconf, automake, libtool, gfortran, clang, cmake, gnumake,
 hwloc, jre, lapack, blas, hdf5, expat, ncurses, readline, qt4, webkitgtk, which,
 lp_solve, omniorb, sqlite, libatomic_ops, pkgconfig, file, gettext, flex, bison,
 doxygen, boost, openscenegraph, gnome2, xorg, git, bash, gtk2, makeWrapper }:
@@ -22,8 +22,6 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  enableParallelBuilding = true;
-
   patchPhase = ''
     cp -fv ${fakegit}/bin/checkout-git.sh libraries/checkout-git.sh
     cp -fv ${fakegit}/bin/checkout-svn.sh libraries/checkout-svn.sh
@@ -44,7 +42,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source Modelica-based modeling and simulation environment";
     homepage    = "https://openmodelica.org";
     license     = licenses.gpl3;

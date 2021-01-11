@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glib, libsndfile, lilv, lv2, pkgconfig, serd, sord, sratom }:
+{ lib, stdenv, fetchFromGitHub, glib, libsndfile, lilv, lv2, pkgconfig, serd, sord, sratom }:
 
 stdenv.mkDerivation rec {
   pname = "lv2bm";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     make install PREFIX=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/portalmod/lv2bm";
     description = "A benchmark tool for LV2 plugins";
     license = licenses.gpl3;

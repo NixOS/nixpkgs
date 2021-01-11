@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gtk, zathura_core, girara, djvulibre, gettext }:
+{ lib, stdenv, fetchurl, meson, ninja, pkgconfig, gtk, zathura_core, girara, djvulibre, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "zathura-djvu";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-djvu/";
     description = "A zathura DJVU plugin";
     longDescription = ''

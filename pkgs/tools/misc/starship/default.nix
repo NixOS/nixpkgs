@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=shows_pinned_in_project_below_root_with_global_json"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
     license = licenses.isc;

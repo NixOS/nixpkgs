@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, openssl, libgsf, gmp }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, openssl, libgsf, gmp }:
 
 stdenv.mkDerivation rec {
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp crackxls2003 $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/GavinSmith0123/crackxls2003/";
     description = "Used to break the encryption on old Microsoft Excel and Microsoft Word files";
     platforms = platforms.linux;

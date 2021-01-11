@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake
+{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake
 , eigen, opencv, ceres-solver, cgal, boost, vcg
 , gmp, mpfr, glog, gflags, libjpeg_turbo }:
 
@@ -50,9 +50,7 @@ stdenv.mkDerivation {
 
   dontUseCmakeBuildDir = true;
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for computer-vision scientists and especially targeted to the Multi-View Stereo reconstruction community";
     homepage = "http://cdcseacave.github.io/openMVS/";
     license = licenses.agpl3;
