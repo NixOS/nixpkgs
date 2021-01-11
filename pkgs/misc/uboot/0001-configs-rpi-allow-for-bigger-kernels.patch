@@ -1,0 +1,30 @@
+From 3c6b7c0922370e9d0c1705706e7c47dcd234e6c8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Milan=20P=C3=A4ssler?= <milan@petabyte.dev>
+Date: Wed, 30 Dec 2020 11:49:16 +0100
+Subject: [PATCH] configs/rpi: allow for bigger kernels
+
+---
+ include/configs/rpi.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/include/configs/rpi.h b/include/configs/rpi.h
+index 834f1cd2..b63ee96f 100644
+--- a/include/configs/rpi.h
++++ b/include/configs/rpi.h
+@@ -163,10 +163,10 @@
+    "fdt_high=" FDT_HIGH "\0" \
+    "initrd_high=" INITRD_HIGH "\0" \
+    "kernel_addr_r=0x00080000\0" \
+-   "scriptaddr=0x02400000\0" \
+-   "pxefile_addr_r=0x02500000\0" \
+-   "fdt_addr_r=0x02600000\0" \
+-   "ramdisk_addr_r=0x02700000\0"
++   "scriptaddr=0x02c00000\0" \
++   "pxefile_addr_r=0x02d00000\0" \
++   "fdt_addr_r=0x02e00000\0" \
++   "ramdisk_addr_r=0x02f00000\0"
+
+ #if CONFIG_IS_ENABLED(CMD_MMC)
+    #define BOOT_TARGET_MMC(func) \
+--
+2.29.2
