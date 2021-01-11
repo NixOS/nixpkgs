@@ -105,6 +105,12 @@ mv cran-packages.nix.new cran-packages.nix
 
 Rscript generate-r-packages.R bioc  > bioc-packages.nix.new
 mv bioc-packages.nix.new bioc-packages.nix
+
+Rscript generate-r-packages.R bioc-annotation > bioc-annotation-packages.nix.new
+mv bioc-annotation-packages.nix.new bioc-annotation-packages.nix
+
+Rscript generate-r-packages.R bioc-experiment > bioc-experiment-packages.nix.new
+mv bioc-experiment-packages.nix.new bioc-experiment-packages.nix
 ```
 
 `generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefor the renaming.
