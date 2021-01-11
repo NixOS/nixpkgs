@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , maturin
 , buildPythonPackage
-, isPy38
+, pythonOlder
 , python
 }:
 let
@@ -20,7 +20,12 @@ let
       sha256 = "0302lcfjlw7nz18nf86z6swhhpp1qnpwcsm2fj4avl22rsv0h78j";
     };
 
-    cargoSha256 = "0d83dniijjq8rc4fcwj6ja5x4hxh187afnqfd8c9fzb8nx909a0v";
+    cargoSha256 = {
+      "3.9" = "15f80m41hapcbms0ydgadj8ykk811sgbzxjqlvmh68rw6qz4pbng";
+      "3.8" = "0d83dniijjq8rc4fcwj6ja5x4hxh187afnqfd8c9fzb8nx909a0v";
+      "3.7" = "0f9s454spr5kj5lzhni0kv0lyq8facb3kdsa1qbrx7vmh2qyis80";
+      "3.6" = "0kvfz1pv5lfrkfy6zjs6zx7c79jczb8jnz2f8mb35vrj21y2lhg4";
+    }.${python.pythonVersion};
 
     nativeBuildInputs = [ maturin python ];
 
@@ -50,8 +55,7 @@ let
 in
 buildPythonPackage rec {
   inherit pname version;
-  # we can only support one python version because the cargo hash changes with the python version
-  disabled = !isPy38;
+  disabled = pythonOlder "3.6";
 
   format = "wheel";
   src = wheel;
