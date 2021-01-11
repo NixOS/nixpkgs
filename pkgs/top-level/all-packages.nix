@@ -208,6 +208,8 @@ in
 
   cpu-x = callPackage ../applications/misc/cpu-x { };
 
+  crow-translate = libsForQt5.callPackage ../applications/misc/crow-translate { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
@@ -3032,6 +3034,8 @@ in
 
   cmt = callPackage ../applications/audio/cmt {};
 
+  crlfuzz = callPackage ../tools/security/crlfuzz {};
+
   hedgedoc = callPackage ../servers/web-apps/hedgedoc { };
 
   colord = callPackage ../tools/misc/colord { };
@@ -5090,6 +5094,8 @@ in
 
   jnettop = callPackage ../tools/networking/jnettop { };
 
+  jumpnbump = callPackage ../games/jumpnbump { };
+
   junkie = callPackage ../tools/networking/junkie { };
 
   just = callPackage ../development/tools/just { };
@@ -6890,6 +6896,8 @@ in
     openssl = openssl_1_0_2;
   };
 
+  psw = callPackage ../tools/misc/psw { };
+
   pws = callPackage ../tools/misc/pws { };
 
   cntlm = callPackage ../tools/networking/cntlm { };
@@ -7480,6 +7488,8 @@ in
 
   # aka., pgp-tools
   signing-party = callPackage ../tools/security/signing-party { };
+
+  signumone-ks = callPackage ../applications/misc/signumone-ks { };
 
   silc_client = callPackage ../applications/networking/instant-messengers/silc-client { };
 
@@ -8193,6 +8203,8 @@ in
   urlscan = callPackage ../applications/misc/urlscan { };
 
   urlview = callPackage ../applications/misc/urlview {};
+
+  urn-timer = callPackage ../tools/misc/urn-timer { };
 
   ursadb = callPackage ../servers/ursadb {};
 
@@ -26076,6 +26088,8 @@ in
 
   displaycal = callPackage ../applications/graphics/displaycal {};
 
+  domination = callPackage ../games/domination { };
+
   drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
@@ -28835,6 +28849,8 @@ in
   streamripper = callPackage ../applications/audio/streamripper { };
 
   sqsh = callPackage ../development/tools/sqsh { };
+
+  sumneko-lua-language-server = callPackage ../development/tools/sumneko-lua-language-server { };
 
   go-swag = callPackage ../development/tools/go-swag { };
 
