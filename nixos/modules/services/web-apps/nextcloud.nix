@@ -8,8 +8,14 @@ let
 
   phpPackage = pkgs.php74.buildEnv {
     extensions = { enabled, all }:
-      enabled
-      ++ (with all; [ apcu redis memcached imagick ]) # Necessary for vanilla nextcloud
+      (with all;
+        enabled
+        ++ [ imagick ] # Always enabled
+        # Optionally enabled depending on caching settings
+        ++ optional cfg.caching.apcu apcu
+        ++ optional cfg.caching.redis redis
+        ++ optional cfg.caching.memcached memcached
+      )
       ++ cfg.phpExtraExtensions all; # Enabled by user
     extraConfig = toKeyValue phpOptions;
   };
