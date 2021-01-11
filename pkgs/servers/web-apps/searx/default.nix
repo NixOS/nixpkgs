@@ -1,4 +1,4 @@
-{ lib, python3, python3Packages, fetchFromGitHub, fetchpatch }:
+{ lib, nixosTests, python3, python3Packages, fetchFromGitHub, fetchpatch }:
 
 with python3Packages;
 
@@ -39,6 +39,8 @@ toPythonModule (buildPythonApplication rec {
     mkdir -p $out/share
     ln -s ../${python3.sitePackages}/searx/static $out/share/
   '';
+
+  passthru.tests = { inherit (nixosTests) searx; };
 
   meta = with lib; {
     homepage = "https://github.com/asciimoo/searx";
