@@ -11,7 +11,9 @@
 }:
 
 let
-  zlibStatic = pkgsStatic.zlib;
+  zlibStatic = pkgsStatic.zlib.override {
+    splitStaticOutput = false;
+  };
   nasslOpensslArgs = {
     static = true;
     enableSSL2 = true;
