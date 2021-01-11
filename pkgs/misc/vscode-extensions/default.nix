@@ -36,6 +36,18 @@ let
         };
       };
 
+      alexdima.copy-relative-path = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "copy-relative-path";
+          publisher = "alexdima";
+          version = "0.0.2";
+          sha256 = "06g601n9d6wyyiz659w60phgm011gn9jj5fy0gf5wpi2bljk3vcn";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       ms-python.vscode-pylance = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-pylance";
