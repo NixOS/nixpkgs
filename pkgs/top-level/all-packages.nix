@@ -13361,6 +13361,10 @@ in
   glew110 = callPackage ../development/libraries/glew/1.10.nix {
     inherit (darwin.apple_sdk.frameworks) AGL OpenGL;
   };
+  glew-egl = glew.overrideAttrs (oldAttrs: {
+    pname = "glew-egl";
+    makeFlags = oldAttrs.makeFlags ++ [ "SYSTEM=linux-egl" ];
+  });
 
   glfw = glfw3;
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
@@ -26368,6 +26372,7 @@ in
   megaglest = callPackage ../games/megaglest {};
 
   mindustry = callPackage ../games/mindustry { };
+  mindustry-wayland = callPackage ../games/mindustry { glew = glew-egl; };
 
   mindustry-server = callPackage ../games/mindustry {
     enableClient = false;
