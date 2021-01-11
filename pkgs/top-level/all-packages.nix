@@ -16514,6 +16514,8 @@ in
   streamlink = callPackage ../applications/video/streamlink { pythonPackages = python3Packages; };
   streamlink-twitch-gui-bin = callPackage ../applications/video/streamlink-twitch-gui/bin.nix {};
 
+  sub-batch = callPackage ../applications/video/sub-batch { };
+
   subdl = callPackage ../applications/video/subdl { };
 
   subtitleeditor = callPackage ../applications/video/subtitleeditor { enchant = enchant1; };
