@@ -19921,7 +19921,7 @@ in
   kopia = callPackage ../tools/backup/kopia { };
 
   kora-icon-theme = callPackage ../data/icons/kora-icon-theme {
-    inherit (kdeFrameworks) breeze-icons;
+    inherit (plasma5Packages) breeze-icons;
   };
 
   koreader = callPackage ../applications/misc/koreader {};
