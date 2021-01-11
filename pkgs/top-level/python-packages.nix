@@ -7179,6 +7179,8 @@ in {
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
+  stdiomask = callPackage ../development/python-modules/stdiomask { };
+
   stem = callPackage ../development/python-modules/stem { };
 
   stevedore = callPackage ../development/python-modules/stevedore { };
@@ -7216,6 +7218,8 @@ in {
   stups-zign = callPackage ../development/python-modules/stups-zign { };
 
   stytra = callPackage ../development/python-modules/stytra { };
+
+  subarulink = callPackage ../development/python-modules/subarulink { };
 
   subdownloader = callPackage ../development/python-modules/subdownloader { };
 
