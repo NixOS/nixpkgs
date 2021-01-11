@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -18,7 +18,7 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.AppVersion=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fetcher for Javascript files";
     longDescription = ''
       subjs fetches Javascript files from a list of URLs or subdomains.

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, editline }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, editline }:
 
 stdenv.mkDerivation rec {
   pname = "jush";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   passthru.shellPath = "/bin/jush";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "just a useless shell";
     homepage = "https://github.com/troglobit/jush";
     license = licenses.isc;

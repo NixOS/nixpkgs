@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , mkDerivation
 , cmake
@@ -31,7 +31,7 @@ mkDerivation rec {
 
   cmakeFlags = [ "-UUNIX_PORTABLE" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://melonds.kuribo64.net/";
     description = "Work in progress Nintendo DS emulator";
     license = licenses.gpl3Plus;

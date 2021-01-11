@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "nbench-byte";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     cp NNET.DAT $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.math.utah.edu/~mayer/linux/bmark.html";
     description = "A synthetic computing benchmark program";
     platforms = platforms.linux;

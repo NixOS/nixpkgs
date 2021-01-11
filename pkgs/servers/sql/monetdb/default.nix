@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, python3
+{ lib, stdenv, fetchurl, cmake, python3
 , bison, openssl, readline, bzip2
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ bison openssl readline bzip2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source database system";
     homepage = "https://www.monetdb.org/";
     license = licenses.mpl20;

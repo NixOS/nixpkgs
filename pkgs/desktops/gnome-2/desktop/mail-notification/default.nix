@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, gnome2, dbus-glib, gmime, gnome-icon-theme, libnotify, libgnome-keyring, openssl, cyrus_sasl, sylpheed, gob2, gettext, intltool, libxml2, hicolor-icon-theme, tango-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, glib, gnome2, dbus-glib, gmime, gnome-icon-theme, libnotify, libgnome-keyring, openssl, cyrus_sasl, sylpheed, gob2, gettext, intltool, libxml2, hicolor-icon-theme, tango-icon-theme }:
 
 stdenv.mkDerivation rec {
   rev = "9ae8768";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tray status icon, which notifies us when new email arrives";
     homepage = "https://www.nongnu.org/mailnotify/";
     license = with licenses; [ gpl3 ];

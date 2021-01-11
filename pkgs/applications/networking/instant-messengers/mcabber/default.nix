@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, ncurses, pkgconfig, glib, loudmouth, libotr
+{ lib, stdenv, fetchurl, openssl, ncurses, pkgconfig, glib, loudmouth, libotr
 , gpgme
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://mcabber.com/";
     description = "Small Jabber console client";
     license = licenses.gpl2;

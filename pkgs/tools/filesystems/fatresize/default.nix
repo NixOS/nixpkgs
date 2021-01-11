@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, parted, util-linux, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, parted, util-linux, pkg-config }:
 
 stdenv.mkDerivation rec {
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ parted util-linux ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The FAT16/FAT32 non-destructive resizer";
     homepage = "https://github.com/ya-mouse/fatresize";
     platforms = platforms.linux;

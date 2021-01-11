@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub,
+{ lib, stdenv, fetchFromGitHub,
   xlibsWrapper, libev, libXi, libXfixes,
   pkgconfig, asciidoc, libxslt, docbook_xsl }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rewrite of unclutter using the X11 Xfixes extension";
     platforms = platforms.unix;
     license = stdenv.lib.licenses.mit;

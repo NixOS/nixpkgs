@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libusb1, rtl-sdr }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libusb1, rtl-sdr }:
 
 stdenv.mkDerivation {
   name = "rtl-ais";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple AIS tuner and generic dual-frequency FM demodulator";
     homepage = "https://github.com/dgiardini/rtl-ais";
     license = licenses.gpl2Plus;

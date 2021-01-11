@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       export AR='${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar'
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic Host Configuration Protocol (DHCP) tools";
 
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, zlib, readline, openssl
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, zlib, readline, openssl
 , libiconv, pcsclite, libassuan, libXt
 , docbook_xsl, libxslt, docbook_xml_dtd_412
 , Carbon, PCSC, buildPackages
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "completiondir=$(out)/etc"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of libraries and utilities to access smart cards";
     homepage = "https://github.com/OpenSC/OpenSC/wiki";
     license = licenses.lgpl21Plus;

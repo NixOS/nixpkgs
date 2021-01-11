@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , SDL2, libpng, libjpeg, glew, openal, scons, libmad
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   prefixKey = "PREFIX=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";
     homepage = "https://endless-sky.github.io/";
     license = with licenses; [

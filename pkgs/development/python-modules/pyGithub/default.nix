@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , cryptography
 , deprecated
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   # Test suite makes REST calls against github.com
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/PyGithub/PyGithub";
     description = "A Python (2 and 3) library to access the GitHub API v3";
     platforms = platforms.all;

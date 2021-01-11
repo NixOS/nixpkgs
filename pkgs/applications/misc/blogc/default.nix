@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, ronn, git, cmocka }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, ronn, git, cmocka }:
 
 stdenv.mkDerivation rec {
   pname = "blogc";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A blog compiler";
     license = licenses.bsd3;
     homepage = "https://blogc.rgm.io";

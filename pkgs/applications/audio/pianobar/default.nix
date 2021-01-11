@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libao, json_c, libgcrypt, ffmpeg_3, curl }:
+{ fetchurl, lib, stdenv, pkgconfig, libao, json_c, libgcrypt, ffmpeg_3, curl }:
 
 stdenv.mkDerivation rec {
   name = "pianobar-2020.04.05";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   CC = "gcc";
   CFLAGS = "-std=c99";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A console front-end for Pandora.com";
     homepage = "https://6xq.net/pianobar/";
     platforms = platforms.unix;

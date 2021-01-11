@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # run. That's why we generate it.
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A compression/decompression tool based on snappy";
     homepage = "https://github.com/kubo/snzip";
     maintainers = with maintainers; [ doronbehar ];

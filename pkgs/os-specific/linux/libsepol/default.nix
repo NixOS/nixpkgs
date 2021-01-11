@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex }:
+{ lib, stdenv, fetchurl, flex }:
 
 stdenv.mkDerivation rec {
   pname = "libsepol";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit se_release se_url; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SELinux binary policy manipulation library";
     homepage = "http://userspace.selinuxproject.org";
     platforms = platforms.linux;

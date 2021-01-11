@@ -1,4 +1,4 @@
-{ stdenv, config, fetchurl, patchelf, makeWrapper, gtk2, glib, udev, alsaLib, atk
+{ lib, stdenv, config, fetchurl, patchelf, makeWrapper, gtk2, glib, udev, alsaLib, atk
 , nspr, fontconfig, cairo, pango, nss, freetype, gnome2, gdk-pixbuf, curl, systemd, xorg }:
 
 # TODO: use dynamic attributes once Nix 1.7 is out
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.uberent.com/pa/";
     description = "Next-generation RTS that takes the genre to a planetary scale";
     license = stdenv.lib.licenses.unfree;

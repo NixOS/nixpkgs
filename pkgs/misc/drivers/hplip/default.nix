@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll
+{ lib, stdenv, fetchurl, substituteAll
 , pkgconfig
 , cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
 , dbus, file, ghostscript, usbutils
@@ -240,7 +240,7 @@ python3Packages.buildPythonApplication {
     "share/hplip" "lib/cups/backend" "lib/cups/filter" python3Packages.python.sitePackages "lib/sane"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
     downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";

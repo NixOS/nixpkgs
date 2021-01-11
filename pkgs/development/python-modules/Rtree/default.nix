@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, libspatialindex, numpy }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, libspatialindex, numpy }:
 
 buildPythonPackage rec {
   pname = "Rtree";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
   checkInputs = [ numpy ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "R-Tree spatial index for Python GIS";
     homepage = "https://toblerity.org/rtree/";
     license = licenses.lgpl21;

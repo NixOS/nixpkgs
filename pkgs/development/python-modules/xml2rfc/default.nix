@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pythonAtLeast, intervaltree, pyflakes, requests, lxml, google-i18n-address
+{ lib, stdenv, fetchPypi, buildPythonPackage, pythonAtLeast, intervaltree, pyflakes, requests, lxml, google-i18n-address
 , pycountry, html5lib, six, kitchen, pypdf2, dict2xml, weasyprint, pyyaml, jinja2, ConfigArgParse, appdirs
 }:
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "xml2rfc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool generating IETF RFCs and drafts from XML sources";
     homepage = "https://tools.ietf.org/tools/xml2rfc/trac/";
     # Well, parts might be considered unfree, if being strict; see:

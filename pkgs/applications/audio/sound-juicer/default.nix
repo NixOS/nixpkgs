@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk3, intltool, itstool, libxml2, brasero
+{ lib, stdenv, fetchurl, pkgconfig, glib, gtk3, intltool, itstool, libxml2, brasero
 , libcanberra-gtk3, gnome3, gst_all_1, libmusicbrainz5, libdiscid, isocodes
 , gsettings-desktop-schemas, wrapGAppsHook }:
 
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Gnome CD Ripper";
     homepage = "https://wiki.gnome.org/Apps/SoundJuicer";
     maintainers = [ maintainers.bdimcheff ];

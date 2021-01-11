@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, bluez, libusb-compat-0_1, cmake }:
+{ lib, stdenv, fetchurl, pkgconfig, bluez, libusb-compat-0_1, cmake }:
    
 stdenv.mkDerivation rec {
   name = "openobex-1.7.2";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sed -i "/if ( PKGCONFIG_UDEV_FOUND )/,/endif ( PKGCONFIG_UDEV_FOUND )/d" udev/CMakeLists.txt
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://dev.zuckschwerdt.org/openobex/";
     description = "An open source implementation of the Object Exchange (OBEX) protocol";
     platforms = platforms.linux;

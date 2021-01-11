@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, which
+{ lib, stdenv, fetchFromGitHub, perl, which
 , openssl, sqlite }:
 
 # Instead of writing directly into $HOME, we change the default db location
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CLI utility to find duplicate files";
     homepage = "http://www.virkki.com/dupd";
     license = licenses.gpl3;

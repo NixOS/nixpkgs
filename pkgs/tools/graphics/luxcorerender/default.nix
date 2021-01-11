@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost165, pkg-config, python36
+{ lib, stdenv, fetchFromGitHub, cmake, boost165, pkg-config, python36
 , tbb, openimageio, libjpeg, libpng, zlib, libtiff, ilmbase
 , freetype, openexr, libXdmcp, libxkbcommon, epoxy, at-spi2-core
 , dbus, doxygen, qt5, c-blosc, libGLU, gnome3, dconf, gtk3, pcre
@@ -76,7 +76,7 @@ in stdenv.mkDerivation {
       --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source, physically based, unbiased rendering engine";
     homepage = "https://luxcorerender.org/";
     maintainers = with maintainers; [ hodapp ];

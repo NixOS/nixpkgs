@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchurl, makeDesktopItem
+{ lib, stdenv, mkDerivation, fetchurl, makeDesktopItem
 , libXrender, libXrandr, libXcursor, libX11, libXext, libXi, libxcb
  , libGL, glib, nss, nspr, expat, alsaLib
 , qtbase, qtdeclarative, qtsvg, qtlocation, qtwebchannel, qtwebengine
@@ -70,7 +70,7 @@ let
       ln -s "$out/eagle-${version}/bin/eagle-logo.png" "$out"/share/icons/eagle.png
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Schematic editor and PCB layout tool from Autodesk (formerly CadSoft)";
       homepage = "https://www.autodesk.com/products/eagle/overview";
       license = licenses.unfree;

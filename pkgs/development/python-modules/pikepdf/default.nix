@@ -18,7 +18,7 @@
 , qpdf
 , setuptools-scm-git-archive
 , setuptools_scm
-, stdenv
+, lib, stdenv
 }:
 
 buildPythonPackage rec {
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     HOME=$TMPDIR
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;

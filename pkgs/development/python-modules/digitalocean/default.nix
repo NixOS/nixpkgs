@@ -8,7 +8,7 @@
 , pytestCheckHook
 , requests
 , responses
-, stdenv
+, lib, stdenv
 }:
 
 buildPythonPackage rec {
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     cd digitalocean
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "digitalocean.com API to manage Droplets and Images";
     homepage = "https://pypi.python.org/pypi/python-digitalocean";
     license = licenses.lgpl3;

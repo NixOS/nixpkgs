@@ -1,4 +1,4 @@
-{ config, stdenv, fetchFromGitHub
+{ config, lib, stdenv, fetchFromGitHub
 , autoconf
 , automake
 , libtool
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ultimate Music Player for GNU/Linux";
     homepage = "http://deadbeef.sourceforge.net/";
     license = licenses.gpl2;

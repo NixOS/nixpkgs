@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , boost, zlib, openssl
 , upnpSupport ? true, miniupnpc ? null
 , aesniSupport ? stdenv.hostPlatform.aesSupport
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     install -D i2pd $out/bin/i2pd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://i2pd.website";
     description = "Minimal I2P router written in C++";
     license = licenses.bsd3;

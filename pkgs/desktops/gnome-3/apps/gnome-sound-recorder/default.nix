@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , gettext
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple and modern sound recorder";
     homepage = "https://wiki.gnome.org/Apps/SoundRecorder";
     license = licenses.gpl2Plus;

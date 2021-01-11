@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apfel, apfelgrid, applgrid, blas, gfortran, lhapdf, lapack, libyaml, lynx
+{ lib, stdenv, fetchurl, apfel, apfelgrid, applgrid, blas, gfortran, lhapdf, lapack, libyaml, lynx
 , mela, root5, qcdnum, which, libtirpc
 }:
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The xFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";
     license     = licenses.gpl3;
     homepage    = "https://www.xfitter.org/xFitter";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, imagemagick }:
+{ lib, stdenv, fetchurl, cmake, imagemagick }:
 
 stdenv.mkDerivation {
   pname = "cuneiform";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-language OCR system";
     homepage = "https://launchpad.net/cuneiform-linux";
     license = licenses.bsd3;

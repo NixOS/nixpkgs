@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, docutils }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, docutils }:
 
 stdenv.mkDerivation rec {
   version = "0.4";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
   configureFlags = [ "VMOD_DIR=$(out)/lib/varnish/vmods" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic director similar to the DNS director from Varnish 3";
     homepage = "https://github.com/nigoroll/libvmod-dynamic";
     inherit (varnish.meta) license platforms maintainers;

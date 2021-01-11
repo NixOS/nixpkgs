@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake } :
+{ lib, stdenv, fetchFromGitHub, cmake } :
 
 stdenv.mkDerivation {
   name = "lzham-1.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     cp ../bin_linux/lzhamtest $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lossless data compression codec with LZMA-like ratios but 1.5x-8x faster decompression speed";
     homepage = "https://github.com/richgel999/lzham_codec";
     license = with licenses; [ mit ];

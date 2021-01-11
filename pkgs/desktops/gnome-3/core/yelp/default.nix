@@ -1,4 +1,4 @@
-{ stdenv, gettext, fetchurl, webkitgtk, pkgconfig, gtk3, glib
+{ lib, stdenv, gettext, fetchurl, webkitgtk, pkgconfig, gtk3, glib
 , gnome3, sqlite
 , itstool, libxml2, libxslt, gst_all_1
 , wrapGAppsHook }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Yelp";
     description = "The help viewer in Gnome";
     maintainers = teams.gnome.members;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja, gettext, glib, libxml2, perl, python3
+{ lib, stdenv, fetchurl, pkgconfig, meson, ninja, gettext, glib, libxml2, perl, python3
 , libxslt, libarchive, bzip2, lzma, json-glib, libsoup
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig gettext perl python3 ];
   buildInputs = [ glib json-glib libxml2 libxslt libarchive bzip2 lzma libsoup ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for managing the osinfo database";
     homepage = "https://libosinfo.org/";
     license = licenses.lgpl2Plus;

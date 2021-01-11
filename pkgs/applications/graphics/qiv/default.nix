@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, imlib2, file, lcms2, libexif } :
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, imlib2, file, lcms2, libexif } :
 
 stdenv.mkDerivation (rec {
   version = "2.3.2";
@@ -18,7 +18,7 @@ stdenv.mkDerivation (rec {
     substituteInPlace Makefile --replace /share/share/ /share/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quick image viewer";
     homepage = "http://spiegl.de/qiv/";
     inherit version;

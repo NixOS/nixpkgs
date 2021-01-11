@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , libyamlcpp
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake git ];
   buildInputs = [ libyamlcpp ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DICOM to NIfTI converter";
     longDescription = ''
       dcm2niix is a designed to convert neuroimaging data from the

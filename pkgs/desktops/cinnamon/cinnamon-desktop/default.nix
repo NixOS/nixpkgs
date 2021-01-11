@@ -8,7 +8,7 @@
 , pkgconfig
 , pulseaudio
 , python3
-, stdenv
+, lib, stdenv
 , xkeyboard_config
 , xorg
 , wrapGAppsHook
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     sed "s|/usr/share|/run/current-system/sw/share|g" -i ./schemas/* # NOTE: unless this causes a circular dependency, we could link it to cinnamon-common/share/cinnamon
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-desktop";
     description = "Library and data for various Cinnamon modules";
 

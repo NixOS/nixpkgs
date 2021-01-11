@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     cp inxi.1 $out/share/man/man1/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A full featured CLI system information tool";
     longDescription = ''
       inxi is a command line system information script built for console and

@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, cmake, openssl, sqlite, pkg-config, systemd
+{ lib, stdenv, fetchpatch, fetchFromGitHub, cmake, openssl, sqlite, pkg-config, systemd
 , tlsSupport ? false }:
 
 assert tlsSupport -> openssl != null;
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     (if tlsSupport then "-DSSL_SUPPORT=ON" else "-DSSL_SUPPORT=OFF")
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High performance peer-to-peer hub for the ADC network";
     homepage = "https://www.uhub.org/";
     license = licenses.gpl3;

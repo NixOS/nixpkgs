@@ -1,5 +1,5 @@
 {
-stdenv
+lib, stdenv
 , makeWrapper
 , makeDesktopItem
 , fetchurl
@@ -45,7 +45,7 @@ let
         cp -r icon $out/share/icons/hicolor
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Web Debugging Proxy";
         homepage = "https://www.charlesproxy.com/";
         maintainers = [ maintainers.kalbasit ];

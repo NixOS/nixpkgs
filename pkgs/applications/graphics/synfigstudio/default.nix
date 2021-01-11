@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, boost, cairo, gettext, glibmm, gtk3, gtkmm3
+{ lib, stdenv, fetchFromGitHub, boost, cairo, gettext, glibmm, gtk3, gtkmm3
 , libjack2, libsigcxx, libxmlxx, makeWrapper, mlt-qt5, pango, pkgconfig
 , imagemagick, intltool, autoreconfHook, which, gnome3
 }:
@@ -117,7 +117,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 2D animation program";
     homepage = "http://www.synfig.org";
     license = licenses.gpl2Plus;

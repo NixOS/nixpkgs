@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , lxml
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     export LC_ALL="en_US.utf-8"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python library for W3C Provenance Data Model (PROV)";
     homepage = "https://github.com/trungdong/prov";
     license = licenses.mit;

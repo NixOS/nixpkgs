@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, sg3_utils, udev, glib, dbus, dbus-glib
+{ lib, stdenv, fetchurl, pkgconfig, sg3_utils, udev, glib, dbus, dbus-glib
 , polkit, parted, lvm2, libatasmart, intltool, libuuid, mdadm
 , libxslt, docbook_xsl, util-linux, libgudev }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--localstatedir=/var" "--enable-lvm2" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.freedesktop.org/wiki/Software/udisks";
     description = "A daemon and command-line utility for querying and manipulating storage devices";
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , libpulseaudio
 , libnotify
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication rec {
   # no tests in tarball
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/enkore/i3pystatus";
     description = "A complete replacement for i3status";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, qt4, util-linux, coreutils, which, qmake4Hook
+{ lib, stdenv, fetchFromGitHub, makeWrapper, qt4, util-linux, coreutils, which, qmake4Hook
 , p7zip, mtools, syslinux }:
 
 stdenv.mkDerivation rec {
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://unetbootin.sourceforge.net/";
     description = "A tool to create bootable live USB drives from ISO images";
     license     = licenses.gpl2Plus;

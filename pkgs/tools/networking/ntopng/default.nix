@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
+{ lib, stdenv, fetchurl, libpcap,/* gnutls, libgcrypt,*/ libxml2, glib
 , geoip, geolite-legacy, sqlite, which, autoreconfHook, git
 , pkgconfig, groff, curl, json_c, luajit, zeromq, rrdtool
 }:
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fpermissive"
     + stdenv.lib.optionalString stdenv.cc.isClang " -Wno-error=reserved-user-defined-literal";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-speed web-based traffic analysis and flow collection tool";
     homepage = "http://www.ntop.org/products/ntop/";
     license = licenses.gpl3Plus;

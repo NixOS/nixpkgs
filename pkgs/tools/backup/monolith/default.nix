@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlagsArray = [ "--skip=tests::cli" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bundle any web page into a single HTML file";
     homepage = "https://github.com/Y2Z/monolith";
     license = licenses.unlicense;

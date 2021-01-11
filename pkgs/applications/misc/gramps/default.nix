@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gexiv2,
+{ lib, stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gexiv2,
   pango, gobject-introspection, wrapGAppsHook, gettext,
 # Optional packages:
  enableOSM ? true, osm-gps-map,
@@ -55,7 +55,7 @@ in buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Genealogy software";
     homepage = "https://gramps-project.org";
     license = licenses.gpl2;

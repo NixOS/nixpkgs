@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libgtop, xmessage, which, pkgconfig }:
+{ lib, stdenv, fetchgit, libgtop, xmessage, which, pkgconfig }:
 
 stdenv.mkDerivation {
   pname = "das_watchdog";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     cp test_rt $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kmatheussen/das_watchdog";
     description = "A general watchdog for the linux operating system";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, protobuf }:
+{ lib, stdenv, fetchurl, cmake, protobuf }:
 
 stdenv.mkDerivation rec {
   pname = "jumanpp";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Japanese morphological analyser using a recurrent neural network language model (RNNLM)";
     longDescription = ''
       JUMAN++ is a new morphological analyser that considers semantic

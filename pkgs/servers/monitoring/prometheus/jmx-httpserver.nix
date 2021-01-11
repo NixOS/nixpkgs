@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 let
   version = "0.10";
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
     makeWrapper "${jre}/bin/java" $out/bin/jmx_prometheus_httpserver --add-flags "-jar $out/libexec/$jarName"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/prometheus/jmx_exporter";
     description = "A process for exposing JMX Beans via HTTP for Prometheus consumption";
     license = licenses.asl20;

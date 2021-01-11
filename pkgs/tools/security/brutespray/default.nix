@@ -1,4 +1,4 @@
-{ stdenv, python3, fetchFromGitHub, makeWrapper, medusa }:
+{ lib, stdenv, python3, fetchFromGitHub, makeWrapper, medusa }:
 
 stdenv.mkDerivation rec {
   pname = "brutespray";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     cp -r wordlist/ $out/share/brutespray/wordlist
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/x90skysn3k/brutespray";
     description = "Brute-Forcing from Nmap output - Automatically attempts default creds on found services";
     license = licenses.mit;

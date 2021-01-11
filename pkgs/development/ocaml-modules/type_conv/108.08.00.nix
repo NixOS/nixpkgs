@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, camlp4}:
+{lib, stdenv, fetchurl, ocaml, findlib, camlp4}:
 
 if !stdenv.lib.versionAtLeast ocaml.version "3.12"
 || stdenv.lib.versionAtLeast ocaml.version "4.03"
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ocaml.janestreet.com/";
     description = "Support library for OCaml preprocessor type conversions";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lua52Packages, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, lua52Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "z-lua";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/skywind3000/z.lua";
     description = "A new cd command that helps you navigate faster by learning your habits";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitLab, pkgconfig, qmake, qtbase, qemu, makeWrapper }:
+{ lib, stdenv, mkDerivation, fetchFromGitLab, pkgconfig, qmake, qtbase, qemu, makeWrapper }:
 
 mkDerivation rec {
   pname = "qtemu";
@@ -35,7 +35,7 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt-based front-end for QEMU emulator";
     homepage = "https://qtemu.org";
     license = licenses.gpl2;

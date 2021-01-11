@@ -1,4 +1,4 @@
-{ stdenv, python27Packages, fetchFromGitHub }:
+{ lib, stdenv, python27Packages, fetchFromGitHub }:
 
 python27Packages.buildPythonApplication rec {
   pname = "printrun";
@@ -29,7 +29,7 @@ python27Packages.buildPythonApplication rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pronterface, Pronsole, and Printcore - Pure Python 3d printing host software";
     homepage = "https://github.com/kliment/Printrun";
     license = licenses.gpl3;

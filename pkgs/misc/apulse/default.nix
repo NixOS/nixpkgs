@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, alsaLib, cmake, pkgconfig, glib
+{ lib, stdenv, fetchFromGitHub, alsaLib, cmake, pkgconfig, glib
 , tracingSupport ? true, logToStderr ? true }:
 
 let oz = x: if x then "1" else "0"; in
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "-DLOG_TO_STDERR=${oz logToStderr}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PulseAudio emulation for ALSA";
     homepage = "https://github.com/i-rinat/apulse";
     license = licenses.mit;

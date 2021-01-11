@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, git, buildGoModule }:
+{ lib, stdenv, fetchFromGitLab, git, buildGoModule }:
 
 buildGoModule rec {
   pname = "gitlab-workhorse";
@@ -17,7 +17,7 @@ buildGoModule rec {
   buildFlagsArray = "-ldflags=-X main.Version=${version}";
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin talyz ];

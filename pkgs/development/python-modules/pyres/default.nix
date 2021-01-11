@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, fetchFromGitHub, simplejson, redis, setproctitle, nose, pkgs }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, fetchFromGitHub, simplejson, redis, setproctitle, nose, pkgs }:
 
 let
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     nosetests . --exclude test_worker_pids
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python resque clone";
     homepage = "https://github.com/binarydud/pyres";
     license = licenses.mit;

@@ -1,5 +1,5 @@
 { mkDerivation
-, stdenv
+, lib, stdenv
 , fetchurl
 , ncurses
 , libuuid
@@ -43,7 +43,7 @@ assert enableQt -> qwt != null;
 
   NIX_CFLAGS_COMPILE="-Wno-unused";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.cgsecurity.org/wiki/Main_Page";
     downloadPage = "https://www.cgsecurity.org/wiki/TestDisk_Download";
     description = "Data recovery utilities";

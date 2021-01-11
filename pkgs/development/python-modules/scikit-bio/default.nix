@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , cython
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m skbio.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://scikit-bio.org/";
     description = "Data structures, algorithms and educational resources for bioinformatics";
     license = licenses.bsd3;

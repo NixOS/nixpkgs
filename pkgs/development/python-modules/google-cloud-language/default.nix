@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , google-api-core
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     "google.cloud.language_v1beta2"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Cloud Natural Language API client library";
     homepage = "https://github.com/googleapis/python-language";
     license = licenses.asl20;

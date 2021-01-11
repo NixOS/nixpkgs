@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, dpkg }:
+{ lib, stdenv, fetchurl, perl, dpkg }:
 
 stdenv.mkDerivation rec {
   pname = "bdf2psf";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     mv usr $out
   ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "BDF to PSF converter";
     homepage = "https://packages.debian.org/sid/bdf2psf";
     longDescription = ''

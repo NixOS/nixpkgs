@@ -1,4 +1,4 @@
-{ stdenv, slop, ffmpeg_3, fetchFromGitHub, makeWrapper}:
+{ lib, stdenv, slop, ffmpeg_3, fetchFromGitHub, makeWrapper}:
 
 stdenv.mkDerivation {
   pname = "capture-unstable";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
       --prefix PATH : '${stdenv.lib.makeBinPath [ slop ffmpeg_3 ]}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A no bullshit screen capture tool";
     homepage = "https://github.com/buhman/capture";
     maintainers = [ maintainers.ar1a ];

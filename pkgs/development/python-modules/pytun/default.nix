@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 }:
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # Test directory contains examples, not tests.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/montag451/pytun";
     description = "Linux TUN/TAP wrapper for Python";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, bash
+{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, bash
 , coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl, openssl_1_0_2
 }:
 
@@ -94,7 +94,7 @@ let
           done
         '';
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           homepage = "http://hadoop.apache.org/";
           description = "Framework for distributed processing of large data sets across clusters of computers";
           license = licenses.asl20;

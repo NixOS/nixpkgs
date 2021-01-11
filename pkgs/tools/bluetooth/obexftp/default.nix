@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openobex, bluez, cmake }:
+{ lib, stdenv, fetchurl, pkgconfig, openobex, bluez, cmake }:
    
 stdenv.mkDerivation rec {
   name = "obexftp-0.24.2";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sed -i 's,^Requires: bluetooth,Requires:,' $out/lib/pkgconfig/obexftp.pc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://dev.zuckschwerdt.org/openobex/wiki/ObexFtp";
     description = "A library and tool to access files on OBEX-based devices (such as Bluetooth phones)";
     platforms = platforms.linux;

@@ -107,7 +107,7 @@ in buildPythonApplication rec {
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     broken = stdenv.isAarch64;
     description = "An open source ecosystem for IoT development";
     homepage = "http://platformio.org";

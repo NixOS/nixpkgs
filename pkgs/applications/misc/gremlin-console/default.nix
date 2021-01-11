@@ -1,4 +1,4 @@
-{ fetchzip, stdenv, makeWrapper, openjdk }:
+{ fetchzip, lib, stdenv, makeWrapper, openjdk }:
 
 stdenv.mkDerivation rec {
   pname = "gremlin-console";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --set CLASSPATH "$out/opt/lib/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tinkerpop.apache.org/";
     description = "Console of the Apache TinkerPop graph computing framework";
     license = licenses.asl20;

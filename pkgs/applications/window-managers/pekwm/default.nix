@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , cmake
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libpng
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight window manager";
     longDescription = ''
       pekwm is a window manager that once upon a time was based on the

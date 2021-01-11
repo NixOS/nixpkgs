@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, libsamplerate, alsaLib, AppKit }:
+{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsaLib, AppKit }:
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = "https://pjsip.org/";
     license = licenses.gpl2Plus;

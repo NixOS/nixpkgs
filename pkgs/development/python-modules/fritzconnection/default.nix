@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, pytest, requests }:
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, pytest, requests }:
 
 buildPythonPackage rec {
   pname = "fritzconnection";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python-Tool to communicate with the AVM FritzBox using the TR-064 protocol";
     homepage = "https://bitbucket.org/kbr/fritzconnection";
     license = licenses.mit;

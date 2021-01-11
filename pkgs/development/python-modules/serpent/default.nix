@@ -25,7 +25,7 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple serialization library based on ast.literal_eval";
     homepage = "https://github.com/irmen/Serpent";
     license = licenses.mit;

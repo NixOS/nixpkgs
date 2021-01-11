@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 , pkgconfig
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh $releaseDir/build/mdcat-*/out/completions/_mdcat
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "cat for markdown";
     homepage = "https://github.com/lunaryorn/mdcat";
     license = with licenses; [ asl20 ];

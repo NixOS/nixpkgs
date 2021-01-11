@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, fuse }:
+{ lib, stdenv, fetchFromGitHub, cmake, fuse }:
 
 stdenv.mkDerivation rec {
   pname = "unionfs-fuse";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/sbin/mount.unionfs-fuse --replace unionfs $out/bin/unionfs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FUSE UnionFS implementation";
     homepage = "https://github.com/rpodgorny/unionfs-fuse";
     license = licenses.bsd3;

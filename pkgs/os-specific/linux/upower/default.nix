@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , libxslt
@@ -62,7 +62,7 @@ stdenv.mkDerivation {
     "sysconfdir=${placeholder "out"}/etc"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://upower.freedesktop.org/";
     description = "A D-Bus service for power management";
     platforms = platforms.linux;

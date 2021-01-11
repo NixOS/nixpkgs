@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "agrep";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Approximate grep for fast fuzzy string searching";
     homepage = "https://www.tgries.de/agrep/";
     license = licenses.isc;

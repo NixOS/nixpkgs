@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "doom-bcc-git-0.8.0.2018.01.04";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     cp -av lib $out/lib/bcc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compiler for Doom/Hexen scripts (ACS, BCS)";
     homepage = "https://github.com/wormt/bcc";
     license = licenses.mit;

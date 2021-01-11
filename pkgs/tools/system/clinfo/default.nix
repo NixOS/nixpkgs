@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocl-icd, opencl-headers }:
+{ lib, stdenv, fetchFromGitHub, ocl-icd, opencl-headers }:
 
 stdenv.mkDerivation rec {
   pname = "clinfo";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Print all known information about all available OpenCL platforms and devices in the system";
     homepage = "https://github.com/Oblomov/clinfo";
     license = licenses.cc0;

@@ -1,5 +1,5 @@
 { spellChecking ? true
-, stdenv, fetchurl, pkgconfig, gtk3, gtkspell3 ? null
+, lib, stdenv, fetchurl, pkgconfig, gtk3, gtkspell3 ? null
 , gmime2, gettext, intltool, itstool, libxml2, libnotify, gnutls
 , makeWrapper, gnupg
 , gnomeSupport ? true, libsecret, gcr
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GTK-based Usenet newsreader good at both text and binaries";
     homepage = "http://pan.rebelbase.com/";
     maintainers = [ maintainers.eelco ];

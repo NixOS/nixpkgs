@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, intltool, libtorrent-rasterbar, pythonPackages }:
+{ lib, stdenv, fetchurl, fetchpatch, intltool, libtorrent-rasterbar, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
   pname = "deluge";
@@ -31,7 +31,7 @@ pythonPackages.buildPythonPackage rec {
      cp deluge/data/share/applications/deluge.desktop $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://deluge-torrent.org";
     description = "Torrent client";
     license = licenses.gpl3Plus;

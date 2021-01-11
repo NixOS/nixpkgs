@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchCrate
 , rustPlatform
 , pkg-config
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
       CoreServices Security SystemConfiguration
     ]));
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A distributed version control system";
     homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];

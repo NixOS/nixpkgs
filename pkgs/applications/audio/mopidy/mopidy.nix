@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
 , gst_all_1, glib-networking, gobject-introspection
 }:
 
@@ -38,7 +38,7 @@ pythonPackages.buildPythonApplication rec {
   # There are no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mopidy.com/";
     description = ''
       An extensible music server that plays music from local disk, Spotify,

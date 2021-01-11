@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, libpcap, automake, nixosTests }:
+{ lib, stdenv, fetchurl, ncurses, libpcap, automake, nixosTests }:
 
 stdenv.mkDerivation {
   name = "iftop-1.0pre4";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   passthru.tests = { inherit (nixosTests) iftop; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Display bandwidth usage on a network interface";
     longDescription = ''
       iftop does for network usage what top(1) does for CPU usage. It listens

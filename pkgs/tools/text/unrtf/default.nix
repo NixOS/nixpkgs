@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoconf, automake, libiconv }:
+{ lib, stdenv, fetchurl, fetchpatch, autoconf, automake, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "unrtf";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A converter from Rich Text Format to other formats";
     longDescription = ''
       UnRTF converts documents in Rich Text Format to other

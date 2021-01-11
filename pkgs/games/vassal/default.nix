@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jre, makeWrapper }:
+{ lib, stdenv, fetchzip, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "VASSAL";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # Don't move doc to share/, VASSAL expects it to be in the root
   forceShare = [ "man" "info" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
       description = "A free, open-source boardgame engine";
       homepage = "http://www.vassalengine.org/";
       license = licenses.lgpl21Only;

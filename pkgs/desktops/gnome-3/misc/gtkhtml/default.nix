@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, intltool
+{ lib, stdenv, fetchurl, pkgconfig, gtk3, intltool
 , gnome3, enchant, isocodes, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ enchant isocodes ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };

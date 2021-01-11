@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, openssl, libevent }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, openssl, libevent }:
 
 stdenv.mkDerivation rec {
   pname = "coturn";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     ./pure-configure.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://coturn.net/";
     license = with licenses; [ bsd3 ];
     description = "A TURN server";

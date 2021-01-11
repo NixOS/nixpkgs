@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , cups
 , dpkg
 , a2ps, ghostscript, gnugrep, gnused, coreutils, file, perl, which
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" ${ stdenv.lib.makeBinPath [ ghostscript a2ps file gnused gnugrep coreutils which ] }
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.brother.com/";
     description = "Brother HL-L2390DW combined print driver";
     license = licenses.unfree;

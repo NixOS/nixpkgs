@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python3Packages
 , makeWrapper
 , coreutils
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
       --prefix PATH : "${stdenv.lib.makeBinPath runtimeDeps}" \
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sshuttle/sshuttle/";
     description = "Transparent proxy server that works as a poor man's VPN";
     longDescription = ''

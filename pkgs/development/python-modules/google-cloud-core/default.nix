@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "API Client library for Google Cloud: Core Helpers";
     homepage = "https://github.com/googleapis/python-cloud-core";
     license = licenses.asl20;

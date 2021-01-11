@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, util-linux, nixosTests }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, util-linux, nixosTests }:
 
 buildGoPackage rec {
   pname = "hub";
@@ -37,7 +37,7 @@ buildGoPackage rec {
 
   passthru.tests = { inherit (nixosTests) hub; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line wrapper for git that makes you better at GitHub";
     license = licenses.mit;
     homepage = "https://hub.github.com/";

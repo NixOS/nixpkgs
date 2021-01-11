@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, qmake, qttools, qtwebkit, qttranslations, gpsbabel }:
+{ lib, stdenv, mkDerivation, qmake, qttools, qtwebkit, qttranslations, gpsbabel }:
 
 mkDerivation {
   pname = "gpsbabel-gui";
@@ -39,7 +39,7 @@ mkDerivation {
     install -Dm644 *.qm coretool/*.qm -t $out/share/gpsbabel/translations
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt-based GUI for gpsbabel";
     homepage = "http://www.gpsbabel.org/";
     license = licenses.gpl2;

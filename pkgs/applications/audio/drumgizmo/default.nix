@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, alsaLib, expat, glib, libjack2, libXext, libX11, libpng
+{ lib, stdenv, fetchurl, fetchpatch, alsaLib, expat, glib, libjack2, libXext, libX11, libpng
 , libpthreadstubs, libsmf, libsndfile, lv2, pkgconfig, zita-resampler
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     libsmf libsndfile lv2 pkgconfig zita-resampler
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An LV2 sample based drum plugin";
     homepage = "https://www.drumgizmo.org";
     license = licenses.lgpl3;

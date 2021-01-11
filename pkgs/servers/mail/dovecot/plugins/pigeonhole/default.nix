@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dovecot, openssl }:
+{ lib, stdenv, fetchurl, dovecot, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "dovecot-pigeonhole";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pigeonhole.dovecot.org/";
     description = "A sieve plugin for the Dovecot IMAP server";
     license = licenses.lgpl21;

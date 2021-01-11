@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lua, pkgconfig, systemd, jemalloc, nixosTests
+{ lib, stdenv, fetchurl, lua, pkgconfig, systemd, jemalloc, nixosTests
 , tlsSupport ? true, openssl
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.redis = nixosTests.redis;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://redis.io";
     description = "An open source, advanced key-value store";
     license = licenses.bsd3;

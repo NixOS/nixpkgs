@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk2, poppler }:
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, gtk2, poppler }:
 
 stdenv.mkDerivation rec {
   pname = "epdfview";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
               })
             ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://packages.debian.org/wheezy/epdfview";
     description = "A lightweight PDF document viewer using Poppler and GTK";
     longDescription = ''

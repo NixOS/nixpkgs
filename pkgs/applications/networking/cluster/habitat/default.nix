@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkgconfig
 , libsodium, libarchive, openssl, zeromq }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An application automation framework";
     homepage = "https://www.habitat.sh";
     license = licenses.asl20;

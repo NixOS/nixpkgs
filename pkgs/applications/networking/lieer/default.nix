@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "lieer";
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description      = "Fast email-fetching and two-way tag synchronization between notmuch and GMail";
     longDescription  = ''
       This program can pull email and labels (and changes to labels)

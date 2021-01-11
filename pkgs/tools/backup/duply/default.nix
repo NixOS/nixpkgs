@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coreutils, python2, duplicity, gawk, gnupg, bash
+{ lib, stdenv, fetchurl, coreutils, python2, duplicity, gawk, gnupg, bash
 , gnugrep, txt2man, makeWrapper, which
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "$out/bin/duply" txt2man > "$out/share/man/man1/duply.1"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shell front end for the duplicity backup tool";
     longDescription = ''
       Duply is a shell front end for the duplicity backup tool

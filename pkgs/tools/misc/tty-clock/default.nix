@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, ncurses, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "tty-clock";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/xorg62/tty-clock";
     license = licenses.free;
     description = "Digital clock in ncurses";

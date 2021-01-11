@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, libnl, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, ncurses, libnl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "wavemon";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0m9n5asjxs1ir5rqprigqcrm976mgjvh4yql1jhfnbszwbf95193";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     description = "Ncurses-based monitoring application for wireless network devices";
     homepage = "https://github.com/uoaerg/wavemon";

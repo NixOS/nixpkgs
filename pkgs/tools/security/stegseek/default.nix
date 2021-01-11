@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , cmake
 , fetchFromGitHub
 , libjpeg
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to crack steganography";
     longDescription = ''
       Stegseek is a lightning fast steghide cracker that can be

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchgit
 , pygobject3
@@ -20,7 +20,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ pygobject3 dbus-python ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ricardomv/snapper-gui";
     description = "Graphical frontend for snapper";
     license = licenses.gpl2;

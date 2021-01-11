@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , intltool
 , fetchFromGitLab
 , meson
@@ -98,7 +98,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME Character Map, based on the Unicode Character Database";
     homepage = "https://wiki.gnome.org/Apps/Gucharmap";
     license = licenses.gpl3;

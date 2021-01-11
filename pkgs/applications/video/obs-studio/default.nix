@@ -1,4 +1,4 @@
-{ config, stdenv
+{ config, lib, stdenv
 , mkDerivation
 , fetchFromGitHub
 , addOpenGLRunpath
@@ -110,7 +110,7 @@ in mkDerivation rec {
       addOpenGLRunpath $out/lib/obs-plugins/*.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free and open source software for video recording and live streaming";
     longDescription = ''
       This project is a rewrite of what was formerly known as "Open Broadcaster

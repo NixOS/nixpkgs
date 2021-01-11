@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, readline }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, readline }:
 
 stdenv.mkDerivation rec {
   pname   = "mrsh";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A minimal POSIX shell";
     homepage = "https://mrsh.sh";
     license = licenses.mit;

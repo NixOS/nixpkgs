@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coreutils }:
+{ lib, stdenv, fetchFromGitHub, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "3proxy";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     ln -s Makefile.Linux Makefile
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiny free proxy server";
     homepage = "https://github.com/z3APA3A/3proxy";
     license = licenses.gpl2;

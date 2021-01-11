@@ -1,4 +1,4 @@
-{ fetchgit, libcommuni, qtbase, qmake, stdenv }:
+{ fetchgit, libcommuni, qtbase, qmake, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "communi";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     rm -rf lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple and elegant cross-platform IRC client";
     homepage = "https://github.com/communi/communi-desktop";
     license = licenses.bsd3;

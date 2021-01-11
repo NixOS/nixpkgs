@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, libX11, libXrandr }:
+{ lib, stdenv, fetchFromGitHub, python3, libX11, libXrandr }:
 
 stdenv.mkDerivation rec {
   pname = "blugon";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple and configurable Blue Light Filter for X";
     longDescription = ''
       blugon is a simple and fast Blue Light Filter, that is highly configurable and provides a command line interface.

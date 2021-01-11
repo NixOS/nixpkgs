@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, flex
+{ lib, stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, flex
 , readline ? null, openssl ? null, python2 ? null, ncurses ? null, rocksdb
 , sqlite ? null, postgresql ? null, libmysqlclient ? null, zlib ? null, lzo ? null
 , jansson ? null, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     "sbindir=\${out}/bin"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.bareos.org/";
     description = "A fork of the bacula project";
     license = licenses.agpl3;

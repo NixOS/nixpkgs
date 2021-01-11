@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, perl
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, perl
 , libtoxcore, libpthreadstubs, libXdmcp, libXScrnSaver
 , qtbase, qtsvg, qttools, qttranslations
 , ffmpeg_3, filter-audio, libexif, libsodium, libopus
@@ -35,7 +35,7 @@ mkDerivation rec {
     "-DTIMESTAMP=1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt Tox client";
     homepage = "https://tox.chat";
     license = licenses.gpl3;

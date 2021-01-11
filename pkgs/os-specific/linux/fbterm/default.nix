@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     ./select.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (s) version;
     description = "Framebuffer terminal emulator";
     homepage = "https://code.google.com/archive/p/fbterm/";

@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchurl, cmake, pkgconfig, makeWrapper
+{ mkDerivation, lib, stdenv, fetchurl, cmake, pkgconfig, makeWrapper
 , httrack, qtbase, qtmultimedia }:
 
 mkDerivation rec {
@@ -28,7 +28,7 @@ mkDerivation rec {
       --replace /usr/share/httraqt/ $out/share/httraqt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Easy-to-use offline browser / website mirroring utility - QT frontend";
     homepage    = "http://www.httrack.com";
     license     = licenses.gpl3;

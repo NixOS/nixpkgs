@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , openssl, openwsman }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     touch AUTHORS NEWS README
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Openwsman command-line client";
     longDescription = ''
       Openwsman provides a command-line tool, wsman, to perform basic

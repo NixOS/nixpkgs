@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , flex
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     "-DINSTALL_AUX_TOOLS=true"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful network analysis framework much different from a typical IDS";
     homepage = "https://www.zeek.org";
     changelog = "https://github.com/zeek/zeek/blob/v${version}/CHANGES";

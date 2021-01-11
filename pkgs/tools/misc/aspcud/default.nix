@@ -1,4 +1,4 @@
-{ stdenv, fetchzip
+{ lib, stdenv, fetchzip
 , boost, clasp, cmake, gringo, re2c
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "-DASPCUD_CLASP_PATH=${clasp}/bin/clasp"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Solver for package problems in CUDF format using ASP";
     homepage = "https://potassco.org/aspcud/";
     platforms = platforms.all;

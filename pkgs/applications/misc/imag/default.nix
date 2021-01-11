@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , llvmPackages
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion target/imag.{bash,fish} --zsh target/_imag
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Commandline personal information management suite";
     homepage = "https://imag-pim.org/";
     license = licenses.lgpl21;

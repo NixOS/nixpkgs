@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, darwin, buildDunePackage, dune-configurator
+{ lib, stdenv, fetchurl, darwin, buildDunePackage, dune-configurator
 , lapack, blas
 }:
 
@@ -22,7 +22,7 @@ buildDunePackage rec {
     stdenv.lib.optionals stdenv.isDarwin
       [ darwin.apple_sdk.frameworks.Accelerate ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mmottl.github.io/lacaml";
     description = "OCaml bindings for BLAS and LAPACK";
     license = licenses.lgpl21Plus;

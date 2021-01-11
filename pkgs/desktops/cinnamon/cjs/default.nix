@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , gobject-introspection
 , pkgconfig
-, stdenv
+, lib, stdenv
 , wrapGAppsHook
 , python3
 , cairo
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     "-Dprofiler=disabled"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cjs";
     description = "JavaScript bindings for Cinnamon";
 

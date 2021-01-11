@@ -1,4 +1,4 @@
-{ stdenv, fetchgit
+{ lib, stdenv, fetchgit
 , cmake, pkgconfig
 , python
 , mpi ? null
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://glotzerlab.engin.umich.edu/hoomd-blue/";
     description = "HOOMD-blue is a general-purpose particle simulation toolkit";
     license = licenses.bsdOriginal;

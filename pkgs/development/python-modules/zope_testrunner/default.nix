@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , zope_interface
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   doCheck = false; # custom test modifies sys.path
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A flexible test runner with layer support";
     homepage = "https://pypi.python.org/pypi/zope.testrunner";
     license = licenses.zpl20;

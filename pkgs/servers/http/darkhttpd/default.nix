@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "darkhttpd";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     head -n 18 darkhttpd.c > "$out/share/licenses/darkhttpd/LICENSE"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small and secure static webserver";
     homepage    = "https://unix4lyfe.org/darkhttpd/";
     license     = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cups, busybox }:
+{ lib, stdenv, fetchurl, cups, busybox }:
 
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cd ${pname}-${version}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
     description = "ESC/P-R 2 Driver (generic driver)";
     longDescription = ''

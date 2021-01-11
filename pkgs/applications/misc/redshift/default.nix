@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchFromGitLab
+{ lib, stdenv, fetchFromGitHub, fetchFromGitLab
 , autoconf, automake, gettext, intltool
 , libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
 , gtk3, python, pygobject3, pyxdg
@@ -95,7 +95,7 @@ rec {
       sha256 = "12cb4gaqkybp4bkkns8pam378izr2mwhr2iy04wkprs2v92j7bz6";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Screen color temperature manager";
       longDescription = ''
         Redshift adjusts the color temperature according to the position

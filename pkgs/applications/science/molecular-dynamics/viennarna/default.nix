@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gsl
 , mpfr
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     "--with-kinwalker"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Prediction and comparison of RNA secondary structures";
     homepage = "https://www.tbi.univie.ac.at/RNA/";
     license = licenses.unfree;

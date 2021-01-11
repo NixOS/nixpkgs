@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkgconfig, readline, libedit
+{ lib, stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkgconfig, readline, libedit
 , python3, makeWrapper }:
 
 let
@@ -30,7 +30,7 @@ let
 
       outputs = [ "out" "dev" "man" ];
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
         license = licenses.bsd2;

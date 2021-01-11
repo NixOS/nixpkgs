@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, xorg, libpng, xineLib, readline, ncurses, curl
+{lib, stdenv, fetchurl, pkgconfig, xorg, libpng, xineLib, readline, ncurses, curl
 , lirc, shared-mime-info, libjpeg }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   LIRC_LIBS="-L ${lirc}/lib -llirc_client";
 #NIX_LDFLAGS = "-lXext -lgcc_s";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.xine-project.org/";
     description = "Xlib-based interface to Xine, a video player";
     platforms = platforms.linux;

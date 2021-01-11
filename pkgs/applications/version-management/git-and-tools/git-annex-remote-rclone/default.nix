@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rclone, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, rclone, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "git-annex-remote-rclone";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${stdenv.lib.makeBinPath [ rclone ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/DanielDent/git-annex-remote-rclone";
     description = "Use rclone supported cloud storage providers with git-annex";
     license = licenses.gpl3;

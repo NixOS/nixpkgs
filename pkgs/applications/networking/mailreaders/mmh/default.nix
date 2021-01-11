@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, autoreconfHook, flex }:
+{ lib, stdenv, fetchurl, ncurses, autoreconfHook, flex }:
 let rev = "431604647f89d5aac7b199a7883e98e56e4ccf9e";
 in stdenv.mkDerivation rec {
   pname = "mmh-unstable";
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
   nativeBuildInputs = [ autoreconfHook flex ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of electronic mail handling programs";
     homepage = "http://marmaro.de/prog/mmh";
     license = licenses.bsd3;

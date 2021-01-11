@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ruby, cdparanoia, makeWrapper }:
+{ lib, stdenv, fetchurl, ruby, cdparanoia, makeWrapper }:
 stdenv.mkDerivation rec {
   version = "0.6.2";
   pname = "rubyripper";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${cdparanoia}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High quality CD audio ripper";
     platforms = platforms.linux;
     license = licenses.gpl3;

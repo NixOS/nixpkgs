@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 
 , autoconf
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     moveToOutput "lib/gimp" "$gimpPlugin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sergiomb2/ufraw";
 
     broken = true; # https://github.com/NixOS/nixpkgs/issues/97946

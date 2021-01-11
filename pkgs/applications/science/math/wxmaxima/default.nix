@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , wrapGAppsHook, cmake, gettext
 , maxima, wxGTK, gnome3 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH ":" ${maxima}/bin)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross platform GUI for the computer algebra system Maxima";
     license = licenses.gpl2;
     homepage = "https://wxmaxima-developers.github.io/wxmaxima/";

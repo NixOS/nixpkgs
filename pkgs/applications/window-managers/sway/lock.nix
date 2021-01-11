@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, scdoc
 , wayland, wayland-protocols, libxkbcommon, cairo, gdk-pixbuf, pam
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "-Dpam=enabled" "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Screen locker for Wayland";
     longDescription = ''
       swaylock is a screen locking utility for Wayland compositors.

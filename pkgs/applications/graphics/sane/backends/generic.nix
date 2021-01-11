@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , gettext, pkgconfig
 , avahi, libgphoto2, libieee1284, libjpeg, libpng, libtiff, libusb1, libv4l, net-snmp
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation {
     rm -f $out/etc/sane.d/net.conf
   '' + stdenv.lib.concatStrings (builtins.map installFirmware compatFirmware);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SANE (Scanner Access Now Easy) backends";
     longDescription = ''
       Collection of open-source SANE backends (device drivers).

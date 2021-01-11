@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkg-config
+{ lib, fetchurl, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkg-config
 , makeWrapper, enet, libXcursor, bullet, openal }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     makeWrapper enet libXcursor bullet openal
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
     homepage = "http://stuntrally.tuxfamily.org/";
     license = licenses.gpl3Plus;

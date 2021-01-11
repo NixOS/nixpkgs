@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , autoreconfHook
 , pkgconfig
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://01.org/ell";
     description = "Embedded Linux Library";
     longDescription = ''

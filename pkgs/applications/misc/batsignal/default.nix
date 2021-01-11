@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libnotify, pkg-config, glib }:
+{ lib, stdenv, fetchFromGitHub, libnotify, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
   pname = "batsignal";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/electrickite/batsignal";
     description = "Lightweight battery daemon written in C";
     license = licenses.isc;

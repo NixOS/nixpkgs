@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , linkFarm
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
       --replace "Exec=io.elementary.greeter" "Exec=$out/bin/io.elementary.greeter"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LightDM Greeter for Pantheon";
     homepage = "https://github.com/elementary/greeter";
     license = licenses.gpl3Plus;

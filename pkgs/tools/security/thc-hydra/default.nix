@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       --add-flags --hydra-path --add-flags "$out/bin/hydra"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A very fast network logon cracker which support many different services";
     homepage = "https://www.thc.org/thc-hydra/";
     license = licenses.agpl3;

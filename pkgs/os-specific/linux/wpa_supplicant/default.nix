@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, pkgconfig, libnl
+{ lib, stdenv, fetchurl, openssl, pkgconfig, libnl
 , dbus, readline ? null, pcsclite ? null
 }:
 
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     install -Dm444 wpa_supplicant.conf $out/share/doc/wpa_supplicant/wpa_supplicant.conf.example
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://hostap.epitest.fi/wpa_supplicant/";
     description = "A tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;

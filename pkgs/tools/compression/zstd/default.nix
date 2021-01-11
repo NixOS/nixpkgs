@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, bash, gnugrep
+{ lib, stdenv, fetchFromGitHub, cmake, bash, gnugrep
 , fixDarwinDylibNames
 , file
 , legacySupport ? false
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.hostPlatform.isUnix "man"
     ++ [ "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Zstandard real-time compression algorithm";
     longDescription = ''
       Zstd, short for Zstandard, is a fast lossless compression algorithm,

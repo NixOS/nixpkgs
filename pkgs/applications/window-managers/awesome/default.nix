@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk-pixbuf
+{ lib, stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk-pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobject-introspection
 , which, dbus, nettools, git, doxygen
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     inherit lua;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Highly configurable, dynamic window manager for X";
     homepage    = "https://awesomewm.org/";
     license     = licenses.gpl2Plus;

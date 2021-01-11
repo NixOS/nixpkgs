@@ -16,7 +16,7 @@
 
 {
   # Build dependencies
-  appimageTools, autoPatchelfHook, fetchzip, stdenv,
+  appimageTools, autoPatchelfHook, fetchzip, lib, stdenv,
 
   # Runtime dependencies;
   # A few additional ones (e.g. Node) are already shipped together with the
@@ -100,7 +100,7 @@ in stdenv.mkDerivation {
     chmod +x bin/pcloud
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Secure and simple to use cloud storage for your files; pCloud Drive, Electron Edition";
     homepage = "https://www.pcloud.com/";
     license = licenses.unfree;

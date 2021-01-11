@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, installShellFiles, makeWrapper, asciidoc
+{ lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper, asciidoc
 , docbook_xml_dtd_45, git, docbook_xsl, libxml2, libxslt, coreutils, gawk
 , gnugrep, gnused, jq, nix, fetchpatch }:
 
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
     cp -r contrib/hello_rs $out/share/doc/${pname}/contrib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Prefetch any fetcher function call, e.g. package sources";
     license = licenses.mit;
     maintainers = with maintainers; [ msteen ];

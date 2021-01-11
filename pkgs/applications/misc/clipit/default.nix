@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchpatch, stdenv
+{ fetchFromGitHub, fetchpatch, lib, stdenv
 , autoreconfHook, intltool, pkgconfig
 , gtk3, libayatana-appindicator, xdotool, which, wrapGAppsHook }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "--prefix" "PATH" ":" "${stdenv.lib.makeBinPath [ xdotool which ]}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight GTK Clipboard Manager";
     inherit (src.meta) homepage;
     license     = licenses.gpl3;

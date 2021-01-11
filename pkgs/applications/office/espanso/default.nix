@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 , pkgconfig
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   # Some tests require networking
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform Text Expander written in Rust";
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;

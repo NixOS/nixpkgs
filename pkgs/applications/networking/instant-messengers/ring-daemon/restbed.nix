@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , asio
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ asio openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HTTP framework for building networked applications";
     longDescription = ''
       HTTP framework for building networked applications that require seamless

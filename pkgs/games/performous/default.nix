@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gettext
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, gettext
 , glibmm, libxmlxx, pango, librsvg
 , SDL2, glew, boost, libav, portaudio, epoxy
 }:
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   pname = "performous";
   version = "1.1";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Karaoke, band and dancing game";
     homepage    = "http://performous.org/";
     license     = licenses.gpl2Plus;

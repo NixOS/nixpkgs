@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ... }:
+{ lib, stdenv, fetchgit, ... }:
 
 stdenv.mkDerivation {
   name = "loadwatch-1.1-1-g6d2544c";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     install loadwatch lw-ctl $out/bin
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Run a program using only idle cycles";
     license = licenses.gpl2;
     maintainers = with maintainers; [ woffs ];

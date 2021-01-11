@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libyamlcpp, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, libyamlcpp, pkgconfig
 , smartSupport ? false, libatasmart }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description  = "A minimalist fan control program";
     longDescription = "A minimalist fan control program. Originally designed
 specifically for IBM/Lenovo Thinkpads, it now supports any kind of system via

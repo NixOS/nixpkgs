@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # Upstream doesn't contain unit tests, only functional tests which require specific hardware
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library to interact with Digi International's XBee radio frequency modules";
     homepage = "https://github.com/digidotcom/xbee-python";
     license = licenses.mpl20;

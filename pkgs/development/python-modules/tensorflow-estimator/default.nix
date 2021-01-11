@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, stdenv, fetchPypi, buildPythonPackage
 , numpy
 , absl-py
 , mock
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ mock numpy absl-py ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TensorFlow Estimator is a high-level API that encapsulates model training, evaluation, prediction, and exporting.";
     homepage = "http://tensorflow.org";
     license = licenses.asl20;

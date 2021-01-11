@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, vte, libxml2, gtk-vnc, intltool
+{ lib, stdenv, fetchurl, pkgconfig, gtk3, gnome3, vte, libxml2, gtk-vnc, intltool
 , libsecret, itstool, wrapGAppsHook, librsvg }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Remote desktop viewer for GNOME";
     homepage = "https://wiki.gnome.org/Apps/Vinagre";
     license = licenses.gpl2Plus;

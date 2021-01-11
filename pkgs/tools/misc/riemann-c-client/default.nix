@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, file , protobufc }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, file , protobufc }:
 
 stdenv.mkDerivation rec {
   name = "riemann-c-client-1.10.4";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     make lib/riemann/proto/riemann.pb-c.h
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/algernon/riemann-c-client";
     description = "A C client library for the Riemann monitoring system";
     license = licenses.gpl3;

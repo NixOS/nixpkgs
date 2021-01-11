@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchurl
 , fetchpatch
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/doc/dxx-rebirth *.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Source Port of the Descent 1 and 2 engines";
     homepage = "https://www.dxx-rebirth.com/";
     license = licenses.gpl3;

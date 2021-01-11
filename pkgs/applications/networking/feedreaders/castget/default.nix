@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, command-line based RSS enclosure downloader";
     longDescription = ''
       castget is a simple, command-line based RSS enclosure downloader. It is

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, gtk3, gnome3, librsvg, pkgconfig, pango, atk, gtk2
+{ lib, stdenv, fetchurl, intltool, gtk3, gnome3, librsvg, pkgconfig, pango, atk, gtk2
 , gdk-pixbuf, hicolor-icon-theme }:
 
 let
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
     gtk-update-icon-cache "$out"/share/icons/HighContrast
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };

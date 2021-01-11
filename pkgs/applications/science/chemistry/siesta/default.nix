@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , gfortran, blas, lapack
 , mpi ? null, scalapack
 }:
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     cp -a siesta $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A first-principles materials simulation code using DFT";
     longDescription = ''
          SIESTA is both a method and its computer program

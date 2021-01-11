@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem
 , atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg
 , lsb-release, freetype, fontconfig, polkit, polkit_gnome
 , pulseaudio }:
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
       --subst-var out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit description;
     homepage = "https://www.anydesk.com";
     license = licenses.unfree;

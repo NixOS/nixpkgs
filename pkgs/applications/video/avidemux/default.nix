@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     fixupPhase
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://fixounet.free.fr/avidemux/";
     description = "Free video editor designed for simple video editing tasks";
     maintainers = with maintainers; [ abbradar ma27 ];

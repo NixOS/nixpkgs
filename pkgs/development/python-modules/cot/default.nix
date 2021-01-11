@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy3k
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy3k
 , argcomplete, colorlog, pyvmomi, requests, verboselogs
 , psutil, pyopenssl, setuptools
 , mock, pytest, pytest-mock, pytestCheckHook, qemu
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'argparse'," ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Common OVF Tool";
     longDescription = ''
       COT (the Common OVF Tool) is a tool for editing Open Virtualization Format (.ovf, .ova) virtual appliances,

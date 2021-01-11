@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, hadoop, jre, bash }:
+{ lib, stdenv, fetchurl, makeWrapper, hadoop, jre, bash }:
 
 stdenv.mkDerivation rec {
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pig.apache.org/";
     description = "High-level language for Apache Hadoop";
     license = licenses.asl20;

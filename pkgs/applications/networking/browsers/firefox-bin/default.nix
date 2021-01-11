@@ -193,7 +193,7 @@ stdenv.mkDerivation {
         then "http://archive.mozilla.org/pub/devedition/releases/"
         else "http://archive.mozilla.org/pub/firefox/releases/";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "http://www.mozilla.org/firefox/";
     license = {

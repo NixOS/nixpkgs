@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , mono, dotnetPackages, makeWrapper
 , gtk2, cups, timidity }:
 
@@ -52,7 +52,7 @@ in stdenv.mkDerivation {
       --add-flags $out/bin/.MidiSheetMusic.exe
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert MIDI Files to Piano Sheet Music for two hands";
     homepage = "http://midisheetmusic.com";
     license = licenses.gpl2;

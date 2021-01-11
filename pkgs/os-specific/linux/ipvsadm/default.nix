@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libnl, popt, gnugrep }:
+{ lib, stdenv, fetchurl, pkgconfig, libnl, popt, gnugrep }:
 
 stdenv.mkDerivation rec {
   pname = "ipvsadm";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s|^PATH=.*|PATH=$out/bin:${gnugrep}/bin|" $out/sbin/ipvsadm-{restore,save}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux Virtual Server support programs";
     homepage = "http://www.linuxvirtualserver.org/software/ipvs.html";
     license = licenses.gpl2;

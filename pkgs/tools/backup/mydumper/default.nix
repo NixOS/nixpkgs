@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig
 , glib, zlib, pcre, libmysqlclient, libressl }:
 
 let inherit (stdenv.lib) getDev; in
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DMYSQL_INCLUDE_DIR=${getDev libmysqlclient}/include/mysql" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''High-perfomance MySQL backup tool'';
     homepage = "https://github.com/maxbube/mydumper";
     license = licenses.gpl3;

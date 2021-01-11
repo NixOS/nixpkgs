@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, cmake, gtk2, libjack2, libgnomecanvas
+{ lib, stdenv, fetchurl, alsaLib, cmake, gtk2, libjack2, libgnomecanvas
 , libpthreadstubs, libsamplerate, libsndfile, libtool, libxml2
 , pkg-config, openssl }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation  rec {
   buildInputs = [ alsaLib gtk2 libjack2 libgnomecanvas libpthreadstubs
                   libsamplerate libsndfile libtool libxml2 openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MIDI controllable audio sampler";
     longDescription = "a fork of Specimen";
     homepage = "http://petri-foo.sourceforge.net";

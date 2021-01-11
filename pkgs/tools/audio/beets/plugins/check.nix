@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, beets, pythonPackages, flac, liboggz, mp3val }:
+{ lib, stdenv, fetchFromGitHub, beets, pythonPackages, flac, liboggz, mp3val }:
 
 pythonPackages.buildPythonApplication rec {
   name = "beets-check";
@@ -26,7 +26,7 @@ pythonPackages.buildPythonApplication rec {
 
   checkPhase = "nosetests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Beets plugin to Verify and store checksums in your library";
     homepage = "https://github.com/geigerzaehler/beets-check";
     license = licenses.mit;

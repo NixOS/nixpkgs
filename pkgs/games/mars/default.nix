@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libGLU, libGL, sfml, fribidi, taglib }:
+{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, sfml, fribidi, taglib }:
 stdenv.mkDerivation rec {
   pname = "mars";
   version = "0.7.5";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     EOF
     chmod +x "$out/bin/mars"
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://mars-game.sourceforge.net/";
     description = "A game about fighting with ships in a 2D space setting";
     license = licenses.gpl3Plus;

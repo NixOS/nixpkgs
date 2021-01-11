@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, wrapGAppsHook, gvfs, gtk3, atomEnv }:
+{ lib, stdenv, pkgs, fetchurl, wrapGAppsHook, gvfs, gtk3, atomEnv }:
 
 let
   versions = {
@@ -81,7 +81,7 @@ let
       sed -i -e "s|Exec=.*$|Exec=$out/bin/${pname}|" $out/share/applications/${pname}.desktop
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A hackable text editor for the 21st Century";
       homepage = "https://atom.io/";
       license = licenses.mit;

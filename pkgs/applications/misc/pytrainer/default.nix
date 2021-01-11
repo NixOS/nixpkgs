@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , perl
 , python3
@@ -84,7 +84,7 @@ python3.pkgs.buildPythonApplication rec {
       ${python3.interpreter} setup.py test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pytrainer/pytrainer/wiki";
     description = "Application for logging and graphing sporting excursions";
     maintainers = [ maintainers.rycee ];

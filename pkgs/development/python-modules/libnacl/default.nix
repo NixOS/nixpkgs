@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytest, libsodium }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pytest, libsodium }:
 
 buildPythonPackage rec {
   pname = "libnacl";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ xvapx ];
     description = "Python bindings for libsodium based on ctypes";
     homepage = "https://pypi.python.org/pypi/libnacl";

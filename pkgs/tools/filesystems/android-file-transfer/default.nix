@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, fuse, readline, pkgconfig, qtbase, qttools }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, fuse, readline, pkgconfig, qtbase, qttools }:
 
 mkDerivation rec {
   pname = "android-file-transfer";
@@ -14,7 +14,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake readline pkgconfig ];
   buildInputs = [ fuse qtbase qttools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reliable MTP client with minimalistic UI";
     homepage = "https://whoozle.github.io/android-file-transfer-linux/";
     license = licenses.lgpl21Plus;

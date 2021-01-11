@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, symlinkJoin, gfortran, perl, procps
+{ lib, stdenv, fetchFromGitLab, symlinkJoin, gfortran, perl, procps
 , libyaml, libxc, fftw, blas, lapack, gsl, netcdf, arpack, autoreconfHook
 , python3
 }:
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Real-space time dependent density-functional theory code";
     homepage = "https://octopus-code.org";
     maintainers = with maintainers; [ markuskowa ];

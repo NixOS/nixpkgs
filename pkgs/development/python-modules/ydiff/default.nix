@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "ydiff";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     $out/bin/ydiff --help
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "View colored, incremental diff in workspace or from stdin with side by side and auto pager support (Was \"cdiff\")";
     longDescription = ''
       Term based tool to view colored, incremental diff in a Git/Mercurial/Svn

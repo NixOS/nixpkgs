@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, cmake, boost, gmp, htslib, zlib, lzma, pkg-config}:
+{lib, stdenv, fetchFromGitHub, cmake, boost, gmp, htslib, zlib, lzma, pkg-config}:
 
 stdenv.mkDerivation rec {
   pname = "octopus";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mv $out/octopus $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bayesian haplotype-based mutation calling";
     license = licenses.mit;
     homepage = "https://github.com/luntergroup/octopus";

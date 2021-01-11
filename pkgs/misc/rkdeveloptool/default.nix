@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libusb1 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libusb1 }:
 
 stdenv.mkDerivation {
   pname = "rkdeveloptool";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libusb1 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/rockchip-linux/rkdeveloptool";
     description = "A tool from Rockchip to communicate with Rockusb devices";
     license = licenses.gpl2;

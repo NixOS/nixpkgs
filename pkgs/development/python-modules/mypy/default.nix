@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, typed-ast, psutil, isPy3k
+{ lib, stdenv, fetchFromGitHub, buildPythonPackage, typed-ast, psutil, isPy3k
 , mypy-extensions
 , typing-extensions
 , fetchpatch
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
   MYPY_USE_MYPYC = stdenv.buildPlatform.is64bit;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Optional static typing for Python";
     homepage    = "http://www.mypy-lang.org";
     license     = licenses.mit;

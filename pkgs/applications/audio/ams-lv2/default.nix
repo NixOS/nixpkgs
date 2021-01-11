@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cairo, fftw, gtkmm2, lv2, lvtk, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cairo, fftw, gtkmm2, lv2, lvtk, pkgconfig
 , wafHook, python3 }:
 
 stdenv.mkDerivation  rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation  rec {
   nativeBuildInputs = [ pkgconfig wafHook python3 ];
   buildInputs = [ cairo fftw gtkmm2 lv2 lvtk ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An LV2 port of the internal modules found in Alsa Modular Synth";
     homepage = "https://github.com/blablack/ams-lv2";
     license = licenses.gpl3;

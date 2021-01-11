@@ -1,4 +1,4 @@
-{ stdenv, vala, fetchFromGitHub, nix-update-script, pantheon, pkgconfig, meson, ninja, python3, gtk3
+{ lib, stdenv, vala, fetchFromGitHub, nix-update-script, pantheon, pkgconfig, meson, ninja, python3, gtk3
 , desktop-file-utils, json-glib, libsoup, libgee, poppler, wrapGAppsHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The simplest PDF viewer around";
     homepage = "https://github.com/lainsce/aesop";
     license = licenses.gpl2Plus;

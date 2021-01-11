@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoconf-archive
 , appstream-glib
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gnomepomodoro.org/";
     description = "Time management utility for GNOME based on the pomodoro technique";
     longDescription = ''

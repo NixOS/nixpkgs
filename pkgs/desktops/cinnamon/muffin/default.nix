@@ -14,7 +14,7 @@
 , libXtst
 , libxkbcommon
 , pkgconfig
-, stdenv
+, lib, stdenv
 , udev
 , xorg
 , wrapGAppsHook
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/muffin";
     description = "The window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
     license = licenses.gpl2;

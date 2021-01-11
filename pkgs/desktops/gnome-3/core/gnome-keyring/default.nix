@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus, libgcrypt, pam, python2, glib, libxslt
+{ lib, stdenv, fetchurl, pkgconfig, dbus, libgcrypt, pam, python2, glib, libxslt
 , gettext, gcr, libcap_ng, libselinux, p11-kit, openssh, wrapGAppsHook
 , docbook_xsl, docbook_xml_dtd_43, gnome3 }:
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of components in GNOME that store secrets, passwords, keys, certificates and make them available to applications";
     homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";
     license = licenses.gpl2;

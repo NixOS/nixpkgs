@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxslt, glib, libxml2, telepathy-glib, avahi, libsoup
+{ lib, stdenv, fetchurl, libxslt, glib, libxml2, telepathy-glib, avahi, libsoup
 , libuuid, openssl, pcre, sqlite, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-avahi-tests" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Link-local XMPP connection manager for Telepathy";
     platforms = platforms.gnu ++ platforms.linux; # Random choice
     maintainers = [ maintainers.lethalman ];

@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and feature-rich Java heap analyzer";
     longDescription = ''
       The Eclipse Memory Analyzer is a tool that helps you find memory

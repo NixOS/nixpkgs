@@ -1,4 +1,4 @@
-{ stdenv, pkgs }:
+{ lib, stdenv, pkgs }:
 
 stdenv.mkDerivation {
   version = "0.4.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = with pkgs; [ cmake pkgconfig doxygen ];
   buildInputs = with pkgs; [ libuecc  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiny collection of programs used for ECDSA (keygen, sign, verify)";
     homepage = "https://github.com/tcatm/ecdsautils/";
     license = with licenses; [ mit bsd2 ];

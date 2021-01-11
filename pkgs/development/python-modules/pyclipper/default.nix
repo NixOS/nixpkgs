@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchPypi
 , buildPythonPackage
 , setuptools_scm
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pyclipper" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cython wrapper for clipper library";
     homepage    = "https://github.com/fonttools/pyclipper";
     license     = licenses.mit;

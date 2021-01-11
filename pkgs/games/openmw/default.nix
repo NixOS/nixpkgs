@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg_3
+{ lib, stdenv, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg_3
 , boost, cmake, SDL2, unshield, openal, libXt, pkg-config }:
 
 let
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "-DDESIRED_QT_VERSION:INT=5"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An unofficial open source engine reimplementation of the game Morrowind";
     homepage = "http://openmw.org";
     license = licenses.gpl3Plus;

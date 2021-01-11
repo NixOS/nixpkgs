@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.phontron.com/kytea/";
     description = "General toolkit developed for analyzing text";
 

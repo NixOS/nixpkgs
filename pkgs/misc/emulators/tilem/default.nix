@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib gnome2.gtk libticonv libtifiles2 libticables2 libticalcs2 ];
   NIX_CFLAGS_COMPILE = [ "-lm" ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://lpg.ticalc.org/prj_tilem/";
     description = "Emulator and debugger for Texas Instruments Z80-based graphing calculators";
     license = licenses.gpl3Plus;

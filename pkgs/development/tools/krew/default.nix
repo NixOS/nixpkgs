@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "krew";
@@ -15,7 +15,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/krew" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Package manager for kubectl plugins";
     homepage = "https://github.com/kubernetes-sigs/krew";
     maintainers = with maintainers; [ vdemeester ];

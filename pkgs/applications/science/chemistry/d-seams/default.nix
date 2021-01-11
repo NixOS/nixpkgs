@@ -15,7 +15,7 @@ clangStdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake lua luaPackages.luafilesystem ];
   buildInputs = [ fmt rang libyamlcpp eigen catch2 boost gsl liblapack blas ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "d-SEAMS: Deferred Structural Elucidation Analysis for Molecular Simulations";
     longDescription = ''

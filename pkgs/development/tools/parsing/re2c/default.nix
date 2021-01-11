@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "re2c";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     patchShebangs run_tests.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for writing very fast and very flexible scanners";
     homepage    = "http://re2c.org";
     license     = licenses.publicDomain;

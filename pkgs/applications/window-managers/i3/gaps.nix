@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, i3, autoreconfHook }:
+{ fetchurl, lib, stdenv, i3, autoreconfHook }:
 
 i3.overrideAttrs (oldAttrs : rec {
 
@@ -15,7 +15,7 @@ i3.overrideAttrs (oldAttrs : rec {
   # fatal error: GENERATED_config_enums.h: No such file or directory
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fork of the i3 tiling window manager with some additional features";
     homepage    = "https://github.com/Airblader/i3";
     maintainers = with maintainers; [ fmthoma ];

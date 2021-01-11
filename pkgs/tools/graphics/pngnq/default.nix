@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libpng, zlib }:
+{ lib, stdenv, fetchurl, pkgconfig, libpng, zlib }:
 
 stdenv.mkDerivation rec {
   name = "pngnq-1.1";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sed -i '/png.h/a \#include <zlib.h>' src/rwpng.c
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pngnq.sourceforge.net/";
     description = "A PNG quantizer";
     license = licenses.bsd3;

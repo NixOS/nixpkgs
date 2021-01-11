@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , darwin
 , fetchurl
 , makeWrapper
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" "man" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful

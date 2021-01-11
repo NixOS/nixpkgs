@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   checkInputs = [ glibcLocales pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://netaddr.readthedocs.io/en/latest/";
     downloadPage = "https://github.com/netaddr/netaddr/releases";
     changelog = "https://netaddr.readthedocs.io/en/latest/changes.html";

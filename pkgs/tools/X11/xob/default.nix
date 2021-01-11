@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, xorg, libconfig }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, xorg, libconfig }:
 
 stdenv.mkDerivation rec {
   pname = "xob";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight overlay bar for the X Window System";
     longDescription = ''
       A lightweight configurable overlay volume/backlight/progress/anything bar

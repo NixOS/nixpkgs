@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
       --replace "/etc/suricata" "$out/etc/suricata"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free and open source, mature, fast and robust network threat detection engine";
     homepage = "https://suricata-ids.org";
     license = licenses.gpl2;

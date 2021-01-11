@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, wrapGAppsHook, autoPatchelfHook, writeShellScript
+{ lib, stdenv, fetchurl, dpkg, wrapGAppsHook, autoPatchelfHook, writeShellScript
 , alsaLib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, gtk3, libnotify, libX11, libXcomposite, libXcursor, libXdamage, libuuid
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${libPath}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Online freelancing platform desktop application for time tracking";
     homepage = "https://www.upwork.com/ab/downloads/";
     license = licenses.unfree;

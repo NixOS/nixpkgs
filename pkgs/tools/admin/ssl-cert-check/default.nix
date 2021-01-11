@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , makeWrapper
 , openssl
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       --set PATH "${stdenv.lib.makeBinPath buildInputs}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "a Bourne shell script that can be used to report on expiring SSL certificates";
     homepage = "https://github.com/Matty9191/ssl-cert-check";
     license = licenses.gpl2;

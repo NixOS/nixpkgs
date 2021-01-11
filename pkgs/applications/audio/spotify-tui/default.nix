@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, installShellFiles, pkgconfig, openssl, python3, libxcb, AppKit, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, pkgconfig, openssl, python3, libxcb, AppKit, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-tui";
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Spotify for the terminal written in Rust";
     homepage = "https://github.com/Rigellute/spotify-tui";
     changelog = "https://github.com/Rigellute/spotify-tui/blob/v${version}/CHANGELOG.md";

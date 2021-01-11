@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, wayland, scdoc, makeWrapper
 , wlroots, wayland-protocols, pixman, libxkbcommon
 , systemd, libGL, libX11
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   # Tests Cage using the NixOS module by launching xterm:
   passthru.tests.basic-nixos-module-functionality = nixosTests.cage;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Wayland kiosk that runs a single, maximized application";
     homepage    = "https://www.hjdskes.nl/projects/cage/";
     license     = licenses.mit;

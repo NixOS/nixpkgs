@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "165kplaqigis0anafvzfqzwc3jjhsn2mwgf4phb4ck75n3yf85ys";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Recon tool that allows searching shortened URLs";
     longDescription = ''
       urlhunter is a recon tool that allows searching on URLs that are

@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, stdenv, fetchPypi, buildPythonPackage
 , nose, flask, six, packaging }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     nosetests --exclude test_acl_uncaught_exception_500
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Flask extension adding a decorator for CORS support";
     homepage = "https://github.com/corydolphin/flask-cors";
     license = with licenses; [ mit ];

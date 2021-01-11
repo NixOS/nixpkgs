@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, boost, libgcrypt, systemd, mpd_clientlib, curl }:
+{ lib, stdenv, fetchurl, meson, ninja, pkgconfig, boost, libgcrypt, systemd, mpd_clientlib, curl }:
 
 stdenv.mkDerivation rec {
   pname = "mpdscribble";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig ];
   buildInputs = [ mpd_clientlib curl boost libgcrypt systemd ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Music Player Daemon (MPD) client which submits information about tracks being played to a scrobbler (e.g. last.fm)";
     homepage = "https://www.musicpd.org/clients/mpdscribble/";
     license = licenses.gpl2;

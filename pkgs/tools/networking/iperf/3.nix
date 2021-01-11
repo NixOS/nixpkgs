@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, fetchpatch }:
+{ lib, stdenv, fetchurl, openssl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "iperf";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ln -s $man/share/man/man1/iperf3.1 $man/share/man/man1/iperf.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://software.es.net/iperf/";
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = platforms.unix;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, stdenv, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication {
   name = "python2nix-20140927";
@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication {
 
   propagatedBuildInputs = with pythonPackages; [ requests pip setuptools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = [ maintainers.domenkozar ];
     platforms = platforms.all;
   };

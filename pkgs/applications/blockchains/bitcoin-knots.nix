@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkgconfig
 , autoreconfHook
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-incompatible-bdb"
                      "--with-boost-libdir=${boost.out}/lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An enhanced Bitcoin node software";
     homepage = "https://bitcoinknots.org/";
     license = licenses.mit;

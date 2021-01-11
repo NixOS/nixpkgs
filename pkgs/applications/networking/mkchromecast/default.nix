@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python3Packages
 , sox
@@ -75,7 +75,7 @@ python3Packages.buildPythonApplication rec {
       --replace './bin/audiodevice' '${placeholder "out"}/bin/audiodevice'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mkchromecast.com/";
     description = "Cast macOS and Linux Audio/Video to your Google Cast and Sonos Devices";
     license = licenses.mit;

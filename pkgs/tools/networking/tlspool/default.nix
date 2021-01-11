@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkgconfig, arpa2cm
 , openldap, p11-kit, unbound, libtasn1, db, openssl, quickder, libkrb5, ldns, gnutls-kdh
 , softhsm
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     cp $src/src/*.h $out/include/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A supercharged TLS daemon that allows for easy, strong and consistent deployment";
     license = licenses.gpl3;
     homepage = "http://www.tlspool.org";

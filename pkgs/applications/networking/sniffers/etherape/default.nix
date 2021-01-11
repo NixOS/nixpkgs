@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libtool, gtk3, libpcap, goocanvas2,
+{ lib, stdenv, fetchurl, pkgconfig, libtool, gtk3, libpcap, goocanvas2,
 popt, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     libtool gtk3 libpcap goocanvas2 popt
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://etherape.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = with platforms; linux;

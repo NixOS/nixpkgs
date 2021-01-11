@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, odpic }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, odpic }:
 
 buildPythonPackage rec {
   pname = "cx_Oracle";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # Check need an Oracle database to run
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python interface to Oracle";
     homepage = "https://oracle.github.io/python-cx_Oracle";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkg-config, makeWrapper
+{ lib, stdenv, fetchgit, cmake, pkg-config, makeWrapper
 , boost
 , pythonSupport ? true, python, swig
 , airspy
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gnuradio block for OsmoSDR and rtl-sdr";
     homepage = "https://sdr.osmocom.org/trac/wiki/GrOsmoSDR";
     license = licenses.gpl3Plus;

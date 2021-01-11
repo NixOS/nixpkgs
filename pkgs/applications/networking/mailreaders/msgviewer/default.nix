@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, unzip, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, makeWrapper, unzip, jre, runtimeShell }:
 
 let
   version = "1.9";
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper unzip ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Viewer for .msg files (MS Outlook)";
     homepage    = "https://www.washington.edu/alpine/";
     license     = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng
+{ lib, stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng
 , CoreServices, CoreGraphics, ImageIO, ninja }:
 
 let
@@ -61,7 +61,7 @@ in stdenv.mkDerivation {
   buildInputs = [ zlib libxml2 libpng ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices CoreGraphics ImageIO ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Xcode-compatible build tool";
     homepage = "https://github.com/facebook/xcbuild";
     platforms = platforms.unix;

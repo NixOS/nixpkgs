@@ -1,4 +1,4 @@
-{ config, stdenv, fetchFromGitHub, fetchpatch
+{ config, lib, stdenv, fetchFromGitHub, fetchpatch
 , addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
 , ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null
@@ -217,7 +217,7 @@ in stdenv.mkDerivation rec {
     addOpenGLRunpath $out/bin/mpv
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = "https://mpv.io";
     license = licenses.gpl2Plus;

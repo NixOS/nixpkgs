@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libusb1, zlib }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libusb1, zlib }:
 
 stdenv.mkDerivation {
   name = "sunxi-tools-20181113";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   installTargets = [ "install-tools" "install-misc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for Allwinner SoC devices";
     homepage = "http://linux-sunxi.org/";
     license = licenses.gpl2Plus;

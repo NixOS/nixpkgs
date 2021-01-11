@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , alsaLib, freetype, xorg, curl, libGL, libjack2, gnome3
 , pkgconfig, makeWrapper
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/helio" "$out/bin/Helio"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "One music sequencer for all major platforms, both desktop and mobile";
     homepage = "https://helio.fm/";
     license = licenses.gpl3Only;

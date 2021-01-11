@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , oauthlib, requests }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;        # Internet tests fail when building in chroot
   propagatedBuildInputs = [ oauthlib requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OAuthlib authentication support for Requests";
     homepage = "https://github.com/requests/requests-oauthlib";
     maintainers = with maintainers; [ prikhi ];

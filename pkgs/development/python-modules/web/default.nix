@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytestCheckHook
+{ lib, stdenv, buildPythonPackage, fetchPypi, pytestCheckHook
 , cheroot
 , dbutils, mysqlclient, pymysql, mysql-connector, psycopg2
 }:
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook dbutils mysqlclient pymysql mysql-connector psycopg2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Makes web apps";
     longDescription = ''
       Think about the ideal way to write a web app.

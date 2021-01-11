@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , rustPlatform
 , unzip
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple CLI client for installing and maintaining linux GOG games";
     homepage = "https://git.sr.ht/~nicohman/wyvern";
     license = licenses.gpl3;

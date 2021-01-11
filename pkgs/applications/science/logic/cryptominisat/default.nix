@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3, xxd, boost, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, xxd, boost, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "cryptominisat";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 boost ];
   nativeBuildInputs = [ cmake xxd ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An advanced SAT Solver";
     homepage    = "https://github.com/msoos/cryptominisat";
     license     = licenses.mit;

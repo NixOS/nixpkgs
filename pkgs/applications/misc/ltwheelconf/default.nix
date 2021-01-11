@@ -1,4 +1,4 @@
-{ stdenv, libusb1, pkgconfig, fetchFromGitHub }:
+{ lib, stdenv, libusb1, pkgconfig, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "ltwheelconf";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     cp ltwheelconf $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/thk/LTWheelConf";
     description = "Logitech wheels configuration tool";
     license = licenses.gpl3;

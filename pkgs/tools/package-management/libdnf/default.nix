@@ -1,4 +1,4 @@
-{ gcc9Stdenv, stdenv, fetchFromGitHub, cmake, gettext, pkg-config, gpgme, libsolv, openssl, check
+{ gcc9Stdenv, lib, stdenv, fetchFromGitHub, cmake, gettext, pkg-config, gpgme, libsolv, openssl, check
 , pcre, json_c, libmodulemd, libsmartcols, sqlite, librepo, libyaml, rpm }:
 
 gcc9Stdenv.mkDerivation rec {
@@ -56,7 +56,7 @@ gcc9Stdenv.mkDerivation rec {
     "-DWITH_ZCHUNK=OFF"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Package management library.";
     homepage = "https://github.com/rpm-software-management/libdnf";
     license = licenses.gpl2Plus;

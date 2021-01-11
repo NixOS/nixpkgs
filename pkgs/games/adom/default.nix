@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, zlib, libmad, libpng12, libcaca, libGLU, libGL, alsaLib, libpulseaudio
+{ lib, stdenv, fetchurl, patchelf, zlib, libmad, libpng12, libcaca, libGLU, libGL, alsaLib, libpulseaudio
 , xorg }:
 
 let
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/adom
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A rogue-like game with nice graphical interface";
     homepage = "http://adom.de/";
     license = licenses.unfreeRedistributable;

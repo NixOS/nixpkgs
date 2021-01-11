@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , isPy3k
-, stdenv
+, lib, stdenv
 , numpy
 , wxPython
 , matplotlib
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     cp $desktopItem/share/applications/* $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pyspread is a non-traditional spreadsheet application that is based on and written in the programming language Python";
     homepage = "https://manns.github.io/pyspread/";
     license = licenses.gpl3;

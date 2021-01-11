@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "frozendict";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # frozendict does not come with tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/slezica/python-frozendict";
     description = "An immutable dictionary";
     license = licenses.mit;

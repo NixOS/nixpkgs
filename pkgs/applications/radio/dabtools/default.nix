@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig
 , libusb1, rtl-sdr, fftw
 } :
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ rtl-sdr fftw libusb1 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Commandline tools for DAB and DAB+ digital radio broadcasts";
     homepage = "https://github.com/Opendigitalradio/dabtools";
     license = licenses.gpl3Plus;

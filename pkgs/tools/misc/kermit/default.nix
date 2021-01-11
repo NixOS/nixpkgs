@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, glibc }:
+{ lib, stdenv, fetchurl, ncurses, glibc }:
 
 stdenv.mkDerivation {
   name = "kermit-9.0.302";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     make -f makefile install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.kermitproject.org/ck90.html";
     description = "Portable Scriptable Network and Serial Communication Software";
     license = licenses.bsd3;

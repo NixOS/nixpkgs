@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja, gettext, gnome3, packagekit, polkit
+{ lib, stdenv, fetchurl, pkgconfig, meson, ninja, gettext, gnome3, packagekit, polkit
 , gtk3, systemd, wrapGAppsHook, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/software/PackageKit/";
     platforms = platforms.linux;
     maintainers = teams.gnome.members;

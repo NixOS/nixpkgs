@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, ninja, boost, meson, pkg-config, nix, isPy3k, python }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, ninja, boost, meson, pkg-config, nix, isPy3k, python }:
 
 buildPythonPackage rec {
   pname = "pythonix";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nix" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
        Eval nix code from python.
     '';

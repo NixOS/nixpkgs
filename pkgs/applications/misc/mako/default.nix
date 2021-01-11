@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, scdoc
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, scdoc
 , systemd, pango, cairo, gdk-pixbuf
 , wayland, wayland-protocols
 , wrapGAppsHook }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dzsh-completions=true" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight Wayland notification daemon";
     homepage = "https://wayland.emersion.fr/mako/";
     license = licenses.mit;

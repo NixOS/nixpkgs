@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , autoconf-archive
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GnomeOnlineMiners";
     description = "A set of crawlers that go through your online content and index them locally in Tracker";
     maintainers = teams.gnome.members;

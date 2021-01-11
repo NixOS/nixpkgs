@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, makeWrapper, python
+{ lib, stdenv, fetchurl, cmake, makeWrapper, python
 , boost, lzma
 , withGog ? false, unar ? null }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${stdenv.lib.makeBinPath [ unar ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to unpack installers created by Inno Setup";
     homepage = "https://constexpr.org/innoextract/";
     license = licenses.zlib;

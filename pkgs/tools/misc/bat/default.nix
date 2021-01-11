@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , nixosTests
 , rustPlatform
 , fetchFromGitHub
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = { inherit (nixosTests) bat; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
     license = with licenses; [ asl20 /* or */ mit ];

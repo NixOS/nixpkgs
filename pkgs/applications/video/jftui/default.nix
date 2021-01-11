@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , curl
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     install -Dm555 build/jftui $out/bin/jftui
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Jellyfin Terminal User Interface ";
     homepage = "https://github.com/Aanok/jftui";
     license = licenses.unlicense;

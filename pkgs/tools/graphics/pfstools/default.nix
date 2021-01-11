@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchurl, cmake, pkgconfig, darwin
+{ lib, stdenv, mkDerivation, fetchurl, cmake, pkgconfig, darwin
 , openexr, zlib, imagemagick, libGLU, libGL, freeglut, fftwFloat
 , fftw, gsl, libexif, perl, opencv2, qtbase, netpbm
 }:
@@ -37,7 +37,7 @@ mkDerivation rec {
 
   patches = [ ./threads.patch ./pfstools.patch ./pfsalign.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pfstools.sourceforge.net/";
     description = "Toolkit for manipulation of HDR images";
     platforms = platforms.linux;

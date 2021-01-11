@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, fuse, libuuid, lz4 }:
+{ lib, stdenv, fetchgit, autoreconfHook, pkgconfig, fuse, libuuid, lz4 }:
 
 stdenv.mkDerivation rec {
   pname = "erofs-utils";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-fuse" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Userspace utilities for linux-erofs file system";
     license = with licenses; [ gpl2 ];
     maintainers = with maintainers; [ ehmry ];

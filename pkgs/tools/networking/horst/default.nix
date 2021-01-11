@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, pkgconfig, ncurses, libnl }:
+{lib, stdenv, fetchFromGitHub, pkgconfig, ncurses, libnl }:
 
 stdenv.mkDerivation rec {
   pname = "horst";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small and lightweight IEEE802.11 wireless LAN analyzer with a text interface";
     homepage = "http://br1.einfach.org/tech/horst/";
     maintainers = [ maintainers.fpletz ];

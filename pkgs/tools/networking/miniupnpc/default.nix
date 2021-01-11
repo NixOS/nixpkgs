@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, cctools }:
+{ lib, stdenv, fetchurl, which, cctools }:
 
 let
   generic = { version, sha256 }:
@@ -19,7 +19,7 @@ let
 
       makeFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "http://miniupnp.free.fr/";
         description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
         platforms = with platforms; linux ++ freebsd ++ darwin;

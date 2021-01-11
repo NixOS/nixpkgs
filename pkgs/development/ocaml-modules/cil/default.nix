@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, ocaml, findlib, ocamlbuild }:
+{ lib, stdenv, fetchurl, perl, ocaml, findlib, ocamlbuild }:
 
 if stdenv.lib.versionAtLeast ocaml.version "4.06"
 then throw "cil is not available for OCaml ${ocaml.version}"
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   '';
   prefixKey = "-prefix=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://kerneis.github.io/cil/";
     description = "A front-end for the C programming language that facilitates program analysis and transformation";
     license = licenses.bsd3;

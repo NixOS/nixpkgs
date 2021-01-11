@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , setuptoolsDarcs
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     sed -i -e '/argparse/d' setup.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://allmydata.org/trac/zfec";
     description = "Zfec, a fast erasure codec which can be used with the command-line, C, Python, or Haskell";
     longDescription = ''

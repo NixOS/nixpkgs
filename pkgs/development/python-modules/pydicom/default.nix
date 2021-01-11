@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -51,7 +51,7 @@ buildPythonPackage {
     "test_fetch_data_files"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pydicom.github.io";
     description = "Pure-Python package for working with DICOM files";
     license = licenses.mit;

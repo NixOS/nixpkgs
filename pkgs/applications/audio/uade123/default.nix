@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, libao, pkgconfig }:
+{ lib, stdenv, fetchurl, which, libao, pkgconfig }:
 
 let
   version = "2.13";
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Plays old Amiga tunes through UAE emulation and cloned m68k-assembler Eagleplayer API";
     homepage = "http://zakalwe.fi/uade/";
     license = licenses.gpl2;

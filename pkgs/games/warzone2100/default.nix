@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchurl, autoconf, automake
+{ lib, stdenv, mkDerivation, fetchurl, autoconf, automake
 , perl, unzip, zip, which, pkgconfig, qtbase, qtscript
 , SDL2, libtheora, openal, glew, physfs, fribidi, libXrandr
 , withVideos ? false
@@ -47,7 +47,7 @@ mkDerivation rec {
   postInstall = stdenv.lib.optionalString withVideos
     "cp ${sequences_src} $out/share/warzone2100/sequences.wz";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free RTS game, originally developed by Pumpkin Studios";
     longDescription = ''
         Warzone 2100 is an open source real-time strategy and real-time tactics

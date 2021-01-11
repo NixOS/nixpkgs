@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gitMinimal, python2Packages }:
+{ lib, stdenv, fetchFromGitHub, gitMinimal, python2Packages }:
 
 stdenv.mkDerivation rec {
   pname = "git-hub";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     rm -r $out/share/{doc,vim}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Git command line interface to GitHub";
     longDescription = ''

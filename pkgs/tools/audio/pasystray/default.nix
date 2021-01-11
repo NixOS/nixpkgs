@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, pkgconfig, autoreconfHook, wrapGAppsHook
+{ lib, stdenv, fetchpatch, fetchFromGitHub, pkgconfig, autoreconfHook, wrapGAppsHook
 , gnome3, avahi, gtk3, libayatana-appindicator-gtk3, libnotify, libpulseaudio
 , xlibsWrapper, gsettings-desktop-schemas
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PulseAudio system tray";
     homepage = "https://github.com/christophgysin/pasystray";
     license = licenses.lgpl21Plus;

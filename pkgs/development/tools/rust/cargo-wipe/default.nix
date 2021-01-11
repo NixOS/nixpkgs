@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , nix-update-script
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''Cargo subcommand "wipe": recursively finds and optionally wipes all "target" or "node_modules" folders'';
     homepage = "https://github.com/mihai-dinculescu/cargo-wipe";
     license = with licenses; [ mit ];

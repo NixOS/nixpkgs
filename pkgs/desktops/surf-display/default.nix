@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, makeWrapper
+{ lib, stdenv, fetchgit, makeWrapper
 , surf, wmctrl, matchbox, xdotool, unclutter
 , xorg, pulseaudio, xprintidle-ng }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     providedSessions = [ "surf-display" ];
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kiosk browser session manager based on the surf browser";
     homepage = "https://code.it-zukunft-schule.de/cgit/surf-display/";
     maintainers = with maintainers; [ etu ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gmp, mpfr, python
+{ lib, stdenv, fetchFromGitHub, cmake, gmp, mpfr, python
 , gperftools, ninja, makeWrapper }:
 
 stdenv.mkDerivation {
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/linja --prefix PATH : $out/bin:${ninja}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic and interactive theorem prover (version with HoTT support)";
     homepage    = "http://leanprover.github.io";
     license     = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , appstream-glib
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description = "Ibus Hangul engine";
     homepage = "https://github.com/choehwanjin/ibus-hangul";

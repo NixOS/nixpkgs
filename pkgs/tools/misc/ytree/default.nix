@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , ncurses
 , readline
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A curses-based file manager similar to DOS Xtree(TM)";
     homepage = "https://www.han.de/~werner/ytree.html";
     license = licenses.gpl2Plus;

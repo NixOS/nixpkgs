@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, cmake, fetchFromBitbucket, pkgconfig, qtbase, qttools, qtmultimedia, zlib, bzip2, xxd }:
+{ lib, stdenv, mkDerivation, cmake, fetchFromBitbucket, pkgconfig, qtbase, qttools, qtmultimedia, zlib, bzip2, xxd }:
 
 mkDerivation {
   pname = "doomseeker";
@@ -18,7 +18,7 @@ mkDerivation {
 
   hardeningDisable = stdenv.lib.optional stdenv.isDarwin "format";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://doomseeker.drdteam.org/";
     description = "Multiplayer server browser for many Doom source ports";
     license = licenses.gpl2;

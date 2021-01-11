@@ -1,4 +1,4 @@
-{ stdenv, go, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, go, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
   pname = "alertmanager";
@@ -31,7 +31,7 @@ buildGoPackage rec {
     installShellCompletion amtool.bash
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/alertmanager";
     license = licenses.asl20;

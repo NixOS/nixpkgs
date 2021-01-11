@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, wrapGAppsHook
 , autoconf, autoconf-archive, automake, gettext, intltool, libtool, pkgconfig
 , libICE, libSM, libXScrnSaver, libXtst, cheetah
 , gobject-introspection, glib, glibmm, gtkmm3, atk, pango, pangomm, cairo
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A program to help prevent Repetitive Strain Injury";
     longDescription = ''
       Workrave is a program that assists in the recovery and prevention of

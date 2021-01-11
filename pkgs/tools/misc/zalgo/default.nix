@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "zalgo";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     install -Dm755 zalgo -t $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Read stdin and corrupt it with combining diacritics";
     homepage = "https://github.com/lunasorcery/zalgo";
     license = licenses.unfree;

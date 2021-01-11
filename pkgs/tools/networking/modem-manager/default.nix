@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkgconfig
+{ lib, stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkgconfig
 , libmbim, libqmi, systemd, vala, gobject-introspection, dbus }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WWAN modem manager, part of NetworkManager";
     homepage = "https://www.freedesktop.org/wiki/Software/ModemManager/";
     license = licenses.gpl2Plus;

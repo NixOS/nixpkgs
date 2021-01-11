@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchurl, extra-cmake-modules, kdoctools, qtscript, kconfig
+{ mkDerivation, lib, stdenv, fetchurl, extra-cmake-modules, kdoctools, qtscript, kconfig
 , kinit, karchive, kcrash, kcmutils, kconfigwidgets, knewstuff, kparts
 , qca-qt5, shared-mime-info }:
 
@@ -26,7 +26,7 @@ mkDerivation rec {
     kcrash
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2;
     description = "A hex editor";
     maintainers = with maintainers; [ peterhoeg bkchr ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which }:
+{ lib, stdenv, fetchurl, which }:
 
 stdenv.mkDerivation rec {
   pname = "lowdown";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
                 MANDIR=''${!outputBin}/share/man
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://kristaps.bsd.lv/lowdown/";
     description = "Simple markdown translator";
     license = licenses.isc;

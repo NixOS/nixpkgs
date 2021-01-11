@@ -15,7 +15,7 @@ let
     lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "CLion";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/clion/";
         inherit description license;
         longDescription = ''
@@ -83,7 +83,7 @@ let
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "DataGrip";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/datagrip/";
         inherit description license;
         longDescription = ''
@@ -100,7 +100,7 @@ let
     lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "Goland";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/go/";
         inherit description license;
         longDescription = ''
@@ -125,7 +125,7 @@ let
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "IDEA";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/idea/";
         inherit description license;
         longDescription = ''
@@ -143,7 +143,7 @@ let
     (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "MPS";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = https://www.jetbrains.com/mps/;
         inherit license description;
         longDescription = ''
@@ -161,7 +161,7 @@ let
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "PhpStorm";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/phpstorm/";
         inherit description license;
         longDescription = ''
@@ -178,7 +178,7 @@ let
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "PyCharm";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/pycharm/";
         inherit description license;
         longDescription = ''
@@ -205,7 +205,7 @@ let
     lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "Rider";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/rider/";
         inherit description license;
         longDescription = ''
@@ -231,7 +231,7 @@ let
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "RubyMine";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/ruby/";
         inherit description license;
         longDescription = description;
@@ -244,7 +244,7 @@ let
     lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "WebStorm";
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.jetbrains.com/webstorm/";
         inherit description license;
         longDescription = ''

@@ -31,7 +31,7 @@ pythonPackages.buildPythonApplication {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/0x776b7364/toggle.sg-download";
     description = "Command-line tool to download videos from toggle.sg written in Python";
     longDescription = ''

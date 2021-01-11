@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qtbase, qtx11extras, ncurses5, xorg, zlib, python27Packages}:
+{lib, stdenv, fetchurl, qtbase, qtx11extras, ncurses5, xorg, zlib, python27Packages}:
 stdenv.mkDerivation {
   name = "fdr-4.2.3";
   src = fetchurl {
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.cs.ox.ac.uk/projects/fdr/";
     description = "The CSP refinement checker";
     license = licenses.unfreeRedistributable;

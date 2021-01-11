@@ -21,7 +21,7 @@ mkDerivation rec {
     "-DNO_SHIBBOLETH=1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Synchronise your ownCloud with your computer using this desktop client";
     homepage = "https://owncloud.org";
     maintainers = [ maintainers.qknight ];

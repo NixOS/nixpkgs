@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, cmake, unzip, zip, file
+{ lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, cmake, unzip, zip, file
 , curl, glew , libGL, SDL2, SDL2_image, zlib, freetype, imagemagick
 , openal , opusfile, libogg
 , Cocoa
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_LINK = "-lopenal";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A compatible client of Ace of Spades 0.75";
     homepage    = "https://github.com/yvt/openspades/";
     license     = licenses.gpl3;

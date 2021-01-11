@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , armadillo
 , boost
 , cmake
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     "-DGFORTRAN=YES"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source Global Navigation Satellite Systems software-defined receiver";
     homepage = "https://gnss-sdr.org/";
     license = licenses.gpl3Plus;

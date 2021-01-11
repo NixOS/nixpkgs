@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkgconfig
 , xorg, gtk2, spice, spice-protocol
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lpthread";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enable a running X11 desktop to be available via a Spice server";
     homepage = "https://gitlab.freedesktop.org/spice/x11spice";
     platforms = platforms.linux;

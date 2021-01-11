@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, python3Packages
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, python3Packages
 , boost, rapidjson, qtbase, qtsvg, igraph, spdlog, wrapQtAppsHook
 , fmt, graphviz, llvmPackages ? null
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # the qt mkDerivation - the latter forcibly overrides this.
   cmakeBuildType = "MinSizeRel";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A comprehensive reverse engineering and manipulation framework for gate-level netlists";
     homepage = "https://github.com/emsec/hal";
     license = licenses.mit;

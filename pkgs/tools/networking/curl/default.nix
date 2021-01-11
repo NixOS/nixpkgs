@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
     inherit sslSupport openssl;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line tool for transferring files with URL syntax";
     homepage    = "https://curl.haxx.se/";
     license = licenses.curl;

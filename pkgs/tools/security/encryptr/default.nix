@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
   # its application and shows a generic page
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://spideroak.com/solutions/encryptr";
     description = "Free, private and secure password management tool and e-wallet";
     license = licenses.unfree;

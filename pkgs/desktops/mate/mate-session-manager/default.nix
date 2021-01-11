@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, xtrans, dbus-glib, systemd,
+{ lib, stdenv, fetchurl, pkgconfig, gettext, xtrans, dbus-glib, systemd,
   libSM, libXtst, gtk3, epoxy, polkit, hicolor-icon-theme, mate,
   wrapGAppsHook, fetchpatch
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   passthru.providedSessions = [ "mate" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MATE Desktop session manager";
     homepage = "https://github.com/mate-desktop/mate-session-manager";
     license = with licenses; [ gpl2 lgpl2 ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, perl, ocaml, findlib, javalib }:
+{ lib, stdenv, fetchFromGitHub, which, perl, ocaml, findlib, javalib }:
 
 let
   pname = "sawja";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ javalib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library written in OCaml, relying on Javalib to provide a high level representation of Java bytecode programs";
     homepage = webpage;
     license = licenses.gpl3Plus;

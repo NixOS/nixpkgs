@@ -1,4 +1,4 @@
-{ stdenv, python, fetchFromGitHub, cmake, swig, ninja
+{ lib, stdenv, python, fetchFromGitHub, cmake, swig, ninja
 , opencascade, smesh, freetype, libGL, libGLU, libX11
 , Cocoa }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "-DPYTHONOCC_WRAP_SMESH=TRUE"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
     homepage = "https://github.com/tpaviot/pythonocc-core";
     license = licenses.lgpl3;

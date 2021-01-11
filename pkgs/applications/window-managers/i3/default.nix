@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, which, pkgconfig, makeWrapper, installShellFiles, libxcb, xcbutilkeysyms
+{ fetchurl, lib, stdenv, which, pkgconfig, makeWrapper, installShellFiles, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
 , xorgserver, xvfb_run }:
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tiling window manager";
     homepage    = "https://i3wm.org";
     maintainers = with maintainers; [ modulistic fpletz globin ];

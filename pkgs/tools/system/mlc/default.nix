@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf }:
+{ lib, stdenv, fetchurl, patchelf }:
 stdenv.mkDerivation rec {
   pname = "mlc";
   version = "3.9";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/bin/mlc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://software.intel.com/content/www/us/en/develop/articles/intelr-memory-latency-checker.html";
     description = "Intel Memory Latency Checker";
     license = licenses.unfree;

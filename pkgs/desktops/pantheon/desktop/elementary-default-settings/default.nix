@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Default settings and configuration files for elementary";
     homepage = "https://github.com/elementary/default-settings";
     license = licenses.gpl2Plus;

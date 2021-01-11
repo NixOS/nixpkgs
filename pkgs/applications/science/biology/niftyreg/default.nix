@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, zlib }:
+{ lib, stdenv, fetchurl, cmake, zlib }:
 
 stdenv.mkDerivation rec {
   pname   = "niftyreg";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg";
     description = "Medical image registration software";
     maintainers = with maintainers; [ bcdarwin ];

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fuse, curl, pkgconfig, glib, zlib}:
+{lib, stdenv, fetchurl, fuse, curl, pkgconfig, glib, zlib}:
 
 stdenv.mkDerivation {
   name = "curlftpfs-0.9.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   doCheck = false; # fails, doesn't work well too, btw
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Filesystem for accessing FTP hosts based on FUSE and libcurl";
     homepage = "http://curlftpfs.sourceforge.net";
     license = licenses.gpl2;

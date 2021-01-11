@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , ninja
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME Shell integration for Chrome";
     homepage = "https://wiki.gnome.org/Projects/GnomeShellIntegrationForChrome";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "MailHog";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "124216850572r1h0ii7ad6jd1cd5czcvkz7k2jzvjb4pv2kl8p3y";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web and API based SMTP testing";
     homepage = "https://github.com/mailhog/MailHog";
     changelog = "https://github.com/mailhog/MailHog/releases/tag/v${version}";

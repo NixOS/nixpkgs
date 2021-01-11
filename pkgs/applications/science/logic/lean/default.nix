@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gmp, coreutils }:
+{ lib, stdenv, fetchFromGitHub, cmake, gmp, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "lean";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       --replace "greadlink" "${coreutils}/bin/readlink"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatic and interactive theorem prover";
     homepage    = "https://leanprover.github.io/";
     changelog   = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";

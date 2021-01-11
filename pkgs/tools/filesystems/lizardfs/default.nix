@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     zlib boost judy pam spdlog fmt python3 systemdMinimal
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://lizardfs.com";
     description = "A highly reliable, scalable and efficient distributed file system";
     platforms = platforms.linux;

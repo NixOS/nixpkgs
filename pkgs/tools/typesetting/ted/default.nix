@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, zlib, pcre, xorg, libjpeg, libtiff, libpng, gtk2, libpaper, makeWrapper, ghostscript }:
+{ lib, stdenv, fetchurl, pkgconfig, zlib, pcre, xorg, libjpeg, libtiff, libpng, gtk2, libpaper, makeWrapper, ghostscript }:
 
 stdenv.mkDerivation rec {
   pname = "ted";
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig zlib pcre xorg.xlibsWrapper xorg.libXpm libjpeg libtiff libpng gtk2 libpaper makeWrapper ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An easy rich text processor";
     longDescription = ''
       Ted is a text processor running under X Windows on Unix/Linux systems.

@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/meli --set LD_LIBRARY_PATH ${notmuch}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Experimental terminal mail client aiming for configurability and extensibility with sane defaults";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;

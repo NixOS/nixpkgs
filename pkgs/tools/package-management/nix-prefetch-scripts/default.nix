@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, buildEnv,
+{ lib, stdenv, makeWrapper, buildEnv,
   breezy, coreutils, cvs, findutils, gawk, git, gnused, mercurial, nix, subversion
 }:
 
@@ -19,7 +19,7 @@ let mkPrefetchScript = tool: src: deps:
 
     preferLocalBuild = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Script used to obtain source hashes for fetch${tool}";
       maintainers = with maintainers; [ bennofs ];
       platforms = stdenv.lib.platforms.unix;
@@ -37,7 +37,7 @@ in rec {
 
     paths = [ nix-prefetch-bzr nix-prefetch-cvs nix-prefetch-git nix-prefetch-hg nix-prefetch-svn ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Collection of all the nix-prefetch-* scripts which may be used to obtain source hashes";
       maintainers = with maintainers; [ bennofs ];
       platforms = stdenv.lib.platforms.unix;

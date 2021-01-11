@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, python3, sphinx
 , acl, curl, fuse, libselinux, udev, xz, zstd
 , fuseSupport ? true
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     export LC_ALL="en_US.utf-8"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Content-Addressable Data Synchronizer";
     homepage    = "https://github.com/systemd/casync";
     license     = licenses.lgpl21;

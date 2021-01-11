@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , makeWrapper
 , makeDesktopItem
 , fetchFromGitHub
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
     ${optionalString enableServer installServer}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mindustrygame.github.io/";
     downloadPage = "https://github.com/Anuken/Mindustry/releases";
     description = "A sandbox tower defense game";

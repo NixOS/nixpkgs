@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
+{ lib, stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
 , alsaLib, dbus, zlib, libxml2, libxslt, makeWrapper, xkeyboard_config, systemd
 , libGL, xcbutilkeysyms, xdg_utils, libtool }:
 
@@ -78,7 +78,7 @@ in stdenv.mkDerivation {
       --set QT_PLUGIN_PATH "$d/plugins"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop client for HipChat services";
     homepage = "http://www.hipchat.com";
     license = licenses.unfree;

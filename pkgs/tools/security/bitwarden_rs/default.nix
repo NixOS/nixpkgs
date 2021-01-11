@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, nixosTests
+{ lib, stdenv, rustPlatform, fetchFromGitHub, nixosTests
 , pkgconfig, openssl
 , Security, CoreServices
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
@@ -37,7 +37,7 @@ in rustPlatform.buildRustPackage rec {
 
   passthru.tests = nixosTests.bitwarden;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/bitwarden_rs";
     license = licenses.gpl3;

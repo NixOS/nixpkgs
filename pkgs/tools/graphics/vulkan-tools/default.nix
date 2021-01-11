@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_RPATH=${libraryPath}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Khronos official Vulkan Tools and Utilities";
     longDescription = ''
       This project provides Vulkan tools and utilities that can assist

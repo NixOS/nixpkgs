@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonApplication
+{ lib, stdenv, fetchurl, python, buildPythonApplication
 , libselinux
 # Propagated to blivet
 , useNixUdev ? true
@@ -67,7 +67,7 @@ in buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NixOS storage manager/partitioner";
     homepage = "https://github.com/NixOS/nixpart";
     license = licenses.gpl2Plus;

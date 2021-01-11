@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fcitx, gettext }:
+{ lib, stdenv, fetchurl, cmake, fcitx, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-table-extra";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace ${fcitx} $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-table-extra";
     downloadPage  = "http://download.fcitx-im.org/fcitx-table-extra/";

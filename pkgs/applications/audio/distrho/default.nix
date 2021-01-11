@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , alsaLib
 , fetchFromGitHub
 , freetype
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     libXrender
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://distrho.sourceforge.net/ports";
     description = "Linux audio plugins and LV2 ports";
     longDescription = ''

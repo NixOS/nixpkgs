@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, unzip, bash, jre8 }:
+{ lib, stdenv, fetchurl, makeDesktopItem, unzip, bash, jre8 }:
 
 let
   pname = "diylc";
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/diylc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi platform circuit layout and schematic drawing tool";
     homepage = "https://bancika.github.io/diy-layout-creator/";
     changelog = "https://github.com/bancika/diy-layout-creator/releases";

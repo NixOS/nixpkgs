@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, postgresql, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl }:
 
 # # To enable on NixOS:
 # config.services.postgresql = {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage    = "https://www.timescale.com/";
     maintainers = with maintainers; [ volth marsam ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre8, which, gawk }:
+{ lib, stdenv, fetchurl, makeWrapper, jre8, which, gawk }:
 
 with stdenv.lib;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A highly scalable, robust (fully ACID) native graph database";
     homepage = "http://www.neo4j.org/";
     license = licenses.gpl3;

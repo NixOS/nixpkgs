@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy27, fetchPypi
+{ lib, stdenv, buildPythonPackage, isPy27, fetchPypi
 , paramiko, pycurl, ajpy, impacket, pyopenssl, cx_oracle, mysqlclient
 , psycopg2, pycrypto, dnspython, ipy, pysnmp, pyasn1, pysqlcipher3 }:
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   # tests require docker-compose and vagrant
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "multi-purpose brute-forcer";
     homepage = "https://github.com/lanjelot/patator";
     license = licenses.gpl2;

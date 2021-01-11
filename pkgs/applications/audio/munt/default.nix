@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, qtbase, alsaLib, makeDesktopItem, libjack2 }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, qtbase, alsaLib, makeDesktopItem, libjack2 }:
 
 let
   desktopItem = makeDesktopItem rec {
@@ -28,7 +28,7 @@ in mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qtbase alsaLib libjack2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-platform software synthesiser emulating Roland MT-32, CM-32L, CM-64 and LAPC-I devices";
     homepage = "http://munt.sourceforge.net/";
     license = with licenses; [ lgpl21 gpl3 ];

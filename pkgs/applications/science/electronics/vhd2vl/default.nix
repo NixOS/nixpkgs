@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , bison
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     cp src/vhd2vl $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VHDL to Verilog converter";
     homepage = "https://github.com/ldoolitt/vhd2vl";
     license = licenses.gpl2Plus;

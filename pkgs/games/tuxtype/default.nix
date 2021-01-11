@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, librsvg, libxml2, SDL, SDL_image, SDL_mixer, SDL_net, SDL_ttf, t4kcommon }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, librsvg, libxml2, SDL, SDL_image, SDL_mixer, SDL_net, SDL_ttf, t4kcommon }:
 
 stdenv.mkDerivation rec {
   version = "1.8.3";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--without-sdlpango" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An Educational Typing Tutor Game Starring Tux, the Linux Penguin";
     homepage = "https://github.com/tux4kids/tuxtype";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , bidict
 , buildPythonPackage
 , fetchFromGitHub
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "socketio" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Socket.IO server and client";
     longDescription = ''
       Socket.IO is a lightweight transport protocol that enables real-time

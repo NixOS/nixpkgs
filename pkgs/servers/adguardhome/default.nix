@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "adguardhome";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     install -m755 -D ./AdGuardHome $out/bin/adguardhome
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/AdguardTeam/AdGuardHome";
     description = "Network-wide ads & trackers blocking DNS server";
     platforms = platforms.linux;

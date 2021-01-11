@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gcc, zlib, python27 }:
+{ lib, stdenv, fetchurl, gcc, zlib, python27 }:
 
 stdenv.mkDerivation rec {
   name = "ecopcr-0.8.0";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 	chmod a+x $out/bin/ecoPCRFormat
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Electronic PCR software tool";
     longDescription = ''
       ecoPCR is an electronic PCR software developed by the LECA. It

@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
     chmod +x $out/bin/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
     homepage = "https://marlam.de/msmtp/";
     license = licenses.gpl3Plus;

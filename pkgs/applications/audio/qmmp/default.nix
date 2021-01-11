@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchurl, cmake, pkgconfig, xlibsWrapper
+{ lib, stdenv, mkDerivation, fetchurl, cmake, pkgconfig, xlibsWrapper
 , qtbase, qttools, qtmultimedia, qtx11extras
 # transports
 , curl, libmms
@@ -51,7 +51,7 @@ mkDerivation rec {
       libsamplerate
     ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt-based audio player that looks like Winamp";
     homepage = "http://qmmp.ylsoftware.com/";
     license = licenses.gpl2;

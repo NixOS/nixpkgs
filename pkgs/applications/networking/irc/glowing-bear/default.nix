@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv }:
+{ fetchFromGitHub, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "glowing-bear";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp -R 3rdparty assets css directives js $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A web client for Weechat";
     homepage = "https://github.com/glowing-bear/glowing-bear";
     license = licenses.gpl3Plus;

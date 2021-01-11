@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, freeglut, libGLU, libGL, libcdio, libjack2
+{ lib, stdenv, fetchurl, pkgconfig, freeglut, libGLU, libGL, libcdio, libjack2
 , libsamplerate, libsndfile, libX11, SDL2, SDL2_net, zlib, alsaLib }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     mv Documentation $out/share/doc/mednafen
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A portable, CLI-driven, SDL+OpenGL-based, multi-system emulator";
     longDescription = ''
       Mednafen is a portable, utilizing OpenGL and SDL,

@@ -1,4 +1,4 @@
-{ pkgs, fetchurl, stdenv, gtk3, pkgconfig, intltool, alsaLib }:
+{ pkgs, fetchurl, lib, stdenv, gtk3, pkgconfig, intltool, alsaLib }:
 
 stdenv.mkDerivation {
   pname = "volumeicon";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk3 intltool alsaLib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight volume control that sits in your systray";
     homepage = "http://softwarebakery.com/maato/volumeicon.html";
     platforms = pkgs.lib.platforms.linux;

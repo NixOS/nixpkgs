@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fuse, p7zip, autoconf, automake, pkgconfig, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, fuse, p7zip, autoconf, automake, pkgconfig, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "fuse-7z-ng";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp TODO README NEWS COPYING ChangeLog AUTHORS $out/share/doc/${pname}/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     inherit (src.homepage);
     description = "A FUSE-based filesystem that uses the p7zip library";

@@ -118,7 +118,7 @@ let
 
         outputs = [ "out" "dev" "lib" "pythonsrc" ];
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "Open source, distributed, transactional key-value store";
           homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;

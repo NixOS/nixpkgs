@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "hicolor-icon-theme-0.17";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Default fallback theme used by implementations of the icon theme specification";
     homepage = "https://icon-theme.freedesktop.org/releases/";
     platforms = platforms.unix;

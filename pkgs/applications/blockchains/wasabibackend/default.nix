@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchurl
 , makeWrapper
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   # If we don't disable stripping the executable fails to start with segfault
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Backend for the Wasabi Wallet";
     homepage = "https://wasabiwallet.io/";
     license = licenses.mit;

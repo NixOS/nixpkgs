@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, SDL2, SDL2_image, pkgconfig
+{ lib, stdenv, fetchFromGitLab, SDL2, SDL2_image, pkgconfig
 , libvorbis, libGL, boost, cmake, zlib, curl, SDL2_mixer, python3
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sed -i 's,APPDIR games,APPDIR bin,' src/install.cmake
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern Interpreter for the Commander Keen Games";
     longDescription = ''
       Commander Genius is an open-source clone of

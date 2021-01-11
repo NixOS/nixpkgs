@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, libpcap }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, libpcap }:
 
 stdenv.mkDerivation rec {
   pname = "masscan";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/masscan --prefix LD_LIBRARY_PATH : "${libpcap}/lib"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast scan of the Internet";
     homepage    = "https://github.com/robertdavidgraham/masscan";
     license     = licenses.agpl3;

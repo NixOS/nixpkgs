@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , gtk3
 , gettext
@@ -90,7 +90,7 @@ in buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A graphics application for digital painters";
     homepage = "http://mypaint.org/";
     license = licenses.gpl2Plus;

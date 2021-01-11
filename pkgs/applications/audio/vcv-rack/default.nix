@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchzip, fetchFromGitHub, pkgconfig
+{ lib, stdenv, makeWrapper, fetchzip, fetchFromGitHub, pkgconfig
 , alsaLib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
 , libzip, rtaudio, rtmidi, speex, libsamplerate }:
 
@@ -89,7 +89,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
     wrapProgram $out/bin/Rack --add-flags "-s $out/share/vcv-rack"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source virtual modular synthesizer";
     homepage = "https://vcvrack.com/";
     # The source is BSD-3 licensed, some of the art is CC-BY-NC 4.0 or under a

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , openssl_1_0_2
 , zlib
@@ -45,7 +45,7 @@ buildRustPackage rec {
     Security
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Decentralized Issue Tracking for git";
     # This has not had a release in years and its cargo vendored dependencies

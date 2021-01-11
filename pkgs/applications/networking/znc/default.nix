@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, pkgconfig
+{ lib, stdenv, fetchurl, openssl, pkgconfig
 , withPerl ? false, perl
 , withPython ? false, python3
 , withTcl ? false, tcl
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ] ++ optional (!withIPv6) [ "--disable-ipv6" ]
     ++ optional withDebug [ "--enable-debug" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced IRC bouncer";
     homepage = "https://wiki.znc.in/ZNC";
     maintainers = with maintainers; [ schneefux lnl7 ];

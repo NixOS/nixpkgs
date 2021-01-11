@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, doxygen }:
+{ lib, stdenv, fetchurl, unzip, doxygen }:
 
 stdenv.mkDerivation rec {
   pname = "bliss";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     mv *.h *.hh $out/include/bliss
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source tool for computing automorphism groups and canonical forms of graphs. It has both a command line user interface as well as C++ and C programming language APIs";
     homepage = "http://www.tcs.hut.fi/Software/bliss/";
     license = licenses.lgpl3;

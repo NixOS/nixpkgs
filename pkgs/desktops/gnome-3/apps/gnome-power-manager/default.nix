@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , gettext
 , fetchurl
 , pkgconfig
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://projects-old.gnome.org/gnome-power-manager/";
     description = "View battery and power statistics provided by UPower";
     maintainers = teams.gnome.members;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "jdupes";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/doc/jdupes CHANGES LICENSE README.md
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A powerful duplicate file finder and an enhanced fork of 'fdupes'";
     longDescription = ''
       jdupes is a program for identifying and taking actions upon

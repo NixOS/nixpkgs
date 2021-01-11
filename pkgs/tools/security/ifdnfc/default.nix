@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub , pkgconfig
+{ lib, stdenv, fetchFromGitHub , pkgconfig
 , pcsclite
 , autoreconfHook
 , libnfc
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--prefix=$(out)" ];
   makeFlags = [ "DESTDIR=/" "usbdropdir=$(out)/pcsc/drivers" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PC/SC IFD Handler based on libnfc";
     longDescription =
     '' libnfc Interface Plugin to be used in <code>services.pcscd.plugins</code>.

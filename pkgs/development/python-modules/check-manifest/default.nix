@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pep517, toml, mock, breezy, git }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pep517, toml, mock, breezy, git }:
 
 buildPythonPackage rec {
   pname = "check-manifest";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   checkInputs = [ mock breezy git ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mgedmin/check-manifest";
     description = "Check MANIFEST.in in a Python source package for completeness";
     license = licenses.mit;

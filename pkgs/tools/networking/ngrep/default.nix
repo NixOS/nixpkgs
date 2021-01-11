@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sed -i "s|BPF=.*|BPF=${libpcap}/include/pcap/bpf.h|" configure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network packet analyzer";
     longDescription = ''
       ngrep strives to provide most of GNU grep's common features, applying

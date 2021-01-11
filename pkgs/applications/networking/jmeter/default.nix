@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, jre, makeWrapper, coreutils }:
+{ fetchurl, lib, stdenv, jre, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "jmeter";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     timeout --kill=1s 1s $out/bin/jmeter-mirror-server.sh || test "$?" = "124"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 100% pure Java desktop application designed to load test functional behavior and measure performance";
     longDescription = ''
       The Apache JMeter desktop application is open source software, a 100%

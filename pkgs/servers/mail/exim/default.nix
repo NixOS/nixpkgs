@@ -1,4 +1,4 @@
-{ coreutils, db, fetchurl, openssl, pcre, perl, pkgconfig, stdenv
+{ coreutils, db, fetchurl, openssl, pcre, perl, pkgconfig, lib, stdenv
 , enableLDAP ? false, openldap
 , enableMySQL ? false, libmysqlclient, zlib
 , enableAuthDovecot ? false, dovecot
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       done )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://exim.org/";
     description = "A mail transfer agent (MTA)";
     license = with licenses; [ gpl2Plus bsd3 ];

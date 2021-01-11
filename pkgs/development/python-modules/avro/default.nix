@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchPypi, pycodestyle, isort }:
+{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, pycodestyle, isort }:
 
 buildPythonPackage rec {
   pname = "avro";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pycodestyle ];
   propagatedBuildInputs = [ isort ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A serialization and RPC framework";
     homepage = "https://pypi.python.org/pypi/avro/";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, pythonPackages
+{ lib, stdenv, fetchgit, autoreconfHook, pkgconfig, pythonPackages
 , libevdev
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pythonPackages.python pythonPackages.evdev libevdev ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Records and replays device descriptions and events to emulate input devices through the kernel's input system";
     homepage = "https://www.freedesktop.org/wiki/Evemu/";
     repositories.git = "git://git.freedesktop.org/git/evemu";

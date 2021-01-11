@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, lv2 }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, glib, lv2 }:
 
 stdenv.mkDerivation rec {
   pname = "x42-gmsynth";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Chris Colins' General User soundfont player LV2 plugin";
     homepage = "https://x42-plugins.com/x42/x42-gmsynth";
     maintainers = with maintainers; [ orivej ];

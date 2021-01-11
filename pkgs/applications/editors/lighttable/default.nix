@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     cp "${desktopItem}/share/applications/LightTable.desktop" "$out"/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The next generation code editor";
     homepage = "http://www.lighttable.com/";
     license = licenses.gpl3;

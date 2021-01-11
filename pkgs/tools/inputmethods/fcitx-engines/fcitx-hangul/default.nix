@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fcitx, libhangul, gettext, pkg-config }:
+{ lib, stdenv, fetchurl, cmake, fcitx, libhangul, gettext, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-hangul";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace ${fcitx} $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-hangul";
     downloadPage  = "http://download.fcitx-im.org/fcitx-hangul/";

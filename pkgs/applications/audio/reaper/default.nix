@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoPatchelfHook, makeWrapper
+{ lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper
 , alsaLib, xorg, libjack2
 , gtk3, pango, gdk-pixbuf, cairo, glib, freetype
 , libpulseaudio, xdg_utils
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/REAPER/reamote-server $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Digital audio workstation";
     homepage = "https://www.reaper.fm/";
     license = licenses.unfree;

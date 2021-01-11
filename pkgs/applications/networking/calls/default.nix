@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , meson
 , ninja
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A phone dialer and call handler";
     homepage = "https://source.puri.sm/Librem5/calls";
     license = licenses.gpl3Plus;

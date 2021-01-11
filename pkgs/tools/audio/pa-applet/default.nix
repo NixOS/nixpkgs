@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libpulseaudio, pkgconfig, gtk3, glibc, autoconf, automake, libnotify, libX11, xf86inputevdev }:
+{ lib, stdenv, fetchgit, libpulseaudio, pkgconfig, gtk3, glibc, autoconf, automake, libnotify, libX11, xf86inputevdev }:
 
 stdenv.mkDerivation {
   name = "pa-applet-2012-04-11";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   postInstall = ''
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "";
     license = licenses.gpl2;
     maintainers = with maintainers; [ domenkozar ];

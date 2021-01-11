@@ -1,4 +1,4 @@
-{ stdenv, runtimeShell, pkgconfig, gettext, ncurses, CoreFoundation
+{ lib, stdenv, runtimeShell, pkgconfig, gettext, ncurses, CoreFoundation
 , tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa
 , debug
 , useXdgDir
@@ -79,7 +79,7 @@ stdenv.mkDerivation {
     isCurses = !tiles;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, post apocalyptic, zombie infested rogue-like";
     longDescription = ''
       Cataclysm: Dark Days Ahead is a roguelike set in a post-apocalyptic world.

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, bison, pkgconfig
+{ lib, stdenv, fetchurl, cmake, bison, pkgconfig
 , boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
 , cctools, CoreServices, developer_cmds
 , libtirpc, rpcsvc-proto
@@ -75,7 +75,7 @@ self = stdenv.mkDerivation rec {
     mysqlVersion = "5.7";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mysql.com/";
     description = "The world's most popular open source database";
     platforms = platforms.unix;

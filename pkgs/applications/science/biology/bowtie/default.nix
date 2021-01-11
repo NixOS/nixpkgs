@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib }:
+{ lib, stdenv, fetchFromGitHub, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "bowtie";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An ultrafast memory-efficient short read aligner";
     license = licenses.artistic2;
     homepage = "http://bowtie-bio.sf.net/bowtie";

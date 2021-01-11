@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchgit, fetchurl, runCommand, git, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, fetchgit, fetchurl, runCommand, git, cmake, pkg-config
 , openssl,  zlib, boost, grpc, c-ares, abseil-cpp, protobuf3_8, libnsl }:
 
 let
@@ -157,7 +157,7 @@ in stdenv.mkDerivation rec {
     ./rippled --unittest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ripple P2P payment network reference server";
     homepage = "https://github.com/ripple/rippled";
     maintainers = with maintainers; [ ehmry offline RaghavSood ];

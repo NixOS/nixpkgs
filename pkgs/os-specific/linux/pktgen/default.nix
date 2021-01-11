@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/include $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Traffic generator powered by DPDK";
     homepage = "http://dpdk.org/";
     license = licenses.bsdOriginal;

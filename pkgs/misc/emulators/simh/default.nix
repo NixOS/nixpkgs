@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , SDL2
 , SDL2_ttf
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     (cd $out/bin; for i in *; do ln -s $i simh-$i; done)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://simh.trailing-edge.com/";
     description = "A collection of simulators of historic hardware";
     longDescription = ''

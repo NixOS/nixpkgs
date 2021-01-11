@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchhg
 , ruamel_base
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # outputs match wheel
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
     homepage = "https://sourceforge.net/projects/ruamel-yaml-clib/";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libx86emu, flex, perl, libuuid }:
+{ lib, stdenv, fetchFromGitHub, libx86emu, flex, perl, libuuid }:
 
 stdenv.mkDerivation rec {
   pname = "hwinfo";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Hardware detection tool from openSUSE";
     license = licenses.gpl2;
     homepage = "https://github.com/openSUSE/hwinfo";

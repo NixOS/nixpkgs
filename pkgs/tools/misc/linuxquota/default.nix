@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, e2fsprogs, openldap, pkgconfig }:
+{ lib, stdenv, fetchurl, e2fsprogs, openldap, pkgconfig }:
 
 stdenv.mkDerivation rec {
   version = "4.05";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ e2fsprogs openldap ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools to manage kernel-level quotas in Linux";
     homepage = "https://sourceforge.net/projects/linuxquota/";
     license = licenses.gpl2; # With some files being BSD as an exception

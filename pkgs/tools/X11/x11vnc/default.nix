@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch,
+{ lib, stdenv, fetchFromGitHub, fetchpatch,
   openssl, zlib, libjpeg, xorg, coreutils, libvncserver,
   autoreconfHook, pkgconfig }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     configureFlags="--mandir=$out/share/man"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A VNC server connected to a real X11 screen";
     homepage = "https://github.com/LibVNC/x11vnc/";
     platforms = platforms.linux;

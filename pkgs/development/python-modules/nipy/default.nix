@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   # nipy.tests.test_scripts.test_nipy_3_4d         # ditto re.: `nipy_3_4d` script
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://nipy.org/nipy";
     description = "Software for structural and functional neuroimaging analysis";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, dpkg, jre_headless, nixosTests }:
+{ lib, stdenv, fetchurl, makeWrapper, dpkg, jre_headless, nixosTests }:
 
 let
   pname = "jitsi-videobridge2";
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     single-host-smoke-test = nixosTests.jitsi-meet;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A WebRTC compatible video router";
     longDescription = ''
       Jitsi Videobridge is an XMPP server component that allows for multiuser video communication.

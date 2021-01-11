@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gtk2 }:
+{ lib, stdenv, fetchurl, pkgconfig, libxml2, gtk2 }:
 
 stdenv.mkDerivation rec {
   version = "2.1.11";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Visualization program for exploring high-dimensional data";
     homepage = "http://www.ggobi.org/";
     license = licenses.cpl10;

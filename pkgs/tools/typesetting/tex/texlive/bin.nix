@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
@@ -142,7 +142,7 @@ core = stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)
   passthru = { inherit version buildInputs; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Basic binaries for TeX Live";
     homepage    = "http://www.tug.org/texlive";
     license     = stdenv.lib.licenses.gpl2;
@@ -341,7 +341,7 @@ pygmentex = python2Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.ctan.org/pkg/pygmentex";
     description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
     longDescription = ''

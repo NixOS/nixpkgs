@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, libunwind, libraw1394, libjpeg, libiec61883, libdv
+{ fetchFromGitHub, lib, stdenv, libunwind, libraw1394, libjpeg, libiec61883, libdv
 , libavc1394, pkgconfig, autoreconfHook }:
 
 stdenv.mkDerivation {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     autoreconfHook pkgconfig
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Receive and store audio & video over IEEE1394";
 
     longDescription = ''

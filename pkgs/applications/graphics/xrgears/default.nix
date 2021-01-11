@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , glm
 , glslang
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     vulkan-loader
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.freedesktop.org/monado/demos/xrgears";
     description = "An OpenXR example using Vulkan for rendering";
     platforms = platforms.linux;

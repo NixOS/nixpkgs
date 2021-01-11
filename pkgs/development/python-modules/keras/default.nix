@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , pytest, pytestcov, pytest_xdist
 , six, numpy, scipy, pyyaml, h5py
 , keras-applications, keras-preprocessing
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # Couldn't get tests working
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Deep Learning library for Theano and TensorFlow";
     homepage = "https://keras.io";
     license = licenses.mit;

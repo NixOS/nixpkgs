@@ -1,4 +1,4 @@
-{ stdenv, fetchCrate, rustPlatform }:
+{ lib, stdenv, fetchCrate, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   version = "4.0.2";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/shssoichiro/oxipng";
     description = "A multithreaded lossless PNG compression optimizer";
     license = licenses.mit;

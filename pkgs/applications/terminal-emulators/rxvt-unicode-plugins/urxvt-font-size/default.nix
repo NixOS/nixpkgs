@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, xrdb, xlsfonts }:
+{ lib, stdenv, fetchFromGitHub, xrdb, xlsfonts }:
 
 stdenv.mkDerivation {
   name = "urxvt-font-size-2015-05-22";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     cp font-size $out/lib/urxvt/perl
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Change the urxvt font size on the fly";
     homepage = "https://github.com/majutsushi/urxvt-font-size";
     license = licenses.mit;

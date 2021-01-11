@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoconf
 , bison
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Icarus Verilog compiler";
     homepage    = "http://iverilog.icarus.com/";  # https does not work
     license     = with licenses; [ gpl2Plus lgpl21Plus ];

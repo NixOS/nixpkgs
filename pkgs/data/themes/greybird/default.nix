@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, sassc, gdk-pixbuf, librsvg, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, sassc, gdk-pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "greybird";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     gtk-engine-murrine
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Grey and blue theme from the Shimmer Project for GTK-based environments";
     homepage = "https://github.com/shimmerproject/Greybird";
     license = [ licenses.gpl2Plus ]; # or alternatively: cc-by-nc-sa-30 or later

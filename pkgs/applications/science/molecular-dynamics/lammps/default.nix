@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , libpng, gzip, fftw, blas, lapack
 , mpi ? null
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     cp -v liblammps* $out/lib/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Classical Molecular Dynamics simulation code";
     longDescription = ''
       LAMMPS is a classical molecular dynamics simulation code designed to

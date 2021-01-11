@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub,  makeWrapper, arduino-cli, ruby, python3 }:
+{ lib, stdenv, fetchFromGitHub,  makeWrapper, arduino-cli, ruby, python3 }:
 
 let
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/arduino-ci --prefix PATH ":" "${runtimePath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CI for Arduino Libraries";
     homepage = src.meta.homepage;
     license = licenses.mit;

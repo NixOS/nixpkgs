@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, openssl, pkg-config, libiconv, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, pkg-config, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "so";
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     libiconv Security
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A TUI interface to the StackExchange network";
     homepage = "https://github.com/samtay/so";
     license = licenses.mit;

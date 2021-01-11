@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch}:
+{lib, stdenv, fetchurl, fetchpatch}:
 
 stdenv.mkDerivation {
   pname = "par";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.nicemice.net/par/";
     description = "Paragraph reflow for email";
     platforms = platforms.unix;

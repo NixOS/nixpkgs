@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   name = "shared-desktop-ontologies-0.11.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://oscaf.sourceforge.net/";
     description = "Ontologies necessary for the Nepomuk semantic desktop";
     longDescription = ''

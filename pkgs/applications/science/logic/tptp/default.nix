@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, yap, tcsh, perl, patchelf }:
+{ lib, stdenv, fetchurl, yap, tcsh, perl, patchelf }:
 
 stdenv.mkDerivation rec {
   pname = "TPTP";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ln -s $sharedir/Scripts/tptp4X $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thousands of problems for theorem provers and tools";
     maintainers = with maintainers; [ raskin gebner ];
     # 6.3 GiB of data. Installation is unpacking and editing a few files.

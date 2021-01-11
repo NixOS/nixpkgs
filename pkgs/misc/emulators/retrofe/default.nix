@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, cmake, glib, gst_all_1, makeWrapper, pkgconfig
+{ lib, stdenv, fetchhg, cmake, glib, gst_all_1, makeWrapper, pkgconfig
 , python, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, sqlite, zlib, runtimeShell
 }:
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
       --run 'export RETROFE_PATH=''${RETROFE_PATH:-$PWD}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A frontend for arcade cabinets and media PCs";
     homepage = "http://retrofe.com";
     license = licenses.gpl3Plus;

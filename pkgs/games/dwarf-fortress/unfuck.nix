@@ -84,7 +84,7 @@ stdenv.mkDerivation {
 
   passthru = { inherit dfVersion; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unfucked multimedia layer for Dwarf Fortress";
     homepage = "https://github.com/svenstaro/dwarf_fortress_unfuck";
     license = licenses.free;

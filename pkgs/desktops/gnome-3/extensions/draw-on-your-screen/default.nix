@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, gettext, gnome3 }:
+{ lib, stdenv, fetchgit, gettext, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-draw-on-your-screen";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A drawing extension for GNOME Shell";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ericdallo ];

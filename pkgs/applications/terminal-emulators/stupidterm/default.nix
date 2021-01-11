@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, vte, gtk, pcre2 }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, vte, gtk, pcre2 }:
 
 stdenv.mkDerivation {
   pname = "stupidterm";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
       --replace "Exec=st" "Exec=$out/bin/stupidterm"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple wrapper around the VTE terminal emulator widget for GTK";
     homepage = "https://github.com/esmil/stupidterm";
     license = licenses.lgpl3Plus;

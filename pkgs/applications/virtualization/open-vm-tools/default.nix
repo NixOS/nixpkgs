@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${lib.makeBinPath [ iproute dbus systemd which ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/vmware/open-vm-tools";
     description = "Set of tools for VMWare guests to improve host-guest interaction";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, django, isPy27 }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, django, isPy27 }:
 
 buildPythonPackage rec {
   version = "3.12.2";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web APIs for Django, made easy";
     homepage = "https://www.django-rest-framework.org/";
     maintainers = with maintainers; [ desiderius ];

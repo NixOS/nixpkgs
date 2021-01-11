@@ -10,7 +10,7 @@
 , qtsvg
 , qtxmlpatterns
 , qttools
-, stdenv
+, lib, stdenv
 }:
 
 mkDerivationWith stdenv.mkDerivation rec {
@@ -92,7 +92,7 @@ mkDerivationWith stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "2D CAD package based on Qt";
     homepage = "https://qcad.org";
     license = licenses.gpl3;

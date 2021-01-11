@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, tk, libX11, zlib, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, tcl, tk, libX11, zlib, makeWrapper, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   pname = "scid-vs-pc";
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     categories = "Game;BoardGame;";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Chess database with play and training functionality";
     homepage = "http://scidvspc.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2;

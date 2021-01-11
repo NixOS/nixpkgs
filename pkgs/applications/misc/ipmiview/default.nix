@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeDesktopItem
 , makeWrapper
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
              cd $WORK_DIR'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.unfree;
     maintainers = with maintainers; [ vlaci ];
     platforms = [ "x86_64-linux" "i686-linux" ];

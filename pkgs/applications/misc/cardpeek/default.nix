@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook,
+{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook,
   glib, gtk3, pcsclite, lua5_2, curl, readline }:
 let
   version = "0.8.4";
@@ -19,7 +19,7 @@ in
 
     enableParallelBuilding = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/L1L1/cardpeek";
       description = "A tool to read the contents of ISO7816 smart cards";
       license = licenses.gpl3Plus;

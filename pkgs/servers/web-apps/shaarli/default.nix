@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "shaarli";
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     cp -R ./* $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The personal, minimalist, super-fast, database free, bookmarking service";
     license = licenses.gpl3Plus;
     homepage = "https://github.com/shaarli/Shaarli";

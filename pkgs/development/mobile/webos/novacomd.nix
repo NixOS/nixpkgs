@@ -1,4 +1,4 @@
-{ stdenv,
+{ lib, stdenv,
 fetchFromGitHub, fetchpatch,
 webos, cmake, pkgconfig,
 libusb-compat-0_1 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DWEBOS_TARGET_MACHINE_IMPL=host" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon for communicating with WebOS devices";
     license = licenses.asl20;
     maintainers = with maintainers; [ dtzWill ];
