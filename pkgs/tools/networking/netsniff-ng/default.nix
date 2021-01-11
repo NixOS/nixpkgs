@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "netsniff-ng";
-  version = "0.6.7";
+  version = "0.6.8";
 
   # Upstream recommends and supports git
   src = fetchFromGitHub {
     repo = pname;
     owner = pname;
     rev = "v${version}";
-    sha256 = "1jvihq30cwlpjqwny0lcrciysn40wscq6xik3s9b81nw2s7wiyqr";
+    sha256 = "10ih8amaqspy0zwg7hqvypa1v7ixpjl0n608cyfgyfzffp73lbqf";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper bison flex ];
