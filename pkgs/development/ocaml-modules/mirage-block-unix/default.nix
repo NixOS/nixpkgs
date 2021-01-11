@@ -15,7 +15,8 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.06";
 
-  propagatedBuildInputs = [ cstruct-lwt logs mirage-block rresult uri ];
+  propagatedBuildInputs =
+    [ cstruct-lwt io-page-unix logs mirage-block rresult uri ];
 
   doCheck = true;
   checkInputs = [ diet io-page-unix ounit ];
