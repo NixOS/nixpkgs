@@ -80,9 +80,11 @@ stdenv.mkDerivation {
 }
 ```
 
-> Note: `wrapQtAppsHook` ignores files that are non-ELF executables.
-> This means that scripts won't be automatically wrapped so you'll need to manually wrap them as previously mentioned.
-> An example of when you'd always need to do this is with Python applications that use PyQT.
+::: note
+`wrapQtAppsHook` ignores files that are non-ELF executables.
+This means that scripts won't be automatically wrapped so you'll need to manually wrap them as previously mentioned.
+An example of when you'd always need to do this is with Python applications that use PyQt.
+:::
 
 ## Adding a library to Nixpkgs
 Add Qt libraries to `qt5-packages.nix` to make them available for every
