@@ -4088,6 +4088,8 @@ in {
 
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
+  mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
+
   multidict = callPackage ../development/python-modules/multidict { };
 
   multi_key_dict = callPackage ../development/python-modules/multi_key_dict { };
