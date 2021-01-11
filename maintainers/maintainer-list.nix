@@ -7003,6 +7003,12 @@
     githubId = 28323;
     name = "Peter Simons";
   };
+  petterstorvik = {
+    email = "petterstorvik@gmail.com";
+    github = "storvik";
+    githubId = 3438604;
+    name = "Petter Storvik";
+  };
   philandstuff = {
     email = "philip.g.potter@gmail.com";
     github = "philandstuff";

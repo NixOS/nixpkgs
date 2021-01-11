@@ -11506,6 +11506,8 @@ in
 
   cloudfoundry-cli = callPackage ../development/tools/cloudfoundry-cli { };
 
+  clpm = callPackage ../development/tools/clpm {};
+
   coan = callPackage ../development/tools/analysis/coan { };
 
   compile-daemon = callPackage ../development/tools/compile-daemon { };
