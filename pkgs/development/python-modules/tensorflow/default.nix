@@ -1,24 +1,25 @@
-{ stdenv, pkgs, bazel_3, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+{ stdenv, bazel_3, buildBazelPackage, isPy3k, lib, fetchFromGitHub, symlinkJoin
 , addOpenGLRunpath
 # Python deps
-, buildPythonPackage, isPy3k, isPy27, pythonOlder, pythonAtLeast, python
+, buildPythonPackage, pythonOlder, pythonAtLeast, python
 # Python libraries
-, numpy, tensorflow-tensorboard_2, backports_weakref, mock, enum34, absl-py
-, future, setuptools, wheel, keras-preprocessing, keras-applications, google-pasta
-, functools32
+, numpy, tensorflow-tensorboard_2, absl-py
+, future, setuptools, wheel, keras-preprocessing, google-pasta
 , opt-einsum, astunparse, h5py
 , termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_2
+, dill, flatbuffers-python, tblib, typing-extensions
 # Common deps
-, git, swig, which, binutils, glibcLocales, cython
+, git, pybind11, which, binutils, glibcLocales, cython, perl
 # Common libraries
-, jemalloc, openmpi, astor, gast, grpc, sqlite, openssl, jsoncpp, re2
-, curl, snappy, flatbuffers, icu, double-conversion, libpng, libjpeg, giflib
+, jemalloc, openmpi, gast, grpc, sqlite, boringssl, jsoncpp
+, curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib
 # Upsteam by default includes cuda support since tensorflow 1.15. We could do
 # that in nix as well. It would make some things easier and less confusing, but
 # it would also make the default tensorflow package unfree. See
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
 , cudaSupport ? false, cudatoolkit ? null, cudnn ? null, nccl ? null
 , mklSupport ? false, mkl ? null
+, tensorboardSupport ? true
 # XLA without CUDA is broken
 , xlaSupport ? cudaSupport
 # Default from ./configure script
@@ -39,7 +40,7 @@ assert ! (stdenv.isDarwin && cudaSupport);
 assert mklSupport -> mkl != null;
 
 let
-  withTensorboard = pythonOlder "3.6";
+  withTensorboard = (pythonOlder "3.6") || tensorboardSupport;
 
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-merged";
@@ -65,34 +66,40 @@ let
   includes_joined = symlinkJoin {
     name = "tensorflow-deps-merged";
     paths = [
-      pkgs.protobuf
       jsoncpp
     ];
   };
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.3.2";
+  version = "2.4.0";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
   pythonEnv = python.withPackages (_:
     [ # python deps needed during wheel build time (not runtime, see the buildPythonPackage part for that)
-      numpy
-      keras-preprocessing
-      protobuf
-      wrapt
-      gast
-      astor
+      # This list can likely be shortened, but each trial takes multiple hours so won't bother for now.
       absl-py
-      termcolor
-      keras-applications
+      astunparse
+      dill
+      flatbuffers-python
+      gast
+      google-pasta
+      grpcio
+      h5py
+      keras-preprocessing
+      numpy
+      opt-einsum
+      protobuf
       setuptools
+      six
+      tblib
+      tensorflow-estimator_2
+      tensorflow-tensorboard_2
+      termcolor
+      typing-extensions
       wheel
-  ] ++ lib.optionals (!isPy3k)
-  [ future
-    functools32
-    mock
+      wrapt
   ]);
 
   bazel-build = buildBazelPackage {
@@ -103,27 +110,21 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "sha256-ncwIkqLDqrB33pB9/FTlBklsIJUEvnDUmyAeUfufCFs=";
+      sha256 = "0yl06aypfxrcs35828xf04mkidz1x0j89v0q5h4d2xps1cb5rv3f";
     };
 
     patches = [
-      # Fixes for NixOS jsoncpp
-      ./system-jsoncpp.patch
-
+      # Relax too strict Python packages versions dependencies.
       ./relax-dependencies.patch
-
-      # see https://github.com/tensorflow/tensorflow/issues/40688
-      (fetchpatch {
-        url = "https://github.com/tensorflow/tensorflow/commit/75ea0b31477d6ba9e990e296bbbd8ca4e7eebadf.patch";
-        sha256 = "1xp1icacig0xm0nmb05sbrf4nw4xbln9fhc308birrv8286zx7wv";
-      })
+      # Add missing `io_bazel_rules_docker` dependency.
+      ./workspace.patch
     ];
 
     # On update, it can be useful to steal the changes from gentoo
     # https://gitweb.gentoo.org/repo/gentoo.git/tree/sci-libs/tensorflow
 
     nativeBuildInputs = [
-      swig which pythonEnv
+      which pythonEnv cython perl
     ] ++ lib.optional cudaSupport addOpenGLRunpath;
 
     buildInputs = [
@@ -135,19 +136,18 @@ let
       # libs taken from system through the TF_SYS_LIBS mechanism
       grpc
       sqlite
-      openssl
+      boringssl
       jsoncpp
-      pkgs.protobuf
       curl
+      pybind11
       snappy
-      flatbuffers
+      flatbuffers-core
       icu
       double-conversion
       libpng
-      libjpeg
+      libjpeg_turbo
       giflib
-      re2
-      pkgs.lmdb
+      lmdb-core
     ] ++ lib.optionals cudaSupport [
       cudatoolkit
       cudnn
@@ -173,10 +173,17 @@ let
       # "com_github_googleapis_googleapis"
       # "com_github_googlecloudplatform_google_cloud_cpp"
       "com_github_grpc_grpc"
-      "com_google_protobuf"
-      "com_googlesource_code_re2"
+      # Multiple issues with custom protobuf.
+      # First `com_github_googleapis` fails to configure. Can be worked around by disabling `com_github_googleapis`
+      # and related functionality, but then the next error is about "dangling symbolic link", and in general
+      # looks like that's only the beginning: see
+      # https://stackoverflow.com/questions/55578884/how-to-build-tensorflow-1-13-1-with-custom-protobuf
+      # "com_google_protobuf"
+      # Fails with the error: external/org_tensorflow/tensorflow/core/profiler/utils/tf_op_utils.cc:46:49: error: no matching function for call to 're2::RE2::FullMatch(absl::lts_2020_02_25::string_view&, re2::RE2&)'
+      # "com_googlesource_code_re2"
       "curl"
       "cython"
+      "dill_archive"
       "double_conversion"
       "enum34_archive"
       "flatbuffers"
@@ -198,8 +205,9 @@ let
       "pybind11"
       "six_archive"
       "snappy"
-      "swig"
+      "tblib_archive"
       "termcolor_archive"
+      "typing_extensions_archive"
       "wrapt"
       "zlib"
     ];
@@ -224,16 +232,13 @@ let
     TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
 
     postPatch = ''
+      # bazel 3.3 should work just as well as bazel 3.1
+      rm -f .bazelversion
+    '' + lib.optionalString (!withTensorboard) ''
       # Tensorboard pulls in a bunch of dependencies, some of which may
       # include security vulnerabilities. So we make it optional.
       # https://github.com/tensorflow/tensorflow/issues/20280#issuecomment-400230560
-      sed -i '/tensorboard >=/d' tensorflow/tools/pip_package/setup.py
-
-      # numpy 1.19 added in https://github.com/tensorflow/tensorflow/commit/75ea0b31477d6ba9e990e296bbbd8ca4e7eebadf.patch
-      sed -i 's/numpy >= 1.16.0, < 1.19.0/numpy >= 1.16.0/' tensorflow/tools/pip_package/setup.py
-
-      # bazel 3.3 should work just as well as bazel 3.1
-      rm -f .bazelversion
+      sed -i '/tensorboard ~=/d' tensorflow/tools/pip_package/setup.py
     '';
 
     # https://github.com/tensorflow/tensorflow/pull/39470
@@ -277,16 +282,15 @@ let
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
 
     removeRulesCC = false;
+    # Without this Bazel complaints about sandbox violations.
+    dontAddBazelOpts = true;
 
     fetchAttrs = {
-      # So that checksums don't depend on these.
-      TF_SYSTEM_LIBS = null;
-
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "sha256-lEdPA9vhYO6vd5FgPMbFp2PkRvDBurPidYsxtJLXcbQ="
+        "0vyy1hv0jy5pqwvnc8pxb9isgnbw07c4a4d4wn61db00np114crz"
       else
-        "sha256-ZEY/bWo5M3Juw1x3CwhXYXZHD4q5LzWDlhgXnh4P95U=";
+        "0vczv5f9s4dxgwdkmf1y9b9ybh5d3y1nllqhb5q8aj9kq73izyn9";
     };
 
     buildAttrs = {
@@ -329,15 +333,13 @@ let
       license = licenses.asl20;
       maintainers = with maintainers; [ jyp abbradar ];
       platforms = with platforms; linux ++ darwin;
-      # The py2 build fails due to some issue importing protobuf. Possibly related to the fix in
-      # https://github.com/akesandgren/easybuild-easyblocks/commit/1f2e517ddfd1b00a342c6abb55aef3fd93671a2b
-      broken = !(xlaSupport -> cudaSupport) || !isPy3k;
+      broken = !(xlaSupport -> cudaSupport);
     };
   };
 
 in buildPythonPackage {
   inherit version pname;
-  disabled = isPy27;
+  disabled = !isPy3k;
 
   src = bazel-build.python;
 
@@ -354,27 +356,23 @@ in buildPythonPackage {
   # tensorflow/tools/pip_package/setup.py
   propagatedBuildInputs = [
     absl-py
-    astor
+    astunparse
+    dill
+    flatbuffers-python
     gast
     google-pasta
-    keras-applications
+    grpcio
+    h5py
     keras-preprocessing
     numpy
-    six
+    opt-einsum
     protobuf
+    six
+    tblib
     tensorflow-estimator_2
     termcolor
+    typing-extensions
     wrapt
-    grpcio
-    opt-einsum
-    astunparse
-    h5py
-  ] ++ lib.optionals (!isPy3k) [
-    mock
-    future
-    functools32
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    backports_weakref enum34
   ] ++ lib.optionals withTensorboard [
     tensorflow-tensorboard_2
   ];
