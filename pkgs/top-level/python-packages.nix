@@ -3257,6 +3257,8 @@ in {
 
   json-merge-patch = callPackage ../development/python-modules/json-merge-patch { };
 
+  json-schema-for-humans = callPackage ../development/python-modules/json-schema-for-humans { };
+
   jsonnet = buildPythonPackage { inherit (pkgs.jsonnet) name src; };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
