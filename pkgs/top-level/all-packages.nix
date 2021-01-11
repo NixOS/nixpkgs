@@ -21610,6 +21610,8 @@ in
 
   ganttproject-bin = callPackage ../applications/misc/ganttproject-bin { };
 
+  gaucheBootstrap = callPackage ../development/interpreters/gauche/boot.nix { };
+
   gauche = callPackage ../development/interpreters/gauche { };
 
   gcal = callPackage ../applications/misc/gcal { };
