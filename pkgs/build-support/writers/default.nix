@@ -63,7 +63,7 @@ rec {
   #
   # Examples:
   #   writeSimpleC = makeBinWriter { compileScript = name: "gcc -o $out $contentPath"; }
-  makeBinWriter = { compileScript }: nameOrPath: content:
+  makeBinWriter = { compileScript, strip ? true }: nameOrPath: content:
     assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
     assert lib.or (types.path.check content) (types.str.check content);
     let
@@ -76,6 +76,8 @@ rec {
       contentPath = content;
     }) ''
       ${compileScript}
+      ${ lib.optionalString strip
+         "${pkgs.binutils-unwrapped}/bin/strip --strip-unneeded $out" }
       ${optionalString (types.path.check nameOrPath) ''
         mv $out tmp
         mkdir -p $out/$(dirname "${nameOrPath}")
@@ -131,7 +133,6 @@ rec {
             -Wall \
             -x c \
             "$contentPath"
-        strip --strip-unneeded "$out"
       '';
     } name;
 
@@ -172,7 +173,6 @@ rec {
         cp $contentPath tmp.hs
         ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs} tmp.hs
         mv tmp $out
-        ${pkgs.binutils-unwrapped}/bin/strip --strip-unneeded "$out"
       '';
     } name;
 
