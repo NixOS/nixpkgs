@@ -3,7 +3,6 @@
 , pythonOlder
 , isPy27
 , fetchFromGitHub
-, nose
 , noise
 , numpy
 , pyplatec
@@ -11,6 +10,7 @@
 , purepng
 , h5py
 , gdal
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -47,13 +47,12 @@ buildPythonPackage rec {
       --replace 'PyPlatec==1.4.0' 'PyPlatec' \
   '';
 
-  # with python<3.5, unittest fails to discover tests because of their filenames
-  # so nose is used instead.
   doCheck = !isPy27; # google namespace clash
-  checkInputs = stdenv.lib.optional (pythonOlder "3.5") [ nose ];
-  postCheck = stdenv.lib.optionalString (pythonOlder "3.5") ''
-    nosetests tests
-  '';
+  checkInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    "TestSerialization"
+  ];
 
   meta = with lib; {
     homepage = "http://world-engine.org";

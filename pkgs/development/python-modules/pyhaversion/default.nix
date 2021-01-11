@@ -1,24 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
-# propagatedBuildInputs
+, pythonOlder
 , aiohttp
 , async-timeout
 , semantic-version
-# buildInputs
 , pytestrunner
-# checkInputs
-, pytest
-, pytest-asyncio
-, aresponses
 }:
 buildPythonPackage rec {
   pname = "pyhaversion";
   version = "3.4.2";
-
-  # needs aiohttp which is py3k-only
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -35,15 +27,14 @@ buildPythonPackage rec {
     pytestrunner
   ];
 
-  checkInputs = [
-    pytest
-    pytest-asyncio
-    aresponses
-  ];
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "pyhaversion" ];
 
   meta = with lib; {
     description = "A python module to the newest version number of Home Assistant";
     homepage = "https://github.com/ludeeus/pyhaversion";
+    license = with licenses; [ mit ];
     maintainers = [ maintainers.makefu ];
   };
 }

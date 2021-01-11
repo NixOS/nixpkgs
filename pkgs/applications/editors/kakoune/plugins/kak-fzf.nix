@@ -4,12 +4,13 @@ assert stdenv.lib.asserts.assertOneOf "fzf" fzf.pname [ "fzf" "skim" ];
 
 stdenv.mkDerivation {
   name = "kak-fzf";
-  version = "2020-05-24";
+  version = "2020-07-26";
+
   src = fetchFromGitHub {
     owner = "andreyorst";
     repo = "fzf.kak";
-    rev = "b2aeb26473962ab0bf3b51ba5c81c50c1d8253d3";
-    sha256 = "0bg845i814xh4y688p2zx726rsg0pd6nb4a7qv2fckmk639f4wzc";
+    rev = "f23daa698ad95493fbd675ae153e3cac13ef34e9";
+    hash = "sha256-BfXHTJ371ThOizMI/4BAbdJoaltGSP586hz4HqX1KWA=";
   };
 
   configurePhase = ''
