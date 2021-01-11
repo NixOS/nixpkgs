@@ -8156,10 +8156,6 @@ in
 
   udptunnel = callPackage ../tools/networking/udptunnel { };
 
-  ufraw = callPackage ../applications/graphics/ufraw {
-    stdenv = gcc6Stdenv; # doesn't build with gcc7
-  };
-
   uftrace = callPackage ../development/tools/uftrace { };
 
   uget = callPackage ../tools/networking/uget { };
