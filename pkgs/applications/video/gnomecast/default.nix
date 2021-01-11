@@ -20,6 +20,9 @@ buildPythonApplication rec {
     gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg_3 ]})
   '';
 
+  # no tests
+  doCheck = false;
+
   meta = with lib; {
     description = "A native Linux GUI for Chromecasting local files";
     homepage = "https://github.com/keredson/gnomecast";

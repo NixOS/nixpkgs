@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , notmuch
 , python
@@ -15,6 +16,10 @@ buildPythonPackage {
     sed -i -e '/CDLL/s@"libnotmuch\.@"${notmuch}/lib/libnotmuch.@' \
       notmuch/globals.py
   '';
+
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "notmuch" ];
 
   meta = with lib; {
     description = "A Python wrapper around notmuch";

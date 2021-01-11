@@ -2771,6 +2771,8 @@ in {
 
   guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
+  gviz-api = callPackage ../development/python-modules/gviz-api {};
+
   gwyddion = disabledIf isPy3k (toPythonModule (pkgs.gwyddion.override {
     pythonSupport = true;
     pythonPackages = self;
@@ -4087,6 +4089,8 @@ in {
   msrplib = callPackage ../development/python-modules/msrplib { };
 
   mt-940 = callPackage ../development/python-modules/mt-940 { };
+
+  mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
 
   multidict = callPackage ../development/python-modules/multidict { };
 
@@ -5445,6 +5449,8 @@ in {
   pyls-isort = callPackage ../development/python-modules/pyls-isort { };
 
   pyls-mypy = callPackage ../development/python-modules/pyls-mypy { };
+
+  pyls-spyder = callPackage ../development/python-modules/pyls-spyder { };
 
   PyLTI = callPackage ../development/python-modules/pylti { };
 
@@ -7255,6 +7261,8 @@ in {
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
+  stdiomask = callPackage ../development/python-modules/stdiomask { };
+
   stem = callPackage ../development/python-modules/stem { };
 
   stevedore = callPackage ../development/python-modules/stevedore { };
@@ -7292,6 +7300,8 @@ in {
   stups-zign = callPackage ../development/python-modules/stups-zign { };
 
   stytra = callPackage ../development/python-modules/stytra { };
+
+  subarulink = callPackage ../development/python-modules/subarulink { };
 
   subdownloader = callPackage ../development/python-modules/subdownloader { };
 
@@ -7389,6 +7399,10 @@ in {
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
+  tensorboard-plugin-profile = callPackage ../development/python-modules/tensorboard-plugin-profile { };
+
+  tensorboard-plugin-wit = callPackage ../development/python-modules/tensorboard-plugin-wit {};
+
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
   tensorflow-bin_2 = callPackage ../development/python-modules/tensorflow/bin.nix {
@@ -7405,9 +7419,10 @@ in {
     cudatoolkit = pkgs.cudatoolkit_11_0;
     cudnn = pkgs.cudnn_cudatoolkit_11_0;
     nccl = pkgs.nccl_cudatoolkit_11;
-    openssl = pkgs.openssl_1_1;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
-    inherit (pkgs) flatbuffers;
+    flatbuffers-core = pkgs.flatbuffers;
+    flatbuffers-python = self.flatbuffers;
+    lmdb-core = pkgs.lmdb;
   };
 
   tensorflow-build = self.tensorflow-build_2;
@@ -7494,6 +7509,8 @@ in {
   threadpool = callPackage ../development/python-modules/threadpool { };
 
   threadpoolctl = callPackage ../development/python-modules/threadpoolctl { };
+
+  three-merge = callPackage ../development/python-modules/three-merge { };
 
   thrift = callPackage ../development/python-modules/thrift { };
 

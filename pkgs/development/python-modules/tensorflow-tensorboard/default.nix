@@ -5,9 +5,10 @@
 , protobuf
 , grpcio
 , markdown
-, futures
 , absl-py
 , google-auth-oauthlib
+, tensorboard-plugin-wit
+, tensorboard-plugin-profile
 }:
 
 # tensorflow/tensorboard is built from a downloaded wheel, because
@@ -16,19 +17,16 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
-  version = "2.1.0";
+  version = "2.4.0";
   format = "wheel";
+  disabled = !isPy3k;
 
-  src = fetchPypi ({
+  src = fetchPypi {
     pname = "tensorboard";
     inherit version format;
-  } // (if isPy3k then {
     python = "py3";
-    sha256 = "1wpjdzhjpcdkyaahzd4bl71k4l30z5c55280ndiwj32hw70lxrp6";
-  } else {
-    python = "py2";
-    sha256 = "1f805839xa36wxb7xac9fyxzaww92vw4d50vs6g61wnlr4byp00w";
-  }));
+    sha256 = "0f17h6i398n8maam0r3rssqvdqnqbwjyf96nnhf482anm1iwdq6d";
+  };
 
   propagatedBuildInputs = [
     numpy
@@ -38,10 +36,12 @@ buildPythonPackage rec {
     grpcio
     absl-py
     google-auth-oauthlib
+    tensorboard-plugin-profile
+    tensorboard-plugin-wit
     # not declared in install_requires, but used at runtime
     # https://github.com/NixOS/nixpkgs/issues/73840
     wheel
-  ] ++ lib.optional (!isPy3k) futures;
+  ];
 
   # in the absence of a real test suite, run cli and imports
   checkPhase = ''

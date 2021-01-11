@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, pytest, hypothesis, scrapy }:
+{ stdenv, lib, fetchPypi, buildPythonPackage, scrapy, six }:
 
 buildPythonPackage rec {
   pname = "scrapy-splash";
@@ -9,7 +9,11 @@ buildPythonPackage rec {
     sha256 = "1dg7csdza2hzqskd9b9gx0v3saqsch4f0fwdp0a3p0822aqqi488";
   };
 
-  checkInputs = [ pytest hypothesis scrapy ];
+  propagatedBuildInputs = [ scrapy six ];
+
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "scrapy_splash" ];
 
   meta = with lib; {
     description = "Scrapy+Splash for JavaScript integration";
