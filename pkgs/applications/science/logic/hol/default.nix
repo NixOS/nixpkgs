@@ -1,4 +1,4 @@
-{stdenv, pkgs, fetchurl, graphviz, fontconfig, liberation_ttf,
+{lib, stdenv, pkgs, fetchurl, graphviz, fontconfig, liberation_ttf,
  experimentalKernel ? true}:
 
 let
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     # ln -s $out/src/hol4.${version}/bin $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interactive theorem prover based on Higher-Order Logic";
     longDescription = ''
       HOL4 is the latest version of the HOL interactive proof

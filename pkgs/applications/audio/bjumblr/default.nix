@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, cairo, lv2, pkgconfig, libsndfile }:
+{ lib, stdenv, fetchFromGitHub, libX11, cairo, lv2, pkgconfig, libsndfile }:
 
 stdenv.mkDerivation rec {
   pname = "BJumblr";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sjaehn/BJumblr";
     description = "Pattern-controlled audio stream / sample re-sequencer LV2 plugin";
     maintainers = [ maintainers.magnetophon ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, pkg-config, glib, fuse, curl, glib-networking
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, glib, fuse, curl, glib-networking
 , asciidoc, libxml2, docbook_xsl, docbook_xml_dtd_45, libxslt, wrapGAppsNoGuiHook }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line client for Mega.co.nz";
     homepage = "https://megatools.megous.com/";
     license = licenses.gpl2Plus;

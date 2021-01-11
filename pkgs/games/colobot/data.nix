@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     cd localSrc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://colobot.info/";
     description = "Game data for colobot";
     license = licenses.gpl3;

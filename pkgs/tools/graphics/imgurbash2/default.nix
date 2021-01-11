@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bash, curl, xsel }:
+{ lib, stdenv, fetchFromGitHub, bash, curl, xsel }:
 
 stdenv.mkDerivation rec {
   pname = "imgurbash2";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/imgurbash2
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A shell script that uploads images to imgur";
     license = licenses.mit;
     platforms = platforms.linux;

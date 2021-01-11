@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, libvorbis, SDL }:
+{ lib, stdenv, fetchFromGitHub, ncurses, libvorbis, SDL }:
 
 stdenv.mkDerivation rec {
   pname = "mp3blaster";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "-Wno-reserved-user-defined-literal"
   ]);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An audio player for the text console";
     homepage = "http://www.mp3blaster.org/";
     license = licenses.gpl2;

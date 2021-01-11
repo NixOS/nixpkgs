@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
 , boost, libbitcoin-client, libbitcoin-network }:
 
 let
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
     "--with-bash-completiondir=$out/share/bash-completion/completions"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bitcoin command line tool";
     homepage = "https://github.com/libbitcoin/libbitcoin-explorer";
     platforms = platforms.linux ++ platforms.darwin;

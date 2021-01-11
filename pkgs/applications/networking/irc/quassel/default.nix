@@ -4,7 +4,7 @@
 , tag ? "-kf5" # tag added to the package name
 , static ? false # link statically
 
-, stdenv, fetchFromGitHub, cmake, makeWrapper, dconf
+, lib, stdenv, fetchFromGitHub, cmake, makeWrapper, dconf
 , mkDerivation, qtbase, qtscript
 , phonon, libdbusmenu, qca-qt5
 
@@ -83,7 +83,7 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
         --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://quassel-irc.org/";
     description = "Qt/KDE distributed IRC client suppporting a remote daemon";
     longDescription = ''

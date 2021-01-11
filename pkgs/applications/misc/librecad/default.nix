@@ -1,4 +1,5 @@
-{ boost
+{ lib
+, boost
 , fetchFromGitHub
 , fetchpatch
 , installShellFiles
@@ -89,7 +90,7 @@ mkDerivationWith stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "2D CAD package based on Qt";
     homepage = "https://librecad.org";
     license = licenses.gpl2;

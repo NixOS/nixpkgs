@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkgconfig
 , gtk3
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.gitLister src.meta.homepage;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Jeinzi/thunar-dropbox";
     description = "A plugin that adds context-menu items for Dropbox to Thunar";
     license = licenses.gpl3;

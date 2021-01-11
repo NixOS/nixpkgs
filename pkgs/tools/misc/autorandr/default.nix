@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python3Packages
 , fetchFromGitHub
 , systemd
@@ -56,7 +56,7 @@ in
       sha256 = "0rmnqk2bi6bbd2if1rll37mlzlqxzmnazfffdhcpzskxwyaj4yn5";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/phillipberndt/autorandr/";
       description = "Automatically select a display configuration based on connected devices";
       license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, SDL, SDL_image, SDL_mixer, SDL_sound, libsigcxx, physfs
+{ fetchurl, lib, stdenv, SDL, SDL_image, SDL_mixer, SDL_sound, libsigcxx, physfs
 , boost, expat, freetype, libjpeg, wxGTK, lua, perl, pkgconfig, zlib, zip, bzip2
 , libpng, libtiff, fluidsynth, libmikmod, libvorbis, flac, libogg }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     libtiff fluidsynth libmikmod flac libvorbis libogg
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Turn based strategy game";
 
     longDescription = ''

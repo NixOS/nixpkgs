@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" ${jre}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Usenet meta search";
     homepage = "https://github.com/theotherp/nzbhydra2";
     license = licenses.asl20;

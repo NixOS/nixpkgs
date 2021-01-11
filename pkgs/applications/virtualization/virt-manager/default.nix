@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, intltool, file
+{ lib, stdenv, fetchurl, python3Packages, intltool, file
 , wrapGAppsHook, gtk-vnc, vte, avahi, dconf
 , gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, glib, libosinfo, gnome3
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
   # Failed tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://virt-manager.org";
     description = "Desktop user interface for managing virtual machines";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ buildPythonPackage, stdenv, lxml, click, fetchFromGitHub, pytest, isPy3k }:
+{ buildPythonPackage, lib, stdenv, lxml, click, fetchFromGitHub, pytest, isPy3k }:
 
 buildPythonPackage rec {
   version = "0.3.24";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     py.test tests/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python3 Parser for Android XML file and get Application Name without using Androguard";
     homepage = "https://github.com/appknox/pyaxmlparser";
     # Files from Androguard are licensed ASL 2.0

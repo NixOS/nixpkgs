@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, utmp, pam ? null }:
 
 stdenv.mkDerivation rec {
   pname = "screen";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/screen/";
     description = "A window manager that multiplexes a physical terminal";
     license = licenses.gpl2Plus;

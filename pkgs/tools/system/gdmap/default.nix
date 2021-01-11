@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, pkgconfig, libxml2, intltool, gettext }:
+{ lib, stdenv, fetchurl, gtk2, pkgconfig, libxml2, intltool, gettext }:
 
 stdenv.mkDerivation rec {
   name = "gdmap-0.8.1";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lm";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://gdmap.sourceforge.net";
     description = "Recursive rectangle map of disk usage";
     license = licenses.gpl2;

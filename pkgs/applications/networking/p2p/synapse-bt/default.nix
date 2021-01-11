@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, CoreServices, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, CoreServices, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "synapse-bt";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--all" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flexible and fast BitTorrent daemon";
     homepage = "https://synapse-bt.org/";
     license = licenses.isc;

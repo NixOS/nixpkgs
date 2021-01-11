@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "diffr";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     export DIFFR_TESTS_BINARY_PATH=$releaseDir/diffr
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yet another diff highlighting tool";
     homepage = "https://github.com/mookid/diffr";
     license = with licenses; [ mit ];

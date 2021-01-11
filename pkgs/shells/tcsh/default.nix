@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , ncurses
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       sha256 = "1qc6ydxhdfizsbkaxhpn3wib8sfphrw10xnnsxx2prvzg9g2zp67";
     });
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An enhanced version of the Berkeley UNIX C shell (csh)";
     longDescription = ''
       tcsh is an enhanced but completely compatible version of the

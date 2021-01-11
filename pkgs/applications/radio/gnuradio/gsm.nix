@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, boost, gnuradio, log4cpp
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, boost, gnuradio, log4cpp
 , makeWrapper, cppunit, libosmocore, gr-osmosdr
 , pythonSupport ? true, python, swig
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gnuradio block for gsm";
     homepage = "https://github.com/ptrkrysik/gr-gsm";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev, buildPackages }:
+{ lib, stdenv, fetchurl, pkgconfig, udev, buildPackages }:
 
 stdenv.mkDerivation rec {
   name = "libatasmart-0.19";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ udev ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://0pointer.de/blog/projects/being-smart.html";
     description = "Library for querying ATA SMART status";
     license = licenses.lgpl21;

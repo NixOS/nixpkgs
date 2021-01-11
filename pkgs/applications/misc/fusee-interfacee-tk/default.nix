@@ -1,4 +1,4 @@
-{ stdenv , fetchFromGitHub , python3 , makeWrapper }:
+{ lib, stdenv , fetchFromGitHub , python3 , makeWrapper }:
 
 let pythonEnv = python3.withPackages(ps: [ ps.tkinter ps.pyusb ]);
 in stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     cp intermezzo.bin $out/bin/intermezzo.bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/nh-server/fusee-interfacee-tk";
     description = "A tool to send .bin files to a Nintendo Switch in RCM mode";
     longDescription = "A mod of falquinhos Fusée Launcher for use with Nintendo Homebrew Switch Guide. It also adds the ability to mount SD while in RCM.

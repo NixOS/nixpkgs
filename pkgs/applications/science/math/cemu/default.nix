@@ -1,5 +1,5 @@
 { fetchFromGitHub
-, stdenv
+, lib, stdenv
 , mkDerivation
 , SDL2
 , libGL
@@ -42,7 +42,7 @@ mkDerivation rec {
     "gui/qt"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     changelog = "https://github.com/CE-Programming/CEmu/releases/tag/v${version}";
     description = "Third-party TI-84 Plus CE / TI-83 Premium CE emulator, focused on developer features";
     homepage = "https://ce-programming.github.io/CEmu";

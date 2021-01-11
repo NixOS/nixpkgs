@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "igmpproxy";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A daemon that routes multicast using IGMP forwarding";
     homepage = "https://github.com/pali/igmpproxy/";
     changelog = "https://github.com/pali/igmpproxy/releases/tag/${version}";

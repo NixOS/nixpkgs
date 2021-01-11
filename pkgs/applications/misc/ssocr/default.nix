@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, imlib2, libX11 }:
+{ lib, stdenv, fetchFromGitHub, imlib2, libX11 }:
 
 stdenv.mkDerivation {
   pname = "ssocr";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Seven Segment Optical Character Recognition";
     homepage = "https://github.com/auerswal/ssocr";
     license = licenses.gpl3;

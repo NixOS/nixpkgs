@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
+{ lib, stdenv, fetchurl, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities for the btrfs filesystem";
     homepage = "https://btrfs.wiki.kernel.org/";
     license = licenses.gpl2;

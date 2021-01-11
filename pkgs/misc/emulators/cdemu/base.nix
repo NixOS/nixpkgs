@@ -1,5 +1,5 @@
 { pkgName, version, pkgSha256 }:
-{ stdenv, fetchurl, cmake, pkgconfig, buildInputs, drvParams ? {} }:
+{ lib, stdenv, fetchurl, cmake, pkgconfig, buildInputs, drvParams ? {} }:
 let name = "${pkgName}-${version}";
 in stdenv.mkDerivation ({
   inherit name buildInputs;
@@ -16,7 +16,7 @@ in stdenv.mkDerivation ({
   configurePhase = ''
     cmake ../${name} -DCMAKE_INSTALL_PREFIX=$out -DCMAKE_BUILD_TYPE=Release -DCMAKE_SKIP_RPATH=ON
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A suite of tools for emulating optical drives and discs";
     longDescription = ''
       CDEmu consists of:

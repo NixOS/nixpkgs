@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cmake, intltool, gettext
+{ lib, stdenv, fetchurl, pkgconfig, cmake, intltool, gettext
 , libxml2, enchant2, isocodes, icu, libpthreadstubs
 , pango, cairo, libxkbfile, libXau, libXdmcp, libxkbcommon
 , dbus, gtk2, gtk3, qt4, extra-cmake-modules
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     "-DXKB_RULES_XML_FILE='${xkeyboard_config}/share/X11/xkb/rules/evdev.xml'"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://github.com/fcitx/fcitx";
     description = "A Flexible Input Method Framework";
     license     = licenses.gpl2;

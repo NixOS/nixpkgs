@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf
+{ lib, stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf
 , librsvg, libgnome-games-support, gettext, itstool, libxml2, wrapGAppsHook
 , meson, ninja, python3, desktop-file-utils
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Tali";
     description = "Sort of poker with dice and less money";
     maintainers = teams.gnome.members;

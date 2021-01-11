@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , capnproto
 , cython
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "capnp" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ cstrahan lukeadams ];
     license = licenses.bsd2;
     homepage = "https://capnproto.github.io/pycapnp/";

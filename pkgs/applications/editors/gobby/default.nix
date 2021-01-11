@@ -1,5 +1,5 @@
 { avahiSupport ? false # build support for Avahi in libinfinity
-, stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, wrapGAppsHook, yelp-tools
+, lib, stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, wrapGAppsHook, yelp-tools
 , gtkmm3, gsasl, gtksourceview3, libxmlxx, libinfinity, intltool, itstool, gnome3 }:
 
 let
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
 
   preConfigure = "./autogen.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://gobby.0x539.de/";
     description = "A GTK-based collaborative editor supporting multiple documents in one session and a multi-user chat";
     license = stdenv.lib.licenses.gpl2Plus;

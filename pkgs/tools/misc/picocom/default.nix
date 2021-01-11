@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , installShellFiles
 , lrzsz
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash bash_completion/picocom
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minimal dumb-terminal emulation program";
     homepage = "https://github.com/npat-efault/picocom/";
     license = licenses.gpl2Plus;

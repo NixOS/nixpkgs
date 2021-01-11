@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, ocamlbuild, ocplib-endian, sexplib, findlib, ppx_tools
+{ lib, stdenv, fetchFromGitHub, ocaml, ocamlbuild, ocplib-endian, sexplib, findlib, ppx_tools
 , async ? null, lwt ? null
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-cstruct";
     description = "Map OCaml arrays onto C-like structs";
     license = stdenv.lib.licenses.isc;

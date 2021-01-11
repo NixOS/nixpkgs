@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
     ''}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high-performance logs, metrics, and events router";
     homepage    = "https://github.com/timberio/vector";
     license     = with licenses; [ asl20 ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, git }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, git }:
 
 stdenv.mkDerivation rec {
   pname = "git-test";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${stdenv.lib.makeBinPath [ git ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Test your commits";
     homepage = "https://github.com/spotify/git-test";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ipfs-cluster";
@@ -17,7 +17,7 @@ buildGoModule rec {
     sha256 = "0fschpysma2piy2bfas56yapxm2cl6nj986ww3sp7ysldjzadmkk";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allocate, replicate, and track Pins across a cluster of IPFS daemons";
     homepage = "https://cluster.ipfs.io/";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast,
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonAtLeast,
   ipaddress, websocket_client, urllib3, pyyaml, requests_oauthlib, python-dateutil, google-auth, adal,
   isort, pytest, coverage, mock, sphinx, autopep8, pep8, codecov, recommonmark, nose }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   checkInputs = [ isort coverage pytest mock sphinx autopep8 pep8 codecov recommonmark nose ];
   propagatedBuildInputs = [ ipaddress websocket_client urllib3 pyyaml requests_oauthlib python-dateutil google-auth adal ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kubernetes python client";
     homepage = "https://github.com/kubernetes-client/python";
     license = licenses.asl20;

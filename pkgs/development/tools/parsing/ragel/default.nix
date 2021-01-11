@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, transfig, tex, ghostscript, colm
+{ lib, stdenv, fetchurl, transfig, tex, ghostscript, colm
 , build-manual ? false
 }:
 
@@ -25,7 +25,7 @@ let
 
       doCheck = true;
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.colm.net/open-source/ragel/";
         description = "State machine compiler";
         inherit license;

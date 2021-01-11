@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, autoPatchelfHook, fetchurl, xar, cpio }:
+{ lib, stdenv, fetchzip, autoPatchelfHook, fetchurl, xar, cpio }:
 
 stdenv.mkDerivation rec {
   pname = "1password";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     $out/bin/op --version
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description  = "1Password command-line tool";
     homepage     = "https://support.1password.com/command-line/";
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI";

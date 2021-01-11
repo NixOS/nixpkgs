@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, barcode, gnome3, autoreconfHook
+{ lib, stdenv, fetchurl, barcode, gnome3, autoreconfHook
 , gtk3, gtk-doc, libxml2, librsvg , libtool, libe-book, gsettings-desktop-schemas
 , intltool, itstool, makeWrapper, pkgconfig, yelp-tools
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create labels and business cards";
     homepage = "https://glabels.org/";
     license = with licenses; [ gpl3Plus lgpl3Plus ];

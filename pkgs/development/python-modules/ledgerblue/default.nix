@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, hidapi
+{ lib, stdenv, fetchPypi, buildPythonPackage, hidapi
 , pycrypto, pillow, protobuf, future, ecpy, python-u2flib-host, pycryptodomex
 , websocket_client
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library to communicate with Ledger Blue/Nano S";
     homepage = "https://github.com/LedgerHQ/blue-loader-python";
     license = licenses.asl20;

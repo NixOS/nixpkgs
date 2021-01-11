@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl }:
+{ lib, stdenv, callPackage, fetchurl }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -45,7 +45,7 @@ in
       inherit sha256;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS (VS Code without MS branding/telemetry/licensing)

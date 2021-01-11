@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, git }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, git }:
 
 stdenv.mkDerivation rec {
   pname = "git-standup";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${stdenv.lib.makeBinPath [ git ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Recall what you did on the last working day";
     homepage = "https://github.com/kamranahmedse/git-standup";
     license = licenses.mit;

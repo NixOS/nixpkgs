@@ -1,4 +1,4 @@
-{ config, stdenv, fetchFromGitHub, pkgconfig, cmake
+{ config, lib, stdenv, fetchFromGitHub, pkgconfig, cmake
 
 # dependencies
 , glib, libXinerama
@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
   # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://conky.sourceforge.net/";
     description = "Advanced, highly configurable system monitor based on torsmo";
     maintainers = [ maintainers.guibert ];

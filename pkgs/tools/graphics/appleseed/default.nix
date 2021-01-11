@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost165, pkg-config, guile,
+{ lib, stdenv, fetchFromGitHub, cmake, boost165, pkg-config, guile,
 eigen, libpng, python, libGLU, qt4, openexr, openimageio,
 opencolorio, xercesc, ilmbase, osl, seexpr, makeWrapper
 }:
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
       "-DUSE_SSE42=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source, physically-based global illumination rendering engine";
     homepage = "https://appleseedhq.net/";
     maintainers = with maintainers; [ hodapp ];

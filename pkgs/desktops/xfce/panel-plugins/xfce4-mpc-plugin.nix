@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel,
+{ lib, stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel,
   libxfce4ui, gtk3, exo, xfce }:
 
 let
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.archiveLister category pname;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-mpc-plugin";
     description = "MPD plugin for Xfce panel";
     platforms = platforms.linux;

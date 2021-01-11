@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildDunePackage }:
+{ lib, stdenv, fetchurl, buildDunePackage }:
 
 buildDunePackage rec {
   pname = "dtoa";
@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/flowtype/ocaml-dtoa";
     description = "Converts OCaml floats into strings (doubles to ascii, \"d to a\"), using the efficient Grisu3 algorithm.";
     license = licenses.mit;

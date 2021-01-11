@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libX11, procps, python2, libdwarf, qtbase, qtwebkit, wrapQtAppsHook, libglvnd }:
+{ lib, stdenv, fetchFromGitHub, cmake, libX11, procps, python2, libdwarf, qtbase, qtwebkit, wrapQtAppsHook, libglvnd }:
 
 stdenv.mkDerivation rec {
   pname = "apitrace";
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     wrapQtApp $out/bin/qapitrace
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://apitrace.github.io";
     description = "Tools to trace OpenGL, OpenGL ES, Direct3D, and DirectDraw APIs";
     license = licenses.mit;

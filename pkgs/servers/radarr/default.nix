@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper }:
+{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "radarr";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
           curl sqlite libmediainfo ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Usenet/BitTorrent movie downloader";
     homepage = "https://radarr.video/";
     license = licenses.gpl3;

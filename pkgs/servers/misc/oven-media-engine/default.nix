@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , srt
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     install -Dm0644 ../misc/conf_examples/Logger.xml $out/share/examples/edge_conf/Logger.xml
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source streaming video service with sub-second latency";
     homepage    = "https://ovenmediaengine.com";
     license     = licenses.gpl2Only;

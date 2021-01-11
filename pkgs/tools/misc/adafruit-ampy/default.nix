@@ -1,4 +1,4 @@
-{ stdenv, python3 }:
+{ lib, stdenv, python3 }:
 
 with python3.pkgs;
 
@@ -17,7 +17,7 @@ buildPythonApplication rec {
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pycampers/ampy";
     license = licenses.mit;
     description = "Utility to interact with a MicroPython board over a serial connection";

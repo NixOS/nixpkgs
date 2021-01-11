@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, systemd, fcgi, autoreconfHook, pkgconfig }:
+{ lib, stdenv, fetchurl, systemd, fcgi, autoreconfHook, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "fcgiwrap";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace libsystemd-daemon libsystemd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://nginx.localdomain.pl/wiki/FcgiWrap";
     description = "Simple server for running CGI applications over FastCGI";
     maintainers = with maintainers; [ lethalman ];

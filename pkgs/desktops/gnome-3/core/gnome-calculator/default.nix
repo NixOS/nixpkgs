@@ -1,4 +1,4 @@
-{ stdenv, meson, ninja, vala, gettext, itstool, fetchurl, pkgconfig, libxml2
+{ lib, stdenv, meson, ninja, vala, gettext, itstool, fetchurl, pkgconfig, libxml2
 , gtk3, glib, gtksourceview4, wrapGAppsHook, gobject-introspection, python3
 , gnome3, mpfr, gmp, libsoup, libmpc, gsettings-desktop-schemas, libgee }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Calculator";
     description = "Application that solves mathematical equations and is suitable as a default application in a Desktop environment";
     maintainers = teams.gnome.members;

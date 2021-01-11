@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, setuptools, swig, verilog }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, setuptools, swig, verilog }:
 
 buildPythonPackage rec {
   pname = "cocotb";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     make test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";
     homepage = "https://github.com/cocotb/cocotb";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , python3, boost
 , cmake
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     cd libtrellis
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description     = "Documentation and bitstream tools for Lattice ECP5 FPGAs";
     longDescription = ''
       Project Trellis documents the Lattice ECP5 architecture

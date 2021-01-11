@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, withRodio ? true
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, withRodio ? true
 , withALSA ? true, alsaLib ? null, withPulseAudio ? false, libpulseaudio ? null
 , withPortAudio ? false, portaudio ? null }:
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Source Spotify client library and playback daemon";
     homepage = "https://github.com/librespot-org/librespot";
     license = with licenses; [ mit ];

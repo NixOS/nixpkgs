@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pkgconfig
 , intltool
 , libX11, libXv, libSM
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     make install prefix="$out" wxcamdocdir="$out/share/doc/wxcam"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source, wxGTK-based webcam app for Linux";
     longDescription = ''
     wxCam is a webcam application for linux. It supports video recording

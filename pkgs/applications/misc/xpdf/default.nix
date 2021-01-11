@@ -1,7 +1,7 @@
 { enableGUI ? true
 , enablePDFtoPPM ? true
 , enablePrinting ? true
-, stdenv, fetchzip, cmake, makeDesktopItem
+, lib, stdenv, fetchzip, cmake, makeDesktopItem
 , zlib, libpng, cups ? null, freetype ? null
 , qtbase ? null, qtsvg ? null, wrapQtAppsHook
 }:
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.xpdfreader.com";
     description = "Viewer for Portable Document Format (PDF) files";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, makeWrapper
+{ lib, stdenv, fetchurl, dpkg, makeWrapper
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
 , gnome2, gtk3, gdk-pixbuf, libnotify, libxcb, nspr, nss, pango
 , systemd, xorg, xprintidle-ng }:
@@ -96,7 +96,7 @@ in stdenv.mkDerivation {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "To Do List / Time Tracker with Jira Integration";
     homepage = "https://super-productivity.com";
     license = licenses.mit;

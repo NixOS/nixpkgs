@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchpatch, stdenv, wrapQtAppsHook, git, pcre, pugixml, qtbase, libsForQt5, qtmultimedia, qttools, yajl, libzip, hunspell
+{ fetchFromGitHub, fetchpatch, lib, stdenv, wrapQtAppsHook, git, pcre, pugixml, qtbase, libsForQt5, qtmultimedia, qttools, yajl, libzip, hunspell
 , boost, libGLU, lua, cmake,  which, }:
 
 let
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       --run "cd $out";
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Crossplatform mud client";
     homepage = "http://mudlet.org/";
     maintainers = [ maintainers.wyvie maintainers.pstn ];

@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     updateScript = ./update-default.sh;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://be5invis.github.io/Iosevka";
     downloadPage = "https://github.com/be5invis/Iosevka/releases";
     description = ''

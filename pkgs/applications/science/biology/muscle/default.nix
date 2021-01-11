@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   _name   = "muscle";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     install -vD muscle $out/bin/muscle
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multiple sequence alignment method with reduced time and space complexity";
     license     = licenses.publicDomain;
     homepage    = "https://www.drive5.com/muscle/";

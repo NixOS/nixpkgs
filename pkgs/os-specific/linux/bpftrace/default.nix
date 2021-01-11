@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkgconfig, flex, bison
 , llvmPackages, kernel, elfutils
 , libelf, libbfd, libbpf, libopcodes, bcc
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
     homepage    = "https://github.com/iovisor/bpftrace";
     license     = licenses.asl20;

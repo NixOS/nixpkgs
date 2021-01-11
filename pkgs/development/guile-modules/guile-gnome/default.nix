@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, guile, guile-lib, gwrap
+{ fetchurl, lib, stdenv, guile, guile-lib, gwrap
 , pkgconfig, gconf, glib, gnome_vfs, gtk2
 , libglade, libgnome, libgnomecanvas, libgnomeui
 , pango, guile-cairo, texinfo
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   GUILE_AUTO_COMPILE = 0;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME bindings for GNU Guile";
     longDescription = ''
       GNU guile-gnome brings the power of Scheme to your graphical application.

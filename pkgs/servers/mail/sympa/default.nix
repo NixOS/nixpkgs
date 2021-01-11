@@ -1,4 +1,4 @@
-{ stdenv, perl, fetchFromGitHub, autoreconfHook, nixosTests }:
+{ lib, stdenv, perl, fetchFromGitHub, autoreconfHook, nixosTests }:
 
 let
   dataDir = "/var/lib/sympa";
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) sympa;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source mailing list manager";
     homepage = "https://www.sympa.org";
     license = licenses.gpl2;

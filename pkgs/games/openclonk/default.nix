@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig
+{ lib, stdenv, fetchurl, cmake, pkgconfig
 , SDL2, libvorbis, libogg, libjpeg, libpng, freetype, glew, tinyxml, openal
 , freealut, readline, gcc-unwrapped
 , enableSoundtrack ? false # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   cmakeBuildType = "RelWithDebInfo";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free multiplayer action game in which you control clonks, small but witty and nimble humanoid beings";
     homepage = "https://www.openclonk.org";
     license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;

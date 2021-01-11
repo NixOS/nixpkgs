@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python3
 , m4
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ./0002-fix-format-security.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VLSI layout tool written in Tcl";
     homepage    = "http://opencircuitdesign.com/magic/";
     license     = licenses.mit;

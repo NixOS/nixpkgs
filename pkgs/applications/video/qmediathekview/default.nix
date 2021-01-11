@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchFromGitHub, qtbase, qttools, xz, boost, qmake, pkgconfig }:
+{ mkDerivation, lib, stdenv, fetchFromGitHub, qtbase, qttools, xz, boost, qmake, pkgconfig }:
 
 mkDerivation rec {
   pname = "QMediathekView";
@@ -22,7 +22,7 @@ mkDerivation rec {
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An alternative Qt-based front-end for the database maintained by the MediathekView project";
     inherit (src.meta) homepage;
     license = licenses.gpl3Plus;

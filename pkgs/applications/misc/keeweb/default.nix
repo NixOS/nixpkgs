@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, appimageTools, undmg, libsecret }:
+{ lib, stdenv, fetchurl, appimageTools, undmg, libsecret }:
 let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -26,7 +26,7 @@ let
     inherit name src;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free cross-platform password manager compatible with KeePass";
     homepage = "https://keeweb.info/";
     license = licenses.mit;

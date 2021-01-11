@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 let
   mkVariant = variant: { version, abbreviation, sha256, outputHash }: stdenv.mkDerivation {
@@ -22,7 +22,7 @@ let
     outputHashMode = "recursive";
     inherit outputHash;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://www.gust.org.pl/projects/e-foundry/tex-gyre";
       # "The TeX Gyre fonts are licensed under the GUST Font License (GFL),
       # which is a free license, legally equivalent to the LaTeX Project Public

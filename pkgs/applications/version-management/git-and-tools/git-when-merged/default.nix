@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "git-when-merged";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     install -D --target-directory $out/bin/ bin/git-when-merged
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Helps you figure out when and why a commit was merged into a branch";
     longDescription = ''

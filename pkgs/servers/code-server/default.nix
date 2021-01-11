@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
+{ lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
 , moreutils, jq, git, zip, rsync, pkgconfig, yarn, python2
 , nodejs-12_x, libsecret, xorg, ripgrep, nettools }:
 
@@ -211,7 +211,7 @@ in stdenv.mkDerivation rec {
     });
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Run VS Code on a remote server";
     longDescription = ''
       code-server is VS Code running on a remote server, accessible through the

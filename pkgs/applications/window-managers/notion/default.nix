@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkgconfig
 , lua, gettext, which, groff, xmessage, xterm
 , readline, fontconfig, libX11, libXext, libSM
 , libXinerama, libXrandr, libXft
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${xmessage}/bin:${xterm}/bin" \
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiling tabbed window manager";
     homepage = "https://notionwm.net";
     license   = licenses.lgpl21;

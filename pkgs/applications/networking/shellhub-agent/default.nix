@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 , genericUpdater
@@ -31,7 +31,7 @@ buildGoModule rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Enables easy access any Linux device behind firewall and NAT";
     longDescription = ''

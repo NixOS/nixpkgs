@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
   version = "1.2.1";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A console-based network monitoring utility (fork of iptraf)";
     longDescription = ''
       IPTraf-ng is a console-based network monitoring utility. IPTraf-ng

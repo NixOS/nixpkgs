@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , pkgconfig, openssl, fuse, libxml2
 , cabextract ? null
 , cdrkit ? null
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wimlib.net";
     description = "A library and program to extract, create, and modify WIM files";
     platforms = platforms.unix;

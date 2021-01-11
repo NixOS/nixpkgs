@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libXt, libXaw, libXres, utilmacros }:
+{ lib, stdenv, fetchurl, pkgconfig, libXt, libXaw, libXres, utilmacros }:
 
 stdenv.mkDerivation rec {
   name = "editres-1.0.7";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cgit.freedesktop.org/xorg/app/editres/";
     description = "A dynamic resource editor for X Toolkit applications";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gcc-unwrapped
 , dpkg
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ gcc-unwrapped.lib ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flash OS images to SD cards and USB drives, safely and easily";
     homepage = "https://etcher.io/";
     license = licenses.asl20;

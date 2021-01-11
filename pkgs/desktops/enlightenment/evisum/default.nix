@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkg-config, efl }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, efl }:
 
 stdenv.mkDerivation rec {
   pname = "evisum";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     efl
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System and process monitor written with EFL";
     homepage = "https://www.enlightenment.org";
     license = with licenses; [ isc ];

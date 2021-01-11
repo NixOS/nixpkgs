@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     rm -r google
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stackdriver Error Reporting API client library";
     homepage = "https://github.com/googleapis/python-error-reporting";
     license = licenses.asl20;

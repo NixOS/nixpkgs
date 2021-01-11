@@ -1,4 +1,4 @@
-{ stdenv, buildPackages
+{ lib, stdenv, buildPackages
 , fetchurl, linuxHeaders, libiconvReal
 , extraConfig ? ""
 }:
@@ -104,7 +104,7 @@ stdenv.mkDerivation {
     libiconv = libiconvReal;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://uclibc-ng.org";
     description = "A small implementation of the C library";
     maintainers = with maintainers; [ rasendubi ];

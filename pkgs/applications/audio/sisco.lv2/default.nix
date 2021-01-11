@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lv2, pkgconfig, libGLU, libGL, cairo, pango, libjack2 }:
+{ lib, stdenv, fetchFromGitHub, lv2, pkgconfig, libGLU, libGL, cairo, pango, libjack2 }:
 
 let
   name = "sisco.lv2-${version}";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   sisco_VERSION = version;
   preConfigure = "makeFlagsArray=(PREFIX=$out)";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple audio oscilloscope with variable time scale, triggering, cursors and numeric readout in LV2 plugin format";
     homepage = "http://x42.github.io/sisco.lv2/";
     license = licenses.gpl2;

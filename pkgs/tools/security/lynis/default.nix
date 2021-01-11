@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchFromGitHub, gawk, installShellFiles }:
+{ lib, stdenv, makeWrapper, fetchFromGitHub, gawk, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "lynis";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       extras/bash_completion.d/lynis
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Security auditing tool for Linux, macOS, and UNIX-based systems";
     homepage = "https://cisofy.com/lynis/";
     license = licenses.gpl3;

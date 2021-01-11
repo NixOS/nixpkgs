@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libconfuse, gettext }:
+{ lib, stdenv, fetchurl, pkgconfig, libconfuse, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "genimage";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp -v README "$docdir"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.pengutronix.de/cgit/genimage";
     description = "Generate filesystem images from directory trees";
     license = licenses.gpl2Plus;

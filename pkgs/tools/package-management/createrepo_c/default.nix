@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, expat, glib, curl, libxml2, python3, rpm, openssl, sqlite, file, xz, pcre, bash-completion }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, expat, glib, curl, libxml2, python3, rpm, openssl, sqlite, file, xz, pcre, bash-completion }:
 
 stdenv.mkDerivation rec {
   pname = "createrepo_c";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bzip2 expat glib curl libxml2 python3 rpm openssl sqlite file xz pcre bash-completion ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C implementation of createrepo";
     homepage    = "http://rpm-software-management.github.io/createrepo_c/";
     license     = licenses.gpl2;

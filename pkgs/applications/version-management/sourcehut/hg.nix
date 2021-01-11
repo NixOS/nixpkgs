@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, buildPythonPackage
+{ lib, stdenv, fetchhg, buildPythonPackage
 , python
 , srht, hglib, scmsrht, unidiff }:
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/hg.sr.ht";
     description = "Mercurial repository hosting service for the sr.ht network";
     license = licenses.agpl3;

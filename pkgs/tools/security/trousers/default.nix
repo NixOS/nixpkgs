@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, pkgconfig }:
+{ lib, stdenv, fetchurl, openssl, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "trousers";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-DALLOW_NON_TSS_CONFIG_FILE" ];
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Trusted computing software stack";
     homepage    = "http://trousers.sourceforge.net/";
     license     = licenses.bsd3;

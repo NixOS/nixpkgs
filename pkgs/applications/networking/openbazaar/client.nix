@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gcc-unwrapped
 , dpkg
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ gcc-unwrapped.lib ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Decentralized Peer to Peer Marketplace for Bitcoin - client";
     homepage = "https://www.openbazaar.org/";
     license = licenses.mit;

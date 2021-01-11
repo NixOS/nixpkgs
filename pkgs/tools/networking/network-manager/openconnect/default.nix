@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , glib
@@ -72,7 +72,7 @@ in stdenv.mkDerivation {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NetworkManager’s OpenConnect plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of graphical utilities for color management to be used in the GNOME desktop";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

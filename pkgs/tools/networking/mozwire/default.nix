@@ -1,4 +1,4 @@
-{ rustPlatform, stdenv, fetchFromGitHub, Security }:
+{ rustPlatform, lib, stdenv, fetchFromGitHub, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "MozWire";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0yxnpnxwis46wz4j5rjzyyzrvh94hn8vzxmmrcmrdz3gkakg77hg";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MozillaVPN configuration manager giving Linux, macOS users (among others), access to MozillaVPN";
     homepage = "https://github.com/NilsIrl/MozWire";
     license = licenses.gpl3;

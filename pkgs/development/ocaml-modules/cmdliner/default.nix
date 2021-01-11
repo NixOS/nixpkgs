@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
 
 let
   pname = "cmdliner";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://erratique.ch/software/cmdliner";
     description = "An OCaml module for the declarative definition of command line interfaces";
     license = licenses.bsd3;

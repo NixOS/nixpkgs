@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, openssl, libxml2, fuse, osxfuse }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, openssl, libxml2, fuse, osxfuse }:
 
 stdenv.mkDerivation rec {
   pname = "s3fs-fuse";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/s3fs $out/bin/mount.s3fs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mount an S3 bucket as filesystem through FUSE";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.darwin;

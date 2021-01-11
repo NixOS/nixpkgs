@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, flex, bison }:
+{ lib, stdenv, fetchFromGitHub, cmake, flex, bison }:
 
 stdenv.mkDerivation rec {
   pname = "fluent-bit";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       --replace /lib/systemd $out/lib/systemd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Log forwarder and processor, part of Fluentd ecosystem";
     homepage = "https://fluentbit.io";
     maintainers = with maintainers; [

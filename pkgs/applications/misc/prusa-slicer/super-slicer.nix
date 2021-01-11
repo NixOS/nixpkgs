@@ -38,7 +38,7 @@ let
       categories = "Development;";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       inherit description;
       homepage = "https://github.com/supermerili/SuperSlicer";
       license = licenses.agpl3;

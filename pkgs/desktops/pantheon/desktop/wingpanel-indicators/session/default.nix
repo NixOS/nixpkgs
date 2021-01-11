@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Session Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-session";
     license = licenses.gpl2Plus;

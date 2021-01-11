@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, liblaxjson, cmake, freeimage }:
+{ lib, stdenv, fetchFromGitHub, liblaxjson, cmake, freeimage }:
 
 stdenv.mkDerivation rec {
   version = "3.1.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ liblaxjson freeimage ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Texture packer and resource bundler";
     platforms = [ "i686-linux" "x86_64-linux" ]; # fails on Darwin and AArch64
     homepage = "https://github.com/andrewrk/rucksack";

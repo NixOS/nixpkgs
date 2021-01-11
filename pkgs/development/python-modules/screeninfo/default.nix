@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchPypi, isPy27, isPy36, dataclasses, libX11, libXinerama, libXrandr }:
+{ lib, stdenv, buildPythonApplication, fetchPypi, isPy27, isPy36, dataclasses, libX11, libXinerama, libXrandr }:
 
 buildPythonApplication rec {
   pname = "screeninfo";
@@ -27,7 +27,7 @@ buildPythonApplication rec {
 
   buildInputs = [ libX11 libXinerama libXrandr];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fetch location and size of physical screens";
     homepage = "https://github.com/rr-/screeninfo";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchFromGitHub
 , qmake
@@ -31,7 +31,7 @@ mkDerivation rec {
     substituteInPlace MediaElch.pro --replace "/usr" "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mediaelch.de/mediaelch/";
     description = "Media Manager for Kodi";
     license = licenses.lgpl3Only;

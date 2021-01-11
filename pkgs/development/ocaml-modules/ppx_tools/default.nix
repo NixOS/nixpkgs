@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, ocaml, findlib }:
+{ lib, stdenv, fetchFromGitHub, buildDunePackage, ocaml, findlib }:
 
 let param =
   let v6_2 = {
@@ -39,7 +39,7 @@ let src = fetchFromGitHub {
       inherit (param) sha256;
     };
     pname = "ppx_tools";
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Tools for authors of ppx rewriters";
       homepage = "https://www.lexifi.com/ppx_tools";
       license = licenses.mit;

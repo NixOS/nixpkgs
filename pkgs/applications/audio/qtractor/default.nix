@@ -24,7 +24,7 @@
 , serd
 , sord
 , sratom
-, stdenv
+, lib, stdenv
 , suil
 }:
 
@@ -69,7 +69,7 @@ mkDerivation rec {
     suil
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Audio/MIDI multi-track sequencer";
     homepage = "https://qtractor.sourceforge.io";
     license = licenses.gpl2Plus;

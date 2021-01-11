@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
 , geos, pytest, cython
 , numpy
 }:
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     py.test tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Geometric objects, predicates, and operations";
     maintainers = with maintainers; [ knedlsepp ];
     homepage = "https://pypi.python.org/pypi/Shapely/";

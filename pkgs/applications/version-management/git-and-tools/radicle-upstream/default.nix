@@ -1,4 +1,4 @@
-{ stdenv, appimageTools, gsettings-desktop-schemas, gtk3, autoPatchelfHook, zlib, fetchurl }:
+{ lib, stdenv, appimageTools, gsettings-desktop-schemas, gtk3, autoPatchelfHook, zlib, fetchurl }:
 
 let
   pname = "radicle-upstream";
@@ -54,7 +54,7 @@ appimageTools.wrapType2 {
       $out/share/icons/hicolor/512x512/apps/${pname}.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A decentralized app for code collaboration";
     homepage = "https://radicle.xyz/";
     license = licenses.gpl3Plus;

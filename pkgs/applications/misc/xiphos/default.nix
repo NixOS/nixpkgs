@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkgconfig
 , python
 , intltool
 , docbook2x, docbook_xml_dtd_412, libxslt
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   wafConfigureFlags = [ "--enable-webkit2" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GTK Bible study tool";
     longDescription = ''
       Xiphos (formerly known as GnomeSword) is a Bible study tool

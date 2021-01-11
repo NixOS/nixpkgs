@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, olm, makeDesktopItem }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, olm, makeDesktopItem }:
 
 buildGoModule rec {
   pname = "gomuks";
@@ -32,7 +32,7 @@ buildGoModule rec {
     substituteAllInPlace $out/share/applications/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://maunium.net/go/gomuks/";
     description = "A terminal based Matrix client written in Go";
     license = licenses.gpl3;

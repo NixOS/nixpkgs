@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , cmake
 , extra-cmake-modules
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Icons based on Breeze and Super Flat Remix";
     homepage = "https://gitlab.manjaro.org/artwork/themes/maia";
     license = licenses.lgpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , fltk
 , openssl
 , libjpeg, libpng
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-ssl" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.dillo.org/";
     description = "A fast graphical web browser with a small footprint";
     longDescription = ''

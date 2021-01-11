@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tries to access the net
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
     license = licenses.gpl2;

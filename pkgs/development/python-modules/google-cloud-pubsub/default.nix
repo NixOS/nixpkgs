@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.pubsub" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Cloud Pub/Sub API client library";
     homepage = "https://pypi.org/project/google-cloud-pubsub";
     license = licenses.asl20;

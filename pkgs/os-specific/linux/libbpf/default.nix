@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkgconfig
 , libelf, zlib
 , fetchpatch
 }:
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   # outputs = [ "out" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Upstream mirror of libbpf";
     homepage    = "https://github.com/libbpf/libbpf";
     license     = with licenses; [ lgpl21 /* or */ bsd2 ];

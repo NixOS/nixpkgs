@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libdaemon, bison, flex, check }:
+{ lib, stdenv, fetchurl, pkgconfig, libdaemon, bison, flex, check }:
 
 stdenv.mkDerivation rec {
   pname = "radvd";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig bison flex check ];
   buildInputs = [ libdaemon ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.litech.org/radvd/";
     description = "IPv6 Router Advertisement Daemon";
     platforms = platforms.linux;

@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "0f3n0wrmg9d2qyn8hlnhf9lsfqd9443myzr04p48v68m8n83j6a9";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cloud enumeration tool";
     longDescription = ''
       A tool to find a company (target) infrastructure, files, and apps on

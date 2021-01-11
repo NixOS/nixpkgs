@@ -26,7 +26,7 @@ mkDerivation rec {
   # todo: libpq would suffice here. Unfortunately this won't work, if one uses only postgresql.lib here.
   buildInputs = [ postgresql qtsvg ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A database modeling tool for PostgreSQL";
     homepage = "https://pgmodeler.io/";
     license = licenses.gpl3;

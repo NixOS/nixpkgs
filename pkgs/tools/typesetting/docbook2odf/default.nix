@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper, zip, libxslt }:
+{ lib, stdenv, fetchurl, perlPackages, makeWrapper, zip, libxslt }:
 
 stdenv.mkDerivation rec {
   name = "docbook2odf-0.244";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       --prefix PERL5PATH : "${perlPackages.makePerlPath [ perlPackages.PerlMagick ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert DocBook to OpenDocument Format (ODF)";
     longDescription = ''
       Docbook2odf is a toolkit that automaticaly converts DocBook to OASIS

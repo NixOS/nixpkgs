@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , zlib
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     install -D fastp $out/bin/fastp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ultra-fast all-in-one FASTQ preprocessor";
     license = licenses.mit;
     homepage = "https://github.com/OpenGene/fastp";

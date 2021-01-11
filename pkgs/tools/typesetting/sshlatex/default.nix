@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, inotify-tools, openssh, perl, gnutar, bash, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, inotify-tools, openssh, perl, gnutar, bash, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "sshlatex";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/sshlatex --prefix PATH : "${binPath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collection of hacks to efficiently run LaTeX via ssh";
     longDescription = ''
       sshlatex is a tool which uploads LaTeX source files to a remote, runs

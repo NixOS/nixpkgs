@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , jinja2
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false; # tests aren't installed thus aren't found, so skip
   propagatedBuildInputs = [ jinja2 pyyaml setuptools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kolypto/j2cli";
     description = "Jinja2 Command-Line Tool";
     license = licenses.bsd2;

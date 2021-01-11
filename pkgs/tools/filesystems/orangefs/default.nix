@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, flex, autoreconfHook
+{ lib, stdenv, fetchurl, bison, flex, autoreconfHook
 , openssl, db, attr, perl, tcsh
 } :
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     sed -i 's:openssl:${openssl}/bin/openssl:' $out/bin/pvfs2-gen-keys.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scale-out network file system for use on high-end computing systems";
     homepage = "http://www.orangefs.org/";
     license = with licenses;  [ asl20 bsd3 gpl2 lgpl21 lgpl21Plus openldap ];

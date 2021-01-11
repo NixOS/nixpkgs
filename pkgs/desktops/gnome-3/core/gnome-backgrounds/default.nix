@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, gettext }:
+{ lib, stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-backgrounds";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, spidermonkey_68, glib
+{ lib, stdenv, fetchurl, meson, ninja, gettext, pkgconfig, spidermonkey_68, glib
 , gnome3, gnome-menus, substituteAll }:
 
 stdenv.mkDerivation rec {
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GnomeShell/Extensions";
     description = "Modify and extend GNOME Shell functionality and behavior";
     maintainers = teams.gnome.members;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "zsa-udev-rules";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     cp dist/linux64/50-wally.rules $out/lib/udev/rules.d/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "udev rules for ZSA devices";
     license = licenses.mit;
     maintainers = with maintainers; [ davidak ];

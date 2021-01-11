@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, dnspython, chardet, lmtpd
+{ lib, stdenv, buildPythonPackage, fetchPypi, dnspython, chardet, lmtpd
 , python-daemon, six, jinja2, mock, click }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     PATH=$out/bin:$PATH python setup.py test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://salmon-mail.readthedocs.org/";
     description = "Pythonic mail application server";
     license = licenses.gpl3;

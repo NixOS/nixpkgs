@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , google-api-core
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     "google.cloud.dlp_v2"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cloud Data Loss Prevention (DLP) API API client library";
     homepage = "https://github.com/googleapis/python-dlp";
     license = licenses.asl20;

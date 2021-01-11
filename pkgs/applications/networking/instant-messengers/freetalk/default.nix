@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , guile, pkgconfig, glib, loudmouth, gmp, libidn, readline, libtool
 , libunwind, ncurses, curl, jansson, texinfo
 , automake, autoconf }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     libunwind ncurses curl jansson
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =  "Console XMPP client";
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin ];

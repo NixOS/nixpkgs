@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , appimageTools
 , makeWrapper
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-platform password manager";
     longDescription = ''
       1Password is a multi-platform package manager.

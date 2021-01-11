@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, vte, gtk3, ncurses, pcre2, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, vte, gtk3, ncurses, pcre2, wrapGAppsHook }:
 
 let
 
@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple VTE-based terminal";
     license = licenses.lgpl2Plus;
     homepage = "https://github.com/thestinger/termite/";

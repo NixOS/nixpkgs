@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, itstool, gtk3, libxml2, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkgconfig, gettext, itstool, gtk3, libxml2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-calc";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calculator for the MATE desktop";
     homepage = "https://mate-desktop.org";
     license = [ licenses.gpl2Plus ];

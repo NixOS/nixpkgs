@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gmp
 , readline
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "all" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Computer algebra system for high-performance number theory computations";
     longDescription = ''
        PARI/GP is a widely used computer algebra system designed for fast

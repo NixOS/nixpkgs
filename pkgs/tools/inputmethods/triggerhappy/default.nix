@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, perl, systemd }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, perl, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "triggerhappy";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     install -D -m 644 -t "$out/etc/triggerhappy/triggers.d" "triggerhappy.conf.examples"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight hotkey daemon";
     longDescription = ''
       Triggerhappy is a hotkey daemon developed with small and embedded systems in

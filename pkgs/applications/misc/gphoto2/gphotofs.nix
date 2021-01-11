@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtool, pkgconfig, libgphoto2, fuse, glib }:
+{ lib, stdenv, fetchurl, libtool, pkgconfig, libgphoto2, fuse, glib }:
 
 stdenv.mkDerivation rec {
   pname = "gphoto2fs";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     libgphoto2 fuse glib libtool
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fuse FS to mount a digital camera";
     homepage = "http://www.gphoto.org/";
     maintainers = [ maintainers.raskin ];

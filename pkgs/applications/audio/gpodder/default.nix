@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, python3Packages, intltool
+{ lib, stdenv, fetchFromGitHub, python3, python3Packages, intltool
 , glibcLocales, gnome3, gtk3, wrapGAppsHook
 , gobject-introspection
 }:
@@ -67,7 +67,7 @@ python3Packages.buildPythonApplication rec {
     LC_ALL=C PYTHONPATH=./src:$PYTHONPATH python3 -m gpodder.unittests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A podcatcher written in python";
     longDescription = ''
       gPodder downloads and manages free audio and video content (podcasts)

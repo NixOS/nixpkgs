@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # no tests for python2
   doCheck = isPy3k;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and feature-rich Python interface to LevelDB";
     platforms = platforms.unix;
     homepage = "https://github.com/wbolster/plyvel";

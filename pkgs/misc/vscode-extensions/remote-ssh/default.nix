@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , vscode-utils
 , useLocalExtensions ? false}:
 # Note that useLocalExtensions requires that vscode-server is not running
@@ -45,7 +45,7 @@ in
         --replace "# install extensions" '${patch}'
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description ="Use any remote machine with a SSH server as your development environment.";
       license = licenses.unfree;
       maintainers = with maintainers; [

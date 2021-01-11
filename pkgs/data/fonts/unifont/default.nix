@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mkfontscale
+{ lib, stdenv, fetchurl, mkfontscale
 , libfaketime, fonttosfnt
 }:
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       mkfontscale
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unicode font for Base Multilingual Plane";
     homepage = "http://unifoundry.com/unifont.html";
 

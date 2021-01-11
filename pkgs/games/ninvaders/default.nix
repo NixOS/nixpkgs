@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ncurses }:
+{ lib, stdenv, fetchFromGitHub, cmake, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "ninvaders";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Space Invaders clone based on ncurses";
     homepage = "http://ninvaders.sourceforge.net/";
     license = licenses.gpl2;

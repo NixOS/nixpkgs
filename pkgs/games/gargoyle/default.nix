@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, jam, cctools, pkgconfig
+{ lib, stdenv, fetchFromGitHub, substituteAll, jam, cctools, pkgconfig
 , SDL, SDL_mixer, SDL_sound, gtk2, libvorbis, smpeg }:
 
 let
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://ccxvii.net/gargoyle/";
     license = licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";

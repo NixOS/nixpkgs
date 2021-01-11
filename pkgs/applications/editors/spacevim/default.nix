@@ -1,5 +1,5 @@
 { ripgrep, gitAndTools, fzf, makeWrapper, vim_configurable, vimPlugins, fetchFromGitHub, writeTextDir
-, stdenv, runCommandNoCC, remarshal, formats, spacevim_config ? import ./init.nix }:
+, lib, stdenv, runCommandNoCC, remarshal, formats, spacevim_config ? import ./init.nix }:
 with stdenv;
 let
   format = formats.toml {};
@@ -42,7 +42,7 @@ in mkDerivation rec {
         --prefix PATH : ${lib.makeBinPath [ fzf gitAndTools.git ripgrep]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern Vim distribution";
     longDescription = ''
       SpaceVim is a distribution of the Vim editor that’s inspired by spacemacs.

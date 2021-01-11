@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
   # __init__.py attempts to mkdir in read-only file system
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Self-hosted knowledge repository";
     homepage = "https://archivy.github.io";
     license = licenses.mit;

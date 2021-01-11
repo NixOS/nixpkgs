@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , vala
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     pango
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Elegant, simple, clean dock";
     homepage = "https://github.com/elementary/dock";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, coreutils, perlPackages, bicpl, libminc, zlib, minc_tools,
+{ lib, stdenv, fetchFromGitHub, cmake, coreutils, perlPackages, bicpl, libminc, zlib, minc_tools,
   makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/BIC-MNI/conglomerate";
     description = "More command-line utilities for working with MINC files";
     maintainers = with maintainers; [ bcdarwin ];

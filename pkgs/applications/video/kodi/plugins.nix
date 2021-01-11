@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchFromGitHub
+{ lib, stdenv, callPackage, fetchFromGitHub
 , cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
 , steam, udev, libusb1, jsoncpp, libhdhomerun, zlib
 , python2Packages, expat, glib, nspr, nss, openssl
@@ -519,7 +519,7 @@ let self = rec {
       sha256 = "044kkzcpzvbyih4vys33r4hqw38xa82snmvl4qj1r80wnszc8af1";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "SFTP Virtual Filesystem add-on for Kodi";
       license = licenses.gpl2Plus;
       platforms = platforms.all;
@@ -541,7 +541,7 @@ let self = rec {
       sha256 = "01qhv095h5j67ispm4iw18pd3kl7a0mnjkgm92al9qqiyif8lzgh";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "LibArchive Virtual Filesystem add-on for Kodi";
       license = licenses.gpl2Plus;
       platforms = platforms.all;

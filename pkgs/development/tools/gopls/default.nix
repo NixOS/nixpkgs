@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchgit }:
+{ lib, stdenv, buildGoModule, fetchgit }:
 
 buildGoModule rec {
   pname = "gopls";
@@ -18,7 +18,7 @@ buildGoModule rec {
   # Only build gopls, and not the integration tests or documentation generator.
   subPackages = [ "." ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Official language server for the Go language";
     homepage = "https://github.com/golang/tools/tree/master/gopls";
     license = licenses.bsd3;

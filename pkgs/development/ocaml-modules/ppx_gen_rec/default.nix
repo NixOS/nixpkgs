@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildDunePackage, ocaml-migrate-parsetree }:
+{ lib, stdenv, fetchurl, buildDunePackage, ocaml-migrate-parsetree }:
 
 buildDunePackage rec {
   pname = "ppx_gen_rec";
@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   buildInputs = [ ocaml-migrate-parsetree ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/flowtype/ocaml-ppx_gen_rec";
     description = "ocaml preprocessor that generates a recursive module";
     license = licenses.mit;

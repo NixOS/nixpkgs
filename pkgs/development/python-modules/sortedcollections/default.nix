@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sortedcollections" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Sorted Collections";
     homepage = "http://www.grantjenks.com/docs/sortedcollections/";
     license = with licenses; [ asl20 ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ppx_tools, yojson }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ppx_tools, yojson }:
 
 if stdenv.lib.versionOlder ocaml.version "4.03"
 || stdenv.lib.versionAtLeast ocaml.version "4.08"
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OCaml library to read and write configuration options in JSON syntax";
     homepage = "https://zoggy.github.io/ocf/";
     license = licenses.lgpl3;

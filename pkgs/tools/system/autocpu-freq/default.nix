@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ lib, stdenv, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
@@ -24,7 +24,7 @@ python3Packages.buildPythonPackage rec {
     cp ${src}/scripts/cpufreqctl.sh $out/bin/cpufreqctl
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/AdnanHodzic/auto-cpufreq";
     description = "Automatic CPU speed & power optimizer for Linux";
     license = licenses.lgpl3Plus;

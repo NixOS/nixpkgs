@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchurl
+{ lib, stdenv, buildGoModule, fetchurl
 , go, ncurses, notmuch, scdoc
 , python3, perl, w3m, dante
 , fetchFromGitHub
@@ -53,7 +53,7 @@ buildGoModule rec {
       ${stdenv.lib.makeBinPath [ w3m dante ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An email client for your terminal";
     homepage = "https://aerc-mail.org/";
     maintainers = with maintainers; [ tadeokondrak ];

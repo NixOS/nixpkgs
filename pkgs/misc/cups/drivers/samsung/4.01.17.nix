@@ -11,7 +11,7 @@
 # }
 # (This advice was tested on the 1st November 2016.)
 
-{ stdenv, fetchurl, cups, libusb-compat-0_1 }:
+{ lib, stdenv, fetchurl, cups, libusb-compat-0_1 }:
 
 # Do not bump lightly! Visit <http://www.bchemnet.com/suldr/supported.html>
 # to see what will break when upgrading. Consider a new versioned attribute.
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
     cp -r ./* $out/share/cups/model/samsung
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Samsung's Linux printing drivers; includes binaries without source code";
     homepage = "http://www.samsung.com/";
     license = licenses.unfree;

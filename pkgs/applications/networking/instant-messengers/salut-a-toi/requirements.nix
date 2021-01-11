@@ -1,5 +1,5 @@
 { fetchurl
-, stdenv
+, lib, stdenv
 , pythonPackages
 }:
 
@@ -40,7 +40,7 @@ in {
     # error: invalid command 'test'
     doCheck = false;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://home.blarg.net/~steveha/pyfeed.html";
       description = "Tools for syndication feeds";
     };
@@ -57,7 +57,7 @@ in {
 
     propagatedBuildInputs = with pythonPackages; [twisted dateutil];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Some (mainly XMPP-related) additions to twisted";
       homepage = "http://wokkel.ik.nu/";
       license = licenses.mit;

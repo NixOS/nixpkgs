@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchFromGitHub, cmake, alsaLib, mesa_glu, libXcursor, libXinerama, libXrandr, xorgserver }:
+{ lib, stdenv, makeWrapper, fetchFromGitHub, cmake, alsaLib, mesa_glu, libXcursor, libXinerama, libXrandr, xorgserver }:
 
 stdenv.mkDerivation rec {
   pname = "bonzomatic";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/Bonzomatic --prefix LD_LIBRARY_PATH : "${alsaLib}/lib"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A live-coding tool for writing 2D fragment/pixel shaders";
     license = with licenses; [
       unlicense

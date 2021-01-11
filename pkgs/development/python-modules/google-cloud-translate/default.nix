@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     "google.cloud.translate_v3beta1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Cloud Translation API client library";
     homepage = "https://github.com/googleapis/python-translate";
     license = licenses.asl20;

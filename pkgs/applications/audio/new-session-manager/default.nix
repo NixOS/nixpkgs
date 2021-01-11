@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, pkg-config, ninja, liblo, libjack2, fltk }:
+{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, liblo, libjack2, fltk }:
 
 stdenv.mkDerivation rec {
   pname = "new-session-manager";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://linuxaudio.github.io/new-session-manager/";
     description = "A session manager designed for audio applications.";
     maintainers = [ maintainers._6AA4FD ];

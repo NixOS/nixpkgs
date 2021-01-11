@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer }:
+{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer }:
 
 stdenv.mkDerivation {
   name = "beret-1.2.0";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     cp -av tahoma.ttf images music rooms sfx $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 2D puzzle-platformer game about a scientist with telekinetic abilities";
     homepage    = "http://kiwisauce.com/beret/";
     license     = licenses.lgpl2;

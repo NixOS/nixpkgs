@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
+{ lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
 , qtbase, qtx11extras
 , taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
 , libpulseaudio, gvfs, libcdio, libechonest, libspotify, pcre, projectm, protobuf
@@ -86,7 +86,7 @@ let
         --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://www.clementine-player.org";
       description = "A multiplatform music player";
       license = licenses.gpl3Plus;
@@ -121,7 +121,7 @@ let
       done
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://www.clementine-player.org";
       description = "Spotify integration for Clementine";
       # The blob itself is Apache-licensed, although libspotify is unfree.

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL2, ftgl, pkgconfig, libpng, libjpeg, pcre, SDL2_image, glew
+{ lib, stdenv, fetchurl, SDL2, ftgl, pkgconfig, libpng, libjpeg, pcre, SDL2_image, glew
 , libGLU, libGL, boost, glm, freetype }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glew SDL2 ftgl libpng libjpeg pcre SDL2_image libGLU libGL boost
                   glm freetype ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://logstalgia.io/";
     description = "Website traffic visualization tool";
     license = licenses.gpl3Plus;

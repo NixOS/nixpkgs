@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, cmake, expat, openssl, zlib, db, curl, wxGTK }:
+{ lib, stdenv, fetchurl, makeWrapper, cmake, expat, openssl, zlib, db, curl, wxGTK }:
 
 stdenv.mkDerivation rec {
   pname = "tqsl";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     wxGTK
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software for using the ARRL Logbook of the World";
     homepage = "https://www.arrl.org/tqsl-download";
     license = licenses.bsd3;

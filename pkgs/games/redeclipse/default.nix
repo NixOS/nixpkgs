@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
 , curl, ed, pkgconfig, freetype, zlib, libX11
 , SDL2, SDL2_image, SDL2_mixer
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       cp -R -t $out/share/redeclipse/data/ data/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A first person arena shooter, featuring parkour, impulse boosts, and more";
     longDescription = ''
       Red Eclipse is a fun-filled new take on the first person arena shooter,

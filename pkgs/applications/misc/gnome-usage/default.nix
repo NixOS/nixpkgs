@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A nice way to view information about use of system resources, like memory and disk space";
     license = licenses.gpl3;
     platforms = platforms.linux;

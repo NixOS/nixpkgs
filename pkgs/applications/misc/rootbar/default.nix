@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchhg
 , pkg-config
 , meson
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/alexays/waybar";
     description = "A bar for Wayland WMs";
     longDescription = ''

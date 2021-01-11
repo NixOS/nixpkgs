@@ -327,7 +327,7 @@ stdenv.mkDerivation rec {
       gnugrep curl runtimeShell;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A full-featured e-mail client";
     homepage = "https://www.thunderbird.net";
     maintainers = with maintainers; [

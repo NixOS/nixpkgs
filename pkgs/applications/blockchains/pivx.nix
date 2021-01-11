@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, pkgconfig, autoreconfHook, wrapQtAppsHook ? null
+{ fetchFromGitHub, lib, stdenv, pkgconfig, autoreconfHook, wrapQtAppsHook ? null
 , openssl, db48, boost, zlib, miniupnpc, gmp
 , qrencode, glib, protobuf, yasm, libevent
 , util-linux, qtbase ? null, qttools ? null
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     $out/bin/test_pivx
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source crypto-currency focused on fast private transactions";
     longDescription = ''
       PIVX is an MIT licensed, open source, blockchain-based cryptocurrency with

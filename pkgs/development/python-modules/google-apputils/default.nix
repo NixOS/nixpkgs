@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   # ERROR:root:Trying to access flag test_tmpdir before flags were parsed.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Application Utilities for Python";
     homepage = "https://github.com/google/google-apputils";
     license = licenses.asl20;

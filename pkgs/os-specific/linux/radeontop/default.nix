@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, makeWrapper
+{ lib, stdenv, fetchFromGitHub, pkgconfig, gettext, makeWrapper
 , ncurses, libdrm, libpciaccess, libxcb }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Top-like tool for viewing AMD Radeon GPU utilization";
     longDescription = ''
       View GPU utilization, both for the total activity percent and individual

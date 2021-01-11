@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, recode, perl }:
+{ lib, stdenv, fetchurl, cmake, recode, perl }:
 
 stdenv.mkDerivation rec {
   pname = "fortune-mod";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     --
   '') ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A program that displays a pseudorandom message from a database of quotations";
     license = licenses.bsdOriginal;
     platforms = platforms.unix;

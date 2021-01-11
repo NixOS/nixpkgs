@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, giblib, xlibsWrapper, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, giblib, xlibsWrapper, autoreconfHook
 , autoconf-archive, libXfixes, libXcursor, libXcomposite }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook autoconf-archive ];
   buildInputs = [ giblib xlibsWrapper libXfixes libXcursor libXcomposite ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/resurrecting-open-source-projects/scrot";
     description = "A command-line screen capture utility";
     platforms = platforms.linux;

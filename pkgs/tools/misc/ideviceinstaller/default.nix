@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, usbmuxd, libzip, libimobiledevice }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, usbmuxd, libzip, libimobiledevice }:
 
 stdenv.mkDerivation rec {
   pname = "ideviceinstaller";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig usbmuxd libimobiledevice libzip ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/libimobiledevice/ideviceinstaller";
     description = "List/modify installed apps of iOS devices";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub
 , click, enum-compat, pyscard, pycountry, terminaltables
 , pytestCheckHook, pythonOlder
 }:
@@ -30,7 +30,7 @@ buildPythonPackage rec {
       --replace '"argparse==1.4.0",' ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/russss/python-emv";
     description = "Implementation of the EMV chip-and-pin smartcard protocol";
     license = licenses.mit;

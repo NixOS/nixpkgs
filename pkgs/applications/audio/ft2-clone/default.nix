@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , nixosTests
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ft2-clone-starts = nixosTests.ft2-clone;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A highly accurate clone of the classic Fasttracker II software for MS-DOS";
     homepage = "https://16-bits.org/ft2.php";
     license = licenses.bsd3;

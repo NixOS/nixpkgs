@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoPatchelfHook
 , bluez
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     cp -r manager $out/bin/manager
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.unifiedremote.com/";
     description = "The one-and-only remote for your computer";
     license = licenses.unfree;

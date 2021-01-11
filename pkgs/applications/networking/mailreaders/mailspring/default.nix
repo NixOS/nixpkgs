@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A beautiful, fast and maintained fork of Nylas Mail by one of the original authors";
     longDescription = ''
       Mailspring is an open-source mail client forked from Nylas Mail and built with Electron.

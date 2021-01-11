@@ -1,4 +1,4 @@
-{ stdenv, pkg-config, fetchFromGitHub, fetchpatch
+{ lib, stdenv, pkg-config, fetchFromGitHub, fetchpatch
 , cmake, boost
 , portmidi, sqlite
 , freetype, libpng, pngpp, zlib
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     wxGTK30 wxsqlite3
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LenMus Phonascus is a program for learning music";
     longDescription = ''
       LenMus Phonascus is a free open source program (GPL v3) for learning music.

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , cmake
@@ -58,7 +58,7 @@ in stdenv.mkDerivation {
     ln -s $out/bin/QMPlay2 $out/bin/qmplay2
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/zaps166/QMPlay2/";
     description = "Qt-based Multimedia player";
     longDescription = ''

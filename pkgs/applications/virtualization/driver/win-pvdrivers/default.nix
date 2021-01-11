@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation  {
   name = "win-pvdrivers-git-20150701";
@@ -20,7 +20,7 @@ stdenv.mkDerivation  {
     cp -r amd64 $out/.
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Xen Subproject: Windows PV Driver";
     homepage = "http://xenproject.org/downloads/windows-pv-drivers.html";
     maintainers = [ maintainers.tstrobel ];

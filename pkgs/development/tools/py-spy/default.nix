@@ -1,4 +1,4 @@
-{ stdenv, pkgsBuildBuild, rustPlatform, fetchFromGitHub, pkgconfig, libunwind, python3 }:
+{ lib, stdenv, pkgsBuildBuild, rustPlatform, fetchFromGitHub, pkgconfig, libunwind, python3 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "py-spy";
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0hrzmpwd2k4l8gjbry8ddrkv9q9qh8ag096md4q0fyn5bgnxhkah";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sampling profiler for Python programs";
     license = licenses.mit;
     maintainers = [ maintainers.lnl7 ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libjpeg }:
+{ lib, stdenv, fetchurl, fetchpatch, libjpeg }:
 
 stdenv.mkDerivation rec {
   pname = "jhead";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     cp -v *.txt $out/share/doc/${pname}-${version}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.sentex.net/~mwandel/jhead/";
     description = "Exif Jpeg header manipulation tool";
     license = licenses.publicDomain;

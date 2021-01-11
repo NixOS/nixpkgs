@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub
 , requests, requests_oauthlib, six
 , pytest, pytestcache, pytestcov, responses, mock
 }:
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python client library to the MediaWiki API";
     license = licenses.mit;
     homepage = "https://github.com/mwclient/mwclient";

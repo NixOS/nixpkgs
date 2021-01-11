@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cmake
+{ lib, stdenv, fetchurl, pkgconfig, cmake
 , alsaLib, boost, glib, lash, libjack2, libarchive, libsndfile, lrdf, qt4
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     alsaLib boost glib lash libjack2 libarchive libsndfile lrdf qt4
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced drum machine";
     homepage = "http://www.hydrogen-music.org";
     license = licenses.gpl2;

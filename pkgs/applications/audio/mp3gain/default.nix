@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, unzip, mpg123 }:
+{ lib, stdenv, fetchurl, fetchpatch, unzip, mpg123 }:
 
 stdenv.mkDerivation {
   name = "mp3gain-1.6.2";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     install -vD mp3gain "$out/bin/mp3gain"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lossless mp3 normalizer with statistical analysis";
     homepage = "http://mp3gain.sourceforge.net/";
     license = licenses.lgpl21;

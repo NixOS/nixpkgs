@@ -32,7 +32,7 @@ buildPythonPackage rec {
     "test_multiprocessing"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reference ASGI adapters and channel layers";
     license = licenses.bsd3;
     homepage = "https://github.com/django/asgiref";

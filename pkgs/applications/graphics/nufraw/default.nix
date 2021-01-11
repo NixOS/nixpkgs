@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     substituteAll ${./nufraw.thumbnailer} $out/share/thumbnailers/${pname}.thumbnailer
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://nufraw.sourceforge.io/";
     description = "Utility to read and manipulate raw images from digital cameras";
     longDescription =

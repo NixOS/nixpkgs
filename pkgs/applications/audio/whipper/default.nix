@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, cdparanoia, cdrdao, flac
+{ lib, stdenv, fetchFromGitHub, python3, cdparanoia, cdrdao, flac
 , sox, accuraterip-checksum, libsndfile, util-linux, substituteAll }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     HOME=$TMPDIR
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/whipper-team/whipper";
     description = "A CD ripper aiming for accuracy over speed";
     maintainers = with maintainers; [ rycee emily ];

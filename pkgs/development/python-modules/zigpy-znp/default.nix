@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , async-timeout
 , asynctest
 , buildPythonPackage
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     "test_force_remove"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for zigpy which communicates with TI ZNP radios";
     homepage = "https://github.com/zha-ng/zigpy-znp";
     license = licenses.gpl3Plus;

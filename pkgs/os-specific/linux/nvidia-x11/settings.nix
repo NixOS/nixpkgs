@@ -97,7 +97,7 @@ stdenv.mkDerivation {
     inherit libXNVCtrl;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "Settings application for NVIDIA graphics cards";
     license = licenses.unfreeRedistributable;

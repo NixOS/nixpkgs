@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , ninja
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PyTorch vision library";
     homepage = "https://pytorch.org/";
     license = licenses.bsd3;

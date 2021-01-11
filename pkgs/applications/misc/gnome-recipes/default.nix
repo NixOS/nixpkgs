@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Recipe management application for GNOME";
     homepage = "https://wiki.gnome.org/Apps/Recipes";
     maintainers = teams.gnome.members;

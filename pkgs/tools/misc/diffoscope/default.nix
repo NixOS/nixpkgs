@@ -68,7 +68,7 @@ python3Packages.buildPythonApplication rec {
     cp doc/diffoscope.1 $out/share/man/man1/diffoscope.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Perform in-depth comparison of files, archives, and directories";
     longDescription = ''
       diffoscope will try to get to the bottom of what makes files or directories

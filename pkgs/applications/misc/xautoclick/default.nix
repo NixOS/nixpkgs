@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, xorg, pkg-config
+{ lib, stdenv, fetchFromGitHub, xorg, pkg-config
 , cmake, libevdev
 , gtkSupport ? true, gtk3, pcre, glib, wrapGAppsHook
 , fltkSupport ? true, fltk
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals fltkSupport [ fltk ]
     ++ stdenv.lib.optionals qtSupport [ qt5.qtbase qt5.wrapQtAppsHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Autoclicker application, which enables you to automatically click the left mousebutton";
     homepage = "https://github.com/qarkai/xautoclick";
     license = licenses.gpl2;

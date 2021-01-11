@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, apacheHttpd, openssl, openldap, apr, aprutil }:
+{ lib, stdenv, fetchurl, pkgconfig, apacheHttpd, openssl, openldap, apr, aprutil }:
 
 stdenv.mkDerivation rec {
   pname = "mod_ca";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "LIBEXECDIR=${placeholder ''out''}/modules"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RedWax CA service module";
 
     homepage = "https://redwax.eu";

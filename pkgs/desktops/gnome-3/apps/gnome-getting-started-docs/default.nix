@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnome3, intltool, itstool, libxml2 }:
+{ lib, stdenv, fetchurl, gnome3, intltool, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-getting-started-docs";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ intltool itstool libxml2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://live.gnome.org/DocumentationProject";
     description = "Help a new user get started in GNOME";
     maintainers = teams.gnome.members;

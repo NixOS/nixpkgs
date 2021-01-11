@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , gtk, glib, pcre, libappindicator, libpthreadstubs, libXdmcp
 , libxkbcommon, epoxy, at-spi2-core, dbus, libdbusmenu
 , wrapGAppsHook
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     dbus libdbusmenu
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop annotation tool";
 
     longDescription = ''

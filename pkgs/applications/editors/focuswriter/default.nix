@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, qmake, qttools, hunspell, qtbase, qtmultimedia, mkDerivation }:
+{ lib, stdenv, fetchurl, pkgconfig, qmake, qttools, hunspell, qtbase, qtmultimedia, mkDerivation }:
 
 mkDerivation rec {
   pname = "focuswriter";
@@ -17,7 +17,7 @@ mkDerivation rec {
   qmakeFlags = [ "PREFIX=/" ];
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple, distraction-free writing environment";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ madjar ];

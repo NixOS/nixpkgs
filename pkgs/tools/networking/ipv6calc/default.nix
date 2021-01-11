@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, getopt, ip2location-c, openssl, perl
+{ lib, stdenv, fetchurl, getopt, ip2location-c, openssl, perl
 , libmaxminddb ? null, geolite-legacy ? null }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calculate/manipulate (not only) IPv6 addresses";
     longDescription = ''
       ipv6calc is a small utility to manipulate (not only) IPv6 addresses and

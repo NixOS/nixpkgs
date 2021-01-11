@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , upx
 }:
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
     install -Dm755 hdl_dump -t $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/AKuHAK/hdl-dump";
     description = "PlayStation 2 HDLoader image dump/install utility";
     platforms = platforms.linux;

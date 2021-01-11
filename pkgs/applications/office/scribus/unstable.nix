@@ -22,7 +22,7 @@
 , qtbase
 , qtimageformats
 , qttools
-, stdenv
+, lib, stdenv
 }:
 
 let
@@ -70,7 +70,7 @@ mkDerivation rec {
     qttools
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [
       erictapen
       kiwi

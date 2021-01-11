@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, sconsPackages, pkgconfig, SDL, libGL, zlib, smpeg
+{ lib, stdenv, fetchurl, fetchpatch, sconsPackages, pkgconfig, SDL, libGL, zlib, smpeg
 , SDL_image, libvorbis, expat, zip, lua }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast 2d tank arcade game";
     homepage = "https://sourceforge.net/projects/btanks/";
     license = licenses.gpl2Plus;

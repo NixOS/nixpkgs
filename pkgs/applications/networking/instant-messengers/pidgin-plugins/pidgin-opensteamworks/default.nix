@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, pidgin, glib, json-glib, nss, nspr
+{ lib, stdenv, fetchFromGitHub, pkgconfig, pidgin, glib, json-glib, nss, nspr
 , libsecret
 } :
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     pidgin glib json-glib nss nspr libsecret
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/EionRobb/pidgin-opensteamworks";
     description = "Plugin for Pidgin 2.x which implements Steam Friends/Steam IM compatibility";
     license = licenses.gpl3;

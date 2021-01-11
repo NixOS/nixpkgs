@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Find the most beautiful wallpapers for your desktop";
     homepage = "https://github.com/calo001/fondo";
     license = licenses.agpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "microplane";
@@ -31,7 +31,7 @@ buildGoPackage rec {
     ln -s $out/bin/microplane $out/bin/mp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A CLI tool to make git changes across many repos";
     homepage = "https://github.com/Clever/microplane";
     license = licenses.asl20;

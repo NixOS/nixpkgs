@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, guile, texinfo, pkgconfig }:
+{ lib, stdenv, fetchurl, guile, texinfo, pkgconfig }:
 
 assert stdenv ? cc && stdenv.cc.isGNU;
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
     "$(dirname $(echo ${stdenv.cc.cc.lib}/lib*/libgcc_s.so))''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collection of useful Guile Scheme modules";
     longDescription = ''
       guile-lib is intended as an accumulation place for pure-scheme Guile

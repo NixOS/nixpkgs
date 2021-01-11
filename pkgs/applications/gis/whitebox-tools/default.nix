@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
 rustPlatform.buildRustPackage rec {
   pname = "whitebox_tools";
   version = "1.4.0";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "09rz8f1xyc64qjbj6pgw8jxr2a7chghmdc6sfkbv7hdvx6vg4wvk";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An advanced geospatial data analysis platform";
     homepage = "https://jblindsay.github.io/ghrg/WhiteboxTools/index.html";
     license = licenses.mit;

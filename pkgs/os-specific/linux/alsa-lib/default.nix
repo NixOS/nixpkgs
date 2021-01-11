@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsa-ucm-conf, alsa-topology-conf }:
+{ lib, stdenv, fetchurl, alsa-ucm-conf, alsa-topology-conf }:
 
 stdenv.mkDerivation rec {
   pname = "alsa-lib";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture libraries";
 

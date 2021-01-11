@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , google-api-core
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     "google.cloud.trace_v2"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cloud Trace API client library";
     homepage = "https://github.com/googleapis/python-trace";
     license = licenses.asl20;

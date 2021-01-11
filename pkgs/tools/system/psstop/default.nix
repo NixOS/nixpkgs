@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
   pname = "psstop";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/clearlinux/psstop";
     description = "Show processes' memory usage by looking into pss"; # upstream summary
     license = licenses.gpl3;

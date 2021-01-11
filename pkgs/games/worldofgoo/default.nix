@@ -1,4 +1,4 @@
-{ stdenv, requireFile, unzip, makeDesktopItem, SDL2, SDL2_mixer, libogg, libvorbis }:
+{ lib, stdenv, requireFile, unzip, makeDesktopItem, SDL2, SDL2_mixer, libogg, libvorbis }:
 
 let
   arch = if stdenv.system == "x86_64-linux"
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath $libPath $out/bin/WorldOfGoo.bin.${arch}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A physics based puzzle game";
     longDescription = ''
       World of Goo is a physics based puzzle / construction game. The millions of Goo

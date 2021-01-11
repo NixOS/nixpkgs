@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ lib, stdenv, fetchPypi, buildPythonPackage
 , hyperopt
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gradient_sdk" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gradient ML SDK";
     homepage    = "https://github.com/Paperspace/gradient-sdk";
     license     = licenses.mit;

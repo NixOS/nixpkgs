@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -19,7 +19,7 @@ buildGoModule rec {
   # test require internet access
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Real-time HTTP Intrusion Detection";
     longDescription = ''
       teler is an real-time intrusion detection and threat alert

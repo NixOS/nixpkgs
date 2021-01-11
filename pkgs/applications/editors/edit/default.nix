@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, unzip, pkgconfig, ncurses, libX11, libXft, cwebbin }:
+{ lib, stdenv, fetchgit, unzip, pkgconfig, ncurses, libX11, libXft, cwebbin }:
 
 stdenv.mkDerivation {
   pname = "edit-nightly";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     cp obj/edit $out/bin/edit
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A relaxing mix of Vi and ACME";
     homepage = "http://c9x.me/edit";
     license = licenses.publicDomain;

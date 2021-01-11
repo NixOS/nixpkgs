@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, cmake, vtk_9, libX11, libGL, Cocoa, OpenGL }:
+{ lib, stdenv, fetchFromGitLab, cmake, vtk_9, libX11, libGL, Cocoa, OpenGL }:
 
 stdenv.mkDerivation rec {
   pname = "f3d";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals stdenv.isLinux [ libGL libX11 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and minimalist 3D viewer using VTK";
     homepage = "https://kitware.github.io/F3D";
     license = licenses.bsd3;

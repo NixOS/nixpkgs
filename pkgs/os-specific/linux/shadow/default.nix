@@ -1,4 +1,4 @@
-{ stdenv, nixosTests, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt
+{ lib, stdenv, nixosTests, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt
 , libxml2 , docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison
 , pam ? null, glibcCross ? null
 }:
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       mv $out/bin/su $su/bin
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/shadow-maint";
     description = "Suite containing authentication-related tools such as passwd and su";
     license = licenses.bsd3;

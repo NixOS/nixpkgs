@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lockfileProgs, perlPackages }:
+{ lib, stdenv, fetchurl, lockfileProgs, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "logcheck";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "SHAREDIR=share/logtail/detectrotate"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mails anomalies in the system logfiles to the administrator";
     longDescription = ''
       Mails anomalies in the system logfiles to the administrator.

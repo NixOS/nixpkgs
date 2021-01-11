@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "git-bug";
@@ -29,7 +29,7 @@ buildGoModule rec {
     install -D -m 0644 -t "$out/share/man/man1" doc/man/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Distributed bug tracker embedded in Git";
     homepage = "https://github.com/MichaelMure/git-bug";
     license = licenses.gpl3;

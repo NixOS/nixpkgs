@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, flex, libffi }:
+{ lib, stdenv, fetchurl, bison, flex, libffi }:
 
 stdenv.mkDerivation rec {
   pname = "txr";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Programming language for convenient data munging";
     license = licenses.bsd2;
     homepage = "http://nongnu.org/txr";

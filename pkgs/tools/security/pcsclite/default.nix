@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev, dbus, perl, python3
+{ lib, stdenv, fetchurl, pkgconfig, udev, dbus, perl, python3
 , IOKit ? null }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 ] ++ stdenv.lib.optionals stdenv.isLinux [ udev dbus ]
              ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";
     homepage = "https://pcsclite.apdu.fr/";
     license = licenses.bsd3;

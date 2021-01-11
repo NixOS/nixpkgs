@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, openssl, lzo, zlib, yacc, flex }:
+{ lib, stdenv, fetchurl, fetchpatch, openssl, lzo, zlib, yacc, flex }:
 
 stdenv.mkDerivation rec {
   name = "vtun-3.0.4";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "--with-blowfish-headers=${openssl.dev}/include/openssl"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
       description = "Virtual Tunnels over TCP/IP with traffic shaping, compression and encryption";
       homepage = "http://vtun.sourceforge.net/";
       license = licenses.gpl2;

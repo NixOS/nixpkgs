@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, glibc
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, glibc
 , bison, curl, flex, gperftools, jansson, jemalloc, kerberos, lua, libmysqlclient
 , ncurses, openssl, pcre, pcre2, perl, rabbitmq-c, sqlite, tcl
 , libaio, libedit, libtool, libui, libuuid, zlib
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/{etc,var}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
      description = "MaxScale database proxy extends MariaDB Server's high availability";
      homepage = "https://mariadb.com/products/technology/maxscale";
      license = licenses.bsl11;

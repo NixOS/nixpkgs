@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python
 , pkgconfig
@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
     tests.samba = nixosTests.samba;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.samba.org";
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;

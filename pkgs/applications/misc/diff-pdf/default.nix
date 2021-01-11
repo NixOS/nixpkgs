@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, cairo, poppler, wxGTK ? null, wxmac ? null, darwin ? null }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, cairo, poppler, wxGTK ? null, wxmac ? null, darwin ? null }:
 
 let
   wxInputs =
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://vslavik.github.io/diff-pdf/";
     description = "Simple tool for visually comparing two PDF files";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libcap, curl, which
+{ lib, stdenv, fetchurl, openssl, libcap, curl, which
 , eventlog, pkgconfig, glib, python, systemd, perl
 , riemann_c_client, protobufc, pcre, libnet
 , json_c, libuuid, libivykis, mongoc, rabbitmq-c
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.syslog-ng.com";
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
     license = licenses.gpl2;

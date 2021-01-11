@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , pkgconfig, dbus, gdk-pixbuf, glib, libX11, gtk2, librsvg
 , dbus-glib, autoreconfHook, wrapGAppsHook }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     dbus gdk-pixbuf glib libX11 gtk2 dbus-glib librsvg
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight volume notification for Linux";
     homepage = "https://github.com/davidbrazdil/volnoti";
     license = licenses.gpl3;

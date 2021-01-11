@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, pcre, pkg-config, python2
+{ lib, stdenv, fetchurl, fetchpatch, cmake, pcre, pkg-config, python2
 , libX11, libXpm, libXft, libXext, libGLU, libGL, zlib, libxml2, lz4, lzma, gsl_1, xxHash
 , Cocoa, OpenGL, noSplash ? false }:
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = platforms.unix;

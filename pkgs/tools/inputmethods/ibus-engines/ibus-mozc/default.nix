@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, ninja, python, pkgconfig, protobuf
+{ lib, stdenv, fetchFromGitHub, which, ninja, python, pkgconfig, protobuf
 , ibus, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese, python3Packages }:
 
 let
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
   name = "ibus-mozc-${version}";
   version = "2.23.4206.102";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description  = "Japanese input method from Google";
     homepage     = "https://github.com/google/mozc";

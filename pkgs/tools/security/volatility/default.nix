@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, stdenv, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "volatility";
@@ -15,7 +15,7 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = [ pythonPackages.pycrypto pythonPackages.distorm3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.volatilityfoundation.org/";
     description = "Advanced memory forensics framework";
     maintainers = with maintainers; [ bosu ];

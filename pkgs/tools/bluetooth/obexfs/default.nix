@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, bluez, fuse, obexftp }:
+{ lib, stdenv, fetchurl, pkgconfig, bluez, fuse, obexftp }:
 
 stdenv.mkDerivation rec {
   name = "obexfs-0.12";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ fuse obexftp bluez ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://dev.zuckschwerdt.org/openobex/wiki/ObexFs";
     description = "A tool to mount OBEX-based devices (such as Bluetooth phones)";
     platforms = platforms.linux;

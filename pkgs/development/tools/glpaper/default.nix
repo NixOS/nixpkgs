@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, meson, ninja, pkg-config, wlroots, wayland, wayland-protocols
+{ lib, stdenv, fetchhg, meson, ninja, pkg-config, wlroots, wayland, wayland-protocols
 , libX11, libGL }:
 
 stdenv.mkDerivation {
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     libGL
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Wallpaper program for wlroots based Wayland compositors such as sway that allows you to render glsl shaders as your wallpaper";
     homepage = "https://hg.sr.ht/~scoopta/glpaper";

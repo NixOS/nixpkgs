@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fcitx, gettext, m17n_lib, m17n_db, pkg-config }:
+{ lib, stdenv, fetchurl, cmake, fcitx, gettext, m17n_lib, m17n_db, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-m17n";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     --replace ${fcitx} $out
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-m17n";
     downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";

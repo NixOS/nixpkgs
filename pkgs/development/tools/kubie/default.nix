@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, installShellFiles, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kubie";
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion completion/kubie.bash
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shell independent context and namespace switcher for kubectl";
     homepage = "https://github.com/sbstp/kubie";
     license = with licenses; [ zlib ];

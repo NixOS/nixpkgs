@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkg-config, fcitx, librime, brise, hicolor-icon-theme }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, fcitx, librime, brise, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-rime";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
        --replace ${fcitx} $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-rime";
     downloadPage  = "https://download.fcitx-im.org/fcitx-rime/";

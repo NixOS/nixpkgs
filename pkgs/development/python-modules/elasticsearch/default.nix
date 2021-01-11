@@ -2,7 +2,7 @@
 , fetchPypi
 , urllib3, requests
 , nosexcover, mock
-, stdenv
+, lib, stdenv
 }:
 
 buildPythonPackage (rec {
@@ -20,7 +20,7 @@ buildPythonPackage (rec {
   propagatedBuildInputs = [ urllib3 requests ];
   buildInputs = [ nosexcover mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Official low-level client for Elasticsearch";
     homepage = "https://github.com/elasticsearch/elasticsearch-py";
     license = licenses.asl20;

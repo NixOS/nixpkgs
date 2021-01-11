@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, readline, libxml2 }:
+{ lib, stdenv, fetchurl, pkgconfig, readline, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "augeas";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ readline libxml2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Configuration editing tool";
     license = licenses.lgpl2;
     homepage = "http://augeas.net/";

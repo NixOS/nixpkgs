@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "duckmarines";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Duck-themed action puzzle video game";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;

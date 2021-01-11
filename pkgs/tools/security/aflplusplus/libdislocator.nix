@@ -1,4 +1,4 @@
-{ stdenv, aflplusplus}:
+{ lib, stdenv, aflplusplus}:
 
 stdenv.mkDerivation {
   version = stdenv.lib.getVersion aflplusplus;
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/get-libdislocator-so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/vanhauser-thc/AFLplusplus";
     description = ''
       Drop-in replacement for the libc allocator which improves

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
+{ lib, stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
 , xapian, glib, gmime3, texinfo , emacs, guile
 , gtk3, webkitgtk, libsoup, icu
 , withMug ? false
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collection of utilties for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";

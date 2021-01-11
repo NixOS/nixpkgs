@@ -70,7 +70,7 @@ buildPythonPackage rec {
     nose
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Theano/libgpuarray";
     description = "Library to manipulate tensors on GPU.";
     license = licenses.free;

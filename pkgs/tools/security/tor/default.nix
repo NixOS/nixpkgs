@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
+{ lib, stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
 , libseccomp, systemd, libcap, lzma, zstd, scrypt, nixosTests
 , writeShellScript
 
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.torproject.org/";
     repositories.git = "https://git.torproject.org/git/tor";
     description = "Anonymizing overlay network";

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, kernel, perl, wireguard-tools, bc }:
+{ lib, stdenv, fetchzip, kernel, perl, wireguard-tools, bc }:
 
 # module requires Linux >= 3.10 https://www.wireguard.io/install/#kernel-requirements
 assert stdenv.lib.versionAtLeast kernel.version "3.10";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     inherit (wireguard-tools) tests;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (wireguard-tools.meta) homepage license maintainers;
     description = "Kernel module for the WireGuard secure network tunnel";
     downloadPage = "https://git.zx2c4.com/wireguard-linux-compat/refs/";

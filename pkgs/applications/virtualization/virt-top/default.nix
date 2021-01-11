@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchpatch, ocamlPackages, autoreconfHook }:
+{ lib, stdenv, fetchgit, fetchpatch, ocamlPackages, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "virt-top";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = "make opt";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A top-like utility for showing stats of virtualized domains";
     homepage = "https://people.redhat.com/~rjones/virt-top/";
     license = licenses.gpl2;

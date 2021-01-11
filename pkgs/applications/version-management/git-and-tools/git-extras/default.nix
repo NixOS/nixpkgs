@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, unixtools, which }:
+{ lib, stdenv, fetchzip, unixtools, which }:
 
 stdenv.mkDerivation rec {
   pname = "git-extras";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     install -D etc/git-extras-completion.zsh $out/share/zsh/site-functions/_git_extras
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tj/git-extras";
     description = "GIT utilities -- repo summary, repl, changelog population, author commit percentages and more";
     license = licenses.mit;

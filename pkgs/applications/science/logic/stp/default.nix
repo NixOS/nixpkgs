@@ -1,4 +1,4 @@
-{ stdenv, cmake, boost, bison, flex, fetchFromGitHub, perl
+{ lib, stdenv, cmake, boost, bison, flex, fetchFromGitHub, perl
 , python3, python3Packages, zlib, minisat, cryptominisat }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple Theorem Prover";
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , zlib, bzip2, lzma, lzo, lz4, zstd, xz
 , libgcrypt, e2fsprogs, util-linux, libgpgerror }:
 
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
     libgcrypt e2fsprogs util-linux libgpgerror
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File system archiver for linux";
     longDescription = ''
       FSArchiver is a system tool that allows you to save the contents of a

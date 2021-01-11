@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl
+{ lib, stdenv, fetchFromGitHub, fetchurl
 , ocaml, findlib, ocamlbuild, ocaml_oasis
 , bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp
 , utop, libxml2, ncurses
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm}/bin/llvm-config" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages.";
     homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
     maintainers = [ maintainers.maurer ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , pythonOlder
 , isPy27
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     nosetests tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://world-engine.org";
     description = "World generator using simulation of plates, rain shadow, erosion, etc";
     license = licenses.mit;

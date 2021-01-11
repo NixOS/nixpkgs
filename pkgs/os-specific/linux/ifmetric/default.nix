@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lynx }:
+{ lib, stdenv, fetchurl, lynx }:
 
 stdenv.mkDerivation rec {
   pname = "ifmetric";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for setting IP interface metrics";
     longDescription = ''
       ifmetric is a Linux tool for setting the metrics of all IPv4 routes

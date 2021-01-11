@@ -5,10 +5,10 @@
 # - The exact version can be specified through the `version` argument to
 #   the derivation; it defaults to the latest stable version.
 
-{ stdenv, fetchzip, writeText, pkgconfig, gnumake42
+{ lib, stdenv, fetchzip, writeText, pkgconfig, gnumake42
 , customOCamlPackages ? null
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ncurses
-, buildIde ? !(stdenv.isDarwin && stdenv.lib.versionAtLeast version "8.10")
+, buildIde ? !(stdenv.isDarwin && lib.versionAtLeast version "8.10")
 , glib, gnome3, wrapGAppsHook
 , csdp ? null
 , version, coq-version ? null,
@@ -166,7 +166,7 @@ self = stdenv.mkDerivation {
     ln -s $out/lib/coq $OCAMLFIND_DESTDIR/coq
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Coq proof assistant";
     longDescription = ''
       Coq is a formal proof management system.  It provides a formal language

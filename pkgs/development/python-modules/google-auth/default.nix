@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     "google.oauth2"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Auth Python Library";
     longDescription = ''
       This library simplifies using Google’s various server-to-server

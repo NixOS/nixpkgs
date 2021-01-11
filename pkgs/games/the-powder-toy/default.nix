@@ -1,5 +1,5 @@
 
-{ stdenv, fetchFromGitHub, scons, pkgconfig, SDL2, lua, fftwFloat,
+{ lib, stdenv, fetchFromGitHub, scons, pkgconfig, SDL2, lua, fftwFloat,
   zlib, bzip2, curl, darwin }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free 2D physics sandbox game";
     homepage = "http://powdertoy.co.uk/";
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];

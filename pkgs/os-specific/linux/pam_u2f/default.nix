@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libfido2, pam, openssl }:
+{ lib, stdenv, fetchurl, pkgconfig, libfido2, pam, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "pam_u2f";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--with-pam-dir=$out/lib/security")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://developers.yubico.com/pam-u2f/";
     description = "A PAM module for allowing authentication with a U2F device";
     license = licenses.bsd2;

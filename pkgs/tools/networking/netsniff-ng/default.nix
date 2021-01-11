@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, bison, flex, geoip, geolite-legacy
+{ lib, stdenv, fetchFromGitHub, makeWrapper, bison, flex, geoip, geolite-legacy
 , libcli, libnet, libnetfilter_conntrack, libnl, libpcap, libsodium
 , liburcu, ncurses, pkgconfig, zlib }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     rm -v $out/etc/netsniff-ng/geoip.conf # updating databases after installation is impossible
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Swiss army knife for daily Linux network plumbing";
     longDescription = ''
       netsniff-ng is a free Linux networking toolkit. Its gain of performance

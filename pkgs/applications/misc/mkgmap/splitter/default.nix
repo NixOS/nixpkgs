@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchsvn
 , jdk
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
       --add-flags "-jar $out/share/java/splitter/splitter.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility for splitting OpenStreetMap maps into tiles";
     homepage = "http://www.mkgmap.org.uk";
     license = licenses.gpl2Only;

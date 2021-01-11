@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pip, pytest, click, six
+{ lib, stdenv, fetchPypi, buildPythonPackage, pip, pytest, click, six
 , setuptools_scm, git, glibcLocales, mock }:
 
 buildPythonPackage rec {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     py.test -k "${disabledTests}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Keeps your pinned dependencies fresh";
     homepage = "https://github.com/jazzband/pip-tools/";
     license = licenses.bsd3;

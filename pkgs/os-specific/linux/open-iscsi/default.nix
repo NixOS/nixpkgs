@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, gettext
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, gettext
 , util-linux, openisns, openssl, kmod, perl, systemd, pkgconf
 }:
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     sed -i "s|/sbin/iscsiadm|$out/bin/iscsiadm|" $out/bin/iscsi_fw_login
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high performance, transport independent, multi-platform implementation of RFC3720";
     license = licenses.gpl2Plus;
     homepage = "https://www.open-iscsi.com";

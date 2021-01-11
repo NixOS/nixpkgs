@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 let
   inherit (stdenv) lib;
@@ -33,7 +33,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) smokeping; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Prometheus exporter for sending continual ICMP/UDP pings";
     homepage = "https://github.com/SuperQ/smokeping_prober";
     license = licenses.asl20;

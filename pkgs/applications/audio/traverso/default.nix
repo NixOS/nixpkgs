@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchurl, cmake, pkgconfig
+{ mkDerivation, lib, stdenv, fetchurl, cmake, pkgconfig
 , alsaLib, fftw, flac, lame, libjack2, libmad, libpulseaudio
 , libsamplerate, libsndfile, libvorbis, portaudio, qtbase, wavpack
 }:
@@ -20,7 +20,7 @@ mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform multitrack audio recording and audio editing suite";
     homepage = "https://traverso-daw.org/";
     license = with licenses; [ gpl2Plus lgpl21Plus ];

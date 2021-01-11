@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, xorg, pcre, gst_all_1, glib
+{ lib, stdenv, fetchurl, pkgconfig, intltool, xorg, pcre, gst_all_1, glib
 , xosd, libnotify, enchant, wrapGAppsHook, gdk-pixbuf }:
 
 stdenv.mkDerivation {
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     sed -e 's@for xosd_dir in@for xosd_dir in ${xosd} @' -i configure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility for switching between keyboard layouts";
     homepage = "https://xneur.ru";
     license = licenses.gpl2Plus;

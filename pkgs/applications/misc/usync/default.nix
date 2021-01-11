@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, scsh, rsync, unison }:
+{ lib, stdenv, fetchFromGitHub, scsh, rsync, unison }:
 
 stdenv.mkDerivation rec {
   pname = "usync";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/$pname --replace "(unison " "(${unison}/bin/unison "
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ebzzry/usync";
     description = "A simple site-to-site synchronization tool";
     license = licenses.mit;

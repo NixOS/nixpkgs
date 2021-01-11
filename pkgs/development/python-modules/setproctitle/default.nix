@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # tries to compile programs with dependencies that aren't available
   pytestFlagsArray = [ "--ignore=tests/setproctitle_test.py" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allows a process to change its title (as displayed by system tools such as ps and top)";
     homepage =  "https://github.com/dvarrazzo/py-setproctitle";
     license = licenses.bsdOriginal;

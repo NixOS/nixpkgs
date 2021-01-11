@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig
 , dpdk, libconfig, libpcap, numactl, openssl, zlib, libbsd, libelf, jansson
 }: let
   dpdk_18_11 = dpdk.overrideAttrs (old: rec {
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Data Plane optimized for DPDK";
     homepage = "https://www.opendataplane.org";
     license = licenses.bsd3;

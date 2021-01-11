@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     install -D build/resources/0ad.desktop $out/share/applications/0ad.desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, open-source game of ancient warfare";
     homepage = "https://play0ad.com/";
     license = with licenses; [

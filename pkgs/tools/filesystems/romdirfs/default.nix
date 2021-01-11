@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, fuse }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, fuse }:
 
 stdenv.mkDerivation rec {
   pname = "romdirfs";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ fuse ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FUSE for access Playstation 2 IOP IOPRP images and BIOS dumps";
     homepage = "https://github.com/mlafeldt/romdirfs";
     license = licenses.gpl3;

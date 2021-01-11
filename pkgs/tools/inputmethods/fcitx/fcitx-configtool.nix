@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, makeWrapper, pkg-config, cmake, fcitx, gtk3, isocodes, gnome3 }:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, cmake, fcitx, gtk3, isocodes, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "fcitx-configtool-0.4.10";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK-based config tool for Fcitx";
     license     = licenses.gpl2;
     platforms   = platforms.linux;

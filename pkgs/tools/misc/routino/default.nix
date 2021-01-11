@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, perl, zlib, bzip2 }:
+{ lib, stdenv, fetchurl, fetchpatch, perl, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   pname = "routino";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.routino.org/";
     description = "OpenStreetMap Routing Software";
     license = licenses.agpl3;

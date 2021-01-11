@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, mysql, mailutils, pbzip2, pigz, bzip2, gzip }:
+{ lib, stdenv, fetchurl, makeWrapper, mysql, mailutils, pbzip2, pigz, bzip2, gzip }:
 
 stdenv.mkDerivation rec {
   pname = "automysqlbackup";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/automysqlbackup --prefix PATH : ${stdenv.lib.makeBinPath [ mysql mailutils pbzip2 pigz bzip2 gzip ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A script to run daily, weekly and monthly backups for your MySQL database";
     homepage = "https://sourceforge.net/projects/automysqlbackup/";
     platforms = platforms.linux;

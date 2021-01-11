@@ -1,4 +1,4 @@
-{ stdenv, mkDerivationWith, fetchurl, python3Packages
+{ lib, stdenv, mkDerivationWith, fetchurl, python3Packages
 , file, intltool, gobject-introspection, libgudev
 , udisks, gexiv2, gst_all_1, libnotify
 , exiftool, gdk-pixbuf, libmediainfo, vmtouch
@@ -78,7 +78,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Photo and video importer for cameras, phones, and memory cards";
     homepage = "https://www.damonlynch.net/rapid/";
     license = licenses.gpl3;

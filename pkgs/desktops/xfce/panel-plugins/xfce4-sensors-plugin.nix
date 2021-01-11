@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxfce4ui,
+{ lib, stdenv, fetchurl, pkgconfig, intltool, gtk3, libxfce4ui,
   libxfce4util, xfce4-panel, libnotify, lm_sensors, hddtemp, netcat-gnu, xfce
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.archiveLister category pname;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-sensors-plugin";
     description = "A panel plug-in for different sensors using acpi, lm_sensors and hddtemp";
     license = licenses.gpl2;

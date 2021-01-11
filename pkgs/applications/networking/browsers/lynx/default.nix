@@ -1,4 +1,4 @@
-{ stdenv, buildPackages
+{ lib, stdenv, buildPackages
 , fetchurl, pkgconfig, ncurses, gzip
 , sslSupport ? true, openssl ? null
 , nukeReferences
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     nuke-refs cfg_defs.h
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A text-mode web browser";
     homepage = "https://lynx.invisible-island.net/";
     license = licenses.gpl2Plus;

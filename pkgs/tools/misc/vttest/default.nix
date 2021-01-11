@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "vttest";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0181lk999gfqk8pkd4yx0qrz9r3k9a0z0i50wcayp7z1n1ivqllb";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tests the compatibility so-called 'VT100-compatible' terminals";
     homepage = "https://invisible-island.net/vttest/";
     license = licenses.mit;

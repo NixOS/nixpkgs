@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 rec {
   version = "3.2.3";
@@ -13,7 +13,7 @@ rec {
     sha256 = "1wj21v57v135n6fnmlm2dxmb9lhrrg62jgkggldp1gb7d6s4arny";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
     license = licenses.gpl3Plus;

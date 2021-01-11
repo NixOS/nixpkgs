@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk3, xfce }:
+{ lib, stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk3, xfce }:
 
 let
   category = "panel-plugins";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.archiveLister category pname;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-eyes-plugin";
     description = "Rolling eyes (following mouse pointer) plugin for the Xfce panel";
     license = licenses.gpl2Plus;

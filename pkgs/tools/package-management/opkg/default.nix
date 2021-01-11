@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, curl, gpgme, libarchive, bzip2, lzma, attr, acl, libxml2
+{ lib, stdenv, fetchurl, pkgconfig, curl, gpgme, libarchive, bzip2, lzma, attr, acl, libxml2
 , autoreconfHook }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ curl gpgme libarchive bzip2 lzma attr acl libxml2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight package management system based upon ipkg";
     homepage = "https://git.yoctoproject.org/cgit/cgit.cgi/opkg/";
     license = licenses.gpl2;

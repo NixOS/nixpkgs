@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, substituteAll, autoreconfHook, iodine, intltool, pkgconfig, networkmanager, libsecret, gtk3
+{ lib, stdenv, fetchFromGitLab, substituteAll, autoreconfHook, iodine, intltool, pkgconfig, networkmanager, libsecret, gtk3
 , withGnome ? true, gnome3, fetchpatch, libnma, glib }:
 
 let
@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NetworkManager's iodine plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;

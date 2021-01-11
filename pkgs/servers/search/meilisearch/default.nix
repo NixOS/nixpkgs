@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , IOKit
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ IOKit Security ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ultra relevant and instant full-text search API";
     homepage = "https://meilisearch.com/";
     license = licenses.mit;

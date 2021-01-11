@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , zlib
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools to create, check, and extract content of CramFs images";
     homepage = "https://packages.debian.org/jessie/cramfsprogs";
     license = licenses.gpl2;

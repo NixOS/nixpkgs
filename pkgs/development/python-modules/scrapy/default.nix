@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , isPy27
 , fetchPypi
@@ -92,7 +92,7 @@ buildPythonPackage rec {
     install -m 644 -D extras/scrapy_zsh_completion $out/share/zsh/site-functions/_scrapy
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast high-level web crawling and web scraping framework, used to crawl websites and extract structured data from their pages";
     homepage = "https://scrapy.org/";
     license = licenses.bsd3;

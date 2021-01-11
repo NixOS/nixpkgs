@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform
+{ lib, stdenv, fetchFromGitHub, rustPlatform
 , xorg, python3, pkgconfig, cairo, libxkbcommon }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   # users.
   cargoBuildFlags = [ "--features i3" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Visually focus windows by label";
     homepage = "https://github.com/svenstaro/wmfocus";
     license = licenses.mit;

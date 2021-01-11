@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, pkg-config, SDL2, libGL, openalSoft
+{ lib, stdenv, fetchFromGitHub, which, pkg-config, SDL2, libGL, openalSoft
 , curl, speex, opusfile, libogg, libvorbis, libopus, libjpeg, mumble, freetype
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     mkdir -p $out/baseq3
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ioquake3.org/";
     description = "First person shooter engine based on the Quake 3: Arena and Quake 3: Team Arena";
     license = licenses.gpl2Only;

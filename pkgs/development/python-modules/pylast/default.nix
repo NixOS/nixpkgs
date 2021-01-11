@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, certifi, six
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, certifi, six
 , setuptools_scm
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # tests require last.fm credentials
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pylast/pylast";
     description = "A python interface to last.fm (and compatibles)";
     license = licenses.asl20;

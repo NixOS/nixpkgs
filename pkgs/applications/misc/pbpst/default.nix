@@ -1,4 +1,4 @@
-{ llvmPackages, stdenv, fetchFromGitHub
+{ llvmPackages, lib, stdenv, fetchFromGitHub
 , python36Packages, which, pkgconfig, curl, git, gettext, jansson
 
 # Optional overrides
@@ -39,7 +39,7 @@ llvmPackages.stdenv.mkDerivation rec {
     "--provider=${provider}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command-line libcurl C client for pb deployments";
     inherit (src.meta) homepage;
     license = licenses.gpl2;

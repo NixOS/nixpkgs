@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, asciidoc, libxml2,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, asciidoc, libxml2,
   libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   # See: https://github.com/tinyproxy/tinyproxy/issues/1
   stdenv.lib.optional stdenv.isDarwin "--disable-regexcheck";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tinyproxy.github.io/";
     description = "A light-weight HTTP/HTTPS proxy daemon for POSIX operating systems";
     license = licenses.gpl2;

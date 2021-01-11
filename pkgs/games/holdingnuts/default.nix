@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, SDL, qt4 }:
+{ lib, stdenv, fetchurl, cmake, SDL, qt4 }:
 
 let mirror = "http://download.holdingnuts.net";
 in stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL qt4 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://www.holdingnuts.net/";
     description = "Open Source Poker client and server";
     license     = licenses.gpl3;

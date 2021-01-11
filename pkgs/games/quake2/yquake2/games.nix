@@ -44,7 +44,7 @@ let
       cp Release/* $out/lib/yquake2/${id}
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       inherit (data) description;
       homepage = "https://www.yamagi.org/quake2/";
       license = licenses.unfree;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , pkgs
 , fetchFromGitHub
 , rustPlatform
@@ -23,7 +23,7 @@ in (rustPlatform.buildRustPackage rec {
   pname = "lorri";
   inherit version;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Your project's nix-env";
     homepage = "https://github.com/target/lorri";
     license = licenses.asl20;

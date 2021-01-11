@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fcitx, anthy, gettext, pkg-config }:
+{ lib, stdenv, fetchurl, cmake, fcitx, anthy, gettext, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-anthy";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace ${fcitx} $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     description   = "Fcitx Wrapper for anthy";
     license       = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, runtimeShell, makeWrapper
+{lib, stdenv, fetchurl, runtimeShell, makeWrapper
 , oraclejre
 , antialiasFont ? true
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     chmod 0755 $out/bin/docear
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A unique solution to academic literature management";
     homepage = "http://www.docear.org/";
     # Licenses at: http://www.docear.org/software/download/

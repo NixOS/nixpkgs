@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, perl, perlPackages }:
+{ lib, stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
   version = "3.6";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "KeePass Command Line Interface";
     longDescription = ''
       KeePass Command Line Interface (CLI) / interactive shell. 

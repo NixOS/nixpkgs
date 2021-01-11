@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # https://github.com/redacted/XKCD-password-generator/issues/32
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pypi.python.org/pypi/xkcdpass/";
     description = "Generate secure multiword passwords/passphrases, inspired by XKCD";
     license = licenses.bsd3;

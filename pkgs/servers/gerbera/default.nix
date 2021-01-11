@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkg-config
 # required
 , libupnp, libuuid, pugixml, libiconv, sqlite, zlib, spdlog, fmt
@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   ++ optionals enableFFmpegThumbnailer [ pkgs.ffmpegthumbnailer ];
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.gerbera.io/";
     description = "UPnP Media Server for 2020";
     longDescription = ''

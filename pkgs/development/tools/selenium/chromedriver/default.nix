@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper
+{ lib, stdenv, fetchurl, unzip, makeWrapper
 , cairo, fontconfig, freetype, gdk-pixbuf, glib
 , glibc, gtk2, libX11, nspr, nss, pango, gconf
 , libxcb, libXi, libXrender, libXext
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
     wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}:\$LD_LIBRARY_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://chromedriver.chromium.org/";
     description = "A WebDriver server for running Selenium tests on Chrome";
     longDescription = ''

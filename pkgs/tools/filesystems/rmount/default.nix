@@ -1,4 +1,4 @@
-{ stdenv, nmap, jq, cifs-utils, sshfs, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, nmap, jq, cifs-utils, sshfs, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/rmount --prefix PATH : ${stdenv.lib.makeBinPath [ nmap jq cifs-utils sshfs ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Luis-Hebendanz/rmount";
     description = "Remote mount utility which parses a json file";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , aiounittest
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     "google.cloud.firestore_admin_v1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Cloud Firestore API client library";
     homepage = "https://github.com/googleapis/python-firestore";
     license = licenses.asl20;

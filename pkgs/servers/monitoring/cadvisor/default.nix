@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "cadvisor";
@@ -26,7 +26,7 @@ buildGoModule rec {
     rm internal/container/mesos/handler_test.go
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Analyzes resource usage and performance characteristics of running docker containers";
     homepage = "https://github.com/google/cadvisor";
     license = licenses.asl20;

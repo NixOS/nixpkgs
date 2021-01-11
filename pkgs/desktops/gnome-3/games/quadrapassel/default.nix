@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf
+{ lib, stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf
 , librsvg, gsound, libmanette
 , gettext, itstool, libxml2, clutter, clutter-gtk, wrapGAppsHook
 , meson, ninja, python3, vala, desktop-file-utils
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Classic falling-block game, Tetris";
     homepage = "https://wiki.gnome.org/Apps/Quadrapassel";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , google-api-core
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     "google.cloud.vision_v1p4beta1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cloud Vision API API client library";
     homepage = "https://github.com/googleapis/python-vision";
     license = licenses.asl20;

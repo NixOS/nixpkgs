@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchurl
 , pkgconfig
@@ -43,7 +43,7 @@ mkDerivation rec {
     mozillaPlugin = "/lib/mozilla/plugins";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A portable DjVu viewer (Qt5) and browser (nsdejavu) plugin";
     homepage = "http://djvu.sourceforge.net/djview4.html";
     license = licenses.gpl2;

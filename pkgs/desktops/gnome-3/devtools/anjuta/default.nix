@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, gjs, flex, bison, libxml2, intltool,
+{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, gjs, flex, bison, libxml2, intltool,
   gdl, libgda, gtksourceview, gsettings-desktop-schemas,
   itstool, python3, ncurses, makeWrapper }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
         "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software development studio";
     homepage = "http://anjuta.org/";
     license = licenses.gpl2;

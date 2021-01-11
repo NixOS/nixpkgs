@@ -72,7 +72,7 @@ let unwrapped = stdenv.mkDerivation rec {
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-protocol instant messaging client";
     homepage = "http://pidgin.im";
     license = licenses.gpl2Plus;

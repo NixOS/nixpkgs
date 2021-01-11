@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gettext, python3, SDL, SDL_image, SDL_gfx, SDL_mixer, libogg, libvorbis, lua5_3, libjpeg, libpng, zlib, libiconv }:
+{ fetchurl, lib, stdenv, pkgconfig, gettext, python3, SDL, SDL_image, SDL_gfx, SDL_mixer, libogg, libvorbis, lua5_3, libjpeg, libpng, zlib, libiconv }:
 
 let
   version = "0.16.1";
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
     SDL SDL_image SDL_gfx SDL_mixer libogg libvorbis lua5_3 libjpeg libpng zlib
   ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Isometric 3D RPG similar to game Diablo";
 
     longDescription = ''

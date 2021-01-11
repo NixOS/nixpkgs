@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, wrapGAppsHook, makeDesktopItem
+{ lib, stdenv, fetchurl, wrapGAppsHook, makeDesktopItem
 , atk
 , cairo
 , coreutils
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
     license = licenses.agpl3;

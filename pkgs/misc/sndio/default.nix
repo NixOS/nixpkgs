@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, fixDarwinDylibNames }:
+{ lib, stdenv, fetchurl, alsaLib, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "sndio";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ljmac0lnjn61admgbcwjfcr5fwccrsblx9rj9bys8wlhz8f796x";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.sndio.org";
     description = "Small audio and MIDI framework part of the OpenBSD project";
     license = licenses.isc;

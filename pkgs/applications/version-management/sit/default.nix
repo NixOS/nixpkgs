@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, libzip, gnupg,
+{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, libzip, gnupg,
   # Darwin
   libiconv, CoreFoundation, Security }:
 
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "092yfpr2svp1qy7xis1q0sdkbsjmmswmdwb0rklrc0yhydcsghp9";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Serverless Information Tracker";
     homepage = "https://sit.fyi/";
     license = with licenses; [ asl20 /* or */ mit ];

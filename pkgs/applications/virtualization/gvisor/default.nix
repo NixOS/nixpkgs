@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildBazelPackage
 , fetchFromGitHub
 , cacert
@@ -91,7 +91,7 @@ in buildBazelPackage rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Container Runtime Sandbox";
     homepage = "https://github.com/google/gvisor";
     license = licenses.asl20;

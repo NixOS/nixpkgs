@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     (flag "OpenCV" opencvSupport)
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A toolbox which offers a wide range of efficient and unified machine learning methods";
     homepage = "http://shogun-toolbox.org/";
     license = licenses.gpl3;

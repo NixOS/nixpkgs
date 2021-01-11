@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -20,7 +20,7 @@ buildGoModule rec {
   # https://github.com/ffuf/ffuf/issues/367
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast web fuzzer written in Go";
     longDescription = ''
       FFUF, or “Fuzz Faster you Fool” is an open source web fuzzing tool,

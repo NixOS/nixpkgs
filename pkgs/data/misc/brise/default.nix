@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, librime }:
+{ lib, stdenv, fetchFromGitHub, librime }:
 
 stdenv.mkDerivation {
   name = "brise-unstable-2017-09-16";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rime Schema Repository";
     longDescription = ''
       This software is a collection of data packages used by Rime

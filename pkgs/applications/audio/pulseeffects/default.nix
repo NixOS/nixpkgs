@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -104,7 +104,7 @@ in stdenv.mkDerivation rec {
   BOOST_INCLUDEDIR = "${stdenv.lib.getDev boost}/include";
   BOOST_LIBRARYDIR = "${stdenv.lib.getLib boost}/lib";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
     homepage = "https://github.com/wwmm/pulseeffects";
     license = licenses.gpl3;

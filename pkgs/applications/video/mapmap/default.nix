@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , qttools
@@ -67,7 +67,7 @@ mkDerivation rec {
   #   rm -r $NIX_BUILD_TOP/__nix_qt5__
   # '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source video mapping software";
     homepage = "https://github.com/mapmapteam/mapmap";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ buildGoPackage, stdenv, fetchurl }:
+{ buildGoPackage, lib, stdenv, fetchurl }:
 
 buildGoPackage rec {
   name = "filegive-0.7.4";
@@ -12,7 +12,7 @@ buildGoPackage rec {
 
   goPackagePath = "viric.name/soft/filegive";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://viric.name/cgi-bin/filegive";
     description = "Easy p2p file sending program";
     license = licenses.agpl3Plus;

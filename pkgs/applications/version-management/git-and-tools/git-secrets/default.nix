@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, git, coreutils }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, git, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "git-secrets";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${stdenv.lib.makeBinPath [ git coreutils ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Prevents you from committing secrets and credentials into git repositories";
     homepage = "https://github.com/awslabs/git-secrets";
     license = licenses.asl20;

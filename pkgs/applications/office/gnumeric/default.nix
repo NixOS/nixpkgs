@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, intltool, perlPackages
+{ lib, stdenv, fetchurl, pkg-config, intltool, perlPackages
 , goffice, gnome3, wrapGAppsHook, gtk3, bison, python3Packages
 , itstool
 }:
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GNOME Office Spreadsheet";
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";

@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, mopidy }:
+{ lib, stdenv, python3Packages, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-tunein";
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mopidy_tunein.tunein" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mopidy extension for playing music from tunein";
     homepage = "https://github.com/kingosticks/mopidy-tunein";
     license = licenses.asl20;

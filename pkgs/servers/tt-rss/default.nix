@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "tt-rss";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     cp -ra * $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web-based news feed (RSS/Atom) aggregator";
     license = licenses.gpl2Plus;
     homepage = "https://tt-rss.org";

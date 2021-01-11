@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , unzip }:
 
 buildPythonPackage rec {
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   buildInputs = [ unzip ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Easy peasy wrapper for HipChat's v1 API";
     homepage = "https://github.com/kurttheviking/simple-hipchat-py";
     license = licenses.mit;

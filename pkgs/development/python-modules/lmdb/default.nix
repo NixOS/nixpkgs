@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   LMDB_FORCE_SYSTEM=1;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Universal Python binding for the LMDB 'Lightning' Database";
     homepage = "https://github.com/dw/py-lmdb";
     license = licenses.openldap;

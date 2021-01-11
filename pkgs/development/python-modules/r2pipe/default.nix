@@ -42,7 +42,7 @@ buildPythonPackage rec {
     EOF
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interact with radare2";
     homepage = "https://github.com/radare/radare2-r2pipe";
     license = licenses.mit;

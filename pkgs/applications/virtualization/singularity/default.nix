@@ -65,7 +65,7 @@ buildGoPackage rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.sylabs.io/";
     description = "Application containers for linux";
     license = licenses.bsd3;

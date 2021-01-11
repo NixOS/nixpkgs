@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, libGL, libdrm,
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, libGL, libdrm,
   python27, wayland, udev, mesa, wafHook }:
 
 stdenv.mkDerivation {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   wafConfigureFlags = ["--with-flavors=x11-gl,x11-glesv2,drm-gl,drm-glesv2,wayland-gl,wayland-glesv2"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenGL (ES) 2.0 benchmark";
     homepage = "https://github.com/glmark2/glmark2";
     license = licenses.gpl3Plus;

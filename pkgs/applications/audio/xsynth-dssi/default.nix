@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, autoconf, automake, dssi, gtk2, libjack2,
+{ lib, stdenv, fetchurl, alsaLib, autoconf, automake, dssi, gtk2, libjack2,
 ladspaH, ladspaPlugins, liblo, pkgconfig }:
 
 stdenv.mkDerivation  rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation  rec {
     cp src/.libs/* $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Classic-analog (VCOs-VCF-VCA) style software synthesizer";
     longDescription = ''
       Xsynth-DSSI is a classic-analog (VCOs-VCF-VCA) style software

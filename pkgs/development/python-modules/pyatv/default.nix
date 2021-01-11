@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage
+{ lib, stdenv, buildPythonPackage
 , aiohttp
 , aiozeroconf
 , asynctest
@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
     license = licenses.mit;

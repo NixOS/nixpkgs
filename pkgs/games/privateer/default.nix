@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, boost, cmake, ffmpeg_3, freeglut, glib,
+{ lib, stdenv, fetchsvn, boost, cmake, ffmpeg_3, freeglut, glib,
   gtk2, libjpeg, libpng, libpthreadstubs, libvorbis, libXau, libXdmcp,
   libXmu, libGLU, libGL, openal, pixman, pkg-config, python27, SDL }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     cp vegaserver $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://privateer.sourceforge.net/";
     description = "Adventure space flight simulation computer game";
     license = licenses.gpl2Plus; # and a special license for art data

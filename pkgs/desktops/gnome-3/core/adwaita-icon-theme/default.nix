@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gnome3
+{ lib, stdenv, fetchurl, pkgconfig, intltool, gnome3
 , iconnamingutils, gtk3, gdk-pixbuf, librsvg, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = with platforms; linux ++ darwin;
     maintainers = teams.gnome.members;
   };

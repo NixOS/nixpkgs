@@ -1,4 +1,4 @@
-{ stdenv, runCommand, fetchFromGitHub, bash, btrfs-progs, coreutils, python3Packages, util-linux }:
+{ lib, stdenv, runCommand, fetchFromGitHub, bash, btrfs-progs, coreutils, python3Packages, util-linux }:
 
 let
 
@@ -43,7 +43,7 @@ let
       "SYSTEMD_SYSTEM_UNIT_DIR=$(out)/etc/systemd/system"
     ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/Zygo/bees";
       description = "Block-oriented BTRFS deduplication service";
       license = licenses.gpl3;

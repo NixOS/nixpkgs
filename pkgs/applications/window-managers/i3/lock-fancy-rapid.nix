@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, xorg, i3lock }:
+{ lib, stdenv, fetchFromGitHub, xorg, i3lock }:
 
 stdenv.mkDerivation rec {
   pname = "i3lock-fancy-rapid";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     install -D i3lock-fancy-rapid $out/bin/i3lock-fancy-rapid
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A faster implementation of i3lock-fancy";
     homepage = "https://github.com/yvbbrjdr/i3lock-fancy-rapid";
     maintainers = with maintainers; [ nickhu ];

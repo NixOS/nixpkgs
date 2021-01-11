@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , openfortivpn
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NetworkManager’s FortiSSL plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2;

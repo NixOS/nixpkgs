@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, boost, lua }:
+{ fetchurl, lib, stdenv, pkgconfig, boost, lua }:
 
 stdenv.mkDerivation rec {
   pname = "ansifilter";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "conf_dir=/etc/ansifilter"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to convert ANSI to other formats";
     longDescription = ''
       Tool to remove ANSI or convert them to another format

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , coreutils
 , patchelf
 , requireFile
@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
   # we did this in prefixup already
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wolfram Mathematica computational software system";
     homepage = "http://www.wolfram.com/mathematica/";
     license = licenses.unfree;

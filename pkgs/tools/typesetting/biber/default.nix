@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, perlPackages, shortenPerlShebang, texlive }:
+{ lib, stdenv, fetchpatch, perlPackages, shortenPerlShebang, texlive }:
 
 let
   biberSource = stdenv.lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
@@ -35,7 +35,7 @@ perlPackages.buildPerlModule {
     shortenPerlShebang $out/bin/biber
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Backend for BibLaTeX";
     license = with licenses; [ artistic1 gpl1Plus ];
     platforms = platforms.unix;

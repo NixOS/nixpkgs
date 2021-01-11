@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, xdg_utils }:
+{ lib, stdenv, fetchFromGitLab, xdg_utils }:
 
 stdenv.mkDerivation rec {
   pname = "anarchism";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cp debian/anarchism.desktop $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.anarchistfaq.org/";
     changelog = "http://anarchism.pageabode.com/afaq/new.html";
     description = "Exhaustive exploration of Anarchist theory and practice";

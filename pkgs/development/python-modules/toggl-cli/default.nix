@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
 , click
 , click-completion
 , factory_boy
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     validate-email
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://toggl.uhlir.dev/";
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
     license = licenses.mit;

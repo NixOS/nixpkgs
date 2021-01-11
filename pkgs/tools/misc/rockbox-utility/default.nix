@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cryptopp
+{ lib, stdenv, fetchurl, pkgconfig, cryptopp
 , libusb1, qtbase, qttools, makeWrapper
 , qmake, withEspeak ? false, espeak ? null
 , qt5 }:
@@ -47,7 +47,7 @@ stdenv.mkDerivation  rec {
   # may clobber the files read by the parallel `make build/rcc/qrc_rbutilqt-lang.cpp`.
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source firmware for mp3 players";
     homepage = "https://www.rockbox.org";
     license = licenses.gpl2;

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A suite of programs for processing MPEG or MJPEG video";
     homepage = "http://mjpeg.sourceforge.net/";
     license = licenses.gpl2;

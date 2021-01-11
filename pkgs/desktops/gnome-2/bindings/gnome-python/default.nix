@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2, pkgconfig, libgnome, GConf, glib, gtk2, gnome_vfs }:
+{ lib, stdenv, fetchurl, python2, pkgconfig, libgnome, GConf, glib, gtk2, gnome_vfs }:
 
 with stdenv.lib;
 
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
     echo "gtk-2.0" > $out/${python2.sitePackages}/${name}.pth
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pygtk.org/";
     description = "Python wrapper for GNOME libraries";
     platforms = platforms.linux;

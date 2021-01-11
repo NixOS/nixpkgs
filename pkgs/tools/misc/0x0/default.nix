@@ -1,4 +1,4 @@
-{ stdenv, xsel, curl, fetchFromGitLab, makeWrapper}:
+{ lib, stdenv, xsel, curl, fetchFromGitLab, makeWrapper}:
 
 stdenv.mkDerivation {
   pname = "0x0";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
       --prefix PATH : '${stdenv.lib.makeBinPath [ curl xsel ]}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client for 0x0.st";
     homepage = "https://gitlab.com/somasis/scripts/";
     maintainers = [ maintainers.ar1a ];

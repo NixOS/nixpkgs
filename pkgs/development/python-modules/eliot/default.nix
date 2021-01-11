@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytest -k 'not test_parse_stream'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://eliot.readthedocs.io";
     description = "Logging library that tells you why it happened";
     license = licenses.asl20;

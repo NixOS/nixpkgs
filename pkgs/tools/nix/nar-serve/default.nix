@@ -22,7 +22,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Serve NAR file contents via HTTP";
     homepage = "https://github.com/numtide/nar-serve";
     license = licenses.mit;

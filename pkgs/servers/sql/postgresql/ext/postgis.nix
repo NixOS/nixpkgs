@@ -1,5 +1,5 @@
 { fetchurl
-, stdenv
+, lib, stdenv
 , perl
 , libxml2
 , postgresql
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.postgis = nixosTests.postgis;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Geographic Objects for PostgreSQL";
     homepage = "https://postgis.net/";
     changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${version}/NEWS";

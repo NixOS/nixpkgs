@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , param
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pytest colorcet -k 'not matplotlib_default_colormap_plot'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of perceptually uniform colormaps";
     homepage = "https://colorcet.pyviz.org";
     license = licenses.cc-by-40;

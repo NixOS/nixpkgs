@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitLab, autoconf, automake, gettext, ncurses}:
+{lib, stdenv, fetchFromGitLab, autoconf, automake, gettext, ncurses}:
 
 stdenv.mkDerivation rec {
   pname = "psmisc";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.com/psmisc/psmisc";
     description = "A set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
     platforms = platforms.linux;

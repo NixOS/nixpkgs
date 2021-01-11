@@ -1,6 +1,6 @@
 { buildVersion, sha256, dev ? false }:
 
-{ fetchurl, stdenv, xorg, glib, libGL, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
+{ fetchurl, lib, stdenv, xorg, glib, libGL, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
 , pkexecPath ? "/run/wrappers/bin/pkexec"
 , writeScript, common-updater-scripts, curl, gnugrep, coreutils
 }:
@@ -117,7 +117,7 @@ in stdenv.mkDerivation (rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Git client from the makers of Sublime Text";
     homepage = "https://www.sublimemerge.com";
     maintainers = with maintainers; [ zookatron ];

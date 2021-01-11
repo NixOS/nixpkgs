@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper, coreutils }:
+{ lib, stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       cp -r scripts/t/origins $out/etc/dpkg
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Debian package manager";
     homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;

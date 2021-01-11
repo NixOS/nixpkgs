@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
+{ lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
 
 stdenv.mkDerivation rec {
   name = "rtl8812au-${kernel.version}-${version}";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Driver for Realtek 802.11ac, rtl8812au, provides the 8812au mod";
     homepage = "https://github.com/gordboy/rtl8812au-5.6.4.2";
     license = licenses.gpl2;

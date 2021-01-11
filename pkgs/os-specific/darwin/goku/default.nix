@@ -1,4 +1,4 @@
-{stdenv, fetchurl }:
+{lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "goku";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp gokuw $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Karabiner configurator";
     homepage = "https://github.com/yqrashawn/GokuRakuJoudo";
     license = licenses.gpl3;

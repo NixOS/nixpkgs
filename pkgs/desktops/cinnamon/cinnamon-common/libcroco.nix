@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, glib, gnome3 }:
+{ lib, stdenv, fetchurl, pkgconfig, libxml2, glib, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "libcroco";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME CSS2 parsing and manipulation toolkit";
     homepage = https://gitlab.gnome.org/GNOME/libcroco;
     license = licenses.lgpl2;

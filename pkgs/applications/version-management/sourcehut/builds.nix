@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ lib, stdenv, fetchgit, buildPythonPackage
 , python
 , buildGoModule
 , srht, redis, celery, pyyaml, markdown }:
@@ -47,7 +47,7 @@ in buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     description = "Continuous integration service for the sr.ht network";
     license = licenses.agpl3;

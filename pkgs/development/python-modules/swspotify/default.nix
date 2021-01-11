@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/SwagLyrics/SwSpotify";
     description = "Library to get the currently playing song and artist from Spotify";
     license = licenses.mit;

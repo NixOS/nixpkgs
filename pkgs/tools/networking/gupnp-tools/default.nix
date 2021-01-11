@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of utilities and demos to work with UPnP";
     homepage = "https://wiki.gnome.org/Projects/GUPnP";
     license = licenses.gpl2Plus;

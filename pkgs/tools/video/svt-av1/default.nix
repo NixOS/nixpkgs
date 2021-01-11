@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, nasm }:
+{ lib, stdenv, fetchFromGitHub, cmake, nasm }:
 
 stdenv.mkDerivation rec {
   pname = "svt-av1";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake nasm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "AV1-compliant encoder/decoder library core";
     homepage = "https://github.com/AOMediaCodec/SVT-AV1";
     license = licenses.bsd2;

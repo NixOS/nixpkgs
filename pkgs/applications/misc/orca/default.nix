@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , pkgconfig
 , fetchurl
 , buildPythonApplication
@@ -97,7 +97,7 @@ buildPythonApplication rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Orca";
     description = "Screen reader";
     longDescription = ''

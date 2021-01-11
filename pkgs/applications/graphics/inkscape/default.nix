@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , boehmgc
 , boost
 , cairo
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vector graphics editor";
     homepage = "https://www.inkscape.org";
     license = licenses.gpl3Plus;

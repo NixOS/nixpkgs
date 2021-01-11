@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, setuptools, unicorn-emu }:
+{ lib, stdenv, buildPythonPackage, setuptools, unicorn-emu }:
 
 buildPythonPackage rec {
   pname = "unicorn";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for Unicorn CPU emulator engine";
     homepage = "https://www.unicorn-engine.org/";
     license = [ licenses.gpl2 ];

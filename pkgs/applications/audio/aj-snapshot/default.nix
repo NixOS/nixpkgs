@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, jack2Full, minixml, pkgconfig }:
+{ lib, stdenv, fetchurl, alsaLib, jack2Full, minixml, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name =  packageName + "-" + version ;
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ alsaLib minixml jack2Full ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for storing/restoring JACK and/or ALSA connections to/from cml files";
     longDescription = ''
     Aj-snapshot is a small program that can be used to make snapshots of the connections made between JACK and/or ALSA clients.

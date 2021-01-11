@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, pkgconfig, libltc, libsndfile, jack2}:
+{lib, stdenv, fetchFromGitHub, pkgconfig, libltc, libsndfile, jack2}:
 
 stdenv.mkDerivation rec {
   pname = "ltc-tools";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/x42/ltc-tools";
     description = "Tools to deal with linear-timecode (LTC)";
     license = licenses.gpl2;

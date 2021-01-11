@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText }:
+{ lib, stdenv, fetchurl, writeText }:
 
 import ./versions.nix ({ version, sha256 }:
   stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ import ./versions.nix ({ version, sha256 }:
       cp ${phpConfig} $out/share/zabbix/conf/zabbix.conf.php
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "An enterprise-class open source distributed monitoring solution (web frontend)";
       homepage = "https://www.zabbix.com/";
       license = licenses.gpl2;

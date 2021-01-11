@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
+{ lib, stdenv, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
 , bundlerEnv, pkgconfig
 # libgit2 + dependencies
 , libgit2, openssl, zlib, pcre, http-parser }:
@@ -61,7 +61,7 @@ in buildGoModule rec {
 
   outputs = [ "out" "ruby" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.com/gitlab-org/gitaly";
     description = "A Git RPC service for handling all the git calls made by GitLab";
     platforms = platforms.linux;

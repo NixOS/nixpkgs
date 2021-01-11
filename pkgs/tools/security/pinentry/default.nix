@@ -89,7 +89,7 @@ pinentryMkDerivation rec {
 
   passthru = { flavors = enabledFlavors; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://gnupg.org/aegypten2/";
     description = "GnuPG’s interface to passphrase input";
     license = licenses.gpl2Plus;

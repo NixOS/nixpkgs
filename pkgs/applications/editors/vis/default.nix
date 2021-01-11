@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, makeWrapper, makeDesktopItem
+{ lib, stdenv, fetchFromGitHub, pkgconfig, makeWrapper, makeDesktopItem
 , ncurses, libtermkey, lpeg, lua
 , acl ? null, libselinux ? null
 }:
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     terminal = "true";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A vim like editor";
     homepage = "https://github.com/martanne/vis";
     license = licenses.isc;

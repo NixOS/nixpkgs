@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , ncurses
 , lzip
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ lzip ];
   buildInputs = [ ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small, 8-bit clean editor";
     longDescription = ''
       GNU moe is a powerful, 8-bit clean, console text editor for ISO-8859 and

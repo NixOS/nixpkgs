@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , autoreconfHook, pkgconfig, wrapGAppsHook
 , glib, intltool, gtk3, gtksourceview }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib intltool gtk3 gtksourceview ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A sticky note application for jotting down things to remember";
     homepage = "https://launchpad.net/xpad";
     license = licenses.gpl3;

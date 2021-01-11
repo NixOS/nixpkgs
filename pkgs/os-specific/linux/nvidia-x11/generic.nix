@@ -16,7 +16,7 @@
 , broken ? false
 }@args:
 
-{ stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
+{ lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
 , kernel ? null, perl, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
@@ -95,7 +95,7 @@ let
       inherit persistencedVersion settingsVersion;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://www.nvidia.com/object/unix.html";
       description = "X.org driver and kernel module for NVIDIA graphics cards";
       license = licenses.unfreeRedistributable;

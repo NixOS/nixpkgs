@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, docutils, pkg-config, glib, libpthreadstubs
+{ lib, stdenv, fetchFromGitHub, cmake, docutils, pkg-config, glib, libpthreadstubs
 , libXau, libXdmcp, xcbutil }:
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkg-config docutils ];
   buildInputs = [ glib libpthreadstubs libXau libXdmcp xcbutil ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Use external locker (such as i3lock) as X screen saver";
     license = licenses.mit;
     maintainers = with maintainers; [ malyn offline ];

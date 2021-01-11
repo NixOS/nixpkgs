@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoconf, automake, gettext
+{ lib, stdenv, fetchurl, pkgconfig, autoconf, automake, gettext
 , fluxbox, bc, gtkmm2, glibmm, libglademm, libsigcxx }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Editor for Fluxbox menus";
     longDescription = ''
       Fluxbox Menu Editor is a menu editor for the Window Manager Fluxbox written in C++

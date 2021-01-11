@@ -1,4 +1,4 @@
-{ stdenv, ncurses, customConfig ? null, name, src, patches ? [] }:
+{ lib, stdenv, ncurses, customConfig ? null, name, src, patches ? [] }:
 stdenv.mkDerivation {
 
   inherit name src patches;
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic virtual terminal manager";
     homepage = "http://www.brain-dump.org/projects/dvtm";
     license = licenses.mit;

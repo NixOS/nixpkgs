@@ -1,4 +1,4 @@
-{ stdenv, autoreconfHook, fetchurl, dbus-glib, gtk2, pkgconfig, wordnet }:
+{ lib, stdenv, autoreconfHook, fetchurl, dbus-glib, gtk2, pkgconfig, wordnet }:
 
 stdenv.mkDerivation {
   pname = "artha";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     ./gio-underlink.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An offline thesaurus based on WordNet";
     homepage = "http://artha.sourceforge.net";
     license = licenses.gpl2;

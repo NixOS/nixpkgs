@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libsoup, graphicsmagick, json-glib, wrapGAppsHook
+{ lib, stdenv, fetchurl, libsoup, graphicsmagick, json-glib, wrapGAppsHook
 , cairo, cmake, ninja, curl, perl, llvm, desktop-file-utils, exiv2, glib
 , ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
 , libpng, librsvg, libtiff, openexr, osm-gps-map, pkgconfig, sqlite, libxslt
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual lighttable and darkroom for photographers";
     homepage = "https://www.darktable.org";
     license = licenses.gpl3Plus;

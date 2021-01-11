@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , cssselect
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # circular dependency on webtest
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/gawel/pyquery";
     description = "A jquery-like library for python";
     license = licenses.bsd0;

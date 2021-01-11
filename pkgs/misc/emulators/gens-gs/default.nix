@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, SDL, nasm, zlib, libpng, libGLU, libGL }:
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, SDL, nasm, zlib, libpng, libGLU, libGL }:
 
 stdenv.mkDerivation {
   name = "gens-gs-7";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   # See http://ubuntuforums.org/showthread.php?p=10535837
   NIX_CFLAGS_COMPILE = "-UGTK_DISABLE_DEPRECATED -UGSEAL_ENABLE";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://segaretro.org/Gens/GS";
     description = "A Genesis/Mega Drive emulator";
     platforms = [ "i686-linux" ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, nixosTests }:
+{ lib, stdenv, fetchurl, unzip, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "grocy";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     cp -R . $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
     description = "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home";

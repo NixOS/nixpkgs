@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, curl, libevent, libiconv, libxml2, openssl, pcre, zlib
+{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, curl, libevent, libiconv, libxml2, openssl, pcre, zlib
 , jabberSupport ? true, iksemel
 , ldapSupport ? true, openldap
 , odbcSupport ? true, unixODBC
@@ -83,7 +83,7 @@ in
         cp -prvd database/postgresql/*.sql $out/share/zabbix/database/postgresql/
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "An enterprise-class open source distributed monitoring solution";
         homepage = "https://www.zabbix.com/";
         license = licenses.gpl2;

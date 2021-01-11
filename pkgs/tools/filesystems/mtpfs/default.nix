@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fuse, libmtp, glib, libmad, libid3tag }:
+{ lib, stdenv, fetchurl, pkgconfig, fuse, libmtp, glib, libmad, libid3tag }:
 
 stdenv.mkDerivation rec {
   name = "mtpfs-1.1";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "07acrqb17kpif2xcsqfqh5j4axvsa4rnh6xwnpqab5b9w5ykbbqv";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cjd/mtpfs";
     description = "FUSE Filesystem providing access to MTP devices";
     platforms = platforms.all;

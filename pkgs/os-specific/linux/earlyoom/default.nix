@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pandoc, installShellFiles, withManpage ? false }:
+{ lib, stdenv, fetchFromGitHub, pandoc, installShellFiles, withManpage ? false }:
 
 stdenv.mkDerivation rec {
   pname = "earlyoom";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     installManPage earlyoom.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Early OOM Daemon for Linux";
     homepage = "https://github.com/rfjakob/earlyoom";
     license = licenses.mit;

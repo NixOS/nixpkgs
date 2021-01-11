@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jre, makeWrapper }:
+{ lib, stdenv, fetchzip, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "LanguageTool";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       --add-flags "-cp $out/share/languagetool-server.jar org.languagetool.server.HTTPServer"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://languagetool.org";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [

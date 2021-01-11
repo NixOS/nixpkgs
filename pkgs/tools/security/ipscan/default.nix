@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, jre, swt, makeWrapper, xorg, dpkg }:
+{ lib, stdenv, fetchurl, jdk, jre, swt, makeWrapper, xorg, dpkg }:
 
 stdenv.mkDerivation rec {
   pname = "ipscan";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp usr/share/pixmaps/ipscan.png $out/share/pixmaps/ipscan.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and friendly network scanner";
     homepage = "https://angryip.org";
     license = licenses.gpl2;

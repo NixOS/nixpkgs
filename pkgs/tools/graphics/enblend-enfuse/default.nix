@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , boost, freeglut, glew, gsl, lcms2, libpng, libtiff, libGLU, libGL, vigra
 , help2man, pkgconfig, perl, texlive }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://enblend.sourceforge.net/";
     description = "Blends away the seams in a panoramic image mosaic using a multiresolution spline";
     license = licenses.gpl2;

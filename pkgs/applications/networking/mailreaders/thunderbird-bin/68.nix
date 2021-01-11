@@ -1,6 +1,6 @@
 # This pakcage is keeped until Thunderbird 78 supports OpenPGP.
 # https://www.thunderbird.net/en-US/thunderbird/78.0.1/releasenotes/
-{ stdenv, fetchurl, config, makeWrapper
+{ lib, stdenv, fetchurl, config, makeWrapper
 , alsaLib
 , at-spi2-atk
 , atk
@@ -170,7 +170,7 @@ stdenv.mkDerivation {
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = "http://www.mozilla.org/thunderbird/";
     license = {

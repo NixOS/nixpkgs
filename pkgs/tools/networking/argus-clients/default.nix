@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, bison, flex, cyrus_sasl, tcp_wrappers, pkgconfig, perl }:
+{ lib, stdenv, fetchurl, libpcap, bison, flex, cyrus_sasl, tcp_wrappers, pkgconfig, perl }:
 
 stdenv.mkDerivation rec {
   pname = "argus-clients";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libpcap bison cyrus_sasl tcp_wrappers flex ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Clients for ARGUS";
     longDescription = ''Clients for Audit Record Generation and
     Utilization System (ARGUS). The Argus Project is focused on developing all

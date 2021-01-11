@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pkgconfig, meson, ninja, python3
 , wrapGAppsHook, vala, shared-mime-info
 , cairo, pantheon, glib, gtk3, libxml2, libgee, libarchive
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mind-mapping application for Elementary OS";
     homepage = "https://github.com/phase1geo/Minder";
     license = licenses.gpl3Plus;

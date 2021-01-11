@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, cmake, libuuid, expat, sqlite, libidn,
+{ lib, stdenv, fetchurl, fetchgit, cmake, libuuid, expat, sqlite, libidn,
   libiconv, botan2, systemd, pkgconfig, udns, pandoc, coreutils } :
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern XMPP IRC gateway";
     platforms = platforms.unix;
     homepage = "https://lab.louiz.org/louiz/biboumi";

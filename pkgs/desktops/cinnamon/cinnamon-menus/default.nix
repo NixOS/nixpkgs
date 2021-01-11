@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkgconfig
-, stdenv
+, lib, stdenv
 , wrapGAppsHook
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-menus";
     description = "A menu system for the Cinnamon project";
     license = [ licenses.gpl2 licenses.lgpl2 ];

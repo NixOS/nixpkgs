@@ -1,4 +1,4 @@
-{stdenv, fetchurl, tlsSupport ? true, openssl ? null}:
+{lib, stdenv, fetchurl, tlsSupport ? true, openssl ? null}:
 
 assert tlsSupport -> openssl != null;
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = stdenv.lib.optionalString tlsSupport "-lcrypto";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ basvandijk ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkgconfig, wrapQtAppsHook
 , boost173, catch2, fmt, lz4, nlohmann_json, rapidjson, zlib, zstd, SDL2
 , udev, libusb1, libzip, qtbase, qtwebengine, qttools, ffmpeg
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/yuzu-cmd --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://yuzu-emu.org";
     description = "An experimental Nintendo Switch emulator written in C++";
     license = with licenses; [

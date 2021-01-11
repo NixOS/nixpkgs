@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     done;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free computer algebra system (CAS)";
     homepage = "https://www-fourier.ujf-grenoble.fr/~parisse/giac.html";
     license = licenses.gpl3Plus;
