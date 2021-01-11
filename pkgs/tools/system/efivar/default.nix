@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     })
   ];
   # We have no LTO here since commit 22284b07.  With GCC 10 that triggers a warning.
-  postPatch = if stdenv.isi686 then "sed '/^OPTIMIZE /s/-flto//' -i Make.defaults" else null;
-  NIX_CFLAGS_COMPILE = if stdenv.isi686 then "-Wno-error=stringop-truncation" else null;
+  postPatch = "sed '/^OPTIMIZE /s/-flto//' -i Make.defaults";
+  NIX_CFLAGS_COMPILE = "-Wno-error=stringop-truncation";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ popt ];
