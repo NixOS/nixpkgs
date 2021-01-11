@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildDunePackage }:
+{ stdenv, lib, fetchurl, buildDunePackage }:
 
 buildDunePackage rec {
   pname = "dtoa";
@@ -11,7 +11,7 @@ buildDunePackage rec {
     sha256 = "0zkhn0rdq82g6gamsv6nkx6i44s8104nh6jg5xydazl9jl1704xn";
   };
 
-  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
+  hardeningDisable = lib.optional stdenv.isDarwin "strictoverflow";
 
   meta = with lib; {
     homepage = "https://github.com/flowtype/ocaml-dtoa";

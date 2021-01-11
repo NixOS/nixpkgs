@@ -46,7 +46,7 @@ let src = fetchFromGitHub {
       maintainers = with maintainers; [ vbgl ];
     };
 in
-if stdenv.lib.versionAtLeast param.version "6.0"
+if lib.versionAtLeast param.version "6.0"
 then
   buildDunePackage {
     inherit pname src meta;

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, which, ocaml, findlib }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if !lib.versionAtLeast ocaml.version "4.02"
 then throw "camlpdf is not available for OCaml ${ocaml.version}"
 else
 

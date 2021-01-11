@@ -1,6 +1,6 @@
-{ lib, stdenv, buildOcaml, ocaml, fetchurl, ounit }:
+{ lib, buildOcaml, ocaml, fetchurl, ounit }:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "pa_ounit is not available for OCaml ${ocaml.version}"
 else
 

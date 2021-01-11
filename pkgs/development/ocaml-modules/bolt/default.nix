@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, which, camlp4 }:
 
-let inherit (stdenv.lib) getVersion versionAtLeast; in
+let inherit (lib) getVersion versionAtLeast; in
 
 assert versionAtLeast (getVersion ocaml) "4.00.0";
 assert versionAtLeast (getVersion findlib) "1.3.3";
