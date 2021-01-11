@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkgconfig, ocb-stubblr }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+if !lib.versionAtLeast ocaml.version "4.03"
 then throw "tsdl is not available for OCaml ${ocaml.version}"
 else
 

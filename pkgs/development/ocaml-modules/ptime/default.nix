@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result, js_of_ocaml }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, result, js_of_ocaml }:
 
 stdenv.mkDerivation rec {
   version = "0.8.5";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
       Ptime is not a calendar library.
     '';
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ sternenseemann ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
 }

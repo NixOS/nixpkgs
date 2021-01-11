@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, ocaml, findlib, pkgconfig, gtk2, libgnomecanvas, libglade, gtksourceview }:
 
 let param =
-  let check = stdenv.lib.versionAtLeast ocaml.version; in
+  let check = lib.versionAtLeast ocaml.version; in
   if check "4.06" then rec {
     version = "2.18.10";
     src = fetchFromGitHub {
