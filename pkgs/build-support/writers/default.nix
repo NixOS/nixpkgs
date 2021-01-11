@@ -76,8 +76,8 @@ rec {
       contentPath = content;
     }) ''
       ${compileScript}
-      ${ lib.optionalString strip
-         "${pkgs.binutils-unwrapped}/bin/strip --strip-unneeded $out" }
+      ${lib.optionalString strip
+         "${pkgs.binutils-unwrapped}/bin/strip --strip-unneeded $out"}
       ${optionalString (types.path.check nameOrPath) ''
         mv $out tmp
         mkdir -p $out/$(dirname "${nameOrPath}")
@@ -111,7 +111,10 @@ rec {
   #        return 0;
   #      }
   #    ''
-  writeC = name: { libraries ? [] }:
+  writeC = name: {
+    libraries ? [],
+    strip ? true
+  }:
     makeBinWriter {
       compileScript = ''
         PATH=${makeBinPath [
@@ -134,6 +137,7 @@ rec {
             -x c \
             "$contentPath"
       '';
+      inherit strip;
     } name;
 
   # writeCBin takes the same arguments as writeC but outputs a directory (like writeScriptBin)
@@ -166,7 +170,8 @@ rec {
   writeHaskell = name: {
     libraries ? [],
     ghc ? pkgs.ghc,
-    ghcArgs ? []
+    ghcArgs ? [],
+    strip ? true
   }:
     makeBinWriter {
       compileScript = ''
@@ -174,11 +179,28 @@ rec {
         ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs} tmp.hs
         mv tmp $out
       '';
+      inherit strip;
     } name;
 
   # writeHaskellBin takes the same arguments as writeHaskell but outputs a directory (like writeScriptBin)
   writeHaskellBin = name:
     writeHaskell "/bin/${name}";
+
+  writeRust = name: {
+      rustc ? pkgs.rustc,
+      rustcArgs ? [],
+      strip ? true
+  }:
+    makeBinWriter {
+      compileScript = ''
+        cp "$contentPath" tmp.rs
+        PATH=${makeBinPath [pkgs.gcc]} ${lib.getBin rustc}/bin/rustc ${lib.escapeShellArgs rustcArgs} -o "$out" tmp.rs
+      '';
+      inherit strip;
+    } name;
+
+  writeRustBin = name:
+    writeRust "/bin/${name}";
 
   # writeJS takes a name an attributeset with libraries and some JavaScript sourcecode and
   # returns an executable
