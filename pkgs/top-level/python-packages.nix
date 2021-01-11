@@ -7912,6 +7912,8 @@ in {
 
   vxi11 = callPackage ../development/python-modules/vxi11 { };
 
+  vyper = callPackage ../development/compilers/vyper { };
+
   w3lib = callPackage ../development/python-modules/w3lib { };
 
   wadllib = callPackage ../development/python-modules/wadllib { };
