@@ -2374,6 +2374,8 @@ in
 
   inchi = callPackage ../development/libraries/inchi {};
 
+  icon-slicer = callPackage ../tools/X11/icon-slicer { };
+
   ifm = callPackage ../tools/graphics/ifm {};
 
   ink = callPackage ../tools/misc/ink { };
@@ -20263,6 +20265,8 @@ in
   open-dyslexic = callPackage ../data/fonts/open-dyslexic { };
 
   open-sans = callPackage ../data/fonts/open-sans { };
+
+  openzone-cursors = callPackage ../data/themes/openzone { };
 
   orbitron = callPackage ../data/fonts/orbitron { };
 
