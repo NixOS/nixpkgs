@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glib zlib libpng ];
 
-  configureFlags = [ "-v" ];
+  cmakeFlags = [ "-DINSTALL_HELPER_SCRIPTS=OFF" ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux ++ platforms.darwin;
