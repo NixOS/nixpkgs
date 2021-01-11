@@ -426,6 +426,7 @@ let
           # We use try_first_pass the second time to avoid prompting password twice
           (optionalString (cfg.unixAuth &&
           (config.security.pam.enableEcryptfs
+            || cfg.enableFscrypt
             || cfg.pamMount
             || cfg.enableKwallet
             || cfg.enableGnomeKeyring
@@ -473,7 +474,7 @@ let
           ${optionalString config.security.pam.enableEcryptfs
               "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
           ${optionalString cfg.enableFscrypt
-              "auth optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so"}
+              "password optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so"}
           ${optionalString cfg.pamMount
               "password optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
           ${optionalString use_ldap
@@ -500,6 +501,8 @@ let
               "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
           ${optionalString config.security.pam.enableEcryptfs
               "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
+          ${optionalString cfg.enableFscrypt
+              "session optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so drop_caches lock_policies"}
           ${optionalString cfg.pamMount
               "session optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
           ${optionalString use_ldap
