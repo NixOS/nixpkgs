@@ -44,7 +44,7 @@ let
       paths = [ pkg ];
       postBuild = ''
         [[ -d "$out/share/applications" ]] && grep -q -R Exec=/ "$out/share/applications" && \
-          >&2 echo "WARNING: ${pkg.name} desktop file is not firejailed."
+          >&2 echo -e "\033[1mERROR: ${pkg.name} desktop file cannot be firejailed because it specifies an absolute path to the unwrapped binary. Please use wrappedBinaries or better yet fix the ${pkg.name} desktop file in nixpkgs and/or upstream.\033[0m" && exit 1
         for bin in $(find "$out/bin" -type l); do
           oldbin="$(readlink "$bin")"
           rm "$bin"
@@ -120,9 +120,7 @@ in {
         Compared to <option>wrappedBinaries</option>,
         this e.g. has the advantage of providing desktop entries and icons.
         However, you should be careful about using these packages'
-        libraries as they will not be wrapped. Note also that applications may
-        not be firejailed if invoked via a desktop file that specifies an
-        absolute path to the unwrapped binary.
+        libraries as they will not be wrapped.
       '';
     };
   };
