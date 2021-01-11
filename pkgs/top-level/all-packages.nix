@@ -21514,6 +21514,8 @@ in
 
   exercism = callPackage ../applications/misc/exercism { };
 
+  expenses = callPackage ../applications/misc/expenses { };
+
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
 
   go-motion = callPackage ../development/tools/go-motion { };
