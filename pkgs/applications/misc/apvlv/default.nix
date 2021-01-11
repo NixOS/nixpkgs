@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig, pcre, libxkbcommon, epoxy
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, pcre, libxkbcommon, epoxy
 , gtk3, poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence, wrapGAppsHook
 }:
 
@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
 
   nativeBuildInputs = [
-    pkgconfig
+    cmake
+    pkg-config
     wrapGAppsHook
   ];
 
   buildInputs = [
-    cmake
     poppler pcre libxkbcommon epoxy
     freetype gtk3
     libpthreadstubs libXdmcp libxshmfence # otherwise warnings in compilation

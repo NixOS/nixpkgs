@@ -13,8 +13,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "06xkhlfix0h6di6cnvc4blbj3mjy90scbh89dvywbx16wjlc79pf";
   };
 
-  buildInputs = [ cmake libzip gnupg ] ++
-    (if stdenv.isDarwin then [ libiconv CoreFoundation Security ] else []);
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libzip gnupg ]
+    ++ (stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreFoundation Security ]);
 
   preCheck = ''
     export HOME=$(mktemp -d)

@@ -10,9 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1c8h94ja7271ph61zrcgnjgblxppld6v22f7f900prjgzbcfy14m";
   };
 
-  buildInputs = [ cmake libGLU libGL qt5.qtbase boost ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libGLU libGL qt5.qtbase boost ];
 
   meta = with stdenv.lib; {
     description = "A toolset for model-checking concurrent systems and protocols";

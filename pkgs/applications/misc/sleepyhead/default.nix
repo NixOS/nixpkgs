@@ -24,7 +24,7 @@ in mkDerivation {
   patchPhase = ''
     patchShebangs configure
   '';
-  
+
   installPhase = if stdenv.isDarwin then ''
     mkdir -p $out/Applications
     cp -r sleepyhead/SleepyHead.app $out/Applications

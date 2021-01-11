@@ -30,21 +30,19 @@ in stdenv.mkDerivation {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ cmake pkg-config];
-
+  nativeBuildInputs = [ cmake flex bison doxygen makeWrapper pkg-config ];
   buildInputs = [
     embree2 zlib boost_static libjpeg
     libtiff libpng ilmbase freetype openexr openimageio
-    tbb qt5.full c-blosc libGLU pcre bison
-    flex libX11 libpthreadstubs python libXdmcp libxkbcommon
-    epoxy at-spi2-core dbus doxygen
+    tbb qt5.full c-blosc libGLU pcre
+    libX11 libpthreadstubs python libXdmcp libxkbcommon
+    epoxy at-spi2-core dbus
     # needed for GSETTINGS_SCHEMAS_PATH
     gsettings-desktop-schemas glib gtk3
     # needed for XDG_ICON_DIRS
     gnome3.adwaita-icon-theme
-    makeWrapper
     (stdenv.lib.getLib dconf)
-   ] ++ stdenv.lib.optionals withOpenCL [ opencl-headers ocl-icd opencl-clhpp rocm-opencl-runtime ];
+  ] ++ stdenv.lib.optionals withOpenCL [ opencl-headers ocl-icd opencl-clhpp rocm-opencl-runtime ];
 
   cmakeFlags = [
     "-DOpenEXR_Iex_INCLUDE_DIR=${openexr.dev}/include/OpenEXR"

@@ -60,12 +60,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    cmake
+    pkg-config
     makeWrapper
   ];
 
   buildInputs = [
     boost
-    cmake
     dbus
     elfutils # libdw
     glib
@@ -77,7 +78,6 @@ stdenv.mkDerivation rec {
     libGL
     lxc
     mesa
-    pkg-config
     properties-cpp
     protobuf protobufc
     python3

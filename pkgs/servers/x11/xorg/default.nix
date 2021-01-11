@@ -2471,11 +2471,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xkbcomp = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile, xorgproto }: stdenv.mkDerivation {
-    name = "xkbcomp-1.4.2";
+    name = "xkbcomp-1.4.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xkbcomp-1.4.2.tar.bz2";
-      sha256 = "0944rrkkf0dxp07vhh9yr4prslxhqyw63qmbjirbv1bypswvrn3d";
+      url = "mirror://xorg/individual/app/xkbcomp-1.4.4.tar.bz2";
+      sha256 = "0zpjkbap9160pdd6jpgb5f0yg5281w0rkkx1l0i7g887lq1ydk2r";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];

@@ -62,8 +62,6 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  enableParallelBuilding = true;
-
   # Same as vulkan-validation-layers
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];
   dontPatchELF = true;

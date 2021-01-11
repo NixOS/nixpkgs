@@ -10,9 +10,7 @@ stdenv.mkDerivation {
     sha256 = "14c1zvzmp1ylp4pgayfdfk1kqjb23xj4f7ll1ra7b18wjxc9ja1v";
   };
 
-  buildInputs = [ cmake ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
 
   installPhase = ''
     mkdir -p $out/bin

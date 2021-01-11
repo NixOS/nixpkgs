@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "07857vdkak306d9s5g6fhmjyxk7vijzjhkmqb15s7ihfxx9lx8xb";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     homepage = "https://bitbucket.org/mpyne/game-music-emu/wiki/Home";

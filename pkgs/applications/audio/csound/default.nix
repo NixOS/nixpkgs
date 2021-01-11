@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
   # version and remove fluidsynth 1.x from nixpkgs again.
   version = "6.15.0";
 
-  enableParallelBuilding = true;
-
   hardeningDisable = [ "format" ];
 
   src = fetchFromGitHub {

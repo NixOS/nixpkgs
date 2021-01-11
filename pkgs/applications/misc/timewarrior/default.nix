@@ -4,8 +4,6 @@ stdenv.mkDerivation rec {
   pname = "timewarrior";
   version = "1.4.2";
 
-  enableParallelBuilding = true;
-
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "timewarrior";

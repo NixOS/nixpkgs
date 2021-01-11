@@ -98,8 +98,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = xorg.xorgserver.propagatedBuildInputs;
 
-  enableParallelBuilding = true;
-
   meta = {
     homepage = "https://tigervnc.org/";
     license = stdenv.lib.licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio, log4cpp
+{ stdenv, fetchFromGitHub, cmake, pkg-config, boost, gnuradio, log4cpp
 , makeWrapper, pythonSupport ? true, python, swig
 }:
 
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "0jkzchvw0ivcxsjhi1h0mf7k13araxf5m4wi5v9xdgqxvipjzqfy";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    cmake boost gnuradio makeWrapper log4cpp
+    boost gnuradio makeWrapper log4cpp
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''
@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
         wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:$(toPythonPath "$out")
     done
   '';
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Gnuradio block for radio data system";

@@ -30,8 +30,6 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  enableParallelBuilding = true;
-
   passthru.updateScript = xfce.updateScript {
     inherit pname version;
     attrPath = "xfce.thunar-dropbox-plugin";

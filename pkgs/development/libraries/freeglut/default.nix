@@ -12,7 +12,8 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper cmake ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper ];
 
   cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
                  "-DOPENGL_INCLUDE_DIR=${libGL}/include"
@@ -21,8 +22,6 @@ in stdenv.mkDerivation {
                  "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
                  "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
                ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Create and manage windows containing OpenGL contexts";

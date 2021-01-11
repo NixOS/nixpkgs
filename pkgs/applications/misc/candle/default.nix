@@ -12,7 +12,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ qmake ];
-  
+
   sourceRoot = "source/src";
 
   installPhase = ''

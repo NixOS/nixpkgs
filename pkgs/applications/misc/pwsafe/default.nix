@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     "-DNO_GTEST=ON"
     "-DCMAKE_CXX_FLAGS=-I${yubikey-personalization}/include/ykpers-1"
   ];
-  enableParallelBuilding = true;
 
   postPatch = ''
     # Fix perl scripts used during the build.

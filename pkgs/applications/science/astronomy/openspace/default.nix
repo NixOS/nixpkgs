@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
-    makeWrapper cmake
     curl boost gdal glew soil
     libX11 libXi libXxf86vm libXcursor libXrandr libXinerama
   ];

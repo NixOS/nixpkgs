@@ -59,8 +59,6 @@ stdenv.mkDerivation (rec {
     "-DSPHINX_OUTPUT_HTML=OFF"
   ];
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     # Editor support
     # vscode:

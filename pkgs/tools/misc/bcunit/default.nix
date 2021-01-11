@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   # https://gitlab.linphone.org/BC/public/bcunit/issues/1
   version = "unstable-2019-11-19";
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";

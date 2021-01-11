@@ -21,8 +21,6 @@ mkDerivation rec {
     "-DNO_SHIBBOLETH=1"
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Synchronise your ownCloud with your computer using this desktop client";
     homepage = "https://owncloud.org";

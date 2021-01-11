@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fuse ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "Transparent encryption filesystem";

@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
     ./fix-cmake.patch
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = "https://elmerfem.org/";
     description = "A finite element software for multiphysical problems";

@@ -33,8 +33,6 @@ stdenv.mkDerivation (rec {
     alsaLib
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = "https://www.rosegardenmusic.com/";
     description = "Music composition and editing environment";

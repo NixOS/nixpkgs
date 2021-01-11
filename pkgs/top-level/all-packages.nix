@@ -5144,6 +5144,8 @@ in
 
   jumpapp = callPackage ../tools/X11/jumpapp {};
 
+  jove = callPackage ../applications/editors/jove {};
+
   jucipp = callPackage ../applications/editors/jucipp { };
 
   jugglinglab = callPackage ../tools/misc/jugglinglab { };
@@ -8383,6 +8385,8 @@ in
   whipper = callPackage ../applications/audio/whipper { };
 
   whois = callPackage ../tools/networking/whois { };
+
+  wifish = callPackage ../tools/networking/wifish { };
 
   wifite2 = callPackage ../tools/networking/wifite2 { };
 
@@ -22637,6 +22641,8 @@ in
   dupd = callPackage ../tools/misc/dupd { };
 
   jdupes = callPackage ../tools/misc/jdupes { };
+
+  jed = callPackage ../applications/editors/jed { };
 
   jedit = callPackage ../applications/editors/jedit { };
 

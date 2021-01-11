@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ python.pkgs.numpy ]
    ++ stdenv.lib.optionals withMPI [ python.pkgs.mpi4py ];
 
-  enableParallelBuilding = true;
-
   dontAddPrefix = true;
   cmakeFlags = [
        "-DENABLE_MPI=${onOffBool withMPI}"

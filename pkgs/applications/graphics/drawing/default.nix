@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "0.4.13";
 
   format = "other";
-  
+
   src = fetchFromGitHub {
     owner = "maoschanz";
     repo = pname;

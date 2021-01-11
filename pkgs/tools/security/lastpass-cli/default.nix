@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
     bash-completion curl openssl libxml2 libxslt
   ];
 
-  enableParallelBuilding = true;
-
   installTargets = [ "install" "install-doc" ];
 
   postInstall = ''

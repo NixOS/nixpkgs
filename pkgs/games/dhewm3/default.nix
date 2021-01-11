@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 libGLU libGL zlib libjpeg libogg libvorbis openal curl ];
 
-  enableParallelBuilding = true;
-
   hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {

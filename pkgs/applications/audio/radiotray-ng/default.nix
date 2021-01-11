@@ -80,8 +80,6 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
   ];
 
-  enableParallelBuilding = true;
-
   checkInputs = [ gtest ];
   doCheck = !stdenv.isAarch64; # single failure that I can't explain
 

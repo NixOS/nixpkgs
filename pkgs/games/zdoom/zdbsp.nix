@@ -10,8 +10,13 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib ];
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    zlib
+  ];
 
   installPhase = ''
     install -Dm755 zdbsp $out/bin/zdbsp

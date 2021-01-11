@@ -10,17 +10,19 @@
 , bash-completion
 , dbus
 , gnome3
-, libxml2
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 }:
-
+let
+  isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
+in
 stdenv.mkDerivation rec {
   pname = "dconf";
   version = "0.38.0";
 
-  outputs = [ "out" "lib" "dev" "devdoc" ];
+  outputs = [ "out" "lib" "dev" ]
+    ++ stdenv.lib.optional (!isCross) "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -30,27 +32,25 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    vala
     pkg-config
     python3
     libxslt
-    libxml2
     glib
-    gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_42
-  ];
+  ] ++ stdenv.lib.optional (!isCross) gtk-doc;
 
   buildInputs = [
     glib
     bash-completion
     dbus
-  ];
+  ] ++ stdenv.lib.optional (!isCross) vala;
+  # Vala cross compilation is broken. For now, build dconf without vapi when cross-compiling.
 
   mesonFlags = [
     "--sysconfdir=/etc"
-    "-Dgtk_doc=true"
-  ];
+    "-Dgtk_doc=${stdenv.lib.boolToString (!isCross)}" # gtk-doc does do some gobject introspection, which doesn't yet cross-compile.
+  ] ++ stdenv.lib.optional isCross "-Dvapi=false";
 
   doCheck = !stdenv.isAarch32 && !stdenv.isAarch64 && !stdenv.isDarwin;
 

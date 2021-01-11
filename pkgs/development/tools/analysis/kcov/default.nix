@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib curl elfutils python libiberty libopcodes ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Code coverage tester for compiled programs, Python scripts and shell scripts";
 

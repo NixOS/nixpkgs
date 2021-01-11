@@ -16,8 +16,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Open Source Biometric Recognition";
     homepage = "http://openbiometrics.org/";

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkgconfig, boost, libunwind, libmemcached
+{ stdenv, fetchgit, cmake, pkg-config, boost, libunwind, libmemcached
 , pcre, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ cmake pkg-config flex bison ];
   buildInputs =
-    [ cmake pkgconfig boost libunwind libmysqlclient libmemcached pcre gdb git perl
-      libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
+    [ boost libunwind libmysqlclient libmemcached pcre gdb git perl
+      libevent gd curl libxml2 icu openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt libkrb5
       gmp libyaml libedit libvpx imagemagick fribidi gperf which
@@ -31,7 +32,6 @@ stdenv.mkDerivation rec {
     ./flexible-array-members-gcc6.patch
   ];
 
-  enableParallelBuilding = true;
   dontUseCmakeBuildDir = true;
   NIX_LDFLAGS = "-lpam -L${pam}/lib";
 
