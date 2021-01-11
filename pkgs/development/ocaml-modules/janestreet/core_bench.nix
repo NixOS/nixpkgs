@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , buildOcamlJane
 , core
 , core_extended

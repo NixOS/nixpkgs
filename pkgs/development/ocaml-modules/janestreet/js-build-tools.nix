@@ -1,4 +1,4 @@
-{ lib, stdenv, buildOcaml, fetchurl, ocaml_oasis, opaline }:
+{ lib, buildOcaml, fetchurl, ocaml_oasis, opaline }:
 
 buildOcaml rec {
   name = "js-build-tools";

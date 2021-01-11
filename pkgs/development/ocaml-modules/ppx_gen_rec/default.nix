@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildDunePackage, ocaml-migrate-parsetree }:
+{ lib, fetchurl, buildDunePackage, ocaml-migrate-parsetree }:
 
 buildDunePackage rec {
   pname = "ppx_gen_rec";

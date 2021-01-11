@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildDunePackage, bigarray-compat, cstruct }:
+{ lib, fetchurl, buildDunePackage, bigarray-compat, cstruct }:
 
 buildDunePackage rec {
   pname = "hex";

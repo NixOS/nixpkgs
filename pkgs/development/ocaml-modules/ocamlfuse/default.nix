@@ -1,4 +1,4 @@
-{ stdenv, lib, buildDunePackage, fetchFromGitHub, camlidl, fuse }:
+{ lib, buildDunePackage, fetchFromGitHub, camlidl, fuse }:
 
 buildDunePackage {
   pname = "ocamlfuse";
