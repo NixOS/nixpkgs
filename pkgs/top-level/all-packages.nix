@@ -4134,6 +4134,8 @@ in
 
   freetds = callPackage ../development/libraries/freetds { };
 
+  freetube = callPackage ../applications/video/freetube { };
+
   freqtweak = callPackage ../applications/audio/freqtweak {
     wxGTK = wxGTK31-gtk2;
   };
