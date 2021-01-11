@@ -9,8 +9,6 @@ args:
 let
   args_ = {
 
-    enableParallelBuilding = args.enableParallelBuilding or true;
-
     nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ wrapQtAppsHook ];
 
   };
