@@ -8,12 +8,12 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "02ajkij85966vd150iy246mv16dsaph1kfi0y8wnncp8w6nar5hg";
+    src = fetch "clang" "0kab4zmkxffg98a3rx95756jlwhxflalin5w05g1anpwxv175xbk";
     inherit clang-tools-extra_src;
 
     unpackPhase = ''
       unpackFile $src
-      mv clang-${version}* clang
+      mv clang-* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
       mv clang-tools-extra-* $sourceRoot/tools/extra

@@ -19,7 +19,7 @@
 let
   reuseLibs = enableShared && withAllTargets;
 
-  version = "2.34";
+  version = "2.35.1";
   basename = "binutils";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
@@ -34,7 +34,7 @@ let
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
-    sha256 = "1rin1f5c7wm4n3piky6xilcrpf2s0n3dd5vqq8irrxkcic3i1w49";
+    sha256 = "sha256-Mg56HQ9G/Nn0E/EEbiFsviO7K85t62xqYzBEJeSLGUI=";
   });
 in
 
@@ -47,12 +47,6 @@ stdenv.mkDerivation {
   patches = [
     # Make binutils output deterministic by default.
     ./deterministic.patch
-
-    # Bfd looks in BINDIR/../lib for some plugins that don't
-    # exist. This is pointless (since users can't install plugins
-    # there) and causes a cycle between the lib and bin outputs, so
-    # get rid of it.
-    ./no-plugins.patch
 
     # Help bfd choose between elf32-littlearm, elf32-littlearm-symbian, and
     # elf32-littlearm-vxworks in favor of the first.
