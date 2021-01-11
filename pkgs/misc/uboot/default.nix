@@ -40,7 +40,9 @@ let
 
     src = if src == null then defaultSrc else src;
 
-    patches = extraPatches;
+    patches = [
+      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+    ] ++ extraPatches;
 
     postPatch = ''
       patchShebangs tools
