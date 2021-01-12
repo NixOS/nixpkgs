@@ -24746,6 +24746,8 @@ in
 
   taskell = haskell.lib.justStaticExecutables haskellPackages.taskell;
 
+  tap-plugins = callPackage ../applications/audio/tap-plugins { };
+
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
   tabula = callPackage ../applications/misc/tabula { };
