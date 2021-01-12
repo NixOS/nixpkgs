@@ -310,7 +310,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           })
         ];
         postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
-        configureFlags = "--with-gettext=${gettext}"; }
+        configureFlags = [ "--with-gettext=${gettext}" ]; }
       { name = "gmp";
         buildInputs = [ gmp ];
         configureFlags = [ "--with-gmp=${gmp.dev}" ]; }

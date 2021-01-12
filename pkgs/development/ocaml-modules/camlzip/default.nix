@@ -2,7 +2,7 @@
 
 let
   param =
-    if stdenv.lib.versionAtLeast ocaml.version "4.02"
+    if lib.versionAtLeast ocaml.version "4.02"
     then {
       version = "1.10";
       url = "https://github.com/xavierleroy/camlzip/archive/rel110.tar.gz";

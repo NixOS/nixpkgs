@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.03.0";
+assert lib.versionAtLeast (lib.getVersion ocaml) "4.03.0";
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-syslog";

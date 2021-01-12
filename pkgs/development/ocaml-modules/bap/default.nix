@@ -8,11 +8,11 @@
 , z3
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.07"
+if !lib.versionAtLeast ocaml.version "4.07"
 then throw "BAP is not available for OCaml ${ocaml.version}"
 else
 
-if stdenv.lib.versionAtLeast core_kernel.version "0.13"
+if lib.versionAtLeast core_kernel.version "0.13"
 then throw "BAP needs core_kernel-0.12 (hence OCaml 4.07)"
 else
 

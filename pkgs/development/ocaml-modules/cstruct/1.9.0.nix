@@ -2,7 +2,7 @@
 , async ? null, lwt ? null
 }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01";
+assert lib.versionAtLeast ocaml.version "4.01";
 
 let version = "1.9.0"; in
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-cstruct";
     description = "Map OCaml arrays onto C-like structs";
-    license = stdenv.lib.licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ maintainers.vbgl maintainers.ericbmerritt ];
     platforms = ocaml.meta.platforms or [];
   };

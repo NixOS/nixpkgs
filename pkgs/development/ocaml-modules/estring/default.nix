@@ -1,6 +1,6 @@
-{ lib, stdenv, buildOcaml, ocaml, fetchurl }:
+{ lib, buildOcaml, ocaml, fetchurl }:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "estring is not available for OCaml ${ocaml.version}"
 else
 

@@ -1498,6 +1498,8 @@ in
 
   babeld = callPackage ../tools/networking/babeld { };
 
+  babelfish = callPackage ../shells/fish/babelfish.nix { };
+
   badchars = python3Packages.callPackage ../tools/security/badchars { };
 
   badvpn = callPackage ../tools/networking/badvpn {};
@@ -11942,6 +11944,8 @@ in
 
   jbake = callPackage ../development/tools/jbake { };
 
+  jbang = callPackage ../development/tools/jbang { };
+
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
   jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
@@ -13251,6 +13255,8 @@ in
   fribidi = callPackage ../development/libraries/fribidi { };
 
   funambol = callPackage ../development/libraries/funambol { };
+
+  gamenetworkingsockets = callPackage ../development/libraries/gamenetworkingsockets { };
 
   gamin = callPackage ../development/libraries/gamin { };
   fam = gamin; # added 2018-04-25
@@ -16465,6 +16471,8 @@ in
 
   tremor = callPackage ../development/libraries/tremor { };
 
+  trillian = callPackage ../tools/misc/trillian { };
+
   twolame = callPackage ../development/libraries/twolame { };
 
   udns = callPackage ../development/libraries/udns { };
@@ -17584,9 +17592,6 @@ in
   };
 
   mariadb = callPackage ../servers/sql/mariadb {
-    # As per mariadb's cmake, "static jemalloc_pic.a can only be used up to jemalloc 4".
-    # https://jira.mariadb.org/browse/MDEV-15034
-    jemalloc450 = jemalloc450.override ({ disableInitExecTls = true; });
     inherit (darwin) cctools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -20492,6 +20497,8 @@ in
 
   masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
 
+  masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
+
   aeolus = callPackage ../applications/audio/aeolus { };
 
   aewan = callPackage ../applications/editors/aewan { };
@@ -20816,11 +20823,7 @@ in
 
   calculix = callPackage ../applications/science/math/calculix {};
 
-  calibre-py2 = libsForQt5.callPackage ../applications/misc/calibre { pythonPackages = python2Packages; };
-
-  calibre-py3 = libsForQt5.callPackage ../applications/misc/calibre { pythonPackages = python3Packages; };
-
-  calibre = calibre-py3;
+  calibre = libsForQt5.callPackage ../applications/misc/calibre {};
 
   calligra = libsForQt5.callPackage ../applications/office/calligra {
     openjpeg = openjpeg_1;
@@ -21686,7 +21689,6 @@ in
     callPackage = pkgs.newScope {
       inherit (rustPackages) cargo rustc;
       libpng = libpng_apng;
-      python = python2;
       gnused = gnused_422;
       inherit (darwin.apple_sdk.frameworks) CoreMedia ExceptionHandling
                                             Kerberos AVFoundation MediaToolbox
@@ -24528,6 +24530,8 @@ in
 
   taskell = haskell.lib.justStaticExecutables haskellPackages.taskell;
 
+  tap-plugins = callPackage ../applications/audio/tap-plugins { };
+
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
   tabula = callPackage ../applications/misc/tabula { };
@@ -26458,6 +26462,8 @@ in
   solarus = libsForQt5.callPackage ../games/solarus { };
   solarus-quest-editor = libsForQt5.callPackage ../development/tools/solarus-quest-editor { };
 
+  soldat-unstable = callPackage ../games/soldat-unstable { };
+
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
 
@@ -27642,6 +27648,7 @@ in
 
   mxnet = callPackage ../applications/science/math/mxnet {
     inherit (linuxPackages) nvidia_x11;
+    stdenv = gcc9Stdenv;
   };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
@@ -28454,6 +28461,8 @@ in
   opkg-utils = callPackage ../tools/package-management/opkg-utils { };
 
   OSCAR = qt5.callPackage ../applications/misc/OSCAR { };
+
+  pcem = callPackage ../misc/emulators/pcem { };
 
   pgmanage = callPackage ../applications/misc/pgmanage { };
 

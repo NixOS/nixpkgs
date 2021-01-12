@@ -1,6 +1,6 @@
-{ lib, stdenv, buildOcaml, ocaml, fetchurl, type_conv }:
+{ lib, buildOcaml, ocaml, fetchurl, type_conv }:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "variantslib-109.15.03 is not available for OCaml ${ocaml.version}"
 else
 

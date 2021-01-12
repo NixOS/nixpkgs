@@ -23,6 +23,7 @@ arcticicestudio/nord-vim
 artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
 ayu-theme/ayu-vim
+bakpakin/fennel.vim
 bazelbuild/vim-bazel
 bbchung/clighter8
 benizi/vim-automkdir

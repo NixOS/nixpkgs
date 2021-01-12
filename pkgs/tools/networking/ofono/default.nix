@@ -46,6 +46,14 @@ stdenv.mkDerivation rec {
     "--enable-external-ell"
   ];
 
+  postInstall = ''
+    rm -r $out/etc/ofono
+    ln -s /etc/ofono $out/etc/ofono
+  '';
+
+  enableParallelBuilding = true;
+  enableParallelChecking = false;
+
   doCheck = true;
 
   meta = with lib; {

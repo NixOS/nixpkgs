@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage }:
+{ lib, fetchFromGitHub, buildDunePackage }:
 
 buildDunePackage rec {
 	pname = "ppx_derivers";
@@ -15,8 +15,8 @@ buildDunePackage rec {
 
 	meta = {
 		description = "Shared [@@deriving] plugin registry";
-		license = stdenv.lib.licenses.bsd3;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		license = lib.licenses.bsd3;
+		maintainers = [ lib.maintainers.vbgl ];
 		inherit (src.meta) homepage;
 	};
 }

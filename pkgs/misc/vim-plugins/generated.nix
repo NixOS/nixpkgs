@@ -1328,6 +1328,18 @@ let
     meta.homepage = "https://github.com/lambdalisue/fern.vim/";
   };
 
+  fennel-vim = buildVimPluginFrom2Nix {
+    pname = "fennel.vim";
+    version = "2021-01-08";
+    src = fetchFromGitHub {
+      owner = "bakpakin";
+      repo = "fennel.vim";
+      rev = "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89";
+      sha256 = "1fvcn4q87d594nzxlj1597bmrixzlfqnl7k8f547skvvywx09kii";
+    };
+    meta.homepage = "https://github.com/bakpakin/fennel.vim/";
+  };
+
   ferret = buildVimPluginFrom2Nix {
     pname = "ferret";
     version = "2020-12-08";
