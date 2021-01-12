@@ -1,4 +1,4 @@
-{ stdenv, lib, perl, fetchurl, python2
+{ gcc9Stdenv, lib, perl, fetchurl, python2
 , pkgconfig, spidermonkey_38, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
 , openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
@@ -8,7 +8,7 @@
 
 assert withEditor -> wxGTK != null;
 
-stdenv.mkDerivation rec {
+gcc9Stdenv.mkDerivation rec {
   pname = "0ad";
   version = "0.0.23b";
 
