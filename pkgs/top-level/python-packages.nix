@@ -5466,6 +5466,8 @@ in {
 
   PyLTI = callPackage ../development/python-modules/pylti { };
 
+  pylutron = callPackage ../development/python-modules/pylutron { };
+
   pymacaroons = callPackage ../development/python-modules/pymacaroons { };
 
   pymaging = callPackage ../development/python-modules/pymaging { };
