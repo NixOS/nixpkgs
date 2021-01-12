@@ -1498,6 +1498,8 @@ in
 
   babeld = callPackage ../tools/networking/babeld { };
 
+  babelfish = callPackage ../shells/fish/babelfish.nix { };
+
   badchars = python3Packages.callPackage ../tools/security/badchars { };
 
   badvpn = callPackage ../tools/networking/badvpn {};
