@@ -58,6 +58,8 @@ let
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
+    bheap = callPackage ../development/ocaml-modules/bheap { };
+
     bigarray-compat = callPackage ../development/ocaml-modules/bigarray-compat { };
 
     bigarray-overlap = callPackage ../development/ocaml-modules/bigarray-overlap { };
