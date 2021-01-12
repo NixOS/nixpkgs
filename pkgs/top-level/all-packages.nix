@@ -1070,6 +1070,8 @@ in
 
   bitwarden_rs-vault = callPackage ../tools/security/bitwarden_rs/vault.nix { };
 
+  configuradorfnmt = callPackage ../tools/security/configuradorfnmt { };
+
   bmap-tools = callPackage ../tools/misc/bmap-tools { };
 
   bonnie = callPackage ../tools/filesystems/bonnie { };
