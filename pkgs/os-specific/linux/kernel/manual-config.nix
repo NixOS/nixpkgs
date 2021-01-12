@@ -32,6 +32,8 @@ in {
   # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
   # automatically extended with extra per-version and per-config values.
   randstructSeed ? "",
+  # Extra moduleBuildDependencies
+  extraModuleBuildDependencies ? [],
   # Use defaultMeta // extraMeta
   extraMeta ? {},
 
@@ -52,7 +54,8 @@ let
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = optional (stdenv.lib.versionAtLeast version "4.14") libelf;
+  moduleBuildDependencies = optional (stdenv.lib.versionAtLeast version "4.14") libelf
+    ++ extraModuleBuildDependencies;
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
@@ -235,6 +238,14 @@ let
         # them here. Note that we may see packages requiring headers
         # from drivers/ in the future; it adds 50M to keep all of its
         # headers on 3.10 though.
+
+        # Keep generated certificates to sign out of tree modules
+        mkdir -p $dev/lib/modules/${modDirVersion}/build/certs
+        for f in certs/signing_key.pem certs/signing_key.x509; do
+          if [ -f "$buildRoot/$f" ]; then
+            cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/certs
+          fi
+        done
 
         chmod u+w -R ..
         arch=$(cd $dev/lib/modules/${modDirVersion}/build/arch; ls)

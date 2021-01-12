@@ -7,6 +7,7 @@
 , libmpc ? null
 , mpfr ? null
 , stdenv
+, makeSetupHook
 
 , # The kernel source tarball.
   src
@@ -176,6 +177,14 @@ let
     inherit version modDirVersion src kernelPatches randstructSeed stdenv extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
+    extraModuleBuildDependencies = [
+      (makeSetupHook
+        { substitutions =
+          { kernel = kernel.dev + "/lib/modules/${modDirVersion}/build";
+            hash = if (configfile.structuredConfig ? MODULE_SIG_HASH)
+              then configfile.structuredConfig.MODULE_SIG_HASH.freeform else ""; }; }
+        ./sign-module.sh)
+    ];
   };
 
   passthru = {
