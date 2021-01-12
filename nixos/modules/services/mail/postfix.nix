@@ -25,7 +25,7 @@ let
 
   clientRestrictions = concatStringsSep ", " (clientAccess ++ dnsBl);
 
-  smtpTlsSecurityLevel = if cfg.useDane then "dane" else "may";
+  smtpTlsSecurityLevel = if cfg.useDane then "dane" else mkDefault "may";
 
   mainCf = let
     escape = replaceStrings ["$"] ["$$"];
