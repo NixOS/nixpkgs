@@ -272,13 +272,12 @@ let
 
       # Working directory will be /tmp
       script = ''
-        set -euo pipefail
+        set -euxo pipefail
 
         ${optionalString (data.webroot != null) ''
           # Ensure the webroot exists
           mkdir -p '${data.webroot}/.well-known/acme-challenge'
-          chown 'acme:${data.group}' ${data.webroot}/{.well-known,.well-known/acme-challenge} \
-          || echo "Please fix the permissions under ${data.webroot}/.well-known/acme-challenge" && exit 1
+          chown 'acme:${data.group}' ${data.webroot}/{.well-known,.well-known/acme-challenge}
         ''}
 
         echo '${domainHash}' > domainhash.txt
