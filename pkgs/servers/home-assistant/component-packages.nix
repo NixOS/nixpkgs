@@ -379,7 +379,7 @@
     "ihc" = ps: with ps; [ defusedxml ]; # missing inputs: ihcsdk
     "image" = ps: with ps; [ aiohttp-cors pillow ];
     "image_processing" = ps: with ps; [ aiohttp-cors ];
-    "imap" = ps: with ps; [ ]; # missing inputs: aioimaplib
+    "imap" = ps: with ps; [ aioimaplib ];
     "imap_email_content" = ps: with ps; [ ];
     "incomfort" = ps: with ps; [ ]; # missing inputs: incomfort-client
     "influxdb" = ps: with ps; [ influxdb-client influxdb ];
