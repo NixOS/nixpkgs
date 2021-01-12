@@ -2433,6 +2433,8 @@ in {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  genome-collector = callPackage ../development/python-modules/genome-collector { };
+
   genpy = callPackage ../development/python-modules/genpy { };
 
   genshi = callPackage ../development/python-modules/genshi { };
@@ -4927,6 +4929,8 @@ in {
     callPackage ../development/python-modules/prettytable { }
   else
     callPackage ../development/python-modules/prettytable/1.nix { };
+
+  primer3 = callPackage ../development/python-modules/primer3 { };
 
   priority = callPackage ../development/python-modules/priority { };
 
