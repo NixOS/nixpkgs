@@ -22,13 +22,15 @@ import ./make-test-python.nix ({ pkgs, ...} :
           bind_address = "0.0.0.0";
           secret_key = "@SEARX_SECRET_KEY@";
         };
-      settings.engines = {
-        wolframalpha =
-          { api_key = "@WOLFRAM_API_KEY@";
-            engine = "wolframalpha_api";
-          };
-        startpage.shortcut = "start";
-      };
+      settings.engines = [
+        { name = "wolframalpha";
+          api_key = "@WOLFRAM_API_KEY@";
+          engine = "wolframalpha_api";
+        }
+        { name = "startpage";
+          shortcut = "start";
+        }
+      ];
     };
 
   };
@@ -109,4 +111,3 @@ import ./make-test-python.nix ({ pkgs, ...} :
           )
     '';
 })
-
