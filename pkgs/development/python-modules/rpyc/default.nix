@@ -1,8 +1,9 @@
-{ lib, stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , nose
 , plumbum
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -18,17 +19,21 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ plumbum ];
 
-  checkInputs = [ nose ];
-  checkPhase = ''
-    cd tests
-    # some tests have added complexities and some tests attempt network use
-    nosetests -I test_deploy -I test_gevent_server -I test_ssh -I test_registry
-  '';
+  checkInputs = [ pytestCheckHook ];
+
+  # Disable tests that requires network access
+  disabledTests = [
+    "test_api"
+    "test_pruning"
+    "test_rpyc"
+  ];
+  pythonImportsCheck = [ "rpyc" ];
 
   meta = with lib; {
     description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";
     homepage = "https://rpyc.readthedocs.org";
     license = licenses.mit;
   };
-
 }
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
