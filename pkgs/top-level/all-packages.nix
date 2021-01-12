@@ -16664,6 +16664,8 @@ in
 
   tremor = callPackage ../development/libraries/tremor { };
 
+  trillian = callPackage ../tools/misc/trillian { };
+
   twolame = callPackage ../development/libraries/twolame { };
 
   udns = callPackage ../development/libraries/udns { };
