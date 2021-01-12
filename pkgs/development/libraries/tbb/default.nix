@@ -1,35 +1,30 @@
-{ stdenv, fetchFromGitHub, fixDarwinDylibNames, compiler ? if stdenv.cc.isClang then "clang" else null, stdver ? null }:
+{ stdenv
+, fetchFromGitHub
+, fixDarwinDylibNames
+, cmake
+}:
 
 with stdenv.lib; stdenv.mkDerivation rec {
   pname = "tbb";
-  version = "2019_U9";
+  version = "2021.1.1";
 
   src = fetchFromGitHub {
-    owner = "01org";
-    repo = "tbb";
-    rev = version;
-    sha256 = "1a39nflw7b2n51jfp3fdprnkpgzaspzww1dckfvaigflfli9s8rj";
+    owner = "oneapi-src";
+    repo = "oneTBB";
+    rev = "v${version}";
+    sha256 = "sha256-uI6q+1okoJ7x88ay7XTNMhT+0uYDfu+1zf0RcGCyilc=";
   };
 
-  nativeBuildInputs = optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ cmake ] ++ optional stdenv.isDarwin fixDarwinDylibNames;
 
-  makeFlags = optional (compiler != null) "compiler=${compiler}"
-    ++ optional (stdver != null) "stdver=${stdver}";
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./glibc-struct-mallinfo.patch;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/lib
-    cp "build/"*release*"/"*${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib/
-    mv include $out/
-    rm $out/include/index.html
-
-    runHook postInstall
+  # tbb detects this compiler as Clang instead of AppleClang
+  prePatch = stdenv.lib.optional stdenv.hostPlatform.isDarwin ''
+    mv cmake/compilers/AppleClang.cmake cmake/compilers/Clang.cmake
   '';
 
-  enableParallelBuilding = true;
+  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./glibc-struct-mallinfo.patch;
 
   meta = {
     description = "Intel Thread Building Blocks C++ Library";
