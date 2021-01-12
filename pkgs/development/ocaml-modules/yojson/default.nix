@@ -7,7 +7,11 @@ let
     url = "https://github.com/ocaml-community/yojson/releases/download/${version}/yojson-${version}.tbz";
     sha256 = "08llz96if8bcgnaishf18si76cv11zbkni0aldb54k3cn7ipiqvd";
     nativeBuildInputs = [ dune ];
-    extra = { inherit (dune) installPhase; };
+    extra = {
+      installPhase = ''
+        dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${pname}
+      '';
+    };
   } else rec {
     version = "1.2.3";
     url = "https://github.com/ocaml-community/yojson/archive/v${version}.tar.gz";
