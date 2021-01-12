@@ -3804,6 +3804,8 @@ in {
 
   manuel = callPackage ../development/python-modules/manuel { };
 
+  manticore = callPackage ../development/python-modules/manticore { inherit (pkgs) z3; };
+
   mapbox = callPackage ../development/python-modules/mapbox { };
 
   mapsplotlib = callPackage ../development/python-modules/mapsplotlib { };
@@ -5239,6 +5241,8 @@ in {
   pyepsg = callPackage ../development/python-modules/pyepsg { };
 
   pyerfa = callPackage ../development/python-modules/pyerfa { };
+
+  pyevmasm = callPackage ../development/python-modules/pyevmasm { };
 
   pyexcel = callPackage ../development/python-modules/pyexcel { };
 
@@ -7972,6 +7976,8 @@ in {
   warrant = callPackage ../development/python-modules/warrant { };
 
   wasabi = callPackage ../development/python-modules/wasabi { };
+
+  wasm = callPackage ../development/python-modules/wasm { };
 
   wasmer = callPackage ../development/python-modules/wasmer { };
 
