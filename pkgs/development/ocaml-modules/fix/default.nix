@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
+assert lib.versionAtLeast (lib.getVersion ocaml) "3.12";
 
 stdenv.mkDerivation {
 

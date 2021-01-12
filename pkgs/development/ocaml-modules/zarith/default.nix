@@ -4,7 +4,7 @@
 }:
 
 let source =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02"
+  if lib.versionAtLeast ocaml.version "4.02"
   then {
     version = "1.11";
     url = "https://github.com/ocaml/Zarith/archive/release-1.11.tar.gz";

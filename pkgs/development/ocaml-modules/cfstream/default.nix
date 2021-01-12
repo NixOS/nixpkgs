@@ -1,4 +1,4 @@
-{ lib, stdenv, buildDunePackage, fetchFromGitHub, m4, core_kernel, ounit }:
+{ lib, buildDunePackage, fetchFromGitHub, m4, core_kernel, ounit }:
 
 buildDunePackage rec {
   pname = "cfstream";

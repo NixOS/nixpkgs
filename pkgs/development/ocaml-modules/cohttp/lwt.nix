@@ -1,8 +1,8 @@
-{ stdenv, buildDunePackage, cohttp, ocaml_lwt, uri, ppx_sexp_conv, logs }:
+{ lib, buildDunePackage, cohttp, ocaml_lwt, uri, ppx_sexp_conv, logs }:
 
-if !stdenv.lib.versionAtLeast cohttp.version "0.99"
+if !lib.versionAtLeast cohttp.version "0.99"
 then cohttp
-else if !stdenv.lib.versionAtLeast ppx_sexp_conv.version "0.13"
+else if !lib.versionAtLeast ppx_sexp_conv.version "0.13"
 then throw "cohttp-lwt is not available for ppx_sexp_conv version ${ppx_sexp_conv.version}"
 else
 

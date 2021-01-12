@@ -4666,6 +4666,12 @@
     githubId = 494012;
     name = "Kevin Cox";
   };
+  kevingriffin = {
+    email = "me@kevin.jp";
+    github = "kevingriffin";
+    githubId = 209729;
+    name = "Kevin Griffin";
+  };
   kfollesdal = {
     email = "kfollesdal@gmail.com";
     github = "kfollesdal";
@@ -8924,6 +8930,12 @@
     github = "teozkr";
     githubId = 649832;
     name = "Teo Klestrup Röijezon";
+  };
+  terin = {
+    email = "terinjokes@gmail.com";
+    github = "terinjokes";
+    githubId = 273509;
+    name = "Terin Stock";
   };
   terlar = {
     email = "terlar@gmail.com";

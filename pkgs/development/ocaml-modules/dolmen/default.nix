@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir }:
 
 stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-dolmen-${version}";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
 	meta = {
 		description = "An OCaml library providing clean and flexible parsers for input languages";
-		license = stdenv.lib.licenses.bsd2;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		license = lib.licenses.bsd2;
+		maintainers = [ lib.maintainers.vbgl ];
 		inherit (src.meta) homepage;
 		inherit (ocaml.meta) platforms;
 	};

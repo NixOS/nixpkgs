@@ -2,7 +2,7 @@
 let
   pname = "yojson";
   param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02" then rec {
+  if lib.versionAtLeast ocaml.version "4.02" then rec {
     version = "1.7.0";
     url = "https://github.com/ocaml-community/yojson/releases/download/${version}/yojson-${version}.tbz";
     sha256 = "08llz96if8bcgnaishf18si76cv11zbkni0aldb54k3cn7ipiqvd";

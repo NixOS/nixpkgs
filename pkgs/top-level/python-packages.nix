@@ -3804,6 +3804,8 @@ in {
 
   manuel = callPackage ../development/python-modules/manuel { };
 
+  manticore = callPackage ../development/python-modules/manticore { inherit (pkgs) z3; };
+
   mapbox = callPackage ../development/python-modules/mapbox { };
 
   mapsplotlib = callPackage ../development/python-modules/mapsplotlib { };
@@ -5240,6 +5242,8 @@ in {
 
   pyerfa = callPackage ../development/python-modules/pyerfa { };
 
+  pyevmasm = callPackage ../development/python-modules/pyevmasm { };
+
   pyexcel = callPackage ../development/python-modules/pyexcel { };
 
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
@@ -6395,6 +6399,8 @@ in {
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
+
+  qdldl = callPackage ../development/python-modules/qdldl { };
 
   qds_sdk = callPackage ../development/python-modules/qds_sdk { };
 
@@ -7970,6 +7976,8 @@ in {
   warrant = callPackage ../development/python-modules/warrant { };
 
   wasabi = callPackage ../development/python-modules/wasabi { };
+
+  wasm = callPackage ../development/python-modules/wasm { };
 
   wasmer = callPackage ../development/python-modules/wasmer { };
 

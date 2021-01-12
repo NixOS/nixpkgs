@@ -1,6 +1,6 @@
 {lib, stdenv, fetchurl, ocaml_pcre, ocamlnet, ocaml, findlib, camlp4}:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "ocaml-http is not available for OCaml ${ocaml.version}"
 else
 
