@@ -1,9 +1,8 @@
 { stdenv, fetchurl, xercesc }:
 
 let
-  fixed_paths = ''LDFLAGS="-L${xercesc}/lib" CPPFLAGS="-I${xercesc}/include"'';
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "xsd";
   version = "4.0.0";
 
@@ -14,19 +13,21 @@ stdenv.mkDerivation {
 
   patches = [ ./xsdcxx.patch ];
 
-  configurePhase = ''
+  postPatch = ''
     patchShebangs .
   '';
 
-  buildPhase = ''
-    make ${fixed_paths}
-  '';
+  enableParallelBuilding = true;
+
+  buildFlags = [
+    "LDFLAGS=-L${xercesc}/lib"
+    "CPPFLAGS=-I${xercesc}/include"
+  ];
+  installFlags = buildFlags ++ [
+    "install_prefix=${placeholder "out"}"
+  ];
 
   buildInputs = [ xercesc ];
-
-  installPhase = ''
-    make ${fixed_paths} install_prefix="$out" install
-  '';
 
   meta = {
     homepage = "http://www.codesynthesis.com/products/xsd";
