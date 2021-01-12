@@ -34,11 +34,8 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
-    # use relative bash path
-    substituteInPlace progs/capsh.c --replace "/bin/bash" "bash"
-
-    # ensure capsh can find bash in $PATH
-    substituteInPlace progs/capsh.c --replace execve execvpe
+    # use full path to bash
+    substituteInPlace progs/capsh.c --replace "/bin/bash" "${stdenv.shell}"
 
     # set prefixes
     substituteInPlace Make.Rules \
