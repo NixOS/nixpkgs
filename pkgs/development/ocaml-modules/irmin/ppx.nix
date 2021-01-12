@@ -1,23 +1,24 @@
-{ lib, fetchurl, buildDunePackage, ppxlib, ocaml-syntax-shims }:
+{ lib, fetchurl, buildDunePackage, ppxlib, ppx_repr }:
 
 buildDunePackage rec {
   pname = "ppx_irmin";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/irmin/releases/download/${version}/irmin-${version}.tbz";
-    sha256 = "0gzw918b661qkvd140hilww9jsc49rxsxz1k4iihyvikjn202km4";
+    sha256 = "1b6lav5br1b83cwdc3gj9mqkzhlbfjrbyjx0107zvj54m82dbrxb";
   };
 
-  minimumOCamlVersion = "4.06";
+  minimumOCamlVersion = "4.08";
 
   useDune2 = true;
 
-  buildInputs = [ ocaml-syntax-shims ];
-  propagatedBuildInputs = [ ppxlib ];
+  propagatedBuildInputs = [
+    ppx_repr
+    ppxlib
+  ];
 
   # tests depend on irmin, would create mutual dependency
-  # opt to test irmin instead of ppx_irmin
   doCheck = false;
 
   meta = {

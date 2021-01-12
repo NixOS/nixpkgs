@@ -474,6 +474,8 @@ let
 
     irmin-chunk = callPackage ../development/ocaml-modules/irmin/chunk.nix { };
 
+    irmin-containers = callPackage ../development/ocaml-modules/irmin/containers.nix { };
+
     irmin-fs = callPackage ../development/ocaml-modules/irmin/fs.nix { };
 
     irmin-git = callPackage ../development/ocaml-modules/irmin/git.nix { };
@@ -481,6 +483,14 @@ let
     irmin-graphql = callPackage ../development/ocaml-modules/irmin/graphql.nix { };
 
     irmin-http = callPackage ../development/ocaml-modules/irmin/http.nix { };
+
+    irmin-layers = callPackage ../development/ocaml-modules/irmin/layers.nix { };
+
+    irmin-mirage = callPackage ../development/ocaml-modules/irmin/mirage.nix { };
+
+    irmin-mirage-git = callPackage ../development/ocaml-modules/irmin/mirage-git.nix { };
+
+    irmin-mirage-graphql = callPackage ../development/ocaml-modules/irmin/mirage-graphql.nix { };
 
     irmin-pack = callPackage ../development/ocaml-modules/irmin/pack.nix { };
 
