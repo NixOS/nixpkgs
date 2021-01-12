@@ -17,5 +17,6 @@ buildGoModule rec {
     homepage = "https://github.com/bouk/babelfish";
     license = licenses.mit;
     maintainers = with maintainers; [ bouk kevingriffin ];
+    platforms = platforms.unix;
   };
 }
