@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase libGLU ]
     ++ lib.optional stdenv.isDarwin AGL;
 
+  dontWrapQtApps = true;
+
   postPatch = ''
     cd QGLViewer
   '';

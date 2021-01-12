@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
   ];
 
+  dontWrapQtApps = true;
+
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
   ];

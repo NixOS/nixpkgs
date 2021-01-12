@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config qttools ];
 
+  dontWrapQtApps = true;
+
   meta = packagekit.meta // {
     description = "System to facilitate installing and updating packages - Qt";
   };

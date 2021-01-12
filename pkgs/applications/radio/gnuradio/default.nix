@@ -218,6 +218,7 @@ let
     passthru
     doCheck
     dontWrapPythonPrograms
+    dontWrapQtApps
     meta
   ;
   cmakeFlags = shared.cmakeFlags
@@ -284,6 +285,7 @@ stdenv.mkDerivation rec {
     passthru
     doCheck
     dontWrapPythonPrograms
+    dontWrapQtApps
     meta
   ;
 }

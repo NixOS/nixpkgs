@@ -12,6 +12,8 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ qmake ];
 
+  dontWrapQtApps = true;
+
   postInstall = ''
      mkdir -p $out/bin
      cp -p converters/dprof2calltree $out/bin/dprof2calltree

@@ -23,6 +23,8 @@ buildPythonPackage rec {
 
   makeFlags = [ "QT_PLUGIN_PATH=${pysideShiboken}/lib/generatorrunner" ];
 
+  dontWrapQtApps = true;
+
   meta = {
     description = "LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
     license = lib.licenses.lgpl21;

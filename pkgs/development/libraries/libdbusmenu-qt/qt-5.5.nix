@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DWITH_DOC=OFF" ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     homepage = "https://launchpad.net/libdbusmenu-qt";
     description = "Provides a Qt implementation of the DBusMenu spec";

@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "Allows to analyze samples of musical instruments, and to combine them (morphing) to construct hybrid sounds";
     homepage = "http://spectmorph.org";

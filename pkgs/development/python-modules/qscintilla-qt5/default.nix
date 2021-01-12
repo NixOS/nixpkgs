@@ -14,6 +14,8 @@ buildPythonPackage {
   buildInputs = [ qscintilla ];
   propagatedBuildInputs = [ pyqt5 ];
 
+  dontWrapQtApps = true;
+
   postPatch = ''
     substituteInPlace Python/configure.py \
       --replace \

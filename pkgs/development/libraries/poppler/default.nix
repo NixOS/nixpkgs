@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
   '';
 
+  dontWrapQtApps = true;
+
   cmakeFlags = [
     (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"
     (mkFlag (!minimal) "GLIB")

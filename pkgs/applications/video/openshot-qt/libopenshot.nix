@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin llvmPackages.openmp
   ;
 
+  dontWrapQtApps = true;
+
   LIBOPENSHOT_AUDIO_DIR = libopenshot-audio;
   "UNITTEST++_INCLUDE_DIR" = "${unittest-cpp}/include/UnitTest++";
 

@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ alsaLib drumstick qtbase qtsvg ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     homepage = "https://kmetronome.sourceforge.io/";
     description = "ALSA MIDI metronome with Qt interface";

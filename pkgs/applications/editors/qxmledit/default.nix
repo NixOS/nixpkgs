@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     export QXMLEDIT_INST_DOC_DIR="$doc"
   '';
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "Simple XML editor based on qt libraries" ;
     homepage = "https://sourceforge.net/projects/qxmledit";

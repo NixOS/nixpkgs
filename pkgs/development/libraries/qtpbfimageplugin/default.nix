@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase protobuf ];
 
+  dontWrapQtApps = true;
+
   postPatch = ''
     # Fix plugin dir
     substituteInPlace pbfplugin.pro \

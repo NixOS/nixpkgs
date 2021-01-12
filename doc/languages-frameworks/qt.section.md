@@ -15,13 +15,14 @@ which are not shared by other C++ software:
 
 ```{=docbook}
 <programlisting>
-{ stdenv, lib, qtbase }: <co xml:id='qt-default-nix-co-1' />
+{ stdenv, lib, qtbase, wrapQtAppsHook }: <co xml:id='qt-default-nix-co-1' />
 
 stdenv.mkDerivation {
   pname = "myapp";
   version = "1.0";
 
   buildInputs = [ qtbase ];
+  nativeBuildInputs = [ wrapQtAppsHook ]; <co xml:id'qt-default-nix-co-2' />
 }
 </programlisting>
 
@@ -32,6 +33,13 @@ stdenv.mkDerivation {
     <emphasis>Do not</emphasis> import Qt package sets such as <literal>qt5</literal>
     because the Qt versions of dependencies may not be coherent, causing build and runtime failures.
    </para>
+  </callout>
+  <callout arearefs="qt-default-nix-co-2'>
+    <para>
+      All Qt packages must include <literal>wrapQtAppsHook</literal> in
+      <literal>nativeBuildInputs</literal>, or you must explicitly set
+      <literal>dontWrapQtApps</literal>.
+    </para>
   </callout>
  </calloutlist>
 ```
@@ -50,7 +58,8 @@ stdenv.mkDerivation {
 }
 ```
 
-Add entries to `qtWrapperArgs` are to modify the wrappers created by `wrapQtAppsHook`:
+Add entries to `qtWrapperArgs` are to modify the wrappers created by
+`wrapQtAppsHook`:
 
 ```nix
 { stdenv, wrapQtAppsHook }:
@@ -65,7 +74,8 @@ stdenv.mkDerivation {
 The entries are passed as arguments to [wrapProgram](#fun-wrapProgram).
 
 Set `dontWrapQtApps` to stop applications from being wrapped automatically.
-Wrap programs manually with `wrapQtApp`, using the syntax of [wrapProgram](#fun-wrapProgram):
+Wrap programs manually with `wrapQtApp`, using the syntax of
+[wrapProgram](#fun-wrapProgram):
 
 ```nix
 { stdenv, lib, wrapQtAppsHook }:
