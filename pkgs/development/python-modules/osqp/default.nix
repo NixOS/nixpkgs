@@ -4,6 +4,7 @@
 , cmake
 , future
 , numpy
+, qdldl
 , scipy
 # check inputs
 , pytestCheckHook
@@ -11,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "osqp";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "130frig5bznfacqp9jwbshmbqd2xw3ixdspsbkrwsvkdaab7kca7";
+    sha256 = "262162039f6ad6c9ffee658541b18cfae8240b65edbde71d9b9e3af42fbfe4b3";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,15 +25,22 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     future
     numpy
+    qdldl
     scipy
   ];
 
   pythonImportsCheck = [ "osqp" ];
   checkInputs = [ pytestCheckHook ];
-  dontUseSetuptoolsCheck = true;  # don't run checks twice
   disabledTests = [
     "mkl_"
-    "update_matrices_tests" # broken w/ scipy >= 1.5.0. Remove next release. See https://github.com/oxfordcontrol/osqp-python/issues/44
+  ];
+    pytestFlagsArray = [
+    # These cannot collect b/c of circular dependency on cvxpy: https://github.com/oxfordcontrol/osqp-python/issues/50
+    "--ignore=module/tests/basic_test.py"
+    "--ignore=module/tests/feasibility_test.py"
+    "--ignore=module/tests/polishing_test.py"
+    "--ignore=module/tests/unconstrained_test.py"
+    "--ignore=module/tests/update_matrices_test.py"
   ];
 
   meta = with lib; {
