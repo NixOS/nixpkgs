@@ -247,7 +247,7 @@
     "ffmpeg_motion" = ps: with ps; [ ha-ffmpeg ];
     "ffmpeg_noise" = ps: with ps; [ ha-ffmpeg ];
     "fibaro" = ps: with ps; [ ]; # missing inputs: fiblary3
-    "fido" = ps: with ps; [ ]; # missing inputs: pyfido
+    "fido" = ps: with ps; [ pyfido ];
     "file" = ps: with ps; [ ];
     "filesize" = ps: with ps; [ ];
     "filter" = ps: with ps; [ aiohttp-cors sqlalchemy ];
