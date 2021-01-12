@@ -875,6 +875,8 @@ let
 
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
+    repr = callPackage ../development/ocaml-modules/repr { };
+
     result = callPackage ../development/ocaml-modules/ocaml-result { };
 
     secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
@@ -956,6 +958,8 @@ let
 
     ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix {
     };
+
+    ppx_repr = callPackage ../development/ocaml-modules/repr/ppx.nix { };
 
     ppx_tools =
       if lib.versionAtLeast ocaml.version "4.02"
