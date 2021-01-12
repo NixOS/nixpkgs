@@ -31,6 +31,12 @@ let
      test '~' = '~' && echo 'success'
     '';
 
+    rust = writeRustBin "test_writers" {} ''
+      fn main(){
+        println!("success")
+      }
+    '';
+
     haskell = writeHaskellBin "test_writers" { libraries = [ haskellPackages.acme-default ]; } ''
       import Data.Default
 
