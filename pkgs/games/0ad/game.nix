@@ -43,6 +43,12 @@ gcc9Stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    # workaround caching issues on the ryzen platform, remove >= 0.0.24
+    # https://trac.wildfiregames.com/ticket/4360
+    sed -e 's|ENSURE|//ENSURE|g' -i source/lib/sysdep/arch/x86_x64/cache.cpp
+  '';
+
   configurePhase = ''
     # Delete shipped libraries which we don't need.
     rm -rf libraries/source/{enet,miniupnpc,nvtt,spidermonkey}
