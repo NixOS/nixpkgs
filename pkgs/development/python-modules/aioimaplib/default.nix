@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "aioimaplib";
-  version = "0.7.15";
+  version = "0.7.18";
 
   # PyPI tarball doesn't ship tests
   src = fetchFromGitHub {
     owner = "bamthomas";
     repo = pname;
     rev = version;
-    sha256 = "15nny3y8pwaizq1zmkg43ym5jszk2hs010z12yn2d0j1fibymwbj";
+    sha256 = "037fxwmkdfb95cqcykrhn37p138wg9pvlsgdf45vyn1mhz5crky5";
   };
 
   disabled = !(isPy3k && pythonOlder "3.7");
