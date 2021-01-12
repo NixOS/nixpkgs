@@ -1329,6 +1329,8 @@ in
 
   asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
 
+  autofirma = callPackage ../tools/security/autofirma { };
+
   gopass = callPackage ../tools/security/gopass { };
 
   gospider = callPackage ../tools/security/gospider { };
