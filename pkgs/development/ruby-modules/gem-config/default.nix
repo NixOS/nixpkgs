@@ -390,16 +390,15 @@ in
   };
 
   nokogiri = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [
+      zlib
+      libxml2
+      libxslt
+    ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
     buildFlags = [
       "--use-system-libraries"
-      "--with-zlib-dir=${zlib.dev}"
-      "--with-xml2-lib=${libxml2.out}/lib"
-      "--with-xml2-include=${libxml2.dev}/include/libxml2"
-      "--with-xslt-lib=${libxslt.out}/lib"
-      "--with-xslt-include=${libxslt.dev}/include"
-      "--with-exslt-lib=${libxslt.out}/lib"
-      "--with-exslt-include=${libxslt.dev}/include"
-    ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
+    ];
   };
 
   opus-ruby = attrs: {
