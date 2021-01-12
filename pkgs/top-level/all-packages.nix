@@ -10507,6 +10507,12 @@ in
 
   swift = callPackage ../development/compilers/swift { };
 
+  symbiflow-vtr = callPackage ../development/compilers/symbiflow-vtr { };
+
+  symbiflow-yosys = callPackage ../development/compilers/symbiflow-yosys { };
+
+  symbiflow-yosys-plugins = callPackage ../development/compilers/symbiflow-yosys-plugins { };
+
   swiProlog = callPackage ../development/compilers/swi-prolog {
     inherit (darwin.apple_sdk.frameworks) Security;
     jdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -10876,6 +10882,8 @@ in
   polyml = callPackage ../development/compilers/polyml { };
   polyml56 = callPackage ../development/compilers/polyml/5.6.nix { };
   polyml57 = callPackage ../development/compilers/polyml/5.7.nix { };
+
+  prjxray-tools = callPackage ../development/compilers/prjxray-tools { };
 
   pure = callPackage ../development/interpreters/pure {
     /*llvm = llvm_35;*/
@@ -11505,6 +11513,8 @@ in
   cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare {};
 
   cloudfoundry-cli = callPackage ../development/tools/cloudfoundry-cli { };
+
+  clpm = callPackage ../development/tools/clpm {};
 
   coan = callPackage ../development/tools/analysis/coan { };
 
@@ -16319,6 +16329,8 @@ in
   streamlink = callPackage ../applications/video/streamlink { pythonPackages = python3Packages; };
   streamlink-twitch-gui-bin = callPackage ../applications/video/streamlink-twitch-gui/bin.nix {};
 
+  sub-batch = callPackage ../applications/video/sub-batch { };
+
   subdl = callPackage ../applications/video/subdl { };
 
   subtitleeditor = callPackage ../applications/video/subtitleeditor { enchant = enchant1; };
@@ -20167,6 +20179,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  prjxray-db = callPackage ../data/misc/prjxray-db { };
+
   profont = callPackage ../data/fonts/profont
     { inherit (buildPackages.xorg) mkfontscale; };
 
@@ -20201,6 +20215,8 @@ in
   skeu = callPackage ../data/themes/skeu { };
 
   sweet = callPackage ../data/themes/sweet { };
+
+  symbiflow-arch-defs = callPackage ../data/misc/symbiflow-arch-defs { };
 
   mime-types = callPackage ../data/misc/mime-types { };
 
@@ -26762,6 +26778,7 @@ in
     tilingnome = callPackage ../desktops/gnome-3/extensions/tilingnome { };
     timepp = callPackage ../desktops/gnome-3/extensions/timepp { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
+    unite-shell = callPackage ../desktops/gnome-3/extensions/unite-shell { };
     window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
     window-is-ready-remover = callPackage ../desktops/gnome-3/extensions/window-is-ready-remover { };
     workspace-matrix = callPackage ../desktops/gnome-3/extensions/workspace-matrix { };
@@ -28789,6 +28806,8 @@ in
   vokoscreen-ng = libsForQt5.callPackage ../applications/video/vokoscreen-ng {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly;
   };
+
+  vsh = callPackage ../tools/misc/vsh { };
 
   vttest = callPackage ../tools/misc/vttest { };
 

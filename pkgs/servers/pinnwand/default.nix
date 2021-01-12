@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, nixosTests, fetchpatch }:
+{ lib, python3, fetchFromGitHub, nixosTests }:
 
 let
   python = python3.override {
@@ -14,14 +14,14 @@ let
   };
 in with python.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
-  version = "1.2.2";
+  version = "1.2.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cxdpc3lxgzakzgvdyyrn234380dm05svnwr8av5nrjp4nm9s8z4";
+    sha256 = "1p6agvp136q6km7gjfv8dpjn6x4ap770lqa40ifblyhw13bsrqlh";
   };
 
   nativeBuildInputs = [
@@ -37,19 +37,9 @@ in with python.pkgs; buildPythonApplication rec {
     sqlalchemy
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    pytest
-  '';
-
-  patches = [
-    # Use poetry-core instead of poetry. Fixed in 1.2.3
-    (fetchpatch {
-      url = "https://github.com/supakeen/pinnwand/commit/38ff5729c59abb97e4b416d3ca66466528b0eac7.patch";
-      sha256 = "F3cZe29z/7glmS3KWzcfmZnhYmC0LrLLS0zHk7WS2rQ=";
-    })
-  ];
+  __darwinAllowLocalNetworking = true;
 
   passthru.tests = nixosTests.pinnwand;
 

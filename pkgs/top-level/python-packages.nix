@@ -1294,6 +1294,8 @@ in {
 
   cloudpickle = callPackage ../development/python-modules/cloudpickle { };
 
+  cloudscraper = callPackage ../development/python-modules/cloudscraper { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   cma = callPackage ../development/python-modules/cma { };
@@ -3233,6 +3235,10 @@ in {
 
   joblib = callPackage ../development/python-modules/joblib { };
 
+  johnnycanencrypt = callPackage ../development/python-modules/johnnycanencrypt {
+    inherit (pkgs.darwin.apple_sdk.frameworks) PCSC;
+  };
+
   josepy = callPackage ../development/python-modules/josepy { };
 
   journalwatch = callPackage ../tools/system/journalwatch { inherit (self) systemd pytest; };
@@ -4785,6 +4791,8 @@ in {
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
+
+  python-prjxray = callPackage ../development/python-modules/python-prjxray { };
 
   python-tado = callPackage ../development/python-modules/python-tado { };
 
@@ -7347,6 +7355,8 @@ in {
 
   sybil = callPackage ../development/python-modules/sybil { };
 
+  symbiflow-fasm = callPackage ../development/python-modules/symbiflow-fasm { };
+
   symengine = callPackage ../development/python-modules/symengine { symengine = pkgs.symengine; };
 
   sympy = if isPy3k then
@@ -7463,6 +7473,8 @@ in {
   testfixtures = callPackage ../development/python-modules/testfixtures { };
 
   textfsm = callPackage ../development/python-modules/textfsm { };
+
+  textx = callPackage ../development/python-modules/textx { };
 
   testpath = callPackage ../development/python-modules/testpath { };
 
@@ -7662,6 +7674,8 @@ in {
   TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
 
   tubeup = callPackage ../development/python-modules/tubeup { };
+
+  tumpa = callPackage ../development/python-modules/tumpa { };
 
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
 
@@ -8101,6 +8115,8 @@ in {
   xarray = callPackage ../development/python-modules/xarray { };
 
   xattr = callPackage ../development/python-modules/xattr { };
+
+  xc-fasm = callPackage ../development/python-modules/xc-fasm { };
 
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
