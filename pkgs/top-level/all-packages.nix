@@ -13002,8 +13002,14 @@ in
 
   boost_process = callPackage ../development/libraries/boost-process { };
 
-  botan = callPackage ../development/libraries/botan { openssl = openssl_1_0_2; };
-  botan2 = callPackage ../development/libraries/botan/2.0.nix { };
+  botan = callPackage ../development/libraries/botan {
+    openssl = openssl_1_0_2;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+
+  botan2 = callPackage ../development/libraries/botan/2.0.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
 
   box2d = callPackage ../development/libraries/box2d { };
 

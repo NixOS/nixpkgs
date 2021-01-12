@@ -4,7 +4,8 @@
 , sourceExtension ? "tar.xz"
 , extraConfigureFlags ? ""
 , postPatch ? null
-, darwin
+, CoreServices
+, Security
 , ...
 }:
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   inherit postPatch;
 
   buildInputs = [ python bzip2 zlib gmp openssl boost ]
-             ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   configurePhase = ''
     python configure.py --prefix=$out --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""} ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else "" }
