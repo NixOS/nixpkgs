@@ -81,7 +81,7 @@ in
       postInstall = ((x.overrides y).postInstall or "") + ''
         export NIX_LISP_ASDF_PATHS="$NIX_LISP_ASDF_PATHS
 $out/lib/common-lisp/query-fs"
-	export HOME=$PWD
+        export HOME=$PWD
         export NIX_LISP_PRELAUNCH_HOOK="nix_lisp_build_system query-fs \
                     '(function query-fs:run-fs-with-cmdline-args)' '$linkedSystems'"
         "$out/bin/query-fs-lisp-launcher.sh"
