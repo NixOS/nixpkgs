@@ -26711,6 +26711,8 @@ in
     inherit (gnome3) zenity;
   };
 
+  sdlpop = callPackage ../games/sdlpop { };
+
   stepmania = callPackage ../games/stepmania {
     ffmpeg = ffmpeg_2;
   };
