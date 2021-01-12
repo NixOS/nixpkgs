@@ -143,6 +143,7 @@ stdenv.mkDerivation rec {
     ./go-1.9-skip-flaky-20072.patch
     ./skip-external-network-tests.patch
     ./skip-nohup-tests.patch
+    ./go_no_vendor_checks-1_14.patch
 
     # fix rare TestDontCacheBrokenHTTP2Conn failure
     (fetchpatch {
