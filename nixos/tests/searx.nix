@@ -39,6 +39,9 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
     services.searx = {
       enable = true;
+      # searx refuses to run if unchanged
+      settings.server.secret_key = "somesecret";
+
       runInUwsgi = true;
       uwsgiConfig = {
         # serve using the uwsgi protocol
