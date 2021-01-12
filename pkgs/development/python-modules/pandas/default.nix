@@ -85,7 +85,6 @@ in buildPythonPackage rec {
   doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
 
   pytestFlagsArray = [
-    "$out/${python.sitePackages}/pandas"
     "--skip-slow"
     "--skip-network"
   ];
@@ -120,7 +119,10 @@ in buildPythonPackage rec {
     "test_clipboard"
   ];
 
+  # tests have relative paths, and need to reference compiled C extensions
+  # so change directory where `import .test` is able to be resolved
   preCheck = ''
+    cd $out/${python.sitePackages}/pandas
     export LC_ALL="en_US.UTF-8"
     PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   ''
