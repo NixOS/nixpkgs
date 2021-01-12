@@ -45,13 +45,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "4.8.3";
+  version = "4.8.4";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "0k5p5y3im7xnf0ikaghh56nfhirkdwf95c8fr17wasgdpw2m86i2";
+    sha256 = "19sndxvszafbd1l2033g2irpx2jrwi5bpbx8r35047wi0z7djiag";
   };
 
   nativeBuildInputs = [
