@@ -5600,6 +5600,8 @@ in {
 
   pypcap = callPackage ../development/python-modules/pypcap { };
 
+  pypck = callPackage ../development/python-modules/pypck { };
+
   pypdf2 = callPackage ../development/python-modules/pypdf2 { };
 
   pyPdf = callPackage ../development/python-modules/pypdf { };
