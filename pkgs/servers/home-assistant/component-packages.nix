@@ -459,7 +459,7 @@
     "luci" = ps: with ps; [ openwrt-luci-rpc ];
     "luftdaten" = ps: with ps; [ luftdaten ];
     "lupusec" = ps: with ps; [ ]; # missing inputs: lupupy
-    "lutron" = ps: with ps; [ ]; # missing inputs: pylutron
+    "lutron" = ps: with ps; [ pylutron ];
     "lutron_caseta" = ps: with ps; [ ]; # missing inputs: pylutron-caseta
     "lw12wifi" = ps: with ps; [ ]; # missing inputs: lw12
     "lyft" = ps: with ps; [ ]; # missing inputs: lyft_rides
