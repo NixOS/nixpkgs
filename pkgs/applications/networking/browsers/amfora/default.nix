@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "amfora";
@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "0mkk7xxfxxp1w9890mkmag11mzxhy2zmh8v1macpyp1zmzgs21f8";
 
-  postInstall = ''
+  postInstall = lib.optionalString (!stdenv.isDarwin) ''
     sed -i "s:amfora:$out/bin/amfora:" amfora.desktop
     install -Dm644 amfora.desktop -t $out/share/applications
   '';
