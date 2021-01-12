@@ -26344,6 +26344,8 @@ in
 
   abbaye-des-morts = callPackage ../games/abbaye-des-morts { };
 
+  abuse = callPackage ../games/abuse { };
+
   adom = callPackage ../games/adom { };
 
   airstrike = callPackage ../games/airstrike { };
