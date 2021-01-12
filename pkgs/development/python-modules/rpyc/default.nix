@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "rpyc";
-  version = "4.1.3";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = pname;
     rev = version;
-    sha256 = "145mi8p37x9cbfm5117g4ng7b5rmghjjwgm319qqhwgzvqg3y4j9";
+    sha256 = "1g75k4valfjgab00xri4pf8c8bb2zxkhgkpyy44fjk7s5j66daa1";
   };
 
   propagatedBuildInputs = [ plumbum ];
