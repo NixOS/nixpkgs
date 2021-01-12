@@ -36,6 +36,9 @@ pythonPackages.buildPythonApplication rec {
     cp artwork/winpdb-icon.svg "$out"/share/icons/winpdb.svg
   '';
 
+  # no tests
+  doCheck = false;
+
   meta = with lib; {
     description = "Platform independent Python debugger";
     longDescription = ''
