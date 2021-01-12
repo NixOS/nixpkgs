@@ -6388,6 +6388,8 @@ in {
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
+  qdldl = callPackage ../development/python-modules/qdldl { };
+
   qds_sdk = callPackage ../development/python-modules/qds_sdk { };
 
   qimage2ndarray = callPackage ../development/python-modules/qimage2ndarray { };
