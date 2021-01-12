@@ -25469,7 +25469,9 @@ in
 
   xrgears = callPackage ../applications/graphics/xrgears { };
 
-  xsd = callPackage ../development/libraries/xsd { };
+  xsd = callPackage ../development/libraries/xsd {
+    stdenv = gcc9Stdenv;
+  };
 
   xscope = callPackage ../applications/misc/xscope { };
 
