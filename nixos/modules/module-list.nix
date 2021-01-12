@@ -230,6 +230,7 @@
   ./services/audio/mpd.nix
   ./services/audio/mpdscribble.nix
   ./services/audio/mopidy.nix
+  ./services/audio/navidrome.nix
   ./services/audio/roon-server.nix
   ./services/audio/slimserver.nix
   ./services/audio/snapserver.nix
