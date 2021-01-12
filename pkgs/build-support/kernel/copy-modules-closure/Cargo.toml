@@ -1,0 +1,10 @@
+[package]
+name = "copy-modules-closure"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+
+[[bin]]
+name = "copy-modules-closure"
+path = "main.rs"
