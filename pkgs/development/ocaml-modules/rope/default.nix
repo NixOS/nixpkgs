@@ -9,7 +9,9 @@ let param =
     buildInputs = [ dune ];
     extra = {
       buildPhase = "dune build -p rope";
-      inherit (dune) installPhase;
+      installPhase = ''
+        dune install --prefix $out --libdir $OCAMLFIND_DESTDIR rope
+      '';
     };
   } else {
     version = "0.5";
