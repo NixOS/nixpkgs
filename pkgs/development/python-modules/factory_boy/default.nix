@@ -35,9 +35,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "factory" ];
 
   meta = with lib; {
-    description = "A Python package to create factories for complex objects";
-    homepage    = "https://github.com/rbarrois/factory_boy";
-    license     = licenses.mit;
+    description = "Python package to create factories for complex objects";
+    homepage = "https://github.com/rbarrois/factory_boy";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fab ];
   };
-
 }
