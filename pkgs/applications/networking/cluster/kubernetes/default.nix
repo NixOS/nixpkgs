@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.19.5";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "15bv620fj4x731f2z2a9dcdss18rk379kc40g49bpqsdn42jjx2z";
+    sha256 = "0nni351ya688dphdkpyq94p3wjw2kigg85kmalwdpv5wpz1abl5g";
   };
 
   nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     ./hack/update-generated-docs.sh
-    (cd build/pause && cc pause.c -o pause)
+    (cd build/pause/linux && cc pause.c -o pause)
   '';
 
   installPhase = ''
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       install -D _output/local/go/bin/''${p##*/} -t $out/bin
     done
 
-    install -D build/pause/pause -t $pause/bin
+    install -D build/pause/linux/pause -t $pause/bin
     installManPage docs/man/man1/*.[1-9]
 
     cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons
