@@ -182,6 +182,23 @@ let
         };
       };
 
+      file-icons.file-icons = buildVscodeMarketplaceExtension {
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/file-icons.file-icons/changelog";
+          description = "File-specific icons in VSCode for improved visual grepping.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=file-icons.file-icons";
+          homepage = "https://github.com/file-icons/vscode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
+        mktplcRef = {
+          name = "file-icons";
+          publisher = "file-icons";
+          version = "1.0.28";
+          sha256 = "1lyx0l42xhi2f3rdnjddc3mw7m913kjnchawi98i6vqsx3dv7091";
+        };
+      };
+
       formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "auto-close-tag";
