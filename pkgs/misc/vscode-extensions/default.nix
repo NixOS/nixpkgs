@@ -148,6 +148,23 @@ let
         meta = { license = stdenv.lib.licenses.mit; };
       };
 
+      donjayamanne.githistory = buildVscodeMarketplaceExtension {
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/donjayamanne.githistory/changelog";
+          description = "View git log, file history, compare branches or commits";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory";
+          homepage = "https://github.com/DonJayamanne/gitHistoryVSCode/";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
+        mktplcRef = {
+          name = "githistory";
+          publisher = "donjayamanne";
+          version = "0.6.14";
+          sha256 = "11x116hzqnhgbryp2kqpki1z5mlnwxb0ly9r1513m5vgbisrsn0i";
+        };
+      };
+
       formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "auto-close-tag";
