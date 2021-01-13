@@ -796,6 +796,8 @@ mapAliases ({
 
   gcc-snapshot = throw "gcc-snapshot: Marked as broken for >2 years, additionally this 'snapshot' pointed to a fairly old one from gcc7.";
 
+  todolist = throw "todolist is now ultralist."; # added 2020-12-27
+
   /* Cleanup before 21.03 */
   riot-desktop = throw "riot-desktop is now element-desktop!";
   riot-web = throw "riot-web is now element-web";
