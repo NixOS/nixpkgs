@@ -428,7 +428,7 @@
     "lannouncer" = ps: with ps; [ ];
     "lastfm" = ps: with ps; [ pylast ];
     "launch_library" = ps: with ps; [ ]; # missing inputs: pylaunches
-    "lcn" = ps: with ps; [ ]; # missing inputs: pypck
+    "lcn" = ps: with ps; [ pypck ];
     "lg_netcast" = ps: with ps; [ ]; # missing inputs: pylgnetcast-homeassistant
     "lg_soundbar" = ps: with ps; [ ]; # missing inputs: temescal
     "life360" = ps: with ps; [ ]; # missing inputs: life360
