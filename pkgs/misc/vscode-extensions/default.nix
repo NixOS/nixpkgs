@@ -223,6 +223,23 @@ let
         };
       };
 
+      freebroccolo.reasonml = buildVscodeMarketplaceExtension {
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/freebroccolo.reasonml/changelog";
+          description = "Reason support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=freebroccolo.reasonml";
+          homepage = "https://github.com/reasonml-editor/vscode-reasonml";
+          license = licenses.asl20;
+          maintainers = with maintainers; [ superherointj ];
+        };
+        mktplcRef = {
+          name = "reasonml";
+          publisher = "freebroccolo";
+          version = "1.0.38";
+          sha256 = "1nay6qs9vcxd85ra4bv93gg3aqg3r2wmcnqmcsy9n8pg1ds1vngd";
+        };
+      };
+
       github.github-vscode-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "github-vscode-theme";
