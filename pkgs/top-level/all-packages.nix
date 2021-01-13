@@ -1287,6 +1287,8 @@ in
 
   google-amber = callPackage ../tools/graphics/amber { };
 
+  hakrawler = callPackage ../tools/security/hakrawler { };
+
   hime = callPackage ../tools/inputmethods/hime {};
 
   hostctl = callPackage ../tools/system/hostctl { };
