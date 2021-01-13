@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchPypi, python }:
+{ lib
+, buildPythonPackage
+, factory_boy
+, faker
+, fetchPypi
+, pytest-cov
+, pytestCheckHook
+, six
+, tox
+}:
 
-python.pkgs.buildPythonPackage rec {
-  pname   = "tld";
+buildPythonPackage rec {
+  pname = "tld";
   version = "0.12.5";
 
   src = fetchPypi {
@@ -9,25 +18,15 @@ python.pkgs.buildPythonPackage rec {
     sha256 = "0d1lbbg2qdw5jjxks0dqlf69bki5885mhj8ysvgylmrni56hjqqv";
   };
 
-  propagatedBuildInputs = with python.pkgs; [ six ];
-  checkInputs = with python.pkgs; [ factory_boy faker pytestcov tox pytestCheckHook];
-
-  # https://github.com/barseghyanartur/tld/issues/54
-  disabledTests = [
-    "test_1_update_tld_names"
-    "test_1_update_tld_names_command"
-    "test_2_update_tld_names_module"
+  checkInputs = [
+    factory_boy
+    faker
+    pytest-cov
+    pytestCheckHook
+    tox
   ];
 
-  preCheck = ''
-    export PATH="$PATH:$out/bin"
-  '';
-
-  dontUseSetuptoolsCheck = true;
-
-  pythonImportsCheck = [
-    "tld"
-  ];
+  pythonImportsCheck = [ "tld" ];
 
   meta = with lib; {
     homepage = "https://github.com/barseghyanartur/tld";
