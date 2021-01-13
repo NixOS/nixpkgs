@@ -5371,6 +5371,10 @@ in
 
   kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
+  lagrange = callPackage ../applications/networking/browsers/lagrange {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
 
   ma1sd = callPackage ../servers/ma1sd { };
