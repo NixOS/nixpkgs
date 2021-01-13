@@ -12446,6 +12446,8 @@ in
 
   terraformer = callPackage ../development/tools/misc/terraformer { };
 
+  terrascan = callPackage ../tools/security/terrascan { };
+
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
