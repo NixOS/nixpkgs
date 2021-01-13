@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, fetchpatch
 , cmake, which, m4, python3, bison, flex, llvmPackages
 
   # the default test target is sse4, but that is not supported by all Hydra agents
@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.13.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1l74xkpwwxc38k2ngg7mpvswziiy91yxslgfad6688hh1n5jvayd";
+    sha256 = "sha256-W285n/0ehVNxcIASCMEvUUJQXJGm3sKl0jdf+ua4C+A=";
   };
 
   nativeBuildInputs = [ cmake which m4 bison flex python3 ];
@@ -22,7 +22,12 @@ stdenv.mkDerivation rec {
     llvm llvmPackages.clang-unwrapped
   ];
 
+
   postPatch = ''
+    # clang is not installed into the LLVM prefix in NixOS
+    # FIXME: in the next release LLVMConfig.cmake will be called FindLLVM.cmake
+    sed -i -e 's!NO_DEFAULT_PATH!!' cmake/LLVMConfig.cmake
+
     substituteInPlace CMakeLists.txt \
       --replace curses ncurses
     substituteInPlace cmake/GenerateBuiltins.cmake \
