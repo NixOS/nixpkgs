@@ -2674,6 +2674,8 @@ in {
 
   gprof2dot = callPackage ../development/python-modules/gprof2dot { inherit (pkgs) graphviz; };
 
+  gps3 = callPackage ../development/python-modules/gps3 { };
+
   gpsoauth = callPackage ../development/python-modules/gpsoauth { };
 
   gpxpy = callPackage ../development/python-modules/gpxpy { };
