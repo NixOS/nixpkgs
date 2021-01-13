@@ -26,6 +26,10 @@ buildPythonPackage rec {
     mutatormath
   ];
 
+  # tests require custom commands to run
+  doCheck = false;
+  pythonImportsCheck = [ "ufoProcessor" ];
+
   meta = with lib; {
     description = "Read, write and generate UFOs with designspace data";
     homepage = "https://github.com/LettError/ufoProcessor";
