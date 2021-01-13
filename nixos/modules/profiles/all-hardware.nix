@@ -12,15 +12,13 @@ in
   # The initrd has to contain any module that might be necessary for
   # supporting the most important parts of HW like drives.
   boot.initrd.availableKernelModules =
-      # SATA/PATA support.
-    lib.optionals (!platform.isAarch64) [ # not sure where else they're missing
+    [ # SATA/PATA support.
       "ahci"
-      "sata_sil24"
-    ] ++ [
+
       "ata_piix"
 
       "sata_inic162x" "sata_nv" "sata_promise" "sata_qstor"
-      "sata_sil" "sata_sis" "sata_svw" "sata_sx4"
+      "sata_sil" "sata_sil24" "sata_sis" "sata_svw" "sata_sx4"
       "sata_uli" "sata_via" "sata_vsc"
 
       "pata_ali" "pata_amd" "pata_artop" "pata_atiixp" "pata_efar"
@@ -42,19 +40,16 @@ in
       # Firewire support.  Not tested.
       "ohci1394" "sbp2"
 
-    ] ++ lib.optionals (!platform.isAarch64) [ # not sure where else they're missing
       # Virtio (QEMU, KVM etc.) support.
       "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
-    ] ++ [
 
       # VMware support.
       "mptspi" "vmxnet3" "vsock"
-    ] ++ lib.optionals (!platform.isAarch64) [ # not sure where else they're missing
-      "vmw_vmci" "vmwgfx" "vmw_vsock_vmci_transport"
     ] ++ lib.optional platform.isx86 "vmw_balloon"
+    ++ lib.optionals (!platform.isAarch64) [ # not sure where else they're missing
+      "vmw_vmci" "vmwgfx" "vmw_vsock_vmci_transport"
 
       # Hyper-V support.
-    ++ lib.optionals (!platform.isAarch64) [ # not sure where else they're missing
       "hv_storvsc"
     ];
 

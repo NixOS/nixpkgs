@@ -194,37 +194,31 @@ in
 
   config = mkMerge
     [ (mkIf config.boot.initrd.enable {
-        boot.initrd.availableKernelModules = let
-          # Some modules apparently aren't present on our aarch64 (and maybe elsewhere).
-          maybeInitrdModules = lib.optionals (!pkgs.stdenv.hostPlatform.isAarch64);
-        in
-            # Note: most of these (especially the SATA/PATA modules)
+        boot.initrd.availableKernelModules =
+          [ # Note: most of these (especially the SATA/PATA modules)
             # shouldn't be included by default since nixos-generate-config
             # detects them, but I'm keeping them for now for backwards
             # compatibility.
 
             # Some SATA/PATA stuff.
-          maybeInitrdModules [ "ahci" ]
-          ++ [
+            "ahci"
             "sata_nv"
             "sata_via"
             "sata_sis"
             "sata_uli"
             "ata_piix"
             "pata_marvell"
-          ]
 
             # Standard SCSI stuff.
-          ++ maybeInitrdModules [ "sd_mod" ]
-          ++ [ "sr_mod" ]
+            "sd_mod"
+            "sr_mod"
 
             # SD cards and internal eMMC drives.
-          ++ maybeInitrdModules [ "mmc_block" ]
+            "mmc_block"
 
             # Support USB keyboards, in case the boot fails and we only have
             # a USB keyboard, or for LUKS passphrase prompt.
-          ++ [ "uhci_hcd" ]
-          ++ maybeInitrdModules [
+            "uhci_hcd"
             "ehci_hcd"
             "ehci_pci"
             "ohci_hcd"

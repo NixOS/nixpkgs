@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   config = {
@@ -6,10 +6,7 @@
     system.fsPackages = [ pkgs.e2fsprogs ];
 
     # As of kernel 4.3, there is no separate ext3 driver (they're also handled by ext4.ko)
-    # No ext* modules are present on our aarch64, apparently (and maybe elsewhere).
-    boot.initrd.availableKernelModules =
-      lib.optionals (!pkgs.stdenv.hostPlatform.isAarch64)
-        [ "ext2" "ext4" ];
+    boot.initrd.availableKernelModules = [ "ext2" "ext4" ];
 
     boot.initrd.extraUtilsCommands =
       ''
