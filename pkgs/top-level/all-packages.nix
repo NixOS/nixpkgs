@@ -21220,11 +21220,7 @@ in
 
   calculix = callPackage ../applications/science/math/calculix {};
 
-  calibre-py2 = libsForQt5.callPackage ../applications/misc/calibre { pythonPackages = python2Packages; };
-
-  calibre-py3 = libsForQt5.callPackage ../applications/misc/calibre { pythonPackages = python3Packages; };
-
-  calibre = calibre-py3;
+  calibre = libsForQt5.callPackage ../applications/misc/calibre { };
 
   calligra = libsForQt5.callPackage ../applications/office/calligra {
     # Must use the same Qt version as Calligra itself:
