@@ -5396,6 +5396,8 @@ in {
 
   pyinputevent = callPackage ../development/python-modules/pyinputevent { };
 
+  pyinsteon = callPackage ../development/python-modules/pyinsteon { };
+
   pyipp = callPackage ../development/python-modules/pyipp { };
 
   pyiqvia = callPackage ../development/python-modules/pyiqvia { };
