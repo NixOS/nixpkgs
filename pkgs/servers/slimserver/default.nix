@@ -44,6 +44,7 @@ perlPackages.buildPerlPackage rec {
     perlPackages.LogLog4perl
     perlPackages.LWP
     perlPackages.NetHTTP
+    perlPackages.NetHTTPSNB
     perlPackages.ProcBackground
     perlPackages.SubName
     perlPackages.TemplateToolkit
