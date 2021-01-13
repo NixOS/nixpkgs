@@ -16,7 +16,7 @@
 , hyphen
 , unrarSupport ? false
 , chmlib
-, python3Packages
+, pythonPackages
 , libusb1
 , libmtp
 , xdg_utils
@@ -26,11 +26,11 @@
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.9.0";
+  version = "4.23.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "a71196af15372054c4a25697534a2df1ef6dd732b9db07aaecaac7a86d9b3a0a";
+    sha256 = "sha256-Ft5RRzzw4zb5RqVyUaHk9Pu6H4V/F9j8FKoTLn61lRg=";
   };
 
   patches = [
@@ -43,7 +43,7 @@ mkDerivation rec {
   ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
-    sed -i "/pyqt_sip_dir/ s:=.*:= '${python3Packages.pyqt5}/share/sip/PyQt5':"  \
+    sed -i "/pyqt_sip_dir/ s:=.*:= '${pythonPackages.pyqt5}/share/sip/PyQt5':"  \
       setup/build_environment.py
 
     # Remove unneeded files and libs
@@ -56,6 +56,8 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig qmake removeReferencesTo ];
+
+  CALIBRE_PY3_PORT = builtins.toString pythonPackages.isPy3k;
 
   buildInputs = [
     chmlib
@@ -74,7 +76,7 @@ mkDerivation rec {
     sqlite
     xdg_utils
   ] ++ (
-    with python3Packages; [
+    with pythonPackages; [
       apsw
       beautifulsoup4
       css-parser
@@ -112,11 +114,11 @@ mkDerivation rec {
     export FC_LIB_DIR=${fontconfig.lib}/lib
     export PODOFO_INC_DIR=${podofo.dev}/include/podofo
     export PODOFO_LIB_DIR=${podofo.lib}/lib
-    export SIP_BIN=${python3Packages.sip}/bin/sip
+    export SIP_BIN=${pythonPackages.sip}/bin/sip
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
 
-    ${python3Packages.python.interpreter} setup.py install --root=$out \
+    ${pythonPackages.python.interpreter} setup.py install --root=$out \
       --prefix=$out \
       --libdir=$out/lib \
       --staging-root=$out \
@@ -145,7 +147,7 @@ mkDerivation rec {
   #   /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-podofo-0.9.6-dev/include/podofo/base/PdfVariant.h
   preFixup = ''
     remove-references-to -t ${podofo.dev} \
-      $out/lib/calibre/calibre/plugins${lib.optionalString python3Packages.isPy3k "/3"}/podofo.so
+      $out/lib/calibre/calibre/plugins${lib.optionalString pythonPackages.isPy3k "/3"}/podofo.so
 
     for program in $out/bin/*; do
       wrapProgram $program \
