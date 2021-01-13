@@ -242,6 +242,8 @@ in {
 
   aiokafka = callPackage ../development/python-modules/aiokafka { };
 
+  aiokef = callPackage ../development/python-modules/aiokef { };
+
   aiolifx = callPackage ../development/python-modules/aiolifx { };
 
   aiolifx-effects = callPackage ../development/python-modules/aiolifx-effects { };

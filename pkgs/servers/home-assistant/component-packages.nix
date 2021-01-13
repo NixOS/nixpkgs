@@ -413,7 +413,7 @@
     "kankun" = ps: with ps; [ ];
     "keba" = ps: with ps; [ ]; # missing inputs: keba-kecontact
     "keenetic_ndms2" = ps: with ps; [ ]; # missing inputs: ndms2_client
-    "kef" = ps: with ps; [ getmac ]; # missing inputs: aiokef
+    "kef" = ps: with ps; [ aiokef getmac ];
     "keyboard" = ps: with ps; [ ]; # missing inputs: pyuserinput
     "keyboard_remote" = ps: with ps; [ aionotify evdev ];
     "kira" = ps: with ps; [ ]; # missing inputs: pykira
