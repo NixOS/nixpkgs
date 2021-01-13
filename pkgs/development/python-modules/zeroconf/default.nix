@@ -33,6 +33,10 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "test_lots_of_names"
   ];
+
+  # disable tests requiring network when cross-compiling
+  doCheck = stdenv.buildPlatform != stdenv.hostPlatform;
+
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "zeroconf" ];
