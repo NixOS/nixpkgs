@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, expat, ocaml, findlib, ounit }:
+{ stdenv, lib, fetchFromGitHub, expat, ocaml, findlib, ounit }:
 
 stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-expat-${version}";
@@ -17,15 +17,15 @@ stdenv.mkDerivation rec {
 
 	buildInputs = [ ocaml findlib expat ounit ];
 
-	doCheck = !stdenv.lib.versionAtLeast ocaml.version "4.06";
+	doCheck = !lib.versionAtLeast ocaml.version "4.06";
 	checkTarget = "testall";
 
 	createFindlibDestdir = true;
 
 	meta = {
 		description = "OCaml wrapper for the Expat XML parsing library";
-		license = stdenv.lib.licenses.mit;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		license = lib.licenses.mit;
+		maintainers = [ lib.maintainers.vbgl ];
 		inherit (src.meta) homepage;
 		inherit (ocaml.meta) platforms;
 	};

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, pytest, scrapy, bsddb3 }:
+{ stdenv, lib, fetchPypi, buildPythonPackage, scrapy, bsddb3 }:
 
 buildPythonPackage rec {
   pname = "scrapy-deltafetch";
@@ -11,7 +11,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ bsddb3 scrapy ];
 
-  checkInputs = [ pytest ];
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "scrapy_deltafetch" ];
 
   meta = with lib; {
     description = "Scrapy spider middleware to ignore requests to pages containing items seen in previous crawls";

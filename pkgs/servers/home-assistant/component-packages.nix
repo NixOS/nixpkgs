@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.1.0";
+  version = "2021.1.1";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -11,7 +11,7 @@
     "actiontec" = ps: with ps; [ ];
     "adguard" = ps: with ps; [ adguardhome ];
     "ads" = ps: with ps; [ pyads ];
-    "advantage_air" = ps: with ps; [ advantage_air ];
+    "advantage_air" = ps: with ps; [ advantage-air ];
     "aftership" = ps: with ps; [ pyaftership ];
     "agent_dvr" = ps: with ps; [ ]; # missing inputs: agent-py
     "air_quality" = ps: with ps; [ ];
@@ -247,7 +247,7 @@
     "ffmpeg_motion" = ps: with ps; [ ha-ffmpeg ];
     "ffmpeg_noise" = ps: with ps; [ ha-ffmpeg ];
     "fibaro" = ps: with ps; [ ]; # missing inputs: fiblary3
-    "fido" = ps: with ps; [ ]; # missing inputs: pyfido
+    "fido" = ps: with ps; [ pyfido ];
     "file" = ps: with ps; [ ];
     "filesize" = ps: with ps; [ ];
     "filter" = ps: with ps; [ aiohttp-cors sqlalchemy ];
@@ -379,7 +379,7 @@
     "ihc" = ps: with ps; [ defusedxml ]; # missing inputs: ihcsdk
     "image" = ps: with ps; [ aiohttp-cors pillow ];
     "image_processing" = ps: with ps; [ aiohttp-cors ];
-    "imap" = ps: with ps; [ ]; # missing inputs: aioimaplib
+    "imap" = ps: with ps; [ aioimaplib ];
     "imap_email_content" = ps: with ps; [ ];
     "incomfort" = ps: with ps; [ ]; # missing inputs: incomfort-client
     "influxdb" = ps: with ps; [ influxdb-client influxdb ];
@@ -428,7 +428,7 @@
     "lannouncer" = ps: with ps; [ ];
     "lastfm" = ps: with ps; [ pylast ];
     "launch_library" = ps: with ps; [ ]; # missing inputs: pylaunches
-    "lcn" = ps: with ps; [ ]; # missing inputs: pypck
+    "lcn" = ps: with ps; [ pypck ];
     "lg_netcast" = ps: with ps; [ ]; # missing inputs: pylgnetcast-homeassistant
     "lg_soundbar" = ps: with ps; [ ]; # missing inputs: temescal
     "life360" = ps: with ps; [ ]; # missing inputs: life360
@@ -827,7 +827,7 @@
     "telnet" = ps: with ps; [ ];
     "temper" = ps: with ps; [ ]; # missing inputs: temperusb
     "template" = ps: with ps; [ ];
-    "tensorflow" = ps: with ps; [ numpy pillow tensorflow-build_2 ]; # missing inputs: pycocotools tf-models-official
+    "tensorflow" = ps: with ps; [ numpy pillow tensorflow ]; # missing inputs: pycocotools tf-models-official
     "tesla" = ps: with ps; [ teslajsonpy ];
     "tfiac" = ps: with ps; [ ]; # missing inputs: pytfiac
     "thermoworks_smoke" = ps: with ps; [ stringcase ]; # missing inputs: thermoworks_smoke
@@ -875,7 +875,7 @@
     "uk_transport" = ps: with ps; [ ];
     "unifi" = ps: with ps; [ aiounifi ];
     "unifi_direct" = ps: with ps; [ pexpect ];
-    "unifiled" = ps: with ps; [ ]; # missing inputs: unifiled
+    "unifiled" = ps: with ps; [ unifiled ];
     "universal" = ps: with ps; [ ];
     "upb" = ps: with ps; [ ]; # missing inputs: upb_lib
     "upc_connect" = ps: with ps; [ connect-box ];

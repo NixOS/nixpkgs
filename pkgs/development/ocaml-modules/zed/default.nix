@@ -1,7 +1,7 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, camomile, react, dune, charInfo_width }:
+{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild, camomile, react, dune, charInfo_width }:
 
 let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02" then
+  if lib.versionAtLeast ocaml.version "4.02" then
   {
     version = "3.1.0";
     sha256 = "04vr1a94imsghm98iigc35rhifsz0rh3qz2qm0wam2wvp6vmrx0p";
@@ -42,10 +42,10 @@ stdenv.mkDerivation (rec {
     To support efficient text edition capabilities, Zed provides macro recording and cursor management facilities.
     '';
     homepage = "https://github.com/diml/zed";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.gal_bolle
+      lib.maintainers.gal_bolle
     ];
   };
 } // param.extra)

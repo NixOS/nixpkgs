@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , notmuch
 , python
@@ -12,6 +13,10 @@ buildPythonPackage {
   sourceRoot = "${notmuch.src.name}/bindings/python-cffi";
 
   buildInputs = [ python notmuch cffi ];
+
+  # no tests
+  doCheck = false;
+  pythonImportsCheck = [ "notmuch2" ];
 
   meta = with lib; {
     description = "Pythonic bindings for the notmuch mail database using CFFI";

@@ -1,22 +1,26 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 }:
 
 buildGoModule rec {
   pname = "gdu";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gk36z8xzj7blwzs080fqsz76hn56c89xcsyil6n5cfkbyf85c6i";
+    sha256 = "0ajkc0vbzyl56d6z03s5vb17frjrg5wl145x60asnrmh7lg8adsj";
   };
 
   vendorSha256 = "1jqbsda9bch3awdq816w4jybv7wz9mfflmvs5y2wsa2qnhn9nbyp";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.AppVersion=${version}" ];
+
+  # analyze/dev_test.go: undefined: processMounts
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Disk usage analyzer with console interface";

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchzip, ocaml, findlib, libffi, pkgconfig, ncurses, integers }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if !lib.versionAtLeast ocaml.version "4.02"
 then throw "ctypes is not available for OCaml ${ocaml.version}"
 else
 

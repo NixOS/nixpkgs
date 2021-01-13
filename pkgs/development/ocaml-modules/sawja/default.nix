@@ -6,7 +6,7 @@ let
   webpage = "http://sawja.inria.fr/";
 in
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.07"
+if !lib.versionAtLeast ocaml.version "4.07"
 then throw "${pname} is not available for OCaml ${ocaml.version}"
 else
 

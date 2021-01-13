@@ -5,7 +5,7 @@ let
   webpage = "http://mjambon.com/${pname}.html";
 in
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.11";
+assert lib.versionAtLeast (lib.getVersion ocaml) "3.11";
 
 stdenv.mkDerivation rec {
 

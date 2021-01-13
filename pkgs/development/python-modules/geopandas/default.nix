@@ -29,10 +29,6 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytestCheckHook Rtree ];
-  disabledTests = [ "web" ];
-  pytestFlagsArray = [ "geopandas" ];
-
   propagatedBuildInputs = [
     pandas
     shapely
@@ -40,6 +36,11 @@ buildPythonPackage rec {
     descartes
     pyproj
   ];
+
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ pytestCheckHook Rtree ];
+  disabledTests = [ "web" ];
+  pytestFlagsArray = [ "geopandas" ];
 
   meta = with lib; {
     description = "Python geospatial data analysis framework";
