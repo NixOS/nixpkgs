@@ -55,7 +55,7 @@ in mkYarnPackage rec {
   '';
 
   # The desktop item properties should be kept in sync with data from upstream:
-  # https://github.com/vector-im/riot-desktop/blob/develop/package.json
+  # https://github.com/vector-im/element-desktop/blob/develop/package.json
   desktopItem = makeDesktopItem {
     name = "element-desktop";
     exec = "${executableName} %u";
