@@ -67,8 +67,10 @@ buildPythonApplication rec {
   # fix over-restrictive version bounds
   postPatch = ''
     substituteInPlace requirements/base.txt \
+      --replace "aws-sam-translator==1.27.0" "aws-sam-translator~=1.31.0" \
       --replace "boto3~=1.14.0, >=1.14.23" "boto3~=1.14" \
-      --replace "docker~=4.2.0" "docker~=4.3.1" \
+      --replace "dateparser~=0.7" "dateparser~=1.0.0" \
+      --replace "docker~=4.2.0" "docker~=4.4.0" \
       --replace "jmespath~=0.9.5" "jmespath~=0.10.0" \
       --replace "python-dateutil~=2.6, <2.8.1" "python-dateutil~=2.6" \
       --replace "requests==2.23.0" "requests~=2.24" \
