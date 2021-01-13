@@ -388,7 +388,7 @@
     "input_number" = ps: with ps; [ ];
     "input_select" = ps: with ps; [ ];
     "input_text" = ps: with ps; [ ];
-    "insteon" = ps: with ps; [ ]; # missing inputs: pyinsteon
+    "insteon" = ps: with ps; [ pyinsteon ];
     "integration" = ps: with ps; [ ];
     "intent" = ps: with ps; [ aiohttp-cors ];
     "intent_script" = ps: with ps; [ ];
