@@ -317,7 +317,7 @@
     "google_travel_time" = ps: with ps; [ googlemaps ];
     "google_wifi" = ps: with ps; [ ];
     "gpmdp" = ps: with ps; [ websocket_client ];
-    "gpsd" = ps: with ps; [ ]; # missing inputs: gps3
+    "gpsd" = ps: with ps; [ gps3 ];
     "gpslogger" = ps: with ps; [ aiohttp-cors ];
     "graphite" = ps: with ps; [ ];
     "gree" = ps: with ps; [ ]; # missing inputs: greeclimate
