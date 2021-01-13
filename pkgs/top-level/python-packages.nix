@@ -6396,6 +6396,8 @@ in {
 
   pyxdg = callPackage ../development/python-modules/pyxdg { };
 
+  pyxeoma = callPackage ../development/python-modules/pyxeoma { };
+
   pyxl3 = callPackage ../development/python-modules/pyxl3 { };
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml { });
