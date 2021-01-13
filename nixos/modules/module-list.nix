@@ -120,6 +120,7 @@
   ./programs/dconf.nix
   ./programs/digitalbitbox/default.nix
   ./programs/dmrconfig.nix
+  ./programs/droidcam.nix
   ./programs/environment.nix
   ./programs/evince.nix
   ./programs/file-roller.nix
