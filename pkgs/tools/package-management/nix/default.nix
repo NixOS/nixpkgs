@@ -13,11 +13,12 @@ common =
   , bash, coreutils, gzip, gnutar
   , pkg-config, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex
-  , jq, libarchive
+  , jq, libarchive, libcpuid
   , lowdown, mdbook
   # Used by tests
   , gmock
   , busybox-sandbox-shell
+  , util-linux
   , storeDir
   , stateDir
   , confDir
@@ -26,6 +27,7 @@ common =
   , enableStatic ? stdenv.hostPlatform.isStatic
   , name, suffix ? "", src
   , patches ? [ ]
+  , isUnstable ? false
   }:
   let
      sh = busybox-sandbox-shell;
@@ -39,20 +41,21 @@ common =
 
       outputs = [ "out" "dev" "man" "doc" ];
 
-      nativeBuildInputs =
-        [ pkg-config ]
-        ++ lib.optionals is24
-          [ autoreconfHook
-            autoconf-archive
-            bison flex
-            (lib.getBin lowdown) mdbook
-            jq
-           ];
+      nativeBuildInputs = [
+        pkg-config
+      ] ++ lib.optionals is24 [
+        autoreconfHook
+        autoconf-archive
+        bison flex
+        (lib.getBin lowdown) mdbook
+        jq
+      ];
 
       buildInputs =
         [ curl openssl sqlite xz bzip2 nlohmann_json
           brotli boost editline
         ]
+        ++ lib.optionals isUnstable [ libcpuid ]
         ++ lib.optionals stdenv.isDarwin [ Security ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
         ++ lib.optionals is24 [ libarchive gmock lowdown ]
@@ -136,6 +139,9 @@ common =
       installFlags = [ "sysconfdir=$(out)/etc" ];
 
       doInstallCheck = true; # not cross
+      installCheckInputs = lib.optionals stdenv.isLinux [
+        util-linux # needed for `unshare`
+      ];
 
       # socket path becomes too long otherwise
       preInstallCheck = lib.optional stdenv.isDarwin ''
@@ -212,29 +218,26 @@ in rec {
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20201205_a5d85d0";
+    suffix = "pre20210219_548437c";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "a5d85d07faa94cf3518e98273be4bee3d495f06a";
-      sha256 = "0g9jjhh0vs4hjrff5yx88x6sh7rk87ngvni3gnyxajqia957dipg";
+      rev = "548437c2347159c4c79352283dd12ce58324f1d6";
+      sha256 = "sha256-Q6VuNRdr87B4F3ILiM6IlQ+bkIYbQTs6EEAtwNrvl1Y=";
     };
 
     patches = [
-      (fetchpatch { # Fix build on gcc10
-        url = "https://github.com/NixOS/nix/commit/d4870462f8f539adeaa6dca476aff6f1f31e1981.patch";
-        sha256 = "mTvLvuxb2QVybRDgntKMq+b6da/s3YgM/ll2rWBeY/Y=";
-      })
-      # Fix the ETag bug. PR merged. Remove when updating to >= 20210125
-      # https://github.com/NixOS/nixpkgs/pull/109309#issuecomment-768331750
       (fetchpatch {
-        url = "https://github.com/NixOS/nix/commit/c5b42c5a42138329c6d02da0d8a53cb59c6077f4.patch";
-        sha256 = "sha256-d4RNOKMxa4NMbFgYcqWRv2ByHt8F/XUWV+6P9qHz7S4=";
+        name = "fix-gcc10-build.patch";
+        url = "https://github.com/NixOS/nix/pull/4619/commits/76d63e3dcaf0c143c7f2a809955b678052403dfa.patch";
+        sha256 = "sha256-isrRB9KjWuEW3SlZ7aX8gvoOrWpmkQuNTELnXkuAN0s=";
       })
     ];
 
     inherit storeDir stateDir confDir boehmgc;
+
+    isUnstable = true;
   });
 
   nixFlakes = nixUnstable;
