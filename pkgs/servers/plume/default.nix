@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "plume";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "plume-org";
     repo = "plume";
     rev = version;
-    sha256 = "0bhl7r8ri0wd8q7vblxlfn3lj7v78qcw2cn9nwad78jsa8y3xyl5";
+    sha256 = "06y87h07q4ck7f5j1l9lybylr1y1vsrq7ffv8scnqgvqadw68qns";
   };
 
-  cargoSha256 = "1cihgxsgchx8ihlmnzf62jd8wy4sf9vfmvijxz7fgh8wagnx7h6q";
+  cargoSha256 = "14x7g93difzwp68phf5p4h5df12xn5cxaspf4j613n3v7s11fb8j";
 
   meta = with stdenv.lib; {
     description = "Serverless Information Tracker";
