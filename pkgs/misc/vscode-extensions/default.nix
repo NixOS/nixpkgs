@@ -155,6 +155,22 @@ let
         };
       };
 
+      github.github-vscode-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "github-vscode-theme";
+          publisher = "github";
+          version = "1.1.5";
+          sha256 = "10f0098cce026d1f0c855fb7a66ea60b5d8acd2b76126ea94fe7361e49cd9ed2";
+        };
+        meta = with lib; {
+          description = "GitHub theme for VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme";
+          homepage = "https://github.com/primer/github-vscode-theme";
+          license = licenses.mit;
+          maintainers = with maintainers; [ hugolgst ];
+        };
+      };
+
       golang.Go = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Go";
