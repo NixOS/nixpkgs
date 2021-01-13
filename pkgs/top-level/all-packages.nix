@@ -12236,6 +12236,8 @@ in
     lua = lua5;
   } // (config.radare or {}))) radare2 r2-for-cutter;
 
+  rizin = callPackage ../development/tools/analysis/rizin { };
+
   radare2-cutter = libsForQt515.callPackage ../development/tools/analysis/radare2/cutter.nix { };
 
   ragel = ragelStable;
