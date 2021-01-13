@@ -1,21 +1,22 @@
 { lib, stdenv, fetchurl
-, perl, flex, bison
+, perl, flex, bison, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "4.100";
+  version = "4.108";
 
   src = fetchurl {
     url    = "https://www.veripool.org/ftp/${pname}-${version}.tgz";
-    sha256 = "0vg1gk1hqlnz74gfpf57588758myxvhqzi37yl4vqjcq40r83nr2";
+    sha256 = "00i7am41w9v4smhl64z7s95wdb55f684y89mc0hbc07j1ggc33lf";
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ perl ];
+  buildInputs = [ perl python3 ];
   nativeBuildInputs = [ flex bison ];
 
   # these tests need some interpreter paths patched early on...
+  # see https://github.com/NixOS/nix/issues/1205
   doCheck = false;
   checkTarget = "test";
 
