@@ -397,8 +397,6 @@ let
   # Syslinux (and isolinux) only supports x86-based architectures.
   canx86BiosBoot = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
 
-  # Some modules apparently aren't present on our aarch64 (and maybe elsewhere).
-  maybeInitrdModules = lib.optionals (!pkgs.stdenv.hostPlatform.isAarch64);
 in
 
 {
@@ -617,11 +615,9 @@ in
         ];
       };
 
-    boot.initrd.availableKernelModules = [ "iso9660" "uas" "overlay" ]
-      ++ maybeInitrdModules [ "squashfs" ];
+    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" "overlay" ];
 
-    boot.initrd.kernelModules = [ "overlay" ]
-      ++ maybeInitrdModules [ "loop" ];
+    boot.initrd.kernelModules = [ "loop" "overlay" ];
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
@@ -720,7 +716,7 @@ in
 
     # Add vfat support to the initrd to enable people to copy the
     # contents of the CD to a bootable USB stick.
-    boot.initrd.supportedFilesystems = maybeInitrdModules [ "vfat" ];
+    boot.initrd.supportedFilesystems = [ "vfat" ];
 
   };
 
