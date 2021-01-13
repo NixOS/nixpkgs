@@ -8386,6 +8386,8 @@ in
 
   whipper = callPackage ../applications/audio/whipper { };
 
+  whitebophir = callPackage ../servers/web-apps/whitebophir { };
+
   whois = callPackage ../tools/networking/whois { };
 
   wifish = callPackage ../tools/networking/wifish { };
