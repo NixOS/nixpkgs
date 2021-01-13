@@ -1,10 +1,13 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy27
+, django
 , faker
-, python
-, ipaddress
+, fetchPypi
+, flask
+, flask_sqlalchemy
+, mongoengine
+, pytestCheckHook
+, sqlalchemy
 }:
 
 buildPythonPackage rec {
@@ -16,10 +19,20 @@ buildPythonPackage rec {
     sha256 = "0nsw2mdjk8sqds3qsix4cf19ws6i0fak79349pw2581ryc7w0720";
   };
 
-  propagatedBuildInputs = [ faker ] ++ lib.optionals isPy27 [ ipaddress ];
+  propagatedBuildInputs = [ faker ];
 
-  # tests not included with pypi release
-  doCheck = false;
+  checkInputs = [
+    django
+    flask
+    flask_sqlalchemy
+    mongoengine
+    pytestCheckHook
+    sqlalchemy
+  ];
+
+  # Checks for MongoDB requires an a running DB
+  disabledTests = [ "MongoEngineTestCase" ];
+  pythonImportsCheck = [ "factory" ];
 
   meta = with lib; {
     description = "A Python package to create factories for complex objects";
