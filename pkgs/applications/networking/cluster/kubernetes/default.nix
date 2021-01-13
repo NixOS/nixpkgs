@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.19.5";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "15bv620fj4x731f2z2a9dcdss18rk379kc40g49bpqsdn42jjx2z";
+    sha256 = "05xrmwsfrbsp143a1d72abkrx43p0spbs1a8pxqicg0fn344b6qm";
   };
 
   nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync installShellFiles ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     ./hack/update-generated-docs.sh
-    (cd build/pause && cc pause.c -o pause)
+    (cd build/pause/linux && cc pause.c -o pause)
   '';
 
   installPhase = ''
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       install -D _output/local/go/bin/''${p##*/} -t $out/bin
     done
 
-    install -D build/pause/pause -t $pause/bin
+    install -D build/pause/linux/pause -t $pause/bin
     installManPage docs/man/man1/*.[1-9]
 
     # Unfortunately, kube-addons-main.sh only looks for the lib file in either the current working dir
