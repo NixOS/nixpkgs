@@ -541,6 +541,8 @@ in {
 
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify { };
 
+  awesomeversion = callPackage ../development/python-modules/awesomeversion { };
+
   awkward0 = callPackage ../development/python-modules/awkward0 { };
   awkward = callPackage ../development/python-modules/awkward { };
 
