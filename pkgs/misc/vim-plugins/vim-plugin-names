@@ -476,6 +476,7 @@ roxma/nvim-yarp
 roxma/vim-tmux-clipboard
 RRethy/vim-hexokinase
 RRethy/vim-illuminate
+rstacruz/vim-closer
 rust-lang/rust.vim
 ryanoasis/vim-devicons
 ryvnf/readline.vim
