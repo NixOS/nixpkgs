@@ -144,7 +144,13 @@ mapAliases ({
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgFor = emacsPackagesFor; # added 2019-08-07
-  emacsPackagesNg = emacsPackages; # added 2019-08-07
+  emacsPackagesNg = emacs.pkgs; # added 2019-08-07
+  emacs26Packages = emacs26.pkgs; # added 2020-12-18
+  emacs27Packages = emacs27.pkgs; # added 2020-12-18
+  emacs26WithPackages = emacs26.pkgs.withPackages; # added 2020-12-18
+  emacs27WithPackages = emacs27.pkgs.withPackages; # added 2020-12-18
+  emacsWithPackages = emacs.pkgs.withPackages; # added 2020-12-18
+  emacsPackages = emacs.pkgs; # added 2020-12-18
   emby = throw "The Emby derivation has been removed, see jellyfin instead for a free software fork."; # added 2019-05-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
   evolution_data_server = evolution-data-server; # added 2018-02-25
