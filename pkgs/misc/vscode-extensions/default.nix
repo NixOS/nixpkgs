@@ -305,14 +305,19 @@ let
       };
 
       jnoortheen.nix-ide = buildVscodeMarketplaceExtension {
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";
+          description = "Nix language support with formatting and error report";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jnoortheen.nix-ide";
+          homepage = "https://github.com/jnoortheen/vscode-nix-ide";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
         mktplcRef = {
           name = "nix-ide";
           publisher = "jnoortheen";
           version = "0.1.7";
           sha256 = "1bw4wyq9abimxbhl7q9g8grvj2ax9qqq6mmqbiqlbsi2arvk0wrm";
-        };
-        meta =  {
-          license = stdenv.lib.licenses.mit;
         };
       };
 
