@@ -5280,6 +5280,8 @@ in {
 
   pyfiglet = callPackage ../development/python-modules/pyfiglet { };
 
+  pyfnip = callPackage ../development/python-modules/pyfnip { };
+
   pyflakes = callPackage ../development/python-modules/pyflakes { };
 
   pyfma = callPackage ../development/python-modules/pyfma { };
