@@ -283,7 +283,7 @@
     "fronius" = ps: with ps; [ ]; # missing inputs: pyfronius
     "frontend" = ps: with ps; [ aiohttp-cors pillow ]; # missing inputs: home-assistant-frontend
     "frontier_silicon" = ps: with ps; [ ]; # missing inputs: afsapi
-    "futurenow" = ps: with ps; [ ]; # missing inputs: pyfnip
+    "futurenow" = ps: with ps; [ pyfnip ];
     "garadget" = ps: with ps; [ ];
     "garmin_connect" = ps: with ps; [ ]; # missing inputs: garminconnect
     "gc100" = ps: with ps; [ ]; # missing inputs: python-gc100
