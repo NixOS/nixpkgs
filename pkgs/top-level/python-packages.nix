@@ -5416,6 +5416,8 @@ in {
 
   pykickstart = callPackage ../development/python-modules/pykickstart { };
 
+  pykira = callPackage ../development/python-modules/pykira { };
+
   pykka = callPackage ../development/python-modules/pykka { };
 
   pykwalify = callPackage ../development/python-modules/pykwalify { };
