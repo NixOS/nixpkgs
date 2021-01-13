@@ -4598,7 +4598,6 @@ broken-packages:
   - dhall-check
   - dhall-docs
   - dhall-fly
-  - dhall-json
   - dhall-lsp-server
   - dhall-nix
   - dhall-nixpkgs
