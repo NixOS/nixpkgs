@@ -483,6 +483,18 @@ let
     meta.homepage = "https://github.com/antoinemadec/coc-fzf/";
   };
 
+  coc-lua = buildVimPluginFrom2Nix {
+    pname = "coc-lua";
+    version = "2021-01-08";
+    src = fetchFromGitHub {
+      owner = "josa42";
+      repo = "coc-lua";
+      rev = "ad83de5ef16299e026b7fce6a024c82b2b7110f5";
+      sha256 = "0b56af3z04vvlkr67yg3bfj71qycyhrv895p1sbfamj483hs7ds6";
+    };
+    meta.homepage = "https://github.com/josa42/coc-lua/";
+  };
+
   coc-neco = buildVimPluginFrom2Nix {
     pname = "coc-neco";
     version = "2020-04-07";
