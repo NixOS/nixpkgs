@@ -99,6 +99,23 @@ let
         };
       };
 
+      CoenraadS.bracket-pair-colorizer = buildVscodeMarketplaceExtension {
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/CoenraadS.bracket-pair-colorizer/changelog";
+          description = "A customizable extension for colorizing matching brackets";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer";
+          homepage = "https://github.com/CoenraadS/BracketPair";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
+        mktplcRef = {
+          name = "bracket-pair-colorizer";
+          publisher = "CoenraadS";
+          version = "1.0.61";
+          sha256 = "0r3bfp8kvhf9zpbiil7acx7zain26grk133f0r0syxqgml12i652";
+        };
+      };
+
       coenraads.bracket-pair-colorizer-2 = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "bracket-pair-colorizer-2";
