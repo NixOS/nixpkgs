@@ -165,6 +165,23 @@ let
         };
       };
 
+      esbenp.prettier-vscode = buildVscodeMarketplaceExtension {
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
+          description = "Code formatter using prettier";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode";
+          homepage = "https://github.com/prettier/prettier-vscode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
+        mktplcRef = {
+          name = "prettier-vscode";
+          publisher = "esbenp";
+          version = "5.8.0";
+          sha256 = "0h7wc4pffyq1i8vpj4a5az02g2x04y7y1chilmcfmzg2w42xpby7";
+        };
+      };
+
       formulahendry.auto-close-tag = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "auto-close-tag";
