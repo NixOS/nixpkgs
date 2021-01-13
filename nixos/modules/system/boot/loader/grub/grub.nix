@@ -553,6 +553,8 @@ in
         apply = toString;
         description = ''
           Index of the default menu item to be booted.
+          Can also be set to "saved", which will make GRUB select
+          the menu item that was used at the last boot.
         '';
       };
 
