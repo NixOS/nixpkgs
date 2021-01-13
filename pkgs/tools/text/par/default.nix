@@ -20,9 +20,7 @@ stdenv.mkDerivation {
 
   makefile = "protoMakefile";
   preBuild = ''
-    makeFlagsArray=+( CC="${stdenv.cc.targetPrefix}cc -c" \
-                      LINK1=${stdenv.cc.targetPrefix}cc   \
-                    )
+    makeFlagsArray+=(CC="${stdenv.cc.targetPrefix}cc -c" LINK1=${stdenv.cc.targetPrefix}cc)
   '';
 
   installPhase = ''
