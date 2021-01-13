@@ -31,8 +31,9 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/barseghyanartur/tld";
     description = "Extracts the top level domain (TLD) from the URL given";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    # https://github.com/barseghyanartur/tld/blob/master/README.rst#license
+    # MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-or-later
+    license = with licenses; [ lgpl21Plus mpl11 gpl2Only ];
+    maintainers = with maintainers; [ fab ];
   };
-
 }
