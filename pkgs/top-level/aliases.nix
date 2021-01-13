@@ -85,6 +85,8 @@ mapAliases ({
   buildGo112Package = throw "buildGo112Package has been removed"; # added 2020-04-26
   buildGo112Module = throw "buildGo112Module has been removed"; # added 2020-04-26
   bundler_HEAD = bundler; # added 2015-11-15
+  calibre-py2 = throw "calibre-py2 has been removed from nixpkgs, as calibre has upgraded to python 3. Please use calibre as replacement."; # added 2021-01-13
+  calibre-py3 = throw "calibre-py3 has been removed from nixpkgs, as calibre's default python version is now 3. Please use calibre as replacement."; # added 2021-01-13
   caddy1 = throw "caddy 1.x has been removed from nixpkgs, as it's unmaintained: https://github.com/caddyserver/caddy/blob/master/.github/SECURITY.md#supported-versions"; # added 2020-10-02
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   cargo-tree = throw "cargo-tree has been removed, use the builtin `cargo tree` command instead."; # added 2020-08-20
