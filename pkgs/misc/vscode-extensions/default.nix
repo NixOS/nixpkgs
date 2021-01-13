@@ -415,6 +415,23 @@ let
 
       matklad.rust-analyzer = callPackage ./rust-analyzer {};
 
+      ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/ocamllabs.ocaml-platform/changelog";
+          description = "Official OCaml Support from OCamlLabs";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ocamllabs.ocaml-platform";
+          homepage = "https://github.com/ocamllabs/vscode-ocaml-platform";
+          license = licenses.isc;
+          maintainers = with maintainers; [ superherointj ];
+        };
+        mktplcRef = {
+          name = "ocaml-platform";
+          publisher = "ocamllabs";
+          version = "1.5.1";
+          sha256 = "0jkxpcrbr8xmwfl8jphmarjz2jk54hvmc24ww89d4bgx1awayqfh";
+        };
+      };
+
       pkief.material-icon-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "material-icon-theme";
