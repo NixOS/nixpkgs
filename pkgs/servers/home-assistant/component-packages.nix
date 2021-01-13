@@ -39,7 +39,7 @@
     "apns" = ps: with ps; [ ]; # missing inputs: apns2
     "apple_tv" = ps: with ps; [ aiohttp-cors netdisco pyatv zeroconf ];
     "apprise" = ps: with ps; [ apprise ];
-    "aprs" = ps: with ps; [ ]; # missing inputs: aprslib geopy
+    "aprs" = ps: with ps; [ geopy ]; # missing inputs: aprslib
     "aqualogic" = ps: with ps; [ ]; # missing inputs: aqualogic
     "aquostv" = ps: with ps; [ ]; # missing inputs: sharp_aquos_rc
     "arcam_fmj" = ps: with ps; [ ]; # missing inputs: arcam-fmj
