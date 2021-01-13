@@ -3,12 +3,15 @@
 let
   cfg = config.services.haproxy;
 
-  haproxyCfg = pkgs.writeText "haproxy.conf" ''
+  haproxyCfg = pkgs.runCommand "haproxy.conf" { CONFIG=cfg.config; } ''
+    cat > $out <<EOF
     global
       # needed for hot-reload to work without dropping packets in multi-worker mode
       stats socket /run/haproxy/haproxy.sock mode 600 expose-fd listeners level user
-
-    ${cfg.config}
+      
+    EOF
+    echo "$CONFIG" >> $out
+    ${pkgs.haproxy}/sbin/haproxy -c -f $out
   '';
 
 in
