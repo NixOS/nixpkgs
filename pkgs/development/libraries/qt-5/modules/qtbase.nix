@@ -162,6 +162,7 @@ stdenv.mkDerivation {
   qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
   qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
 
+  # don't strip away debugging symbols when build with developerBuild
   dontStrip = developerBuild;
 
   setOutputFlags = false;
