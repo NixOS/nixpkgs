@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "pause" ];
 
+  patches = [ ./fixup-addonmanager-lib-path.patch ];
+
   postPatch = ''
     # go env breaks the sandbox
     substituteInPlace "hack/lib/golang.sh" \
@@ -64,9 +66,16 @@ stdenv.mkDerivation rec {
     install -D build/pause/linux/pause -t $pause/bin
     installManPage docs/man/man1/*.[1-9]
 
-    cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons
+    # Unfortunately, kube-addons-main.sh only looks for the lib file in either the current working dir
+    # or in /opt. We have to patch this for now.
+    substitute cluster/addons/addon-manager/kube-addons-main.sh $out/bin/kube-addons \
+      --subst-var out
+
+    chmod +x $out/bin/kube-addons
     patchShebangs $out/bin/kube-addons
     wrapProgram $out/bin/kube-addons --set "KUBECTL_BIN" "$out/bin/kubectl"
+
+    cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons-lib.sh
 
     cp ${./mk-docker-opts.sh} $out/bin/mk-docker-opts.sh
 

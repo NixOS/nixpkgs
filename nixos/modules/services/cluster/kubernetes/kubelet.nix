@@ -125,6 +125,18 @@ in
       };
     };
 
+    containerRuntime = mkOption {
+      description = "Which container runtime type to use";
+      type = enum ["docker" "remote"];
+      default = "remote";
+    };
+
+    containerRuntimeEndpoint = mkOption {
+      description = "Endpoint at which to find the container runtime api interface/socket";
+      type = str;
+      default = "unix:///var/run/docker/containerd/containerd.sock";
+    };
+
     enable = mkEnableOption "Kubernetes kubelet.";
 
     extraOpts = mkOption {
@@ -240,7 +252,7 @@ in
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "kubernetes.target" ];
-        after = [ "network.target" "docker.service" "kube-apiserver.service" ];
+        after = [ "network.target" "kube-apiserver.service" "sockets.target" ];
         path = with pkgs; [
           gitMinimal
           openssh
@@ -306,6 +318,8 @@ in
             ${optionalString (cfg.tlsKeyFile != null)
               "--tls-private-key-file=${cfg.tlsKeyFile}"} \
             ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
+            --container-runtime=${cfg.containerRuntime} \
+            --container-runtime-endpoint=${cfg.containerRuntimeEndpoint} \
             ${cfg.extraOpts}
           '';
           WorkingDirectory = top.dataDir;
