@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "factory_boy";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ded73e49135c24bd4d3f45bf1eb168f8d290090f5cf4566b8df3698317dc9c08";
+    sha256 = "0nsw2mdjk8sqds3qsix4cf19ws6i0fak79349pw2581ryc7w0720";
   };
 
   propagatedBuildInputs = [ faker ] ++ lib.optionals isPy27 [ ipaddress ];
