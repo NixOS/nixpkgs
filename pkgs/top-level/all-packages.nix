@@ -21302,11 +21302,10 @@ in
   };
 
   inherit (callPackage ../applications/virtualization/docker {})
-    docker_18_09
-    docker_19_03;
+    docker_20_10;
 
-  docker = docker_19_03;
-  docker-edge = docker_19_03;
+  docker = docker_20_10;
+  docker-edge = docker_20_10;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
