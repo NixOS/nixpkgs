@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "docker-proxy-${rev}";
-  rev = "7b2b1feb1de4817d522cc372af149ff48d25028e";
+  rev = "fa125a3512ee0f6187721c88582bf8c4378bd4d7";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "docker";
     repo = "libnetwork";
-    sha256 = "1ng577k11cyv207bp0vaz5jjfcn2igd6w95zn4izcq1nldzp5935";
+    sha256 = "1r47y0gww3j7fas4kgiqbhrz5fazsx1c6sxnccdfhj8fzik77s9y";
   };
 
   goPackagePath = "github.com/docker/libnetwork";
