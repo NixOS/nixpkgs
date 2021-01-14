@@ -5538,6 +5538,8 @@ in {
 
   PyMVGLive = callPackage ../development/python-modules/pymvglive { };
 
+  pymyq = callPackage ../development/python-modules/pymyq { };
+
   pymysql = callPackage ../development/python-modules/pymysql { };
 
   pymysqlsa = callPackage ../development/python-modules/pymysqlsa { };
