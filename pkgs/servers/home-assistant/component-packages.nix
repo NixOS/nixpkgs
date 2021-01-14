@@ -894,7 +894,7 @@
     "velbus" = ps: with ps; [ ]; # missing inputs: python-velbus
     "velux" = ps: with ps; [ ]; # missing inputs: pyvlx
     "venstar" = ps: with ps; [ ]; # missing inputs: venstarcolortouch
-    "vera" = ps: with ps; [ ]; # missing inputs: pyvera
+    "vera" = ps: with ps; [ pyvera ];
     "verisure" = ps: with ps; [ jsonpath ]; # missing inputs: vsure
     "versasense" = ps: with ps; [ ]; # missing inputs: pyversasense
     "version" = ps: with ps; [ pyhaversion ];

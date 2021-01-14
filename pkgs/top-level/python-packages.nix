@@ -6366,6 +6366,8 @@ in {
 
   pyvcf = callPackage ../development/python-modules/pyvcf { };
 
+  pyvera = callPackage ../development/python-modules/pyvera { };
+
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
   pyvips = callPackage ../development/python-modules/pyvips {
