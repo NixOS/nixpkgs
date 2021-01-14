@@ -915,7 +915,7 @@
     "wake_on_lan" = ps: with ps; [ wakeonlan ];
     "waqi" = ps: with ps; [ ]; # missing inputs: waqiasync
     "water_heater" = ps: with ps; [ ];
-    "waterfurnace" = ps: with ps; [ ]; # missing inputs: waterfurnace
+    "waterfurnace" = ps: with ps; [ waterfurnace ];
     "watson_iot" = ps: with ps; [ ]; # missing inputs: ibmiotf
     "watson_tts" = ps: with ps; [ ]; # missing inputs: ibm-watson
     "waze_travel_time" = ps: with ps; [ WazeRouteCalculator ];
