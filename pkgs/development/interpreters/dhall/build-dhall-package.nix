@@ -85,6 +85,6 @@ in
     ${lib.optionalString (documentationRoot != null) ''
     mkdir -p $out/${dataDhall}
 
-    XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --input '${documentationRoot}' --output-link $out/docs
+    XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --input '${documentationRoot}' --package-name '${name}' --output-link $out/docs
     ''}
   ''
