@@ -47,7 +47,7 @@ let cfg = config.services.drbd; in
         options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
       '';
 
-    environment.etc.drbd.conf =
+    environment.etc."drbd.conf" =
       { source = pkgs.writeText "drbd.conf" cfg.config; };
 
     systemd.services.drbd = {
