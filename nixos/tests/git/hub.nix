@@ -6,12 +6,12 @@ import ../make-test-python.nix ({ pkgs, ...} : {
 
   nodes.hub = { pkgs, ... }:
     {
-      environment.systemPackages = [ pkgs.gitAndTools.hub ];
+      environment.systemPackages = [ pkgs.hub ];
     };
 
   testScript =
     ''
-      assert "git version ${pkgs.git.version}\nhub version ${pkgs.gitAndTools.hub.version}\n" in hub.succeed("hub version")
+      assert "git version ${pkgs.git.version}\nhub version ${pkgs.hub.version}\n" in hub.succeed("hub version")
       assert "These GitHub commands are provided by hub" in hub.succeed("hub help")
     '';
 })
