@@ -9693,6 +9693,8 @@ in
 
   remarkable-toolchain = callPackage ../development/tools/misc/remarkable/remarkable-toolchain { };
 
+  remarkable2-toolchain = callPackage ../development/tools/misc/remarkable/remarkable2-toolchain { };
+
   tacacsplus = callPackage ../servers/tacacsplus { };
 
   tamarin-prover =
