@@ -8009,6 +8009,8 @@ in {
 
   watchdog = callPackage ../development/python-modules/watchdog { };
 
+  waterfurnace = callPackage ../development/python-modules/waterfurnace { };
+
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
 
   wcwidth = callPackage ../development/python-modules/wcwidth { };
