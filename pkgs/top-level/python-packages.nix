@@ -1161,6 +1161,8 @@ in {
 
   cerberus = callPackage ../development/python-modules/cerberus { };
 
+  cert-chain-resolver = callPackage ../development/python-modules/cert-chain-resolver { };
+
   certbot = callPackage ../development/python-modules/certbot { };
 
   certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
