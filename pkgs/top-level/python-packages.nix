@@ -272,6 +272,8 @@ in {
 
   aiostream = callPackage ../development/python-modules/aiostream { };
 
+  aioswitcher = callPackage ../development/python-modules/aioswitcher { };
+
   aiounifi = callPackage ../development/python-modules/aiounifi { };
 
   aiounittest = callPackage ../development/python-modules/aiounittest { };
