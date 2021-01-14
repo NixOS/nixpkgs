@@ -76,7 +76,7 @@ default-package-overrides:
   # haskell-language-server 0.5.0.0 doesn't accept newer versions
   - fourmolu ==0.2.*
   - refinery ==0.2.*
-  # Stackage Nightly 2021-01-11
+  # Stackage Nightly 2021-01-14
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -313,7 +313,6 @@ default-package-overrides:
   - bimap-server ==0.1.0.1
   - bin ==0.1
   - binary-conduit ==1.3.1
-  - binaryen ==0.0.5.0
   - binary-ext ==2.0.4
   - binary-ieee754 ==0.1.0.0
   - binary-instances ==1.0.1
@@ -1114,7 +1113,7 @@ default-package-overrides:
   - hp2pretty ==0.9
   - hpack ==0.34.3
   - hpack-dhall ==0.5.2
-  - hpc-codecov ==0.2.0.0
+  - hpc-codecov ==0.2.0.1
   - hpc-lcov ==1.0.1
   - hprotoc ==2.4.17
   - hruby ==0.3.8
@@ -1668,7 +1667,7 @@ default-package-overrides:
   - nvim-hs-ghcid ==2.0.0.0
   - oauthenticated ==0.2.1.0
   - ObjectName ==1.1.0.1
-  - o-clock ==1.2.0
+  - o-clock ==1.2.0.1
   - odbc ==0.2.2
   - oeis2 ==1.0.4
   - ofx ==0.4.4.0
@@ -2016,7 +2015,7 @@ default-package-overrides:
   - runmemo ==1.0.0.1
   - rvar ==0.2.0.6
   - safe ==0.3.19
-  - safecopy ==0.10.3
+  - safecopy ==0.10.3.1
   - safe-decimal ==0.2.0.0
   - safe-exceptions ==0.1.7.1
   - safe-foldable ==0.1.0.0
@@ -2292,7 +2291,7 @@ default-package-overrides:
   - tasty-hunit-compat ==0.2.0.1
   - tasty-kat ==0.0.3
   - tasty-leancheck ==0.0.1
-  - tasty-lua ==0.2.3.1
+  - tasty-lua ==0.2.3.2
   - tasty-program ==1.0.5
   - tasty-quickcheck ==0.10.1.2
   - tasty-rerun ==1.1.18
@@ -2569,7 +2568,7 @@ default-package-overrides:
   - webex-teams-api ==0.2.0.1
   - webex-teams-conduit ==0.2.0.1
   - webex-teams-pipes ==0.2.0.1
-  - webgear-server ==0.2.0
+  - webgear-server ==0.2.1
   - webrtc-vad ==0.1.0.3
   - websockets ==0.12.7.2
   - websockets-snap ==0.10.3.1
