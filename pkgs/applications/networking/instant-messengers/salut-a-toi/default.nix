@@ -3,7 +3,7 @@
 let
   inherit (python27Packages) python;
   requirements = (import ./requirements.nix {
-    inherit stdenv fetchurl;
+    inherit lib fetchurl;
     pythonPackages = python27Packages;
   });
 

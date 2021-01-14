@@ -15106,6 +15106,21 @@ let
     doCheck = false; /* wants network */
   };
 
+  NetHTTPSNB = buildPerlPackage {
+    pname = "Net-HTTPS-NB";
+    version = "0.15";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OL/OLEG/Net-HTTPS-NB-0.15.tar.gz";
+      sha256 = "0kwc4z8pqnbc396wjnlgdmri10zdh91f2bi6saxkpfjzlm7wysba";
+    };
+    propagatedBuildInputs = [ IOSocketSSL NetHTTP ];
+    meta = {
+      homepage = "https://github.com/olegwtf/p5-Net-HTTPS-NB";
+      description = "Non-blocking HTTPS client";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   NetIDNEncode = buildPerlModule {
     pname = "Net-IDN-Encode";
     version = "2.500";
