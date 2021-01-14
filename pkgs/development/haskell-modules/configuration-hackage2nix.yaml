@@ -4602,7 +4602,6 @@ broken-packages:
   - dhall-nixpkgs
   - dhall-text
   - dhall-to-cabal
-  - dhall-yaml
   - dhcp-lease-parser
   - dhrun
   - dia-base
