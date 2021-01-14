@@ -2954,6 +2954,8 @@ in {
 
   hydra-check = callPackage ../development/python-modules/hydra-check { };
 
+  hydrawiser = callPackage ../development/python-modules/hydrawiser { };
+
   hypchat = callPackage ../development/python-modules/hypchat { };
 
   hyperframe = callPackage ../development/python-modules/hyperframe { };
@@ -2986,6 +2988,8 @@ in {
   icalendar = callPackage ../development/python-modules/icalendar { };
 
   icecream = callPackage ../development/python-modules/icecream { };
+
+  icmplib = callPackage ../development/python-modules/icmplib { };
 
   ics = callPackage ../development/python-modules/ics { };
 
@@ -4865,6 +4869,8 @@ in {
   ponywhoosh = callPackage ../development/python-modules/ponywhoosh { };
 
   pooch = callPackage ../development/python-modules/pooch { };
+
+  poolsense = callPackage ../development/python-modules/poolsense { };
 
   poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
     inherit (pkgs.qt5) qtbase;
