@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck =  [ "colorlog" ];
+  pythonImportsCheck = [ "colorlog" ];
 
   meta = with lib; {
     description = "Log formatting with colors";
