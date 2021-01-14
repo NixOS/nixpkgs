@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ajkc0vbzyl56d6z03s5vb17frjrg5wl145x60asnrmh7lg8adsj";
+    sha256 = "1dc0z6daxpbid2ilpms0dw76qyyc84gx0bcqsx0b3s5p5p154xzq";
   };
 
-  vendorSha256 = "1jqbsda9bch3awdq816w4jybv7wz9mfflmvs5y2wsa2qnhn9nbyp";
+  vendorSha256 = "18a3qwshz8jmw0j29qvmzarxig0kj1n0fnmlx81qzswsyl85kncv";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.AppVersion=${version}" ];
 
