@@ -68,6 +68,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The USBGuard software framework helps to protect your computer against BadUSB";
+    longDescription = ''
+      USBGuard is a software framework for implementing USB device authorization
+      policies (what kind of USB devices are authorized) as well as method of
+      use policies (how a USB device may interact with the system). Simply put,
+      it is a USB device whitelisting tool.
+    '';
     homepage = "https://usbguard.github.io/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.tnias ];
