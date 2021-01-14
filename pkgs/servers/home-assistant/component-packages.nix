@@ -416,7 +416,7 @@
     "kef" = ps: with ps; [ aiokef getmac ];
     "keyboard" = ps: with ps; [ ]; # missing inputs: pyuserinput
     "keyboard_remote" = ps: with ps; [ aionotify evdev ];
-    "kira" = ps: with ps; [ ]; # missing inputs: pykira
+    "kira" = ps: with ps; [ pykira ];
     "kiwi" = ps: with ps; [ ]; # missing inputs: kiwiki-client
     "knx" = ps: with ps; [ xknx ];
     "kodi" = ps: with ps; [ ]; # missing inputs: pykodi
