@@ -296,6 +296,36 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
         # packages.  You should set this to true if you have benchmarks defined
         # in your local packages that you want to be able to run with cabal benchmark
         doBenchmark ? false
+        # An optional function that can modify the generic builder arguments
+        # for the fake package that shellFor uses to construct its environment.
+        #
+        # Example:
+        #   let
+        #     # elided...
+        #     haskellPkgs = pkgs.haskell.packages.ghc884.override (hpArgs: {
+        #       overrides = pkgs.lib.composeExtensions (hpArgs.overrides or (_: _: { })) (
+        #         _hfinal: hprev: {
+        #           mkDerivation = args: hprev.mkDerivation ({
+        #             doCheck = false;
+        #             doBenchmark = false;
+        #             doHoogle = true;
+        #             doHaddock = true;
+        #             enableLibraryProfiling = false;
+        #             enableExecutableProfiling = false;
+        #           } // args);
+        #         }
+        #       );
+        #     });
+        #   in
+        #   hpkgs.shellFor {
+        #     packages = p: [ p.foo ];
+        #     genericBuilderArgsModifier = args: args // { doCheck = true; doBenchmark = true };
+        #   }
+        #
+        # This will disable tests and benchmarks for everything in "haskellPkgs"
+        # (which will invalidate the binary cache), and then re-enable them
+        # for the "shellFor" environment (ensuring that any test/benchmark
+        # dependencies for "foo" will be available within the nix-shell).
       , genericBuilderArgsModifier ? (args: args)
       , ...
       } @ args:
