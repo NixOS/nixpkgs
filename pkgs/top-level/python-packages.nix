@@ -2989,6 +2989,8 @@ in {
 
   icecream = callPackage ../development/python-modules/icecream { };
 
+  icmplib = callPackage ../development/python-modules/icmplib { };
+
   ics = callPackage ../development/python-modules/ics { };
 
   identify = callPackage ../development/python-modules/identify { };

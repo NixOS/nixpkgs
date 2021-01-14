@@ -615,7 +615,7 @@
     "picotts" = ps: with ps; [ ];
     "piglow" = ps: with ps; [ ]; # missing inputs: piglow
     "pilight" = ps: with ps; [ ]; # missing inputs: pilight
-    "ping" = ps: with ps; [ ]; # missing inputs: icmplib
+    "ping" = ps: with ps; [ icmplib ];
     "pioneer" = ps: with ps; [ ];
     "pjlink" = ps: with ps; [ ]; # missing inputs: pypjlink2
     "plaato" = ps: with ps; [ aiohttp-cors ];
