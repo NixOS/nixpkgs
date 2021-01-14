@@ -104,5 +104,6 @@ in stdenv.mkDerivation rec {
     license     = [ licenses.mpl20 licenses.gpl3 ];
     maintainers = with maintainers; [ TheBrainScrambler ];
     platforms   = [ "i686-linux" "x86_64-linux" ];
+    broken      = true; # 2021-01-07
   };
 }

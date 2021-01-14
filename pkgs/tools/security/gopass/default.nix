@@ -12,7 +12,7 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.10.1";
+  version = "1.11.0";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -20,10 +20,10 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dhh64mxfhk610wr7bpakzgmc4a4iyhfkkl3qhjp6a46g9iygana";
+    sha256 = "0plg3hck6yqxcazjczx9m5palzz5h3qs5minzmmq8yzvfwi0shic";
   };
 
-  vendorSha256 = "07wv6yahx4yzr3h1x93x4r5rvw8wbfk836f04b4r9xjbnpq7lb2a";
+  vendorSha256 = "1sycbcld5qyriqb771l52drxy4vhzm4nh9q5s6kn70nq1s2a3h7x";
 
   doCheck = false;
 
@@ -46,12 +46,9 @@ buildGoModule rec {
     ln -s $out/bin/gopass $out/bin/pass
   '';
 
-  # --run to work around WONTFIX in https://github.com/gopasspw/gopass/issues/1662
   postFixup = ''
     for bin in $out/bin/*; do
-      wrapProgram $bin \
-        --prefix PATH : "${wrapperPath}" \
-        --run 'rm -f "''${XDG_CONFIG_HOME:-~/.config}/gopass/gpg-binary.loc"'
+      wrapProgram $bin --prefix PATH : "${wrapperPath}"
     done
   '';
 

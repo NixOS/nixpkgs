@@ -23,6 +23,7 @@ arcticicestudio/nord-vim
 artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
 ayu-theme/ayu-vim
+bakpakin/fennel.vim
 bazelbuild/vim-bazel
 bbchung/clighter8
 benizi/vim-automkdir
@@ -205,6 +206,7 @@ jnurmine/zenburn
 jonbri/vim-colorstepper
 jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
+josa42/coc-lua
 josa42/vim-lightline-coc
 joshdick/onedark.vim
 jpalardy/vim-slime@main
@@ -475,6 +477,7 @@ roxma/nvim-yarp
 roxma/vim-tmux-clipboard
 RRethy/vim-hexokinase
 RRethy/vim-illuminate
+rstacruz/vim-closer
 rust-lang/rust.vim
 ryanoasis/vim-devicons
 ryvnf/readline.vim

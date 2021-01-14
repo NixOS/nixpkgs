@@ -342,6 +342,7 @@ in
   sbt-extras = handleTest ./sbt-extras.nix {};
   scala = handleTest ./scala.nix {};
   sddm = handleTest ./sddm.nix {};
+  searx = handleTest ./searx.nix {};
   service-runner = handleTest ./service-runner.nix {};
   shadow = handleTest ./shadow.nix {};
   shadowsocks = handleTest ./shadowsocks {};

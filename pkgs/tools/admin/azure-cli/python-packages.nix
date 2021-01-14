@@ -52,7 +52,7 @@ let
         pname = "azure-cli-core";
         inherit version src;
 
-        sourceRoot = "source/src/azure-cli-core";
+        sourceRoot = "${src.name}/src/azure-cli-core";
 
         propagatedBuildInputs = with self; [
           adal
@@ -111,7 +111,7 @@ let
         version = "1.0.4"; # might be wrong, but doesn't really matter
         inherit src;
 
-        sourceRoot = "source/src/azure-cli-telemetry";
+        sourceRoot = "${src.name}/src/azure-cli-telemetry";
 
         propagatedBuildInputs = with super; [
           applicationinsights
@@ -208,6 +208,9 @@ let
 
       azure-mgmt-network = overrideAzureMgmtPackage super.azure-mgmt-network "17.0.0" "zip"
         "3694f2675e152afccb1588a6cc7bb4b4795d442a4e5d7082cdf1f4e32a779199";
+
+      azure-mgmt-marketplaceordering = overrideAzureMgmtPackage super.azure-mgmt-marketplaceordering "0.1.0" "zip"
+        "sha256-baEkJcurDMYvJG5yZrTWev9r3QMey+UMdULC8rJECtQ=";
 
       azure-mgmt-media = overrideAzureMgmtPackage super.azure-mgmt-media "2.1.0" "zip"
         "1py0hch0wghzfxazdrrs7p0kln2zn9jh3fmkzwd2z8qggj38q6gm";
@@ -383,6 +386,23 @@ let
           inherit (oldAttrs) pname;
           inherit version;
           sha256 = "192icfx82gcl3igr18w062744376r2ivh63c8nd7v17mjk860yac";
+          extension = "zip";
+        };
+
+        preBuild = ''
+          rm azure_bdist_wheel.py
+          substituteInPlace setup.cfg \
+            --replace "azure-namespace-package = azure-mgmt-datalake-nspkg" ""
+        '';
+      });
+
+      azure-mgmt-datalake-store = super.azure-mgmt-datalake-store.overrideAttrs(oldAttrs: rec {
+        version = "0.5.0";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "sha256-k3bTVJVmHRn4rMVgT2ewvFlJOxg1u8SA+aGVL5ABekw=";
           extension = "zip";
         };
 

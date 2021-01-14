@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita-ubuntu";
-  version = "1.5";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "0mld78s6gl5kfsdaqa7xs5mvfng9600pd2d9sp2b2q5axx7wjay5";
+    sha256 = "024b0817jilvi5ilq9sbwg19ql5i2x3jfgc1awk7zzv6sqii639x";
   };
 
   buildInputs = [

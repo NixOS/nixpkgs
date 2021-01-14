@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, astring, pprint }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, astring, pprint }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if !lib.versionAtLeast ocaml.version "4.02"
 then throw "ocp-ocamlres is not available for OCaml ${ocaml.version}"
 else
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
 	meta = {
 		description = "A simple tool and library to embed files and directories inside OCaml executables";
-		license = stdenv.lib.licenses.lgpl3Plus;
+		license = lib.licenses.lgpl3Plus;
 		homepage = "https://www.typerex.org/ocp-ocamlres.html";
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		maintainers = [ lib.maintainers.vbgl ];
 		inherit (ocaml.meta) platforms;
 	};
 }

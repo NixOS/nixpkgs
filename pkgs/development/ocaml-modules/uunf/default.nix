@@ -21,7 +21,7 @@ let
   };
 in
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.03";
+assert lib.versionAtLeast ocaml.version "4.03";
 
 stdenv.mkDerivation {
   name = "ocaml-${pname}-${version}";

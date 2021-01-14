@@ -1,6 +1,7 @@
 nvidia_x11: sha256:
 
 { stdenv
+, lib
 , fetchFromGitHub
 , m4
 , libtirpc

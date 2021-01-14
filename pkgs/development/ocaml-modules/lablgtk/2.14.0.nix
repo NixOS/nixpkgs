@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, ocaml, findlib, pkgconfig, gtk2, libgnomecanvas, libglade, gtksourceview, camlp4 }:
+{ stdenv, lib, fetchurl, ocaml, findlib, pkgconfig, gtk2, libgnomecanvas, libglade, gtksourceview, camlp4 }:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.04"
+if lib.versionAtLeast ocaml.version "4.04"
 then throw "lablgtk-2.14 is not available for OCaml ${ocaml.version}" else
 
 let
@@ -31,11 +31,11 @@ stdenv.mkDerivation (rec {
     branch = "2.14";
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.maggesi
-      stdenv.lib.maintainers.roconnor
+      lib.maintainers.maggesi
+      lib.maintainers.roconnor
     ];
     homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgtk.html";
     description = "LablGTK is is an Objective Caml interface to GTK";
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
   };
 })
