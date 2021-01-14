@@ -3,7 +3,7 @@
 , aiohttp
 , aresponses
 , fetchFromGitHub
-, poetry
+, poetry-core
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyiqvia";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,10 +21,10 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "1yjsbq4p040a35n8g2l0wgnv83wkjirv4rj73s2mjzn3cxf395bz";
+    sha256 = "089lah23939m523jmjkaw2li0fikp2nswxznfvzwnr6wjpp3m9as";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ aiohttp ];
 
