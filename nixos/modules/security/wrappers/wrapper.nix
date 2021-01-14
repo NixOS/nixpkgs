@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   dontUnpack = true;
   hardeningEnable = [ "pie" ];
   CFLAGS = [
-    "-DWRAPPER_DIR=\"${parentWrapperDir}\""
+    ''-DWRAPPER_DIR="${parentWrapperDir}"''
   ] ++ (if debug then [
     "-Werror" "-Og" "-g"
   ] else [
