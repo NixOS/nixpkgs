@@ -4445,8 +4445,6 @@ in
 
   gnutar = callPackage ../tools/archivers/gnutar { };
 
-  gnuvd = callPackage ../tools/misc/gnuvd { };
-
   goaccess = callPackage ../tools/misc/goaccess { };
 
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
