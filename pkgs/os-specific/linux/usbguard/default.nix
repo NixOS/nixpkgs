@@ -1,5 +1,4 @@
-{
-  stdenv, fetchurl, lib,
+{ stdenv, fetchFromGitHub, lib, autoreconfHook,
   pkgconfig, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl, asciidoc,
   dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf,
   audit,
@@ -15,14 +14,16 @@ stdenv.mkDerivation rec {
   version = "1.0.0";
   pname = "usbguard";
 
-  repo = "https://github.com/USBGuard/usbguard";
-
-  src = fetchurl {
-    url = "${repo}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-VheYbNXdGi0xEEFkihl32DbPTjOkEh1/glmfIUlqvEI=";
+  src = fetchFromGitHub {
+    owner = "USBGuard";
+    repo = pname;
+    rev = "usbguard-${version}";
+    sha256 = "sha256-CPuBQmDOpXWn0jPo4HRyDCZUpDy5NmbvUHxXoVbMd/I=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     asciidoc
     pkgconfig
     libxslt # xsltproc
