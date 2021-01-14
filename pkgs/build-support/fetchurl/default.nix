@@ -122,7 +122,7 @@ stdenvNoCC.mkDerivation {
   name =
     if showURLs then "urls"
     else if name != "" then name
-    else baseNameOf (toString (builtins.head urls_));
+    else lib.nameFromURL (toString (builtins.head urls_));
 
   builder = ./builder.sh;
 

@@ -536,21 +536,17 @@ rec {
       then parse x
       else x.version or (parse x.name);
 
-  /* Extract name with version from URL. Ask for separator which is
-     supposed to start extension.
+  /* Extract filename from URL, with query component or tailing slash striped.
 
      Example:
-       nameFromURL "https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2" "-"
-       => "nix"
-       nameFromURL "https://nixos.org/releases/nix/nix-1.7/nix-1.7-x86_64-linux.tar.bz2" "_"
-       => "nix-1.7-x86"
-  */
-  nameFromURL = url: sep:
-    let
-      components = splitString "/" url;
-      filename = lib.last components;
-      name = head (splitString sep filename);
-    in assert name != filename; name;
+       nameFromURL "https://bug-220081-attachments.webkit.org/attachment.cgi?id=416707&action=diff&format=raw"
+       => "attachment.cgi"
+       nameFromURL "http://git.savannah.gnu.org/cgit/mailutils.git/patch/?id=37713b42a501892469234b90454731d8d8b7a3e6"
+       => "patch"
+       nameFromURL "http://git.savannah.gnu.org/cgit/mailutils.git/patch/"
+       => "patch"
+  # */
+  nameFromURL = url: baseNameOf (head (splitString "?" url));
 
   /* Create an --{enable,disable}-<feat> string that can be passed to
      standard GNU Autoconf scripts.

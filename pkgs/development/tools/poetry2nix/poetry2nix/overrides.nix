@@ -576,7 +576,8 @@ self: super:
     old:
     let
       blas = old.passthru.args.blas or pkgs.openblasCompat;
-      blasImplementation = lib.nameFromURL blas.name "-";
+      # FIXME: Could use blas.implementation or base.pname or lib.getName ?
+      blasImplementation = builtins.head (lib.splitString "-" blas.name);
       cfg = pkgs.writeTextFile {
         name = "site.cfg";
         text = (
