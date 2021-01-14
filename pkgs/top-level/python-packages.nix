@@ -5595,6 +5595,8 @@ in {
 
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
 
+  pyopnsense = callPackage ../development/python-modules/pyopnsense { };
+
   pyosf = callPackage ../development/python-modules/pyosf { };
 
   pyosmium = callPackage ../development/python-modules/pyosmium { };

@@ -590,7 +590,7 @@
     "opentherm_gw" = ps: with ps; [ ]; # missing inputs: pyotgw
     "openuv" = ps: with ps; [ ]; # missing inputs: pyopenuv
     "openweathermap" = ps: with ps; [ pyowm ];
-    "opnsense" = ps: with ps; [ ]; # missing inputs: pyopnsense
+    "opnsense" = ps: with ps; [ pyopnsense ];
     "opple" = ps: with ps; [ ]; # missing inputs: pyoppleio
     "orangepi_gpio" = ps: with ps; [ ]; # missing inputs: OPi.GPIO
     "oru" = ps: with ps; [ ]; # missing inputs: oru
