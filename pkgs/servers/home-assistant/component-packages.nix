@@ -841,7 +841,7 @@
     "tile" = ps: with ps; [ pytile ];
     "time_date" = ps: with ps; [ ];
     "timer" = ps: with ps; [ ];
-    "tmb" = ps: with ps; [ ]; # missing inputs: tmb
+    "tmb" = ps: with ps; [ tmb ];
     "tod" = ps: with ps; [ ];
     "todoist" = ps: with ps; [ todoist ];
     "tof" = ps: with ps; [ ]; # missing inputs: RPi.GPIO VL53L1X2
