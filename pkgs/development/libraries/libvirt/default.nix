@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fetchgit
-, pkgconfig, makeWrapper, autoreconfHook, fetchpatch
+, makeWrapper, autoreconfHook, fetchpatch
 , coreutils, libxml2, gnutls, perl, python2, attr, glib, docutils
-, iproute, iptables, readline, lvm2, util-linux, systemd, libpciaccess, gettext
-, libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
+, iproute, readline, lvm2, util-linux, systemd, libpciaccess, gettext
+, libtasn1, iptables-nftables-compat, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, dbus, libtirpc, rpcsvc-proto, darwin
 , meson, ninja, audit, cmake, bash-completion, pkg-config
@@ -34,8 +34,12 @@ in stdenv.mkDerivation rec {
         fetchSubmodules = true;
       };
 
+  patches = [
+    ./0001-meson-patch-in-an-install-prefix-for-building-on-nix.patch
+  ];
+
   nativeBuildInputs = [
-    ninja meson cmake makeWrapper pkgconfig docutils
+    ninja meson cmake makeWrapper pkg-config docutils
   ] ++ optional (!stdenv.isDarwin) [
     rpcsvc-proto
   ] ++ optionals stdenv.isDarwin [
@@ -47,7 +51,7 @@ in stdenv.mkDerivation rec {
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib dbus
   ] ++ optionals stdenv.isLinux [
-    audit libpciaccess lvm2 utillinux systemd libnl numad zfs
+    audit libpciaccess lvm2 util-linux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted libtirpc
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
@@ -62,33 +66,30 @@ in stdenv.mkDerivation rec {
   preConfigure = let
     overrides = {
       QEMU_BRIDGE_HELPER = "/run/wrappers/bin/qemu-bridge-helper";
-      QEMU_PR_HELPER="/run/libvirt/nix-helpers/qemu-pr-helper";
-      EBTABLES_PATH ="${ebtables}/bin/ebtables-legacy";
-    # "CFLAGS"=-I${libtirpc.dev}/include/tirpc";
+      QEMU_PR_HELPER = "/run/libvirt/nix-helpers/qemu-pr-helper";
     };
     patchBuilder = var: value: ''
       sed -i meson.build -e "s|conf.set_quoted('${var}',.*|conf.set_quoted('${var}','${value}')|"
     '';
   in ''
-    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
+    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables-nftables-compat lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
     patchShebangs . # fixes /usr/bin/python references
   ''
-  #"QEMU_BRIDGE_HELPER" "/run/wrappers/bin/qemu-bridge-helper"
-  + (stdenv.lib.concatStringsSep "\n" (stdenv.lib.mapAttrsToList patchBuilder overrides))
-  ;
+  + (stdenv.lib.concatStringsSep "\n" (stdenv.lib.mapAttrsToList patchBuilder overrides));
+
   mesonAutoFeatures = "auto";
+
   mesonFlags = let
     opt = option: enable: "-D${option}=${if enable then "enabled" else "disabled"}";
   in [
-    # "localstatedir=$(TMPDIR)/var"
-    # "sysconfdir=$(out)/var/lib"
-    "-Drunstatedir=/run"
-    # "-Dlocalstatedir=$(TMPDIR)/var"
-    "-Dsysconfdir=$(out)/var/lib"
+    "--sysconfdir=/var/lib"
+    "-Dinstall_prefix=${placeholder "out"}"
+    "-Dlocalstatedir=/var/lib"
+    "-Drunstatedir=/var/run"
     "-Dlibpcap=enabled"
     "-Ddriver_qemu=enabled"
     "-Ddriver_vmware=enabled"
@@ -97,7 +98,7 @@ in stdenv.mkDerivation rec {
     "-Ddriver_esx=enabled"
     "-Ddriver_remote=enabled"
     "-Dpolkit=enabled"
-    # "-Dbus=enabled"
+    "-Ddbus=enabled"
     (opt "storage_iscsi" enableIscsi)
   ] ++ optionals stdenv.isLinux [
     (opt "storage_zfs" (zfs != null))
@@ -114,7 +115,8 @@ in stdenv.mkDerivation rec {
   ];
 
   postInstall = let
-    binPath = [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
+    # iptables-nftables-compat for an 'ebtables' binary
+    binPath = [ iptables-nftables-compat iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ] ++ optionals enableIscsi [ openiscsi ];
   in ''
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace 'ON_BOOT=start'       'ON_BOOT=''${ON_BOOT:-start}' \
@@ -131,8 +133,6 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/sbin/libvirtd \
       --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath binPath}
   '';
-
-  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://libvirt.org/";
