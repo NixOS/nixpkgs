@@ -8174,6 +8174,8 @@ in {
 
   xkcdpass = callPackage ../development/python-modules/xkcdpass { };
 
+  xknx = callPackage ../development/python-modules/xknx { };
+
   xlib = callPackage ../development/python-modules/xlib { };
 
   xlrd = callPackage ../development/python-modules/xlrd { };

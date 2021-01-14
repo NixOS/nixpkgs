@@ -418,7 +418,7 @@
     "keyboard_remote" = ps: with ps; [ aionotify evdev ];
     "kira" = ps: with ps; [ ]; # missing inputs: pykira
     "kiwi" = ps: with ps; [ ]; # missing inputs: kiwiki-client
-    "knx" = ps: with ps; [ ]; # missing inputs: xknx
+    "knx" = ps: with ps; [ xknx ];
     "kodi" = ps: with ps; [ ]; # missing inputs: pykodi
     "konnected" = ps: with ps; [ aiohttp-cors ]; # missing inputs: konnected
     "kulersky" = ps: with ps; [ ]; # missing inputs: pykulersky
