@@ -4507,6 +4507,8 @@ in {
 
   ortools = (toPythonModule (pkgs.or-tools.override { inherit (self) python; })).python;
 
+  orvibo = callPackage ../development/python-modules/orvibo { };
+
   osc = callPackage ../development/python-modules/osc { };
 
   oscrypto = callPackage ../development/python-modules/oscrypto { };
