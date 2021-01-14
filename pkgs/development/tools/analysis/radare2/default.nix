@@ -56,11 +56,6 @@ let
         # radare 3.3 compat for radare2-cutter
         (cd shlr && ln -s ../capstone-${cs_ver} capstone)
         tar -czvf shlr/capstone-${cs_ver}.tar.gz capstone-${cs_ver}
-        # necessary because they broke the offline-build:
-        # https://github.com/radare/radare2/commit/6290e4ff4cc167e1f2c28ab924e9b99783fb1b38#diff-a44d840c10f1f1feaf401917ae4ccd54R258
-        # https://github.com/radare/radare2/issues/13087#issuecomment-465159716
-        curl() { true; }
-        export -f curl
       '';
 
       postInstall = ''
