@@ -15117,7 +15117,7 @@ let
     meta = {
       homepage = "https://github.com/olegwtf/p5-Net-HTTPS-NB";
       description = "Non-blocking HTTPS client";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
