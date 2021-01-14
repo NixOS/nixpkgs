@@ -206,6 +206,7 @@ jnurmine/zenburn
 jonbri/vim-colorstepper
 jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
+josa42/coc-lua
 josa42/vim-lightline-coc
 joshdick/onedark.vim
 jpalardy/vim-slime@main

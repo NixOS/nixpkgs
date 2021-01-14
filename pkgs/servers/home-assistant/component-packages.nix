@@ -416,9 +416,9 @@
     "kef" = ps: with ps; [ aiokef getmac ];
     "keyboard" = ps: with ps; [ ]; # missing inputs: pyuserinput
     "keyboard_remote" = ps: with ps; [ aionotify evdev ];
-    "kira" = ps: with ps; [ ]; # missing inputs: pykira
+    "kira" = ps: with ps; [ pykira ];
     "kiwi" = ps: with ps; [ ]; # missing inputs: kiwiki-client
-    "knx" = ps: with ps; [ ]; # missing inputs: xknx
+    "knx" = ps: with ps; [ xknx ];
     "kodi" = ps: with ps; [ ]; # missing inputs: pykodi
     "konnected" = ps: with ps; [ aiohttp-cors ]; # missing inputs: konnected
     "kulersky" = ps: with ps; [ ]; # missing inputs: pykulersky
@@ -519,7 +519,7 @@
     "mvglive" = ps: with ps; [ PyMVGLive ];
     "mychevy" = ps: with ps; [ ]; # missing inputs: mychevy
     "mycroft" = ps: with ps; [ ]; # missing inputs: mycroftapi
-    "myq" = ps: with ps; [ ]; # missing inputs: pymyq
+    "myq" = ps: with ps; [ pymyq ];
     "mysensors" = ps: with ps; [ aiohttp-cors paho-mqtt ]; # missing inputs: pymysensors
     "mystrom" = ps: with ps; [ aiohttp-cors python-mystrom ];
     "mythicbeastsdns" = ps: with ps; [ ]; # missing inputs: mbddns
@@ -590,7 +590,7 @@
     "opentherm_gw" = ps: with ps; [ ]; # missing inputs: pyotgw
     "openuv" = ps: with ps; [ ]; # missing inputs: pyopenuv
     "openweathermap" = ps: with ps; [ pyowm ];
-    "opnsense" = ps: with ps; [ ]; # missing inputs: pyopnsense
+    "opnsense" = ps: with ps; [ pyopnsense ];
     "opple" = ps: with ps; [ ]; # missing inputs: pyoppleio
     "orangepi_gpio" = ps: with ps; [ ]; # missing inputs: OPi.GPIO
     "oru" = ps: with ps; [ ]; # missing inputs: oru
@@ -894,7 +894,7 @@
     "velbus" = ps: with ps; [ ]; # missing inputs: python-velbus
     "velux" = ps: with ps; [ ]; # missing inputs: pyvlx
     "venstar" = ps: with ps; [ ]; # missing inputs: venstarcolortouch
-    "vera" = ps: with ps; [ ]; # missing inputs: pyvera
+    "vera" = ps: with ps; [ pyvera ];
     "verisure" = ps: with ps; [ jsonpath ]; # missing inputs: vsure
     "versasense" = ps: with ps; [ ]; # missing inputs: pyversasense
     "version" = ps: with ps; [ pyhaversion ];

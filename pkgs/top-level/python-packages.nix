@@ -5428,6 +5428,8 @@ in {
 
   pykickstart = callPackage ../development/python-modules/pykickstart { };
 
+  pykira = callPackage ../development/python-modules/pykira { };
+
   pykka = callPackage ../development/python-modules/pykka { };
 
   pykwalify = callPackage ../development/python-modules/pykwalify { };
@@ -5536,6 +5538,8 @@ in {
 
   PyMVGLive = callPackage ../development/python-modules/pymvglive { };
 
+  pymyq = callPackage ../development/python-modules/pymyq { };
+
   pymysql = callPackage ../development/python-modules/pymysql { };
 
   pymysqlsa = callPackage ../development/python-modules/pymysqlsa { };
@@ -5594,6 +5598,8 @@ in {
   pyopengl-accelerate = callPackage ../development/python-modules/pyopengl-accelerate { };
 
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
+
+  pyopnsense = callPackage ../development/python-modules/pyopnsense { };
 
   pyosf = callPackage ../development/python-modules/pyosf { };
 
@@ -6359,6 +6365,8 @@ in {
   pyvcd = callPackage ../development/python-modules/pyvcd { };
 
   pyvcf = callPackage ../development/python-modules/pyvcf { };
+
+  pyvera = callPackage ../development/python-modules/pyvera { };
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
@@ -8171,6 +8179,8 @@ in {
   xhtml2pdf = callPackage ../development/python-modules/xhtml2pdf { };
 
   xkcdpass = callPackage ../development/python-modules/xkcdpass { };
+
+  xknx = callPackage ../development/python-modules/xknx { };
 
   xlib = callPackage ../development/python-modules/xlib { };
 
