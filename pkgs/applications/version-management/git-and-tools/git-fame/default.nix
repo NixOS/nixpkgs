@@ -7,7 +7,7 @@ bundlerEnv {
 
   gemdir = ./.;
 
-  passthru.updateScript = bundlerUpdateScript "gitAndTools.git-fame";
+  passthru.updateScript = bundlerUpdateScript "git-fame";
 
   meta = with lib; {
     description = ''

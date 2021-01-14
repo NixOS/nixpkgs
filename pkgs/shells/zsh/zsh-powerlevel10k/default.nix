@@ -6,7 +6,7 @@
 let
   # match gitstatus version with given `gitstatus_version`:
   # https://github.com/romkatv/powerlevel10k/blob/master/gitstatus/build.info
-  gitstatus = pkgs.gitAndTools.gitstatus.overrideAttrs (oldAtttrs: rec {
+  gitstatus = pkgs.gitstatus.overrideAttrs (oldAtttrs: rec {
     version = "1.3.1";
 
     src = fetchFromGitHub {

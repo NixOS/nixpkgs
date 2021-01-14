@@ -2491,7 +2491,7 @@ in {
   gipc = callPackage ../development/python-modules/gipc { };
 
   git-annex-adapter =
-    callPackage ../development/python-modules/git-annex-adapter { inherit (pkgs.gitAndTools) git-annex; };
+    callPackage ../development/python-modules/git-annex-adapter { };
 
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
 

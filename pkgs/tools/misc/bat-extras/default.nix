@@ -13,7 +13,7 @@
 , withEntr ? entr != null, entr ? null
 # batdiff
 , gitMinimal
-, withDelta ? gitAndTools?delta, gitAndTools ? null
+, withDelta ? delta != null, delta ? null
 }:
 
 let
@@ -133,7 +133,7 @@ let
     stdenv.lib.optional cond dep;
 in
 {
-  batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta gitAndTools.delta);
+  batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
   batgrep = script "batgrep" [ less coreutils ripgrep ];
   batman = script "batman" [];
   batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);
