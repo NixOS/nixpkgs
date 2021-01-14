@@ -82,5 +82,6 @@ in lib.makeScope newScope (self: lib.makeOverridable ({
   // {
     inherit emacs melpaBuild trivialBuild;
     emacsWithPackages = emacsWithPackages self;
+    withPackages = emacsWithPackages self;
   })
 ) {})

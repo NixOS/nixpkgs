@@ -242,6 +242,8 @@ in {
 
   aiokafka = callPackage ../development/python-modules/aiokafka { };
 
+  aiokef = callPackage ../development/python-modules/aiokef { };
+
   aiolifx = callPackage ../development/python-modules/aiolifx { };
 
   aiolifx-effects = callPackage ../development/python-modules/aiolifx-effects { };
@@ -540,6 +542,8 @@ in {
   avro-python3 = callPackage ../development/python-modules/avro-python3 { };
 
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify { };
+
+  awesomeversion = callPackage ../development/python-modules/awesomeversion { };
 
   awkward0 = callPackage ../development/python-modules/awkward0 { };
   awkward = callPackage ../development/python-modules/awkward { };
@@ -5274,7 +5278,11 @@ in {
 
   pyfftw = callPackage ../development/python-modules/pyfftw { };
 
+  pyfido = callPackage ../development/python-modules/pyfido { };
+
   pyfiglet = callPackage ../development/python-modules/pyfiglet { };
+
+  pyfnip = callPackage ../development/python-modules/pyfnip { };
 
   pyflakes = callPackage ../development/python-modules/pyflakes { };
 
@@ -5388,6 +5396,8 @@ in {
 
   pyinputevent = callPackage ../development/python-modules/pyinputevent { };
 
+  pyinsteon = callPackage ../development/python-modules/pyinsteon { };
+
   pyipp = callPackage ../development/python-modules/pyipp { };
 
   pyiqvia = callPackage ../development/python-modules/pyiqvia { };
@@ -5469,6 +5479,8 @@ in {
   pyls-spyder = callPackage ../development/python-modules/pyls-spyder { };
 
   PyLTI = callPackage ../development/python-modules/pylti { };
+
+  pylutron = callPackage ../development/python-modules/pylutron { };
 
   pymacaroons = callPackage ../development/python-modules/pymacaroons { };
 
@@ -6389,6 +6401,8 @@ in {
   pyx = callPackage ../development/python-modules/pyx { };
 
   pyxdg = callPackage ../development/python-modules/pyxdg { };
+
+  pyxeoma = callPackage ../development/python-modules/pyxeoma { };
 
   pyxl3 = callPackage ../development/python-modules/pyxl3 { };
 
