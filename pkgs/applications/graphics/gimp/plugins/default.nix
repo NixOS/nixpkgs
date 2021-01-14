@@ -167,8 +167,6 @@ in
     variant = "gimp";
   };
 
-  ufraw = pkgs.ufraw.gimpPlugin;
-
   gimplensfun = pluginDerivation rec {
     version = "unstable-2018-10-21";
     name = "gimplensfun-${version}";

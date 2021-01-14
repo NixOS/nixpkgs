@@ -247,7 +247,7 @@
     "ffmpeg_motion" = ps: with ps; [ ha-ffmpeg ];
     "ffmpeg_noise" = ps: with ps; [ ha-ffmpeg ];
     "fibaro" = ps: with ps; [ ]; # missing inputs: fiblary3
-    "fido" = ps: with ps; [ ]; # missing inputs: pyfido
+    "fido" = ps: with ps; [ pyfido ];
     "file" = ps: with ps; [ ];
     "filesize" = ps: with ps; [ ];
     "filter" = ps: with ps; [ aiohttp-cors sqlalchemy ];
@@ -283,7 +283,7 @@
     "fronius" = ps: with ps; [ ]; # missing inputs: pyfronius
     "frontend" = ps: with ps; [ aiohttp-cors pillow ]; # missing inputs: home-assistant-frontend
     "frontier_silicon" = ps: with ps; [ ]; # missing inputs: afsapi
-    "futurenow" = ps: with ps; [ ]; # missing inputs: pyfnip
+    "futurenow" = ps: with ps; [ pyfnip ];
     "garadget" = ps: with ps; [ ];
     "garmin_connect" = ps: with ps; [ ]; # missing inputs: garminconnect
     "gc100" = ps: with ps; [ ]; # missing inputs: python-gc100
@@ -388,7 +388,7 @@
     "input_number" = ps: with ps; [ ];
     "input_select" = ps: with ps; [ ];
     "input_text" = ps: with ps; [ ];
-    "insteon" = ps: with ps; [ ]; # missing inputs: pyinsteon
+    "insteon" = ps: with ps; [ pyinsteon ];
     "integration" = ps: with ps; [ ];
     "intent" = ps: with ps; [ aiohttp-cors ];
     "intent_script" = ps: with ps; [ ];
@@ -413,7 +413,7 @@
     "kankun" = ps: with ps; [ ];
     "keba" = ps: with ps; [ ]; # missing inputs: keba-kecontact
     "keenetic_ndms2" = ps: with ps; [ ]; # missing inputs: ndms2_client
-    "kef" = ps: with ps; [ getmac ]; # missing inputs: aiokef
+    "kef" = ps: with ps; [ aiokef getmac ];
     "keyboard" = ps: with ps; [ ]; # missing inputs: pyuserinput
     "keyboard_remote" = ps: with ps; [ aionotify evdev ];
     "kira" = ps: with ps; [ ]; # missing inputs: pykira
@@ -459,7 +459,7 @@
     "luci" = ps: with ps; [ openwrt-luci-rpc ];
     "luftdaten" = ps: with ps; [ luftdaten ];
     "lupusec" = ps: with ps; [ ]; # missing inputs: lupupy
-    "lutron" = ps: with ps; [ ]; # missing inputs: pylutron
+    "lutron" = ps: with ps; [ pylutron ];
     "lutron_caseta" = ps: with ps; [ ]; # missing inputs: pylutron-caseta
     "lw12wifi" = ps: with ps; [ ]; # missing inputs: lw12
     "lyft" = ps: with ps; [ ]; # missing inputs: lyft_rides
@@ -942,7 +942,7 @@
     "xbee" = ps: with ps; [ ]; # missing inputs: xbee-helper
     "xbox" = ps: with ps; [ aiohttp-cors ]; # missing inputs: xbox-webapi
     "xbox_live" = ps: with ps; [ ]; # missing inputs: xboxapi
-    "xeoma" = ps: with ps; [ ]; # missing inputs: pyxeoma
+    "xeoma" = ps: with ps; [ pyxeoma ];
     "xfinity" = ps: with ps; [ ]; # missing inputs: xfinity-gateway
     "xiaomi" = ps: with ps; [ ha-ffmpeg ];
     "xiaomi_aqara" = ps: with ps; [ aiohttp-cors netdisco zeroconf ]; # missing inputs: PyXiaomiGateway

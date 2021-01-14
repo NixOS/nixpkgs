@@ -155,19 +155,17 @@ in
       users.groups.docker.gid = config.ids.gids.docker;
       systemd.packages = [ cfg.package ];
 
-      # TODO: remove once docker 20.10 is released
-      systemd.enableUnifiedCgroupHierarchy = false;
-
       systemd.services.docker = {
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
         environment = proxy_env;
         serviceConfig = {
+          Type = "notify";
           ExecStart = [
             ""
             ''
               ${cfg.package}/bin/dockerd \
                 --group=docker \
-                --host=fd:// \
+                --host=unix:// \
                 --log-driver=${cfg.logDriver} \
                 ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
                 ${optionalString cfg.liveRestore "--live-restore" } \

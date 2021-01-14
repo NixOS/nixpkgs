@@ -3771,6 +3771,12 @@
     githubId = 7481521;
     name = "Balázs Lengyel";
   };
+  ilian = {
+    email = "ilian@tuta.io";
+    github = "ilian";
+    githubId = 25505957;
+    name = "Ilian";
+  };
   ilikeavocadoes = {
     email = "ilikeavocadoes@hush.com";
     github = "ilikeavocadoes";
@@ -6568,12 +6574,6 @@
     email = "timmelzer+nixpkgs@gmail.com";
     github = "NobbZ";
     githubId = 58951;
-  };
-  nocent = {
-    email = "nocent@protonmail.ch";
-    github = "nocent";
-    githubId = 25505957;
-    name = "nocent";
   };
   nocoolnametom = {
     email = "nocoolnametom@gmail.com";
