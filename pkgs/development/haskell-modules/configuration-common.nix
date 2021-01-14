@@ -976,6 +976,7 @@ self: super: {
   # This issue can be mitigated with 'dontCheck' which skips the tests and their compilation.
   dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (dontCheck super.dhall-json);
   dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" super.dhall-nix;
+  dhall-yaml = generateOptparseApplicativeCompletions ["dhall-to-yaml-ng" "yaml-to-dhall"] super.dhall-yaml;
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
   netrc = doJailbreak super.netrc;
