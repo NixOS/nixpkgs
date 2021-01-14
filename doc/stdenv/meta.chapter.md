@@ -163,7 +163,7 @@ meta.hydraPlatforms = [];
 
 ### `broken` {#var-meta-broken}
 
-If set to `true`, the package is marked as "broken", meaning that it won’t show up in `nix-env -qa`, and cannot be built or installed. Such packages should be removed from Nixpkgs eventually unless they are fixed.
+If set to `true`, the package is marked as "broken", meaning that it won’t show up in `nix-env -qa`, and cannot be built or installed. The same happens when set to a non empty string value, in which case the text will be included in the error message shown when trying to build this package. Such packages should be removed from Nixpkgs eventually unless they are fixed.
 
 ### `updateWalker` {#var-meta-updateWalker}
 

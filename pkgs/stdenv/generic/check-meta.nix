@@ -53,7 +53,7 @@ let
     hasLicense attrs &&
     isUnfree (lib.lists.toList attrs.meta.license);
 
-  isMarkedBroken = attrs: attrs.meta.broken or false;
+  isMarkedBroken = attrs: !builtins.elem attrs.meta.broken or false [ false "" ];
 
   hasUnsupportedPlatform = attrs:
     (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
@@ -214,7 +214,7 @@ let
     priority = int;
     platforms = listOf str;
     hydraPlatforms = listOf str;
-    broken = bool;
+    broken = either bool str;
     unfree = bool;
     unsupported = bool;
     insecure = bool;
@@ -282,8 +282,9 @@ let
       { valid = false; reason = "unfree"; errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)"; }
     else if hasBlocklistedLicense attrs then
       { valid = false; reason = "blocklisted"; errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)"; }
-    else if !allowBroken && attrs.meta.broken or false then
-      { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
+    else if !allowBroken && isMarkedBroken attrs then
+      let because = if lib.types.str.check attrs.meta.broken then " because ${attrs.meta.broken}" else ""; in
+      { valid = false; reason = "broken"; errormsg = "is marked as broken${because}"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
       { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
     else if !(hasAllowedInsecure attrs) then
