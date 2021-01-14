@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./pure-configure.patch
+    (fetchpatch {
+      name = "CVE-2020-26262.patch";
+      url = "https://github.com/coturn/coturn/commit/abfe1fd08d78baa0947d17dac0f7411c3d948e4d.patch";
+      sha256 = "06e0b92043d6afcd96f2cf514c60d17987642f41403cfb17cc35f37c7c726ba4";
+    })
   ];
 
   meta = with stdenv.lib; {
