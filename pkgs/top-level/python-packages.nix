@@ -7614,6 +7614,8 @@ in {
 
   tls-parser = callPackage ../development/python-modules/tls-parser { };
 
+  tmb = callPackage ../development/python-modules/tmb { };
+
   tmdb3 = callPackage ../development/python-modules/tmdb3 { };
 
   todoist = callPackage ../development/python-modules/todoist { };
