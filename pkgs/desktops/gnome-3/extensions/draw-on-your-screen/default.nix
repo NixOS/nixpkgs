@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-draw-on-your-screen";
-  version = "6";
+  version = "10";
 
   src = fetchgit {
     url = "https://framagit.org/abakkk/DrawOnYourScreen/";
     rev = "v${version}";
-    sha256 = "05i20ii8lv6mg56rz8lng80dx35l6g45j8wr7jgbp591hg0spj1w";
+    sha256 = "07adzg3mf6k0pmd9lc358w0w3l4pr3p6374day1qhmci2p4zxq6p";
   };
 
   uuid = "drawOnYourScreen@abakkk.framagit.org";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A drawing extension for GNOME Shell";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ericdallo ];
+    maintainers = with maintainers; [ ericdallo ahuzik ];
     platforms = gnome3.gnome-shell.meta.platforms;
     homepage = "https://framagit.org/abakkk/DrawOnYourScreen";
   };

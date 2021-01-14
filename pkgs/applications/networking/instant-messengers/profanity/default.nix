@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, openssl
 , glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
-, cmocka, libmicrohttpd, expat, sqlite, libmesode, fetchpatch
-, autoconf-archive
+, cmocka, libmicrohttpd, expat, sqlite, libmesode, autoconf-archive
 
 , autoAwaySupport ? true,       libXScrnSaver ? null, libX11 ? null
 , notifySupport ? true,         libnotify ? null, gdk-pixbuf ? null
@@ -22,20 +21,16 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "profanity";
-  version = "0.9.5";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = version;
-    sha256 = "14vbblf639f90bb4npg2xv53cpvk9am9ic4pmc1vnv4m3zsndjg5";
+    sha256 = "0a9rzhnivxcr8v02xxzrbck7pvvv4c66ap2zy0gzxhri5p8ac03r";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/profanity-im/profanity/commit/54667c022f17bdb547c3b8b4eec1c2889c9d60f3.patch";
-      sha256 = "0aqrq45im1qnq308hyhh7dqbggzmcqb0b868wr5v8v08pd94s45k";
-    })
     ./patches/packages-osx.patch
   ];
 
@@ -80,6 +75,8 @@ stdenv.mkDerivation rec {
     homepage = "http://www.profanity.im/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    changelog = "https://github.com/profanity-im/profanity/releases/tag/${version}";
+    downloadPage = "https://github.com/profanity-im/profanity/releases/";
     maintainers = [ maintainers.devhell ];
     updateWalker = true;
   };

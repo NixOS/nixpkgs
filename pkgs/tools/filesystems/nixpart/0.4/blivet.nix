@@ -1,6 +1,6 @@
 # FIXME: Unify with pkgs/development/python-modules/blivet/default.nix.
 
-{ lib, stdenv, fetchurl, buildPythonApplication, pykickstart, pyparted, pyblock
+{ lib, fetchurl, buildPythonApplication, pykickstart, pyparted, pyblock
 , libselinux, cryptsetup, multipath_tools, lsof, util-linux
 , useNixUdev ? true, systemd ? null
 # useNixUdev is here for bw compatibility
@@ -30,13 +30,13 @@ buildPythonApplication rec {
     sed -i -e 's|"lsof"|"${lsof}/bin/lsof"|' blivet/formats/fs.py
     sed -i -r -e 's|"(u?mount)"|"${util-linux.bin}/bin/\1"|' blivet/util.py
     sed -i -e '/find_library/,/find_library/ {
-      c libudev = "${stdenv.lib.getLib systemd}/lib/libudev.so.1"
+      c libudev = "${lib.getLib systemd}/lib/libudev.so.1"
     }' blivet/pyudev.py
   '';
 
   propagatedBuildInputs = [
     pykickstart pyparted pyblock libselinux cryptsetup
-  ] ++ stdenv.lib.optional useNixUdev systemd;
+  ] ++ lib.optional useNixUdev systemd;
 
   # tests are currently _heavily_ broken upstream
   doCheck = false;
