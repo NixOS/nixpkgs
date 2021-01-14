@@ -6382,6 +6382,8 @@ in {
     inherit (pkgs) pkg-config vips glib;
   };
 
+  pyvlx = callPackage ../development/python-modules/pyvlx { };
+
   pyvmomi = callPackage ../development/python-modules/pyvmomi { };
 
   pyvoro = callPackage ../development/python-modules/pyvoro { };
