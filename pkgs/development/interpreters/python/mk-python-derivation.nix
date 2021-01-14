@@ -97,12 +97,6 @@
 
 , ... } @ attrs:
 
-
-# Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-if disabled
-then throw "${name} not supported for interpreter ${python.executable}"
-else
-
 let
   inherit (python) stdenv;
 
@@ -176,6 +170,7 @@ let
       # default to python's platforms
       platforms = python.meta.platforms;
       isBuildPythonPackage = python.meta.platforms;
+      broken = lib.optionalString disabled "interpreter ${python.executable} is not supported by this version";
     } // lib.optionalAttrs (attrs?pname) {
       mainProgram = attrs.pname;
     } // meta;
