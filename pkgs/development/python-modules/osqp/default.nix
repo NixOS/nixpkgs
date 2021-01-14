@@ -8,15 +8,16 @@
 , scipy
 # check inputs
 , pytestCheckHook
+, cvxopt
 }:
 
 buildPythonPackage rec {
   pname = "osqp";
-  version = "0.6.2";
+  version = "0.6.2.post0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "262162039f6ad6c9ffee658541b18cfae8240b65edbde71d9b9e3af42fbfe4b3";
+    sha256 = "5f0695f26a3bef0fae91254bc283fab790dcca0064bfe0f425167f9c9e8b4cbc";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -30,17 +31,9 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "osqp" ];
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [ pytestCheckHook cvxopt ];
   disabledTests = [
     "mkl_"
-  ];
-    pytestFlagsArray = [
-    # These cannot collect b/c of circular dependency on cvxpy: https://github.com/oxfordcontrol/osqp-python/issues/50
-    "--ignore=module/tests/basic_test.py"
-    "--ignore=module/tests/feasibility_test.py"
-    "--ignore=module/tests/polishing_test.py"
-    "--ignore=module/tests/unconstrained_test.py"
-    "--ignore=module/tests/update_matrices_test.py"
   ];
 
   meta = with lib; {
