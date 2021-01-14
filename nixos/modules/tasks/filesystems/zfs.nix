@@ -327,7 +327,9 @@ in
     };
 
     services.zfs.zed = {
-      enableMail = mkEnableOption "ZED's ability to send emails";
+      enableMail = mkEnableOption "ZED's ability to send emails" // {
+        default = cfgZfs.package.enableMail;
+      };
 
       settings = mkOption {
         type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
@@ -362,6 +364,14 @@ in
   config = mkMerge [
     (mkIf cfgZfs.enabled {
       assertions = [
+        {
+          assertion = cfgZED.enableMail -> cfgZfs.package.enableMail;
+          message = ''
+            To allow ZED to send emails, ZFS needs to be configured to enable
+            this. To do so, one must override the `zfs` package and set
+            `enableMail` to true.
+          '';
+        }
         {
           assertion = config.networking.hostId != null;
           message = "ZFS requires networking.hostId to be set";
