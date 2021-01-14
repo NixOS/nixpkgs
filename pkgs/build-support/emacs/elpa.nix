@@ -26,7 +26,9 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
   installPhase = ''
     runHook preInstall
 
-    emacs --batch -Q -l ${./elpa2nix.el} \
+    emacs --batch -Q \
+        --eval "(setq comp-enable-subr-trampolines nil)" \
+        -l ${./elpa2nix.el} \
         -f elpa2nix-install-package \
         "${src}" "$out/share/emacs/site-lisp/elpa"
 
