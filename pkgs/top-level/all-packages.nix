@@ -4957,6 +4957,8 @@ in
       configureFlags = oldAttrs.configureFlags ++ ["--enable-threadsafe" "--disable-hl" ];
   }));
 
+  hdf5-blosc = callPackage ../development/libraries/hdf5-blosc { };
+
   hdfview = callPackage ../tools/misc/hdfview {
     javac = jdk8; # TODO: https://github.com/NixOS/nixpkgs/pull/89731
   };
