@@ -25743,7 +25743,7 @@ in
 
   yate = callPackage ../applications/misc/yate { };
 
-  ydiff = callPackage ../development/tools/ydiff { };
+  inherit (gitAndTools) ydiff;
 
   yed = callPackage ../applications/graphics/yed {};
 
