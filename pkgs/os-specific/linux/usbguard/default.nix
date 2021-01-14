@@ -1,12 +1,23 @@
-{ stdenv, fetchFromGitHub, lib, autoreconfHook,
-  pkgconfig, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl, asciidoc,
-  dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf,
-  audit,
-  libgcrypt ? null,
-  libsodium ? null
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, asciidoc
+, pkgconfig
+, libxslt
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl
+, dbus-glib
+, libcap_ng
+, libqb
+, libseccomp
+, polkit
+, protobuf
+, audit
+, libgcrypt
+, libsodium
 }:
-
-with stdenv.lib;
 
 assert libgcrypt != null -> libsodium == null;
 
@@ -55,7 +66,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "The USBGuard software framework helps to protect your computer against BadUSB";
     homepage = "https://usbguard.github.io/";
     license = licenses.gpl2Plus;
