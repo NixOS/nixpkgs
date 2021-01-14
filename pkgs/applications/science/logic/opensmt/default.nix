@@ -1,4 +1,4 @@
-{ lib, stdenv, lib, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub
 , cmake, libedit, gmpxx, bison, flex
 , enableReadline ? false, readline
 , gtest
