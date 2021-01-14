@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       unlicense
       unfreeRedistributable # contains libbass.so in repository
     ];
-    maintainers = [ maintainers.nocent ];
+    maintainers = [ maintainers.ilian ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
