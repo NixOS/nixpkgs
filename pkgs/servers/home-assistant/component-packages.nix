@@ -892,7 +892,7 @@
     "vallox" = ps: with ps; [ ]; # missing inputs: vallox-websocket-api
     "vasttrafik" = ps: with ps; [ ]; # missing inputs: vtjp
     "velbus" = ps: with ps; [ ]; # missing inputs: python-velbus
-    "velux" = ps: with ps; [ ]; # missing inputs: pyvlx
+    "velux" = ps: with ps; [ pyvlx ];
     "venstar" = ps: with ps; [ ]; # missing inputs: venstarcolortouch
     "vera" = ps: with ps; [ ]; # missing inputs: pyvera
     "verisure" = ps: with ps; [ jsonpath ]; # missing inputs: vsure
