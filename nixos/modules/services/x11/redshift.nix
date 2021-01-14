@@ -7,26 +7,12 @@ let
   cfg = config.services.redshift;
   lcfg = config.location;
   settingsFormat = pkgs.formats.ini {};
-  isGeoclue2 = lcfg.provider == "geoclue2";
-  isManual = lcfg.provider == "manual";
 
 in {
 
   meta.maintainers = with maintainers; [ thiagokokada ];
 
   imports = [
-    (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
-      (config:
-        let value = getAttrFromPath [ "services" "redshift" "latitude" ] config;
-        in if value == null then
-          throw "services.redshift.latitude is set to null, you can remove this"
-          else builtins.fromJSON value))
-    (mkChangedOptionModule [ "services" "redshift" "longitude" ] [ "location" "longitude" ]
-      (config:
-        let value = getAttrFromPath [ "services" "redshift" "longitude" ] config;
-        in if value == null then
-          throw "services.redshift.longitude is set to null, you can remove this"
-          else builtins.fromJSON value))
     (mkRenamedOptionModule [ "services" "redshift" "provider" ] [ "location" "provider" ])
     (mkRemovedOptionModule [ "services" "redshift" "extraOptions" ] "All Redshift configuration is now available through services.redshift.settings instead.")
   ] ++
@@ -48,6 +34,59 @@ in {
         This module also supports Gammastep, look for
         <literal>services.redshift.package</literal> and
         <literal>services.redshift.executable</literal> options.
+      '';
+    };
+
+    dawnTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "6:00-7:45";
+      description = ''
+        Set the time interval of dawn manually.
+
+        The times must be specified as HH:MM in 24-hour format.
+      '';
+    };
+
+    duskTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "18:35-20:15";
+      description = ''
+        Set the time interval of dusk manually.
+
+        The times must be specified as HH:MM in 24-hour format.
+      '';
+    };
+
+    latitude = mkOption {
+      type = types.nullOr types.float;
+      default = null;
+      example = "0.0";
+      description = ''
+        Set the current location latitude.
+
+        Keep in mind that latitudes south of Equator (e.g. Australia) are negative numbers.
+      '';
+    };
+
+    longitude = mkOption {
+      type = types.nullOr types.float;
+      default = null;
+      example = "0.0";
+      description = ''
+        Set the current location longitude.
+
+        Keep in mind that longitudes west of Greenwich (e.g. the Americas) are negative numbers.
+      '';
+    };
+
+    useGeoclue = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Use Geoclue2 as a location provider for Redshift.
       '';
     };
 
@@ -80,6 +119,7 @@ in {
 
         options.redshift = mkOption {
           type = settingsFormat.type.functor.wrapped;
+          description = "Main Redshift/Gammastep configuration.";
         };
 
         # Copy all redshift definitions to general, such that in case of gammastep,
@@ -131,7 +171,9 @@ in {
     # needed so that .desktop files are installed, which geoclue cares about
     environment.systemPackages = [ cfg.package ];
 
-    services.geoclue2.appConfig.redshift = mkIf isGeoclue2 {
+    location.provider = mkIf cfg.useGeoclue "geoclue2";
+
+    services.geoclue2.appConfig.redshift = mkIf cfg.useGeoclue {
       isAllowed = true;
       isSystem = true;
     };
@@ -141,13 +183,32 @@ in {
         assertion = (cfg.settings ? redshift.dawn-time) == (cfg.settings ? redshift.dusk-time);
         message = "Time of dawn and time of dusk must be provided together.";
       }
+      {
+        assertion = (cfg.settings ? redshift.lat) == (cfg.settings ? redshift.lon);
+        message = "Latitude and longitude must be provided together.";
+      }
+      # Only checking for dawn-time or lat because the above two assertions cover the dusk-time/lon.
+      {
+        assertion = (cfg.settings ? redshift.dawn-time) ||
+                    (cfg.settings.redshift.location-provider or "") == "geoclue2" ||
+                    ((cfg.settings.redshift.location-provider or "") == "manual" && (cfg.settings ? manual.lat));
+        message = ''Either set "redshift.dawnTime" and "redshift.duskTime" OR "redshift.latitude" and "redshift.longitude" OR "redshift.useGeoclue".'' ;
+      }
     ];
 
     services.redshift.settings = {
-      redshift.location-provider = lcfg.provider;
-      manual = mkIf isManual {
-        lat = lcfg.latitude;
-        lon = lcfg.longitude;
+      redshift = {
+        location-provider = if cfg.useGeoclue then "geoclue2" else "manual";
+        dawn-time = mkIf (cfg.dawnTime != null) cfg.dawnTime;
+        dusk-time = mkIf (cfg.duskTime != null) cfg.duskTime;
+      };
+      manual = {
+        lat = if (lcfg.provider == "manual" && options.location.latitude.isDefined)
+              then lcfg.latitude
+              else mkIf (cfg.latitude != null) cfg.latitude;
+        lon = if (lcfg.provider == "manual" && options.location.longitude.isDefined)
+              then lcfg.longitude
+              else mkIf (cfg.longitude != null) cfg.longitude;
       };
     };
 
