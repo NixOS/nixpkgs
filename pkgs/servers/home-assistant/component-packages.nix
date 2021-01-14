@@ -799,7 +799,7 @@
     "swisscom" = ps: with ps; [ ];
     "switch" = ps: with ps; [ ];
     "switchbot" = ps: with ps; [ ]; # missing inputs: PySwitchbot
-    "switcher_kis" = ps: with ps; [ ]; # missing inputs: aioswitcher
+    "switcher_kis" = ps: with ps; [ aioswitcher ];
     "switchmate" = ps: with ps; [ ]; # missing inputs: pySwitchmate
     "syncthru" = ps: with ps; [ ]; # missing inputs: pysyncthru url-normalize
     "synology" = ps: with ps; [ ]; # missing inputs: py-synology
