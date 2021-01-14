@@ -367,7 +367,7 @@
     "humidifier" = ps: with ps; [ ];
     "hunterdouglas_powerview" = ps: with ps; [ ]; # missing inputs: aiopvapi
     "hvv_departures" = ps: with ps; [ ]; # missing inputs: pygti
-    "hydrawise" = ps: with ps; [ ]; # missing inputs: hydrawiser
+    "hydrawise" = ps: with ps; [ hydrawiser ];
     "hyperion" = ps: with ps; [ ]; # missing inputs: hyperion-py
     "iammeter" = ps: with ps; [ ]; # missing inputs: iammeter
     "iaqualink" = ps: with ps; [ ]; # missing inputs: iaqualink
@@ -615,7 +615,7 @@
     "picotts" = ps: with ps; [ ];
     "piglow" = ps: with ps; [ ]; # missing inputs: piglow
     "pilight" = ps: with ps; [ ]; # missing inputs: pilight
-    "ping" = ps: with ps; [ ]; # missing inputs: icmplib
+    "ping" = ps: with ps; [ icmplib ];
     "pioneer" = ps: with ps; [ ];
     "pjlink" = ps: with ps; [ ]; # missing inputs: pypjlink2
     "plaato" = ps: with ps; [ aiohttp-cors ];
@@ -625,7 +625,7 @@
     "plum_lightpad" = ps: with ps; [ ]; # missing inputs: plumlightpad
     "pocketcasts" = ps: with ps; [ ]; # missing inputs: pycketcasts
     "point" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pypoint
-    "poolsense" = ps: with ps; [ ]; # missing inputs: poolsense
+    "poolsense" = ps: with ps; [ poolsense ];
     "powerwall" = ps: with ps; [ ]; # missing inputs: tesla-powerwall
     "profiler" = ps: with ps; [ objgraph pyprof2calltree ]; # missing inputs: guppy3
     "progettihwsw" = ps: with ps; [ ]; # missing inputs: progettihwsw
