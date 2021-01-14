@@ -86,6 +86,12 @@ stdenv.mkDerivation rec {
     gdb man emacs
   ];
 
+  # Expects there to always be a thread with ID
+  # thread:0000000000000009, but notmuch new is non-deterministic so
+  # this isn't always the case.  Upstream bug report:
+  # https://nmbug.notmuchmail.org/nmweb/show/871reno6g7.fsf%40alyssa.is
+  NOTMUCH_SKIP_TESTS = "lib-thread";
+
   installTargets = [ "install" "install-man" "install-info" ];
 
   postInstall = stdenv.lib.optionalString withEmacs ''
