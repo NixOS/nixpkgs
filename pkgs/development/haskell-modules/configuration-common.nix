@@ -521,6 +521,10 @@ self: super: {
      then self.buildHaskellPackages.tasty-discover
      else dontCheck super.tasty-discover);
 
+  # Known issue with nondeterministic test suite failure
+  # https://github.com/nomeata/tasty-expected-failure/issues/21
+  tasty-expected-failure = dontCheck super.tasty-expected-failure;
+
   # Waiting on https://github.com/RaphaelJ/friday/pull/36
   friday = doJailbreak super.friday;
 
