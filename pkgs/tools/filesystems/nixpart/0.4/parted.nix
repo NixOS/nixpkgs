@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, lvm2, libuuid, gettext, readline
+{ lib,stdenv, fetchurl, fetchpatch, lvm2, libuuid, gettext, readline
 , util-linux, check
 , enableStatic ? stdenv.hostPlatform.isStatic
 }:
@@ -21,21 +21,21 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libuuid ]
-    ++ stdenv.lib.optional (readline != null) readline
-    ++ stdenv.lib.optional (gettext != null) gettext
-    ++ stdenv.lib.optional (lvm2 != null) lvm2;
+    ++ lib.optional (readline != null) readline
+    ++ lib.optional (gettext != null) gettext
+    ++ lib.optional (lvm2 != null) lvm2;
 
   configureFlags =
        (if (readline != null)
         then [ "--with-readline" ]
         else [ "--without-readline" ])
-    ++ stdenv.lib.optional (lvm2 == null) "--disable-device-mapper"
-    ++ stdenv.lib.optional enableStatic "--enable-static";
+    ++ lib.optional (lvm2 == null) "--disable-device-mapper"
+    ++ lib.optional enableStatic "--enable-static";
 
   doCheck = true;
   checkInputs = [ check util-linux ];
 
-  meta = {
+  meta = with lib; {
     description = "Create, destroy, resize, check, and copy partitions";
 
     longDescription = ''
@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/parted/";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
     maintainers = [
       # Add your name here!
     ];
 
     # GNU Parted requires libuuid, which is part of util-linux-ng.
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }
