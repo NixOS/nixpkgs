@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "gomplate";
@@ -26,7 +26,7 @@ buildGoModule rec {
     "-X github.com/${owner}/${pname}/v3/version.Version=${rev}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A flexible commandline tool for template rendering";
     homepage = "https://gomplate.ca/";
     maintainers = with maintainers; [ ris jlesquembre ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , bzip2
 , cmake
 , doxygen
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake doxygen pkgconfig ];
   buildInputs = [ bzip2 fuse libevent lzma openssl systemd tcp_wrappers zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A caching proxy specialized for linux distribution files";
     homepage = "https://www.unix-ag.uni-kl.de/~bloch/acng/";
     license = licenses.gpl2;

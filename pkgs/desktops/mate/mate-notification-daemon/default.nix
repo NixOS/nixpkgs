@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, glib, libcanberra-gtk3,
+{ lib, stdenv, fetchurl, pkgconfig, gettext, glib, libcanberra-gtk3,
   libnotify, libwnck3, gtk3, libxml2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Notification daemon for MATE Desktop";
     homepage = "https://github.com/mate-desktop/mate-notification-daemon";
     license = licenses.gpl2;

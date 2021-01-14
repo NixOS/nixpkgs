@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ginkgo";
@@ -13,7 +13,7 @@ buildGoModule rec {
   vendorSha256 = "072amyw1ir18v9vk268j2y7dhw3lfwvxzvzsdqhnp50rxsa911bx";
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "BDD Testing Framework for Go";
     homepage = "https://github.com/onsi/ginkgo";
     license = licenses.mit;

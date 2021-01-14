@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, pkgconfig, wrapGAppsHook
 , help2man, luafilesystem, luajit, sqlite
 , webkitgtk, gtk3, gst_all_1, glib-networking
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, small, webkit-based browser framework extensible in Lua";
     longDescription = ''
       Luakit is a highly configurable browser framework based on the WebKit web

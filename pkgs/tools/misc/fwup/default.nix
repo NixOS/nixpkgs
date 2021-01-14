@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ];
   propagatedBuildInputs = [ zip unzip mtools dosfstools coreutils ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Configurable embedded Linux firmware update creator and runner";
     homepage = "https://github.com/fhunleth/fwup";
     license = licenses.asl20;

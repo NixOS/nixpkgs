@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Task manager with Todoist support designed for GNU/Linux 🚀️";
     homepage = "https://planner-todo.web.app";
     license = licenses.gpl3;

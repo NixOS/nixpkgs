@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, perl, rsync }:
+{ lib, stdenv, fetchurl, perl, rsync }:
 
 let
-  base = import ./base.nix { inherit stdenv fetchurl; };
+  base = import ./base.nix { inherit stdenv lib fetchurl; };
 in
 stdenv.mkDerivation {
   name = "rrsync-${base.version}";

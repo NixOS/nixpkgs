@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, glib, gtk3, libnotify, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, gettext, glib, gtk3, libnotify, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "cbatticon";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight and fast battery icon that sits in the system tray";
     homepage = "https://github.com/valr/cbatticon";
     license = licenses.gpl2;

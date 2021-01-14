@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, php, which, gnused, makeWrapper, gnumake, gcc, callPackage }:
+{ lib, stdenv, fetchurl, php, which, gnused, makeWrapper, gnumake, gcc, callPackage }:
 
 stdenv.mkDerivation rec {
   pname = "phoronix-test-suite";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     simple-execution = callPackage ./tests.nix { };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-Source, Automated Benchmarking";
     homepage = "https://www.phoronix-test-suite.com/";
     maintainers = with maintainers; [ davidak ];

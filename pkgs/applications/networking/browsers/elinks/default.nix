@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, ncurses, xlibsWrapper, bzip2, zlib
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, xlibsWrapper, bzip2, zlib
 , brotli, zstd, lzma, openssl, autoreconfHook, gettext, pkgconfig, libev
 , gpm, libidn, tre, expat
 , # Incompatible licenses, LGPLv3 - GPLv2
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional enablePerl         "--with-perl"
     ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Full-featured text-mode web browser (package based on the fork felinks)";
     homepage = "https://github.com/rkd77/felinks";
     license = licenses.gpl2;

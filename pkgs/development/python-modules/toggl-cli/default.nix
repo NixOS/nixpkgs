@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
 , click
 , click-completion
 , factory_boy
@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "toggl-cli";
-  version = "2.2.1";
+  version = "2.4.1";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     pname = "togglCli";
     inherit version;
-    sha256 = "1izsxag98lvivkwf7724g2ak6icjak9jdqphaq1a79kwdnqprx1m";
+    sha256 = "19lry8adcznzmzbvghyid3yl4j05db6931bw38af5vrkkyzyf62i";
   };
 
   postPatch = ''
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     validate-email
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://toggl.uhlir.dev/";
     description = "Command line tool and set of Python wrapper classes for interacting with toggl's API";
     license = licenses.mit;

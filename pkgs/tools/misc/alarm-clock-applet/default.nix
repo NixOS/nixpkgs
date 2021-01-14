@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pkgconfig
 , autoconf
 , automake111x
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://alarm-clock.pseudoberries.com/";
     description = "A fully-featured alarm clock for your GNOME panel or equivalent";
     license = licenses.gpl2;

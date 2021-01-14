@@ -26,6 +26,7 @@ stdenv.mkDerivation {
     "--with-tcsetpgrp"
     "--enable-pcre"
     "--enable-zprofile=${placeholder "out"}/etc/zprofile"
+    "--disable-site-fndir"
   ];
 
   # the zsh/zpty module is not available on hydra

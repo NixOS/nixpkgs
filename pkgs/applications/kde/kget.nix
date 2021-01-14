@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "kget";
+  pname = "kget";
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 

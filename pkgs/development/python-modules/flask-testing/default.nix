@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy3k, flask, blinker, twill }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, isPy3k, flask, blinker, twill }:
 
 buildPythonPackage rec {
   pname = "Flask-Testing";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_testing" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flask unittest integration.";
     homepage = "https://pythonhosted.org/Flask-Testing/";
     license = licenses.bsd3;

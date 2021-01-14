@@ -1,27 +1,22 @@
-{ stdenv, fetchFromGitHub, buildGoModule, bash, fish, zsh }:
+{ lib, stdenv, fetchFromGitHub, buildGoModule, bash, fish, zsh }:
 
 buildGoModule rec {
   pname = "direnv";
-  version = "2.25.1";
-
-  vendorSha256 = null;
+  version = "2.27.0";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "0bwr7zdzjm5p6bjyzafc2n57y83f0pv2bmj99rhi8f94hhfydlsf";
+    sha256 = "05vvn59xd2q4yjizh5fprjib5xqq58by80d5avsm8nb1qxf383b1";
   };
+
+  vendorSha256 = "084x7d7sshcsyim76d6pl6127nlqacgwwnm965srl9y5w5nqzba6";
 
   # we have no bash at the moment for windows
   BASH_PATH =
     stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
     "${bash}/bin/bash";
-
-  # fix hardcoded GOFLAGS in makefile. remove once https://github.com/direnv/direnv/issues/718 is closed.
-  postPatch = ''
-    substituteInPlace GNUmakefile --replace "export GOFLAGS=-mod=vendor" ""
-  '';
 
   # replace the build phase to use the GNUMakefile instead
   buildPhase = ''
@@ -29,9 +24,7 @@ buildGoModule rec {
   '';
 
   installPhase = ''
-    make install DESTDIR=$out
-    mkdir -p $out/share/fish/vendor_conf.d
-    echo "eval ($out/bin/direnv hook fish)" > $out/share/fish/vendor_conf.d/direnv.fish
+    make install PREFIX=$out
   '';
 
   checkInputs = [ fish zsh ];
@@ -41,7 +34,7 @@ buildGoModule rec {
     make test-go test-bash test-fish test-zsh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A shell extension that manages your environment";
     longDescription = ''
       Once hooked into your shell direnv is looking for an .envrc file in your

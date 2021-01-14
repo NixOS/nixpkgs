@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, m4 }:
+{ lib, stdenv, fetchurl, bison, m4 }:
 
 stdenv.mkDerivation {
   name = "flex-2.6.1";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     sed -i Makefile -e 's/-no-undefined//;'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/westes/flex";
     description = "A fast lexical analyser generator";
     license = licenses.bsd2;

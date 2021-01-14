@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qmake, qtbase, qttools }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, qtbase, qttools }:
 
 mkDerivation rec {
   pname = "lumina-calculator";
@@ -22,7 +22,7 @@ mkDerivation rec {
     "LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scientific calculator for the Lumina Desktop";
     homepage = "https://github.com/lumina-desktop/lumina-calculator";
     license = licenses.bsd3;

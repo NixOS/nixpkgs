@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = (with python3Packages; [
     boto
     gevent
-    google_cloud_storage
+    google-cloud-storage
   ]) ++ [
     postgresql
     lzop

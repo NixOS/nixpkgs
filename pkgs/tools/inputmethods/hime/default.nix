@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--disable-lib64" "--disable-qt5-immodule" ];
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://hime-ime.github.io/";
     downloadPage = "https://github.com/hime-ime/hime/downloads";
     description = "A useful input method engine for Asia region";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , copper
 , ruby
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ]
   ++ stdenv.lib.optionals withQt [ "UI=qt" ]
   ++ stdenv.lib.optionals withGtk [ "UI=gtk" ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Folding text editor, designed to hierarchically structure any kind of text file and especially source code";
     homepage = "https://tibleiz.net/code-browser/";
     license = licenses.gpl2;

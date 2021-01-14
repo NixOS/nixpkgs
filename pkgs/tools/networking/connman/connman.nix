@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , file
@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A daemon for managing internet connections";
     homepage = "https://01.org/connman";
     maintainers = [ maintainers.matejc ];

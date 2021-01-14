@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl
+{ lib, stdenv, fetchurl, perl
 , ghostscript #for postscript and html output
 , psutils, netpbm #for html output
 , buildPackages
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     "--with-gs=${ghostscript}/bin/gs"
   ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
+    "gl_cv_func_signbit=yes"
   ];
 
   makeFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
@@ -102,7 +103,7 @@ stdenv.mkDerivation rec {
     find $perl/ -type f -print0 | xargs --null sed -i 's|${buildPackages.perl}|${perl}|'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/groff/";
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper
 , which, nodejs, mkYarnPackage, python2, nixosTests }:
 
 mkYarnPackage rec {
@@ -61,7 +61,7 @@ mkYarnPackage rec {
 
   passthru.tests = { inherit (nixosTests) hedgedoc; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Realtime collaborative markdown notes on all platforms";
     license = licenses.agpl3;
     homepage = "https://hedgedoc.org";

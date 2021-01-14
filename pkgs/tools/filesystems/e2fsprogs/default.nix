@@ -1,4 +1,6 @@
-{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo, shared ? true }:
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo
+, shared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://e2fsprogs.sourceforge.net/";
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
     license = licenses.gpl2;

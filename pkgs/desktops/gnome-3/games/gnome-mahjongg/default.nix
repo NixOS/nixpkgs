@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
 , librsvg, gettext, itstool, libxml2
 , meson, ninja, glib, vala, desktop-file-utils
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Mahjongg";
     description = "Disassemble a pile of tiles by removing matching pairs";
     maintainers = teams.gnome.members;

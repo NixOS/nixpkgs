@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple formatter designed for elementary OS";
     homepage = "https://github.com/Djaler/Formatter";
     maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;

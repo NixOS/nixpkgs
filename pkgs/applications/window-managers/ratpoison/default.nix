@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, autoconf, automake
+{ lib, stdenv, fetchurl, pkgconfig, perl, autoconf, automake
 , libX11, xorgproto, libXt, libXpm, libXft, libXtst, libXi
 , libXrandr, fontconfig, freetype, readline
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     mv $out/share/ratpoison $contrib/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nongnu.org/ratpoison/";
     description = "Simple mouse-free tiling window manager";
     license = licenses.gpl2Plus;

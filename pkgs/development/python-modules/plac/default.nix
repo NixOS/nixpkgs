@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , python
@@ -17,7 +17,7 @@ buildPythonPackage rec {
       ${python.interpreter} -m unittest discover -p "*test_plac*"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parsing the Command Line the Easy Way";
     homepage = "https://github.com/micheles/plac";
     license = licenses.bsdOriginal;

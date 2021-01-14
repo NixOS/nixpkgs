@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, zlib, kmod, which
-, static ? stdenv.targetPlatform.isStatic
+{ lib, stdenv, fetchurl, pkgconfig, zlib, kmod, which
+, static ? stdenv.hostPlatform.isStatic
 , darwin ? null
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   # Get rid of update-pciids as it won't work.
   postInstall = "rm $out/sbin/update-pciids $out/man/man8/update-pciids.8";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://mj.ucw.cz/pciutils.html";
     description = "A collection of programs for inspecting and manipulating configuration of PCI devices";
     license = licenses.gpl2Plus;

@@ -283,7 +283,6 @@ let
     odbc = [ pkgs.unixODBC ];
     pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
-    pbdNCDF4 = [ pkgs.netcdf ];
     pbdPROF = [ pkgs.openmpi ];
     pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
     pdftools = [ pkgs.poppler.dev ];
@@ -380,6 +379,7 @@ let
     rmutil = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     robustbase = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     SparseM = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
+    hexbin = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     svKomodo = [ pkgs.which ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
@@ -478,7 +478,6 @@ let
     "Demerelate"
     "detrendeR"
     "dgmb"
-    "DivMelt"
     "dpa"
     "DSpat"
     "dynamicGraph"
@@ -498,14 +497,12 @@ let
     "forensim"
     "FreeSortR"
     "fscaret"
-    "fSRM"
     "gcmr"
     "geomorph"
     "geoR"
     "georob"
     "GGEBiplotGUI"
     "gnm"
-    "GPCSIV"
     "GrapheR"
     "GroupSeq"
     "gsubfn"
@@ -580,7 +577,6 @@ let
     "RcmdrPlugin_orloca"
     "RcmdrPlugin_plotByGroup"
     "RcmdrPlugin_pointG"
-    "RcmdrPlugin_qual"
     "RcmdrPlugin_ROC"
     "RcmdrPlugin_sampling"
     "RcmdrPlugin_SCDA"
@@ -606,7 +602,6 @@ let
     "soundecology"
     "spatsurv"
     "sqldf"
-    "SRRS"
     "SSDforR"
     "statcheck"
     "StatDA"
@@ -623,8 +618,6 @@ let
     "tcltk2"
     "TestScorer"
     "TIMP"
-    "titan"
-    "tkrgl"
     "tkrplot"
     "tmap"
     "tspmeta"
@@ -698,7 +691,6 @@ let
     data_table = old.data_table.overrideDerivation (attrs: {
       NIX_CFLAGS_COMPILE = attrs.NIX_CFLAGS_COMPILE + " -fopenmp";
       patchPhase = "patchShebangs configure";
-      postInstall = "mv $out/library/data.table/libs/{data.table,datatable}.so";
     });
 
     ModelMetrics = old.ModelMetrics.overrideDerivation (attrs: {

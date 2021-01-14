@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, pkgconfig, scons, util-linux, fuse, libevent, openssl, zlib }:
+{ lib, stdenv, fetchurl, boost, pkgconfig, scons, util-linux, fuse, libevent, openssl, zlib }:
 
 stdenv.mkDerivation {
   version = "0.8.1";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   installPhase = ":";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A secure distributed file system";
     homepage = "http://ori.scs.stanford.edu/";
     license = licenses.mit;

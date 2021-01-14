@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchFromGitHub
 , cmake
@@ -53,8 +53,6 @@ stdenv.mkDerivation rec {
     url = "https://github.com/EttusResearch/uhd/releases/download/v${version}/uhd-images_${version}.tar.xz";
     sha256 = "1fir1a13ac07mqhm4sr34cixiqj2difxq0870qv1wr7a7cbfw6vp";
   };
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DENABLE_LIBUHD=ON"
@@ -143,7 +141,7 @@ stdenv.mkDerivation rec {
     mv $out/lib/uhd/utils/uhd-usrp.rules $out/lib/udev/rules.d/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "USRP Hardware Driver (for Software Defined Radio)";
     longDescription = ''
       The USRP Hardware Driver (UHD) software is the hardware driver for all

@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Remote desktop application, server component";
     homepage = "http://x2go.org/";
     platforms = stdenv.lib.platforms.linux;

@@ -52,8 +52,6 @@ in mkDerivation rec {
     pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy at-spi2-core libXtst
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-Ddisable_autoupdate=ON"
     # We're allowed to used the API ID of the Snap package:

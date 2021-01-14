@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   cmakeFlags =
     lib.optionals stdenv.isLinux [ "-DINSTALL_UDEV_RULES=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/airspy/airspyone_host";
     description = "Host tools and driver library for the AirSpy SDR";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, lv2 }:
+{ lib, stdenv, fetchurl, unzip, lv2 }:
 
 stdenv.mkDerivation {
   pname = "molot-lite";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     make install INSTALL_DIR=$out/lib/lv2 -C Molot_Stereo_Lite
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stereo and mono audio signal dynamic range compressor in LV2 format";
     homepage = "https://sourceforge.net/projects/molot/";
     license = licenses.gpl3Plus;

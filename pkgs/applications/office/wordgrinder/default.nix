@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, makeWrapper
+{ lib, stdenv, fetchFromGitHub, pkgconfig, makeWrapper
 , lua52Packages, libXft, ncurses, ninja, readline, zlib }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/xwordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Text-based word processor";
     homepage = "https://cowlark.com/wordgrinder";
     license = licenses.mit;

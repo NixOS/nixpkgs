@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libvdpau }:
+{ lib, stdenv, fetchurl, pkgconfig, libvdpau }:
 
 stdenv.mkDerivation rec {
   pname = "vdpauinfo";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libvdpau ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://people.freedesktop.org/~aplattner/vdpau/";
     description = "Tool to query the Video Decode and Presentation API for Unix (VDPAU) abilities of the system";
     license = licenses.mit; # expat version

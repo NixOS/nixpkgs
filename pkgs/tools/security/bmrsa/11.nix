@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "bmrsa";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     echo -e 'install:\n\tcp bmrsa '$out'/bin' >> Makefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RSA utility";
     homepage = "http://bmrsa.sourceforge.net/";
     license = licenses.gpl1;

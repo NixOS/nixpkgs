@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk3, xfce }:
+{ lib, stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk3, xfce }:
 
 let
   category = "panel-plugins";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.archiveLister category pname;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-genmon-plugin";
     description = "Generic monitor plugin for the Xfce panel";
     license = licenses.gpl2Plus;

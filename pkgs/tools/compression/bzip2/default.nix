@@ -1,5 +1,5 @@
-{ stdenv, fetchurl
-, linkStatic ? (stdenv.hostPlatform.system == "i686-cygwin")
+{ lib, stdenv, fetchurl
+, linkStatic ? with stdenv.hostPlatform; isStatic || isCygwin
 , autoreconfHook
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-quality data compression program";
     license = licenses.bsdOriginal;
     platforms = platforms.all;

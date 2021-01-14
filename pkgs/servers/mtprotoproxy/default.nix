@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, pyaes, pycrypto, uvloop, wrapPython }:
+{ lib, stdenv, fetchFromGitHub, python, pyaes, pycrypto, uvloop, wrapPython }:
 
 stdenv.mkDerivation rec {
   pname = "mtprotoproxy";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Async MTProto proxy for Telegram";
     license     = licenses.mit;
     homepage    = "https://github.com/alexbers/mtprotoproxy";

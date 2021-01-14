@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , nixosTests
 , fetchFromGitHub
 , rustPlatform
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = { inherit (nixosTests) ripgrep; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = with licenses; [ unlicense /* or */ mit ];

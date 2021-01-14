@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkg-config, libsecret }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, pkg-config, libsecret }:
 
 buildGoPackage rec {
   pname = "docker-credential-helpers";
@@ -39,7 +39,7 @@ buildGoPackage rec {
       install -Dm755 -t $out/bin bin/docker-credential-secretservice
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Suite of programs to use native stores to keep Docker credentials safe";
     homepage = "https://github.com/docker/docker-credential-helpers";
     license = licenses.mit;

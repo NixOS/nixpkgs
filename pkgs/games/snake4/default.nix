@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, shhmsg, shhopt, xorg }:
+{ lib, stdenv, fetchurl, shhmsg, shhopt, xorg }:
 
 stdenv.mkDerivation rec {
   name = "snake4-1.0.14";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
                    "INSTBINDIR=$(out)/bin"
                    "INSTMANDIR=$(out)/man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A game starring a fruit-eating snake";
     homepage = "https://shh.thathost.com/pub-unix/html/snake4.html";
     license = licenses.artistic1;

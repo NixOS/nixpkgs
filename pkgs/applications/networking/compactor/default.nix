@@ -1,5 +1,5 @@
 { autoconf, automake, boost, cbor-diag, cddl, fetchFromGitHub, file, libctemplate, libmaxminddb
-, libpcap, libtins, libtool, lzma, openssl, pkgconfig, stdenv, tcpdump, wireshark-cli
+, libpcap, libtins, libtool, lzma, openssl, pkgconfig, lib, stdenv, tcpdump, wireshark-cli
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     rm test-scripts/same-tshark-output.sh
   ''; # TODO: https://github.com/dns-stats/compactor/issues/49  (failing test)
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools to capture DNS traffic and record it in C-DNS files";
     homepage    = "http://dns-stats.org/";
     changelog   = "https://github.com/dns-stats/${pname}/raw/${version}/ChangeLog.txt";

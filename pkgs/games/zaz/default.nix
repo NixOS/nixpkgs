@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , SDL
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "ZAZ_LIBS+=-lvorbisfile"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
     homepage = "http://zaz.sourceforge.net/";
     license = licenses.gpl3;

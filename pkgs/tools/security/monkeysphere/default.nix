@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , perl, libassuan, libgcrypt
 , perlPackages, lockfileProgs, gnupg, coreutils
 # For the tests:
@@ -84,7 +84,7 @@ in stdenv.mkDerivation rec {
         done
       '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://web.monkeysphere.info/";
     description = "Leverage the OpenPGP web of trust for SSH and TLS authentication";
     longDescription = ''

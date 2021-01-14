@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "thanos";
   version = "0.17.2";
@@ -25,7 +25,7 @@ buildGoModule rec {
        -X ${t}.BuildDate=unknown
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Highly available Prometheus setup with long term storage capabilities";
     homepage = "https://github.com/thanos-io/thanos";
     license = licenses.asl20;

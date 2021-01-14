@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll
+{ lib, stdenv, fetchurl, substituteAll
 , pkgconfig
 , cups, libjpeg, libusb1, python2Packages, sane-backends, dbus, usbutils
 , net-snmp, openssl, nettools
@@ -179,7 +179,7 @@ python2Packages.buildPythonApplication {
       --replace {/usr,$out}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = "http://hplipopensource.com/";
     downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnsrecon";
@@ -34,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DNS Enumeration Script";
     homepage = "https://github.com/darkoperator/dnsrecon";
     license = licenses.gpl2;

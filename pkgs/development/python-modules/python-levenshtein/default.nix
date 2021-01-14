@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # No tests included in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Functions for fast computation of Levenshtein distance and string similarity";
     homepage    = "https://github.com/ztane/python-Levenshtein";
     license     = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, autoreconfHook
 , gtk2, hicolor-icon-theme, intltool, pkgconfig
 , which, wrapGAppsHook, xdotool }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${which}/bin:${xdotool}/bin")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight GTK clipboard manager";
     homepage = "https://github.com/rickyrockrat/parcellite";
     license = licenses.gpl3Plus;

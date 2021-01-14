@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
 , influxdb, graphite_api, memcached
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   passthru.moduleName = "influxgraph.InfluxDBFinder";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "InfluxDB storage plugin for Graphite-API";
     homepage = "https://github.com/InfluxGraph/influxgraph";
     license = licenses.asl20;

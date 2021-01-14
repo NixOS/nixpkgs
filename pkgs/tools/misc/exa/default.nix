@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, cmake, perl, pkgconfig, zlib
+{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform, cmake, perl, pkgconfig, zlib
 , darwin, libiconv, installShellFiles
 }:
 
@@ -45,7 +45,7 @@ buildRustPackage rec {
   # Some tests fail, but Travis ensures a proper build
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Replacement for 'ls' written in Rust";
     longDescription = ''
       exa is a modern replacement for ls. It uses colours for information by

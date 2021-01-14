@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "credhub-cli";
@@ -35,7 +35,7 @@ buildGoModule rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides a command line interface to interact with CredHub servers";
     homepage = "https://github.com/cloudfoundry-incubator/credhub-cli";
     maintainers = with maintainers; [ ris ];

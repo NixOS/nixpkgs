@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ nose pytest ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WSGI request and response object";
     homepage = "http://pythonpaste.org/webob/";
     license = licenses.mit;

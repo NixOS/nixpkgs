@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glibc, libGLU, libGL, freetype, glib, libSM, libICE, libXi, libXv
+{ lib, stdenv, fetchurl, glibc, libGLU, libGL, freetype, glib, libSM, libICE, libXi, libXv
 , libXrender, libXrandr, libXfixes, libXcursor, libXinerama, libXext, libX11
 , zlib, fontconfig, dpkg, libproxy, libxml2, gst_all_1, dbus }:
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A world sphere viewer";
     homepage = "http://earth.google.com";
     license = licenses.unfree;

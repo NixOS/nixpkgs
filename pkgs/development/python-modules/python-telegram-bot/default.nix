@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchPypi
 , buildPythonPackage
 , certifi
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "telegram" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This library provides a pure Python interface for the Telegram Bot API.";
     homepage = "https://python-telegram-bot.org";
     license = licenses.lgpl3;

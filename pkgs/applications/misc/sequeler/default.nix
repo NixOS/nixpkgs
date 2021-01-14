@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, nix-update-script
+{ lib, stdenv, fetchFromGitHub, nix-update-script
 , vala, meson, ninja, pkgconfig, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
 , gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libssh2 }:
 
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Friendly SQL Client";
     longDescription = ''
       Sequeler is a native Linux SQL client built in Vala and Gtk. It allows you

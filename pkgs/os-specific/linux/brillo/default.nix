@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab , go-md2man, coreutils, substituteAll }:
+{ lib, stdenv, fetchFromGitLab , go-md2man, coreutils, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "brillo";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install-dist" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Backlight and Keyboard LED control tool";
     homepage = "https://gitlab.com/cameronnemo/brillo";
     license = [ licenses.gpl3 licenses.bsd0 ];

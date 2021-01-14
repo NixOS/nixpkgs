@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub
+{ lib, stdenv, rustPlatform, fetchFromGitHub
 , libsodium, openssl
 , pkgconfig
 }:
@@ -33,7 +33,7 @@ buildRustPackage rec {
 
   cargoSha256 = "087ccb824hmmxmnn5c2bzww2q888a8zy6y7rwgsdfr8rbay2c909";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A server application to run tox node written in pure Rust";
     homepage = "https://github.com/tox-rs/tox-node";
     license = [ licenses.gpl3Plus ];

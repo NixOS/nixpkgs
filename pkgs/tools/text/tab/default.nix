@@ -1,4 +1,4 @@
-{ stdenv, fetchFromBitbucket, python3 }:
+{ lib, stdenv, fetchFromBitbucket, python3 }:
 
 stdenv.mkDerivation rec {
   version = "7.2";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Programming language/shell calculator";
     homepage    = "https://tkatchev.bitbucket.io/tab/";
     license     = licenses.boost;

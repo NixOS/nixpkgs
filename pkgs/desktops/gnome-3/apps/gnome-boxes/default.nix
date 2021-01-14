@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -44,7 +44,6 @@
 , libsecret
 , libcap_ng
 , numactl
-, xen
 , libapparmor
 , json-glib
 , webkitgtk
@@ -117,7 +116,6 @@ stdenv.mkDerivation rec {
     tracker-miners
     vte
     webkitgtk
-    xen
     yajl
   ];
 
@@ -137,7 +135,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple GNOME 3 application to access remote or virtual systems";
     homepage = "https://wiki.gnome.org/Apps/Boxes";
     license = licenses.gpl3;

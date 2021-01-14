@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, python, fetchPypi, numpy, pyyaml, matplotlib, h5py, spglib, pytestCheckHook }:
+{ lib, stdenv, buildPythonPackage, python, fetchPypi, numpy, pyyaml, matplotlib, h5py, spglib, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "phonopy";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     rm -r phonopy
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package for phonon calculations at harmonic and quasi-harmonic levels";
     homepage = "https://atztogo.github.io/phonopy/";
     license = licenses.bsd0;

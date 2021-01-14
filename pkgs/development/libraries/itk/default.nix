@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "itk";
-  version = "5.1.1";
+  version = "5.1.2";
 
   src = fetchFromGitHub {
     owner = "InsightSoftwareConsortium";
     repo = "ITK";
     rev = "v${version}";
-    sha256 = "1z7rmqrhgl7hfb3d0077kvp8vpi05r2zk3qyqzmv7bzbal5sqqhv";
+    sha256 = "0db91pm1zy40h4qr5zsdfl94znk16w9ysddz5cxbl198iyyqii8f";
   };
 
   postPatch = ''
@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
     "-DModule_ITKVtkGlue=ON"
     "-DModule_ITKReview=ON"
   ];
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake xz makeWrapper ];
   buildInputs = [ libX11 libuuid vtk_7 ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];

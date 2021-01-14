@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcap, libconfig, perl, tcp_wrappers, pcre, nixosTests }:
+{ lib, stdenv, fetchurl, libcap, libconfig, perl, tcp_wrappers, pcre, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "sslh";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) sslh;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";
     license = licenses.gpl2Plus;
     homepage = "https://www.rutschle.net/tech/sslh/README.html";

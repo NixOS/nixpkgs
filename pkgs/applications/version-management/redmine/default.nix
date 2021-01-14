@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bundlerEnv, ruby, makeWrapper }:
+{ lib, stdenv, fetchurl, bundlerEnv, ruby, makeWrapper }:
 
 let
   version = "4.1.1";
@@ -42,7 +42,7 @@ in
       makeWrapper ${rubyEnv.wrappedRuby}/bin/ruby $out/bin/rdm-mailhandler.rb --add-flags $out/share/redmine/extra/mail_handler/rdm-mailhandler.rb
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://www.redmine.org/";
       platforms = platforms.linux;
       maintainers = [ maintainers.aanderse ];

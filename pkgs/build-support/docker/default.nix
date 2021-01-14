@@ -35,7 +35,6 @@
   system,  # Note: This is the cross system we're compiling for
 }:
 
-# WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
 let
 
   mkDbExtraCommand = contents: let

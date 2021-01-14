@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , atk
 , cairo
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small GTK application to allow to keep a diary of your life";
     homepage = "https://wiki.gnome.org/Apps/Almanah_Diary";
     license = licenses.gpl3Plus;

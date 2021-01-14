@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     # Allow multiple colon-separated authorized keys files to be
     # specified in the file= option.
     ./multiple-key-files.patch
+    ./edcsa-crash-fix.patch
   ];
 
   configureFlags = [

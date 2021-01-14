@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "vapor";
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LÖVE Distribution Client allowing access to many games";
     platforms = platforms.linux;
     license = licenses.zlib;

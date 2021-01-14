@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , meson
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Personal task manager for GNOME";
     homepage = "https://wiki.gnome.org/Apps/Todo";
     license = licenses.gpl3Plus;

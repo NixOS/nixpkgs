@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , meson, ninja, pkg-config, wayland, scdoc
 , libxkbcommon, pcre, json_c, dbus, libevdev
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "-Ddefault-wallpaper=false"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An i3-compatible tiling Wayland compositor";
     longDescription = ''
       Sway is a tiling Wayland compositor and a drop-in replacement for the i3

@@ -5,57 +5,76 @@
 # - The exact version can be specified through the `version` argument to
 #   the derivation; it defaults to the latest stable version.
 
-{ stdenv, fetchFromGitHub, writeText, pkgconfig, gnumake42
-, ocamlPackages, ncurses
-, buildIde ? !(stdenv.isDarwin && stdenv.lib.versionAtLeast version "8.10")
+{ lib, stdenv, fetchzip, writeText, pkgconfig, gnumake42
+, customOCamlPackages ? null
+, ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ncurses
+, buildIde ? !(stdenv.isDarwin && lib.versionAtLeast version "8.10")
 , glib, gnome3, wrapGAppsHook
 , csdp ? null
-, version
-}:
-
+, version, coq-version ? null,
+}@args:
+let lib = import ../../../../build-support/coq/extra-lib.nix {inherit (stdenv) lib;}; in
+with builtins; with lib;
 let
-  sha256 = {
-   "8.5pl1"    = "1976ki5xjg2r907xj9p7gs0kpdinywbwcqlgxqw75dgp0hkgi00n";
-   "8.5pl2"    = "109rrcrx7mz0fj7725kjjghfg5ydwb24hjsa5hspa27b4caah7rh";
-   "8.5pl3"    = "15c3rdk59nifzihsp97z4vjxis5xmsnrvpb86qiazj143z2fmdgw";
-   "8.6"       = "148mb48zpdax56c0blfi7v67lx014lnmrvxxasi28hsibyz2lvg4";
-   "8.6.1"     = "0llrxcxwy5j87vbbjnisw42rfw1n1pm5602ssx64xaxx3k176g6l";
-   "8.7.0"     = "1h18b7xpnx3ix9vsi5fx4zdcbxy7bhra7gd5c5yzxmk53cgf1p9m";
-   "8.7.1"     = "0gjn59jkbxwrihk8fx9d823wjyjh5m9gvj9l31nv6z6bcqhgdqi8";
-   "8.7.2"     = "0a0657xby8wdq4aqb2xsxp3n7pmc2w4yxjmrb2l4kccs1aqvaj4w";
-   "8.8.0" = "13a4fka22hdxsjk11mgjb9ffzplfxyxp1sg5v1c8nk1grxlscgw8";
-   "8.8.1" = "1hlf58gwazywbmfa48219amid38vqdl94yz21i11b4map6jfwhbk";
-   "8.8.2" = "1lip3xja924dm6qblisk1bk0x8ai24s5xxqxphbdxj6djglj68fd";
-   "8.9.0" = "1dkgdjc4n1m15m1p724hhi5cyxpqbjw6rxc5na6fl3v4qjjfnizh";
-   "8.9.1" = "1xrq6mkhpq994bncmnijf8jwmwn961kkpl4mwwlv7j3dgnysrcv2";
-   "8.10.0" = "138jw94wp4mg5dgjc2asn8ng09ayz1mxdznq342n0m469j803gzg";
-   "8.10.1" = "072v2zkjzf7gj48137wpr3c9j0hg9pdhlr5l8jrgrwynld8fp7i4";
-   "8.10.2" = "0znxmpy71bfw0p6x47i82jf5k7v41zbz9bdpn901ysn3ir8l3wrz";
-   "8.11.0" = "1rfdic6mp7acx2zfwz7ziqk12g95bl9nyj68z4n20a5bcjv2pxpn";
-   "8.11.1" = "0qriy9dy36dajsv5qmli8gd6v55mah02ya334nw49ky19v7518m0";
-   "8.11.2" = "0f77ccyxdgbf1nrj5fa8qvrk1cyfy06fv8gj9kzfvlcgn0cf48sa";
-   "8.12.0" = "18dc7k0piv6v064zgdadpw6mkkxk7j663hb3svgj5236fihjr0cz";
-   "8.12.1" = "1rkcyjjrzcqw9xk93hsq0vvji4f8r5iq0f739mghk60bghkpnb7q";
-   "8.12.2" = "18gscfm039pqhq4msq01nraig5dm9ab98bjca94zldf8jvdv0x2n";
-   "8.13+beta1" = "1v4a6dpj41flspa4ihcr7m5ahqz10kbn62fmrldmv7gzq6jsyfyq";
-  }.${version};
-  coq-version = stdenv.lib.versions.majorMinor version;
-  versionAtLeast = stdenv.lib.versionAtLeast coq-version;
-  ideFlags = stdenv.lib.optionalString (buildIde && !versionAtLeast "8.10")
+  release = {
+   "8.5pl1".sha256     = "1976ki5xjg2r907xj9p7gs0kpdinywbwcqlgxqw75dgp0hkgi00n";
+   "8.5pl2".sha256     = "109rrcrx7mz0fj7725kjjghfg5ydwb24hjsa5hspa27b4caah7rh";
+   "8.5pl3".sha256     = "15c3rdk59nifzihsp97z4vjxis5xmsnrvpb86qiazj143z2fmdgw";
+   "8.6.0".sha256      = "148mb48zpdax56c0blfi7v67lx014lnmrvxxasi28hsibyz2lvg4";
+   "8.6.0".rev         = "V8.6";
+   "8.6.1".sha256      = "0llrxcxwy5j87vbbjnisw42rfw1n1pm5602ssx64xaxx3k176g6l";
+   "8.7.0".sha256      = "1h18b7xpnx3ix9vsi5fx4zdcbxy7bhra7gd5c5yzxmk53cgf1p9m";
+   "8.7.1".sha256      = "0gjn59jkbxwrihk8fx9d823wjyjh5m9gvj9l31nv6z6bcqhgdqi8";
+   "8.7.2".sha256      = "0a0657xby8wdq4aqb2xsxp3n7pmc2w4yxjmrb2l4kccs1aqvaj4w";
+   "8.8.0".sha256      = "13a4fka22hdxsjk11mgjb9ffzplfxyxp1sg5v1c8nk1grxlscgw8";
+   "8.8.1".sha256      = "1hlf58gwazywbmfa48219amid38vqdl94yz21i11b4map6jfwhbk";
+   "8.8.2".sha256      = "1lip3xja924dm6qblisk1bk0x8ai24s5xxqxphbdxj6djglj68fd";
+   "8.9.0".sha256      = "1dkgdjc4n1m15m1p724hhi5cyxpqbjw6rxc5na6fl3v4qjjfnizh";
+   "8.9.1".sha256      = "1xrq6mkhpq994bncmnijf8jwmwn961kkpl4mwwlv7j3dgnysrcv2";
+   "8.10.0".sha256     = "138jw94wp4mg5dgjc2asn8ng09ayz1mxdznq342n0m469j803gzg";
+   "8.10.1".sha256     = "072v2zkjzf7gj48137wpr3c9j0hg9pdhlr5l8jrgrwynld8fp7i4";
+   "8.10.2".sha256     = "0znxmpy71bfw0p6x47i82jf5k7v41zbz9bdpn901ysn3ir8l3wrz";
+   "8.11.0".sha256     = "1rfdic6mp7acx2zfwz7ziqk12g95bl9nyj68z4n20a5bcjv2pxpn";
+   "8.11.1".sha256     = "0qriy9dy36dajsv5qmli8gd6v55mah02ya334nw49ky19v7518m0";
+   "8.11.2".sha256     = "0f77ccyxdgbf1nrj5fa8qvrk1cyfy06fv8gj9kzfvlcgn0cf48sa";
+   "8.12.0".sha256     = "18dc7k0piv6v064zgdadpw6mkkxk7j663hb3svgj5236fihjr0cz";
+   "8.12.1".sha256     = "1rkcyjjrzcqw9xk93hsq0vvji4f8r5iq0f739mghk60bghkpnb7q";
+   "8.12.2".sha256     = "18gscfm039pqhq4msq01nraig5dm9ab98bjca94zldf8jvdv0x2n";
+   "8.13+beta1".sha256 = "1v4a6dpj41flspa4ihcr7m5ahqz10kbn62fmrldmv7gzq6jsyfyq";
+  };
+  releaseRev = v: "V${v}";
+  fetched = import ../../../../build-support/coq/meta-fetch/default.nix
+    { inherit stdenv fetchzip; }
+    { inherit release releaseRev; location = { owner = "coq"; repo = "coq";}; }
+    args.version;
+  version = fetched.version;
+  coq-version = args.coq-version or (if version != "dev" then versions.majorMinor version else "dev");
+  versionAtLeast = v: (coq-version == "dev") || (stdenv.lib.versionAtLeast coq-version v);
+  ideFlags = optionalString (buildIde && !versionAtLeast "8.10")
     "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
   csdpPatch = if csdp != null then ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
   '' else "";
+  ocamlPackages = if !isNull customOCamlPackages then customOCamlPackages
+    else with versions; switch coq-version [
+      { case = range "8.11" "8.13"; out = ocamlPackages_4_10; }
+      { case = range "8.7" "8.10";  out = ocamlPackages_4_09; }
+      { case = range "8.5" "8.6";   out = ocamlPackages_4_05; }
+    ] ocamlPackages_4_10;
+  ocamlBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
+    ++ optional (!versionAtLeast "8.10") ocamlPackages.camlp5
+    ++ optional (!versionAtLeast "8.13") ocamlPackages.num
+    ++ optional (versionAtLeast "8.13") ocamlPackages.zarith;
 self = stdenv.mkDerivation {
   pname = "coq";
-  inherit version;
+  inherit (fetched) version src;
 
   passthru = {
     inherit coq-version;
-    inherit ocamlPackages;
+    inherit ocamlPackages ocamlBuildInputs;
     # For compatibility
-    inherit (ocamlPackages) ocaml camlp5 findlib num;
+    inherit (ocamlPackages) ocaml camlp5 findlib num ;
     emacsBufferSetup = pkgs: ''
       ; Propagate coq paths to children
       (inherit-local-permanent coq-prog-name "${self}/bin/coqtop")
@@ -67,7 +86,7 @@ self = stdenv.mkDerivation {
         (coq-prog-args))
       (mapc (lambda (arg)
         (when (file-directory-p (concat arg "/lib/coq/${coq-version}/user-contrib"))
-          (setenv "COQPATH" (concat (getenv "COQPATH") ":" arg "/lib/coq/${coq-version}/user-contrib")))) '(${stdenv.lib.concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
+          (setenv "COQPATH" (concat (getenv "COQPATH") ":" arg "/lib/coq/${coq-version}/user-contrib")))) '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
       ; TODO Abstract this pattern from here and nixBufferBuilders.withPackages!
       (defvar nixpkgs--coq-buffer-count 0)
       (when (eq nixpkgs--coq-buffer-count 0)
@@ -102,27 +121,12 @@ self = stdenv.mkDerivation {
     '';
   };
 
-  src = fetchFromGitHub {
-    owner = "coq";
-    repo = "coq";
-    rev = "V${version}";
-    inherit sha256;
-  };
-
-  nativeBuildInputs = [ pkgconfig ]
-  ++ stdenv.lib.optional (!versionAtLeast "8.6") gnumake42
-  ;
-  buildInputs = [ ncurses ocamlPackages.ocaml ocamlPackages.findlib ]
-  ++ stdenv.lib.optional (!versionAtLeast "8.10") ocamlPackages.camlp5
-  ++ stdenv.lib.optional (!versionAtLeast "8.12") ocamlPackages.num
-  ++ stdenv.lib.optionals buildIde
-    (if versionAtLeast "8.10"
-     then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
-     else [ ocamlPackages.lablgtk ]);
-
-  propagatedBuildInputs =
-     stdenv.lib.optional (versionAtLeast "8.13") ocamlPackages.zarith
-  ++ stdenv.lib.optional (coq-version == "8.12") ocamlPackages.num;
+  nativeBuildInputs = [ pkgconfig ] ++ optional (!versionAtLeast "8.6") gnumake42;
+  buildInputs = [ ncurses ] ++ ocamlBuildInputs
+    ++ optionals buildIde
+      (if versionAtLeast "8.10"
+       then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
+       else [ ocamlPackages.lablgtk ]);
 
   postPatch = ''
     UNAME=$(type -tp uname)
@@ -162,7 +166,7 @@ self = stdenv.mkDerivation {
     ln -s $out/lib/coq $OCAMLFIND_DESTDIR/coq
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Coq proof assistant";
     longDescription = ''
       Coq is a formal proof management system.  It provides a formal language

@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, bash, pkgconfig, autoconf, cpio, file, which, unzip
+{ stdenv, lib, fetchurl, bash, pkg-config, autoconf, cpio, file, which, unzip
 , zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk14-bootstrap
+, libXcursor, libXrandr, fontconfig, openjdk15-bootstrap
 , setJavaClassPath
 , headless ? false
 , enableJavaFX ? openjfx.meta.available, openjfx
@@ -9,8 +9,8 @@
 }:
 
 let
-  major = "14";
-  update = ".0.2";
+  major = "15";
+  update = ".0.1";
   build = "-ga";
 
   openjdk = stdenv.mkDerivation rec {
@@ -18,15 +18,15 @@ let
     version = "${major}${update}${build}";
 
     src = fetchurl {
-      url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "1s1pc6ihzf0awp4hbaqfxmbica0hnrg8nr7s0yd2hfn7nan8xmf3";
+      url = "https://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
+      sha256 = "1h8n5figc9q0k9p8b0qggyhvqagvxanfih1lj5j492c74cd1mx1l";
     };
 
-    nativeBuildInputs = [ pkgconfig autoconf ];
+    nativeBuildInputs = [ pkg-config autoconf ];
     buildInputs = [
       cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk14-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk15-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -54,7 +54,7 @@ let
     '';
 
     configureFlags = [
-      "--with-boot-jdk=${openjdk14-bootstrap.home}"
+      "--with-boot-jdk=${openjdk15-bootstrap.home}"
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
@@ -138,10 +138,10 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk14-bootstrap ];
+    disallowedReferences = [ openjdk15-bootstrap ];
 
     meta = with stdenv.lib; {
-      homepage = "http://openjdk.java.net/";
+      homepage = "https://openjdk.java.net/";
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";
       maintainers = with maintainers; [ edwtjo ];

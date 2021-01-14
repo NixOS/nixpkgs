@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Online Accounts Plug";
     homepage = "https://github.com/elementary/switchboard-plug-onlineaccounts";
     license = licenses.lgpl2Plus;

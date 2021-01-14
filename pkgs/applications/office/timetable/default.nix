@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , glib
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Plot out your own timetable for the week and organize it";
     homepage = "https://github.com/lainsce/timetable";
     maintainers = [ maintainers.xiorcale ] ++ pantheon.maintainers;

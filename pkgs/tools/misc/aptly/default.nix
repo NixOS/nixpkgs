@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles, makeWrapper, gnupg, bzip2, xz, graphviz }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, installShellFiles, makeWrapper, gnupg, bzip2, xz, graphviz }:
 
 let
 
@@ -37,7 +37,7 @@ buildGoPackage {
       --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg bzip2 xz graphviz ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.aptly.info";
     description = "Debian repository management tool";
     license = licenses.mit;

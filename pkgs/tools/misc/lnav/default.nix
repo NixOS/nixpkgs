@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses
+{ lib, stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses
 , readline, zlib, bzip2, autoconf, automake, curl }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tstack/lnav";
     description = "The Logfile Navigator";
     longDescription = ''

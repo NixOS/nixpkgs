@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 let
   arch = "amd64";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     $out/bin/jotta-cli completion > $out/share/bash-completion/completions/jotta-cli.bash
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description  = "Jottacloud CLI";
     homepage     = "https://www.jottacloud.com/";
     downloadPage = "https://repo.jotta.us/archives/linux/";

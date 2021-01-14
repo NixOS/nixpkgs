@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pytest
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     PYTHONPATH=$PWD:$PYTHONPATH pytest tests/{core,files}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/lepture/authlib";
     description = "The ultimate Python library in building OAuth and OpenID Connect servers. JWS,JWE,JWK,JWA,JWT included.";
     maintainers = with maintainers; [ flokli ];

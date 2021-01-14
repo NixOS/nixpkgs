@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   passthru.providedSessions = [ "enlightenment" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Compositing Window Manager and Desktop Shell";
     homepage = "https://www.enlightenment.org";
     license = licenses.bsd2;

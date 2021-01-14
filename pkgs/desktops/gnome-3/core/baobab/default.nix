@@ -1,4 +1,4 @@
-{ stdenv, gettext, fetchurl, vala, desktop-file-utils
+{ lib, stdenv, gettext, fetchurl, vala, desktop-file-utils
 , meson, ninja, pkgconfig, python3, gtk3, glib, libxml2
 , wrapGAppsHook, itstool, gnome3 }:
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical application to analyse disk usage in any GNOME environment";
     homepage = "https://wiki.gnome.org/Apps/DiskUsageAnalyzer";
     license = licenses.gpl2;

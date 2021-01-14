@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , xorg
@@ -52,7 +52,7 @@
    make DESTDIR="$out" install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://tytel.org/helm";
     description = "A free, cross-platform, polyphonic synthesizer";
     longDescription = ''

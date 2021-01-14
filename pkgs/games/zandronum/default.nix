@@ -51,8 +51,6 @@ in stdenv.mkDerivation rec {
     then [ "-DSERVERONLY=ON" ]
     else [ "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so" ]);
 
-  enableParallelBuilding = true;
-
   hardeningDisable = [ "format" ];
 
   installPhase = ''
@@ -74,7 +72,7 @@ in stdenv.mkDerivation rec {
     inherit fmod sqlite;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://zandronum.com/";
     description = "Multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software";
     maintainers = with maintainers; [ lassulus MP2E ];

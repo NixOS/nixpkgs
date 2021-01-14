@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, python3, ibus, pkgconfig, gtk3, m17n_lib
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, python3, ibus, pkgconfig, gtk3, m17n_lib
 , wrapGAppsHook, gobject-introspection
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${m17n_lib}/lib")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mike-fabian.github.io/ibus-typing-booster/";
     license = licenses.gpl3Plus;
     description = "A typing booster engine for the IBus platform";

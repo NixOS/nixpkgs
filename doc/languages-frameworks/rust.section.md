@@ -1,10 +1,4 @@
----
-title: Rust
-author: Matthias Beyer
-date: 2017-03-05
----
-
-# Rust
+# Rust {#rust}
 
 To install the rust compiler and cargo put
 
@@ -27,18 +21,18 @@ Rust applications are packaged by using the `buildRustPackage` helper from `rust
 ```
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "11.0.2";
+  version = "12.1.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    sha256 = "1iga3320mgi7m853la55xip514a3chqsdi1a1rwv25lr9b1p7vd3";
+    sha256 = "1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps";
   };
 
-  cargoSha256 = "17ldqr3asrdcsh4l29m3b5r37r5d0b3npq1lrgjmxb6vlx6a36qh";
+  cargoSha256 = "03wf9r2csi6jpa7v5sw5lpxkrk4wfzwmzx7k3991q3bdjzcwnnwp";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = licenses.unlicense;
@@ -47,10 +41,31 @@ rustPlatform.buildRustPackage rec {
 }
 ```
 
-`buildRustPackage` requires a `cargoSha256` attribute which is computed over
-all crate sources of this package. Currently it is obtained by inserting a
-fake checksum into the expression and building the package once. The correct
-checksum can then be taken from the failed build.
+`buildRustPackage` requires either the `cargoSha256` or the
+`cargoHash` attribute which is computed over all crate sources of this
+package. `cargoHash256` is used for traditional Nix SHA-256 hashes,
+such as the one in the example above. `cargoHash` should instead be
+used for [SRI](https://www.w3.org/TR/SRI/) hashes. For example:
+
+```
+  cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
+```
+
+Both types of hashes are permitted when contributing to nixpkgs. The
+Cargo hash is obtained by inserting a fake checksum into the
+expression and building the package once. The correct checksum can
+then be taken from the failed build. A fake hash can be used for
+`cargoSha256` as follows:
+
+```
+  cargoSha256 = lib.fakeSha256;
+```
+
+For `cargoHash` you can use:
+
+```
+  cargoHash = lib.fakeHash;
+```
 
 Per the instructions in the [Cargo Book](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html)
 best practices guide, Rust applications should always commit the `Cargo.lock`

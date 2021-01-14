@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg
+{ lib, stdenv, fetchurl, dpkg
 , alsaLib, at-spi2-atk, at-spi2-core, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
 , gnome2, gdk-pixbuf, gtk3, pango, libnotify, libsecret, libuuid, libxcb, nspr, nss, systemd, xorg, wrapGAppsHook }:
 
@@ -92,7 +92,7 @@ in stdenv.mkDerivation {
     wrapGAppsHook $out/bin/mongodb-compass
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GUI for MongoDB";
     homepage = "https://www.mongodb.com/products/compass";
     license = licenses.unfree;

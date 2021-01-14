@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , fetchpatch
 , appstream-glib
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     "-Dconsolekit=false"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/hughsie/gnome-firmware-updater";
     description = "Tool for installing firmware on devices";
     license = licenses.gpl2Plus;

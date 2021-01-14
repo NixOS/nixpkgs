@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , meson
@@ -37,6 +37,12 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-calendar/-/commit/8be361b6ce8f0f8053e1609decbdbdc164ec8448.patch";
       sha256 = "Ue0pWwcbYyCZPHPPoR0dXW5n948/AZ3wVDMTIZDOnyE=";
+    })
+
+    # https://gitlab.gnome.org/GNOME/gnome-calendar/-/merge_requests/84
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-calendar/-/merge_requests/84.patch";
+      sha256 = "czG3uIHl3tBnjDUvCOPm8IRp2o7yZYCb0/jWtv3uzIY=";
     })
   ];
 
@@ -77,7 +83,7 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Calendar";
     description = "Simple and beautiful calendar application for GNOME";
     maintainers = teams.gnome.members;

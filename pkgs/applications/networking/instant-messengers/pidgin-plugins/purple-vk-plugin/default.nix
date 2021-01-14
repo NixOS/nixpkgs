@@ -13,7 +13,8 @@ stdenv.mkDerivation {
     sha256 = "02p57fgx8ml00cbrb4f280ak2802svz80836dzk9f1zwm1bcr2qc";
   };
 
-  buildInputs = [ pidgin cmake libxml2 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ pidgin libxml2 ];
 
   preConfigure = ''
     sed -i -e 's|DESTINATION.*PURPLE_PLUGIN_DIR}|DESTINATION lib/purple-2|' CMakeLists.txt

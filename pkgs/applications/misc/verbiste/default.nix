@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libgnomeui, libxml2 }:
+{ lib, stdenv, fetchurl, pkgconfig, libgnomeui, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "verbiste";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://sarrazip.com/dev/verbiste.html";
     description = "French and Italian verb conjugator";
     license = licenses.gpl2Plus;

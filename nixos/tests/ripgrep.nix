@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "ripgrep";
-  meta = with pkgs.stdenv.lib.maintainers; { maintainers = [ nequissimus ]; };
+  meta = with pkgs.lib.maintainers; { maintainers = [ nequissimus ]; };
 
   nodes.ripgrep = { pkgs, ... }: { environment.systemPackages = [ pkgs.ripgrep ]; };
 

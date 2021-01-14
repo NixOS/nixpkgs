@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
+{ lib, stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
 
 stdenv.mkDerivation rec {
   pname = "hostapd";
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     install -vD hostapd_cli.1 -t $man/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://hostap.epitest.fi";
     repositories.git = "git://w1.fi/hostap.git";
     description = "A user space daemon for access point and authentication servers";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, libmhash, docutils }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, libmhash, docutils }:
 
 stdenv.mkDerivation rec {
   version = "1.0.2";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Digest and HMAC vmod";
     homepage = "https://github.com/varnish/libvmod-digest";
     inherit (varnish.meta) license platforms maintainers;

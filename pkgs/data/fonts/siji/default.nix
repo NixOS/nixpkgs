@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, libfaketime, fonttosfnt, mkfontscale }:
+{ lib, stdenv, fetchzip, libfaketime, fonttosfnt, mkfontscale }:
 
 stdenv.mkDerivation rec {
   name = "siji-${version}";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "bdf" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/stark/siji";
     description = "An iconic bitmap font based on Stlarch with additional glyphs";
     license = licenses.gpl2;

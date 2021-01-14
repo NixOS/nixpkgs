@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline
+{ lib, stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline
 , CoreFoundation, IOKit
 }:
 
 stdenv.mkDerivation rec {
-  name = "bacula-9.6.6";
+  pname = "bacula";
+  version = "11.0.0";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/bacula/${name}.tar.gz";
-    sha256 = "10c25igfvff09nz5ll8rxc46f659rnwimj1v9cdhr67lwdswk1k2";
+    url    = "mirror://sourceforge/bacula/${pname}-${version}.tar.gz";
+    sha256 = "JmBTwI/wUEytkhu0SYbTX6/dDQG6xvN2odEYTVpztok=";
   };
 
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
@@ -36,10 +37,10 @@ stdenv.mkDerivation rec {
     ln -s $out/sbin/* $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enterprise ready, Network Backup Tool";
     homepage    = "http://bacula.org/";
-    license     = licenses.gpl2;
+    license     = with licenses; [ agpl3Only bsd2 ];
     maintainers = with maintainers; [ domenkozar lovek323 eleanor ];
     platforms   = platforms.all;
   };

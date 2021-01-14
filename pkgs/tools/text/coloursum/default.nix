@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "coloursum";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Colourise your checksum output";
     homepage = "https://github.com/ticky/coloursum";
     license = licenses.mit;

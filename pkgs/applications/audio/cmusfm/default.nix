@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, libnotify, gdk-pixbuf }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, libnotify, gdk-pixbuf }:
 
 stdenv.mkDerivation {
   version = "2020-07-23";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ curl libnotify gdk-pixbuf ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Last.fm and Libre.fm standalone scrobbler for the cmus music player";
     longDescription = ''
       Features:

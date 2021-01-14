@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "bash ./bootstrap.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TCP stream extractor";
     longDescription = ''
       tcpflow is a program that captures data transmitted as part of TCP

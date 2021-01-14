@@ -231,7 +231,7 @@ self: super: {
   });
 
   vimsence = super.vimsence.overrideAttrs(old: {
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Discord rich presence for Vim";
       homepage = "https://github.com/hugolgst/vimsence";
       maintainers = with stdenv.lib.maintainers; [ hugolgst ];
@@ -321,7 +321,7 @@ self: super: {
       # remove unnecessary duplicated bin wrapper script
       rm -r plugin/vimacs
     '';
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Vim-Improved eMACS: Emacs emulation plugin for Vim";
       homepage = "http://algorithm.com.au/code/vimacs";
       license = licenses.gpl2Plus;
@@ -393,6 +393,16 @@ self: super: {
 
   vim-beancount = super.vim-beancount.overrideAttrs(old: {
     passthru.python3Dependencies = ps: with ps; [ beancount ];
+  });
+
+  vim-closer = super.vim-closer.overrideAttrs(old: {
+    patches = [
+      # Fix duplicate tag in doc
+      (fetchpatch {
+        url = "https://github.com/rstacruz/vim-closer/commit/a504be8c7050e41b7dfc50c2362948e2cf7c5422.patch";
+        sha256 = "065q30d913fm3pc7r5y53wmnb7q7bhv21qxavm65bkb91242d409";
+      })
+    ];
   });
 
   vim-codefmt = super.vim-codefmt.overrideAttrs(old: {
@@ -557,7 +567,7 @@ self: super: {
       ln -s ${ycmd}/lib/ycmd third_party
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A code-completion engine for Vim";
       homepage = "https://github.com/Valloric/YouCompleteMe";
       license = licenses.gpl3;
@@ -644,7 +654,7 @@ self: super: {
           libiconv
         ];
 
-        cargoSha256 = "QUi3GyAsakAtDQkiVA7ez05s5CixqsVSp92svYmcWdQ=";
+        cargoSha256 = "1738hvqzwr4h1bigsqffc6alkzvir8s6f7mr0xyp21qbf5qkxmq2";
       };
     in ''
       ln -s ${maple-bin}/bin/maple $target/bin/maple

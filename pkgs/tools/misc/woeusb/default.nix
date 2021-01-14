@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, makeWrapper
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper
 , coreutils, dosfstools, findutils, gawk, gnugrep, grub2_light, ncurses, ntfs3g, parted, p7zip, util-linux, wget
 , wxGTK30 }:
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     [ "$out_version" = '${version}' ]
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create bootable USB disks from Windows ISO images";
     homepage = "https://github.com/slacka/WoeUSB";
     license = licenses.gpl3;

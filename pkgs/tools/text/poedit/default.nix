@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, gettext, pkgconfig, wxGTK30,
-  boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk2, gtkspell2, pugixml,
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, gettext, pkgconfig, wxGTK30-gtk3,
+  boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk3, gtkspell3, pugixml,
   nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook
     libxslt xmlto boost libtool pkgconfig ];
 
-  buildInputs = [ lucenepp nlohmann_json wxGTK30 icu pugixml gtk2 gtkspell2 hicolor-icon-theme ];
+  buildInputs = [ lucenepp nlohmann_json wxGTK30-gtk3 icu pugixml gtk3 gtkspell3 hicolor-icon-theme ];
 
   propagatedBuildInputs = [ gettext ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform gettext catalogs (.po files) editor";
     homepage = "https://www.poedit.net/";
     license = licenses.mit;

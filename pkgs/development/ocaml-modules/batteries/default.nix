@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, qtest, num }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, qtest, num }:
 
 let version = "3.2.0"; in
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   checkInputs = [ qtest ];
   propagatedBuildInputs = [ num ];
 
-  doCheck = stdenv.lib.versionAtLeast ocaml.version "4.04" && !stdenv.isAarch64;
+  doCheck = lib.versionAtLeast ocaml.version "4.04" && !stdenv.isAarch64;
   checkTarget = "test";
 
   createFindlibDestdir = true;
@@ -27,10 +27,10 @@ stdenv.mkDerivation {
       and comprehensive development platform for the OCaml programming
       language.
     '';
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.maggesi
+      lib.maintainers.maggesi
     ];
   };
 }

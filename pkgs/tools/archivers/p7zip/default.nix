@@ -1,17 +1,15 @@
-{ stdenv, fetchFromGitHub, lib, enableUnfree ? false }:
+{ stdenv, fetchFromGitHub, fetchpatch, lib, enableUnfree ? false }:
 
 stdenv.mkDerivation rec {
   pname = "p7zip";
-  version = "17.01";
-
+  version = "17.03";
 
   src = fetchFromGitHub {
     owner  = "szcnick";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0gczdmypwbfnxzb11rjrrndjkkb3jzxfby2cchn5j8ysny13mfps";
-  }
-  ;
+    sha256 = "0zgpa90z5p30jbpqydiig1h8hn41c76n2x26rh8cc92xw72ni33d";
+  };
 
   # Default makefile is full of impurities on Darwin. The patch doesn't hurt Linux so I'm leaving it unconditional
   postPatch = ''
@@ -31,12 +29,13 @@ stdenv.mkDerivation rec {
     find . -name makefile'*' -exec sed -i '/Rar/d' {} +
   '';
 
+  makeFlags = [ "DEST_HOME=${placeholder "out"}" ];
+
   preConfigure = ''
-    makeFlagsArray=(DEST_HOME=$out)
-      buildFlags=all3
-        '' + stdenv.lib.optionalString stdenv.isDarwin ''
-        cp makefile.macosx_llvm_64bits makefile.machine
-'';
+    buildFlags=all3
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    cp makefile.macosx_llvm_64bits makefile.machine
+  '';
 
   enableParallelBuilding = true;
 

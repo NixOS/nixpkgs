@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl, qttools, pkgconfig
 , minizip, zlib
 , qtbase, qtsvg, qtmultimedia, qtwebkit, qttranslations, qtxmlpatterns
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
                 "DATADIR=/share/"
                 "SYSCONFDIR=/etc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Qt frontend for MAME/MESS";
     homepage = "https://qmc2.batcom-it.net";
     license = licenses.gpl2;

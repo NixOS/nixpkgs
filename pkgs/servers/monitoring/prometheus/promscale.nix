@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 }:
@@ -20,7 +20,7 @@ buildGoModule rec {
 
   doCheck = false; # Requires access to a docker daemon
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source analytical platform for Prometheus metrics";
     homepage = "https://github.com/timescale/promscale";
     license = licenses.asl20;

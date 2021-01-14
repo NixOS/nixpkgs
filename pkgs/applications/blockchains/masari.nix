@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ boost miniupnpc openssl lmdb unbound readline ];
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "scalability-focused, untraceable, secure, and fungible cryptocurrency using the RingCT protocol";
     homepage = "https://www.getmasari.org/";

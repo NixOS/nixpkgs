@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, git, makeWrapper, openssl, coreutils, util-linux, gnugrep, gnused, gawk }:
+{ lib, stdenv, fetchFromGitHub, git, makeWrapper, openssl, coreutils, util-linux, gnugrep, gnused, gawk }:
 
 stdenv.mkDerivation rec {
   pname = "transcrypt";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/transcrypt-depspathprefix
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Transparently encrypt files within a Git repository";
     longDescription = ''
       A script to configure transparent encryption of sensitive files stored in

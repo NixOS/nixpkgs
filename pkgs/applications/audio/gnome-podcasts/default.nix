@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitLab
 , fetchpatch
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs scripts/compile-gschema.py scripts/cargo.sh scripts/test.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Listen to your favorite podcasts";
     homepage = "https://wiki.gnome.org/Apps/Podcasts";
     license = licenses.gpl3;

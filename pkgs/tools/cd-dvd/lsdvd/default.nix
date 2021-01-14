@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libdvdread, pkgconfig }:
+{ lib, stdenv, fetchurl, libdvdread, pkgconfig }:
 
 let
   version = "0.17";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ libdvdread ];
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/lsdvd/";
     description = "Display information about audio, video, and subtitle tracks on a DVD";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, itstool, gtk3, dbus-glib, libnotify, libxml2, libcanberra-gtk3, mod_dnssd, apacheHttpd, hicolor-icon-theme, mate, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkgconfig, gettext, itstool, gtk3, dbus-glib, libnotify, libxml2, libcanberra-gtk3, mod_dnssd, apacheHttpd, hicolor-icon-theme, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-user-share";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "User level public file sharing for the MATE desktop";
     homepage = "https://github.com/mate-desktop/mate-user-share";
     license = with licenses; [ gpl2Plus ];

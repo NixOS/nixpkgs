@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , meson
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
       --replace "Exec=tilix" "Exec=$out/bin/tilix"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiling terminal emulator following the Gnome Human Interface Guidelines";
     homepage = "https://gnunn1.github.io/tilix-web";
     license = licenses.mpl20;

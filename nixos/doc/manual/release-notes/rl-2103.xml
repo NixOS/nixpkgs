@@ -108,6 +108,15 @@
     </para>
    </listitem>
    <listitem>
+    <para>
+     The <varname>networking.wireless.iwd</varname> module now installs
+     the upstream-provided 80-iwd.link file, which sets the NamePolicy=
+     for all wlan devices to "keep kernel", to avoid race conditions
+     between iwd and networkd. If you don't want this, you can set
+     <literal>systemd.network.links."80-iwd" = lib.mkForce {}</literal>.
+    </para>
+   </listitem>
+   <listitem>
      <para>
        <literal>rubyMinimal</literal> was removed due to being unused and
        unusable. The default ruby interpreter includes JIT support, which makes
@@ -169,6 +178,38 @@
     </para>
    </listitem>
    <listitem>
+     <para>
+       xfsprogs was update from 4.19 to 5.10. It now enables reflink support by default on filesystem creation.
+       Support for reflinks was added with an experimental status to kernel 4.9 and deemed stable in kernel 4.16.
+       If you want to be able to mount XFS filesystems created with this release of xfsprogs on kernel releases older than those, you need to format them
+       with <literal>mkfs.xfs -m reflink=0</literal>.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+      The uWSGI server is now built with POSIX capabilities. As a consequence,
+      root is no longer required in emperor mode and the service defaults to
+      running as the unprivileged <literal>uwsgi</literal> user. Any additional
+      capability can be added via the new option
+      <xref linkend="opt-services.uwsgi.capabilities"/>.
+      The previous behaviour can be restored by setting:
+<programlisting>
+  <xref linkend="opt-services.uwsgi.user"/> = "root";
+  <xref linkend="opt-services.uwsgi.group"/> = "root";
+  <xref linkend="opt-services.uwsgi.instance"/> =
+    {
+      uid = "uwsgi";
+      gid = "uwsgi";
+    };
+</programlisting>
+    </para>
+    <para>
+      Another incompatibility from the previous release is that vassals running under a
+      different user or group need to use <literal>immediate-{uid,gid}</literal>
+      instead of the usual <literal>uid,gid</literal> options.
+    </para>
+   </listitem>
+   <listitem>
     <para>
     <package>btc1</package> has been abandoned upstream, and removed.
     </para>
@@ -213,6 +254,22 @@
     <para>
      <package>openafs</package> now points to <package>openafs_1_8</package>,
      which is the new stable release.  OpenAFS 1.6 was removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     MariaDB has been updated to 10.5.
+     Before you upgrade, it would be best to take a backup of your database and read
+     <link xlink:href="https://mariadb.com/kb/en/upgrading-from-mariadb-104-to-mariadb-105/#incompatible-changes-between-104-and-105">
+     Incompatible Changes Between 10.4 and 10.5</link>.
+     After the upgrade you will need to run <literal>mysql_upgrade</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The TokuDB storage engine dropped in <package>mariadb</package> 10.5 and removed in <package>mariadb</package> 10.6.
+     It is recommended to switch to RocksDB. See also <link xlink:href="https://mariadb.com/kb/en/tokudb/">TokuDB</link> and
+     <link xlink:href="https://jira.mariadb.org/browse/MDEV-19780">MDEV-19780: Remove the TokuDB storage engine</link>.
     </para>
    </listitem>
    <listitem>
@@ -279,6 +336,16 @@
     </programlisting>
    </listitem>
    <listitem>
+    <para>
+      The <literal>services.tor</literal> module has a new exhaustively typed <xref linkend="opt-services.tor.settings" /> option following RFC 0042; backward compatibility with old options has been preserved when aliasing was possible.
+      The corresponding systemd service has been hardened,
+      but there is a chance that the service still requires more permissions,
+      so please report any related trouble on the bugtracker.
+      Onion services v3 are now supported in <xref linkend="opt-services.tor.relay.onionServices" />.
+      A new <xref linkend="opt-services.tor.openFirewall" /> option as been introduced for allowing connections on all the TCP ports configured.
+    </para>
+   </listitem>
+   <listitem>
      <para>
        The options <literal>services.slurm.dbdserver.storagePass</literal>
        and <literal>services.slurm.dbdserver.configFile</literal> have been removed.
@@ -289,11 +356,79 @@
    </listitem>
    <listitem>
      <para>
+       The <literal>wafHook</literal> hook does not wrap Python anymore.
+       Packages depending on <literal>wafHook</literal> need to include any Python into their <literal>nativeBuildInputs</literal>.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
        Starting with version 1.7.0, the project formerly named <literal>CodiMD</literal>
        is now named <literal>HedgeDoc</literal>.
        New installations will no longer use the old name for users, state directories and such, this needs to be considered when moving state to a more recent NixOS installation.
        Based on <xref linkend="opt-system.stateVersion" />, existing installations will continue to work.
      </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <package>fish-foreign-env</package> package has been replaced with
+     <package>fishPlugins.foreign-env</package>, in which the fish
+     functions have been relocated to the
+     <literal>vendor_functions.d</literal> directory to be loaded automatically.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       The prometheus json exporter is now managed by the prometheus community. Together with additional features
+       some backwards incompatibilities were introduced.
+       Most importantly the exporter no longer accepts a fixed command-line parameter to specify the URL of the
+       endpoint serving JSON. It now expects this URL to be passed as an URL parameter, when scraping the exporter's
+       <literal>/probe</literal> endpoint.
+       In the prometheus scrape configuration the scrape target might look like this:
+       <programlisting>
+http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/endpoint
+       </programlisting>
+     </para>
+     <para>
+       Existing configuration for the exporter needs to be updated, but can partially be re-used.
+       Documentation is available in the upstream repository and a small example for NixOS is available
+       in the corresponding NixOS test.
+     </para>
+     <para>
+       These changes also affect <xref linkend="opt-services.prometheus.exporters.rspamd.enable" />, which is
+       just a preconfigured instance of the json exporter.
+     </para>
+     <para>
+       For more information, take a look at the <link xlink:href="https://github.com/prometheus-community/json_exporter">
+       official documentation</link> of the json_exporter.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Androidenv was updated, removing the <literal>includeDocs</literal> and <literal>lldbVersions</literal>
+       arguments. Docs only covered a single version of the Android SDK, LLDB is now bundled with the NDK,
+       and both are no longer available to download from the Android package repositories. Additionally, since
+       the package lists have been updated, some older versions of Android packages may not be bundled. If you
+       depend on older versions of Android packages, we recommend overriding the repo.
+     </para>
+     <para>
+       Android packages are now loaded from a repo.json file created by parsing Android repo XML files. The arguments
+       <literal>repoJson</literal> and <literal>repoXmls</literal> have been added to allow overriding the built-in
+       androidenv repo.json with your own. Additionally, license files are now written to allow compatibility
+       with Gradle-based tools, and the <literal>extraLicenses</literal> argument has been added to accept more
+       SDK licenses if your project requires it. See the androidenv documentation for more details.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+      The Searx module has been updated with the ability to configure the
+      service declaratively and uWSGI integration.
+      The option <literal>services.searx.configFile</literal> has been renamed
+      to <xref linkend="opt-services.searx.settingsFile"/> for consistency with
+      the new <xref linkend="opt-services.searx.settings"/>. In addition, the
+      <literal>searx</literal> uid and gid reservations have been removed
+      since they were not necessary: the service is now running with a
+      dynamically allocated uid.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
@@ -444,6 +579,17 @@
      <xref linkend="opt-users.users._name_.createHome" /> now always ensures home directory permissions to be <literal>0700</literal>.
      Permissions had previously been ignored for already existing home directories, possibly leaving them readable by others.
      The option's description was incorrect regarding ownership management and has been simplified greatly.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       The GNOME desktop manager once again installs <package>gnome3.epiphany</package> by default.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+     NixOS now generates empty <literal>/etc/netgroup</literal>.
+     <literal>/etc/netgroup</literal> defines network-wide groups and may affect to setups using NIS.
     </para>
    </listitem>
   </itemizedlist>

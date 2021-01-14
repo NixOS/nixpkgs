@@ -1,19 +1,19 @@
 # This script was inspired by the ArchLinux User Repository package:
 #
 #   https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=oh-my-zsh-git
-{ stdenv, fetchFromGitHub, nixosTests, writeScript, common-updater-scripts, git
+{ lib, stdenv, fetchFromGitHub, nixosTests, writeScript, common-updater-scripts, git
 , nix, nixfmt, jq, coreutils, gnused, curl, cacert }:
 
 stdenv.mkDerivation rec {
-  version = "2020-12-28";
+  version = "2021-01-07";
   pname = "oh-my-zsh";
-  rev = "4b2431e8b1c08a2dc14fe31bf07a5e5f08eaa87e";
+  rev = "c9bf8b4a84d4ae392cf1bdd6a4a7c7c4f7710b92";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    sha256 = "09776acglph64lg9x1f1ypglbbhknrqidq47zk95vksd1in8l3is";
+    sha256 = "13i4r2bhffdjcln5cml29m9gzw9m39yxcln49h3shpp7s1gl3z4a";
   };
 
   installPhase = ''
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A framework for managing your zsh configuration";
     longDescription = ''
       Oh My Zsh is a framework for managing your zsh configuration.

@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ lib, stdenv, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ntfy";
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     HOME=$(mktemp -d) ${python3Packages.python.interpreter} setup.py test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility for sending notifications, on demand and when commands finish";
     homepage = "http://ntfy.rtfd.org/";
     license = licenses.gpl3;

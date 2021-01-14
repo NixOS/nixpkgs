@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , grpcio
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
   checkInputs = [ pytest ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GRPC library for the google-iam-v1 service";
     homepage = "https://github.com/googleapis/googleapis";
     license = licenses.asl20;

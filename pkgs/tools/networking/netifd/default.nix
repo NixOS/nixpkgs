@@ -1,4 +1,4 @@
-{ runCommand, stdenv, cmake, fetchgit, libnl, libubox, uci, ubus, json_c }:
+{ runCommand, lib, stdenv, cmake, fetchgit, libnl, libubox, uci, ubus, json_c }:
 
 stdenv.mkDerivation {
   pname = "netifd";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
       -I$(echo "${stdenv.lib.getDev libnl}"/include/libnl*/)"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenWrt Network interface configuration daemon";
     homepage = "https://git.openwrt.org/?p=project/netifd.git;a=summary";
     license = licenses.lgpl21;

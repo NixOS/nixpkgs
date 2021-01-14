@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, SDL2, SDL2_mixer, libpng }:
+{ lib, stdenv, fetchFromGitHub, cmake, SDL2, SDL2_mixer, libpng }:
 
 stdenv.mkDerivation rec {
   pname = "julius";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 SDL2_mixer libpng ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source re-implementation of Caesar III";
     homepage = "https://github.com/bvschaik/julius";
     license = licenses.agpl3;

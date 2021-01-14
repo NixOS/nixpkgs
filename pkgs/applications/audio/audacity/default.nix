@@ -1,8 +1,8 @@
-{ stdenv, fetchzip, wxGTK30, pkgconfig, file, gettext,
+{ lib, stdenv, fetchzip, wxGTK30, pkgconfig, file, gettext,
   libvorbis, libmad, libjack2, lv2, lilv, serd, sord, sratom, suil, alsaLib, libsndfile, soxr, flac, lame,
   expat, libid3tag, ffmpeg_3, soundtouch, /*, portaudio - given up fighting their portaudio.patch */
-  autoconf, automake, libtool
-  }:
+  cmake
+}:
 
 with stdenv.lib;
 
@@ -15,16 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1xk0piv72d2xd3p7igr916fhcbrm76fhjr418k1rlqdzzg1hfljn";
   };
 
-  preConfigure = /* we prefer system-wide libs */ ''
-    autoreconf -vi # use system libraries
-
-    # we will get a (possibly harmless) warning during configure without this
-    substituteInPlace configure \
-      --replace /usr/bin/file ${file}/bin/file
-  '';
-
-  configureFlags = [
-    "--with-libsamplerate"
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
   # audacity only looks for lame and ffmpeg at runtime, so we need to link them in manually
@@ -43,19 +35,17 @@ stdenv.mkDerivation rec {
     "-lswscale"
   ];
 
-  nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
+  nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [
     file gettext wxGTK30 expat alsaLib
     libsndfile soxr libid3tag libjack2 lv2 lilv serd sord sratom suil wxGTK30.gtk
     ffmpeg_3 libmad lame libvorbis flac soundtouch
   ]; #ToDo: detach sbsms
 
-  enableParallelBuilding = true;
-
   dontDisableStatic = true;
   doCheck = false; # Test fails
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sound editor with graphical UI";
     homepage = "https://www.audacityteam.org/";
     license = licenses.gpl2Plus;

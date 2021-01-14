@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jupyterlab_git" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Jupyter lab extension for version control with Git.";
     license = with licenses; [ bsd3 ];
     homepage = "https://github.com/jupyterlab/jupyterlab-git";

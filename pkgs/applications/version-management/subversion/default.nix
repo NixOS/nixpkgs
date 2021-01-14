@@ -5,7 +5,7 @@
 , perlBindings ? false
 , javahlBindings ? false
 , saslSupport ? false
-, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
+, lib, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
 , apacheHttpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
 , sasl ? null, serf ? null
 }:
@@ -95,7 +95,7 @@ let
     checkInputs = [ python ];
     doCheck = false; # fails 10 out of ~2300 tests
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
       license = licenses.asl20;
       homepage = "http://subversion.apache.org/";

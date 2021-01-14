@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, glib, gtk3, gsettings-desktop-schemas
+{ fetchurl, lib, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, glib, gtk3, gsettings-desktop-schemas
 , gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412, python3
 , libxslt, gettext, makeWrapper, systemd, xorg, epoxy, gnugrep, bash, gnome-session-ctl }:
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     providedSessions = [ "gnome" "gnome-xorg" ];
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME session manager";
     homepage = "https://wiki.gnome.org/Projects/SessionManagement";
     license = licenses.gpl2Plus;

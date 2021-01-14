@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, itk4, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, cmake, itk4, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname   = "c3d";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ itk4 ]
     ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pyushkevich/c3d";
     description = "Medical imaging processing tool";
     maintainers = with maintainers; [ bcdarwin ];

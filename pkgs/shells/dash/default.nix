@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, autoreconfHook, fetchurl }:
+{ lib, stdenv, buildPackages, autoreconfHook, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "dash";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";
     description = "A POSIX-compliant implementation of /bin/sh that aims to be as small as possible";
     platforms = platforms.unix;

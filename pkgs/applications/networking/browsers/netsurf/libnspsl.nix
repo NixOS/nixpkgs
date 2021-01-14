@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , buildsystem
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.netsurf-browser.org/";
     description = "NetSurf Public Suffix List - Handling library";
     license = licenses.mit;

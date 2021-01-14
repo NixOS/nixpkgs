@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, pcsclite, makeDesktopItem, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, pcsclite, makeDesktopItem, makeWrapper }:
 
 let
   version = "1.2.4";
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
       --suffix LD_LIBRARY_PATH ':' ${stdenv.lib.getLib pcsclite}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client side implementation of the eCard-API-Framework (BSI
       TR-03112) and related international standards, such as ISO/IEC 24727";
     homepage = "https://www.openecard.org/";

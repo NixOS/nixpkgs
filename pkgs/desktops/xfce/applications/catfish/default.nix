@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, file, which, intltool, gobject-introspection,
+{ lib, stdenv, fetchurl, file, which, intltool, gobject-introspection,
   findutils, xdg_utils, dconf, gtk3, python3Packages,
   wrapGAppsHook
 }:
@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication rec {
   # Disable check because there is no test in the source distribution
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.xfce.org/apps/catfish/start";
     description = "Handy file search tool";
     longDescription = ''

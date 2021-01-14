@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gettext
 , glib
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Window manager used in Gnome Flashback";
     homepage = "https://wiki.gnome.org/Projects/Metacity";
     license = licenses.gpl2;

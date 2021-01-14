@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , webtest
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   # https://github.com/Pylons/pyramid/issues/1899
   doCheck = !isPy35;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Pyramid Web Framework, a Pylons project";
     homepage = "https://trypyramid.com/";
     license = licenses.bsd0;

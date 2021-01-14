@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoreconfHook
 , fetchFromGitHub
 , fetchpatch
@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NetworkManager's sstp plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;

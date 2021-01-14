@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitiles, pkgconfig, libuuid, openssl, libyaml, lzma }:
+{ lib, stdenv, fetchFromGitiles, pkgconfig, libuuid, openssl, libyaml, lzma }:
 
 stdenv.mkDerivation rec {
   version = "20180311";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cp -r tests/devkeys* $out/share/vboot/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Chrome OS partitioning and kernel signing tools";
     license = licenses.bsd3;
     platforms = platforms.linux;

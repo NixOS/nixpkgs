@@ -4,8 +4,9 @@
 , databases
 , typesystem
 , aiosqlite
-, pytest
+, pytestCheckHook
 , pytestcov
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,12 @@ buildPythonPackage rec {
 
   checkInputs = [
     aiosqlite
-    pytest
+    pytestCheckHook
     pytestcov
+    typing-extensions
   ];
 
-  checkPhase = ''
-    PYTHONPATH=$PYTHONPATH:. pytest
-  '';
+  pythonImportsCheck = [ "orm" ];
 
   meta = with lib; {
     description = "An async ORM";

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     substituteInPlace config/pstoedit.pc.in --replace '@LIBPNG_LDFLAGS@' ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Translates PostScript and PDF graphics into other vector formats";
     homepage = "https://sourceforge.net/projects/pstoedit/";
     license = licenses.gpl2;

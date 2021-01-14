@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchFromGitHub
 , fluxbox
@@ -86,7 +86,7 @@ mkDerivation rec {
 
   passthru.providedSessions = [ "Lumina-DE" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight, portable desktop environment";
     longDescription = ''
       The Lumina Desktop Environment is a lightweight system interface

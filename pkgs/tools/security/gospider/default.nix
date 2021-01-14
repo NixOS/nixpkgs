@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jaeles-project";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "03gl8y2047iwa6bhmayyds3li21wy3sw1x4hpp9zgqgi95039q86";
   };
 
@@ -19,7 +19,7 @@ buildGoModule rec {
   # tests require internet access and API keys
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast web spider written in Go";
     longDescription = ''
       GoSpider is a fast web crawler that parses sitemap.xml and robots.txt file.

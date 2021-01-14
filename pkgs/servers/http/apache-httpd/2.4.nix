@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
+{ lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv, lynx
 , proxySupport ? true
 , sslSupport ? true, openssl
 , http2Support ? true, nghttp2
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     inherit apr aprutil sslSupport proxySupport ldapSupport luaSupport lua5;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Apache HTTPD, the world's most popular web server";
     homepage    = "http://httpd.apache.org/";
     license     = licenses.asl20;

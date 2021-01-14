@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , hwloc
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
     ]
   );
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.gromacs.org";
     license = licenses.gpl2;
     description = "Molecular dynamics software package";

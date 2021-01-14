@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python3
 , pkg-config
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     cp build/${region}_pc/sm64.${region}.f3dex2e $out/bin/sm64ex
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sm64pc/sm64ex";
     description = "Super Mario 64 port based off of decompilation";
     longDescription = ''

@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : "${openssl}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A basic http server for hosting a folder fast and simply";
     homepage = "https://github.com/thecoshman/http";
     license = licenses.mit;

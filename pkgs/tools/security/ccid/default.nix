@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pcsclite, pkgconfig, libusb1, perl }:
+{ lib, stdenv, fetchurl, pcsclite, pkgconfig, libusb1, perl }:
 
 stdenv.mkDerivation rec {
   pname = "ccid";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig perl ];
   buildInputs = [ pcsclite libusb1 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ccid drivers for pcsclite";
     homepage = "https://ccid.apdu.fr/";
     license = licenses.gpl2Plus;

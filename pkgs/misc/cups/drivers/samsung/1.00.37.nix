@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cups, libusb-compat-0_1, libxml2 }:
+{ lib, stdenv, fetchurl, cups, libusb-compat-0_1, libxml2 }:
 
 let
 
@@ -85,7 +85,7 @@ in stdenv.mkDerivation rec {
   # we did this in prefixup already
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unified Linux Driver for Samsung printers and scanners";
     homepage = "http://www.bchemnet.com/suldr";
     downloadPage = "http://www.bchemnet.com/suldr/driver/";

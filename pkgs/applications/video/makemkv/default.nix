@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchurl
 , autoPatchelfHook
@@ -13,21 +13,21 @@
 }:
 
 let
-  version = "1.15.3";
+  version = "1.15.4";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    hash = "sha256-Y23aetnwqLGaBIgJ/AP0oCrh8P5jpVrcMJgmc0Oe+i8=";
+    hash = "sha256-Reun5hp7Rnsf6N5yL6iQ1Vbhnz/AKnt/jYRqyOK625o=";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    hash = "sha256-Qruq9YKAaNF1pDtOhptP95UjFL2NA4EuROR4v6XZHEw=";
+    hash = "sha256-gtBi1IRNF5ASk/ZdzkDmOuEIT9gazNaRNCftqbLEP+M=";
   };
 in mkDerivation {
   pname = "makemkv";
@@ -58,7 +58,7 @@ in mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert blu-ray and dvd to mkv";
     longDescription = ''
       makemkv is a one-click QT application that transcodes an encrypted

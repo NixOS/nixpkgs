@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, mkDerivation
+{ lib, stdenv, fetchFromGitHub, mkDerivation
 , pkgconfig, qtbase, qttools, qmake, qtmultimedia, qtx11extras, alsaLib, libv4l, libXrandr
 , ffmpeg
 }:
@@ -38,7 +38,7 @@ mkDerivation rec {
     substituteInPlace settings/QvkSettings.cpp --subst-var-by ffmpeg ${ffmpeg}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple GUI screencast recorder, using ffmpeg";
     homepage = "https://linuxecke.volkoh.de/vokoscreen/vokoscreen.html";
     longDescription = ''

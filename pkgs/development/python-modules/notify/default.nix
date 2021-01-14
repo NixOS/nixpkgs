@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python
 , pygobject2
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for libnotify";
     homepage = "http://www.galago-project.org/";
     license = licenses.lgpl3;

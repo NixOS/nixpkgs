@@ -38,6 +38,13 @@ mkDerivation rec {
     ln -s /var/log/teamviewer $out/share/teamviewer/logfiles
     ln -s ${xdg_utils}/bin $out/share/teamviewer/tv_bin/xdg-utils
 
+    for i in 16 20 24 32 48 256; do
+      size=$i"x"$i
+
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      ln -s $out/share/teamviewer/tv_bin/desktop/teamviewer_$i.png $out/share/icons/hicolor/$size/apps/TeamViewer.png
+    done;
+
     sed -i "s,/opt/teamviewer,$out/share/teamviewer,g" $out/share/teamviewer/tv_bin/desktop/com.teamviewer.*.desktop
 
     substituteInPlace $out/share/teamviewer/tv_bin/script/tvw_aux \
@@ -50,6 +57,7 @@ mkDerivation rec {
     wrapProgram $out/share/teamviewer/tv_bin/TeamViewer --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libXrandr libX11 ]}"
     wrapProgram $out/share/teamviewer/tv_bin/TeamViewer_Desktop --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [libXrandr libX11 libXext libXdamage libXtst libSM libXfixes ]}"
 
+    wrapQtApp $out/share/teamviewer/tv_bin/script/teamviewer
     wrapQtApp $out/bin/teamviewer
   '';
 

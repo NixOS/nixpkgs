@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ lib, stdenv, fetchgit, buildPythonPackage
 , python
 , srht, pygit2 }:
 
@@ -23,7 +23,9 @@ buildPythonPackage rec {
     export PKGVER=${version}
   '';
 
-  meta = with stdenv.lib; {
+  dontUseSetuptoolsCheck = true;
+
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/man.sr.ht";
     description = "Wiki service for the sr.ht network";
     license = licenses.agpl3;

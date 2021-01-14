@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
+{ lib, stdenv, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
 , mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkgconfig }:
 
 mkDerivation {
@@ -30,7 +30,7 @@ mkDerivation {
 
   qtWrapperArgs = [ ''--suffix PATH : ${nx-libs}/bin:${openssh}/libexec'' ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical NoMachine NX3 remote desktop client";
     homepage = "http://x2go.org/";
     license = licenses.gpl2;

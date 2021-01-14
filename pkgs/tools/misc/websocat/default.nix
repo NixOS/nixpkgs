@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, openssl, rustPlatform, Security, makeWrapper, bash }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, openssl, rustPlatform, Security, makeWrapper, bash }:
 
 rustPlatform.buildRustPackage rec {
   pname = "websocat";
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${stdenv.lib.makeBinPath [ bash ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line client for WebSockets (like netcat/socat)";
     homepage = "https://github.com/vi/websocat";
     license = licenses.mit;

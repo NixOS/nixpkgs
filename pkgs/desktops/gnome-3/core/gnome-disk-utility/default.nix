@@ -1,4 +1,4 @@
-{ stdenv, gettext, fetchurl, pkgconfig, udisks2, libsecret, libdvdread
+{ lib, stdenv, gettext, fetchurl, pkgconfig, udisks2, libsecret, libdvdread
 , meson, ninja, gtk3, glib, wrapGAppsHook, python3, libnotify
 , itstool, gnome3, libxml2, gsettings-desktop-schemas
 , libcanberra-gtk3, libxslt, docbook_xsl, libpwquality, systemd }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://en.wikipedia.org/wiki/GNOME_Disks";
     description = "A udisks graphical front-end";
     maintainers = teams.gnome.members;

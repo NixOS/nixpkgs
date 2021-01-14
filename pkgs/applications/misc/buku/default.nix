@@ -1,4 +1,4 @@
-{ stdenv, python3, fetchFromGitHub }:
+{ lib, stdenv, python3, fetchFromGitHub }:
 
 with python3.pkgs; buildPythonApplication rec {
   version = "4.5";
@@ -70,11 +70,11 @@ with python3.pkgs; buildPythonApplication rec {
     cp auto-completion/fish/* $out/share/fish/vendor_completions.d
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Private cmdline bookmark manager";
     homepage = "https://github.com/jarun/Buku";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ matthiasbeyer infinisil ];
   };
 }

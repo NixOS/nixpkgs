@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
+{ lib, stdenv, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
 , makeWrapper , rlwrap, gnused, gnugrep, coreutils, xprop
 , extraModulePaths ? []
 , version }:
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
     inherit sbcl lispPackages contrib;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tiling window manager for X11";
     homepage    = "https://github.com/stumpwm/";
     license     = licenses.gpl2Plus;

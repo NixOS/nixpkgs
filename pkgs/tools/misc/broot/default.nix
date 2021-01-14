@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchCrate
 , installShellFiles
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "04nidx43w4nnccgbrw30wg9ai8p7hbklxpn1gc6gr2325yhqvwhl";
   };
 
-  cargoSha256 = "1bzq0dsdnmxniwnb6989wlhih28c4lyd11sci821whs11lhlfpz0";
+  cargoHash = "sha256-4F9HIQ1BQx4EikyH0DwlDAkYIeUJJbMsj7ZX23QD+K8=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
     installManPage man/broot.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
     maintainers = with maintainers; [ danieldk ];

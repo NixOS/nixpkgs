@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, docutils, makeWrapper
+{ lib, stdenv, fetchFromGitHub, docutils, makeWrapper
 , gnupg, curl, rsync, coreutils
 , gawk, gnused, gnugrep
 }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
                                                     gawk gnused gnugrep ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://spwhitton.name/tech/code/git-remote-gcrypt";
     description = "A git remote helper for GPG-encrypted remotes";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, efivar, popt }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, efivar, popt }:
 
 stdenv.mkDerivation rec {
   pname = "efibootmgr";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";
     homepage = "https://github.com/rhboot/efibootmgr";
     license = licenses.gpl2;

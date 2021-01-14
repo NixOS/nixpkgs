@@ -93,11 +93,11 @@ in {
     assertions = [
       {
         assertion = cfg.pulse.enable -> !config.hardware.pulseaudio.enable;
-        message = "PipeWire based PulseAudio server emulation replaces PulseAudio";
+        message = "PipeWire based PulseAudio server emulation replaces PulseAudio. This option requires `hardware.pulseaudio.enable` to be set to false";
       }
       {
         assertion = cfg.jack.enable -> !config.services.jack.jackd.enable;
-        message = "PipeWire based JACK emulation doesn't use the JACK service";
+        message = "PipeWire based JACK emulation doesn't use the JACK service. This option requires `services.jack.jackd.enable` to be set to false";
       }
     ];
 

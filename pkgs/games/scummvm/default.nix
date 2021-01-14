@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nasm
+{ lib, stdenv, fetchurl, nasm
 , alsaLib, curl, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, libGLU, libGL, SDL2, zlib
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
     homepage = "https://www.scummvm.org/";
     license = licenses.gpl2;

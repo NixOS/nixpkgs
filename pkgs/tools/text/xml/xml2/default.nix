@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2 }:
+{ lib, stdenv, fetchurl, pkgconfig, libxml2 }:
 
 stdenv.mkDerivation {
   name = "xml2-0.5";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libxml2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://web.archive.org/web/20160515005047/http://dan.egnor.name:80/xml2";
     description = "Tools for command line processing of XML, HTML, and CSV";
     license = licenses.gpl2Plus;

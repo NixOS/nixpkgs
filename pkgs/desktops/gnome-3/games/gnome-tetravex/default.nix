@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
 , libxml2, gettext, itstool, meson, ninja, python3
 , vala, desktop-file-utils
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Tetravex";
     description = "Complete the puzzle by matching numbered tiles";
     maintainers = teams.gnome.members;

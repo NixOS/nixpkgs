@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, autoreconfHook
 , libpcap, texinfo
 , iptables
 , gnupgSupport ? true, gnupg, gpgme # Increases dependencies!
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       "wknopddir = $out/etc/fwknop"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Single Packet Authorization (and Port Knocking) server/client";
     longDescription = ''

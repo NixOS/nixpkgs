@@ -1,4 +1,4 @@
-{stdenv, buildOcamlJane,
+{lib, buildOcamlJane,
  ppx_core, ppx_driver, ppx_tools, ppx_type_conv}:
 
 buildOcamlJane {
@@ -7,7 +7,7 @@ buildOcamlJane {
   propagatedBuildInputs =
     [ppx_core ppx_driver ppx_tools ppx_type_conv ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generation of fast comparison functions from type expressions and definitions";
     maintainers = [ maintainers.maurer ];
     license = licenses.asl20;

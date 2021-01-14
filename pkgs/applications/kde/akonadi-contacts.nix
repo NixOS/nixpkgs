@@ -8,7 +8,7 @@
 }:
 
 mkDerivation {
-  name = "akonadi-contacts";
+  pname = "akonadi-contacts";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 ];
     maintainers = kdepimTeam;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, doxygen, perl, pam, nspr, nss, openldap
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, doxygen, perl, pam, nspr, nss, openldap
 , db, cyrus_sasl, svrcore, icu, net-snmp, kerberos, pcre, perlPackages, libevent, openssl, python
 }:
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   passthru.version = version;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.port389.org/";
     description = "Enterprise-class Open Source LDAP server for Linux";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, libX11, libXinerama, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libX11, libXinerama, makeWrapper }:
 
 let
     rpath = stdenv.lib.makeLibraryPath [ libXinerama libX11 ];
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/leftwm-worker --prefix LD_LIBRARY_PATH : "${rpath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tiling window manager for the adventurer";
     homepage = "https://github.com/leftwm/leftwm";
     license = licenses.mit;

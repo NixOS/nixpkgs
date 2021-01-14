@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, lwt }:
+{ lib, fetchFromGitHub, buildDunePackage, lwt }:
 
 buildDunePackage rec {
   pname = "lwt_log";
@@ -18,7 +18,7 @@ buildDunePackage rec {
   meta = {
     description = "Lwt logging library (deprecated)";
     homepage = "https://github.com/aantron/lwt_log";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

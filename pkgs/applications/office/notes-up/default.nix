@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Markdown notes editor and manager designed for elementary OS"
     + stdenv.lib.optionalString withPantheon " - built with Contractor support";
     homepage = "https://github.com/Philip-Scott/Notes-up";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, gtk2 }:
+{ lib, stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-icon-theme";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     rm -r "$out/share/locale"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of icons for the GNOME 2 desktop";
     homepage = "https://download.gnome.org/sources/gnome-icon-theme/";
     license = licenses.gpl3Plus;

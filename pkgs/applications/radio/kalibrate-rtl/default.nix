@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, fftw, rtl-sdr, libusb1 }:
+{ lib, stdenv, fetchgit, autoreconfHook, pkgconfig, fftw, rtl-sdr, libusb1 }:
 
 stdenv.mkDerivation {
   name = "kalibrate-rtl-20131214";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ fftw rtl-sdr libusb1 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calculate local oscillator frequency offset in RTL-SDR devices";
     longDescription = ''
       Kalibrate, or kal, can scan for GSM base stations in a given frequency

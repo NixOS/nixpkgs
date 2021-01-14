@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     rm $out/share/themes/*/COPYING
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Material Design theme for GNOME/GTK based desktop environments";
     homepage = "https://github.com/nana-4/materia-theme";
     license = licenses.gpl2Only;

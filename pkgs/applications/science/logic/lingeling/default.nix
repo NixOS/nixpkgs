@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , aiger
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast SAT solver";
     homepage    = "http://fmv.jku.at/lingeling/";
     license     = licenses.mit;

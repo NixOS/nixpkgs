@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, darwin, callPackage
+{ lib, stdenv, fetchurl, fetchpatch, darwin, callPackage
 , autoreconfHook
 , pkgconfig
 , libtool
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon which collects system performance statistics periodically";
     homepage = "https://collectd.org";
     license = licenses.gpl2;

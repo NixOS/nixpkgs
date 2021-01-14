@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL2, ftgl, pkgconfig, libpng, libjpeg, pcre
+{ lib, stdenv, fetchurl, SDL2, ftgl, pkgconfig, libpng, libjpeg, pcre
 , SDL2_image, freetype, glew, libGLU, libGL, boost, glm
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gource.io/";
     description = "A Software version control visualization tool";
     license = licenses.gpl3Plus;

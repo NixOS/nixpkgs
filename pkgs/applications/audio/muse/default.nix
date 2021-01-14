@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qttools, wrapQtAppsHook
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, qttools, wrapQtAppsHook
 , alsaLib, dssi, fluidsynth, ladspaH, lash, libinstpatch, libjack2, liblo
 , libsamplerate, libsndfile, lilv, lrdf, lv2, qtsvg, rtaudio, rubberband, sord
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libsamplerate libsndfile lilv lrdf lv2 qtsvg rtaudio rubberband sord
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://muse-sequencer.github.io/";
     description = "MIDI/Audio sequencer with recording and editing capabilities";
     longDescription = ''

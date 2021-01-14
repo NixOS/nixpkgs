@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pygmt" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python interface for the Generic Mapping Tools";
     homepage = "https://github.com/GenericMappingTools/pygmt";
     license = licenses.bsd3;

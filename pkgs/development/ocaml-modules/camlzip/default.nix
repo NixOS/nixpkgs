@@ -1,8 +1,8 @@
-{stdenv, fetchurl, zlib, ocaml, findlib}:
+{lib, stdenv, fetchurl, zlib, ocaml, findlib}:
 
 let
   param =
-    if stdenv.lib.versionAtLeast ocaml.version "4.02"
+    if lib.versionAtLeast ocaml.version "4.02"
     then {
       version = "1.10";
       url = "https://github.com/xavierleroy/camlzip/archive/rel110.tar.gz";
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     ln -s $out/lib/ocaml/${ocaml.version}/site-lib/{,caml}zip
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://cristal.inria.fr/~xleroy/software.html#camlzip";
     description = "A library for handling ZIP and GZIP files in OCaml";
     longDescription = ''

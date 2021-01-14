@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, glibc, augeas, dnsutils, c-ares, curl,
+{ lib, stdenv, fetchurl, fetchpatch, glibc, augeas, dnsutils, c-ares, curl,
   cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
   python, python3, pam, popt, talloc, tdb, tevent, pkgconfig, ldb, openldap,
   pcre, kerberos, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     find "$out" -depth -type d -exec rmdir --ignore-fail-on-non-empty {} \;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System Security Services Daemon";
     homepage = "https://fedorahosted.org/sssd/";
     license = licenses.gpl3;

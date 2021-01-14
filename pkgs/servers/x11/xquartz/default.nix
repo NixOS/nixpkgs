@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, xterm, makeWrapper, ruby
+{ lib, stdenv, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, xterm, makeWrapper, ruby
 , quartz-wm, fontconfig, xlsfonts, xfontsel
 , ttf_bitstream_vera, freefont_ttf, liberation_ttf
 , shell ? "${bashInteractive}/bin/bash"
@@ -184,7 +184,7 @@ in stdenv.mkDerivation {
       --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms   = platforms.darwin;
     maintainers = with maintainers; [ cstrahan ];
     license     = licenses.mit;

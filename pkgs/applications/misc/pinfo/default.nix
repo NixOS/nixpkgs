@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, gettext, texinfo, ncurses, readline }:
+{ lib, stdenv, fetchurl, autoreconfHook, gettext, texinfo, ncurses, readline }:
 
 stdenv.mkDerivation {
   name = "pinfo-0.6.10";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-curses=${ncurses.dev}" "--with-readline=${readline.dev}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A viewer for info files";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

@@ -17,8 +17,6 @@ mkDerivation rec {
     sha256 = "XP9VTeiVIiMm5mkXapCKWxfcvaYCkhY3S5RXZNR3oWo=";
   };
 
-  enableParallelBuilding = true;
-
   patches = [
     # Remove unnecessary constexpr, this is not allowed in C++14
     (fetchpatch {

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , glib
 , gmime3
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pawsa.fedorapeople.org/balsa/";
     description = "An e-mail client for GNOME";
     license = licenses.gpl2Plus;

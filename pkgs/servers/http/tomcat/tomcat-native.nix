@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apr, jdk, openssl }:
+{ lib, stdenv, fetchurl, apr, jdk, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "tomcat-native";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "--with-ssl=${openssl.dev}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An optional component for use with Apache Tomcat that allows Tomcat to use certain native resources for performance, compatibility, etc";
     homepage = "https://tomcat.apache.org/native-doc/";
     license = licenses.asl20;

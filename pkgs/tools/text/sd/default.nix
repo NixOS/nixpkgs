@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Intuitive find & replace CLI (sed alternative)";
     homepage = "https://github.com/chmln/sd";
     license = licenses.mit;

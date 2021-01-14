@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   pname = "riemann";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/riemann" --prefix PATH : "${jre}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://riemann.io/";
     description = "A network monitoring system";
     license = licenses.epl10;

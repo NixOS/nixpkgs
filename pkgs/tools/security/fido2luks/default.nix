@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , cryptsetup
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "19drjql13z8bw257z10kjppxm25jlfgrpc9g1jf68ka5j2b3nx7k";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Decrypt your LUKS partition using a FIDO2 compatible authenticator";
     homepage = "https://github.com/shimunn/fido2luks";
     license = licenses.gpl3;

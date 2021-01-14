@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'NixOS' && github.event.issue.pull_request != '' && contains(github.event.comment.body, '/rebase-staging')
     steps:
+      - uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: eyes
       - uses: scherermichael-oss/action-has-permission@1.0.6
         id: check-write-access
         with:

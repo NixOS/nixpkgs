@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig
 , bzip2, curl, expat, fribidi, libunibreak, sqlite, zlib
 , uiTarget ? if !stdenv.isDarwin then "desktop" else "macosx"
 , uiType ? if !stdenv.isDarwin then "qt4" else "cocoa"
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An e-book reader for Linux";
     homepage = "http://www.fbreader.org/";
     license = licenses.gpl3;

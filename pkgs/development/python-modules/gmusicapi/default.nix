@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , validictory
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ validictory decorator mutagen protobuf setuptools requests dateutil proboscis mock appdirs oauth2client pyopenssl gpsoauth MechanicalSoup future ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An unofficial API for Google Play Music";
     homepage = "https://pypi.python.org/pypi/gmusicapi/";
     license = licenses.bsd3;

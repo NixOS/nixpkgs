@@ -29,7 +29,7 @@ buildRustPackage rec {
     rm $out/bin/ripasso-man
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple password manager written in Rust";
     homepage = "https://github.com/cortex/ripasso";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchurl
+{ lib, stdenv, buildGoPackage, fetchurl
 , cmake, xz, which, autoconf
 , ncurses6, libedit, libunwind
 , installShellFiles
@@ -60,7 +60,7 @@ buildGoPackage rec {
     find $out -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${go} '{}' +
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://www.cockroachlabs.com";
     description = "A scalable, survivable, strongly-consistent SQL database";
     license     = licenses.bsl11;

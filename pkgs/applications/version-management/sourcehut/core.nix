@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchNodeModules, buildPythonPackage
+{ lib, stdenv, fetchgit, fetchNodeModules, buildPythonPackage
 , pgpy, flask, bleach, humanize, html5lib, markdown, psycopg2, pygments
 , requests, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, prometheus_client
 , celery, alembic, importlib-metadata, mistletoe
@@ -61,7 +61,7 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/srht";
     description = "Core modules for sr.ht";
     license = licenses.bsd3;

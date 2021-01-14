@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, gawk }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, gawk }:
 
 stdenv.mkDerivation rec {
   pname = "youtrack";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Issue tracking and project management tool for developers";
     maintainers = with maintainers; [ yorickvp ];
     # https://www.jetbrains.com/youtrack/buy/license.html

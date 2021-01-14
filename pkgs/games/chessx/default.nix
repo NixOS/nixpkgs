@@ -1,5 +1,5 @@
 { mkDerivation
-, stdenv
+, lib, stdenv
 , pkgconfig
 , zlib
 , qtbase
@@ -46,7 +46,7 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://chessx.sourceforge.net/";
     description = "Browse and analyse chess games";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoconf
 , automake
 , c-ares
@@ -109,7 +109,7 @@ mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Easy automated syncing between your computers and your MEGA Cloud Drive";
     homepage = "https://mega.nz/";

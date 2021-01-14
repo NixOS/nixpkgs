@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME translation making program";
     homepage = "https://wiki.gnome.org/Apps/Gtranslator";
     license = licenses.gpl3Plus;

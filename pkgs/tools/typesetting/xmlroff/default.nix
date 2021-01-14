@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook
 , gtk2
 , libxml2
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "docs" ""  # docs target wants to download from network
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XSL Formatter";
     homepage = "http://xmlroff.org/";
     platforms = platforms.unix;

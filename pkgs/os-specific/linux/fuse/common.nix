@@ -1,6 +1,6 @@
 { version, sha256Hash }:
 
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, util-linux, gettext
 , meson, ninja, pkg-config
 , autoreconfHook
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library that allows filesystems to be implemented in user space";
     longDescription = ''
       FUSE (Filesystem in Userspace) is an interface for userspace programs to

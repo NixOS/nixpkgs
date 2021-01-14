@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , cloudpickle
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     py.test dask_glm
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dask/dask-glm/";
     description = "Generalized Linear Models with Dask";
     license = licenses.bsd3;

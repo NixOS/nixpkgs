@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libuuid, libselinux }:
+{ lib, stdenv, fetchurl, fetchpatch, libuuid, libselinux }:
 let
   sourceInfo = rec {
     version = "2.2.7";
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     find . -name .libs | xargs rm -rf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NILFS utilities";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

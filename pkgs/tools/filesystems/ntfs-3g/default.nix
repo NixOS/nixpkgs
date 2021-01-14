@@ -1,4 +1,4 @@
-{stdenv, fetchurl, util-linux, libuuid
+{lib, stdenv, fetchurl, util-linux, libuuid
 , crypto ? false, libgcrypt, gnutls, pkgconfig}:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       ln -sv mount.ntfs-3g $out/sbin/mount.ntfs
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.tuxera.com/community/open-source-ntfs-3g/";
     description = "FUSE-based NTFS driver with full write support";
     maintainers = with maintainers; [ dezgeg ];

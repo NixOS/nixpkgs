@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, freeimage }:
+{ lib, stdenv, fetchFromGitHub, cmake, freeimage }:
 
 stdenv.mkDerivation rec {
   pname = "perceptualdiff";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ freeimage ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A program that compares two images using a perceptually based image metric";
     homepage = "https://github.com/myint/perceptualdiff";
     license = licenses.gpl2;

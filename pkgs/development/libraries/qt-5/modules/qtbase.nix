@@ -356,8 +356,6 @@ stdenv.mkDerivation {
         ]
     );
 
-  enableParallelBuilding = true;
-
   postInstall =
     # Move selected outputs.
     ''

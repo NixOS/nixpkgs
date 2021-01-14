@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, makeDesktopItem }:
+{ lib, stdenv, fetchurl, makeWrapper, jre, makeDesktopItem }:
 
 let
   desktopItem = makeDesktopItem {
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
       --run "cd $out/share/java/${pname}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Electronic TV Program Guide";
     homepage = "https://www.tvbrowser.org/";
     license = licenses.gpl3;

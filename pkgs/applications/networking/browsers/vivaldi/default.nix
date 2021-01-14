@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon
+{ lib, stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
 , alsaLib, dbus, cups, libexif, ffmpeg_3, systemd
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
@@ -86,7 +86,7 @@ in stdenv.mkDerivation rec {
     ln -sf ${vivaldi-widevine}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
     license     = licenses.unfree;

@@ -43,7 +43,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       };
   in {
     name = "mpd";
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ emmanuelrosa ];
     };
 

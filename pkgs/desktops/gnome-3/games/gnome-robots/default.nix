@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
 , librsvg, gsound, gettext, itstool, libxml2, libgnome-games-support
 , libgee, meson, ninja, python3, desktop-file-utils, adwaita-icon-theme }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Robots";
     description = "Avoid the robots and make them crash into each other";
     maintainers = teams.gnome.members;

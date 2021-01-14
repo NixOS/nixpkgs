@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, python
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, python
 , fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
 , brotli, fontmath, mutatormath, booleanoperations
 , ufoprocessor, ufonormalizer, psautohint, tqdm
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     "test_options"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Adobe Font Development Kit for OpenType";
     homepage = "https://adobe-type-tools.github.io/afdko/";
     license = licenses.asl20;

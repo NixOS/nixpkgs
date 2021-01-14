@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, callPackage, pkgconfig, cmake, vala, libxml2,
+{ lib, stdenv, fetchFromGitHub, substituteAll, callPackage, pkgconfig, cmake, vala, libxml2,
   glib, pcre, gtk2, gtk3, xorg, libxkbcommon, epoxy, at-spi2-core, dbus-glib, bamf,
   xfce, libwnck3, libdbusmenu, gobject-introspection }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.gitLister src.meta.homepage;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Global Menu applet for XFCE4";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ jD91mZM2 ];

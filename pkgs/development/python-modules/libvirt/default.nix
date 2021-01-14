@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitLab, pkgconfig, lxml, libvirt, nose }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitLab, pkgconfig, lxml, libvirt, nose }:
 
 buildPythonPackage rec {
   pname = "libvirt";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libvirt.org/python.html";
     description = "libvirt Python bindings";
     license = licenses.lgpl2;

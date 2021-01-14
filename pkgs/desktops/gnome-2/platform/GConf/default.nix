@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus-glib, glib, ORBit2, libxml2, polkit, python3, intltool }:
+{ lib, stdenv, fetchurl, pkgconfig, dbus-glib, glib, ORBit2, libxml2, polkit, python3, intltool }:
 
 stdenv.mkDerivation rec {
   pname = "gconf";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     2to3 --write --nobackup gsettings/gsettings-schema-convert
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://projects.gnome.org/gconf/";
     description = "Deprecated system for storing application preferences";
     platforms = platforms.unix;

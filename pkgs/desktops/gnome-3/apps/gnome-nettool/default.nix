@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
 , libgtop, intltool, itstool, libxml2, nmap, inetutils }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-nettool";
     description = "A collection of networking tools";
     maintainers = teams.gnome.members;

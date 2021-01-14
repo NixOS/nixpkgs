@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python3
 , par2cmdline
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/sabnzbd --set PATH ${path}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Usenet NZB downloader, par2 repairer and auto extracting server";
     homepage = "https://sabnzbd.org";
     license = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, installShellFiles, libiconv, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-absorb";
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tummychow/git-absorb";
     description = "git commit --fixup, but automatic";
     license = [ licenses.bsd3 ];

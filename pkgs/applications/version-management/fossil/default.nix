@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , installShellFiles
 , tcl
 , libiconv
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --name fossil.bash tools/fossil-autocomplete.bash
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple, high-reliability, distributed software configuration management";
     longDescription = ''
       Fossil is a software configuration management system.  Fossil is

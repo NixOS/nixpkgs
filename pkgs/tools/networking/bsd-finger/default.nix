@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 # !!! Duplication: this package is almost exactly the same as `bsd-finger'.
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   preInstall = '' mkdir -p $out/man/man1 $out/bin '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     license = licenses.bsdOriginal;
   };

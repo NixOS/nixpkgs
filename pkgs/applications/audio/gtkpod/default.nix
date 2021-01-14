@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, wrapGAppsHook, intltool, libgpod, curl, flac,
+{ lib, stdenv, fetchurl, pkgconfig, wrapGAppsHook, intltool, libgpod, curl, flac,
   gnome3, gtk3, gettext, perlPackages, flex, libid3tag, gdl,
   libvorbis, gdk-pixbuf }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK Manager for an Apple ipod";
     homepage = "http://gtkpod.sourceforge.net";
     license = licenses.gpl2Plus;

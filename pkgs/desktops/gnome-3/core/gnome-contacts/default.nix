@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , gettext
 , fetchurl
 , evolution-data-server
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Contacts";
     description = "GNOME’s integrated address book";
     maintainers = teams.gnome.members;

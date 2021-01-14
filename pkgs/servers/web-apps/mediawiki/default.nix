@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, writeText }:
+{ lib, stdenv, fetchurl, makeWrapper, writeText }:
 
 stdenv.mkDerivation rec {
   pname = "mediawiki";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The collaborative editing software that runs Wikipedia";
     license = licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";

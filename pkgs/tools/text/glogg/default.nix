@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchFromGitHub, qmake, boost }:
+{ mkDerivation, lib, stdenv, fetchFromGitHub, qmake, boost }:
 
 mkDerivation rec {
   pname = "glogg";
@@ -29,7 +29,7 @@ mkDerivation rec {
     wrapQtApp $out/Applications/glogg.app/Contents/MacOS/glogg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The fast, smart log explorer";
     longDescription = ''
       A multi-platform GUI application to browse and search through long or complex log files. It is designed with programmers and system administrators in mind. glogg can be seen as a graphical, interactive combination of grep and less.

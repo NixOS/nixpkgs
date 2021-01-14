@@ -51,7 +51,7 @@ let
       popd
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Apple SDK ${version}";
       maintainers = with maintainers; [ copumpkin ];
       platforms   = platforms.darwin;
@@ -183,7 +183,7 @@ let
       "/System/Library/Frameworks/${name}.framework/${name}"
     ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Apple SDK framework ${name}";
       maintainers = with maintainers; [ copumpkin ];
       platforms   = platforms.darwin;

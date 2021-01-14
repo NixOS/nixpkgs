@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , python
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elftools" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for analyzing ELF files and DWARF debugging information";
     homepage = "https://github.com/eliben/pyelftools";
     license = licenses.publicDomain;

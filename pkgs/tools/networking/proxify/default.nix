@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorSha256 = "1x78n88ri8kph827k03x1q06zpbbbp7793xsvc376ljda5n6bqig";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Proxy tool for HTTP/HTTPS traffic capture";
     longDescription = ''
       This tool supports multiple operations such as request/response dump, filtering

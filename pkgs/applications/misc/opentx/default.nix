@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub
+{ lib, stdenv, mkDerivation, fetchFromGitHub
 , cmake, gcc-arm-embedded, python3Packages
 , qtbase, qtmultimedia, qttranslations, SDL, gtest
 , dfu-util, avrdude
@@ -14,8 +14,6 @@ mkDerivation rec {
     rev = "release/${version}";
     sha256 = "1pp3k1802gl1rji98clv17wj0619dliq821mpi4446lk22q692yq";
   };
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];
 
@@ -35,7 +33,7 @@ mkDerivation rec {
     #"-DAVRDUDE_PATH=${avrdude}/bin/avrdude"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenTX Companion transmitter support software";
     longDescription = ''
       OpenTX Companion is used for many different tasks like loading OpenTX

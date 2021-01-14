@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, vpnc, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib, autoreconfHook } :
+{ lib, stdenv, fetchFromGitHub, pkgconfig, vpnc, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib, autoreconfHook } :
 
 assert (openssl != null) == (gnutls == null);
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   propagatedBuildInputs = [ vpnc openssl gnutls gmp libxml2 stoken zlib ];
   
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenConnect client extended to support Palo Alto Networks' GlobalProtect VPN";
     homepage = "https://github.com/dlenski/openconnect/";
     license = licenses.lgpl21;

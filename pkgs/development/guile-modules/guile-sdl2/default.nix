@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, guile, libtool, pkgconfig
+{ lib, stdenv, fetchurl, guile, libtool, pkgconfig
 , SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
 }:
 
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
 
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bindings to SDL2 for GNU Guile";
     homepage = "https://dthompson.us/projects/guile-sdl2.html";
     license = licenses.lgpl3Plus;

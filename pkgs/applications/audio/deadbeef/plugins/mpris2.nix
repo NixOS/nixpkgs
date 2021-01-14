@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, deadbeef, glib }:
+{ lib, stdenv, fetchurl, pkgconfig, deadbeef, glib }:
 
 stdenv.mkDerivation rec {
   pname = "deadbeef-mpris2-plugin";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ deadbeef glib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MPRISv2 plugin for the DeaDBeeF music player";
     homepage = "https://github.com/Serranya/deadbeef-mpris2-plugin/";
     license = licenses.gpl2;

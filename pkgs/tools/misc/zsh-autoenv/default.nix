@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, runtimeShell }:
 
 stdenv.mkDerivation {
   pname = "zsh-autoenv";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/zsh-autoenv-share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automatically sources whitelisted .autoenv.zsh files";
     longDescription = ''
       zsh-autoenv automatically sources (known/whitelisted)

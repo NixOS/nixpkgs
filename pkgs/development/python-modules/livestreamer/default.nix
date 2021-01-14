@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , pkgs
 , isPyPy
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     wrapProgram $out/bin/livestreamer --prefix PATH : ${pkgs.rtmpdump}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://livestreamer.tanuki.se";
     description = ''
       Livestreamer is CLI program that extracts streams from various

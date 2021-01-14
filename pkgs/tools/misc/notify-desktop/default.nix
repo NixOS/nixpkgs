@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, dbus, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, dbus, pkgconfig }:
 
 stdenv.mkDerivation {
   pname = "notify-desktop";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     install -m 755 bin/notify-desktop $out/bin/notify-desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Little application that lets you send desktop notifications with one command";
     longDescription = ''
       It's basically clone of notify-send from libnotify,

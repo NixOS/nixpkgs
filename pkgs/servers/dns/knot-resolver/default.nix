@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 # native deps.
 , runCommand, pkgconfig, meson, ninja, makeWrapper
 # build+runtime deps.
@@ -84,7 +84,7 @@ unwrapped = stdenv.mkDerivation rec {
     meson test --print-errorlogs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Caching validating DNS resolver, from .cz domain registry";
     homepage = "https://knot-resolver.cz";
     license = licenses.gpl3Plus;

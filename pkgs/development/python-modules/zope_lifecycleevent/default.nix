@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     "zope.interface"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.lifecycleevent";
     description = "Object life-cycle events";
     license = licenses.zpl20;

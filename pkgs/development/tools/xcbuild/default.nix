@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng
+{ lib, stdenv, cmake, fetchFromGitHub, zlib, libxml2, libpng
 , CoreServices, CoreGraphics, ImageIO, ninja }:
 
 let
@@ -47,8 +47,6 @@ in stdenv.mkDerivation {
       --replace "#if HAVE_LIBCOMPRESSION" "#if 0"
   '';
 
-  enableParallelBuilding = true;
-
   # TODO: instruct cmake not to put it in /usr, rather than cleaning up
   postInstall = ''
     mv $out/usr/* $out
@@ -59,10 +57,11 @@ in stdenv.mkDerivation {
 
   cmakeFlags = [ "-GNinja" ];
 
-  buildInputs = [ cmake zlib libxml2 libpng ninja ]
+  nativeBuildInputs = [ cmake ninja ];
+  buildInputs = [ zlib libxml2 libpng ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices CoreGraphics ImageIO ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Xcode-compatible build tool";
     homepage = "https://github.com/facebook/xcbuild";
     platforms = platforms.unix;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , perl, flex, bison
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and robust (System)Verilog simulator/compiler";
     homepage    = "https://www.veripool.org/wiki/verilator";
     license     = licenses.lgpl3;

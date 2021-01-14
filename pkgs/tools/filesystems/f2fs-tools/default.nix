@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, libselinux, libuuid, pkgconfig }:
+{ lib, stdenv, fetchgit, autoreconfHook, libselinux, libuuid, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "f2fs-tools";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./f2fs-tools-cross-fix.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/";
     description = "Userland tools for the f2fs filesystem";
     license = licenses.gpl2;

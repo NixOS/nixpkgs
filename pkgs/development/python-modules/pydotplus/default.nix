@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pyparsing
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     graphviz
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/erocarrera/pydot";
     description = "An improved version of the old pydot project that provides a Python Interface to Graphviz’s Dot language";
     license = licenses.mit;

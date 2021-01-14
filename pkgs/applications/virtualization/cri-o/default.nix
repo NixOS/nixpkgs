@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , btrfs-progs
 , buildGoModule
 , fetchFromGitHub
@@ -56,7 +56,7 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) cri-o; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cri-o.io";
     description = ''
       Open Container Initiative-based implementation of the

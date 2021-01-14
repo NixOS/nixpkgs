@@ -2,9 +2,10 @@ let
   password1 = "foobar";
   password2 = "helloworld";
   password3 = "bazqux";
+  password4 = "asdf123";
 in import ./make-test-python.nix ({ pkgs, ... }: {
   name = "shadow";
-  meta = with pkgs.stdenv.lib.maintainers; { maintainers = [ nequissimus ]; };
+  meta = with pkgs.lib.maintainers; { maintainers = [ nequissimus ]; };
 
   nodes.shadow = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.shadow ];
@@ -18,6 +19,10 @@ in import ./make-test-python.nix ({ pkgs, ... }: {
       users.layla = {
         password = password2;
         shell = pkgs.shadow;
+      };
+      users.ash = {
+        password = password4;
+        shell = pkgs.bash;
       };
     };
   };
@@ -40,6 +45,15 @@ in import ./make-test-python.nix ({ pkgs, ... }: {
         shadow.send_chars("whoami > /tmp/1\n")
         shadow.wait_for_file("/tmp/1")
         assert "emma" in shadow.succeed("cat /tmp/1")
+
+    with subtest("Switch user"):
+        shadow.send_chars("su - ash\n")
+        shadow.sleep(2)
+        shadow.send_chars("${password4}\n")
+        shadow.sleep(2)
+        shadow.send_chars("whoami > /tmp/3\n")
+        shadow.wait_for_file("/tmp/3")
+        assert "ash" in shadow.succeed("cat /tmp/3")
 
     with subtest("Change password"):
         shadow.send_key("alt-f3")

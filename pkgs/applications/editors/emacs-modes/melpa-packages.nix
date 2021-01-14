@@ -6,8 +6,8 @@ To update the list of packages from MELPA,
 
 1. Run ./update-melpa
 2. Check for evaluation errors:
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackages.melpaStablePackages
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackages.melpaPackages
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacs.pkgs..melpaStablePackages
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacs.pkgs..melpaPackages
 3. `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
 
 ## Update from overlay
@@ -142,11 +142,6 @@ let
         });
 
         flycheck-rtags = fix-rtags super.flycheck-rtags;
-
-        gnuplot = super.gnuplot.overrideAttrs (old: {
-          nativeBuildInputs =
-            (old.nativeBuildInputs or [ ]) ++ [ pkgs.autoreconfHook ];
-        });
 
         pdf-tools = super.pdf-tools.overrideAttrs (old: {
           nativeBuildInputs = [ external.pkgconfig ];
@@ -583,7 +578,8 @@ let
         };
 
         vterm = super.vterm.overrideAttrs (old: {
-          buildInputs = old.buildInputs ++ [ self.emacs pkgs.cmake pkgs.libvterm-neovim ];
+          nativeBuildInputs = [ pkgs.cmake ];
+          buildInputs = old.buildInputs ++ [ self.emacs pkgs.libvterm-neovim ];
           cmakeFlags = [
             "-DEMACS_SOURCE=${self.emacs.src}"
             "-DUSE_SYSTEM_LIBVTERM=ON"

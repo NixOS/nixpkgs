@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "markdown2";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "08a124043aa0ad36ba2136239547d5011a2b770278abb11a5609611e0040ea05";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast and complete Python implementation of Markdown";
     homepage =  "https://github.com/trentm/python-markdown2";
     license = licenses.mit;

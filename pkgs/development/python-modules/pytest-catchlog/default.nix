@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, unzip }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, unzip }:
 
 buildPythonPackage rec {
   pname = "pytest-catchlog";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # Requires pytest < 3.1
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.mit;
     homepage = "https://pypi.python.org/pypi/pytest-catchlog/";
     description = "py.test plugin to catch log messages. This is a fork of pytest-capturelog.";

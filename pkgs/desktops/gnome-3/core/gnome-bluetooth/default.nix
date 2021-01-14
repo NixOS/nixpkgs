@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnome3, meson, ninja, pkgconfig, gtk3, intltool, glib
+{ lib, stdenv, fetchurl, gnome3, meson, ninja, pkgconfig, gtk3, intltool, glib
 , udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra-gtk3, gobject-introspection
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, python3, gsettings-desktop-schemas }:
 
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://help.gnome.org/users/gnome-bluetooth/stable/index.html.en";
     description = "Application that let you manage Bluetooth in the GNOME destkop";
     maintainers = teams.gnome.members;

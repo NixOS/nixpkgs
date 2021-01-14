@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "fping-5.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-ipv6" "--enable-ipv4" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://fping.org/";
     description = "Send ICMP echo probes to network hosts";
     license = licenses.bsd0;

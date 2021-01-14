@@ -19,7 +19,7 @@
 , portaudio
 , SDL2
 , soundtouch
-, stdenv
+, lib, stdenv
 , udev
 , wrapGAppsHook
 , wxGTK
@@ -91,7 +91,7 @@ stdenv.mkDerivation {
     zlib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Playstation 2 emulator";
     longDescription= ''
       PCSX2 is an open-source PlayStation 2 (AKA PS2) emulator. Its purpose

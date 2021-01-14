@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, which, pkgconfig, ocaml, findlib, imagemagick }:
+{ stdenv, lib, fetchurl, which, pkgconfig, ocaml, findlib, imagemagick }:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "magick is not available for OCaml ${ocaml.version}"
 else
 
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.linux-nantes.org/~fmonnier/OCaml/ImageMagick/";
     description = "ImageMagick Binding for OCaml";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     platforms = imagemagick.meta.platforms;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

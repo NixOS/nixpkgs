@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, pkgconfig
 , doxygen, freetype, libX11, libftdi, libusb-compat-0_1, libusb1, ncurses, perl }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       --replace server/drivers/ $out/lib/lcdproc/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client/server suite for controlling a wide variety of LCD devices";
     homepage    = "http://lcdproc.org/";
     license     = licenses.gpl2;

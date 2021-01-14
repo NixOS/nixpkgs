@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, CoreServices, CoreFoundation, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, CoreServices, CoreFoundation, fetchpatch }:
 
 stdenv.mkDerivation rec {
   version = "1.1";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     install -Dm755 qgrep $out/bin/qgrep
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast regular expression grep for source code with incremental index updates";
     homepage = "https://github.com/zeux/qgrep";
     license = licenses.mit;

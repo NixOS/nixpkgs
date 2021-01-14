@@ -1,4 +1,4 @@
-{ rustPlatform, fetchFromGitHub, stdenv, installShellFiles }:
+{ rustPlatform, fetchFromGitHub, lib, stdenv, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tre-command";
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     installManPage manual/tre.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tree command, improved";
     homepage = "https://github.com/dduan/tre";
     license = licenses.mit;

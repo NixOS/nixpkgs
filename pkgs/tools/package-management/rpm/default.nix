@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     ln -sf $out/bin/{rpm,rpmverify}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.rpm.org/";
     license = licenses.gpl2;
     description = "The RPM Package Manager";

@@ -11,7 +11,7 @@
 , ninja
 , pkgconfig
 , python3
-, stdenv
+, lib, stdenv
 , vala
 , wrapGAppsHook
 , inxi
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     sed "s|'inxi'|'${inxi}/bin/inxi'|" -i scripts/upload-system-info
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/xapps";
     description = "Cross-desktop libraries and common resources";
     license = licenses.lgpl3;

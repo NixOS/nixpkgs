@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, samba, perl, openldap }:
+{ lib, stdenv, fetchurl, makeWrapper, samba, perl, openldap }:
 
 stdenv.mkDerivation rec {
   pname = "enum4linux";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${stdenv.lib.makeBinPath [ samba openldap ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for enumerating information from Windows and Samba systems";
     homepage = "https://labs.portcullis.co.uk/tools/enum4linux/";
     license = licenses.gpl2;

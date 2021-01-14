@@ -15,7 +15,7 @@
 , wrapGAppsHook
 , pkgconfig
 , pulseaudio
-, stdenv
+, lib, stdenv
 , systemd
 , upower
 , dconf
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/csd-backlight-helper $out/bin/cinnamon-settings-daemon/csd-backlight-helper
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-settings-daemon";
     description = "The settings daemon for the Cinnamon desktop";
     license = licenses.gpl2;

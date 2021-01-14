@@ -416,7 +416,10 @@ let
       SECURITY_APPARMOR                = yes;
       DEFAULT_SECURITY_APPARMOR        = yes;
 
-      SECURITY_LOCKDOWN_LSM            = whenAtLeast "5.4" yes;
+      MODULE_SIG            = no; # r13y, generates a random key during build and bakes it in
+      # Depends on MODULE_SIG and only really helps when you sign your modules
+      # and enforce signatures which we don't do by default.
+      SECURITY_LOCKDOWN_LSM = option no;
     } // optionalAttrs (!stdenv.hostPlatform.isAarch32) {
 
       # Detect buffer overflows on the stack
@@ -654,7 +657,10 @@ let
 
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
-      KERNEL_XZ          = yes;
+
+      # use zstd for kernel compression if newer than 5.9, else xz.
+      KERNEL_XZ          = whenOlder "5.9" yes;
+      KERNEL_ZSTD        = whenAtLeast "5.9" yes;
 
       SYSVIPC            = yes;  # System-V IPC
 
@@ -819,6 +825,12 @@ let
 
       # See comments on https://github.com/NixOS/nixpkgs/commit/9b67ea9106102d882f53d62890468071900b9647
       CRYPTO_AEGIS128_SIMD = whenAtLeast "5.4" no;
+
+      # Distros should configure the default as a kernel option.
+      # We previously defined it on the kernel command line as cma=
+      # The kernel command line will override a platform-specific configuration from its device tree.
+      # https://github.com/torvalds/linux/blob/856deb866d16e29bd65952e0289066f6078af773/kernel/dma/contiguous.c#L35-L44
+      CMA_SIZE_MBYTES = freeform "32";
     };
   };
 in

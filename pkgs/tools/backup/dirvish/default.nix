@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeWrapper, perl, perlPackages }:
+{ fetchurl, lib, stdenv, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "dirvish-1.2.1";
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, disk based, rotating network backup system";
     homepage = "http://dirvish.org/";
     license = stdenv.lib.licenses.osl2;

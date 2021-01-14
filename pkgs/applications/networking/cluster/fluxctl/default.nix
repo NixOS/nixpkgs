@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "fluxctl";
@@ -28,7 +28,7 @@ buildGoModule rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CLI client for Flux, the GitOps Kubernetes operator";
     homepage = "https://github.com/fluxcd/flux";
     license = licenses.asl20;

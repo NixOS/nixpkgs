@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, pcsclite, qt5
+{ lib, stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, pcsclite, qt5
 , gcc-arm-embedded }:
 
 let
@@ -33,7 +33,7 @@ let
         install -Dt $out/firmware bootrom/obj/bootrom.elf armsrc/obj/fullimage.elf
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Client for proxmark3, powerful general purpose RFID tool";
         homepage = "http://www.proxmark.org";
         license = licenses.gpl2Plus;

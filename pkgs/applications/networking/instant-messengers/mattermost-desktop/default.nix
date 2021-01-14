@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnome2, gtk3, pango, atk, cairo, gdk-pixbuf, glib,
+{ lib, stdenv, fetchurl, gnome2, gtk3, pango, atk, cairo, gdk-pixbuf, glib,
 freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
 libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
 libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev, wrapGAppsHook,
@@ -88,7 +88,7 @@ in
         $out/share/mattermost-desktop/mattermost-desktop
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Mattermost Desktop client";
       homepage    = "https://about.mattermost.com/";
       license     = licenses.asl20;

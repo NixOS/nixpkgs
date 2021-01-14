@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An automatic hinter for TrueType fonts";
     longDescription = ''
       A library and two programs which take a TrueType font as the

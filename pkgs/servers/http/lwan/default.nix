@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, zlib, cmake, jemalloc }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, zlib, cmake, jemalloc }:
 
 stdenv.mkDerivation rec {
   pname = "lwan";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ jemalloc zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight high-performance multi-threaded web server";
     longDescription = "A lightweight and speedy web server with a low memory
       footprint (~500KiB for 10k idle connections), with minimal system calls and

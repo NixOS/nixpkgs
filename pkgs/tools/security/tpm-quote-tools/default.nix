@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, trousers, openssl }:
+{ lib, stdenv, fetchurl, trousers, openssl }:
 
 stdenv.mkDerivation rec { 
   pname = "tpm-quote-tools";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       $out/bin/tpm_mkaik
   '';
 
-  meta = with stdenv.lib; { 
+  meta = with lib; { 
     description = "A collection of programs that provide support for TPM based attestation using the TPM quote mechanism";
     longDescription = ''
       The TPM Quote Tools is a collection of programs that provide support

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
   pname = "abcMIDI";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # There is also a file called "makefile" which seems to be preferred by the standard build phase
   makefile = "Makefile";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://abc.sourceforge.net/abcMIDI/";
     downloadPage = "https://ifdo.ca/~seymour/runabc/top.html";
     license = licenses.gpl2Plus;

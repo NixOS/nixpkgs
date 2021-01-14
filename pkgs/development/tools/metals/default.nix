@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "metals";
-  version = "0.9.7";
+  version = "0.9.8";
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "0aky4vbbm5hi6jnd2n1aimqznbbaya05c7vdgaqhy3630ks3w4k9";
+    outputHash     = "1gn7v1478sqhz4hv53pgvaw2nqziyiavvhn5q152lkzyvghq08wk";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       --add-flags "${extraJavaOpts} -Dmetals.client=sublime -cp $CLASSPATH scala.meta.metals.Main"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://scalameta.org/metals/";
     license = licenses.asl20;
     description = "Work-in-progress language server for Scala";

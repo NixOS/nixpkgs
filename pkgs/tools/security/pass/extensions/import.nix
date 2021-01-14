@@ -1,4 +1,4 @@
-{ stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper, fetchpatch }:
+{ lib, stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper, fetchpatch }:
 
 let
   pythonEnv = pythonPackages.python.withPackages (p: [
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
       --prefix PYTHONPATH : "$out/${pythonPackages.python.sitePackages}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pass extension for importing data from existing password managers";
     homepage = "https://github.com/roddhjav/pass-import";
     license = licenses.gpl3Plus;

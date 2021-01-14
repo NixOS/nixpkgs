@@ -1,4 +1,4 @@
-{ stdenv, fetchbzr, intltool
+{ lib, stdenv, fetchbzr, intltool
 , gtk2, wrapGAppsHook, autoreconfHook, pkgconfig
 , libmikmod, librsvg, libcanberra-gtk2, hicolor-icon-theme }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-setgid" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bejeweled clone game";
     homepage = "https://gweled.org";
     license = licenses.gpl2;

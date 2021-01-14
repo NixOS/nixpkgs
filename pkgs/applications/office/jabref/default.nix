@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, wrapGAppsHook, gtk3, gsettings-desktop-schemas
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, wrapGAppsHook, gtk3, gsettings-desktop-schemas
 , zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsaLib, libav, cairo, freetype, pango, gdk-pixbuf, glib }:
 
 stdenv.mkDerivation rec {
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     cp unpacked/org.jabref/icons/jabref.svg $out/share/icons/jabref.svg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source bibliography reference manager";
     homepage = "https://www.jabref.org";
     license = licenses.gpl2;

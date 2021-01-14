@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, python, gtest
 , boost, cryptopp, curl, fuse, openssl
 }:
@@ -48,8 +48,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost cryptopp curl fuse openssl ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DCRYFS_UPDATE_CHECKS:BOOL=FALSE"
     "-DBoost_USE_STATIC_LIBS:BOOL=FALSE" # this option is case sensitive
@@ -68,7 +66,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cryptographic filesystem for the cloud";
     homepage    = "https://www.cryfs.org";
     license     = licenses.lgpl3;

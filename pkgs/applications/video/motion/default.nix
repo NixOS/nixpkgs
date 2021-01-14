@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , ffmpeg, libjpeg, libmicrohttpd }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ffmpeg libjpeg libmicrohttpd ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Monitors the video signal from cameras";
     homepage = "https://motion-project.github.io/";
     license = licenses.gpl2Plus;

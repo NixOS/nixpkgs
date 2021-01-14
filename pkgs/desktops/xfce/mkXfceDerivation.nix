@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkgconfig, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitLab, pkgconfig, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook }:
 
 { category
 , pname
@@ -46,7 +46,7 @@ let
       versionLister = xfce.gitLister src.meta.homepage;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://gitlab.xfce.org/${category}/${pname}/about";
       license = licenses.gpl2; # some libraries are under LGPLv2+
       platforms = platforms.linux;

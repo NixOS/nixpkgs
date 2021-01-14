@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , glib
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) cri-o podman; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/containers/conmon";
     description = "An OCI container runtime monitor";
     license = licenses.asl20;

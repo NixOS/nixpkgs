@@ -1,8 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree, jedi, pycodestyle,
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree, jedi, pycodestyle,
   psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
   spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle, watchdog, python-language-server
-, pyqtwebengine, atomicwrites, pyxdg, diff-match-patch
+, pyqtwebengine, atomicwrites, pyxdg, diff-match-patch, three-merge, pyls-black, pyls-spyder
 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     intervaltree jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
     pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
-    atomicwrites pyxdg diff-match-patch
+    atomicwrites pyxdg diff-match-patch three-merge pyls-black pyls-spyder
   ];
 
   # There is no test for spyder
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   postInstall = ''
     # add Python libs to env so Spyder subprocesses
     # created to run compute kernels don't fail with ImportErrors
-    wrapProgram $out/bin/spyder3 --prefix PYTHONPATH : "$PYTHONPATH"
+    wrapProgram $out/bin/spyder --prefix PYTHONPATH : "$PYTHONPATH"
 
     # Create desktop item
     mkdir -p $out/share/icons
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scientific python development environment";
     longDescription = ''
       Spyder (previously known as Pydee) is a powerful interactive development

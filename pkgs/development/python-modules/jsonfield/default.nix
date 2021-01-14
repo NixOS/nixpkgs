@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, django, pytestCheckHook, pytest-django }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, django, pytestCheckHook, pytest-django }:
 
 buildPythonPackage rec {
   pname = "jsonfield";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reusable model field that allows you to store validated JSON, automatically handling serialization to and from the database";
     homepage = "https://github.com/rpkilby/jsonfield/";
     license = licenses.mit;

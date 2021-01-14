@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xfce }:
+{ lib, stdenv, fetchurl, xfce }:
 
 let
   category = "art";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.archiveLister category pname;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.xfce.org/";
     description = "Themes for Xfce";
     license = licenses.gpl3;

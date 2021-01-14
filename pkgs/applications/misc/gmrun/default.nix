@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, gtk2, pkgconfig, popt }:
+{ lib, stdenv, fetchurl, glib, gtk2, pkgconfig, popt }:
 
 let
   version = "0.9.2";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       ./gmrun-0.9.2-xdg.patch
     ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gnome Completion-Run Utility";
     longDescription = ''
       A simple program which provides a "run program" window, featuring a bash-like TAB completion.

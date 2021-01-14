@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glib, gettext }:
+{ lib, stdenv, fetchFromGitHub, glib, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-dash-to-panel";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   uuid = "dash-to-panel@jderose9.github.com";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An icon taskbar for Gnome Shell";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mounium ];

@@ -13,6 +13,7 @@
 , libdrm
 , mesa
 , libxkbcommon
+, libappindicator-gtk3
 }@args:
 
 let
@@ -93,12 +94,12 @@ rec {
     headers = "116h3b02da18w5mqgw6adgbzc9l02vl3c62syw4wsy6xww6i0mgr";
   };
 
-  electron_11 = mkElectron "11.1.0" {
-    x86_64-linux = "64f9c0864a12a9e0a435b967ed63209a9bb447456aafe8660edaaa2f6517c538";
-    x86_64-darwin = "827b0b3e562535de25d3e4d2c4d7529338efae9197e8cf6702dda786b5870bd0";
-    i686-linux = "aa424de2c480d0deb26aa53dc45622857521cb9876cf29a52d32a4da66cae3c6";
-    armv7l-linux = "375bbea1ecf521ab95760052df5e0ad167e41f61cc79c7c441553ecc2f64d1dd";
-    aarch64-linux = "caaf1f9a2e62c9dbbcb777e5c64640d8a1f60a0f5791a2c8f62ab44067c88777";
-    headers = "1kafrz2rxryv7psgfn20qrkpcn83hi9fz7df2ra1nzkngfj7xdjr";
+  electron_11 = mkElectron "11.2.0" {
+    x86_64-linux = "a2ed11a5ec9ad10302053e5e2bdf2abf0f9bac521e4f80a377308bffe8c24c00";
+    x86_64-darwin = "c8485cc6cb754bccfb1a01db93f5f0f1ee1ed3017551f3d25a1191c7c7aea654";
+    i686-linux = "508b9276f97c66418e530cbfa584701d4b0a42825fb2519b21ff161db1dc121f";
+    armv7l-linux = "edf1ad6606eab5efc1c9a33ce16489dae1df21ce6e69166f4c8da27ca6fde2ca";
+    aarch64-linux = "ed8e318ce0ba92058efdc667790bcbfce1c7f888f9d94038c1c76ed8678158fc";
+    headers = "0mwv9vm2km6sawyds87fzy7m4pcmmwl9c2qihs1nc7cwmdz388lv";
   };
 }

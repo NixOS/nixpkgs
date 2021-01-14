@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "disk-filltest";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man; mv $out/man1 $out/share/man
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple program to detect bad disks by filling them with random data";
     longDescription = ''
       disk-filltest is a tool to check storage disks for coming

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
 , tatsu, arrow
 , pytestCheckHook, pytest-flakes
 }:
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pytest-flakes ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pythonic and easy iCalendar library (RFC 5545)";
     longDescription = ''
       Ics.py is a pythonic and easy iCalendar library. Its goals are to read and

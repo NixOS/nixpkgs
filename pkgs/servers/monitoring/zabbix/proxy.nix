@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libevent, libiconv, openssl, pcre, zlib
+{ lib, stdenv, fetchurl, pkgconfig, libevent, libiconv, openssl, pcre, zlib
 , odbcSupport ? true, unixODBC
 , snmpSupport ? true, net-snmp
 , sshSupport ? true, libssh2
@@ -72,7 +72,7 @@ in
         cp -prvd database/postgresql/schema.sql $out/share/zabbix/database/postgresql/
       '';
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "An enterprise-class open source distributed monitoring solution (client-server proxy)";
         homepage = "https://www.zabbix.com/";
         license = licenses.gpl2;

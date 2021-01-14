@@ -1,4 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, stdenv
+, buildPythonPackage
+, fetchFromGitHub
 , aiohttp
 , eventlet
 , iana-etc
@@ -14,18 +16,14 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "3.13.2";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "v${version}";
-    sha256 = "1hn5nnxp7y2dpf52vrwdxza2sqmzj8admcnwgjkmcxk65s2dhvy1";
+    sha256 = "00x9pmmnl1yd59wd96ivkiqh4n5nphl8cwk43hf4nqr0icgsyhar";
   };
-
-  propagatedBuildInputs = [
-    six
-  ];
 
   checkInputs = [
     aiohttp
@@ -38,6 +36,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  doCheck = !stdenv.isDarwin;
+
   preCheck = stdenv.lib.optionalString stdenv.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
@@ -47,11 +47,16 @@ buildPythonPackage rec {
 
   # somehow effective log level does not change?
   disabledTests = [ "test_logger" ];
+  pythonImportsCheck = [ "engineio" ];
 
-  meta = with stdenv.lib; {
-    description = "Engine.IO server";
+  meta = with lib; {
+    description = "Python based Engine.IO client and server";
+    longDescription = ''
+      Engine.IO is a lightweight transport protocol that enables real-time
+      bidirectional event-based communication between clients and a server.
+    '';
     homepage = "https://github.com/miguelgrinberg/python-engineio/";
-    license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

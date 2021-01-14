@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, numactl, ncurses, check }:
+{ lib, stdenv, fetchurl, pkgconfig, numactl, ncurses, check }:
 
 stdenv.mkDerivation rec {
   pname = "numatop";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   doCheck  = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for runtime memory locality characterization and analysis of processes and threads on a NUMA system";
     homepage = "https://01.org/numatop";
     license = licenses.bsd3;

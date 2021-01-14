@@ -1,4 +1,4 @@
-{ stdenv, writeScriptBin, fetchFromGitLab, autoreconfHook, pkg-config
+{ lib, stdenv, writeScriptBin, fetchFromGitLab, autoreconfHook, pkg-config
 , autoconf-archive, libxslt, boost , gtkmm2 , imagemagick, sane-backends
 , tesseract4, udev, libusb1, gnum4 }:
 
@@ -12,13 +12,13 @@ let
   '';
 in stdenv.mkDerivation rec {
   pname = "utsushi";
-  version = "unstable-2020-11-10";
+  version = "unstable-2021-01-01";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
-    rev = "04700043e2d16062eb8bd27f4efff3024f387d32";
-    sha256 = "0rxv5n0985d414i6hwichsn7hybwgwsimpy5s4hmcsvxqcpks4li";
+    rev = "1646d7d301f3d2aeb24930696688853fed5f0d43";
+    sha256 = "1g9m00qljhlw56h3hgfq67ywf4r92nl37m7x5mxa7ygaxc0dyb14";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,7 @@ in stdenv.mkDerivation rec {
 
   doInstallCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SANE utsushi backend for some Epson scanners";
     longDescription = ''
       ImageScanV3 (aka utsushi) scanner driver. Non-free plugins are not

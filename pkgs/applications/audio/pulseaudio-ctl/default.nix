@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , bc, dbus, gawk, gnused, libnotify, pulseaudio }:
 
 let
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
       --prefix PATH : ${path}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Control pulseaudio volume from the shell or mapped to keyboard shortcuts. No need for alsa-utils";
     homepage = "https://bbs.archlinux.org/viewtopic.php?id=124513";
     license = licenses.mit;

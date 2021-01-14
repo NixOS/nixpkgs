@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gdk-pixbuf, optipng, librsvg, gtk3, pantheon, gnome3, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, gdk-pixbuf, optipng, librsvg, gtk3, pantheon, gnome3, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-xfce-icon-theme";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     make icon-caches
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Elementary icons for Xfce and other GTK desktops like GNOME";
     homepage = "https://github.com/shimmerproject/elementary-xfce";
     license = licenses.gpl2;

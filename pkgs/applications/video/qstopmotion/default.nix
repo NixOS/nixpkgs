@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchurl
 , qtbase
@@ -64,7 +64,7 @@ mkDerivation rec {
     grep -rl 'qwt' . | xargs sed -i 's@<qwt/qwt_slider.h>@<qwt_slider.h>@g'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.qstopmotion.org";
     description = "Create stopmotion animation with a (web)camera";
     longDescription = ''

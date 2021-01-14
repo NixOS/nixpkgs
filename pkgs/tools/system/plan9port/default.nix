@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which
+{ lib, stdenv, fetchFromGitHub, which
 , darwin ? null
 , xorgproto ? null
 , libX11
@@ -79,7 +79,7 @@ stdenv.mkDerivation {
     ./test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://9fans.github.io/plan9port/";
     description = "Plan 9 from User Space";
     longDescription = ''

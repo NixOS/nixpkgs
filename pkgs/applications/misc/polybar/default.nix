@@ -1,5 +1,5 @@
 { cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
-, python3, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
+, python3, lib, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
 , xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
 , removeReferencesTo
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       fetchSubmodules = true;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://polybar.github.io/";
       description = "A fast and easy-to-use tool for creating status bars";
       longDescription = ''

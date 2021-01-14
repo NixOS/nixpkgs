@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, pkg-config, ninja, docutils, makeWrapper
 , fuse3, glib
 , which, python3Packages
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     python3 -m pytest test/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchFromGitHub
 , wrapQtAppsHook
@@ -139,7 +139,7 @@ python3.pkgs.buildPythonApplication {
     ;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper
 , fontconfig, freetype, glib, gtk3
 , jdk, libX11, libXrender, libXtst, zlib }:
 
@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dbeaver-ce";
-  version = "7.3.0";
+  version = "7.3.2";
 
   desktopItem = makeDesktopItem {
     name = "dbeaver";
@@ -30,10 +30,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dbeaver.io/files/${version}/dbeaver-ce-${version}-linux.gtk.x86_64.tar.gz";
-    sha256 = "sha256-JhEF2/97vo2FgzpCFkuc31aLl9qjKHV8RYXO5oBU1no=";
+    sha256 = "sha256-4BVXcR8/E4uIrPQJe9KU9577j4XLTxJWTO8g0vCHWts=";
   };
 
   installPhase = ''
+    # remove bundled jre
+    rm -rf jre
+
     mkdir -p $out/
     cp -r . $out/dbeaver
 
@@ -54,7 +57,7 @@ stdenv.mkDerivation rec {
     ln -s $out/dbeaver/icon.xpm $out/share/pixmaps/dbeaver.xpm
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://dbeaver.io/";
     description = "Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more";
     longDescription = ''

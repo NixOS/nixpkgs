@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Power Plug";
     homepage = "https://github.com/elementary/switchboard-plug-power";
     license = licenses.gpl2Plus;

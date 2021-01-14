@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, texinfo }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "macchanger";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility for viewing/manipulating the MAC address of network interfaces";
     maintainers = with maintainers; [ joachifm ma27 ];
     license = licenses.gpl2Plus;

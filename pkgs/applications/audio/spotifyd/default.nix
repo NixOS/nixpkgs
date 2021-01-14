@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPackages_1_45, pkgconfig, openssl
+{ lib, stdenv, fetchFromGitHub, rustPackages_1_45, pkgconfig, openssl
 , withALSA ? true, alsaLib ? null
 , withPulseAudio ? false, libpulseaudio ? null
 , withPortAudio ? false, portaudio ? null
@@ -39,7 +39,7 @@ rustPackages_1_45.rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source Spotify client running as a UNIX daemon";
     homepage = "https://github.com/Spotifyd/spotifyd";
     license = with licenses; [ gpl3 ];

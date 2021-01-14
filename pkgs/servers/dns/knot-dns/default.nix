@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
+{ lib, stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2
 , autoreconfHook
 }:
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     rm -r "$out"/lib/*.la
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Authoritative-only DNS server from .cz domain registry";
     homepage = "https://knot-dns.cz";
     license = licenses.gpl3Plus;

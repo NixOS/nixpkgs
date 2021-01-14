@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "csexp";
   version = "1.3.2";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.02.3";
 
   src = fetchurl {

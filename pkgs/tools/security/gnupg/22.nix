@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+{ fetchurl, fetchpatch, lib, stdenv, pkgconfig, libgcrypt, libassuan, libksba
 , libgpgerror, libiconv, npth, gettext, texinfo, buildPackages
 
 # Each of the dependencies below are optional.
@@ -16,11 +16,11 @@ assert guiSupport -> pinentry != null && enableMinimal == false;
 stdenv.mkDerivation rec {
   pname = "gnupg";
 
-  version = "2.2.24";
+  version = "2.2.27";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "0ilcp7m1dvwnri3i7q9wanf5pvhwxk7h106pd62g0d5fz80b944h";
+    sha256 = "1693s2rp9sjwvdslj94n03wnb6rxysjy0dli0q1698af044h1ril";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     ln -s -t $out/bin $out/libexec/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gnupg.org";
     description = "Modern (2.1) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;

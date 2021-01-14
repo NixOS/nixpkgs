@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , vala, gobject-introspection, intltool, python2Packages, glib
 , pkgconfig
 , libgee, json-glib, marisa, libkkc-data
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ln -s ${libkkc-data}/lib/libkkc/models $out/share/libkkc/models
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Japanese Kana Kanji conversion input method library";
     homepage    = "https://github.com/ueno/libkkc";
     license     = licenses.gpl3Plus;

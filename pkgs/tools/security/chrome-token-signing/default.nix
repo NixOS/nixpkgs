@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qmake, pcsclite, pkgconfig, opensc }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pcsclite, pkgconfig, opensc }:
 
 mkDerivation rec {
   pname = "chrome-token-signing";
@@ -28,7 +28,7 @@ mkDerivation rec {
     install -D -t $out/lib/mozilla/native-messaging-hosts host-linux/ff/ee.ria.esteid.json
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Chrome and Firefox extension for signing with your eID on the web";
     homepage = "https://github.com/open-eid/chrome-token-signing/wiki";
     license = licenses.lgpl21;

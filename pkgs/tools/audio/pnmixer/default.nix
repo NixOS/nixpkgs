@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gettext, alsaLib, gtk3, glib, libnotify, libX11, pcre }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, gettext, alsaLib, gtk3, glib, libnotify, libX11, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "pnmixer";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ alsaLib gtk3 glib libnotify libX11 pcre ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/nicklan/pnmixer";
     description = "ALSA volume mixer for the system tray";
     license = licenses.gpl3;

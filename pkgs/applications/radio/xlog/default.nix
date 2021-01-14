@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, gtk2, pkgconfig, hamlib }:
+{ lib, stdenv, fetchurl, glib, gtk2, pkgconfig, hamlib }:
 stdenv.mkDerivation rec {
   pname = "xlog";
   version = "2.0.19";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib pkgconfig gtk2 hamlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An amateur radio logging program";
     longDescription =
       '' Xlog is an amateur radio logging program.

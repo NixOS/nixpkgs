@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, getdns, doxygen, libyaml, darwin, cmake, systemd }:
+{ lib, stdenv, fetchFromGitHub, getdns, doxygen, libyaml, darwin, cmake, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "stubby";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ doxygen getdns systemd ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A local DNS Privacy stub resolver (using DNS-over-TLS)";
     longDescription = ''
       Stubby is an application that acts as a local DNS Privacy stub

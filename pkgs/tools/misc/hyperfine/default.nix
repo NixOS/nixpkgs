@@ -1,4 +1,4 @@
-{ stdenv, fetchCrate, rustPlatform, installShellFiles
+{ lib, stdenv, fetchCrate, rustPlatform, installShellFiles
 , Security
 }:
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
       --zsh $releaseDir/build/hyperfine-*/out/_hyperfine
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line benchmarking tool";
     homepage    = "https://github.com/sharkdp/hyperfine";
     license     = with licenses; [ asl20 /* or */ mit ];

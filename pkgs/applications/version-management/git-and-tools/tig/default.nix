@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45
+{ lib, stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45
 , readline, makeWrapper, git, libiconv, autoreconfHook, findXMLCatalogs, pkgconfig
 }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${git}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
     maintainers = with maintainers; [ bjornfor domenkozar qknight globin ];

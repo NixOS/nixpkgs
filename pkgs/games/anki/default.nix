@@ -128,6 +128,9 @@ buildPythonApplication rec {
   # UTF-8 locale needed for testing
   LC_ALL = "en_US.UTF-8";
 
+  # tests fail with to many open files
+  doCheck = !stdenv.isDarwin;
+
   # - Anki writes some files to $HOME during tests
   # - Skip tests using network
   checkPhase = ''
@@ -196,6 +199,6 @@ buildPythonApplication rec {
     license = licenses.agpl3Plus;
     broken = stdenv.hostPlatform.isAarch64;
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ oxij Profpatsch enzime ];
+    maintainers = with maintainers; [ oxij Profpatsch ];
   };
 }

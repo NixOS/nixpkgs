@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, perl, xkeyboard_config }:
+{ lib, stdenv, fetchFromGitLab, perl, xkeyboard_config }:
 
 stdenv.mkDerivation rec {
   pname = "ckbcomp";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     install -Dm0444 -t $out/share/man/man1 man/ckbcomp.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compiles a XKB keyboard description to a keymap suitable for loadkeys";
     homepage = "https://salsa.debian.org/installer-team/console-setup";
     license = licenses.gpl2Plus;

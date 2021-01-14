@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, which, perl, autoconf, automake, libtool, openssl, systemd, pam, fuse, libjpeg, libopus, nasm, xorg }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, which, perl, autoconf, automake, libtool, openssl, systemd, pam, fuse, libjpeg, libopus, nasm, xorg }:
 
 let
   xorgxrdp = stdenv.mkDerivation rec {
@@ -94,7 +94,7 @@ let
 
     enableParallelBuilding = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "An open source RDP server";
       homepage = "https://github.com/neutrinolabs/xrdp";
       license = licenses.asl20;

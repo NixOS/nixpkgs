@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 , gtk3
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--bin" "xprite-native" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/rickyhan/xprite-editor";
     description = "Pixel art editor";
     license = licenses.gpl3;

@@ -37,8 +37,6 @@ mkDerivation rec {
     export MAGICK_LOCATION="${graphicsmagick}/include/GraphicsMagick"
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     homepage = "https://photoqt.org/";
     description = "Simple, yet powerful and good looking image viewer";

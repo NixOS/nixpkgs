@@ -14,7 +14,7 @@
 , ninja
 , pkgconfig
 , python3
-, stdenv
+, lib, stdenv
 , systemd
 , wrapGAppsHook
 , xapps
@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "4.8.0";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "0sbfd1d4kjiccaq9s36r2cvdcmvd1x2087nkfgl32gwxakqi3g4n";
+    sha256 = "133vpgs0dqr16pvx5wyxhfcargn9wl14z0q99m2pn93hf6zycmsv";
   };
 
   patches = [
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-session";
     description = "The Cinnamon session manager";
     license = licenses.gpl2;

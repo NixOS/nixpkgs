@@ -69,7 +69,7 @@ in
     };
     NIX_LDFLAGS = "-lm";
     hardeningDisable = [ "format" ];
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "The GIMP Animation Package";
       homepage = "https://www.gimp.org";
       # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
@@ -93,7 +93,7 @@ in
 
     installPhase = "installPlugins fourier";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "GIMP plug-in to do the fourier transform";
       homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
       license = with licenses; [ gpl3Plus ];
@@ -166,8 +166,6 @@ in
   gmic = pkgs.gmic-qt.override {
     variant = "gimp";
   };
-
-  ufraw = pkgs.ufraw.gimpPlugin;
 
   gimplensfun = pluginDerivation rec {
     version = "unstable-2018-10-21";

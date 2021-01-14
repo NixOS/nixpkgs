@@ -21,9 +21,8 @@ stdenv.mkDerivation {
     sed -i 's,/etc,'$out'/etc,' doc/user/tool_suite_haka.rst
   '';
 
-  buildInputs = [ cmake swig wireshark check rsync libpcap gawk libedit pcre ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ swig wireshark check rsync libpcap gawk libedit pcre ];
 
   meta = {
     description = "A collection of tools that allows capturing TCP/IP packets and filtering them based on Lua policy files";

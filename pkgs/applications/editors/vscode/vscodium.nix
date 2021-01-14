@@ -1,11 +1,11 @@
-{ stdenv, callPackage, fetchurl }:
+{ lib, stdenv, callPackage, fetchurl }:
 
 let
   inherit (stdenv.hostPlatform) system;
 
   plat = {
     x86_64-linux = "linux-x64";
-    x86_64-darwin = "darwin";
+    x86_64-darwin = "darwin-x64";
     aarch64-linux = "linux-arm64";
     armv7l-linux = "linux-armhf";
   }.${system};
@@ -45,7 +45,7 @@ in
       inherit sha256;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS (VS Code without MS branding/telemetry/licensing)

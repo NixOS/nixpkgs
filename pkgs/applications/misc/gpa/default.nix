@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk2, gpgme, libgpgerror, libassuan }:
+{ lib, stdenv, fetchurl, intltool, pkgconfig, gtk2, gpgme, libgpgerror, libassuan }:
 
 stdenv.mkDerivation rec {
   name = "gpa-0.10.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ intltool pkgconfig ];
   buildInputs = [ gtk2 gpgme libgpgerror libassuan ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical user interface for the GnuPG";
     homepage = "https://www.gnupg.org/related_software/gpa/";
     license = licenses.gpl3Plus;

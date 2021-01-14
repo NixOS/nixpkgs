@@ -1,4 +1,4 @@
-{ stdenv, linkFarm, lightdm-mini-greeter, fetchFromGitHub, autoreconfHook, pkgconfig, lightdm, gtk3, glib, gdk-pixbuf, wrapGAppsHook, librsvg }:
+{ lib, stdenv, linkFarm, lightdm-mini-greeter, fetchFromGitHub, autoreconfHook, pkgconfig, lightdm, gtk3, glib, gdk-pixbuf, wrapGAppsHook, librsvg }:
 
 stdenv.mkDerivation rec {
   pname = "lightdm-mini-greeter";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     name = "lightdm-mini-greeter.desktop";
   }];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A minimal, configurable, single-user GTK3 LightDM greeter";
     homepage = "https://github.com/prikhi/lightdm-mini-greeter";
     license = licenses.gpl3;

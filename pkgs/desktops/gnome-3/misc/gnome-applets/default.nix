@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gettext
 , itstool
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Applets for use with the GNOME panel";
     homepage = "https://wiki.gnome.org/Projects/GnomeApplets";
     license = licenses.gpl2Plus;

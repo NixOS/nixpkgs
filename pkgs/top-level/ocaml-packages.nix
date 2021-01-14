@@ -117,7 +117,6 @@ let
     bin_prot_p4 = callPackage ../development/ocaml-modules/bin_prot { };
 
     bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
-    bisect_ppx-ocamlbuild = callPackage ../development/ocaml-modules/bisect_ppx-ocamlbuild { };
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
@@ -429,6 +428,8 @@ let
 
     irmin = callPackage ../development/ocaml-modules/irmin { };
 
+    irmin-chunk = callPackage ../development/ocaml-modules/irmin/chunk.nix { };
+
     irmin-fs = callPackage ../development/ocaml-modules/irmin/fs.nix { };
 
     irmin-git = callPackage ../development/ocaml-modules/irmin/git.nix { };
@@ -567,6 +568,10 @@ let
       inherit (pkgs) gnuplot;
     };
 
+    mew = callPackage ../development/ocaml-modules/mew { };
+
+    mew_vi = callPackage ../development/ocaml-modules/mew_vi { };
+
     mezzo = callPackage ../development/compilers/mezzo { };
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
@@ -578,6 +583,8 @@ let
     mirage-block-combinators = callPackage ../development/ocaml-modules/mirage-block/combinators.nix { };
 
     mirage-block-ramdisk = callPackage ../development/ocaml-modules/mirage-block-ramdisk { };
+
+    mirage-block-unix = callPackage ../development/ocaml-modules/mirage-block-unix { };
 
     mirage-bootvar-unix = callPackage ../development/ocaml-modules/mirage-bootvar-unix { };
 
@@ -596,6 +603,8 @@ let
     mirage-crypto-pk = callPackage ../development/ocaml-modules/mirage-crypto/pk.nix { };
 
     mirage-crypto-rng = callPackage ../development/ocaml-modules/mirage-crypto/rng.nix { };
+
+    mirage-crypto-rng-async = callPackage ../development/ocaml-modules/mirage-crypto/rng-async.nix { };
 
     mirage-crypto-rng-mirage = callPackage ../development/ocaml-modules/mirage-crypto/rng-mirage.nix { };
 
@@ -842,6 +851,8 @@ let
 
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
+    ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix { };
+
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
@@ -912,10 +923,7 @@ let
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
-    ppx_blob =
-      if lib.versionAtLeast ocaml.version "4.02"
-      then callPackage ../development/ocaml-modules/ppx_blob {}
-      else null;
+    ppx_blob = callPackage ../development/ocaml-modules/ppx_blob { };
 
     ppx_cstruct = callPackage ../development/ocaml-modules/cstruct/ppx.nix {};
 
@@ -1017,6 +1025,8 @@ let
     toml = callPackage ../development/ocaml-modules/toml { };
 
     topkg = callPackage ../development/ocaml-modules/topkg { };
+
+    trie = callPackage ../development/ocaml-modules/trie { };
 
     tsdl = callPackage ../development/ocaml-modules/tsdl { };
 

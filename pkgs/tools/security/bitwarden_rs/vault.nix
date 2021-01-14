@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nixosTests }:
+{ lib, stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "bitwarden_rs-vault";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.bitwarden;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Integrates the web vault into bitwarden_rs";
     homepage = "https://github.com/dani-garcia/bw_web_builds";
     platforms = platforms.all;

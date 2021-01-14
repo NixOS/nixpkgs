@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "colorlog";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck =  [ "colorlog" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Log formatting with colors";
     homepage = "https://github.com/borntyping/python-colorlog";
     license = licenses.mit;

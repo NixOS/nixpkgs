@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoPatchelfHook
 , gtk3
@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
     cp $src $out/bin/deadd-notification-center
     chmod +x $out/bin/deadd-notification-center
 
-    sed "s|##PREFIX##|$out|g" ${dbusService} > $out/share/dbus-1/services/com.ph-uhl.deadd.notification.service 
+    sed "s|##PREFIX##|$out|g" ${dbusService} > $out/share/dbus-1/services/com.ph-uhl.deadd.notification.service
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A haskell-written notification center for users that like a desktop with style";
     homepage = "https://github.com/phuhl/linux_notification_center";
     license = licenses.bsd3;

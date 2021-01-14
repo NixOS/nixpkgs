@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A sophisticated software modeler";
     homepage = "https://staruml.io/";
     license = licenses.unfree;

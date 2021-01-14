@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub, git, installShellFiles }:
+{ lib, stdenv, python3Packages, fetchFromGitHub, git, installShellFiles }:
 
 python3Packages.buildPythonApplication rec {
   pname = "stgit";
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     installShellCompletion --name _stg $out/share/stgit/completion/stgit.zsh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A patch manager implemented on top of Git";
     homepage = "http://procode.org/stgit/";
     license = licenses.gpl2;

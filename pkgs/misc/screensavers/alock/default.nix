@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchgit, pkgconfig, autoreconfHook
 , libX11, pam, libgcrypt, libXrender, imlib2 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     pam libgcrypt libXrender imlib2
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Arkq/alock";
     description = "Simple screen lock application for X server";
     longDescription = ''

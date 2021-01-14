@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "betta-cyber";
     repo = "netease-music-tui";
-    rev = "${version}";
+    rev = version;
     sha256 = "0m5b3q493d32kxznm4apn56216l07b1c49km236i03mpfvdw7m1f";
   };
 

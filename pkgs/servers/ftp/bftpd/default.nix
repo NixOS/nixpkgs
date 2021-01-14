@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   pname = "bftpd";
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     description = "A minimal ftp server";
     downloadPage = "http://bftpd.sf.net/download.html";

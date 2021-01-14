@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, libiconv }:
+{ lib, stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "kakasi-2.3.6";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin [ libiconv ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Kanji Kana Simple Inverter";
     longDescription = ''
       KAKASI is the language processing filter to convert Kanji

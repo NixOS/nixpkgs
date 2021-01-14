@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, gtk3, gnome3, python3, dconf
+{ lib, stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, gtk3, gnome3, python3, dconf
 , libxml2, gettext, docbook_xsl, wrapGAppsHook, gobject-introspection }:
 
 let
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };

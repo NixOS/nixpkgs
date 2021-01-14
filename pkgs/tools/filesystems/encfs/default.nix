@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkgconfig, perl
 , gettext, fuse, openssl, tinyxml2
 }:
@@ -23,9 +23,7 @@ stdenv.mkDerivation rec {
       "-DINSTALL_LIBENCFS=ON"
     ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An encrypted filesystem in user-space via FUSE";
     homepage = "https://vgough.github.io/encfs";
     license = with licenses; [ gpl3 lgpl3 ];

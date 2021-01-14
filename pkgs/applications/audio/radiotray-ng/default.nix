@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkgconfig
 # Transport
 , curl
@@ -80,8 +80,6 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
   ];
 
-  enableParallelBuilding = true;
-
   checkInputs = [ gtest ];
   doCheck = !stdenv.isAarch64; # single failure that I can't explain
 
@@ -90,7 +88,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/rt2rtng --prefix PYTHONPATH : $PYTHONPATH
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An internet radio player for linux";
     homepage = "https://github.com/ebruck/radiotray-ng";
     license = licenses.gpl3;

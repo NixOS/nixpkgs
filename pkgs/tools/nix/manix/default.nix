@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "manix";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0f2q3bj1cmpbma0fjhc2lc92j4al78fhrx3yc37kmbgzaza0yan5";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Fast Documentation Searcher for Nix";
     homepage    = "https://github.com/mlvzk/manix";
     license     = [ licenses.mpl20 ];

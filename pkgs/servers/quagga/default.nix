@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcap, libnl, readline, net-snmp, less, perl, texinfo,
+{ lib, stdenv, fetchurl, libcap, libnl, readline, net-snmp, less, perl, texinfo,
   pkgconfig, c-ares }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quagga BGP/OSPF/ISIS/RIP/RIPNG routing daemon suite";
     longDescription = ''
       GNU Quagga is free software which manages TCP/IP based routing protocols.

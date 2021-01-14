@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel, which }:
+{ lib, stdenv, fetchurl, kernel, which }:
 
 # Don't bother with older versions, though some might even work:
 assert stdenv.lib.versionAtLeast kernel.version "4.10";
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
     install -m 644 *.ko $out/lib/modules/${kernel.modDirVersion}/extra/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Undervolting kernel driver for Intel processors";
     longDescription = ''
       PHC is a Linux kernel patch to undervolt processors. This can divide the

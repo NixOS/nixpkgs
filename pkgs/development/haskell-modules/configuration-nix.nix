@@ -94,16 +94,6 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
-  # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
-  cachix = overrideSrc (disableLibraryProfiling super.cachix) {
-    src = (pkgs.fetchFromGitHub {
-      owner = "cachix";
-      repo = "cachix";
-      rev = "1471050f5906ecb7cd0d72115503d07d2e3beb17";
-      sha256 = "1lkrmhv5x9dpy53w33kxnhv4x4qm711ha8hsgccrjmxaqcsdm59g";
-    }) + "/cachix";
-    version = "0.5.1";
-  };
   hercules-ci-agent = disableLibraryProfiling super.hercules-ci-agent;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
@@ -550,7 +540,6 @@ self: super: builtins.intersectAttrs super {
 
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
-  splitmix_0_1_0_3 = dontCheck super.splitmix_0_1_0_3;
 
   # Break infinite recursion cycle between tasty and clock.
   clock = dontCheck super.clock;
@@ -722,7 +711,7 @@ self: super: builtins.intersectAttrs super {
 
   # mplayer-spot uses mplayer at runtime.
   mplayer-spot =
-    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.mplayer ];
+    let path = pkgs.lib.makeBinPath [ pkgs.mplayer ];
     in overrideCabal (addBuildTool super.mplayer-spot pkgs.makeWrapper) (oldAttrs: {
       postInstall = ''
         wrapProgram $out/bin/mplayer-spot --prefix PATH : "${path}"
@@ -734,7 +723,7 @@ self: super: builtins.intersectAttrs super {
   primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
 
   cut-the-crap =
-    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg_3 pkgs.youtube-dl ];
+    let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg_3 pkgs.youtube-dl ];
     in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \
@@ -809,4 +798,7 @@ self: super: builtins.intersectAttrs super {
 
   # tests depend on a specific version of solc
   hevm = dontCheck (doJailbreak super.hevm);
+
+  # waiting for https://github.com/haskell/ThreadScope/pull/115
+  threadscope = doJailbreak super.threadscope;
 }

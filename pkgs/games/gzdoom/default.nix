@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, openal, fluidsynth_1
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, openal, fluidsynth_1
 , soundfont-fluid, libGL, SDL2, bzip2, zlib, libjpeg, libsndfile, mpg123
 , game-music-emu, pkgconfig }:
 
@@ -53,8 +53,6 @@ let
       zmusic
     ];
 
-    enableParallelBuilding = true;
-
     NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
 
     installPhase = ''
@@ -72,7 +70,7 @@ let
       makeWrapper $out/lib/gzdoom/gzdoom $out/bin/gzdoom
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/coelckers/gzdoom";
       description =
         "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";

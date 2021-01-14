@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pkgconfig, libtool
 , libX11, libXt, libXpm }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     LIBTOOL=${libtool}/bin/libtool ./configure --prefix=$out --enable-everything --enable-smart-resize --enable-256-color
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://rxvt.sourceforge.net/";
     description = "Colour vt102 terminal emulator with less features and lower memory consumption";
     longDescription = ''

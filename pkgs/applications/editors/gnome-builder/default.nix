@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , ctags
 , appstream-glib
 , desktop-file-utils
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gnome3.updateScript { packageName = pname; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An IDE for writing GNOME-based software";
     longDescription = ''
       Global search, auto-completion, source code map, documentation

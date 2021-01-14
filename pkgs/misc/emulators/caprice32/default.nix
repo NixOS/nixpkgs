@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, desktop-file-utils, libpng
+{ lib, stdenv, fetchFromGitHub, desktop-file-utils, libpng
 , pkgconfig, SDL, freetype, zlib }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     install -Dm644 $out/share/caprice32/resources/freedesktop/caprice32.menu -t $out/etc/xdg/menus/applications-merged/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A complete emulation of CPC464, CPC664 and CPC6128";
     homepage = "https://github.com/ColinPitrat/caprice32";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, curl, ffmpeg, icoutils, libGLU, libmad, libogg
+{ lib, stdenv, fetchurl, boost, curl, ffmpeg, icoutils, libGLU, libmad, libogg
 , libpng, libsndfile, libvorbis, lua, pkgconfig, SDL2, SDL2_image, SDL2_net
 , SDL2_ttf, smpeg, speex, zziplib, zlib, makeWrapper, makeDesktopItem, unzip
 , alephone }:
@@ -52,7 +52,7 @@ let
       popd
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description =
         "Aleph One is the open source continuation of Bungie’s Marathon 2 game engine";
       homepage = "https://alephone.lhowon.org/";

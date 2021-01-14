@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, bison, flex
+{ lib, stdenv, fetchurl, pkgconfig, bison, flex
 , buildsystem
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.netsurf-browser.org/";
     description = "NetSurf Parametric Logging Library";
     license = licenses.isc;

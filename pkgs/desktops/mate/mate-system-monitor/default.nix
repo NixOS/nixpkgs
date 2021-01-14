@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, itstool, gtkmm3, libxml2, libgtop, libwnck3, librsvg, polkit, systemd, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkgconfig, gettext, itstool, gtkmm3, libxml2, libgtop, libwnck3, librsvg, polkit, systemd, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-system-monitor";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System monitor for the MATE desktop";
     homepage = "https://mate-desktop.org";
     license = [ licenses.gpl2Plus ];

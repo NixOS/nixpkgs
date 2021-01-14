@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, qmake4Hook, unzip, libGLU, makeWrapper }:
+{ lib, stdenv, fetchurl, qt4, qmake4Hook, unzip, libGLU, makeWrapper }:
 
 stdenv.mkDerivation {
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     wrapProgram "$out/bin/structure-synth" --run "cd $out/share"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application for generating 3D structures by specifying a design grammar";
     homepage = "http://structuresynth.sourceforge.net";
     maintainers = with maintainers; [ hodapp ];

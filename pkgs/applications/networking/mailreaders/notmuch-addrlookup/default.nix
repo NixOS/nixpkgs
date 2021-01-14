@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, notmuch }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, glib, notmuch }:
 
 let
   version = "9";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   installPhase = "install -D notmuch-addrlookup $out/bin/notmuch-addrlookup";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Address lookup tool for Notmuch in C";
     homepage = "https://github.com/aperezdc/notmuch-addrlookup-c";
     maintainers = with maintainers; [ mog ];

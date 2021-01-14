@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "nzbget";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ aanderse flokli ];
   };
 
@@ -10,7 +10,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
       # hack, don't add (unfree) unrar to nzbget's path,
       # so we can run this test in CI
-      systemd.services.nzbget.path = pkgs.stdenv.lib.mkForce [ pkgs.p7zip ];
+      systemd.services.nzbget.path = pkgs.lib.mkForce [ pkgs.p7zip ];
     };
   };
 

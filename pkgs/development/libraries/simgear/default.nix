@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
                   libICE libSM libXt libXmu libGLU libGL boost zlib libjpeg freealut
                   openscenegraph openal expat apr curl ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Simulation construction toolkit";
     homepage = "https://gitorious.org/fg/simgear";

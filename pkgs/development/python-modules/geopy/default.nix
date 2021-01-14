@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , isPy3k
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "07l1pblzg3hb3dbvd9rq8x78ly5dv0zxbc5hwskqil0bhv5v1p39";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/geopy/geopy";
     description = "Python Geocoding Toolbox";
     license = licenses.mit;

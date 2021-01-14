@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, fetchpatch, buildPythonPackage, pkgconfig, pytest, fuse, attr, which
+{ lib, stdenv, fetchPypi, fetchpatch, buildPythonPackage, pkgconfig, pytest, fuse, attr, which
 , contextlib2, osxfuse
 }:
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     py.test -k "not test_listdir" ${optionalString stdenv.isDarwin ''-m "not uses_fuse"''}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for the low-level FUSE API";
     homepage = "https://github.com/python-llfuse/python-llfuse";
     license = licenses.lgpl2Plus;

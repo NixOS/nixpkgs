@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pandas pytorch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wraps tensor-like objects and provides a uniform slicing interface via __getitem__";
     homepage = "https://github.com/interpretml/slicer";
     license = licenses.mit;

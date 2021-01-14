@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , avahi
 , bluez
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     "--install-roboto-font"
   ] ++ optional optimizationSupport "--optimization";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";
     longDescription = ''
         guitarix is a virtual guitar amplifier for Linux running with

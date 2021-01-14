@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "1.4.18";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unpacks MIME attachments of type application/ms-tnef";
     longDescription = ''
       TNEF is a program for unpacking MIME attachments of type "application/ms-tnef". This is a Microsoft only attachment.

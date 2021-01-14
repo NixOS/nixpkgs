@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, libjack2, pkgconfig, libpulseaudio, xorg }:
+{ lib, stdenv, fetchurl, alsaLib, libjack2, pkgconfig, libpulseaudio, xorg }:
 
 stdenv.mkDerivation  rec {
   pname = "bristol";
@@ -24,7 +24,7 @@ stdenv.mkDerivation  rec {
     sed -e "s@\`which brighton\`@$out/bin/brighton@g" -i bin/startBristol
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A range of synthesiser, electric piano and organ emulations";
     homepage = "http://bristol.sourceforge.net";
     license = licenses.gpl3;

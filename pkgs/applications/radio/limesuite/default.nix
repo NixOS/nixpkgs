@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , sqlite, wxGTK30-gtk3, libusb1, soapysdr
 , mesa_glu, libX11, gnuplot, fltk
 } :
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/limesuite bin/Release/lms7suite_mcu/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Driver and GUI for LMS7002M-based SDR platforms";
     homepage = "https://github.com/myriadrf/LimeSuite";
     license = licenses.asl20;

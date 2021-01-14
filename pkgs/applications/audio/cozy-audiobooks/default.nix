@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , ninja
 , meson
 , pkgconfig
@@ -78,7 +78,7 @@ python3Packages.buildPythonApplication rec {
     ln -s $out/bin/com.github.geigi.cozy $out/bin/cozy
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern audio book player for Linux using GTK 3";
     homepage = "https://cozy.geigi.de/";
     maintainers = [ maintainers.makefu ];

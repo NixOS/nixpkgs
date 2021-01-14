@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libpcap, pcre, libnl, zlib, libmicrohttpd
+{ lib, stdenv, fetchurl, pkgconfig, libpcap, pcre, libnl, zlib, libmicrohttpd
 , sqlite, protobuf, protobufc, libusb1, libcap, binutils, elfutils
 , withNetworkManager ? false, glib, networkmanager
 , withPython ? false, python3
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wireless network sniffer";
     homepage = "https://www.kismetwireless.net/";
     license = licenses.gpl3;

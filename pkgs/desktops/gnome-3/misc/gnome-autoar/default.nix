@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , gnome3
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
     license = licenses.lgpl21;

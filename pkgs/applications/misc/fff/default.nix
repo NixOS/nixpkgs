@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, bashInteractive, xdg_utils, file, coreutils, w3m, xdotool }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, bashInteractive, xdg_utils, file, coreutils, w3m, xdotool }:
 
 stdenv.mkDerivation rec {
   pname = "fff";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/fff" --prefix PATH : $pathAdd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fucking Fast File-Manager";
     homepage = "https://github.com/dylanaraps/fff";
     license = licenses.mit;

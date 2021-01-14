@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , python3
 , perl
 , perlPackages
@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Rhythmbox";
     description = "A music playing application for GNOME";
     license = licenses.gpl2;

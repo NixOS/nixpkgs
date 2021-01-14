@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, libxml2, gettext, libical, libnotify
+{ lib, stdenv, fetchurl, pkgconfig, gtk3, libxml2, gettext, libical, libnotify
 , libarchive, gspell, webkitgtk, libgringotts, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 libxml2 libical libnotify libarchive
     gspell webkitgtk libgringotts ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A handy personal organizer";
     homepage = "http://clayo.org/osmo/";
     license = licenses.gpl2;

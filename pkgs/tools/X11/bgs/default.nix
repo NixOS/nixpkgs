@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, libX11, libXinerama, imlib2}:
+{lib, stdenv, fetchurl, pkgconfig, libX11, libXinerama, imlib2}:
 
 stdenv.mkDerivation rec {
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extremely fast and small background setter for X";
     license = licenses.mit;
     platforms = platforms.linux;

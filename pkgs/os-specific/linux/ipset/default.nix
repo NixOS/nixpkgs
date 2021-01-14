@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libmnl }:
+{ lib, stdenv, fetchurl, pkgconfig, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "ipset";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-kmod=no" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://ipset.netfilter.org/";
     description = "Administration tool for IP sets";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, zeromq, cppzmq }:
+{ lib, stdenv, fetchurl, cmake, zeromq, cppzmq }:
 
 stdenv.mkDerivation {
   name = "ursadb";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     cppzmq
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/CERT-Polska/ursadb";
     description = "Trigram database written in C++, suited for malware indexing";
     license = licenses.bsd3;

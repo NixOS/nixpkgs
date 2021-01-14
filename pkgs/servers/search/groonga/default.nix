@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mecab, kytea, libedit, pkgconfig
+{ lib, stdenv, fetchurl, mecab, kytea, libedit, pkgconfig
 , suggestSupport ? false, zeromq, libevent, msgpack
 , lz4Support  ? false, lz4
 , zlibSupport ? false, zlib
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   doInstallCheck    = true;
   installCheckPhase = "$out/bin/groonga --version";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://groonga.org/";
     description = "An open-source fulltext search engine and column store";
     license     = licenses.lgpl21;

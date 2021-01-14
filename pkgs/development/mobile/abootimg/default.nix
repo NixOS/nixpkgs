@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coreutils, cpio, findutils, gzip, makeWrapper, util-linux }:
+{ lib, stdenv, fetchFromGitHub, coreutils, cpio, findutils, gzip, makeWrapper, util-linux }:
 
 let
   version = "0.6";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/abootimg-unpack-initrd --prefix PATH : ${stdenv.lib.makeBinPath [ cpio gzip ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ggrandou/abootimg";
     description = "Manipulate Android Boot Images";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchurl, cmake, pkgconfig, qtbase, qt5, libGLU, libGL
+{ mkDerivation, lib, stdenv, fetchurl, cmake, pkgconfig, qtbase, qt5, libGLU, libGL
 , freeglut ? null, openal ? null, SDL2 ? null }:
 
 mkDerivation rec {
@@ -26,7 +26,7 @@ mkDerivation rec {
     "-DYAB_PORTS=qt"
   ] ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source Sega Saturn emulator";
     homepage = "https://yabause.org/";
     license = licenses.gpl2Plus;

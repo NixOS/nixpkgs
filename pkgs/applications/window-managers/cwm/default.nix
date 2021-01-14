@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, libXinerama, libXrandr, libXft, yacc, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXinerama, libXrandr, libXft, yacc, pkgconfig }:
 
 stdenv.mkDerivation rec {
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight and efficient window manager for X11";
     homepage    = "https://github.com/leahneukirchen/cwm";
     maintainers = with maintainers; [ _0x4A6F mkf ];

@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, fetchFromGitHub, python3Packages, libunistring,
+{ lib, stdenv, substituteAll, fetchFromGitHub, python3Packages, libunistring,
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
@@ -132,7 +132,7 @@ buildPythonApplication rec {
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;

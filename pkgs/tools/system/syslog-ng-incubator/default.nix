@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, syslogng
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, syslogng
 , eventlog, perl, python, yacc, protobufc, libivykis, libcap, czmq
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "--with-module-dir=$(out)/lib/syslog-ng"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/balabit/syslog-ng-incubator";
     description = "A collection of tools and modules for syslog-ng";
     license = licenses.gpl2;

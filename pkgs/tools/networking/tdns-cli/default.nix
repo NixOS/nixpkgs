@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   name = "tdns-cli";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0v1hx6kjsmydx6ckjqj31y2gcpvax4mshwrniicplkka3q6hx9ra";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DNS tool that aims to replace dig and nsupdate";
     homepage = "https://github.com/rotty/tdns-cli";
     license = licenses.gpl3;

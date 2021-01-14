@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , flac, expat, libidn, qtbase, qtwebkit, libvorbis }:
 assert stdenv.hostPlatform.system == "x86_64-linux";
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       $out/opt/google/musicmanager/MusicManager
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Uploads music from your computer to Google Play";
     homepage    = "https://support.google.com/googleplay/answer/1229970";
     license     = licenses.unfree;

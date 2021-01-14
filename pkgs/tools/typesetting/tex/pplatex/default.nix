@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, pcre }:
 
 stdenv.mkDerivation {
   pname = "pplatex";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "A tool to reformat the output of latex and friends into readable messages";
     homepage = "https://github.com/stefanhepp/pplatex";

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 # Upstream has a `./vendor` directory with all deps which we rely upon.
 buildGoPackage rec {
@@ -14,7 +14,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/elisescu/tty-share";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tty-share.com";
     description = "Share terminal via browser for remote work or shared sessions";
     platforms = platforms.linux;

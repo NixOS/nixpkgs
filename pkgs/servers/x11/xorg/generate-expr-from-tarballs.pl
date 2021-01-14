@@ -311,7 +311,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig $nativeBuildInputsStr];
     buildInputs = [ $buildInputsStr];$extraAttrsStr
-    meta.platforms = stdenv.lib.platforms.unix;
+    meta.platforms = lib.platforms.unix;
   }) {};
 
 EOF

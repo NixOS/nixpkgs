@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, openssl, libiconv }:
+{ lib, stdenv, fetchurl, zlib, openssl, libiconv }:
 
 stdenv.mkDerivation rec {
   version = "3.49.2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Easy-to-use offline browser / website mirroring utility";
     homepage    = "http://www.httrack.com";
     license     = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkgconfig
 , python3Packages
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/johanmalm/jgmenu";
     description = "Small X11 menu intended to be used with openbox and tint2";
     license = licenses.gpl2;

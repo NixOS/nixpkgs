@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "ccd2iso-0.3";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1z000zi7hpr2h9cabj6hzf3n6a6gd6glmm8nn36v4b8i4vzbhx7q";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CloneCD to ISO converter";
     homepage = "https://sourceforge.net/projects/ccd2iso/";
     license = licenses.gpl2;

@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy27
 , pandas, shapely, fiona, descartes, pyproj
-, pytest, Rtree, fetchpatch }:
+, pytestCheckHook, Rtree, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "geopandas";
@@ -20,13 +20,14 @@ buildPythonPackage rec {
       url = "https://github.com/geopandas/geopandas/pull/1544/commits/6ce868a33a2f483b071089d51e178030fa4414d0.patch";
       sha256 = "1sjgxrqgbhz5krx51hrv230ywszcdl6z8q3bj6830kfad8n8b5dq";
     })
+    # Fix GeoJSON for Fiona>=1.8.16 (Sep. 7, 2020).
+    # https://github.com/geopandas/geopandas/issues/1606
+    # Will be included in next upstream release after 0.8.1
+    (fetchpatch {
+      url = "https://github.com/geopandas/geopandas/commit/72427d3d8c128039bfce1d54a76c0b652887b276.patch";
+      sha256 = "1726mrpddgmba0ngff73a5bsb6ywpsg63a2pdd2grp9339bgvi4a";
+    })
   ];
-
-  checkInputs = [ pytest Rtree ];
-
-  checkPhase = ''
-    py.test geopandas -m "not web"
-  '';
 
   propagatedBuildInputs = [
     pandas
@@ -36,7 +37,12 @@ buildPythonPackage rec {
     pyproj
   ];
 
-  meta = with stdenv.lib; {
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ pytestCheckHook Rtree ];
+  disabledTests = [ "web" ];
+  pytestFlagsArray = [ "geopandas" ];
+
+  meta = with lib; {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
     license = licenses.bsd3;

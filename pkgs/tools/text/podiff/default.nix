@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   pname = "podiff";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     mkdir -p $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Finds differences in translations between two PO files, or revisions";
     homepage = "http://puszcza.gnu.org.ua/software/podiff";
     license = licenses.gpl3Plus;

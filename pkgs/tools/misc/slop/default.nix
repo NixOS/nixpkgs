@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig
 , glew, glm, libGLU, libGL, libX11, libXext, libXrender, icu
 , cppcheck
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Queries a selection from the user and prints to stdout";
     platforms = stdenv.lib.platforms.linux;

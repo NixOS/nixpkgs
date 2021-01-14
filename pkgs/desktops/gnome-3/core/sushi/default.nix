@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , meson
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://en.wikipedia.org/wiki/Sushi_(software)";
     description = "A quick previewer for Nautilus";
     maintainers = teams.gnome.members;

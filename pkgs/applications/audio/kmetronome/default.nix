@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qttools, alsaLib, drumstick, qtbase, qtsvg }:
+{ lib, stdenv, fetchurl, cmake, pkgconfig, qttools, alsaLib, drumstick, qtbase, qtsvg }:
 
 stdenv.mkDerivation rec {
   pname = "kmetronome";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ alsaLib drumstick qtbase qtsvg ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://kmetronome.sourceforge.io/";
     description = "ALSA MIDI metronome with Qt interface";
     license = licenses.gpl2Plus;

@@ -40,7 +40,7 @@ in
 
     sourceRoot = "";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS

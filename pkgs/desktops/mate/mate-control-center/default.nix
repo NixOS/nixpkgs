@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, itstool, libxml2, dbus-glib,
+{ lib, stdenv, fetchurl, pkgconfig, gettext, itstool, libxml2, dbus-glib,
   libxklavier, libcanberra-gtk3, librsvg, libappindicator-gtk3,
   desktop-file-utils, dconf, gtk3, polkit, mate, hicolor-icon-theme, wrapGAppsHook
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utilities to configure the MATE desktop";
     homepage = "https://github.com/mate-desktop/mate-control-center";
     license = licenses.gpl2;

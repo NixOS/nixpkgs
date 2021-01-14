@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gtk3, libwnck3, libfakekey, libXtst, mate, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkgconfig, gettext, gtk3, libwnck3, libfakekey, libXtst, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-netbook";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MATE utilities for netbooks";
     longDescription = ''
       MATE utilities for netbooks are an applet and a daemon to maximize

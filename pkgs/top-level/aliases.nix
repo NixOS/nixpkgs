@@ -78,6 +78,7 @@ mapAliases ({
   bittorrentSync = throw "bittorrentSync has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync14 = throw "bittorrentSync14 has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync20 = throw "bittorrentSync20 has been deprecated by resilio-sync."; # added 2019-06-03
+  bs1770gain = throw "bs1770gain has been removed from nixpkgs, as it had no maintainer or reverse dependencies."; # added 2021-01-02
   btc1 = throw "btc1 has been removed, it was abandoned by upstream"; # added 2020-11-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   buildGo112Package = throw "buildGo112Package has been removed"; # added 2020-04-26
@@ -141,7 +142,13 @@ mapAliases ({
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgFor = emacsPackagesFor; # added 2019-08-07
-  emacsPackagesNg = emacsPackages; # added 2019-08-07
+  emacsPackagesNg = emacs.pkgs; # added 2019-08-07
+  emacs26Packages = emacs26.pkgs; # added 2020-12-18
+  emacs27Packages = emacs27.pkgs; # added 2020-12-18
+  emacs26WithPackages = emacs26.pkgs.withPackages; # added 2020-12-18
+  emacs27WithPackages = emacs27.pkgs.withPackages; # added 2020-12-18
+  emacsWithPackages = emacs.pkgs.withPackages; # added 2020-12-18
+  emacsPackages = emacs.pkgs; # added 2020-12-18
   emby = throw "The Emby derivation has been removed, see jellyfin instead for a free software fork."; # added 2019-05-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
   evolution_data_server = evolution-data-server; # added 2018-02-25
@@ -157,6 +164,7 @@ mapAliases ({
   firefoxWrapper = firefox;           # 2015-09
 
   firestr = throw "firestr has been removed."; # added 2019-12-08
+  fish-foreign-env = throw "fish-foreign-env has been replaced with fishPlugins.foreign-env"; # added 2020-12-29, modified 2021-01-10
   flameGraph = flamegraph; # added 2018-04-25
   flvtool2 = throw "flvtool2 has been removed."; # added 2020-11-03
   foldingathome = fahclient; # added 2020-09-03
@@ -208,6 +216,7 @@ mapAliases ({
   };
   gnustep-make = gnustep.make; # added 2016-7-6
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
+  gnuvd = throw "gnuvd was removed because the backend service is missing"; # added 2020-01-14
   go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
@@ -282,7 +291,7 @@ mapAliases ({
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
   libGL_driver = mesa.drivers; # added 2019-05-28
-  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
+  libintlOrEmpty = lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjpeg_drop = libjpeg_original; # added 2020-06-05
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   liblapackWithoutAtlas = lapack-reference; # added 2018-11-05
@@ -664,6 +673,7 @@ mapAliases ({
   uberwriter = apostrophe; # added 2020-04-23
   ubootBeagleboneBlack = ubootAmx335xEVM; # added 2020-01-21
   ucsFonts = ucs-fonts; # added 2016-07-15
+  ufraw = throw "ufraw is unmaintained and has been removed from nixpkgs. Its successor, nufraw, doesn't seem to be stable enough. Consider using Darktable for now."; # 2020-01-11
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   unicorn-emu = unicorn; # added 2020-10-29
   unifiStable = unifi6; # added 2020-12-28
@@ -792,11 +802,16 @@ mapAliases ({
 
   gcc-snapshot = throw "gcc-snapshot: Marked as broken for >2 years, additionally this 'snapshot' pointed to a fairly old one from gcc7.";
 
+  todolist = throw "todolist is now ultralist."; # added 2020-12-27
+
   /* Cleanup before 21.03 */
   riot-desktop = throw "riot-desktop is now element-desktop!";
   riot-web = throw "riot-web is now element-web";
 
   ant-dracula-theme = throw "ant-dracula-theme is now dracula-theme, and theme name is Dracula instead of Ant-Dracula.";
+
+  /* Added 2021-01-02 */
+  ttyrec = ovh-ttyrec;
 
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:

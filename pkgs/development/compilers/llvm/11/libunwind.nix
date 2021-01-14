@@ -1,4 +1,6 @@
-{ stdenv, version, fetch, cmake, fetchpatch, enableShared ? true }:
+{ stdenv, version, fetch, cmake, fetchpatch
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "libunwind";
@@ -7,8 +9,6 @@ stdenv.mkDerivation rec {
   src = fetch pname "0bwjd2xf51r2apn8p0f9shb6nc8hnqzq1n9gggjvyjmi6cf02mc4";
 
   nativeBuildInputs = [ cmake ];
-
-  enableParallelBuilding = true;
 
   cmakeFlags = stdenv.lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF";
 }

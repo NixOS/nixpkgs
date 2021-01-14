@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , ncurses, db , popt, libtool
 # Sound sub-systems
 , alsaSupport ? true, alsaLib
@@ -94,7 +94,7 @@ in stdenv.mkDerivation rec {
     "--without-rcc"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An ncurses console audio player designed to be powerful and easy to use";
     homepage = "http://moc.daper.net/";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, fetchurl, ocaml
+{ stdenv, lib, buildDunePackage, fetchurl, ocaml
 , result, alcotest, cohttp-lwt-unix, odoc, curl }:
 
 buildDunePackage rec {
@@ -17,7 +17,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ result ];
   checkInputs = [ alcotest cohttp-lwt-unix ];
   # test dependencies are only available for >= 4.08
-  doCheck = stdenv.lib.versionAtLeast ocaml.version "4.08"
+  doCheck = lib.versionAtLeast ocaml.version "4.08"
     # Some test fails in macOS sandbox
     # > Fatal error: exception Unix.Unix_error(Unix.EPERM, "bind", "")
     && !stdenv.isDarwin;

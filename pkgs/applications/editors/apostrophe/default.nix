@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, meson, ninja, cmake
+{ lib, stdenv, fetchFromGitLab, meson, ninja, cmake
 , wrapGAppsHook, pkgconfig, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
 , gtk3, webkitgtk, glib-networking, gnome3, gspell, texlive
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/somas/apostrophe";
     description = "A distraction free Markdown editor for GNU/Linux";
     license = licenses.gpl3;

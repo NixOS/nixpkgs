@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, glib, pcre, json-glib }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, glib, pcre, json-glib }:
 
 stdenv.mkDerivation rec {
   pname = "wmc-mpris";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "-DFIREFOX_MANIFEST_DESTINATION=${placeholder "out"}/lib/mozilla/native-messaging-hosts"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/f1u77y/wmc-mpris";
     description = "MPRIS proxy for usage with 'Web Media Controller' web extension";
     license = licenses.unlicense;

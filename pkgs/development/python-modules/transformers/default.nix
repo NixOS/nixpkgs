@@ -1,5 +1,5 @@
 { buildPythonPackage
-, stdenv
+, lib, stdenv
 , fetchFromGitHub
 , isPy39
 , cookiecutter
@@ -97,7 +97,7 @@ buildPythonPackage rec {
     "test_tokenizer_identifier_non_existent"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/huggingface/transformers";
     description = "State-of-the-art Natural Language Processing for TensorFlow 2.0 and PyTorch";
     changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";

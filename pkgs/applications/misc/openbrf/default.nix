@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU, libGL }:
+{ mkDerivation, lib, stdenv, fetchFromGitHub, qtbase, vcg, glew, qmake, libGLU, libGL }:
 
 
 mkDerivation {
@@ -37,7 +37,7 @@ mkDerivation {
 
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to edit resource files (BRF)";
     homepage = "https://github.com/cfcohen/openbrf";
     maintainers = with stdenv.lib.maintainers; [ abbradar ];

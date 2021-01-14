@@ -1,5 +1,5 @@
 { fetchurl
-, stdenv
+, lib, stdenv
 , gtk
 , pkgconfig
 , libgsf
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A personnal accounting application";
     longDescription = ''
       Grisbi is an application written by French developers, so it perfectly

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, lzma, boost, libdevil, zlib, p7zip
+{ lib, stdenv, fetchFromGitHub, cmake, lzma, boost, libdevil, zlib, p7zip
 , openal, libvorbis, glew, freetype, xorg, SDL2, libGLU, libGL
-, asciidoc, libxslt, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
+, asciidoc, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
 , jdk ? null, python ? null, systemd, libunwind, which, minizip
 , withAI ? true # support for AI Interfaces and Skirmish AIs
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # taken from https://github.com/spring/spring/commits/maintenance
   src = fetchFromGitHub {
     owner = "spring";
-    repo = "spring";
+    repo = pname;
     inherit rev;
     sha256 = "1nx68d894yfmqc6df72hmk75ph26fqdvlmmq58cca0vbwpz9hf5v";
     fetchSubmodules = true;
@@ -40,13 +40,12 @@ stdenv.mkDerivation rec {
                 "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON"
                 "-DPREFER_STATIC_LIBS:BOOL=OFF"];
 
-  buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL2
-    xorg.libX11 xorg.libXcursor libGLU libGL glew asciidoc libxslt docbook_xsl curl makeWrapper
-    docbook_xsl_ns systemd libunwind which minizip ]
+  nativeBuildInputs = [ cmake makeWrapper docbook_xsl docbook_xsl_ns asciidoc ];
+  buildInputs = [ lzma boost libdevil zlib p7zip openal libvorbis freetype SDL2
+    xorg.libX11 xorg.libXcursor libGLU libGL glew curl
+    systemd libunwind which minizip ]
     ++ stdenv.lib.optional withAI jdk
     ++ stdenv.lib.optional withAI python;
-
-  enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
 
@@ -55,11 +54,11 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc systemd ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://springrts.com/";
     description = "A powerful real-time strategy (RTS) game engine";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom maintainers.qknight maintainers.domenkozar maintainers.sorki ];
+    maintainers = with maintainers; [ phreedom qknight domenkozar sorki ];
     platforms = platforms.linux;
   };
 }

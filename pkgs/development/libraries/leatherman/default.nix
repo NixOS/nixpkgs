@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost curl ruby ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = "https://github.com/puppetlabs/leatherman/";
     description = "A collection of C++ and CMake utility libraries";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
 , gettext, meson, gsound, librsvg, itstool, vala
 , python3, ninja, desktop-file-utils }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Four-in-a-row";
     description = "Make lines of the same color to win";
     maintainers = teams.gnome.members;

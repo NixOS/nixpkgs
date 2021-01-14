@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, openssl, zlib, wirelesstools
+{ lib, stdenv, fetchurl, libpcap, openssl, zlib, wirelesstools
 , iw, ethtool, pciutils, libnl, pkgconfig, makeWrapper
 , autoreconfHook, usbutils }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wireless encryption cracking tools";
     homepage = "http://www.aircrack-ng.org/";
     license = licenses.gpl2Plus;

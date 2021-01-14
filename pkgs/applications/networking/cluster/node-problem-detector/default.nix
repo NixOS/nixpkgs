@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, systemd }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, systemd }:
 
 buildGoModule rec {
   pname = "node-problem-detector";
@@ -36,7 +36,7 @@ buildGoModule rec {
     "-X k8s.io/${pname}/pkg/version.version=v${version}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Various problem detectors running on the Kubernetes nodes";
     homepage = "https://github.com/kubernetes/node-problem-detector";
     changelog = "https://github.com/kubernetes/node-problem-detector/releases/tag/v${version}";

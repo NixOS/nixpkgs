@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, buildGoModule, ruby }:
+{ lib, stdenv, fetchFromGitLab, buildGoModule, ruby }:
 
 buildGoModule rec {
   pname = "gitlab-shell";
@@ -22,7 +22,7 @@ buildGoModule rec {
   '';
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SSH access and repository management app for GitLab";
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;

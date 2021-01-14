@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip
+{ lib, stdenv, fetchurl, unzip
 # If jdk is null, require JAVA_HOME in runtime environment, else store
 # JAVA_HOME=${jdk.home} into grails.
 , jdk ? null
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Full stack, web application framework for the JVM";
     longDescription = ''
       Grails is an Open Source, full stack, web application framework for the

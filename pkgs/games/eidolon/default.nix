@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, rustPlatform, pkgconfig, openssl }:
+{ lib, stdenv, fetchgit, rustPlatform, pkgconfig, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "eidolon";
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A single TUI-based registry for drm-free, wine and steam games on linux, accessed through a rofi launch menu";
     homepage = "https://github.com/nicohman/eidolon";
     license = licenses.gpl3;

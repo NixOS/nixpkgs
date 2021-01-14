@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, libappindicator-gtk3, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, pkgconfig, libappindicator-gtk3, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "systrayhelper";
@@ -27,7 +27,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ pkgconfig libappindicator-gtk3 ];
   buildInputs = [ libappindicator-gtk3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A systray utility written in go, using json over stdio for control and events";
     homepage    = "https://github.com/ssbc/systrayhelper";
     maintainers = with maintainers; [ cryptix ];

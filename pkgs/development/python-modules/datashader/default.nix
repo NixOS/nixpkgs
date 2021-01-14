@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , dask
 , distributed
 , bokeh
@@ -36,6 +37,12 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "b1f80415f72f92ccb660aaea7b2881ddd35d07254f7c44101709d42e819d6be6";
   };
+  patches = [ (fetchpatch {
+    # Unpins pyct==0.46 (Sep. 11, 2020).
+    # Will be incorporated into the next datashader release after 0.11.1
+    url = "https://github.com/holoviz/datashader/pull/960/commits/d7a462fa399106c34fd0d44505a8a73789dbf874.patch";
+    sha256 = "1wqsk9dpxnkxr49fa7y5q6ahin80cvys05lnirs2w2p1dja35y4x";
+  })];
 
   propagatedBuildInputs = [
     dask

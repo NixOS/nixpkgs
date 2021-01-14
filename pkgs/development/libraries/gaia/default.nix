@@ -5,6 +5,7 @@
 , swig
 , eigen
 , pkgconfig
+, python2
 , wafHook
 , makeWrapper
 , qt4
@@ -38,9 +39,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    wafHook
     pkgconfig
+    python2 # For wafHook
     swig
+    wafHook
   ]
     # The gaiafusion binary inside $out/bin needs a shebangs patch, and
     # wrapping with the appropriate $PYTHONPATH

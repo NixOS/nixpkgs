@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, vdr, alsaLib, fetchFromGitHub
+{ lib, stdenv, fetchurl, fetchgit, vdr, alsaLib, fetchFromGitHub
 , libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg_3
 , libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
 , callPackage
@@ -37,7 +37,7 @@ in {
 
     makeFlags = [ "DESTDIR=$(out)" ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://www.saunalahti.fi/~rahrenbe/vdr/femon/";
       description = "DVB Frontend Status Monitor plugin for VDR";
       maintainers = [ maintainers.ck3d ];
@@ -72,7 +72,7 @@ in {
       rev = "d19657bae399e79df107e316ca40922d21393f80";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/pesintta/vdr-plugin-vaapidevice";
       description = "VDR SoftHDDevice Plug-in (with VA-API VPP additions)";
       maintainers = [ maintainers.ck3d ];
@@ -118,7 +118,7 @@ in {
 
     installFlags = buildFlags;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://projects.vdr-developer.org/projects/plg-markad";
       description = "Ein Programm zum automatischen Setzen von Schnittmarken bei Werbeeinblendungen während einer Sendung.";
       maintainers = [ maintainers.ck3d ];
@@ -166,7 +166,7 @@ in {
 
     outputs = [ "out" "man" ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://winni.vdr-developer.org/epgsearch";
       description = "Searchtimer and replacement of the VDR program menu";
       maintainers = [ maintainers.ck3d ];
@@ -193,7 +193,7 @@ in {
       sha256 = "0n7idpxqx7ayd63scl6xwdx828ik4kb2mwz0c30cfjnmnxxd45lw";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/FernetMenta/vdr-plugin-vnsiserver";
       description = "VDR plugin to handle KODI clients.";
       maintainers = [ maintainers.ck3d ];
@@ -228,7 +228,7 @@ in {
 
     installPhase = ":";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://projects.vdr-developer.org/projects/plg-text2skin";
       description = "VDR Text2Skin Plugin";
       maintainers = [ maintainers.ck3d ];
@@ -329,7 +329,7 @@ in {
 
     installFlags = [ "DESTDIR=$(out)" ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/jowi24/vdr-fritz";
       description = "A plugin for VDR to access AVMs Fritz Box routers";
       maintainers = [ maintainers.ck3d ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gnome3, glib, libxml2, gtk-engine-murrine, gdk-pixbuf, librsvg, bc }:
+{ lib, stdenv, fetchFromGitHub, gnome3, glib, libxml2, gtk-engine-murrine, gdk-pixbuf, librsvg, bc }:
 
 stdenv.mkDerivation rec {
   pname = "equilux-theme";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     rm $out/share/themes/*/COPYING
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "A Material Design theme for GNOME/GTK based desktop environments";
     license = licenses.gpl2;

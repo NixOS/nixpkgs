@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, fcitx, libskk, skk-dicts }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, fcitx, libskk, skk-dicts }:
 
 stdenv.mkDerivation {
   pname = "fcitx-skk";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       --replace ${fcitx} $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     description   = "A SKK style input method engine for fcitx";
     longDescription = ''

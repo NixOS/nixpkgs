@@ -14,11 +14,12 @@
 , ocl-icd ? null
 , gperftools ? null
 , eigen ? null
-, enableAVX2 ? false
+, enableAVX2 ? stdenv.hostPlatform.avx2Support
 , enableBigBoards ? false
 , enableCuda ? false
 , enableGPU ? true
-, enableTcmalloc ? true}:
+, enableTcmalloc ? true
+}:
 
 assert !enableGPU -> (
   eigen != null &&
@@ -103,9 +104,7 @@ in env.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "/run/opengl-driver/lib"
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Go engine modeled after AlphaGo Zero";
     homepage    = "https://github.com/lightvector/katago";
     license     = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, vala, gnome3, gtk3, wrapGAppsHook, appstream-glib, desktop-file-utils
+{ lib, stdenv, fetchurl, pkgconfig, vala, gnome3, gtk3, wrapGAppsHook, appstream-glib, desktop-file-utils
 , glib, librsvg, libxml2, gettext, itstool, libgee, libgnome-games-support
 , meson, ninja, python3
 }:
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Klotski";
     description = "Slide blocks to solve the puzzle";
     maintainers = teams.gnome.members;

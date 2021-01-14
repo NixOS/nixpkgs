@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, lib, cmake, cacert, fetchpatch, buildShared ? true }:
+{ stdenv, fetchurl, lib, cmake, cacert, fetchpatch
+, buildShared ? !stdenv.hostPlatform.isStatic
+}:
 
 let
 
@@ -39,8 +41,6 @@ let
     postPatch = lib.optionalString (lib.versionAtLeast version "2.9.2") ''
       substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
     '';
-
-    enableParallelBuilding = true;
 
     outputs = [ "bin" "dev" "out" "man" "nc" ];
 

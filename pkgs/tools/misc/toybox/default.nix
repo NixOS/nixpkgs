@@ -1,7 +1,7 @@
 {
   stdenv, lib, fetchFromGitHub, which,
   buildPackages,
-  enableStatic ? false,
+  enableStatic ? stdenv.hostPlatform.isStatic,
   enableMinimal ? false,
   extraConfig ? ""
 }:
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight implementation of some Unix command line utilities";
     homepage = "https://landley.net/toybox/";
     license = licenses.bsd0;

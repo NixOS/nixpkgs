@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, znc }:
+{ lib, stdenv, fetchFromGitHub, znc }:
 
 let
   zncDerivation = a@{
@@ -29,7 +29,7 @@ in {
       sha256 = "1k7ifpqqzzf2j7w795q4mx1nvmics2higzjqr3mid3lp43sqg5s6";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Request backlog for IRC channels.";
       homepage = "https://github.com/fruitiex/znc-backlog/";
       license = licenses.asl20;
@@ -49,7 +49,7 @@ in {
       sha256 = "1jaspnrbv3pzsnbysqygc8s8g3q07zx5nlrdpgwv9j8aryg0pcnh";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "ZNC module for client specific buffers";
       homepage = "https://github.com/CyberShadow/znc-clientbuffer";
       license = licenses.asl20;
@@ -69,7 +69,7 @@ in {
       sha256 = "0ikd3dzjjlr0gs0ikqfk50msm6mij99ln2rjzqavh58iwzr7n5r8";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "ZNC clientaway module";
       homepage = "https://github.com/kylef/znc-contrib";
       license = licenses.gpl2;
@@ -109,7 +109,7 @@ in {
       sha256 = "0ikd3dzjjlr0gs0ikqfk50msm6mij99ln2rjzqavh58iwzr7n5r8";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "ZNC ignore module";
       homepage = "https://github.com/kylef/znc-contrib";
       license = licenses.gpl2;
@@ -129,7 +129,7 @@ in {
       sha256 = "1gjr8yqgpkpcc18rf0zfgil3rcd1ihqk0q9f8rwbfvs5381h3c58";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Palaver ZNC module";
       homepage = "https://github.com/cocodelabs/znc-palaver";
       license = licenses.mit;
@@ -149,7 +149,7 @@ in {
       sha256 = "0mgfajljy035051b2sx70i8xrb51zw9q2z64kf85zw1lynihzyh4";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "An advanced playback module for ZNC";
       homepage = "https://github.com/jpnurmi/znc-playback";
       license = licenses.asl20;

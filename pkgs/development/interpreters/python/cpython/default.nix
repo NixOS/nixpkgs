@@ -35,7 +35,7 @@
 , rebuildBytecode ? true
 , stripBytecode ? false
 , includeSiteCustomize ? true
-, static ? false
+, static ? stdenv.hostPlatform.isStatic
 # Not using optimizations on Darwin
 # configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.
 , enableOptimizations ? (!stdenv.isDarwin)
@@ -99,6 +99,50 @@ let
   pythonForBuildInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
     "$out/bin/python"
   else pythonForBuild.interpreter;
+
+  # The CPython interpreter contains a _sysconfigdata_<platform specific suffix>
+  # module that is imported by the sysconfig and distutils.sysconfig modules.
+  # The sysconfigdata module is generated at build time and contains settings
+  # required for building Python extension modules, such as include paths and
+  # other compiler flags. By default, the sysconfigdata module is loaded from
+  # the currently running interpreter (ie. the build platform interpreter), but
+  # when cross-compiling we want to load it from the host platform interpreter.
+  # This can be done using the _PYTHON_SYSCONFIGDATA_NAME environment variable.
+  # The _PYTHON_HOST_PLATFORM variable also needs to be set to get the correct
+  # platform suffix on extension modules. The correct values for these variables
+  # are not documented, and must be derived from the configure script (see links
+  # below).
+  sysconfigdataHook = with stdenv.hostPlatform; with passthru; let
+    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
+    # The configure script uses "arm" as the CPU name for all 32-bit ARM
+    # variants when cross-compiling, but native builds include the version
+    # suffix, so we do the same.
+    pythonHostPlatform = "${parsed.kernel.name}-${parsed.cpu.name}";
+
+    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
+    multiarchCpu =
+      if isAarch32 then
+        if parsed.cpu.significantByte.name == "littleEndian" then "arm" else "armeb"
+      else if isx86_32 then "i386"
+      else parsed.cpu.name;
+    multiarch =
+      if isDarwin then "darwin"
+      else "${multiarchCpu}-${parsed.kernel.name}-${parsed.abi.name}";
+
+    abiFlags = optionalString (isPy36 || isPy37) "m";
+
+    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
+    pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${parsed.kernel.name}_${multiarch}";
+  in ''
+    sysconfigdataHook() {
+      if [ "$1" = '${placeholder "out"}' ]; then
+        export _PYTHON_HOST_PLATFORM='${pythonHostPlatform}'
+        export _PYTHON_SYSCONFIGDATA_NAME='${pythonSysconfigdataName}'
+      fi
+    }
+
+    addEnvHooks "$hostOffset" sysconfigdataHook
+  '';
 
 in with passthru; stdenv.mkDerivation {
   pname = "python3";
@@ -165,6 +209,16 @@ in with passthru; stdenv.mkDerivation {
   ] ++ [
     # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
+    # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
+    (
+      if isPy36 then
+        ./3.6/fix-finding-headers-when-cross-compiling.patch
+      else
+        ./3.7/fix-finding-headers-when-cross-compiling.patch
+    )
+  ] ++ optionals (isPy36 || isPy37 || isPy38) [
+    # Backport a fix for ctypes.util.find_library.
+    ./3.7/find_library.patch
   ];
 
   postPatch = ''
@@ -278,6 +332,10 @@ in with passthru; stdenv.mkDerivation {
     find $out/lib/python*/config-* -type f -print -exec nuke-refs -e $out '{}' +
     find $out/lib -name '_sysconfigdata*.py*' -print -exec nuke-refs -e $out '{}' +
 
+    # Make the sysconfigdata module accessible on PYTHONPATH
+    # This allows build Python to import host Python's sysconfigdata
+    mkdir -p "$out/${sitePackages}"
+    ln -s "$out/lib/${libPrefix}/"_sysconfigdata*.py "$out/${sitePackages}/"
     '' + optionalString stripConfig ''
     rm -R $out/bin/python*-config $out/lib/python*/config-*
     '' + optionalString stripIdlelib ''
@@ -308,6 +366,14 @@ in with passthru; stdenv.mkDerivation {
   preFixup = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     # Ensure patch-shebangs uses shebangs of host interpreter.
     export PATH=${stdenv.lib.makeBinPath [ "$out" bash ]}:$PATH
+  '';
+
+  # Add CPython specific setup-hook that configures distutils.sysconfig to
+  # always load sysconfigdata from host Python.
+  postFixup = stdenv.lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    cat << "EOF" >> "$out/nix-support/setup-hook"
+    ${sysconfigdataHook}
+    EOF
   '';
 
   # Enforce that we don't have references to the OpenSSL -dev package, which we

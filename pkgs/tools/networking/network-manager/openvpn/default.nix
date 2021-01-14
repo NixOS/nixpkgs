@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkgconfig, file, networkmanager, libsecret
+{ lib, stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkgconfig, file, networkmanager, libsecret
 , gtk3, withGnome ? true, gnome3, kmod, libnma }:
 
 let
@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NetworkManager's OpenVPN plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;

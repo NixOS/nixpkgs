@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, protobuf, openssl, libpcap, traceroute
+{ lib, stdenv, fetchurl, pkgconfig, protobuf, openssl, libpcap, traceroute
 , withGUI ? false, qt5 }:
 
 let inherit (stdenv.lib) optional;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl protobuf libpcap traceroute ]
                 ++ optional withGUI qt5.qtbase ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.caida.org/projects/spoofer";
     description = "Assess and report on deployment of source address validation";
     longDescription = ''

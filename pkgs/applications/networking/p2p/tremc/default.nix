@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages
+{ lib, stdenv, fetchFromGitHub, python3Packages
 , x11Support ? !stdenv.isDarwin
 , xclip ? null
 , pbcopy ? null
@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Curses interface for transmission";
     homepage = "https://github.com/tremc/tremc";
     license = licenses.gpl3Plus;

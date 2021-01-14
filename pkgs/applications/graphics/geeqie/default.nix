@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoconf, automake, gettext, intltool
+{ lib, stdenv, fetchurl, pkgconfig, autoconf, automake, gettext, intltool
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
 , wrapGAppsHook, fetchpatch
 }:
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight GTK based image viewer";
 
     longDescription =

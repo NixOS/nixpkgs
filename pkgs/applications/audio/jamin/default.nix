@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fftwFloat, gtk2, ladspaPlugins, libjack2, liblo, libxml2
+{ lib, stdenv, fetchurl, fftwFloat, gtk2, ladspaPlugins, libjack2, liblo, libxml2
 , makeWrapper, pkgconfig, perlPackages
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/jamin --set LADSPA_PATH ${ladspaPlugins}/lib/ladspa
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://jamin.sourceforge.net";
     description = "JACK Audio Mastering interface";
     license = licenses.gpl2;

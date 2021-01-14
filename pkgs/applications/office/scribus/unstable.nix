@@ -22,7 +22,7 @@
 , qtbase
 , qtimageformats
 , qttools
-, stdenv
+, lib, stdenv
 }:
 
 let
@@ -42,8 +42,6 @@ mkDerivation rec {
     url = "mirror://sourceforge/${pname}/${pname}-devel/${pname}-${version}.tar.xz";
     sha256 = "sha256-1CV2lVOc+kDerYq9rwTFHjTU10vK1aLJNNCObp1Dt6s=";
   };
-
-  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     cmake
@@ -72,7 +70,7 @@ mkDerivation rec {
     qttools
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [
       erictapen
       kiwi

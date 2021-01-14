@@ -112,7 +112,10 @@ stdenv.mkDerivation rec {
   };
 
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  # the glib setup hook will populate GSETTINGS_SCHEMAS_PATH,
+  # wrapGAppHooks (among other things) adds it to XDG_DATA_DIRS
+  # so 'save as...' works:
+  nativeBuildInputs = [ glib wrapGAppsHook ];
   buildInputs = [
     jdk
     ant
@@ -241,7 +244,7 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source electronics prototyping platform";
     homepage = "http://arduino.cc/";
     license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2;

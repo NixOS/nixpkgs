@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple Mastodon client designed for elementary OS";
     homepage = "https://github.com/bleakgrey/tootle";
     license = licenses.gpl3;

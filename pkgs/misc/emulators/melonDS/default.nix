@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , mkDerivation
 , cmake
@@ -21,7 +21,6 @@ mkDerivation rec {
     sha256 = "0m45m1ch0az8l3d3grjbqvi5vvydbffxwka9w3k3qiia50m7fnph";
   };
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook ];
   buildInputs = [
     SDL2
@@ -32,7 +31,7 @@ mkDerivation rec {
 
   cmakeFlags = [ "-UUNIX_PORTABLE" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://melonds.kuribo64.net/";
     description = "Work in progress Nintendo DS emulator";
     license = licenses.gpl3Plus;

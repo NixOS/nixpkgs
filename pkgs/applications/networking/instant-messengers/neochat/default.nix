@@ -1,5 +1,5 @@
 { mkDerivation
-, stdenv
+, lib, stdenv
 , fetchFromGitLab
 , pkg-config
 , cmake
@@ -57,7 +57,7 @@ mkDerivation rec {
     libpulseaudio
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client for matrix, the decentralized communication protocol.";
     homepage = "https://apps.kde.org/en/neochat";
     license = licenses.gpl3Only;

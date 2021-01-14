@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nettle }:
+{ lib, stdenv, fetchurl, nettle }:
 
 stdenv.mkDerivation rec {
   pname = "rdfind";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ nettle ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://rdfind.pauldreik.se/";
     description = "Removes or hardlinks duplicate files very swiftly";
     license = stdenv.lib.licenses.gpl2;

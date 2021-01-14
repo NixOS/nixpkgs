@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, desktop-file-utils
+{ lib, stdenv, fetchurl, desktop-file-utils
 , gtk3, libX11
 , makeWrapper, pkgconfig, perl, autoreconfHook, wrapGAppsHook
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
     cp Makefile.gtk Makefile
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simon Tatham's portable puzzle collection";
     license = licenses.mit;
     maintainers = [ maintainers.raskin ];

@@ -1,5 +1,5 @@
 { majorVersion, minorVersion, sourceSha256, patchesToFetch ? [] }:
-{ stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libtiff
+{ stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libpng, libtiff
 , fetchpatch
 , enableQt ? false, wrapQtAppsHook, qtbase, qtx11extras, qttools
 , enablePython ? false, pythonInterpreter ? throw "vtk: Python support requested, but no python interpreter was given."
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ libtiff ]
+  buildInputs = [ libpng libtiff ]
     ++ optionals enableQt [ qtbase qtx11extras qttools ]
     ++ optionals stdenv.isLinux [
       libGLU
@@ -65,6 +65,7 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_C_FLAGS=-fPIC"
     "-DCMAKE_CXX_FLAGS=-fPIC"
+    "-DVTK_USE_SYSTEM_PNG=ON"
     "-DVTK_USE_SYSTEM_TIFF=1"
     "-DOPENGL_INCLUDE_DIR=${libGL}/include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -83,8 +84,6 @@ in stdenv.mkDerivation rec {
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
   '';
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";

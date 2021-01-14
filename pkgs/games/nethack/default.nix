@@ -141,7 +141,7 @@ in stdenv.mkDerivation rec {
     ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rogue-like game";
     homepage = "http://nethack.org/";
     license = "nethack";

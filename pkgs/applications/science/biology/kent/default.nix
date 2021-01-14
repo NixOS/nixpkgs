@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , libpng
 , libuuid
 , zlib
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     cp $NIX_BUILD_TOP/bin/x86_64/* $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "UCSC Genome Bioinformatics Group's suite of biological analysis tools, i.e. the kent utilities";
     license = licenses.unfree;
     maintainers = with maintainers; [ scalavision ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, fetchpatch, cmake, qt4, fftw, graphicsmagick_q16,
+{ lib, stdenv, fetchhg, fetchpatch, cmake, qt4, fftw, graphicsmagick_q16,
   lcms2, lensfun, pkgconfig, libjpeg, exiv2, liblqr1 }:
 
 stdenv.mkDerivation {
@@ -32,9 +32,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ qt4 fftw graphicsmagick_q16 lcms2 lensfun libjpeg exiv2 liblqr1 ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     license = licenses.gpl3;
     broken = true; # exiv2 0.27.1 FTBFS

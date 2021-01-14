@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gnome3
 , meson
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/connections";
     description = "A remote desktop client for the GNOME desktop environment";
     maintainers = teams.gnome.members;

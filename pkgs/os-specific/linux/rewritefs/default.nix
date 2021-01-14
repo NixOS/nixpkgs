@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, fuse, pcre }: 
+{ lib, stdenv, fetchFromGitHub, pkgconfig, fuse, pcre }: 
 
 stdenv.mkDerivation {
   pname = "rewritefs";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   preConfigure = "substituteInPlace Makefile --replace /usr/local $out";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''A FUSE filesystem intended to be used
       like Apache mod_rewrite'';
     homepage    = "https://github.com/sloonz/rewritefs";

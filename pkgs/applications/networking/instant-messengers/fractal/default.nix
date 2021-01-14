@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , nix-update-script
 , fetchpatch
@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Matrix group messaging app";
     homepage = "https://gitlab.gnome.org/GNOME/fractal";
     license = licenses.gpl3;

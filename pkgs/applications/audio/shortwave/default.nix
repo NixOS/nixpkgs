@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , cargo
 , dbus
@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs build-aux/meson/postinstall.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Shortwave";
     description = "Find and listen to internet radio stations";
     longDescription = ''

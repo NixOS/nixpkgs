@@ -67,7 +67,7 @@ in buildGoPackage rec {
     installShellCompletion --zsh contrib/completions/zsh/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Build, deploy, and manage your applications with Docker and Kubernetes";
     license = licenses.asl20;
     homepage = "http://www.openshift.org";

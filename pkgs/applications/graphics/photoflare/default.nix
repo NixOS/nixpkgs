@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, graphicsmagick, fetchFromGitHub, qmake, qtbase, qttools
+{ mkDerivation, lib, stdenv, graphicsmagick, fetchFromGitHub, qmake, qtbase, qttools
 }:
 
 mkDerivation rec {
@@ -21,7 +21,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform image editor with a powerful features and a very friendly graphical user interface";
     homepage = "https://photoflare.io";
     maintainers = [ maintainers.omgbebebe ];

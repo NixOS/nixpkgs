@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, libxml2 }:
+{ lib, stdenv, fetchgit, autoreconfHook, pkgconfig, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "evtest";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "168gdhzj11f4nk94a6z696sm8v1njzwww69bn6wr97l17897913g";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple tool for input event debugging";
     license = stdenv.lib.licenses.gpl2;
     platforms = platforms.linux;

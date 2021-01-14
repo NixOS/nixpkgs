@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub, libusb1, pkgconfig, stdenv, libiconv }:
+{ buildGoPackage, fetchFromGitHub, libusb1, pkgconfig, lib, stdenv, libiconv }:
 
 buildGoPackage rec {
   pname = "aws-okta";
@@ -20,7 +20,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libusb1  libiconv ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     description = "aws-vault like tool for Okta authentication";
     license = licenses.mit;

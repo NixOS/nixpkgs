@@ -1,7 +1,7 @@
 { fetchurl
 , fetchpatch
 , substituteAll
-, stdenv
+, lib, stdenv
 , meson
 , ninja
 , pkg-config
@@ -200,7 +200,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Core user interface for the GNOME 3 desktop";
     homepage = "https://wiki.gnome.org/Projects/GnomeShell";
     license = licenses.gpl2Plus;

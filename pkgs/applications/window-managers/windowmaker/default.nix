@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , libX11, libXext, libXft, libXmu, libXinerama, libXrandr, libXpm
 , imagemagick, libpng, libjpeg, libexif, libtiff, libungif, libwebp }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "--disable-magick" # Many distros reported imagemagick fails to be found
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://windowmaker.org/";
     description = "NeXTSTEP-like window manager";
     longDescription = ''

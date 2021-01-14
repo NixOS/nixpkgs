@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
   xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
 
 let
@@ -76,9 +76,7 @@ stdenv.mkDerivation rec {
 
   stripDebugList = [ "bin" "share" ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An orthodox file manager";
     homepage = "https://github.com/elfmz/far2l";
     license = licenses.gpl2;

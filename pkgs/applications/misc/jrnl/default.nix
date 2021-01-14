@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python3
 }:
 
@@ -21,7 +21,7 @@ buildPythonApplication rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://maebert.github.io/jrnl/";
     description = "A simple command line journal application that stores your journal in a plain text file";
     license = licenses.mit;

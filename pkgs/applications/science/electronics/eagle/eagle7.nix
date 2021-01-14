@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, patchelf, zlib, freetype, fontconfig
+{ lib, stdenv, fetchurl, makeDesktopItem, patchelf, zlib, freetype, fontconfig
 , openssl, libXrender, libXrandr, libXcursor, libX11, libXext, libXi
 , libxcb, cups, xkeyboardconfig, runtimeShell
 }:
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     ln -s "$out/eagle-${version}/bin/eagleicon50.png" "$out"/share/icons/eagle.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Schematic editor and PCB layout tool from CadSoft";
     homepage = "http://www.cadsoftusa.com/";
     license = licenses.unfree;

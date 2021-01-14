@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "msr-tools";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace /usr/sbin $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to read/write from/to MSR CPU registers on Linux";
     license = licenses.gpl2;
     platforms = platforms.linux;

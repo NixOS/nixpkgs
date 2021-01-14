@@ -78,7 +78,15 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     mongodb = callPackage ../development/php-packages/mongodb { };
 
-    oci8 = callPackage ../development/php-packages/oci8 { };
+    oci8 = callPackage ../development/php-packages/oci8 ({
+      version = "2.2.0";
+      sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
+    } // lib.optionalAttrs (lib.versionAtLeast php.version "8.0") {
+      version = "3.0.1";
+      sha256 = "108ds92620dih5768z19hi0jxfa7wfg5hdvyyvpapir87c0ap914";
+    });
+
+    pdlib = callPackage ../development/php-packages/pdlib { };
 
     pcov = callPackage ../development/php-packages/pcov { };
 
@@ -302,7 +310,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           })
         ];
         postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
-        configureFlags = "--with-gettext=${gettext}"; }
+        configureFlags = [ "--with-gettext=${gettext}" ]; }
       { name = "gmp";
         buildInputs = [ gmp ];
         configureFlags = [ "--with-gmp=${gmp.dev}" ]; }
@@ -388,10 +396,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         buildInputs = [ pcre' ] ++ lib.optionals (lib.versionAtLeast php.version "8.0") [
           valgrind.dev
         ];
-        # HAVE_OPCACHE_FILE_CACHE is defined in config.h, which is
-        # included from ZendAccelerator.h, but ZendAccelerator.h is
-        # included after the ifdef...
-        patches = [] ++ lib.optional (lib.versionAtLeast php.version "8.0") [ ../development/interpreters/php/fix-opcache-configure.patch ] ++lib.optional (lib.versionOlder php.version "7.4") [
+        patches = [] ++ lib.optional (lib.versionOlder php.version "7.4") [
           (pkgs.writeText "zend_file_cache_config.patch" ''
             --- a/ext/opcache/zend_file_cache.c
             +++ b/ext/opcache/zend_file_cache.c

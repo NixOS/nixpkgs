@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config
+{ lib, stdenv, fetchurl, pkg-config
 , zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl, libmilter, pcre2
 , libmspack, systemd, Foundation, json_c, check
 }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.clamav.net";
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2;

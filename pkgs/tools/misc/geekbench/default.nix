@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, ocl-icd, vulkan-loader, linuxPackages }:
+{ lib, stdenv, fetchurl, makeWrapper, ocl-icd, vulkan-loader, linuxPackages }:
 
 stdenv.mkDerivation rec {
   pname = "geekbench";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform benchmark";
     homepage = "https://geekbench.com/";
     license = licenses.unfree;

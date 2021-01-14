@@ -59,6 +59,7 @@ buildPythonPackage rec {
     "test_count_nonzero_str"
     "rolling_methods"  # floating percision error ~0.1*10^8 small
     "num_workers_config" # flaky
+    "test_2args_with_array[pandas1-darray1-ldexp]"  # flaky
   ];
 
   meta = {

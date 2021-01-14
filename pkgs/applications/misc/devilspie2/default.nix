@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, glib, gtk, lua, libwnck3 }:
+{ lib, stdenv, fetchurl, intltool, pkgconfig, glib, gtk, lua, libwnck3 }:
 
 stdenv.mkDerivation rec {
   pname = "devilspie2";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp devilspie2.1 $out/share/man/man1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A window matching utility";
     longDescription = ''
       Devilspie2 is a window matching utility, allowing the user to

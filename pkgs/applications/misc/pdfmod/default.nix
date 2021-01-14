@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Attic/PdfMod";
     description = "A simple application for modifying PDF documents";
     platforms = platforms.all;

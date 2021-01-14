@@ -57,7 +57,7 @@ mkDerivation rec {
     qtgraphicaleffects
   ] ++ lib.optional stdenv.isDarwin qtmacextras;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop client for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/nheko";
     maintainers = with maintainers; [ ekleog fpletz ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , SDL2, cmake, curl, duktape, fontconfig, freetype, icu, jansson, libGLU
 , libiconv, libpng, libpthreadstubs, libzip, nlohmann_json, openssl, pkgconfig
 , speexdsp, zlib
@@ -68,11 +68,9 @@ stdenv.mkDerivation {
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
-  enableParallelBuilding = true;
-
   preFixup = "ln -s $out/share/openrct2 $out/bin/data";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
     homepage = "https://openrct2.io/";
     license = licenses.gpl3;

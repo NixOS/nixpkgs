@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchpatch, cmake, pkgconfig, libusb1 }:
+{ lib, stdenv, fetchgit, fetchpatch, cmake, pkgconfig, libusb1 }:
 
 stdenv.mkDerivation rec {
   pname = "rtl-sdr";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     echo "Requires: libusb-1.0" >> "$pcfile"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Turns your Realtek RTL2832 based DVB dongle into a SDR receiver";
     homepage = "http://sdr.osmocom.org/trac/wiki/rtl-sdr";
     license = licenses.gpl2Plus;

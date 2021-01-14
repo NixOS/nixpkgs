@@ -300,8 +300,6 @@ in (mkDrv rec {
     cp -r sysui/desktop/icons  "$out/share"
     sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
 
-    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH")
-
     mkdir -p $dev
     cp -r include $dev
   '' + lib.optionalString kdeIntegration ''
