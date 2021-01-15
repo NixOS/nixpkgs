@@ -4,7 +4,7 @@
 , withAllTargets ? false, libbfd, libopcodes
 , enableShared ? !stdenv.hostPlatform.isStatic
 , noSysDirs
-, gold ? !stdenv.buildPlatform.isDarwin || stdenv.hostPlatform == stdenv.targetPlatform
+, gold ? true
 , bison ? null
 , flex
 , texinfo
