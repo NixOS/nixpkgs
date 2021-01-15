@@ -33,7 +33,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   testScript = ''
     start_all()
 
-    docker.wait_for_unit("docker.service")
+    docker.wait_for_unit("sockets.target")
     docker.succeed("tar cv --files-from /dev/null | docker import - scratchimg")
     docker.succeed(
         "docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
