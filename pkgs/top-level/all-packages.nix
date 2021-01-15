@@ -15715,7 +15715,34 @@ in
 
   nv-codec-headers = callPackage ../development/libraries/nv-codec-headers { };
 
-  nvidia-docker = callPackage ../applications/virtualization/nvidia-docker { };
+  mkNvidiaContainerPkg = { name, containerRuntimePath, configTemplate, additionalPaths ? [] }:
+    let
+      nvidia-container-runtime = callPackage ../applications/virtualization/nvidia-container-runtime {
+        inherit containerRuntimePath configTemplate;
+      };
+    in symlinkJoin {
+      inherit name;
+      paths = [
+        (callPackage ../applications/virtualization/libnvidia-container { })
+        nvidia-container-runtime
+        (callPackage ../applications/virtualization/nvidia-container-toolkit {
+          inherit nvidia-container-runtime;
+        })
+      ] ++ additionalPaths;
+    };
+
+  nvidia-docker = mkNvidiaContainerPkg {
+    name = "nvidia-docker";
+    containerRuntimePath = "${docker}/libexec/docker/runc";
+    configTemplate = ../applications/virtualization/nvidia-docker/config.toml;
+    additionalPaths = [ (callPackage ../applications/virtualization/nvidia-docker { }) ];
+  };
+
+  nvidia-podman = mkNvidiaContainerPkg {
+    name = "nvidia-podman";
+    containerRuntimePath = "${runc}/bin/runc";
+    configTemplate = ../applications/virtualization/nvidia-podman/config.toml;
+  };
 
   nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 

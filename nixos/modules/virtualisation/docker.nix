@@ -213,9 +213,6 @@ in
           message = "Option enableNvidia requires 32bit support libraries";
         }];
     }
-    (mkIf cfg.enableNvidia {
-      environment.etc."nvidia-container-runtime/config.toml".source = "${pkgs.nvidia-docker}/etc/config.toml";
-    })
   ]);
 
   imports = [
