@@ -13,7 +13,8 @@
 , coreutils
 , git
 , runCommand
-, lib, stdenv
+, stdenv
+, lib
 , fetchurl
 , alsaLib
 , dbus
