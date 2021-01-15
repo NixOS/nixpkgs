@@ -722,7 +722,7 @@
     "seventeentrack" = ps: with ps; [ ]; # missing inputs: py17track
     "sharkiq" = ps: with ps; [ ]; # missing inputs: sharkiqpy
     "shell_command" = ps: with ps; [ ];
-    "shelly" = ps: with ps; [ ]; # missing inputs: aioshelly
+    "shelly" = ps: with ps; [ aioshelly ];
     "shiftr" = ps: with ps; [ paho-mqtt ];
     "shodan" = ps: with ps; [ shodan ];
     "shopping_list" = ps: with ps; [ aiohttp-cors ];
