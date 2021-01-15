@@ -295,6 +295,8 @@ in buildFHSUserEnv rec {
     targetPkgs = commonTargetPkgs;
     inherit multiPkgs extraBuildCommands;
 
+    inherit unshareIpc unsharePid;
+
     runScript = writeScript "steam-run" ''
       #!${runtimeShell}
       run="$1"
