@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}"];
 
   patchPhase = ''
+    patch -p1 < ${./plugin-search-dirs.patch}
     substituteInPlace ./Makefile \
       --replace 'CXX = clang' "" \
       --replace 'LD = clang++' 'LD = $(CXX)' \
@@ -95,6 +96,8 @@ stdenv.mkDerivation rec {
   # is also needed at build time for the test suite.
   postBuild   = "ln -sfv ${abc-verifier}/bin/abc ./yosys-abc";
   postInstall = "ln -sfv ${abc-verifier}/bin/abc $out/bin/yosys-abc";
+
+  setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
     description = "Open RTL synthesis framework and tools";
