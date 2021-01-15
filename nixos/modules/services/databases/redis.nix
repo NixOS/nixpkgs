@@ -144,7 +144,7 @@ in
       };
 
       masterAuth = mkOption {
-        type = types.str;
+        type = with types; nullOr str;
         default = null;
         description = ''If the master is password protected (using the requirePass configuration)
         it is possible to tell the slave to authenticate before starting the replication synchronization
