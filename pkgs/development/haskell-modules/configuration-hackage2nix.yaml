@@ -8795,6 +8795,7 @@ broken-packages:
   - pinboard
   - pinboard-notes-backup
   - pinch
+  - pinch-gen
   - pinchot
   - ping
   - pinpon
@@ -11648,6 +11649,7 @@ broken-packages:
   - yxdb-utils
   - Z-Data
   - Z-IO
+  - Z-MessagePack
   - Z-YAML
   - z3-encoding
   - z85
