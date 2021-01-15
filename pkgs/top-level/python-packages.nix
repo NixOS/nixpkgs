@@ -2491,7 +2491,7 @@ in {
   gipc = callPackage ../development/python-modules/gipc { };
 
   git-annex-adapter =
-    callPackage ../development/python-modules/git-annex-adapter { inherit (pkgs.gitAndTools) git-annex; };
+    callPackage ../development/python-modules/git-annex-adapter { };
 
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
 
@@ -2677,6 +2677,8 @@ in {
   gphoto2 = callPackage ../development/python-modules/gphoto2 { inherit (pkgs) pkgconfig; };
 
   gprof2dot = callPackage ../development/python-modules/gprof2dot { inherit (pkgs) graphviz; };
+
+  gps3 = callPackage ../development/python-modules/gps3 { };
 
   gpsoauth = callPackage ../development/python-modules/gpsoauth { };
 
@@ -8020,6 +8022,8 @@ in {
   wasmer = callPackage ../development/python-modules/wasmer { };
 
   watchdog = callPackage ../development/python-modules/watchdog { };
+
+  waterfurnace = callPackage ../development/python-modules/waterfurnace { };
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
 

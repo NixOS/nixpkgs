@@ -194,7 +194,15 @@ mapAliases ({
   gdb-multitarget = gdb; # added 2017-11-13
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
   gettextWithExpat = gettext; # 2016-02-19
-  git-hub = gitAndTools.git-hub; # added 2016-04-29
+  gitAndTools = self // { # added 2021-01-14
+    darcsToGit = darcs-to-git;
+    gitAnnex = git-annex;
+    gitBrunch = git-brunch;
+    gitFastExport = git-fast-export;
+    gitRemoteGcrypt = git-remote-gcrypt;
+    svn_all_fast_export = svn-all-fast-export;
+    topGit = top-git;
+  };
   glib_networking = glib-networking; # added 2018-02-25
   gmailieer = lieer; # added 2020-04-19
   gnome-mpv = celluloid; # added 2019-08-22

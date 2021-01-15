@@ -59,6 +59,7 @@ in
 
       port = mkOption {
         default = "3050";
+        type = types.port;
         description = ''
           Port Firebird uses.
         '';
@@ -66,6 +67,7 @@ in
 
       user = mkOption {
         default = "firebird";
+        type = types.str;
         description = ''
           User account under which firebird runs.
         '';
@@ -73,6 +75,7 @@ in
 
       baseDir = mkOption {
         default = "/var/db/firebird"; # ubuntu is using /var/lib/firebird/2.1/data/.. ?
+        type = types.str;
         description = ''
           Location containing data/ and system/ directories.
           data/ stores the databases, system/ stores the password database security2.fdb.
