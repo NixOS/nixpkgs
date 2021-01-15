@@ -9,7 +9,7 @@
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
 , onlyLibVLC ? false
-, withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
+, withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null, wrapQtAppsHook ? null
 , jackSupport ? false
 , skins2Support ? true, freetype
 , removeReferencesTo
@@ -21,6 +21,8 @@
 #   networking.firewall.allowedTCPPorts = [ 8010 ];
 
 with stdenv.lib;
+
+assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null);
 
 stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
