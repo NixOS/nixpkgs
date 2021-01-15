@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXt, libXext, libXpm, imake, gccmakedep
+{ lib, stdenv, fetchurl, libX11, libXt, libXext, libXpm, imake, gccmakedep
 , svgSupport ? false, librsvg, glib, gdk-pixbuf, pkgconfig
 }:
 
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ imake gccmakedep ];
   buildInputs = [
     libX11 libXt libXext libXpm
-  ] ++ stdenv.lib.optionals svgSupport [ librsvg glib gdk-pixbuf pkgconfig ];
+  ] ++ lib.optionals svgSupport [ librsvg glib gdk-pixbuf pkgconfig ];
 
   outputs = [ "out" "man" ];
 
-  imakeFlags = stdenv.lib.optionalString svgSupport "-DWITH_SVG_SUPPORT";
+  imakeFlags = lib.optionalString svgSupport "-DWITH_SVG_SUPPORT";
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A keyboard layout indicator and switcher";
     homepage = "http://xxkb.sourceforge.net/";
-    license = stdenv.lib.licenses.artistic2;
-    maintainers = with stdenv.lib.maintainers; [ rasendubi ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.artistic2;
+    maintainers = with lib.maintainers; [ rasendubi ];
+    platforms = lib.platforms.linux;
   };
 }

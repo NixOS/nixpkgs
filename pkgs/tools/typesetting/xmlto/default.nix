@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libxml2, libxslt
+{ fetchurl, lib, stdenv, libxml2, libxslt
 , docbook_xml_dtd_45, docbook_xsl, w3m
 , bash, getopt, makeWrapper }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/xmlto" \
-       --prefix PATH : "${stdenv.lib.makeBinPath [ libxslt libxml2 getopt ]}"
+       --prefix PATH : "${lib.makeBinPath [ libxslt libxml2 getopt ]}"
 
     # `w3m' is needed for HTML to text conversions.
     substituteInPlace "$out/share/xmlto/format/docbook/txt" \
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
       necessary post-processing.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://fedorahosted.org/xmlto/";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

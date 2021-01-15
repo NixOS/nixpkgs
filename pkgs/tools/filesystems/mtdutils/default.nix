@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, cmocka, acl, libuuid, lzo, zlib, zstd }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, cmocka, acl, libuuid, lzo, zlib, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "mtd-utils";
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "1lijl89l7hljx8xx70vrz9srd3h41v5gh4b0lvqnlv831yvyh5cd";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ] ++ stdenv.lib.optional doCheck cmocka;
+  nativeBuildInputs = [ autoreconfHook pkgconfig ] ++ lib.optional doCheck cmocka;
   buildInputs = [ acl libuuid lzo zlib zstd ];
 
   configureFlags = [
-    (stdenv.lib.enableFeature doCheck "unit-tests")
-    (stdenv.lib.enableFeature doCheck "tests")
+    (lib.enableFeature doCheck "unit-tests")
+    (lib.enableFeature doCheck "tests")
   ];
   enableParallelBuilding = true;
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tools for MTD filesystems";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://www.linux-mtd.infradead.org/";
-    maintainers = with stdenv.lib.maintainers; [ viric ];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [ viric ];
+    platforms = with lib.platforms; linux;
   };
 }

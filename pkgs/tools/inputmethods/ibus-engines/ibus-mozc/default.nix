@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   postUnpack = ''
     rm -rf $sourceRoot/src/third_party/japanese_usage_dictionary/
     ln -s ${japanese_usage_dictionary} $sourceRoot/src/third_party/japanese_usage_dictionary
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     sed -i 's/-lc++/-lstdc++/g' $sourceRoot/src/gyp/common.gypi
   '';
 

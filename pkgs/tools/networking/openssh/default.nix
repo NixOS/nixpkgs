@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , pkgs
 , fetchurl
 , fetchpatch
@@ -30,7 +30,7 @@ let
   };
 
 in
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "openssh";
   inherit version;
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
     description = "An implementation of the SSH protocol";
     homepage = "https://www.openssh.com/";
     changelog = "https://www.openssh.com/releasenotes.html";
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ eelco aneeshusa ];
   };

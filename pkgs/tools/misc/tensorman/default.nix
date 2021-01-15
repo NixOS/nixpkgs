@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Utility for easy management of Tensorflow containers";
     homepage = "https://github.com/pop-os/tensorman/";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     platforms =  [ "x86_64-linux" ];
     maintainers = with maintainers; [ thefenriswolf ];
   };

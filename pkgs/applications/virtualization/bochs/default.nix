@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pkgconfig, libtool
 , gtk2, libGLU, libGL, readline, libX11, libXpm
 , docbook_xml_dtd_45, docbook_xsl
@@ -15,7 +15,7 @@ assert wxSupport -> (gtk2 != null && wxGTK != null);
 assert wgetSupport -> (wget != null);
 assert curlSupport -> (curl != null);
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "bochs";

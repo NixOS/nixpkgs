@@ -22,7 +22,7 @@ in (fetchgit {
     description = "The Go font family";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sternenseemann ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     hydraPlatforms = [];
   };
 }

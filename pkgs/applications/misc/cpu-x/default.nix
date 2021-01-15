@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/cpu-x \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ stdenv.cc ]}
+      --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
   '';
 
   meta = with lib; {

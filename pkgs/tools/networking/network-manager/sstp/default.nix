@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = [ sstp networkmanager glib ppp ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret libnma ];
+    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
   nativeBuildInputs = [ file intltool autoreconfHook pkgconfig ];
 

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++
-    stdenv.lib.optionals (enableGui) [ gtk2 ]
+    lib.optionals (enableGui) [ gtk2 ]
   ;
 
   configureScript = "./build.sh";
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
     "--disable-malloc"
   ]
-    ++ stdenv.lib.optionals (!enableGui) [ "--topless" ]
+    ++ lib.optionals (!enableGui) [ "--topless" ]
   ;
 
   hardeningDisable = [ "bindnow" "fortify" "pic" "relro" ];

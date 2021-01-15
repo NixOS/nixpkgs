@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , libX11
 , glib
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://sites.google.com/site/tstyblo/wmctrl";
     description = "CLI tool to interact with EWMH/NetWM compatible X Window Managers";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; all;
-    maintainers = [ stdenv.lib.maintainers.Anton-Latukha ];
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; all;
+    maintainers = [ lib.maintainers.Anton-Latukha ];
   };
 
 }

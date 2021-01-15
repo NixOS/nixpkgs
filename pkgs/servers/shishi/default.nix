@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , libgcrypt, libgpgerror, libtasn1
 
 # Optional Dependencies
@@ -9,18 +9,18 @@ let
   mkFlag = trueStr: falseStr: cond: name: val: "--"
     + (if cond then trueStr else falseStr)
     + name
-    + stdenv.lib.optionalString (val != null && cond != false) "=${val}";
+    + lib.optionalString (val != null && cond != false) "=${val}";
   mkEnable = mkFlag "enable-" "disable-";
   mkWith = mkFlag "with-" "without-";
   mkOther = mkFlag "" "" true;
 
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
 
   optPam = shouldUsePkg pam;
   optLibidn = shouldUsePkg libidn;
   optGnutls = shouldUsePkg gnutls;
 in
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   name = "shishi-1.0.2";
 

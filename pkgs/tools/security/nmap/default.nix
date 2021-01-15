@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libpcap, pkgconfig, openssl, lua5_3
+{ lib, stdenv, fetchurl, fetchpatch, libpcap, pkgconfig, openssl, lua5_3
 , pcre, liblinear, libssh2
 , graphicalSupport ? false
 , libX11 ? null
@@ -8,7 +8,7 @@
 , withLua ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";

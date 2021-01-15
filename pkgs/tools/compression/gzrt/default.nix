@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "gzrt-0.8";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.urbanophile.com/arenn/hacking/gzrt/";
     description = "The gzip Recovery Toolkit";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

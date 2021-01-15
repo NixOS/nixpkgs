@@ -28,7 +28,7 @@ mkDerivation {
     install -Dm644 reference.brf $out/share/openBrf/reference.brf
 
     patchelf  \
-      --set-rpath "${stdenv.lib.makeLibraryPath [ qtbase glew stdenv.cc.cc libGLU libGL ]}" \
+      --set-rpath "${lib.makeLibraryPath [ qtbase glew stdenv.cc.cc libGLU libGL ]}" \
       $out/share/openBrf/openBrf
 
     mkdir -p "$out/bin"
@@ -40,7 +40,7 @@ mkDerivation {
   meta = with lib; {
     description = "A tool to edit resource files (BRF)";
     homepage = "https://github.com/cfcohen/openbrf";
-    maintainers = with stdenv.lib.maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [ abbradar ];
     license = licenses.free;
     platforms = platforms.linux;
   };

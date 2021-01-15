@@ -23,17 +23,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ pcre protobufc ]
-    ++ stdenv.lib.optionals withCrypto [ openssl ]
-    ++ stdenv.lib.optionals enableMagic [ file ]
-    ++ stdenv.lib.optionals enableCuckoo [ jansson ]
+    ++ lib.optionals withCrypto [ openssl ]
+    ++ lib.optionals enableMagic [ file ]
+    ++ lib.optionals enableCuckoo [ jansson ]
   ;
 
   preConfigure = "./bootstrap.sh";
 
   configureFlags = [
-    (stdenv.lib.withFeature withCrypto "crypto")
-    (stdenv.lib.enableFeature enableMagic "magic")
-    (stdenv.lib.enableFeature enableCuckoo "cuckoo")
+    (lib.withFeature withCrypto "crypto")
+    (lib.enableFeature enableMagic "magic")
+    (lib.enableFeature enableCuckoo "cuckoo")
   ];
 
   meta = with lib; {

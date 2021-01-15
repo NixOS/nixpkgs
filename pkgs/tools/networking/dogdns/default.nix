@@ -19,9 +19,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ installShellFiles ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.isLinux [ pkg-config ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   cargoSha256 = "08scc6vh703245rg3xkffhalrk5pisd0wg54fd49d7gdbyjivgi6";
 

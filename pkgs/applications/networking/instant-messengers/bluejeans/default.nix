@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ rpmextract makeWrapper ];
 
   libPath =
-    stdenv.lib.makeLibraryPath
+    lib.makeLibraryPath
       [
         libnotify
         libuuid

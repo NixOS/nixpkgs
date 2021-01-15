@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, autoreconfHook, intltool, pkgconfig, libgnome, libgnomeui, GConf }:
+{ fetchFromGitHub, lib, stdenv, autoreconfHook, intltool, pkgconfig, libgnome, libgnomeui, GConf }:
 
 stdenv.mkDerivation {
   name = "gtetrinet-0.7.11";
@@ -37,8 +37,8 @@ stdenv.mkDerivation {
       that is played over the internet.
     '';
     homepage = "http://gtetrinet.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.chris-martin ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.chris-martin ];
   };
 }

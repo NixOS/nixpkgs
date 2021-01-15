@@ -78,7 +78,7 @@ let
 
     passthru.updateScript = ./update.sh;
 
-    rpath = stdenv.lib.makeLibraryPath [
+    rpath = lib.makeLibraryPath [
       alsaLib
       at-spi2-atk
       at-spi2-core

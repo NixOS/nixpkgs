@@ -7,7 +7,7 @@ let
     pname    = "gtkglarea";
     version = "2.1.0";
     src = fetchurl {
-      url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
       sha256 = "1pl2vdj6l64j864ilhkq1bcggb3hrlxjwk5m029i7xfjfxc587lf";
     };
     nativeBuildInputs = [ pkgconfig ];

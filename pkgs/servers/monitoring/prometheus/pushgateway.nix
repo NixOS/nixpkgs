@@ -24,7 +24,7 @@ buildGoPackage rec {
         -X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.Branch=${rev}
         -X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.BuildUser=${buildUser}
         -X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.BuildDate=${buildDate}
-        -X main.goVersion=${stdenv.lib.getVersion go}
+        -X main.goVersion=${lib.getVersion go}
   '';
 
   doInstallCheck = true;

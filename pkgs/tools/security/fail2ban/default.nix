@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication {
   };
 
   pythonPath = with python3.pkgs;
-    stdenv.lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.isLinux [
       systemd
     ];
 

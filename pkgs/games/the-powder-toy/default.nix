@@ -1,4 +1,3 @@
-
 { lib, stdenv, fetchFromGitHub, scons, pkgconfig, SDL2, lua, fftwFloat,
   zlib, bzip2, curl, darwin }:
 
@@ -15,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ scons pkgconfig ];
 
-  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin
     [ darwin.apple_sdk.frameworks.Cocoa ];
 
   buildInputs = [ SDL2 lua fftwFloat zlib bzip2 curl ];

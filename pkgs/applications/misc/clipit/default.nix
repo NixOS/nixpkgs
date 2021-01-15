@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 libayatana-appindicator ];
 
   gappsWrapperArgs = [
-    "--prefix" "PATH" ":" "${stdenv.lib.makeBinPath [ xdotool which ]}"
+    "--prefix" "PATH" ":" "${lib.makeBinPath [ xdotool which ]}"
   ];
 
   meta = with lib; {

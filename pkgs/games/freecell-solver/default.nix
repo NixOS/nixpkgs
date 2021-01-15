@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, cmake
+{ lib, stdenv, fetchurl, pkgconfig, cmake
 , perl, gmp, libtap, gperf
 , perlPackages, python3 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "freecell-solver";

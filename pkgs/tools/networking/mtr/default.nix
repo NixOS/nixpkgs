@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
       --replace ' install-exec-hook' ""
   '';
 
-  configureFlags = stdenv.lib.optional (!withGtk) "--without-gtk";
+  configureFlags = lib.optional (!withGtk) "--without-gtk";
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ ncurses ]
-    ++ stdenv.lib.optional withGtk gtk3
-    ++ stdenv.lib.optional stdenv.isLinux libcap;
+    ++ lib.optional withGtk gtk3
+    ++ lib.optional stdenv.isLinux libcap;
 
   enableParallelBuilding = true;
 

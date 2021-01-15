@@ -89,7 +89,7 @@ perlPackages.buildPerlPackage rec {
   installPhase = ''
     cp -r . $out
     wrapProgram $out/slimserver.pl \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ lame flac faad2 sox monkeysAudio wavpack ]}"
+      --prefix PATH : "${lib.makeBinPath [ lame flac faad2 sox monkeysAudio wavpack ]}"
   '';
 
   outputs = [ "out" ];

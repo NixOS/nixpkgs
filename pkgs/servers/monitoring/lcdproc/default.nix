@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for f in $out/bin/*.pl ; do
       substituteInPlace $f \
-        --replace /usr/bin/perl ${stdenv.lib.getBin perl}/bin/perl
+        --replace /usr/bin/perl ${lib.getBin perl}/bin/perl
     done
 
     # NixOS will not use this file anyway but at least we can now execute LCDd

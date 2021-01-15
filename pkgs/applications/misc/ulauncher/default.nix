@@ -100,7 +100,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ wmctrl ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ wmctrl ]}")
   '';
 
   passthru = {

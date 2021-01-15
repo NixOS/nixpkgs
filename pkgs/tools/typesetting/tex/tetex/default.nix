@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   # fixes "error: conflicting types for 'calloc'", etc.
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.isDarwin ''
     sed -i 57d texk/kpathsea/c-std.h
   '';
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
       "--without-oxdvik" "--without-texinfo" "--without-texi2html"
       "--with-system-zlib" "--with-system-pnglib" "--with-system-ncurses" ]
     # couldn't get gsftopk working on darwin
-    ++ stdenv.lib.optional stdenv.isDarwin "--without-gsftopk";
+    ++ lib.optional stdenv.isDarwin "--without-gsftopk";
 
   postUnpack = ''
     mkdir -p $out/share/texmf

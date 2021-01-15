@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext pkgconfig which ];
   buildInputs = [ glib gtk2 ];
 
-  patches = stdenv.lib.optional enableSoftening [
+  patches = lib.optional enableSoftening [
     ./encryption.patch
     ./dvdrom.patch
   ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "--docdir=share/doc"
     "--with-nls=yes"
     "--with-embedded-src-path=no"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform.isx86_64) "--with-sse2=yes";
+  ] ++ lib.optional (stdenv.hostPlatform.isx86_64) "--with-sse2=yes";
 
   # fatal error: inlined-icons.h: No such file or directory
   enableParallelBuilding = false;

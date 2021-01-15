@@ -18,7 +18,7 @@
 , withMisc ? false, libeb ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert withGtk2 -> gtk2 != null;
 assert withGtk3 -> gtk3 != null;

@@ -8,7 +8,7 @@ in stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "062kh4zj7jfbwy4zzcwpq2m457bzbpm3l18s0ysnw3mgia3siz8f";
   };
 
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [ openvpn networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret libnma ];
+    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
   nativeBuildInputs = [ intltool pkgconfig file libxml2 ];
 

@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_DBUS_1_DATADIR = "${placeholder "out"}/share";
 
   # FIXME: Ugly hack for tests to find libpam_wrapper.so
-  LIBRARY_PATH = stdenv.lib.makeLibraryPath [ python3.pkgs.pypamtest ];
+  LIBRARY_PATH = lib.makeLibraryPath [ python3.pkgs.pypamtest ];
 
   doCheck = true;
 

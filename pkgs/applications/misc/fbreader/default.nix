@@ -6,7 +6,7 @@
 , AppKit, Cocoa
 }:
 
-with stdenv.lib;
+with lib;
 
 assert elem uiTarget [ "desktop" "macosx" ];
 assert elem uiType [ "qt4" "gtk" "cocoa" ];

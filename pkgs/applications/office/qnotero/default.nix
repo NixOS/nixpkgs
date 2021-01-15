@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
+{ lib, stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
 python3Packages.buildPythonPackage rec {
   pname = "qnotero";
@@ -29,8 +29,8 @@ python3Packages.buildPythonPackage rec {
   meta = {
     description = "Quick access to Zotero references";
     homepage = "http://www.cogsci.nl/software/qnotero";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.nico202 ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.nico202 ];
   };
 }

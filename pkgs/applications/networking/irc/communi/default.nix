@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "COMMUNI_INSTALL_THEMES=${placeholder "out"}/share/communi/themes"
   ];
 
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     substituteInPlace "$out/share/applications/communi.desktop" \
       --replace "/usr/bin" "$out/bin"
   '';

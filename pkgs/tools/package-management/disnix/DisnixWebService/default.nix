@@ -1,4 +1,4 @@
-{stdenv, fetchurl, apacheAnt, jdk, axis2, dbus_java }:
+{lib, stdenv, fetchurl, apacheAnt, jdk, axis2, dbus_java }:
 
 stdenv.mkDerivation {
   name = "DisnixWebService-0.10";
@@ -18,11 +18,11 @@ stdenv.mkDerivation {
   '';
   buildPhase = "ant";
   installPhase = "ant install";
-  
+
   meta = {
     description = "A SOAP interface and client for Disnix";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sander ];
+    platforms = lib.platforms.linux;
   };
 }

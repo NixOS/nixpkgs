@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   SODIUM_USE_PKG_CONFIG = 1;
 
   buildInputs = [ openssl libsodium ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.isDarwin [ Security ];
   nativeBuildInputs = [ pkgconfig ];
 
   meta = with lib; {

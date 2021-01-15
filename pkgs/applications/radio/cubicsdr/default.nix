@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fftw hamlib libpulseaudio libGL libX11 liquid-dsp soapysdr-with-plugins wxGTK31-gtk3 ];
 
   cmakeFlags = [ "-DUSE_HAMLIB=ON" ]
-    ++ stdenv.lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
+    ++ lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
 
   meta = with lib; {
     homepage = "https://cubicsdr.com";

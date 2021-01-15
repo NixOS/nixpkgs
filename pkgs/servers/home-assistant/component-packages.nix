@@ -39,7 +39,7 @@
     "apns" = ps: with ps; [ ]; # missing inputs: apns2
     "apple_tv" = ps: with ps; [ aiohttp-cors netdisco pyatv zeroconf ];
     "apprise" = ps: with ps; [ apprise ];
-    "aprs" = ps: with ps; [ ]; # missing inputs: aprslib geopy
+    "aprs" = ps: with ps; [ geopy ]; # missing inputs: aprslib
     "aqualogic" = ps: with ps; [ ]; # missing inputs: aqualogic
     "aquostv" = ps: with ps; [ ]; # missing inputs: sharp_aquos_rc
     "arcam_fmj" = ps: with ps; [ ]; # missing inputs: arcam-fmj
@@ -759,7 +759,7 @@
     "solaredge_local" = ps: with ps; [ ]; # missing inputs: solaredge-local
     "solarlog" = ps: with ps; [ ]; # missing inputs: sunwatcher
     "solax" = ps: with ps; [ ]; # missing inputs: solax
-    "soma" = ps: with ps; [ ]; # missing inputs: pysoma
+    "soma" = ps: with ps; [ pysoma ];
     "somfy" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pymfy
     "somfy_mylink" = ps: with ps; [ ]; # missing inputs: somfy-mylink-synergy
     "sonarr" = ps: with ps; [ ]; # missing inputs: sonarr

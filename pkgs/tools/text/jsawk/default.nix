@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, spidermonkey_38 }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, spidermonkey_38 }:
 
 stdenv.mkDerivation {
   pname = "jsawk";
@@ -21,8 +21,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Like awk, but for JSON";
     homepage = "https://github.com/micha/jsawk";
-    license = stdenv.lib.licenses.publicDomain;
-    maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ puffnfresh ];
+    platforms = lib.platforms.unix;
   };
 }

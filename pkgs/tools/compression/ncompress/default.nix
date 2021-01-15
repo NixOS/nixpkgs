@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   name = "ncompress-4.2.4.5";
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://ncompress.sourceforge.net/";
-    license = stdenv.lib.licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     description = "A fast, simple LZW file compressor";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     glib nss nspr gconf fontconfig freetype pango cairo libX11 libXi
     libXcursor libXext libXfixes libXrender libXcomposite alsaLib
     libXdamage libXtst libXrandr expat libcap dbus gtk2 gdk-pixbuf

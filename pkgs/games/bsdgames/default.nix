@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, openssl, flex, bison, less, miscfiles }:
+{ lib, stdenv, fetchurl, ncurses, openssl, flex, bison, less, miscfiles }:
 
 stdenv.mkDerivation {
   name = "bsd-games-2.17";
@@ -60,8 +60,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.t2-project.org/packages/bsd-games.html";
     description = "Ports of all the games from NetBSD-current that are free";
-    license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

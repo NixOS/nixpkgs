@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python3Packages
 , pkgconfig
 , librsvg
@@ -16,7 +16,7 @@
 , wrapGAppsHook
 }:
 
-with stdenv.lib;
+with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";

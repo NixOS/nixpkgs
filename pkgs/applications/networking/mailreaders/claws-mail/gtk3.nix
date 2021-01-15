@@ -1,4 +1,4 @@
-{ config, fetchgit, stdenv, wrapGAppsHook, autoreconfHook, bison, flex
+{ lib, config, fetchgit, stdenv, wrapGAppsHook, autoreconfHook, bison, flex
 , curl, dbus, dbus-glib, enchant, gtk3, gnutls, gnupg, gpgme
 , libarchive, libcanberra-gtk3, libetpan, libnotify, libsoup, libxml2, networkmanager
 , openldap, perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk
@@ -27,7 +27,7 @@
 , enableSpellcheck ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "claws-mail-gtk3";

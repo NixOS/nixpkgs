@@ -7,6 +7,7 @@
 , libseccomp
 , rpcsvc-proto
 , libtirpc
+, makeWrapper
 }:
 let
   modp-ver = "450.57";
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = "libnvidia-container";
+    repo = pname;
     rev = "v${version}";
     sha256 = "0j6b8z9x9hrrs4xp11zyjjd7kyl7fzcicpiis8k1qb1q2afnqsrq";
   };
@@ -64,17 +65,23 @@ stdenv.mkDerivation rec {
     popd
   '';
 
+  postInstall = ''
+    wrapProgram $out/bin/nvidia-container-cli \
+      --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:/run/opengl-driver-32/lib
+  '';
+
   NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-L${libtirpc.dev}/lib" "-ltirpc" ];
 
-  nativeBuildInputs = [ pkgconfig rpcsvc-proto ];
+  nativeBuildInputs = [ pkgconfig rpcsvc-proto makeWrapper ];
 
   buildInputs = [ libelf libcap libseccomp libtirpc ];
 
   meta = with lib; {
     homepage = "https://github.com/NVIDIA/libnvidia-container";
     description = "NVIDIA container runtime library";
-    license = licenses.bsd3;
+    license = licenses.asl20;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ cpcloud ];
   };
 }

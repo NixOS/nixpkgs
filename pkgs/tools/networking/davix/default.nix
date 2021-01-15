@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   # "please ignore the GitHub-generated tarballs, as they are incomplete"
   # https://github.com/cern-fts/davix/releases/tag/R_0_7_6
   src = fetchurl {
-    url = "https://github.com/cern-fts/${pname}/releases/download/R_${stdenv.lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/cern-fts/${pname}/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.gz";
     sha256 = "0wq66spnr616cns72f9dvr2xfvkdvfqqmc6d7dx29fpp57zzvrx2";
   };
 

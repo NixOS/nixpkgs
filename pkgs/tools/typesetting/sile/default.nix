@@ -63,17 +63,17 @@ stdenv.mkDerivation rec {
     libiconv
     luaEnv
   ]
-  ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
+  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
   checkInputs = [
     poppler_utils
   ];
 
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
   '';
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-framework AppKit";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
 
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preBuild = stdenv.lib.optionalString stdenv.cc.isClang ''
+  preBuild = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace libtexpdf/dpxutil.c \
       --replace "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
   '';

@@ -64,4 +64,4 @@ let
       };
     };
 in
-  stdenv.lib.mapAttrs mkVariant variants
+  lib.mapAttrs mkVariant variants

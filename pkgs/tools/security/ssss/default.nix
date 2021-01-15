@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp }:
+{ lib, stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation {
   name = "ssss-0.5";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Shamir Secret Sharing Scheme";
     homepage = "http://point-at-infinity.org/ssss/";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2;
   };
 }

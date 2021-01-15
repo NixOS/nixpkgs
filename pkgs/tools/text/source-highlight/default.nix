@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost }:
+{ lib, stdenv, fetchurl, boost }:
 
 let
   name = "source-highlight";
@@ -21,8 +21,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Source code renderer with syntax highlighting";
     homepage = "https://www.gnu.org/software/src-highlite/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.gpl3Plus;
+    platforms = with lib.platforms; linux ++ darwin;
     longDescription =
       ''
         GNU Source-highlight, given a source file, produces a document

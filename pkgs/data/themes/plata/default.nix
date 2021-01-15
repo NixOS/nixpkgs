@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     libxml2
     glib.dev
   ]
-  ++ stdenv.lib.optionals mateSupport [ gtk3 marco ]
-  ++ stdenv.lib.optional telegramSupport zip;
+  ++ lib.optionals mateSupport [ gtk3 marco ]
+  ++ lib.optional telegramSupport zip;
 
   buildInputs = [
     gdk-pixbuf
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     let
-      inherit (stdenv.lib) enableFeature optional;
+      inherit (lib) enableFeature optional;
       withOptional = value: feat: optional (value != null) "--with-${feat}=${value}";
     in [
       "--enable-parallel"

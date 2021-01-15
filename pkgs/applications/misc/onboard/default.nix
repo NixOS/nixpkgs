@@ -77,7 +77,7 @@ python3.pkgs.buildPythonApplication rec {
     udev
     xorg.libXtst
     xorg.libxkbfile
-  ] ++ stdenv.lib.optional atspiSupport at-spi2-core;
+  ] ++ lib.optional atspiSupport at-spi2-core;
 
   propagatedBuildInputs = with python3.pkgs; [
     dbus-python

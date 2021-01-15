@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libpng, libX11, libXext, libXi, libXtst }:
+{ lib, stdenv, fetchurl, pkgconfig, libpng, libX11, libXext, libXi, libXtst }:
 
 let version = "1.09"; in
 stdenv.mkDerivation {
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://www.hoopajoo.net/projects/xautomation.html";
     description = "Control X from the command line for scripts, and do \"visual scraping\" to find things on the screen";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ vaibhavsagar ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ vaibhavsagar ];
+    platforms = with lib.platforms; linux;
   };
 }

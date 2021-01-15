@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, makeWrapper, ncurses, nixosTests
+{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, makeWrapper, ncurses, nixosTests
 , libiconv, openssl, pcre2, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
 , libaio, libevent, jemalloc, cracklib, systemd, perl
 , bzip2, lz4, lzo, snappy, xz, zlib, zstd
@@ -8,7 +8,7 @@
 , withStorageRocks ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 let # in mariadb # spans the whole file
 

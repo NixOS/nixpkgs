@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 
 , autoconf
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A console tool to create ZIM files";
     homepage = "http://git.wikimedia.org/log/openzim";
-    maintainers = with stdenv.lib.maintainers; [ robbinch ];
-    license = stdenv.lib.licenses.gpl3;
-    platforms = with stdenv.lib.platforms; [ linux ];
+    maintainers = with lib.maintainers; [ robbinch ];
+    license = lib.licenses.gpl3;
+    platforms = with lib.platforms; [ linux ];
   };
 }

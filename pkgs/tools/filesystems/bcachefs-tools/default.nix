@@ -27,13 +27,13 @@ stdenv.mkDerivation {
   buildInputs = [
     libuuid libscrypt libsodium keyutils liburcu zlib libaio
     zstd lz4 python3Packages.pytest udev valgrind
-  ] ++ stdenv.lib.optional fuseSupport fuse3;
+  ] ++ lib.optional fuseSupport fuse3;
 
   doCheck = false; # needs bcachefs module loaded on builder
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
   checkInputs = [ valgrind ];
 
-  preCheck = stdenv.lib.optionalString fuseSupport ''
+  preCheck = lib.optionalString fuseSupport ''
     rm tests/test_fuse.py
   '';
 

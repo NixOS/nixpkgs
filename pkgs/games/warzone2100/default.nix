@@ -44,7 +44,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = stdenv.lib.optionalString withVideos
+  postInstall = lib.optionalString withVideos
     "cp ${sequences_src} $out/share/warzone2100/sequences.wz";
 
   meta = with lib; {

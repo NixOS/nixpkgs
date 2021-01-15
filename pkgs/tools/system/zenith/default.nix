@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "16s7swv2sp15gry1j1pcyz29cspvafczaf4v02x4fd2jbn2y3f6r";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with lib; {
     description = "Sort of like top or htop but with zoom-able charts, network, and disk usage";

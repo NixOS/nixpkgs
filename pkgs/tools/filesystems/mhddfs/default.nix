@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fuse, pkgconfig, attr, uthash }:
+{ lib, stdenv, fetchurl, fuse, pkgconfig, attr, uthash }:
 
 stdenv.mkDerivation rec {
   pname = "mhddfs";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://mhddfs.uvw.ru/";
     description = "Combines a several mount points into the single one";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.makefu ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.makefu ];
   };
 }

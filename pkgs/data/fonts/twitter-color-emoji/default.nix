@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = let
-    templateSubstitutions = stdenv.lib.concatStringsSep "; " [
+    templateSubstitutions = lib.concatStringsSep "; " [
       ''s#Noto Color Emoji#Twitter Color Emoji#''
       ''s#NotoColorEmoji#TwitterColorEmoji#''
       ''s#Copyright .* Google Inc\.#Twitter, Inc and other contributors.#''

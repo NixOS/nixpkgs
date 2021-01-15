@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     mbelib libsndfile itpp
-  ] ++ stdenv.lib.optionals portaudioSupport [ portaudio ];
+  ] ++ lib.optionals portaudioSupport [ portaudio ];
 
   doCheck = true;
   preCheck = ''

@@ -22,16 +22,16 @@
 
     nativeBuildInputs = [
       meson ninja pkgconfig scdoc wrapGAppsHook cmake
-    ] ++ stdenv.lib.optional withMediaPlayer gobject-introspection;
+    ] ++ lib.optional withMediaPlayer gobject-introspection;
 
-    propagatedBuildInputs = stdenv.lib.optionals withMediaPlayer [
+    propagatedBuildInputs = lib.optionals withMediaPlayer [
       glib
       playerctl
       python38Packages.pygobject3
     ];
     strictDeps = false;
 
-    buildInputs = with stdenv.lib;
+    buildInputs = with lib;
       [ wayland wlroots gtkmm3 libsigcxx jsoncpp fmt spdlog gtk-layer-shell howard-hinnant-date ]
       ++ optional  traySupport  libdbusmenu-gtk3
       ++ optional  pulseSupport libpulseaudio
@@ -40,7 +40,7 @@
       ++ optional  swaySupport  sway
       ++ optional  mpdSupport   mpd_clientlib;
 
-    mesonFlags = (stdenv.lib.mapAttrsToList
+    mesonFlags = (lib.mapAttrsToList
       (option: enable: "-D${option}=${if enable then "enabled" else "disabled"}")
       {
         dbusmenu-gtk = traySupport;
@@ -54,7 +54,7 @@
       "-Dsystemd=disabled"
     ];
 
-    preFixup = stdenv.lib.optional withMediaPlayer ''
+    preFixup = lib.optional withMediaPlayer ''
       cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
 
       wrapProgram $out/bin/waybar-mediaplayer.py \

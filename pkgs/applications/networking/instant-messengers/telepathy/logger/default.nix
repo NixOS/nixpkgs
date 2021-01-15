@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/libexec/telepathy-logger" \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 

@@ -58,7 +58,7 @@ python3.pkgs.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/electrum/tests
   '';
 
-  nativeBuildInputs = stdenv.lib.optionals enableQt [ wrapQtAppsHook ];
+  nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
@@ -81,7 +81,7 @@ python3.pkgs.buildPythonApplication {
     keepkey
     trezor
     btchip
-  ] ++ stdenv.lib.optionals enableQt [ pyqt5 qdarkstyle ];
+  ] ++ lib.optionals enableQt [ pyqt5 qdarkstyle ];
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
@@ -94,7 +94,7 @@ python3.pkgs.buildPythonApplication {
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '');
 
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     # Despite setting usr_share above, these files are installed under
     # $out/nix ...
     mv $out/${python3.sitePackages}/nix/store"/"*/share $out
@@ -108,7 +108,7 @@ python3.pkgs.buildPythonApplication {
 
   '';
 
-  postFixup = stdenv.lib.optionalString enableQt ''
+  postFixup = lib.optionalString enableQt ''
     wrapQtApp $out/bin/electrum
   '';
 

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ gettext ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ gettext ]}")
   '';
 
   enableParallelBuilding = true;

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, ninja, libevdev, libev }:
+{ lib, stdenv, fetchgit, pkgconfig, ninja, libevdev, libev }:
 
 stdenv.mkDerivation {
   version = "0.4";
@@ -26,8 +26,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/jmesmon/illum";
     description = "Daemon that wires button presses to screen backlight level";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.dancek ];
-    license = stdenv.lib.licenses.agpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.dancek ];
+    license = lib.licenses.agpl3;
   };
 }

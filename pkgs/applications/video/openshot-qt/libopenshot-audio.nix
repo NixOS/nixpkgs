@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, doxygen
+{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake, doxygen
 , alsaLib, libX11, libXft, libXrandr, libXinerama, libXext, libXcursor
 , zlib, AGL, Cocoa, Foundation
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "libopenshot-audio";
   version = "0.2.0";

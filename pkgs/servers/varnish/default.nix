@@ -22,11 +22,11 @@ let
       buildFlags = [ "localstatedir=/var/spool" ];
 
       postInstall = ''
-        wrapProgram "$out/sbin/varnishd" --prefix PATH : "${stdenv.lib.makeBinPath [ stdenv.cc ]}"
+        wrapProgram "$out/sbin/varnishd" --prefix PATH : "${lib.makeBinPath [ stdenv.cc ]}"
       '';
 
       # https://github.com/varnishcache/varnish-cache/issues/1875
-      NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isi686 "-fexcess-precision=standard";
+      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-fexcess-precision=standard";
 
       outputs = [ "out" "dev" "man" ];
 

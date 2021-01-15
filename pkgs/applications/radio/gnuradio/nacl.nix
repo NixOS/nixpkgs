@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     boost gnuradio uhd makeWrapper libsodium cppunit log4cpp
-  ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
+  ] ++ lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''
     for prog in "$out"/bin/*; do

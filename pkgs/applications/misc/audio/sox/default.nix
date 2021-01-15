@@ -14,7 +14,7 @@
 , enableLibpulseaudio ? true, libpulseaudio ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   name = "sox-14.4.2";

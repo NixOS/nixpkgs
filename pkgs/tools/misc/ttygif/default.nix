@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   postInstall = ''
     wrapProgram $out/bin/ttygif \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ imagemagick xorg.xwd ]}
+      --prefix PATH : ${lib.makeBinPath [ imagemagick xorg.xwd ]}
   '';
 
   meta = with lib; {

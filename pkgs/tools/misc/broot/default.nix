@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
     Security
     zlib

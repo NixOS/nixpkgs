@@ -1,4 +1,4 @@
-{ stdenv, cmake, pkg-config, git, curl, SDL2, xercesc, openal, lua, libvlc
+{ lib, stdenv, cmake, pkg-config, git, curl, SDL2, xercesc, openal, lua, libvlc
 , libjpeg, wxGTK, cppunit, ftgl, glew, libogg, libvorbis, buildEnv, libpng
 , fontconfig, freetype, xorg, makeWrapper, bash, which, gnome3, libGLU, glib
 , fetchFromGitHub
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
     license = licenses.gpl3;
     homepage = "http://megaglest.org/";

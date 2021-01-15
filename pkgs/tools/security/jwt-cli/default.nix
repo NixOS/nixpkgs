@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1k13pw202fr5mvd0ys39n3dxwcl3sd01j6izfb28k06b6pav3wc8";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   doInstallCheck = true;
   installCheckPhase = "$out/bin/jwt --version";

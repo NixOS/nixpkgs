@@ -44,14 +44,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ lzma boost libdevil zlib p7zip openal libvorbis freetype SDL2
     xorg.libX11 xorg.libXcursor libGLU libGL glew curl
     systemd libunwind which minizip ]
-    ++ stdenv.lib.optional withAI jdk
-    ++ stdenv.lib.optional withAI python;
+    ++ lib.optional withAI jdk
+    ++ lib.optional withAI python;
 
   NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
 
   postInstall = ''
     wrapProgram "$out/bin/spring" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc systemd ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc systemd ]}"
   '';
 
   meta = with lib; {

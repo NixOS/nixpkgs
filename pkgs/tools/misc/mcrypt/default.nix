@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libmcrypt, libmhash }:
+{ lib, stdenv, fetchurl, libmcrypt, libmhash }:
 
 stdenv.mkDerivation rec {
   version = "2.6.8";
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
       ever-wider range of algorithms and modes.
     '';
     homepage = "http://mcrypt.sourceforge.net";
-    license = stdenv.lib.licenses.gpl3Only;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.qknight ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.qknight ];
   };
 }

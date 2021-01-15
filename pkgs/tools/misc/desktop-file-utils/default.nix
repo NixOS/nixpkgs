@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, glib, libintl }:
+{ lib, stdenv, fetchurl, pkgconfig, glib, libintl }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "desktop-file-utils";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libXi, xorgproto, autoconf, automake, libtool, m4, xlibsWrapper, pkgconfig }:
+{ lib, stdenv, fetchurl, libXi, xorgproto, autoconf, automake, libtool, m4, xlibsWrapper, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "xinput_calibrator";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/tias/xinput_calibrator";
     description = "A generic touchscreen calibration program for X.Org";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.flosse ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.flosse ];
+    platforms = lib.platforms.linux;
   };
 }

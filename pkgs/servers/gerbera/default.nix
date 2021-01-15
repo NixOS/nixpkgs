@@ -16,7 +16,7 @@
 , enableInotifyTools ? true
 }:
 
-with stdenv.lib;
+with lib;
 let
   optionOnOff = option: if option then "on" else "off";
 in stdenv.mkDerivation rec {

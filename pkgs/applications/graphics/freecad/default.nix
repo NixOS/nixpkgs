@@ -33,6 +33,7 @@ in mkDerivation rec {
   ] ++ (with pythonPackages; [
     matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
     GitPython # for addon manager
+    scipy pyyaml # (at least for) PyrateWorkbench
   ]);
 
   cmakeFlags = [

@@ -13,7 +13,7 @@
 
 }:
 
-let inherit (stdenv.lib) optionals; in
+let inherit (lib) optionals; in
 
 stdenv.mkDerivation {
   pname = "secp256k1";

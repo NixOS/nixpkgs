@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper mono ];
 
-  libraries = stdenv.lib.makeLibraryPath [ gtk2 curl ];
+  libraries = lib.makeLibraryPath [ gtk2 curl ];
 
   buildPhase = "true";
 

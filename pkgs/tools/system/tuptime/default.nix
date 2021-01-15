@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram $out/share/tuptime/db-tuptime-migrate-4.0-to-5.0.sh \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ sqlite ]}"
+      --prefix PATH : "${lib.makeBinPath [ sqlite ]}"
   '';
 
   meta = with lib; {

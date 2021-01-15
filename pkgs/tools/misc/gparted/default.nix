@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-       --prefix PATH : "${stdenv.lib.makeBinPath [ gpart hdparm util-linux procps coreutils gnused gnugrep ]}"
+       --prefix PATH : "${lib.makeBinPath [ gpart hdparm util-linux procps coreutils gnused gnugrep ]}"
     )
   '';
 

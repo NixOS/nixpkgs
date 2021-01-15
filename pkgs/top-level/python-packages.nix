@@ -5833,6 +5833,8 @@ in {
 
   pysolr = callPackage ../development/python-modules/pysolr { };
 
+  pysoma = callPackage ../development/python-modules/pysoma { };
+
   py-sonic = callPackage ../development/python-modules/py-sonic { };
 
   pysonos = callPackage ../development/python-modules/pysonos { };
@@ -8143,6 +8145,7 @@ in {
 
   wxPython_4_0 = callPackage ../development/python-modules/wxPython/4.0.nix {
     inherit (pkgs) pkgconfig;
+    inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox Carbon Cocoa CoreFoundation IOKit OpenGL;
     wxGTK = pkgs.wxGTK30.override {
       withGtk2 = false;
       withWebKit = true;

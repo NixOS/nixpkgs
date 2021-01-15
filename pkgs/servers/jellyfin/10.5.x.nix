@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     install -dm 755 "$out/opt/jellyfin"
     cp -r * "$out/opt/jellyfin"
     makeWrapper "${dotnetCorePackages.aspnetcore_3_1}/bin/dotnet" $out/bin/jellyfin \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         sqlite fontconfig freetype stdenv.cc.cc.lib
       ]}:$out/opt/jellyfin/runtimes/${runtimeDir}/native/" \
       --add-flags "$out/opt/jellyfin/jellyfin.dll --ffmpeg ${ffmpeg}/bin/ffmpeg"
@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
     smoke-test = nixosTests.jellyfin;
   };
 
-  meta =  with stdenv.lib; {
+  meta =  with lib; {
     description = "The Free Software Media System";
     homepage = "https://jellyfin.org/";
     license = licenses.gpl2;

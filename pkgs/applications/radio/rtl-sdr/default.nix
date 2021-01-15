@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   #   /etc/udev/rules.d/, and there is no option to install elsewhere. So install
   #   rules manually.
   # * Propagate libusb-1.0 dependency in pkg-config file.
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p "$out/etc/udev/rules.d/"
     cp ../rtl-sdr.rules "$out/etc/udev/rules.d/99-rtl-sdr.rules"
 

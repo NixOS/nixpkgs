@@ -1,4 +1,4 @@
-{stdenv
+{lib, stdenv
 , fetchurl
 , fetchpatch
 , bzip2
@@ -40,8 +40,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Opensource disk backup software";
     homepage = "http://www.partimage.org";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [lib.maintainers.marcweber];
+    platforms = lib.platforms.linux;
   };
 }

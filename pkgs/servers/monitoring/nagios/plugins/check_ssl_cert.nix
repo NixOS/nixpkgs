@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/check_ssl_cert \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ openssl file which curl ]}"
+      --prefix PATH : "${lib.makeBinPath [ openssl file which curl ]}"
   '';
 
   meta = with lib; {

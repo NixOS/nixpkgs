@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, pkgconfig, ncurses }:
+{ lib, stdenv, fetchurl, xorg, pkgconfig, ncurses }:
 stdenv.mkDerivation {
 
   pname = "xrestop";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [ xorg.libX11 xorg.libXres xorg.libXext ncurses ];
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2;
   };
 }

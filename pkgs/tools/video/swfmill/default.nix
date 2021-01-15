@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pkgconfig, libxslt, freetype, libpng, libxml2
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An xml2swf and swf2xml processor with import functionalities";
     homepage = "http://swfmill.org";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

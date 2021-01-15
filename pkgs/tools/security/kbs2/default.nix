@@ -14,18 +14,18 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1gvvmfavaq29p40p5mq1phpp2a1nw04dz4975pzm1b6z89p0jlzl";
 
   nativeBuildInputs = [ installShellFiles ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ python3 ];
+    ++ lib.optionals stdenv.isLinux [ python3 ];
 
   buildInputs = [ ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libxcb ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit ];
+    ++ lib.optionals stdenv.isLinux [ libxcb ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit ];
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
   checkFlags = [ "--skip=kbs2::config::tests::test_find_config_dir" ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "--skip=test_ragelib_rewrap_keyfile" ];
+    ++ lib.optionals stdenv.isDarwin [ "--skip=test_ragelib_rewrap_keyfile" ];
 
   postInstall = ''
     mkdir -p $out/share/kbs2

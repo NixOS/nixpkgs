@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, callPackage }:
+{ lib, stdenv, fetchurl, callPackage }:
 
 let
  # Probably a bug in some FreeDict release files, but easier to trivially
@@ -24,7 +24,7 @@ let
 
      meta = {
        description = "dictd-db dictionary for dictd";
-       platforms = stdenv.lib.platforms.linux;
+       platforms = lib.platforms.linux;
      };
    };
 in rec {

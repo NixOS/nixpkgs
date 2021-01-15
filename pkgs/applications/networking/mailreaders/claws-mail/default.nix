@@ -1,4 +1,4 @@
-{ config, fetchurl, stdenv, wrapGAppsHook, autoreconfHook
+{ lib, config, fetchurl, stdenv, wrapGAppsHook, autoreconfHook
 , curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme, gumbo
 , libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
 , openldap, perl, pkgconfig, poppler, python, shared-mime-info
@@ -27,7 +27,7 @@
 , enableSpellcheck ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "claws-mail";

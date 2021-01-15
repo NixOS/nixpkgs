@@ -21,7 +21,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     qtbase qtsvg gnuradio boost gr-osmosdr rtl-sdr hackrf
-  ] ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ];
+  ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   postInstall = ''
     install -vD $src/gqrx.desktop -t "$out/share/applications/"

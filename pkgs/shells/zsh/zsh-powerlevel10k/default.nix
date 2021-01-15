@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, pkgs }:
+{ lib, stdenv, fetchFromGitHub, substituteAll, pkgs }:
 
 # To make use of this derivation, use
 # `programs.zsh.promptInit = "source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";`
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A fast reimplementation of Powerlevel9k ZSH theme";
     homepage = "https://github.com/romkatv/powerlevel10k";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.hexa ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.hexa ];
   };
 }

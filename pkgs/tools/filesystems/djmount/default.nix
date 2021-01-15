@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fuse }:
+{ lib, stdenv, fetchurl, pkgconfig, fuse }:
 
 stdenv.mkDerivation rec {
   pname = "djmount";
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://djmount.sourceforge.net/";
     description = "UPnP AV client, mounts as a Linux filesystem the media content of compatible UPnP AV devices";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.jagajaga ];
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.jagajaga ];
+    license = lib.licenses.gpl2;
   };
 }

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp -r proprietary/*.bundle $out/pcsc/drivers
   '';
 
-  libPath = stdenv.lib.makeLibraryPath [ libusb-compat-0_1 ];
+  libPath = lib.makeLibraryPath [ libusb-compat-0_1 ];
 
   fixupPhase = ''
     patchelf --set-rpath $libPath \

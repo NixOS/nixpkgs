@@ -1,4 +1,4 @@
-{ stdenv, cmake, libGL, SDL, SDL_mixer, SDL_net, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, cmake, libGL, SDL, SDL_mixer, SDL_net, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "eternity-engine";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://doomworld.com/eternity";
     description = "New school Doom port by James Haley";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ MP2E ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ MP2E ];
   };
 }

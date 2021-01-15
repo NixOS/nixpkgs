@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, nss, nspr, libqb
+{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, nss, nspr, libqb
 , dbus, rdma-core, libstatgrab, net-snmp
 , enableDbus ? false
 , enableInfiniBandRdma ? false
@@ -6,7 +6,7 @@
 , enableSnmp ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "corosync";

@@ -29,8 +29,8 @@ mkDerivation rec {
     description = "Qt-based slow-scan TV and fax";
     homepage = "http://users.telenet.be/on4qz/";
     platforms = platforms.linux;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ hax404 ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ hax404 ];
   };
 }
 

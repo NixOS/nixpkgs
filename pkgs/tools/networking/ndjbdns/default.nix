@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, systemd, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, systemd, pkgconfig }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   version = "1.06";

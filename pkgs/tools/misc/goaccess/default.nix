@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, ncurses, glib, libmaxminddb, fetchpatch }:
+{ lib, stdenv, fetchurl, pkgconfig, ncurses, glib, libmaxminddb, fetchpatch }:
 
 stdenv.mkDerivation rec {
   version = "1.4";
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Real-time web log analyzer and interactive viewer that runs in a terminal in *nix systems";
     homepage    = "https://goaccess.io";
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ ederoyd46 ];
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ ederoyd46 ];
   };
 }

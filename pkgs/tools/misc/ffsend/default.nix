@@ -32,7 +32,7 @@ buildRustPackage rec {
     if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
     else [ openssl ];
 
-  preBuild = stdenv.lib.optionalString (x11Support && usesX11) (
+  preBuild = lib.optionalString (x11Support && usesX11) (
     if preferXsel && xsel != null then ''
       export XSEL_PATH="${xsel}/bin/xsel"
     '' else ''

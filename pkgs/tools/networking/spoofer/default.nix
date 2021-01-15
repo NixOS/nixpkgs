@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkgconfig, protobuf, openssl, libpcap, traceroute
 , withGUI ? false, qt5 }:
 
-let inherit (stdenv.lib) optional;
+let inherit (lib) optional;
 in
 
 stdenv.mkDerivation rec {
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     license = licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ leenaars];
+    maintainers = with lib.maintainers; [ leenaars];
   };
 }

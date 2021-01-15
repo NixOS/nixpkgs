@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     # Wrap the application with Electron.
     makeWrapper "${electron_11}/bin/electron" "$out/bin/${pname}" \
       --add-flags "$out/share/${pname}/resources/app.asar" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath runtimeLibs}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
   '';
 
   passthru.updateScript = ./update.sh;

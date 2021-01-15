@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     zlib readline openssl libassuan
     libXt libxslt libiconv docbook_xml_dtd_412
   ]
-  ++ stdenv.lib.optional stdenv.isDarwin Carbon
+  ++ lib.optional stdenv.isDarwin Carbon
   ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
       if withApplePCSC then
         "${PCSC}/Library/Frameworks/PCSC.framework/PCSC"
       else
-        "${stdenv.lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
+        "${lib.getLib pcsclite}/lib/libpcsclite${stdenv.hostPlatform.extensions.sharedLibrary}"
       }"
-    (stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform)
+    (lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform)
       "XSLTPROC=${buildPackages.libxslt}/bin/xsltproc")
   ];
 
-  PCSC_CFLAGS = stdenv.lib.optionalString withApplePCSC
+  PCSC_CFLAGS = lib.optionalString withApplePCSC
     "-I${PCSC}/Library/Frameworks/PCSC.framework/Headers";
 
   installFlags = [

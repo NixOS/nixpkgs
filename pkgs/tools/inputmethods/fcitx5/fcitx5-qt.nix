@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchFromGitHub
 , cmake
@@ -36,7 +36,7 @@ mkDerivation rec {
     libXdmcp
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fcitx5 Qt Library";
     homepage = "https://github.com/fcitx/fcitx5-qt";
     license = with licenses; [ lgpl21Plus bsd3 ];

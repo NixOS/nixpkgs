@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   configureFlags = [
     "--sysconfdir=/etc"
-    (stdenv.lib.enableFeature tlsSupport "ssl")
+    (lib.enableFeature tlsSupport "ssl")
   ];
 
   postConfigure =
@@ -34,9 +34,9 @@ stdenv.mkDerivation {
 
   installTargets = [ "install" "install-sendmail" ];
 
-  buildInputs = stdenv.lib.optional tlsSupport openssl;
+  buildInputs = lib.optional tlsSupport openssl;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString tlsSupport "-lcrypto";
+  NIX_LDFLAGS = lib.optionalString tlsSupport "-lcrypto";
 
   meta = with lib; {
     platforms = platforms.linux;

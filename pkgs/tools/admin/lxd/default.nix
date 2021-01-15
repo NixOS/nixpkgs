@@ -46,7 +46,7 @@ buildGoPackage rec {
     # test binaries, code generation
     rm $out/bin/{deps,macaroon-identity,generate}
 
-    wrapProgram $out/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath (
+    wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
       networkPkgs
       ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute bash criu ]
       ++ [ (writeShellScriptBin "apparmor_parser" ''

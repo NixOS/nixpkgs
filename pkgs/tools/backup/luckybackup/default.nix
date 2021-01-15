@@ -1,9 +1,9 @@
-{ mkDerivation, stdenv, fetchurl
+{ mkDerivation, lib, stdenv, fetchurl
 , pkgconfig, libtool, qmake
 , rsync, ssh
 }:
 
-with stdenv.lib;
+with lib;
 mkDerivation rec {
   pname = "luckybackup";
   version = "0.5.0";
@@ -16,7 +16,7 @@ mkDerivation rec {
   buildInputs = [ rsync ssh ];
 
   nativeBuildInputs = [ pkgconfig libtool qmake ];
-  
+
   prePatch = ''
     for File in luckybackup.pro menu/luckybackup-pkexec \
         menu/luckybackup-su.desktop menu/luckybackup.desktop \
@@ -29,12 +29,12 @@ mkDerivation rec {
   meta = {
     description = "A powerful, fast and reliable backup & sync tool";
     longDescription = ''
-      luckyBackup is an application for data back-up and synchronization 
+      luckyBackup is an application for data back-up and synchronization
       powered by the rsync tool.
-      
+
       It is simple to use, fast (transfers over only changes made and not
       all data), safe (keeps your data safe by checking all declared directories
-      before proceeding in any data manipulation), reliable and fully 
+      before proceeding in any data manipulation), reliable and fully
       customizable.
     '';
     homepage = "http://luckybackup.sourceforge.net/";

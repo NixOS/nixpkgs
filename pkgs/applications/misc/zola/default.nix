@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ openssl oniguruma ]
-    ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
+    ++ lib.optional stdenv.isDarwin CoreServices;
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 

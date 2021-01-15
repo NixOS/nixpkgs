@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1iziymcbpc64d44djgqfifpblsly4sr5bxsp5g29jgxz552kjlah";
   };
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-liconv";
 
   preBuild = ''
     substituteInPlace src/Makefile --replace "CC=gcc" "CC?=gcc"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.aescrypt.com/";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 qknight ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms   = lib.platforms.all;
     hydraPlatforms = with platforms; unix;
   };
 }
