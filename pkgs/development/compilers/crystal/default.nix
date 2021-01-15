@@ -57,6 +57,7 @@ let
     buildCommand = ''
       mkdir -p $out
       tar --strip-components=1 -C $out -xf ${src}
+      patchShebangs $out
     '';
   };
 
