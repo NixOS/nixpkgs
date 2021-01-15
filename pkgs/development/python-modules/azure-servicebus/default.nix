@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "46d1e7b9da537da831c3184d42d3e2bc3c7ab9234e204a9d4c2e5dc54010721b";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     uamqp
     azure-common
     azure-core
