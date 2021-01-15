@@ -285,6 +285,8 @@ let
 
     encore = callPackage ../development/ocaml-modules/encore { };
 
+    emile = callPackage ../development/ocaml-modules/emile { };
+
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
     eqaf = callPackage ../development/ocaml-modules/eqaf { };
