@@ -17,8 +17,6 @@ let
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
 
-  enableZfs = inInitrd || inSystem;
-
   autosnapPkg = pkgs.zfstools.override {
     zfs = cfgZfs.package;
   };
@@ -107,6 +105,14 @@ in
         default = if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
         description = "Configured ZFS userland tools package.";
       };
+
+      enabled = mkOption {
+        readOnly = true;
+        type = types.bool;
+        default = inInitrd || inSystem;
+        description = "True if ZFS filesystem support is enabled";
+      };
+
       enableUnstable = mkOption {
         type = types.bool;
         default = false;
@@ -350,7 +356,7 @@ in
   ###### implementation
 
   config = mkMerge [
-    (mkIf enableZfs {
+    (mkIf cfgZfs.enabled {
       assertions = [
         {
           assertion = config.networking.hostId != null;
@@ -589,7 +595,7 @@ in
       systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })
 
-    (mkIf (enableZfs && cfgSnapshots.enable) {
+    (mkIf (cfgZfs.enabled && cfgSnapshots.enable) {
       systemd.services = let
                            descr = name: if name == "frequent" then "15 mins"
                                     else if name == "hourly" then "hour"
@@ -627,7 +633,7 @@ in
                             }) snapshotNames);
     })
 
-    (mkIf (enableZfs && cfgScrub.enable) {
+    (mkIf (cfgZfs.enabled && cfgScrub.enable) {
       systemd.services.zfs-scrub = {
         description = "ZFS pools scrubbing";
         after = [ "zfs-import.target" ];
@@ -654,7 +660,7 @@ in
       };
     })
 
-    (mkIf (enableZfs && cfgTrim.enable) {
+    (mkIf (cfgZfs.enabled && cfgTrim.enable) {
       systemd.services.zpool-trim = {
         description = "ZFS pools trim";
         after = [ "zfs-import.target" ];
