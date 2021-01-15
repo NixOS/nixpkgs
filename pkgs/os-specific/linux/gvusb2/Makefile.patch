@@ -1,0 +1,17 @@
+diff --git a/Makefile b/Makefile
+index e666392..e1a341b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -3,8 +3,10 @@ obj-m += gvusb2-sound.o gvusb2-video.o
+ gvusb2-sound-y := gvusb2-snd.o gvusb2-core.o
+ gvusb2-video-y := gvusb2-vid.o gvusb2-v4l2.o gvusb2-core.o gvusb2-i2c.o
+ 
++KERNEL_SOURCE_DIR := /lib/modules/$(shell uname -r)/build
++
+ all:
+-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
++	make -C $(KERNEL_SOURCE_DIR) M=$(PWD) modules
+ 
+ clean:
+-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
++	make -C $(KERNEL_SOURCE_DIR) M=$(PWD) clean
