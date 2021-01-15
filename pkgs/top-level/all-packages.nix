@@ -16938,6 +16938,8 @@ in
 
   uthash = callPackage ../development/libraries/uthash { };
 
+  uthenticode = callPackage ../development/libraries/uthenticode { };
+
   utmps = skawarePackages.utmps;
 
   ucommon = ucommon_openssl;
