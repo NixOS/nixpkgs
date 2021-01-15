@@ -1,4 +1,4 @@
-{stdenv, mkDerivation, fetchurl, qmake, qtbase, qtsvg, pkgconfig, poppler, djvulibre, libspectre, cups
+{lib, stdenv, mkDerivation, fetchurl, qmake, qtbase, qtsvg, pkgconfig, poppler, djvulibre, libspectre, cups
 , file, ghostscript
 }:
 let
@@ -40,9 +40,9 @@ mkDerivation {
   meta = {
     inherit (s) version;
     description = "A tabbed document viewer";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = "https://launchpad.net/qpdfview";
     updateWalker = true;
   };

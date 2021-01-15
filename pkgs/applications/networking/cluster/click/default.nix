@@ -15,7 +15,7 @@ buildRustPackage rec {
 
   cargoSha256 = "1f9yn4pvp58laylngdrfdkwygisnzkhkm7pndf6l33k3aqxhz5mm";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
     description = ''The "Command Line Interactive Controller for Kubernetes"'';

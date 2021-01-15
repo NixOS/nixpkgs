@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , substituteAll
@@ -64,7 +65,7 @@ mkDerivation rec {
 
   buildInputs = [ leptonica tesseract4 qtmultimedia qtx11extras ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";
     homepage = "https://crow-translate.github.io/";
     license = licenses.gpl3Plus;

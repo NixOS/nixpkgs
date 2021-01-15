@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fetchFromGitHub, mono }:
+{ lib, stdenv, buildEnv, fetchFromGitHub, mono }:
 
 let
   version = "1.8.4.2";
@@ -18,8 +18,8 @@ let
     meta = {
       description = "KeePass plugin to expose password entries securely (256bit AES/CBC) over HTTP";
       homepage    = "https://github.com/pfn/keepasshttp";
-      platforms   = with stdenv.lib.platforms; linux;
-      license     = stdenv.lib.licenses.gpl3;
+      platforms   = with lib.platforms; linux;
+      license     = lib.licenses.gpl3;
     };
 
     pluginFilename = "KeePassHttp.plgx";

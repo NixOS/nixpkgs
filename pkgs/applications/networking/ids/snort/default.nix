@@ -1,4 +1,4 @@
-{stdenv, pkgconfig, luajit, openssl, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison, makeWrapper
+{lib, stdenv, pkgconfig, luajit, openssl, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison, makeWrapper
 , libtirpc
 }:
 
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Network intrusion prevention and detection system (IDS/IPS)";
     homepage = "https://www.snort.org";
-    maintainers = with stdenv.lib.maintainers; [ aycanirican ];
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [ aycanirican ];
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux;
   };
 }

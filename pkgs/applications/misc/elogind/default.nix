@@ -25,7 +25,7 @@
 , enableSystemd ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "elogind";

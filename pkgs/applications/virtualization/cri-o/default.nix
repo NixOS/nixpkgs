@@ -37,7 +37,7 @@ buildGoModule rec {
     libseccomp
     libselinux
     lvm2
-  ] ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
+  ] ++ lib.optionals (glibc != null) [ glibc glibc.static ];
 
   BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -36,7 +36,7 @@
 , withKeePassFDOSecrets ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
@@ -49,18 +49,18 @@ stdenv.mkDerivation rec {
     sha256 = "032dzywvwpclhsl3n1pq2m9gyxqpg0gkci6axbvbs7bn82wznc4h";
   };
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang [
     "-Wno-old-style-cast"
     "-Wno-error"
     "-D__BIG_ENDIAN__=${if stdenv.isBigEndian then "1" else "0"}"
   ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace "/usr/local/bin" "../bin" \
       --replace "/usr/local/share/man" "../share/man"
   '';
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
 
   patches = [
     ./darwin.patch
@@ -111,9 +111,9 @@ stdenv.mkDerivation rec {
     yubikey-personalization
     zlib
   ]
-  ++ stdenv.lib.optional withKeePassKeeShareSecure quazip
-  ++ stdenv.lib.optional stdenv.isDarwin qtmacextras
-  ++ stdenv.lib.optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication;
+  ++ lib.optional withKeePassKeeShareSecure quazip
+  ++ lib.optional stdenv.isDarwin qtmacextras
+  ++ lib.optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication;
 
   preFixup = optionalString stdenv.isDarwin ''
     # Make it work without Qt in PATH.

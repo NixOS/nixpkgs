@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-zlib=system" ]
     # Floating point behavior on i686 causes test failures. Preventing
     # extended precision fixes this problem.
-    ++ stdenv.lib.optionals stdenv.isi686 [
+    ++ lib.optionals stdenv.isi686 [
       "CFLAGS=-ffloat-store" "CXXFLAGS=-ffloat-store"
     ];
 

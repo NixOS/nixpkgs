@@ -1,6 +1,6 @@
-{ fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkgconfig, glib, libgcrypt }:
+{ lib, fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkgconfig, glib, libgcrypt }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   version = "1.4.2";
   pname = "bitlbee-steam";
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
 
     homepage = "https://github.com/jgeboski/bitlbee-steam";
     license = licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

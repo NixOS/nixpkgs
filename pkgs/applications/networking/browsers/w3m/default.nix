@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , ncurses, boehmgc, gettext, zlib
 , sslSupport ? true, openssl ? null
 , graphicsSupport ? !stdenv.isDarwin, imlib2 ? null
@@ -12,7 +12,7 @@ assert graphicsSupport -> imlib2 != null;
 assert x11Support -> graphicsSupport && libX11 != null;
 assert mouseSupport -> gpm-ncurses != null;
 
-with stdenv.lib;
+with lib;
 
 let
   mktable = buildPackages.stdenv.mkDerivation {
@@ -94,7 +94,7 @@ in stdenv.mkDerivation rec {
     homepage = "http://w3m.sourceforge.net/";
     description = "A text-mode web browser";
     maintainers = [ maintainers.cstrahan ];
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
 }

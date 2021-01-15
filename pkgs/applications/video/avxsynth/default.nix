@@ -4,7 +4,7 @@
 }:
 
 let
-  inherit (stdenv.lib) enableFeature optional;
+  inherit (lib) enableFeature optional;
 in
 
 stdenv.mkDerivation {

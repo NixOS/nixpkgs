@@ -1,6 +1,6 @@
-{ fetchFromGitHub, stdenv, bitlbee, autoreconfHook, pkgconfig, glib }:
+{ lib, fetchFromGitHub, stdenv, bitlbee, autoreconfHook, pkgconfig, glib }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "bitlbee-discord";
   version = "0.4.3";
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sm00th/bitlbee-discord";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lassulus jb55 ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

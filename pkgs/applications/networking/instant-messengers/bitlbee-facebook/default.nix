@@ -1,6 +1,6 @@
-{ fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkgconfig, glib, json-glib }:
+{ lib, fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkgconfig, glib, json-glib }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "bitlbee-facebook";
   version = "1.2.1";
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
 
     homepage = "https://github.com/bitlbee/bitlbee-facebook";
     license = licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

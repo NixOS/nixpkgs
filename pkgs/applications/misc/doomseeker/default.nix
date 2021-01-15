@@ -16,7 +16,7 @@ mkDerivation {
   nativeBuildInputs = [ cmake qttools pkgconfig xxd ];
   buildInputs = [ qtbase qtmultimedia zlib bzip2 ];
 
-  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "format";
+  hardeningDisable = lib.optional stdenv.isDarwin "format";
 
   meta = with lib; {
     homepage = "http://doomseeker.drdteam.org/";

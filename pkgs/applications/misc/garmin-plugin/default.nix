@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, garmintools, libgcrypt, libusb-compat-0_1, pkgconfig, tinyxml, zlib }:
+{ lib, stdenv, fetchurl, garmintools, libgcrypt, libusb-compat-0_1, pkgconfig, tinyxml, zlib }:
 stdenv.mkDerivation {
   name = "garmin-plugin-0.3.26";
   src = fetchurl {
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   '';
   meta = {
     homepage = "http://www.andreas-diesner.de/garminplugin";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -16,7 +16,7 @@ buildGoModule rec {
   buildFlagsArray = ''
     -ldflags=
         -X main.version=${version}
-        -X main.goVersion=${stdenv.lib.getVersion go}
+        -X main.goVersion=${lib.getVersion go}
   '';
 
   meta = with lib; {

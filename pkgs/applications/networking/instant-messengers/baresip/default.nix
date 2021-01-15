@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, openssl, libre, librem, pkgconfig, gst_all_1
+{ lib, stdenv, fetchurl, zlib, openssl, libre, librem, pkgconfig, gst_all_1
 , cairo, mpg123, alsaLib, SDL, libv4l, celt, libsndfile, srtp, ffmpeg_3
 , gsm, speex, portaudio, spandsp, libuuid, libvpx
 }:
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     "USE_BV32=" "USE_COREAUDIO=" "USE_G711=1" "USE_G722=1" "USE_G722_1="
     "USE_ILBC=" "USE_OPUS=" "USE_SILK="
   ]
-  ++ stdenv.lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
-  ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
+  ++ lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
+  ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
   ;
 
   NIX_CFLAGS_COMPILE='' -I${librem}/include/rem -I${gsm}/include/gsm
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
     -D__need_timeval -D__need_timespec -D__need_time_t '';
   meta = {
     homepage = "http://www.creytiv.com/baresip.html";
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    license = stdenv.lib.licenses.bsd3;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [raskin];
+    license = lib.licenses.bsd3;
     inherit version;
     downloadPage = "http://www.creytiv.com/pub/";
     updateWalker = true;

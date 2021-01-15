@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     description = "Converter from OpenStreetMap data format to OpenOrienteering Mapper format";
     license = licenses.gpl3;
     maintainers = [ maintainers.mpickering ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with lib.platforms; linux;
   };
 }

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     json-glib
   ];
 
-  cmakeFlags = stdenv.lib.optional stdenv.isDarwin "-DMOVIES=OFF";
+  cmakeFlags = lib.optional stdenv.isDarwin "-DMOVIES=OFF";
 
   meta = with lib; {
     description = "A presenter console with multi-monitor support for PDF files";

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, makeself, yasm, fuse, wxGTK, lvm2 }:
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, makeself, yasm, fuse, wxGTK, lvm2 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "veracrypt";

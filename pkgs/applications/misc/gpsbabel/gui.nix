@@ -29,7 +29,7 @@ mkDerivation {
   '';
 
   qtWrapperArgs = [
-    "--prefix PATH : ${stdenv.lib.makeBinPath [ gpsbabel ]}"
+    "--prefix PATH : ${lib.makeBinPath [ gpsbabel ]}"
   ];
 
   postInstall = ''

@@ -19,7 +19,7 @@
 # If your firewall is enabled, make sure to have something like:
 #   networking.firewall.allowedTCPPorts = [ 8010 ];
 
-with stdenv.lib;
+with lib;
 
 assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null);
 

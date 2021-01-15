@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig,
   gettext, openssl
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   pname = "notbit";

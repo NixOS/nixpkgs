@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Simple tool for input event debugging";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };

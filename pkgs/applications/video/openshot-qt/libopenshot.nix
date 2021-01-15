@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , pkgconfig, cmake, doxygen
 , libopenshot-audio, imagemagick, ffmpeg_3
 , swig, python3
@@ -7,7 +7,7 @@
 , llvmPackages
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "libopenshot";
   version = "0.2.5";

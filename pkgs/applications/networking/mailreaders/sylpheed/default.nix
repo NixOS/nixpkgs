@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, openssl ? null, gpgme ? null
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, openssl ? null, gpgme ? null
 , gpgSupport ? true, sslSupport ? true }:
 
 assert gpgSupport -> gpgme != null;
 assert sslSupport -> openssl != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "sylpheed";

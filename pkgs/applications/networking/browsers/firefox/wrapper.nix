@@ -172,7 +172,7 @@ let
         desktopName = "${desktopName}${nameSuffix}${lib.optionalString forceWayland " (Wayland)"}";
         genericName = "Web Browser";
         categories = "Network;WebBrowser;";
-        mimeType = stdenv.lib.concatStringsSep ";" [
+        mimeType = lib.concatStringsSep ";" [
           "text/html"
           "text/xml"
           "application/xhtml+xml"

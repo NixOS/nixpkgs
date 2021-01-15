@@ -33,7 +33,7 @@ in mkDerivation {
     cp sleepyhead/SleepyHead $out/bin
   '';
 
-  postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.isDarwin ''
     wrapQtApp "$out/Applications/SleepyHead.app/Contents/MacOS/SleepyHead"
   '';
 
