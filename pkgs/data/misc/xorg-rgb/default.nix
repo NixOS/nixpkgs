@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, xorgproto}:
+{lib, stdenv, fetchurl, pkgconfig, xorgproto}:
 stdenv.mkDerivation rec {
   pname = "rgb";
   version = "1.0.6";
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "X11 colorname to RGB mapping database";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = "http://xorg.freedesktop.org/";
   };
 }
