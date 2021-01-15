@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -6,41 +6,13 @@ let
   runDir = "/run/searx";
   cfg = config.services.searx;
 
-  hasEngines =
-    builtins.hasAttr "engines" cfg.settings &&
-    cfg.settings.engines != { };
-
-  # Script to merge NixOS settings with
-  # the default settings.yml bundled in searx.
-  mergeConfig = ''
+  generateConfig = ''
     cd ${runDir}
-    # find the default settings.yml
-    default=$(find '${cfg.package}/' -name settings.yml)
 
     # write NixOS settings as JSON
-    cat <<'EOF' > settings.json
+    cat <<'EOF' > settings.yml
       ${builtins.toJSON cfg.settings}
     EOF
-
-    ${optionalString hasEngines ''
-      # extract and convert the default engines array to an object
-      ${pkgs.yq-go}/bin/yq r "$default" engines -j | \
-      ${pkgs.jq}/bin/jq 'reduce .[] as $e ({}; .[$e.name] = $e)' \
-        > engines.json
-
-      # merge and update the NixOS engines with the newly created object
-      cp settings.json temp.json
-      ${pkgs.jq}/bin/jq -s '. as [$s, $e] | $s | .engines |=
-        ($e * . | to_entries | map (.value))' \
-        temp.json engines.json > settings.json
-
-      # clean up temporary files
-      rm {engines,temp}.json
-    ''}
-
-    # merge the default and NixOS settings
-    ${pkgs.yq-go}/bin/yq m -P settings.json "$default" > settings.yml
-    rm settings.json
 
     # substitute environment variables
     env -0 | while IFS='=' read -r -d ''' n v; do
@@ -50,6 +22,12 @@ let
     # set strict permissions
     chmod 400 settings.yml
   '';
+
+  settingType = with types; (oneOf
+    [ bool int float str
+      (listOf settingType)
+      (attrsOf settingType)
+    ]) // { description = "JSON value"; };
 
 in
 
@@ -86,15 +64,16 @@ in
       };
 
       settings = mkOption {
-        type = types.attrs;
+        type = types.attrsOf settingType;
         default = { };
         example = literalExample ''
           { server.port = 8080;
             server.bind_address = "0.0.0.0";
             server.secret_key = "@SEARX_SECRET_KEY@";
 
-            engines.wolframalpha =
-              { shortcut = "wa";
+            engines = lib.singleton
+              { name = "wolframalpha";
+                shortcut = "wa";
                 api_key = "@WOLFRAM_API_KEY@";
                 engine = "wolframalpha_api";
               };
@@ -155,9 +134,9 @@ in
       };
 
       uwsgiConfig = mkOption {
-        type = types.attrs;
+        type = options.services.uwsgi.instance.type;
         default = { http = ":8080"; };
-        example = lib.literalExample ''
+        example = literalExample ''
           {
             disable-logging = true;
             http = ":8080";                   # serve via HTTP...
@@ -199,7 +178,7 @@ in
         RuntimeDirectoryMode = "750";
       } // optionalAttrs (cfg.environmentFile != null)
         { EnvironmentFile = builtins.toPath cfg.environmentFile; };
-      script = mergeConfig;
+      script = generateConfig;
     };
 
     systemd.services.searx = mkIf (!cfg.runInUwsgi) {
@@ -221,6 +200,11 @@ in
         after = [ "searx-init.service" ];
       };
 
+    services.searx.settings = {
+      # merge NixOS settings with defaults settings.yml
+      use_default_settings = mkDefault true;
+    };
+
     services.uwsgi = mkIf (cfg.runInUwsgi) {
       enable = true;
       plugins = [ "python3" ];
@@ -241,6 +225,6 @@ in
 
   };
 
-  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
+  meta.maintainers = with maintainers; [ rnhmjoj ];
 
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, util-linux, coreutils }:
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, systemd, util-linux, coreutils }:
 
 let
   v = "2.02.106";
@@ -68,9 +68,9 @@ stdenv.mkDerivation {
       cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
     '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://sourceware.org/lvm2/";
     description = "Tools to support Logical Volume Management (LVM) on Linux";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

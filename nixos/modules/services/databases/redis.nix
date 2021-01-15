@@ -122,12 +122,29 @@ in
       };
 
       slaveOf = mkOption {
-        default = null; # { ip, port }
-        description = "An attribute set with two attributes: ip and port to which this redis instance acts as a slave.";
+        type = with types; nullOr (submodule ({ ... }: {
+          options = {
+            ip = mkOption {
+              type = str;
+              description = "IP of the Redis master";
+              example = "192.168.1.100";
+            };
+
+            port = mkOption {
+              type = port;
+              description = "port of the Redis master";
+              default = 6379;
+            };
+          };
+        }));
+
+        default = null;
+        description = "IP and port to which this redis instance acts as a slave.";
         example = { ip = "192.168.1.100"; port = 6379; };
       };
 
       masterAuth = mkOption {
+        type = with types; nullOr str;
         default = null;
         description = ''If the master is password protected (using the requirePass configuration)
         it is possible to tell the slave to authenticate before starting the replication synchronization

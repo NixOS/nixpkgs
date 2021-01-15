@@ -194,7 +194,15 @@ mapAliases ({
   gdb-multitarget = gdb; # added 2017-11-13
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
   gettextWithExpat = gettext; # 2016-02-19
-  git-hub = gitAndTools.git-hub; # added 2016-04-29
+  gitAndTools = self // { # added 2021-01-14
+    darcsToGit = darcs-to-git;
+    gitAnnex = git-annex;
+    gitBrunch = git-brunch;
+    gitFastExport = git-fast-export;
+    gitRemoteGcrypt = git-remote-gcrypt;
+    svn_all_fast_export = svn-all-fast-export;
+    topGit = top-git;
+  };
   glib_networking = glib-networking; # added 2018-02-25
   gmailieer = lieer; # added 2020-04-19
   gnome-mpv = celluloid; # added 2019-08-22
@@ -216,6 +224,7 @@ mapAliases ({
   };
   gnustep-make = gnustep.make; # added 2016-7-6
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
+  gnuvd = throw "gnuvd was removed because the backend service is missing"; # added 2020-01-14
   go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobjectIntrospection = gobject-introspection; # added 2018-12-02

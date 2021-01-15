@@ -5,7 +5,7 @@
 , awesomeversion
 , buildPythonPackage
 , fetchFromGitHub
-, pythonAtLeast
+, pythonOlder
 , pytest-asyncio
 , pytestCheckHook
 }:
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "20.12.1";
 
   # Only 3.8.0 and beyond are supported
-  disabled = pythonAtLeast "3.8";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ludeeus";

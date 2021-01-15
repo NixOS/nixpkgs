@@ -1161,6 +1161,8 @@ in {
 
   cerberus = callPackage ../development/python-modules/cerberus { };
 
+  cert-chain-resolver = callPackage ../development/python-modules/cert-chain-resolver { };
+
   certbot = callPackage ../development/python-modules/certbot { };
 
   certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
@@ -2489,7 +2491,7 @@ in {
   gipc = callPackage ../development/python-modules/gipc { };
 
   git-annex-adapter =
-    callPackage ../development/python-modules/git-annex-adapter { inherit (pkgs.gitAndTools) git-annex; };
+    callPackage ../development/python-modules/git-annex-adapter { };
 
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
 
@@ -2675,6 +2677,8 @@ in {
   gphoto2 = callPackage ../development/python-modules/gphoto2 { inherit (pkgs) pkgconfig; };
 
   gprof2dot = callPackage ../development/python-modules/gprof2dot { inherit (pkgs) graphviz; };
+
+  gps3 = callPackage ../development/python-modules/gps3 { };
 
   gpsoauth = callPackage ../development/python-modules/gpsoauth { };
 
@@ -2954,6 +2958,8 @@ in {
 
   hydra-check = callPackage ../development/python-modules/hydra-check { };
 
+  hydrawiser = callPackage ../development/python-modules/hydrawiser { };
+
   hypchat = callPackage ../development/python-modules/hypchat { };
 
   hyperframe = callPackage ../development/python-modules/hyperframe { };
@@ -2986,6 +2992,8 @@ in {
   icalendar = callPackage ../development/python-modules/icalendar { };
 
   icecream = callPackage ../development/python-modules/icecream { };
+
+  icmplib = callPackage ../development/python-modules/icmplib { };
 
   ics = callPackage ../development/python-modules/ics { };
 
@@ -4866,6 +4874,8 @@ in {
 
   pooch = callPackage ../development/python-modules/pooch { };
 
+  poolsense = callPackage ../development/python-modules/poolsense { };
+
   poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
     inherit (pkgs.qt5) qtbase;
     inherit (pkgs.libsForQt5) poppler;
@@ -5422,6 +5432,8 @@ in {
 
   pykickstart = callPackage ../development/python-modules/pykickstart { };
 
+  pykira = callPackage ../development/python-modules/pykira { };
+
   pykka = callPackage ../development/python-modules/pykka { };
 
   pykwalify = callPackage ../development/python-modules/pykwalify { };
@@ -5530,6 +5542,8 @@ in {
 
   PyMVGLive = callPackage ../development/python-modules/pymvglive { };
 
+  pymyq = callPackage ../development/python-modules/pymyq { };
+
   pymysql = callPackage ../development/python-modules/pymysql { };
 
   pymysqlsa = callPackage ../development/python-modules/pymysqlsa { };
@@ -5588,6 +5602,8 @@ in {
   pyopengl-accelerate = callPackage ../development/python-modules/pyopengl-accelerate { };
 
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
+
+  pyopnsense = callPackage ../development/python-modules/pyopnsense { };
 
   pyosf = callPackage ../development/python-modules/pyosf { };
 
@@ -6353,6 +6369,8 @@ in {
   pyvcd = callPackage ../development/python-modules/pyvcd { };
 
   pyvcf = callPackage ../development/python-modules/pyvcf { };
+
+  pyvera = callPackage ../development/python-modules/pyvera { };
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
@@ -7598,6 +7616,8 @@ in {
 
   tls-parser = callPackage ../development/python-modules/tls-parser { };
 
+  tmb = callPackage ../development/python-modules/tmb { };
+
   tmdb3 = callPackage ../development/python-modules/tmdb3 { };
 
   todoist = callPackage ../development/python-modules/todoist { };
@@ -8003,6 +8023,8 @@ in {
 
   watchdog = callPackage ../development/python-modules/watchdog { };
 
+  waterfurnace = callPackage ../development/python-modules/waterfurnace { };
+
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
 
   wcwidth = callPackage ../development/python-modules/wcwidth { };
@@ -8165,6 +8187,8 @@ in {
   xhtml2pdf = callPackage ../development/python-modules/xhtml2pdf { };
 
   xkcdpass = callPackage ../development/python-modules/xkcdpass { };
+
+  xknx = callPackage ../development/python-modules/xknx { };
 
   xlib = callPackage ../development/python-modules/xlib { };
 
