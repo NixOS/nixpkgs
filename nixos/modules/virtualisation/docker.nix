@@ -165,7 +165,7 @@ in
             ''
               ${cfg.package}/bin/dockerd \
                 --group=docker \
-                --host=unix:// \
+                --host=fd:// \
                 --log-driver=${cfg.logDriver} \
                 ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
                 ${optionalString cfg.liveRestore "--live-restore" } \
@@ -216,7 +216,7 @@ in
   ]);
 
   imports = [
-    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed in favor of starting docker at boot")
+    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
   ];
 
 }
