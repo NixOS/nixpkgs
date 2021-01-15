@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ladspa-sdk, pkgs, ... }:
+{ lib, stdenv, fetchurl, ladspa-sdk, pkgs, ... }:
 
 stdenv.mkDerivation rec {
   pname = "tap-plugins";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/local "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tom's Audio Processing plugins";
     longDescription = ''
       A number of LADSPA plugins including: TAP AutoPanner, TAP Chorus/Flanger, TAP DeEsser,

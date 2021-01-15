@@ -5,7 +5,7 @@ doxygen, boost, openscenegraph, gnome2, xorg, git, bash, gtk2, makeWrapper }:
 
 let
 
-  fakegit = import ./fakegit.nix {inherit stdenv fetchgit fetchsvn bash;} ;
+  fakegit = import ./fakegit.nix { inherit lib stdenv fetchgit fetchsvn bash; };
 
 in
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     for e in $(cd $out/bin && ls); do
       wrapProgram $out/bin/$e \
         --prefix PATH : "${gnumake}/bin" \
-        --prefix LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ lapack blas ]}"
+        --prefix LIBRARY_PATH : "${lib.makeLibraryPath [ lapack blas ]}"
     done
   '';
 

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   autofig = callPackage ./autofig.nix {};
   nativeBuildInputs = [ autoreconfHook glib autofig pkgconfig gettext ];
   buildInputs = [ libpng12 imagemagick pstoedit ]
-    ++ stdenv.lib.optionals stdenv.isDarwin
+    ++ lib.optionals stdenv.isDarwin
        (with darwin.apple_sdk.frameworks; [ gd ApplicationServices ]);
 
   postUnpack = ''

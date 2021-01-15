@@ -4,7 +4,7 @@
 let
   version = "3.10.12";
   name = "xcircuit-${version}";
-  inherit (stdenv.lib) getBin;
+  inherit (lib) getBin;
 
 in stdenv.mkDerivation {
   inherit name version;

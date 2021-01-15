@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     # Allow geeqie to find exiv2 and exiftran, necessary to
     # losslessly rotate JPEG images.
     sed -i $out/lib/geeqie/geeqie-rotate \
-        -e '1 a export PATH=${stdenv.lib.makeBinPath [ exiv2 fbida ]}:$PATH'
+        -e '1 a export PATH=${lib.makeBinPath [ exiv2 fbida ]}:$PATH'
   '';
 
   enableParallelBuilding = true;

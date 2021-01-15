@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sconsPackages, pkgconfig
+{ lib, stdenv, fetchurl, sconsPackages, pkgconfig
 , libsamplerate, libsndfile, liblo, libjack2, boost }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://das.nasophon.de/klick/";
     description = "Advanced command-line metronome for JACK";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

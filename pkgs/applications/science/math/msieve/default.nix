@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, gmp, ecm }:
+{lib, stdenv, fetchurl, zlib, gmp, ecm }:
 
 stdenv.mkDerivation {
   name = "msieve-1.53";
@@ -22,9 +22,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A C library implementing a suite of algorithms to factor large integers";
-    license = stdenv.lib.licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     homepage = "http://msieve.sourceforge.net/";
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
-    platforms = [ "x86_64-linux" ] ++ stdenv.lib.platforms.darwin;
+    maintainers = [ lib.maintainers.roconnor ];
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
   };
 }

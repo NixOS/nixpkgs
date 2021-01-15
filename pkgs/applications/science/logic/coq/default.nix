@@ -49,7 +49,7 @@ let
     args.version;
   version = fetched.version;
   coq-version = args.coq-version or (if version != "dev" then versions.majorMinor version else "dev");
-  versionAtLeast = v: (coq-version == "dev") || (stdenv.lib.versionAtLeast coq-version v);
+  versionAtLeast = v: (coq-version == "dev") || (lib.versionAtLeast coq-version v);
   ideFlags = optionalString (buildIde && !versionAtLeast "8.10")
     "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
   csdpPatch = if csdp != null then ''

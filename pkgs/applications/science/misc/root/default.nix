@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --replace 'set(lcgpackages ' '#set(lcgpackages '
 
     patchShebangs build/unix/
-  '' + stdenv.lib.optionalString noSplash ''
+  '' + lib.optionalString noSplash ''
     substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
   '';
 
@@ -70,8 +70,8 @@ stdenv.mkDerivation rec {
     "-Dxml=ON"
     "-Dxrootd=OFF"
   ]
-  ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.lib.getDev stdenv.cc.libc}/include"
-  ++ stdenv.lib.optionals stdenv.isDarwin [
+  ++ lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
+  ++ lib.optionals stdenv.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
     "-DCMAKE_DISABLE_FIND_PACKAGE_Python2=TRUE"
 

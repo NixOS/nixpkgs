@@ -11,7 +11,7 @@
 , libicns, Carbon, Cocoa, OpenGL, OpenAL}:
 
 let
-  inherit (stdenv.lib) optionals;
+  inherit (lib) optionals;
 in
 stdenv.mkDerivation rec {
 

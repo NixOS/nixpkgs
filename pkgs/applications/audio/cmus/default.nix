@@ -39,7 +39,7 @@
 #, vtxSupport ? true, libayemu ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert samplerateSupport -> jackSupport;
 
@@ -120,8 +120,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses ]
-    ++ stdenv.lib.optional stdenv.cc.isClang clangGCC
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
+    ++ lib.optional stdenv.cc.isClang clangGCC
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
     ++ flatten (concatMap (a: a.deps) opts);
 
   makeFlags = [ "LD=$(CC)" ];

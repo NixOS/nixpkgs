@@ -16,14 +16,14 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkgconfig makeWrapper installShellFiles ];
 
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   postInstall = ''
     installManPage git-gone.1
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/git-gone --prefix PATH : "${stdenv.lib.makeBinPath [ git ]}"
+    wrapProgram $out/bin/git-gone --prefix PATH : "${lib.makeBinPath [ git ]}"
   '';
 
   meta = with lib; {

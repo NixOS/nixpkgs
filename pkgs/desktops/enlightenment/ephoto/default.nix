@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, efl, pcre, mesa, makeWrapper }:
+{ lib, stdenv, fetchurl, pkgconfig, efl, pcre, mesa, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "ephoto";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Image viewer and editor written using the Enlightenment Foundation Libraries";
     homepage = "https://smhouston.us/projects/ephoto/";
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

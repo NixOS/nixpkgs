@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = lib.optional (stdenv.lib.hasSuffix ".zip" url) unzip;
+  nativeBuildInputs = lib.optional (lib.hasSuffix ".zip" url) unzip;
 
   installPhase = ''
     mkdir -p $out/bin $out/share/kindlegen/doc

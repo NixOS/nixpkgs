@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , removeReferencesTo
@@ -25,7 +25,7 @@ assert enableSystemd -> systemd != null;
 ### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
 ### works at least for your platform.
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "cups";
 

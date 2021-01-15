@@ -69,7 +69,7 @@ python2Packages.buildPythonApplication {
     pygobject2
     reportlab
     usbutils
-  ] ++ stdenv.lib.optionals qtSupport [
+  ] ++ lib.optionals qtSupport [
     pyqt4
   ];
 
@@ -111,7 +111,7 @@ python2Packages.buildPythonApplication {
 
   enableParallelBuilding = true;
 
-  postInstall = stdenv.lib.optionalString withPlugin ''
+  postInstall = lib.optionalString withPlugin ''
     sh ${plugin} --noexec --keep
     cd plugin_tmp
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ qt4 boost bzip2 libX11 pcre-cpp libidn lua5 miniupnpc aspell gettext ]
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   patches = [
     (fetchpatch {

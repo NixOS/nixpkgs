@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, git, perl, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, git, perl, makeWrapper }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "git-octopus";

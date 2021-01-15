@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "http://das.nasophon.de/jack_oscrolloscope";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

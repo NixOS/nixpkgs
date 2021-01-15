@@ -4,7 +4,7 @@
 , pcre ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert pcreSupport -> pcre != null;
 

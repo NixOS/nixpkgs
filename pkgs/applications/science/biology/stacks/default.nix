@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, zlib }:
-    
+{ lib, stdenv, fetchurl, zlib }:
+
 stdenv.mkDerivation rec {
   pname = "stacks";
   version = "2.53";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Software pipeline for building loci from short-read sequences";
     homepage = "http://catchenlab.life.illinois.edu/stacks/";
-    maintainers = [ stdenv.lib.maintainers.bzizou ];
-    license = stdenv.lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.bzizou ];
+    license = lib.licenses.gpl3;
   };
 }

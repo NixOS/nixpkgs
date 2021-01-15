@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchpatch, autoreconfHook
+{ lib, stdenv, fetchgit, fetchpatch, autoreconfHook
 , pkgconfig, libtool, boost, SDL
 , glib, pango, gettext, curl, xorg
 , libpng, libjpeg, giflib, speex, atk
@@ -24,7 +24,7 @@
 , enablePlugins  ? false, xulrunner ? null, npapi_sdk ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   available = x: x != null;
@@ -109,7 +109,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  configureFlags = with stdenv.lib; [
+  configureFlags = with lib; [
     "--with-boost-incl=${boost.dev}/include"
     "--with-boost-lib=${boost.out}/lib"
     "--enable-renderer=${concatStringsSep "," renderers}"

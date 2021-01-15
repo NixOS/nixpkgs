@@ -5,7 +5,7 @@
 , vmopts ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   mkJetBrainsProduct = callPackage ./common.nix { inherit vmopts; };
@@ -271,7 +271,7 @@ in
     name = "clion-${version}";
     version = "2020.3.1"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
       sha256 = "1jfvwir79s0kcqmlx6bbkmc42bplgl7814mnqfcsdzni1qv62pws"; /* updated by script */
@@ -284,7 +284,7 @@ in
     name = "datagrip-${version}";
     version = "2020.3.1"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
       sha256 = "0jk7ywxk983ld5x71a59dh1hvlnli3sbvg7fbicahas5ml8clxfv"; /* updated by script */
@@ -297,7 +297,7 @@ in
     name = "goland-${version}";
     version = "2020.3.1"; /* updated by script */
     description = "Up and Coming Go IDE";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
       sha256 = "12gi1a2bmafmy7qgqwv3a7b5b46dlhw4ahmkm5pkq6pmxl4y6dmk"; /* updated by script */
@@ -310,7 +310,7 @@ in
     name = "idea-community-${version}";
     version = "2020.3.1"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
-    license = stdenv.lib.licenses.asl20;
+    license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
       sha256 = "0am4h8w1dmjl08iphqy78ivb91vkrvskg95dgm24zcj0n8rwmaq6"; /* updated by script */
@@ -323,7 +323,7 @@ in
     name = "idea-ultimate-${version}";
     version = "2020.3.1"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
       sha256 = "1kwz0aq4b664awppakj4syppk218nynwxv4ngc7pa3k9v4g2sdah"; /* updated by script */
@@ -336,7 +336,7 @@ in
     name = "mps-${version}";
     version = "2020.2.3"; /* updated by script */
     description = "Create your own domain-specific language";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/mps/2020.2/MPS-${version}.tar.gz";
       sha256 = "1wd3d8pc155m54y5p2056p0x93v2nv9457i7la53ibbs7rj1j7kw"; /* updated by script */
@@ -349,7 +349,7 @@ in
     name = "phpstorm-${version}";
     version = "2020.3.1"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
       sha256 = "1c5j3mbg8scsl4c90cjahdk5gs5q72y5a8fhkqa9zmy6di42k99x"; /* updated by script */
@@ -362,7 +362,7 @@ in
     name = "pycharm-community-${version}";
     version = "2020.3.2"; /* updated by script */
     description = "PyCharm Community Edition";
-    license = stdenv.lib.licenses.asl20;
+    license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
       sha256 = "1z3w6aah635fdrhrzp5af6sgj269jk7mv8vgdd83gxillkx9vq9k"; /* updated by script */
@@ -375,7 +375,7 @@ in
     name = "pycharm-professional-${version}";
     version = "2020.3.2"; /* updated by script */
     description = "PyCharm Professional Edition";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
       sha256 = "1fbb8v40q7vgn5v5dyxb211abr8swnxa3gw18kh3vlk6yc2crzfw"; /* updated by script */
@@ -388,7 +388,7 @@ in
     name = "rider-${version}";
     version = "2020.3.2"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
       sha256 = "1dkgbd2nqkjcswf7j3pnrsaq9n5wk42abz2c4wgkrh1zrpgihd0j"; /* updated by script */
@@ -401,7 +401,7 @@ in
     name = "ruby-mine-${version}";
     version = "2020.3.1"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
       sha256 = "0drxzz6k0cmhir4szg8nwmsi9qh380vrryghmpvx9w83yrcain4c"; /* updated by script */
@@ -414,7 +414,7 @@ in
     name = "webstorm-${version}";
     version = "2020.3.1"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
       sha256 = "1bfq3xwnfz6f04d0lq584q7pg775a8y35b1b62w81dbfh43l4fj0"; /* updated by script */

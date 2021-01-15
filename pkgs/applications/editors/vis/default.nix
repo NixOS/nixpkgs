@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     libtermkey
     lua
     lpeg
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     acl
     libselinux
   ];
@@ -51,10 +51,10 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "vis";
     genericName = "Text editor";
-    categories = stdenv.lib.concatStringsSep ";" [
+    categories = lib.concatStringsSep ";" [
       "Application" "Development" "IDE"
     ];
-    mimeType = stdenv.lib.concatStringsSep ";" [
+    mimeType = lib.concatStringsSep ";" [
       "text/plain" "application/octet-stream"
     ];
     startupNotify = "false";

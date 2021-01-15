@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkgconfig
 , python
 , alsaLib, glew, libGL, libpng
 , libogg, libtheora, libvorbis
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # for providing support to Nixpkgs :)
   TCL_CONFIG="${tcl}/lib/";
 
-  meta = with stdenv.lib;{
+  meta = with lib;{
     description = "The MSX emulator that aims for perfection";
     longDescription = ''
       OpenMSX is an emulator for the MSX home computer system. Its goal is

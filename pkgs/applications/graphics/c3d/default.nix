@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ itk4 ]
-    ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
+    ++ lib.optional stdenv.isDarwin Cocoa;
 
   meta = with lib; {
     homepage = "https://github.com/pyushkevich/c3d";

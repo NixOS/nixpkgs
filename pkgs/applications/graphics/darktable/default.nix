@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
     libgphoto2 libjpeg libpng librsvg libtiff openexr sqlite libxslt
     libsoup graphicsmagick json-glib openjpeg lua pugixml
     libwebp libsecret gnome3.adwaita-icon-theme osm-gps-map pcre isocodes
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     colord colord-gtk libX11 ocl-icd
-  ] ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration
-    ++ stdenv.lib.optional stdenv.cc.isClang llvmPackages.openmp;
+  ] ++ lib.optional stdenv.isDarwin gtk-mac-integration
+    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = [
     "-DBUILD_USERMANUAL=False"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "-DUSE_COLORD=OFF"
     "-DUSE_KWALLET=OFF"
   ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   # the wrappers:
   preFixup = let
     libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
-    libPathPrefix = "$out/lib/darktable" + stdenv.lib.optionalString stdenv.isLinux ":${ocl-icd}/lib";
+    libPathPrefix = "$out/lib/darktable" + lib.optionalString stdenv.isLinux ":${ocl-icd}/lib";
   in ''
     for f in $out/share/darktable/kernels/*.cl; do
       sed -r "s|#include \"(.*)\"|#include \"$out/share/darktable/kernels/\1\"|g" -i "$f"

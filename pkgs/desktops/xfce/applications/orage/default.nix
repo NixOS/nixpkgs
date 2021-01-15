@@ -4,7 +4,7 @@
 assert withPanelPlugin -> libxfce4ui != null && xfce4-panel != null;
 
 let
-  inherit (stdenv.lib) optionals;
+  inherit (lib) optionals;
 in
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "4.12.1";
 
   src = fetchurl {
-    url = "https://archive.xfce.org/src/apps/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "https://archive.xfce.org/src/apps/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "0qlhvnl2m33vfxqlbkic2nmfpwyd4mq230jzhs48cg78392amy9w";
   };
 

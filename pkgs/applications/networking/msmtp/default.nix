@@ -21,13 +21,13 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ gnutls gsasl libidn2 ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security
-    ++ stdenv.lib.optional withKeyring libsecret;
+    ++ lib.optional stdenv.isDarwin Security
+    ++ lib.optional withKeyring libsecret;
 
   nativeBuildInputs = [ autoreconfHook pkgconfig texinfo ];
 
   configureFlags =
-    [ "--sysconfdir=/etc" ] ++ stdenv.lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
+    [ "--sysconfdir=/etc" ] ++ lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
 
   postInstall = ''
     install -d $out/share/doc/${pname}/scripts

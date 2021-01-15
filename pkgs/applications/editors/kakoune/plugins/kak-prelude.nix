@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     cp -r rc $out/share/kak/autoload/plugins/prelude
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
   { description = "Prelude of shell blocks for Kakoune.";
     homepage = "https://github.com/alexherbo2/prelude.kak";
     license = licenses.unlicense;

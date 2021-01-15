@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libintl }:
+{ lib, stdenv, fetchurl, pkgconfig, intltool, gtk3, libintl }:
 
 stdenv.mkDerivation rec {
   pname = "lxtask";
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
       requires pure GTK.
     '';
     homepage = "https://wiki.lxde.org/en/LXTask";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

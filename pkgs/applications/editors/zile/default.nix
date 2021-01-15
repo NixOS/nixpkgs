@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkg-config ]
     # `help2man' wants to run Zile, which won't work when the
     # newly-produced binary can't be run at build-time.
-    ++ stdenv.lib.optional
+    ++ lib.optional
          (stdenv.hostPlatform == stdenv.buildPlatform)
          help2man;
 

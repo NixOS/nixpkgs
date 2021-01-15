@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp git-open $out/bin
     wrapProgram $out/bin/git-open \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ git xdg_utils gnugrep ]}"
+      --prefix PATH : "${lib.makeBinPath [ git xdg_utils gnugrep ]}"
   '';
 
   meta = with lib; {

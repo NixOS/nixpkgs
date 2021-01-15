@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libmatchbox, libX11, libXext }:
+{ lib, stdenv, fetchurl, pkgconfig, libmatchbox, libX11, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "matchbox";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "X window manager for non-desktop embedded systems";
     homepage = "https://www.yoctoproject.org/software-item/matchbox/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

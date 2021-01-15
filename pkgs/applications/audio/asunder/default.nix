@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, gtk2, libcddb, intltool, pkgconfig, cdparanoia
+{ lib, stdenv, fetchurl, makeWrapper, gtk2, libcddb, intltool, pkgconfig, cdparanoia
 , mp3Support ? false, lame
 , oggSupport ? true, vorbis-tools
 , flacSupport ? true, flac
@@ -9,7 +9,7 @@
 #, aacSupport ? false, TODO: neroAacEnc
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "2.9.7";

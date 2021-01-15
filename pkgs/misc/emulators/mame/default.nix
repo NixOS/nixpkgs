@@ -61,7 +61,7 @@ in mkDerivation {
   '';
 
   installPhase = ''
-    make -f dist.mak PTR64=${stdenv.lib.optionalString stdenv.is64bit "1"}
+    make -f dist.mak PTR64=${lib.optionalString stdenv.is64bit "1"}
     mkdir -p ${dest}
     mv build/release/*/Release/mame/* ${dest}
 

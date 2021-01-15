@@ -3,7 +3,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "whipper";
-  version = "0.9.1.dev7+g${stdenv.lib.substring 0 7 src.rev}";
+  version = "0.9.1.dev7+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "whipper-team";
@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ accuraterip-checksum cdrdao util-linux flac sox ])
+    "--prefix" "PATH" ":" (lib.makeBinPath [ accuraterip-checksum cdrdao util-linux flac sox ])
   ];
 
   preBuild = ''

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/hitori/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/hitori/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0gjbbh4gym8wwa4jjg7wwifjh2h7bf6m0x23c5jjxvrf3vln9gfq";
   };
 

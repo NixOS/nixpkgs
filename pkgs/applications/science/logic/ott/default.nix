@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ocaml, opaline }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, ocaml, opaline }:
 
 stdenv.mkDerivation rec {
   pname = "ott";
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       target-system terms.
     '';
     homepage = "http://www.cl.cam.ac.uk/~pes20/ott";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ jwiegley ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jwiegley ];
+    platforms = lib.platforms.unix;
   };
 }

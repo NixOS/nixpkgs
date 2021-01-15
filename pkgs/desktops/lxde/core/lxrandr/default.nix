@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "04n3vgh3ix12p8jfs4w0dyfq3anbjy33h7g53wbbqqc0f74xyplb";
   };
 
-  configureFlags = stdenv.lib.optional withGtk3 "--enable-gtk3";
+  configureFlags = lib.optional withGtk3 "--enable-gtk3";
 
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [ libX11 (if withGtk3 then gtk3 else gtk2) xrandr ];
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Standard screen manager of LXDE";
     homepage = "https://lxde.org/";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = with maintainers; [ rawkode ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

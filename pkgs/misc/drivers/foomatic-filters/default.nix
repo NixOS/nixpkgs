@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchurl, pkgconfig, perl, cups, dbus, enscript }:
+{ lib, stdenv, fetchpatch, fetchurl, pkgconfig, perl, cups, dbus, enscript }:
 
 stdenv.mkDerivation rec {
   name = "foomatic-filters-4.0.17";
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Foomatic printing filters";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -48,10 +48,10 @@ let
     sqlite
     taglib
   ]
-  ++ stdenv.lib.optionals (withIpod) [libgpod libplist usbmuxd]
-  ++ stdenv.lib.optionals (withMTP) [libmtp]
-  ++ stdenv.lib.optionals (withCD) [libcdio]
-  ++ stdenv.lib.optionals (withCloud) [sparsehash];
+  ++ lib.optionals (withIpod) [libgpod libplist usbmuxd]
+  ++ lib.optionals (withMTP) [libmtp]
+  ++ lib.optionals (withCD) [libcdio]
+  ++ lib.optionals (withCloud) [sparsehash];
 
   postPatch = ''
     sed -i src/CMakeLists.txt \

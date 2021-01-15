@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "contrib" ];
 
   mesonFlags = [
-    "-Dxwayland=${stdenv.lib.boolToString withXwayland}"
+    "-Dxwayland=${lib.boolToString withXwayland}"
     "-Dversion_override=${version}"
   ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     cp $src/examples/config $contrib/share/cagebreak/config
   '';
 
-  postFixup = stdenv.lib.optionalString withXwayland ''
+  postFixup = lib.optionalString withXwayland ''
     wrapProgram $out/bin/cagebreak --prefix PATH : "${xwayland}/bin"
   '';
 

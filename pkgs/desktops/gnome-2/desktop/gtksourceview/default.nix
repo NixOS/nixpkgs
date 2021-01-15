@@ -1,8 +1,8 @@
-{stdenv, fetchpatch, fetchurl, autoreconfHook, pkgconfig, atk, cairo, glib
+{lib, stdenv, fetchpatch, fetchurl, autoreconfHook, pkgconfig, atk, cairo, glib
 , gnome-common, gtk2, pango
 , libxml2Python, perl, intltool, gettext, gtk-mac-integration-gtk2 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
