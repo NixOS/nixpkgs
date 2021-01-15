@@ -1564,4 +1564,7 @@ self: super: {
   # https://github.com/input-output-hk/nothunks/issues/9
   nothunks = doJailbreak super.nothunks;
 
+  # Allow building with recent versions of tasty.
+  lukko = doJailbreak super.lukko;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
