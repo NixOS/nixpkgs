@@ -1446,8 +1446,9 @@ self: super: {
   # 1. test requires internet
   # 2. dependency shake-bench hasn't been published yet so we also need unmarkBroken and doDistribute
   ghcide = doDistribute (unmarkBroken (dontCheck
-    (super.ghcide.override { lsp-test = dontCheck self.lsp-test_0_11_0_7; })
-  ));
+  (super.ghcide_0_7_0_0.override {
+    lsp-test = dontCheck self.lsp-test_0_11_0_7;
+  })));
   refinery = doDistribute super.refinery_0_3_0_0;
   data-tree-print = doJailbreak super.data-tree-print;
 
