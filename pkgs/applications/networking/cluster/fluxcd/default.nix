@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fluxcd";
-  version = "0.5.9";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "fluxcd";
     repo = "flux2";
     rev = "v${version}";
-    sha256 = "1fic1hgsjhail9p2ki7qqr0vl5av3gfb8y3h9ygzq4j869780bsq";
+    sha256 = "16jq6ygm7and4fixh8f7jjv45vgjmyy8wghwnkhwb0140j6lj3ym";
   };
 
-  vendorSha256 = "15zn40pi1rw0yqxm9fpmj4l179rg846r3m89imh96g2v3gk8qqcv";
+  vendorSha256 = "1909czaa0q03xh1qvg3f2qzwfwlqyc0akg2c98wd7qrnk1yzzdxy";
 
   nativeBuildInputs = [ installShellFiles ];
 

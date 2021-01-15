@@ -7869,6 +7869,8 @@ in {
 
   update-dotdee = callPackage ../development/python-modules/update-dotdee { };
 
+  upnpy = callPackage ../development/python-modules/upnpy { };
+
   uproot3 = callPackage ../development/python-modules/uproot3 { };
 
   uproot3-methods = callPackage ../development/python-modules/uproot3-methods { };
