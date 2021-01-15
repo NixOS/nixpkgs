@@ -5833,6 +5833,8 @@ in {
 
   pysolr = callPackage ../development/python-modules/pysolr { };
 
+  pysoma = callPackage ../development/python-modules/pysoma { };
+
   py-sonic = callPackage ../development/python-modules/py-sonic { };
 
   pysonos = callPackage ../development/python-modules/pysonos { };
