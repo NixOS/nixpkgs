@@ -9315,6 +9315,12 @@
     githubId = 303489;
     name = "Manuel Bärenz";
   };
+  tu-maurice = {
+    email = "valentin.gehrke+nixpkgs@zom.bi";
+    github = "tu-maurice";
+    githubId = 16151097;
+    name = "Valentin Gehrke";
+  };
   tv = {
     email = "tv@krebsco.de";
     github = "4z3";

@@ -158,8 +158,8 @@
 /nixos/modules/services/networking/ntp @thoughtpolice
 
 # Dhall
-/pkgs/development/dhall-modules      @Gabriel439 @Profpatsch
-/pkgs/development/interpreters/dhall @Gabriel439 @Profpatsch
+/pkgs/development/dhall-modules      @Gabriel439 @Profpatsch @ehmry
+/pkgs/development/interpreters/dhall @Gabriel439 @Profpatsch @ehmry
 
 # Idris
 /pkgs/development/idris-modules @Infinisil
