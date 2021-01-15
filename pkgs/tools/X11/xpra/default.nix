@@ -30,11 +30,11 @@ let
 
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.0.2";
+  version = "4.0.6";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "1cs39jzi59hkl421xmhi549ndmdfzkg0ap45f4nlsn9zr9zwmp3x";
+    sha256 = "nGcvbZFGYd2nQ75LL4YN+xcWb7UsViA3OAqpcrTwieg=";
   };
 
   patches = [
@@ -110,7 +110,10 @@ in buildPythonApplication rec {
 
   enableParallelBuilding = true;
 
-  passthru = { inherit xf86videodummy; };
+  passthru = {
+    inherit xf86videodummy;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     homepage = "http://xpra.org/";
