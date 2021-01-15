@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk3, intltool, pkgconfig, texinfo }:
+{ lib, stdenv, fetchurl, gtk3, intltool, pkgconfig, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "gxmessage";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A GTK enabled dropin replacement for xmessage";
     homepage = "http://homepages.ihug.co.nz/~trmusson/programs.html#gxmessage";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [jfb];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [jfb];
+    platforms = with lib.platforms; linux;
   };
 }

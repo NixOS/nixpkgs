@@ -1,4 +1,4 @@
-{ stdenv, mysql_jdbc }:
+{ lib, stdenv, mysql_jdbc }:
 
 stdenv.mkDerivation {
   name = "tomcat-mysql-jdbc";
@@ -8,6 +8,6 @@ stdenv.mkDerivation {
   inherit mysql_jdbc;
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

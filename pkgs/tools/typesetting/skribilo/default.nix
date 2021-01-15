@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , gettext
@@ -18,7 +18,7 @@
 let
   pname = "skribilo";
   version = "0.9.5";
-  inherit (stdenv.lib) optional;
+  inherit (lib) optional;
 in stdenv.mkDerivation {
   inherit pname version;
 
@@ -42,7 +42,7 @@ in stdenv.mkDerivation {
       --prefix GUILE_LOAD_COMPILED_PATH : "$out/share/guile/site:${guile-lib}/share/guile/site:${guile-reader}/share/guile/site"
   '';
 
-  meta = with stdenv.lib;{
+  meta = with lib;{
     description = "The Ultimate Document Programming Framework";
     longDescription = ''
       Skribilo is a free document production tool that takes a

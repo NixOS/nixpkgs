@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
   sourceRoot = pname;
   phases = [ "unpackPhase installPhase" ];
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib stdenv.cc.libc SDL2 SDL2_mixer
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc.lib stdenv.cc.libc SDL2 SDL2_mixer
     libogg libvorbis ];
 
   unpackPhase = ''
-    # The game is distributed as a shell script, with a tar of mojosetup, and a 
+    # The game is distributed as a shell script, with a tar of mojosetup, and a
     # zip archive attached to the end. Therefore a simple unzip does the job.
     # However, to avoid unzip errors, we need to strip those out first.
     tail -c +421887 ${src} > ${src}.zip

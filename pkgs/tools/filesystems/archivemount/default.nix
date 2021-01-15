@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fuse, libarchive }:
+{ lib, stdenv, fetchurl, pkgconfig, fuse, libarchive }:
 
 let
   name = "archivemount-0.9.1";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Gateway between FUSE and libarchive: allows mounting of cpio, .tar.gz, .tar.bz2 archives";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

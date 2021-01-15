@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, lua5, curl, quvi_scripts, libquvi, lua5_sockets, glib, makeWrapper}:
+{lib, stdenv, fetchurl, pkgconfig, lua5, curl, quvi_scripts, libquvi, lua5_sockets, glib, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "quvi";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Web video downloader";
     homepage = "http://quvi.sf.net";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

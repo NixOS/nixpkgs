@@ -21,11 +21,11 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     pkgconfig
-  ] ++ stdenv.lib.optionals pythonSupport [ swig ];
+  ] ++ lib.optionals pythonSupport [ swig ];
 
   buildInputs = [
     boost gnuradio limesuite log4cpp
-  ] ++ stdenv.lib.optionals pythonSupport [ python ];
+  ] ++ lib.optionals pythonSupport [ python ];
 
 
   meta = with lib; {

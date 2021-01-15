@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var/lib/solanum"
     "--with-rundir=/run/solanum"
     "--with-logdir=/var/log/solanum"
-  ] ++ stdenv.lib.optionals (stdenv.isLinux) [
+  ] ++ lib.optionals (stdenv.isLinux) [
     "--enable-sctp=${lksctp-tools.out}/lib"
   ];
 

@@ -25,8 +25,8 @@ buildPythonApplication rec {
     ipaddress jsonschema requests six texttable websocket_client
     docopt cached-property paramiko distro python-dotenv
   ] ++
-    stdenv.lib.optional (pythonOlder "3.4") enum34 ++
-    stdenv.lib.optional (pythonOlder "3.2") functools32;
+    lib.optional (pythonOlder "3.4") enum34 ++
+    lib.optional (pythonOlder "3.2") functools32;
 
   postPatch = ''
     # Remove upper bound on requires, see also

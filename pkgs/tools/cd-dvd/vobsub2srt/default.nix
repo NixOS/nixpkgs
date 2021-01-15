@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, libtiff, pkg-config, tesseract }:
+{ lib, stdenv, fetchgit, cmake, libtiff, pkg-config, tesseract }:
 
 let rev = "a6abbd61127a6392d420bbbebdf7612608c943c2";
     shortRev = builtins.substring 0 7 rev;
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/ruediger/VobSub2SRT";
     description = "Converts VobSub subtitles into SRT subtitles";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.ttuegel ];
   };
 }

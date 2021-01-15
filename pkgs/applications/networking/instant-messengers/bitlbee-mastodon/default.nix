@@ -1,6 +1,6 @@
-{ fetchgit, stdenv, bitlbee, autoreconfHook, pkgconfig, glib }:
+{ lib, fetchgit, stdenv, bitlbee, autoreconfHook, pkgconfig, glib }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "bitlbee-mastodon";
   version = "1.4.4";
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://alexschroeder.ch/cgit/bitlbee-mastodon/about";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jpotier ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

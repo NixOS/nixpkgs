@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitLab, getopt, lua, boost, pkgconfig, swig, perl, gcc }:
 
-with stdenv.lib;
+with lib;
 
 let
   self = stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ let
 
     buildInputs = [ getopt lua boost ];
 
-    prePatch = stdenv.lib.optionalString stdenv.cc.isClang ''
+    prePatch = lib.optionalString stdenv.cc.isClang ''
       substituteInPlace src/makefile \
           --replace 'CXX=g++' 'CXX=clang++'
     '';

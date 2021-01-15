@@ -21,7 +21,7 @@
 , common-updater-scripts
 }:
 
-assert stdenv.lib.versionAtLeast mlt.version "6.22.1";
+assert lib.versionAtLeast mlt.version "6.22.1";
 
 mkDerivation rec {
   pname = "shotcut";
@@ -52,7 +52,7 @@ mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
   qmakeFlags = [
-    "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease"
+    "QMAKE_LRELEASE=${lib.getDev qttools}/bin/lrelease"
     "SHOTCUT_VERSION=${version}"
     "DEFINES+=SHOTCUT_NOUPGRADE"
   ];
@@ -68,7 +68,7 @@ mkDerivation rec {
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
     "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
-    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ jack1 SDL2 ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ jack1 SDL2 ]}"
     "--prefix PATH : ${mlt}/bin"
   ];
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "bin" "man" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1060ws037v556rx1qhfrcg02859rscksrzr8fq11himdg4d1y6m8";
   };
 

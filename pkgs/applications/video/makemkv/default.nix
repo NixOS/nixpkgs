@@ -43,8 +43,8 @@ in mkDerivation {
 
   qtWrapperArgs =
     let
-      binPath = stdenv.lib.makeBinPath [ jre_headless ];
-    in stdenv.lib.optionals withJava [
+      binPath = lib.makeBinPath [ jre_headless ];
+    in lib.optionals withJava [
       ''--prefix PATH : ${binPath}''
     ];
 

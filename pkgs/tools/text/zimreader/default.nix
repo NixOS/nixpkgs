@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, automake, autoconf, libtool
+{ lib, stdenv, fetchFromGitHub, fetchpatch, automake, autoconf, libtool
 , zimlib, cxxtools, tntnet
 }:
 
@@ -31,8 +31,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A tool to serve ZIM files using HTTP";
     homepage = "http://git.wikimedia.org/log/openzim";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ robbinch juliendehos ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ robbinch juliendehos ];
     platforms = [ "x86_64-linux" ];
   };
 }

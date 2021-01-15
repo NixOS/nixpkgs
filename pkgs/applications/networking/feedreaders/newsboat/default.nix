@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace Makefile --replace "|| true" ""
   ''
     # TODO: Check if that's still needed
-    + stdenv.lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.isDarwin ''
       # Allow other ncurses versions on Darwin
       substituteInPlace config.sh \
         --replace "ncurses5.4" "ncurses"
@@ -29,24 +29,24 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     asciidoctor
     gettext
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ncurses ];
+  ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ncurses ];
 
   buildInputs = [ stfl sqlite curl libxml2 json_c ncurses ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security Foundation libiconv gettext ];
+    ++ lib.optionals stdenv.isDarwin [ Security Foundation libiconv gettext ];
 
   postBuild = ''
     make prefix="$out"
   '';
 
   # TODO: Check if that's still needed
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
 
   # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
   # these for all platforms, since upstream's gettext crate behavior might
   # change in the future.
-  GETTEXT_LIB_DIR = "${stdenv.lib.getLib gettext}/lib";
-  GETTEXT_INCLUDE_DIR = "${stdenv.lib.getDev gettext}/include";
-  GETTEXT_BIN_DIR = "${stdenv.lib.getBin gettext}/bin";
+  GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
+  GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
+  GETTEXT_BIN_DIR = "${lib.getBin gettext}/bin";
 
   doCheck = true;
 
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     make prefix="$out" install
     cp -r contrib $out
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
     done

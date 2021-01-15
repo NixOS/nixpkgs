@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1clpl9fi07lms0din8f9m4y6br5jg8k5xsklsqmvgdwf83wyn321";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 
   # many tests are failing
   doCheck = false;

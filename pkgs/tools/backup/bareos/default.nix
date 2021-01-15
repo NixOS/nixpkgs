@@ -6,7 +6,7 @@
 
 assert sqlite != null || postgresql != null || libmysqlclient != null;
 
-with stdenv.lib;
+with lib;
 let
   withGlusterfs = "\${with_glusterfs_directory}";
 in

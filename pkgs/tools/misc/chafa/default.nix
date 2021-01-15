@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
                         docbook_xsl
                       ];
 
-  buildInputs = [ glib imagemagick ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
+  buildInputs = [ glib imagemagick ] ++ lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
 
   patches = [ ./xmlcatalog_patch.patch ];
 

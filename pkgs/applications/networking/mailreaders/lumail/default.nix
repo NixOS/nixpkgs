@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     sed -e "s|^#\!\(.*/perl.*\)$|#\!\1$perlFlags|" -i perl.d/imap-proxy
   '';
 
-  buildFlags = stdenv.lib.optional debugBuild "lumail2-debug";
+  buildFlags = lib.optional debugBuild "lumail2-debug";
 
   installPhase = ''
     mkdir -p $out/bin || true

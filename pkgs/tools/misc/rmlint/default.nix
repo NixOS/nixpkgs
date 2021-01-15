@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , cairo
 , fetchFromGitHub
 , gettext
@@ -18,7 +18,7 @@
 , wrapGAppsHook
 , withGui ? false }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "rmlint";
   version = "2.10.1";
@@ -30,14 +30,14 @@ stdenv.mkDerivation rec {
     sha256 = "15xfkcw1bkfyf3z8kl23k3rlv702m0h7ghqxvhniynvlwbgh6j2x";
   };
 
-  CFLAGS="-I${stdenv.lib.getDev util-linux}/include";
+  CFLAGS="-I${lib.getDev util-linux}/include";
 
   nativeBuildInputs = [
     pkgconfig
     sphinx
     gettext
     scons
-  ] ++ stdenv.lib.optionals withGui [
+  ] ++ lib.optionals withGui [
     makeWrapper
     wrapGAppsHook
   ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     json-glib
     libelf
     util-linux
-  ] ++ stdenv.lib.optionals withGui [
+  ] ++ lib.optionals withGui [
     cairo
     gobject-introspection
     gtksourceview3
@@ -59,10 +59,10 @@ stdenv.mkDerivation rec {
 
   # this doesn't seem to support configureFlags, and appends $out afterwards,
   # so add the --without-gui in front of it
-  prefixKey = stdenv.lib.optionalString (!withGui) " --without-gui " + "--prefix=";
+  prefixKey = lib.optionalString (!withGui) " --without-gui " + "--prefix=";
 
   # in GUI mode, this shells out to itself, and tries to import python modules
-  postInstall = stdenv.lib.optionalString withGui ''
+  postInstall = lib.optionalString withGui ''
     gappsWrapperArgs+=(--prefix PATH : "$out/bin")
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${python3.pkgs.pygobject3}):$(toPythonPath ${python3.pkgs.pycairo})")
   '';

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig }:
+{lib, stdenv, fetchurl, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "eot_utilities";
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.w3.org/Tools/eot-utils/";
     description = "Create Embedded Open Type from OpenType or TrueType font";
-    license = stdenv.lib.licenses.w3c;
-    maintainers = with stdenv.lib.maintainers; [ leenaars ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.w3c;
+    maintainers = with lib.maintainers; [ leenaars ];
+    platforms = with lib.platforms; unix;
   };
 }

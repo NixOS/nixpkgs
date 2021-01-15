@@ -16,13 +16,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl libsamplerate ]
-    ++ stdenv.lib.optional stdenv.isLinux alsaLib
-    ++ stdenv.lib.optional stdenv.isDarwin AppKit;
+    ++ lib.optional stdenv.isLinux alsaLib
+    ++ lib.optional stdenv.isDarwin AppKit;
 
   preConfigure = ''
     export LD=$CC
   '' # Fixed on master, remove with 2.11
-     + stdenv.lib.optionalString stdenv.isDarwin ''
+     + lib.optionalString stdenv.isDarwin ''
     NIX_CFLAGS_COMPILE+=" -framework Security"
   '';
 

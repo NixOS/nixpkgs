@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, makeWrapper, pkg-config
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config
 , zip, python, zlib, which, icu, libmicrohttpd, lzma, aria2, wget, bc
 , libuuid, libX11, libXext, libXt, libXrender, glib, dbus, dbus-glib
 , gtk2, gdk-pixbuf, pango, cairo, freetype, fontconfig, alsaLib, atk, cmake
 , xapian, ctpp2, zimlib
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   xulrunner64_tar = fetchurl {

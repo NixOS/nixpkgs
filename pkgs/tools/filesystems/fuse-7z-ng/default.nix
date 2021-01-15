@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  libs = stdenv.lib.makeLibraryPath [ p7zip ]; # 'cause 7z.so is loaded manually
+  libs = lib.makeLibraryPath [ p7zip ]; # 'cause 7z.so is loaded manually
   postInstall = ''
     wrapProgram $out/bin/${pname} --suffix LD_LIBRARY_PATH : "${libs}/p7zip"
 

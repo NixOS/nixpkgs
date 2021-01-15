@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreFoundation
       IOKit
     ]
     # acl relies on attr, which I can't get to build on darwin
-    ++ stdenv.lib.optional (!stdenv.isDarwin) acl;
+    ++ lib.optional (!stdenv.isDarwin) acl;
 
   configureFlags = [
     "--with-sqlite3=${sqlite.dev}"
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "--with-logdir=/var/log/bacula"
     "--with-working-dir=/var/lib/bacula"
     "--mandir=\${out}/share/man"
-  ] ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes";
+  ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes";
 
   installFlags = [
     "logdir=\${out}/logdir"

@@ -1,4 +1,4 @@
- { stdenv, fetchurl, pkgconfig, freetype, gtk }:
+ { lib, stdenv, fetchurl, pkgconfig, freetype, gtk }:
 
 stdenv.mkDerivation rec {
   version = "1.6";
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
     description = "Bitmap Font Editor";
     longDescription = ''
       gbdfed lets you interactively create new bitmap font files or modify existing ones.
-      It allows editing multiple fonts and multiple glyphs, 
+      It allows editing multiple fonts and multiple glyphs,
       it allows cut and paste operations between fonts and glyphs and editing font properties.
-      The editor works natively with BDF fonts. 
+      The editor works natively with BDF fonts.
     '';
     homepage = "http://sofia.nmsu.edu/~mleisher/Software/gbdfed/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.linquize ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.linquize ];
+    platforms = lib.platforms.all;
   };
 }

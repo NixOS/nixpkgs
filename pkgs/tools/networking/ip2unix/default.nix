@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, libyamlcpp, systemd
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, libyamlcpp, systemd
 , python3Packages, asciidoc, libxslt, docbook_xml_dtd_45, docbook_xsl
 , libxml2, docbook5
 }:
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/nixcloud/ip2unix";
     description = "Turn IP sockets into Unix domain sockets";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.lgpl3;
-    maintainers = [ stdenv.lib.maintainers.aszlig ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl3;
+    maintainers = [ lib.maintainers.aszlig ];
   };
 }

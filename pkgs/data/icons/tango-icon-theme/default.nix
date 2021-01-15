@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, iconnamingutils, imagemagick, librsvg
+{ lib, stdenv, fetchurl, intltool, pkgconfig, iconnamingutils, imagemagick, librsvg
 , gtk/*any version*/, gnome-icon-theme, hicolor-icon-theme
 }:
 
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A basic set of icons";
     homepage = "http://tango.freedesktop.org/Tango_Icon_Library";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

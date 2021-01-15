@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "pies-1.3";
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
          native utilities).  Finally, it can replace the inetd utility!
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     homepage = "https://www.gnu.org/software/pies/";
 
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    platforms = lib.platforms.gnu ++ stdenv.lib.platforms.linux;
     maintainers = [ ];
   };
 }

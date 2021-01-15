@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0bpkgq7srwpjmadsz3nsd14jpr19b1zfrpc074lzjaq15icxxgxc";
   };
 
-  buildInputs = with stdenv.lib; [ boost zlib openssl ]
+  buildInputs = with lib; [ boost zlib openssl ]
     ++ optional upnpSupport miniupnpc;
   makeFlags =
     let ynf = a: b: a + "=" + (if b then "yes" else "no"); in

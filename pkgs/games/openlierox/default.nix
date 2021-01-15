@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, xorgproto, gd, SDL, SDL_image, SDL_mixer, zlib
+{ lib, stdenv, fetchurl, libX11, xorgproto, gd, SDL, SDL_image, SDL_mixer, zlib
 , libxml2, pkg-config, curl, cmake, libzip }:
 
 stdenv.mkDerivation {
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://openlierox.net";
     description = "Real-time game with Worms-like shooting";
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

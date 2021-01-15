@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, smartmontools, autoreconfHook, gettext, gtkmm3, pkgconfig, wrapGAppsHook, pcre-cpp, gnome3 }:
+{ fetchurl, lib, stdenv, smartmontools, autoreconfHook, gettext, gtkmm3, pkgconfig, wrapGAppsHook, pcre-cpp, gnome3 }:
 
 stdenv.mkDerivation rec {
   version="1.1.3";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${stdenv.lib.makeBinPath [ smartmontools ]}"
+      --prefix PATH : "${lib.makeBinPath [ smartmontools ]}"
     )
   '';
 
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       as well as run various tests on it.
     '';
     homepage = "https://gsmartcontrol.sourceforge.io/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [qknight];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [qknight];
+    platforms = with lib.platforms; linux;
   };
 }

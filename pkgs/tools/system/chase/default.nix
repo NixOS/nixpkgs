@@ -1,4 +1,4 @@
-{ stdenv, fetchurl ,pkgconfig, libatomic_ops , boehmgc }:
+{ lib, stdenv, fetchurl ,pkgconfig, libatomic_ops , boehmgc }:
 
 stdenv.mkDerivation rec {
   pname = "chase";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "-e" ];
   makeFlagsArray="LIBS=-lgc";
 
-  meta = with stdenv.lib ; {
+  meta = with lib ; {
     description = "Follow a symlink and print out its target file";
     longDescription = ''
     A commandline program that chases symbolic filesystems links to the original file

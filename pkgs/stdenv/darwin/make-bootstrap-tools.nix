@@ -152,7 +152,7 @@ in rec {
     allowedReferences = [];
 
     meta = {
-      maintainers = [ stdenv.lib.maintainers.copumpkin ];
+      maintainers = [ lib.maintainers.copumpkin ];
     };
   };
 

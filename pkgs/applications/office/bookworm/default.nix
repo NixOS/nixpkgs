@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   # These programs are expected in PATH from the source code and scripts
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${stdenv.lib.makeBinPath [ unzip unar poppler_utils html2text coreutils curl gnugrep ]}"
+      --prefix PATH : "${lib.makeBinPath [ unzip unar poppler_utils html2text coreutils curl gnugrep ]}"
       --prefix PATH : $out/bin
     )
   '';

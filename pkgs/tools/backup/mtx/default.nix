@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "mtx-1.3.12";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
       specification.
     '';
     homepage = "https://sourceforge.net/projects/mtx/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.redvers ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.redvers ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, python, pkgconfig, cmake, bluez, libusb1, curl
+{ lib, stdenv, fetchFromGitHub, python, pkgconfig, cmake, bluez, libusb1, curl
 , libiconv, gettext, sqlite
 , dbiSupport ? false, libdbi ? null, libdbiDrivers ? null
 , postgresSupport ? false, postgresql ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "gammu";

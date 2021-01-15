@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/ix --prefix PATH : "${stdenv.lib.makeBinPath [ curl ]}"
+    wrapProgram $out/bin/ix --prefix PATH : "${lib.makeBinPath [ curl ]}"
   '';
 
   meta = with lib; {

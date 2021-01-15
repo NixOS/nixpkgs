@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     pushd $out/share/Ted/examples
     for f in rtf2*.sh
     do
-        makeWrapper "$PWD/$f" "$out/bin/$f" --prefix PATH : $out/bin:${stdenv.lib.makeBinPath [ ghostscript ]}
+        makeWrapper "$PWD/$f" "$out/bin/$f" --prefix PATH : $out/bin:${lib.makeBinPath [ ghostscript ]}
     done
     popd
 

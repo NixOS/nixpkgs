@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, openssl
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, openssl
 , glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
 , cmocka, libmicrohttpd, expat, sqlite, libmesode, autoconf-archive
 
@@ -17,7 +17,7 @@ assert pgpSupport          -> gpgme != null;
 assert pythonPluginSupport -> python != null;
 assert omemoSupport        -> libsignal-protocol-c != null && libgcrypt != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "profanity";

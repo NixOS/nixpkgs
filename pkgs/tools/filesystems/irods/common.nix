@@ -48,8 +48,8 @@ with stdenv;
       testing on supported platforms; plug-in support for microservices, storage resources,
       drivers, and databases; and extensive documentation, training and support services.'';
     homepage = "https://irods.org";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.bzizou ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.linux;
   };
 }

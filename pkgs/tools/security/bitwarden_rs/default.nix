@@ -18,7 +18,7 @@ in rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = with stdenv.lib; [ openssl ]
+  buildInputs = with lib; [ openssl ]
     ++ optionals stdenv.isDarwin [ Security CoreServices ]
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;

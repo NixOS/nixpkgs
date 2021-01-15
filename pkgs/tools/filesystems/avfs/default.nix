@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fuse, xz }:
+{ lib, stdenv, fetchurl, pkgconfig, fuse, xz }:
 
 stdenv.mkDerivation rec {
   pname = "avfs";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://avf.sourceforge.net/";
     description = "Virtual filesystem that allows browsing of compressed files";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     python27
     libpng
     expat
-  ] ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
+  ] ++ lib.optional stdenv.isDarwin ApplicationServices;
 
   # Required by .pc file
   propagatedBuildInputs = [

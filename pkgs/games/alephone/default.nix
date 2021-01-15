@@ -93,7 +93,7 @@ in self // {
       '';
 
       meta = alephone.meta // {
-        license = stdenv.lib.licenses.free;
+        license = lib.licenses.free;
         hydraPlatforms = [ ];
       } // meta;
     });

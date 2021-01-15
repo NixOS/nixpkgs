@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, python3Packages, docker, autoreconfHook, coreutils, makeWrapper, gnused, gnutar, gzip, findutils, sudo, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, python3, python3Packages, docker, autoreconfHook, coreutils, makeWrapper, gnused, gnutar, gzip, findutils, sudo, nixosTests }:
 
 stdenv.mkDerivation rec {
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   # Here we wrap those deps so they are resolved inside nixpkgs.
   postInstall = ''
     for file in $out/bin/* ; do \
-      wrapProgram $file --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils docker gnused gnutar gzip findutils sudo ]}
+      wrapProgram $file --prefix PATH : ${lib.makeBinPath [ coreutils docker gnused gnutar gzip findutils sudo ]}
     done
   '';
 
@@ -54,9 +54,9 @@ stdenv.mkDerivation rec {
       on offer.
     '';
     homepage = "https://hpc.github.io/charliecloud";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.bzizou ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.linux;
   };
 
 }

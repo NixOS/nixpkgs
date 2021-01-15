@@ -3,7 +3,7 @@
 , autoreconfHook
 }:
 
-let inherit (stdenv.lib) optional optionals; in
+let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";

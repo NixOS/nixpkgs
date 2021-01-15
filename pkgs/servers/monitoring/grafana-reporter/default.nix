@@ -1,6 +1,6 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, tetex, makeWrapper }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, tetex, makeWrapper }:
 
-with stdenv.lib;
+with lib;
 
 buildGoPackage rec {
   pname = "reporter";

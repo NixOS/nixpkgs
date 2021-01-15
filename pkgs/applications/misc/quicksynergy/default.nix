@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk2, synergy}:
+{lib, stdenv, fetchurl, pkgconfig, gtk2, synergy}:
 
 stdenv.mkDerivation rec {
   pname = "quicksynergy";
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
       Remember to open port 24800 (used by synergys program) if you want to
       host mouse and keyboard.";
     homepage = "https://sourceforge.net/projects/quicksynergy/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.spinus ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.spinus ];
+    platforms = lib.platforms.linux;
   };
 }

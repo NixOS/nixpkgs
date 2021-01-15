@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
       supposed to be an improved scrot.
     '';
     changelog = "https://github.com/naelstrof/maim/releases/tag/v${version}";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
     maintainers = with maintainers; [ primeos mbakke ];
   };
 }

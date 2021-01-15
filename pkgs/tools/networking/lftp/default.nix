@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnutls readline zlib libidn2 gmp libiconv libunistring gettext ];
 
-  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "format";
+  hardeningDisable = lib.optional stdenv.isDarwin "format";
 
   configureFlags = [
     "--with-readline=${readline.dev}"

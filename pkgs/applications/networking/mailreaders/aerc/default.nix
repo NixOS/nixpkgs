@@ -48,9 +48,9 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/aerc --prefix PATH ":" \
-      "$out/share/aerc/filters:${stdenv.lib.makeBinPath [ ncurses ]}"
+      "$out/share/aerc/filters:${lib.makeBinPath [ ncurses ]}"
     wrapProgram $out/share/aerc/filters/html --prefix PATH ":" \
-      ${stdenv.lib.makeBinPath [ w3m dante ]}
+      ${lib.makeBinPath [ w3m dante ]}
   '';
 
   meta = with lib; {

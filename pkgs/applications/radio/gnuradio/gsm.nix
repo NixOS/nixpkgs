@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     boost gnuradio makeWrapper cppunit libosmocore gr-osmosdr log4cpp
-  ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
+  ] ++ lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''
     for prog in "$out"/bin/*; do

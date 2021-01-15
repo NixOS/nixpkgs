@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, openjdk, unzip, makeWrapper }:
+{ fetchurl, lib, stdenv, openjdk, unzip, makeWrapper }:
 
 let
   version = "1.4.9";
@@ -20,10 +20,10 @@ in stdenv.mkDerivation {
     done
   '';
   meta = {
-    maintainers = [ stdenv.lib.maintainers.cleverca22 ];
+    maintainers = [ lib.maintainers.cleverca22 ];
     description = "A graphical user interface to programs that play the board game Go and support the Go Text Protocol such as GNU Go";
     homepage = "http://gogui.sourceforge.net/";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3;
   };
 }

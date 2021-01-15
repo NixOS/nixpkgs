@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, pkgconfig, SDL, SDL_mixer, SDL_Pango, glib }:
+{ lib, stdenv, fetchurl, perlPackages, pkgconfig, SDL, SDL_mixer, SDL_Pango, glib }:
 
 perlPackages.buildPerlModule {
   pname = "frozen-bubble";
@@ -19,7 +19,7 @@ perlPackages.buildPerlModule {
 
   meta = {
     description = "Puzzle with Bubbles";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ puckipedia ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ puckipedia ];
   };
 }

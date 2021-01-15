@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
     patchelf \
        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-       --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}" \
+       --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc ]}" \
        "$out/opt/ipmicfg/IPMICFG-Linux.x86_64"
 
     ln -s "$out/opt/ipmicfg/IPMICFG-Linux.x86_64" "$out/bin/ipmicfg"

@@ -154,6 +154,6 @@ stdenv.mkDerivation (rec {
 } // optionalAttrs stdenv.hostPlatform.isMusl {
   # Work around a bogus warning in conjunction with musl.
   NIX_CFLAGS_COMPILE = "-Wno-error";
-} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isAndroid {
+} // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
   NIX_CFLAGS_COMPILE = "-D__USE_FORTIFY_LEVEL=0";
 })

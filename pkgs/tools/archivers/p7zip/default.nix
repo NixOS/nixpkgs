@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
     # I think this is a typo and should be CXX? Either way let's kill it
     sed -i '/XX=\/usr/d' makefile.macosx_llvm_64bits
-  '' + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     substituteInPlace makefile.machine \
       --replace 'CC=gcc'  'CC=${stdenv.cc.targetPrefix}gcc' \
       --replace 'CXX=g++' 'CXX=${stdenv.cc.targetPrefix}g++'
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     buildFlags=all3
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     cp makefile.macosx_llvm_64bits makefile.machine
   '';
 
@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
   meta = {
     homepage = "https://github.com/szcnick/p7zip";
     description = "A new p7zip fork with additional codecs and improvements (forked from https://sourceforge.net/projects/p7zip/)";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.raskin ];
     # RAR code is under non-free UnRAR license, but we remove it
     license = if enableUnfree then lib.licenses.unfree else lib.licenses.lgpl2Plus;
   };

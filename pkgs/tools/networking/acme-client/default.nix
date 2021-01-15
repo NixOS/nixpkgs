@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , apple_sdk ? null
 , libbsd
@@ -6,7 +6,7 @@
 , pkgconfig
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "acme-client";

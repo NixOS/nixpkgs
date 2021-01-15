@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ zlib ]
-                ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+                ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   installPhase = ''
     runHook preInstall

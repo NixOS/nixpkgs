@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, ncurses, readline, autoreconfHook }:
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "abook-0.6.1";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://abook.sourceforge.net/";
     description = "Text-based addressbook program designed to use with mutt mail client";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.edwtjo ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.edwtjo ];
+    platforms = with lib.platforms; linux;
   };
 }

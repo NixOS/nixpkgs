@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
 
   buildInputs = [ wxGTK30 glib pcre ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace far2l/bootstrap/trash.sh \
       --replace 'gvfs-trash'  '${gvfs}/bin/gvfs-trash'
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace far2l/CMakeLists.txt \
       --replace "-framework System" -lSystem
   '' + ''
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       mkdir -p $out/share/icons/hicolor/$size/apps
       convert -size $size ../far2l/DE/icons/hicolor/$size/apps/far2l.svg $out/share/icons/hicolor/$size/apps/far2l.png
     done
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     wrapProgram $out/bin/far2l --argv0 $out/bin/far2l
   '';
 

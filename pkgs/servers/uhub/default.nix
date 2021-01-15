@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ sqlite systemd ] ++ stdenv.lib.optional tlsSupport openssl;
+  buildInputs = [ sqlite systemd ] ++ lib.optional tlsSupport openssl;
 
   outputs = [ "out"
     "mod_example"

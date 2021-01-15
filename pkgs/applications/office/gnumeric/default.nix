@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
   version = "1.12.48";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "14556b0vyxdvdwjlin0rv7jk0vq4nplbmvp9j89bhkfk84xf7k2p";
   };
 
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The GNOME Office Spreadsheet";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ];

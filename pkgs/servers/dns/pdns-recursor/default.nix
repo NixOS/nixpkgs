@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, boost, nixosTests
+{ lib, stdenv, fetchurl, pkgconfig, boost, nixosTests
 , openssl, systemd, lua, luajit, protobuf
 , enableProtoBuf ? false
 }:
 assert enableProtoBuf -> protobuf != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "pdns-recursor";

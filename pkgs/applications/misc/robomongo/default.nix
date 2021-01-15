@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [makeWrapper];
 
-  ldLibraryPath = stdenv.lib.makeLibraryPath [
+  ldLibraryPath = lib.makeLibraryPath [
     stdenv.cc.cc
     zlib
     glib
@@ -70,8 +70,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://robomongo.org/";
     description = "Query GUI for mongodb";
-    platforms = stdenv.lib.intersectLists stdenv.lib.platforms.linux stdenv.lib.platforms.x86_64;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.eperuffo ];
+    platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.eperuffo ];
   };
 }

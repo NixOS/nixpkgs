@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "stricat";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Multi-use cryptographic tool based on the STRIBOB algorithm";
     homepage    = "https://www.stribob.com/stricat/";
-    license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.bsd3;
+    platforms   = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

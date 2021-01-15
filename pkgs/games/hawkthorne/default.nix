@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, love, curl, zip }:
+{ fetchgit, lib, stdenv, love, curl, zip }:
 
 stdenv.mkDerivation {
   version = "0.12.1";
@@ -32,8 +32,8 @@ stdenv.mkDerivation {
       Hawthorne's inheritance.
     '';
     homepage = "https://www.reddit.com/r/hawkthorne";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ campadrenalin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ campadrenalin ];
     broken = true;
   };
 }

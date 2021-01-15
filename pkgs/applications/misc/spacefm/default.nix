@@ -1,4 +1,4 @@
-{ pkgs, fetchFromGitHub, stdenv, gtk3, udev, desktop-file-utils
+{ pkgs, fetchFromGitHub, lib, stdenv, gtk3, udev, desktop-file-utils
 , shared-mime-info, intltool, pkgconfig, wrapGAppsHook, ffmpegthumbnailer
 , jmtpfs, ifuseSupport ? false, ifuse ? null, lsof, udisks2 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   # Introduced because ifuse doesn't build due to CVEs in libplist
   # Revert when libplist builds again…
 
-  meta = with stdenv.lib;  {
+  meta = with lib;  {
     description = "A multi-panel tabbed file manager";
     longDescription = ''
       Multi-panel tabbed file and desktop manager for Linux

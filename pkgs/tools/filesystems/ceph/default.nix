@@ -36,7 +36,7 @@
 # We must have one crypto library
 assert cryptopp != null || (nss != null && nspr != null);
 
-with stdenv; with stdenv.lib;
+with stdenv; with lib;
 let
   shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
@@ -122,10 +122,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "15.2.7";
+  version = "15.2.8";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "082lpx1rsifjh636zypxy6ccs6nfkcm9azxp5ghvr5mvx9chmyrj";
+    sha256 = "1nmrras3g2zapcd06qr5m7y4zkymnr0r53jkpicjw2g4q7wfmib4";
   };
 in rec {
   ceph = stdenv.mkDerivation {

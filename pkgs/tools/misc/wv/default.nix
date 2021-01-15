@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, imagemagick, libpng, glib, pkgconfig, libgsf
+{ lib, stdenv, fetchurl, zlib, imagemagick, libpng, glib, pkgconfig, libgsf
 , libxml2, bzip2 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Converter from Microsoft Word formats to human-editable ones";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2;
   };
 }

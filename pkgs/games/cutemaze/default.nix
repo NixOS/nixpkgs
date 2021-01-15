@@ -13,7 +13,7 @@ mkDerivation rec {
 
   buildInputs = [ qtsvg ];
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv CuteMaze.app $out/Applications
   '';

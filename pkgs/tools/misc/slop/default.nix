@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ glew glm libGLU libGL libX11 libXext libXrender icu ]
-                ++ stdenv.lib.optional doCheck cppcheck;
+                ++ lib.optional doCheck cppcheck;
 
   doCheck = false;
 
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Queries a selection from the user and prints to stdout";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
     maintainers = with maintainers; [ primeos mbakke ];
   };
 }

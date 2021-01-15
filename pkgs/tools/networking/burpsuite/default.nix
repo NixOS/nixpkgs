@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, runtimeShell }:
 
 let
   version = "2020.1";
@@ -32,9 +32,9 @@ in stdenv.mkDerivation {
     '';
     homepage = "https://portswigger.net/burp/";
     downloadPage = "https://portswigger.net/burp/freedownload";
-    license = [ stdenv.lib.licenses.unfree ];
+    license = [ lib.licenses.unfree ];
     platforms = jre.meta.platforms;
     hydraPlatforms = [];
-    maintainers = with stdenv.lib.maintainers; [ bennofs ];
+    maintainers = with lib.maintainers; [ bennofs ];
   };
 }

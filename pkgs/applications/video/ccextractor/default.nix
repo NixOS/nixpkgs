@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake
+{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake
 , glew, glfw3, leptonica, libiconv, tesseract3, zlib }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "ccextractor";
   version = "0.88";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  buildInputs = [ glew glfw3 leptonica tesseract3 zlib ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
+  buildInputs = [ glew glfw3 leptonica tesseract3 zlib ] ++ lib.optional (!stdenv.isLinux) libiconv;
 
   meta = {
     homepage = "https://www.ccextractor.org";

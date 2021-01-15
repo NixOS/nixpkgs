@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
-  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   meta = {
     homepage = "https://mosh.org/";
@@ -53,8 +53,8 @@ stdenv.mkDerivation rec {
       Mosh is a replacement for SSH. It's more robust and responsive,
       especially over Wi-Fi, cellular, and long-distance links.
     '';
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = lib.platforms.unix;
   };
 }

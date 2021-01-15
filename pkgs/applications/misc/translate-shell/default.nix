@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/trans \
-      --prefix PATH : ${stdenv.lib.makeBinPath [
+      --prefix PATH : ${lib.makeBinPath [
         gawk
         curl
         ncurses

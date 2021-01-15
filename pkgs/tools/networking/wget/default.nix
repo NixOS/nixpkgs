@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs doc
 
-  '' + stdenv.lib.optionalString doCheck ''
+  '' + lib.optionalString doCheck ''
     # Work around lack of DNS resolution in chroots.
     for i in "tests/"*.pm "tests/"*.px
     do
@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext pkgconfig perlPackages.perl lzip libiconv libintl ];
   buildInputs = [ libidn2 zlib pcre libuuid ]
-    ++ stdenv.lib.optionals doCheck [ perlPackages.IOSocketSSL perlPackages.LWP python3 ]
-    ++ stdenv.lib.optional (openssl != null) openssl
-    ++ stdenv.lib.optional (libpsl != null) libpsl
-    ++ stdenv.lib.optional stdenv.isDarwin perlPackages.perl;
+    ++ lib.optionals doCheck [ perlPackages.IOSocketSSL perlPackages.LWP python3 ]
+    ++ lib.optional (openssl != null) openssl
+    ++ lib.optional (libpsl != null) libpsl
+    ++ lib.optional stdenv.isDarwin perlPackages.perl;
 
   configureFlags = [
-    (stdenv.lib.withFeatureAs (openssl != null) "ssl" "openssl")
+    (lib.withFeatureAs (openssl != null) "ssl" "openssl")
   ];
 
   doCheck = false;

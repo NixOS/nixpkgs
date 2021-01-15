@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Compiles a XKB keyboard description to a keymap suitable for loadkeys";
     homepage = "https://salsa.debian.org/installer-team/console-setup";
     license = licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ dezgeg ];
+    maintainers = with lib.maintainers; [ dezgeg ];
     platforms = platforms.unix;
   };
 }

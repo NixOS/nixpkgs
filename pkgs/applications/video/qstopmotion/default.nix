@@ -74,9 +74,9 @@ mkDerivation rec {
       animation to different video formats such as mpeg or avi.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ maintainers.leenaars ];
     broken = stdenv.isAarch64;
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
 }

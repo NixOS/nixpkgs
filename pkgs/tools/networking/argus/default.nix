@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     substituteInPlace events/argus-vmstat.sh \
       --replace vm_stat ${procps}/bin/vmstat
     substituteInPlace events/argus-snmp.sh \
-      --replace /usr/bin/snmpget ${stdenv.lib.getBin net-snmp}/bin/snmpget \
-      --replace /usr/bin/snmpwalk ${stdenv.lib.getBin net-snmp}/bin/snmpwalk
+      --replace /usr/bin/snmpget ${lib.getBin net-snmp}/bin/snmpget \
+      --replace /usr/bin/snmpwalk ${lib.getBin net-snmp}/bin/snmpwalk
   '';
 
   meta = with lib; {

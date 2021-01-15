@@ -26,11 +26,11 @@ in stdenv.mkDerivation rec {
   postPatch = "cp -v ${driverdb} drivedb.h";
 
   configureFlags = [
-    "--with-scriptpath=${stdenv.lib.makeBinPath [ mailutils inetutils ]}"
+    "--with-scriptpath=${lib.makeBinPath [ mailutils inetutils ]}"
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [IOKit ApplicationServices];
+  buildInputs = [] ++ lib.optionals stdenv.isDarwin [IOKit ApplicationServices];
   enableParallelBuilding = true;
 
   meta = with lib; {

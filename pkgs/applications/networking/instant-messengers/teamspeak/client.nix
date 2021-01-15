@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       patchelf --replace-needed libquazip.so ${quazip}/lib/libquazip5.so ts3client
       patchelf \
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath ${stdenv.lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
+        --set-rpath ${lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
         --force-rpath \
         ts3client
     '';

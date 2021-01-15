@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [ openssl curl ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.isDarwin Security;
 
   doCheck = !stdenv.isDarwin;
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace $out/etc/profile.d/command-not-found.sh \
       --replace "@out@" "$out"
     wrapProgram $out/bin/nix-index \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ nix ]}"
+      --prefix PATH : "${lib.makeBinPath [ nix ]}"
   '';
 
   meta = with lib; {

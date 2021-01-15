@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
   buildInputs = [ alsaLib flac gtk2 libvorbis libvpx libGL libGLU SDL2 SDL2_mixer ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
+    ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
 
   postPatch = ''
     substituteInPlace source/build/src/glbuild.cpp \

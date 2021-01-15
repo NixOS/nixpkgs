@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, readline, ncurses, gettext, openssl, pkgconfig }:
+{ lib, stdenv, fetchurl, gtk2, readline, ncurses, gettext, openssl, pkgconfig }:
 
 stdenv.mkDerivation {
   name = "gftp-2.0.19";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   meta = {
     description = "GTK-based FTP client";
     homepage = "http://www.gftp.org";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

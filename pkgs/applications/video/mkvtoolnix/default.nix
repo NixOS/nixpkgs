@@ -9,7 +9,7 @@
 
 assert withGUI -> qtbase != null && qtmultimedia != null && wrapQtAppsHook != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";

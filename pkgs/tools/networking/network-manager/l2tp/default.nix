@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ networkmanager ppp ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret libnma ];
+    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
   nativeBuildInputs = [ autoreconfHook libtool intltool pkgconfig file findutils ];
 

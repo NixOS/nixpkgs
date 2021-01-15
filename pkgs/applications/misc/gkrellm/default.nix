@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, gettext, pkgconfig, glib, gtk2, libX11, libSM, libICE, which
+{ lib, fetchurl, stdenv, gettext, pkgconfig, glib, gtk2, libX11, libSM, libICE, which
 , IOKit ? null }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   name = "gkrellm-2.3.11";

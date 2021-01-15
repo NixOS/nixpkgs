@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, perl, gettext, libusb-compat-0_1, pkgconfig, bluez
+{ lib, stdenv, fetchurl, intltool, perl, gettext, libusb-compat-0_1, pkgconfig, bluez
 , readline, pcsclite, libical, gtk2, glib, libXpm }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Cellphone tool";
     homepage = "http://www.gnokii.org";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
     broken = true; # 2018-04-10
   };
 }

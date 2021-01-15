@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja ]
-  ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   meta = with lib; {
     description = "Client library for MPD (music player daemon)";

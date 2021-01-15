@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
     patchShebangs $out/bin/0x0
     wrapProgram $out/bin/0x0 \
-      --prefix PATH : '${stdenv.lib.makeBinPath [ curl xsel ]}'
+      --prefix PATH : '${lib.makeBinPath [ curl xsel ]}'
   '';
 
   meta = with lib; {

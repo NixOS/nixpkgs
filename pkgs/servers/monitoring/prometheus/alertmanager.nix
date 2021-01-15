@@ -21,7 +21,7 @@ buildGoPackage rec {
        -X ${t}.Branch=unknown
        -X ${t}.BuildUser=nix@nixpkgs
        -X ${t}.BuildDate=unknown
-       -X ${t}.GoVersion=${stdenv.lib.getVersion go}
+       -X ${t}.GoVersion=${lib.getVersion go}
   '';
 
   nativeBuildInputs = [ installShellFiles ];

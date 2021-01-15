@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram $out/sbin/btrbk \
       --set PERL5LIB $PERL5LIB \
-      --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
+      --prefix PATH ':' "${lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
   '';
 
   meta = with lib; {

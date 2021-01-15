@@ -32,6 +32,6 @@ stdenv.mkDerivation {
     '';
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
-    license = stdenv.lib.licenses.publicDomain;
+    license = lib.licenses.publicDomain;
   };
 }

@@ -8,7 +8,7 @@
 , enableTesseract ? true, leptonica, tesseract4
 }:
 
-with stdenv.lib;
+with lib;
 
 # k2pdfopt is a pain to package. It requires modified versions of mupdf,
 # leptonica, and tesseract.  Instead of shipping patches for these upstream

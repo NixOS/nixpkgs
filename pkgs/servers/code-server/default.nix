@@ -130,7 +130,7 @@ in stdenv.mkDerivation rec {
 
   configurePhase = ''
     # set default yarn opts
-    ${stdenv.lib.concatMapStrings (option: ''
+    ${lib.concatMapStrings (option: ''
       yarn --offline config set ${option}
     '') defaultYarnOpts}
 
@@ -206,8 +206,8 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    prefetchYarnCache = stdenv.lib.overrideDerivation yarnCache (d: {
-      outputHash = stdenv.lib.fakeSha256;
+    prefetchYarnCache = lib.overrideDerivation yarnCache (d: {
+      outputHash = lib.fakeSha256;
     });
   };
 

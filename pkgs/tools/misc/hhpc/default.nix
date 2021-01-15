@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "Hides the mouse pointer in X11";
     maintainers = with maintainers; [ nico202 ];
     platforms = platforms.unix;
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

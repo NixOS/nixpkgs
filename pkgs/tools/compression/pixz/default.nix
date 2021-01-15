@@ -1,5 +1,5 @@
 {
-  stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig
+  lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig
   , asciidoc, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl
   , libarchive, lzma
 }:
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = ''A parallel compressor/decompressor for xz format'';
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

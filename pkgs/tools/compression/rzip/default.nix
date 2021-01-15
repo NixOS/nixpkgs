@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, bzip2}:
+{lib, stdenv, fetchurl, fetchpatch, bzip2}:
 
 stdenv.mkDerivation {
   name = "rzip-2.1";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://rzip.samba.org/";
     description = "Compression program";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

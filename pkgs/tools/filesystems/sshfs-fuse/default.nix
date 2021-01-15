@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse3 glib ];
   checkInputs = [ which python3Packages.pytest ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString
+  NIX_CFLAGS_COMPILE = lib.optionalString
     (stdenv.hostPlatform.system == "i686-linux")
     "-D_FILE_OFFSET_BITS=64";
 

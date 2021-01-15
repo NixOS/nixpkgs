@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoPatchelfHook
 , python3Packages
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Project X-Ray - Xilinx Series 7 Bitstream Documentation";
     homepage    = "https://github.com/SymbiFlow/symbiflow-arch-defs";
     hydraPlatforms = [];

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib kmod which ] ++
-    stdenv.lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
+    lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
   preConfigure = if stdenv.cc.isGNU then null else ''
     substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""

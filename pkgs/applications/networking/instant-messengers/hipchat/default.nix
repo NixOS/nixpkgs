@@ -5,7 +5,7 @@
 let
   version = "4.30.5.1682";
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     xdg_utils
     xorg.libXext
     xorg.libSM

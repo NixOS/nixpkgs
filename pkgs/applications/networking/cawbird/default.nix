@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ibboard.co.uk/cawbird/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ jonafato schmittlauch ];
+    maintainers = with lib.maintainers; [ jonafato schmittlauch ];
   };
 }

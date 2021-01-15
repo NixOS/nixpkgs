@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
     libnotify
     libappindicator-gtk3
     gtk3
-    (stdenv.lib.getLib dconf)
+    (lib.getLib dconf)
   ]
   ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
-  ++ (stdenv.lib.optional (aria2 != null) aria2);
+  ++ (lib.optional (aria2 != null) aria2);
 
   enableParallelBuilding = true;
 
-  preFixup = stdenv.lib.optionalString (aria2 != null)
+  preFixup = lib.optionalString (aria2 != null)
                ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
 
   meta = with lib; {

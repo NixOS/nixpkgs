@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, gettext, makeWrapper, PerlMagick, which, highlight
+{ lib, stdenv, fetchurl, perlPackages, gettext, makeWrapper, PerlMagick, which, highlight
 , gitSupport ? false, git ? null
 , docutilsSupport ? false, python ? null, docutils ? null
 , monotoneSupport ? false, monotone ? null
@@ -20,8 +20,6 @@ assert mercurialSupport -> (mercurial != null);
 let
   name = "ikiwiki";
   version = "3.20200202.3";
-
-  lib = stdenv.lib;
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
@@ -85,8 +83,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
     homepage = "http://ikiwiki.info/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.peti ];
   };
 }

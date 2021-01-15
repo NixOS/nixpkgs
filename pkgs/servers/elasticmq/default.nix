@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, which }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, which }:
 
 stdenv.mkDerivation rec {
   name = "elasticmq-0.5";
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     ''
       mkdir -p $out/bin
       cp -prd lib conf $out/
-      
+
       cp bin/run.sh $out/bin/elasticmq
       substituteInPlace $out/bin/elasticmq --replace '-DBASEDIR=$BASEDIR' '-DBASEDIR=''${ELASTICMQ_DATA_PREFIX:-.}'
 
-      wrapProgram $out/bin/elasticmq --prefix PATH : "${stdenv.lib.makeBinPath [ which jre ]}"
+      wrapProgram $out/bin/elasticmq --prefix PATH : "${lib.makeBinPath [ which jre ]}"
     '';
 
   meta = {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
         $ELASTICMQ_DATA_PREFIX/conf/Default.scala.  You can use the
         Default.scala included in the distribution as a template.
       '';
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,9 +1,9 @@
-{ fetchurl, fetchpatch, stdenv, gnutls, glib, pkgconfig, check, libotr, python
+{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkgconfig, check, libotr, python
 , enableLibPurple ? false, pidgin ? null
 , enablePam ? false, pam ? null
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   name = "bitlbee-3.6";
 

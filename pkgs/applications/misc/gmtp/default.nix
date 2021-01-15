@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libmtp, libid3tag, flac, libvorbis, gtk3
+{ lib, stdenv, fetchurl, pkgconfig, libmtp, libid3tag, flac, libvorbis, gtk3
 , gsettings-desktop-schemas, wrapGAppsHook
 }:
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A simple MP3 and Media player client for UNIX and UNIX like systems";
     homepage = "https://gmtp.sourceforge.io";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

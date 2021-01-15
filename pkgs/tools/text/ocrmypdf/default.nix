@@ -74,11 +74,11 @@ buildPythonApplication rec {
   patches = [
     (substituteAll {
       src = ./liblept.patch;
-      liblept = "${stdenv.lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}";
+      liblept = "${lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${stdenv.lib.makeBinPath [ ghostscript jbig2enc pngquant qpdf tesseract4 unpaper ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ghostscript jbig2enc pngquant qpdf tesseract4 unpaper ]}" ];
 
   meta = with lib; {
     homepage = "https://github.com/jbarlow83/OCRmyPDF";

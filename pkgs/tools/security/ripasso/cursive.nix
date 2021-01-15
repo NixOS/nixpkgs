@@ -21,7 +21,7 @@ buildRustPackage rec {
   nativeBuildInputs = [ pkgconfig gpgme python3 ];
   buildInputs = [
     ncurses openssl libgpgerror gpgme xorg.libxcb
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Security ];
+  ] ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
 
   preFixup = ''
     mkdir -p "$out/man/man1"

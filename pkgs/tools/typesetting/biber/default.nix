@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, perlPackages, shortenPerlShebang, texlive }:
 
 let
-  biberSource = stdenv.lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
+  biberSource = lib.head (builtins.filter (p: p.tlType == "source") texlive.biber.pkgs);
 
   # perl 5.32.0 ships with U:C 1.27
   UnicodeCollate_1_29 = perlPackages.buildPerlPackage rec {
@@ -35,9 +35,9 @@ perlPackages.buildPerlModule {
     TestDifferences
     PerlIOutf8_strict
   ];
-  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang $out/bin/biber
   '';
 

@@ -1,4 +1,4 @@
-{ stdenv, python3, beancount }:
+{ lib, stdenv, python3, beancount }:
 
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;
@@ -38,7 +38,7 @@ buildPythonApplication rec {
   meta = {
     homepage = "https://beancount.github.io/fava";
     description = "Web interface for beancount";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

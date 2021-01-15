@@ -1,6 +1,6 @@
 { lib, stdenv, fetchpatch, python3Packages }:
 
-with stdenv.lib;
+with lib;
 with python3Packages;
 
 buildPythonPackage rec {

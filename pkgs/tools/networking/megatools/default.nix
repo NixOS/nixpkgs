@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     docbook_xsl docbook_xml_dtd_45 libxslt
   ];
   buildInputs = [ glib glib-networking curl ]
-  ++ stdenv.lib.optionals stdenv.isLinux [ fuse ];
+  ++ lib.optionals stdenv.isLinux [ fuse ];
 
   enableParallelBuilding = true;
 

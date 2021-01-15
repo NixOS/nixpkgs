@@ -23,8 +23,8 @@ in stdenv.mkDerivation rec {
 
   patches =
     # Use shared libraries to decrease size
-    stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.14-shared_libs.patch
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
+    lib.optional (!stdenv.isDarwin) ./mupdf-1.14-shared_libs.patch
+    ++ lib.optional stdenv.isDarwin ./darwin.patch
   ;
 
   postPatch = ''

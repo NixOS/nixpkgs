@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   name = "ec2-api-tools-1.7.5.1";
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://developer.amazonwebservices.com/connect/entry.jspa?externalID=351";
     description = "Command-line tools to create and manage Amazon EC2 virtual machines";
-    license = stdenv.lib.licenses.amazonsl;
+    license = lib.licenses.amazonsl;
   };
 }

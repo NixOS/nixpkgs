@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     libcxx systemd libpulseaudio
     stdenv.cc.cc alsaLib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
     gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
