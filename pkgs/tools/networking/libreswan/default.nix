@@ -5,7 +5,7 @@
   }:
 
 let
-  binPath = stdenv.lib.makeBinPath [
+  binPath = lib.makeBinPath [
     bash iproute iptables procps coreutils gnused gawk nss.tools which python
   ];
 in
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
                   libcap_ng curl nspr nss python ldns ]
-                ++ stdenv.lib.optional docs xmlto
-                ++ stdenv.lib.optional stdenv.isLinux libselinux;
+                ++ lib.optional docs xmlto
+                ++ lib.optional stdenv.isLinux libselinux;
 
   prePatch = ''
     # Correct bash path

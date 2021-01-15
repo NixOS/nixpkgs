@@ -1,4 +1,4 @@
-{ stdenv, stdenvNoCC, fetchFromGitHub, callPackage, makeWrapper
+{ lib, stdenv, stdenvNoCC, fetchFromGitHub, callPackage, makeWrapper
 , clang, llvm, gcc, which, libcgroup, python, perl, gmp
 , file, wine ? null, fetchpatch
 }:
@@ -31,7 +31,7 @@ let
     # script.
     nativeBuildInputs = [ makeWrapper which clang gcc ];
     buildInputs = [ llvm python gmp ]
-      ++ stdenv.lib.optional (wine != null) python.pkgs.wrapPython;
+      ++ lib.optional (wine != null) python.pkgs.wrapPython;
 
 
     postPatch = ''
@@ -91,7 +91,7 @@ let
 
       patchShebangs $out/bin
 
-    '' + stdenv.lib.optionalString (wine != null) ''
+    '' + lib.optionalString (wine != null) ''
       substitute afl-wine-trace $out/bin/afl-wine-trace \
         --replace "qemu_mode/unsigaction" "$out/lib/afl"
       chmod +x $out/bin/afl-wine-trace
@@ -128,9 +128,9 @@ let
         and improvements from the community
       '';
       homepage    = "https://aflplus.plus";
-      license     = stdenv.lib.licenses.asl20;
+      license     = lib.licenses.asl20;
       platforms   = ["x86_64-linux" "i686-linux"];
-      maintainers = with stdenv.lib.maintainers; [ ris mindavi ];
+      maintainers = with lib.maintainers; [ ris mindavi ];
     };
   };
 in aflplusplus

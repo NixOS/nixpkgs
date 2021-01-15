@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     cp ${dicts} src/module/spell/dict/$(stripHash ${dicts})
     cp ${table} src/im/table/data/$(stripHash ${table})
   ''
-  + stdenv.lib.optionalString withPinyin ''
+  + lib.optionalString withPinyin ''
     cp ${pystroke-data} src/module/pinyin-enhance/data/$(stripHash ${pystroke-data})
     cp ${pytable-data} src/module/pinyin-enhance/data/$(stripHash ${pytable-data})
     cp ${pinyin-data} src/im/pinyin/data/$(stripHash ${pinyin-data})

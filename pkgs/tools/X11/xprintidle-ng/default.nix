@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, libXScrnSaver, libXext, gnulib
+{ lib, stdenv, fetchFromGitHub, libX11, libXScrnSaver, libXext, gnulib
   , autoconf, automake, libtool, gettext, pkgconfig
   , git, perl, texinfo, help2man
 }:
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     inherit  version;
     description = ''A command-line tool to print idle time from libXss'';
     homepage = "http://taktoa.me/xprintidle-ng/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

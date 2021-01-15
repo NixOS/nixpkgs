@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     buildInputs = [
       boost165 opencv zlib libxml2 freetype libjpeg libtiff
       swig openexr ilmbase
-    ] ++ stdenv.lib.optional withPython python3;
+    ] ++ lib.optional withPython python3;
 
     meta = with lib; {
       description = "A free, open source raytracer";

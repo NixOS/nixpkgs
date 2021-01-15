@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libX11, libXtst, qt4 }:
+{ lib, stdenv, fetchurl, pkgconfig, libX11, libXtst, qt4 }:
 stdenv.mkDerivation rec {
   name = "qjoypad-4.1.0";
   src = fetchurl {
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
       experience just a little bit nicer.
     '';
     homepage = "http://qjoypad.sourceforge.net";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ astsmtl ];
+    platforms = with lib.platforms; linux;
   };
 }

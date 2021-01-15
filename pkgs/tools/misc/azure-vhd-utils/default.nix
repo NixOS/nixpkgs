@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   pname = "azure-vhd-utils";
-  version = "20160614-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "20160614-${lib.strings.substring 0 7 rev}";
   rev = "070db2d701a462ca2edcf89d677ed3cac309d8e8";
 
   goPackagePath = "github.com/Microsoft/azure-vhd-utils";

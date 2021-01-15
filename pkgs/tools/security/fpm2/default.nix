@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, gnupg, gtk2
+{ lib, stdenv, fetchurl, pkgconfig, gnupg, gtk2
 , libxml2, intltool
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "fpm2";

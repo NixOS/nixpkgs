@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, python, libev, wafHook }:
+{ lib, stdenv, fetchgit, python, libev, wafHook }:
 stdenv.mkDerivation rec {
   pname = "weighttp";
   version = "0.4";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python libev ];
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
     homepage = "https://redmine.lighttpd.net/projects/weighttp/wiki";
     description = "A lightweight and simple webserver benchmarking tool";
   };

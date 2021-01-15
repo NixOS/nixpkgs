@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , extra-cmake-modules
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lua support for Fcitx 5";
     homepage = "https://github.com/fcitx/fcitx5-lua";
     license = licenses.lgpl21Plus;

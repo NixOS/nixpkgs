@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libxml2, libxslt, getopt, gettext, nixUnstable, dysnomia, libintl, libiconv, help2man, doclifter, docbook5, dblatex, doxygen, libnixxml, autoreconfHook }:
+{ lib, stdenv, fetchurl, pkgconfig, glib, libxml2, libxslt, getopt, gettext, nixUnstable, dysnomia, libintl, libiconv, help2man, doclifter, docbook5, dblatex, doxygen, libnixxml, autoreconfHook }:
 
 stdenv.mkDerivation {
   name = "disnix-0.10";
@@ -13,8 +13,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A Nix-based distributed service deployment tool";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = with stdenv.lib.maintainers; [ sander tomberek ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ sander tomberek ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [zlib] ++ stdenv.lib.optional stdenv.isLinux util-linux;
+  buildInputs = [zlib] ++ lib.optional stdenv.isLinux util-linux;
 
   makeFlags = [ "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc" ];
 

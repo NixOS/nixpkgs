@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, coreutils }:
+{ lib, stdenv, fetchurl, openssl, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "spiped";
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Utility for secure encrypted channels between sockets";
     homepage    = "https://www.tarsnap.com/spiped.html";
-    license     = stdenv.lib.licenses.bsd2;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.bsd2;
+    platforms   = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

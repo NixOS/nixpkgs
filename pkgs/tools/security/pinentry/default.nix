@@ -5,7 +5,7 @@
 , enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "emacs" ] ++ lib.optionals stdenv.isLinux [ "gnome3" ]
 }:
 
-with stdenv.lib;
+with lib;
 
 assert isList enabledFlavors && enabledFlavors != [];
 

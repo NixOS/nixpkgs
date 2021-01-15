@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Rewrite of unclutter using the X11 Xfixes extension";
     platforms = platforms.unix;
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     inherit version;
     maintainers = [ maintainers.globin ];
   };

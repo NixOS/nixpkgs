@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [ iodine networkmanager glib ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret libnma ];
+    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
   nativeBuildInputs = [ intltool autoreconfHook pkgconfig ];
 

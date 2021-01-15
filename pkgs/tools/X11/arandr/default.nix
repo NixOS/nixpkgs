@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages
+{ lib, stdenv, fetchurl, python3Packages
 , gobject-introspection, gsettings-desktop-schemas, gtk3
 , wrapGAppsHook, xrandr
 }:
@@ -34,7 +34,7 @@ in buildPythonApplication rec {
   meta = {
     homepage = "http://christian.amsuess.com/tools/arandr/";
     description = "A simple visual front end for XRandR";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.domenkozar ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.domenkozar ];
   };
 }

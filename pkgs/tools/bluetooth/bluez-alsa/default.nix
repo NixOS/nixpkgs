@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
 , alsaLib, bluez, glib, sbc, dbus
 
 # optional, but useful utils
@@ -9,7 +9,7 @@
 # TODO: aptxSupport
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "bluez-alsa";

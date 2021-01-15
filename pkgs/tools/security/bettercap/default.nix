@@ -25,7 +25,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpcap libusb1 ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libnfnetlink libnetfilter_queue ];
+    ++ lib.optionals stdenv.isLinux [ libnfnetlink libnetfilter_queue ];
 
   meta = with lib; {
     description = "A man in the middle tool";

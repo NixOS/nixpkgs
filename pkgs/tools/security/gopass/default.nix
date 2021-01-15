@@ -29,12 +29,12 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev}" ];
 
-  wrapperPath = stdenv.lib.makeBinPath (
+  wrapperPath = lib.makeBinPath (
     [
       git
       gnupg
       xclip
-    ] ++ stdenv.lib.optional stdenv.isLinux wl-clipboard
+    ] ++ lib.optional stdenv.isLinux wl-clipboard
   );
 
   postInstall = ''
@@ -42,7 +42,7 @@ buildGoModule rec {
       $out/bin/gopass completion $shell > gopass.$shell
       installShellCompletion gopass.$shell
     done
-  '' + stdenv.lib.optionalString passAlias ''
+  '' + lib.optionalString passAlias ''
     ln -s $out/bin/gopass $out/bin/pass
   '';
 

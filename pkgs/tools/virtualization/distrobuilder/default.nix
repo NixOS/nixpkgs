@@ -2,7 +2,7 @@
 , makeWrapper, coreutils, gnupg, gnutar, squashfsTools, debootstrap
 }:
 
-let binPath = stdenv.lib.makeBinPath [
+let binPath = lib.makeBinPath [
   coreutils gnupg gnutar squashfsTools debootstrap
 ];
 in

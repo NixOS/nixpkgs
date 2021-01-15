@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, bzip2, openssl, fetchpatch }:
+{ lib, stdenv, fetchurl, zlib, bzip2, openssl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "dmg2img-1.6.7";
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
     description = "An Apple's compressed dmg to standard (hfsplus) image disk file convert tool";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

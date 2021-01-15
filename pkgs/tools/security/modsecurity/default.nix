@@ -6,7 +6,7 @@
 with lib;
 
 let luaValue = if luaSupport then lua5 else "no";
-    optional = stdenv.lib.optional;
+    optional = lib.optional;
 in
 
 stdenv.mkDerivation rec {
@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     homepage = "https://www.modsecurity.org/";
     maintainers = with maintainers; [offline];
-    platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms   = lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

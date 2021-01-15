@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ curl openssl libxml2 ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ fuse ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ osxfuse ];
+    ++ lib.optionals stdenv.isLinux [ fuse ]
+    ++ lib.optionals stdenv.isDarwin [ osxfuse ];
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   configureFlags = [

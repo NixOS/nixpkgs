@@ -111,7 +111,7 @@ in stdenv.mkDerivation rec {
     # It also invokes executable Python scripts in `$out/libexec/glusterfs`, which is why we set up PYTHONPATH accordingly.
     # We set up the paths for the main entry point executables.
 
-    GLUSTER_PATH="${stdenv.lib.makeBinPath runtimePATHdeps}:$out/bin"
+    GLUSTER_PATH="${lib.makeBinPath runtimePATHdeps}:$out/bin"
     GLUSTER_PYTHONPATH="$(toPythonPath $out):$out/libexec/glusterfs"
     GLUSTER_LD_LIBRARY_PATH="$out/lib"
 

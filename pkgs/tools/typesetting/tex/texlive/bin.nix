@@ -145,7 +145,7 @@ core = stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Basic binaries for TeX Live";
     homepage    = "http://www.tug.org/texlive";
-    license     = stdenv.lib.licenses.gpl2;
+    license     = lib.licenses.gpl2;
     maintainers = with maintainers; [ vcunat veprbl lovek323 raskin jwiegley ];
     platforms   = platforms.all;
   };
@@ -169,13 +169,13 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     ++ map (prog: "--disable-${prog}") # don't build things we already have
       ([ "tex" "ptex" "eptex" "uptex" "euptex" "aleph" "pdftex"
         "web-progs" "synctex"
-      ] ++ stdenv.lib.optionals (!withLuaJIT) [ "luajittex" "luajithbtex" "mfluajit" ]);
+      ] ++ lib.optionals (!withLuaJIT) [ "luajittex" "luajithbtex" "mfluajit" ]);
 
   configureScript = ":";
 
   # we use static libtexlua, because it's only used by a single binary
   postConfigure = let
-    luajit = stdenv.lib.optionalString withLuaJIT ",luajit";
+    luajit = lib.optionalString withLuaJIT ",luajit";
   in ''
     mkdir ./WorkDir && cd ./WorkDir
     for path in libs/{teckit,lua53${luajit}} texk/web2c; do
@@ -220,7 +220,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     mv "$out/bin"/{luatex,texlua,texluac} "$luatex/bin/"
     mv "$out/bin"/luahbtex "$luahbtex/bin/"
     mv "$out/bin"/xetex "$xetex/bin/"
-  '' + stdenv.lib.optionalString withLuaJIT ''
+  '' + lib.optionalString withLuaJIT ''
     mv "$out/bin"/mfluajit{,-nowin} "$mflua/bin/"
     mv "$out/bin"/{luajittex,luajithbtex,texluajit,texluajitc} "$luajittex/bin/"
   '' ;
@@ -294,11 +294,11 @@ latexindent = perlPackages.buildPerlPackage rec {
   pname = "latexindent";
   inherit (src) version;
 
-  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.latexindent.pkgs);
+  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.latexindent.pkgs);
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
   propagatedBuildInputs = with perlPackages; [ FileHomeDir LogDispatch LogLog4perl UnicodeLineBreak YAMLTiny ];
 
   postPatch = ''
@@ -315,7 +315,7 @@ latexindent = perlPackages.buildPerlPackage rec {
     install -D ./scripts/latexindent/latexindent.pl "$out"/bin/latexindent
     mkdir -p "$out"/${perl.libPrefix}
     cp -r ./scripts/latexindent/LatexIndent "$out"/${perl.libPrefix}/
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang "$out"/bin/latexindent
   '';
 };
@@ -325,7 +325,7 @@ pygmentex = python2Packages.buildPythonApplication rec {
   pname = "pygmentex";
   inherit (src) version;
 
-  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs);
+  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs);
 
   propagatedBuildInputs = with python2Packages; [ pygments chardet ];
 
@@ -361,7 +361,7 @@ pygmentex = python2Packages.buildPythonApplication rec {
 texlinks = stdenv.mkDerivation rec {
   name = "texlinks.sh";
 
-  src = stdenv.lib.head (builtins.filter (p: p.tlType == "run") texlive.texlive-scripts-extra.pkgs);
+  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.texlive-scripts-extra.pkgs);
 
   dontBuild = true;
   doCheck = false;
@@ -425,7 +425,7 @@ xdvi = stdenv.mkDerivation {
 
 } # un-indented
 
-// stdenv.lib.optionalAttrs (!clisp.meta.broken) # broken on aarch64 and darwin (#20062)
+// lib.optionalAttrs (!clisp.meta.broken) # broken on aarch64 and darwin (#20062)
 {
 
 xindy = stdenv.mkDerivation {

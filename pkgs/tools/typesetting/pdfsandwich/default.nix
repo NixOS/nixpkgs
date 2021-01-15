@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     cp -p pdfsandwich $out/bin
-    wrapProgram $out/bin/pdfsandwich --prefix PATH : ${stdenv.lib.makeBinPath [ imagemagick ghostscript poppler_utils unpaper tesseract ]}
+    wrapProgram $out/bin/pdfsandwich --prefix PATH : ${lib.makeBinPath [ imagemagick ghostscript poppler_utils unpaper tesseract ]}
 
     mkdir -p $out/man/man1
     cp -p pdfsandwich.1.gz $out/man/man1

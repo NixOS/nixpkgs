@@ -19,7 +19,7 @@ assert withSQLite -> sqlite != null;
 assert withPgSQL -> postgresql != null;
 assert withMysql -> libmysqlclient != null;
 
-let inherit (stdenv.lib) getDev optional optionalString; in
+let inherit (lib) getDev optional optionalString; in
 
 stdenv.mkDerivation rec {
   version = "1.7.5";

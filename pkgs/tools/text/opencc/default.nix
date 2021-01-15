@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python ];
 
   # let intermediate tools find intermediate library
-  preBuild = stdenv.lib.optionalString stdenv.isLinux ''
+  preBuild = lib.optionalString stdenv.isLinux ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$(pwd)/src
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$(pwd)/src
   '';
 

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   # See now-cli/default.nix
   dontStrip = true;
   preFixup = let
-    libPath = stdenv.lib.makeLibraryPath [stdenv.cc.cc stdenv.cc.libc];
+    libPath = lib.makeLibraryPath [stdenv.cc.cc stdenv.cc.libc];
     bin = "$out/bin/${pname}";
   in ''
 

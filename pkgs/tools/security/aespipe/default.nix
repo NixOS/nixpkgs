@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cp bz2aespipe $out/bin
     wrapProgram $out/bin/bz2aespipe \
-     --prefix PATH : $out/bin:${stdenv.lib.makeBinPath [ sharutils ]}
+     --prefix PATH : $out/bin:${lib.makeBinPath [ sharutils ]}
   '';
 
   meta = with lib; {

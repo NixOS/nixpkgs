@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://traceroute.sourceforge.net/";
     description = "Tracks the route taken by packets over an IP network";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ maintainers.koral ];
     platforms = platforms.linux;
   };

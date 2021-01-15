@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , xz
 , writeText
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
         is just a bonus.
       '';
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

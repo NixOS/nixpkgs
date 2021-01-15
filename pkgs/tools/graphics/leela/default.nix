@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, poppler }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, poppler }:
 
 stdenv.mkDerivation {
   name = "leela-12.fe7a35a";
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   meta = {
     description = "CLI frontend to the poppler-glib libary of PDF tools";
     homepage = "https://github.com/TrilbyWhite/Leela";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.puffnfresh ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.puffnfresh ];
+    platforms = lib.platforms.linux;
   };
 }

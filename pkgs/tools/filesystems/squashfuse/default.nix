@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libtool, fuse,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libtool, fuse,
   pkgconfig, lz4, xz, zlib, lzo, zstd }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
 

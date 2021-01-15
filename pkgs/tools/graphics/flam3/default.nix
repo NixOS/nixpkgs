@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "flam3";
-  version = "3.1.1-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "3.1.1-${lib.strings.substring 0 7 rev}";
   rev = "e0801543538451234d7a8a240ba3b417cbda5b21";
 
   src = fetchFromGitHub {

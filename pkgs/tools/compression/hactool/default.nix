@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     mv config.mk.template config.mk
   '';
 
-  makeFlags = stdenv.lib.optionals stdenv.isDarwin [ "CC=cc" ];
+  makeFlags = lib.optionals stdenv.isDarwin [ "CC=cc" ];
 
   installPhase = ''
     install -D hactool $out/bin/hactool

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, gtk3 }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "screen-message";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.joachim-breitner.de/en/projects#screen-message";
     description = "Displays a short text fullscreen in an X11 window";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.fpletz ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.fpletz ];
+    platforms = lib.platforms.unix;
   };
 }

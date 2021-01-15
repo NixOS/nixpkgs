@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake perl pkgconfig ];
   buildInputs = [ openssl curl libusb1 protobufc ];
 
-  cmakeFlags = stdenv.lib.optional enableUnsafe [ "-Dunsafe=on" ];
+  cmakeFlags = lib.optional enableUnsafe [ "-Dunsafe=on" ];
 
   preFixup = ''
     chmod +x $out/bin/ttbin2mysports

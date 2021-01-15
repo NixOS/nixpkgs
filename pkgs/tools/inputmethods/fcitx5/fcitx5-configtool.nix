@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchFromGitHub
 , cmake
@@ -45,12 +45,12 @@ mkDerivation rec {
     xkeyboardconfig
     libxkbfile
     libXdmcp
-  ] ++ stdenv.lib.optionals kcmSupport [
+  ] ++ lib.optionals kcmSupport [
     kdeclarative
     kwidgetsaddons
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Configuration Tool for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-configtool";
     license = licenses.gpl2Plus;

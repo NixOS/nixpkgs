@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dysnomia, disnix, socat, pkgconfig, getopt }:
+{ lib, stdenv, fetchurl, dysnomia, disnix, socat, pkgconfig, getopt }:
 
 stdenv.mkDerivation {
   name = "disnixos-0.9";
@@ -13,8 +13,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Provides complementary NixOS infrastructure deployment to Disnix";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.sander ];
+    platforms = lib.platforms.linux;
   };
 }

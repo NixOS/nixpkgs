@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
     "--enable-confdir=/etc"
-  ] ++ stdenv.lib.optional stdenv.isLinux
+  ] ++ lib.optional stdenv.isLinux
          "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
-    ++ stdenv.lib.optional (!stdenv.isLinux)
+    ++ lib.optional (!stdenv.isLinux)
          "--disable-libsystemd";
 
   postConfigure = ''
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig perl ];
-  buildInputs = [ python3 ] ++ stdenv.lib.optionals stdenv.isLinux [ udev dbus ]
-             ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = [ python3 ] ++ lib.optionals stdenv.isLinux [ udev dbus ]
+             ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with lib; {
     description = "Middleware to access a smart card using SCard API (PC/SC)";

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp enum4linux.pl $out/bin/enum4linux
 
     wrapProgram $out/bin/enum4linux \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ samba openldap ]}
+      --prefix PATH : ${lib.makeBinPath [ samba openldap ]}
   '';
 
   meta = with lib; {

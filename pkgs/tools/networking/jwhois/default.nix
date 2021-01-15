@@ -1,4 +1,4 @@
-{stdenv, lynx, fetchurl}:
+{lib, stdenv, lynx, fetchurl}:
 
 stdenv.mkDerivation {
   name = "jwhois-4.0";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A client for the WHOIS protocol allowing you to query the owner of a domain name";
     homepage = "https://www.gnu.org/software/jwhois/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
 }

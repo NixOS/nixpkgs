@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , libjack2, alsaLib, libpulseaudio
 , faac, lame, libogg, libopus, libvorbis, libsamplerate
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://darkice.org/";
     description = "Live audio streamer";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ ikervagyok fpletz ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ikervagyok fpletz ];
   };
 }

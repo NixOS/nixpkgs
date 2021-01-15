@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     install -d $out/bin $out/share/lynis/plugins
     cp -r include db default.prf $out/share/lynis/
     cp -a lynis $out/bin
-    wrapProgram "$out/bin/lynis" --prefix PATH : ${stdenv.lib.makeBinPath [ gawk ]}
+    wrapProgram "$out/bin/lynis" --prefix PATH : ${lib.makeBinPath [ gawk ]}
 
     installManPage lynis.8
     installShellCompletion --bash --name lynis.bash \

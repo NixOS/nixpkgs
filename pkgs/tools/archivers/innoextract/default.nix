@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper ];
 
   # we need unar to for multi-archive extraction
-  postFixup = stdenv.lib.optionalString withGog ''
+  postFixup = lib.optionalString withGog ''
     wrapProgram $out/bin/innoextract \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ unar ]}
+      --prefix PATH : ${lib.makeBinPath [ unar ]}
   '';
 
   meta = with lib; {

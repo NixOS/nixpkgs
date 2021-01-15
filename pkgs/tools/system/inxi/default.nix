@@ -9,7 +9,7 @@
 
 let
   prefixPath = programs:
-    "--prefix PATH ':' '${stdenv.lib.makeBinPath programs}'";
+    "--prefix PATH ':' '${lib.makeBinPath programs}'";
   recommendedSystemPrograms = lib.optionals withRecommendedSystemPrograms [
     util-linuxMinimal dmidecode file hddtemp iproute ipmitool usbutils kmod
     lm_sensors smartmontools binutils tree upower pciutils

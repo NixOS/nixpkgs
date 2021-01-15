@@ -1,4 +1,4 @@
-{ stdenv, autoconf, automake, fetchFromGitHub, libgcc, libjpeg_turbo
+{ lib, stdenv, autoconf, automake, fetchFromGitHub, libgcc, libjpeg_turbo
 , libpng, libtool, libxml2, pkgconfig, which, xorg
 , libtirpc
 }:
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "NX X server based on Xnest";
     homepage = "https://github.com/ArcticaProject/nx-libs";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ jD91mZM2 ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ jD91mZM2 ];
+    platforms = lib.platforms.linux;
   };
 }

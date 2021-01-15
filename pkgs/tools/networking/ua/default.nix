@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit
+{ lib, stdenv, buildGoPackage, fetchgit
 , pkgconfig
 , glib, libxml2
 }:
@@ -23,9 +23,9 @@ buildGoPackage rec {
 
   meta = {
     homepage = "https://github.com/sloonz/ua";
-    license = stdenv.lib.licenses.isc;
+    license = lib.licenses.isc;
     description = "Universal Aggregator";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

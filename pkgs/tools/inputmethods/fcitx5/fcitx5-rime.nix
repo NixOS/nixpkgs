@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchFromGitHub
 , pkgconfig
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     librime
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RIME support for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-rime";
     license = licenses.lgpl21Plus;

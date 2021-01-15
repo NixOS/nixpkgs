@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = []
-    ++ stdenv.lib.optionals lzmaSupport [ xz ];
+    ++ lib.optionals lzmaSupport [ xz ];
 
   postPatch = ''
     cd xdelta3
