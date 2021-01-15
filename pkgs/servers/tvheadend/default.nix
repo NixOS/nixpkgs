@@ -65,7 +65,7 @@ in stdenv.mkDerivation {
 
   postInstall = ''
     wrapProgram $out/bin/tvheadend \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ bzip2 ]}
+      --prefix PATH : ${lib.makeBinPath [ bzip2 ]}
   '';
 
   meta = with lib; {

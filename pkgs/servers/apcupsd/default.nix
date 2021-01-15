@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ util-linux man ] ++ stdenv.lib.optional enableCgiScripts gd;
+  buildInputs = [ util-linux man ] ++ lib.optional enableCgiScripts gd;
 
   prePatch = ''
     sed -e "s,\$(INSTALL_PROGRAM) \$(STRIP),\$(INSTALL_PROGRAM)," \
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
         --with-lock-dir=/run/lock \
         --with-pid-dir=/run \
         --enable-usb \
-        ${stdenv.lib.optionalString enableCgiScripts "--enable-cgi --with-cgi-bin=$out/libexec/cgi-bin"}
+        ${lib.optionalString enableCgiScripts "--enable-cgi --with-cgi-bin=$out/libexec/cgi-bin"}
         "
   '';
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, redland, pkgconfig, gmp, zlib, librdf_raptor2
+{ lib, stdenv, fetchurl, redland, pkgconfig, gmp, zlib, librdf_raptor2
   , librdf_rasqal }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An HTTP interface to Redland RDF store";
     homepage = "https://www.aelius.com/njh/redstore/";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = with stdenv.lib.platforms;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = with lib.platforms;
       linux ++ freebsd ++ gnu;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

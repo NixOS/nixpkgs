@@ -40,7 +40,7 @@ assert withRest -> curl != null && withJson;
 ## TODO: include oracle optionally
 ## TODO: include ykclient optionally
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "freeradius";
   version = "3.0.21";
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ] ++ optional (!linkOpenssl) "--with-openssl=no";
 
-  patches = stdenv.lib.optional withRest (fetchpatch {
+  patches = lib.optional withRest (fetchpatch {
     # Fix HTTP/2 in rest
     url = "https://github.com/FreeRADIUS/freeradius-server/commit/6286520698a3cc4053b4d49eb0a61d9ba77632aa.patch";
     sha256 = "1ycvr3ql1mfkvzydnn4aiygnidicv2hgllppv37nb1p2pk02159g";

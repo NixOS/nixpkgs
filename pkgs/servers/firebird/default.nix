@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libedit, automake, autoconf, libtool
+{lib, stdenv, fetchurl, libedit, automake, autoconf, libtool
 ,
   # icu = null: use icu which comes with firebird
 
@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
       "--with-fbconf=/etc/firebird"
       "--with-fbsecure-db=/var/db/firebird/system"
     ]
-    ++ (stdenv.lib.optional  (icu != null) "--with-system-icu")
-    ++ (stdenv.lib.optional superServer "--enable-superserver");
+    ++ (lib.optional  (icu != null) "--with-system-icu")
+    ++ (lib.optional superServer "--enable-superserver");
 
   src = fetchurl {
     url = "mirror://sourceforge/firebird/Firebird-${version}.tar.bz2";
@@ -83,8 +83,8 @@ stdenv.mkDerivation rec {
     description = "SQL relational database management system";
     homepage = "https://www.firebirdnews.org";
     license = ["IDPL" "Interbase-1.0"];
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [lib.maintainers.marcweber];
+    platforms = lib.platforms.linux;
     broken = true;
   };
 

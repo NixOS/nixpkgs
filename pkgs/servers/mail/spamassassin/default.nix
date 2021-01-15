@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, makeWrapper, gnupg }:
+{ lib, stdenv, fetchurl, perlPackages, makeWrapper, gnupg }:
 
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";
@@ -35,8 +35,8 @@ perlPackages.buildPerlPackage rec {
   meta = {
     homepage = "http://spamassassin.apache.org/";
     description = "Open-Source Spam Filter";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ peti qknight qyliss ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ peti qknight qyliss ];
   };
 }

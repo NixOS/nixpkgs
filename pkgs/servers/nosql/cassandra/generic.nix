@@ -7,8 +7,8 @@
 }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
-  binPath = with stdenv.lib; makeBinPath ([
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc ];
+  binPath = with lib; makeBinPath ([
     bash
     getopt
     gawk

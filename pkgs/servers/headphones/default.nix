@@ -28,6 +28,6 @@ python2.pkgs.buildPythonApplication rec {
     description = "Automatic music downloader for SABnzbd";
     license     = licenses.gpl3;
     homepage    = "https://github.com/rembo10/headphones";
-    maintainers = with stdenv.lib.maintainers; [ rembo10 ];
+    maintainers = with lib.maintainers; [ rembo10 ];
   };
 }

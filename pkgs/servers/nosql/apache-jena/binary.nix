@@ -1,4 +1,4 @@
-{stdenv, fetchurl, java, makeWrapper}:
+{lib, stdenv, fetchurl, java, makeWrapper}:
 let
   s = # Generated upstream information
   rec {
@@ -27,9 +27,9 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = ''RDF database'';
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = "http://jena.apache.org";
     downloadPage = "http://archive.apache.org/dist/jena/binaries/";
     updateWalker = true;

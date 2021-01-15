@@ -17,9 +17,9 @@ buildGoModule rec {
   subPackages = [ "..." ];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ systemd.dev ];
+  buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
 
-  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/promtail \
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';

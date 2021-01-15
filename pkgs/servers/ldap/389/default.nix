@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
     "--with-db-lib=${db.out}/lib"
     "--with-sasl=${cyrus_sasl.dev}"
     "--with-netsnmp=yes"
-    "--with-netsnmp-inc=${stdenv.lib.getDev net-snmp}/include"
-    "--with-netsnmp-lib=${stdenv.lib.getLib net-snmp}/lib"
+    "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
+    "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
   ];
 
   enableParallelBuilding = true;
