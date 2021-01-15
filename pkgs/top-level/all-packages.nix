@@ -18602,6 +18602,8 @@ in
 
   batctl = callPackage ../os-specific/linux/batman-adv/batctl.nix { };
 
+  beefi = callPackage ../os-specific/linux/beefi { };
+
   blktrace = callPackage ../os-specific/linux/blktrace { };
 
   bluez5 = callPackage ../os-specific/linux/bluez { };
