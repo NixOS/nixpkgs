@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitLab, cmake, openal, pkgconfig, libogg,
+{ lib, stdenv, fetchFromGitLab, cmake, openal, pkgconfig, libogg,
   libvorbis, SDL2, makeWrapper, libpng, libjpeg_turbo, libGLU }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
 
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://osslugaru.gitlab.io";
     maintainers = [ ];
     platforms = platforms.linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

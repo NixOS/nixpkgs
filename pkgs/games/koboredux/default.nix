@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , requireFile
@@ -10,7 +10,7 @@
 , useProprietaryAssets ? true
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "koboredux";
   version = "0.7.5.1";

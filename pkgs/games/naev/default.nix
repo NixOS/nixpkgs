@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, SDL, openal, SDL_mixer, libxml2, pkgconfig, libvorbis
+{ lib, fetchurl, stdenv, SDL, openal, SDL_mixer, libxml2, pkgconfig, libvorbis
 , libpng, libGLU, libGL, makeWrapper, zlib, freetype }:
 
 let
@@ -34,9 +34,9 @@ stdenv.mkDerivation {
   meta = {
     description = "2D action/rpg space game";
     homepage = "http://www.naev.org";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [];
   };
 }

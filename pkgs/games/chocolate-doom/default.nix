@@ -1,4 +1,4 @@
-{ stdenv, autoreconfHook, pkgconfig, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub }:
+{ lib, stdenv, autoreconfHook, pkgconfig, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "chocolate-doom";
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://chocolate-doom.org/";
     description = "A Doom source port that accurately reproduces the experience of Doom as it was played in the 1990s";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-    hydraPlatforms = stdenv.lib.platforms.linux; # darwin times out
-    maintainers = with stdenv.lib.maintainers; [ MP2E ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    hydraPlatforms = lib.platforms.linux; # darwin times out
+    maintainers = with lib.maintainers; [ MP2E ];
   };
 }

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, cmake, xlibsWrapper, libGLU, libGL, SDL, openal, freealut, libogg, libvorbis, runtimeShell }:
+{ fetchurl, lib, stdenv, cmake, xlibsWrapper, libGLU, libGL, SDL, openal, freealut, libogg, libvorbis, runtimeShell }:
 
 stdenv.mkDerivation rec {
   version = "1.3.2";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Hardcore 3D space shooter with spaceship upgrade possibilities";
     homepage = "https://www.viewizard.com/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

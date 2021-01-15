@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, python, gtk2, readline }:
+{ lib, stdenv, fetchurl, pkgconfig, glib, python, gtk2, readline }:
 
 let version = "1.06.002"; in
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-gtk" "--with--board3d" ];
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "World class backgammon application";
       homepage = "http://www.gnubg.org/";
       license = licenses.gpl3;

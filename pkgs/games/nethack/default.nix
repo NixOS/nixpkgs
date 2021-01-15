@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preFixup = stdenv.lib.optionalString qtMode ''
+  preFixup = lib.optionalString qtMode ''
     wrapQtApp "$out/games/nethack"
   '';
 

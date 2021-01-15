@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, cmake, pkgconfig, python3, alsaLib
+{ fetchFromGitHub, lib, stdenv, cmake, pkgconfig, python3, alsaLib
 , libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
 , nixosTests
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://teeworlds.com/";
     license = "BSD-style, see `license.txt'";
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ astsmtl ];
+    platforms = lib.platforms.linux;
   };
 }

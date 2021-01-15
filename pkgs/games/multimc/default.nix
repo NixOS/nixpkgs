@@ -2,7 +2,7 @@
 
 let
   jdk = jdk8;
-  libpath = with xorg; stdenv.lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
+  libpath = with xorg; lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
 in mkDerivation rec {
   pname = "multimc";
   version = "0.6.11";

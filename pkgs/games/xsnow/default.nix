@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libXt, libXpm, libXext, imake, gccmakedep }:
+{ lib, stdenv, fetchurl, libXt, libXpm, libXext, imake, gccmakedep }:
 
 stdenv.mkDerivation rec {
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An X-windows application that will let it snow on the root, in between and on windows";
     homepage = "http://janswaal.home.xs4all.nl/Xsnow/";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.robberer ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.robberer ];
   };
 }

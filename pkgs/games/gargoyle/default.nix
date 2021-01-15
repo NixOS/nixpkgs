@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
     sha256 = "0w54avmbp4i4zps2rb4acmpa641s6wvwbrln4vbdhcz97fx48nzz";
   };
 
-  nativeBuildInputs = [ jam pkgconfig ] ++ stdenv.lib.optional stdenv.isDarwin cctools;
+  nativeBuildInputs = [ jam pkgconfig ] ++ lib.optional stdenv.isDarwin cctools;
 
   buildInputs = [ SDL SDL_mixer SDL_sound gtk2 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ smpeg libvorbis ];
+    ++ lib.optionals stdenv.isDarwin [ smpeg libvorbis ];
 
   buildPhase = jamenv + "jam -j$NIX_BUILD_CORES";
 

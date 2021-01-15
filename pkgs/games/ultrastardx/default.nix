@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
       --subst-var-by libpcre_LIBNAME libpcre.so.1
   '';
 
-  preBuild = with stdenv.lib;
+  preBuild = with lib;
     let items = concatMapStringsSep " " (x: "-rpath ${getLib x}/lib") sharedLibs;
     in ''
       export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
