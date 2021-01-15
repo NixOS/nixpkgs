@@ -594,7 +594,7 @@
     "opple" = ps: with ps; [ ]; # missing inputs: pyoppleio
     "orangepi_gpio" = ps: with ps; [ ]; # missing inputs: OPi.GPIO
     "oru" = ps: with ps; [ ]; # missing inputs: oru
-    "orvibo" = ps: with ps; [ ]; # missing inputs: orvibo
+    "orvibo" = ps: with ps; [ orvibo ];
     "osramlightify" = ps: with ps; [ ]; # missing inputs: lightify
     "otp" = ps: with ps; [ pyotp ];
     "ovo_energy" = ps: with ps; [ ]; # missing inputs: ovoenergy
@@ -799,7 +799,7 @@
     "swisscom" = ps: with ps; [ ];
     "switch" = ps: with ps; [ ];
     "switchbot" = ps: with ps; [ ]; # missing inputs: PySwitchbot
-    "switcher_kis" = ps: with ps; [ ]; # missing inputs: aioswitcher
+    "switcher_kis" = ps: with ps; [ aioswitcher ];
     "switchmate" = ps: with ps; [ ]; # missing inputs: pySwitchmate
     "syncthru" = ps: with ps; [ ]; # missing inputs: pysyncthru url-normalize
     "synology" = ps: with ps; [ ]; # missing inputs: py-synology
@@ -892,7 +892,7 @@
     "vallox" = ps: with ps; [ ]; # missing inputs: vallox-websocket-api
     "vasttrafik" = ps: with ps; [ ]; # missing inputs: vtjp
     "velbus" = ps: with ps; [ ]; # missing inputs: python-velbus
-    "velux" = ps: with ps; [ ]; # missing inputs: pyvlx
+    "velux" = ps: with ps; [ pyvlx ];
     "venstar" = ps: with ps; [ ]; # missing inputs: venstarcolortouch
     "vera" = ps: with ps; [ pyvera ];
     "verisure" = ps: with ps; [ jsonpath ]; # missing inputs: vsure
