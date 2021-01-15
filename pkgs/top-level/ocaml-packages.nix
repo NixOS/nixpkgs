@@ -847,6 +847,8 @@ let
 
     pcap-format = callPackage ../development/ocaml-modules/pcap-format { };
 
+    pecu = callPackage ../development/ocaml-modules/pecu { };
+
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
     phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
