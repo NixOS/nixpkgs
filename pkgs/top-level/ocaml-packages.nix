@@ -361,6 +361,8 @@ let
 
     hmap = callPackage ../development/ocaml-modules/hmap { };
 
+    hxd = callPackage ../development/ocaml-modules/hxd { };
+
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
     imagelib-unix = callPackage ../development/ocaml-modules/imagelib/unix.nix { };
