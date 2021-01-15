@@ -88,8 +88,8 @@ in stdenv.mkDerivation rec {
   in [
     "--sysconfdir=/var/lib"
     "-Dinstall_prefix=${placeholder "out"}"
-    "-Dlocalstatedir=/var/lib"
-    "-Drunstatedir=/var/run"
+    "-Dlocalstatedir=/var"
+    "-Drunstatedir=/run"
     "-Dlibpcap=enabled"
     "-Ddriver_qemu=enabled"
     "-Ddriver_vmware=enabled"
