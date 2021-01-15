@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     "LD=${stdenv.cc.targetPrefix}cc"
   ];
 
-  installFlags = stdenv.lib.mapAttrsToList
+  installFlags = lib.mapAttrsToList
     (n: v: "${n}dir=${placeholder "out"}/${v}") {
     bin = "bin";
     sbin = "sbin";

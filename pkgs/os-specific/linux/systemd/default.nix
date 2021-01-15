@@ -320,7 +320,7 @@ stdenv.mkDerivation {
     "-Dgcrypt=${lib.boolToString (libgcrypt != null)}"
     "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=${lib.boolToString withCompression}"
-    "-Dhomed=${stdenv.lib.boolToString withHomed}"
+    "-Dhomed=${lib.boolToString withHomed}"
     "-Dlogind=${lib.boolToString withLogind}"
     "-Dlocaled=${lib.boolToString withLocaled}"
     "-Dhostnamed=${lib.boolToString withHostnamed}"

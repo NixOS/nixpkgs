@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "man" ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
+    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   # wrapPython wraps the scripts in $test. They pull in gobject-introspection,
   # which doesn't cross-compile.
-  pythonPath = stdenv.lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+  pythonPath = lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
     python3Packages.dbus-python
     python3Packages.pygobject3
   ];
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share
     cp -a doc $out/share/
     cp -a README AUTHORS TODO $out/share/doc/
-  '' + stdenv.lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p $test/bin
     cp -a test/* $test/bin/
   '';

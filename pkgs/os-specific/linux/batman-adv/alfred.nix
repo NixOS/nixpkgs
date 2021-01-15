@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gpsd, libcap, libnl }:
+{ lib, stdenv, fetchurl, pkgconfig, gpsd, libcap, libnl }:
 
 let cfg = import ./version.nix; in
 
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.open-mesh.org/projects/batman-adv/wiki/Wiki";
     description = "B.A.T.M.A.N. routing protocol in a linux kernel module for layer 2, information distribution tool";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ fpletz ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = with lib.platforms; linux;
   };
 }

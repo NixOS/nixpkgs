@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       --with-ldb-lib-dir=$out/modules/ldb
       --with-nscd=${glibc.bin}/sbin/nscd
     )
-  '' + stdenv.lib.optionalString withSudo ''
+  '' + lib.optionalString withSudo ''
     configureFlagsArray+=("--with-sudo")
   '';
 

@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   libPath = with xorg;
-            stdenv.lib.makeLibraryPath ([ stdenv.cc.cc libXrandr libXext libX11 libXcomposite libXinerama ]
+            lib.makeLibraryPath ([ stdenv.cc.cc libXrandr libXext libX11 libXcomposite libXinerama ]
             ++ lib.optionals (!libsOnly) [ libXi glib dbus-glib zlib ]);
 
 

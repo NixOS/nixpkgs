@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = let
-    path = stdenv.lib.makeBinPath [
+    path = lib.makeBinPath [
       findutils file binutils-unwrapped sysctl openssl
     ];
   in ''
