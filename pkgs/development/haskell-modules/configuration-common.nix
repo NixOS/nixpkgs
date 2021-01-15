@@ -1567,4 +1567,7 @@ self: super: {
   # Allow building with recent versions of tasty.
   lukko = doJailbreak super.lukko;
 
+  # Allow building with older versions of http-client.
+  http-client-restricted = doJailbreak super.http-client-restricted;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
