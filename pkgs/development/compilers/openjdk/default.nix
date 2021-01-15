@@ -55,6 +55,7 @@ let
 
     configureFlags = [
       "--with-boot-jdk=${openjdk15-bootstrap.home}"
+      "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
