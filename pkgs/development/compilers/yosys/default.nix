@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenv, lib
 , abc-verifier
 , bash
 , bison
@@ -43,13 +43,16 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ tcl readline libffi python3 bison flex protobuf zlib ];
+  nativeBuildInputs = [ pkg-config bison flex ];
+  buildInputs = [ tcl readline libffi python3 protobuf zlib ];
 
   makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}"];
 
-  patchPhase = ''
-    patch -p1 < ${./plugin-search-dirs.patch}
+  patches = [
+    ./plugin-search-dirs.patch
+  ];
+
+  postPatch = ''
     substituteInPlace ./Makefile \
       --replace 'echo UNKNOWN' 'echo ${builtins.substring 0 10 src.rev}'
 
@@ -94,7 +97,7 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open RTL synthesis framework and tools";
     homepage    = "http://www.clifford.at/yosys/";
     license     = licenses.isc;
