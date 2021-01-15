@@ -759,7 +759,7 @@
     "solaredge_local" = ps: with ps; [ ]; # missing inputs: solaredge-local
     "solarlog" = ps: with ps; [ ]; # missing inputs: sunwatcher
     "solax" = ps: with ps; [ ]; # missing inputs: solax
-    "soma" = ps: with ps; [ ]; # missing inputs: pysoma
+    "soma" = ps: with ps; [ pysoma ];
     "somfy" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pymfy
     "somfy_mylink" = ps: with ps; [ ]; # missing inputs: somfy-mylink-synergy
     "sonarr" = ps: with ps; [ ]; # missing inputs: sonarr
