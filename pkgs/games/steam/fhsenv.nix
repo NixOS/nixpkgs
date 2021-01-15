@@ -284,6 +284,11 @@ in buildFHSUserEnv rec {
   # this fixes certain issues where they don't render correctly
   unshareIpc = false;
 
+  # Some applications such as Natron need access to MIT-SHM or other
+  # shared memory mechanisms. Unsharing the pid namespace
+  # breaks the ability for application to reference shared memory.
+  unsharePid = false;
+
   passthru.run = buildFHSUserEnv {
     name = "steam-run";
 
