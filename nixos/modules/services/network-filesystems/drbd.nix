@@ -51,13 +51,28 @@ let cfg = config.services.drbd; in
       { source = pkgs.writeText "drbd.conf" cfg.config; };
 
     systemd.services.drbd = {
+      description = "Distributed Replicated Block Device";
       after = [ "systemd-udev.settle.service" "network.target" ];
       wants = [ "systemd-udev.settle.service" ];
       wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = "yes";
+      };
+      preStart = ''
+        # Check the configuration file for syntax errors
+        ${pkgs.drbd}/bin/drbdadm sh-nop
+      '';
       script = ''
+        # Activate all resources on start
         ${pkgs.drbd-utils}/bin/drbdadm up all
       '';
-      serviceConfig.ExecStop = ''
+      reload = ''
+        # Re-adjust everything on reload
+        ${pkgs.drbd-utils}/bin/drbdadm adjust all
+      '';
+      preStop = ''
+        # Deactivate all resources on stop
         ${pkgs.drbd-utils}/bin/drbdadm down all
       '';
     };
