@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, xz
+{ lib, stdenv, fetchFromGitHub, zlib, xz
 , lz4 ? null
 , lz4Support ? false
 , zstd
@@ -22,23 +22,23 @@ stdenv.mkDerivation {
     # This patch adds an option to pad filesystems (increasing size) in
     # exchange for better chunking / binary diff calculation.
     ./4k-align.patch
-  ] ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch;
+  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   buildInputs = [ zlib xz zstd ]
-    ++ stdenv.lib.optional lz4Support lz4;
+    ++ lib.optional lz4Support lz4;
 
   preBuild = "cd squashfs-tools";
 
   installFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
   makeFlags = [ "XZ_SUPPORT=1" "ZSTD_SUPPORT=1" ]
-    ++ stdenv.lib.optional lz4Support "LZ4_SUPPORT=1";
+    ++ lib.optional lz4Support "LZ4_SUPPORT=1";
 
   meta = {
     homepage = "http://squashfs.sourceforge.net/";
     description = "Tool for creating and unpacking squashfs filesystems";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ ruuda ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ruuda ];
   };
 }

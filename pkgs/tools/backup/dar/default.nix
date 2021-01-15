@@ -1,11 +1,11 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , attr, e2fsprogs
 , curl, librsync, libthreadar
 , gpgme, libgcrypt, openssl
 , bzip2, lzo, xz, zlib
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "2.6.13";

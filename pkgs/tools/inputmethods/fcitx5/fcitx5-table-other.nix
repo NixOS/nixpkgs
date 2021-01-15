@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , extra-cmake-modules
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     fcitx5
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Some other tables for Fcitx";
     homepage = "https://github.com/fcitx/fcitx5-table-other";
     license = licenses.gpl3Only;

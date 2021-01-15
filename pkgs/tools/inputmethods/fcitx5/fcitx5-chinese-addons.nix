@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchurl
 , fetchFromGitHub
@@ -64,9 +64,9 @@ mkDerivation rec {
     opencc
     qtwebengine
     fmt
-  ] ++ stdenv.lib.optional luaSupport fcitx5-lua;
+  ] ++ lib.optional luaSupport fcitx5-lua;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Addons related to Chinese, including IME previous bundled inside fcitx4";
     homepage = "https://github.com/fcitx/fcitx5-chinese-addons";
     license = with licenses; [ gpl2Plus lgpl21Plus ];

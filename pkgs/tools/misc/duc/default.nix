@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ tokyocabinet ncurses ] ++
-    stdenv.lib.optionals enableCairo [ cairo pango ];
+    lib.optionals enableCairo [ cairo pango ];
 
   configureFlags =
-    stdenv.lib.optionals (!enableCairo) [ "--disable-x11" "--disable-cairo" ];
+    lib.optionals (!enableCairo) [ "--disable-x11" "--disable-cairo" ];
 
   meta = with lib; {
     homepage = "http://duc.zevv.nl/";

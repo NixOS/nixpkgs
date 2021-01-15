@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/airmon-ng --prefix PATH : ${stdenv.lib.makeBinPath [
+    wrapProgram $out/bin/airmon-ng --prefix PATH : ${lib.makeBinPath [
       ethtool iw pciutils usbutils
     ]}
   '';

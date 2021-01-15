@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchFromGitHub
 , cmake
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGOBJECT_INTROSPECTION_GIRDIR=share/gir-1.0"
     "-DGOBJECT_INTROSPECTION_TYPELIBDIR=lib/girepository-1.0"
-  ] ++ stdenv.lib.optional (! withGTK2) "-DENABLE_GTK2_IM_MODULE=off";
+  ] ++ lib.optional (! withGTK2) "-DENABLE_GTK2_IM_MODULE=off";
 
   buildInputs = [
     gtk3
@@ -54,14 +54,14 @@ stdenv.mkDerivation rec {
     dbus
     at-spi2-core
     libXtst
-  ] ++ stdenv.lib.optional withGTK2 gtk2;
+  ] ++ lib.optional withGTK2 gtk2;
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fcitx5 gtk im module and glib based dbus client library";
     homepage = "https://github.com/fcitx/fcitx5-gtk";
     license = licenses.lgpl21Plus;

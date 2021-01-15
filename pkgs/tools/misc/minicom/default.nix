@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0j95727xni4r122dalp09963gvc1nqa18l1d4wzz8746kw5s2rrb";
   };
 
-  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin libiconv;
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   postInstall = ''
     for f in $out/bin/*minicom ; do
       wrapProgram $f \
-        --prefix PATH : ${stdenv.lib.makeBinPath [ lrzsz ]}:$out/bin
+        --prefix PATH : ${lib.makeBinPath [ lrzsz ]}:$out/bin
     done
   '';
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, pkgconfig }:
+{ lib, stdenv, fetchurl, gtk2, pkgconfig }:
 
 stdenv.mkDerivation rec {
   version = "0.2.8-6";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A GTK front-end for command line archiving tools";
-    maintainers = [ stdenv.lib.maintainers.domenkozar ];
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.domenkozar ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
   };
 }

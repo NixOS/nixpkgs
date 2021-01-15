@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libiconv }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "dosfstools";
@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ]
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   configureFlags = [ "--enable-compat-symlinks" ];
 
   meta = {
     description = "Utilities for creating and checking FAT and VFAT file systems";
     homepage = "https://github.com/dosfstools/dosfstools";
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    license = stdenv.lib.licenses.gpl3;
+    platforms = lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = lib.licenses.gpl3;
   };
 }

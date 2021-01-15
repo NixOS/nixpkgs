@@ -7,7 +7,7 @@
 , xenSupport ? false
 }:
 
-with stdenv.lib;
+with lib;
 let
   pcSystems = {
     i686-linux.target = "i386";

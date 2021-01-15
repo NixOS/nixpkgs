@@ -29,15 +29,15 @@ stdenv.mkDerivation {
   configureFlags = [
     "--infodir=${placeholder "out"}/share/info"
     "--mandir=${placeholder "out"}/share/man"
-  ] ++ stdenv.lib.optionals static [
+  ] ++ lib.optionals static [
     "LDFLAGS=-static"
     "--enable-static"
     "--disable-shared"
-  ] ++ stdenv.lib.optionals (!static) [
+  ] ++ lib.optionals (!static) [
     "--enable-shared"
   ];
 
-  makeFlags = stdenv.lib.optional static "AM_LDFLAGS=-all-static";
+  makeFlags = lib.optional static "AM_LDFLAGS=-all-static";
   dontDisableStatic = static;
 
   meta = with lib; {

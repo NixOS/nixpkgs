@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkgconfig
 , glib, zlib, pcre, libmysqlclient, libressl }:
 
-let inherit (stdenv.lib) getDev; in
+let inherit (lib) getDev; in
 
 stdenv.mkDerivation rec {
   version = "0.9.5";

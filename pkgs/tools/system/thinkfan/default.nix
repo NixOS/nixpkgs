@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_INSTALL_DOCDIR=share/doc/${pname}"
     "-DUSE_NVML=OFF"
-  ] ++ stdenv.lib.optional smartSupport "-DUSE_ATASMART=ON";
+  ] ++ lib.optional smartSupport "-DUSE_ATASMART=ON";
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ libyamlcpp ] ++ stdenv.lib.optional smartSupport libatasmart;
+  buildInputs = [ libyamlcpp ] ++ lib.optional smartSupport libatasmart;
 
   installPhase = ''
     runHook preInstall

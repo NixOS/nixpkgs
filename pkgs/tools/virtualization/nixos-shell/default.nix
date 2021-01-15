@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/nixos-shell \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ nix ]}
+      --prefix PATH : ${lib.makeBinPath [ nix ]}
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];

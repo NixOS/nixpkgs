@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , pkgconfig, autoreconfHook
 , gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
@@ -13,7 +13,7 @@
 # strongswan curl plugin may break.
 # See https://wiki.strongswan.org/projects/strongswan/wiki/Curl for more info.
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "strongswan";

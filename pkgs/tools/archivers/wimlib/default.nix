@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = let
-    path = stdenv.lib.makeBinPath  [ cabextract cdrkit mtools ntfs3g syslinux ];
+    path = lib.makeBinPath  [ cabextract cdrkit mtools ntfs3g syslinux ];
   in ''
     for prog in $out/bin/*; do
       wrapProgram $prog --prefix PATH : ${path}

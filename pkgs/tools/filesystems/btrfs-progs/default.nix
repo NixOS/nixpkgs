@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
+  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
 
   meta = with lib; {
     description = "Utilities for the btrfs filesystem";

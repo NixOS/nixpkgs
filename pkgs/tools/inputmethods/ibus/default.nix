@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
 , fetchurl
 , fetchFromGitHub
@@ -36,7 +36,7 @@
 
 assert withWayland -> wayland != null && libxkbcommon != null;
 
-with stdenv.lib;
+with lib;
 
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);

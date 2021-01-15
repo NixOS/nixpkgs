@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -18,7 +18,7 @@ buildGoModule rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to scan for CRLF vulnerability";
     homepage = "https://github.com/dwisiswant0/crlfuzz";
     license = with licenses; [ mit ];

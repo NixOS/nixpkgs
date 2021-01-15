@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libtool, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, libtool, autoreconfHook, pkgconfig
 , sysfsutils
 , argp-standalone
   # WARNING: DO NOT USE BEACON GENERATED VALUES AS SECRET CRYPTOGRAPHIC KEYS
@@ -10,7 +10,7 @@
 , libp11 ? null, opensc ? null, withPkcs11 ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "rng-tools";

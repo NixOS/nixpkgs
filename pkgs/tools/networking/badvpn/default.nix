@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, openssl, nss, pkg-config, nspr, bash, debug ? false}:
+{lib, stdenv, fetchurl, cmake, openssl, nss, pkg-config, nspr, bash, debug ? false}:
 let
   s = # Generated upstream information
   rec {
@@ -11,7 +11,7 @@ let
   };
 
 
-  compileFlags = "-O3 ${stdenv.lib.optionalString (!debug) "-DNDEBUG"}";
+  compileFlags = "-O3 ${lib.optionalString (!debug) "-DNDEBUG"}";
 in
 stdenv.mkDerivation {
   inherit (s) name version;
@@ -32,8 +32,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = ''A set of network-related (mostly VPN-related) tools'';
-    license = stdenv.lib.licenses.bsd3 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.bsd3 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

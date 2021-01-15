@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
-  
+
   configureFlags = [
     "--with-vpnc-script=${vpnc}/vpnc-script"
     "--disable-nls"
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl gnutls gmp libxml2 stoken zlib ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC;
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC;
   nativeBuildInputs = [ pkgconfig ];
 
   meta = with lib; {
@@ -36,6 +36,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.infradead.org/openconnect/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ pradeepchhetri tricktron ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

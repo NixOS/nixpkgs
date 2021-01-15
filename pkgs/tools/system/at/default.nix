@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, bison, flex, pam, perl
+{ lib, stdenv, fetchurl, fetchpatch, bison, flex, pam, perl
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 , atWrapperPath ? "/run/wrappers/bin/at"
 }:
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = ''The classical Unix `at' job scheduling command'';
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://packages.qa.debian.org/at";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

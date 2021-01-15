@@ -23,7 +23,7 @@ pythonPackages.buildPythonApplication {
     # so mididings knows where to look for config files
     ++ [ pyxdg ];
 
-  preBuild = with stdenv.lib.versions; ''
+  preBuild = with lib.versions; ''
     substituteInPlace setup.py \
       --replace boost_python "boost_python${major pythonPackages.python.version}${minor pythonPackages.python.version}"
   '';

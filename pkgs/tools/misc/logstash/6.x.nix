@@ -6,7 +6,7 @@
 , jre
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = elk6Version;

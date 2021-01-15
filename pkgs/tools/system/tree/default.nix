@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   version = "1.8.0";
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://mama.indstate.edu/users/ice/tree/";
     description = "Command to produce a depth indented directory listing";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
     longDescription = ''
       Tree is a recursive directory listing command that produces a
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
       the LS_COLORS environment variable is set and output is to tty.
     '';
 
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [stdenv.lib.maintainers.peti];
+    platforms = lib.platforms.all;
+    maintainers = [lib.maintainers.peti];
   };
 }

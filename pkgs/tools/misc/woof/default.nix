@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.home.unix-ag.org/simon/woof.html";
     description = "Web Offer One File - Command-line utility to easily exchange files over a local network";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = with maintainers; [ matthiasbeyer ];
   };
 }

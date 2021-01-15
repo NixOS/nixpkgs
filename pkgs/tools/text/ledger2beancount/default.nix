@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perlPackages, beancount }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, beancount }:
 
-with stdenv.lib;
+with lib;
 
 let
   perlDeps = with perlPackages; [

@@ -4,7 +4,7 @@
 
 let
   maybe64 = if stdenv.isx86_64 then "_64" else "";
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.cc.lib libX11 libXScrnSaver libXext libXft libXrender freetype
       zlib fontconfig
     ];

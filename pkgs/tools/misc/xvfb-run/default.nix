@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     patchShebangs $out/bin/xvfb-run
     wrapProgram $out/bin/xvfb-run \
       --set FONTCONFIG_FILE "${fontsConf}" \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which util-linux gawk coreutils ]}
+      --prefix PATH : ${lib.makeBinPath [ getopt xorgserver xauth which util-linux gawk coreutils ]}
   '';
 
   meta = with lib; {

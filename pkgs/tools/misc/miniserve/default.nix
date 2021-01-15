@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0s1gdngpf6gxz2lyapblxxmc6aydg2i9kmrfvngkbmqh4as1a2vl";
 
   nativeBuildInputs = [ pkg-config zlib ];
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     description = "For when you really just want to serve some files over HTTP right now!";

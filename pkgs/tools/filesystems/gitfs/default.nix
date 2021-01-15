@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gitfs";
@@ -30,8 +30,8 @@ python3Packages.buildPythonApplication rec {
       automatically committed to the remote.
     '';
     homepage = "https://github.com/PressLabs/gitfs";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.robbinch ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.robbinch ];
   };
 }

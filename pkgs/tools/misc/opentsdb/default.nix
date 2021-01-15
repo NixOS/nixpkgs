@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Time series database with millisecond precision";
     homepage = "http://opentsdb.net";
     license = licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

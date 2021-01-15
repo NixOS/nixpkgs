@@ -2,7 +2,7 @@
 , texinfo, libuuid, flex, bison, pixman, autoconf
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   qemuName = "qemu-2.10.0";

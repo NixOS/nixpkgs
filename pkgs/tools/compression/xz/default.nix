@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
-  configureFlags = stdenv.lib.optional enableStatic "--disable-shared";
+  configureFlags = lib.optional enableStatic "--disable-shared";
 
   doCheck = true;
 

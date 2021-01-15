@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, ruby, openssl, makeWrapper }:
+{ lib, stdenv, fetchurl, unzip, ruby, openssl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "ec2-ami-tools";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       for i in $out/bin/*; do
           wrapProgram $i \
             --set EC2_HOME $out \
-            --prefix PATH : ${stdenv.lib.makeBinPath [ ruby openssl ]}
+            --prefix PATH : ${lib.makeBinPath [ ruby openssl ]}
       done
 
       sed -i 's|/bin/bash|${stdenv.shell}|' $out/lib/ec2/platform/base/pipeline.rb
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://aws.amazon.com/developertools/Amazon-EC2/368";
     description = "Command-line tools to create and manage Amazon EC2 virtual machine images";
-    license = stdenv.lib.licenses.amazonsl;
+    license = lib.licenses.amazonsl;
   };
 
 }

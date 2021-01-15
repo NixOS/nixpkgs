@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     ./gringo-4.5.4-to_string.patch
   ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace ./SConstruct \
       --replace \
         "env['CXX']            = 'g++'" \

@@ -17,7 +17,7 @@ let
     );
   '';
 
-  dbScript = writeScript "create_pykms_db.sh" (with stdenv.lib; ''
+  dbScript = writeScript "create_pykms_db.sh" (with lib; ''
     #!${runtimeShell}
 
     set -eEuo pipefail

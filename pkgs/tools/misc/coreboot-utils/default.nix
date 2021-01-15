@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
+{ lib, stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
   version = "4.13";
 
-  commonMeta = with stdenv.lib; {
+  commonMeta = with lib; {
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
     license = licenses.gpl2;
@@ -91,14 +91,14 @@ let
       installPhase = "install -Dm755 acpidump-all $out/bin/acpidump-all";
       postFixup = let
         binPath = [ coreutils  acpica-tools iasl gnugrep  gnused  file ];
-      in "wrapProgram $out/bin/acpidump-all --set PATH ${stdenv.lib.makeBinPath binPath}";
+      in "wrapProgram $out/bin/acpidump-all --set PATH ${lib.makeBinPath binPath}";
     };
   };
 
 in utils // {
   coreboot-utils = (buildEnv {
     name = "coreboot-utils-${version}";
-    paths = stdenv.lib.attrValues utils;
+    paths = lib.attrValues utils;
     postBuild = "rm -rf $out/sbin";
   }) // {
     inherit version;

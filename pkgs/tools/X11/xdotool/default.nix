@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libX11, perl, libXtst, xorgproto, libXi, libXinerama, libxkbcommon }:
+{ lib, stdenv, fetchurl, pkgconfig, libX11, perl, libXtst, xorgproto, libXi, libXinerama, libxkbcommon }:
 
 stdenv.mkDerivation rec {
   pname = "xdotool";
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.semicomplete.com/projects/xdotool/";
     description = "Fake keyboard/mouse input, window management, and more";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

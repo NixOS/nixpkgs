@@ -3,7 +3,7 @@
 , gnugrep, gnused, jq, nix, fetchpatch }:
 
 let
-  binPath = stdenv.lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ];
+  binPath = lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ];
 
 in stdenv.mkDerivation rec {
   pname = "nix-prefetch";

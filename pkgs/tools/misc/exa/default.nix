@@ -28,7 +28,7 @@ buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkgconfig perl installShellFiles ];
   buildInputs = [ zlib ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin [
     libiconv darwin.apple_sdk.frameworks.Security ]
   ;
 

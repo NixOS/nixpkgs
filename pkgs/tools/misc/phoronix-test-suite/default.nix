@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ./install-sh $out
     wrapProgram $out/bin/phoronix-test-suite \
     --set PHP_BIN ${php}/bin/php \
-    --prefix PATH : ${stdenv.lib.makeBinPath [ gnumake gcc ]}
+    --prefix PATH : ${lib.makeBinPath [ gnumake gcc ]}
   '';
 
   passthru.tests = {

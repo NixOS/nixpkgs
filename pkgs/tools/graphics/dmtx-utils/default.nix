@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libdmtx, pkgconfig, imagemagick}:
+{lib, stdenv, fetchurl, libdmtx, pkgconfig, imagemagick}:
 let
   s = # Generated upstream information
   rec {
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Data matrix command-line utilities";
-    license = stdenv.lib.licenses.lgpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl2 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

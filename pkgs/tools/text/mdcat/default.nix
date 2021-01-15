@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkgconfig asciidoctor installShellFiles ];
-  buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   cargoSha256 = "sha256-mnDUIJhEGNoh3eq2Vhww1T/tpZh9RP+RxbRsBNrpOzw=";
 

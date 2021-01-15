@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
+{ lib, stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
 , libkrb5 ? null, systemd ? null, jemalloc ? null, libmysqlclient ? null, postgresql ? null
 , libdbi ? null, net-snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
@@ -8,7 +8,7 @@
 , nixosTests ? null
 }:
 
-with stdenv.lib;
+with lib;
 let
   mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
 in
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     postgresql libdbi net-snmp libuuid curl gnutls libgcrypt liblognorm openssl
     librelp libksi liblogging libnet hadoop rdkafka libmongo-client czmq
     rabbitmq-c hiredis mongoc libmaxminddb
-  ] ++ stdenv.lib.optional (libmysqlclient != null) libmysqlclient
-    ++ stdenv.lib.optional stdenv.isLinux systemd;
+  ] ++ lib.optional (libmysqlclient != null) libmysqlclient
+    ++ lib.optional stdenv.isLinux systemd;
 
   configureFlags = [
     "--sysconfdir=/etc"

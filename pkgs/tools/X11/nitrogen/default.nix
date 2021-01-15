@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtkmm2 }:
+{ lib, stdenv, fetchurl, pkgconfig, glib, gtkmm2 }:
 
 let version = "1.6.1";
 in
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
       and settings are stored in a human-readable config file.
     '';
     homepage = "https://github.com/l3ib/nitrogen";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.auntie ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.auntie ];
   };
 }

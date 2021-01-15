@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, alsaLib, pkgconfig, fetchgit, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook }:
+{ lib, stdenv, makeWrapper, alsaLib, pkgconfig, fetchgit, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook }:
 
 stdenv.mkDerivation {
   name = "gvolicon-2014-04-28";
@@ -21,8 +21,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A simple and lightweight volume icon that sits in your system tray";
     homepage = "https://github.com/Unia/gvolicon";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.bennofs ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.bennofs ];
   };
 }

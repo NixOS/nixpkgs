@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ libxml2 file p7zip unrar unzip ];
-  buildFlags = stdenv.lib.optional stdenv.cc.isClang "CC=clang";
+  buildFlags = lib.optional stdenv.cc.isClang "CC=clang";
   installFlags = [ "PREFIX=\${out}" ];
 
   patchPhase = ''

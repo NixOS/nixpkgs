@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "evscript";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1dcyhxfyq0nrjl05g1s9pjkg7vqw63wbdhlskrdcvxncmci3s7rp";
   verifyCargoDeps = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/myfreeweb/${pname}";
     description = "A tiny sandboxed Dyon scripting environment for evdev input devices";
     license = licenses.unlicense;

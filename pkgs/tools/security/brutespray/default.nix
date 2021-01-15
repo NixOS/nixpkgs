@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     patchShebangs $out/bin
     patchPythonScript $out/bin/brutespray
     wrapProgram $out/bin/brutespray \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ medusa ]}
+      --prefix PATH : ${lib.makeBinPath [ medusa ]}
 
     mkdir -p $out/share/brutespray
     cp -r wordlist/ $out/share/brutespray/wordlist

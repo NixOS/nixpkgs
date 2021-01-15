@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     description = "Mini PXE server";
     maintainers = [ maintainers.raskin ];
     platforms = ["x86_64-linux"];
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
   };
 }

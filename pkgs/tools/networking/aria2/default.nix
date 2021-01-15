@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook sphinx ];
 
   buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
-    stdenv.lib.optional stdenv.isDarwin Security;
+    lib.optional stdenv.isDarwin Security;
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 

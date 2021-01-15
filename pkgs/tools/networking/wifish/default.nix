@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , dialog
 , gawk
 , wpa_supplicant
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram ${placeholder "out"}/bin/wifish \
-      --prefix PATH ":" ${stdenv.lib.makeBinPath [ dialog gawk wpa_supplicant ]}
+      --prefix PATH ":" ${lib.makeBinPath [ dialog gawk wpa_supplicant ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bougyman/wifish";
     description = "Simple wifi shell script for linux";
     license = licenses.wtfpl;

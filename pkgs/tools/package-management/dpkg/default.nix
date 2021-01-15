@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     "--disable-dselect"
     "--with-admindir=/var/lib/dpkg"
     "PERL_LIBDIR=$(out)/${perl.libPrefix}"
-    (stdenv.lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
-    (stdenv.lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
+    (lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
+    (lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
   ];
 
   preConfigure = ''

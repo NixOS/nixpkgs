@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchFromGitHub
 , pkg-config
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Next generation of fcitx";
     homepage = "https://github.com/fcitx/fcitx5";
     license = licenses.lgpl21Plus;
