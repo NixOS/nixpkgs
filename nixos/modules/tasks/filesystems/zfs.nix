@@ -368,8 +368,6 @@ in
         }
       ];
 
-      virtualisation.lxd.zfsSupport = true;
-
       boot = {
         kernelModules = [ "zfs" ];
 
