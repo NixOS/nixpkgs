@@ -10832,6 +10832,8 @@ in
   yasm = callPackage ../development/compilers/yasm { };
 
   yosys = callPackage ../development/compilers/yosys { };
+  yosys-bluespec = callPackage ../development/compilers/yosys/plugins/bluespec.nix { };
+  yosys-ghdl = callPackage ../development/compilers/yosys/plugins/ghdl.nix { };
 
   z88dk = callPackage ../development/compilers/z88dk { };
 
