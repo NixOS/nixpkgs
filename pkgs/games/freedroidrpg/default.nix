@@ -7,7 +7,7 @@ in stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "ftp://ftp.osuosl.org/pub/freedroid/freedroidRPG-${stdenv.lib.versions.majorMinor version}/freedroidRPG-${version}.tar.gz";
+    url = "ftp://ftp.osuosl.org/pub/freedroid/freedroidRPG-${lib.versions.majorMinor version}/freedroidRPG-${version}.tar.gz";
     sha256 = "0n4kn38ncmcy3lrxmq8fjry6c1z50z4q1zcqfig0j4jb0dsz2va2";
   };
 
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     SDL SDL_image SDL_gfx SDL_mixer libogg libvorbis lua5_3 libjpeg libpng zlib
-  ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+  ] ++ lib.optional stdenv.isDarwin libiconv;
 
   meta = with lib; {
     description = "Isometric 3D RPG similar to game Diablo";

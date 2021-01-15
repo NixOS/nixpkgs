@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11, imake, gccmakedep}:
+{lib, stdenv, fetchurl, libX11, imake, gccmakedep}:
 
 stdenv.mkDerivation rec {
   pname = "xskat";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install.man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''Famous german card game'';
     platforms = platforms.unix;
     license = licenses.free;

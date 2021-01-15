@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional waylandSupport "wayland"
     ++ lib.optional x11Support "x11";
 
-  buildInputs = with stdenv.lib; [
+  buildInputs = with lib; [
     cairo
     fribidi
     harfbuzz

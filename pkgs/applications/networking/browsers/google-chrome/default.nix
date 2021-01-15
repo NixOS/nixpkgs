@@ -1,4 +1,4 @@
-{ stdenv, patchelf, makeWrapper
+{ lib, stdenv, patchelf, makeWrapper
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
@@ -41,7 +41,7 @@
 , gnome3
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   opusWithCustomModes = libopus.override {

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, conf ? null }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, conf ? null }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "nnn";

@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.isDarwin Security;
   checkInputs = [ gitMinimal util-linuxMinimal ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";

@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withVPX libvpx;
 
   buildCommand = let
-    qtVersion = "5.${stdenv.lib.versions.minor qtbase.version}";
+    qtVersion = "5.${lib.versions.minor qtbase.version}";
     wrapWith = makeWrapper: filename:
       "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
     wrapQtApp = wrapWith "wrapQtApp";
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
     ${wrapProgram "$out/bin/avidemux3_cli"}
 
-    ${stdenv.lib.optionalString withQT ''
+    ${lib.optionalString withQT ''
       ${wrapQtApp "$out/bin/avidemux3_qt5"}
       ${wrapQtApp "$out/bin/avidemux3_jobs_qt5"}
     ''}

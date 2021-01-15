@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ${gnutar}/bin/tar xf $src --strip 1 -C ${targetPath}
   '';
 
-  sqltoolsserviceRpath = stdenv.lib.makeLibraryPath [
+  sqltoolsserviceRpath = lib.makeLibraryPath [
     stdenv.cc.cc
     libunwind
     libuuid
@@ -62,10 +62,10 @@ stdenv.mkDerivation rec {
   # this will most likely need to be updated when azuredatastudio's version changes
   sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/2.0.0-release.56";
 
-  rpath = stdenv.lib.concatStringsSep ":" [
+  rpath = lib.concatStringsSep ":" [
     atomEnv.libPath
     (
-      stdenv.lib.makeLibraryPath [
+      lib.makeLibraryPath [
         libuuid
         at-spi2-core
         at-spi2-atk
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    maintainers = with stdenv.lib.maintainers; [ xavierzwirtz ];
+    maintainers = with lib.maintainers; [ xavierzwirtz ];
     description = "A data management tool that enables working with SQL Server, Azure SQL DB and SQL DW";
     homepage = "https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio";
     license = lib.licenses.unfreeRedistributable;

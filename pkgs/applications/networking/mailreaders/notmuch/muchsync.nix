@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , notmuch, openssl, pkgconfig, sqlite, xapian, zlib
 }:
 stdenv.mkDerivation rec {
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Synchronize maildirs and notmuch databases";
     homepage = "http://www.muchsync.org/";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [];
-    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [];
+    license = lib.licenses.gpl2Plus;
   };
 }

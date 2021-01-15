@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mkDerivation, autoPatchelfHook, bash
+{ lib, stdenv, fetchurl, mkDerivation, autoPatchelfHook, bash
 , fetchFromGitHub
 # Dynamic libraries
 , dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
@@ -14,7 +14,7 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 let
-  inherit (stdenv.lib) concatStringsSep makeBinPath optional;
+  inherit (lib) concatStringsSep makeBinPath optional;
 
   version = "5.4.53350.1027";
   srcs = {
@@ -128,9 +128,9 @@ in mkDerivation {
   meta = {
     homepage = "https://zoom.us/";
     description = "zoom.us video conferencing application";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with stdenv.lib.maintainers; [ danbst tadfisher doronbehar ];
+    maintainers = with lib.maintainers; [ danbst tadfisher doronbehar ];
   };
 
 }

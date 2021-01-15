@@ -1,4 +1,4 @@
-{stdenv, fetchhg}:
+{lib, stdenv, fetchhg}:
 let
   s =
   rec {
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = ''A console dmenu-like tool'';
-    license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

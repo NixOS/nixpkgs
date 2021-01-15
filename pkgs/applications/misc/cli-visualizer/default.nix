@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, fftw, ncurses5, libpulseaudio, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, cmake, fftw, ncurses5, libpulseaudio, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "1.8";
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/dpayne/cli-visualizer";
     description = "CLI based audio visualizer";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
+    platforms = with lib.platforms; linux;
   };
 }

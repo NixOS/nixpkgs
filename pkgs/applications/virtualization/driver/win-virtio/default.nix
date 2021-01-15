@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
                 {input="viorng"; output="viorng";}
                ];
     in
-      stdenv.lib.concatStringsSep "\n" ((map (copy "amd64" "w8.1") virtio) ++ (map (copy "x86" "w8.1") virtio));
+      lib.concatStringsSep "\n" ((map (copy "amd64" "w8.1") virtio) ++ (map (copy "x86" "w8.1") virtio));
 
   meta = with lib; {
     description = "Windows VirtIO Drivers";

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     expat curl jansson libpng libjpeg libGLU libGL libXxf86vm pcre SDL2 vim speex
   ];
 
-  installPhase = with stdenv.lib; let
+  installPhase = with lib; let
     sys = last (splitString "-" stdenv.hostPlatform.system);
     arch = head (splitString "-" stdenv.hostPlatform.system);
   in ''

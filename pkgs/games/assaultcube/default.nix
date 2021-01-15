@@ -1,8 +1,8 @@
-{ fetchFromGitHub, stdenv, makeDesktopItem, openal, pkgconfig, libogg,
+{ fetchFromGitHub, lib, stdenv, makeDesktopItem, openal, pkgconfig, libogg,
   libvorbis, SDL, SDL_image, makeWrapper, zlib, file,
   client ? true, server ? true }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
 
@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "https://assault.cubers.net";
     maintainers = [ ];
     platforms = platforms.linux; # should work on darwin with a little effort.
-    license = stdenv.lib.licenses.zlib;
+    license = lib.licenses.zlib;
   };
 }

@@ -5,7 +5,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optionals optionalString;
+  inherit (lib) optionals optionalString;
 
   cursesDeps = [ gettext ncurses ]
     ++ optionals stdenv.isDarwin [ CoreFoundation ];

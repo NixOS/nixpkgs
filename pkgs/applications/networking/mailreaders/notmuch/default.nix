@@ -1,4 +1,4 @@
-{ fetchurl, fetchgit, stdenv
+{ fetchurl, fetchgit, lib, stdenv
 , pkgconfig, gnupg
 , xapian, gmime, talloc, zlib
 , doxygen, perl, texinfo
@@ -9,7 +9,7 @@
 , withEmacs ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "0.31";
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "V=1" ];
 
 
-  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional withEmacs "emacs";
+  outputs = [ "out" "man" "info" ] ++ lib.optional withEmacs "emacs";
 
   preCheck = let
     test-database = fetchurl {
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-man" "install-info" ];
 
-  postInstall = stdenv.lib.optionalString withEmacs ''
+  postInstall = lib.optionalString withEmacs ''
     moveToOutput bin/notmuch-emacs-mua $emacs
   '';
 

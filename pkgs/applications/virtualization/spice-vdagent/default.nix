@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, alsaLib, spice-protocol, glib,
+{lib, stdenv, fetchurl, pkgconfig, alsaLib, spice-protocol, glib,
  libpciaccess, libxcb, libXrandr, libXinerama, libXfixes, dbus, libdrm,
  systemd}:
 stdenv.mkDerivation rec {
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
        * Multiple displays
     '';
     homepage = "https://www.spice-space.org/";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.aboseley ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.aboseley ];
+    platforms = lib.platforms.linux;
   };
 }

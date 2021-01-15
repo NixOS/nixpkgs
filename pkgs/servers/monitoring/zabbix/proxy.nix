@@ -13,7 +13,7 @@ assert postgresqlSupport -> !mysqlSupport && !sqliteSupport;
 assert sqliteSupport -> !mysqlSupport && !postgresqlSupport;
 
 let
-  inherit (stdenv.lib) optional optionalString;
+  inherit (lib) optional optionalString;
 in
   import ./versions.nix ({ version, sha256 }:
     stdenv.mkDerivation {
@@ -21,7 +21,7 @@ in
       inherit version;
 
       src = fetchurl {
-        url = "https://cdn.zabbix.com/zabbix/sources/stable/${stdenv.lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
+        url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
         inherit sha256;
       };
 

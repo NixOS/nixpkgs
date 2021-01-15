@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, dconf, pkgconfig, dbus-glib, telepathy-glib, libxslt, makeWrapper }:
+{ lib, stdenv, fetchurl, glib, dconf, pkgconfig, dbus-glib, telepathy-glib, libxslt, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-idle";
@@ -10,16 +10,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib telepathy-glib dbus-glib libxslt telepathy-glib.python (stdenv.lib.getLib dconf) makeWrapper ];
+  buildInputs = [ glib telepathy-glib dbus-glib libxslt telepathy-glib.python (lib.getLib dconf) makeWrapper ];
 
   preFixup = ''
     wrapProgram "$out/libexec/telepathy-idle" \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 
   meta = {
     description = "IRC connection manager for the Telepathy framework";
-    license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
 }

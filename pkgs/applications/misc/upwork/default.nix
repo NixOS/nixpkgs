@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libXtst nspr nss libxcb pango systemd libXScrnSaver
   ];
 
-  libPath = stdenv.lib.makeLibraryPath buildInputs;
+  libPath = lib.makeLibraryPath buildInputs;
 
   unpackPhase = ''
     dpkg-deb -x ${src} ./

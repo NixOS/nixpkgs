@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -143,8 +143,8 @@ let
     };
     gr-audio = {
       runtime = []
-        ++ stdenv.lib.optionals stdenv.isLinux [ alsaLib libjack2 ]
-        ++ stdenv.lib.optionals stdenv.isDarwin [ CoreAudio ]
+        ++ lib.optionals stdenv.isLinux [ alsaLib libjack2 ]
+        ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
       ;
       cmakeEnableFlag = "GR_AUDIO";
     };
@@ -193,6 +193,7 @@ let
   shared = (import ./shared.nix {
     inherit
       stdenv
+      lib
       python
       removeReferencesTo
       featuresInfo
@@ -223,7 +224,7 @@ let
     # From some reason, if these are not set, libcodec2 and gsm are not
     # detected properly. NOTE: qradiolink needs libcodec2 to be detected in
     # order to build, see https://github.com/qradiolink/qradiolink/issues/67
-    ++ stdenv.lib.optionals (hasFeature "gr-vocoder" features) [
+    ++ lib.optionals (hasFeature "gr-vocoder" features) [
       "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2.so"
       "-DLIBCODEC2_INCLUDE_DIRS=${codec2}/include"
       "-DLIBCODEC2_HAS_FREEDV_API=ON"
@@ -235,7 +236,7 @@ let
   postInstall = shared.postInstall
     # This is the only python reference worth removing, if needed (3.7 doesn't
     # set that reference).
-    + stdenv.lib.optionalString (!hasFeature "python-support" features) ''
+    + lib.optionalString (!hasFeature "python-support" features) ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
     ''
   ;
@@ -249,7 +250,7 @@ let
     # we'll need to package volk while able to tell it to install or not
     # install python referencing files. When we'll be there, this will help:
     # https://github.com/gnuradio/volk/pull/404
-    + stdenv.lib.optionalString (!hasFeature "python-support" features) ''
+    + lib.optionalString (!hasFeature "python-support" features) ''
       sed -i -e "/python\/volk_modtool/d" volk/CMakeLists.txt
     ''
   ;

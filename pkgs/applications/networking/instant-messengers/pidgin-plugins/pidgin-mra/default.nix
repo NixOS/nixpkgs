@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, pidgin } :
+{ lib, stdenv, fetchgit, pkgconfig, pidgin } :
 
 let
   version = "54b2992";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/dreadatour/pidgin-mra";
     description = "Mail.ru Agent plugin for Pidgin / libpurple";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

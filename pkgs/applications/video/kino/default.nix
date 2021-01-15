@@ -50,7 +50,7 @@
 #AMR-WB float support      no
 #AMR-WB IF2 support        no
 
-{ stdenv, fetchurl, gtk2, libglade, libxml2, libraw1394, libsamplerate, libdv
+{ lib, stdenv, fetchurl, gtk2, libglade, libxml2, libraw1394, libsamplerate, libdv
 , pkgconfig, perlPackages, libavc1394, libiec61883, libXv, gettext
 , libX11, glib, cairo, intltool, ffmpeg, libv4l
 }:
@@ -89,7 +89,7 @@ stdenv.mkDerivation {
   meta = {
       description = "Non-linear DV editor for GNU/Linux";
       homepage = "http://www.kinodv.org/";
-      license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+      license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

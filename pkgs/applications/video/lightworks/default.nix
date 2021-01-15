@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
 , gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU
 , nvidia_cg_toolkit, zlib, openssl, portaudio
 }:
 let
-  fullPath = stdenv.lib.makeLibraryPath [
+  fullPath = lib.makeLibraryPath [
     stdenv.cc.cc
     gtk3
     gdk-pixbuf
@@ -80,8 +80,8 @@ in buildFHSUserEnv {
   meta = {
     description = "Professional Non-Linear Video Editor";
     homepage = "https://www.lwks.com/";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.antonxy ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.antonxy ];
     platforms = [ "x86_64-linux" ];
   };
 }

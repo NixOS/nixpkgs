@@ -29,7 +29,7 @@
 , nixosTestRunner ? false
 }:
 
-with stdenv.lib;
+with lib;
 let
   audio = optionalString alsaSupport "alsa,"
     + optionalString pulseSupport "pa,"
@@ -40,9 +40,9 @@ in
 stdenv.mkDerivation rec {
   version = "5.1.0";
   pname = "qemu"
-    + stdenv.lib.optionalString xenSupport "-xen"
-    + stdenv.lib.optionalString hostCpuOnly "-host-cpu-only"
-    + stdenv.lib.optionalString nixosTestRunner "-for-vm-tests";
+    + lib.optionalString xenSupport "-xen"
+    + lib.optionalString hostCpuOnly "-host-cpu-only"
+    + lib.optionalString nixosTestRunner "-for-vm-tests";
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     ++ optional smartcardSupport "--enable-smartcard"
     ++ optional spiceSupport "--enable-spice"
     ++ optional usbredirSupport "--enable-usb-redir"
-    ++ optional (hostCpuTargets != null) "--target-list=${stdenv.lib.concatStringsSep "," hostCpuTargets}"
+    ++ optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
     ++ optional stdenv.isDarwin "--enable-cocoa"
     ++ optional stdenv.isDarwin "--enable-hvf"
     ++ optional stdenv.isLinux "--enable-linux-aio"

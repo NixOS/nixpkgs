@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper,
+{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper,
   atk, ffmpeg, gdk-pixbuf, glibc, gtk3, libav_0_8, libXtst }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     libav_0_8 gtk3 libXtst
   ];
 
-  libPath = stdenv.lib.makeLibraryPath buildInputs;
+  libPath = lib.makeLibraryPath buildInputs;
 
   unpackPhase = ''
     dpkg-deb -x ${src} ./
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${libPath}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Digital signature tool for Costa Rican electronic invoicing";
     homepage = "https://signum.one/download.html";
     license = licenses.unfree;

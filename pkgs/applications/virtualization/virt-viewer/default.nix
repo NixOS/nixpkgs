@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, shared-mime-info, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkgconfig, intltool, shared-mime-info, wrapGAppsHook
 , glib, gsettings-desktop-schemas, gtk-vnc, gtk3, libvirt, libvirt-glib, libxml2, vte
 , spiceSupport ? true
 , spice-gtk ? null, spice-protocol ? null, libcap ? null, gdbm ? null
@@ -7,7 +7,7 @@
 assert spiceSupport ->
   spice-gtk != null && spice-protocol != null && libcap != null && gdbm != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   baseName = "virt-viewer";

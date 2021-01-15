@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, jre8, which, gawk }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "neo4j";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     do
         makeWrapper "$out/share/neo4j/bin/$NEO4J_SCRIPT" \
             "$out/bin/$NEO4J_SCRIPT" \
-            --prefix PATH : "${stdenv.lib.makeBinPath [ jre8 which gawk ]}" \
+            --prefix PATH : "${lib.makeBinPath [ jre8 which gawk ]}" \
             --set JAVA_HOME "$jre8"
     done
   '';
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
 
     maintainers = [ maintainers.offline ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

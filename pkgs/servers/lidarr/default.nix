@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${mono}/bin/mono" $out/bin/Lidarr \
       --add-flags "$out/bin/Lidarr.exe" \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ chromaprint ]} \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [
+      --prefix PATH : ${lib.makeBinPath [ chromaprint ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
           curl sqlite libmediainfo ]}
   '';
 

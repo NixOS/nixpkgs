@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, intltool, file,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, intltool, file,
   desktop-file-utils, enchant, gtk3, gtkmm3, gst_all_1, hicolor-icon-theme,
   libsigcxx, libxmlxx, xdg_utils, isocodes, wrapGAppsHook
 }:
@@ -60,8 +60,8 @@ stdenv.mkDerivation {
       makes it easier to synchronise subtitles to voices.
       '';
     homepage = "http://kitone.github.io/subtitleeditor/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.plcplc ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.plcplc ];
   };
 }

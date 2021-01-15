@@ -1,4 +1,4 @@
-{stdenv
+{lib, stdenv
 , coreutils, findutils, nix, xz, bzip2, gnused, gnugrep, openssl
 , lighttpd, iproute }:
 stdenv.mkDerivation rec {
@@ -47,15 +47,15 @@ stdenv.mkDerivation rec {
   meta = {
     description = ''A set of scripts to serve the Nix store as a binary cache'';
     longDescription = ''
-      This package installs a CGI script that serves Nix store path in the 
-      binary cache format. It also installs a launcher called 
+      This package installs a CGI script that serves Nix store path in the
+      binary cache format. It also installs a launcher called
       nix-binary-cache-start that can be run without any setup to launch
       a binary cache and get the example arguments for its usage.
     '';
-    maintainers = [stdenv.lib.maintainers.raskin];
-    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.gpl2Plus;
     inherit version;
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     hydraPlatforms = [];
   };
 }

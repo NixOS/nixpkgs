@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     homepage = "https://wiki.gnome.org/Apps/Tomboy";
     description = "A simple note-taking application with synchronization";
     platforms = platforms.linux;
-    license = stdenv.lib.licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     maintainers = with maintainers; [ stesie ];
   };
 }

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig which makeWrapper ];
   buildInputs = [ SDL2 libpng xz zlib freetype fontconfig libxdg_basedir ]
-    ++ stdenv.lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
+    ++ lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
 
   prefixKey = "--prefix-dir=";
 
@@ -51,23 +51,23 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mv $out/games/ $out/bin
 
-    ${stdenv.lib.optionalString withOpenGFX ''
+    ${lib.optionalString withOpenGFX ''
       cp ${opengfx}/* $out/share/games/openttd/baseset
     ''}
 
     mkdir -p $out/share/games/openttd/data
 
-    ${stdenv.lib.optionalString withOpenSFX ''
+    ${lib.optionalString withOpenSFX ''
       cp ${opensfx}/*.{obs,cat} $out/share/games/openttd/data
     ''}
 
     mkdir $out/share/games/openttd/baseset/openmsx
 
-    ${stdenv.lib.optionalString withOpenMSX ''
+    ${lib.optionalString withOpenMSX ''
       cp ${openmsx}/*.{obm,mid} $out/share/games/openttd/baseset/openmsx
     ''}
 
-    ${stdenv.lib.optionalString withFluidSynth ''
+    ${lib.optionalString withFluidSynth ''
       wrapProgram $out/bin/openttd \
         --add-flags -m \
         --add-flags extmidi:cmd=${playmidi}/bin/playmidi

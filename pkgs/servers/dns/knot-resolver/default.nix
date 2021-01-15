@@ -12,7 +12,7 @@ let # un-indented, over the whole file
 
 result = if extraFeatures then wrapped-full else unwrapped;
 
-inherit (stdenv.lib) optional optionals optionalString;
+inherit (lib) optional optionals optionalString;
 lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {

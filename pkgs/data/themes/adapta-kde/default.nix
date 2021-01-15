@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "adapta-kde-theme";
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A port of the Adapta theme for Plasma";
     homepage = "https://git.io/adapta-kde";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.tadfisher ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.tadfisher ];
+    platforms = lib.platforms.all;
   };
 }

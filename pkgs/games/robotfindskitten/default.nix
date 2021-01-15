@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, ncurses }:
+{ lib, stdenv, fetchurl, pkgconfig, ncurses }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "robotfindskitten";

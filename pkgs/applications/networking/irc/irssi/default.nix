@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr }:
+{ lib, stdenv, fetchurl, pkgconfig, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr }:
 
 stdenv.mkDerivation rec {
   pname = "irssi";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage    = "https://irssi.org";
     description = "A terminal based IRC client";
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
-    license     = stdenv.lib.licenses.gpl2Plus;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    license     = lib.licenses.gpl2Plus;
   };
 }

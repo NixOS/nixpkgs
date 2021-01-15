@@ -16,7 +16,7 @@
 , enable32bitGuests ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   python = python3;

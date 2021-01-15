@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer, libpng,
+{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer, libpng,
   cairo, librsvg, gettext, libpaper, fribidi, pkgconfig, gperf, imagemagick }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     cp hildon/tuxpaint.xpm $out/share/pixmaps
     sed -e "s+Exec=tuxpaint+Exec=$out/bin/tuxpaint+" < src/tuxpaint.desktop > $out/share/applications/tuxpaint.desktop
- 
+
     # Install stamps
     tar xzf $stamps
     cd tuxpaint-stamps-2014.08.23
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open Source Drawing Software for Children";
     homepage = "http://www.tuxpaint.org/";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ woffs ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ woffs ];
+    platforms = lib.platforms.linux;
   };
 }

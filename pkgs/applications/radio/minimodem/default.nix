@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, libtool
+{ lib, stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, libtool
 , fftw, fftwSinglePrec, alsaLib, libsndfile, libpulseaudio
 }:
 
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
     Caller-ID.
     '';
     homepage = "http://www.whence.com/minimodem/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ relrod ];
+    license = lib.licenses.gpl3Plus;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ relrod ];
   };
 }
 

@@ -30,6 +30,6 @@ in stdenv.mkDerivation {
     description = "PVR & episode guide that downloads and manages all your TV shows";
     license     = licenses.gpl3;
     homepage    = "https://github.com/midgetspy/Sick-Beard";
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

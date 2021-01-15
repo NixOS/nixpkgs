@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 , openssl
@@ -21,12 +21,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.isDarwin Security;
 
   # package does not contain tests as of v0.2.2
   docCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CLI tool to download saved images from Reddit";
     homepage = "https://github.com/manojkarthick/reddsaver";
     license = with licenses; [ mit /* or */ asl20 ];

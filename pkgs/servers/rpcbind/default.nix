@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [ libnsl libtirpc ]
-             ++ stdenv.lib.optional useSystemd systemd;
+             ++ lib.optional useSystemd systemd;
 
   configureFlags = [
     "--with-systemdsystemunitdir=${if useSystemd then "${placeholder "out"}/etc/systemd/system" else "no"}"

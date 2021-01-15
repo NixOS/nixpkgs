@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
   buildInputs = [ bzip2 qtbase libnova proj openjpeg libpng ];
   cmakeFlags = [ "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-2.3" ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
+    ++ lib.optionals stdenv.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
 
   postInstall = if stdenv.isDarwin then ''
     mkdir -p "$out/Applications" "$out/XyGrib/XyGrib.app/Contents/Resources"

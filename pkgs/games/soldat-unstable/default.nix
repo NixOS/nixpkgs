@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, fpc, zip, makeWrapper
+{ lib, stdenv, fetchFromGitHub, fetchpatch, fpc, zip, makeWrapper
 , SDL2, freetype, physfs, openal, gamenetworkingsockets
 , xorg, autoPatchelfHook
 }:
@@ -27,7 +27,7 @@ let
       install -Dm644 client/play-regular.ttf -t $out/share/soldat
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Soldat's base game content";
       license = licenses.cc-by-40;
       platforms = platforms.all;
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Soldat is a unique 2D (side-view) multiplayer action game";
     license = [ licenses.mit base.meta.license ];
     inherit (src.meta) homepage;

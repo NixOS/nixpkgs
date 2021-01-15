@@ -65,8 +65,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Simple text adventure interpreter for Unix and Windows";
     homepage = "https://instead.syscall.ru/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux;
     maintainers = with maintainers; [ pSub ];
   };
 }

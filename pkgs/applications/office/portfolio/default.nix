@@ -20,7 +20,7 @@ let
     categories = "Office;";
   };
 
-  runtimeLibs = stdenv.lib.makeLibraryPath [ gtk3 webkitgtk ];
+  runtimeLibs = lib.makeLibraryPath [ gtk3 webkitgtk ];
 in
 stdenv.mkDerivation rec {
   pname = "PortfolioPerformance";

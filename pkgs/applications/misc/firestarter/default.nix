@@ -2,7 +2,7 @@
   withCuda ? true
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "firestarter";
   version = "1.7.4";

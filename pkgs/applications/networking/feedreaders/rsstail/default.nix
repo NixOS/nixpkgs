@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "flok99";
   };
 
-  buildInputs = [ libmrss ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ libmrss ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
   checkInputs = [ cppcheck ];
 
   postPatch = ''

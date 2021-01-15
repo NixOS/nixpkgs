@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, freetype, lcms, libtiff, libxml2
+{ lib, stdenv, fetchurl, pkgconfig, freetype, lcms, libtiff, libxml2
 , libart_lgpl, qt4, python2, cups, fontconfig, libjpeg
 , zlib, libpng, xorg, cairo, podofo, hunspell, boost, cmake, imagemagick, ghostscript }:
 
@@ -43,10 +43,10 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.linux;
     description = "Desktop Publishing (DTP) and Layout program for Linux";
     homepage = "https://www.scribus.net";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 }

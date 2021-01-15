@@ -3,7 +3,7 @@
 , enableGlfw ? false, glfw, runtimeShell }:
 
 let
-  inherit (stdenv.lib) optional makeLibraryPath;
+  inherit (lib) optional makeLibraryPath;
 
   wrapperScript = writeScript "glava" ''
     #!${runtimeShell}

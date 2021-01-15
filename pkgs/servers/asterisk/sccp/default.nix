@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     p="$out/lib/asterisk/modules/chan_sccp.so"
-    patchelf --set-rpath "$p:${stdenv.lib.makeLibraryPath [ binutils-unwrapped ]}" "$p"
+    patchelf --set-rpath "$p:${lib.makeLibraryPath [ binutils-unwrapped ]}" "$p"
   '';
 
   meta = with lib; {

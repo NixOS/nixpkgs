@@ -1,7 +1,7 @@
 { stdenv, lib, buildGoPackage, fetchFromGitHub, makeWrapper, nixosTests
 , systemd, withSystemdSupport ? true }:
 
-with stdenv.lib;
+with lib;
 
 buildGoPackage rec {
   pname = "postfix_exporter";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, snack, tcl, tk, makeWrapper }:
+{ lib, stdenv, fetchurl, snack, tcl, tk, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "wavesurfer-1.8.5";
@@ -17,12 +17,12 @@ stdenv.mkDerivation {
     ln -s $out/{nix-support,bin}/wavesurfer.tcl
     wrapProgram "$out/nix-support/wavesurfer.tcl"  \
                  --set TCLLIBPATH "${snack}/lib" \
-                 --prefix PATH : "${stdenv.lib.makeBinPath [ tcl tk ]}"
+                 --prefix PATH : "${lib.makeBinPath [ tcl tk ]}"
   '';
 
   meta = {
     description = "Tool for recording, playing, editing, viewing and labeling of audio";
     homepage = "http://www.speech.kth.se/wavesurfer/";
-    license = stdenv.lib.licenses.bsd0;
+    license = lib.licenses.bsd0;
   };
 }

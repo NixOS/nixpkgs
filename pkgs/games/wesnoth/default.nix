@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
                   libvorbis fribidi dbus libpng pcre openssl icu ]
-                ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation];
+                ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation];
 
   cmakeFlags = [ "-DENABLE_TOOLS=${if enableTools then "ON" else "OFF"}" ];
 

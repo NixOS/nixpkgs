@@ -30,7 +30,7 @@ mkDerivation rec {
     install -D -t $out/bin qtemu
 
     # make sure that the qemu-* executables are found
-    wrapProgram $out/bin/qtemu --prefix PATH : ${stdenv.lib.makeBinPath [ qemu ]}
+    wrapProgram $out/bin/qtemu --prefix PATH : ${lib.makeBinPath [ qemu ]}
 
     runHook postInstall
   '';

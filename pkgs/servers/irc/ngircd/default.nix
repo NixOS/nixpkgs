@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, openssl, pam, libiconv }:
+{ lib, stdenv, fetchurl, zlib, openssl, pam, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "ngircd";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Next Generation IRC Daemon";
     homepage    = "https://ngircd.barton.de";
-    license     = stdenv.lib.licenses.gpl2;
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.gpl2;
+    platforms   = lib.platforms.all;
   };
 }

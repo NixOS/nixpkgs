@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk2, menu-cache }:
+{ lib, stdenv, fetchurl, pkgconfig, glib, gtk2, menu-cache }:
 
 stdenv.mkDerivation rec {
   pname = "openbox-menu";
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
       dynamic menu listing installed applications. Most of the work is done by
       the LXDE library menu-cache.
     '';
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms   = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.romildo ];
+    platforms   = lib.platforms.unix;
   };
 }

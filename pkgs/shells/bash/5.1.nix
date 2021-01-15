@@ -12,7 +12,7 @@
 , texinfo ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert interactive -> readline80 != null;
 assert withDocs -> texinfo != null;

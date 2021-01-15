@@ -95,8 +95,8 @@ gcc8Stdenv.mkDerivation {
     description = "NoSQL data store using the seastar framework, compatible with Apache Cassandra";
     homepage = "https://scylladb.com";
     license = licenses.agpl3;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     hydraPlatforms = []; # It's huge ATM, about 18 GB.
-    maintainers = [ stdenv.lib.maintainers.farlion ];
+    maintainers = [ lib.maintainers.farlion ];
   };
 }

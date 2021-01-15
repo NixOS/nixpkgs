@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchsvn, pkgconfig, sconsPackages, libGLU, libGL, SDL2, SDL2_image
+{ lib, stdenv, fetchFromGitHub, fetchsvn, pkgconfig, sconsPackages, libGLU, libGL, SDL2, SDL2_image
 , libvorbis, bullet, curl, gettext, writeTextFile
 
 , data ? fetchsvn {
@@ -35,9 +35,9 @@ let
     meta = {
       description = "Car racing game";
       homepage = "http://vdrift.net/";
-      license = stdenv.lib.licenses.gpl2Plus;
-      maintainers = with stdenv.lib.maintainers; [viric];
-      platforms = stdenv.lib.platforms.linux;
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [viric];
+      platforms = lib.platforms.linux;
     };
   };
   wrappedName = "vdrift-${version}-with-data-${toString data.rev}";

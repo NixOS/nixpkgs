@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python, dict, glibcLocales, writeScript}:
+{lib, stdenv, fetchurl, python, dict, glibcLocales, writeScript}:
 
 stdenv.mkDerivation rec {
   version = "20161001";
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "DICT version of English Wiktionary";
     homepage = "http://en.wiktionary.org/";
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

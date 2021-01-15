@@ -6,7 +6,7 @@ let
   # Choose your "paksets" of objects, images, text, music, etc.
   paksets = config.simutrans.paksets or "pak64 pak64.japan pak128 pak128.britain pak128.german";
 
-  result = with stdenv.lib; withPaks (
+  result = with lib; withPaks (
     if paksets == "*" then attrValues pakSpec # taking all
       else map (name: pakSpec.${name}) (splitString " " paksets)
   );
@@ -24,7 +24,7 @@ let
 
 
   # As of 2015/03, many packsets still didn't have a release for version 120.
-  pakSpec = stdenv.lib.mapAttrs
+  pakSpec = lib.mapAttrs
     (pakName: attrs: mkPak (attrs // {inherit pakName;}))
   {
     pak64 = {

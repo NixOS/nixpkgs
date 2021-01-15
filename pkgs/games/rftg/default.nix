@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, pkgconfig }:
+{ lib, stdenv, fetchurl, gtk2, pkgconfig }:
 
 stdenv.mkDerivation rec {
 
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://keldon.net/rftg/";
     description = "Implementation of the card game Race for the Galaxy, including an AI";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.falsifian ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.falsifian ];
   };
 
 }

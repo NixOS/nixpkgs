@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    wrapProgram $out/bin/r2mod --prefix PATH : "${stdenv.lib.makeBinPath [ jq p7zip ]}";
+    wrapProgram $out/bin/r2mod --prefix PATH : "${lib.makeBinPath [ jq p7zip ]}";
   '';
 
   meta = with lib; {
