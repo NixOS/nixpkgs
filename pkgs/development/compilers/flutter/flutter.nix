@@ -1,9 +1,9 @@
-{ channel
-, pname
+{ pname
 , version
 , sha256Hash
 , patches
 , dart
+, channel ? "stable"
 , filename ? "flutter_linux_${version}-${channel}.tar.xz"
 }:
 

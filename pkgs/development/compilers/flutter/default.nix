@@ -10,10 +10,8 @@ in
   stable = mkFlutter rec {
     inherit dart;
     pname = "flutter";
-    channel = "stable";
-    version = "1.22.0";
-    filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "0ryrx458ss8ryhmspcfrhjvad2pl46bxh1qk5vzwzhxiqdc79vm8";
+    version = "1.22.4";
+    sha256Hash = "0qalgav9drqddcj8lfvl9ddf3325n953pvkmgha47lslg9sa88zw";
     patches = getPatches ./patches/stable;
   };
 }
