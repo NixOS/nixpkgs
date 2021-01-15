@@ -453,7 +453,7 @@ in
       description = "gitea";
       after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
-      path = [ gitea pkgs.gitAndTools.git ];
+      path = [ gitea pkgs.git ];
 
       preStart = let
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";

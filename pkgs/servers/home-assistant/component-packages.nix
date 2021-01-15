@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.1.1";
+  version = "2021.1.2";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -317,7 +317,7 @@
     "google_travel_time" = ps: with ps; [ googlemaps ];
     "google_wifi" = ps: with ps; [ ];
     "gpmdp" = ps: with ps; [ websocket_client ];
-    "gpsd" = ps: with ps; [ ]; # missing inputs: gps3
+    "gpsd" = ps: with ps; [ gps3 ];
     "gpslogger" = ps: with ps; [ aiohttp-cors ];
     "graphite" = ps: with ps; [ ];
     "gree" = ps: with ps; [ ]; # missing inputs: greeclimate
@@ -915,7 +915,7 @@
     "wake_on_lan" = ps: with ps; [ wakeonlan ];
     "waqi" = ps: with ps; [ ]; # missing inputs: waqiasync
     "water_heater" = ps: with ps; [ ];
-    "waterfurnace" = ps: with ps; [ ]; # missing inputs: waterfurnace
+    "waterfurnace" = ps: with ps; [ waterfurnace ];
     "watson_iot" = ps: with ps; [ ]; # missing inputs: ibmiotf
     "watson_tts" = ps: with ps; [ ]; # missing inputs: ibm-watson
     "waze_travel_time" = ps: with ps; [ WazeRouteCalculator ];
