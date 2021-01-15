@@ -10720,12 +10720,6 @@ in
 
   swift = callPackage ../development/compilers/swift { };
 
-  symbiflow-vtr = callPackage ../development/compilers/symbiflow-vtr { };
-
-  symbiflow-yosys = callPackage ../development/compilers/symbiflow-yosys { };
-
-  symbiflow-yosys-plugins = callPackage ../development/compilers/symbiflow-yosys-plugins { };
-
   swiProlog = callPackage ../development/compilers/swi-prolog {
     inherit (darwin.apple_sdk.frameworks) Security;
     jdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -11095,8 +11089,6 @@ in
   polyml = callPackage ../development/compilers/polyml { };
   polyml56 = callPackage ../development/compilers/polyml/5.6.nix { };
   polyml57 = callPackage ../development/compilers/polyml/5.7.nix { };
-
-  prjxray-tools = callPackage ../development/compilers/prjxray-tools { };
 
   pure = callPackage ../development/interpreters/pure {
     /*llvm = llvm_35;*/
@@ -20630,8 +20622,6 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  prjxray-db = callPackage ../data/misc/prjxray-db { };
-
   profont = callPackage ../data/fonts/profont
     { inherit (buildPackages.xorg) mkfontscale; };
 
@@ -20666,8 +20656,6 @@ in
   skeu = callPackage ../data/themes/skeu { };
 
   sweet = callPackage ../data/themes/sweet { };
-
-  symbiflow-arch-defs = callPackage ../data/misc/symbiflow-arch-defs { };
 
   mime-types = callPackage ../data/misc/mime-types { };
 
