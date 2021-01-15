@@ -1471,6 +1471,9 @@ self: super: {
   # https://github.com/adnelson/semver-range/issues/15
   semver-range = dontCheck super.semver-range;
 
+  # https://github.com/obsidiansystems/dependent-sum/issues/55
+  dependent-sum = doJailbreak super.dependent-sum;
+
   dependent-sum-aeson-orphans = appendPatch super.dependent-sum-aeson-orphans (pkgs.fetchpatch {
     # 2020-11-18: https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/9
     # Bump version bounds for ghc 8.10
@@ -1486,7 +1489,7 @@ self: super: {
   # base upper bound is incompatible with ghc 8.10
   neuron = doJailbreak super.neuron;
 
-  reflex = appendPatches super.reflex [
+  reflex = dontCheck (doJailbreak (appendPatches super.reflex [
     # https://github.com/reflex-frp/reflex/pull/444
     # Fixes for ghc 8.10
     (pkgs.fetchpatch {
@@ -1499,7 +1502,7 @@ self: super: {
       url = https://patch-diff.githubusercontent.com/raw/reflex-frp/reflex/pull/448.patch;
       sha256 = "0a8gcq9g8dyyafkvs54mi3fnisff20r0x0qzmhxcp9md61nkf7gq";
     })
-  ];
+  ]));
 
   # 2020-11-19: jailbreaking because of pretty-simple bound out of date
   # https://github.com/kowainik/stan/issues/408
