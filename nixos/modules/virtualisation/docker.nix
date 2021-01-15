@@ -165,7 +165,7 @@ in
             ''
               ${cfg.package}/bin/dockerd \
                 --group=docker \
-                --host=unix:// \
+                --host=fd:// \
                 --log-driver=${cfg.logDriver} \
                 ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
                 ${optionalString cfg.liveRestore "--live-restore" } \
