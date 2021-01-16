@@ -1,18 +1,18 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, pyxdg, pytest }:
+{ lib, stdenv, buildPythonApplication, fetchFromGitHub, pyxdg, pytest, pytest-mock }:
 
 buildPythonApplication rec {
   pname   = "pass-git-helper";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner  = "languitar";
     repo   = "pass-git-helper";
     rev    = "v${version}";
-    sha256 = "18nvwlp0w4aqj268wly60rnjzqw2d8jl0hbs6bkwp3hpzzz5g6yd";
+    sha256 = "sha256-GdsFPpBdoEaOCmdKxw5xTuFOcGFH94w5q/lV891lCUs=";
   };
 
   propagatedBuildInputs = [ pyxdg ];
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest pytest-mock ];
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
