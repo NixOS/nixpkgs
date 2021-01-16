@@ -222,6 +222,27 @@ with super;
     disabled = luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
   });
 
+  lualdap = super.lualdap.override rec {
+    inherit (super.lualdap) pname;
+    version = "1.2.5";
+    # the repo from luarocks is archived, this was updated recently
+    src = pkgs.fetchFromGitHub {
+      owner = pname;
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "0ynjkf636k6xnk65pv8b2l24dk498ccsa1wzak53rji8pwc2q29c";
+    };
+    knownRockspec = "lualdap-${version}-1.rockspec";
+    preConfigure = ''
+      sed -e 's_dev_${version}_g' rockspecs/lualdap/lualdap-${version}.rockspec > lualdap-${version}-1.rockspec
+    '';
+
+    externalDeps = [
+      { name = "LBER"; dep = pkgs.openldap; }
+      { name = "LDAP"; dep = pkgs.openldap; }
+    ];
+  };
+
   luaossl = super.luaossl.override({
     externalDeps = [
       { name = "CRYPTO"; dep = pkgs.openssl; }
