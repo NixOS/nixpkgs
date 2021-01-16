@@ -713,6 +713,8 @@ in
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
+  metapixel = callPackage ../tools/graphics/metapixel { };
+
   ### APPLICATIONS/TERMINAL-EMULATORS
 
   alacritty = callPackage ../applications/terminal-emulators/alacritty {
