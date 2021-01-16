@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "routino";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchurl {
     url = "https://routino.org/download/${pname}-${version}.tgz";
-    sha256 = "1ccx3s99j8syxc1gqkzsaqkmyf44l7h3adildnc5iq2md7bp8wab";
+    sha256 = "1xa7l2bjn832nk6bc7b481nv8hd2gj41jwhg0d2qy10lqdvjpn5b";
   };
 
   patchFlags = [ "-p0" ];
