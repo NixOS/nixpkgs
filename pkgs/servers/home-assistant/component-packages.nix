@@ -350,7 +350,7 @@
     "hlk_sw16" = ps: with ps; [ ]; # missing inputs: hlk-sw16
     "home_connect" = ps: with ps; [ aiohttp-cors ]; # missing inputs: homeconnect
     "homeassistant" = ps: with ps; [ ];
-    "homekit" = ps: with ps; [ HAP-python pyqrcode aiohttp-cors ha-ffmpeg zeroconf ]; # missing inputs: PyTurboJPEG base36 fnvhash
+    "homekit" = ps: with ps; [ HAP-python pyqrcode aiohttp-cors base36 ha-ffmpeg zeroconf ]; # missing inputs: PyTurboJPEG fnvhash
     "homekit_controller" = ps: with ps; [ aiohttp-cors zeroconf ]; # missing inputs: aiohomekit
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [ ]; # missing inputs: homematicip
