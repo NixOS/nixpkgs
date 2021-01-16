@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
   meta = {
     inherit (s) version;
-    description = ''A console dmenu-like tool'';
+    description = "A console dmenu-like tool";
     license = lib.licenses.mit;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

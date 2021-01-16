@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     ;
   meta = {
     inherit (s) version;
-    description = ''A very minimal Linux init implementation from suckless.org'';
+    description = "A very minimal Linux init implementation from suckless.org";
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
