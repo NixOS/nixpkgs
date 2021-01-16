@@ -431,8 +431,6 @@ let
       git-binary = pkgs.git;
     };
 
-    git-http = callPackage ../development/ocaml-modules/git-http { };
-
     git-unix = callPackage ../development/ocaml-modules/git-unix {
       git-binary = pkgs.git;
     };
