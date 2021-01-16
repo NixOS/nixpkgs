@@ -102,6 +102,14 @@ in stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+  # Use Zyn-Fusion logo for zest build
+  # Manually derived from https://github.com/mruby-zest/mruby-zest-build/blob/3.0.6/src/mruby-zest/example/ZynLogo.qml#L65-L97
+  postInstall = lib.optionalString (guiModule == "zest") ''
+    rm -r "$out/share/pixmaps"
+    mkdir -p "$out/share/icons/hicolor/scalable/apps"
+    cp ${./ZynLogo.svg} "$out/share/icons/hicolor/scalable/apps/zynaddsubfx.svg"
+  '';
+
   # When building with zest GUI, patch plugins
   # and standalone executable to properly locate zest
   postFixup = lib.optionalString (guiModule == "zest") ''
