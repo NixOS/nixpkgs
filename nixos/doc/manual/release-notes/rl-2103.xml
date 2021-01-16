@@ -666,6 +666,13 @@ self: super:
      <varname>services.restic</varname> now uses a dedicated cache directory for every backup defined in <varname>services.restic.backups</varname>. The old global cache directory, <literal>/root/.cache/restic</literal>, is now unused and can be removed to free up disk space.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The borgbackup service now accepts randomizedDelaySec (default: 0) and persistent (default: true) parameters.
+     By default borgbackup will now run immediately if it would have been triggered at least
+     once during the time when the timer was inactive.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
