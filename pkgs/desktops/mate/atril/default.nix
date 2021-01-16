@@ -19,14 +19,14 @@
 , enableImages ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "atril";
   version = "1.24.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0967gxw7h2qh2kpwl0jgv58hicz6aa92kr12mnykbpikad25s95y";
   };
 

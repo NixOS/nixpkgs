@@ -5,7 +5,7 @@
 
 let
   version = "1.1";
-  perlVersion = stdenv.lib.getVersion perl;
+  perlVersion = lib.getVersion perl;
 in
 
 assert perlVersion != "";

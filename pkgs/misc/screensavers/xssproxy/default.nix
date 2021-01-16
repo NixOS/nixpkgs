@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glib, pkgconfig, xorg, dbus }:
+{ lib, stdenv, fetchFromGitHub, glib, pkgconfig, xorg, dbus }:
 
 let rev = "1.0.0"; in
 
@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Forward freedesktop.org Idle Inhibition Service calls to Xss";
     homepage = "https://github.com/timakro/xssproxy";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ benley ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ benley ];
+    platforms = lib.platforms.unix;
   };
 }

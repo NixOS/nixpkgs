@@ -1,8 +1,8 @@
-{ stdenv }:
+{ lib, stdenv }:
 
 { paths }:
 
-with stdenv.lib;
+with lib;
 let installSanePath = path: ''
       if [ -e "${path}/lib/sane" ]; then
         find "${path}/lib/sane" -maxdepth 1 -not -type d | while read backend; do

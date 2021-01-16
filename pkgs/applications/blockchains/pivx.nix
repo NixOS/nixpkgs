@@ -7,7 +7,7 @@
 , disableDaemon ? false
 , withGui ? false }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   name = "pivx-${version}";
   version = "4.1.1";

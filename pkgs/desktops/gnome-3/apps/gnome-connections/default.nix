@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/connections/${stdenv.lib.versions.majorMinor version}/connections-${version}.tar.xz";
+    url = "mirror://gnome/sources/connections/${lib.versions.majorMinor version}/connections-${version}.tar.xz";
     hash = "sha256-5c7uBFkh9Vsw6bWWUDjNTMDrrFqI5JEgYlsWpfyuTpA=";
   };
 

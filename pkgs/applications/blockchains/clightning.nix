@@ -1,7 +1,7 @@
-{ stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
+{ lib, stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
   autogen, sqlite, gmp, zlib, fetchurl, unzip, fetchpatch, gettext }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "clightning";
   version = "0.9.2";

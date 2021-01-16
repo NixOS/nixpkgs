@@ -189,9 +189,9 @@ in
 
       homepage = "http://lensfun.sebastiankraft.net/";
 
-      license = stdenv.lib.licenses.gpl3Plus;
+      license = lib.licenses.gpl3Plus;
       maintainers = [ ];
-      platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+      platforms = lib.platforms.gnu ++ lib.platforms.linux;
     };
   };
 

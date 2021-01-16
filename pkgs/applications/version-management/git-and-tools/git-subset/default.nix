@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ curl libiconv Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ curl libiconv Security ];
 
   meta = with lib; {
     description = "Super fast Git tree filtering";

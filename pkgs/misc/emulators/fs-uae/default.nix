@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , gettext, gtk2, SDL2, zlib, glib, openal, libGLU, libGL, lua, freetype, libmpeg2, zip }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "fs-uae";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     homepage = "https://fs-uae.net";
-    maintainers = with stdenv.lib; [ maintainers.AndersonTorres ];
+    maintainers = with lib; [ maintainers.AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

@@ -47,7 +47,7 @@ let self = stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/mutter/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "03a612m0c7v6y72bs3ghmpyk49177fzq6gdy1jrz4608vnalx5yr";
   };
 

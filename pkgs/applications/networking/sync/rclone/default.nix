@@ -26,7 +26,7 @@ buildGoModule rec {
       rcloneBin =
         if stdenv.buildPlatform == stdenv.hostPlatform
         then "$out"
-        else stdenv.lib.getBin buildPackages.rclone;
+        else lib.getBin buildPackages.rclone;
     in
     ''
       installManPage rclone.1

@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   # ctags needed in path by outline plugin
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${stdenv.lib.makeBinPath [ ctags ]}"
+      --prefix PATH : "${lib.makeBinPath [ ctags ]}"
     )
   '';
 

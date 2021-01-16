@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       portaudio
       zlib
     ]
-    ++ stdenv.lib.optional withLua lua;
+    ++ lib.optional withLua lua;
 
   buildFlags = "translations";
 

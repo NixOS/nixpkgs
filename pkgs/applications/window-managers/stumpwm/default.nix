@@ -73,7 +73,7 @@ stdenv.mkDerivation {
 
     mkdir -p $out/share/stumpwm/modules
     cp -r modules/* $out/share/stumpwm/modules/
-    for d in ${stdenv.lib.concatStringsSep " " extraModulePaths}; do
+    for d in ${lib.concatStringsSep " " extraModulePaths}; do
       cp -r --no-preserve=mode "$d" $out/share/stumpwm/modules/
     done
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
     cp $out/share/stumpwm/modules/util/stumpish/stumpish $out/bin/
     chmod +x $out/bin/stumpish
     wrapProgram $out/bin/stumpish \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ rlwrap gnused gnugrep coreutils xprop ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ rlwrap gnused gnugrep coreutils xprop ]}"
 
     # Paths in the compressed image $out/bin/stumpwm are not
     # recognized by Nix. Add explicit reference here.

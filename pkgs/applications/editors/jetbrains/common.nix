@@ -5,7 +5,7 @@
 
 { name, product, version, src, wmClass, jdk, meta }:
 
-with stdenv.lib;
+with lib;
 
 let loName = toLower product;
     hiName = toUpper product;
@@ -71,8 +71,8 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     item=${desktopItem}
 
     makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
-      --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${stdenv.lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
+      --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         # Some internals want libstdc++.so.6
         stdenv.cc.cc.lib libsecret
         libnotify
@@ -86,6 +86,6 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     ln -s "$item/share/applications" $out/share
   '';
 
-} // stdenv.lib.optionalAttrs (!(meta.license.free or true)) {
+} // lib.optionalAttrs (!(meta.license.free or true)) {
   preferLocalBuild = true;
 }

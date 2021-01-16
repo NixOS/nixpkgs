@@ -85,7 +85,7 @@ mkDerivation rec {
         substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin perl}/bin/perl
       fi
     done
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
   '';
 

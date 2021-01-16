@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/xnee/";
 
     maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
   };
 }

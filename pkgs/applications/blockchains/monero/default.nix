@@ -10,7 +10,7 @@
 ,   python3  ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert stdenv.isDarwin -> IOKit != null;
 assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];

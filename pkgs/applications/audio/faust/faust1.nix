@@ -5,7 +5,7 @@
 , pkgconfig
 }:
 
-with stdenv.lib.strings;
+with lib.strings;
 
 let
 

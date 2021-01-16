@@ -1,6 +1,6 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
-with stdenv.lib;
+with lib;
 
 let
   version = "2016-01-26";

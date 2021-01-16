@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, flex, perl, libpng, giflib, libjpeg, alsaLib, readline, libGLU, libGL, libXaw
+{ lib, stdenv, fetchurl, bison, flex, perl, libpng, giflib, libjpeg, alsaLib, readline, libGLU, libGL, libXaw
 , pkgconfig, gtk2, SDL, autoreconfHook, makeDesktopItem
 }:
 
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Commodore 64, 128 and other emulators";
     homepage = "http://www.viceteam.org";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.sander ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -5,7 +5,7 @@
 }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ libXrender libXrandr libXcursor libX11 libXext libXi libxcb
       libGL glib nss nspr expat alsaLib
       qtbase qtdeclarative qtsvg qtlocation qtwebchannel qtwebengine

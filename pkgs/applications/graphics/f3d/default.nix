@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ vtk_9 ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libGL libX11 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+    ++ lib.optionals stdenv.isLinux [ libGL libX11 ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
   meta = with lib; {
     description = "Fast and minimalist 3D viewer using VTK";

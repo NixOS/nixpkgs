@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , cairo
 , cmake
 , fetchFromGitHub
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     "-DENABLE_SDL='true'"
   ];
 
-  meta =  with stdenv.lib; {
+  meta =  with lib; {
     description = "A merge of the original Visual Boy Advance forks";
     license = licenses.gpl2;
     maintainers = with maintainers; [ lassulus ];
     homepage = "https://vba-m.com/";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     badPlatforms = [ "aarch64-linux" ];
   };
 }

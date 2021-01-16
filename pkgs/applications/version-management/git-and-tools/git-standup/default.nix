@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin git-standup
 
     wrapProgram $out/bin/git-standup \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ git ]}"
+      --prefix PATH : "${lib.makeBinPath [ git ]}"
   '';
 
   meta = with lib; {

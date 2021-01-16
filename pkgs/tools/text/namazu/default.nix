@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "http://namazu.org/";
 
-    platforms = lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
     maintainers = [ ];
     broken = true; # File-MMagic is not compatible with our Perl version
   };

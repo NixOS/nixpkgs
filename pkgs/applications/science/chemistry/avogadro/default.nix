@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4, zlib, eigen, openbabel, pkgconfig, libGLU, libGL, libX11, doxygen }:
+{ lib, stdenv, fetchurl, cmake, qt4, zlib, eigen, openbabel, pkgconfig, libGLU, libGL, libX11, doxygen }:
 
 stdenv.mkDerivation rec {
   name = "avogadro-1.1.1";
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Molecule editor and visualizer";
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    platforms = lib.platforms.mesaPlatforms;
   };
 }

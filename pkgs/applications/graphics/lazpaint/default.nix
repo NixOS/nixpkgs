@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
 
     # Python is needed for scripts
     makeWrapper $out/share/lazpaint/lazpaint $out/bin/lazpaint \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ python3 ]}
+      --prefix PATH : ${lib.makeBinPath [ python3 ]}
   '';
 
   meta = with lib; {

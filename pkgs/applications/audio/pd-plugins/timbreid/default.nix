@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, puredata, fftw }:
+{ lib, stdenv, fetchurl, unzip, puredata, fftw }:
 
 stdenv.mkDerivation rec {
   version = "0.7.0";
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A collection of audio feature analysis externals for puredata";
     homepage = "http://williambrent.conflations.com/pages/research.html";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

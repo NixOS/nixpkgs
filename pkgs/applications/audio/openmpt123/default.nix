@@ -17,9 +17,9 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib mpg123 libogg libvorbis portaudio libsndfile flac ]
-  ++ stdenv.lib.optional usePulseAudio libpulseaudio;
+  ++ lib.optional usePulseAudio libpulseaudio;
 
-  configureFlags = stdenv.lib.optional (!usePulseAudio) "--without-pulseaudio";
+  configureFlags = lib.optional (!usePulseAudio) "--without-pulseaudio";
 
   meta = with lib; {
     description = "A cross-platform command-line based module file player";

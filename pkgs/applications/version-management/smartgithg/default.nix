@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ jre gnome3.adwaita-icon-theme gtk3 ];
 
-  preFixup = with stdenv.lib; ''
+  preFixup = with lib; ''
     gappsWrapperArgs+=( \
       --prefix PATH : ${makeBinPath [ jre which ]} \
       --prefix LD_LIBRARY_PATH : ${makeLibraryPath [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  desktopItem = with stdenv.lib; makeDesktopItem rec {
+  desktopItem = with lib; makeDesktopItem rec {
     name = "smartgit";
     exec = "smartgit";
     comment = meta.description;
@@ -89,6 +89,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.syntevo.com/smartgit/";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ jraygauthier ];
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

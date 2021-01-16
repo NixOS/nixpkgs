@@ -1,10 +1,10 @@
-{ stdenv, buildGoPackage, fetchurl, makeWrapper
+{ lib, stdenv, buildGoPackage, fetchurl, makeWrapper
 , git, bash, gzip, openssh, pam
 , sqliteSupport ? true
 , pamSupport ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 buildGoPackage rec {
   pname = "gitea";

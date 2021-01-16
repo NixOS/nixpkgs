@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     description = "Apache HTTPD, the world's most popular web server";
     homepage    = "http://httpd.apache.org/";
     license     = licenses.asl20;
-    platforms   = lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms   = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with maintainers; [ lovek323 peti ];
   };
 }

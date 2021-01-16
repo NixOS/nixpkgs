@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, autoreconfHook, libtool, pkgconfig, file, zip, wxGTK, gtk2
+{ lib, stdenv, fetchurl, autoreconfHook, libtool, pkgconfig, file, zip, wxGTK, gtk2
 , contribPlugins ? false, hunspell, gamin, boost
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${stdenv.lib.optionalString contribPlugins "full-"}${version}";
+  name = "${pname}-${lib.optionalString contribPlugins "full-"}${version}";
   version = "17.12";
   pname = "codeblocks";
 

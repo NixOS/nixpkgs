@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0zkns037vgy96ybmn80px515ivz6yhj5br5mwbvxgl73va92wd9v";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "Sync personal and work git repositories from multiple providers";

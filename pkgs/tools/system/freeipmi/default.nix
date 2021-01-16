@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
 
     updateWalker = true;
     inherit version;

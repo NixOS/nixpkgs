@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, cmake, ninja, pkgconfig, wrapGAppsHook
+{ lib, stdenv, fetchFromGitLab, cmake, ninja, pkgconfig, wrapGAppsHook
 , glib, gtk3, gettext, libxkbfile, libX11
 , freerdp, libssh, libgcrypt, gnutls
 , pcre2, libdbusmenu-gtk3, libappindicator-gtk3
@@ -9,7 +9,7 @@
 , gnome3
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "remmina";

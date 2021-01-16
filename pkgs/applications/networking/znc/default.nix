@@ -9,7 +9,7 @@
 , withDebug ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "znc";
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     ++ optional withZlib zlib;
 
   configureFlags = [
-    (stdenv.lib.enableFeature withPerl "perl")
-    (stdenv.lib.enableFeature withPython "python")
-    (stdenv.lib.enableFeature withTcl "tcl")
-    (stdenv.lib.withFeatureAs withTcl "tcl" "${tcl}/lib")
-    (stdenv.lib.enableFeature withCyrus "cyrus")
+    (lib.enableFeature withPerl "perl")
+    (lib.enableFeature withPython "python")
+    (lib.enableFeature withTcl "tcl")
+    (lib.withFeatureAs withTcl "tcl" "${tcl}/lib")
+    (lib.enableFeature withCyrus "cyrus")
   ] ++ optional (!withIPv6) [ "--disable-ipv6" ]
     ++ optional withDebug [ "--enable-debug" ];
 

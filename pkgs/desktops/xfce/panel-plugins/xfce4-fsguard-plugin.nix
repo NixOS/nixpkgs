@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.1.1";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "05nmfkrmifm76bsywqmbjd1qdvzagv5cbvnwbkb57156j055vl6n";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     xfconf
     gtk3
   ];
-  
+
   passthru.updateScript = xfce.updateScript {
     inherit pname version;
     attrPath = "xfce.${pname}";

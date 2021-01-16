@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, xlibsWrapper, libXext, libGLU, libGL, imagemagick, libtiff, bzip2}:
+{lib, stdenv, fetchurl, pkgconfig, xlibsWrapper, libXext, libGLU, libGL, imagemagick, libtiff, bzip2}:
 
 stdenv.mkDerivation rec {
   version = "0.9.1";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       This package currently contains all of the screensavers from the
       original collection, plus a few others.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

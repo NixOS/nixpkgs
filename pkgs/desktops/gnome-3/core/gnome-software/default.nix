@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-software/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-software/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0rjm486vgn6gi9mv1rqdcvr9cilmw6in4r6djqkxbxqll89cp2l7";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas gnome-desktop
     gspell json-glib libsecret ostree
     polkit flatpak libxmlb gnome-online-accounts libsysprof-capture
-  ] ++ stdenv.lib.optionals withFwupd [
+  ] ++ lib.optionals withFwupd [
     fwupd
   ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     "-Dgudev=false"
     # FIXME: package malcontent parental controls
     "-Dmalcontent=false"
-  ] ++ stdenv.lib.optionals (!withFwupd) [
+  ] ++ lib.optionals (!withFwupd) [
     "-Dfwupd=false"
   ];
 

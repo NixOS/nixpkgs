@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-desktop/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-desktop/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1m7iww1zk845szs9s3zc8a1s1wpd6kizndhq7gqy3575c0xgr2w9";
   };
 

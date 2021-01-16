@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoBuildFlags = with stdenv.lib; [
+  cargoBuildFlags = with lib; [
     "--no-default-features"
     "--features"
     (concatStringsSep "," (filter (x: x != "") [
@@ -31,9 +31,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ openssl ] ++ stdenv.lib.optional withALSA alsaLib
-    ++ stdenv.lib.optional withPulseAudio libpulseaudio
-    ++ stdenv.lib.optional withPortAudio portaudio;
+  buildInputs = [ openssl ] ++ lib.optional withALSA alsaLib
+    ++ lib.optional withPulseAudio libpulseaudio
+    ++ lib.optional withPortAudio portaudio;
 
   doCheck = false;
 

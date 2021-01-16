@@ -39,7 +39,7 @@
 
 buildFun:
 
-with stdenv.lib;
+with lib;
 
 let
   jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731

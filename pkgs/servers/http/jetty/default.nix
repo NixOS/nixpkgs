@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "A Web server and javax.servlet container";
     homepage = "https://www.eclipse.org/jetty/";
     platforms = lib.platforms.all;
-    license = [ lib.licenses.asl20 stdenv.lib.licenses.epl10 ];
+    license = [ lib.licenses.asl20 lib.licenses.epl10 ];
   };
 }
