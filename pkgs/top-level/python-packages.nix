@@ -4812,8 +4812,6 @@ in {
 
   python-openems = callPackage ../development/python-modules/python-openems { };
 
-  python-prjxray = callPackage ../development/python-modules/python-prjxray { };
-
   python-tado = callPackage ../development/python-modules/python-tado { };
 
   pkutils = callPackage ../development/python-modules/pkutils { };
@@ -7407,8 +7405,6 @@ in {
 
   sybil = callPackage ../development/python-modules/sybil { };
 
-  symbiflow-fasm = callPackage ../development/python-modules/symbiflow-fasm { };
-
   symengine = callPackage ../development/python-modules/symengine { symengine = pkgs.symengine; };
 
   sympy = if isPy3k then
@@ -7525,8 +7521,6 @@ in {
   testfixtures = callPackage ../development/python-modules/testfixtures { };
 
   textfsm = callPackage ../development/python-modules/textfsm { };
-
-  textx = callPackage ../development/python-modules/textx { };
 
   testpath = callPackage ../development/python-modules/testpath { };
 
@@ -8178,8 +8172,6 @@ in {
   xarray = callPackage ../development/python-modules/xarray { };
 
   xattr = callPackage ../development/python-modules/xattr { };
-
-  xc-fasm = callPackage ../development/python-modules/xc-fasm { };
 
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
