@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     inherit version;
-    description = ''A Common Lisp implementation based on LLVM with C++ integration'';
+    description = "A Common Lisp implementation based on LLVM with C++ integration";
     license = stdenv.lib.licenses.lgpl21Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
