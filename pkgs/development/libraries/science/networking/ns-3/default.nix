@@ -38,7 +38,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ns-3";
-  version = "32";
+  version = "33";
 
   src = fetchFromGitLab {
     owner = "nsnam";
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     sha256 = "158yjhsrmslj1q4zcq5p16hv9i82qnxx714l7idicncn0wzrfx7k";
   };
 
-  nativeBuildInputs = [ wafHook ];
+  nativeBuildInputs = [ wafHook python ];
 
   outputs = [ "out" ] ++ lib.optional pythonSupport "py";
 
@@ -60,8 +60,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs doc/ns3_html_theme/get_version.sh
-    # FIX/Remove when https://github.com/NixOS/nixpkgs/pull/69310 gets merged
-    sed -i 's/program.ns3_module_dependencies.copy()/program.ns3_module_dependencies[:]/g' wscript
   '';
 
   wafConfigureFlags = with stdenv.lib; [
@@ -107,6 +105,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     description = "A discrete time event network simulator";
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [ teto rgrunbla ];
   };
 }
