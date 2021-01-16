@@ -90,6 +90,8 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
+  passthru.updateScript = ./update.py;
+
   meta = with lib; {
     description = "Next generation of fcitx";
     homepage = "https://github.com/fcitx/fcitx5";
