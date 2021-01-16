@@ -218,6 +218,8 @@ in {
 
   aioharmony = callPackage ../development/python-modules/aioharmony { };
 
+  aiohomekit = callPackage ../development/python-modules/aiohomekit { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
