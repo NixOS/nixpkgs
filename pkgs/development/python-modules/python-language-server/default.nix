@@ -30,7 +30,7 @@ buildPythonPackage rec {
     sha256 = "07x6jr4z20jxn03bxblwc8vk0ywha492cgwfhj7q97nb5cm7kx0q";
   };
 
-  propagatedBuildInputs = [ setuptools jedi pluggy future python-jsonrpc-server flake8 ujson ]
+  propagatedBuildInputs = [ setuptools jedi pluggy future python-jsonrpc-server ujson ]
     ++ lib.optional (withProvider "autopep8") autopep8
     ++ lib.optional (withProvider "mccabe") mccabe
     ++ lib.optional (withProvider "pycodestyle") pycodestyle
@@ -42,12 +42,13 @@ buildPythonPackage rec {
     ++ lib.optional isPy27 configparser
     ++ lib.optionals (pythonOlder "3.2") [ backports_functools_lru_cache futures ];
 
-
   # The tests require all the providers, disable otherwise.
   doCheck = providers == ["*"];
 
   checkInputs = [
     pytestCheckHook mock pytestcov coverage flaky
+    # Do not propagate flake8 or it will enable pyflakes implicitly
+    flake8
     # rope is technically a dependency, but we don't add it by default since we
     # already have jedi, which is the preferred option
     rope
