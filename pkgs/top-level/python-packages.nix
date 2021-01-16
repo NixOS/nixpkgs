@@ -854,6 +854,8 @@ in {
 
   bayespy = callPackage ../development/python-modules/bayespy { };
 
+  bc-python-hcl2 = callPackage ../development/python-modules/bc-python-hcl2 { };
+
   bcdoc = callPackage ../development/python-modules/bcdoc { };
 
   bcrypt = if pythonOlder "3.6" then
@@ -1612,6 +1614,8 @@ in {
   debugpy = callPackage ../development/python-modules/debugpy { };
 
   decorator = callPackage ../development/python-modules/decorator { };
+
+  deep_merge = callPackage ../development/python-modules/deep_merge { };
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
 

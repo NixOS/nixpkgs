@@ -182,6 +182,8 @@ in
 
   cereal = callPackage ../development/libraries/cereal { };
 
+  checkov = callPackage ../development/tools/analysis/checkov {};
+
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
