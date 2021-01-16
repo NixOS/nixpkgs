@@ -2392,6 +2392,8 @@ in {
 
   flask_sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
 
+  flask-sslify = callPackage ../development/python-modules/flask-sslify { };
+
   flask-swagger = callPackage ../development/python-modules/flask-swagger { };
 
   flask-swagger-ui = callPackage ../development/python-modules/flask-swagger-ui { };
