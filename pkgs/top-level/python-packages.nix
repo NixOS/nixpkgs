@@ -6151,6 +6151,8 @@ in {
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
+  python-hpilo = callPackage ../development/python-modules/python-hpilo { };
+
   python-igraph = callPackage ../development/python-modules/python-igraph {
     pkgconfig = pkgs.pkgconfig;
     igraph = pkgs.igraph;
@@ -7900,6 +7902,8 @@ in {
   user-agents = callPackage ../development/python-modules/user-agents { };
 
   userpath = callPackage ../development/python-modules/userpath { };
+
+  utils = callPackage ../development/python-modules/utils { };
 
   uuid = callPackage ../development/python-modules/uuid { };
 
