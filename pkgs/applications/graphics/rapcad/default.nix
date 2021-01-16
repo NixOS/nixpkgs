@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
-    description = ''Constructive solid geometry package'';
+    description = "Constructive solid geometry package";
     broken = true; # 2018-04-11
   };
 }

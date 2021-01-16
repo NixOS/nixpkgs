@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = ''A vi-like file manager${if isFullPackage then "; Includes support for optional features" else ""}'';
+    description = "A vi-like file manager${if isFullPackage then "; Includes support for optional features" else ""}";
     maintainers = with maintainers; [ raskin ];
     platforms = if mediaSupport then platforms.linux else platforms.unix;
     license = licenses.gpl2;

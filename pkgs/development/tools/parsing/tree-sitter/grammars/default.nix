@@ -16,6 +16,7 @@
   tree-sitter-json = (builtins.fromJSON (builtins.readFile ./tree-sitter-json.json));
   tree-sitter-julia = (builtins.fromJSON (builtins.readFile ./tree-sitter-julia.json));
   tree-sitter-lua = (builtins.fromJSON (builtins.readFile ./tree-sitter-lua.json));
+  tree-sitter-nix = (builtins.fromJSON (builtins.readFile ./tree-sitter-nix.json));
   tree-sitter-ocaml = (builtins.fromJSON (builtins.readFile ./tree-sitter-ocaml.json));
   tree-sitter-php = (builtins.fromJSON (builtins.readFile ./tree-sitter-php.json));
   tree-sitter-python = (builtins.fromJSON (builtins.readFile ./tree-sitter-python.json));

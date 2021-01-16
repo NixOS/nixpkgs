@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenv, lib
 , abc-verifier
 , bash
 , bison
@@ -12,7 +12,6 @@
 , tcl
 , verilog
 , zlib
-, plugins ? []
 }:
 
 # NOTE: as of late 2020, yosys has switched to an automation robot that
@@ -33,8 +32,6 @@
 # ultimately less confusing than using dates.
 
 stdenv.mkDerivation rec {
-  inherit plugins;
-
   pname   = "yosys";
   version = "0.9+3830";
 
@@ -46,17 +43,21 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkg-config protobuf flex bison python3 ];
+  nativeBuildInputs = [ pkg-config bison flex ];
   buildInputs = [ tcl readline libffi python3 protobuf zlib ];
 
   makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}"];
 
-  patchPhase = ''
+  patches = [
+    ./plugin-search-dirs.patch
+  ];
+
+  postPatch = ''
     substituteInPlace ./Makefile \
       --replace 'echo UNKNOWN' 'echo ${builtins.substring 0 10 src.rev}'
+
     chmod +x ./misc/yosys-config.in
-    patchShebangs ./misc/yosys-config.in
-    patchShebangs tests
+    patchShebangs tests ./misc/yosys-config.in
   '';
 
   preBuild = let
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
     fi
 
     if ! grep -q "YOSYS_VER := $version" Makefile; then
-      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package ($version), failing."
+      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (${version}), failing."
       exit 1
     fi
   '';
@@ -92,16 +93,11 @@ stdenv.mkDerivation rec {
   # add a symlink to fake things so that both variants work the same way. this
   # is also needed at build time for the test suite.
   postBuild   = "ln -sfv ${abc-verifier}/bin/abc ./yosys-abc";
-  postInstall = ''
-    ln -sfv ${abc-verifier}/bin/abc $out/bin/yosys-abc
+  postInstall = "ln -sfv ${abc-verifier}/bin/abc $out/bin/yosys-abc";
 
-    mkdir -p $out/share/yosys/plugins
-    for plugin in $plugins; do
-        ln -sfv $plugin/share/yosys/plugins/* $out/share/yosys/plugins/
-    done
-  '';
+  setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open RTL synthesis framework and tools";
     homepage    = "http://www.clifford.at/yosys/";
     license     = licenses.isc;
