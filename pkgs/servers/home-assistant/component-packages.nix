@@ -846,7 +846,7 @@
     "todoist" = ps: with ps; [ todoist ];
     "tof" = ps: with ps; [ ]; # missing inputs: RPi.GPIO VL53L1X2
     "tomato" = ps: with ps; [ ];
-    "toon" = ps: with ps; [ aiohttp-cors hass-nabucasa ]; # missing inputs: toonapi
+    "toon" = ps: with ps; [ aiohttp-cors hass-nabucasa toonapi ];
     "torque" = ps: with ps; [ aiohttp-cors ];
     "totalconnect" = ps: with ps; [ ]; # missing inputs: total_connect_client
     "touchline" = ps: with ps; [ ]; # missing inputs: pytouchline
