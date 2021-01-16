@@ -2542,6 +2542,8 @@ in
 
   nextdns = callPackage ../applications/networking/nextdns { };
 
+  ngadmin = callPackage ../applications/networking/ngadmin { };
+
   nfdump = callPackage ../tools/networking/nfdump { };
 
   nfstrace = callPackage ../tools/networking/nfstrace { };
