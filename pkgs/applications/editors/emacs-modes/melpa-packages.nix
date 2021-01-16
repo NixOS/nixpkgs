@@ -341,6 +341,7 @@ let
         # Telega has a server portion for it's network protocol
         telega = super.telega.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
+          nativeBuildInputs = [ external.pkgconfig ];
 
           postBuild = ''
             cd source/server
