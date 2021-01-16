@@ -167,6 +167,10 @@ in
     deps = [ innoextract file-rename ]; }
     ../build-support/setup-hooks/gog-unpack.sh;
 
+  btnx-config = callPackage ../applications/misc/btnx-config {
+    inherit (gnome2) libglade;
+  };
+
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   # TODO: eventually migrate everything to buildFHSUserEnvBubblewrap
@@ -175,8 +179,6 @@ in
   buildFHSUserEnvBubblewrap = callPackage ../build-support/build-fhs-userenv-bubblewrap { };
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
-
-  btnx-config = callPackage ../applications/misc/btnx-config { };
 
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
