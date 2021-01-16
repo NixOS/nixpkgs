@@ -2818,6 +2818,8 @@ in {
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
 
+  hatasmota = callPackage ../development/python-modules/hatasmota { };
+
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
 
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
