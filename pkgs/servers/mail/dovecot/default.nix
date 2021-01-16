@@ -1,8 +1,9 @@
-{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
+{ stdenv, lib, fetchurl, fetchpatch, perl, pkgconfig, systemd, openssl
 , bzip2, zlib, lz4, inotify-tools, pam, libcap
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
 # Auth modules
+, withLua ? true, lua, autoreconfHook
 , withMySQL ? false, libmysqlclient
 , withPgSQL ? false, postgresql
 , withSQLite ? true, sqlite
@@ -12,13 +13,15 @@ stdenv.mkDerivation rec {
   pname = "dovecot";
   version = "2.3.13";
 
-  nativeBuildInputs = [ perl pkgconfig ];
+  # autoreconfHook can be removed as soon as the patch to fix the lua build below is removed
+  nativeBuildInputs = [ autoreconfHook perl pkgconfig ];
   buildInputs =
     [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus_sasl.dev ]
     ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withPgSQL postgresql
-    ++ lib.optional withSQLite sqlite;
+    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withLua lua;
 
   src = fetchurl {
     url = "https://dovecot.org/releases/2.3/${pname}-${version}.tar.gz";
@@ -44,6 +47,11 @@ stdenv.mkDerivation rec {
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
     ./2.3.x-module_dir.patch
+    # This fixes the build of the lua module, remove when it's included in a relase
+    (fetchpatch {
+      url = "https://github.com/dovecot/core/commit/2dac24558091c673e5918568d9958f6d8f261fc5.patch";
+      sha256 = "05hglw36imq4858055a48j0gnwm85g8z6kdckjghsm69bc97y5n2";
+    })
   ];
 
   configureFlags = [
@@ -52,14 +60,13 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     # We need this so utilities default to reading /etc/dovecot/dovecot.conf file.
     "--sysconfdir=/etc"
-    "--with-ldap"
-    "--with-ssl=openssl"
-    "--with-zlib"
     "--with-bzlib"
-    "--with-lz4"
+    "--with-icu"
     "--with-ldap"
     "--with-lucene"
-    "--with-icu"
+    "--with-lz4"
+    "--with-ssl=openssl"
+    "--with-zlib"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "i_cv_epoll_works=${if stdenv.isLinux then "yes" else "no"}"
     "i_cv_posix_fallocate_works=${if stdenv.isDarwin then "no" else "yes"}"
@@ -77,6 +84,7 @@ stdenv.mkDerivation rec {
     "lib_cv_va_val_copy=yes"
   ] ++ lib.optional (stdenv.isLinux) "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     ++ lib.optional (stdenv.isDarwin) "--enable-static"
+    ++ lib.optional withLua "--with-lua"
     ++ lib.optional withMySQL "--with-mysql"
     ++ lib.optional withPgSQL "--with-pgsql"
     ++ lib.optional withSQLite "--with-sqlite";
@@ -84,7 +92,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with lib.maintainers; [ peti fpletz globin ];
+    maintainers = with lib.maintainers; [ peti fpletz globin ajs124 ];
     platforms = lib.platforms.unix;
   };
   passthru.tests = {
