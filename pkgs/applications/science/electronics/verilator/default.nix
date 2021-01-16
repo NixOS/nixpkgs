@@ -18,10 +18,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  postPatch = ''
+  preCheck = ''
     patchShebangs \
       src/flexfix \
-      src/vlcovgen
+      src/vlcovgen \
+      test_regress/t/*.pl
   '';
 
   meta = with lib; {
