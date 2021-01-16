@@ -28905,6 +28905,8 @@ in
 
   nixos-generators = callPackage ../tools/nix/nixos-generators { };
 
+  nixos-rebuild = callPackage ../os-specific/linux/nixos-rebuild { };
+
   norwester-font = callPackage ../data/fonts/norwester  {};
 
   nut = callPackage ../applications/misc/nut { };
