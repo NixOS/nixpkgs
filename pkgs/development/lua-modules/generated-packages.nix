@@ -1064,6 +1064,23 @@ luafilesystem = buildLuarocksPackage {
     license.fullName = "MIT/X11";
   };
 };
+lualdap = buildLuarocksPackage {
+  pname = "lualdap";
+  version = "1.2.4.rc1-0";
+
+  src = fetchurl {
+    url    = "mirror://luarocks/lualdap-1.2.4.rc1-0.src.rock";
+    sha256 = "1a46nvkzhsayczj7dxxd7hmacm0wz3dg1vmyh0m0f5k5dz8dlvci";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with lib; {
+    homepage = "https://github.com/bdellegrazie/lualdap";
+    description = "Simple interface from Lua to an LDAP Client";
+    license.fullName = "MIT";
+  };
+};
 lualogging = buildLuarocksPackage {
   pname = "lualogging";
   version = "1.3.0-1";
