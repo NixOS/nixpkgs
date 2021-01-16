@@ -176,6 +176,8 @@ in
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
+  btnx = callPackage ../tools/inputmethods/btnx { };
+
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
   castxml = callPackage ../development/tools/castxml { };
