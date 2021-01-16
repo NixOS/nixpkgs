@@ -3657,6 +3657,8 @@ in {
 
   lightparam = callPackage ../development/python-modules/lightparam { };
 
+  lima = callPackage ../development/python-modules/lima { };
+
   limitlessled = callPackage ../development/python-modules/limitlessled { };
 
   limits = callPackage ../development/python-modules/limits { };
