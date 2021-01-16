@@ -127,6 +127,18 @@ let
           license = licenses.mit;
         };
       };
+      
+      dbaeumer.vscode-eslint = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-eslint";
+          publisher = "dbaeumer";
+          version = "2.1.14";
+          sha256 = "sha256-bVGmp871yu1Llr3uJ+CCosDsrxJtD4b1+CR+omMUfIQ=";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
 
       dhall.dhall-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
