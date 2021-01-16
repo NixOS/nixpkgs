@@ -16417,6 +16417,8 @@ in
     buildGoModule = buildGo114Module;
   };
 
+  grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
+
   grafana-loki = callPackage ../servers/monitoring/loki {
     buildGoPackage = buildGo114Package;
   };
