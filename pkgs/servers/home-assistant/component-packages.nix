@@ -816,7 +816,7 @@
     "tank_utility" = ps: with ps; [ ]; # missing inputs: tank_utility
     "tankerkoenig" = ps: with ps; [ ]; # missing inputs: pytankerkoenig
     "tapsaff" = ps: with ps; [ ]; # missing inputs: tapsaff
-    "tasmota" = ps: with ps; [ aiohttp-cors paho-mqtt ]; # missing inputs: hatasmota
+    "tasmota" = ps: with ps; [ aiohttp-cors hatasmota paho-mqtt ];
     "tautulli" = ps: with ps; [ ]; # missing inputs: pytautulli
     "tcp" = ps: with ps; [ ];
     "ted5000" = ps: with ps; [ xmltodict ];
