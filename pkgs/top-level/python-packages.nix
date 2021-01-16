@@ -7647,6 +7647,8 @@ in {
   else
     callPackage ../development/python-modules/toolz/2.nix { };
 
+  toonapi = callPackage ../development/python-modules/toonapi { };
+
   toposort = callPackage ../development/python-modules/toposort { };
 
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
