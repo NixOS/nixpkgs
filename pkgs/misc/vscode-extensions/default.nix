@@ -388,6 +388,18 @@ let
       ms-python.python = callPackage ./python {
         extractNuGet = callPackage ./python/extract-nuget.nix { };
       };
+      
+      msjsdiag.debugger-for-chrome = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "debugger-for-chrome";
+          publisher = "msjsdiag";
+          version = "4.12.11";
+          sha256 = "sha256-9i3TgCFThnFF5ccwzS4ATj5c2Xoe/4tDFGv75jJxeQ4=";
+        };
+        meta = {
+          license = stdenv.lib.licenses.mit;
+        };
+      };
 
       naumovs.color-highlight = buildVscodeMarketplaceExtension {
         mktplcRef = {
