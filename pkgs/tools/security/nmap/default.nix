@@ -12,11 +12,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";
-  version = "7.80";
+  version = "7.91";
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "1aizfys6l9f9grm82bk878w56mg0zpkfns3spzj157h98875mypw";
+    sha256 = "001kb5xadqswyw966k2lqi6jr6zz605jpp9w4kmm272if184pk0q";
   };
 
   patches = [ ./zenmap.patch ]
