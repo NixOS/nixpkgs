@@ -32,6 +32,8 @@ let
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
     ]);
     scrape_configs = filterValidPrometheus cfg.scrapeConfigs;
+    remote_write = filterValidPrometheus cfg.remoteWrite;
+    remote_read = filterValidPrometheus cfg.remoteRead;
     alerting = {
       inherit (cfg) alertmanagers;
     };
@@ -98,6 +100,126 @@ let
         communicating with external systems (federation, remote
         storage, Alertmanager).
       '';
+    };
+  };
+
+  promTypes.remote_read = types.submodule {
+    options = {
+      url = mkOption {
+        type = types.str;
+        description = ''
+          ServerName extension to indicate the name of the server.
+          http://tools.ietf.org/html/rfc4366#section-3.1
+        '';
+      };
+      remote_timeout = mkDefOpt types.str "30s" ''
+        Timeout for requests to the remote write endpoint.
+      '';
+      relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
+         List of remote write relabel configurations.
+         List of relabel configurations.
+       '';
+      name = mkOpt types.string ''
+        Name of the remote write config, which if specified must be unique among remote write configs.
+        The name will be used in metrics and logging in place of a generated value to help users distinguish between
+        remote write configs.
+      '';
+      basic_auth = mkOpt (types.submodule {
+        options = {
+          username = mkOption {
+            type = types.str;
+            description = ''
+              HTTP username
+            '';
+          };
+          password = mkOpt types.str "HTTP password";
+          password_file = mkOpt types.str "HTTP password file";
+        };
+      }) ''
+        Sets the `Authorization` header on every remote write request with the
+        configured username and password.
+        password and password_file are mutually exclusive.
+      '';
+      bearer_token = mkOpt types.str ''
+        Sets the `Authorization` header on every remote write request with
+        the configured bearer token. It is mutually exclusive with `bearer_token_file`.
+      '';
+      bearer_token_file = mkOpt types.str ''
+        Sets the `Authorization` header on every remote write request with the bearer token
+        read from the configured file. It is mutually exclusive with `bearer_token`.
+      '';
+      tls_config = mkOpt promTypes.tls_config ''
+        Configures the remote write request's TLS settings.
+      '';
+      proxy_url = mkOpt types.str "Optional Proxy URL.";
+      metadata_config = {
+        send = mkDefOpt types.bool "true" ''
+          Whether metric metadata is sent to remote storage or not.
+        '';
+        send_interval = mkDefOpt types.str "1m" ''
+          How frequently metric metadata is sent to remote storage.
+        '';
+      };
+    };
+  };
+
+  promTypes.remote_write = types.submodule {
+    options = {
+      url = mkOption {
+        type = types.str;
+        description = ''
+          ServerName extension to indicate the name of the server.
+          http://tools.ietf.org/html/rfc4366#section-3.1
+        '';
+      };
+      remote_timeout = mkDefOpt types.str "30s" ''
+        Timeout for requests to the remote write endpoint.
+      '';
+      relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
+         List of remote write relabel configurations.
+         List of relabel configurations.
+       '';
+      name = mkOpt types.string ''
+        Name of the remote write config, which if specified must be unique among remote write configs.
+        The name will be used in metrics and logging in place of a generated value to help users distinguish between
+        remote write configs.
+      '';
+      basic_auth = mkOpt (types.submodule {
+        options = {
+          username = mkOption {
+            type = types.str;
+            description = ''
+              HTTP username
+            '';
+          };
+          password = mkOpt types.str "HTTP password";
+          password_file = mkOpt types.str "HTTP password file";
+        };
+      }) ''
+        Sets the `Authorization` header on every remote write request with the
+        configured username and password.
+        password and password_file are mutually exclusive.
+      '';
+      bearer_token = mkOpt types.str ''
+        Sets the `Authorization` header on every remote write request with
+        the configured bearer token. It is mutually exclusive with `bearer_token_file`.
+      '';
+      bearer_token_file = mkOpt types.str ''
+        Sets the `Authorization` header on every remote write request with the bearer token
+        read from the configured file. It is mutually exclusive with `bearer_token`.
+      '';
+      tls_config = mkOpt promTypes.tls_config ''
+        Configures the remote write request's TLS settings.
+      '';
+      proxy_url = mkOpt types.str "Optional Proxy URL.";
+      metadata_config = {
+        send = mkDefOpt types.bool "true" ''
+          Whether metric metadata is sent to remote storage or not.
+        '';
+        send_interval = mkDefOpt types.str "1m" ''
+          How frequently metric metadata is sent to remote storage.
+        '';
+      };
     };
   };
 
@@ -538,6 +660,24 @@ in {
       description = ''
         Parameters that are valid in all  configuration contexts. They
         also serve as defaults for other configuration sections
+      '';
+    };
+
+    remoteRead = mkOption {
+      type = types.listOf promTypes.remote_read;
+      default = [];
+      description = ''
+        Parameters of the endpoints to query from.
+        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read">the official documentation</link> for more information.
+      '';
+    };
+
+    remoteWrite = mkOption {
+      type = types.listOf promTypes.remote_write;
+      default = [];
+      description = ''
+        Parameters of the endpoints to send samples to.
+        See <link xlink:href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write">the official documentation</link> for more information.
       '';
     };
 
