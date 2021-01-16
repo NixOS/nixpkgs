@@ -2382,6 +2382,8 @@ in {
 
   flask_script = callPackage ../development/python-modules/flask-script { };
 
+  flask-seasurf = callPackage ../development/python-modules/flask-seasurf { };
+
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
   flask-socketio = callPackage ../development/python-modules/flask-socketio { };
