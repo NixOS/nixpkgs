@@ -7337,6 +7337,8 @@ in {
 
   sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
 
+  sphinx-autobuild = callPackage ../development/python-modules/sphinx-argparse { };
+
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree { };
