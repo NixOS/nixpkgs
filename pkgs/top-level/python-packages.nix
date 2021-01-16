@@ -558,6 +558,8 @@ in {
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
+  axis = callPackage ../development/python-modules/axis { };
+
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
 
   azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
@@ -6618,6 +6620,8 @@ in {
   resampy = callPackage ../development/python-modules/resampy { };
 
   responses = callPackage ../development/python-modules/responses { };
+
+  respx = callPackage ../development/python-modules/respx { };
 
   restrictedpython = callPackage ../development/python-modules/restrictedpython { };
 
