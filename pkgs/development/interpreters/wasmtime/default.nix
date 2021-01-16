@@ -1,23 +1,27 @@
-{ rustPlatform, fetchFromGitHub, lib, python3, cmake, llvmPackages, clang, stdenv, darwin }:
+{ rustPlatform, fetchFromGitHub, lib, v8 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "0.21.0";
+  version = "0.35.2";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0q7wsnq5zdskxwzsxwm98jfnv2frnwca1dkhwndcn9yyz2gyw57m";
+    sha256 = "sha256-4oZglk7MInLIsvbeCfs4InAcmSmzZp16XL5+8eoYXJk=";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "1wlig9gls7s1k1swxwhl82vfga30bady8286livxc4y2zp0vb18w";
+  cargoSha256 = "sha256-IqFOw9bGdM3IEoMeqDlxKfLnZvR80PSnwP9kr1tI/h0=";
 
   nativeBuildInputs = [ python3 cmake clang ];
   buildInputs = [ llvmPackages.libclang ] ++
    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+  configurePhase = ''
+    export HOME=$TMP;
+  '';
 
   doCheck = true;
 
