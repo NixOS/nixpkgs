@@ -832,6 +832,8 @@ in {
 
   baron = callPackage ../development/python-modules/baron { };
 
+  base36 = callPackage ../development/python-modules/base36 { };
+
   base58 = callPackage ../development/python-modules/base58 { };
 
   baselines = callPackage ../development/python-modules/baselines { };
