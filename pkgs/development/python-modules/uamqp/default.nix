@@ -1,12 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, isPy3k
 , certifi
-, CFNetwork
 , cmake
 , enum34
 , openssl
-, Security
 , six
-, stdenv
+, CFNetwork
+, CoreFoundation
+, Security
 }:
 
 buildPythonPackage rec {
@@ -18,6 +23,15 @@ buildPythonPackage rec {
     sha256 = "sha256-zDUFe/yMCThn+qJqDekMrUHEf1glGxBw4pioExLLoqg=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Azure/azure-c-shared-utility/commit/52ab2095649b5951e6af77f68954209473296983.patch";
+      sha256 = "06pxhdpkv94pv3lhj1vy0wlsqsdznz485bvg3zafj67r55g40lhd";
+      stripLen = "2";
+      extraPrefix = "src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/";
+    })
+  ];
+
   buildInputs = [
     openssl
     certifi
@@ -25,7 +39,9 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!isPy3k) [
     enum34
   ] ++ lib.optionals stdenv.isDarwin [
-    CFNetwork Security
+    CoreFoundation
+    CFNetwork
+    Security
   ];
 
   dontUseCmakeConfigure = true;
