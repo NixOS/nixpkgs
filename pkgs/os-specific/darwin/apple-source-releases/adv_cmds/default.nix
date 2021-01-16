@@ -1,6 +1,27 @@
-{ lib, stdenv, appleDerivation, xcbuild, ncurses, libutil }:
+{ lib, stdenv, appleDerivation, xcbuild, ncurses, libutil
 
-appleDerivation {
+# loop depends ps -> adv_cmds -> xcbuild -> cmake -> ps, we need a standalone ps to break the chain.
+, psOnly ? false
+}:
+
+if psOnly
+then appleDerivation {
+  setOutputFlags = false;
+  outputs = [ "out" "ps" ];
+
+  buildPhase = ''
+    cd ps
+
+    cc -Os -Wno-#warnings *.c -o ps
+  '';
+
+  installPhase = ''
+    install -D ps -t $ps/bin
+
+    touch $out
+  '';
+}
+else appleDerivation {
   # We can't just run the root build, because https://github.com/facebook/xcbuild/issues/264
 
   patchPhase = ''

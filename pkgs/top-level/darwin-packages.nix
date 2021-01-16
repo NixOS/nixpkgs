@@ -47,6 +47,8 @@ in
 
   print-reexports = callPackage ../os-specific/darwin/apple-sdk/print-reexports { };
 
+  inherit (darwin.adv_cmds.override { psOnly = true; }) ps;
+
   maloader = callPackage ../os-specific/darwin/maloader {
     inherit (darwin) opencflite;
   };

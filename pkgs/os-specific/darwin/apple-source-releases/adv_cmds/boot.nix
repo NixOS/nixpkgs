@@ -60,8 +60,6 @@ in appleDerivation {
     runHook preBuild
 
     bsdmake -C usr-share-locale.tproj
-
-    clang ${recentAdvCmds}/ps/*.c -o ps
   '';
 
   installPhase = ''
@@ -73,13 +71,11 @@ in appleDerivation {
     # install -m 0755 mklocale.tproj/mklocale $locale/bin
 
     install -d 0755 $ps/bin
-    install ps $ps/bin/ps
     touch "$out"
   '';
 
   outputs = [
     "out"
-    "ps"
     "locale"
   ];
   setOutputFlags = false;
