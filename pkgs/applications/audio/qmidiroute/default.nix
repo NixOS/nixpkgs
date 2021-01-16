@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2;
     maintainers = [ maintainers.lebastr ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

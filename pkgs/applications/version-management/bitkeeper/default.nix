@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gperf, bison, groff
+{ lib, stdenv, fetchurl, perl, gperf, bison, groff
 , pkgconfig, libXft, pcre
 , libtomcrypt, libtommath, lz4 }:
 
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
       scales up to very large projects and down to tiny ones.
     '';
     homepage    = "https://www.bitkeeper.org/";
-    license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ wscott thoughtpolice ];
+    license     = lib.licenses.asl20;
+    platforms   = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wscott thoughtpolice ];
     broken      = true; # seems to fail on recent glibc versions
   };
 }

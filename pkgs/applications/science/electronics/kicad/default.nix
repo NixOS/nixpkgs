@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , gnome3
 , wxGTK30
@@ -70,13 +70,13 @@
 # }
 
 assert withNgspice -> libngspice != null;
-assert stdenv.lib.assertMsg (!ngspiceSupport)
+assert lib.assertMsg (!ngspiceSupport)
   "`nspiceSupport` was renamed to `withNgspice` for the sake of consistency with other kicad nix arguments.";
-assert stdenv.lib.assertMsg (!oceSupport)
+assert lib.assertMsg (!oceSupport)
   "`oceSupport` was renamed to `withOCE` for the sake of consistency with other kicad nix arguments.";
-assert stdenv.lib.assertMsg (!scriptingSupport)
+assert lib.assertMsg (!scriptingSupport)
   "`scriptingSupport` was renamed to `withScripting` for the sake of consistency with other kicad nix arguments.";
-assert stdenv.lib.assertMsg (!withOCCT)
+assert lib.assertMsg (!withOCCT)
   "`withOCCT` was renamed to `withOCC` for the sake of consistency with upstream cmake options.";
 let
   baseName = if (stable) then "kicad" else "kicad-unstable";
@@ -151,7 +151,7 @@ let
   python = python3;
   wxPython = python.pkgs.wxPython_4_0;
 
-  inherit (stdenv.lib) concatStringsSep flatten optionalString optionals;
+  inherit (lib) concatStringsSep flatten optionalString optionals;
 in
 stdenv.mkDerivation rec {
 
@@ -251,11 +251,11 @@ stdenv.mkDerivation rec {
       KiCad is an open source software suite for Electronic Design Automation.
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
-    license = stdenv.lib.licenses.agpl3;
+    license = lib.licenses.agpl3;
     # berce seems inactive...
-    maintainers = with stdenv.lib.maintainers; [ evils kiwi berce ];
+    maintainers = with lib.maintainers; [ evils kiwi berce ];
     # kicad is cross platform
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     # despite that, nipkgs' wxGTK for darwin is "wxmac"
     # and wxPython_4_0 does not account for this
     # adjusting this package to downgrade to python2Packages.wxPython (wxPython 3),

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, SDL2 }:
+{ lib, stdenv, fetchFromGitHub, SDL2 }:
 
 stdenv.mkDerivation {
   pname = "oberon-risc-emu";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     mv risc $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://github.com/pdewacht/oberon-risc-emu/";
     description = "Emulator for the Oberon RISC machine";
     license     = licenses.isc;

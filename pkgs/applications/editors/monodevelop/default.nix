@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     2a3,5
     > export MONO_GAC_PREFIX=${gnome-sharp}:${gtk-sharp-2_0}:\$MONO_GAC_PREFIX
     > export PATH=${mono}/bin:\$PATH
-    > export LD_LIBRARY_PATH=${stdenv.lib.makeLibraryPath [ glib gnome2.libgnomeui gnome2.gnome_vfs gnome-sharp gtk-sharp-2_0 gtk-sharp-2_0.gtk ]}:\$LD_LIBRARY_PATH
+    > export LD_LIBRARY_PATH=${lib.makeLibraryPath [ glib gnome2.libgnomeui gnome2.gnome_vfs gnome-sharp gtk-sharp-2_0 gtk-sharp-2_0.gtk ]}:\$LD_LIBRARY_PATH
     >
     EOF
     done

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, cmake, qt4 }:
+{ fetchFromGitHub, lib, stdenv, cmake, qt4 }:
 
 stdenv.mkDerivation {
   name = "resim";
@@ -16,5 +16,5 @@ stdenv.mkDerivation {
     cp -v vc4emul/vc4emul $out/bin/vc4emul
   '';
 
-  meta.license = stdenv.lib.licenses.mit;
+  meta.license = lib.licenses.mit;
 }

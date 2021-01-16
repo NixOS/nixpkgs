@@ -36,6 +36,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.infradead.org/openconnect/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ pradeepchhetri tricktron ];
-    platforms = lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "4.5.1";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "1iaszzkagl1mb0cdafrvlfjnjklhhs9y90517par34sjiqbq1dsd";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     intltool
   ];
-  
+
   buildInputs = [
     libxfce4util
     libxfce4ui
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     xfconf
     gtk3
   ];
-  
+
   passthru.updateScript = xfce.updateScript {
     inherit pname version;
     attrPath = "xfce.${pname}";

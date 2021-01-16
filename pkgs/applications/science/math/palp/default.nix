@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "format"
   ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  patchPhase = lib.optionalString stdenv.isDarwin ''
     substituteInPlace GNUmakefile --replace gcc cc
   '';
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     for file in poly class cws nef mori; do
         cp -p $file.x "$out/bin/$file-${dim}d.x"
     done
-  '' + stdenv.lib.optionalString doSymlink ''
+  '' + lib.optionalString doSymlink ''
     cd "$out/bin"
     for file in poly class cws nef mori; do
         ln -sf $file-6d.x $file.x

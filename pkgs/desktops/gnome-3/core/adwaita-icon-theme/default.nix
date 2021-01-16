@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/adwaita-icon-theme/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/adwaita-icon-theme/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "15xgz9wzk07442x3s3052as95g0223z4pp9qlsgcs323yama30v6";
   };
 

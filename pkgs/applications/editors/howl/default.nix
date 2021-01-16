@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, gtk3, librsvg }:
+{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, gtk3, librsvg }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "howl";

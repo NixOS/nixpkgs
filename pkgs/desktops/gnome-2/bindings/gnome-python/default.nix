@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, python2, pkgconfig, libgnome, GConf, glib, gtk2, gnome_vfs }:
 
-with stdenv.lib;
+with lib;
 
 let
   inherit (python2.pkgs) python pygobject2 pygtk dbus-python;

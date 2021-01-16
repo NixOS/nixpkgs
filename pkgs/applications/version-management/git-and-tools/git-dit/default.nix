@@ -38,7 +38,7 @@ buildRustPackage rec {
     openssl_1_0_2
     libssh
     zlib
-  ] ++ stdenv.lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.isDarwin) [
     curl
     libiconv
     CoreFoundation

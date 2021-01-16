@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
     ghostscript atk gtk2 glib fontconfig freetype
     libgnomecanvas
     pango libX11 xorgproto zlib poppler
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     libgnomeprint libgnomeprintui
   ];
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
 
   NIX_LDFLAGS = "-lz"
-    + stdenv.lib.optionalString (!isGdkQuartzBackend) " -lX11";
+    + lib.optionalString (!isGdkQuartzBackend) " -lX11";
 
   desktopItem = makeDesktopItem {
     name = name;

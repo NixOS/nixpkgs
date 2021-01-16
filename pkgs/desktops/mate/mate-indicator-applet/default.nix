@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.24.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0m7pvbs5hhy5f400wqb8wp0dw3pyjpjnjax9qzc73j97l1k3zawf";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       A small applet to display information from various applications
       consistently in the panel.
-       
+
       The indicator applet exposes Ayatana Indicators in the MATE Panel.
       Ayatana Indicators are an initiative by Canonical to provide crisp and
       clean system and application status indication. They take the form of

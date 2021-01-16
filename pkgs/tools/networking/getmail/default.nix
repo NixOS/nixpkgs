@@ -19,7 +19,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = {
     description = "A program for retrieving mail";
-    maintainers = [ lib.maintainers.raskin stdenv.lib.maintainers.domenkozar ];
+    maintainers = [ lib.maintainers.raskin lib.maintainers.domenkozar ];
     platforms = lib.platforms.linux;
 
     homepage = "http://pyropus.ca/software/getmail/";

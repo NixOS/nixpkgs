@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgconfig, ocaml, findlib, fetchurl, curl, ncurses }:
+{ stdenv, lib, pkgconfig, ocaml, findlib, fetchurl, curl, ncurses, lwt }:
 
 if lib.versionOlder ocaml.version "4.02"
 then throw "ocurl is not available for OCaml ${ocaml.version}"
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig ocaml findlib ncurses ];
-  propagatedBuildInputs = [ curl ];
+  propagatedBuildInputs = [ curl lwt ];
   createFindlibDestdir = true;
   meta = {
     description = "OCaml bindings to libcurl";

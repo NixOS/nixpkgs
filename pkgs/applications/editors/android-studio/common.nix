@@ -72,7 +72,7 @@ let
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
-        --prefix PATH : "${stdenv.lib.makeBinPath [
+        --prefix PATH : "${lib.makeBinPath [
 
           # Checked in studio.sh
           coreutils
@@ -95,7 +95,7 @@ let
           git
           ps
         ]}" \
-        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
 
           # Crash at startup without these
           fontconfig

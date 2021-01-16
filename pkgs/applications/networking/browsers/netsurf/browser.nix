@@ -22,7 +22,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 in
 stdenv.mkDerivation rec {
   pname = "netsurf";

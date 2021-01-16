@@ -111,7 +111,7 @@ in
 
       # Wrap preload libXss
       wrapProgram $out/bin/kodestudio \
-          --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
+          --prefix LD_PRELOAD : ${lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
     '';
 
     meta = with lib; {

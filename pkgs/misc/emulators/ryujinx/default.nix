@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
 
     makeWrapper $out/lib/ryujinx/Ryujinx $out/bin/Ryujinx \
       --set DOTNET_ROOT "${dotnetCorePackages.netcore_3_1}" \
-      --suffix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath runtimeDeps}" \
+      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
       ''${gappsWrapperArgs[@]}
 
     for i in 16 32 48 64 96 128 256 512 1024; do

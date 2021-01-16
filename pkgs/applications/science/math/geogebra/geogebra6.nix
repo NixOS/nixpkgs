@@ -1,4 +1,4 @@
-{ stdenv, unzip, fetchurl, electron_6, makeWrapper, geogebra }:
+{ lib, stdenv, unzip, fetchurl, electron_6, makeWrapper, geogebra }:
 let
   pname = "geogebra";
   version = "6-0-609-0";
@@ -6,7 +6,7 @@ let
   srcIcon = geogebra.srcIcon;
   desktopItem = geogebra.desktopItem;
 
-  meta = with stdenv.lib; geogebra.meta // {
+  meta = with lib; geogebra.meta // {
     license = licenses.geogebra;
     maintainers = with maintainers; [ voidless ];
     platforms = with platforms; linux ++ darwin;
@@ -38,7 +38,7 @@ let
     installPhase = ''
       mkdir -p $out/libexec/geogebra/ $out/bin
       cp -r GeoGebra-linux-x64/{resources,locales} "$out/"
-      makeWrapper ${stdenv.lib.getBin electron_6}/bin/electron $out/bin/geogebra --add-flags "$out/resources/app"
+      makeWrapper ${lib.getBin electron_6}/bin/electron $out/bin/geogebra --add-flags "$out/resources/app"
       install -Dm644 "${desktopItem}/share/applications/"* \
         -t $out/share/applications/
 

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, expat
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, expat
 , libmicrohttpd
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   pname = "stabber-unstable";

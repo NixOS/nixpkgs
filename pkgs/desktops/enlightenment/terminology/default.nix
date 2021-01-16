@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkg-config, efl, pcre, mesa }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, efl, pcre, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "terminology";
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Powerful terminal emulator based on EFL";
     homepage = "https://www.enlightenment.org/about-terminology";
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }

@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "http://archive.notam02.no/arkiv/src";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

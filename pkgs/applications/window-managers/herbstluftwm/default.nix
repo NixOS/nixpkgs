@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, glib, libX11, libXext, libXinerama, libXrandr
+{ lib, stdenv, fetchurl, cmake, pkgconfig, glib, libX11, libXext, libXinerama, libXrandr
 , withDoc ? stdenv.buildPlatform == stdenv.targetPlatform, asciidoc ? null }:
 
 # Doc generation is disabled by default when cross compiling because asciidoc
@@ -17,19 +17,19 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
-  ] ++ stdenv.lib.optionals withDoc [
+  ] ++ lib.optionals withDoc [
     "doc"
     "man"
   ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_SYSCONF_PREFIX=${placeholder "out"}/etc"
-  ] ++ stdenv.lib.optional (!withDoc) "-DWITH_DOCUMENTATION=OFF";
+  ] ++ lib.optional (!withDoc) "-DWITH_DOCUMENTATION=OFF";
 
   nativeBuildInputs = [
     cmake
     pkgconfig
-  ] ++ stdenv.lib.optional withDoc asciidoc;
+  ] ++ lib.optional withDoc asciidoc;
 
   buildInputs = [
     libX11
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A manual tiling window manager for X";
     homepage = "https://herbstluftwm.org/";
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
   };
 }

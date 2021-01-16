@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp git-recent $out/bin
     wrapProgram $out/bin/git-recent \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ git less util-linux ]}"
+      --prefix PATH : "${lib.makeBinPath [ git less util-linux ]}"
   '';
 
   meta = with lib; {

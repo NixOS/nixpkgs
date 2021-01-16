@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp git-annex-remote-rclone $out/bin
     wrapProgram "$out/bin/git-annex-remote-rclone" \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ rclone ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ rclone ]}"
   '';
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, python3Packages, makeWrapper
+{ lib, stdenv, fetchFromGitHub, pkgconfig, python3Packages, makeWrapper
 , bash, libsamplerate, libsndfile, readline, eigen, celt
 , wafHook
 # Darwin Dependencies
@@ -12,10 +12,10 @@
 , prefix ? ""
 }:
 
-with stdenv.lib;
+with lib;
 let
   inherit (python3Packages) python dbus-python;
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && lib.any (lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
 
   libOnly = prefix == "lib";
 

@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Virtual Pipe Organ Software";
     homepage = "https://sourceforge.net/projects/ourorgan";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.puzzlewolf ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.puzzlewolf ];
   };
 }

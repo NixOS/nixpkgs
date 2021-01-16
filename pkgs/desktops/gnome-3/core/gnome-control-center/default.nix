@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "09i011hf23s2i4wim43vjys7y4y43cxl3kyvrnrwqvqgc5n0144d";
   };
   # See https://mail.gnome.org/archives/distributor-list/2020-September/msg00001.html

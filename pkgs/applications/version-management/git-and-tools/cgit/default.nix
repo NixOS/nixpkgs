@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
+{ lib, stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
 , docbook_xsl, pkgconfig, luajit
 , coreutils, gnused, groff, docutils
 , gzip, bzip2, lzip, xz, zstd
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/lib/cgit/filters" "$out $pythonPath"
 
     for script in $out/lib/cgit/filters/*.sh $out/lib/cgit/filters/html-converters/txt2html; do
-      wrapProgram $script --prefix PATH : '${stdenv.lib.makeBinPath [ coreutils gnused ]}'
+      wrapProgram $script --prefix PATH : '${lib.makeBinPath [ coreutils gnused ]}'
     done
   '';
 
@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
     homepage = "https://git.zx2c4.com/cgit/about/";
     repositories.git = "git://git.zx2c4.com/cgit";
     description = "Web frontend for git repositories";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ bjornfor ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

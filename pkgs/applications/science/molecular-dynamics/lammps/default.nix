@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ fftw libpng blas lapack gzip ]
-    ++ (stdenv.lib.optionals withMPI [ mpi ]);
+    ++ (lib.optionals withMPI [ mpi ]);
 
   configurePhase = ''
     cd src
-    for pack in ${stdenv.lib.concatStringsSep " " packages}; do make "yes-$pack" SHELL=$SHELL; done
+    for pack in ${lib.concatStringsSep " " packages}; do make "yes-$pack" SHELL=$SHELL; done
   '';
 
   # Must do manual build due to LAMMPS requiring a seperate build for

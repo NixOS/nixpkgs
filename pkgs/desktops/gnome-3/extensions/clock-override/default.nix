@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, gnome3, gettext, glib }:
+{ lib, stdenv, fetchzip, gnome3, gettext, glib }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-clock-override";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Customize the date and time format displayed in clock in the top bar in GNOME Shell";
     license = licenses.mit;
     maintainers = with maintainers; [ rhoriguchi ];

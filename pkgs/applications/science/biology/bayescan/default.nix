@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = stdenv.lib.optional stdenv.cc.isClang llvmPackages.openmp;
+  buildInputs = lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   # Disable FORTIFY_SOURCE or the binary fails with "buffer overflow"
   hardeningDisable = [ "fortify" ];
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "http://cmpg.unibe.ch/software/BayeScan";
     license = licenses.gpl3;
     maintainers = [ maintainers.bzizou ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -7,6 +7,7 @@
 , appstream
 , appstream-glib
 , wrapGAppsHook
+, desktop-file-utils
 , gobject-introspection
 , gtksourceview4
 , gspell
@@ -17,13 +18,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
-  version = "0.3.2";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
-    sha256 = "1c7jrq20m53y2k8lmh37zldgc3bndldxipx4xq0lz3qq2fv1gg07";
+    sha256 = "1qmy2bxl8x6pijjaaj91v6rqdipha6iyy0b6b9y1lk3r2p3azd42";
   };
 
   format = "other";
@@ -35,6 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     appstream # for appstreamcli
     appstream-glib
     wrapGAppsHook
+    desktop-file-utils
   ];
 
   buildInputs = [
@@ -49,6 +51,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3
     pyxdg
+    pypdf2
   ];
 
   meta = with lib; {

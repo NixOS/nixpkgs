@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://fedorahosted.org/sssd/";
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ e-user ];
-    license = [ lib.licenses.gpl3 stdenv.lib.licenses.lgpl3 ];
+    license = [ lib.licenses.gpl3 lib.licenses.lgpl3 ];
   };
 }

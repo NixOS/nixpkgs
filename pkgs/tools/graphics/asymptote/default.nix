@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    (lib.optional (stdenv.lib.versionOlder version "2.68")
+    (lib.optional (lib.versionOlder version "2.68")
       (fetchpatch {
         url = "https://github.com/vectorgraphics/asymptote/commit/3361214340d58235f4dbb8f24017d0cd5d94da72.patch";
         sha256 = "sha256:1z2b41x8v7683myd45lq6niixpdjy0b185x0xl61130vrijhq5nm";

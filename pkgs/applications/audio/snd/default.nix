@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , gtk2, alsaLib
 , fftw, gsl
 }:
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Sound editor";
     homepage = "http://ccrma.stanford.edu/software/snd";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ ];
   };
 
 

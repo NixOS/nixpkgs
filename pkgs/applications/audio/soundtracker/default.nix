@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     jack2
     audiofile
     goocanvas
-  ] ++ stdenv.lib.optional stdenv.isLinux alsaLib;
+  ] ++ lib.optional stdenv.isLinux alsaLib;
 
   hardeningDisable = [ "format" ];
 

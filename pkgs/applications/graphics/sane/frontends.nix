@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ sane-backends libX11 gtk2 ]
-    ++ stdenv.lib.optional (libusb-compat-0_1 != null) libusb-compat-0_1;
+    ++ lib.optional (libusb-compat-0_1 != null) libusb-compat-0_1;
   nativeBuildInputs = [ pkgconfig ];
 
   enableParallelBuilding = true;

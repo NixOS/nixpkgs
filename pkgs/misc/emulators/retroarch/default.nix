@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, pkgconfig, makeWrapper
+{ lib, stdenv, fetchFromGitHub, which, pkgconfig, makeWrapper
 , ffmpeg_3, libGLU, libGL, freetype, libxml2, python3
 , libobjc, AppKit, Foundation
 , alsaLib ? null
@@ -19,7 +19,7 @@
 , libxkbcommon
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = stdenv.lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
+  configureFlags = lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
 
   postInstall = optionalString withVulkan ''
     wrapProgram $out/bin/retroarch --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib

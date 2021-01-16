@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       Development Environment), and COGRE (COnnected GRaph Editor).
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     homepage = "http://cedet.sourceforge.net/";
 

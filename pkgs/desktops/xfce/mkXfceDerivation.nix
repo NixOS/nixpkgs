@@ -14,7 +14,7 @@
 
 let
   inherit (builtins) filter getAttr head isList;
-  inherit (stdenv.lib) attrNames concatLists recursiveUpdate zipAttrsWithNames;
+  inherit (lib) attrNames concatLists recursiveUpdate zipAttrsWithNames;
 
   filterAttrNames = f: attrs:
     filter (n: f (getAttr n attrs)) (attrNames attrs);

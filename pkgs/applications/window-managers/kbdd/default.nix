@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, dbus-glib, autoreconfHook, xorg }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, dbus-glib, autoreconfHook, xorg }:
 
 stdenv.mkDerivation {
   pname = "kbdd";
@@ -17,8 +17,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Simple daemon and library to make per window layout using XKB";
     homepage = "https://github.com/qnikst/kbdd";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.wedens ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.wedens ];
   };
 }

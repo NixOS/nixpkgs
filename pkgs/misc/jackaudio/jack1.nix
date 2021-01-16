@@ -5,7 +5,7 @@
 }:
 
 let
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && lib.any (lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
 
   optAlsaLib = shouldUsePkg alsaLib;
   optDb = shouldUsePkg db;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    (stdenv.lib.enableFeature (optLibffado != null) "firewire")
+    (lib.enableFeature (optLibffado != null) "firewire")
   ];
 
   nativeBuildInputs = [ pkgconfig ];

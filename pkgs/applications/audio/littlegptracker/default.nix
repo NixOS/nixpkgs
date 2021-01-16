@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL
   ]
-  ++ stdenv.lib.optional stdenv.isDarwin Foundation
-  ++ stdenv.lib.optional stdenv.isLinux jack2;
+  ++ lib.optional stdenv.isDarwin Foundation
+  ++ lib.optional stdenv.isLinux jack2;
 
   patches = [
     # Remove outdated (pre-64bit) checks that would fail on modern platforms
@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
   preBuild = "cd projects";
 
   makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ]
-    ++ stdenv.lib.optionals stdenv.isLinux  [ "PLATFORM=DEB" ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "PLATFORM=OSX" ];
+    ++ lib.optionals stdenv.isLinux  [ "PLATFORM=DEB" ]
+    ++ lib.optionals stdenv.isDarwin [ "PLATFORM=OSX" ];
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ] ++
-    stdenv.lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
+    lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
 
-  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin "-framework Foundation";
+  NIX_LDFLAGS = lib.optional stdenv.isDarwin "-framework Foundation";
 
   installPhase = let extension = if stdenv.isDarwin then "app" else "deb-exe";
     in "install -Dm555 lgpt.${extension} $out/bin/lgpt";

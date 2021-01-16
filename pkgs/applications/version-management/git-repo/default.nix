@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   # Important runtime dependencies
   postFixup = ''
     wrapProgram $out/bin/repo --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ git gnupg less ]}"
+      "${lib.makeBinPath [ git gnupg less ]}"
   '';
 
   meta = with lib; {

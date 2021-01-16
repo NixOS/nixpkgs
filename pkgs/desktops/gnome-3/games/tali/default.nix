@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/tali/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/tali/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "196f6hiap61sdqr7kvywk74yl0m2j7fvqml37p6cgfm7gfrhrvi9";
   };
 

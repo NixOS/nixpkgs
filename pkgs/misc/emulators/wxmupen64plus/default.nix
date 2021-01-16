@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, wxGTK29, mupen64plus, SDL, libX11, libGLU, libGL
+{ lib, stdenv, fetchurl, python, wxGTK29, mupen64plus, SDL, libX11, libGLU, libGL
 , wafHook }:
 
 stdenv.mkDerivation {
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "GUI for the Mupen64Plus 2.0 emulator";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://bitbucket.org/auria/wxmupen64plus/wiki/Home";
   };
 }

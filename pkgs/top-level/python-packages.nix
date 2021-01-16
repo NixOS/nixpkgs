@@ -558,6 +558,8 @@ in {
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
+  axis = callPackage ../development/python-modules/axis { };
+
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
 
   azure-applicationinsights = callPackage ../development/python-modules/azure-applicationinsights { };
@@ -831,6 +833,8 @@ in {
   bap = callPackage ../development/python-modules/bap { bap = pkgs.ocaml-ng.ocamlPackages_4_07.bap; };
 
   baron = callPackage ../development/python-modules/baron { };
+
+  base36 = callPackage ../development/python-modules/base36 { };
 
   base58 = callPackage ../development/python-modules/base58 { };
 
@@ -2821,6 +2825,8 @@ in {
   HAP-python = callPackage ../development/python-modules/HAP-python { };
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
+
+  hatasmota = callPackage ../development/python-modules/hatasmota { };
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
 
@@ -6621,6 +6627,8 @@ in {
 
   responses = callPackage ../development/python-modules/responses { };
 
+  respx = callPackage ../development/python-modules/respx { };
+
   restrictedpython = callPackage ../development/python-modules/restrictedpython { };
 
   restructuredtext_lint = callPackage ../development/python-modules/restructuredtext_lint { };
@@ -7645,6 +7653,8 @@ in {
   else
     callPackage ../development/python-modules/toolz/2.nix { };
 
+  toonapi = callPackage ../development/python-modules/toonapi { };
+
   toposort = callPackage ../development/python-modules/toposort { };
 
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
@@ -7793,8 +7803,9 @@ in {
 
   tzlocal = callPackage ../development/python-modules/tzlocal { };
 
-  uamqp =
-    callPackage ../development/python-modules/uamqp { inherit (pkgs.darwin.apple_sdk.frameworks) CFNetwork Security; };
+  uamqp = callPackage ../development/python-modules/uamqp {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CFNetwork CoreFoundation Security;
+  };
 
   ua-parser = callPackage ../development/python-modules/ua-parser { };
 

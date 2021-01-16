@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, writeScript, nixosTests, common-updater-scripts
+{ lib, stdenv, fetchFromGitHub, writeScript, nixosTests, common-updater-scripts
 , coreutils, git, gnused, nix, nixfmt }:
 
 let
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     #!${stdenv.shell}
     set -o errexit
     PATH=${
-      stdenv.lib.makeBinPath [
+      lib.makeBinPath [
         common-updater-scripts
         coreutils
         git
@@ -51,8 +51,8 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Improved Nano Syntax Highlighting Files";
     homepage = "https://github.com/scopatz/nanorc";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ nequissimus ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ nequissimus ];
+    platforms = lib.platforms.all;
   };
 }

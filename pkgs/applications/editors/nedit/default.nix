@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ motif libXpm ];
 
   # the linux config works fine on darwin too!
-  buildFlags = stdenv.lib.optional (stdenv.isLinux || stdenv.isDarwin) "linux";
+  buildFlags = lib.optional (stdenv.isLinux || stdenv.isDarwin) "linux";
 
   NIX_CFLAGS_COMPILE="-DBUILD_UNTESTED_NEDIT -L${motif}/lib";
 

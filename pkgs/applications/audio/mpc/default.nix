@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qbi0i9cq54rj8z2kapk8x8g1jkw2jz781niwb9i7kw4xfhvy5zx";
   };
 
-  buildInputs = [ mpd_clientlib ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ mpd_clientlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   nativeBuildInputs = [ meson ninja pkgconfig sphinx ];
 

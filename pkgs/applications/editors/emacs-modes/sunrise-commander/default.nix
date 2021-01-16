@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Two-pane file manager for Emacs based on Dired and inspired by MC";
     homepage = "http://www.emacswiki.org/emacs/Sunrise_Commander";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

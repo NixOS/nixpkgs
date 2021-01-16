@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, git, gnupg }:
+{ lib, stdenv, fetchFromGitHub, git, gnupg }:
 
 let version = "2.5.0"; in
 stdenv.mkDerivation {
@@ -35,8 +35,8 @@ stdenv.mkDerivation {
       * Provides a way to use alternate files on a specific OS or host.
       * Supplies a method of encrypting confidential data so it can safely be stored in your repository.
     '';
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ abathur ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ abathur ];
+    platforms = lib.platforms.unix;
   };
 }

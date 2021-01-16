@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
                   xorg.xcbutil xorg.xcbutilimage xorg.xcbutilkeysyms
                   xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
                   xcbutilxrm ]
-                  ++ stdenv.lib.optional gtk3Support gtk3;
+                  ++ lib.optional gtk3Support gtk3;
 
   cmakeFlags = [
     #"-DGENERATE_MANPAGES=ON"
     "-DOVERRIDE_VERSION=${version}"
-  ] ++ stdenv.lib.optional luaPackages.isLuaJIT "-DLUA_LIBRARY=${lua}/lib/libluajit-5.1.so"
+  ] ++ lib.optional luaPackages.isLuaJIT "-DLUA_LIBRARY=${lua}/lib/libluajit-5.1.so"
   ;
 
   GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";

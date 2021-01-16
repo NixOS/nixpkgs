@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fltk, openexr, libGLU, libGL, ctl }:
+{ lib, stdenv, fetchurl, pkgconfig, fltk, openexr, libGLU, libGL, ctl }:
 
 stdenv.mkDerivation {
   name ="openexr_viewers-2.2.1";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Application for viewing OpenEXR images on a display at various exposure settings";
     homepage = "http://openexr.com";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
 }

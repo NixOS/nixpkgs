@@ -1,9 +1,9 @@
-{ stdenv, fetchpatch, fetchFromGitHub, cmake, zlib, gmp, jdk8,
+{ lib, stdenv, fetchpatch, fetchFromGitHub, cmake, zlib, gmp, jdk8,
   # The JDK we use on Darwin currenly makes extensive use of rpaths which are
   # annoying and break the python library, so let's not bother for now
   includeJava ? !stdenv.hostPlatform.isDarwin, includeGplCode ? true }:
 
-with stdenv.lib;
+with lib;
 
 let
   boolToCmake = x: if x then "ON" else "OFF";

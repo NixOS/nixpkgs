@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, cmake, graphviz, pkg-config }:
+{ lib, stdenv, fetchurl, qt4, cmake, graphviz, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "qfsm-0.54.0";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Graphical editor for finite state machines";
     homepage = "http://qfsm.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

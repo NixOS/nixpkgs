@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "09v991rl2w4c4jh7ga7q1lk6wyl2vr71j5cpniij8mcvszrz78qf";
 
   nativeBuildInputs = [ cmake pkgconfig python3 ];
-  buildInputs = [ openssl xorg.libxcb libgit2 ] ++ stdenv.lib.optionals stdenv.isDarwin
+  buildInputs = [ openssl xorg.libxcb libgit2 ] ++ lib.optionals stdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [ curl Security AppKit ]);
 
   # Tests need to write to the theme directory in HOME.
