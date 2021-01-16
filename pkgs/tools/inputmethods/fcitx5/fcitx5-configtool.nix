@@ -6,6 +6,7 @@
 , fcitx5
 , fcitx5-qt
 , qtx11extras
+, qtquickcontrols2
 , kwidgetsaddons
 , kdeclarative
 , kirigami2
@@ -18,13 +19,13 @@
 
 mkDerivation rec {
   pname = "fcitx5-configtool";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-configtool";
     rev = version;
-    sha256 = "npSqd0R6bqKc+JxYCGcfVzgNLpuLtnHq6zM58smZ8/I=";
+    sha256 = "sha256-kw0KIbS5SVMf6kR/9xsYiChHXQBM0enSVXyh0QfiiPY=";
   };
 
   cmakeFlags = [
@@ -40,6 +41,7 @@ mkDerivation rec {
     fcitx5
     fcitx5-qt
     qtx11extras
+    qtquickcontrols2
     kirigami2
     isocodes
     xkeyboardconfig
