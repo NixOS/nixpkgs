@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.coker.com.au/bonnie++/";
     description = "Hard drive and file system benchmark suite";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

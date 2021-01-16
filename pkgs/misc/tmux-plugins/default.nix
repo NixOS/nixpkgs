@@ -88,9 +88,9 @@ in rec {
         computer or server restarts, if the machine is on, tmux will be there how
         you left it off the last time it was used.
       '';
-      license = stdenv.lib.licenses.mit;
-      platforms = stdenv.lib.platforms.unix;
-      maintainers = with stdenv.lib.maintainers; [ ronanmacf ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ronanmacf ];
     };
   };
 
@@ -379,9 +379,9 @@ in rec {
           * restoring vim and neovim sessions
           * restoring pane contents
       '';
-      license = stdenv.lib.licenses.mit;
-      platforms = stdenv.lib.platforms.unix;
-      maintainers = with stdenv.lib.maintainers; [ ronanmacf ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ronanmacf ];
     };
   };
 
@@ -491,9 +491,9 @@ in rec {
         * User menu.
         * Popup window support.
       '';
-      license = stdenv.lib.licenses.mit;
-      platforms = stdenv.lib.platforms.unix;
-      maintainers = with stdenv.lib.maintainers; [ kyleondy ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ kyleondy ];
     };
   };
 

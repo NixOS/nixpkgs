@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   qtWrapperArgs =
-    [ ''--prefix PATH : ${stdenv.lib.makeBinPath [ wirelesstools iw ]}'' ];
+    [ ''--prefix PATH : ${lib.makeBinPath [ wirelesstools iw ]}'' ];
 
   meta = with lib; {
     description = "Graphical wireless scanning for Linux";

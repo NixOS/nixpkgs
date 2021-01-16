@@ -11,7 +11,7 @@ let
 
     buildInputs = znc.buildInputs;
 
-    meta = a.meta // { platforms = stdenv.lib.platforms.unix; };
+    meta = a.meta // { platforms = lib.platforms.unix; };
     passthru.module_name = module_name;
   });
 
@@ -93,7 +93,7 @@ in {
     meta = {
       description = "ZNC FiSH module";
       homepage = "https://github.com/dctrwatson/znc-fish";
-      maintainers = [ stdenv.lib.maintainers.offline ];
+      maintainers = [ lib.maintainers.offline ];
     };
   };
 
@@ -190,8 +190,8 @@ in {
     meta = {
       description = "Push notification service module for ZNC";
       homepage = "https://github.com/jreese/znc-push";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ offline schneefux ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ offline schneefux ];
     };
   };
 

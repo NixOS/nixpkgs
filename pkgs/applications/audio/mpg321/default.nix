@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ ("--enable-alsa=" + (if stdenv.isLinux then "yes" else "no")) ]
-    ++ (stdenv.lib.optional (defaultAudio != null)
+    ++ (lib.optional (defaultAudio != null)
          "--with-default-audio=${defaultAudio}");
 
   buildInputs = [libao libid3tag libmad zlib]
-    ++ stdenv.lib.optional stdenv.isLinux alsaLib;
+    ++ lib.optional stdenv.isLinux alsaLib;
 
   installTargets = [ "install" "install-man" ];
 

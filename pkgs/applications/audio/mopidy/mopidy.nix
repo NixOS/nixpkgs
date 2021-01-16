@@ -32,7 +32,7 @@ pythonPackages.buildPythonApplication rec {
       requests
       setuptools
       tornado
-    ] ++ stdenv.lib.optional (!stdenv.isDarwin) dbus-python
+    ] ++ lib.optional (!stdenv.isDarwin) dbus-python
   );
 
   # There are no tests

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wrapGAppsHook, gettext
+{ lib, stdenv, fetchFromGitHub, wrapGAppsHook, gettext
 , python3Packages, gnome3, gtk3, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
 
 let
@@ -74,8 +74,8 @@ in buildPythonApplication rec {
        - Available in 24 languages
     '';
     homepage = "https://www.nongnu.org/sonata/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.rvl ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.rvl ];
   };
 }

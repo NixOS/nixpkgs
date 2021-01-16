@@ -6,7 +6,7 @@
   webkitgtk ? null,
   keybinder3 ? null, gtksourceview ? null, libmodplug ? null, kakasi ? null, libappindicator-gtk3 ? null }:
 
-let optionals = stdenv.lib.optionals; in
+let optionals = lib.optionals; in
 python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
   version = "4.3.0";
@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  pytestFlags = stdenv.lib.optionals (xineBackend || !withGstPlugins) [
+  pytestFlags = lib.optionals (xineBackend || !withGstPlugins) [
     "--ignore=tests/plugin/test_replaygain.py"
   ] ++ [
     # requires networking
@@ -65,7 +65,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  preFixup = stdenv.lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
+  preFixup = lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
 
   meta = with lib; {
     description = "GTK-based audio player written in Python, using the Mutagen tagging library";

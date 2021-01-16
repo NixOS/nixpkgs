@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       '';
     homepage = "https://bitbucket.org/gotoh/connect/wiki/Home";
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.gnu ++ stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ jcumming ];
   };
 }

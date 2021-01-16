@@ -6,10 +6,10 @@
 
 let
 
-  d2u = stdenv.lib.replaceChars ["-"] ["_"];
+  d2u = lib.replaceChars ["-"] ["_"];
 
   mkLibRetroCore = { core, src, description, license, broken ? false, ... }@a:
-  stdenv.lib.makeOverridable stdenv.mkDerivation ((rec {
+  lib.makeOverridable stdenv.mkDerivation ((rec {
 
     name = "libretro-${a.core}-${version}";
     version = "2020-03-06";
@@ -62,7 +62,7 @@ let
     fetchSubmodules = true;
   };
 
-in with stdenv.lib.licenses;
+in with lib.licenses;
 
 {
 
@@ -313,8 +313,8 @@ in with stdenv.lib.licenses;
     license = gpl2;
     extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
     preBuild = "cd desmume/src/frontend/libretro";
-    makeFlags = stdenv.lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
-             ++ stdenv.lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
+    makeFlags = lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
+             ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
   };
 
   desmume2015 = mkLibRetroCore rec {
@@ -327,8 +327,8 @@ in with stdenv.lib.licenses;
     description = "libretro wrapper for desmume NDS emulator from 2015";
     license = gpl2;
     extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
-    makeFlags = stdenv.lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
-             ++ stdenv.lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
+    makeFlags = lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
+             ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
     preBuild = "cd desmume";
   };
 
@@ -435,7 +435,7 @@ in with stdenv.lib.licenses;
     license = gpl2;
     extraBuildInputs = [ libGL libGLU ];
     makefile = "Makefile";
-    makeFlags = stdenv.lib.optional stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
+    makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=arm64" ];
     meta.platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 
@@ -505,7 +505,7 @@ in with stdenv.lib.licenses;
       sha256 = "1jhgfys8hiipvbwq3gc48d7v6wq645d10rbr4w5m6px0fk6csshk";
     };
     description = "Port of Game and Watch to libretro";
-    license = stdenv.lib.licenses.zlib;
+    license = lib.licenses.zlib;
     makefile = "Makefile";
   };
 
@@ -567,7 +567,7 @@ in with stdenv.lib.licenses;
     description = "Port of MAME ~2000 to libretro";
     license = gpl2Plus;
     makefile = "Makefile";
-    makeFlags = stdenv.lib.optional (!stdenv.hostPlatform.isx86) "IS_X86=0";
+    makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "IS_X86=0";
   };
 
   mame2003 = mkLibRetroCore rec {
@@ -604,7 +604,7 @@ in with stdenv.lib.licenses;
     description = "Port of MAME ~2010 to libretro";
     license = gpl2Plus;
     makefile = "Makefile";
-    makeFlags = stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
+    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
   };
 
   mame2015 = mkLibRetroCore rec {
@@ -778,7 +778,7 @@ in with stdenv.lib.licenses;
     license = gpl2;
     extraBuildInputs = [ libGLU libGL libpng ];
     makefile = "Makefile";
-    postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
       sed -i -e '1 i\CPUFLAGS += -DARM_FIX -DNO_ASM -DARM_ASM -DDONT_WANT_ARM_OPTIMIZATIONS -DARM64' Makefile \
       && sed -i -e 's,CPUFLAGS  :=,,g' Makefile
     '';
@@ -810,7 +810,7 @@ in with stdenv.lib.licenses;
     SDL_CONFIG = "${SDL.dev}/bin/sdl-config";
     dontAddPrefix = true;
     configurePlatforms = [];
-    makeFlags = stdenv.lib.optional stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
+    makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
   };
 
   play = mkLibRetroCore {
@@ -1091,7 +1091,7 @@ in with stdenv.lib.licenses;
     license = gpl2;
     makefile = "Makefile";
     # Disable SSE for non-x86. DYNAREC doesn't build on either Aarch64 or x86_64.
-    makeFlags = stdenv.lib.optional (!stdenv.hostPlatform.isx86) "HAVE_SSE=0";
+    makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "HAVE_SSE=0";
     preBuild = "cd yabause/src/libretro";
   };
 

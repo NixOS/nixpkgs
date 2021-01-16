@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake
+{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake
 , libjpeg ? null
 , zlib ? null
 , libpng ? null
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A library for computer-vision scientists and targeted for the Multiple View Geometry community";
     homepage = "https://openmvg.readthedocs.io/en/latest/";
-    license = stdenv.lib.licenses.mpl20;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ mdaiter ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mdaiter ];
   };
 }

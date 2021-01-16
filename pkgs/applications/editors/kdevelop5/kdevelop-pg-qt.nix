@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
       It is used for some KDevelop-languagesupport-plugins (Ruby, PHP, CSS...).
     '';
     homepage = "https://www.kdevelop.org";
-    license = with stdenv.lib.licenses; [ lgpl2Plus ];
+    license = with lib.licenses; [ lgpl2Plus ];
   };
 }

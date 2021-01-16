@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/git-reparent --prefix PATH : "${stdenv.lib.makeBinPath [ git gnused ]}"
+    wrapProgram $out/bin/git-reparent --prefix PATH : "${lib.makeBinPath [ git gnused ]}"
   '';
 
   meta = with lib; {

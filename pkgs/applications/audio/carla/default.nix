@@ -5,7 +5,7 @@
   withGtk2 ? true, gtk2 ? null,
   withGtk3 ? true, gtk3 ? null }:
 
-with stdenv.lib;
+with lib;
 
 assert withFrontend -> python3Packages ? pyqt5;
 assert withQt -> qtbase != null;

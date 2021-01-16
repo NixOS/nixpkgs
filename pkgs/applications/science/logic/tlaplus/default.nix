@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , adoptopenjdk-bin, jre, ant
 }:
 
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An algorithm specification language with model checking tools";
     homepage    = "http://lamport.azurewebsites.net/tla/tla.html";
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

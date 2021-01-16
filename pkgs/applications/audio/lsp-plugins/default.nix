@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, makeWrapper
+{ lib, stdenv, fetchFromGitHub, pkgconfig, makeWrapper
 , libsndfile, jack2Full
 , libGLU, libGL, lv2, cairo
 , ladspaH, php }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "release" ];
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Collection of open-source audio plugins";
       longDescription = ''
         Compatible with follwing formats:

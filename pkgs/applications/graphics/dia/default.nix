@@ -16,8 +16,8 @@ stdenv.mkDerivation {
   buildInputs =
     [ gtk2 libxml2 gettext python libxml2Python docbook5
       libxslt docbook_xsl libart_lgpl ]
-      ++ stdenv.lib.optional withGNOME libgnomeui
-      ++ stdenv.lib.optional stdenv.isDarwin gtk-mac-integration-gtk2;
+      ++ lib.optional withGNOME libgnomeui
+      ++ lib.optional stdenv.isDarwin gtk-mac-integration-gtk2;
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig intltool ]
     ++ (with perlPackages; [ perl XMLParser ]);
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh # autoreconfHook is not enough
   '';
-  configureFlags = stdenv.lib.optional withGNOME "--enable-gnome";
+  configureFlags = lib.optional withGNOME "--enable-gnome";
 
   hardeningDisable = [ "format" ];
 

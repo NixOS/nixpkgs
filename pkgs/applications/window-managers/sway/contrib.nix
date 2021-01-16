@@ -34,7 +34,7 @@ grimshot = stdenv.mkDerivation rec {
 
     install -Dm 0755 contrib/grimshot $out/bin/grimshot
     wrapProgram $out/bin/grimshot --set PATH \
-      "${stdenv.lib.makeBinPath [
+      "${lib.makeBinPath [
         sway-unwrapped
         wl-clipboard
         coreutils

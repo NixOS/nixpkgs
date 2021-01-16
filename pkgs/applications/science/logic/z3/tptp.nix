@@ -1,4 +1,4 @@
-{stdenv, z3, cmake}:
+{lib, stdenv, z3, cmake}:
 stdenv.mkDerivation rec {
   pname = "z3-tptp";
   version = z3.version;
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     inherit version;
     inherit (z3.meta) license homepage platforms;
     description = ''TPTP wrapper for Z3 prover'';
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = [lib.maintainers.raskin];
   };
 }

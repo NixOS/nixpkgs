@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, curl, boost, eigen
+{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake, curl, boost, eigen
 , freeimage, freetype, libGLU, libGL, SDL2, alsaLib, libarchive
 , fetchpatch }:
 
@@ -30,8 +30,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A flexible emulator front-end supporting keyboardless navigation and custom system themes";
     homepage = "https://emulationstation.org";
-    maintainers = [ stdenv.lib.maintainers.edwtjo ];
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.edwtjo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

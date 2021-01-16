@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Free cross-platform programming exerciser";
     license = licenses.gpl3;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     broken = true;
   };
 }

@@ -19,9 +19,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ acl curl xz zstd ]
-                ++ stdenv.lib.optionals (fuseSupport) [ fuse ]
-                ++ stdenv.lib.optionals (selinuxSupport) [ libselinux ]
-                ++ stdenv.lib.optionals (udevSupport) [ udev ];
+                ++ lib.optionals (fuseSupport) [ fuse ]
+                ++ lib.optionals (selinuxSupport) [ libselinux ]
+                ++ lib.optionals (udevSupport) [ udev ];
   nativeBuildInputs = [ meson ninja pkgconfig python3 sphinx ];
   checkInputs = [ glibcLocales rsync ];
 
@@ -33,9 +33,9 @@ stdenv.mkDerivation {
   '';
 
   PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
-  mesonFlags = stdenv.lib.optionals (!fuseSupport) [ "-Dfuse=false" ]
-               ++ stdenv.lib.optionals (!udevSupport) [ "-Dudev=false" ]
-               ++ stdenv.lib.optionals (!selinuxSupport) [ "-Dselinux=false" ];
+  mesonFlags = lib.optionals (!fuseSupport) [ "-Dfuse=false" ]
+               ++ lib.optionals (!udevSupport) [ "-Dudev=false" ]
+               ++ lib.optionals (!selinuxSupport) [ "-Dselinux=false" ];
 
   doCheck = true;
   preCheck = ''

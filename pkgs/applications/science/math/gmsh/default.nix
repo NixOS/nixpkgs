@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, blas, lapack, gfortran, gmm, fltk, libjpeg
+{ lib, stdenv, fetchurl, cmake, blas, lapack, gfortran, gmm, fltk, libjpeg
 , zlib, libGL, libGLU, xorg, opencascade-occt }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "A three-dimensional finite element mesh generator";
     homepage = "http://gmsh.info/";
     platforms = [ "x86_64-linux" ];
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

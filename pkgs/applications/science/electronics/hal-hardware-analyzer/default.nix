@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja pkgconfig ];
   buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog fmt graphviz wrapQtAppsHook ]
     ++ (with python3Packages; [ python pybind11 ])
-    ++ stdenv.lib.optional stdenv.cc.isClang llvmPackages.openmp;
+    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  cmakeFlags = with stdenv.lib.versions; [
+  cmakeFlags = with lib.versions; [
     "-DHAL_VERSION_RETURN=${version}"
     "-DHAL_VERSION_MAJOR=${major version}"
     "-DHAL_VERSION_MINOR=${minor version}"

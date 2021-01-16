@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, mpd_clientlib, ncurses, pkgconfig, readline
+{ lib, stdenv, fetchurl, boost, mpd_clientlib, ncurses, pkgconfig, readline
 , libiconv, icu, curl
 , outputsSupport ? true # outputs screen
 , visualizerSupport ? false, fftw ? null # visualizer screen
@@ -9,7 +9,7 @@
 assert visualizerSupport -> (fftw != null);
 assert taglibSupport -> (taglib != null);
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "ncmpcpp";
   version = "0.9.1";

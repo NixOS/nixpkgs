@@ -48,7 +48,7 @@
 , systemd
 , zlib
 }:
-with stdenv.lib;
+with lib;
 let
   deps = [
     alsaLib
@@ -88,7 +88,7 @@ let
     systemd
     zlib
   ];
-  rpath = stdenv.lib.makeLibraryPath deps ;
+  rpath = lib.makeLibraryPath deps ;
 in
 stdenv.mkDerivation rec {
   pname = "appgate-sdp";
@@ -156,7 +156,7 @@ stdenv.mkDerivation rec {
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "$ORIGIN:$out/opt/appgate/service/:$out/opt/appgate/:${rpath}" $binary
     done
 
-    wrapProgram $out/opt/appgate/appgate-driver --prefix PATH : ${stdenv.lib.makeBinPath [ iproute networkmanager dnsmasq ]}
+    wrapProgram $out/opt/appgate/appgate-driver --prefix PATH : ${lib.makeBinPath [ iproute networkmanager dnsmasq ]}
     wrapProgram $out/opt/appgate/linux/set_dns --set PYTHONPATH $PYTHONPATH
   '';
   meta = with lib; {

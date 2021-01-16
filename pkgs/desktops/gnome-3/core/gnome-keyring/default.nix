@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-keyring/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-keyring/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "11sgffrrpss5cmv3b717pqlbhgq17l1xd33fsvqgsw8simxbar52";
   };
 

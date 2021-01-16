@@ -1,4 +1,4 @@
-{ stdenv, udev, ncurses, pkgconfig, fetchurl, bluez }:
+{ lib, stdenv, udev, ncurses, pkgconfig, fetchurl, bluez }:
 
 stdenv.mkDerivation rec {
   name = "xwiimote-2";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://dvdhrm.github.io/xwiimote";
     description = "Userspace utilities to control connected Nintendo Wii Remotes";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 
   postInstallPhase = ''

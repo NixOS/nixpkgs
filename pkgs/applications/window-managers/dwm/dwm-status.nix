@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "041sd9zm1c3v6iihnwjcya2xg5yxb2y4biyxpjlfblz2srxa15dm";
 
   postInstall = lib.optionalString (bins != [])  ''
-    wrapProgram $out/bin/dwm-status --prefix "PATH" : "${stdenv.lib.makeBinPath bins}"
+    wrapProgram $out/bin/dwm-status --prefix "PATH" : "${lib.makeBinPath bins}"
   '';
 
   meta = with lib; {

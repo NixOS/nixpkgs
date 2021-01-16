@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isAarch64; # single failure that I can't explain
 
   preFixup = ''
-    gappsWrapperArgs+=(--suffix PATH : ${stdenv.lib.makeBinPath [ dbus ]})
+    gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ dbus ]})
     wrapProgram $out/bin/rt2rtng --prefix PYTHONPATH : $PYTHONPATH
   '';
 

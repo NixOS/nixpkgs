@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gedit/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gedit/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0kc48a399achcz6vlqq0jk0b8ixbrzyv9xb22s5av76m5hyqalq0";
   };
 

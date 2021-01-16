@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkgconfig
 , autoreconfHook
@@ -18,7 +18,7 @@
 , withGui
 }:
 
-with stdenv.lib;
+with lib;
 let
   version = "0.20.1";
   majorMinorVersion = versions.majorMinor version;

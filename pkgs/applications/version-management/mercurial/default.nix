@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, makeWrapper, unzip
+{ lib, stdenv, fetchurl, python3Packages, makeWrapper, unzip
 , guiSupport ? false, tk ? null
 , ApplicationServices
 }:
@@ -20,11 +20,11 @@ in python3Packages.buildPythonApplication rec {
   passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 
   buildInputs = [ makeWrapper docutils unzip ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
+    ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  postInstall = (stdenv.lib.optionalString guiSupport ''
+  postInstall = (lib.optionalString guiSupport ''
     mkdir -p $out/etc/mercurial
     cp contrib/hgk $out/bin
     cat >> $out/etc/mercurial/hgrc << EOF
@@ -56,9 +56,9 @@ in python3Packages.buildPythonApplication rec {
     description = "A fast, lightweight SCM system for very large distributed projects";
     homepage = "https://www.mercurial-scm.org";
     downloadPage = "https://www.mercurial-scm.org/release/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.eelco ];
     updateWalker = true;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

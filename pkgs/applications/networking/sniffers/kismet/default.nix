@@ -22,15 +22,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpcap pcre libmicrohttpd libnl zlib sqlite protobuf protobufc
     libusb1 libcap binutils elfutils
-  ] ++ stdenv.lib.optionals withNetworkManager [ networkmanager glib ]
-    ++ stdenv.lib.optional withSensors lm_sensors
-    ++ stdenv.lib.optional withPython (python3.withPackages(ps: [ ps.setuptools ps.protobuf
+  ] ++ lib.optionals withNetworkManager [ networkmanager glib ]
+    ++ lib.optional withSensors lm_sensors
+    ++ lib.optional withPython (python3.withPackages(ps: [ ps.setuptools ps.protobuf
                                                                   ps.numpy ps.pyserial ]));
 
   configureFlags = []
-    ++ stdenv.lib.optional (!withNetworkManager) "--disable-libnm"
-    ++ stdenv.lib.optional (!withPython) "--disable-python-tools"
-    ++ stdenv.lib.optional (!withSensors) "--disable-lmsensors";
+    ++ lib.optional (!withNetworkManager) "--disable-libnm"
+    ++ lib.optional (!withPython) "--disable-python-tools"
+    ++ lib.optional (!withSensors) "--disable-lmsensors";
 
   postConfigure = ''
     sed -e 's/-o $(INSTUSR)//' \

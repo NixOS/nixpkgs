@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , pkgconfig, libtool, intltool
 , libXmu
 , lua
@@ -8,7 +8,7 @@
 , gtk2, gtkglext, libglade
 , libGLU, libpcap, SDL, zziplib }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "desmume";

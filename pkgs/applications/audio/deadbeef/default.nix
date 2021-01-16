@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     sha256 = "161b0ll8v4cjgwwmk137hzvh0jidlkx56vjkpnr70f0x4jzv2nll";
   };
 
-  buildInputs = with stdenv.lib; [ jansson ]
+  buildInputs = with lib; [ jansson ]
     ++ optional gtk2Support gtk2
     ++ optionals gtk3Support [ gtk3 gsettings-desktop-schemas ]
     ++ optional vorbisSupport libvorbis
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     intltool
     libtool
     pkgconfig
-  ] ++ stdenv.lib.optional gtk3Support wrapGAppsHook;
+  ] ++ lib.optional gtk3Support wrapGAppsHook;
 
   enableParallelBuilding = true;
 

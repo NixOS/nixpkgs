@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libjack2, fftwFloat, gtk2 }:
+{ lib, stdenv, fetchurl, pkgconfig, libjack2, fftwFloat, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "spectrojack";
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A little spectrogram/audiogram/sonogram/whatever for JACK";
     homepage = "http://sed.free.fr/spectrojack";
-    license = stdenv.lib.licenses.publicDomain;
-    maintainers = with stdenv.lib.maintainers; [ sleexyz ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ sleexyz ];
+    platforms = with lib.platforms; linux;
   };
 }

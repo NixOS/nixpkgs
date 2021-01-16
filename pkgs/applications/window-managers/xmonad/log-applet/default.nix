@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib dbus-glib xorg.xcbutilwm ]
-    ++ stdenv.lib.optionals (desktopSupport == "gnomeflashback") [ gtk3 gnome3.gnome-panel ]
-    ++ stdenv.lib.optionals (desktopSupport == "mate") [ gtk3 mate.mate-panel ]
-    ++ stdenv.lib.optionals (desktopSupport == "xfce4") [ gtk2 libxfce4util xfce4-panel ]
+    ++ lib.optionals (desktopSupport == "gnomeflashback") [ gtk3 gnome3.gnome-panel ]
+    ++ lib.optionals (desktopSupport == "mate") [ gtk3 mate.mate-panel ]
+    ++ lib.optionals (desktopSupport == "xfce4") [ gtk2 libxfce4util xfce4-panel ]
   ;
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

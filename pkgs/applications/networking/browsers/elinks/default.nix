@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
     ncurses xlibsWrapper bzip2 zlib brotli zstd lzma
     openssl libidn tre expat libev
   ]
-    ++ stdenv.lib.optional stdenv.isLinux gpm
-    ++ stdenv.lib.optional enableGuile guile
-    ++ stdenv.lib.optional enablePython python
-    ++ stdenv.lib.optional enablePerl perl
+    ++ lib.optional stdenv.isLinux gpm
+    ++ lib.optional enableGuile guile
+    ++ lib.optional enablePython python
+    ++ lib.optional enablePerl perl
     ;
 
   nativeBuildInputs = [ autoreconfHook gettext pkgconfig ];
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
     "--with-lzma"
     "--with-libev"
     "--with-terminfo"
-  ] ++ stdenv.lib.optional enableGuile        "--with-guile"
-    ++ stdenv.lib.optional enablePython       "--with-python"
-    ++ stdenv.lib.optional enablePerl         "--with-perl"
+  ] ++ lib.optional enableGuile        "--with-guile"
+    ++ lib.optional enablePython       "--with-python"
+    ++ lib.optional enablePerl         "--with-perl"
     ;
 
   meta = with lib; {

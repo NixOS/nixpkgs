@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, scons, zlib, SDL, lua5_1, pkgconfig}:
+{lib, stdenv, fetchFromGitHub, scons, zlib, SDL, lua5_1, pkgconfig}:
 
 stdenv.mkDerivation {
   pname = "fceux-unstable";
@@ -32,9 +32,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A Nintendo Entertainment System (NES) Emulator";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.scubed2 ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.scubed2 ];
     homepage = "http://www.fceux.com/";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

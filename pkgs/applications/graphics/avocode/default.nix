@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "06xf5y2mljk3pd74ap9n90bhhidbzpg5c6wws361ygd4f3x86c46";
   };
 
-  libPath = stdenv.lib.makeLibraryPath (with xorg; [
+  libPath = lib.makeLibraryPath (with xorg; [
     stdenv.cc.cc.lib
     at-spi2-core.out
     gdk-pixbuf

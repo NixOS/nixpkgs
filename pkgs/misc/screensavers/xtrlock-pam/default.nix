@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, python, pkgconfig, xlibsWrapper, pam }:
+{ lib, stdenv, fetchgit, python, pkgconfig, xlibsWrapper, pam }:
 
 stdenv.mkDerivation {
   name = "xtrlock-pam-3.4-post-20150909";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/aanatoly/xtrlock-pam";
     description = "PAM based X11 screen locker";
     license = "unknown";
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [ tstrobel ];
+    platforms = with lib.platforms; linux;
   };
 }

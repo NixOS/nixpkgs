@@ -5,14 +5,14 @@ stdenv.mkDerivation rec {
   version = "0.6.13";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1m110rbj5d2raxcdp4iz0qp172284945awrsbdlq99ksmqsc4zkn";
   };
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";
+  configureFlags = lib.optional stdenv.isDarwin "--disable-Bsymbolic";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libxml2 glib ];

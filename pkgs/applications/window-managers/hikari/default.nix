@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   # Must replace GNU Make by bmake
-  buildPhase = with stdenv.lib; concatStringsSep " " (
+  buildPhase = with lib; concatStringsSep " " (
     [ "bmake" "-j$NIX_BUILD_CORES" "PREFIX=$out" ]
     ++ optional stdenv.isLinux "WITH_POSIX_C_SOURCE=YES"
     ++ mapAttrsToList (feat: enabled:

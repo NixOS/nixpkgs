@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, writeText, libX11, ncurses
+{ lib, stdenv, fetchurl, pkgconfig, writeText, libX11, ncurses
 , libXft, conf ? null, patches ? [], extraLibs ? []}:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "st";

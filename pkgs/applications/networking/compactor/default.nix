@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     changelog   = "https://github.com/dns-stats/${pname}/raw/${version}/ChangeLog.txt";
     license     = [ licenses.boost licenses.mpl20 licenses.openssl ];
     maintainers = with maintainers; [ fdns ];
-    platforms   = stdenv.lib.platforms.unix;
+    platforms   = lib.platforms.unix;
   };
 }

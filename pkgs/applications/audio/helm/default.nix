@@ -72,7 +72,7 @@
         Simple arpeggiator
         Effects: Formant filter, stutter, delay
     '';
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
   };

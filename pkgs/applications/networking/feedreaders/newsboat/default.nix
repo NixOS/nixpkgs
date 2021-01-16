@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.21";
+  version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
-    sha256 = "0ignfmh5193bigvk9f057r0r4yaxymxv2afycn2b98w05gljccb6";
+    sha256 = "1j3z34dhqw0f1v6v2lfwcvzqnm2kr2940bgxibfi0npacp74izh3";
   };
 
-  cargoSha256 = "16652i2hbs6d3fam2hdlc947i5nrb3na186zfcb4nfh7hnb7lh8g";
+  cargoSha256 = "08ywaka1lib8yrqjmfx1i37f7b33y3i6jj7f50pwhw8n6lr9f7lc";
 
   postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""

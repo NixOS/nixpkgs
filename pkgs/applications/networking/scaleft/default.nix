@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ patchelf rpmextract ];
 
   libPath =
-    stdenv.lib.makeLibraryPath
+    lib.makeLibraryPath
        [ stdenv.cc stdenv.cc.cc.lib ];
 
   buildCommand = ''

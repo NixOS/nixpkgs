@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, efl, python3Packages, dbus, makeWrapper }:
+{ lib, stdenv, fetchurl, pkgconfig, efl, python3Packages, dbus, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "econnman";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A user interface for the connman network connection manager";
     homepage = "https://enlightenment.org/";
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }
