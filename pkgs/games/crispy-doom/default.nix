@@ -1,4 +1,4 @@
-{ lib, stdenv, autoreconfHook, pkgconfig, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, python }:
+{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, python }:
 
 stdenv.mkDerivation rec {
   pname = "crispy-doom";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     for script in $(grep -lr '^#!/usr/bin/env python$'); do patchShebangs $script; done
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python ];
   buildInputs = [ SDL2 SDL2_mixer SDL2_net ];
   enableParallelBuilding = true;
 

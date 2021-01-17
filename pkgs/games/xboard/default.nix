@@ -1,5 +1,5 @@
 {lib, stdenv, fetchurl, libX11, xorgproto, libXt, libXaw, libSM, libICE, libXmu
-, libXext, gnuchess, texinfo, libXpm, pkgconfig, librsvg, cairo, pango
+, libXext, gnuchess, texinfo, libXpm, pkg-config, librsvg, cairo, pango
 , gtk2
 }:
 let
@@ -14,7 +14,7 @@ let
   };
   buildInputs = [
     libX11 xorgproto libXt libXaw libSM libICE libXmu
-    libXext gnuchess texinfo libXpm pkgconfig librsvg
+    libXext gnuchess texinfo libXpm pkg-config librsvg
     cairo pango gtk2
   ];
 in

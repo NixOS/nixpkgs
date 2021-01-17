@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gtk2, glib, pkgconfig, libGLU, libGL, wxGTK, libX11, xorgproto
+{ lib, stdenv, fetchurl, gtk2, glib, pkg-config, libGLU, libGL, wxGTK, libX11, xorgproto
 , runtimeShell }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 glib libGLU libGL wxGTK libX11 xorgproto ];
 
   preBuild = ''

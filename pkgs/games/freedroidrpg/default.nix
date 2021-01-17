@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, pkgconfig, gettext, python3, SDL, SDL_image, SDL_gfx, SDL_mixer, libogg, libvorbis, lua5_3, libjpeg, libpng, zlib, libiconv }:
+{ fetchurl, lib, stdenv, pkg-config, gettext, python3, SDL, SDL_image, SDL_gfx, SDL_mixer, libogg, libvorbis, lua5_3, libjpeg, libpng, zlib, libiconv }:
 
 let
   version = "0.16.1";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     sha256 = "0n4kn38ncmcy3lrxmq8fjry6c1z50z4q1zcqfig0j4jb0dsz2va2";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext python3 ];
+  nativeBuildInputs = [ pkg-config gettext python3 ];
 
   buildInputs = [
     SDL SDL_image SDL_gfx SDL_mixer libogg libvorbis lua5_3 libjpeg libpng zlib

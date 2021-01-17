@@ -1,5 +1,5 @@
 { lib, stdenv, mkDerivation, fetchurl, autoconf, automake
-, perl, unzip, zip, which, pkgconfig, qtbase, qtscript
+, perl, unzip, zip, which, pkg-config, qtbase, qtscript
 , SDL2, libtheora, openal, glew, physfs, fribidi, libXrandr
 , withVideos ? false
 }:
@@ -26,7 +26,7 @@ mkDerivation rec {
     glew physfs fribidi libXrandr
   ];
   nativeBuildInputs = [
-    perl zip unzip pkgconfig autoconf automake
+    perl zip unzip pkg-config autoconf automake
   ];
 
   preConfigure = "./autogen.sh";

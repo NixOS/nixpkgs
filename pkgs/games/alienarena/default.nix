@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libjpeg, libX11, libXxf86vm, curl, libogg
+{ lib, stdenv, fetchurl, pkg-config, libjpeg, libX11, libXxf86vm, curl, libogg
 , libvorbis, freetype, openal, libGL }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "03nnv4m2xmswr0020hssajncdb8sy95jp5yccsm53sgxga4r8igg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjpeg libX11 curl libogg libvorbis
                   freetype openal libGL libXxf86vm ];
 

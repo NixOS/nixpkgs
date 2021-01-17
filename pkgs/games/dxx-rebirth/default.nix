@@ -3,7 +3,7 @@
 , fetchurl
 , fetchpatch
 , scons
-, pkgconfig
+, pkg-config
 , SDL
 , SDL_mixer
 , libGLU
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lsrlp47aby2m9hh7i3nv5rb0srlkmnq1w2ca6vyvlga9m9h7jrk";
   };
 
-  nativeBuildInputs = [ pkgconfig scons ];
+  nativeBuildInputs = [ pkg-config scons ];
 
   buildInputs = [ libGLU libGL libpng physfs SDL SDL_mixer ];
 
