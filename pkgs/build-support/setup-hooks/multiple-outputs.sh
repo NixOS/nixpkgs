@@ -29,15 +29,18 @@ _overrideFirst() {
 # The variables are global to be usable anywhere during the build.
 # Typical usage in package is defining outputBin = "dev";
 
-_overrideFirst outputDev "dev" "out"
-_overrideFirst outputBin "bin" "out"
+# Typically out is in outputs, but for split packages it's not. In that case
+# maintainer should handle outputs themself, so fallback removing default outputs.
+
+_overrideFirst outputDev "dev" "out" REMOVE
+_overrideFirst outputBin "bin" "out" REMOVE
 
 _overrideFirst outputInclude "$outputDev"
 
 # so-libs are often among the main things to keep, and so go to $out
-_overrideFirst outputLib "lib" "out"
+_overrideFirst outputLib "lib" "out" REMOVE
 
-_overrideFirst outputDoc "doc" "out"
+_overrideFirst outputDoc "doc" "out" REMOVE
 _overrideFirst outputDevdoc "devdoc" REMOVE # documentation for developers
 # man and info pages are small and often useful to distribute with binaries
 _overrideFirst outputMan "man" "$outputBin"
