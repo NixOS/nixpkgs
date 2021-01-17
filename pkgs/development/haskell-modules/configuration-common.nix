@@ -1375,6 +1375,11 @@ self: super: {
   # jailbreaking pandoc-citeproc because it has not bumped upper bound on pandoc
   pandoc-citeproc = doJailbreak super.pandoc-citeproc;
 
+  # 2021-01-17: Tests are broken because of a version mismatch.
+  # See here: https://github.com/jgm/pandoc/issues/7035
+  # This problem is fixed on master. Remove override when this assert fails.
+  pandoc = assert super.pandoc.version == "2.11.3.2"; dontCheck super.pandoc;
+
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
 
