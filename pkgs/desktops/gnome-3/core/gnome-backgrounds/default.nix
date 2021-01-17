@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, gettext }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gnome3, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-backgrounds";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript { packageName = "gnome-backgrounds"; attrPath = "gnome3.gnome-backgrounds"; };
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext ];
 
   meta = with lib; {
     platforms = platforms.unix;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkgconfig, vala, glib, gtk3, gnome3, desktop-file-utils
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, vala, glib, gtk3, gnome3, desktop-file-utils
 , clutter, clutter-gtk, gettext, itstool, libxml2, wrapGAppsHook, python3 }:
 
 let
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ meson ninja vala pkgconfig wrapGAppsHook python3 itstool gettext libxml2 desktop-file-utils ];
+  nativeBuildInputs = [ meson ninja vala pkg-config wrapGAppsHook python3 itstool gettext libxml2 desktop-file-utils ];
   buildInputs = [ glib gtk3 gnome3.adwaita-icon-theme clutter clutter-gtk ];
 
   postPatch = ''

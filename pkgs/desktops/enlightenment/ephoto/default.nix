@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, efl, pcre, mesa, makeWrapper }:
+{ lib, stdenv, fetchurl, pkg-config, efl, pcre, mesa, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "ephoto";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     mesa.dev # otherwise pkg-config does not find gbm
     makeWrapper
   ];

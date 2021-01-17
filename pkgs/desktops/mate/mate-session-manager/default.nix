@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, xtrans, dbus-glib, systemd,
+{ lib, stdenv, fetchurl, pkg-config, gettext, xtrans, dbus-glib, systemd,
   libSM, libXtst, gtk3, epoxy, polkit, hicolor-icon-theme, mate,
   wrapGAppsHook, fetchpatch
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     xtrans
     wrapGAppsHook

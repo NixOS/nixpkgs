@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , wrapGAppsHook
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection # For setup hook
     itstool
     libxml2
-    pkgconfig
+    pkg-config
     dbus
     wrapGAppsHook
   ];

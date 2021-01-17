@@ -5,7 +5,7 @@
 , meson
 , python3
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , glib
 , libgee
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     dbus
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

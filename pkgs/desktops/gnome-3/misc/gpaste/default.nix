@@ -11,7 +11,7 @@
 , mutter
 , ninja
 , pango
-, pkgconfig
+, pkg-config
 , vala
 , wrapGAppsHook
 }:
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];

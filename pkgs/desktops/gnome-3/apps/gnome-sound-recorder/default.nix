@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , gettext
 , gobject-introspection
 , wrapGAppsHook
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     meson
     ninja

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, gjs, flex, bison, libxml2, intltool,
+{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, gjs, flex, bison, libxml2, intltool,
   gdl, libgda, gtksourceview, gsettings-desktop-schemas,
   itstool, python3, ncurses, makeWrapper }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkgconfig intltool itstool python3 makeWrapper
+    pkg-config intltool itstool python3 makeWrapper
     # Required by python3
     ncurses
   ];

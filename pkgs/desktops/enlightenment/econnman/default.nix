@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, efl, python3Packages, dbus, makeWrapper }:
+{ lib, stdenv, fetchurl, pkg-config, efl, python3Packages, dbus, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "econnman";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "057pwwavlvrrq26bncqnfrf449zzaim0zq717xv86av4n940gwv0";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig python3Packages.wrapPython ];
+  nativeBuildInputs = [ makeWrapper pkg-config python3Packages.wrapPython ];
 
   buildInputs = [ efl python3Packages.python dbus ];
 

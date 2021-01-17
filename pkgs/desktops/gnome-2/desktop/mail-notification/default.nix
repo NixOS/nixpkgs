@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, glib, gnome2, dbus-glib, gmime, gnome-icon-theme, libnotify, libgnome-keyring, openssl, cyrus_sasl, sylpheed, gob2, gettext, intltool, libxml2, hicolor-icon-theme, tango-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, gnome2, dbus-glib, gmime, gnome-icon-theme, libnotify, libgnome-keyring, openssl, cyrus_sasl, sylpheed, gob2, gettext, intltool, libxml2, hicolor-icon-theme, tango-icon-theme }:
 
 stdenv.mkDerivation rec {
   rev = "9ae8768";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1slb7gajn30vdaq0hf5rikwdly1npmg1cf83hpjs82xd98knl13d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
    buildInputs = [ glib dbus-glib gmime libnotify libgnome-keyring openssl cyrus_sasl sylpheed gob2 gettext intltool gnome2.GConf gnome2.libgnomeui dbus-glib gmime libnotify gnome2.scrollkeeper libxml2 gnome-icon-theme hicolor-icon-theme tango-icon-theme ];
 
   prePatch = ''

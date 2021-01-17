@@ -21,7 +21,7 @@
 , ninja
 , packagekit
 , pantheon
-, pkgconfig
+, pkg-config
 , python3
 , vala
 , polkit
@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     appstream-glib
-    dbus # for pkgconfig
+    dbus # for pkg-config
     desktop-file-utils
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, gtk2, libX11, xrandr, withGtk3 ? false, gtk3 }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, gtk2, libX11, xrandr, withGtk3 ? false, gtk3 }:
 
 stdenv.mkDerivation rec {
   name = "lxrandr-0.3.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional withGtk3 "--enable-gtk3";
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
   buildInputs = [ libX11 (if withGtk3 then gtk3 else gtk2) xrandr ];
 
   meta = with lib; {

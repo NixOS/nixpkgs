@@ -15,7 +15,7 @@
 , libpulseaudio
 , libxkbfile
 , libxml2
-, pkgconfig
+, pkg-config
 , polkit
 , gdm
 , systemd
@@ -87,7 +87,7 @@ let
       autoreconfHook
       gettext
       libxml2
-      pkgconfig
+      pkg-config
       wrapGAppsHook
     ];
 

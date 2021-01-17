@@ -4,7 +4,7 @@
 , pantheon
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , gtk3
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 

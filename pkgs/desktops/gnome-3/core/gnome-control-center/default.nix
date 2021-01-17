@@ -52,7 +52,7 @@
 , networkmanagerapplet
 , libnma
 , ninja
-, pkgconfig
+, pkg-config
 , polkit
 , python3
 , samba
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     shared-mime-info
     wrapGAppsHook

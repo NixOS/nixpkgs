@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkgconfig, efl, gst_all_1, pcre, mesa, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, efl, gst_all_1, pcre, mesa, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "rage";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     mesa.dev
     wrapGAppsHook
   ];

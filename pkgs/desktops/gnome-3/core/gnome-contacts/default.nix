@@ -3,7 +3,7 @@
 , fetchurl
 , evolution-data-server
 , fetchpatch
-, pkgconfig
+, pkg-config
 , libxslt
 , docbook_xsl
 , docbook_xml_dtd_42
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     gettext
     libxslt

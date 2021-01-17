@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, gtk3, libsoup, tzdata }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libsoup, tzdata }:
 
 stdenv.mkDerivation rec {
   pname = "libmateweather";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "02d7c59pami1fzxg73mp6risa9hvsdpgs68f62wkg09nrppzsk4v";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [ pkg-config gettext ];
 
   buildInputs = [ gtk3 libsoup tzdata ];
 

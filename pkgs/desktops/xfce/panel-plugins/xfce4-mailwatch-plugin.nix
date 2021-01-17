@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui,
+{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel, libxfce4ui,
   gtk2, exo, gnutls, libgcrypt, xfce }:
 
 let
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     intltool
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
