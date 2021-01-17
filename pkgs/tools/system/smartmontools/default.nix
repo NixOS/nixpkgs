@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, autoreconfHook
 , mailutils, inetutils
-, IOKit ? null , ApplicationServices ? null }:
+, IOKit, ApplicationServices }:
 
 let
-  version = "7.1";
+  version = "7.2";
 
-  dbrev = "5062";
-  drivedbBranch = "RELEASE_7_0_DRIVEDB";
+  dbrev = "5164";
+  drivedbBranch = "RELEASE_7_2_DRIVEDB";
   driverdb = fetchurl {
     url    = "https://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
-    sha256 = "0gggl55h9gq0z846ndhyd7xrpxh8lqfbidblx0598q2wlh9rvlww";
+    sha256 = "1vj0sv3bgcd0lwk5x450brfyxksa5fn1mjgvmj994ab8spmicc43";
     name   = "smartmontools-drivedb.h";
   };
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/smartmontools/${pname}-${version}.tar.gz";
-    sha256 = "0imqb7ka4ia5573w8rnpck571pjjc9698pdjcapy9cfyk4n4swrz";
+    sha256 = "1mlc25sd5rgj5xmzcllci47inmfdw7cp185fday6hc9rwqkqmnaw";
   };
 
   patches = [ ./smartmontools.patch ];
