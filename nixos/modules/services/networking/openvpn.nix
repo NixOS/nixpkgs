@@ -8,60 +8,195 @@ let
 
   inherit (pkgs) openvpn;
 
+  PATH = name: makeBinPath (getAttr "openvpn-${name}" config.systemd.services).path;
+
   makeOpenVPNJob = cfg: name:
     let
 
-      path = makeBinPath (getAttr "openvpn-${name}" config.systemd.services).path;
+      configFile = pkgs.writeText "openvpn-config-${name}" (
+        generators.toKeyValue {
+          mkKeyValue = key: value:
+            if hasAttr key scripts
+            then "${key} " + pkgs.writeShellScript "openvpn-${name}-${key}" (scripts.${key} value)
+            else if builtins.isBool value
+            then optionalString value key
+            else if builtins.isPath value
+            then "${key} ${toString value}"
+            else "${key} ${generators.mkValueStringDefault {} value}";
+          listsAsDuplicateKeys = true;
+        } cfg.settings
+      );
 
-      upScript = ''
-        #! /bin/sh
-        export PATH=${path}
+      scripts = {
+        up = script:
+          let init = ''
+            export PATH=${PATH name}
 
-        # For convenience in client scripts, extract the remote domain
-        # name and name server.
-        for var in ''${!foreign_option_*}; do
-          x=(''${!var})
-          if [ "''${x[0]}" = dhcp-option ]; then
-            if [ "''${x[1]}" = DOMAIN ]; then domain="''${x[2]}"
-            elif [ "''${x[1]}" = DNS ]; then nameserver="''${x[2]}"
-            fi
-          fi
-        done
+            # For convenience in client scripts, extract the remote domain
+            # name and name server.
+            for var in ''${!foreign_option_*}; do
+              x=(''${!var})
+              if [ "''${x[0]}" = dhcp-option ]; then
+                if [ "''${x[1]}" = DOMAIN ]; then domain="''${x[2]}"
+                elif [ "''${x[1]}" = DNS ]; then nameserver="''${x[2]}"
+                fi
+              fi
+            done
 
-        ${cfg.up}
-        ${optionalString cfg.updateResolvConf
-           "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
-      '';
+            ${optionalString cfg.updateResolvConf
+               "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
+          '';
+          # Add DNS settings given in foreign DHCP options to the resolv.conf of the netns
+          setNetNSResolvConf = ''
+            mkdir -p /etc/netns/'${cfg.netns}'
+            rm -f /etc/netns/'${cfg.netns}'/resolv.conf
+            foreign_opt_domains=
+            process_foreign_option () {
+              case "$1:$2" in
+                dhcp-option:DNS) echo "nameserver $3" >>/etc/netns/'${cfg.netns}'/resolv.conf ;;
+                dhcp-option:DOMAIN) foreign_opt_domains="$foreign_opt_domains $3" ;;
+              esac
+            }
+            i=1
+            while
+              eval opt=\"\''${foreign_option_$i-}\"
+              [ -n "$opt" ]
+            do
+              process_foreign_option $opt
+              i=$(( i + 1 ))
+            done
+            for d in $foreign_opt_domains; do
+              printf '%s\n' "domain $1" "search $*" \
+                >>/etc/netns/'${cfg.netns}'/resolv.conf
+            done
+          '';
+          in
+          if cfg.netns == null
+          then ''
+            ${init}
+            ${script}
+          ''
+          else ''
+            export PATH=${PATH name}
+            set -eux
+            ${setNetNSResolvConf}
+            ip link set dev '${cfg.settings.dev}' up netns '${cfg.netns}' mtu "$tun_mtu"
+            ip netns exec '${cfg.netns}' ${pkgs.writeShellScript "openvpn-${name}-up-netns.sh" ''
+              ${init}
+              set -eux
+              export PATH=${PATH name}
 
-      downScript = ''
-        #! /bin/sh
-        export PATH=${path}
-        ${optionalString cfg.updateResolvConf
-           "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
-        ${cfg.down}
-      '';
+              ip link set dev lo up
 
-      configFile = pkgs.writeText "openvpn-config-${name}"
-        ''
-          errors-to-stderr
-          ${optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
-          ${cfg.config}
-          ${optionalString (cfg.up != "" || cfg.updateResolvConf)
-              "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"}
-          ${optionalString (cfg.down != "" || cfg.updateResolvConf)
-              "down ${pkgs.writeScript "openvpn-${name}-down" downScript}"}
-          ${optionalString (cfg.authUserPass != null)
-              "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
-                ${cfg.authUserPass.username}
-                ${cfg.authUserPass.password}
-              ''}"}
-        '';
+              netmask4="''${ifconfig_netmask:-30}"
+              netbits6="''${ifconfig_ipv6_netbits:-112}"
+              if [ -n "''${ifconfig_local-}" ]; then
+                if [ -n "''${ifconfig_remote-}" ]; then
+                  ip -4 addr replace \
+                    local "$ifconfig_local" \
+                    peer "$ifconfig_remote/$netmask4" \
+                    ''${ifconfig_broadcast:+broadcast "$ifconfig_broadcast"} \
+                    dev '${cfg.settings.dev}'
+                else
+                  ip -4 addr replace \
+                    local "$ifconfig_local/$netmask4" \
+                    ''${ifconfig_broadcast:+broadcast "$ifconfig_broadcast"} \
+                    dev '${cfg.settings.dev}'
+                fi
+              fi
+              if [ -n "''${ifconfig_ipv6_local-}" ]; then
+                if [ -n "''${ifconfig_ipv6_remote-}" ]; then
+                  ip -6 addr replace \
+                    local "$ifconfig_ipv6_local" \
+                    peer "$ifconfig_ipv6_remote/$netbits6" \
+                    dev '${cfg.settings.dev}'
+                else
+                  ip -6 addr replace \
+                    local "$ifconfig_ipv6_local/$netbits6" \
+                    dev '${cfg.settings.dev}'
+                fi
+              fi
+              set +eux
+              ${script}
+            ''}
+          '';
+        route-up = script:
+          if cfg.netns == null
+          then script
+          else ''
+            export PATH=${PATH name}
+            set -eux
+            ip netns exec '${cfg.netns}' ${pkgs.writeShellScript "openvpn-${name}-route-up-netns" ''
+              export PATH=${PATH name}
+              set -eux
+              i=1
+              while
+                eval net=\"\''${route_network_$i-}\"
+                eval mask=\"\''${route_netmask_$i-}\"
+                eval gw=\"\''${route_gateway_$i-}\"
+                eval mtr=\"\''${route_metric_$i-}\"
+                [ -n "$net" ]
+              do
+                ip -4 route replace "$net/$mask" via "$gw" ''${mtr:+metric "$mtr"}
+                i=$(( i + 1 ))
+              done
+
+              if [ -n "''${route_vpn_gateway-}" ]; then
+                ip -4 route replace default via "$route_vpn_gateway"
+              fi
+
+              i=1
+              while
+                # There doesn't seem to be $route_ipv6_metric_<n>
+                # according to the manpage.
+                eval net=\"\''${route_ipv6_network_$i-}\"
+                eval gw=\"\''${route_ipv6_gateway_$i-}\"
+                [ -n "$net" ]
+              do
+                ip -6 route replace  "$net"  via "$gw"  metric 100
+                i=$(( i + 1 ))
+              done
+
+              # There's no $route_vpn_gateway for IPv6. It's not
+              # documented if OpenVPN includes default route in
+              # $route_ipv6_*. Set default route to remote VPN
+              # endpoint address if there is one. Use higher metric
+              # than $route_ipv6_* routes to give preference to a
+              # possible default route in them.
+              if [ -n "''${ifconfig_ipv6_remote-}" ]; then
+                ip -6 route replace default \
+                  via "$ifconfig_ipv6_remote" metric 200
+              fi
+              ${script}
+            ''}
+          '';
+        down = script:
+          let init = ''
+            export PATH=${PATH name}
+            ${optionalString cfg.updateResolvConf
+               "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
+          ''; in
+          if cfg.netns == null
+          then ''
+            ${init}
+            ${script}
+          ''
+          else ''
+            ip netns exec '${cfg.netns}' ${pkgs.writeShellScript "openvpn-${name}-down-netns.sh" ''
+              ${init}
+              ${script}
+            ''}
+            rm -f /etc/netns/'${cfg.netns}'/resolv.conf
+          '';
+      };
 
     in {
       description = "OpenVPN instance ‘${name}’";
 
       wantedBy = optional cfg.autoStart "multi-user.target";
       after = [ "network.target" ];
+      bindsTo = optional (cfg.netns != null) "netns-${cfg.netns}.service";
+      requires = optional (cfg.netns != null) "netns-${cfg.netns}.service";
 
       path = [ pkgs.iptables pkgs.iproute pkgs.nettools ];
 
@@ -69,7 +204,6 @@ let
       serviceConfig.Restart = "always";
       serviceConfig.Type = "notify";
     };
-
 in
 
 {
@@ -87,30 +221,30 @@ in
       example = literalExample ''
         {
           server = {
-            config = '''
+            settings = {
               # Simplest server configuration: https://community.openvpn.net/openvpn/wiki/StaticKeyMiniHowto
               # server :
-              dev tun
-              ifconfig 10.8.0.1 10.8.0.2
-              secret /root/static.key
-            ''';
-            up = "ip route add ...";
-            down = "ip route del ...";
+              dev = "tun";
+              ifconfig = "10.8.0.1 10.8.0.2";
+              secret = "/root/static.key";
+              up = "ip route add ...";
+              down = "ip route del ...";
+            };
           };
 
           client = {
-            config = '''
-              client
-              remote vpn.example.org
-              dev tun
-              proto tcp-client
-              port 8080
-              ca /root/.vpn/ca.crt
-              cert /root/.vpn/alice.crt
-              key /root/.vpn/alice.key
-            ''';
-            up = "echo nameserver $nameserver | ''${pkgs.openresolv}/sbin/resolvconf -m 0 -a $dev";
-            down = "''${pkgs.openresolv}/sbin/resolvconf -d $dev";
+            settings = {
+              client = true;
+              remote = "vpn.example.org";
+              dev = "tun";
+              proto = "tcp-client";
+              port = 8080;
+              ca = "/root/.vpn/ca.crt";
+              cert = "/root/.vpn/alice.crt";
+              key = "/root/.vpn/alice.key";
+              up = "echo nameserver $nameserver | ''${pkgs.openresolv}/sbin/resolvconf -m 0 -a $dev";
+              down = "''${pkgs.openresolv}/sbin/resolvconf -d $dev";
+            };
           };
         }
       '';
@@ -124,36 +258,67 @@ in
         attribute name.
       '';
 
-      type = with types; attrsOf (submodule {
+      type = with types; attrsOf (submodule ({name, config, ...}: {
 
         options = {
-
-          config = mkOption {
-            type = types.lines;
+          settings = mkOption {
             description = ''
               Configuration of this OpenVPN instance.  See
               <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
               for details.
 
               To import an external config file, use the following definition:
-              <literal>config = "config /path/to/config.ovpn"</literal>
+              <literal>config = /path/to/config.ovpn;</literal>
             '';
-          };
-
-          up = mkOption {
-            default = "";
-            type = types.lines;
-            description = ''
-              Shell commands executed when the instance is starting.
-            '';
-          };
-
-          down = mkOption {
-            default = "";
-            type = types.lines;
-            description = ''
-              Shell commands executed when the instance is shutting down.
-            '';
+            default = {};
+            type = types.submodule {
+              freeformType = with types; attrsOf (nullOr (oneOf [path str bool int]));
+              options.dev = mkOption {
+                default = null;
+                type = types.str;
+                description = ''
+                  Shell commands executed when the instance is starting.
+                '';
+              };
+              options.down = mkOption {
+                default = "";
+                type = types.lines;
+                description = ''
+                  Shell commands executed when the instance is shutting down.
+                '';
+              };
+              options.errors-to-stderr = mkOption {
+                default = true;
+                type = types.bool;
+                description = ''
+                  Output errors to stderr instead of stdout
+                  unless log output is redirected by one of the <code>--log</code> options.
+                '';
+              };
+              options.route-up = mkOption {
+                default = "";
+                type = types.lines;
+                description = ''
+                  Run command after routes are added.
+                '';
+              };
+              options.up = mkOption {
+                default = "";
+                type = types.lines;
+                description = ''
+                  Shell commands executed when the instance is starting.
+                '';
+              };
+              options.script-security = mkOption {
+                default = 1;
+                type = types.enum [1 2 3];
+                description = ''
+                  1 — (Default) Only call built-in executables such as ifconfig, ip, route, or netsh.
+                  2 — Allow calling of built-in executables and user-defined scripts.
+                  3 — Allow passwords to be passed to scripts via environmental variables (potentially unsafe).
+                '';
+              };
+            };
           };
 
           autoStart = mkOption {
@@ -195,9 +360,34 @@ in
               };
             });
           };
+
+          netns = mkOption {
+            default = true;
+            type = with types; nullOr str;
+            description = "Network namespace.";
+          };
         };
 
-      });
+        config.settings = mkMerge
+          [ (mkIf (config.netns != null) {
+              # Useless to setup the interface
+              # because moving it to the netns will reset it
+              ifconfig-noexec = true;
+              route-noexec = true;
+              script-security = 2;
+            })
+            (mkIf (config.authUserPass != null) {
+              auth-user-pass = pkgs.writeText "openvpn-auth-user-pass-${name}" ''
+                ${config.authUserPass.username}
+                ${config.authUserPass.password}
+              '';
+            })
+            (mkIf config.updateResolvConf {
+              script-security = 2;
+            })
+          ];
+
+      }));
 
     };
 
