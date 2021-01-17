@@ -17721,6 +17721,8 @@ in
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = dontRecurseIntoAttrs (callPackage ../servers/monitoring/grafana/plugins { });
 
+  grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
+
   grafana-loki = callPackage ../servers/monitoring/loki { };
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
