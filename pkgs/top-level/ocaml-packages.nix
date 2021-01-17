@@ -1073,6 +1073,8 @@ let
 
     variantslib_p4 = callPackage ../development/ocaml-modules/variantslib { };
 
+    vchan = callPackage ../development/ocaml-modules/vchan { };
+
     vg = callPackage ../development/ocaml-modules/vg { };
 
     visitors = callPackage ../development/ocaml-modules/visitors { };
