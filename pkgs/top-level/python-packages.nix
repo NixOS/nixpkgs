@@ -2334,6 +2334,8 @@ in {
 
   fn = callPackage ../development/python-modules/fn { };
 
+  fnvhash = callPackage ../development/python-modules/fnvhash { };
+
   folium = callPackage ../development/python-modules/folium { };
 
   fontforge = disabledIf (!isPy3k) (toPythonModule (pkgs.fontforge.override {
