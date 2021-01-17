@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , zlib, libpng, libjpeg, libGLU, libGL, glm
 , libX11, libXext, libXfixes, libXrandr, libXcomposite, slop, icu
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "181mjjrjb9fs1ficcv9miqbk94v95j1yli7fjp2dj514g7nj9l3x";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs =
     [ zlib libpng libjpeg libGLU libGL glm
       libX11 libXext libXfixes libXrandr libXcomposite slop icu ];

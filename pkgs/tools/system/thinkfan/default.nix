@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libyamlcpp, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, libyamlcpp, pkg-config
 , smartSupport ? false, libatasmart }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "-DUSE_NVML=OFF"
   ] ++ lib.optional smartSupport "-DUSE_ATASMART=ON";
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ libyamlcpp ] ++ lib.optional smartSupport libatasmart;
 

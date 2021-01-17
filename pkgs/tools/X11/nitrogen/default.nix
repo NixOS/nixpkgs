@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gtkmm2 }:
+{ lib, stdenv, fetchurl, pkg-config, glib, gtkmm2 }:
 
 let version = "1.6.1";
 in
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zc3fl1mbhq0iyndy4ysmy8vv5c7xwf54rbgamzfhfvsgdq160pl";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ glib gtkmm2 ];
 

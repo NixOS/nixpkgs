@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libX11, libXtst, pkgconfig, xorgproto, libXi }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXtst, pkg-config, xorgproto, libXi }:
 
 stdenv.mkDerivation rec {
   pname = "ksuperkey";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 libXtst xorgproto libXi ];
 
   meta = with lib; {

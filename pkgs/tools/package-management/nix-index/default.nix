@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkgconfig, makeWrapper, openssl, curl
+{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, makeWrapper, openssl, curl
 , nix, Security
 }:
 
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0apdr9z18p6m4lfjv8k9zv2mqc7vssd2d536zfv1pns0pdqsfw50";
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ openssl curl ]
     ++ lib.optional stdenv.isDarwin Security;
 

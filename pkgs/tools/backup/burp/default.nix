@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , acl, librsync, ncurses, openssl, zlib, uthash }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zhq240kz881vs2s620qp0kifmgr582caalm85ls789w9rmdkhjl";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ librsync ncurses openssl zlib uthash ]
     ++ lib.optional (!stdenv.isDarwin) acl;
 

@@ -3,7 +3,7 @@
 , fetchurl
 , ncurses
 , libuuid
-, pkgconfig
+, pkg-config
 , libjpeg
 , zlib
 , libewf
@@ -39,7 +39,7 @@ assert enableQt -> qwt != null;
   ++ lib.optional enableExtFs e2fsprogs
   ++ lib.optionals enableQt [ qtbase qttools qwt ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   NIX_CFLAGS_COMPILE="-Wno-unused";
 

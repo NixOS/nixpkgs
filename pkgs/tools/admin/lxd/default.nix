@@ -1,4 +1,4 @@
-{ lib, stdenv, hwdata, pkgconfig, lxc, buildGoPackage, fetchurl
+{ lib, stdenv, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
 , squashfsTools, iproute, iptables, ebtables, iptables-nftables-compat, libcap
 , libco-canonical, dqlite, raft-canonical, sqlite-replication, udev
@@ -58,7 +58,7 @@ buildGoPackage rec {
     installShellCompletion --bash go/src/github.com/lxc/lxd/scripts/bash/lxd-client
   '';
 
-  nativeBuildInputs = [ installShellFiles pkgconfig makeWrapper ];
+  nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
   buildInputs = [ lxc acl libcap libco-canonical.dev dqlite.dev
                   raft-canonical.dev sqlite-replication udev.dev ];
 

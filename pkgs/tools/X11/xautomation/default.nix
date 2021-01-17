@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libpng, libX11, libXext, libXi, libXtst }:
+{ lib, stdenv, fetchurl, pkg-config, libpng, libX11, libXext, libXi, libXtst }:
 
 let version = "1.09"; in
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "03azv5wpg65h40ip2kk1kdh58vix4vy1r9bihgsq59jx2rhjr3zf";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpng libX11 libXext libXi libXtst ];
 
   meta = {

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchpatch, fetchurl, autoconf, automake, gettext, libtool, pkgconfig
+{ lib, stdenv, buildPackages, fetchpatch, fetchurl, autoconf, automake, gettext, libtool, pkg-config
 , icu, libuuid, readline, inih
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
-    autoconf automake libtool gettext pkgconfig
+    autoconf automake libtool gettext pkg-config
     libuuid # codegen tool uses libuuid
   ];
   buildInputs = [ readline icu inih ];

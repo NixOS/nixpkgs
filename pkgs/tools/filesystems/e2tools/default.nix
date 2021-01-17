@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, e2fsprogs }:
+{ lib, stdenv, fetchurl, pkg-config, e2fsprogs }:
 
 stdenv.mkDerivation rec {
   pname = "e2tools";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "16wlc54abqz06dpipjdkw58bncpkxlj5f55lkzy07k3cg0bqwg2f";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ e2fsprogs ];
 
   enableParallelBuilding = true;

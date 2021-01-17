@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, libX11, libXScrnSaver, libXext, gnulib
-  , autoconf, automake, libtool, gettext, pkgconfig
+  , autoconf, automake, libtool, gettext, pkg-config
   , git, perl, texinfo, help2man
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoconf automake gettext git gnulib
-    help2man libtool perl pkgconfig texinfo
+    help2man libtool perl pkg-config texinfo
   ];
 
   configurePhase = ''

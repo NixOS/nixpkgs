@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config
 , CoreFoundation, IOKit, libossp_uuid
 , curl, libcap,  libuuid, lm_sensors, zlib, fetchpatch
 , nixosTests
@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1266jbfw55r1zh00xi6c90j2fs9hw8hmsb7686rh04l8mffny9f4";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ curl.dev zlib.dev ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]

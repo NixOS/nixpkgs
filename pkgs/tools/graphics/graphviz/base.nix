@@ -1,6 +1,6 @@
 { rev, sha256, version }:
 
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, cairo, expat, flex
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, cairo, expat, flex
 , fontconfig, gd, gettext, gts, libdevil, libjpeg, libpng, libtool, pango
 , yacc, fetchpatch, xorg ? null, ApplicationServices ? null }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     inherit sha256 rev;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     libpng libjpeg expat yacc libtool fontconfig gd gts libdevil flex pango

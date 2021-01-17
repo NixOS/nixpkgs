@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkgconfig, python, gtest
+, cmake, pkg-config, python, gtest
 , boost, cryptopp, curl, fuse, openssl
 }:
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       --replace "(4.5L*1024*1024*1024)" "(0.5L*1024*1024*1024)"
   '';
 
-  nativeBuildInputs = [ cmake gtest pkgconfig python ];
+  nativeBuildInputs = [ cmake gtest pkg-config python ];
 
   buildInputs = [ boost cryptopp curl fuse openssl ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, openssl, libxml2, fuse, osxfuse }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, curl, openssl, libxml2, fuse, osxfuse }:
 
 stdenv.mkDerivation rec {
   pname = "s3fs-fuse";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl openssl libxml2 ]
     ++ lib.optionals stdenv.isLinux [ fuse ]
     ++ lib.optionals stdenv.isDarwin [ osxfuse ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   configureFlags = [
     "--with-openssl"

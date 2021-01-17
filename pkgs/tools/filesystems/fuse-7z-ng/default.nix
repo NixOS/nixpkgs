@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fuse, p7zip, autoconf, automake, pkgconfig, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, fuse, p7zip, autoconf, automake, pkg-config, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "fuse-7z-ng";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "17v1gcmg5q661b047zxjar735i4d3508dimw1x3z1pk4d1zjhp3x";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse autoconf automake makeWrapper ];
 
   preConfigure = "./autogen.sh";

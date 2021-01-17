@@ -18,7 +18,7 @@ let
 
   cryptsetup = import ./cryptsetup.nix {
     inherit lib stdenv fetchurl python;
-    inherit (pkgs) fetchpatch pkgconfig libgcrypt libuuid popt lvm2;
+    inherit (pkgs) fetchpatch pkg-config libgcrypt libuuid popt lvm2;
   };
 
   dmraid = import ./dmraid.nix {
@@ -27,7 +27,7 @@ let
 
   lvm2 = import ./lvm2.nix {
     inherit lib stdenv fetchurl;
-    inherit (pkgs) fetchpatch pkgconfig util-linux systemd coreutils;
+    inherit (pkgs) fetchpatch pkg-config util-linux systemd coreutils;
   };
 
   multipath_tools = import ./multipath-tools.nix {
@@ -50,7 +50,7 @@ let
 
   pyparted = import ./pyparted.nix {
     inherit lib stdenv fetchurl python buildPythonApplication parted;
-    inherit (pkgs) pkgconfig e2fsprogs;
+    inherit (pkgs) pkg-config e2fsprogs;
   };
 
 in buildPythonApplication rec {

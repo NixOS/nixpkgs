@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, libxml2, libxslt, getopt, gettext, nixUnstable, dysnomia, libintl, libiconv, help2man, doclifter, docbook5, dblatex, doxygen, libnixxml, autoreconfHook }:
+{ lib, stdenv, fetchurl, pkg-config, glib, libxml2, libxslt, getopt, gettext, nixUnstable, dysnomia, libintl, libiconv, help2man, doclifter, docbook5, dblatex, doxygen, libnixxml, autoreconfHook }:
 
 stdenv.mkDerivation {
   name = "disnix-0.10";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0mciqbc2h60nc0i6pd36w0m2yr96v97ybrzrqzh5f67ac1f0gqwg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libxml2 libxslt getopt nixUnstable libintl libiconv dysnomia ];
 
   meta = {
