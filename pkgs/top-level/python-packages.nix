@@ -7096,8 +7096,6 @@ in {
 
   snapcast = callPackage ../development/python-modules/snapcast { };
 
-  snapperGUI = callPackage ../development/python-modules/snappergui { };
-
   snapshottest = callPackage ../development/python-modules/snapshottest { };
 
   sniffio = callPackage ../development/python-modules/sniffio { };
