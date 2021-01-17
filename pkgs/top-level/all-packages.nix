@@ -2904,6 +2904,8 @@ in
 
   cantata = libsForQt5.callPackage ../applications/audio/cantata { };
 
+  cantoolz = python3Packages.callPackage ../tools/networking/cantoolz { };
+
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
   caudec = callPackage ../applications/audio/caudec { };
