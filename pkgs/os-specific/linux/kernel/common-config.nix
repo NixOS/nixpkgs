@@ -174,6 +174,8 @@ let
                                               (whenAtLeast "4.17" yes) ];
       NF_TABLES_NETDEV            = mkMerge [ (whenOlder "4.17" module)
                                               (whenAtLeast "4.17" yes) ];
+      NFT_REJECT_NETDEV           = whenAtLeast "5.11" module;
+
       # IP: Netfilter Configuration
       NF_TABLES_IPV4              = mkMerge [ (whenOlder "4.17" module)
                                               (whenAtLeast "4.17" yes) ];
