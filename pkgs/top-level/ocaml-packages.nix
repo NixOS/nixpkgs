@@ -1093,6 +1093,8 @@ let
 
     xenstore = callPackage ../development/ocaml-modules/xenstore { };
 
+    xenstore_transport = callPackage ../development/ocaml-modules/xenstore_transport { };
+
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
 
     xml-light = callPackage ../development/ocaml-modules/xml-light { };
