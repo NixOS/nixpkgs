@@ -1,4 +1,4 @@
-{ stdenvNoCC, buildEnv, writeShellScriptBin, fetchurl, jre }:
+{ lib, stdenvNoCC, buildEnv, writeShellScriptBin, fetchurl, jre }:
 
 let
   name = "legends-browser-${version}";
@@ -26,7 +26,7 @@ buildEnv {
   inherit name;
   paths = [ script ];
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "A multi-platform, open source, java-based legends viewer for dwarf fortress";
     maintainers = with maintainers; [ Baughn ];
     license = licenses.mit;
