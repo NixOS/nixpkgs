@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchurl, nodejs, phantomjs2, pkgs }:
+{ lib, stdenv, fetchgit, fetchurl, nodejs, phantomjs2, pkgs }:
 
 with lib;
 
@@ -59,12 +59,12 @@ in stdenv.mkDerivation rec {
     cp -v out/* $out/lib/
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://remarkjs.com";
     description = "A simple, in-browser, markdown-driven slideshow tool";
     maintainers = [];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.mit;
+    platforms = platforms.linux;
+    license = licenses.mit;
     broken = true;
   };
 }

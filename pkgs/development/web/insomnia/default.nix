@@ -6,7 +6,7 @@
 , libudev0-shim, glibc, curl, openssl, autoPatchelfHook }:
 
 let
-  runtimeLibs = stdenv.lib.makeLibraryPath [
+  runtimeLibs = lib.makeLibraryPath [
     curl
     glibc
     libudev0-shim

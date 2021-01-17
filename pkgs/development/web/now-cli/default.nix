@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl }:
+{ lib, stdenv, fetchurl }:
 stdenv.mkDerivation rec {
   pname = "now-cli";
   version = "15.8.7";

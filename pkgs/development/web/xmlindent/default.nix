@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex }:
+{ lib, stdenv, fetchurl, flex }:
 
 stdenv.mkDerivation rec {
   pname = "xmlindent";
@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "PREFIX=/usr/local" "PREFIX=$out"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "XML stream reformatter";
     homepage = "http://xmlindent.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
     maintainers = [ ];
   };
 }
