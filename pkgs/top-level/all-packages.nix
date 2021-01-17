@@ -15779,7 +15779,11 @@ in
   };
   openal = openalSoft;
 
-  openbabel = callPackage ../development/libraries/openbabel { };
+  openbabel = openbabel3;
+
+  openbabel2 = callPackage ../development/libraries/openbabel/2.nix { };
+
+  openbabel3 = callPackages ../development/libraries/openbabel { };
 
   opencascade = callPackage ../development/libraries/opencascade {
     inherit (darwin.apple_sdk.frameworks) OpenCL Cocoa;
@@ -27344,6 +27348,7 @@ in
   ### SCIENCE/CHEMISTY
 
   avogadro = callPackage ../applications/science/chemistry/avogadro {
+    openbabel = openbabel2;
     eigen = eigen2;
   };
 
