@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , tokyocabinet, ncurses
 , cairo ? null, pango ? null
 , enableCairo ? stdenv.isLinux
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i7ry25xzy027g6ysv6qlf09ax04q4vy0kikl8h0aq5jbxsl9q52";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ tokyocabinet ncurses ] ++
     lib.optionals enableCairo [ cairo pango ];
 

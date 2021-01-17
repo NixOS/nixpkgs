@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, udev, intltool, pkgconfig, glib, xmlto, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, fetchpatch, udev, intltool, pkg-config, glib, xmlto, wrapGAppsHook
 , docbook_xml_dtd_412, docbook_xsl
 , libxml2, desktop-file-utils, libusb1, cups, gdk-pixbuf, pango, atk, libnotify
 , gobject-introspection, libsecret, packagekit
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    intltool pkgconfig
+    intltool pkg-config
     xmlto libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
     python3Packages.wrapPython
     wrapGAppsHook autoreconfHook

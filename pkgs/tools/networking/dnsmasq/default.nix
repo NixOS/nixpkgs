@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, dbus, nettle, fetchpatch
+{ lib, stdenv, fetchurl, pkg-config, dbus, nettle, fetchpatch
 , libidn, libnetfilter_conntrack }:
 
 with lib;
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     END
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ nettle libidn ]
     ++ optionals stdenv.isLinux [ dbus libnetfilter_conntrack ];
 

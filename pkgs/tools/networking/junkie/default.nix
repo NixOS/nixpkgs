@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, libpcap, guile, openssl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libpcap, guile, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "junkie";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kfdjgch667gfb3qpiadd2dj3fxc7r19nr620gffb1ahca02wq31";
   };
   buildInputs = [ libpcap guile openssl ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   configureFlags = [
     "GUILELIBDIR=\${out}/share/guile/site"
     "GUILECACHEDIR=\${out}/lib/guile/ccache"

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkgconfig
+{ lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkg-config
 , makeWrapper, perlPackages, openssl, autoreconfHook, openssh, bash-completion
 , libutempter ? null, withUtempter ? stdenv.isLinux }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "05hjhlp6lk8yjcy59zywpf0r6s0h0b9zxq0lw66dh9x8vxrhaq6s";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ protobuf ncurses zlib makeWrapper openssl bash-completion ]
     ++ (with perlPackages; [ perl IOTty ])
     ++ lib.optional withUtempter libutempter;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, e2fsprogs, openldap, pkgconfig }:
+{ lib, stdenv, fetchurl, e2fsprogs, openldap, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "4.05";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" "man" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ e2fsprogs openldap ];
 
   meta = with lib; {

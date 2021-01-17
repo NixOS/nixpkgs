@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, systemd, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, systemd, pkg-config }:
 
 with lib;
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0gjyvn8r66kp49gasd6sqfvg2pj0c6v67hnq7cqwl04kj69rfy86";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ ]
     ++ optional stdenv.isLinux systemd;
 

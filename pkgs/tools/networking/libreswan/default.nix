@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper,
-  pkgconfig, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
+  pkg-config, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
   bash, iproute, iptables, procps, coreutils, gnused, gawk, nss, which, python,
   docs ? false, xmlto, libselinux, ldns
   }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "-DNSS_PKCS11_2_0_COMPAT=1"
   ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
                   libcap_ng curl nspr nss python ldns ]
                 ++ lib.optional docs xmlto

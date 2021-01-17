@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , glew, glm, libGLU, libGL, libX11, libXext, libXrender, icu
 , cppcheck
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1k8xxb4rj2fylr4vj16yvsf73cyywliz9cy78pl4ibmi03jhg837";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glew glm libGLU libGL libX11 libXext libXrender icu ]
                 ++ lib.optional doCheck cppcheck;
 

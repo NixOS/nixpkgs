@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libtool, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, libtool, autoreconfHook, pkg-config
 , sysfsutils
 , argp-standalone
   # WARNING: DO NOT USE BEACON GENERATED VALUES AS SECRET CRYPTOGRAPHIC KEYS
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  nativeBuildInputs = [ autoreconfHook libtool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
 
   configureFlags = [
     (withFeature   withGcrypt        "libgcrypt")

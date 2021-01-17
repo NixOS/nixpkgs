@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch
-, pkgconfig, autoreconfHook
+, pkg-config, autoreconfHook
 , gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
 , systemd, pam
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs =
     [ curl gmp python3 ldns unbound openssl pcsclite ]
     ++ optionals enableTNC [ trousers sqlite libxml2 ]

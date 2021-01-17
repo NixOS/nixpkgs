@@ -6,7 +6,7 @@
 , autoconf
 , automake
 , libtool
-, pkgconfig
+, pkg-config
 , cargo
 , rustc
 , gobject-introspection
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     which
     autoconf
     automake

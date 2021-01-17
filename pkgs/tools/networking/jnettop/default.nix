@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, lib, stdenv, autoconf, libpcap, ncurses, pkgconfig, glib }:
+{ fetchurl, fetchpatch, lib, stdenv, autoconf, libpcap, ncurses, pkg-config, glib }:
 
 stdenv.mkDerivation {
   name = "jnettop-0.13.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1855np7c4b0bqzhf1l1dyzxb90fpnvrirdisajhci5am6als31z9";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf ];
+  nativeBuildInputs = [ pkg-config autoconf ];
   buildInputs = [ libpcap ncurses glib ];
 
   patches = [

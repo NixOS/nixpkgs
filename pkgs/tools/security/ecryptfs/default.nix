@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, perl, util-linux, keyutils, nss, nspr, python2, pam, enablePython ? false
+{ lib, stdenv, fetchurl, pkg-config, perl, util-linux, keyutils, nss, nspr, python2, pam, enablePython ? false
 , intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which, lsof }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optionals (!enablePython) [ "--disable-pywrap" ];
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
   # if python2 support is requested, it is needed at builtime as well as runtime.
   ++ lib.optionals (enablePython) [ python2 ]
   ;

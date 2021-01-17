@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, libusb1, pcsclite }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libusb1, pcsclite }:
 
 let
   version = "3.99.5";
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "tools" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ libusb1 pcsclite ];
 

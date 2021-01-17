@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitiles, fetchFromGitHub, fetchurl, trousers, leveldb, unzip
-, scons, pkgconfig, glib, dbus_cplusplus, dbus, protobuf, openssl, snappy, pam
+, scons, pkg-config, glib, dbus_cplusplus, dbus, protobuf, openssl, snappy, pam
 }:
 
 let
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     substituteInPlace makefile --replace @@NIXOS_LEVELDB@@ ${leveldb}
     '';
 
-  nativeBuildInputs = [ unzip scons pkgconfig ];
+  nativeBuildInputs = [ unzip scons pkg-config ];
 
   buildInputs = [ trousers glib dbus_cplusplus dbus protobuf openssl snappy leveldb pam ];
 

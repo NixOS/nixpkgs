@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, autoreconfHook, makeWrapper, pkgconfig
+{ lib, stdenv, fetchgit, autoreconfHook, makeWrapper, pkg-config
 , lrzsz, ncurses, libiconv }:
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin libiconv;
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
 
   enableParallelBuilding = true;
 

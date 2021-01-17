@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , glib
 , gpm
 , file
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sha256 = "12jlnabnc91xsm35g99g2wnh96jmznvrhffd18rj7fqfy8brdhgz";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
     file

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gnupg, gtk2
+{ lib, stdenv, fetchurl, pkg-config, gnupg, gtk2
 , libxml2, intltool
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "d55e9ce6be38a44fc1053d82db2d117cf3991a51898bd86d7913bae769f04da7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gnupg gtk2 libxml2 intltool ];
 
   meta = {
