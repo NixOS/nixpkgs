@@ -1171,6 +1171,8 @@ in {
 
   cement = callPackage ../development/python-modules/cement { };
 
+  censys = callPackage ../development/python-modules/censys { };
+
   connect-box = callPackage ../development/python-modules/connect_box { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
