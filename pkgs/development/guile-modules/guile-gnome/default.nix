@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     texinfo guile gwrap pkgconfig gconf glib gnome_vfs gtk2
     libglade libgnome libgnomecanvas libgnomeui pango guile-cairo
-  ] ++ stdenv.lib.optional doCheck guile-lib;
+  ] ++ lib.optional doCheck guile-lib;
 
   # The test suite tries to open an X display, which fails.
   doCheck = false;
