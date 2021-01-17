@@ -1,4 +1,4 @@
-{ clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, gyp, which, ninja,
+{ lib, clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, gyp, which, ninja,
   python, pkgconfig, protobuf, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese,
   fcitx, gettext }:
 let
@@ -100,7 +100,7 @@ in clangStdenv.mkDerivation rec {
     install    -m 644 fcitx-mozc-icons/*.png                 $out/share/fcitx/mozc/icon/
   '';
 
-  meta = with clangStdenv.lib; {
+  meta = with lib; {
     isFcitxEngine = true;
     description   = "Fcitx engine for Google japanese input method";
     homepage      = "https://github.com/google/mozc";
