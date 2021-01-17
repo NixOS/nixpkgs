@@ -1,8 +1,16 @@
-{ substituteAll, runtimeShell, jq, nix, lib }:
-
+{ substituteAll
+, runtimeShell
+, coreutils
+, gnused
+, gnugrep
+, jq
+, nix
+, lib
+}:
 let
   fallback = import ./../../../../nixos/modules/installer/tools/nix-fallback-paths.nix;
-in substituteAll {
+in
+substituteAll {
   name = "nixos-rebuild";
   src = ./nixos-rebuild.sh;
   dir = "bin";
@@ -10,5 +18,5 @@ in substituteAll {
   inherit runtimeShell nix;
   nix_x86_64_linux = fallback.x86_64-linux;
   nix_i686_linux = fallback.i686-linux;
-  path = lib.makeBinPath [ jq ];
+  path = lib.makeBinPath [ coreutils jq gnused gnugrep ];
 }
