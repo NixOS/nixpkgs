@@ -12,6 +12,9 @@ buildPythonPackage rec {
   buildInputs = [ setuptools-git ];
   propagatedBuildInputs = [ click colorama ];
 
+  doCheck = false;
+  pythonImportsCheck = [ "click" "colorama" ];
+
   meta = with lib; {
     description = "A python script that will make your terminal snow";
     homepage = "http://github.com/sontek/snowmachine";
