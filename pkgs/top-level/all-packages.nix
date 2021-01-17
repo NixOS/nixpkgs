@@ -12737,6 +12737,8 @@ in
 
   schemaspy = callPackage ../development/tools/database/schemaspy { };
 
+  scenebuilder = callPackage ../development/tools/scenebuilder { };
+
   shncpd = callPackage ../tools/networking/shncpd { };
 
   sigrok-cli = callPackage ../development/tools/sigrok-cli { };
