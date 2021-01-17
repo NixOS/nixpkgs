@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = let
-    dependencies = stdenv.lib.makeBinPath [ platform-tools socat go-mtpfs adbfs-rootless ];
+    dependencies = lib.makeBinPath [ platform-tools socat go-mtpfs adbfs-rootless ];
   in ''
     runHook preInstall
 
