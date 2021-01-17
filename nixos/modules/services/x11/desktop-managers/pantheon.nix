@@ -181,7 +181,7 @@ in
         hicolor-icon-theme
         lightlocker
         onboard
-        qgnomeplatform
+        libsForQt5.qgnomeplatform # TODO: This should be replaced by qt5.style
         shared-mime-info
         sound-theme-freedesktop
         xdg-user-dirs

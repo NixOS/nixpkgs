@@ -16207,6 +16207,8 @@ in
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
+    adwaita-qt = callPackage ../data/themes/adwaita-qt { };
+
     alkimia = callPackage ../development/libraries/alkimia { };
 
     appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
@@ -16329,6 +16331,8 @@ in
 
     qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
+    qgnomeplatform =  callPackage ../development/libraries/qgnomeplatform { };
+
     qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
 
     quazip = callPackage ../development/libraries/quazip { };
@@ -16446,8 +16450,6 @@ in
   };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
-
-  qgnomeplatform =  libsForQt514.callPackage ../development/libraries/qgnomeplatform { };
 
   randomx = callPackage ../development/libraries/randomx { };
 
@@ -20058,8 +20060,6 @@ in
   adapta-kde-theme = callPackage ../data/themes/adapta-kde { };
 
   adementary-theme = callPackage ../data/themes/adementary { };
-
-  adwaita-qt = libsForQt5.callPackage ../data/themes/adwaita-qt { };
 
   agave = callPackage ../data/fonts/agave { };
 
