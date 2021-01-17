@@ -5,7 +5,7 @@
 , file
 , gtk3
 , intltool
-, pkgconfig
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rkxaqb62w4mv86fcnmr32lq6y0h4hh92wmsy5ddb9a8jnzx6r7w";
   };
 
-  nativeBuildInputs = [ intltool makeWrapper pkgconfig ];
+  nativeBuildInputs = [ intltool makeWrapper pkg-config ];
   buildInputs = [ curl gtk3 ];
 
   postInstall = ''

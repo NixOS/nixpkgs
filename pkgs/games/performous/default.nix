@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, gettext
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gettext
 , glibmm, libxmlxx, pango, librsvg
 , SDL2, glew, boost, libav, portaudio, epoxy
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./performous-cmake.patch ];
 
-  nativeBuildInputs = [ cmake pkgconfig gettext ];
+  nativeBuildInputs = [ cmake pkg-config gettext ];
 
   buildInputs = [
     glibmm libxmlxx pango librsvg

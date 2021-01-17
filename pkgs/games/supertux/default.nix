@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, pkgconfig, SDL2, SDL2_image , curl
+{ lib, stdenv, fetchurl, cmake, pkg-config, SDL2, SDL2_image , curl
 , libogg, libvorbis, libGLU, libGL, openal, boost, glew
 , libpng, freetype
 }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "167m3z4m8n76dvbv42m1fnvabpbpsxvr28zk9641916jl9pfba96";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [ SDL2 SDL2_image curl libogg libvorbis libGLU libGL openal boost glew
     libpng freetype

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk, openssl }:
+{ lib, stdenv, fetchurl, pkg-config, gtk, openssl }:
 
 stdenv.mkDerivation rec {
   name = "macopix-1.7.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sgnr0wrw3hglcnsyvipll7icfv69ssmyw584zfhk1rgramlkzyb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk openssl ];
 
   preConfigure = ''

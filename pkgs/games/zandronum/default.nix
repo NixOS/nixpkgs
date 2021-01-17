@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchhg, cmake, pkgconfig, makeWrapper, callPackage
+{ stdenv, lib, fetchhg, cmake, pkg-config, makeWrapper, callPackage
 , soundfont-fluid, SDL, libGL, glew, bzip2, zlib, libjpeg, fluidsynth, openssl, gtk2, python3, libgme
 , serverOnly ? false
 }:
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ openssl bzip2 zlib SDL libjpeg sqlite libgme ]
              ++ lib.optionals (!serverOnly) [ libGL glew fmod fluidsynth gtk2 ];
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper python3 ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper python3 ];
 
   preConfigure = ''
     ln -s ${sqlite}/* sqlite/

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, unzip, zlib, libpng, bzip2, SDL, SDL_mixer
+{ lib, stdenv, fetchurl, pkg-config, unzip, zlib, libpng, bzip2, SDL, SDL_mixer
 , buildEnv, config, runtimeShell
 }:
 
@@ -115,7 +115,7 @@ let
 
     sourceRoot = ".";
 
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [ zlib libpng bzip2 SDL SDL_mixer unzip ];
 
     configurePhase = let
