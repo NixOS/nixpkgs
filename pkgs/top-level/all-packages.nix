@@ -26982,6 +26982,8 @@ in
 
   stardust = callPackage ../games/stardust {};
 
+  starspace = callPackage ../applications/science/machine-learning/starspace { };
+
   stockfish = callPackage ../games/stockfish { };
 
   steamPackages = dontRecurseIntoAttrs (callPackage ../games/steam {
