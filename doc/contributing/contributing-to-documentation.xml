@@ -12,7 +12,7 @@ xlink:href="https://github.com/NixOS/nixpkgs/tree/master/doc">doc</filename> sub
 <screen>
 <prompt>$ </prompt>cd /path/to/nixpkgs/doc
 <prompt>$ </prompt>nix-shell
-<prompt>[nix-shell]$ </prompt>make
+<prompt>[nix-shell]$ </prompt>make $makeFlags
 </screen>
  <para>
   If you experience problems, run <command>make debug</command> to help understand the docbook errors.
