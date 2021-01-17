@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./Makefile.patch
-  ] ++ (lib.optional (lib.versionOlder lib.kernel.version "5.7") ./vfl_type_grabber.patch);
+  ] ++ (lib.optional (lib.versionOlder kernel.version "5.7") ./vfl_type_grabber.patch);
 
   installPhase = ''
     install -D gvusb2-sound.ko $out/${kerneldir}/extra/gvusb2-sound.ko
