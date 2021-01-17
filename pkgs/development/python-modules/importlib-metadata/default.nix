@@ -8,22 +8,23 @@
 , configparser
 , isPy3k
 , importlib-resources
+, typing-extensions
 , packaging
 }:
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "1.7.0";
+  version = "3.4.0";
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    sha256 = "10vz0ydrzspdhdbxrzwr9vhs693hzh4ff71lnqsifvdzvf66bfwh";
+    sha256 = "13gkxz2567iw2df8fg0li7sssqkzs16jx54m9villhd7fx2alpgs";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ zipp ]
+  propagatedBuildInputs = [ zipp typing-extensions ]
     ++ lib.optionals (!isPy3k) [ pathlib2 contextlib2 configparser ];
 
   doCheck = false; # Cyclic dependencies.
