@@ -3,7 +3,7 @@
 , vala
 , gettext
 , libxml2
-, pkgconfig
+, pkg-config
 , glib
 , gtk3
 , gnome3
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

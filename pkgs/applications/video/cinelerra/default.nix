@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool
-, pkgconfig, faad2, faac, a52dec, alsaLib, fftw, lame, libavc1394
+, pkg-config, faad2, faac, a52dec, alsaLib, fftw, lame, libavc1394
 , libiec61883, libraw1394, libsndfile, libvorbis, libogg, libjpeg
 , libtiff, freetype, mjpegtools, x264, gettext, openexr
 , libXext, libXxf86vm, libXv, libXi, libX11, libXft, xorgproto, libtheora, libpng
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ automake
-      autoconf libtool pkgconfig file
+      autoconf libtool pkg-config file
       faad2 faac
       a52dec alsaLib   fftw lame libavc1394 libiec61883
       libraw1394 libsndfile libvorbis libogg libjpeg libtiff freetype

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, pkgconfig, ninja, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, meson, pkg-config, ninja, wrapGAppsHook
 , wayland, wlroots, gtkmm3, libsigcxx, jsoncpp, fmt, scdoc, spdlog, gtk-layer-shell
 , howard-hinnant-date, cmake
 , traySupport  ? true,  libdbusmenu-gtk3
@@ -21,7 +21,7 @@
     };
 
     nativeBuildInputs = [
-      meson ninja pkgconfig scdoc wrapGAppsHook cmake
+      meson ninja pkg-config scdoc wrapGAppsHook cmake
     ] ++ lib.optional withMediaPlayer gobject-introspection;
 
     propagatedBuildInputs = lib.optionals withMediaPlayer [

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python, pkgconfig, cmake, bluez, libusb1, curl
+{ lib, stdenv, fetchFromGitHub, python, pkg-config, cmake, bluez, libusb1, curl
 , libiconv, gettext, sqlite
 , dbiSupport ? false, libdbi ? null, libdbiDrivers ? null
 , postgresSupport ? false, postgresql ? null
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./bashcomp-dir.patch ./systemd.patch ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [ python bluez libusb1 curl gettext sqlite libiconv ]
   ++ optionals dbiSupport [ libdbi libdbiDrivers ]

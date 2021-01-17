@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, pidgin, libnotify, gdk-pixbuf, glib, dbus
+{ lib, stdenv, fetchurl, pkg-config, pidgin, libnotify, gdk-pixbuf, glib, dbus
 , dbus-glib }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "ln -s \$out/lib/pidgin \$out/share/pidgin-otr";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pidgin libnotify gdk-pixbuf glib dbus dbus-glib ];
 
   meta = {

@@ -1,4 +1,4 @@
-{lib, stdenv, mkDerivation, fetchurl, qmake, qtbase, qtsvg, pkgconfig, poppler, djvulibre, libspectre, cups
+{lib, stdenv, mkDerivation, fetchurl, qmake, qtbase, qtsvg, pkg-config, poppler, djvulibre, libspectre, cups
 , file, ghostscript
 }:
 let
@@ -10,7 +10,7 @@ let
     url="https://launchpad.net/qpdfview/trunk/${version}/+download/qpdfview-${version}.tar.gz";
     sha256 = "0v1rl126hvblajnph2hkansgi0s8vjdc5yxrm4y3faa0lxzjwr6c";
   };
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkg-config ];
   buildInputs = [
     qtbase qtsvg poppler djvulibre libspectre cups file ghostscript
   ];

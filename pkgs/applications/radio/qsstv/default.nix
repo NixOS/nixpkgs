@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl, qtbase, qmake, openjpeg, pkgconfig, fftw,
+{ mkDerivation, lib, stdenv, fetchurl, qtbase, qmake, openjpeg, pkg-config, fftw,
   libpulseaudio, alsaLib, hamlib, libv4l, fftwFloat }:
 
 mkDerivation rec {
@@ -14,7 +14,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [ qtbase openjpeg fftw libpulseaudio alsaLib hamlib libv4l

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook,
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook,
   glib, gtk3, pcsclite, lua5_2, curl, readline }:
 let
   version = "0.8.4";
@@ -14,7 +14,7 @@ in
       sha256 = "1ighpl7nvcvwnsd6r5h5n9p95kclwrq99hq7bry7s53yr57l6588";
     };
 
-    nativeBuildInputs = [ pkgconfig autoreconfHook ];
+    nativeBuildInputs = [ pkg-config autoreconfHook ];
     buildInputs = [ glib gtk3 pcsclite lua5_2 curl readline ];
 
     enableParallelBuilding = true;

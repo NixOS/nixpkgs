@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, cmake, qtbase, qttools
 , seafile-shared, jansson, libsearpc
 , withShibboleth ? true, qtwebengine }:
 
@@ -13,7 +13,7 @@ mkDerivation rec {
     sha256 = "2vV+6ZXjVg81JVLfWeD0UK+RdmpBxBU2Ozx790WFSyw=";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ qtbase qttools seafile-shared jansson libsearpc ]
     ++ lib.optional withShibboleth qtwebengine;
 

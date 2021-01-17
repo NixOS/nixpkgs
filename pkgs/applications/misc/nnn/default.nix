@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, conf ? null }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, ncurses, readline, conf ? null }:
 
 with lib;
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   configFile = optionalString (conf != null) (builtins.toFile "nnn.h" conf);
   preBuild = optionalString (conf != null) "cp ${configFile} src/nnn.h";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ readline ncurses ];
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];

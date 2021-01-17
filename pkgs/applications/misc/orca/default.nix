@@ -1,5 +1,5 @@
 { lib, stdenv
-, pkgconfig
+, pkg-config
 , fetchurl
 , buildPythonApplication
 , autoreconfHook
@@ -57,7 +57,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     autoreconfHook
     wrapGAppsHook
-    pkgconfig
+    pkg-config
     libxmlxx3
     gettext
     yelp-tools

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, qt4, pkgconfig, boost, expat, cairo, python2Packages,
+{ lib, stdenv, fetchurl, qt4, pkg-config, boost, expat, cairo, python2Packages,
   cmake, flex, bison, pango, librsvg, librevenge, libxml2, libcdr, libzip,
   poppler, imagemagick, openexr, ffmpeg_3, opencolorio, openimageio,
   qmake4Hook, libpng, libGL, lndir }:
@@ -50,7 +50,7 @@ let
     ({
       pluginName = "arena";
       sha256 = "0qba13vn9qdfax7nqlz1ps27zspr5kh795jp1xvbmwjzjzjpkqkf";
-      nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         pango librsvg librevenge libcdr opencolorio libxml2 libzip
         poppler imagemagick
@@ -66,7 +66,7 @@ let
     ({
       pluginName = "io";
       sha256 = "0s196i9fkgr9iw92c94mxgs1lkxbhynkf83vmsgrldflmf0xjky7";
-      nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         libpng ffmpeg_3 openexr opencolorio openimageio boost libGL
         seexpr
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
     sha256 = "1wdc0zqriw2jhlrhzs6af3kagrv22cm086ffnbr1x43mgc9hfhjp";
   };
 
-  nativeBuildInputs = [ qmake4Hook pkgconfig python2Packages.wrapPython ];
+  nativeBuildInputs = [ qmake4Hook pkg-config python2Packages.wrapPython ];
 
   buildInputs = [
     qt4 boost expat cairo python2Packages.pyside python2Packages.pysideShiboken

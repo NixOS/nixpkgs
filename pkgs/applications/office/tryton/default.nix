@@ -1,6 +1,6 @@
 { lib, stdenv
 , python3Packages
-, pkgconfig
+, pkg-config
 , librsvg
 , gobject-introspection
 , atk
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gobject-introspection
     wrapGAppsHook
   ];

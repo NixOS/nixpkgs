@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, pkgconfig, makeWrapper, cmake, gtest
+{ fetchurl, lib, stdenv, pkg-config, makeWrapper, cmake, gtest
 , boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
 , webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
 , libdbiDrivers, guile, perl, perlPackages
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sha256 = "020k1mm909dcgs52ls4v7xx3yn8gqazi9awyr81l6y7pkq1spn2n";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
+  nativeBuildInputs = [ pkg-config makeWrapper cmake gtest ];
 
   buildInputs = [
     boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales

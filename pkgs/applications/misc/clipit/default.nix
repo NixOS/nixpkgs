@@ -1,5 +1,5 @@
 { fetchFromGitHub, fetchpatch, lib, stdenv
-, autoreconfHook, intltool, pkgconfig
+, autoreconfHook, intltool, pkg-config
 , gtk3, libayatana-appindicator, xdotool, which, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     intltoolize --copy --force --automake
   '';
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook autoreconfHook intltool ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook autoreconfHook intltool ];
   configureFlags = [ "--with-gtk3" "--enable-appindicator=yes" ];
   buildInputs = [ gtk3 libayatana-appindicator ];
 

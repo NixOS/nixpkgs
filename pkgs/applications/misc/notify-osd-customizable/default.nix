@@ -7,7 +7,7 @@
 , libtool
 , libwnck3
 , makeWrapper
-, pkgconfig
+, pkg-config
 , gsettings-desktop-schemas
 }:
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh --libexecdir=$(out)/bin";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     glib libwnck3 libnotify dbus-glib makeWrapper
     gsettings-desktop-schemas gnome3.gnome-common

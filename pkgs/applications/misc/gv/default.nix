@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkgconfig, libiconv }:
+{ lib, stdenv, fetchurl, Xaw3d, ghostscriptX, perl, pkg-config, libiconv }:
 
 let
   name = "gv-3.7.4";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     Xaw3d
     ghostscriptX
     perl
-    pkgconfig
+    pkg-config
   ] ++ lib.optionals stdenv.isDarwin [
     libiconv
   ];

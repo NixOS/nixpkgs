@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkgconfig, gtk2, synergy}:
+{lib, stdenv, fetchurl, pkg-config, gtk2, synergy}:
 
 stdenv.mkDerivation rec {
   pname = "quicksynergy";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pi8503bg8q1psw50y6d780i33nnvfjqiy9vnr3v52pdcfip8pix";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gtk2
     synergy

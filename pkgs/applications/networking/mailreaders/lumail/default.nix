@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, lua, file, ncurses, gmime, pcre-cpp
+{ lib, stdenv, fetchurl, pkg-config, lua, file, ncurses, gmime, pcre-cpp
 , perl, perlPackages, makeWrapper
 , debugBuild ? false
 , alternativeGlobalConfigFilePath ? null
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [
     lua file ncurses gmime pcre-cpp
     perl perlPackages.JSON perlPackages.NetIMAPClient

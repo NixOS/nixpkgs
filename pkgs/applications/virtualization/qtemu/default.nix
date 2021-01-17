@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitLab, pkgconfig, qmake, qtbase, qemu, makeWrapper }:
+{ lib, stdenv, mkDerivation, fetchFromGitLab, pkg-config, qmake, qtbase, qemu, makeWrapper }:
 
 mkDerivation rec {
   pname = "qtemu";
@@ -13,7 +13,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

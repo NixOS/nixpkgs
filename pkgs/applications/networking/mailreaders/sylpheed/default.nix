@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, openssl ? null, gpgme ? null
+{ lib, stdenv, fetchurl, pkg-config, gtk2, openssl ? null, gpgme ? null
 , gpgSupport ? true, sslSupport ? true }:
 
 assert gpgSupport -> gpgme != null;
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0j9y5vdzch251s264diw9clrn88dn20bqqkwfmis9l7m8vmwasqd";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gtk2 ]
     ++ optionals gpgSupport [ gpgme ]

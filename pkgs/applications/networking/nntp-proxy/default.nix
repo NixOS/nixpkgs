@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libconfig, pkgconfig, libevent, openssl }:
+{ lib, stdenv, fetchFromGitHub, libconfig, pkg-config, libevent, openssl }:
 
 stdenv.mkDerivation {
   pname = "nntp-proxy";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0jwxh71am83fbnq9mn06jl06rq8qybm506js79xmmc3xbk5pqvy4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libconfig libevent openssl ];
 
   installFlags = [ "INSTALL_DIR=$(out)/bin/" ];

@@ -1,7 +1,7 @@
 { lib, config, fetchgit, stdenv, wrapGAppsHook, autoreconfHook, bison, flex
 , curl, dbus, dbus-glib, enchant, gtk3, gnutls, gnupg, gpgme
 , libarchive, libcanberra-gtk3, libetpan, libnotify, libsoup, libxml2, networkmanager
-, openldap, perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk
+, openldap, perl, pkg-config, poppler, python, shared-mime-info, webkitgtk
 , glib-networking, gsettings-desktop-schemas, libSM, libytnef, libical
 # Build options
 # TODO: A flag to build the manual.
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
 
-  nativeBuildInputs = [ autoreconfHook bison flex pkgconfig wrapGAppsHook python.pkgs.wrapPython ];
+  nativeBuildInputs = [ autoreconfHook bison flex pkg-config wrapGAppsHook python.pkgs.wrapPython ];
   propagatedBuildInputs = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
 
   buildInputs =

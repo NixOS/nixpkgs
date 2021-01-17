@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchFromGitHub
-, cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs
+, cmake, extra-cmake-modules, pkg-config, libxcb, libpthreadstubs
 , libXdmcp, libXau, qtbase, qtdeclarative, qtquickcontrols2, qttools, pam, systemd
 }:
 
@@ -27,7 +27,7 @@ in mkDerivation {
       sed -e '1i#include <sys/time.h>' -i src/helper/HelperApp.cpp
     '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config qttools ];
 
   buildInputs = [
     libxcb libpthreadstubs libXdmcp libXau pam qtbase qtdeclarative qtquickcontrols2 systemd

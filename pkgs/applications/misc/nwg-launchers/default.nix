@@ -5,7 +5,7 @@
 , meson
 , ninja
 , nlohmann_json
-, pkgconfig
+, pkg-config
 , swaylock
 , makeWrapper
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     cmake
     makeWrapper
   ];

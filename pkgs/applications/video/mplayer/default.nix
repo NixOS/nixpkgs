@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchurl, pkgconfig, freetype, yasm, ffmpeg_3
+{ config, lib, stdenv, fetchurl, pkg-config, freetype, yasm, ffmpeg_3
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig yasm ];
+  nativeBuildInputs = [ pkg-config yasm ];
   buildInputs = with lib;
     [ freetype ffmpeg_3 ]
     ++ optional aalibSupport aalib

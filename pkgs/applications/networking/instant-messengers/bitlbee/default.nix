@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkgconfig, check, libotr, python
+{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkg-config, check, libotr, python
 , enableLibPurple ? false, pidgin ? null
 , enablePam ? false, pam ? null
 }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zhhcbcr59sx9h4maf8zamzv2waya7sbsl7w74gbyilvy93dw5cz";
   };
 
-  nativeBuildInputs = [ pkgconfig ] ++ optional doCheck check;
+  nativeBuildInputs = [ pkg-config ] ++ optional doCheck check;
 
   buildInputs = [ gnutls libotr python ]
     ++ optional enableLibPurple pidgin

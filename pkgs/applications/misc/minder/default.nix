@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, pkgconfig, meson, ninja, python3
+, pkg-config, meson, ninja, python3
 , wrapGAppsHook, vala, shared-mime-info
 , cairo, pantheon, glib, gtk3, libxml2, libgee, libarchive
 , discount, gtksourceview3
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "137kyf82n5a2v0cm9q02rhv8rmbjgnj60h64prq90h0d42prj3gd";
   };
 
-  nativeBuildInputs = [ pkgconfig meson ninja python3 wrapGAppsHook vala shared-mime-info ];
+  nativeBuildInputs = [ pkg-config meson ninja python3 wrapGAppsHook vala shared-mime-info ];
   buildInputs = [ cairo pantheon.granite glib gtk3 libxml2 libgee libarchive hicolor-icon-theme discount gtksourceview3 ];
 
   postPatch = ''

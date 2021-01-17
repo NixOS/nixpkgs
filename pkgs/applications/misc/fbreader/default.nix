@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config
 , bzip2, curl, expat, fribidi, libunibreak, sqlite, zlib
 , uiTarget ? if !stdenv.isDarwin then "desktop" else "macosx"
 , uiType ? if !stdenv.isDarwin then "qt4" else "cocoa"
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
       --replace -llinebreak -lunibreak
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     bzip2 curl expat fribidi libunibreak sqlite zlib
