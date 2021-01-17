@@ -2834,6 +2834,8 @@ in {
 
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
 
+  hastygram = callPackage ../development/python-modules/hastygram { };
+
   hatasmota = callPackage ../development/python-modules/hatasmota { };
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
