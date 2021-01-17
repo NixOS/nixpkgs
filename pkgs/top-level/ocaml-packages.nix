@@ -154,6 +154,8 @@ let
 
     conduit-lwt-unix = callPackage ../development/ocaml-modules/conduit/lwt-unix.nix { };
 
+    conduit-mirage = callPackage ../development/ocaml-modules/conduit/mirage.nix { };
+
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
     containers = callPackage ../development/ocaml-modules/containers { };
