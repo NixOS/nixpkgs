@@ -5604,6 +5604,12 @@
       fingerprint = "B573 5118 0375 A872 FBBF  7770 B629 036B E399 EEE9";
     }];
   };
+  mausch = {
+    email = "mauricioscheffer@gmail.com";
+    github = "mausch";
+    githubId = 95194;
+    name = "Mauricio Scheffer";
+  };
   matejc = {
     email = "cotman.matej@gmail.com";
     github = "matejc";
