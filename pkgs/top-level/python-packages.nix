@@ -5602,10 +5602,233 @@ in {
 
   pynzb = callPackage ../development/python-modules/pynzb { };
 
-  pyobjc = if stdenv.isDarwin then
-    callPackage ../development/python-modules/pyobjc { }
-  else
-    throw "pyobjc can only be built on Mac OS";
+  pyobjc = callPackage ../development/python-modules/pyobjc { };
+
+  pyobjc-core = callPackage ../development/python-modules/pyobjc-core { };
+
+  pyobjc-framework-Accounts = callPackage ../development/python-modules/pyobjc-framework-Accounts { };
+
+  pyobjc-framework-AddressBook = callPackage ../development/python-modules/pyobjc-framework-AddressBook { };
+
+  pyobjc-framework-AdSupport = callPackage ../development/python-modules/pyobjc-framework-AdSupport { };
+
+  pyobjc-framework-AppleScriptObjC = callPackage ../development/python-modules/pyobjc-framework-AppleScriptObjC { };
+
+  pyobjc-framework-AppleScriptKit = callPackage ../development/python-modules/pyobjc-framework-AppleScriptKit { };
+
+  pyobjc-framework-ApplicationServices = callPackage ../development/python-modules/pyobjc-framework-ApplicationServices { };
+
+  pyobjc-framework-AuthenticationServices = callPackage ../development/python-modules/pyobjc-framework-AuthenticationServices { };
+
+  pyobjc-framework-AutomaticAssessmentConfiguration = callPackage ../development/python-modules/pyobjc-framework-AutomaticAssessmentConfiguration { };
+
+  pyobjc-framework-Automator = callPackage ../development/python-modules/pyobjc-framework-Automator { };
+
+  pyobjc-framework-AVFoundation = callPackage ../development/python-modules/pyobjc-framework-AVFoundation { };
+
+  pyobjc-framework-AVKit = callPackage ../development/python-modules/pyobjc-framework-AVKit { };
+
+  pyobjc-framework-BusinessChat = callPackage ../development/python-modules/pyobjc-framework-BusinessChat { };
+
+  pyobjc-framework-CalendarStore = callPackage ../development/python-modules/pyobjc-framework-CalendarStore { };
+
+  pyobjc-framework-CFNetwork = callPackage ../development/python-modules/pyobjc-framework-CFNetwork { };
+
+  pyobjc-framework-CloudKit = callPackage ../development/python-modules/pyobjc-framework-CloudKit { };
+
+  pyobjc-framework-Cocoa = callPackage ../development/python-modules/pyobjc-framework-Cocoa { };
+
+  pyobjc-framework-Collaboration = callPackage ../development/python-modules/pyobjc-framework-Collaboration { };
+
+  pyobjc-framework-ColorSync = callPackage ../development/python-modules/pyobjc-framework-ColorSync { };
+
+  pyobjc-framework-Contacts = callPackage ../development/python-modules/pyobjc-framework-Contacts { };
+
+  pyobjc-framework-ContactsUI = callPackage ../development/python-modules/pyobjc-framework-ContactsUI { };
+
+  pyobjc-framework-CoreAudio = callPackage ../development/python-modules/pyobjc-framework-CoreAudio { };
+
+  pyobjc-framework-CoreAudioKit = callPackage ../development/python-modules/pyobjc-framework-CoreAudioKit { };
+
+  pyobjc-framework-CoreBluetooth = callPackage ../development/python-modules/pyobjc-framework-CoreBluetooth { };
+
+  pyobjc-framework-CoreData = callPackage ../development/python-modules/pyobjc-framework-CoreData { };
+
+  pyobjc-framework-CoreHaptics = callPackage ../development/python-modules/pyobjc-framework-CoreHaptics { };
+
+  pyobjc-framework-CoreLocation = callPackage ../development/python-modules/pyobjc-framework-CoreLocation { };
+
+  pyobjc-framework-CoreMedia = callPackage ../development/python-modules/pyobjc-framework-CoreMedia { };
+
+  pyobjc-framework-CoreMediaIO = callPackage ../development/python-modules/pyobjc-framework-CoreMediaIO { };
+
+  pyobjc-framework-CoreML = callPackage ../development/python-modules/pyobjc-framework-CoreML { };
+
+  pyobjc-framework-CoreMotion = callPackage ../development/python-modules/pyobjc-framework-CoreMotion { };
+
+  pyobjc-framework-CoreServices = callPackage ../development/python-modules/pyobjc-framework-CoreServices { };
+
+  pyobjc-framework-CoreSpotlight = callPackage ../development/python-modules/pyobjc-framework-CoreSpotlight { };
+
+  pyobjc-framework-CoreText = callPackage ../development/python-modules/pyobjc-framework-CoreText { };
+
+  pyobjc-framework-CoreWLAN = callPackage ../development/python-modules/pyobjc-framework-CoreWLAN { };
+
+  pyobjc-framework-CryptoTokenKit = callPackage ../development/python-modules/pyobjc-framework-CryptoTokenKit { };
+
+  pyobjc-framework-DeviceCheck = callPackage ../development/python-modules/pyobjc-framework-DeviceCheck { };
+
+  pyobjc-framework-DictionaryServices = callPackage ../development/python-modules/pyobjc-framework-DictionaryServices { };
+
+  pyobjc-framework-DiscRecording = callPackage ../development/python-modules/pyobjc-framework-DiscRecording { };
+
+  pyobjc-framework-DiscRecordingUI = callPackage ../development/python-modules/pyobjc-framework-DiscRecordingUI { };
+
+  pyobjc-framework-DiskArbitration = callPackage ../development/python-modules/pyobjc-framework-DiskArbitration { };
+
+  pyobjc-framework-DVDPlayback = callPackage ../development/python-modules/pyobjc-framework-DVDPlayback { };
+
+  pyobjc-framework-EventKit = callPackage ../development/python-modules/pyobjc-framework-EventKit { };
+
+  pyobjc-framework-ExceptionHandling = callPackage ../development/python-modules/pyobjc-framework-ExceptionHandling { };
+
+  pyobjc-framework-ExecutionPolicy = callPackage ../development/python-modules/pyobjc-framework-ExecutionPolicy { };
+
+  pyobjc-framework-ExternalAccessory = callPackage ../development/python-modules/pyobjc-framework-ExternalAccessory { };
+
+  pyobjc-framework-FileProvider = callPackage ../development/python-modules/pyobjc-framework-FileProvider { };
+
+  pyobjc-framework-FileProviderUI = callPackage ../development/python-modules/pyobjc-framework-FileProviderUI { };
+
+  pyobjc-framework-FinderSync = callPackage ../development/python-modules/pyobjc-framework-FinderSync { };
+
+  pyobjc-framework-FSEvents = callPackage ../development/python-modules/pyobjc-framework-FSEvents { };
+
+  pyobjc-framework-GameCenter = callPackage ../development/python-modules/pyobjc-framework-GameCenter { };
+
+  pyobjc-framework-GameController = callPackage ../development/python-modules/pyobjc-framework-GameController { };
+
+  pyobjc-framework-GameKit = callPackage ../development/python-modules/pyobjc-framework-GameKit { };
+
+  pyobjc-framework-GameplayKit = callPackage ../development/python-modules/pyobjc-framework-GameplayKit { };
+
+  pyobjc-framework-ImageCaptureCore = callPackage ../development/python-modules/pyobjc-framework-ImageCaptureCore { };
+
+  pyobjc-framework-IMServicePlugIn = callPackage ../development/python-modules/pyobjc-framework-IMServicePlugIn { };
+
+  pyobjc-framework-InputMethodKit = callPackage ../development/python-modules/pyobjc-framework-InputMethodKit { };
+
+  pyobjc-framework-Intents = callPackage ../development/python-modules/pyobjc-framework-Intents { };
+
+  pyobjc-framework-InstallerPlugins = callPackage ../development/python-modules/pyobjc-framework-InstallerPlugins { };
+
+  pyobjc-framework-InstantMessage = callPackage ../development/python-modules/pyobjc-framework-InstantMessage { };
+
+  pyobjc-framework-IOSurface = callPackage ../development/python-modules/pyobjc-framework-IOSurface { };
+
+  pyobjc-framework-iTunesLibrary = callPackage ../development/python-modules/pyobjc-framework-iTunesLibrary { };
+
+  pyobjc-framework-LatentSemanticMapping = callPackage ../development/python-modules/pyobjc-framework-LatentSemanticMapping { };
+
+  pyobjc-framework-LaunchServices = callPackage ../development/python-modules/pyobjc-framework-LaunchServices { };
+
+  pyobjc-framework-libdispatch = callPackage ../development/python-modules/pyobjc-framework-libdispatch { };
+
+  pyobjc-framework-LinkPresentation = callPackage ../development/python-modules/pyobjc-framework-LinkPresentation { };
+
+  pyobjc-framework-LocalAuthentication = callPackage ../development/python-modules/pyobjc-framework-LocalAuthentication { };
+
+  pyobjc-framework-MapKit = callPackage ../development/python-modules/pyobjc-framework-MapKit { };
+
+  pyobjc-framework-MediaAccessibility = callPackage ../development/python-modules/pyobjc-framework-MediaAccessibility { };
+
+  pyobjc-framework-MediaLibrary = callPackage ../development/python-modules/pyobjc-framework-MediaLibrary { };
+
+  pyobjc-framework-MediaPlayer = callPackage ../development/python-modules/pyobjc-framework-MediaPlayer { };
+
+  pyobjc-framework-MediaToolbox = callPackage ../development/python-modules/pyobjc-framework-MediaToolbox { };
+
+  pyobjc-framework-Metal = callPackage ../development/python-modules/pyobjc-framework-Metal { };
+
+  pyobjc-framework-MetalKit = callPackage ../development/python-modules/pyobjc-framework-MetalKit { };
+
+  pyobjc-framework-ModelIO = callPackage ../development/python-modules/pyobjc-framework-ModelIO { };
+
+  pyobjc-framework-MultipeerConnectivity = callPackage ../development/python-modules/pyobjc-framework-MultipeerConnectivity { };
+
+  pyobjc-framework-NaturalLanguage = callPackage ../development/python-modules/pyobjc-framework-NaturalLanguage { };
+
+  pyobjc-framework-NetFS = callPackage ../development/python-modules/pyobjc-framework-NetFS { };
+
+  pyobjc-framework-Network = callPackage ../development/python-modules/pyobjc-framework-Network { };
+
+  pyobjc-framework-NetworkExtension = callPackage ../development/python-modules/pyobjc-framework-NetworkExtension { };
+
+  pyobjc-framework-NotificationCenter = callPackage ../development/python-modules/pyobjc-framework-NotificationCenter { };
+
+  pyobjc-framework-OpenDirectory = callPackage ../development/python-modules/pyobjc-framework-OpenDirectory { };
+
+  pyobjc-framework-OSAKit = callPackage ../development/python-modules/pyobjc-framework-OSAKit { };
+
+  pyobjc-framework-OSLog = callPackage ../development/python-modules/pyobjc-framework-OSLog { };
+
+  pyobjc-framework-PencilKit = callPackage ../development/python-modules/pyobjc-framework-PencilKit { };
+
+  pyobjc-framework-Photos = callPackage ../development/python-modules/pyobjc-framework-Photos { };
+
+  pyobjc-framework-PhotosUI = callPackage ../development/python-modules/pyobjc-framework-PhotosUI { };
+
+  pyobjc-framework-PreferencePanes = callPackage ../development/python-modules/pyobjc-framework-PreferencePanes { };
+
+  pyobjc-framework-PushKit = callPackage ../development/python-modules/pyobjc-framework-PushKit { };
+
+  pyobjc-framework-Quartz = callPackage ../development/python-modules/pyobjc-framework-Quartz { };
+
+  pyobjc-framework-QuickLookThumbnailing = callPackage ../development/python-modules/pyobjc-framework-QuickLookThumbnailing { };
+
+  pyobjc-framework-SafariServices = callPackage ../development/python-modules/pyobjc-framework-SafariServices { };
+
+  pyobjc-framework-SceneKit = callPackage ../development/python-modules/pyobjc-framework-SceneKit { };
+
+  pyobjc-framework-ScreenSaver = callPackage ../development/python-modules/pyobjc-framework-ScreenSaver { };
+
+  pyobjc-framework-ScriptingBridge = callPackage ../development/python-modules/pyobjc-framework-ScriptingBridge { };
+
+  pyobjc-framework-SearchKit = callPackage ../development/python-modules/pyobjc-framework-SearchKit { };
+
+  pyobjc-framework-Security = callPackage ../development/python-modules/pyobjc-framework-Security { };
+
+  pyobjc-framework-SecurityFoundation = callPackage ../development/python-modules/pyobjc-framework-SecurityFoundation { };
+
+  pyobjc-framework-SecurityInterface = callPackage ../development/python-modules/pyobjc-framework-SecurityInterface { };
+
+  pyobjc-framework-ServiceManagement = callPackage ../development/python-modules/pyobjc-framework-ServiceManagement { };
+
+  pyobjc-framework-Social = callPackage ../development/python-modules/pyobjc-framework-Social { };
+
+  pyobjc-framework-SoundAnalysis = callPackage ../development/python-modules/pyobjc-framework-SoundAnalysis { };
+
+  pyobjc-framework-Speech = callPackage ../development/python-modules/pyobjc-framework-Speech { };
+
+  pyobjc-framework-SpriteKit = callPackage ../development/python-modules/pyobjc-framework-SpriteKit { };
+
+  pyobjc-framework-StoreKit = callPackage ../development/python-modules/pyobjc-framework-StoreKit { };
+
+  pyobjc-framework-SyncServices = callPackage ../development/python-modules/pyobjc-framework-SyncServices { };
+
+  pyobjc-framework-SystemConfiguration = callPackage ../development/python-modules/pyobjc-framework-SystemConfiguration { };
+
+  pyobjc-framework-SystemExtensions = callPackage ../development/python-modules/pyobjc-framework-SystemExtensions { };
+
+  pyobjc-framework-UserNotifications = callPackage ../development/python-modules/pyobjc-framework-UserNotifications { };
+
+  pyobjc-framework-VideoSubscriberAccount = callPackage ../development/python-modules/pyobjc-framework-VideoSubscriberAccount { };
+
+  pyobjc-framework-VideoToolbox = callPackage ../development/python-modules/pyobjc-framework-VideoToolbox { };
+
+  pyobjc-framework-Vision = callPackage ../development/python-modules/pyobjc-framework-Vision { };
+
+  pyobjc-framework-WebKit = callPackage ../development/python-modules/pyobjc-framework-WebKit { };
 
   pyocr = callPackage ../development/python-modules/pyocr {
     tesseract = pkgs.tesseract4;

@@ -107,8 +107,8 @@ let
         fi
 
         local tbd_source=${darwin-stubs}/System/Library/Frameworks/$nested_path/Versions/$current
-        if [ "${name}" != "Kernel" ]; then
-          # The Kernel.framework has headers but no actual library component.
+        # Skip frameworks which have no generated tbd file.
+        if stat --printf="" $tbd_source/*.tbd 2>/dev/null; then
           cp -v $tbd_source/*.tbd .
         fi
 
@@ -276,19 +276,21 @@ in rec {
       setupHook = ./private-frameworks-setup-hook.sh;
     });
 
+    GameKit = stdenv.lib.overrideDerivation super.GameKit (drv: {
+      installPhase = drv.installPhase + ''
+        mkdir -p $out/include/simd
+        cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
+      '';
+    });
+
     IMServicePlugIn = stdenv.lib.overrideDerivation super.IMServicePlugIn (drv: {
       extraTBDFiles = [ "Versions/A/Frameworks/IMServicePlugInSupport.framework/Versions/A/IMServicePlugInSupport.tbd" ];
     });
 
-    Security = stdenv.lib.overrideDerivation super.Security (drv: {
-      setupHook = ./security-setup-hook.sh;
-    });
-
-    QuartzCore = stdenv.lib.overrideDerivation super.QuartzCore (drv: {
+    GameplayKit = stdenv.lib.overrideDerivation super.GameplayKit (drv: {
       installPhase = drv.installPhase + ''
-        f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
-        substituteInPlace "$f" \
-          --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
+        mkdir -p $out/include/simd
+        cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
       '';
     });
 
@@ -296,6 +298,39 @@ in rec {
       installPhase = drv.installPhase + ''
         mkdir -p $out/include/simd
         cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
+      '';
+    });
+
+    ModelIO = stdenv.lib.overrideDerivation super.ModelIO (drv: {
+      installPhase = drv.installPhase + ''
+        mkdir -p $out/include/simd
+        cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
+      '';
+    });
+
+    SceneKit = stdenv.lib.overrideDerivation super.SceneKit (drv: {
+      installPhase = drv.installPhase + ''
+        mkdir -p $out/include/simd
+        cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
+      '';
+    });
+
+    Security = stdenv.lib.overrideDerivation super.Security (drv: {
+      setupHook = ./security-setup-hook.sh;
+    });
+
+    SpriteKit = stdenv.lib.overrideDerivation super.SpriteKit (drv: {
+      installPhase = drv.installPhase + ''
+        mkdir -p $out/include/simd
+        cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
+      '';
+    });
+
+    QuartzCore = stdenv.lib.overrideDerivation super.QuartzCore (drv: {
+      installPhase = drv.installPhase + ''
+        f="$out/Library/Frameworks/QuartzCore.framework/Headers/CoreImage.h"
+        substituteInPlace "$f" \
+          --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
       '';
     });
 
