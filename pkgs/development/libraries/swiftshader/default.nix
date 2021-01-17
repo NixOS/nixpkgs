@@ -1,17 +1,17 @@
-{ stdenv, fetchgit, python3, cmake, jq, libX11, libXext }:
+{ stdenv, fetchgit, python3, cmake, jq, libX11, libXext, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "swiftshader";
-  version = "2020-06-17";
+  version = "2021-01-17";
 
   src = fetchgit {
     url = "https://swiftshader.googlesource.com/SwiftShader";
-    rev = "763957e6b4fc1aa360ab19c4109b8b26686783e8";
-    sha256 = "0sdh48swx0qyq2nfkv1nggs14am0qc7z239qrxb69p2ddqm76g1s";
+    rev = "149733cead636de93d96c5c64f30168d5f6bb03f";
+    sha256 = "1krhwybh98gp2rxbfc5gv7wjhsg3ncd2wqd8sizpy1kr7mr6c7av";
   };
 
   nativeBuildInputs = [ cmake python3 jq ];
-  buildInputs = [ libX11 libXext ];
+  buildInputs = [ libX11 libXext zlib ];
 
   # Make sure we include the drivers and icd files in the output as the cmake
   # generated install command only puts in the spirv-tools stuff.
