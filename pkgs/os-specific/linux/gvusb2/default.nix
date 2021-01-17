@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A linux driver for the IO-DATA GV-USB2 SD capture device";
     homepage = "https://github.com/Isaac-Lozano/GV-USB2-Driver";
-    license = licenses.gpl2;
+    license = with licenses [ bsd3 gpl2Only ];
     maintainers = with maintainers; [ djanatyn ];
     platforms = platforms.linux;
   };
