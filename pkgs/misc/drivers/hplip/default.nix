@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, substituteAll
-, pkgconfig
+, pkg-config
 , cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
 , dbus, file, ghostscript, usbutils
 , net-snmp, openssl, perl, nettools, avahi
@@ -69,7 +69,7 @@ python3Packages.buildPythonApplication {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     removeReferencesTo
   ] ++ lib.optional withQt5 qt5.wrapQtAppsHook;
 

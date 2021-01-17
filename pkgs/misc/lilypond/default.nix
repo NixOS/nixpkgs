@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, ghostscript, gyre-fonts, texinfo, imagemagick, texi2html, guile
-, python2, gettext, flex, perl, bison, pkgconfig, autoreconfHook, dblatex
+, python2, gettext, flex, perl, bison, pkg-config, autoreconfHook, dblatex
 , fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
 , makeWrapper, t1utils
 , texlive, tex ? texlive.combine {
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     export HOME=$TMPDIR/home
   '';
 
-  nativeBuildInputs = [ autoreconfHook bison flex makeWrapper pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook bison flex makeWrapper pkg-config ];
 
   buildInputs =
     [ ghostscript texinfo imagemagick texi2html guile dblatex tex zip netpbm

@@ -3,7 +3,7 @@
 , fetchpatch
 , makeWrapper
 , symlinkJoin
-, pkgconfig
+, pkg-config
 , libtool
 , gtk2
 , libxml2
@@ -295,7 +295,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ma76jj0k3bz0fy06fiyl4di4y77rcryb0mwjmzs5ms2vq9rjysr";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gtk2
     libxml2

@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , removeReferencesTo
 , zlib
 , libjpeg
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
   '';
 
-  nativeBuildInputs = [ pkgconfig removeReferencesTo ];
+  nativeBuildInputs = [ pkg-config removeReferencesTo ];
 
   buildInputs = [ zlib libjpeg libpng libtiff libusb1 gnutls libpaper ]
     ++ optionals stdenv.isLinux [ avahi pam dbus ]
