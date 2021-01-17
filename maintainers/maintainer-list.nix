@@ -970,6 +970,12 @@
     email = "sivaraman.balaji@gmail.com";
     name = "Balaji Sivaraman";
   };
+  baloo = {
+    email = "nixpkgs@superbaloo.net";
+    github = "baloo";
+    githubId = 59060;
+    name = "Arthur Gautier";
+  };
   balsoft = {
     email = "balsoft75@gmail.com";
     github = "balsoft";
