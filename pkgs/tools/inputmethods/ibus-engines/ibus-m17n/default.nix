@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , ibus
 , gtk3
 , m17n_lib
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     gettext
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

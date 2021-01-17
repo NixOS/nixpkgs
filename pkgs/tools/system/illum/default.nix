@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, pkgconfig, ninja, libevdev, libev }:
+{ lib, stdenv, fetchgit, pkg-config, ninja, libevdev, libev }:
 
 stdenv.mkDerivation {
   version = "0.4";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "05v3hz7n6b1mlhc6zqijblh1vpl0ja1y8y0lafw7mjdz03wxhfdb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ninja libevdev libev ];
 
   configurePhase = ''

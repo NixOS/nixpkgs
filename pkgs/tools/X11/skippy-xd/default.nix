@@ -1,10 +1,10 @@
 {lib, stdenv, fetchgit, xorgproto, libX11, libXft, libXcomposite, libXdamage
-, libXext, libXinerama, libjpeg, giflib, pkgconfig
+, libXext, libXinerama, libjpeg, giflib, pkg-config
 }:
 let
   buildInputs = [
     xorgproto libX11 libXft libXcomposite libXdamage libXext
-    libXinerama libjpeg giflib pkgconfig
+    libXinerama libjpeg giflib pkg-config
   ];
 in
 stdenv.mkDerivation rec {

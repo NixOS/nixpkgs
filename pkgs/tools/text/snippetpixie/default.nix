@@ -4,7 +4,7 @@
 , meson
 , ninja
 , vala
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , appstream
 , desktop-file-utils
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     appstream
     desktop-file-utils

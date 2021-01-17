@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libvdpau }:
+{ lib, stdenv, fetchurl, pkg-config, libvdpau }:
 
 stdenv.mkDerivation rec {
   pname = "vdpauinfo";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s6jdadnycyd1agsnfx7hrf17hmipasx1fpmppd4m1z6i9sp1i6g";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libvdpau ];
 
   meta = with lib; {

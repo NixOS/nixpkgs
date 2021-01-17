@@ -350,7 +350,7 @@
     "hlk_sw16" = ps: with ps; [ ]; # missing inputs: hlk-sw16
     "home_connect" = ps: with ps; [ aiohttp-cors ]; # missing inputs: homeconnect
     "homeassistant" = ps: with ps; [ ];
-    "homekit" = ps: with ps; [ HAP-python pyqrcode aiohttp-cors base36 ha-ffmpeg zeroconf ]; # missing inputs: PyTurboJPEG fnvhash
+    "homekit" = ps: with ps; [ HAP-python pyqrcode aiohttp-cors base36 fnvhash ha-ffmpeg zeroconf ]; # missing inputs: PyTurboJPEG
     "homekit_controller" = ps: with ps; [ aiohomekit aiohttp-cors zeroconf ];
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [ ]; # missing inputs: homematicip
@@ -653,7 +653,7 @@
     "quantum_gateway" = ps: with ps; [ ]; # missing inputs: quantum-gateway
     "qvr_pro" = ps: with ps; [ ]; # missing inputs: pyqvrpro
     "qwikswitch" = ps: with ps; [ ]; # missing inputs: pyqwikswitch
-    "rachio" = ps: with ps; [ aiohttp-cors hass-nabucasa ]; # missing inputs: rachiopy
+    "rachio" = ps: with ps; [ aiohttp-cors hass-nabucasa rachiopy ];
     "radarr" = ps: with ps; [ ];
     "radiotherm" = ps: with ps; [ ]; # missing inputs: radiotherm
     "rainbird" = ps: with ps; [ ]; # missing inputs: pyrainbird
@@ -794,7 +794,7 @@
     "supervisord" = ps: with ps; [ ];
     "supla" = ps: with ps; [ ]; # missing inputs: asyncpysupla
     "surepetcare" = ps: with ps; [ ]; # missing inputs: surepy
-    "swiss_hydrological_data" = ps: with ps; [ ]; # missing inputs: swisshydrodata
+    "swiss_hydrological_data" = ps: with ps; [ swisshydrodata ];
     "swiss_public_transport" = ps: with ps; [ python-opendata-transport ];
     "swisscom" = ps: with ps; [ ];
     "switch" = ps: with ps; [ ];
@@ -927,7 +927,7 @@
     "whois" = ps: with ps; [ python-whois ];
     "wiffi" = ps: with ps; [ ]; # missing inputs: wiffi
     "wilight" = ps: with ps; [ pywilight ];
-    "wink" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pubnubsub-handler python-wink
+    "wink" = ps: with ps; [ aiohttp-cors pubnubsub-handler ]; # missing inputs: python-wink
     "wirelesstag" = ps: with ps; [ ]; # missing inputs: wirelesstagpy
     "withings" = ps: with ps; [ aiohttp-cors ]; # missing inputs: withings-api
     "wled" = ps: with ps; [ wled ];

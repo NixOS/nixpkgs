@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch, pkg-config, libuuid, gettext, texinfo
 , shared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "info" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig texinfo ];
+  nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [ libuuid gettext ];
 
   # Only use glibc's __GNUC_PREREQ(X,Y) (checks if compiler is gcc version >= X.Y) when using glibc

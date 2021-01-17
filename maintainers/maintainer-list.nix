@@ -4815,6 +4815,12 @@
     github = "kmein";
     githubId = 10352507;
   };
+  kmicklas = {
+    email = "maintainer@kmicklas.com";
+    name = "Ken Micklas";
+    github = "kmicklas";
+    githubId = 929096;
+  };
   knairda = {
     email = "adrian@kummerlaender.eu";
     name = "Adrian Kummerlaender";

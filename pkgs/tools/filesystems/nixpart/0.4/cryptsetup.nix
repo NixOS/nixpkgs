@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, lvm2, libgcrypt, libuuid, pkgconfig, popt
+{ lib, stdenv, fetchurl, fetchpatch, lvm2, libgcrypt, libuuid, pkg-config, popt
 , enablePython ? true, python ? null
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-cryptsetup-reencrypt" ]
                 ++ lib.optional enablePython "--enable-python";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ lvm2 libgcrypt libuuid popt ]
              ++ lib.optional enablePython python;
 

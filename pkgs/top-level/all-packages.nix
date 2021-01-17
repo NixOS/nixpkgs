@@ -9172,6 +9172,8 @@ in
 
   pash = callPackage ../shells/pash { };
 
+  scponly = callPackage ../shells/scponly { };
+
   tcsh = callPackage ../shells/tcsh { };
 
   rush = callPackage ../shells/rush { };
@@ -23405,6 +23407,7 @@ in
     autoload = callPackage ../applications/video/mpv/scripts/autoload.nix {};
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
     mpris = callPackage ../applications/video/mpv/scripts/mpris.nix {};
+    mpvacious = callPackage ../applications/video/mpv/scripts/mpvacious.nix {};
     simple-mpv-webui = callPackage ../applications/video/mpv/scripts/simple-mpv-webui.nix {};
     sponsorblock = callPackage ../applications/video/mpv/scripts/sponsorblock.nix {};
   };
@@ -24614,6 +24617,7 @@ in
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
   snapper = callPackage ../tools/misc/snapper { };
+  snapper-gui = callPackage ../applications/misc/snapper-gui { };
 
   snd = callPackage ../applications/audio/snd { };
 

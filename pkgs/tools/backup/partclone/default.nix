@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook
-, pkgconfig, libuuid, e2fsprogs, nilfs-utils, ntfs3g
+, pkg-config, libuuid, e2fsprogs, nilfs-utils, ntfs3g
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0bv15i0gxym4dv48rgaavh8p94waryn1l6viis6qh5zm9cd08skg";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [
     e2fsprogs libuuid stdenv.cc.libc nilfs-utils ntfs3g
     (lib.getOutput "static" stdenv.cc.libc)

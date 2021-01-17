@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fuse, pkgconfig }:
+{ lib, stdenv, fetchurl, fuse, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "1.14.8";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse ];
   postFixup = ''
     ln -s $out/bin/bindfs $out/bin/mount.fuse.bindfs

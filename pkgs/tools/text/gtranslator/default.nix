@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , itstool
 , gettext
 , python3
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     itstool
     gettext
     python3

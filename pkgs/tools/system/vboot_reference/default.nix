@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitiles, pkgconfig, libuuid, openssl, libyaml, lzma }:
+{ lib, stdenv, fetchFromGitiles, pkg-config, libuuid, openssl, libyaml, lzma }:
 
 stdenv.mkDerivation rec {
   version = "20180311";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zja4ma6flch08h5j2l1hqnxmw2xwylidnddxxd5y2x05dai9ddj";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl libuuid libyaml lzma ];
 
   enableParallelBuilding = true;

@@ -562,6 +562,8 @@ in {
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
+  awsiotpythonsdk = callPackage ../development/python-modules/awsiotpythonsdk { };
+
   axis = callPackage ../development/python-modules/axis { };
 
   azure-appconfiguration = callPackage ../development/python-modules/azure-appconfiguration { };
@@ -2335,6 +2337,8 @@ in {
   flux-led = callPackage ../development/python-modules/flux-led { };
 
   fn = callPackage ../development/python-modules/fn { };
+
+  fnvhash = callPackage ../development/python-modules/fnvhash { };
 
   folium = callPackage ../development/python-modules/folium { };
 
@@ -5035,6 +5039,10 @@ in {
 
   publicsuffix = callPackage ../development/python-modules/publicsuffix { };
 
+  pubnub = callPackage ../development/python-modules/pubnub { };
+
+  pubnubsub-handler = callPackage ../development/python-modules/pubnubsub-handler { };
+
   pudb = callPackage ../development/python-modules/pudb { };
 
   pulp = callPackage ../development/python-modules/pulp { };
@@ -6087,6 +6095,8 @@ in {
 
   pytest-twisted = callPackage ../development/python-modules/pytest-twisted { };
 
+  pytest-vcr = callPackage ../development/python-modules/pytest-vcr { };
+
   pytest-virtualenv = callPackage ../development/python-modules/pytest-virtualenv { };
 
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
@@ -6514,6 +6524,8 @@ in {
   r2pipe = callPackage ../development/python-modules/r2pipe { };
 
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
+
+  rachiopy = callPackage ../development/python-modules/rachiopy { };
 
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud { };
 
@@ -7112,8 +7124,6 @@ in {
 
   snapcast = callPackage ../development/python-modules/snapcast { };
 
-  snapperGUI = callPackage ../development/python-modules/snappergui { };
-
   snapshottest = callPackage ../development/python-modules/snapshottest { };
 
   sniffio = callPackage ../development/python-modules/sniffio { };
@@ -7418,6 +7428,8 @@ in {
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
+
+  swisshydrodata = callPackage ../development/python-modules/swisshydrodata { };
 
   swspotify = callPackage ../development/python-modules/swspotify { };
 

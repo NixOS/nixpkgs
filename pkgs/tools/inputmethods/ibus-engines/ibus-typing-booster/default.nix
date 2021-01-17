@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, python3, ibus, pkgconfig, gtk3, m17n_lib
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, python3, ibus, pkg-config, gtk3, m17n_lib
 , wrapGAppsHook, gobject-introspection
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./hunspell-dirs.patch ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook gobject-introspection ];
   buildInputs = [ python ibus gtk3 m17n_lib ];
 
   preFixup = ''

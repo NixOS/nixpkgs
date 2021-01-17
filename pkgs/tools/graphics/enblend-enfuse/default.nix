@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , boost, freeglut, glew, gsl, lcms2, libpng, libtiff, libGLU, libGL, vigra
-, help2man, pkgconfig, perl, texlive }:
+, help2man, pkg-config, perl, texlive }:
 
 stdenv.mkDerivation rec {
   pname = "enblend-enfuse";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost freeglut glew gsl lcms2 libpng libtiff libGLU libGL vigra ];
 
-  nativeBuildInputs = [ help2man perl pkgconfig texlive.combined.scheme-small ];
+  nativeBuildInputs = [ help2man perl pkg-config texlive.combined.scheme-small ];
 
   preConfigure = ''
     patchShebangs src/embrace

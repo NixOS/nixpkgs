@@ -1,7 +1,7 @@
 { stdenv, runCommand, fetchurl
 , fetchpatch
 , ensureNewerSourcesHook
-, cmake, pkgconfig
+, cmake, pkg-config
 , which, git
 , boost, python3Packages
 , libxml2, zlib, lz4
@@ -139,7 +139,7 @@ in rec {
 
     nativeBuildInputs = [
       cmake
-      pkgconfig which git python3Packages.wrapPython makeWrapper
+      pkg-config which git python3Packages.wrapPython makeWrapper
       python3Packages.python # for the toPythonPath function
       (ensureNewerSourcesHook { year = "1980"; })
     ];

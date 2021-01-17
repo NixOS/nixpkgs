@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, python, buildPythonApplication, parted, e2fsprogs }:
+{ lib, stdenv, fetchurl, pkg-config, python, buildPythonApplication, parted, e2fsprogs }:
 
 buildPythonApplication rec {
   pname = "pyparted";
@@ -24,7 +24,7 @@ buildPythonApplication rec {
     PATH="${parted}/sbin:$PATH"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ parted ];
 

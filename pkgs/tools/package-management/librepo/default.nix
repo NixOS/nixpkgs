@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , cmake
 , python
-, pkgconfig
+, pkg-config
 , libxml2
 , glib
 , openssl
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

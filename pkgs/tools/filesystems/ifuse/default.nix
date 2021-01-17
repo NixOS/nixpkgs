@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, usbmuxd, fuse, libimobiledevice }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, usbmuxd, fuse, libimobiledevice }:
 
 stdenv.mkDerivation rec {
   pname = "ifuse";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r12y3h1j7ikkwk874h9969kr4ksyamvrwywx19ml6rsr01arw84";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig fuse usbmuxd libimobiledevice ];
+  nativeBuildInputs = [ autoreconfHook pkg-config fuse usbmuxd libimobiledevice ];
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/ifuse";

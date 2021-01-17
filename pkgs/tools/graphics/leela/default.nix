@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, poppler }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, poppler }:
 
 stdenv.mkDerivation {
   name = "leela-12.fe7a35a";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1k6n758r9dhjmc1pnpk6qzpg0q7pkq2hf18z3b0s2z198jpkg9s3";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ poppler ];
 
   installFlags = [ "PREFIX=$(out)" "MANDIR=$(out)/share/man" ];

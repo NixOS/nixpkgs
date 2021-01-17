@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, vala, intltool, pkgconfig
+, vala, intltool, pkg-config
 , libkkc, ibus, skk-dicts
 , gtk3
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    vala intltool pkgconfig
+    vala intltool pkg-config
   ];
 
   buildInputs = [ libkkc ibus skk-dicts gtk3 ];
