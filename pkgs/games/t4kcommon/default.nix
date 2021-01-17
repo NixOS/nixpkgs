@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, cmake, pkgconfig, SDL, SDL_image, SDL_mixer, SDL_net, SDL_ttf, libpng, librsvg, libxml2 }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, cmake, pkg-config, SDL, SDL_image, SDL_mixer, SDL_net, SDL_ttf, libpng, librsvg, libxml2 }:
 
 stdenv.mkDerivation rec {
   version = "0.1.1";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ SDL SDL_image SDL_mixer SDL_net SDL_ttf libpng librsvg libxml2 ];
 
   meta = with lib; {

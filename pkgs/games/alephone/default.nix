@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, boost, curl, ffmpeg, icoutils, libGLU, libmad, libogg
-, libpng, libsndfile, libvorbis, lua, pkgconfig, SDL2, SDL2_image, SDL2_net
+, libpng, libsndfile, libvorbis, lua, pkg-config, SDL2, SDL2_image, SDL2_net
 , SDL2_ttf, smpeg, speex, zziplib, zlib, makeWrapper, makeDesktopItem, unzip
 , alephone }:
 
@@ -15,7 +15,7 @@ let
       sha256 = "13ck3mp9qd5pkiq6zwvr744bwvmnqkgj5vpf325sz1mcvnv7l8lh";
     };
 
-    nativeBuildInputs = [ pkgconfig icoutils ];
+    nativeBuildInputs = [ pkg-config icoutils ];
 
     buildInputs = [
       boost
