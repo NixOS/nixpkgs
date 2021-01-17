@@ -794,7 +794,7 @@
     "supervisord" = ps: with ps; [ ];
     "supla" = ps: with ps; [ ]; # missing inputs: asyncpysupla
     "surepetcare" = ps: with ps; [ ]; # missing inputs: surepy
-    "swiss_hydrological_data" = ps: with ps; [ ]; # missing inputs: swisshydrodata
+    "swiss_hydrological_data" = ps: with ps; [ swisshydrodata ];
     "swiss_public_transport" = ps: with ps; [ python-opendata-transport ];
     "swisscom" = ps: with ps; [ ];
     "switch" = ps: with ps; [ ];
