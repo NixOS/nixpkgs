@@ -357,7 +357,7 @@
     "homeworks" = ps: with ps; [ ]; # missing inputs: pyhomeworks
     "honeywell" = ps: with ps; [ ]; # missing inputs: somecomfort
     "horizon" = ps: with ps; [ ]; # missing inputs: horimote
-    "hp_ilo" = ps: with ps; [ ]; # missing inputs: python-hpilo
+    "hp_ilo" = ps: with ps; [ python-hpilo ];
     "html5" = ps: with ps; [ aiohttp-cors pywebpush ];
     "http" = ps: with ps; [ aiohttp-cors ];
     "htu21d" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
