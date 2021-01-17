@@ -8,7 +8,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Isaac-Lozano";
-    repo = pname;
+    repo = "GV-USB2-Driver";
     rev = "811fb0f6ee4ef62e0e346a293bb5e3b61ad10b7d";
     sha256 = "0sxspwizcpd6a63awnd6czxylp48rw3h22mf8hf0gh514gklyy5a";
   };
