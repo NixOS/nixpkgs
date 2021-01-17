@@ -1,4 +1,5 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
 , fetchPypi
 , isPy3k
@@ -8,7 +9,6 @@
 , pytestCheckHook
 , requests
 , responses
-, lib, stdenv
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "koalalorenzo";
-    repo = "python-digitalocean";
+    repo = pname;
     rev = "v${version}";
     sha256 = "16fxlfpisj4rcj9dvlifs6bpx42a0sn9b07bnyzwrbhi6nfvkd2g";
   };
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pytest
     pytestCheckHook
     responses
-  ] ++ stdenv.lib.optionals (!isPy3k) [
+  ] ++ lib.optionals (!isPy3k) [
     mock
   ];
 
@@ -41,13 +41,12 @@ buildPythonPackage rec {
     cd digitalocean
   '';
 
+  pythonImportsCheck = [ "digitalocean" ];
+
   meta = with lib; {
-    description = "digitalocean.com API to manage Droplets and Images";
-    homepage = "https://pypi.python.org/pypi/python-digitalocean";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [
-      kiwi
-      teh
-    ];
+    description = "Python API to manage Digital Ocean Droplets and Images";
+    homepage = "https://github.com/koalalorenzo/python-digitalocean";
+    license = with licenses; [ lgpl3Only ];
+    maintainers = with maintainers; [ kiwi teh ];
   };
 }
