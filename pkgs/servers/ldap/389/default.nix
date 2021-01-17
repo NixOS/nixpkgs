@@ -1,30 +1,83 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, doxygen, perl, pam, nspr, nss, openldap
-, db, cyrus_sasl, svrcore, icu, net-snmp, kerberos, pcre, perlPackages, libevent, openssl, python
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, doxygen
+, perl
+, pam
+, nspr
+, nss
+, openldap
+, db
+, cyrus_sasl
+, svrcore
+, icu
+, net-snmp
+, kerberos
+, pcre
+, perlPackages
+, libevent
+, openssl
+, python
+, cracklib
+, rsync
 }:
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "1.3.9.1";
+  version = "1.4.4.13";
 
-  src = fetchurl {
-    url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "141iv1phgk1lw74sfjj3v7wy6qs0q56lvclwv2p0hqn1wg8ic4q6";
+  src = fetchFromGitHub {
+    owner = "389ds";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "1zasnw5idjyd6in22bfdz20cyiqnwx0lss8shf53aib92jxm1504";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    doxygen
+    rsync
+  ];
+
   buildInputs = [
-    perl pam nspr nss openldap db cyrus_sasl svrcore icu
-    net-snmp kerberos pcre libevent openssl python
-  ] ++ (with perlPackages; [ MozillaLdap NetAddrIP DBFile ]);
+    perl
+    pam
+    nspr
+    nss
+    openldap
+    db
+    cyrus_sasl
+    svrcore
+    icu
+    net-snmp
+    kerberos
+    pcre
+    libevent
+    openssl
+    python
+    cracklib
+  ] ++ (with perlPackages; [
+    MozillaLdap
+    NetAddrIP
+    DBFile
+  ]);
 
   patches = [
+    # This reverts a commit that adds support for the gost-yescrypt password hashing algorithm,
+    # since it requires a glibc with patches for blowfish/bcrypt support to build
     (fetchpatch {
-      name = "389-ds-nss.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/nss.patch?h=389-ds-base&id=b80ed52cc65ff9b1d72f8ebc54dbd462b12f6be9";
-      sha256 = "07z7jl9z4gzhk3k6qyfn558xl76js8041llyr5n99h20ckkbwagk";
+      url = "https://github.com/389ds/389-ds-base/commit/bf46ccec94da41616b7fa1bd5ac39c970b367846.patch";
+      revert = true;
+      sha256 = "16i91gvlj0cxz520bbfl45pr0rvgdh6mz2rw62pr688q7id9gs4g";
     })
   ];
+
   postPatch = ''
+    patchShebangs .
     substituteInPlace Makefile.am \
       --replace 's,@perlpath\@,$(perldir),g' 's,@perlpath\@,$(perldir) $(PERLPATH),g'
   '';
@@ -49,6 +102,9 @@ stdenv.mkDerivation rec {
     "--with-netsnmp=yes"
     "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
     "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
+    "--with-journald"
+    "--enable-autobind"
+    "--enable-perl"
   ];
 
   enableParallelBuilding = true;
@@ -57,8 +113,6 @@ stdenv.mkDerivation rec {
     "sysconfdir=${placeholder "out"}/etc"
     "localstatedir=${placeholder "TMPDIR"}"
   ];
-
-  passthru.version = version;
 
   meta = with lib; {
     homepage = "https://www.port389.org/";

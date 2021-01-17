@@ -17851,6 +17851,7 @@ in
 
   _389-ds-base = callPackage ../servers/ldap/389 {
     kerberos = libkrb5;
+    python = python3;
   };
 
   adguardhome = callPackage ../servers/adguardhome {};
