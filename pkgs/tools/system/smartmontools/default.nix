@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, autoreconfHook
 , mailutils, inetutils
-, IOKit ? null , ApplicationServices ? null }:
+, IOKit, ApplicationServices }:
 
 let
   version = "7.2";
