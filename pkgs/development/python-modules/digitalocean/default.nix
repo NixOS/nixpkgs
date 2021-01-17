@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "python-digitalocean";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "koalalorenzo";
     repo = "python-digitalocean";
     rev = "v${version}";
-    sha256 = "1pz15mh72i992p63grwzqn2bbp6sm37zcp4f0fy1z7rsargwsbcz";
+    sha256 = "16fxlfpisj4rcj9dvlifs6bpx42a0sn9b07bnyzwrbhi6nfvkd2g";
   };
 
   propagatedBuildInputs = [
