@@ -9172,6 +9172,8 @@ in
 
   pash = callPackage ../shells/pash { };
 
+  scponly = callPackage ../shells/scponly { };
+
   tcsh = callPackage ../shells/tcsh { };
 
   rush = callPackage ../shells/rush { };
