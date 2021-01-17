@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
+  strictDeps = true;
 
   hardeningDisable = [ "format" "stackprotector" ];
 
