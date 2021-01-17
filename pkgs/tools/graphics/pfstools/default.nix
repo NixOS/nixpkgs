@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, cmake, pkgconfig, darwin
+{ lib, stdenv, mkDerivation, fetchurl, cmake, pkg-config, darwin
 , openexr, zlib, imagemagick, libGLU, libGL, freeglut, fftwFloat
 , fftw, gsl, libexif, perl, opencv2, qtbase, netpbm
 }:
@@ -25,7 +25,7 @@ mkDerivation rec {
     echo "FIND_PACKAGE_HANDLE_STANDARD_ARGS(NETPBM DEFAULT_MSG NETPBM_LIBRARY NETPBM_INCLUDE_DIR)" >> cmake/FindNETPBM.cmake
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     openexr zlib imagemagick fftwFloat
     fftw gsl libexif perl opencv2 qtbase netpbm

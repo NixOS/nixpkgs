@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, attr, libuuid, libscrypt, libsodium, keyutils
+{ lib, stdenv, fetchFromGitHub, pkg-config, attr, libuuid, libscrypt, libsodium, keyutils
 , liburcu, zlib, libaio, udev, zstd, lz4, valgrind, python3Packages
 , fuseSupport ? false, fuse3 ? null }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
                 "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libuuid libscrypt libsodium keyutils liburcu zlib libaio

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, fetchurl, pkgconfig, popt }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, fetchurl, pkg-config, popt }:
 
 stdenv.mkDerivation rec {
   pname = "efivar";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   postPatch = if stdenv.isi686 then "sed '/^OPTIMIZE /s/-flto//' -i Make.defaults" else null;
   NIX_CFLAGS_COMPILE = if stdenv.isi686 then "-Wno-error=stringop-truncation" else null;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ popt ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 

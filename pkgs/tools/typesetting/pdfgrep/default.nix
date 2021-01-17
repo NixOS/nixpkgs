@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, poppler, libgcrypt, pcre, asciidoc }:
+{ lib, stdenv, fetchurl, pkg-config, poppler, libgcrypt, pcre, asciidoc }:
 
 stdenv.mkDerivation rec {
   pname = "pdfgrep";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig asciidoc ];
+  nativeBuildInputs = [ pkg-config asciidoc ];
   buildInputs = [ poppler libgcrypt pcre ];
 
   meta = {

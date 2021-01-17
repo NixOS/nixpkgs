@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , dbus, libconfuse, libjpeg, sane-backends, systemd }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/scanbd/${pname}-${version}.tgz";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus libconfuse libjpeg sane-backends systemd ];
 
   configureFlags = [

@@ -5,7 +5,7 @@
 , autoreconfHook
 , gettext
 , makeWrapper
-, pkgconfig
+, pkg-config
 , vala
 , wrapGAppsHook
 , dbus
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     gettext
     makeWrapper
-    pkgconfig
+    pkg-config
     python3BuildEnv
     vala
     wrapGAppsHook

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libXi, xorgproto, autoconf, automake, libtool, m4, xlibsWrapper, pkgconfig }:
+{ lib, stdenv, fetchurl, libXi, xorgproto, autoconf, automake, libtool, m4, xlibsWrapper, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "xinput_calibrator";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh --with-gui=X11";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ xorgproto libXi autoconf automake libtool m4 xlibsWrapper ];
 
   meta = {

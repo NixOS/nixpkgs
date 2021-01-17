@@ -1,5 +1,5 @@
 { stdenv, cmake, expat, fetchFromGitHub, jq, lib, libXdmcp, libXrandr, libffi
-, libxcb, pkgconfig, python3, symlinkJoin, vulkan-headers, vulkan-loader
+, libxcb, pkg-config, python3, symlinkJoin, vulkan-headers, vulkan-loader
 , vulkan-validation-layers, wayland, writeText, xcbutilkeysyms, xcbutilwm
 , xlibsWrapper }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       fetchSubmodules = true;
     });
 
-  nativeBuildInputs = [ cmake pkgconfig python3 jq ];
+  nativeBuildInputs = [ cmake pkg-config python3 jq ];
 
   buildInputs = [
     expat

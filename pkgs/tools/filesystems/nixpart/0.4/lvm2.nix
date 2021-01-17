@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, systemd, util-linux, coreutils }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, systemd, util-linux, coreutils }:
 
 let
   v = "2.02.106";
@@ -28,11 +28,11 @@ stdenv.mkDerivation {
     "--disable-readline"
     "--enable-udev_rules"
     "--enable-udev_sync"
-    "--enable-pkgconfig"
+    "--enable-pkg-config"
     "--enable-applib"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ systemd ];
 
   preConfigure =

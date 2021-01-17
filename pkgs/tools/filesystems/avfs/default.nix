@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, fuse, xz }:
+{ lib, stdenv, fetchurl, pkg-config, fuse, xz }:
 
 stdenv.mkDerivation rec {
   pname = "avfs";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1psh8k7g7rb0gn7aygbjv86kxyi9xq07barxksa99nnmq3lc2kjg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ fuse xz ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, libglade, openbox,
+{ lib, stdenv, fetchurl, pkg-config, gtk2, libglade, openbox,
   imlib2, libstartup_notification, makeWrapper, libSM }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fanjdmd8727kk74x5404vi8v7s4kpq48l583d12fsi4xvsfb8vi";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gtk2 libglade libSM openbox imlib2 libstartup_notification
     makeWrapper

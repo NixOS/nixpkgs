@@ -2,7 +2,7 @@
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
-, perl, perlPackages, python2Packages, pkgconfig
+, perl, perlPackages, python2Packages, pkg-config
 , poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang
@@ -71,7 +71,7 @@ core = stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     /*teckit*/ zziplib poppler mpfr gmp
     pixman gd freetype libpng libpaper zlib
@@ -233,7 +233,7 @@ chktex = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ core/*kpathsea*/ ];
 
   preConfigure = "cd texk/chktex";
@@ -257,7 +257,7 @@ dvisvgm = stdenv.mkDerivation rec {
     sha256 = "12b6h0h8rc487yjh3sq9zsdabm9cs2vqcrb0znnfi8277f87zf3j";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ core/*kpathsea*/ brotli ghostscript zlib freetype woff2 potrace xxHash ];
 
   enableParallelBuilding = true;
@@ -270,7 +270,7 @@ dvipng = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  nativeBuildInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkg-config ];
   buildInputs = [ core/*kpathsea*/ zlib libpng freetype gd ghostscript makeWrapper ];
 
   preConfigure = ''
@@ -387,7 +387,7 @@ bibtex8 = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ core/*kpathsea*/ icu ];
 
   preConfigure = "cd texk/bibtex-x";
@@ -405,7 +405,7 @@ xdvi = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ core/*kpathsea*/ freetype ghostscript ]
     ++ (with xorg; [ libX11 libXaw libXi libXpm libXmu libXaw libXext libXfixes ]);
 
@@ -446,7 +446,7 @@ xindy = stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [
-    pkgconfig perl
+    pkg-config perl
     (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
   ];
   buildInputs = [ clisp libiconv ];

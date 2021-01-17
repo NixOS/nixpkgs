@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, python3, sqlite, libedit, zlib }:
+{ lib, stdenv, fetchurl, pkg-config, python3, sqlite, libedit, zlib }:
 
 stdenv.mkDerivation rec {
   version = "5.8.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v8ngx77nachxln68xpvyw2lh7z59pzsi99h8j0mnrm0gjsacrdd";
   };
 
-  nativeBuildInputs = [ pkgconfig python3 ];
+  nativeBuildInputs = [ pkg-config python3 ];
   buildInputs = [ sqlite libedit zlib ];
 
   configureFlags = [

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, pkgconfig, gettext, libtool, pandoc, which, attr, libiconv }:
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, pkg-config, gettext, libtool, pandoc, which, attr, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "mergerfs";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    automake autoconf pkgconfig gettext libtool pandoc which
+    automake autoconf pkg-config gettext libtool pandoc which
   ];
   prePatch = ''
     sed -i -e '/chown/d' -e '/chmod/d' libfuse/Makefile

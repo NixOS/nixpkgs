@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, cmake, perlPackages, curl, gtest
+{ stdenv, lib, fetchurl, pkg-config, cmake, perlPackages, curl, gtest
 , gnutls, libtasn1, lzma, bzip2, lz4, zstd, libseccomp, udev
 , db, dpkg, libxslt, docbook_xsl, docbook_xml_dtd_45
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gn4srqaaym85gc8nldqkv01477kdwr136an2nlpbdrsbx3y83zl";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake gtest libxslt.bin ];
+  nativeBuildInputs = [ pkg-config cmake gtest libxslt.bin ];
 
   buildInputs = [
     perlPackages.perl curl gnutls libtasn1 lzma bzip2 lz4 zstd libseccomp udev db dpkg

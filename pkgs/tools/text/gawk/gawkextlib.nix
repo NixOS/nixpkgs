@@ -1,4 +1,4 @@
-{ lib, stdenv, recurseIntoAttrs, fetchgit, writeText, pkgconfig, autoreconfHook
+{ lib, stdenv, recurseIntoAttrs, fetchgit, writeText, pkg-config, autoreconfHook
 , autoconf, automake, libiconv, libtool, texinfo, gettext, gawk, rapidjson, gd
 , shapelib, libharu, lmdb, gmp, glibcLocales, mpfr, more, postgresql, hiredis
 , expat, tre, makeWrapper }:
@@ -26,7 +26,7 @@ let
           automake
           libtool
           autoreconfHook
-          pkgconfig
+          pkg-config
           texinfo
           gettext
         ];

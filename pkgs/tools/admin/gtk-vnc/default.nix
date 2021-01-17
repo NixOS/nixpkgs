@@ -7,7 +7,7 @@
 , gnutls
 , cairo
 , glib
-, pkgconfig
+, pkg-config
 , cyrus_sasl
 , libpulseaudio
 , libgcrypt
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gobject-introspection
     vala
     gettext

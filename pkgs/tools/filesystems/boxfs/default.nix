@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, curl, fuse, libxml2, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, curl, fuse, libxml2, pkg-config }:
 
 let
   srcs = {
@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
   patches = [ ./work-around-API-borkage.patch ];
 
   buildInputs = [ curl fuse libxml2 ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildFlags = [ "static" ];
 

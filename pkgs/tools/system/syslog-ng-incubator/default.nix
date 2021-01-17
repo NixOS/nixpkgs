@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, syslogng
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, syslogng
 , eventlog, perl, python, yacc, protobufc, libivykis, libcap, czmq
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "17y85cqcyfbp882gaii731cvz5bg1s8rgda271jh6kgnrz5rbd4s";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook yacc ];
+  nativeBuildInputs = [ pkg-config autoreconfHook yacc ];
 
   buildInputs = [
     glib syslogng eventlog perl python protobufc libivykis libcap czmq

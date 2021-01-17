@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , libX11, libXcomposite, libXft, libXmu, libXrandr, libXext, libXScrnSaver
 , pam, apacheHttpd, pamtester, xscreensaver }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig
+    autoreconfHook pkg-config
   ];
   buildInputs = [
     libX11 libXcomposite libXft libXmu libXrandr libXext libXScrnSaver
