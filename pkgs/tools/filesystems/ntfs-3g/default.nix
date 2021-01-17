@@ -1,5 +1,5 @@
 {lib, stdenv, fetchurl, util-linux, libuuid
-, crypto ? false, libgcrypt, gnutls, pkgconfig}:
+, crypto ? false, libgcrypt, gnutls, pkg-config}:
 
 stdenv.mkDerivation rec {
   pname = "ntfs3g";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" "doc" ];
 
   buildInputs = [ libuuid ] ++ lib.optionals crypto [ gnutls libgcrypt ];
-  nativeBuildInputs = lib.optional crypto pkgconfig;
+  nativeBuildInputs = lib.optional crypto pkg-config;
 
   src = fetchurl {
     url = "https://tuxera.com/opensource/ntfs-3g_ntfsprogs-${version}.tgz";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, cmake, libyamlcpp,
+{ lib, stdenv, fetchurl, pkg-config, cmake, libyamlcpp,
   libevdev, udev }:
 
 let
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     sha256 = "0lqz89wsf9r5xdgflincysxg4l8fpgg5z8zczhhrg9s5787srfzi";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libevdev udev libyamlcpp ];
 
   prePatch = ''

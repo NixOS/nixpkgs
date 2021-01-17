@@ -1,5 +1,5 @@
 { lib, stdenv
-, pkgconfig
+, pkg-config
 , glib
 , libxml2
 , expat
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     gtk-doc
     gobject-introspection

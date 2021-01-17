@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, ronn, libpng, uthash
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, ronn, libpng, uthash
 , xorg }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ 
     autoconf
     automake
-    pkgconfig
+    pkg-config
     ronn
   ];
 

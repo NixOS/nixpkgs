@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libpng, zlib }:
+{ lib, stdenv, fetchurl, pkg-config, libpng, zlib }:
 
 stdenv.mkDerivation rec {
   name = "pngnq-1.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qmnnl846agg55i7h4vmrn11lgb8kg6gvs8byqz34bdkjh5gwiy1";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpng zlib ];
 
   patchPhase = ''

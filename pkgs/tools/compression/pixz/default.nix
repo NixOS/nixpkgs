@@ -1,5 +1,5 @@
 {
-  lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig
+  lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config
   , asciidoc, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl
   , libarchive, lzma
 }:
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "1.0.7";
   name = "${baseName}-${version}";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     autoconf automake libtool asciidoc libxslt libxml2
     docbook_xml_dtd_45 docbook_xsl

@@ -3,7 +3,7 @@
 , psutils, netpbm #for html output
 , buildPackages
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , texinfo
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ ghostscript psutils netpbm perl ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig texinfo ];
+  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
 
   # Builds running without a chroot environment may detect the presence
   # of /usr/X11 in the host system, leading to an impure build of the

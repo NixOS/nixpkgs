@@ -1,5 +1,5 @@
 { stdenv, lib, fetchpatch
-, pkgconfig, autoreconfHook
+, pkg-config, autoreconfHook
 , fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libgcrypt, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
 , sqlite
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ cpio zlib bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
                 ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 

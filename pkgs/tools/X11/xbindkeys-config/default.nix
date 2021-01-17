@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, gtk, pkgconfig, procps, makeWrapper, ... }:
+{ lib, stdenv, fetchurl, gtk, pkg-config, procps, makeWrapper, ... }:
 
 stdenv.mkDerivation rec {
   pname = "xbindkeys-config";
   version = "0.1.3";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk makeWrapper ];
 
   src = fetchurl {

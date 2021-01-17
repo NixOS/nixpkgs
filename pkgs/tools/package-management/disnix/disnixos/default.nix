@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dysnomia, disnix, socat, pkgconfig, getopt }:
+{ lib, stdenv, fetchurl, dysnomia, disnix, socat, pkg-config, getopt }:
 
 stdenv.mkDerivation {
   name = "disnixos-0.9";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0vllm5a8d9dvz5cjiq1mmkc4r4vnljabq42ng0ml85sjn0w7xvm7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ socat dysnomia disnix getopt ];
 
   meta = {

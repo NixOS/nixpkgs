@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, gtk3 }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "screen-message";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lw955qq5pq010lzmaf32ylj2iprgsri9ih4hx672c3f794ilab0";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ gtk3 ];
 
   # screen-message installs its binary in $(prefix)/games per default

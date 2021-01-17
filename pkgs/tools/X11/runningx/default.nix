@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libX11 }:
+{ lib, stdenv, fetchurl, pkg-config, libX11 }:
 
 stdenv.mkDerivation {
   pname = "runningx";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1mikkhrx6jsx716041qdy3nwjac08pxxvxyq2yablm8zg9hrip0d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libX11 ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, fuse }:
+{ lib, stdenv, fetchurl, pkg-config, fuse }:
 
 stdenv.mkDerivation rec {
   pname = "djmount";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kqf0cy3h4cfiy5a2sigmisx0lvvsi1n0fbyb9ll5gacmy1b8nxa";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse];
 
   meta = {

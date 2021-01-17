@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , gettext
 , guile
 , guile-reader
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
     sha256 = "sha256-AIJqIcRjT7C0EO6J60gGjERdgAglh0ZU49U9XKPwvwk=";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ gettext guile ploticus imagemagick ghostscript transfig ]
   ++ optional enableEmacs emacs

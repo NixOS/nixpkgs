@@ -1,4 +1,4 @@
-{ pkgs, fetchurl, lib, stdenv, gtk3, pkgconfig, intltool, alsaLib }:
+{ pkgs, fetchurl, lib, stdenv, gtk3, pkg-config, intltool, alsaLib }:
 
 stdenv.mkDerivation {
   pname = "volumeicon";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "182xl2w8syv6ky2h2bc9imc6ap8pzh0p7rp63hh8nw0xm38c3f14";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk3 intltool alsaLib ];
 
   meta = with lib; {

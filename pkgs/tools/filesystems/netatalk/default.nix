@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, autoreconfHook, pkgconfig, perl, python
+{ fetchurl, lib, stdenv, autoreconfHook, pkg-config, perl, python
 , db, libgcrypt, avahi, libiconv, pam, openssl, acl
 , ed, libtirpc, libevent
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ./omitLocalstatedirCreation.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig perl python python.pkgs.wrapPython ];
+  nativeBuildInputs = [ autoreconfHook pkg-config perl python python.pkgs.wrapPython ];
 
   buildInputs = [ db libgcrypt avahi libiconv pam openssl acl libevent ];
 

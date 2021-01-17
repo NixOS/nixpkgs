@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, scons, pkgconfig, libX11 }:
+{ lib, stdenv, fetchFromGitHub, scons, pkg-config, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "xsettingsd";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ./SConstruct.patch
   ];
 
-  nativeBuildInputs = [ scons pkgconfig ];
+  nativeBuildInputs = [ scons pkg-config ];
 
   buildInputs = [ libX11 ];
 

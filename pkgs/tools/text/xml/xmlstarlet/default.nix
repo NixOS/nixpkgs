@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libxml2, libxslt }:
+{ lib, stdenv, fetchurl, pkg-config, libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
   name = "xmlstarlet-1.6.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jp737nvfcf6wyb54fla868yrr39kcbijijmjpyk4lrpyg23in0m";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxml2 libxslt ];
 
   preConfigure =

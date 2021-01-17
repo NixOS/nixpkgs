@@ -1,5 +1,5 @@
 { lib, stdenv, autoconf, automake, fetchFromGitHub, libgcc, libjpeg_turbo
-, libpng, libtool, libxml2, pkgconfig, which, xorg
+, libpng, libtool, libxml2, pkg-config, which, xorg
 , libtirpc
 }:
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "01aqdwy0i4nxdyfa24bwnrqjz93q0idihdaqals2yjqpg160nwfc";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig which
+  nativeBuildInputs = [ autoconf automake libtool pkg-config which
     xorg.gccmakedep xorg.imake ];
   buildInputs = [ libgcc libjpeg_turbo libpng libxml2 xorg.fontutil
     xorg.libXcomposite xorg.libXdamage xorg.libXdmcp xorg.libXext xorg.libXfont2

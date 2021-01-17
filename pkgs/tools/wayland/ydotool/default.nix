@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake, boost, libevdevplus, libuinputplus }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, boost, libevdevplus, libuinputplus }:
 
 stdenv.mkDerivation rec {
   pname = "ydotool";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       ""
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     boost libevdevplus libuinputplus
   ];

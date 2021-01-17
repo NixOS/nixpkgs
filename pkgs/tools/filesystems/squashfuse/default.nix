@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libtool, fuse,
-  pkgconfig, lz4, xz, zlib, lzo, zstd }:
+  pkg-config, lz4, xz, zlib, lzo, zstd }:
 
 with lib;
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "062s77y32p80vc24a79z31g90b9wxzvws1xvicgx5fn1pd0xa0q6";
   };
 
-  nativeBuildInputs = [ autoreconfHook libtool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
   buildInputs = [ lz4 xz zlib lzo zstd fuse ];
 
   meta = {

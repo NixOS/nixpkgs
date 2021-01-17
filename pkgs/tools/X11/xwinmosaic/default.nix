@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gtk2, cmake, pkgconfig, libXdamage }:
+{ lib, stdenv, fetchFromGitHub, gtk2, cmake, pkg-config, libXdamage }:
 
 stdenv.mkDerivation rec {
   version = "0.4.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "16qhrpgn84fz0q3nfvaz5sisc82zk6y7c0sbvbr69zfx5fwbs1rr";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ gtk2 libXdamage ];
 
   meta = {
