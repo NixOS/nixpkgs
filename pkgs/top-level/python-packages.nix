@@ -268,6 +268,8 @@ in {
 
   aiorun = callPackage ../development/python-modules/aiorun { };
 
+  aioshelly = callPackage ../development/python-modules/aioshelly { };
+
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
 
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
