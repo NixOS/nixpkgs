@@ -653,7 +653,7 @@
     "quantum_gateway" = ps: with ps; [ ]; # missing inputs: quantum-gateway
     "qvr_pro" = ps: with ps; [ ]; # missing inputs: pyqvrpro
     "qwikswitch" = ps: with ps; [ ]; # missing inputs: pyqwikswitch
-    "rachio" = ps: with ps; [ aiohttp-cors hass-nabucasa ]; # missing inputs: rachiopy
+    "rachio" = ps: with ps; [ aiohttp-cors hass-nabucasa rachiopy ];
     "radarr" = ps: with ps; [ ];
     "radiotherm" = ps: with ps; [ ]; # missing inputs: radiotherm
     "rainbird" = ps: with ps; [ ]; # missing inputs: pyrainbird
