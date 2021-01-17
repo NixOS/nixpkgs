@@ -9,7 +9,7 @@
 , gettext
 , ninja
 , pantheon
-, pkgconfig
+, pkg-config
 , json-glib
 , libgudev
 , libevdev
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     cmake
     gettext
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];

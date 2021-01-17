@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, ncurses, readline, autoreconfHook }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "abook-0.6.1";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
      })
   ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ ncurses readline ];
 
   meta = {

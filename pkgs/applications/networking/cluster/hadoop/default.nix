@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, bash
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, which, maven, cmake, jre, bash
 , coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl, openssl_1_0_2
 }:
 
@@ -34,7 +34,7 @@ let
           outputHash = dependencies-sha256;
         };
 
-        nativeBuildInputs = [ maven cmake pkgconfig ];
+        nativeBuildInputs = [ maven cmake pkg-config ];
         buildInputs = [ fuse snappy zlib bzip2 opensslPkg protobuf2_5 ];
         # most of the hardcoded pathes are fixed in 2.9.x and 3.0.0, this list of patched files might be reduced when 2.7.x and 2.8.x will be deprecated
         postPatch = ''

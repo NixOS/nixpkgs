@@ -8,7 +8,7 @@
 , getent
 , libcap
 , gettext
-, pkgconfig
+, pkg-config
 , udev
 , eudev
 , libxslt
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     m4
-    pkgconfig
+    pkg-config
     gperf
     getent
     libcap

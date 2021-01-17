@@ -1,4 +1,4 @@
-{lib, stdenv, pkgconfig, luajit, openssl, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison, makeWrapper
+{lib, stdenv, pkg-config, luajit, openssl, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison, makeWrapper
 , libtirpc
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "13lzvjli6kbsnkd7lf0rm71l2mnz38pxk76ia9yrjb6clfhlbb73";
   };
 
-  buildInputs = [ makeWrapper pkgconfig luajit openssl libpcap pcre libdnet daq zlib flex bison libtirpc ];
+  buildInputs = [ makeWrapper pkg-config luajit openssl libpcap pcre libdnet daq zlib flex bison libtirpc ];
 
   NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
 

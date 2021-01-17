@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gtk2, libgnomeui, libXv, libraw1394, libdc1394
+{ lib, stdenv, fetchurl, pkg-config, glib, gtk2, libgnomeui, libXv, libraw1394, libdc1394
 , SDL, automake, GConf }:
 
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     cp ${automake}/share/automake-*/mkinstalldirs .
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib gtk2 libgnomeui libXv libraw1394 libdc1394 SDL GConf ];
 
   meta = {

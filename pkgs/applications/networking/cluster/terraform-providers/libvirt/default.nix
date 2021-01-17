@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, libvirt, pkgconfig, makeWrapper, cdrtools }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, libvirt, pkg-config, makeWrapper, cdrtools }:
 
 # USAGE:
 # install the following package globally or in nix-shell:
@@ -30,7 +30,7 @@ buildGoPackage rec {
     sha256 = "0ak2lpnv6h0i7lzfcggd90jpfhvsasdr6nflkflk2drlcpalggj9";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ libvirt ];
 

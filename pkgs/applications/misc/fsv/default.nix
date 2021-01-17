@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook
-, libtool, pkgconfig, gtk2, libGLU, file
+, libtool, pkg-config, gtk2, libGLU, file
 }:
 
 let
@@ -10,7 +10,7 @@ let
       url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
       sha256 = "1pl2vdj6l64j864ilhkq1bcggb3hrlxjwk5m029i7xfjfxc587lf";
     };
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs       = [ gtk2 libGLU ];
     hardeningDisable  = [ "format" ];
   };
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
    sed -i 's/AM_GNU_GETTEXT/AM_GNU_GETTEXT([external])/' configure.in
   '';
 
-  nativeBuildInputs = [ autoreconfHook libtool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
   buildInputs       = [ file gtk2 libGLU gtkglarea ];
 
   meta = with lib; {

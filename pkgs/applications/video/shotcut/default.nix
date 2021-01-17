@@ -8,7 +8,7 @@
 , gettext
 , mlt
 , jack1
-, pkgconfig
+, pkg-config
 , qtbase
 , qtmultimedia
 , qtx11extras
@@ -35,7 +35,7 @@ mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
     SDL2
     frei0r

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, unzip, pkgconfig, glib, llvmPackages }:
+{ lib, stdenv, fetchFromGitHub, unzip, pkg-config, glib, llvmPackages }:
 
 stdenv.mkDerivation {
   pname = "milu-nightly";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     cp bin/milu $out/bin
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
      glib
      unzip

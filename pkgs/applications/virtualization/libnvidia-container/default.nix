@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , libelf
 , libcap
 , libseccomp
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-L${libtirpc.dev}/lib" "-ltirpc" ];
 
-  nativeBuildInputs = [ pkgconfig rpcsvc-proto makeWrapper ];
+  nativeBuildInputs = [ pkg-config rpcsvc-proto makeWrapper ];
 
   buildInputs = [ libelf libcap libseccomp libtirpc ];
 

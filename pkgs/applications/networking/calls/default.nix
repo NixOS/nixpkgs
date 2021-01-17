@@ -2,7 +2,7 @@
 , fetchFromGitLab
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , libhandy_0
 , modemmanager
 , gtk3
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     desktop-file-utils
     vala
     wrapGAppsHook

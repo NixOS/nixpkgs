@@ -1,7 +1,7 @@
 { fetchurl
 , lib, stdenv
 , gtk
-, pkgconfig
+, pkg-config
 , libgsf
 , libofx
 , intltool
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1piiyyxjsjbw9gcqydvknzxmmfgh8kdqal12ywrxyxih2afwnvbw";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [
     gtk
     libgsf

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, poppler, pkgconfig, gdk-pixbuf, SDL, gtk2 }:
+{ lib, stdenv, fetchFromGitHub, poppler, pkg-config, gdk-pixbuf, SDL, gtk2 }:
 
 stdenv.mkDerivation {
   pname = "green-pdfviewer";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0d0lv33flhgsxhc77kfp2avdz5gvml04r8l1j95yjz2rr096lzlj";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ poppler gdk-pixbuf SDL gtk2 ];
 
   patches = [

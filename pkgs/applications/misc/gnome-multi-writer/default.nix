@@ -11,7 +11,7 @@
 , libgudev
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , polkit
 , udisks
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

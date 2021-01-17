@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, ronn, git, cmocka }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, ronn, git, cmocka }:
 
 stdenv.mkDerivation rec {
   pname = "blogc";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hx0gpvmv7rd910czafvmcpxabbvfmvdyxk4d1mckmblx8prb807";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ ronn git cmocka ];
 

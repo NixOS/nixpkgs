@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkg-config, wxGTK30, glib, pcre, m4, bash,
   xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
 
 let
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ssd3hwz4b7vl4r858d9whl61cn23pgcamcjmvfa6ysf4x2b7sgi";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
+  nativeBuildInputs = [ cmake pkg-config m4 makeWrapper imagemagick ];
 
   buildInputs = [ wxGTK30 glib pcre ]
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;

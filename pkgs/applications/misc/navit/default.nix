@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, gtk2, fontconfig, freetype, imlib2
+{ lib, stdenv, fetchFromGitHub, pkg-config, gtk2, fontconfig, freetype, imlib2
 , SDL_image, libGLU, libGL, libXmu, freeglut, pcre, dbus, dbus-glib, glib
 , librsvg, freeimage, libxslt, cairo, gdk-pixbuf, pango
 , atk, patchelf, fetchurl, bzip2, python, gettext, quesoglc
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       qtbase qtlocation qtdeclarative qtsvg
   ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig cmake patchelf bzip2 ];
+  nativeBuildInputs = [ makeWrapper pkg-config cmake patchelf bzip2 ];
 
   # we dont want blank screen by defaut
   postInstall = ''
