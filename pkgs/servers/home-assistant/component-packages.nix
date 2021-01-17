@@ -77,7 +77,7 @@
     "binary_sensor" = ps: with ps; [ ];
     "bitcoin" = ps: with ps; [ blockchain ];
     "bizkaibus" = ps: with ps; [ ]; # missing inputs: bizkaibus
-    "blackbird" = ps: with ps; [ ]; # missing inputs: pyblackbird
+    "blackbird" = ps: with ps; [ pyblackbird ];
     "blebox" = ps: with ps; [ ]; # missing inputs: blebox_uniapi
     "blink" = ps: with ps; [ ]; # missing inputs: blinkpy
     "blinksticklight" = ps: with ps; [ BlinkStick ];
