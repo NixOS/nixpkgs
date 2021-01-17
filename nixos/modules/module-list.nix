@@ -873,6 +873,7 @@
   ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/grocy.nix
+  ./services/web-apps/hastygram.nix
   ./services/web-apps/hedgedoc.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix
