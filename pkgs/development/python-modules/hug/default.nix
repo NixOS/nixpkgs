@@ -1,6 +1,5 @@
 { lib , buildPythonPackage, fetchFromGitHub, isPy27
 , falcon
-, pytestrunner
 , requests
 , pytestCheckHook
 , marshmallow
@@ -22,7 +21,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ falcon requests ];
 
-  checkInputs = [ mock marshmallow pytestCheckHook pytestrunner numpy ];
+  checkInputs = [ mock marshmallow pytestCheckHook numpy ];
+
+  postPatch = ''
+    substituteInPlace setup.py --replace '"pytest-runner"' ""
+  '';
 
   preCheck = ''
     # some tests need the `hug` CLI on the PATH
