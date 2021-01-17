@@ -267,14 +267,14 @@ let self = rec {
 
     plugin = "svtplay";
     namespace = "plugin.video.svtplay";
-    version = "4.0.48";
+    version = "5.1.12";
 
     src = fetchFromGitHub {
       name = plugin + "-" + version + ".tar.gz";
       owner = "nilzen";
       repo = "xbmc-" + plugin;
-      rev = "dc18ad002cd69257611d0032fba91f57bb199165";
-      sha256 = "0klk1jpjc243ak306k94mag4b4s17w68v69yb8lzzydszqkaqa7x";
+      rev = "v${version}";
+      sha256 = "04j1nhm7mh9chs995lz6bv1vsq5xzk7a7c0lmk4bnfv8jrfpj0w6";
     };
 
     meta = {
@@ -288,7 +288,6 @@ let self = rec {
       '';
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
-      broken = true; # requires port to python3
     };
 
   };
