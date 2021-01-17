@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, beets, pythonPackages }:
+{ lib, fetchFromGitHub, beets, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "beets-extrafiles";
