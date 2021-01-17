@@ -14804,6 +14804,8 @@ in
 
   libltc = callPackage ../development/libraries/libltc { };
 
+  liblxi = callPackage ../development/libraries/liblxi { };
+
   libmaxminddb = callPackage ../development/libraries/libmaxminddb { };
 
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
@@ -23322,6 +23324,8 @@ in
   lv2bm = callPackage ../applications/audio/lv2bm { };
 
   lv2-cpp-tools = callPackage ../applications/audio/lv2-cpp-tools { };
+
+  lxi-tools = callPackage ../tools/networking/lxi-tools { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
