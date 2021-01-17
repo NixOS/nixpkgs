@@ -24827,6 +24827,7 @@ in
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
   snapper = callPackage ../tools/misc/snapper { };
+  snapper-gui = callPackage ../applications/misc/snapper-gui { };
 
   snd = callPackage ../applications/audio/snd { };
 
