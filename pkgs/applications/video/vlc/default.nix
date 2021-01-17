@@ -9,8 +9,9 @@
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
 , onlyLibVLC ? false
-, withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null, wrapQtAppsHook ? null
+, withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
 , jackSupport ? false
+, skins2Support ? !onlyLibVLC, freetype
 , removeReferencesTo
 , chromecastSupport ? true, protobuf, libmicrodns
 }:
@@ -20,8 +21,6 @@
 #   networking.firewall.allowedTCPPorts = [ 8010 ];
 
 with lib;
-
-assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null);
 
 stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
@@ -52,6 +51,7 @@ stdenv.mkDerivation rec {
     fluidsynth wayland wayland-protocols
   ] ++ optional (!stdenv.hostPlatform.isAarch64) live555
     ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
+    ++ optionals skins2Support (with xorg; [ libXpm freetype libXext libXinerama ])
     ++ optional jackSupport libjack2
     ++ optionals chromecastSupport [ protobuf libmicrodns ];
 
@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-kde-solid=$out/share/apps/solid/actions"
   ] ++ optional onlyLibVLC "--disable-vlc"
+    ++ optional skins2Support "--enable-skins2"
     ++ optionals chromecastSupport [
     "--enable-sout"
     "--enable-chromecast"
