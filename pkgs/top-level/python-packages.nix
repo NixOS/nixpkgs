@@ -1917,6 +1917,8 @@ in {
 
   dopy = callPackage ../development/python-modules/dopy { };
 
+  dotty-dict = callPackage ../development/python-modules/dotty-dict { };
+
   dot2tex = callPackage ../development/python-modules/dot2tex { inherit (pkgs) graphviz; };
 
   dparse = callPackage ../development/python-modules/dparse { };
