@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, intltool, libxml2
-, pciutils, pkgconfig, gtk2, ddccontrol-db
+, pciutils, pkg-config, gtk2, ddccontrol-db
 , makeDesktopItem
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "09npy6z2j3jrvpvlr46vih31y2mbrh7wsqlbrjprxjv1j0kkz5q2";
   };
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook intltool pkg-config ];
 
   buildInputs = [
     libxml2

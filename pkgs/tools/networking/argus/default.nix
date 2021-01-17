@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, libpcap, bison, flex, cyrus_sasl, tcp_wrappers,
-  pkgconfig, procps, which, wget, lsof, net-snmp, perl }:
+  pkg-config, procps, which, wget, lsof, net-snmp, perl }:
 
 stdenv.mkDerivation rec {
   pname = "argus";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zzf688dbbcb5z2r9v1p28rddns6znzx35nc05ygza6lp7aknkna";
   };
 
-  nativeBuildInputs = [ pkgconfig bison flex ];
+  nativeBuildInputs = [ pkg-config bison flex ];
   buildInputs = [ libpcap cyrus_sasl tcp_wrappers ];
   propagatedBuildInputs = [ procps which wget lsof net-snmp ];
 

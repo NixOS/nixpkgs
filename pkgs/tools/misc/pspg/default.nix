@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gnugrep, ncurses, pkgconfig, readline, postgresql }:
+{ lib, stdenv, fetchFromGitHub, gnugrep, ncurses, pkg-config, readline, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pspg";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "000h4yiaym7i5bcm268rvsjbs2brz2is9lhm6vm3dx0q7k1pcx45";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gnugrep ncurses readline postgresql ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

@@ -10,7 +10,7 @@
 , libnma
 , libsecret
 , networkmanager
-, pkgconfig
+, pkg-config
 , ppp
 , sstp
 , substituteAll
@@ -32,7 +32,7 @@ in stdenv.mkDerivation {
   buildInputs = [ sstp networkmanager glib ppp ]
     ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
-  nativeBuildInputs = [ file intltool autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ file intltool autoreconfHook pkg-config ];
 
   postPatch = ''
     sed -i 's#/sbin/pppd#${ppp}/bin/pppd#' src/nm-sstp-service.c

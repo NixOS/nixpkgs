@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, cryptopp
+{ lib, stdenv, fetchurl, pkg-config, cryptopp
 , libusb1, qtbase, qttools, makeWrapper
 , qmake, withEspeak ? false, espeak ? null
 , qt5 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation  rec {
 
   buildInputs = [ cryptopp libusb1 qtbase qttools ]
     ++ lib.optional withEspeak espeak;
-  nativeBuildInputs = [ makeWrapper pkgconfig qmake qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ makeWrapper pkg-config qmake qt5.wrapQtAppsHook ];
 
   postPatch = ''
     sed -i rbutil/rbutilqt/rbutilqt.pro \

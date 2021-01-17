@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , file
 , glib
 # always required runtime dependencies
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     file
   ]
     ++ optionals (enablePolkit) [ polkit ]

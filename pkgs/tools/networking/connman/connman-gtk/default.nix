@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, intltool, pkgconfig,
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, intltool, pkg-config,
 gtk3, connman, openconnect, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     intltool
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

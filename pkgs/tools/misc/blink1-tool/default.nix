@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libusb1, pkgconfig, ... }:
+{ lib, stdenv, fetchurl, libusb1, pkg-config, ... }:
 
 stdenv.mkDerivation rec {
   pname = "blink1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1waci6hccv5i50v5d3z7lx4h224fbkj66ywfynnsgn46w0jm6imv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];
 
   configurePhase = ''

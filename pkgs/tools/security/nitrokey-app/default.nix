@@ -1,4 +1,4 @@
-{ lib, stdenv, bash-completion, cmake, fetchFromGitHub, hidapi, libusb1, pkgconfig
+{ lib, stdenv, bash-completion, cmake, fetchFromGitHub, hidapi, libusb1, pkg-config
 , qtbase, qttranslations, qtsvg, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     wrapQtAppsHook
   ];
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];

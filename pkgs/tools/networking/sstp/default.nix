@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, ppp, libevent, openssl }:
+{ lib, stdenv, fetchurl, pkg-config, ppp, libevent, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "sstp-client";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "--with-pppd-plugin-dir=$(out)/lib/pppd"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libevent openssl ppp ];
 
   meta = {

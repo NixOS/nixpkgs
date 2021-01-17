@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "pick";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = with lib; {
     inherit (src.meta) homepage;

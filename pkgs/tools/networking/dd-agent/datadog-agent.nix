@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig, systemd, hostname, extraTags ? [] }:
+{ lib, stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkg-config, systemd, hostname, extraTags ? [] }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
@@ -28,7 +28,7 @@ in buildGoPackage rec {
   goPackagePath = "github.com/${owner}/${repo}";
 
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ systemd ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 

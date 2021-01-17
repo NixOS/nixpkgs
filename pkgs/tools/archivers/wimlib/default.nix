@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper
-, pkgconfig, openssl, fuse, libxml2
+, pkg-config, openssl, fuse, libxml2
 , cabextract ? null
 , cdrkit ? null
 , mtools ? null
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.13.2";
   pname = "wimlib";
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ openssl fuse libxml2 ntfs3g ];
 
   src = fetchurl {

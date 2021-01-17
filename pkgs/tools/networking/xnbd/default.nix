@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, autoreconfHook, glib, jansson }:
+{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, glib, jansson }:
 
 stdenv.mkDerivation rec {
   name = "xnbd-0.4.0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./0001-Fix-build-for-glibc-2.28.patch ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ glib jansson ];
 

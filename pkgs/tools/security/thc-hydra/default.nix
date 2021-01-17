@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, zlib, openssl, ncurses, libidn, pcre, libssh, libmysqlclient, postgresql
-, withGUI ? false, makeWrapper, pkgconfig, gtk2 }:
+, withGUI ? false, makeWrapper, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --replace "-lcurses" "-lncurses"
   '';
 
-  nativeBuildInputs = lib.optionals withGUI [ pkgconfig makeWrapper ];
+  nativeBuildInputs = lib.optionals withGUI [ pkg-config makeWrapper ];
 
   buildInputs = [
     zlib openssl ncurses libidn pcre libssh libmysqlclient postgresql

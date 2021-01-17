@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, xorg, pkgconfig}:
+{lib, stdenv, fetchFromGitHub, xorg, pkg-config}:
 
 stdenv.mkDerivation rec {
   pname = "hhpc";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1djsw1r38mh6zx0rbyn2cfa931hyddib4fl3i27c4z7xinl709ss";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ xorg.libX11 ];
 
   installPhase = ''

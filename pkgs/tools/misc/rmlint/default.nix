@@ -9,7 +9,7 @@
 , libelf
 , makeWrapper
 , pango
-, pkgconfig
+, pkg-config
 , polkit
 , python3
 , scons
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   CFLAGS="-I${lib.getDev util-linux}/include";
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     sphinx
     gettext
     scons

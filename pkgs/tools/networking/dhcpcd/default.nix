@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, udev, runtimeShellPackage,
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, udev, runtimeShellPackage,
 runtimeShell }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gf1qif25wy5lffzw39pi4sshmpxz1f4a1m9sglj7am1gaix3817";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     udev
     runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts

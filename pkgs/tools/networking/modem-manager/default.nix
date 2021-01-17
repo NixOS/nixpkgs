@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkgconfig
+{ lib, stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkg-config
 , libmbim, libqmi, systemd, vala, gobject-introspection, dbus }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "15cjy7zzsxagx649vz0990avin47vpgdmm4ss2msggdla6x2c6py";
   };
 
-  nativeBuildInputs = [ vala gobject-introspection gettext pkgconfig ];
+  nativeBuildInputs = [ vala gobject-introspection gettext pkg-config ];
 
   buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
 

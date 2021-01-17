@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, intltool, gettext, makeWrapper, coreutils, gnused, gnome3
-, gnugrep, parted, glib, libuuid, pkgconfig, gtkmm3, libxml2
+, gnugrep, parted, glib, libuuid, pkg-config, gtkmm3, libxml2
 , gpart, hdparm, procps, util-linux, polkit, wrapGAppsHook, substituteAll
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-doc" ];
 
   buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin gnome3.adwaita-icon-theme  ];
-  nativeBuildInputs = [ intltool gettext pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ intltool gettext pkg-config wrapGAppsHook ];
 
   preFixup = ''
     gappsWrapperArgs+=(
