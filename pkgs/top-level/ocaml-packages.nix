@@ -1091,6 +1091,8 @@ let
 
     x509 = callPackage ../development/ocaml-modules/x509 { };
 
+    xenstore = callPackage ../development/ocaml-modules/xenstore { };
+
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
 
     xml-light = callPackage ../development/ocaml-modules/xml-light { };
