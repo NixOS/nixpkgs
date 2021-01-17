@@ -2,7 +2,7 @@
 , meson
 , fetchurl
 , python3
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , adwaita-icon-theme
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     perl
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

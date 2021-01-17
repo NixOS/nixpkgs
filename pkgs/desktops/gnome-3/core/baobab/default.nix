@@ -1,5 +1,5 @@
 { lib, stdenv, gettext, fetchurl, vala, desktop-file-utils
-, meson, ninja, pkgconfig, python3, gtk3, glib, libxml2
+, meson, ninja, pkg-config, python3, gtk3, glib, libxml2
 , wrapGAppsHook, itstool, gnome3 }:
 
 let
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0ac3fbl15l836yvgw724q4whbkws9v4b6l2xy6bnp0b0g0a6i104";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gettext itstool libxml2 desktop-file-utils wrapGAppsHook python3 ];
+  nativeBuildInputs = [ meson ninja pkg-config vala gettext itstool libxml2 desktop-file-utils wrapGAppsHook python3 ];
   buildInputs = [ gtk3 glib gnome3.adwaita-icon-theme ];
 
   doCheck = true;

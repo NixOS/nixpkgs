@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gnome3, meson, ninja, pkgconfig, gtk3, intltool, glib
+{ lib, stdenv, fetchurl, gnome3, meson, ninja, pkg-config, gtk3, intltool, glib
 , udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra-gtk3, gobject-introspection
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, python3, gsettings-desktop-schemas }:
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja intltool itstool pkgconfig libxml2 wrapGAppsHook gobject-introspection
+    meson ninja intltool itstool pkg-config libxml2 wrapGAppsHook gobject-introspection
     gtk-doc docbook_xsl docbook_xml_dtd_43 python3
   ];
   buildInputs = [

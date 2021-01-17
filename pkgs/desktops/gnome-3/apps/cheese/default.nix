@@ -4,7 +4,7 @@
 , wrapGAppsHook
 , gnome-video-effects
 , libcanberra-gtk3
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , clutter-gtk
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

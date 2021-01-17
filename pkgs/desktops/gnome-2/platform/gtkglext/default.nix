@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitLab
-, pkgconfig
+, pkg-config
 , gtk-doc
 , autoconf
 , automake
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gtk-doc
     autoconf
     automake

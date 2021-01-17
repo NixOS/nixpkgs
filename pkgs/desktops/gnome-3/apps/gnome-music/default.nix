@@ -14,7 +14,7 @@
 , gnome-online-accounts
 , grilo
 , grilo-plugins
-, pkgconfig
+, pkg-config
 , gtk3
 , pango
 , glib
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     ninja
     gettext
     itstool
-    pkgconfig
+    pkg-config
     libxml2
     wrapGAppsHook
     desktop-file-utils

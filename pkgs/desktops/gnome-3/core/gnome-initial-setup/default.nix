@@ -4,7 +4,7 @@
 , gettext
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , gnome3
 , accountsservice
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     systemd
     wrapGAppsHook
   ];

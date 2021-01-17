@@ -3,7 +3,7 @@
 , ninja
 , gettext
 , fetchurl
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , itstool
 , desktop-file-utils
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     itstool
     libxml2

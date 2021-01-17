@@ -10,7 +10,7 @@
 , libgtop
 , libstartup_notification
 , libxml2
-, pkgconfig
+, pkg-config
 , substituteAll
 , wrapGAppsHook
 , zenity
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gettext
     libxml2
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

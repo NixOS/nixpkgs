@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, wrapGAppsHook
 , libgtop, intltool, itstool, libxml2, nmap, inetutils }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c9cvzvyqgfwa5zzyvp7118pkclji62fkbb33g4y9sp5kw6m397h";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gtk3 wrapGAppsHook libgtop intltool itstool libxml2
     gnome3.adwaita-icon-theme

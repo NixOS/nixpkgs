@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, vala, gnome3, gtk3, wrapGAppsHook, appstream-glib, desktop-file-utils
+{ lib, stdenv, fetchurl, pkg-config, vala, gnome3, gtk3, wrapGAppsHook, appstream-glib, desktop-file-utils
 , glib, librsvg, libxml2, gettext, itstool, libgee, libgnome-games-support
 , meson, ninja, python3
 }:
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig vala meson ninja python3 wrapGAppsHook
+    pkg-config vala meson ninja python3 wrapGAppsHook
     gettext itstool libxml2 appstream-glib desktop-file-utils
     gnome3.adwaita-icon-theme
   ];

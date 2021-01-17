@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, isocodes, gnome3, gtk3, dconf, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, isocodes, gnome3, gtk3, dconf, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-desktop";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     wrapGAppsHook
   ];

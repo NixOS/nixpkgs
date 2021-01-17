@@ -3,7 +3,7 @@
 , meson
 , ninja
 , gettext
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , itstool
 , desktop-file-utils
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     vala
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     itstool
     wrapGAppsHook

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk3, intltool
+{ lib, stdenv, fetchurl, pkg-config, gtk3, intltool
 , gnome3, enchant, isocodes, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript { packageName = "gtkhtml"; attrPath = "gnome3.gtkhtml"; };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk3 intltool gnome3.adwaita-icon-theme
                   gsettings-desktop-schemas ];
 

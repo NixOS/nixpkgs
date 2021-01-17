@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, gettext, pkgconfig, spidermonkey_68, glib
+{ lib, stdenv, fetchurl, meson, ninja, gettext, pkg-config, spidermonkey_68, glib
 , gnome3, gnome-menus, substituteAll }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   # https://gitlab.gnome.org/GNOME/gnome-shell-extensions/blob/3.34.0/meson.build#L23
   checkInputs = [ spidermonkey_68 ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext glib ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext glib ];
 
   mesonFlags = [ "-Dextension_set=all" ];
 

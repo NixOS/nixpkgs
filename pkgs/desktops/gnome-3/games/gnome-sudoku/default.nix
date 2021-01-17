@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, vala, pkgconfig, gobject-introspection, gettext, gtk3, gnome3, wrapGAppsHook
+{ lib, stdenv, fetchurl, meson, ninja, vala, pkg-config, gobject-introspection, gettext, gtk3, gnome3, wrapGAppsHook
 , libgee, json-glib, qqwing, itstool, libxml2, python3, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cpxx63liczmax6ry06r5k0f221xpg2rqh49vkdj2snmqq61swrq";
   };
 
-  nativeBuildInputs = [ meson ninja vala pkgconfig gobject-introspection gettext itstool libxml2 python3 desktop-file-utils wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja vala pkg-config gobject-introspection gettext itstool libxml2 python3 desktop-file-utils wrapGAppsHook ];
   buildInputs = [ gtk3 libgee json-glib qqwing ];
 
   postPatch = ''

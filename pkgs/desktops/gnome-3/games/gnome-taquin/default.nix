@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, wrapGAppsHook
 , librsvg, gsound, gettext, itstool, libxml2
 , meson, ninja, vala, python3, desktop-file-utils
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig wrapGAppsHook meson ninja python3
+    pkg-config wrapGAppsHook meson ninja python3
     gettext itstool libxml2 vala desktop-file-utils
   ];
   buildInputs = [

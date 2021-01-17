@@ -6,7 +6,7 @@
 , fetchpatch
 , evince
 , gjs
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , tracker
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     itstool
     libxslt
