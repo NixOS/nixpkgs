@@ -25,8 +25,8 @@ in stdenv.mkDerivation rec {
   ] ++ (optional (versionOlder kernel.version "5.7") ./vfl_type_grabber.patch);
 
   installPhase = ''
-    install -D {,$out/${kerneldir}/extra/}gvusb2-sound.ko
-    install -D {,$out/${kerneldir}/extra/}gvusb2-video.ko
+    install -D gvusb2-sound.ko $out/${kerneldir}/extra/gvusb2-sound.ko
+    install -D gvusb2-video.ko $out/${kerneldir}/extra/gvusb2-video.ko
   '';
 
   meta = with lib; {
