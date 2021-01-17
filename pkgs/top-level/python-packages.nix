@@ -6730,6 +6730,8 @@ in {
 
   roman = callPackage ../development/python-modules/roman { };
 
+  roombapy = callPackage ../development/python-modules/roombapy { };
+
   rope = callPackage ../development/python-modules/rope { };
 
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
