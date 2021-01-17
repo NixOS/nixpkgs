@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, scons, zlib, SDL, lua5_1, pkgconfig}:
+{lib, stdenv, fetchFromGitHub, scons, zlib, SDL, lua5_1, pkg-config}:
 
 stdenv.mkDerivation {
   pname = "fceux-unstable";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0gpz411dzfwx9mr34yi4zb1hphd5hha1nvwgzxki0sviwafca992";
   };
 
-  nativeBuildInputs = [ pkgconfig scons ];
+  nativeBuildInputs = [ pkg-config scons ];
   buildInputs = [
     zlib SDL lua5_1
   ];

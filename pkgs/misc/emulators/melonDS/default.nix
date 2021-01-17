@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , mkDerivation
 , cmake
-, pkgconfig
+, pkg-config
 , SDL2
 , qtbase
 , libpcap
@@ -21,7 +21,7 @@ mkDerivation rec {
     sha256 = "0m45m1ch0az8l3d3grjbqvi5vvydbffxwka9w3k3qiia50m7fnph";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
   buildInputs = [
     SDL2
     qtbase

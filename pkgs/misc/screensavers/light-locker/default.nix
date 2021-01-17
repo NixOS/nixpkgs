@@ -3,7 +3,7 @@
 , nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , intltool
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     intltool
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

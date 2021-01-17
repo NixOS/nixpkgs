@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkg-config
 , python
 , alsaLib, glew, libGL, libpng
 , libogg, libtheora, libvorbis
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ pkg-config python ];
 
   buildInputs = [ alsaLib glew libGL libpng
     libogg libtheora libvorbis freetype

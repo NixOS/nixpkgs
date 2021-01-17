@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, SDL2, alsaLib, gtk3
+{ lib, stdenv, fetchFromGitHub, pkg-config, SDL2, alsaLib, gtk3
 , makeWrapper, libGLU, libGL, libarchive, libao, unzip, xdg_utils
 , epoxy, gdk-pixbuf, gnome3, wrapGAppsHook
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     makeWrapper
     wrapGAppsHook
   ];
