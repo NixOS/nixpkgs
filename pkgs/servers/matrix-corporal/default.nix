@@ -1,4 +1,4 @@
-{lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "matrix-corporal";
