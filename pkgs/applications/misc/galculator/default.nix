@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, intltool
-, gtk, pkgconfig, flex }:
+, gtk, pkg-config, flex }:
 
 stdenv.mkDerivation rec {
   pname = "galculator";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q0hb62f266709ncyq96bpx4a40a1i6dc5869byvd7x285sx1c2w";
   };
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook intltool pkg-config ];
   buildInputs = [ gtk flex ];
 
   meta = with lib; {

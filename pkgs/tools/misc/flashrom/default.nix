@@ -3,7 +3,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , libftdi1
 , libusb1
 , pciutils
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   mesonFlags = lib.optionals stdenv.isAarch64 [ "-Dpciutils=false" ];
-  nativeBuildInputs = [ meson pkgconfig ninja ];
+  nativeBuildInputs = [ meson pkg-config ninja ];
   buildInputs = [ libftdi1 libusb1 pciutils ];
 
   meta = with lib; {

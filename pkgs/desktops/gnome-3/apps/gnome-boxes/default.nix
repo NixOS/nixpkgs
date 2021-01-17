@@ -3,7 +3,7 @@
 , meson
 , ninja
 , wrapGAppsHook
-, pkgconfig
+, pkg-config
 , gettext
 , itstool
 , libvirt-glib
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     itstool
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

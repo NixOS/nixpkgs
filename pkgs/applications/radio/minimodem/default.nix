@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, libtool
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, libtool
 , fftw, fftwSinglePrec, alsaLib, libsndfile, libpulseaudio
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b5xy36fjcp7vkp115dpx4mlmqg2fc7xvxdy648fb8im953bw7ql";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
+  nativeBuildInputs = [ pkg-config autoconf automake libtool ];
   buildInputs = [ fftw fftwSinglePrec alsaLib libsndfile libpulseaudio ];
 
   preConfigure = ''

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, libGLU, libGL
+{ stdenv, lib, fetchurl, pkg-config, libGLU, libGL
 , SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
 
 , use3DOVideos ? false, requireFile ? null, writeText ? null
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     sha256 = "10nbvcrr0lc0mxivxfkcbxnibwk3vwmamabrlvwdsjxd9pk8aw65";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU libGL ];
 
   postUnpack = ''

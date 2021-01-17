@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config
 , wayland, wayland-protocols }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0c4w87ipsw09aii34szj9p0xfy0m00wyjpll0gb0aqmwa60p0c5d";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig wayland-protocols ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-protocols ];
   buildInputs = [ wayland ];
 
   meta = with lib; {

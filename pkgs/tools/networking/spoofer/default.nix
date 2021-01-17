@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, protobuf, openssl, libpcap, traceroute
+{ lib, stdenv, fetchurl, pkg-config, protobuf, openssl, libpcap, traceroute
 , withGUI ? false, qt5 }:
 
 let inherit (lib) optional;
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pnim3xyfsmv6alsvhwjs4v9lp39wwiyj63rxsqyz4wx4vkmn12z";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl protobuf libpcap traceroute ]
                 ++ optional withGUI qt5.qtbase ;
 

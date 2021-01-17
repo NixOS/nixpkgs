@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx
-, pkgconfig, intltool, fontconfig, libzip, zip, zlib }:
+, pkg-config, intltool, fontconfig, libzip, zip, zlib }:
 
 let
   version = "1.08.20121209";
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL SDL_mixer SDL_image SDL_ttf SDL_gfx
-    pkgconfig intltool fontconfig libzip zip zlib
+    pkg-config intltool fontconfig libzip zip zlib
   ];
 
   preConfigure = ''

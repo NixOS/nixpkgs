@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, irssi, gmp, automake, autoconf, libtool, openssl, glib, pkgconfig }:
+{ lib, stdenv, fetchurl, irssi, gmp, automake, autoconf, libtool, openssl, glib, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "fish-irssi-20130413-e98156bebd";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp src/.libs/libfish.so $out/lib/irssi/modules
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gmp automake autoconf libtool openssl glib ];
 
   meta = {

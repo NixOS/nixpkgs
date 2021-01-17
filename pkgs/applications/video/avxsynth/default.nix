@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , cairo, ffmpeg_3, ffms, libjpeg, log4cpp, pango
 , avxeditSupport ? false, qt4 ? null
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     "--with-jpeg=${libjpeg.out}/lib"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ cairo ffmpeg_3 ffms libjpeg log4cpp pango ]
     ++ optional avxeditSupport qt4;

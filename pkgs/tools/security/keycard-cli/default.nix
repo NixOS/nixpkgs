@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub, pkgconfig, pcsclite }:
+{ lib, buildGoPackage, fetchFromGitHub, pkg-config, pcsclite }:
 
 buildGoPackage rec {
   pname = "keycard-cli";
@@ -7,7 +7,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/status-im/keycard-cli";
   subPackages = [ "." ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcsclite ];
 
   src = fetchFromGitHub {

@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitLab
-, pkgconfig
+, pkg-config
 , intltool
 , automake111x
 , autoconf
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = with gnome2; [
-    pkgconfig
+    pkg-config
     intltool
     automake111x
     autoconf

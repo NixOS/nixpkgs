@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , gtk3
 , vala
 , enchant2
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

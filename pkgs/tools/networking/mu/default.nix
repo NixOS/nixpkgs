@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
+{ lib, stdenv, fetchFromGitHub, sqlite, pkg-config, autoreconfHook, pmccabe
 , xapian, glib, gmime3, texinfo , emacs, guile
 , gtk3, webkitgtk, libsoup, icu
 , withMug ? false
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!stdenv.isDarwin) guile
     ++ lib.optionals withMug [ gtk3 webkitgtk ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook pmccabe ];
+  nativeBuildInputs = [ pkg-config autoreconfHook pmccabe ];
 
   enableParallelBuilding = true;
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, pkgconfig
+{ lib, stdenv, fetchurl, cmake, pkg-config
 , SDL2, libvorbis, libogg, libjpeg, libpng, freetype, glew, tinyxml, openal
 , freealut, readline, gcc-unwrapped
 , enableSoundtrack ? false # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     SDL2 libvorbis libogg libjpeg libpng freetype glew tinyxml openal freealut

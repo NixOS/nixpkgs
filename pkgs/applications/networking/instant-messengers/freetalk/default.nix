@@ -1,11 +1,11 @@
 { lib, stdenv, fetchFromGitHub
-, guile, pkgconfig, glib, loudmouth, gmp, libidn, readline, libtool
+, guile, pkg-config, glib, loudmouth, gmp, libidn, readline, libtool
 , libunwind, ncurses, curl, jansson, texinfo
 , automake, autoconf }:
 stdenv.mkDerivation rec {
   pname = "freetalk";
   version = "4.1";
-  
+
   src = fetchFromGitHub {
     owner = "GNUFreetalk";
     repo = "freetalk";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  nativeBuildInputs = [ pkgconfig texinfo autoconf automake ];
+  nativeBuildInputs = [ pkg-config texinfo autoconf automake ];
   buildInputs = [
     guile glib loudmouth gmp libidn readline libtool
     libunwind ncurses curl jansson

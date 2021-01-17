@@ -13,7 +13,7 @@
 , libnotify
 , libxklavier
 , wrapGAppsHook
-, pkgconfig
+, pkg-config
 , pulseaudio
 , lib, stdenv
 , systemd
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     wrapGAppsHook
     intltool
-    pkgconfig
+    pkg-config
   ];
 
   outputs = [ "out" "dev" ];

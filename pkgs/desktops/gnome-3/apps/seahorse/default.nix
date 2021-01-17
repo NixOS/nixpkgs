@@ -5,7 +5,7 @@
 , meson
 , ninja
 , libpwquality
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , wrapGAppsHook
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     itstool
     wrapGAppsHook

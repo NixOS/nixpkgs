@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgconfig, gtk2, keybinder, fetchFromGitLab }:
+{ lib, stdenv, pkg-config, gtk2, keybinder, fetchFromGitLab }:
 
 stdenv.mkDerivation {
   name = "fehlstart-9f4342d7";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   patches = [ ./use-nix-profiles.patch ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 keybinder ];
 
   preConfigure = ''

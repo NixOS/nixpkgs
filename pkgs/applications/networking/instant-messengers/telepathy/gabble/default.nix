@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libxslt, telepathy-glib, libxml2, dbus-glib, dbus
+{ lib, stdenv, fetchurl, pkg-config, libxslt, telepathy-glib, libxml2, dbus-glib, dbus
 , sqlite, libsoup, libnice, gnutls}:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "174nlkqm055vrhv11gy73m20jbsggcb0ddi51c7s9m3j5ibr2p0i";
   };
 
-  nativeBuildInputs = [ pkgconfig libxslt ];
+  nativeBuildInputs = [ pkg-config libxslt ];
   buildInputs = [ libxml2 dbus-glib sqlite libsoup libnice telepathy-glib gnutls telepathy-glib.python ];
 
   checkInputs = [ dbus.daemon ];

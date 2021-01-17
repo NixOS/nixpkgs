@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, which
+{ lib, stdenv, fetchurl, pkg-config, gettext, which
 , glib, gtk2
 , enableSoftening ? true
 }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0f8gjnia2fxcbmhl8b3qkr5b7idl8m855dw7xw2fnmbqwvcm6k4w";
   };
 
-  nativeBuildInputs = [ gettext pkgconfig which ];
+  nativeBuildInputs = [ gettext pkg-config which ];
   buildInputs = [ glib gtk2 ];
 
   patches = lib.optional enableSoftening [

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fox, pkgconfig, gettext, xlibsWrapper, gcc, intltool, file, libpng }:
+{ lib, stdenv, fetchurl, fox, pkg-config, gettext, xlibsWrapper, gcc, intltool, file, libpng }:
 
 stdenv.mkDerivation rec {
   name = "xfe-1.42";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v1v0vcbnm30kpyd3rj8f56yh7lfnwy7nbs9785wi229b29fiqx1";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fox gettext xlibsWrapper gcc intltool file libpng ];
 
   preConfigure = ''

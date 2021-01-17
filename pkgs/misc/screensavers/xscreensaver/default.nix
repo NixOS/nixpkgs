@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, bc, perl, perlPackages, pam, libXext, libXScrnSaver, libX11
+{ lib, stdenv, fetchurl, pkg-config, bc, perl, perlPackages, pam, libXext, libXScrnSaver, libX11
 , libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, libGLU, libGL, gtk2
 , libxml2, libglade, intltool, xorg, makeWrapper, gle, gdk-pixbuf, gdk-pixbuf-xlib
 , forceInstallAllHacks ? false
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig bc perl libjpeg libGLU libGL gtk2 libxml2 libglade pam
+    [ pkg-config bc perl libjpeg libGLU libGL gtk2 libxml2 libglade pam
       libXext libXScrnSaver libX11 libXrandr libXmu libXxf86vm libXrender
       libXxf86misc intltool xorg.appres makeWrapper gle gdk-pixbuf
       gdk-pixbuf-xlib

@@ -6,7 +6,7 @@
 , gettext
 , libGLU, libGL
 , openal
-, pkgconfig
+, pkg-config
 , SDL2
 , sfml
 , zip
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kgpbvng3c12ws0dy92zc0azd94h0i3j4vm7b67zc8mi3pqsppdg";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     cairo

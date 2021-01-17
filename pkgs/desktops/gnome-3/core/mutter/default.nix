@@ -3,7 +3,7 @@
 , substituteAll
 , runCommand
 , lib, stdenv
-, pkgconfig
+, pkg-config
 , gnome3
 , gettext
 , gobject-introspection
@@ -74,7 +74,7 @@ let self = stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    # required for pkgconfig to detect mutter-clutter
+    # required for pkg-config to detect mutter-clutter
     json-glib
     libXtst
     libcap_ng
@@ -86,7 +86,7 @@ let self = stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
     xorgserver # for cvt command

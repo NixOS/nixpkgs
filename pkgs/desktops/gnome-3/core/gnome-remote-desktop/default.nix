@@ -3,7 +3,7 @@
 , cairo
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , wrapGAppsHook
 , glib
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];

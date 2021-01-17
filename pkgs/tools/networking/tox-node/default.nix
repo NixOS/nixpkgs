@@ -1,6 +1,6 @@
 { lib, stdenv, rustPlatform, fetchFromGitHub
 , libsodium, openssl
-, pkgconfig
+, pkg-config
 }:
 
 with rustPlatform;
@@ -17,7 +17,7 @@ buildRustPackage rec {
   };
 
   buildInputs = [ libsodium openssl ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   SODIUM_USE_PKG_CONFIG = "yes";
 

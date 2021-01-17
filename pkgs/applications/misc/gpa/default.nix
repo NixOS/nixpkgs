@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, intltool, pkgconfig, gtk2, gpgme, libgpgerror, libassuan }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, gtk2, gpgme, libgpgerror, libassuan }:
 
 stdenv.mkDerivation rec {
   name = "gpa-0.10.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cbpc45f8qbdkd62p12s3q2rdq6fa5xdzwmcwd3xrj55bzkspnwm";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkg-config ];
   buildInputs = [ gtk2 gpgme libgpgerror libassuan ];
 
   meta = with lib; {

@@ -3,7 +3,7 @@
 , fetchpatch
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gnome3
 , glib
 , gtk3
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     python3
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     gettext
     itstool

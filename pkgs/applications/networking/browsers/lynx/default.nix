@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages
-, fetchurl, pkgconfig, ncurses, gzip
+, fetchurl, pkg-config, ncurses, gzip
 , sslSupport ? true, openssl ? null
 , nukeReferences
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ nukeReferences ]
-    ++ lib.optional sslSupport pkgconfig;
+    ++ lib.optional sslSupport pkg-config;
 
   buildInputs = [ ncurses gzip ] ++ lib.optional sslSupport openssl.dev;
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, libusb-compat-0_1, libusb1, autoconf, automake, libconfuse, pkgconfig
+{ lib, stdenv, fetchgit, libusb-compat-0_1, libusb1, autoconf, automake, libconfuse, pkg-config
 , gccCross ? null
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   # Not to strip cross build binaries (this is for the gcc-cross-wrapper)
   dontCrossStrip = true;
 
-  nativeBuildInputs = [ autoconf automake pkgconfig ];
+  nativeBuildInputs = [ autoconf automake pkg-config ];
   buildInputs = [ libusb-compat-0_1 libusb1 libconfuse ] ++
     lib.optional (gccCross != null) gccCross;
 

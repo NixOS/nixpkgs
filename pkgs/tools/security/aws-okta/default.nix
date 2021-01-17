@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub, libusb1, pkgconfig, lib, stdenv, libiconv }:
+{ buildGoPackage, fetchFromGitHub, libusb1, pkg-config, lib, stdenv, libiconv }:
 
 buildGoPackage rec {
   pname = "aws-okta";
@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   buildFlagsArray = [ "-ldflags=-X main.Version=${version}" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1  libiconv ];
 
   meta = with lib; {

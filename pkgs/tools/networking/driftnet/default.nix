@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, libpcap, libjpeg , libungif, libpng
 , giflib, glib, gtk2, cairo, pango, gdk-pixbuf, atk
-, pkgconfig, autoreconfHook }:
+, pkg-config, autoreconfHook }:
 
 with lib;
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   pname = "driftnet";
   version = "1.1.5";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libpcap libjpeg libungif libpng giflib
     glib gtk2 glib cairo pango gdk-pixbuf atk autoreconfHook

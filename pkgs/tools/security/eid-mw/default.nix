@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkgconfig
+, autoreconfHook, pkg-config
 , gtk3, nssTools, pcsclite
 , libxml2, libproxy
 , openssl, curl
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "Fedict";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
   buildInputs = [ gtk3 pcsclite libxml2 libproxy curl openssl ];
   preConfigure = ''
     mkdir openssl

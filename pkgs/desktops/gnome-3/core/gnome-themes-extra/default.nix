@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, intltool, gtk3, gnome3, librsvg, pkgconfig, pango, atk, gtk2
+{ lib, stdenv, fetchurl, intltool, gtk3, gnome3, librsvg, pkg-config, pango, atk, gtk2
 , gdk-pixbuf, hicolor-icon-theme }:
 
 let
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
   buildInputs = [ gtk3 librsvg pango atk gtk2 gdk-pixbuf ];
   propagatedBuildInputs = [ gnome3.adwaita-icon-theme hicolor-icon-theme ];
 

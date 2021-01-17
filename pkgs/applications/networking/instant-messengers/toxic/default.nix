@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, libsodium, ncurses, curl
-, libtoxcore, openal, libvpx, freealut, libconfig, pkgconfig, libopus
+, libtoxcore, openal, libvpx, freealut, libconfig, pkg-config, libopus
 , qrencode, gdk-pixbuf, libnotify }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!stdenv.isAarch32) [
     openal libopus libvpx freealut qrencode
   ];
-  nativeBuildInputs = [ pkgconfig libconfig ];
+  nativeBuildInputs = [ pkg-config libconfig ];
 
   meta = with lib; {
     description = "Reference CLI for Tox";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lib, meson, ninja, pkgconfig, qtbase, qttools
+{ stdenv, fetchFromGitHub, lib, meson, ninja, pkg-config, qtbase, qttools
 , wrapQtAppsHook
 , enableExperimental ? false
 , includeMatrixDiscovery ? false
@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    pkgconfig meson ninja wrapQtAppsHook
+    pkg-config meson ninja wrapQtAppsHook
   ];
 
   buildInputs = [

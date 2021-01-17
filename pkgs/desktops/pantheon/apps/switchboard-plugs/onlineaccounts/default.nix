@@ -5,7 +5,7 @@
 , pantheon
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala_0_46
 , libgee
 , granite
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala_0_46
   ];
 

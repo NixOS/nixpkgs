@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, boost, dash, freetype, libpng, pkgconfig, SDL, which, zlib, nasm }:
+{lib, stdenv, fetchurl, boost, dash, freetype, libpng, pkg-config, SDL, which, zlib, nasm }:
 
 stdenv.mkDerivation rec {
   pname = "mupen64plus";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a21n4gqdvag6krwcjm5bnyw5phrlxw6m0mk73jy53iq03f3s96m";
   };
 
-  nativeBuildInputs = [ pkgconfig nasm ];
+  nativeBuildInputs = [ pkg-config nasm ];
   buildInputs = [ boost dash freetype libpng SDL which zlib ];
 
   buildPhase = ''

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, gtk2 }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, iconnamingutils, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-icon-theme";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
     iconnamingutils
     gtk2

@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , substituteAll
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     libxml2
-    pkgconfig
+    pkg-config
     vala
   ];
 

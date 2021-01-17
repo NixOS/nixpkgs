@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, pkg-config
 , openssl, ldns
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     openssl

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, substituteAll, vpnc, intltool, pkgconfig, networkmanager, libsecret
+{ lib, stdenv, fetchurl, substituteAll, vpnc, intltool, pkg-config, networkmanager, libsecret
 , gtk3, withGnome ? true, gnome3, glib, kmod, file, fetchpatch, libnma }:
 let
   pname = "NetworkManager-vpnc";
@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
   buildInputs = [ vpnc networkmanager glib ]
     ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
-  nativeBuildInputs = [ intltool pkgconfig file ];
+  nativeBuildInputs = [ intltool pkg-config file ];
 
   configureFlags = [
     "--without-libnm-glib"

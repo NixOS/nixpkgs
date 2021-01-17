@@ -19,7 +19,7 @@
 , spdlog
 , fmt
 , olm
-, pkgconfig
+, pkg-config
 , nlohmann_json
 }:
 
@@ -37,7 +37,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     lmdbxx
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchurl, fetchFromGitHub, pkg-config
 , libtool, autoconf, automake, cppunit
 , libtorrent, ncurses, libsigcxx, curl
 , zlib, openssl, xmlrpc_c
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hcaf1brk402caa7hhlb2r1c93mjzxkm8gb19xfl33gkp3jpf372";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libtool autoconf automake cppunit
     libtorrent ncurses libsigcxx curl zlib openssl xmlrpc_c

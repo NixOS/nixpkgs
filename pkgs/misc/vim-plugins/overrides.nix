@@ -2,7 +2,7 @@
 , python, cmake, meson, vim, ruby
 , which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
 , llvmPackages, rustPlatform, buildGoModule
-, pkgconfig, curl, openssl, libgit2, libiconv
+, pkg-config, curl, openssl, libgit2, libiconv
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
 , ycmd, rake
@@ -642,7 +642,7 @@ self: super: {
         src = old.src;
 
         nativeBuildInputs = [
-          pkgconfig
+          pkg-config
         ];
 
         buildInputs = [

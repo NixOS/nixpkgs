@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
 , glew, glfw3, leptonica, libiconv, tesseract3, zlib }:
 
 with lib;
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/src";
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [ glew glfw3 leptonica tesseract3 zlib ] ++ lib.optional (!stdenv.isLinux) libiconv;
 

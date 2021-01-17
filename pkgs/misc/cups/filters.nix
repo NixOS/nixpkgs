@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, cups, poppler, poppler_utils, fontconfig
+{ lib, stdenv, fetchurl, pkg-config, cups, poppler, poppler_utils, fontconfig
 , libjpeg, libpng, perl, ijs, qpdf, dbus, avahi
 , makeWrapper, coreutils, gnused, bc, gawk, gnugrep, which, ghostscript
 , mupdf
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1kv25011iyzvd33n5zmmn1z2p6pzk26hmmw6qvjjnx8p3sp7raqn";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [
     cups poppler poppler_utils fontconfig libjpeg libpng perl

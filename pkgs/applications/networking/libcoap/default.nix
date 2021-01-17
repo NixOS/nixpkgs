@@ -1,4 +1,4 @@
-{ fetchFromGitHub, automake, autoconf, which, pkgconfig, libtool, lib, stdenv }:
+{ fetchFromGitHub, automake, autoconf, which, pkg-config, libtool, lib, stdenv }:
 stdenv.mkDerivation rec {
   pname = "libcoap";
   version = "4.2.1";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     autoconf
     which
     libtool
-    pkgconfig
+    pkg-config
   ];
   preConfigure = "./autogen.sh";
   configureFlags = [

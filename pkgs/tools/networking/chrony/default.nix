@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libcap, readline, texinfo, nss, nspr
+{ lib, stdenv, fetchurl, pkg-config, libcap, readline, texinfo, nss, nspr
 , libseccomp, pps-tools, gnutls }:
 
 assert stdenv.isLinux -> libcap != null;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline texinfo nss nspr gnutls ]
     ++ lib.optionals stdenv.isLinux [ libcap libseccomp pps-tools ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   hardeningEnable = [ "pie" ];
 

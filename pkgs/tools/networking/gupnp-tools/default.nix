@@ -4,7 +4,7 @@
 , ninja
 , gupnp
 , gssdp
-, pkgconfig
+, pkg-config
 , gtk3
 , libuuid
 , gettext
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     wrapGAppsHook
   ];

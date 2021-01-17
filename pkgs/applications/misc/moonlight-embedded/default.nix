@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, perl
 , alsaLib, libevdev, libopus, udev, SDL2
-, ffmpeg_3, pkgconfig, xorg, libvdpau, libpulseaudio, libcec
+, ffmpeg_3, pkg-config, xorg, libvdpau, libpulseaudio, libcec
 , curl, expat, avahi, enet, libuuid, libva
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [
     alsaLib libevdev libopus udev SDL2
-    ffmpeg_3 pkgconfig xorg.libxcb libvdpau libpulseaudio libcec
+    ffmpeg_3 pkg-config xorg.libxcb libvdpau libpulseaudio libcec
     xorg.libpthreadstubs curl expat avahi enet libuuid libva
   ];
 

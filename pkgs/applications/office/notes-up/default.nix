@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , vala_0_46
 , cmake
 , ninja
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ninja
     # fails with newer vala: https://github.com/Philip-Scott/Notes-up/issues/349
     vala_0_46
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

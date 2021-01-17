@@ -8,7 +8,7 @@
 , clutter-gst
 , python3Packages
 , shared-mime-info
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , gobject-introspection
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     gettext
     python3Packages.python
     itstool

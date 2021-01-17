@@ -1,7 +1,7 @@
 { lib, stdenv
 , gettext
 , fetchurl
-, pkgconfig
+, pkg-config
 , itstool
 , libxml2
 , libxslt
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     itstool
     libxml2

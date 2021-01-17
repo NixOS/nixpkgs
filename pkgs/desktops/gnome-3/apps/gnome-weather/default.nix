@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gjs, gobject-introspection
+{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, wrapGAppsHook, gjs, gobject-introspection
 , libgweather, meson, ninja, geoclue2, gnome-desktop, python3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "11z75ky6xp9hx7lm24xng7ydr20bzh4d6p9sbi9c8ccz2m3fdrk8";
   };
 
-  nativeBuildInputs = [ pkgconfig meson ninja wrapGAppsHook python3 ];
+  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook python3 ];
   buildInputs = [
     gtk3 gjs gobject-introspection gnome-desktop
     libgweather gnome3.adwaita-icon-theme geoclue2 gsettings-desktop-schemas

@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libusb1, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, libusb1, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "OpenCorsairLink-${version}";
   version = "2019-12-23";
 
   buildInputs = [ libusb1 ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

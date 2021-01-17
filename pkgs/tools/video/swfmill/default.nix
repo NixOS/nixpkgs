@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, pkgconfig, libxslt, freetype, libpng, libxml2
+, pkg-config, libxslt, freetype, libpng, libxml2
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   # Fixes build with GCC 6
   NIX_CFLAGS_COMPILE = "-std=c++03";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxslt freetype libpng libxml2 ];
 
   meta = {

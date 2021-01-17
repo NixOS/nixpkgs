@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, pkgconfig, libxcb, mkDerivation, qmake
+{ lib, fetchFromGitHub, pkg-config, libxcb, mkDerivation, qmake
 , qtbase, qtdeclarative, qtquickcontrols, qtquickcontrols2
 , ffmpeg-full, gst_all_1, libpulseaudio, alsaLib, jack2
 , v4l-utils }:
@@ -22,7 +22,7 @@ mkDerivation rec {
     v4l-utils
   ];
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
 
   qmakeFlags = [
     "Webcamoid.pro"

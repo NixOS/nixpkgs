@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config
 , qtbase, qtmultimedia, qtsvg, qttools, krdc
 , libvncserver, libvirt, pcre, pixman, qtermwidget, spice-gtk, spice-protocol
 , libselinux, libsepol, util-linux
@@ -35,7 +35,7 @@ mkDerivation rec {
     libselinux libsepol util-linux
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
+  nativeBuildInputs = [ cmake pkg-config qttools ];
 
   meta = with lib; {
     homepage    = "https://f1ash.github.io/qt-virt-manager";

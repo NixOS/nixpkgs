@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gettext, pkgconfig, glib, libnotify, gtk3, libgee
+{ lib, stdenv, fetchurl, gettext, pkg-config, glib, libnotify, gtk3, libgee
 , keybinder3, json-glib, zeitgeist, vala, gobject-introspection
 }:
 
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig gettext vala
+    pkg-config gettext vala
     # For setup hook
     gobject-introspection
   ];

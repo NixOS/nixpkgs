@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, cmake, pkgconfig, python3, alsaLib
+{ fetchFromGitHub, lib, stdenv, cmake, pkg-config, python3, alsaLib
 , libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
 , nixosTests
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
                 '#define DATA_DIR "${placeholder "out"}/share/teeworlds/data"'
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig icoutils ];
+  nativeBuildInputs = [ cmake pkg-config icoutils ];
 
   buildInputs = [
     python3 alsaLib libX11 libGLU SDL2 lua5_3 zlib freetype wavpack

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, nasm, makeDesktopItem
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, nasm, makeDesktopItem
 , alsaLib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
 , SDL2, SDL2_mixer }:
 
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ alsaLib flac gtk2 libvorbis libvpx libGL libGLU SDL2 SDL2_mixer ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ]
+  nativeBuildInputs = [ makeWrapper pkg-config ]
     ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
 
   postPatch = ''

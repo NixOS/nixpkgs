@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, rustPlatform
-, openssl, pkgconfig, darwin, libiconv }:
+, openssl, pkg-config, darwin, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "154alxxclz78r29m656c8yahnzq0vd64s4sp19h0ca92dfw4s46y";
   };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
     libiconv darwin.apple_sdk.frameworks.Security
   ];

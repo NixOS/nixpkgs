@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, openssl
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, openssl
 , glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
 , cmocka, libmicrohttpd, expat, sqlite, libmesode, autoconf-archive
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    autoreconfHook autoconf-archive glibcLocales pkgconfig
+    autoreconfHook autoconf-archive glibcLocales pkg-config
   ];
 
   buildInputs = [

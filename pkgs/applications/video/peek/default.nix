@@ -6,7 +6,7 @@
 , gettext
 , desktop-file-utils
 , appstream-glib
-, pkgconfig
+, pkg-config
 , txt2man
 , gzip
 , vala
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     libxml2
-    pkgconfig
+    pkg-config
     txt2man
     python3
     vala

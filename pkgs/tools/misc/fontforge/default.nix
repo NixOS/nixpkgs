@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib
 , fetchpatch
-, cmake, perl, uthash, pkgconfig, gettext
+, cmake, perl, uthash, pkg-config, gettext
 , python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, cairo, pango
 , readline, woff2, zeromq, libuninameslist
 , withSpiro ? false, libspiro
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2 -mfpmath=sse";
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
     readline uthash woff2 zeromq libuninameslist
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2

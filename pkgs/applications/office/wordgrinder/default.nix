@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, makeWrapper
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper
 , lua52Packages, libXft, ncurses, ninja, readline, zlib }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     makeWrapper
     ninja
   ];

@@ -15,7 +15,7 @@
 , libsoup
 , libwnck3
 , libxml2
-, pkgconfig
+, pkg-config
 , polkit
 , systemd
 , wrapGAppsHook
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     libxml2
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

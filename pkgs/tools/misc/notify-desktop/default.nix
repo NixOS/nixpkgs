@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, dbus, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, dbus, pkg-config }:
 
 stdenv.mkDerivation {
   pname = "notify-desktop";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1brcvl2fx0yzxj9mc8hzfl32zdka1f1bxpzsclcsjplyakyinr1a";
   };
 
-  buildInputs = [ dbus pkgconfig ];
+  buildInputs = [ dbus pkg-config ];
 
   installPhase = ''
     mkdir -p $out/bin

@@ -1,5 +1,5 @@
 { fetchurl, fetchgit, lib, stdenv
-, pkgconfig, gnupg
+, pkg-config, gnupg
 , xapian, gmime, talloc, zlib
 , doxygen, perl, texinfo
 , pythonPackages
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     doxygen                   # (optional) api docs
     pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
     texinfo                   # (optional) documentation -> doc/INSTALL

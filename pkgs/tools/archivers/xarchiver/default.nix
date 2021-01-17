@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, pkgconfig, intltool, libxslt, makeWrapper,
+{ lib, stdenv, fetchFromGitHub, gtk3, pkg-config, intltool, libxslt, makeWrapper,
   coreutils, zip, unzip, p7zip, unrar, gnutar, bzip2, gzip, lhasa, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1iklwgykgymrwcc5p1cdbh91v0ih1m58s3w9ndl5kyd44bwlb7px";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config makeWrapper wrapGAppsHook ];
   buildInputs = [ gtk3 intltool libxslt ];
 
   postFixup = ''

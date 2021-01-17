@@ -2,7 +2,7 @@
 , fetchgit
 , which
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , automake
 , libtool
 , pjsip
@@ -89,7 +89,7 @@ stdenv.mkDerivation {
     autoreconfHook
     automake
     libtool
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

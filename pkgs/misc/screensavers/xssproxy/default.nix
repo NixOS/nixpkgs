@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, glib, pkgconfig, xorg, dbus }:
+{ lib, stdenv, fetchFromGitHub, glib, pkg-config, xorg, dbus }:
 
 let rev = "1.0.0"; in
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0c83wmipnsdnbihc5niyczs7jrkss2s8n6iwwjdia7hkjzbd0hl7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib xorg.libX11 xorg.libXScrnSaver dbus ];
 
   makeFlags = [

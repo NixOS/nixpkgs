@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glib, intltool, libfm, libX11, pango, pkgconfig
+{ lib, stdenv, fetchurl, glib, intltool, libfm, libX11, pango, pkg-config
 , wrapGAppsHook, gnome3, withGtk3 ? true, gtk2, gtk3 }:
 
 let
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib gtk libfm' libX11 pango gnome3.adwaita-icon-theme ];
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook intltool ];
 
   configureFlags = optional withGtk3 "--with-gtk=3";
 

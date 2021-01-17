@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, freeglut, SDL, SDL_mixer, libGLU, libGL, libXi, libXmu }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, freeglut, SDL, SDL_mixer, libGLU, libGL, libXi, libXmu }:
 
 stdenv.mkDerivation {
   name = "crack-attack-1.1.14";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     "--datadir=${placeholder "out"}/share"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 freeglut SDL SDL_mixer libGLU libGL libXi libXmu ];
 
   hardeningDisable = [ "format" ];

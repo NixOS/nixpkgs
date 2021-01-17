@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchFromGitHub, fetchpatch
-, addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
+, addOpenGLRunpath, docutils, perl, pkg-config, python3, wafHook, which
 , ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null
 , CoreFoundation, Cocoa, CoreAudio, MediaPlayer
@@ -152,7 +152,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
 
   nativeBuildInputs = [
-    addOpenGLRunpath docutils perl pkgconfig python3 wafHook which
+    addOpenGLRunpath docutils perl pkg-config python3 wafHook which
   ]
     ++ optional swiftSupport swift;
 

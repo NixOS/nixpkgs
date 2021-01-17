@@ -4,7 +4,7 @@
 , substituteAll
 , plymouth
 , pam
-, pkgconfig
+, pkg-config
 , autoconf
 , automake
 , libtool
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     intltool
     itstool
     libtool
-    pkgconfig
+    pkg-config
     vala
   ];
 

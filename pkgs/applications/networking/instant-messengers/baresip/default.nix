@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, openssl, libre, librem, pkgconfig, gst_all_1
+{ lib, stdenv, fetchurl, zlib, openssl, libre, librem, pkg-config, gst_all_1
 , cairo, mpg123, alsaLib, SDL, libv4l, celt, libsndfile, srtp, ffmpeg_3
 , gsm, speex, portaudio, spandsp, libuuid, libvpx
 }:
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     url = "http://www.creytiv.com/pub/baresip-${version}.tar.gz";
     sha256 = "13di0ycdcr2q2a20mjvyaqfmvk5xldwqaxklqsz7470jnbc5n0rb";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [zlib openssl libre librem cairo mpg123
     alsaLib SDL libv4l celt libsndfile srtp ffmpeg_3 gsm speex portaudio spandsp libuuid
     libvpx

@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, intltool, glib, pkgconfig, udev, util-linux, acl }:
+{ lib, stdenv, fetchurl, intltool, glib, pkg-config, udev, util-linux, acl }:
 stdenv.mkDerivation {
   name = "udevil-0.4.4";
   src = fetchurl {
     url = "https://github.com/IgnorantGuru/udevil/archive/0.4.4.tar.gz";
     sha256 = "0z1bhaayambrcn7bgnrqk445k50ifabmw8q4i9qj49nnbcvxhbxd";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ intltool glib udev ];
   configurePhase = ''
     substituteInPlace src/Makefile.in --replace "-o root -g root" ""

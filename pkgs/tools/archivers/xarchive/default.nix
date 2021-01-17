@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gtk2, pkgconfig }:
+{ lib, stdenv, fetchurl, gtk2, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "0.2.8-6";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0chfim7z27s00naf43a61zsngwhvim14mg1p3csbv5i3f6m50xx4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 ];
 
   hardeningDisable = [ "format" ];

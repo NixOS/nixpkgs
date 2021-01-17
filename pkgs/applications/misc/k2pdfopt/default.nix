@@ -1,5 +1,5 @@
 { lib, stdenv, runCommand, fetchzip, fetchurl, fetchpatch, fetchFromGitHub
-, cmake, pkgconfig, zlib, libpng, makeWrapper
+, cmake, pkg-config, zlib, libpng, makeWrapper
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
 , enableMuPDF ? true, mupdf_1_17
@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
       --replace "<djvu.h>" "<libdjvu/ddjvuapi.h>"
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs =
   let

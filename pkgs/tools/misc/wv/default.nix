@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, imagemagick, libpng, glib, pkgconfig, libgsf
+{ lib, stdenv, fetchurl, zlib, imagemagick, libpng, glib, pkg-config, libgsf
 , libxml2, bzip2 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "17f16lkdv1c3amaz2hagiicih59ynpp4786k1m2qa1sw68xhswsc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib imagemagick libpng glib libgsf libxml2 bzip2 ];
 
   hardeningDisable = [ "format" ];
