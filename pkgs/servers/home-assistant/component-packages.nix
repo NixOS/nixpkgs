@@ -19,7 +19,7 @@
     "airvisual" = ps: with ps; [ pyairvisual ];
     "aladdin_connect" = ps: with ps; [ ]; # missing inputs: aladdin_connect
     "alarm_control_panel" = ps: with ps; [ ];
-    "alarmdecoder" = ps: with ps; [ ]; # missing inputs: adext
+    "alarmdecoder" = ps: with ps; [ adext ];
     "alert" = ps: with ps; [ ];
     "alexa" = ps: with ps; [ aiohttp-cors ];
     "almond" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pyalmond
