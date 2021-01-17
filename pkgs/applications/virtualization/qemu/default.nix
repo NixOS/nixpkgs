@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
+{ lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
 , perl, pixman, vde2, alsaLib, texinfo, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rd41wwlvp0vpialjp2czs6i3lsc338xc72l3zkbb7ixjfslw5y9";
   };
 
-  nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ]
+  nativeBuildInputs = [ python python.pkgs.sphinx pkg-config flex bison ]
     ++ optionals gtkSupport [ wrapGAppsHook ];
   buildInputs =
     [ zlib glib perl pixman

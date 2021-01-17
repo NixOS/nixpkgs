@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, autoreconfHook
 , libarchive, perl, xorg, libdvdnav, libbluray
 , zlib, a52dec, libmad, faad2, ffmpeg_3, alsaLib
-, pkgconfig, dbus, fribidi, freefont_ttf, libebml, libmatroska
+, pkg-config, dbus, fribidi, freefont_ttf, libebml, libmatroska
 , libvorbis, libtheora, speex, lua5, libgcrypt, libgpgerror, libupnp
 , libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     ++ optional jackSupport libjack2
     ++ optionals chromecastSupport [ protobuf libmicrodns ];
 
-  nativeBuildInputs = [ autoreconfHook perl pkgconfig removeReferencesTo ]
+  nativeBuildInputs = [ autoreconfHook perl pkg-config removeReferencesTo ]
     ++ optionals withQt5 [ wrapQtAppsHook ];
 
   enableParallelBuilding = true;

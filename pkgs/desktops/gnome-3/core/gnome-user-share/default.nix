@@ -6,7 +6,7 @@
 , fetchpatch
 , apacheHttpd
 , nautilus
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , libxml2
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gettext

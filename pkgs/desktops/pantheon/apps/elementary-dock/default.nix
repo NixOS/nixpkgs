@@ -13,7 +13,7 @@
 , libXi
 , pango
 , gettext
-, pkgconfig
+, pkg-config
 , libxml2
 , bamf
 , gdk-pixbuf
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     libxml2 # xmllint
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];

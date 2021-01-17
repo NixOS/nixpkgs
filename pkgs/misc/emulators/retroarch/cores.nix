@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
+{ lib, stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkg-config, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
 , miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
@@ -288,7 +288,7 @@ in with lib.licenses;
     };
     description = "Port of Citra to libretro";
     license = gpl2Plus;
-    extraNativeBuildInputs = [ cmake pkgconfig ];
+    extraNativeBuildInputs = [ cmake pkg-config ];
     extraBuildInputs = [ libGLU libGL boost ];
     makefile = "Makefile";
     cmakeFlags = [
@@ -342,7 +342,7 @@ in with lib.licenses;
     description = "Port of Dolphin to libretro";
     license = gpl2Plus;
 
-    extraNativeBuildInputs = [ cmake curl pkgconfig ];
+    extraNativeBuildInputs = [ cmake curl pkg-config ];
     extraBuildInputs = [
       libGLU libGL pcre sfml
       gettext hidapi
@@ -838,7 +838,7 @@ in with lib.licenses;
     };
     description = "ppsspp libretro port";
     license = gpl2;
-    extraNativeBuildInputs = [ cmake pkgconfig ];
+    extraNativeBuildInputs = [ cmake pkg-config ];
     extraBuildInputs = [ libGLU libGL libzip ffmpeg_3 python37 snappy xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [ "-DLIBRETRO=ON -DUSE_SYSTEM_FFMPEG=ON -DUSE_SYSTEM_SNAPPY=ON -DUSE_SYSTEM_LIBZIP=ON -DOpenGL_GL_PREFERENCE=GLVND" ];
@@ -981,7 +981,7 @@ in with lib.licenses;
     };
     description = "Port of Stella to libretro";
     license = gpl2;
-    extraBuildInputs = [ libpng pkgconfig SDL ];
+    extraBuildInputs = [ libpng pkg-config SDL ];
     makefile = "Makefile";
     preBuild = "cd src/libretro";
     dontConfigure = true;
@@ -1020,7 +1020,7 @@ in with lib.licenses;
     };
     description = "Port of TIC-80 to libretro";
     license = mit;
-    extraNativeBuildInputs = [ cmake pkgconfig ];
+    extraNativeBuildInputs = [ cmake pkg-config ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DBUILD_LIBRETRO=ON"

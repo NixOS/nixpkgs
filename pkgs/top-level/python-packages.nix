@@ -218,6 +218,8 @@ in {
 
   aioharmony = callPackage ../development/python-modules/aioharmony { };
 
+  aiohomekit = callPackage ../development/python-modules/aiohomekit { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
@@ -265,6 +267,8 @@ in {
   aiorpcx = callPackage ../development/python-modules/aiorpcx { };
 
   aiorun = callPackage ../development/python-modules/aiorun { };
+
+  aioshelly = callPackage ../development/python-modules/aioshelly { };
 
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
 
@@ -4872,7 +4876,7 @@ in {
 
   poetry-core = callPackage ../development/python-modules/poetry-core { };
 
-  poezio = callPackage ../applications/networking/instant-messengers/poezio { inherit (pkgs) pkgconfig; };
+  poezio = callPackage ../applications/networking/instant-messengers/poezio { inherit (pkgs) pkg-config; };
 
   polib = callPackage ../development/python-modules/polib { };
 
@@ -6158,6 +6162,8 @@ in {
   python-gnupg = callPackage ../development/python-modules/python-gnupg { };
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
+
+  python-hpilo = callPackage ../development/python-modules/python-hpilo { };
 
   python-igraph = callPackage ../development/python-modules/python-igraph {
     pkgconfig = pkgs.pkgconfig;
@@ -7909,6 +7915,8 @@ in {
   user-agents = callPackage ../development/python-modules/user-agents { };
 
   userpath = callPackage ../development/python-modules/userpath { };
+
+  utils = callPackage ../development/python-modules/utils { };
 
   uuid = callPackage ../development/python-modules/uuid { };
 

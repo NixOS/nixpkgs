@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, afl, python2, zlib, pkgconfig, glib, perl
+{ lib, stdenv, fetchurl, afl, python2, zlib, pkg-config, glib, perl
 , texinfo, libuuid, flex, bison, pixman, autoconf
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [
-    python2 perl pkgconfig flex bison autoconf texinfo
+    python2 perl pkg-config flex bison autoconf texinfo
   ];
 
   buildInputs = [

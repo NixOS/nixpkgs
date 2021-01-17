@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, wrapGAppsHook
-, autoconf, autoconf-archive, automake, gettext, intltool, libtool, pkgconfig
+, autoconf, autoconf-archive, automake, gettext, intltool, libtool, pkg-config
 , libICE, libSM, libXScrnSaver, libXtst, cheetah
 , gobject-introspection, glib, glibmm, gtkmm3, atk, pango, pangomm, cairo
 , cairomm , dbus, dbus-glib, gdome2, gstreamer, gst-plugins-base
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoconf autoconf-archive automake gettext intltool libtool pkgconfig wrapGAppsHook
+    autoconf autoconf-archive automake gettext intltool libtool pkg-config wrapGAppsHook
   ];
   buildInputs = [
     libICE libSM libXScrnSaver libXtst cheetah

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, ncurses, glib, libmaxminddb, fetchpatch }:
+{ lib, stdenv, fetchurl, pkg-config, ncurses, glib, libmaxminddb, fetchpatch }:
 
 stdenv.mkDerivation rec {
   version = "1.4";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "--enable-utf8"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libmaxminddb
     ncurses

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   # Hamlib builds with autotools, wsjtx builds with cmake
-  # Omitting pkgconfig because it causes issues locating the built hamlib
+  # Omitting pkg-config because it causes issues locating the built hamlib
   nativeBuildInputs = [
     asciidoc asciidoctor autoconf automake cmake docbook_xsl gfortran libtool
     qttools texinfo wrapQtAppsHook

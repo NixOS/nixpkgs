@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, pkgconfig, SDL2, glew, xcftools, python, pillow, makeWrapper }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, pkg-config, SDL2, glew, xcftools, python, pillow, makeWrapper }:
 
 let
   vasm =
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     url = "https://www.retrodev.com/repos/blastem/archive/3d48cb0c28be.tar.gz";
     sha256 = "07wzbmzp0y8mh59jxg81q17gqagz3psxigxh8dmzsipgg68y6a8r";
   };
-  buildInputs = [ pkgconfig SDL2 glew xcftools python pillow vasm makeWrapper ];
+  buildInputs = [ pkg-config SDL2 glew xcftools python pillow vasm makeWrapper ];
   preBuild = ''
     patchShebangs img2tiles.py
   '';

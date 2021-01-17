@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, lib, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+{ fetchurl, fetchpatch, lib, stdenv, pkg-config, libgcrypt, libassuan, libksba
 , libgpgerror, libiconv, npth, gettext, texinfo, buildPackages
 
 # Each of the dependencies below are optional.
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig texinfo ];
+  nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext
     readline libusb1 gnutls adns openldap zlib bzip2 sqlite

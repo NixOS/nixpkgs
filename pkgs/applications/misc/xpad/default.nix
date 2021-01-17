@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, autoreconfHook, pkgconfig, wrapGAppsHook
+, autoreconfHook, pkg-config, wrapGAppsHook
 , glib, intltool, gtk3, gtksourceview }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qpmlwn0bcw1q73ag0l0fdnlzmwawfvsy4g9y5b0vyrc58lcp5d3";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
 
   buildInputs = [ glib intltool gtk3 gtksourceview ];
 

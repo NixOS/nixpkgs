@@ -6,7 +6,7 @@
 , libxml2
 , webkitgtk
 , highlight
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , libnotify
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     itstool
     libxml2
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

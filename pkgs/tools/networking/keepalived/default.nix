@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, nixosTests
 , libnfnetlink, libnl, net-snmp, openssl
-, pkgconfig, autoreconfHook }:
+, pkg-config, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "keepalived";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests.keepalived = nixosTests.keepalived;
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   configureFlags = [
     "--enable-sha1"

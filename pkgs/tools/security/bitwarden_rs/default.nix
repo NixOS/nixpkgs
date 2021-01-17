@@ -1,5 +1,5 @@
 { lib, stdenv, rustPlatform, fetchFromGitHub, nixosTests
-, pkgconfig, openssl
+, pkg-config, openssl
 , Security, CoreServices
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
 
@@ -17,7 +17,7 @@ in rustPlatform.buildRustPackage rec {
     sha256 = "0hi29vy23a5r23pgzdssd2gvim8vw2vmykck5cl5phq11a3az31p";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = with lib; [ openssl ]
     ++ optionals stdenv.isDarwin [ Security CoreServices ]
     ++ optional (dbBackend == "mysql") libmysqlclient

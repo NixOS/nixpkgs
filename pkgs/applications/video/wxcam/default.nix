@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, pkgconfig
+, pkg-config
 , intltool
 , libX11, libXv, libSM
 , gtk, libglade
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with lib;
-  [ pkgconfig intltool libX11 libXv libSM gtk libglade wxGTK perlPackages.XMLParser xvidcore mjpegtools alsaLib libv4l cimg ];
+  [ pkg-config intltool libX11 libXv libSM gtk libglade wxGTK perlPackages.XMLParser xvidcore mjpegtools alsaLib libv4l cimg ];
 
   NIX_CFLAGS_COMPILE="-I ${cimg}/include/cimg";
 

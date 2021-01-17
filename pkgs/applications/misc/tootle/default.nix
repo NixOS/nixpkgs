@@ -5,7 +5,7 @@
 , vala
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , libgee
 , gsettings-desktop-schemas
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

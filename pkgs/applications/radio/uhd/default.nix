@@ -2,7 +2,7 @@
 , fetchurl
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 # See https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html for dependencies explanations
 , boost
 , enableLibuhd_C_api ? true
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ]
     # If both enableLibuhd_Python_api and enableUtils are off, we don't need
     # pythonEnv in buildInputs as it's a 'build' dependency and not a runtime

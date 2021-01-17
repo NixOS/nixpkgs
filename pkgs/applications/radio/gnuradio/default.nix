@@ -4,7 +4,7 @@
 , cmake
 # Remove gcc and python references
 , removeReferencesTo
-, pkgconfig
+, pkg-config
 , cppunit
 , swig
 , orc
@@ -53,7 +53,7 @@ let
     basic = {
       native = [
         cmake
-        pkgconfig
+        pkg-config
         orc
       ];
       runtime = [

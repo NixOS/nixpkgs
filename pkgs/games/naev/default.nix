@@ -1,4 +1,4 @@
-{ lib, fetchurl, stdenv, SDL, openal, SDL_mixer, libxml2, pkgconfig, libvorbis
+{ lib, fetchurl, stdenv, SDL, openal, SDL_mixer, libxml2, pkg-config, libvorbis
 , libpng, libGLU, libGL, makeWrapper, zlib, freetype }:
 
 let
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ SDL SDL_mixer openal libxml2 libvorbis libpng libGLU libGL zlib freetype ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   NIX_CFLAGS_COMPILE="-include ${zlib.dev}/include/zlib.h";
 

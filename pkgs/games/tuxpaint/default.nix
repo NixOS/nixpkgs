@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, SDL, SDL_image, SDL_ttf, SDL_mixer, libpng,
-  cairo, librsvg, gettext, libpaper, fribidi, pkgconfig, gperf, imagemagick }:
+  cairo, librsvg, gettext, libpaper, fribidi, pkg-config, gperf, imagemagick }:
 
 stdenv.mkDerivation rec {
   version = "0.9.24";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ SDL SDL_image SDL_ttf SDL_mixer libpng cairo
-    librsvg gettext libpaper fribidi pkgconfig gperf imagemagick ];
+    librsvg gettext libpaper fribidi pkg-config gperf imagemagick ];
   hardeningDisable = [ "format" ];
   makeFlags = [ "GPERF=${gperf}/bin/gperf"
                 "PREFIX=$$out"

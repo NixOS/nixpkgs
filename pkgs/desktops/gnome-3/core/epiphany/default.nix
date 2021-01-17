@@ -3,7 +3,7 @@
 , ninja
 , gettext
 , fetchurl
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , icu
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
     buildPackages.glib

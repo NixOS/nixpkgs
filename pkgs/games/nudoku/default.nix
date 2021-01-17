@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gettext, ncurses }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gettext, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "nudoku";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace 0.19 0.20
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig gettext ];
+  nativeBuildInputs = [ autoreconfHook pkg-config gettext ];
   buildInputs = [ ncurses ];
 
   configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-nls";

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fontconfig, libjpeg, libcap, freetype, fribidi, pkgconfig
+{ stdenv, fetchgit, fontconfig, libjpeg, libcap, freetype, fribidi, pkg-config
 , gettext, systemd, perl, lib
 , enableSystemd ? true
 , enableBidi ? true
@@ -28,7 +28,7 @@
   nativeBuildInputs = [ perl ];
 
   # plugins uses the same build environment as vdr
-  propagatedNativeBuildInputs = [ pkgconfig gettext ];
+  propagatedNativeBuildInputs = [ pkg-config gettext ];
 
   installFlags = [
     "DESTDIR=$(out)"

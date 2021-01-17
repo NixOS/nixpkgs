@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, intltool, pkgconfig, glib, gtk2, ncurses
+{ lib, stdenv, fetchurl, fetchpatch, intltool, pkg-config, glib, gtk2, ncurses
 , pythonSupport ? false, python27Packages}:
 
 let
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ intltool glib gtk2 ncurses ] ++
                 lib.optionals pythonSupport [python pygtk];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glib, dbus, libgcrypt, pkgconfig, intltool, gobject-introspection, gnome3 }:
+{ lib, stdenv, fetchurl, glib, dbus, libgcrypt, pkg-config, intltool, gobject-introspection, gnome3 }:
 
 let
   pname = "libgnome-keyring";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [ glib gobject-introspection dbus libgcrypt ];
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
   passthru = {
     updateScript = gnome3.updateScript {

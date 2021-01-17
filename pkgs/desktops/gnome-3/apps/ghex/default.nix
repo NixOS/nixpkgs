@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , python3
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     itstool
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cairo, libxkbcommon
-, pango, fribidi, harfbuzz, pcre, pkgconfig
+, pango, fribidi, harfbuzz, pcre, pkg-config
 , ncursesSupport ? true, ncurses ? null
 , waylandSupport ? true, wayland ? null, wayland-protocols ? null
 , x11Support ? true, xlibs ? null, xorg ? null
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ifq5bk7782b9m6bl111x33fn38rpppdrww7hfavqia9a9gi2sl5";
   };
 
-  nativeBuildInputs = [ pkgconfig pcre ];
+  nativeBuildInputs = [ pkg-config pcre ];
 
   makeFlags = ["PREFIX=$(out)"];
 

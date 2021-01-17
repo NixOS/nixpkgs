@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkgconfig, ncurses, python3, openssl, libgpgerror, gpgme, xorg, AppKit, Security }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, ncurses, python3, openssl, libgpgerror, gpgme, xorg, AppKit, Security }:
 
 with rustPlatform;
 buildRustPackage rec {
@@ -18,7 +18,7 @@ buildRustPackage rec {
 
   cargoBuildFlags = [ "-p ripasso-cursive -p ripasso-man" ];
 
-  nativeBuildInputs = [ pkgconfig gpgme python3 ];
+  nativeBuildInputs = [ pkg-config gpgme python3 ];
   buildInputs = [
     ncurses openssl libgpgerror gpgme xorg.libxcb
   ] ++ lib.optionals stdenv.isDarwin [ AppKit Security ];

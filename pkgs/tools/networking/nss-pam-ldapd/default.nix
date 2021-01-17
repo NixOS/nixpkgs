@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, pkgconfig, makeWrapper, autoreconfHook
+, pkg-config, makeWrapper, autoreconfHook
 , openldap, python, pam
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dna3r0q6sjhhlkhcp8x2zkslrd4y7701kk6fl5r940sdph1pmyh";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper autoreconfHook ];
+  nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook ];
   buildInputs = [ openldap pam python ];
 
   preConfigure = ''

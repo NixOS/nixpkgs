@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gtk2, menu-cache }:
+{ lib, stdenv, fetchurl, pkg-config, glib, gtk2, menu-cache }:
 
 stdenv.mkDerivation rec {
   pname = "openbox-menu";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hi4b6mq97y6ajq4hhsikbkk23aha7ikaahm92djw48mgj2f1w8l";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib gtk2 menu-cache ];
 
   patches = [ ./with-svg.patch ];

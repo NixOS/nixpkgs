@@ -12,7 +12,7 @@
 , libxslt
 , glib
 , gtk3
-, pkgconfig
+, pkg-config
 , lcms2
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     meson
     ninja

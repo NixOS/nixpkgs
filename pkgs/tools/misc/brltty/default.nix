@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, python3, bluez
+{ lib, stdenv, fetchurl, pkg-config, python3, bluez
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
 , systemdSupport ? stdenv.isLinux, systemd ? null }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nk54chr7z2w579vyiak9xk2avhnvrx7x2l5sk8nyw2zplchkx9q";
   };
 
-  nativeBuildInputs = [ pkgconfig python3.pkgs.cython ];
+  nativeBuildInputs = [ pkg-config python3.pkgs.cython ];
   buildInputs = [ bluez ]
     ++ lib.optional alsaSupport alsaLib
     ++ lib.optional systemdSupport systemd;

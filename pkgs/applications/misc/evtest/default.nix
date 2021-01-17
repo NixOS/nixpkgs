@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkgconfig, libxml2 }:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "evtest";
   version = "1.34";
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libxml2 ];
 
   src = fetchgit {

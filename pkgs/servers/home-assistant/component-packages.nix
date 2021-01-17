@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.1.3";
+  version = "2021.1.4";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -351,13 +351,13 @@
     "home_connect" = ps: with ps; [ aiohttp-cors ]; # missing inputs: homeconnect
     "homeassistant" = ps: with ps; [ ];
     "homekit" = ps: with ps; [ HAP-python pyqrcode aiohttp-cors base36 ha-ffmpeg zeroconf ]; # missing inputs: PyTurboJPEG fnvhash
-    "homekit_controller" = ps: with ps; [ aiohttp-cors zeroconf ]; # missing inputs: aiohomekit
+    "homekit_controller" = ps: with ps; [ aiohomekit aiohttp-cors zeroconf ];
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [ ]; # missing inputs: homematicip
     "homeworks" = ps: with ps; [ ]; # missing inputs: pyhomeworks
     "honeywell" = ps: with ps; [ ]; # missing inputs: somecomfort
     "horizon" = ps: with ps; [ ]; # missing inputs: horimote
-    "hp_ilo" = ps: with ps; [ ]; # missing inputs: python-hpilo
+    "hp_ilo" = ps: with ps; [ python-hpilo ];
     "html5" = ps: with ps; [ aiohttp-cors pywebpush ];
     "http" = ps: with ps; [ aiohttp-cors ];
     "htu21d" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
@@ -722,7 +722,7 @@
     "seventeentrack" = ps: with ps; [ ]; # missing inputs: py17track
     "sharkiq" = ps: with ps; [ ]; # missing inputs: sharkiqpy
     "shell_command" = ps: with ps; [ ];
-    "shelly" = ps: with ps; [ ]; # missing inputs: aioshelly
+    "shelly" = ps: with ps; [ aioshelly ];
     "shiftr" = ps: with ps; [ paho-mqtt ];
     "shodan" = ps: with ps; [ shodan ];
     "shopping_list" = ps: with ps; [ aiohttp-cors ];

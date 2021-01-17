@@ -10,7 +10,7 @@
 , udev
 , libusb1
 , makeWrapper
-, pkgconfig
+, pkg-config
 , qtbase
 , qttools
 , qtwebsockets
@@ -63,7 +63,7 @@ in mkDerivation rec {
     curl
     git
     makeWrapper
-    pkgconfig
+    pkg-config
     qttools
   ];
 

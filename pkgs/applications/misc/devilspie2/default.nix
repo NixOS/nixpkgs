@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, intltool, pkgconfig, glib, gtk, lua, libwnck3 }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, glib, gtk, lua, libwnck3 }:
 
 stdenv.mkDerivation rec {
   pname = "devilspie2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0a7qjl2qd4099kkkbwa1y2fk48s21jlr409lf9mij7mlc9yc3zzc";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkg-config ];
   buildInputs = [ glib gtk lua libwnck3 ];
 
   installPhase = ''

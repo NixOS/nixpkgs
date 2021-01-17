@@ -1,4 +1,4 @@
-{ pkgconfig, lib, stdenv, rustPlatform, rustc, cargo, docker, openssl, fetchFromGitHub }:
+{ pkg-config, lib, stdenv, rustPlatform, rustc, cargo, docker, openssl, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tensorman";
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0ywb53snvymmwh10hm6whckz7dwmpqa4rxiggd24y178jdfrm2ns";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
   cargoSha256 = "0vckay4jhg02xg68mvh7ys0yjj0p30m6wsjriqc8k24wjsrhiw9k";
 

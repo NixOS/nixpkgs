@@ -1,5 +1,5 @@
 { fetchurl, fetchpatch, lib, stdenv, makeWrapper
-, pkgconfig, intltool, gettext, gtk2, expat, curl
+, pkg-config, intltool, gettext, gtk2, expat, curl
 , gpsd, bc, file, gnome-doc-utils, libexif, libxml2, libxslt, scrollkeeper
 , docbook_xml_dtd_412, gexiv2, gpsbabel, expect
 , withMapnik ? false, mapnik
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ makeWrapper intltool gettext gtk2 expat curl gpsd bc file gnome-doc-utils
     libexif libxml2 libxslt scrollkeeper docbook_xml_dtd_412 gexiv2
   ] ++ lib.optional withMapnik mapnik

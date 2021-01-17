@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 
 # Optional Dependencies
 , alsaLib ? null, db ? null, libuuid ? null, libffado ? null, celt ? null
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     (lib.enableFeature (optLibffado != null) "firewire")
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ optAlsaLib optDb optLibffado optCelt ];
   propagatedBuildInputs = [ optLibuuid ];
 

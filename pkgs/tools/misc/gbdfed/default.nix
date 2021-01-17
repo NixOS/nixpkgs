@@ -1,4 +1,4 @@
- { lib, stdenv, fetchurl, pkgconfig, freetype, gtk }:
+ { lib, stdenv, fetchurl, pkg-config, freetype, gtk }:
 
 stdenv.mkDerivation rec {
   version = "1.6";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g09k6wim58hngxncq2brr7mwjm92j3famp0vs4b3p48wr65vcjx";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freetype gtk ];
 
   patches = [ ./Makefile.patch ];

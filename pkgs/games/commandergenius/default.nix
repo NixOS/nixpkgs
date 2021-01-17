@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, SDL2, SDL2_image, pkgconfig
+{ lib, stdenv, fetchFromGitLab, SDL2, SDL2_image, pkg-config
 , libvorbis, libGL, boost, cmake, zlib, curl, SDL2_mixer, python3
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     export makeFlags="$makeFlags DESTDIR=$(out)"
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   postPatch = ''
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(sdl2-config --cflags)"

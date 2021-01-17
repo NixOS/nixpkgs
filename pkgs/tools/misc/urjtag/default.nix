@@ -1,4 +1,4 @@
-{ lib, stdenv, autoconf, automake, pkgconfig, gettext, libtool, bison
+{ lib, stdenv, autoconf, automake, pkg-config, gettext, libtool, bison
 , flex, which, subversion, fetchurl, makeWrapper, libftdi1, libusb-compat-0_1, readline
 , python3
 , svfSupport ? true
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1k2vmvvarik0q3llbfbk8ad35mcns7w1ln9gla1mn7z9c6x6x90r";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gettext autoconf automake libtool bison flex which
     subversion makeWrapper readline libftdi1 libusb-compat-0_1 python3 ];
 

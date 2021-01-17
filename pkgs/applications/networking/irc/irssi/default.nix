@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr }:
+{ lib, stdenv, fetchurl, pkg-config, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr }:
 
 stdenv.mkDerivation rec {
   pname = "irssi";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g2nxazn4lszmd6mf1s36x5ablk4999g1qx7byrnvgnjsihjh62k";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses glib openssl perl libintl libgcrypt libotr ];
 
   configureFlags = [

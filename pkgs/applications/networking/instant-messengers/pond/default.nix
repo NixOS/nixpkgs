@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, trousers, dclxvi, wrapGAppsHook, pkgconfig, gtk3, gtkspell3,
+{ lib, stdenv, buildGoPackage, trousers, dclxvi, wrapGAppsHook, pkg-config, gtk3, gtkspell3,
   fetchgit }:
 
 let
@@ -19,7 +19,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ trousers gtk3 gtkspell3 ]
     ++ lib.optional stdenv.hostPlatform.isx86_64 dclxvi
     ++ lib.optionals gui [ wrapGAppsHook ];

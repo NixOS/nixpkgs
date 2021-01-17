@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, amoeba-data, alsaLib, expat, freetype, gtk2, libvorbis, libGLU, xorg, pkgconfig }:
+{ lib, stdenv, fetchurl, amoeba-data, alsaLib, expat, freetype, gtk2, libvorbis, libGLU, xorg, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "amoeba-${version}-${debver}";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     sed -i main/linux-config/linux-config.cpp -e 's|libgtk-x11-2.0.so.0|${gtk2}/lib/&|'
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsaLib expat freetype gtk2 libvorbis libGLU xorg.libXxf86vm ];
 
   installPhase = ''

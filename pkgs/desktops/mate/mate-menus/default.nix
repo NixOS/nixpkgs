@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, glib, gobject-introspection, python3 }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, glib, gobject-introspection, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-menus";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "17zc9fn14jykhn30z8iwlw0qwk32ivj6gxgww3xrqvqk0da5yaas";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext gobject-introspection ];
+  nativeBuildInputs = [ pkg-config gettext gobject-introspection ];
 
   buildInputs = [ glib python3 ];
 

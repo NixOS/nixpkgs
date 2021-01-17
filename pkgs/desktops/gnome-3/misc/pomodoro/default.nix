@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , autoconf-archive
 , appstream-glib
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , libcanberra
 , gst_all_1
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     libxml2
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];

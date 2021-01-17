@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "tinyfecvpn";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   patchPhase = ''
     runHook prePatch

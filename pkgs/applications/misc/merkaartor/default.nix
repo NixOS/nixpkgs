@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, pkgconfig, fetchpatch
+{ mkDerivation, lib, fetchFromGitHub, qmake, pkg-config, fetchpatch
 , boost, gdal, proj, qtbase, qtsvg, qtwebview, qtwebkit }:
 
 mkDerivation rec {
@@ -19,7 +19,7 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkg-config ];
 
   buildInputs = [ boost gdal proj qtbase qtsvg qtwebview qtwebkit ];
 

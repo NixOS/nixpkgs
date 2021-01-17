@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, gnome3
+{ lib, stdenv, fetchurl, pkg-config, intltool, gnome3
 , iconnamingutils, gtk3, gdk-pixbuf, librsvg, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gdk-pixbuf librsvg ];
 
-  nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk3 ];
+  nativeBuildInputs = [ pkg-config intltool iconnamingutils gtk3 ];
 
   dontDropIconThemeCache = true;
 

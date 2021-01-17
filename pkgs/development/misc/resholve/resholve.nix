@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , callPackage
 , python27Packages
 , installShellFiles
@@ -11,12 +11,12 @@
 , doCheck ? true
 }:
 let
-  version = "0.4.0";
+  version = "0.4.1";
   rSrc = fetchFromGitHub {
     owner = "abathur";
     repo = "resholve";
     rev = "v${version}";
-    hash = "sha256-wfxcX3wMZqoi5bWjXYRa21UDDJmTDfE+21p4mL2IJog=";
+    hash = "sha256-VK7r+kdtWvS9d4B90Hq7fhLfWT/B/Y9zppvOX9tPt5g=";
   };
   deps = callPackage ./deps.nix {
     /*
@@ -55,13 +55,19 @@ python27Packages.buildPythonApplication {
 
   inherit doCheck;
   checkInputs = [ bats ];
-  RESHOLVE_PATH = "${stdenv.lib.makeBinPath [ file findutils gettext ]}";
+  RESHOLVE_PATH = "${lib.makeBinPath [ file findutils gettext ]}";
 
   checkPhase = ''
     # explicit interpreter for test suite
     export INTERP="${bash}/bin/bash" PATH="$out/bin:$PATH"
     patchShebangs .
     ./test.sh
+  '';
+
+  # Do not propagate Python; may be obsoleted by nixos/nixpkgs#102613
+  # for context on why, see abathur/resholve#20
+  postFixup = ''
+    rm $out/nix-support/propagated-build-inputs
   '';
 
   meta = with lib; {

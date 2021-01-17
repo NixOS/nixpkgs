@@ -5,7 +5,7 @@
 , installShellFiles
 , mkDerivationWith
 , muparser
-, pkgconfig
+, pkg-config
 , qmake
 , qtbase
 , qtsvg
@@ -83,7 +83,7 @@ mkDerivationWith stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     installShellFiles
-    pkgconfig
+    pkg-config
     qmake
     qttools
   ];

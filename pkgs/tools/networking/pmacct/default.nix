@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , libtool
 , libpcap
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sha256 = "17p5isrq5w58hvmzhc6akbd37ins3c95g0rvhhdm0v33khzxmran";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libtool ];
+  nativeBuildInputs = [ autoreconfHook pkg-config libtool ];
   buildInputs = [ libpcap ]
     ++ optional withJansson jansson
     ++ optional withNflog libnetfilter_log

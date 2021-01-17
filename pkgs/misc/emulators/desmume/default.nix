@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch
-, pkgconfig, libtool, intltool
+, pkg-config, libtool, intltool
 , libXmu
 , lua
 , tinyxml
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   CXXFLAGS = "-fpermissive";
 
   buildInputs =
-  [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch
+  [ pkg-config libtool intltool libXmu lua agg alsaLib soundtouch
     openal desktop-file-utils gtk2 gtkglext libglade
     libGLU libpcap SDL zziplib tinyxml ];
 

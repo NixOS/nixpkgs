@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , gettext
 , libxml2
-, pkgconfig
+, pkg-config
 , gtk3
 , cmake
 , ninja
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     vala
     cmake

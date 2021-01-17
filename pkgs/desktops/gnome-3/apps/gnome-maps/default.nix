@@ -4,7 +4,7 @@
 , ninja
 , gettext
 , python3
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , gobject-introspection
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];

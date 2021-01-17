@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, pkgconfig, writeText, libX11, conf ? null, patches ? [] }:
+{ lib, stdenv, fetchgit, pkg-config, writeText, libX11, conf ? null, patches ? [] }:
 
 with lib;
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 ];
 
   installFlags = [ "PREFIX=$(out)" ];

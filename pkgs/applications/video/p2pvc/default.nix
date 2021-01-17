@@ -1,9 +1,9 @@
-{ lib, stdenv, pkgconfig, fetchFromGitHub, opencv2, ncurses, portaudio }:
+{ lib, stdenv, pkg-config, fetchFromGitHub, opencv2, ncurses, portaudio }:
 
 stdenv.mkDerivation {
   name = "p2pvc";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ opencv2 ncurses portaudio ];
 
   enableParallelBuilding = true;

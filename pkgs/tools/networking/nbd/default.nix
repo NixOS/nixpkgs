@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, which }:
+{ lib, stdenv, fetchurl, pkg-config, glib, which }:
 
 stdenv.mkDerivation rec {
   name = "nbd-3.20";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib ]
     ++ lib.optional (stdenv ? glibc) stdenv.glibc.linuxHeaders;
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkg-config which ];
 
   postInstall = ''
     mkdir -p "$out/share/doc/${name}"

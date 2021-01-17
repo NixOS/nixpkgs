@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, pkgconfig
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config
 , libXtst, libvorbis, hunspell, lzo, xz, bzip2, libiconv
 , qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake
 , withCC ? true, opencc
@@ -30,7 +30,7 @@ mkDerivation rec {
       --replace "hunspell-1.6.1" "hunspell-${lib.versions.majorMinor hunspell.version}"
   '';
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
     qtbase qtsvg qtwebkit qttools
     libvorbis hunspell xz lzo

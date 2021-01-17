@@ -57,7 +57,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.1.3";
+  hassVersion = "2021.1.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -76,7 +76,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "168njrzvqr3wn1xk02q1yn1f90mf1hds6m8lffgkql8m6a6576hn";
+    sha256 = "03aa7kd216rnp8h80nv002ahafiy0031lxk1bkwcirrznphcw7sj";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -179,6 +179,8 @@ in with py.pkgs; buildPythonApplication rec {
     # keyring.errors.NoKeyringError: No recommended backend was available.
     "test_secrets_from_unrelated_fails"
     "test_secrets_credstash"
+    # RuntimeError: Event loop is closed
+    "test_remove_older_logs"
   ];
 
   preCheck = ''

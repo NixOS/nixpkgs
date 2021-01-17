@@ -20,7 +20,7 @@
 , mousetweaks
 , udev
 , libxkbcommon
-, pkgconfig
+, pkg-config
 , procps
 , python3
 , wrapGAppsHook
@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     intltool
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

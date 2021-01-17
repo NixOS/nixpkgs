@@ -2,7 +2,7 @@
 , lib
 , fetchgit
 , rustPlatform
-, pkgconfig
+, pkg-config
 , openssl
 , dbus
 , sqlite
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = lib.optional withNotmuch "--features=notmuch";
 
-  nativeBuildInputs = [ pkgconfig gzip makeWrapper ];
+  nativeBuildInputs = [ pkg-config gzip makeWrapper ];
 
   buildInputs = [ openssl dbus sqlite ] ++ lib.optional withNotmuch notmuch;
 

@@ -19,7 +19,7 @@
 , curl
 , xorg
 , makeWrapper
-, pkgconfig
+, pkg-config
 , libvlc
 , mbedtls
 
@@ -50,7 +50,7 @@ in mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ addOpenGLRunpath cmake pkgconfig ];
+  nativeBuildInputs = [ addOpenGLRunpath cmake pkg-config ];
 
   buildInputs = [
     curl

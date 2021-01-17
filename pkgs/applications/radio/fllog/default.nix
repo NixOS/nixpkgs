@@ -3,7 +3,7 @@
 , fetchurl
 , fltk13
 , libjpeg
-, pkgconfig
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   meta = {

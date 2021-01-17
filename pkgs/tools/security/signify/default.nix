@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libbsd, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, libbsd, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "signify";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libbsd ];
 
   preInstall = ''

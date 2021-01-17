@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, fetchpatch, autoreconfHook
-, pkgconfig, libtool, boost, SDL
+, pkg-config, libtool, boost, SDL
 , glib, pango, gettext, curl, xorg
 , libpng, libjpeg, giflib, speex, atk
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation {
     sed -i 's|jemalloc.h|jemalloc/jemalloc.h|' libbase/jemalloc_gnash.c
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libtool ];
+  nativeBuildInputs = [ autoreconfHook pkg-config libtool ];
   buildInputs = [
     glib gettext boost curl SDL speex
     xorg.libXmu xorg.libSM xorg.libXt

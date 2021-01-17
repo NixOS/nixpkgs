@@ -1,5 +1,5 @@
 { lib, stdenv, buildGoPackage, fetchgit
-, pkgconfig
+, pkg-config
 , glib, libxml2
 }:
 
@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libxml2 ];
 
   meta = {

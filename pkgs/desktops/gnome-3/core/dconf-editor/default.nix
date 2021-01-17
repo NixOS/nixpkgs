@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, gtk3, gnome3, python3, dconf
+{ lib, stdenv, fetchurl, meson, ninja, vala, libxslt, pkg-config, glib, gtk3, gnome3, python3, dconf
 , libxml2, gettext, docbook_xsl, wrapGAppsHook, gobject-introspection }:
 
 let
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja vala libxslt pkgconfig wrapGAppsHook
+    meson ninja vala libxslt pkg-config wrapGAppsHook
     gettext docbook_xsl libxml2 gobject-introspection python3
   ];
 

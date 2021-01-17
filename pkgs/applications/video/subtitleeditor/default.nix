@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, intltool, file,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, intltool, file,
   desktop-file-utils, enchant, gtk3, gtkmm3, gst_all_1, hicolor-icon-theme,
   libsigcxx, libxmlxx, xdg_utils, isocodes, wrapGAppsHook
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs =  [
     autoreconfHook
-    pkgconfig
+    pkg-config
     intltool
     file
     wrapGAppsHook

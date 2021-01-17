@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, fetchpatch, pkgconfig, exiv2, libxml2, gtk3
+{ fetchFromGitHub, lib, stdenv, fetchpatch, pkg-config, exiv2, libxml2, gtk3
 , libxslt, docbook_xsl, docbook_xml_dtd_42, desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_42
     docbook_xsl
     libxslt
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

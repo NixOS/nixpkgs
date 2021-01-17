@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libxml2, glib, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, libxml2, glib, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "libcroco";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional stdenv.isDarwin "--disable-Bsymbolic";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxml2 glib ];
 
   passthru = {

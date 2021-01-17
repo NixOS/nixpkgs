@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, makeWrapper, openal, fluidsynth_1
 , soundfont-fluid, libGL, SDL2, bzip2, zlib, libjpeg, libsndfile, mpg123
-, game-music-emu, pkgconfig }:
+, game-music-emu, pkg-config }:
 
 let
   zmusic-src = fetchFromGitHub {
@@ -15,7 +15,7 @@ let
 
     src = zmusic-src;
 
-    nativeBuildInputs = [ cmake pkgconfig ];
+    nativeBuildInputs = [ cmake pkg-config ];
 
     preConfigure = ''
       sed -i \
@@ -38,7 +38,7 @@ let
       fetchSubmodules = true;
     };
 
-    nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
+    nativeBuildInputs = [ cmake makeWrapper pkg-config ];
     buildInputs = [
       SDL2
       libGL

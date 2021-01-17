@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkg-config
 , glib, libwnck3, procps }:
 
 with lib;
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
   buildInputs = [ glib libwnck3 ];
 
   postInstall = ''

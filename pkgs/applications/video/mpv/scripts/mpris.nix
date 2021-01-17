@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, pkgconfig, glib, mpv-unwrapped }:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, glib, mpv-unwrapped }:
 
 stdenv.mkDerivation rec {
   pname = "mpv-mpris";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ glib mpv-unwrapped ];
 

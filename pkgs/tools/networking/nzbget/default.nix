@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libxml2, ncurses, libsigcxx, libpar2
+{ lib, stdenv, fetchurl, pkg-config, libxml2, ncurses, libsigcxx, libpar2
 , gnutls, libgcrypt, zlib, openssl }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lwd0pfrs4a5ms193hgz2qiyf7grrc925dw6y0nfc0gkp27db9b5";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libxml2 ncurses libsigcxx libpar2 gnutls
                   libgcrypt zlib openssl ];
