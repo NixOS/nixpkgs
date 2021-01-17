@@ -21,6 +21,7 @@
  <xi:include href="opengl.section.xml" />
  <xi:include href="shell-helpers.section.xml" />
  <xi:include href="steam.section.xml" />
+ <xi:include href="security-wordlists.section.xml" />
  <xi:include href="cataclysm-dda.section.xml" />
  <xi:include href="urxvt.section.xml" />
  <xi:include href="weechat.section.xml" />
