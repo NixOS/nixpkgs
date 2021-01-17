@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   buildInputs = [
     elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
     libopcodes python3 perl
-  ] ++ stdenv.lib.optional withGtk gtk2
+  ] ++ lib.optional withGtk gtk2
     ++ (if (versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ]);
 
   # Note: we don't add elfutils to buildInputs, since it provides a
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://perf.wiki.kernel.org/";
     description = "Linux tools to profile with performance counters";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

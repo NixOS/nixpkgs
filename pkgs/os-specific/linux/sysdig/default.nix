@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake, kernel, installShellFiles
+{ lib, stdenv, fetchFromGitHub, cmake, kernel, installShellFiles
 , luajit, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils, tbb, c-ares, protobuf, grpc
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "sysdig";
   version = "0.27.1";

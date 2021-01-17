@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (!isStatic) ''rm "$lib"/lib/*.a''}
     mkdir -p "$doc/share/doc/${pname}-${version}"
     cp License "$doc/share/doc/${pname}-${version}/"
-  '' + stdenv.lib.optionalString usePam ''
+  '' + lib.optionalString usePam ''
     mkdir -p "$pam/lib/security"
     mv "$lib"/lib/security "$pam/lib"
   '';
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library for working with POSIX capabilities";
     homepage = "https://sites.google.com/site/fullycapable";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
 }

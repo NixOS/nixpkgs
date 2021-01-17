@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 let
   pname = "zd1211-firmware";
@@ -19,6 +19,6 @@ in fetchzip rec {
     description = "Firmware for the ZyDAS ZD1211(b) 802.11a/b/g USB WLAN chip";
     homepage = "https://sourceforge.net/projects/zd1211/";
     license = "GPL";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

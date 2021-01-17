@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, kernel, which }:
 
 # Don't bother with older versions, though some might even work:
-assert stdenv.lib.versionAtLeast kernel.version "4.10";
+assert lib.versionAtLeast kernel.version "4.10";
 
 let
   release = "0.4.0";
@@ -48,6 +48,6 @@ in stdenv.mkDerivation rec {
     downloadPage = "http://www.linux-phc.org/forum/viewtopic.php?f=7&t=267";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
+    broken = lib.versionAtLeast kernel.version "4.18";
   };
 }

@@ -19349,7 +19349,7 @@ in
 
   linuxPackages_custom = { version, src, configfile, allowImportFromDerivation ? true }:
     recurseIntoAttrs (linuxPackagesFor (pkgs.linuxManualConfig {
-      inherit version src configfile stdenv allowImportFromDerivation;
+      inherit version src configfile lib stdenv allowImportFromDerivation;
     }));
 
   # This serves as a test for linuxPackages_custom
@@ -19380,7 +19380,7 @@ in
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
-        inherit stdenv;
+        inherit lib stdenv;
         inherit (kernel) version;
       };
       kernelPatches = kernel.kernelPatches ++ [

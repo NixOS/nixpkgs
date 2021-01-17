@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, automake, autoconf, udisks1, dbus-glib, glib, libconfuse }:
+{ lib, stdenv, fetchurl, pkgconfig, automake, autoconf, udisks1, dbus-glib, glib, libconfuse }:
 
 stdenv.mkDerivation {
   name = "udisks-glue-1.3.5";
@@ -16,9 +16,9 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/fernandotcl/udisks-glue";
     description = "A tool to associate udisks events to user-defined actions";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [pSub];
-    license = stdenv.lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [pSub];
+    license = lib.licenses.bsd2;
     broken = true;
     hydraPlatforms = [];
   };
