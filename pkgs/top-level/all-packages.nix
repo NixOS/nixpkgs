@@ -713,6 +713,8 @@ in
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
+  metapixel = callPackage ../tools/graphics/metapixel { };
+
   ### APPLICATIONS/TERMINAL-EMULATORS
 
   alacritty = callPackage ../applications/terminal-emulators/alacritty {
@@ -2943,6 +2945,8 @@ in
   davix = callPackage ../tools/networking/davix { };
 
   cantata = libsForQt5.callPackage ../applications/audio/cantata { };
+
+  cantoolz = python3Packages.callPackage ../tools/networking/cantoolz { };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
@@ -14794,6 +14798,8 @@ in
 
   libltc = callPackage ../development/libraries/libltc { };
 
+  liblxi = callPackage ../development/libraries/liblxi { };
+
   libmaxminddb = callPackage ../development/libraries/libmaxminddb { };
 
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
@@ -23110,6 +23116,8 @@ in
   lv2bm = callPackage ../applications/audio/lv2bm { };
 
   lv2-cpp-tools = callPackage ../applications/audio/lv2-cpp-tools { };
+
+  lxi-tools = callPackage ../tools/networking/lxi-tools { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
