@@ -124,7 +124,8 @@ in
       };
       hostName = mkOption {
         type = types.str;
-        default = config.networking.hostName;
+        default = config.networking.fqdn;
+        defaultText = "\${config.networking.fqdn}";
         example = "somewhere.example.com";
         description = "DNS name for the urls generated in the cgi.";
       };
@@ -156,6 +157,7 @@ in
       ownerEmail = mkOption {
         type = types.str;
         default = "no-reply@${cfg.hostName}";
+        defaultText = "no-reply@\${hostName}";
         example = "no-reply@yourdomain.com";
         description = "Email contact for owner";
       };

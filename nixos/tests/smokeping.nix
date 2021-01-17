@@ -8,6 +8,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     sm =
       { ... }:
       {
+        networking.domain = "example.com"; # FQDN: sm.example.com
         services.smokeping = {
           enable = true;
           port = 8081;
