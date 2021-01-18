@@ -19,7 +19,11 @@ update_path() {
   fi
 }
 
-cd "$install_dir/share/dwarftherapist"
+share_dir="$install_dir/share/dwarftherapist"
+if [ -d "$share_dir" ]; then
+  cd "$share_dir"
+fi
+
 update_path memory_layouts
 
 QT_QPA_PLATFORM_PLUGIN_PATH="@qt_plugin_path@" \

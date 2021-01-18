@@ -1,12 +1,15 @@
 { pkgs, stdenv, dwarf-therapist, dwarf-fortress, makeWrapper }:
 
 let
-  platformSlug = if stdenv.targetPlatform.is32bit then
-    "linux32" else "linux64";
-  inifile = "linux/v0.${dwarf-fortress.baseVersion}.${dwarf-fortress.patchVersion}_${platformSlug}.ini";
+  platform = if stdenv.isLinux then "linux" else
+               if stdenv.isDarwin then "osx" else
+               throw "Invalid platform: must be Linux or Darwin";
 
+  platformSlug = if stdenv.targetPlatform.is32bit then
+    "${platform}32" else "${platform}64";
+
+  inifile = "${platform}/v0.${dwarf-fortress.baseVersion}.${dwarf-fortress.patchVersion}_${platformSlug}.ini";
 in
-  
 stdenv.mkDerivation {
   name = "dwarf-therapist-${dwarf-therapist.version}";
   
@@ -20,7 +23,7 @@ stdenv.mkDerivation {
 
   buildCommand = ''
     mkdir -p $out/bin
-    ln -s $out/bin/dwarftherapist $out/bin/DwarfTherapist
+
     substitute $wrapper $out/bin/dwarftherapist \
       --subst-var-by stdenv_shell ${stdenv.shell} \
       --subst-var-by install $out \
@@ -29,13 +32,19 @@ stdenv.mkDerivation {
 
     chmod 755 $out/bin/dwarftherapist
 
+    if [ ! -f $out/bin/DwarfTherapist ]; then
+      # Case-sensitive filesystem; make a link
+      ln -s $out/bin/dwarftherapist $out/bin/DwarfTherapist
+    fi
+
     # Fix up memory layouts
-    rm -rf $out/share/dwarftherapist/memory_layouts/linux
-    mkdir -p $out/share/dwarftherapist/memory_layouts/linux
-    orig_md5=$(cat "${dwarf-fortress}/hash.md5.orig" | cut -c1-8)
-    patched_md5=$(cat "${dwarf-fortress}/hash.md5" | cut -c1-8)
     input_file="${dwarf-therapist}/share/dwarftherapist/memory_layouts/${inifile}"
     output_file="$out/share/dwarftherapist/memory_layouts/${inifile}"
+
+    rm -rf $out/share/dwarftherapist/memory_layouts/${platform}
+    mkdir -p $out/share/dwarftherapist/memory_layouts/${platform}
+    orig_md5=$(cat "${dwarf-fortress}/hash.md5.orig" | cut -c1-8)
+    patched_md5=$(cat "${dwarf-fortress}/hash.md5" | cut -c1-8)
 
     echo "[Dwarf Therapist Wrapper] Fixing Dwarf Fortress MD5 prefix:"
     echo "  Input:   $input_file"
