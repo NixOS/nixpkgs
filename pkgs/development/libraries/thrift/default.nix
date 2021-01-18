@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ boost zlib libevent openssl python bison flex ]
-    ++ stdenv.lib.optional (!static) twisted;
+  nativeBuildInputs = [ cmake pkgconfig bison flex ];
+  buildInputs = [ boost zlib libevent openssl ]
+    ++ stdenv.lib.optionals (!static) [ python twisted ];
 
   preConfigure = "export PY_PREFIX=$out";
 
