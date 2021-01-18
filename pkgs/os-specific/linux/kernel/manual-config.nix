@@ -35,6 +35,8 @@ in {
   # Use defaultMeta // extraMeta
   extraMeta ? {},
 
+  nativeBuildInputs ? [],
+
   # for module compatibility
   isXen      ? features.xen_dom0 or false,
   isZen      ? false,
@@ -307,6 +309,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk zstd ]
+      ++ nativeBuildInputs
       ++ optional  (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
       ++ optional  (stdenv.lib.versionAtLeast version "4.14" && stdenv.lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
