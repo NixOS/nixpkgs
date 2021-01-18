@@ -1053,6 +1053,8 @@ let
 
     sedlex_2 = callPackage ../development/ocaml-modules/sedlex/2.nix { };
 
+    semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
+
     sodium = callPackage ../development/ocaml-modules/sodium { };
 
     spelll = callPackage ../development/ocaml-modules/spelll { };
