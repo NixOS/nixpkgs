@@ -10735,6 +10735,8 @@ in
     jdk = oraclejdk;
   };
 
+  sqlx-cli = callPackage ../development/tools/rust/sqlx-cli { };
+
   squeak = callPackage ../development/compilers/squeak { };
 
   squirrel-sql = callPackage ../development/tools/database/squirrel-sql {
