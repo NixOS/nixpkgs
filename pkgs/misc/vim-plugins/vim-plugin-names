@@ -132,6 +132,7 @@ gentoo/gentoo-syntax
 GEverding/vim-hocon
 gfanto/fzf-lsp.nvim@main
 gibiansky/vim-textobj-haskell
+glepnir/galaxyline.nvim
 glts/vim-textobj-comment
 godlygeek/csapprox
 godlygeek/tabular
