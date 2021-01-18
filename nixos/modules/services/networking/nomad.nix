@@ -71,9 +71,10 @@ in
 
           If `data_dir` is set to a value other than the default value of
           `"/var/lib/nomad"` it is the Nomad cluster manager's responsibility
-          to make sure that this directory exist and has the appropriate
-          permissions. One way to do this is with the `ExecStartPre` feature of
-          systemd.
+          to make sure that this directory exists and has the appropriate
+          permissions. One way to ensure this is the case to create the
+          directory and adjust its permissions as needed using the
+          `ExecStartPre` feature of systemd.
 
           Additionally, if `dropPrivileges` is `true` then `data_dir`
           **cannot** be customized.  Setting `dropPrivileges` to `true` enables
