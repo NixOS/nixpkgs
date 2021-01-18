@@ -2,17 +2,18 @@
 
 let
   version = "5.10.6";
+  suffix = "zen1";
 in
 
 buildLinux (args // {
-  modDirVersion = "${version}-zen1";
+  modDirVersion = "${version}-${suffix}";
   inherit version;
   isZen = true;
 
   src = fetchFromGitHub {
     owner = "zen-kernel";
     repo = "zen-kernel";
-    rev = "v${version}-zen1";
+    rev = "v${version}-${suffix}";
     sha256 = "0asn4ysnzv845g35ca9sdi89sc7clcc88xmx64pcxmh033civ5fw";
   };
 
