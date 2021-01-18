@@ -19,15 +19,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/lib
+    mkdir -p $out/bin $out/lib
     # cp $src/standard.prelude $out/lib
     install -Dm755 gofc goferc -t $out/bin
   '';
 
   fixupPhase = ''
-    substituteInPlace $out/bin/goferc --replace '/home/staff/ian/gofer/lib/' '$out/lib/'
-    substituteInPlace $out/bin/goferc --replace '/usr/local/lib/Gofer/' $out/bin/
+    substituteInPlace $out/bin/goferc \
+      --replace '/home/staff/ian/gofer/lib/' '$out/lib/'
+      --replace '/usr/local/lib/Gofer/' $out/bin/
   '';
 
   hardeningDisable = [ "format" ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lfggpchx4v7adlgn2d02f4ywx8dijr5lzp0w619slprxi0pxfbz";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compiler for Gofer -- a language based on the Haskell report version 1.2";
     homepage = "http://web.cecs.pdx.edu/~mpj/goferarc/";
     license = licenses.unfree;
