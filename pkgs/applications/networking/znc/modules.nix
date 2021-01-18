@@ -133,7 +133,7 @@ in {
       description = "Palaver ZNC module";
       homepage = "https://github.com/cocodelabs/znc-palaver";
       license = licenses.mit;
-      maintainers = with maintainers; [ kiwi ];
+      maintainers = with maintainers; [ kiwi szlend ];
     };
   };
 
