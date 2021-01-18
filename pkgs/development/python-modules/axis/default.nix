@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "axis";
-  version = "42";
+  version = "43";
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1144zkgyf63qlw4dfn1zqcbgaksmxvjc4115jhzi98z0fkvlk34p";
+    sha256 = "1p9yfixsrkw7rxbvgybcb653rbqv0x18wzqkh620g193snm9sgm2";
   };
 
   propagatedBuildInputs = [
