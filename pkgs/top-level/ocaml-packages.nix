@@ -1014,6 +1014,8 @@ let
 
     prof_spacetime = callPackage ../development/ocaml-modules/prof_spacetime { };
 
+    progress = callPackage ../development/ocaml-modules/progress { };
+
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
     ptset = callPackage ../development/ocaml-modules/ptset { };
