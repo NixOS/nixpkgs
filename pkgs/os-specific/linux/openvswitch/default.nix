@@ -2,7 +2,7 @@
 , procps, libcap_ng, openssl, python3 , perl
 , kernel ? null }:
 
-with stdenv.lib;
+with lib;
 
 let
   _kernel = kernel;

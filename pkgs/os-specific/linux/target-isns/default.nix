@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub, fetchpatch } :
+{ lib, stdenv, cmake, fetchFromGitHub, fetchpatch } :
 
 stdenv.mkDerivation rec {
   pname = "target-isns";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "iSNS client for the Linux LIO iSCSI target";
     homepage = "https://github.com/open-iscsi/target-isns";
     maintainers = [ maintainers.markuskowa ];

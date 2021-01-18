@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, bison, file, flex
+{ lib, stdenv, fetchurl, pkgconfig, bison, file, flex
 , asciidoc, libxslt, findXMLCatalogs, docbook_xml_dtd_45, docbook_xsl
 , libmnl, libnftnl, libpcap
 , gmp, jansson, readline
@@ -7,7 +7,7 @@
 , withXtables ? false , iptables
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "0.9.7";

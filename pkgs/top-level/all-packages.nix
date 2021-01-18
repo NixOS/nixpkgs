@@ -697,6 +697,8 @@ in
 
   aide = callPackage ../tools/security/aide { };
 
+  aiodnsbrute = python3Packages.callPackage ../tools/security/aiodnsbrute { };
+
   aircrack-ng = callPackage ../tools/networking/aircrack-ng { };
 
   airfield = callPackage ../tools/networking/airfield { };
@@ -3891,6 +3893,8 @@ in
 
   eventstat = callPackage ../os-specific/linux/eventstat { };
 
+  evillimiter = python3Packages.callPackage ../tools/networking/evillimiter { };
+
   evtest = callPackage ../applications/misc/evtest { };
 
   evtest-qt = libsForQt5.callPackage ../applications/misc/evtest-qt { };
@@ -5590,6 +5594,8 @@ in
 
   matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
 
+  matrix-corporal = callPackage ../servers/matrix-corporal { };
+
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
@@ -5795,6 +5801,8 @@ in
   libipfix = callPackage ../development/libraries/libipfix { };
 
   libircclient = callPackage ../development/libraries/libircclient { };
+
+  libiscsi = callPackage ../development/libraries/libiscsi { };
 
   libisds = callPackage ../development/libraries/libisds { };
 
@@ -10633,6 +10641,7 @@ in
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-readme = callPackage ../development/tools/rust/cargo-readme {};
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
   cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme {};
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
@@ -15784,7 +15793,11 @@ in
   };
   openal = openalSoft;
 
-  openbabel = callPackage ../development/libraries/openbabel { };
+  openbabel = openbabel3;
+
+  openbabel2 = callPackage ../development/libraries/openbabel/2.nix { };
+
+  openbabel3 = callPackages ../development/libraries/openbabel { };
 
   opencascade = callPackage ../development/libraries/opencascade {
     inherit (darwin.apple_sdk.frameworks) OpenCL Cocoa;
@@ -17481,10 +17494,6 @@ in
 
   biboumi = callPackage ../servers/xmpp/biboumi { };
 
-  elasticmq = callPackage ../servers/elasticmq {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-
   elasticmq-server-bin = callPackage ../servers/elasticmq-server-bin {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -17527,6 +17536,8 @@ in
 
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = dontRecurseIntoAttrs (callPackage ../servers/monitoring/grafana/plugins { });
+
+  grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
 
@@ -19147,7 +19158,7 @@ in
 
   linuxPackages_custom = { version, src, configfile, allowImportFromDerivation ? true }:
     recurseIntoAttrs (linuxPackagesFor (pkgs.linuxManualConfig {
-      inherit version src configfile stdenv allowImportFromDerivation;
+      inherit version src configfile lib stdenv allowImportFromDerivation;
     }));
 
   # This serves as a test for linuxPackages_custom
@@ -19178,7 +19189,7 @@ in
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
-        inherit stdenv;
+        inherit lib stdenv;
         inherit (kernel) version;
       };
       kernelPatches = kernel.kernelPatches ++ [
@@ -26770,6 +26781,8 @@ in
 
   stardust = callPackage ../games/stardust {};
 
+  starspace = callPackage ../applications/science/machine-learning/starspace { };
+
   stockfish = callPackage ../games/stockfish { };
 
   steamPackages = dontRecurseIntoAttrs (callPackage ../games/steam {
@@ -27070,6 +27083,7 @@ in
     mpris-indicator-button = callPackage ../desktops/gnome-3/extensions/mpris-indicator-button { };
     night-theme-switcher = callPackage ../desktops/gnome-3/extensions/night-theme-switcher { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
+    noannoyance = callPackage ../desktops/gnome-3/extensions/noannoyance { };
     paperwm = callPackage ../desktops/gnome-3/extensions/paperwm { };
     pidgin-im-integration = callPackage ../desktops/gnome-3/extensions/pidgin-im-integration { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
@@ -27135,6 +27149,7 @@ in
   ### SCIENCE/CHEMISTY
 
   avogadro = callPackage ../applications/science/chemistry/avogadro {
+    openbabel = openbabel2;
     eigen = eigen2;
   };
 
@@ -27880,6 +27895,8 @@ in
   pcb = callPackage ../applications/science/electronics/pcb { };
 
   qucs = callPackage ../applications/science/electronics/qucs { };
+
+  qucs-s = callPackage ../applications/science/electronics/qucs-s { };
 
   xcircuit = callPackage ../applications/science/electronics/xcircuit { };
 

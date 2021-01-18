@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "sof-firmware";
   version = "1.6";

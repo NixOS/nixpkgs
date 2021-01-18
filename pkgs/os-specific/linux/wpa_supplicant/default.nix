@@ -2,7 +2,7 @@
 , dbus, readline ? null, pcsclite ? null
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   version = "2.9";
 
@@ -81,8 +81,8 @@ stdenv.mkDerivation rec {
     cat -n .config
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE \
-      -I$(echo "${stdenv.lib.getDev libnl}"/include/libnl*/) \
-      -I${stdenv.lib.getDev pcsclite}/include/PCSC/"
+      -I$(echo "${lib.getDev libnl}"/include/libnl*/) \
+      -I${lib.getDev pcsclite}/include/PCSC/"
   '';
 
   buildInputs = [ openssl libnl dbus readline pcsclite ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildLinux, linux_zen, ... } @ args:
+{ lib, stdenv, fetchFromGitHub, buildLinux, linux_zen, ... } @ args:
 
 let
   version = "5.10.6";
@@ -18,7 +18,7 @@ buildLinux (args // {
 
   extraMeta = {
     branch = "5.10/master";
-    maintainers = with stdenv.lib.maintainers; [ atemu ];
+    maintainers = with lib.maintainers; [ atemu ];
     description = linux_zen.meta.description + " (Same as linux_zen but less aggressive release schedule)";
   };
 

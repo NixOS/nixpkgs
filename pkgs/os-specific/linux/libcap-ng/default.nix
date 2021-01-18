@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, swig ? null, python2 ? null, python3 ? null }:
+{ lib, stdenv, fetchurl, swig ? null, python2 ? null, python3 ? null }:
 
 assert python2 != null || python3 != null -> swig != null;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     (if python3 != null then "--with-python3" else "--without-python3")
   ];
 
-  meta = let inherit (stdenv.lib) platforms licenses; in {
+  meta = let inherit (lib) platforms licenses; in {
     description = "Library for working with POSIX capabilities";
     homepage = "https://people.redhat.com/sgrubb/libcap-ng/";
     platforms = platforms.linux;

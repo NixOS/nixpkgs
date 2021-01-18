@@ -64,7 +64,7 @@ assert weatherMetarSupport -> curlSupport;
 assert weatherXoapSupport  -> curlSupport && libxml2 != null;
 assert journalSupport      -> systemd != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "conky";

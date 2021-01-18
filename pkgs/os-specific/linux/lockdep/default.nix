@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, flex, bison, valgrind }:
+{ lib, stdenv, fetchurl, bash, flex, bison, valgrind }:
 
 stdenv.mkDerivation rec {
   pname = "lockdep";
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Userspace locking validation tool built on the Linux kernel";
     homepage    = "https://kernel.org/";
-    license     = stdenv.lib.licenses.gpl2;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.gpl2;
+    platforms   = lib.platforms.linux;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

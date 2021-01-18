@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pcre, pkgconfig, libsepol
+{ lib, stdenv, fetchurl, pcre, pkgconfig, libsepol
 , enablePython ? true, swig ? null, python3 ? null
 , fts
 }:
 
 assert enablePython -> swig != null && python3 != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "libselinux";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "SBINDIR=$(bin)/sbin"
     "SHLIBDIR=$(out)/lib"
 
-    "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+    "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
 
   preInstall = ''

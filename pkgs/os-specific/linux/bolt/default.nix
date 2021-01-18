@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
-  ] ++ stdenv.lib.optional (!doCheck) python3;
+  ] ++ lib.optional (!doCheck) python3;
 
   buildInputs = [
     glib

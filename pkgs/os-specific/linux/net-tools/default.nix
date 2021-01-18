@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "net-tools";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://net-tools.sourceforge.net/";
     description = "A set of tools for controlling the network subsystem in Linux";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

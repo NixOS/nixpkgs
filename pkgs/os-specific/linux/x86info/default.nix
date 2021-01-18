@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pciutils, python}:
+{lib, stdenv, fetchurl, pciutils, python}:
 
 stdenv.mkDerivation rec {
   version = "1.30";
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
       x86info will identify all Intel/AMD/Centaur/Cyrix/VIA CPUs. It leverages
       the cpuid kernel module where possible.  it supports parsing model specific
       registers (MSRs) via the msr kernel module.  it will approximate processor
-      frequency, and identify the cache sizes and layout. 
+      frequency, and identify the cache sizes and layout.
     '';
     platforms = [ "i686-linux" "x86_64-linux" ];
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "http://codemonkey.org.uk/projects/x86info/";
-    maintainers = with stdenv.lib.maintainers; [jcumming];
+    maintainers = with lib.maintainers; [jcumming];
   };
 }

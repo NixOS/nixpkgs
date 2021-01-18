@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, rpmextract, ncurses5, numactl, zlib }:
+{ lib, stdenv, fetchzip, rpmextract, ncurses5, numactl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "intel-ocl";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     stdenv.cc.cc.lib
     ncurses5
     numactl
@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Official OpenCL runtime for Intel CPUs";
     homepage    = "https://software.intel.com/en-us/articles/opencl-drivers";
-    license     = stdenv.lib.licenses.unfree;
+    license     = lib.licenses.unfree;
     platforms   = [ "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.kierdavis ];
+    maintainers = [ lib.maintainers.kierdavis ];
   };
 }

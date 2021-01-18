@@ -174,6 +174,8 @@ in {
 
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
+  adext = callPackage ../development/python-modules/adext { };
+
   adguardhome = callPackage ../development/python-modules/adguardhome { };
 
   advantage-air = callPackage ../development/python-modules/advantage-air { };
@@ -193,6 +195,8 @@ in {
   agate-excel = callPackage ../development/python-modules/agate-excel { };
 
   agate-sql = callPackage ../development/python-modules/agate-sql { };
+
+  agent-py = callPackage ../development/python-modules/agent-py { };
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
@@ -1914,6 +1918,8 @@ in {
   dominate = callPackage ../development/python-modules/dominate { };
 
   dopy = callPackage ../development/python-modules/dopy { };
+
+  dotty-dict = callPackage ../development/python-modules/dotty-dict { };
 
   dot2tex = callPackage ../development/python-modules/dot2tex { inherit (pkgs) graphviz; };
 
@@ -4466,6 +4472,10 @@ in {
 
   openapi-spec-validator = callPackage ../development/python-modules/openapi-spec-validator { };
 
+  openbabel-bindings = callPackage ../development/python-modules/openbabel-bindings {
+      openbabel = (callPackage ../development/libraries/openbabel { python = self.python; });
+  };
+
   opencv3 = toPythonModule (pkgs.opencv3.override {
     enablePython = true;
     pythonPackages = self;
@@ -5138,6 +5148,8 @@ in {
   pybind11 = callPackage ../development/python-modules/pybind11 { };
 
   pybindgen = callPackage ../development/python-modules/pybindgen { };
+
+  pyblackbird = callPackage ../development/python-modules/pyblackbird { };
 
   pyblake2 = callPackage ../development/python-modules/pyblake2 { };
 
@@ -6725,6 +6737,8 @@ in {
   roku = callPackage ../development/python-modules/roku { };
 
   roman = callPackage ../development/python-modules/roman { };
+
+  roombapy = callPackage ../development/python-modules/roombapy { };
 
   rope = callPackage ../development/python-modules/rope { };
 
