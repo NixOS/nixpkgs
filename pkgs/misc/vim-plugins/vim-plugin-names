@@ -608,6 +608,10 @@ vhda/verilog_systemverilog.vim
 vigoux/LanguageTool.nvim
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
+vim-erlang/vim-erlang-compiler
+vim-erlang/vim-erlang-omnicomplete
+vim-erlang/vim-erlang-runtime
+vim-erlang/vim-erlang-tags
 vim-pandoc/vim-pandoc
 vim-pandoc/vim-pandoc-after
 vim-pandoc/vim-pandoc-syntax
