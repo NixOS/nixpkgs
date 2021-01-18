@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
+{ stdenv, lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "rmview";
