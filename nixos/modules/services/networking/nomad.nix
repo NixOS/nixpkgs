@@ -49,6 +49,18 @@ in
         '';
       };
 
+      settingsFiles = mkOption {
+        type = types.listOf (types.oneOf [ types.path types.str ]);
+        default = [];
+        description = ''
+          Additional settings files used to configure nomad. These files
+          will be watched for changes.
+        '';
+        example = literalExample ''
+          [ "/etc/awesome.nomad.json" ]
+        '';
+      };
+
       settings = mkOption {
         type = format.type;
         default = {};
@@ -89,7 +101,8 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      restartTriggers = [ config.environment.etc."nomad.json".source ];
+      restartTriggers = [ config.environment.etc."nomad.json".source ]
+        ++ cfg.settingsFiles;
 
       path = cfg.extraPackages ++ (with pkgs; [
         # Client mode requires at least the following:
@@ -101,7 +114,8 @@ in
       serviceConfig = {
         DynamicUser = cfg.dropPrivileges;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json";
+        ExecStart = "${cfg.package}/bin/nomad agent" +
+          concatMapStrings (file: " -config=${file}") (["/etc/nomad.json"] ++ cfg.settingsFiles);
         KillMode = "process";
         KillSignal = "SIGINT";
         LimitNOFILE = 65536;
