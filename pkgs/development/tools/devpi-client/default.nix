@@ -25,11 +25,11 @@
 
 buildPythonApplication rec {
   pname = "devpi-client";
-  version = "5.2.0";
+  version = "5.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y8r1pjav0gyrbnyqjnc202sa962n1gasi8233xj7jc39lv3iq40";
+    sha256 = "74ff365efeaa7b78c9eb7f6d7bd349ccd6252a6cdf879bcb4137ee5ff0fb127a";
   };
 
   buildInputs = [ glibcLocales pkginfo check-manifest ];

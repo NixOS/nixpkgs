@@ -1,0 +1,38 @@
+PATH
+  remote: .
+  specs:
+    haste (0.2.3)
+      faraday (~> 0.9)
+      json
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    diff-lcs (1.4.4)
+    faraday (0.17.3)
+      multipart-post (>= 1.2, < 3)
+    json (2.3.1)
+    multipart-post (2.1.1)
+    rspec (3.9.0)
+      rspec-core (~> 3.9.0)
+      rspec-expectations (~> 3.9.0)
+      rspec-mocks (~> 3.9.0)
+    rspec-core (3.9.2)
+      rspec-support (~> 3.9.3)
+    rspec-expectations (3.9.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.9.0)
+    rspec-mocks (3.9.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.9.0)
+    rspec-support (3.9.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  haste!
+  rspec
+
+BUNDLED WITH
+   2.1.4
