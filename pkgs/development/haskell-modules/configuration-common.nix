@@ -223,7 +223,7 @@ self: super: {
     # https://github.com/haskell-nix/hnix-store/issues/104
     # Until unpin, which may hold off in time due to Stackage maintenence bottleneck
     # the 0_4_0_0 is used
-    hnix-store-core = self.hnix-store-core_0_4_0_0; # at least 1.7
+    hnix-store-core = self.hnix-store-core_0_4_1_0; # at least 1.7
 
   });
 
@@ -232,7 +232,7 @@ self: super: {
   # Until unpin, which may hold off in time due to Stackage maintenence bottleneck
   # the 0_4_0_0 is used
   hnix-store-remote = (super.hnix-store-remote.override {
-    hnix-store-core = self.hnix-store-core_0_4_0_0; # at least 1.7
+    hnix-store-core = self.hnix-store-core_0_4_1_0; # at least 1.7
   });
 
 
