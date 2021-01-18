@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fzf }:
+{ lib, stdenv, fetchFromGitHub, fzf }:
 
 assert lib.asserts.assertOneOf "fzf" fzf.pname [ "fzf" "skim" ];
 
