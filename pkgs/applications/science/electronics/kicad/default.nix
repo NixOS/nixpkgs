@@ -146,7 +146,9 @@ let
       };
 
   python = python3;
-  wxPython = python.pkgs.wxPython_4_0;
+  wxPython = if (stable)
+    then python.pkgs.wxPython_4_0
+    else python.pkgs.wxPython_4_1;
 
   inherit (lib) concatStringsSep flatten optionalString optionals;
 in
