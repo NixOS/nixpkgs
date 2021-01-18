@@ -14,7 +14,6 @@ let
     echo "}" >> $out
   '').outPath;
 in {
-  lib,
   # Allow overriding stdenv on each buildLinux call
   stdenv,
   # The kernel version
