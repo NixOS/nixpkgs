@@ -8068,6 +8068,8 @@ in {
 
   warrant = callPackage ../development/python-modules/warrant { };
 
+  waqiasync = callPackage ../development/python-modules/waqiasync { };
+
   wasabi = callPackage ../development/python-modules/wasabi { };
 
   wasm = callPackage ../development/python-modules/wasm { };
