@@ -135,12 +135,11 @@ in
           OOMScoreAdjust = -1000;
           Restart = "on-failure";
           RestartSec = 2;
-          # Agrees with the default `data_dir = "/var/lib/nomad"` in `settings` above.
-          StateDirectory = "nomad";
           TasksMax = "infinity";
           User = optionalString cfg.dropPrivileges "nomad";
         }
         (mkIf cfg.enableDocker { SupplementaryGroups = "docker"; }) # space-separated string
+        (mkIf (cfg.settings.data_dir == "/var/lib/nomad") { StateDirectory = "nomad"; })
       ];
 
       unitConfig = {
