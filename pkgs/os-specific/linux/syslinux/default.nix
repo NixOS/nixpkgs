@@ -79,7 +79,7 @@ stdenv.mkDerivation {
     "PERL=perl"
     "HEXDATE=0x00000000"
   ]
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
+    ++ lib.optionals stdenv.hostPlatform.isi686 [ "bios" "efi32" ];
 
   doCheck = false; # fails. some fail in a sandbox, others require qemu
 

@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   passthru = {inherit compat24 compat26 unicode;};
 
   meta = {
-    platforms = stdenv.lib.platforms.windows;
+    platforms = lib.platforms.windows;
 
     broken = true;
   };

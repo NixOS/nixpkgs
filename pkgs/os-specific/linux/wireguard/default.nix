@@ -1,9 +1,9 @@
 { lib, stdenv, fetchzip, kernel, perl, wireguard-tools, bc }:
 
 # module requires Linux >= 3.10 https://www.wireguard.io/install/#kernel-requirements
-assert stdenv.lib.versionAtLeast kernel.version "3.10";
+assert lib.versionAtLeast kernel.version "3.10";
 # wireguard upstreamed since 5.6 https://lists.zx2c4.com/pipermail/wireguard/2019-December/004704.html
-assert stdenv.lib.versionOlder kernel.version "5.6";
+assert lib.versionOlder kernel.version "5.6";
 
 stdenv.mkDerivation rec {
   pname = "wireguard";

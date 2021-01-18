@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ intel-gmmlib intel-graphics-compiler libva stdenv.cc.cc.lib ]} \
+    patchelf --set-rpath ${lib.makeLibraryPath [ intel-gmmlib intel-graphics-compiler libva stdenv.cc.cc.lib ]} \
       $out/lib/intel-opencl/libigdrcl.so
   '';
 

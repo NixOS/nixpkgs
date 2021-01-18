@@ -13,13 +13,13 @@
     "ads" = ps: with ps; [ pyads ];
     "advantage_air" = ps: with ps; [ advantage-air ];
     "aftership" = ps: with ps; [ pyaftership ];
-    "agent_dvr" = ps: with ps; [ ]; # missing inputs: agent-py
+    "agent_dvr" = ps: with ps; [ agent-py ];
     "air_quality" = ps: with ps; [ ];
     "airly" = ps: with ps; [ airly ];
     "airvisual" = ps: with ps; [ pyairvisual ];
     "aladdin_connect" = ps: with ps; [ ]; # missing inputs: aladdin_connect
     "alarm_control_panel" = ps: with ps; [ ];
-    "alarmdecoder" = ps: with ps; [ ]; # missing inputs: adext
+    "alarmdecoder" = ps: with ps; [ adext ];
     "alert" = ps: with ps; [ ];
     "alexa" = ps: with ps; [ aiohttp-cors ];
     "almond" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pyalmond
@@ -77,7 +77,7 @@
     "binary_sensor" = ps: with ps; [ ];
     "bitcoin" = ps: with ps; [ blockchain ];
     "bizkaibus" = ps: with ps; [ ]; # missing inputs: bizkaibus
-    "blackbird" = ps: with ps; [ ]; # missing inputs: pyblackbird
+    "blackbird" = ps: with ps; [ pyblackbird ];
     "blebox" = ps: with ps; [ ]; # missing inputs: blebox_uniapi
     "blink" = ps: with ps; [ ]; # missing inputs: blinkpy
     "blinksticklight" = ps: with ps; [ BlinkStick ];
@@ -682,7 +682,7 @@
     "rmvtransport" = ps: with ps; [ PyRMVtransport ];
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [ ]; # missing inputs: rokuecp
-    "roomba" = ps: with ps; [ ]; # missing inputs: roombapy
+    "roomba" = ps: with ps; [ roombapy ];
     "roon" = ps: with ps; [ ]; # missing inputs: roonapi
     "route53" = ps: with ps; [ boto3 ];
     "rova" = ps: with ps; [ ]; # missing inputs: rova

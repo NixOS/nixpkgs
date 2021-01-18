@@ -970,6 +970,12 @@
     email = "sivaraman.balaji@gmail.com";
     name = "Balaji Sivaraman";
   };
+  baloo = {
+    email = "nixpkgs@superbaloo.net";
+    github = "baloo";
+    githubId = 59060;
+    name = "Arthur Gautier";
+  };
   balsoft = {
     email = "balsoft75@gmail.com";
     github = "balsoft";
@@ -2030,6 +2036,12 @@
     github = "danharaj";
     githubId = 23366017;
     name = "Dan Haraj";
+  };
+  danielbarter = {
+    email = "danielbarter@gmail.com";
+    github = "danielbarter";
+    githubId = 8081722;
+    name = "Daniel Barter";
   };
   danieldk = {
     email = "me@danieldk.eu";
@@ -5613,6 +5625,12 @@
       longkeyid = "rsa2048/0xB629036BE399EEE9";
       fingerprint = "B573 5118 0375 A872 FBBF  7770 B629 036B E399 EEE9";
     }];
+  };
+  mausch = {
+    email = "mauricioscheffer@gmail.com";
+    github = "mausch";
+    githubId = 95194;
+    name = "Mauricio Scheffer";
   };
   matejc = {
     email = "cotman.matej@gmail.com";

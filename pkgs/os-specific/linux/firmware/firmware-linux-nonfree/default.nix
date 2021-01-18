@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
   outputHashAlgo = "sha256";
   outputHash = "1p7vn2hfwca6w69jhw5zq70w44ji8mdnibm1z959aalax6ndy146";
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "Binary firmware collection packaged by kernel.org";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
     license = licenses.unfreeRedistributableFirmware;

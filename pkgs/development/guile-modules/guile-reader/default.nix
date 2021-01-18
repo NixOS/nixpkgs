@@ -1,7 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, pkgconfig
 , gperf, guile, guile-lib, libffi }:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
 
   pname = "guile-reader";

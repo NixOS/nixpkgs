@@ -7,7 +7,7 @@ assert sensord -> rrdtool != null;
 stdenv.mkDerivation rec {
   pname = "lm-sensors";
   version = "3.6.0";
-  dashedVersion = stdenv.lib.replaceStrings ["."] ["-"] version;
+  dashedVersion = lib.replaceStrings ["."] ["-"] version;
 
   src = fetchzip {
     url = "https://github.com/lm-sensors/lm-sensors/archive/V${dashedVersion}.tar.gz";
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ bison flex which ];
   buildInputs = [ perl ]
-   ++ stdenv.lib.optional sensord rrdtool;
+   ++ lib.optional sensord rrdtool;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "ETCDIR=${placeholder "out"}/etc"
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
-  ] ++ stdenv.lib.optional sensord "PROG_EXTRA=sensord";
+  ] ++ lib.optional sensord "PROG_EXTRA=sensord";
 
   meta = with lib; {
     homepage = "https://hwmon.wiki.kernel.org/lm_sensors";
