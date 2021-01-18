@@ -21,6 +21,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Wulfsta/psw";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ wulfsta ];
-    platforms = platforms.linux;
   };
 }
