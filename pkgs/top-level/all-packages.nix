@@ -3893,6 +3893,8 @@ in
 
   eventstat = callPackage ../os-specific/linux/eventstat { };
 
+  evillimiter = python3Packages.callPackage ../tools/networking/evillimiter { };
+
   evtest = callPackage ../applications/misc/evtest { };
 
   evtest-qt = libsForQt5.callPackage ../applications/misc/evtest-qt { };
