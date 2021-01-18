@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, stdenv, python3, fetchFromGitHub }:
 
 let
   py = python3.override {
@@ -52,5 +52,6 @@ buildPythonPackage rec {
     description = "An Etebase (EteSync 2.0) server so you can run your own.";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ felschr ];
+    broken = stdenv.isDarwin;
   };
 }
