@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, SDL2, libogg, libvorbis, zlib, unzip }:
+{ lib, stdenv, fetchurl, pkg-config, SDL2, libogg, libvorbis, zlib, unzip }:
 
 let
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-tools" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL2 libogg libvorbis zlib unzip ];
 
   enableParallelBuilding = true;

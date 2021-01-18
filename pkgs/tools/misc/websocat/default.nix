@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, openssl, rustPlatform, Security, makeWrapper, bash }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, openssl, rustPlatform, Security, makeWrapper, bash }:
 
 rustPlatform.buildRustPackage rec {
   pname = "websocat";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "--features=ssl" ];
   cargoSha256 = "1hsms8rlnds8npr8m0dm21h04ci5ljda09pqb598v7ny3j2dldiq";
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   # The wrapping is required so that the "sh-c" option of websocat works even

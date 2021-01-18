@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, pkgconfig, glib, ncurses
+{ lib, stdenv, fetchurl, perl, pkg-config, glib, ncurses
 , enablePlugin ? false }:
 
 # Enabling the plugin and using it with a recent irssi, segafults on join:
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     configureFlags="$configureFlags --with-silc-plugin=$out/lib/irssi"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ perl glib ncurses ];
 
   meta = {

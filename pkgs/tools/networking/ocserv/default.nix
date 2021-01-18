@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, nettle, gnutls
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, nettle, gnutls
 , libev, protobufc, guile, geoip, libseccomp, gperf, readline
 , lz4, libgssglue, ronn, pam
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0k7sx9sg8akxwfdl51cvdqkdrx9qganqddgri2yhcgznc3f3pz5b";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ nettle gnutls libev protobufc guile geoip libseccomp gperf readline lz4 libgssglue ronn pam ];
 
   meta = with lib; {

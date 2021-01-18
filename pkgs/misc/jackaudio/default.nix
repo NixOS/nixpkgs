@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, python3Packages, makeWrapper
+{ lib, stdenv, fetchFromGitHub, pkg-config, python3Packages, makeWrapper
 , bash, libsamplerate, libsndfile, readline, eigen, celt
 , wafHook
 # Darwin Dependencies
@@ -12,10 +12,10 @@
 , prefix ? ""
 }:
 
-with stdenv.lib;
+with lib;
 let
   inherit (python3Packages) python dbus-python;
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg: if pkg != null && lib.any (lib.meta.platformMatch stdenv.hostPlatform) pkg.meta.platforms then pkg else null;
 
   libOnly = prefix == "lib";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pzgrjy5fi2nif2j442fs3j2bbshxpnmq9kzwcqz54wx1w8fzdfr";
   };
 
-  nativeBuildInputs = [ pkgconfig python makeWrapper wafHook ];
+  nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];
   buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ] ++ optionals stdenv.isDarwin [

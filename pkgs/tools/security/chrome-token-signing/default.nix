@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pcsclite, pkgconfig, opensc }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pcsclite, pkg-config, opensc }:
 
 mkDerivation rec {
   pname = "chrome-token-signing";
@@ -11,7 +11,7 @@ mkDerivation rec {
     sha256 = "1vbghy12fjmq4m5l7hisq1ylnzy0rdnnd920xwamjamlx38jj3ln";
   };
 
-  buildInputs = [ qmake pcsclite pkgconfig ];
+  buildInputs = [ qmake pcsclite pkg-config ];
   dontUseQmakeConfigure = true;
 
   patchPhase = ''

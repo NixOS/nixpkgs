@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsoup, upower,
+{ lib, stdenv, fetchurl, pkg-config, intltool, gtk3, libxml2, libsoup, upower,
   libxfce4ui, libxfce4util, xfce4-panel, hicolor-icon-theme, xfce }:
 
 let
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
   version = "0.10.1";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "12bs2rfmmy021087i10vxibdbbvd5vld0vk3h5hymhpz7rgszcmg";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
   ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-  
+
   passthru.updateScript = xfce.updateScript {
     inherit pname version;
     attrPath = "xfce.${pname}";

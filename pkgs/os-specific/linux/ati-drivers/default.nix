@@ -9,7 +9,7 @@
 
 assert (!libsOnly) -> kernel != null;
 
-with stdenv.lib;
+with lib;
 
 # This derivation requires a maximum of gcc49, Linux kernel 4.1 and xorg.xserver 1.17
 # and will not build or run using versions newer

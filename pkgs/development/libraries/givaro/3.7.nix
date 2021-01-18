@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   buildInputs = [autoconf automake libtool gmpxx];
   meta = {
     inherit version;
-    description = ''A C++ library for arithmetic and algebraic computations'';
+    description = "A C++ library for arithmetic and algebraic computations";
     license = stdenv.lib.licenses.cecill-b;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;

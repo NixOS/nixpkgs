@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, shared-mime-info
-, autoconf, automake, intltool, libtool, pkgconfig, cmake
+, autoconf, automake, intltool, libtool, pkg-config, cmake
 , ruby, librsvg
 , ncurses, m17n_lib, m17n_db, expat
 , withAnthy ? true, anthy ? null
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoconf automake intltool libtool pkgconfig cmake
+    autoconf automake intltool libtool pkg-config cmake
 
     ruby # used by sigscheme build to generate function tables
     librsvg # used by uim build to generate png pixmaps from svg

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gtk2, pkgconfig, libxml2, intltool, gettext }:
+{ lib, stdenv, fetchurl, gtk2, pkg-config, libxml2, intltool, gettext }:
 
 stdenv.mkDerivation rec {
   name = "gdmap-0.8.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nr8l88cg19zj585hczj8v73yh21k7j13xivhlzl8jdk0j0cj052";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 libxml2 intltool gettext ];
 
   patches = [ ./get_sensitive.patch ./set_flags.patch ];

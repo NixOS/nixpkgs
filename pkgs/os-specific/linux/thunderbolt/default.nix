@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , boost
 , cmake
 , fetchFromGitHub
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Thunderbolt(TM) user-space components";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.ryantrinkle ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.ryantrinkle ];
     homepage = "https://01.org/thunderbolt-sw";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

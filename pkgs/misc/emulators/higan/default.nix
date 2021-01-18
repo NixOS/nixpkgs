@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, pkgconfig
+, pkg-config
 , libX11, libXv
 , udev
 , libGLU, libGL, SDL2
@@ -11,7 +11,7 @@
 , libicns, Carbon, Cocoa, OpenGL, OpenAL}:
 
 let
-  inherit (stdenv.lib) optionals;
+  inherit (lib) optionals;
 in
 stdenv.mkDerivation rec {
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ optionals stdenv.isDarwin [ libicns ];
 
   buildInputs = [ SDL2 libao ]

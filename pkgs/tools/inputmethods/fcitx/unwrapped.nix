@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, cmake, intltool, gettext
+{ lib, stdenv, fetchurl, pkg-config, cmake, intltool, gettext
 , libxml2, enchant2, isocodes, icu, libpthreadstubs
 , pango, cairo, libxkbfile, libXau, libXdmcp, libxkbcommon
 , dbus, gtk2, gtk3, qt4, extra-cmake-modules
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     patchShebangs cmake/
   '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules intltool pkgconfig pcre ];
+  nativeBuildInputs = [ cmake extra-cmake-modules intltool pkg-config pcre ];
 
   buildInputs = [
     xkeyboard_config enchant2 gettext isocodes icu libpthreadstubs libXau libXdmcp libxkbfile

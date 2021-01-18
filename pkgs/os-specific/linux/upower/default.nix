@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     udev
     systemd
   ]
-  ++ stdenv.lib.optional useIMobileDevice libimobiledevice
+  ++ lib.optional useIMobileDevice libimobiledevice
   ;
 
   propagatedBuildInputs = [

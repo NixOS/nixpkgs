@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pidgin, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, pidgin, pkg-config }:
 
 stdenv.mkDerivation {
   pname = "purple-slack-unstable";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1sksqshiwldd32k8jmiflp2pcax31ym6rypr4qa4v5vdn907g80m";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pidgin ];
 
   PKG_CONFIG_PURPLE_PLUGINDIR = "${placeholder "out"}/lib/purple-2";

@@ -610,6 +610,16 @@
     githubId = 11699655;
     name = "Stanislas Lange";
   };
+  anhdle14 = {
+    name = "Le Anh Duc";
+    email = "anhdle14@icloud.com";
+    github = "anhdle14";
+    githubId = 9645992;
+    keys = [{
+      longkeyid = "rsa4096/0x0299AFF9ECBB5169";
+      fingerprint = "AA4B 8EC3 F971 D350 482E  4E20 0299 AFF9 ECBB 5169";
+    }];
+  };
   ankhers = {
     email = "me@ankhers.dev";
     github = "ankhers";
@@ -959,6 +969,12 @@
   balajisivaraman = {
     email = "sivaraman.balaji@gmail.com";
     name = "Balaji Sivaraman";
+  };
+  baloo = {
+    email = "nixpkgs@superbaloo.net";
+    github = "baloo";
+    githubId = 59060;
+    name = "Arthur Gautier";
   };
   balsoft = {
     email = "balsoft75@gmail.com";
@@ -2020,6 +2036,12 @@
     github = "danharaj";
     githubId = 23366017;
     name = "Dan Haraj";
+  };
+  danielbarter = {
+    email = "danielbarter@gmail.com";
+    github = "danielbarter";
+    githubId = 8081722;
+    name = "Daniel Barter";
   };
   danieldk = {
     email = "me@danieldk.eu";
@@ -4805,6 +4827,12 @@
     github = "kmein";
     githubId = 10352507;
   };
+  kmicklas = {
+    email = "maintainer@kmicklas.com";
+    name = "Ken Micklas";
+    github = "kmicklas";
+    githubId = 929096;
+  };
   knairda = {
     email = "adrian@kummerlaender.eu";
     name = "Adrian Kummerlaender";
@@ -5587,6 +5615,12 @@
       longkeyid = "rsa2048/0xB629036BE399EEE9";
       fingerprint = "B573 5118 0375 A872 FBBF  7770 B629 036B E399 EEE9";
     }];
+  };
+  mausch = {
+    email = "mauricioscheffer@gmail.com";
+    github = "mausch";
+    githubId = 95194;
+    name = "Mauricio Scheffer";
   };
   matejc = {
     email = "cotman.matej@gmail.com";
@@ -9649,6 +9683,10 @@
   vozz = {
     email = "oliver.huntuk@gmail.com";
     name = "Oliver Hunt";
+  };
+  vq = {
+    email = "vq@erq.se";
+    name = "Daniel Nilsson";
   };
   vrthra = {
     email = "rahul@gopinath.org";

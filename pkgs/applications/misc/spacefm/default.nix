@@ -1,5 +1,5 @@
 { pkgs, fetchFromGitHub, lib, stdenv, gtk3, udev, desktop-file-utils
-, shared-mime-info, intltool, pkgconfig, wrapGAppsHook, ffmpegthumbnailer
+, shared-mime-info, intltool, pkg-config, wrapGAppsHook, ffmpegthumbnailer
 , jmtpfs, ifuseSupport ? false, ifuse ? null, lsof, udisks2 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gtk3 udev desktop-file-utils shared-mime-info intltool
     wrapGAppsHook ffmpegthumbnailer jmtpfs lsof udisks2

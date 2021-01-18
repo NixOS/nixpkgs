@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     "RacketPrefix=${racket}"
     "RacketInclude=${racket}/include/racket"
     "RacketLib=${racket}/lib/racket"
-    "LIBPATH=${stdenv.lib.makeLibraryPath libs}"
+    "LIBPATH=${lib.makeLibraryPath libs}"
     "DESTDIR=build"
   ];
   configurePhase = ''

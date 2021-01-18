@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, cmake, pkgconfig, openssl, libxml2, boost, python3, libuuid }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, openssl, libxml2, boost, python3, libuuid }:
 
 stdenv.mkDerivation rec {
   version = "0.7.6";
   pname = "davix";
-  nativeBuildInputs = [ cmake pkgconfig python3 ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
   buildInputs = [ openssl libxml2 boost libuuid ];
 
   # using the url below since the github release page states

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pypck";
-  version = "0.7.8";
+  version = "0.7.9";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = pname;
     rev = version;
-    sha256 = "06yqyqpzpypid27z31prvsp7nzpjqzn7gjlfqwjhhxl8fdgh8hkr";
+    sha256 = "0clpi6bplzw7qg2m0hgwqr71zwxrh901gwprhd1yjykn30njp5bw";
   };
 
   checkInputs = [

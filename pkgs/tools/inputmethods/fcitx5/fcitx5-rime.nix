@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , cmake
 , extra-cmake-modules
 , gettext
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    pkgconfig
+    pkg-config
     gettext
   ];
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, gtk2, libdv, libjpeg, libpng, libX11, pkgconfig, SDL, SDL_gfx
+{ stdenv, lib, fetchurl, gtk2, libdv, libjpeg, libpng, libX11, pkg-config, SDL, SDL_gfx
 , withMinimal ? true
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libdv libjpeg libpng ]
               ++ lib.optionals (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , curl
 , libimobiledevice
 , libirecovery
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

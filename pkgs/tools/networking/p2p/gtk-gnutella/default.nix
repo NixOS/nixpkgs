@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , fetchpatch
 , bison
-, pkgconfig
+, pkg-config
 , gettext
 , desktop-file-utils
 , glib
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     bison
     desktop-file-utils
     gettext
-    pkgconfig
+    pkg-config
   ];
   buildInputs = [
     glib

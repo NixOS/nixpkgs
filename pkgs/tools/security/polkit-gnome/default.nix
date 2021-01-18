@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, polkit, gtk3, pkgconfig, intltool }:
+{ lib, stdenv, fetchurl, polkit, gtk3, pkg-config, intltool }:
 stdenv.mkDerivation rec {
   pname = "polkit-gnome";
   version = "0.105";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ polkit gtk3 ];
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
   configureFlags = [ "--disable-introspection" ];
 

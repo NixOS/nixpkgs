@@ -10,7 +10,7 @@
 , vala
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , dconf
 , gst_all_1
 , wrapGAppsHook
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     python3
     gobject-introspection # for setup hook

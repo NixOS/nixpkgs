@@ -139,6 +139,7 @@ mapAliases ({
   draftsight = throw "draftsight has been removed, no longer available as freeware"; # added 2020-08-14
   dvb_apps = throw "dvb_apps has been removed."; # added 2020-11-03
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
+  elasticmq = throw "elasticmq has been removed in favour of elasticmq-server-bin"; # added 2021-01-17
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgFor = emacsPackagesFor; # added 2019-08-07
@@ -266,7 +267,7 @@ mapAliases ({
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
   julia_07 = throw "julia_07 is deprecated in favor of julia_10 LTS"; # added 2020-09-15
   julia_11 = throw "julia_11 is deprecated in favor of latest Julia version"; # added 2020-09-15
-  kdeconnect = kdeApplications.kdeconnect-kde; # added 2020-10-28
+  kdeconnect = plasma5Packages.kdeconnect-kde; # added 2020-10-28
   kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepass-keefox = keepass-keepassrpc; # backwards compatibility alias, added 2018-02
   keepassx-community = keepassxc; # added 2017-11
@@ -318,6 +319,7 @@ mapAliases ({
   libstdcxxHook = throw "libstdcxx hook has been removed because cc-wrapper is now directly aware of the c++ standard library intended to be used."; # 2020-06-22
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
   links = links2; # added 2016-01-31
+  linux_mptcp_5_9 = linux_5_9; # added 2020-01-07
   linux_rpi0 = linux_rpi1;
   linuxPackages_rpi0 = linuxPackages_rpi1;
 
@@ -825,8 +827,8 @@ mapAliases ({
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */
 
-  inherit (kdeFrameworks) breeze-icons oxygen-icons5;
-  inherit (kdeApplications)
+  inherit (plasma5Packages) breeze-icons oxygen-icons5;
+  inherit (plasma5Packages)
     akonadi akregator ark
     bomber bovo
     dolphin dragon
@@ -858,7 +860,7 @@ mapAliases ({
     spectacle
     yakuake
   ;
-  inherit (plasma5)
+  inherit (plasma5Packages)
     bluedevil breeze-gtk breeze-qt5 breeze-grub breeze-plymouth discover
     kactivitymanagerd kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5
     kinfocenter kmenuedit kscreen kscreenlocker ksshaskpass ksysguard
@@ -867,7 +869,7 @@ mapAliases ({
     plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
     systemsettings xdg-desktop-portal-kde
   ;
-  inherit (plasma5.thirdParty)
+  inherit (plasma5Packages.thirdParty)
     plasma-applet-caffeine-plus
     kwin-dynamic-workspaces
     kwin-tiling

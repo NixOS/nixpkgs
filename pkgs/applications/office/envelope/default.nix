@@ -4,7 +4,7 @@
 , fetchpatch
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pantheon
 , python3
 , vala
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];

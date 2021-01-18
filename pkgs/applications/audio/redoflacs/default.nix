@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/redoflacs \
-      --prefix PATH : ${stdenv.lib.makeBinPath ([ flac sox ])}
+      --prefix PATH : ${lib.makeBinPath ([ flac sox ])}
   '';
 
   meta = with lib; {

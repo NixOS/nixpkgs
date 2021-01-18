@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libX11, guile }:
+{ lib, stdenv, fetchurl, pkg-config, libX11, guile }:
 
 let version = "1.8.7"; in
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1wl2vc5alisiwyk8m07y1ryq8w3ll9ym83j27g4apm4ixjl8d6x2";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 guile ];
 
   meta = {

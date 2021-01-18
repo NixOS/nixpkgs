@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, mpd_clientlib, curl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, mpd_clientlib, curl }:
 
 stdenv.mkDerivation rec {
   pname = "mpdas";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fcqc4w6iwbi1n3cllcgj0k61zffhqkbr8668myxap21m35x8y1r";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ mpd_clientlib curl ];
 

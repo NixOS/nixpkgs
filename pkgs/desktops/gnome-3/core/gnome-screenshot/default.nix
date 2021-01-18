@@ -1,4 +1,4 @@
-{ lib, stdenv, gettext, libxml2, libhandy, fetchurl, pkgconfig, libcanberra-gtk3
+{ lib, stdenv, gettext, libxml2, libhandy, fetchurl, pkg-config, libcanberra-gtk3
 , gtk3, glib, meson, ninja, python3, wrapGAppsHook, appstream-glib, desktop-file-utils
 , gnome3, gsettings-desktop-schemas }:
 
@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1h4zsaybjrlkfcrvriyybg4gfr7v9d1ndh2p516k94ad2gfx6mp5";
   };
 
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
     patchShebangs build-aux/postinstall.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext appstream-glib libxml2 desktop-file-utils python3 wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext appstream-glib libxml2 desktop-file-utils python3 wrapGAppsHook ];
   buildInputs = [
     gtk3 glib libcanberra-gtk3 libhandy gnome3.adwaita-icon-theme
     gsettings-desktop-schemas

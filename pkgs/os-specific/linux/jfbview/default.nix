@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freetype harfbuzz jbig2dec libjpeg libX11 mupdf_1_17 ncurses openjpeg
     openssl
-  ] ++ stdenv.lib.optionals imageSupport [
+  ] ++ lib.optionals imageSupport [
     imlib2
   ];
 

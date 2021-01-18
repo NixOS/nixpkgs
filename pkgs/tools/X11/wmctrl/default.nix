@@ -2,7 +2,7 @@
 , fetchurl
 , libX11
 , glib
-, pkgconfig
+, pkg-config
 , libXmu
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1afclc57b9017a73mfs9w7lbdvdipmf9q0xdk116f61gnvyix2np";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 libXmu glib ];
 
   patches = [ ./64-bit-data.patch ];

@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
   };
 
   # Adapt the linux-only CMakeLists to darwin (more reliable than make-macos.sh)
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     sed -i -e 's@__LINUX_ALSA__@__MACOSX_CORE__@' -e 's@asound@@' CMakeLists.txt
   '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ]
-    ++ stdenv.lib.optional stdenv.isLinux alsaLib
-    ++ stdenv.lib.optionals stdenv.isDarwin [
+    ++ lib.optional stdenv.isLinux alsaLib
+    ++ lib.optionals stdenv.isDarwin [
          libiconv
          CoreAudio
          CoreMIDI
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
          Cocoa
        ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin [
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin [
     "-framework CoreAudio"
     "-framework CoreMIDI"
     "-framework CoreServices"

@@ -13,7 +13,7 @@
 }:
 let
 
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 
 in
 mkDerivation rec {

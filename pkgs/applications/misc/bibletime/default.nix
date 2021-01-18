@@ -1,4 +1,4 @@
-{ lib, mkDerivation, stdenv, fetchurl, cmake, pkgconfig, sword, boost, clucene_core
+{ lib, mkDerivation, stdenv, fetchurl, cmake, pkg-config, sword, boost, clucene_core
 , qtbase, qttools, qtsvg, qtwebkit
 }:
 
@@ -13,7 +13,7 @@ mkDerivation rec {
     sha256 = "1s5bvmwbz1gyp3ml8sghpc00h8nhdvx2iyq96iri30kwx1y1jy6i";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
    sword boost clucene_core
    qtbase qttools qtsvg qtwebkit

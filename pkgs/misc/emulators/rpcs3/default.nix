@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchgit, cmake, pkgconfig, git
+{ mkDerivation, lib, fetchgit, cmake, pkg-config, git
 , qtbase, qtquickcontrols, openal, glew, vulkan-headers, vulkan-loader, libpng
 , ffmpeg, libevdev, python3
 , pulseaudioSupport ? true, libpulseaudio
@@ -35,7 +35,7 @@ mkDerivation {
     "-DUSE_NATIVE_INSTRUCTIONS=OFF"
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig git ];
+  nativeBuildInputs = [ cmake pkg-config git ];
 
   buildInputs = [
     qtbase qtquickcontrols openal glew vulkan-headers vulkan-loader libpng ffmpeg

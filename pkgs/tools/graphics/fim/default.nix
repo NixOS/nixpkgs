@@ -1,4 +1,4 @@
-{ gcc9Stdenv, fetchurl, autoconf, automake, pkgconfig, lib
+{ gcc9Stdenv, fetchurl, autoconf, automake, pkg-config, lib
 , perl, flex, bison, readline, libexif
 , x11Support ? true, SDL
 , svgSupport ? true, inkscape
@@ -23,7 +23,7 @@ gcc9Stdenv.mkDerivation rec {
      --replace /usr/bin/perl ${perl}/bin/perl
   '';
 
-  nativeBuildInputs = [ autoconf automake pkgconfig ];
+  nativeBuildInputs = [ autoconf automake pkg-config ];
 
   buildInputs = with lib;
     [ perl flex bison readline libexif ]

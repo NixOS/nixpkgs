@@ -12,7 +12,7 @@
 , ninja
 , libxml2
 , gettext
-, pkgconfig
+, pkg-config
 , libgphoto2
 , gphoto2
 , v4l-utils
@@ -46,7 +46,7 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
     extra-cmake-modules
     ninja

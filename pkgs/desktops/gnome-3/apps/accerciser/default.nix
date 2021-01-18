@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , wrapGAppsHook
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0fd9vv2abd2if2qj4nlfy7mpd7rc4sx18zhmxd5ijlnfhkpggbp5";
   };
 
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection # For setup hook
     itstool
     libxml2
-    pkgconfig
+    pkg-config
     dbus
     wrapGAppsHook
   ];

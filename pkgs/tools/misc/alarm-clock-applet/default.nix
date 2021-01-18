@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, pkgconfig
+, pkg-config
 , autoconf
 , automake111x
 , libtool
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
     automake111x
     autoconf

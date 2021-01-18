@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, gtk3, ncurses
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, ncurses
 , libcpuid, pciutils, procps, wrapGAppsHook, nasm, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "191zkkswlbbsw492yygc3idf7wh3bxs97drrqvqqw0mqvrzykxm3";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook nasm makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook nasm makeWrapper ];
   buildInputs = [
     gtk3 ncurses libcpuid pciutils procps
   ];

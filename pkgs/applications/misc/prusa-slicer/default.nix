@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
 , boost, cereal, curl, eigen, expat, glew, libpng, tbb, wxGTK31
 , gtest, nlopt, xorg, makeDesktopItem
 , cgal_5, gmp, ilmbase, mpfr, qhull, openvdb, systemd
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

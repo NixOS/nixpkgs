@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, readline, ncurses
-, autoreconfHook, pkgconfig, gettext }:
+, autoreconfHook, pkg-config, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "hstr";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1chmfdi1dwg3sarzd01nqa82g65q7wdr6hrnj96l75vikwsg986y";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ readline ncurses gettext ];
 
   configureFlags = [ "--prefix=$(out)" ];

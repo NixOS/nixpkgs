@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , libxml2
 , gnome3
 , gtk3
@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
   version = "3.32.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/zenity/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "15fdh8xfdhnwcynyh4byx3mrjxbyprqnwxzi7qn3g5wwaqryg1p7";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     yelp-tools
     itstool

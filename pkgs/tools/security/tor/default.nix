@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
+{ lib, stdenv, fetchurl, pkg-config, libevent, openssl, zlib, torsocks
 , libseccomp, systemd, libcap, lzma, zstd, scrypt, nixosTests
 , writeShellScript
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "geoip" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
     lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 

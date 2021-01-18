@@ -1,5 +1,5 @@
 { expat, fetchFromGitHub, ffmpeg_3, fontconfig, freetype, libarchive, libjpeg
-, libGLU, libGL, openal, pkgconfig, sfml, lib, stdenv, zlib
+, libGLU, libGL, openal, pkg-config, sfml, lib, stdenv, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "16p369j0hanm0l2fiy6h9d9pn0f3qblcy9l39all6h7rfxnhp9ii";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   patchPhase = ''
     sed -i "s|prefix=/usr/local|prefix=$out|" Makefile

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, python3, vulkan-loader,
- vulkan-headers, glslang, pkgconfig, xlibsWrapper, libxcb,
+ vulkan-headers, glslang, pkg-config, xlibsWrapper, libxcb,
  libXrandr, wayland }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "088vqh956zma3p1qc3p6rsygf5s395b6cv8b1x0whp2a0a1y81xz";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ python3 vulkan-headers vulkan-loader xlibsWrapper libxcb libXrandr wayland ];
 
   libraryPath = lib.strings.makeLibraryPath [ vulkan-loader ];

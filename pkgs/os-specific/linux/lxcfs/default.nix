@@ -1,8 +1,8 @@
-{ config, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse
+{ config, lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse
 , util-linux, makeWrapper
 , enableDebugBuild ? config.lxcfs.enableDebugBuild or false }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "lxcfs";
   version = "4.0.6";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];
   buildInputs = [ fuse makeWrapper ];
 
-  preConfigure = stdenv.lib.optionalString enableDebugBuild ''
+  preConfigure = lib.optionalString enableDebugBuild ''
     sed -i 's,#AM_CFLAGS += -DDEBUG,AM_CFLAGS += -DDEBUG,' Makefile.am
   '';
 

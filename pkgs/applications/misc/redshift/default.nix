@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchFromGitLab
 , autoconf, automake, gettext, intltool
-, libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
+, libtool, pkg-config, wrapGAppsHook, wrapPython, gobject-introspection
 , gtk3, python, pygobject3, pyxdg
 
 , withQuartz ? stdenv.isDarwin, ApplicationServices
@@ -30,7 +30,7 @@ let
         gettext
         intltool
         libtool
-        pkgconfig
+        pkg-config
         wrapGAppsHook
         wrapPython
       ];

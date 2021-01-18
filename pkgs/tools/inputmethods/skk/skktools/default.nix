@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, gdbm, glib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gdbm, glib }:
 
 # Note (2017-10-24, yuriaisaka):
 # - Version 1.3.3 dates from Jul. 19, 2013.
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   #   sha256 = "1k9zxqybl1l5h0a8px2awc920qrdyp1qls50h3kfrj3g65d08aq2";
   # };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gdbm glib ];
 
   meta = {

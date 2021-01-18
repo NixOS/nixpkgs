@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, wrapGAppsHook
 , librsvg, gettext, itstool, libxml2
 , meson, ninja, glib, vala, desktop-file-utils
 }:
@@ -8,13 +8,13 @@ stdenv.mkDerivation rec {
   version = "3.38.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-mahjongg/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-mahjongg/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "144ia3zn9rhwa1xbdkvsz6m0dsysl6mxvqw9bnrlh845hmyy9cfj";
   };
 
   nativeBuildInputs = [
     meson ninja vala desktop-file-utils
-    pkgconfig gnome3.adwaita-icon-theme
+    pkg-config gnome3.adwaita-icon-theme
     libxml2 itstool gettext wrapGAppsHook
     glib # for glib-compile-schemas
   ];

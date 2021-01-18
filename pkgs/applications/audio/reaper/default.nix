@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "6.19";
 
   src = fetchurl {
-    url = "https://www.reaper.fm/files/${stdenv.lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_x86_64.tar.xz";
+    url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_x86_64.tar.xz";
     sha256 = "1cdy5ilpfidz7xyqn2i41szr24ilcmpl35aw1vbashf0b6dg48la";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     rm $out/opt/REAPER/uninstall-reaper.sh
 
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libpulseaudio libjack2 ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpulseaudio libjack2 ]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/

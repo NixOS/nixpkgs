@@ -1,4 +1,4 @@
-{ lib, stdenv, autoreconfHook, pkgconfig, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub }:
+{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "chocolate-doom";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ SDL2 SDL2_mixer SDL2_net ];
   enableParallelBuilding = true;
 

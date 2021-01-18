@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ ncurses openssl ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "Gemini Project client written in Rust with NCurses";

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, pkgconfig, autoreconfHook
+{ fetchFromGitHub, lib, stdenv, pkgconfig, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
 , qrencode, glib, protobuf, yasm, libevent
 , util-linux
@@ -6,7 +6,7 @@
 , disable_Wallet ? false
 , disable_Daemon ? false }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "dashpay";
   version = "0.12.2.3";

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, substituteAll
-, pkgconfig
+, pkg-config
 , cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
 , dbus, file, ghostscript, usbutils
 , net-snmp, openssl, perl, nettools, avahi
@@ -69,9 +69,9 @@ python3Packages.buildPythonApplication {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     removeReferencesTo
-  ] ++ stdenv.lib.optional withQt5 qt5.wrapQtAppsHook;
+  ] ++ lib.optional withQt5 qt5.wrapQtAppsHook;
 
   pythonPath = with python3Packages; [
     dbus
@@ -81,7 +81,7 @@ python3Packages.buildPythonApplication {
     usbutils
     sip
     dbus-python
-  ] ++ stdenv.lib.optionals withQt5 [
+  ] ++ lib.optionals withQt5 [
     pyqt5
     enum-compat
   ];
@@ -127,9 +127,9 @@ python3Packages.buildPythonApplication {
       --with-systraydir=$out/xdg/autostart
       --with-mimedir=$out/etc/cups
       --enable-policykit
-      ${stdenv.lib.optionalString withStaticPPDInstall "--enable-cups-ppd-install"}
+      ${lib.optionalString withStaticPPDInstall "--enable-cups-ppd-install"}
       --disable-qt4
-      ${stdenv.lib.optionalString withQt5 "--enable-qt5"}
+      ${lib.optionalString withQt5 "--enable-qt5"}
     "
 
     export makeFlags="
@@ -155,7 +155,7 @@ python3Packages.buildPythonApplication {
   # Running `hp-diagnose_plugin -g` can be used to diagnose
   # issues with plugins.
   #
-  postInstall = stdenv.lib.optionalString withPlugin ''
+  postInstall = lib.optionalString withPlugin ''
     sh ${plugin} --noexec --keep
     cd plugin_tmp
 
@@ -229,7 +229,7 @@ python3Packages.buildPythonApplication {
       --replace {,${util-linux}/bin/}logger \
       --replace {/usr,$out}/bin
     remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/*.so)
-  '' + stdenv.lib.optionalString withQt5 ''
+  '' + lib.optionalString withQt5 ''
     for f in $out/bin/hp-*;do
       wrapQtApp $f
     done

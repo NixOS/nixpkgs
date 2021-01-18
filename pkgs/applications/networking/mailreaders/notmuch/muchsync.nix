@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, notmuch, openssl, pkgconfig, sqlite, xapian, zlib
+, notmuch, openssl, pkg-config, sqlite, xapian, zlib
 }:
 stdenv.mkDerivation rec {
   version = "5";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     url = "http://www.muchsync.org/src/${pname}-${version}.tar.gz";
     sha256 = "1k2m44pj5i6vfhp9icdqs42chsp208llanc666p3d9nww8ngq2lb";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ notmuch openssl sqlite xapian zlib ];
   meta = {
     description = "Synchronize maildirs and notmuch databases";

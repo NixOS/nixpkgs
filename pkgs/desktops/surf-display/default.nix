@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
     patchShebangs $out/bin/surf-display
     wrapProgram $out/bin/surf-display \
-       --prefix PATH ':' ${stdenv.lib.makeBinPath buildInputs}
+       --prefix PATH ':' ${lib.makeBinPath buildInputs}
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

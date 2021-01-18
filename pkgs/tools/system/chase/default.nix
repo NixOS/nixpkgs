@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl ,pkgconfig, libatomic_ops , boehmgc }:
+{ lib, stdenv, fetchurl ,pkg-config, libatomic_ops , boehmgc }:
 
 stdenv.mkDerivation rec {
   pname = "chase";
   version = "0.5.2";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libatomic_ops boehmgc ] ;
   src = fetchurl {
     url = "mirror://debian/pool/main/c/chase/chase_${version}.orig.tar.gz";

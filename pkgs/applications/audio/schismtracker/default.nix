@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook python ];
 
-  buildInputs = [ SDL ] ++ stdenv.lib.optional stdenv.isLinux alsaLib;
+  buildInputs = [ SDL ] ++ lib.optional stdenv.isLinux alsaLib;
 
   meta = with lib; {
     description = "Music tracker application, free reimplementation of Impulse Tracker";

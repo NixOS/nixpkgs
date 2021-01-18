@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, cmake }:
+{ lib, stdenv, fetchzip, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "clingo";
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "ASP system to ground and solve logic programs";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
     homepage = "https://potassco.org/";
     downloadPage = "https://github.com/potassco/clingo/releases/";
   };

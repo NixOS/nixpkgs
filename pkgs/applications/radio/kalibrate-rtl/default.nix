@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkgconfig, fftw, rtl-sdr, libusb1 }:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, fftw, rtl-sdr, libusb1 }:
 
 stdenv.mkDerivation {
   name = "kalibrate-rtl-20131214";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1spbfflkqnw9s8317ppsf7b1nnkicqsmaqsnz1zf8i49ix70i6kn";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fftw rtl-sdr libusb1 ];
 
   meta = with lib; {

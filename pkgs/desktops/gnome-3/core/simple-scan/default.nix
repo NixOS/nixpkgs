@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , itstool
 , python3
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0grscz96bwj79ka4qvxh8h75avdx6824k8k38ylmaj6xbl6gi0hy";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     itstool
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
     libxml2

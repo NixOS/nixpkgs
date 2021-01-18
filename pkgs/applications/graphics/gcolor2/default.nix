@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk2, perlPackages, pkgconfig } :
+{lib, stdenv, fetchurl, gtk2, perlPackages, pkgconfig } :
 
 let version = "0.4"; in
 stdenv.mkDerivation {
@@ -27,8 +27,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Simple GTK 2 color selector";
     homepage = "http://gcolor2.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ notthemessiah ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ notthemessiah ];
+    platforms = with lib.platforms; unix;
   };
 }

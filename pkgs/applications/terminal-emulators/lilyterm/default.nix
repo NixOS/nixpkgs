@@ -29,7 +29,7 @@ let
       };
 
 in
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   inherit pname;
 

@@ -1,7 +1,7 @@
 { lib, stdenv
 , gettext
 , fetchurl
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , meson
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0drfn3wcc8l4n07qwv6p0rw2dwcd00hwzda282q62l6sasks2b2g";
   };
 
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     gettext
 

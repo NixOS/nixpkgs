@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pkg-config
 , freetype, giflib, gtk3, lcms2, libjpeg, libpng, libtiff, openjpeg, gifsicle
 }:
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
       GNU/Linux, Windows and older PC hardware.
     '';
     homepage = "http://mtpaint.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.vklquevs ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.vklquevs ];
   };
 }
 

@@ -20,16 +20,16 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig gettext intltool itstool libxml2 makeWrapper ];
   buildInputs = [ gtk3 gmime2 libnotify gnutls ]
-    ++ stdenv.lib.optional spellChecking gtkspell3
-    ++ stdenv.lib.optionals gnomeSupport [ libsecret gcr ];
+    ++ lib.optional spellChecking gtkspell3
+    ++ lib.optionals gnomeSupport [ libsecret gcr ];
 
   configureFlags = [
     "--with-dbus"
     "--with-gtk3"
     "--with-gnutls"
     "--enable-libnotify"
-  ] ++ stdenv.lib.optional spellChecking "--with-gtkspell"
-    ++ stdenv.lib.optional gnomeSupport "--enable-gkr";
+  ] ++ lib.optional spellChecking "--with-gtkspell"
+    ++ lib.optional gnomeSupport "--enable-gkr";
 
   postInstall = ''
     wrapProgram $out/bin/pan --suffix PATH : ${gnupg}/bin

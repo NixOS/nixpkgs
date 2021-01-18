@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch}:
+{lib, stdenv, fetchurl, fetchpatch}:
 
 let
    acpitool-patch-051-4 = params: fetchpatch rec {
@@ -44,8 +44,8 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "A small, convenient command-line ACPI client with a lot of features";
     homepage = "https://sourceforge.net/projects/acpitool/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.guibert ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.guibert ];
+    platforms = lib.platforms.unix;
   };
 }

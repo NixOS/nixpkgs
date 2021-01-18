@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoreconfHook
 , boost
 , db48
@@ -13,7 +13,7 @@
 , python3
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "particl-core";

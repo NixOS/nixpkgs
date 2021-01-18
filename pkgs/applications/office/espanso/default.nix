@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , rustPlatform
-, pkgconfig
+, pkg-config
 , extra-cmake-modules
 , libX11
 , libXi
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     extra-cmake-modules
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

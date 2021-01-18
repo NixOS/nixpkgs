@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, curl, git, gmp, libsigsegv, meson, ncurses, ninja
-, openssl, pkgconfig, re2c, zlib
+, openssl, pkg-config, re2c, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ninja meson ];
+  nativeBuildInputs = [ pkg-config ninja meson ];
   buildInputs = [ curl git gmp libsigsegv ncurses openssl re2c zlib ];
 
   postPatch = ''

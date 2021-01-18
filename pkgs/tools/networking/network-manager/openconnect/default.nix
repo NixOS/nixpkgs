@@ -5,7 +5,7 @@
 , libxml2
 , openconnect
 , intltool
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , networkmanager
 , gcr
@@ -55,7 +55,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [
     intltool
-    pkgconfig
+    pkg-config
     file
   ];
 

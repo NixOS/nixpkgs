@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, libX11, xorgproto, libXtst, libXi, libXext
+{ lib, stdenv, fetchFromGitHub, pkg-config, libX11, xorgproto, libXtst, libXi, libXext
 , libXinerama, libXrandr, glib, cairo, xdotool }:
 
 let release = "20180821"; in
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "0hmc14fj612z5h7gjgk95zyqab3p35c4a99snnblzxfg0p3x2f1d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 xorgproto libXtst libXi libXext libXinerama libXrandr
                   glib cairo xdotool ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk3, libxml2, gettext, libical, libnotify
+{ lib, stdenv, fetchurl, pkg-config, gtk3, libxml2, gettext, libical, libnotify
 , libarchive, gspell, webkitgtk, libgringotts, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "19h3dnjgqbawnvgnycyp4n5b6mjsp5zghn3b69b6f3xa3fyi32qy";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config gettext wrapGAppsHook ];
   buildInputs = [ gtk3 libxml2 libical libnotify libarchive
     gspell webkitgtk libgringotts ];
 

@@ -3,7 +3,7 @@
 , nix-update-script
 , fetchpatch
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , python3
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

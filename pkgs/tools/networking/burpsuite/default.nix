@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, jdk11, runtimeShell }:
 
 let
-  version = "2020.1";
+  version = "2020.12.1";
   jar = fetchurl {
     name = "burpsuite.jar";
     url = "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar";
-    sha256 = "12awfy0f8fyqjc0kza1gkmdx1g8bniw1xqaps2dhjimi6s0lq5jx";
+    sha256 = "1vdxwasvcyxyyidq3cfjphzkir358sxikgvxgl36czylap4hzjh1";
   };
   launcher = ''
     #!${runtimeShell}
-    exec ${jre}/bin/java -jar ${jar} "$@"
+    exec ${jdk11}/bin/java -jar ${jar} "$@"
   '';
 in stdenv.mkDerivation {
   pname = "burpsuite";
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
     homepage = "https://portswigger.net/burp/";
     downloadPage = "https://portswigger.net/burp/freedownload";
     license = [ lib.licenses.unfree ];
-    platforms = jre.meta.platforms;
+    platforms = jdk11.meta.platforms;
     hydraPlatforms = [];
     maintainers = with lib.maintainers; [ bennofs ];
   };

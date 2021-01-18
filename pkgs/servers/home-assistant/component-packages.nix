@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.1.2";
+  version = "2021.1.4";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -13,13 +13,13 @@
     "ads" = ps: with ps; [ pyads ];
     "advantage_air" = ps: with ps; [ advantage-air ];
     "aftership" = ps: with ps; [ pyaftership ];
-    "agent_dvr" = ps: with ps; [ ]; # missing inputs: agent-py
+    "agent_dvr" = ps: with ps; [ agent-py ];
     "air_quality" = ps: with ps; [ ];
     "airly" = ps: with ps; [ airly ];
     "airvisual" = ps: with ps; [ pyairvisual ];
     "aladdin_connect" = ps: with ps; [ ]; # missing inputs: aladdin_connect
     "alarm_control_panel" = ps: with ps; [ ];
-    "alarmdecoder" = ps: with ps; [ ]; # missing inputs: adext
+    "alarmdecoder" = ps: with ps; [ adext ];
     "alert" = ps: with ps; [ ];
     "alexa" = ps: with ps; [ aiohttp-cors ];
     "almond" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pyalmond
@@ -64,7 +64,7 @@
     "avion" = ps: with ps; [ ]; # missing inputs: avion
     "awair" = ps: with ps; [ ]; # missing inputs: python_awair
     "aws" = ps: with ps; [ aiobotocore ];
-    "axis" = ps: with ps; [ aiohttp-cors paho-mqtt ]; # missing inputs: axis
+    "axis" = ps: with ps; [ aiohttp-cors axis paho-mqtt ];
     "azure_devops" = ps: with ps; [ ]; # missing inputs: aioazuredevops
     "azure_event_hub" = ps: with ps; [ ]; # missing inputs: azure-eventhub
     "azure_service_bus" = ps: with ps; [ azure-servicebus ];
@@ -77,7 +77,7 @@
     "binary_sensor" = ps: with ps; [ ];
     "bitcoin" = ps: with ps; [ blockchain ];
     "bizkaibus" = ps: with ps; [ ]; # missing inputs: bizkaibus
-    "blackbird" = ps: with ps; [ ]; # missing inputs: pyblackbird
+    "blackbird" = ps: with ps; [ pyblackbird ];
     "blebox" = ps: with ps; [ ]; # missing inputs: blebox_uniapi
     "blink" = ps: with ps; [ ]; # missing inputs: blinkpy
     "blinksticklight" = ps: with ps; [ BlinkStick ];
@@ -350,14 +350,14 @@
     "hlk_sw16" = ps: with ps; [ ]; # missing inputs: hlk-sw16
     "home_connect" = ps: with ps; [ aiohttp-cors ]; # missing inputs: homeconnect
     "homeassistant" = ps: with ps; [ ];
-    "homekit" = ps: with ps; [ HAP-python pyqrcode aiohttp-cors ha-ffmpeg zeroconf ]; # missing inputs: PyTurboJPEG base36 fnvhash
-    "homekit_controller" = ps: with ps; [ aiohttp-cors zeroconf ]; # missing inputs: aiohomekit
+    "homekit" = ps: with ps; [ HAP-python pyqrcode aiohttp-cors base36 fnvhash ha-ffmpeg zeroconf ]; # missing inputs: PyTurboJPEG
+    "homekit_controller" = ps: with ps; [ aiohomekit aiohttp-cors zeroconf ];
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [ ]; # missing inputs: homematicip
     "homeworks" = ps: with ps; [ ]; # missing inputs: pyhomeworks
     "honeywell" = ps: with ps; [ ]; # missing inputs: somecomfort
     "horizon" = ps: with ps; [ ]; # missing inputs: horimote
-    "hp_ilo" = ps: with ps; [ ]; # missing inputs: python-hpilo
+    "hp_ilo" = ps: with ps; [ python-hpilo ];
     "html5" = ps: with ps; [ aiohttp-cors pywebpush ];
     "http" = ps: with ps; [ aiohttp-cors ];
     "htu21d" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
@@ -653,7 +653,7 @@
     "quantum_gateway" = ps: with ps; [ ]; # missing inputs: quantum-gateway
     "qvr_pro" = ps: with ps; [ ]; # missing inputs: pyqvrpro
     "qwikswitch" = ps: with ps; [ ]; # missing inputs: pyqwikswitch
-    "rachio" = ps: with ps; [ aiohttp-cors hass-nabucasa ]; # missing inputs: rachiopy
+    "rachio" = ps: with ps; [ aiohttp-cors hass-nabucasa rachiopy ];
     "radarr" = ps: with ps; [ ];
     "radiotherm" = ps: with ps; [ ]; # missing inputs: radiotherm
     "rainbird" = ps: with ps; [ ]; # missing inputs: pyrainbird
@@ -682,7 +682,7 @@
     "rmvtransport" = ps: with ps; [ PyRMVtransport ];
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [ ]; # missing inputs: rokuecp
-    "roomba" = ps: with ps; [ ]; # missing inputs: roombapy
+    "roomba" = ps: with ps; [ roombapy ];
     "roon" = ps: with ps; [ ]; # missing inputs: roonapi
     "route53" = ps: with ps; [ boto3 ];
     "rova" = ps: with ps; [ ]; # missing inputs: rova
@@ -722,7 +722,7 @@
     "seventeentrack" = ps: with ps; [ ]; # missing inputs: py17track
     "sharkiq" = ps: with ps; [ ]; # missing inputs: sharkiqpy
     "shell_command" = ps: with ps; [ ];
-    "shelly" = ps: with ps; [ ]; # missing inputs: aioshelly
+    "shelly" = ps: with ps; [ aioshelly ];
     "shiftr" = ps: with ps; [ paho-mqtt ];
     "shodan" = ps: with ps; [ shodan ];
     "shopping_list" = ps: with ps; [ aiohttp-cors ];
@@ -794,7 +794,7 @@
     "supervisord" = ps: with ps; [ ];
     "supla" = ps: with ps; [ ]; # missing inputs: asyncpysupla
     "surepetcare" = ps: with ps; [ ]; # missing inputs: surepy
-    "swiss_hydrological_data" = ps: with ps; [ ]; # missing inputs: swisshydrodata
+    "swiss_hydrological_data" = ps: with ps; [ swisshydrodata ];
     "swiss_public_transport" = ps: with ps; [ python-opendata-transport ];
     "swisscom" = ps: with ps; [ ];
     "switch" = ps: with ps; [ ];
@@ -816,7 +816,7 @@
     "tank_utility" = ps: with ps; [ ]; # missing inputs: tank_utility
     "tankerkoenig" = ps: with ps; [ ]; # missing inputs: pytankerkoenig
     "tapsaff" = ps: with ps; [ ]; # missing inputs: tapsaff
-    "tasmota" = ps: with ps; [ aiohttp-cors paho-mqtt ]; # missing inputs: hatasmota
+    "tasmota" = ps: with ps; [ aiohttp-cors hatasmota paho-mqtt ];
     "tautulli" = ps: with ps; [ ]; # missing inputs: pytautulli
     "tcp" = ps: with ps; [ ];
     "ted5000" = ps: with ps; [ xmltodict ];
@@ -846,7 +846,7 @@
     "todoist" = ps: with ps; [ todoist ];
     "tof" = ps: with ps; [ ]; # missing inputs: RPi.GPIO VL53L1X2
     "tomato" = ps: with ps; [ ];
-    "toon" = ps: with ps; [ aiohttp-cors hass-nabucasa ]; # missing inputs: toonapi
+    "toon" = ps: with ps; [ aiohttp-cors hass-nabucasa toonapi ];
     "torque" = ps: with ps; [ aiohttp-cors ];
     "totalconnect" = ps: with ps; [ ]; # missing inputs: total_connect_client
     "touchline" = ps: with ps; [ ]; # missing inputs: pytouchline
@@ -927,7 +927,7 @@
     "whois" = ps: with ps; [ python-whois ];
     "wiffi" = ps: with ps; [ ]; # missing inputs: wiffi
     "wilight" = ps: with ps; [ pywilight ];
-    "wink" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pubnubsub-handler python-wink
+    "wink" = ps: with ps; [ aiohttp-cors pubnubsub-handler ]; # missing inputs: python-wink
     "wirelesstag" = ps: with ps; [ ]; # missing inputs: wirelesstagpy
     "withings" = ps: with ps; [ aiohttp-cors ]; # missing inputs: withings-api
     "wled" = ps: with ps; [ wled ];

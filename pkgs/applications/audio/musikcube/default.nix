@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     ncurses
     pulseaudio
     taglib
-  ] ++ stdenv.lib.optional systemdSupport systemd;
+  ] ++ lib.optional systemdSupport systemd;
 
   cmakeFlags = [
     "-DDISABLE_STRIP=true"

@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , makeWrapper
 , symlinkJoin
-, pkgconfig
+, pkg-config
 , libtool
 , gtk2
 , libxml2
@@ -19,8 +19,8 @@
 }:
 let common_meta = {
   homepage = "http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX";
-  license = with stdenv.lib.licenses; epson;
-  platforms = with stdenv.lib.platforms; linux;
+  license = with lib.licenses; epson;
+  platforms = with lib.platforms; linux;
 };
 in
 ############################
@@ -261,7 +261,7 @@ let plugins = {
 in
 let fwdir = symlinkJoin {
   name = "esci-firmware-dir";
-  paths = stdenv.lib.mapAttrsToList (name: value: value + /share/esci) plugins;
+  paths = lib.mapAttrsToList (name: value: value + /share/esci) plugins;
 };
 in
 let iscan-data = stdenv.mkDerivation rec {
@@ -295,7 +295,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ma76jj0k3bz0fy06fiyl4di4y77rcryb0mwjmzs5ms2vq9rjysr";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gtk2
     libxml2
@@ -337,7 +337,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/iscan-registry --prefix PATH : ${getopt}/bin
     registry=$out/bin/iscan-registry;
   '' +
-  stdenv.lib.concatStrings (stdenv.lib.mapAttrsToList
+  lib.concatStrings (lib.mapAttrsToList
     (name: value: ''
       plugin=${value};
       ${value.passthru.registrationCommand}
@@ -349,7 +349,7 @@ stdenv.mkDerivation rec {
       Includes gui-less iscan (aka. Image Scan! for Linux).
       Supported hardware: at least :
     '' +
-    stdenv.lib.concatStringsSep ", " (stdenv.lib.mapAttrsToList (name: value: value.passthru.hw) plugins);
-    maintainers = with stdenv.lib.maintainers; [ symphorien dominikh ];
+    lib.concatStringsSep ", " (lib.mapAttrsToList (name: value: value.passthru.hw) plugins);
+    maintainers = with lib.maintainers; [ symphorien dominikh ];
   };
 }

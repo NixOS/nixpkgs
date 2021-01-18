@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, vala, pkgconfig, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook
+{ lib, stdenv, fetchurl, vala, pkg-config, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook
 , gettext, itstool, clutter, clutter-gtk, libxml2, appstream-glib
 , meson, ninja, python3 }:
 
@@ -7,12 +7,12 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/lightsoff/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/lightsoff/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0dpnnw8v1yk1p0y08f9c9xkgswqlm8x83dfn96798nif2zbypdnh";
   };
 
   nativeBuildInputs = [
-    vala pkgconfig wrapGAppsHook itstool gettext appstream-glib libxml2
+    vala pkg-config wrapGAppsHook itstool gettext appstream-glib libxml2
     meson ninja python3
   ];
   buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk-pixbuf librsvg clutter clutter-gtk ];

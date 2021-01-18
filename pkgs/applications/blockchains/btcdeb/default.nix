@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkgconfig
 , openssl
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "btcdeb-unstable";
   version = "200806";

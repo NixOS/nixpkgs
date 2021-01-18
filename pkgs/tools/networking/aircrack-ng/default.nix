@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, libpcap, openssl, zlib, wirelesstools
-, iw, ethtool, pciutils, libnl, pkgconfig, makeWrapper
+, iw, ethtool, pciutils, libnl, pkg-config, makeWrapper
 , autoreconfHook, usbutils }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ix2k64qg7x3w0bzdsbk1m50kcpq1ws59g3zkwiafvpwdr4gs2sg";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper autoreconfHook ];
+  nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook ];
   buildInputs = [ libpcap openssl zlib libnl iw ethtool pciutils ];
 
   patchPhase = ''

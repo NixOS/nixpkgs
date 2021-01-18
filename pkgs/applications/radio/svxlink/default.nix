@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, pkgconfig, fetchFromGitHub, makeDesktopItem, alsaLib, speex
+{ lib, stdenv, cmake, pkg-config, fetchFromGitHub, makeDesktopItem, alsaLib, speex
 , libopus, curl, gsm, libgcrypt, libsigcxx, popt, qtbase, qttools
 , wrapQtAppsHook, rtl-sdr, tcl, doxygen, groff }:
 
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   ];
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [ cmake pkgconfig doxygen groff wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config doxygen groff wrapQtAppsHook ];
 
   buildInputs = [
     alsaLib

@@ -265,7 +265,7 @@ in
 
   hitimes = attrs: {
     buildInputs =
-      stdenv.lib.optionals stdenv.isDarwin
+      lib.optionals stdenv.isDarwin
         [ darwin.apple_sdk.frameworks.CoreServices ];
   };
 
@@ -392,7 +392,8 @@ in
   nokogiri = attrs: {
     buildFlags = [
       "--use-system-libraries"
-      "--with-zlib-dir=${zlib.dev}"
+      "--with-zlib-lib=${zlib.out}/lib"
+      "--with-zlib-include=${zlib.dev}/include"
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
       "--with-xslt-lib=${libxslt.out}/lib"
@@ -514,7 +515,7 @@ in
         --replace "gobject-2.0" "${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"
 
       substituteInPlace lib/vips.rb \
-        --replace "vips_libname = 'vips'" "vips_libname = '${stdenv.lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}'"
+        --replace "vips_libname = 'vips'" "vips_libname = '${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}'"
     '';
   };
 
@@ -631,7 +632,7 @@ in
   };
 
   zookeeper = attrs: {
-    buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools ];
+    buildInputs = lib.optionals stdenv.isDarwin [ darwin.cctools ];
     dontBuild = false;
     postPatch = ''
       sed -i ext/extconf.rb -e "4a \

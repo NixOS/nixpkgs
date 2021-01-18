@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , python3Packages
 , pango
 , librsvg
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     makeWrapper
     python3Packages.wrapPython
   ];

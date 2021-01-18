@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, substituteAll
-, pkgconfig, gobject-introspection, gdk-pixbuf
+, pkg-config, gobject-introspection, gdk-pixbuf
 , gtk3, mate, python3, dropbox }:
 
 let
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.24.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1rcn82q58mv9hn5xamvzay2pw1szfk6zns94362476fcp786lji2";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gobject-introspection
     gdk-pixbuf
     (python3.withPackages (ps: with ps; [

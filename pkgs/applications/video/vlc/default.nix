@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, autoreconfHook
 , libarchive, perl, xorg, libdvdnav, libbluray
 , zlib, a52dec, libmad, faad2, ffmpeg_3, alsaLib
-, pkgconfig, dbus, fribidi, freefont_ttf, libebml, libmatroska
+, pkg-config, dbus, fribidi, freefont_ttf, libebml, libmatroska
 , libvorbis, libtheora, speex, lua5, libgcrypt, libgpgerror, libupnp
 , libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
@@ -9,8 +9,9 @@
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
 , onlyLibVLC ? false
-, withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null, wrapQtAppsHook ? null
+, withQt5 ? true, qtbase, qtsvg, qtx11extras, wrapQtAppsHook
 , jackSupport ? false
+, skins2Support ? !onlyLibVLC, freetype
 , removeReferencesTo
 , chromecastSupport ? true, protobuf, libmicrodns
 }:
@@ -20,8 +21,6 @@
 #   networking.firewall.allowedTCPPorts = [ 8010 ];
 
 with lib;
-
-assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null);
 
 stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
@@ -52,10 +51,11 @@ stdenv.mkDerivation rec {
     fluidsynth wayland wayland-protocols
   ] ++ optional (!stdenv.hostPlatform.isAarch64) live555
     ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
+    ++ optionals skins2Support (with xorg; [ libXpm freetype libXext libXinerama ])
     ++ optional jackSupport libjack2
     ++ optionals chromecastSupport [ protobuf libmicrodns ];
 
-  nativeBuildInputs = [ autoreconfHook perl pkgconfig removeReferencesTo ]
+  nativeBuildInputs = [ autoreconfHook perl pkg-config removeReferencesTo ]
     ++ optionals withQt5 [ wrapQtAppsHook ];
 
   enableParallelBuilding = true;
@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-kde-solid=$out/share/apps/solid/actions"
   ] ++ optional onlyLibVLC "--disable-vlc"
+    ++ optional skins2Support "--enable-skins2"
     ++ optionals chromecastSupport [
     "--enable-sout"
     "--enable-chromecast"

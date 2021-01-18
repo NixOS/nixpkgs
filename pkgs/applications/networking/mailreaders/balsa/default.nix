@@ -15,7 +15,7 @@
 , libnotify
 , libsecret
 , openssl
-, pkgconfig
+, pkg-config
 , webkitgtk
 , wrapGAppsHook
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
     gobject-introspection
     wrapGAppsHook

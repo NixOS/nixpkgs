@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, fftw, hamlib, libpulseaudio, libGL, libX11, liquid-dsp,
-  pkgconfig, soapysdr-with-plugins, wxGTK31-gtk3, enableDigitalLab ? false }:
+  pkg-config, soapysdr-with-plugins, wxGTK31-gtk3, enableDigitalLab ? false }:
 
 stdenv.mkDerivation rec {
   pname = "cubicsdr";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ fftw hamlib libpulseaudio libGL libX11 liquid-dsp soapysdr-with-plugins wxGTK31-gtk3 ];
 

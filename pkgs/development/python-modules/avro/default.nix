@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bbf9f89fd20b4cf3156f10ec9fbce83579ece3e0403546c305957f9dac0d2f03";
+    sha256 = "b3a405df5aa8654b992d2aca7b80482b858a1919a44dc0b10a682162e8ee340a";
   };
 
   patchPhase = ''

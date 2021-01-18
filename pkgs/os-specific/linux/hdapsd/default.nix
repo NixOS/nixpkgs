@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let version = "20141203"; in
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   postInstall = builtins.readFile ./postInstall.sh;
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Hard Drive Active Protection System Daemon";
       homepage = "http://hdaps.sf.net/";
       license = licenses.gpl2;

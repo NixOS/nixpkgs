@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://jcorporation.github.io/mympd";
     description = "A standalone and mobile friendly web mpd client with a tiny footprint and advanced features";
-    maintainers = [ stdenv.lib.maintainers.doronbehar ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.doronbehar ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

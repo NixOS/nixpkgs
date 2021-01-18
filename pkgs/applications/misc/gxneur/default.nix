@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, gtk2, xorg, glib, xneur, libglade, GConf, libappindicator-gtk2, pcre }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, gtk2, xorg, glib, xneur, libglade, GConf, libappindicator-gtk2, pcre }:
 
 stdenv.mkDerivation {
   name = "gxneur-0.20.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
   buildInputs = [
     xorg.libX11 glib gtk2 xorg.libXpm xorg.libXt xorg.libXext xneur
     libglade GConf pcre libappindicator-gtk2

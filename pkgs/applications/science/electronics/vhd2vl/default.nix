@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "17va2pil4938j8c93anhy45zzgnvq3k71a7glj02synfrsv6fs8n";
   };
 
-  patches = stdenv.lib.optionals (!stdenv.isAarch64) [
+  patches = lib.optionals (!stdenv.isAarch64) [
     # fix build with verilog 11.0 - https://github.com/ldoolitt/vhd2vl/pull/15
     # for some strange reason, this is not needed for aarch64
     (fetchpatch {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, autoconf, automake, gettext
+{ lib, stdenv, fetchurl, pkg-config, autoconf, automake, gettext
 , fluxbox, bc, gtkmm2, glibmm, libglademm, libsigcxx }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "d1c81a6a38c0faad02943ad65d6d0314bd205c6de841669a2efe43e4c503e63d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake gettext fluxbox bc gtkmm2 glibmm libglademm libsigcxx ];
 
   preConfigure = ''

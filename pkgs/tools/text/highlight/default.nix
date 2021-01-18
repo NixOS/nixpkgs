@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, pkgconfig, swig, perl, gcc }:
+{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, pkg-config, swig, perl, gcc }:
 
 with lib;
 
@@ -16,7 +16,7 @@ let
 
     enableParallelBuilding = true;
 
-    nativeBuildInputs = [ pkgconfig swig perl ] ++ optional stdenv.isDarwin gcc;
+    nativeBuildInputs = [ pkg-config swig perl ] ++ optional stdenv.isDarwin gcc;
 
     buildInputs = [ getopt lua boost ];
 

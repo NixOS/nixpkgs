@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform
-, darwin, fontconfig, harfbuzz, openssl, pkgconfig }:
+, darwin, fontconfig, harfbuzz, openssl, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0jzngl1iwrq20cx3l0mwdrrddvyw977rwb75nz1k4hkxjnicc1ga";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ fontconfig harfbuzz openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);

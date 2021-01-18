@@ -4,7 +4,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gnome3
 , perl
 , gettext
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-settings-daemon/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0r010wzw3dj87mapzvq15zv93i86wg0x0rpii3x2wapq3bcj30g2";
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     perl
     gettext
     libxml2

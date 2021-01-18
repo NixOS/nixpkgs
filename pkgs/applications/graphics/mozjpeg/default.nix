@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libpng, nasm }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libpng, nasm }:
 
 stdenv.mkDerivation rec {
   version = "3.3.1";
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
       The idea is to reduce transfer times for JPEGs on the Web, thus reducing page load times.
     '';
     homepage = "https://github.com/mozilla/mozjpeg";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.aristid ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.aristid ];
+    platforms = lib.platforms.all;
   };
 }

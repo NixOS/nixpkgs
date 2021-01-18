@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig
+{ stdenv, lib, fetchurl, pkg-config
 , curl, SDL2, libGLU, libGL, glew, ncurses, c-ares
 , Carbon, CoreServices }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "16brxqmfiyz4j4lb8ihzjcbwqmpsms6vm3ijbp34lnw0blbwdjb2";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ curl SDL2 libGLU libGL glew ncurses c-ares ]
     ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices ];
 

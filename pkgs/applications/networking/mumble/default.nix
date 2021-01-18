@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, qt5
+{ lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, qt5
 , avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsaLib, python
 , rnnoise
@@ -16,7 +16,7 @@ assert pulseSupport -> libpulseaudio != null;
 assert iceSupport -> zeroc-ice != null;
 assert grpcSupport -> (grpc != null && c-ares != null && abseil-cpp != null && which != null);
 
-with stdenv.lib;
+with lib;
 let
   generic = overrides: source: qt5.mkDerivation (source // overrides // {
     pname = overrides.type;

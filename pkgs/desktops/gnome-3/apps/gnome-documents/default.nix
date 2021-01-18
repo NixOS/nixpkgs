@@ -6,7 +6,7 @@
 , fetchpatch
 , evince
 , gjs
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , tracker
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-documents/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1qph567mapg3s1a26k7b8y57g9bklhj2mh8xm758z9zkms20xafq";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     itstool
     libxslt

@@ -15,7 +15,7 @@
 , libuv
 , libzen
 , pcre-cpp
-, pkgconfig
+, pkg-config
 , readline
 , sqlite
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

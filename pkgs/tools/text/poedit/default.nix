@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, gettext, pkgconfig, wxGTK30-gtk3,
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, gettext, pkg-config, wxGTK30-gtk3,
   boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk3, gtkspell3, pugixml,
   nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook
-    libxslt xmlto boost libtool pkgconfig ];
+    libxslt xmlto boost libtool pkg-config ];
 
   buildInputs = [ lucenepp nlohmann_json wxGTK30-gtk3 icu pugixml gtk3 gtkspell3 hicolor-icon-theme ];
 

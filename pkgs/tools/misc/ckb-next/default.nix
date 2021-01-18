@@ -1,5 +1,5 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub, substituteAll, udev
-, pkgconfig, qtbase, cmake, zlib, kmod }:
+, pkg-config, qtbase, cmake, zlib, kmod }:
 
 mkDerivation rec {
   version = "0.4.2";
@@ -19,7 +19,7 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
   ];
 

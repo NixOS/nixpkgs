@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, glib, dbus-glib, libxklavier,
+{ lib, stdenv, fetchurl, pkg-config, gettext, glib, dbus-glib, libxklavier,
   libcanberra-gtk3, libnotify, nss, polkit, dconf, gtk3, mate,
   pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
   wrapGAppsHook }:
@@ -8,13 +8,13 @@ stdenv.mkDerivation rec {
   version = "1.24.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0n1ywr3ir5p536s7azdbw2mh40ylqlpx3a74mjrivbms1rpjxyab";
   };
 
   nativeBuildInputs = [
     gettext
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
     mate.mate-desktop
     mate.libmatekbd
     mate.libmatemixer
-  ] ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
+  ] ++ lib.optional pulseaudioSupport libpulseaudio;
 
-  configureFlags = stdenv.lib.optional pulseaudioSupport "--enable-pulse";
+  configureFlags = lib.optional pulseaudioSupport "--enable-pulse";
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 

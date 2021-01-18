@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, libGLU, libGL, libX11, xorgproto, tcl, freeglut, freetype
 , sfml, libXi
 , libXmu, libXext, libXt, libSM, libICE
-, libpng, pkgconfig, gettext, intltool
+, libpng, pkg-config, gettext, intltool
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     libGLU libGL libX11 xorgproto tcl freeglut freetype
     sfml libXi
     libXmu libXext libXt libSM libICE
-    libpng pkgconfig gettext intltool
+    libpng pkg-config gettext intltool
   ];
 
   configureFlags = [ "--with-tcl=${tcl}/lib" ];

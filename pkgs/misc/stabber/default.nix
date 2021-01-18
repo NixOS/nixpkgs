@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, expat
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, expat
 , libmicrohttpd
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   pname = "stabber-unstable";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     mkdir m4
   '';
 
-  buildInputs = [ autoreconfHook pkgconfig glib expat libmicrohttpd ];
+  buildInputs = [ autoreconfHook pkg-config glib expat libmicrohttpd ];
 
   meta = {
     description = "Stubbed XMPP Server";

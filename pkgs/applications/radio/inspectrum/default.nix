@@ -1,7 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , cmake
 , boost
 , fftwFloat
@@ -22,7 +22,7 @@ mkDerivation rec {
     sha256 = "1x6nyn429pk0f7lqzskrgsbq09mq5787xd4piic95add6n1cc355";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
     fftwFloat
     boost

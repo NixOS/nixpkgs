@@ -3,7 +3,7 @@
 , ninja
 , gettext
 , fetchurl
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , icu
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0v8iymg72m83ikxxyhapvz5v8zh8hlr1pw7n215cy3p8q6yg41cb";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
     buildPackages.glib

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, zlib, readline, openssl
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, zlib, readline, openssl
 , libiconv, pcsclite, libassuan, libXt
 , docbook_xsl, libxslt, docbook_xml_dtd_412
 , Carbon, PCSC, buildPackages
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OjOfA1pIu8NeN+hPuow5UVMKsg0PrsLojw5h05/Qm+o=";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     zlib readline openssl libassuan
     libXt libxslt libiconv docbook_xml_dtd_412

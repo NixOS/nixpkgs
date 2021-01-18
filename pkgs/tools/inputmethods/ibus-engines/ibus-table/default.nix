@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, autoreconfHook, docbook2x, pkgconfig
+, autoreconfHook, docbook2x, pkg-config
 , gtk3, dconf, gobject-introspection
 , ibus, python3, wrapGAppsHook }:
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docbook2x
-    pkgconfig
+    pkg-config
     gobject-introspection
     wrapGAppsHook
   ];

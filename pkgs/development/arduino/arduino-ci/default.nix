@@ -2,7 +2,7 @@
 
 let
 
-  runtimePath = stdenv.lib.makeBinPath [
+  runtimePath = lib.makeBinPath [
     arduino-cli
     python3 # required by the esp8266 core
   ];

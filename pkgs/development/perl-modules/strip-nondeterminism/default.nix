@@ -17,7 +17,7 @@ buildPerlPackage rec {
   # stray test failure
   doCheck = false;
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ shortenPerlShebang ];
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ shortenPerlShebang ];
   buildInputs = [ ArchiveZip ArchiveCpio file ];
 
   perlPostHook = ''
@@ -26,7 +26,7 @@ buildPerlPackage rec {
     rm $out/share/man/man1/dh_strip_nondeterminism.1.gz
   '';
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang $out/bin/strip-nondeterminism
   '';
 

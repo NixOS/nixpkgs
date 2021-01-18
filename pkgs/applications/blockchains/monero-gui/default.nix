@@ -1,4 +1,4 @@
-{ stdenv, wrapQtAppsHook, makeDesktopItem
+{ lib, stdenv, wrapQtAppsHook, makeDesktopItem
 , fetchFromGitHub
 , cmake, qttools, pkgconfig
 , qtbase, qtdeclarative, qtgraphicaleffects
@@ -15,7 +15,7 @@
 ,   python3  ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
 

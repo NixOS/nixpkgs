@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libX11, libXScrnSaver, libXext, glib, dbus, pkgconfig, systemd }:
+{ lib, stdenv, fetchgit, libX11, libXScrnSaver, libXext, glib, dbus, pkgconfig, systemd }:
 
 stdenv.mkDerivation {
   name = "lightum-2014-06-07";
@@ -31,8 +31,8 @@ stdenv.mkDerivation {
   meta = {
     description = "MacBook automatic light sensor daemon";
     homepage = "https://github.com/poliva/lightum";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ puffnfresh ];
+    platforms = lib.platforms.linux;
   };
 }

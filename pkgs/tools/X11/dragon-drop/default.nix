@@ -1,4 +1,4 @@
-{ lib, stdenv, gtk, pkgconfig, fetchFromGitHub }:
+{ lib, stdenv, gtk, pkg-config, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "dragon-drop";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fgzz39007fdjwq72scp0qygp2v3zc5f1xkm0sxaa8zxm25g1bra";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk ];
 
   installPhase = ''

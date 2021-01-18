@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, wrapGAppsHook
 , gettext, meson, gsound, librsvg, itstool, vala
 , python3, ninja, desktop-file-utils }:
 
@@ -7,12 +7,12 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/four-in-a-row/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/four-in-a-row/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "10ji60bdfdzb6wk5dkwjc3yww7hqi3yjcx1k1z7x2521h2dpdli1";
   };
 
   nativeBuildInputs = [
-    pkgconfig wrapGAppsHook gettext meson itstool vala
+    pkg-config wrapGAppsHook gettext meson itstool vala
     ninja python3 desktop-file-utils
   ];
   buildInputs = [ gtk3 gsound librsvg gnome3.adwaita-icon-theme ];

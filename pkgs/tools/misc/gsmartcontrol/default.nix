@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, smartmontools, autoreconfHook, gettext, gtkmm3, pkgconfig, wrapGAppsHook, pcre-cpp, gnome3 }:
+{ fetchurl, lib, stdenv, smartmontools, autoreconfHook, gettext, gtkmm3, pkg-config, wrapGAppsHook, pcre-cpp, gnome3 }:
 
 stdenv.mkDerivation rec {
   version="1.1.3";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     ./fix-paths.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook gettext pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook gettext pkg-config wrapGAppsHook ];
   buildInputs = [ gtkmm3 pcre-cpp gnome3.adwaita-icon-theme ];
 
   enableParallelBuilding = true;

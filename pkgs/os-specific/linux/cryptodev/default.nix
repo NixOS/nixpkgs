@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, kernel ? false }:
+{ fetchFromGitHub, lib, stdenv, kernel ? false }:
 
 stdenv.mkDerivation rec {
   pname = "cryptodev-linux-1.11";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Device that allows access to Linux kernel cryptographic drivers";
     homepage = "http://cryptodev-linux.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

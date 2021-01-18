@@ -1,4 +1,4 @@
-{ lib, stdenv, meson, ninja, vala, gettext, itstool, fetchurl, pkgconfig, libxml2
+{ lib, stdenv, meson, ninja, vala, gettext, itstool, fetchurl, pkg-config, libxml2
 , gtk3, glib, gtksourceview4, wrapGAppsHook, gobject-introspection, python3
 , gnome3, mpfr, gmp, libsoup, libmpc, gsettings-desktop-schemas, libgee }:
 
@@ -7,12 +7,12 @@ stdenv.mkDerivation rec {
   version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-calculator/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-calculator/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0sri58cp6v07cqpdsf8dhf9dnykz305kvkx0l9dd25g06djcr0wc";
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala gettext itstool wrapGAppsHook python3
+    meson ninja pkg-config vala gettext itstool wrapGAppsHook python3
     gobject-introspection # for finding vapi files
   ];
 

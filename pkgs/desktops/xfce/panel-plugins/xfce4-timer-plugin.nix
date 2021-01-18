@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk3, hicolor-icon-theme, xfce }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk3, hicolor-icon-theme, xfce }:
 
 let
   category = "panel-plugins";
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
   version = "1.7.1";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "1qr4m3n2l3rvsizsr3h7fyfajszfalqm7rhvjx2yjj8r3f8x4ljb";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
   ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "format" ];
-  
+
   passthru.updateScript = xfce.updateScript {
     inherit pname version;
     attrPath = "xfce.${pname}";

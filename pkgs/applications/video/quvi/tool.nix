@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkgconfig, lua5, curl, quvi_scripts, libquvi, lua5_sockets, glib, makeWrapper}:
+{lib, stdenv, fetchurl, pkg-config, lua5, curl, quvi_scripts, libquvi, lua5_sockets, glib, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "quvi";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h52s265rp3af16dvq1xlscp2926jqap2l4ah94vrfchv6m1hffb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ lua5 curl quvi_scripts libquvi glib makeWrapper ];
   postInstall = ''
       wrapProgram $out/bin/quvi --set LUA_PATH "${lua5_sockets}/share/lua/${lua5.luaversion}/?.lua"

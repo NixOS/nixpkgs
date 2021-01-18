@@ -35,7 +35,7 @@ buildGoModule rec {
 
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs =
-    stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   meta = with lib; {
     homepage = "https://geth.ethereum.org/";

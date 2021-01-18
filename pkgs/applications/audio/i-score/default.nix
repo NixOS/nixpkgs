@@ -22,7 +22,7 @@
   qttools,
   qtwebsockets,
   rtaudio,
-  stdenv
+  lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -78,8 +78,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An interactive sequencer for the intermedia arts";
     homepage = "http://i-score.org/";
-    license = stdenv.lib.licenses.cecill20;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.cecill20;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

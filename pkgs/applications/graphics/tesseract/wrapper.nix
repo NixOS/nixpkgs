@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, tesseractBase, languages
+{ lib, stdenv, makeWrapper, tesseractBase, languages
 
 # A list of languages like [ "eng" "spa" … ] or `null` for all available languages
 , enableLanguages ? null
@@ -54,5 +54,5 @@ in
   if enableLanguagesHash == null then
     tesseract
   else
-    stdenv.lib.warn "Argument `enableLanguagesHash` is obsolete and can be removed."
+    lib.warn "Argument `enableLanguagesHash` is obsolete and can be removed."
     tesseract

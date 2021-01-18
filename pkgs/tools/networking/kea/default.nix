@@ -1,15 +1,22 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, openssl, botan2, log4cplus
-, boost, python3, postgresql, libmysqlclient, gmp, bzip2 }:
-
-let inherit (stdenv) lib; in
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, pkg-config
+, boost
+, botan2
+, libmysqlclient
+, log4cplus
+, postgresql
+, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "kea";
-  version = "1.5.0-P1";
+  version = "1.8.2";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0bqxzp3f7cmraa5davj2az1hx1gbbchqzlz3ai26c802agzafyhz";
+    sha256 = "0f8x1blfmbcak0cd21jm1zpz4w8iimldhjilwkwgvmmrxnmsfv28";
   };
 
   patches = [ ./dont-create-var.patch ];
@@ -20,15 +27,24 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+    "--enable-perfdhcp"
+    "--enable-shell"
     "--localstatedir=/var"
-    "--with-pgsql=${postgresql}/bin/pg_config"
     "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config"
+    "--with-pgsql=${postgresql}/bin/pg_config"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
   buildInputs = [
-    openssl log4cplus boost python3 libmysqlclient
-    botan2 gmp bzip2
+    boost
+    botan2
+    libmysqlclient
+    log4cplus
+    python3
   ];
 
   enableParallelBuilding = true;

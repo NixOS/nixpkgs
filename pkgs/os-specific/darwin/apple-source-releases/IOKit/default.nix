@@ -2,7 +2,7 @@
 
 # Someday it'll make sense to split these out into their own packages, but today is not that day.
 appleDerivation {
-  srcs = stdenv.lib.attrValues IOKitSrcs;
+  srcs = lib.attrValues IOKitSrcs;
   sourceRoot = ".";
 
   phases = [ "unpackPhase" "installPhase" ];

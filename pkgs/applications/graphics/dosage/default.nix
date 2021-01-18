@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ lib, stdenv, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
   pname = "dosage";
@@ -23,6 +23,6 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "A comic strip downloader and archiver";
     homepage = "https://dosage.rocks/";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
   };
 }

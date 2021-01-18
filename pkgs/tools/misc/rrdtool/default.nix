@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo, groff
+{ fetchurl, lib, stdenv, gettext, perl, pkg-config, libxml2, pango, cairo, groff
 , tcl-8_5, darwin }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1nsqra0g2nja19akmf9x5y9hhgc35ml3w9dcdz2ayz7zgvmzm6d1";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gettext perl libxml2 pango cairo groff ]
     ++ lib.optionals stdenv.isDarwin [ tcl-8_5 darwin.apple_sdk.frameworks.ApplicationServices ];

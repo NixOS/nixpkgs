@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, libwnck3, libnotify, dbus-glib, makeWrapper, gsettings-desktop-schemas }:
+{ lib, stdenv, fetchurl, pkg-config, glib, libwnck3, libnotify, dbus-glib, makeWrapper, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "notify-osd";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g5a7a680b05x27apz0y1ldl5csxpp152wqi42s107jymbp0s20j";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     glib libwnck3 libnotify dbus-glib makeWrapper
     gsettings-desktop-schemas

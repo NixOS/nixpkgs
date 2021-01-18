@@ -2,7 +2,7 @@
 , mkDerivation
 , fetchurl
 , poppler_utils
-, pkgconfig
+, pkg-config
 , libpng
 , imagemagick
 , libjpeg
@@ -55,7 +55,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig qmake removeReferencesTo ];
+  nativeBuildInputs = [ pkg-config qmake removeReferencesTo ];
 
   CALIBRE_PY3_PORT = builtins.toString pythonPackages.isPy3k;
 

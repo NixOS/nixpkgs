@@ -1,5 +1,5 @@
 {lib, stdenv, fetchurl, SDL, libGLU, libGL, SDL_image, freealut, openal, libvorbis,
-pkgconfig}:
+pkg-config}:
 
 stdenv.mkDerivation {
   name = "ultimate-stunts-0.7.6.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0rd565ml6l927gyq158klhni7myw8mgllhv0xl1fg9m8hlzssgrv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL libGLU libGL SDL_image freealut openal libvorbis ];
 
   postPatch = ''

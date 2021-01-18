@@ -22,9 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Convert DjVu files to PDF files";
-    homepage = "https://0x2a.at/s/projects/djvu2pdf";
-    license = lib.licenses.gpl2;
+    homepage = "https://0x2a.at/site/projects/djvu2pdf/";
+    license = lib.licenses.gpl1Only;
     platforms = lib.platforms.all;
-    inherit version;
   };
 }

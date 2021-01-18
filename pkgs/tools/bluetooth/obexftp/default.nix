@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, openobex, bluez, cmake }:
+{ lib, stdenv, fetchurl, pkg-config, openobex, bluez, cmake }:
    
 stdenv.mkDerivation rec {
   name = "obexftp-0.24.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "18w9r78z78ri5qc8fjym4nk1jfbrkyr789sq7rxrkshf1a7b83yl";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [ bluez ];
 

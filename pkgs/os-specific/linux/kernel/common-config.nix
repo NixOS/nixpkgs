@@ -10,14 +10,14 @@
 # hardware problems with a new one.
 
 # Configuration
-{ stdenv, version
+{ lib, stdenv, version
 
 , features ? { grsecurity = false; xen_dom0 = false; }
 }:
 
-with stdenv.lib;
-with stdenv.lib.kernel;
-with (stdenv.lib.kernel.whenHelpers version);
+with lib;
+with lib.kernel;
+with (lib.kernel.whenHelpers version);
 
 let
 
@@ -196,6 +196,11 @@ let
       INET_UDP_DIAG     = module;
       INET_RAW_DIAG     = whenAtLeast "4.14" module;
       INET_DIAG_DESTROY = whenAtLeast "4.9" yes;
+
+      # enable multipath-tcp
+      MPTCP           = whenAtLeast "5.6" yes;
+      MPTCP_IPV6      = whenAtLeast "5.6" yes;
+      INET_MPTCP_DIAG = whenAtLeast "5.9" module;
     };
 
     wireless = {

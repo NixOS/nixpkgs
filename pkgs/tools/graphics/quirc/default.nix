@@ -1,4 +1,4 @@
-{lib, stdenv, fetchgit, SDL_gfx, SDL, libjpeg, libpng, pkgconfig}:
+{lib, stdenv, fetchgit, SDL_gfx, SDL, libjpeg, libpng, pkg-config}:
 let
   s =
   rec {
@@ -13,7 +13,7 @@ let
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     SDL SDL_gfx libjpeg libpng
   ];

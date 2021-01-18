@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool , pkgconfig, glib, libxml2, libxslt, getopt, libiconv, gettext, nix, disnix, libnixxml }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool , pkg-config, glib, libxml2, libxslt, getopt, libiconv, gettext, nix, disnix, libnixxml }:
 
 stdenv.mkDerivation rec {
   version="2020-07-04";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-XKab2hNGtWDkIEMxE1vMvqQBTP9BvHTabBVfzpH57h0=";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
+  nativeBuildInputs = [ pkg-config autoconf automake libtool ];
   buildInputs = [ glib libxml2 libxslt getopt nix disnix libiconv gettext libnixxml ];
   preConfigure = ''
     ./bootstrap

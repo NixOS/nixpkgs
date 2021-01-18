@@ -49,8 +49,8 @@ let
         description = "Web Debugging Proxy";
         homepage = "https://www.charlesproxy.com/";
         maintainers = [ maintainers.kalbasit ];
-        license = stdenv.lib.licenses.unfree;
-        platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+        license = lib.licenses.unfree;
+        platforms = lib.platforms.linux ++ lib.platforms.darwin;
       };
     };
 

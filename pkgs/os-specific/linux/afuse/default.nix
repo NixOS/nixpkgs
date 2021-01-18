@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, fuse }:
+{ lib, stdenv, fetchurl, pkgconfig, autoreconfHook, fuse }:
 
 stdenv.mkDerivation {
   name = "afuse-0.4.1";
@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Automounter in userspace";
     homepage = "https://github.com/pcarrier/afuse";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.linux;
   };
 }

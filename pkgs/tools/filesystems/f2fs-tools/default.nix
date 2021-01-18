@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, autoreconfHook, libselinux, libuuid, pkgconfig }:
+{ lib, stdenv, fetchgit, autoreconfHook, libselinux, libuuid, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "f2fs-tools";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "06ss05n87i1c3149qb3n7j1qp2scv3g2adx0v6ljkl59ab9b5saj";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libselinux libuuid ];
 
   patches = [ ./f2fs-tools-cross-fix.patch ];

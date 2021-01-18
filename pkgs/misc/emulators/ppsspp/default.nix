@@ -6,7 +6,7 @@
 , lib
 , libzip
 , mkDerivation
-, pkgconfig
+, pkg-config
 , python3
 , qtbase
 , qtmultimedia
@@ -31,7 +31,7 @@ mkDerivation rec {
     substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig python3 ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
 
   buildInputs = [
     SDL2

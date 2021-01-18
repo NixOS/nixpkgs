@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    license = licenses.gpl3Plus;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }

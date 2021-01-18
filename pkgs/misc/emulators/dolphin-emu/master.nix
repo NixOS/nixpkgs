@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeDesktopItem, pkgconfig, cmake
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, pkg-config, cmake
 , wrapQtAppsHook, qtbase, bluez, ffmpeg_3, libao, libGLU, libGL, pcre, gettext
 , libXrandr, libusb1, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
 , libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsaLib
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0vv3ahk6zdx2hx5diq4jkhl289wjybqcr4lwinrkfiywb83hcabg";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ]
+  nativeBuildInputs = [ cmake pkg-config ]
   ++ lib.optional stdenv.isLinux wrapQtAppsHook;
 
   buildInputs = [

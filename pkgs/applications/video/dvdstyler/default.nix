@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , flex, bison, gettext
 , xineUI, wxSVG
 , fontconfig
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-  [ pkgconfig ];
+  [ pkg-config ];
 
   packagesToBinPath =
   [ cdrtools dvdauthor dvdplusrwtools ];

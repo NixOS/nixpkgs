@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, makeself, yasm, fuse, wxGTK, lvm2 }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, makeself, yasm, fuse, wxGTK, lvm2 }:
 
 with lib;
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "src";
 
-  nativeBuildInputs = [ makeself pkgconfig yasm ];
+  nativeBuildInputs = [ makeself pkg-config yasm ];
   buildInputs = [ fuse lvm2 wxGTK ];
 
   enableParallelBuilding = true;

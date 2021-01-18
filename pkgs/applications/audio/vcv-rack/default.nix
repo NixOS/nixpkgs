@@ -36,7 +36,7 @@ let
     sha256 = "17kd0lh2x3x12bxkyhq6z8sg6vxln8m9qirf0basvcsmylr6rb64";
   };
 in
-with stdenv.lib; stdenv.mkDerivation rec {
+with lib; stdenv.mkDerivation rec {
   pname = "VCV-Rack";
   version = "1.1.6";
 

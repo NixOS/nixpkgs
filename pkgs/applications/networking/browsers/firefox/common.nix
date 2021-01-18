@@ -2,9 +2,9 @@
 , src, unpackPhase ? null, patches ? []
 , extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [] }:
 
-{ lib, stdenv, pkgconfig, pango, perl, python2, python3, zip
+{ lib, stdenv, pkg-config, pango, perl, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
-, freetype, fontconfig, file, nspr, nss, nss_3_53, libnotify
+, freetype, fontconfig, file, nspr, nss, nss_3_53
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libXdamage, libevent, libstartup_notification
 , libvpx_1_8
@@ -23,8 +23,7 @@
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libxkbcommon
-# LTO is disabled since it caused segfaults on wayland see https://github.com/NixOS/nixpkgs/issues/101429
-, ltoSupport ? false, overrideCC, buildPackages
+, ltoSupport ? stdenv.isLinux, overrideCC, buildPackages
 , gssSupport ? true, kerberos
 , pipewireSupport ? waylandSupport && webrtcSupport, pipewire
 
@@ -91,21 +90,25 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
+  # 78 ESR won't build with rustc 1.47
+  inherit (if lib.versionAtLeast ffversion "82" then rustPackages else rustPackages_1_45)
+    rustc cargo;
+
   # Darwin's stdenv provides the default llvmPackages version, match that since
   # clang LTO on Darwin is broken so the stdenv is not being changed.
+  # Target the LLVM version that rustc -Vv reports it is built with for LTO.
+  # rustPackages_1_45 -> LLVM 10, rustPackages -> LLVM 11
   llvmPackages = if stdenv.isDarwin
                  then buildPackages.llvmPackages
-                 else buildPackages.llvmPackages_10;
+                 else if lib.versionAtLeast rustc.llvm.version "11"
+                      then buildPackages.llvmPackages_11
+                      else buildPackages.llvmPackages_10;
 
   # When LTO for Darwin is fixed, the following will need updating as lld
   # doesn't work on it. For now it is fine since ltoSupport implies no Darwin.
   buildStdenv = if ltoSupport
                 then overrideCC stdenv llvmPackages.lldClang
                 else stdenv;
-
-  # 78 ESR won't build with rustc 1.47
-  inherit (if lib.versionAtLeast ffversion "82" then rustPackages else rustPackages_1_45)
-    rustc cargo;
 
   nss_pkg = if lib.versionOlder ffversion "83" then nss_3_53 else nss;
 in
@@ -121,13 +124,19 @@ buildStdenv.mkDerivation ({
   ] ++
   lib.optional (lib.versionOlder ffversion "83") ./no-buildconfig-ffx76.patch ++
   lib.optional (lib.versionAtLeast ffversion "84") ./no-buildconfig-ffx84.patch ++
+  lib.optional (ltoSupport && lib.versionOlder ffversion "84") ./lto-dependentlibs-generation-ffx83.patch ++
+  lib.optional (ltoSupport && lib.versionAtLeast ffversion "84" && lib.versionOlder ffversion "86")
+    (fetchpatch {
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/fdff20c37be3";
+      sha256 = "135n9brliqy42lj3nqgb9d9if7x6x9nvvn0z4anbyf89bikixw48";
+    })
 
   # there are two flavors of pipewire support
   # The patches for the ESR release and the patches for the current stable
   # release.
   # Until firefox upstream stabilizes pipewire support we will have to continue
   # tracking multiple versions here.
-  lib.optional (pipewireSupport && lib.versionOlder ffversion "83")
+  ++ lib.optional (pipewireSupport && lib.versionOlder ffversion "83")
     (fetchpatch {
       # https://src.fedoraproject.org/rpms/firefox/blob/master/f/firefox-pipewire-0-3.patch
       url = "https://src.fedoraproject.org/rpms/firefox/raw/e99b683a352cf5b2c9ff198756859bae408b5d9d/f/firefox-pipewire-0-3.patch";
@@ -157,7 +166,7 @@ buildStdenv.mkDerivation ({
     gtk2 perl zip libjpeg zlib bzip2
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
-    libnotify xorg.pixman yasm libGLU libGL
+    xorg.pixman yasm libGLU libGL
     xorg.xorgproto
     xorg.libXext unzip makeWrapper
     libevent libstartup_notification /* cairo */
@@ -173,23 +182,16 @@ buildStdenv.mkDerivation ({
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
-  ++ lib.optional  ltoSupport llvmPackages.libunwind
-  ++ lib.optionals waylandSupport [ libxkbcommon ]
-  ++ lib.optionals pipewireSupport [ pipewire ]
-  ++ lib.optionals (lib.versionAtLeast ffversion "82") [ gnum4 ]
+  ++ lib.optional  waylandSupport libxkbcommon
+  ++ lib.optional  pipewireSupport pipewire
+  ++ lib.optional  (lib.versionAtLeast ffversion "82") gnum4
   ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                           AVFoundation MediaToolbox CoreLocation
                                           Foundation libobjc AddressBook cups ];
 
   NIX_LDFLAGS = lib.optionalString ltoSupport ''
-    -rpath ${placeholder "out"}/lib/${binaryName}
     -rpath ${llvmPackages.libunwind.out}/lib
   '';
-
-  NIX_CFLAGS_COMPILE = toString [
-    "-I${glib.dev}/include/gio-unix-2.0"
-    "-I${nss_pkg.dev}/include/nss"
-  ];
 
   MACH_USE_SYSTEM_PYTHON = "1";
 
@@ -202,7 +204,7 @@ buildStdenv.mkDerivation ({
     substituteInPlace \
       media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_generic_gn/moz.build \
       --replace /usr/include ${pipewire.dev}/include
-  '' + lib.optionalString (lib.versionAtLeast ffversion "80") ''
+  '' + lib.optionalString (lib.versionAtLeast ffversion "80" && lib.versionOlder ffversion "81") ''
     substituteInPlace dom/system/IOUtils.h \
       --replace '#include "nspr/prio.h"'          '#include "prio.h"'
 
@@ -220,8 +222,7 @@ buildStdenv.mkDerivation ({
       llvmPackages.llvm # llvm-objdump
       nodejs
       perl
-      pkgconfig
-      python2
+      pkg-config
       python3
       rust-cbindgen
       rustc
@@ -295,10 +296,9 @@ buildStdenv.mkDerivation ({
   #   https://bugzilla.mozilla.org/show_bug.cgi?id=1538724
   # elf-hack is broken when using clang+lld:
   #   https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
-  ++ lib.optionals ltoSupport [
-    "--enable-lto"
-    "--disable-elf-hack"
-  ] ++ lib.optional (ltoSupport && !buildStdenv.isDarwin) "--enable-linker=lld"
+  ++ lib.optional ltoSupport "--enable-lto"
+  ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
+  ++ lib.optional (ltoSupport && !buildStdenv.isDarwin) "--enable-linker=lld"
 
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"
@@ -323,6 +323,13 @@ buildStdenv.mkDerivation ({
     "MOZILLA_OFFICIAL=1"
     "BUILD_OFFICIAL=1"
   ]
+  ++ lib.optionals ltoSupport [
+    "AR=${llvmPackages.bintools}/bin/llvm-ar"
+    "LLVM_OBJDUMP=${llvmPackages.bintools}/bin/llvm-objdump"
+    "NM=${llvmPackages.bintools}/bin/llvm-nm"
+    "RANLIB=${llvmPackages.bintools}/bin/llvm-ranlib"
+    "STRIP=${llvmPackages.bintools}/bin/llvm-strip"
+  ]
   ++ extraMakeFlags;
 
   enableParallelBuilding = true;
@@ -341,18 +348,6 @@ buildStdenv.mkDerivation ({
     gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
   '';
 
-  postFixup = lib.optionalString buildStdenv.isLinux ''
-    # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
-    patchelf --set-rpath "${lib.getLib libnotify
-      }/lib:$(patchelf --print-rpath "$out"/lib/${binaryName}*/libxul.so)" \
-        "$out"/lib/${binaryName}*/libxul.so
-    patchelf --add-needed ${xorg.libXScrnSaver.out}/lib/libXss.so $out/lib/${binaryName}/${binaryName}
-    ${lib.optionalString (pipewireSupport && lib.versionAtLeast ffversion "83") ''
-      patchelf --add-needed "${lib.getLib pipewire}/lib/libpipewire-0.3.so" \
-        "$out"/lib/${binaryName}/${binaryName}
-    ''}
-  '';
-
   doInstallCheck = true;
   installCheckPhase = ''
     # Some basic testing
@@ -365,6 +360,7 @@ buildStdenv.mkDerivation ({
     isFirefox3Like = true;
     gtk = gtk2;
     inherit alsaSupport;
+    inherit pipewireSupport;
     inherit nspr;
     inherit ffmpegSupport;
     inherit gssSupport;

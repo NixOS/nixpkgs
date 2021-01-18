@@ -16,7 +16,7 @@
 , which
 }:
 
-with stdenv.lib.strings;
+with lib.strings;
 
 let
 
@@ -173,7 +173,7 @@ let
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
 
-      libPath = stdenv.lib.makeLibraryPath propagatedBuildInputs;
+      libPath = lib.makeLibraryPath propagatedBuildInputs;
 
       postFixup = ''
 

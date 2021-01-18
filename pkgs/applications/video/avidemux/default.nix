@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, pkgconfig
+{ stdenv, lib, fetchurl, cmake, pkg-config
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs =
-    [ yasm cmake pkgconfig ]
+    [ yasm cmake pkg-config ]
     ++ lib.optional withQT wrapQtAppsHook;
   buildInputs = [
     zlib gettext libvdpau libva libXv sqlite fribidi fontconfig

@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fftw perl hwloc ]
-  ++ (stdenv.lib.optionals mpiEnabled [ openmpi ]);
+  ++ (lib.optionals mpiEnabled [ openmpi ]);
 
   cmakeFlags = [
     "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"

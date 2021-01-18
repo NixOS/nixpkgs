@@ -3,7 +3,7 @@
 , fetchurl
 , clang
 , llvm
-, pkgconfig
+, pkg-config
 , makeWrapper
 , file
 , hyperscan
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     clang
     llvm
     makeWrapper
-    pkgconfig
+    pkg-config
   ]
   ++ lib.optionals rustSupport [ rustc cargo ]
   ;

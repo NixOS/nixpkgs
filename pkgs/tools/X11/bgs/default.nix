@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkgconfig, libX11, libXinerama, imlib2}:
+{lib, stdenv, fetchurl, pkg-config, libX11, libXinerama, imlib2}:
 
 stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rw9ingkkpvvr2dixx126ziim67a54r8k49918h1mbph0fjj08n5";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libX11 libXinerama imlib2 ];
 

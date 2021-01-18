@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, fetchpatch, cmake, pkgconfig, libusb1 }:
+{ lib, stdenv, fetchgit, fetchpatch, cmake, pkg-config, libusb1 }:
 
 stdenv.mkDerivation rec {
   pname = "rtl-sdr";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ns740s2rys4glq4la4bh0sxfv1mn61yfjns2yllhx70rsb2fqrn";
   }) ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ libusb1 ];
 
   # TODO: get these fixes upstream:

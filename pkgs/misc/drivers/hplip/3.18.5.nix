@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, substituteAll
-, pkgconfig
+, pkg-config
 , cups, zlib, libjpeg, libusb1, python2Packages, sane-backends
 , dbus, file, ghostscript, usbutils
 , net-snmp, openssl, perl, nettools
@@ -66,7 +66,7 @@ python2Packages.buildPythonApplication {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   pythonPath = with python2Packages; [
@@ -76,7 +76,7 @@ python2Packages.buildPythonApplication {
     reportlab
     usbutils
     sip
-  ] ++ stdenv.lib.optionals withQt5 [
+  ] ++ lib.optionals withQt5 [
     pyqt5
   ];
 
@@ -108,9 +108,9 @@ python2Packages.buildPythonApplication {
       --with-systraydir=$out/xdg/autostart
       --with-mimedir=$out/etc/cups
       --enable-policykit
-      ${stdenv.lib.optionalString withStaticPPDInstall "--enable-cups-ppd-install"}
+      ${lib.optionalString withStaticPPDInstall "--enable-cups-ppd-install"}
       --disable-qt4
-      ${stdenv.lib.optionalString withQt5 "--enable-qt5"}
+      ${lib.optionalString withQt5 "--enable-qt5"}
     "
 
     export makeFlags="
@@ -136,7 +136,7 @@ python2Packages.buildPythonApplication {
   # Running `hp-diagnose_plugin -g` can be used to diagnose
   # issues with plugins.
   #
-  postInstall = stdenv.lib.optionalString withPlugin ''
+  postInstall = lib.optionalString withPlugin ''
     sh ${plugin} --noexec --keep
     cd plugin_tmp
 

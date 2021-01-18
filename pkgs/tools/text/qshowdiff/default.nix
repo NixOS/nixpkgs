@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, qt4, perl, pkgconfig }:
+{lib, stdenv, fetchurl, qt4, perl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "qshowdiff";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "027959xbzvi5c2w9y1x122sr5i26k9mvp43banz2wln6gd860n1a";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ qt4 perl ];
 
   configurePhase = ''

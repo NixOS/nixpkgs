@@ -2,7 +2,7 @@
 , procps, libcap_ng, openssl, python2, iproute , perl
 , automake, autoconf, libtool, kernel ? null }:
 
-with stdenv.lib;
+with lib;
 
 let
   _kernel = kernel;

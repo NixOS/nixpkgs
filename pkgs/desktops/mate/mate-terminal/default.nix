@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, glib, itstool, libxml2, mate, dconf, gtk3, vte, pcre2, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, glib, itstool, libxml2, mate, dconf, gtk3, vte, pcre2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-terminal";
   version = "1.24.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0qmyhxmarwkxad8k1m9q1iwx70zhfp6zc2mh74nv26nj4gr3h3am";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     wrapGAppsHook
   ];

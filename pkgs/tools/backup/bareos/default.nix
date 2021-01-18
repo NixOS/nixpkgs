@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, flex
+{ lib, stdenv, fetchFromGitHub, pkg-config, nettools, gettext, flex
 , readline ? null, openssl ? null, python2 ? null, ncurses ? null, rocksdb
 , sqlite ? null, postgresql ? null, libmysqlclient ? null, zlib ? null, lzo ? null
 , jansson ? null, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "1awf5i4mw2nfd7z0dmqnywapnx9nz6xwqv8rxp0y2mnrhzdpbrbz";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     nettools gettext readline openssl python2 flex ncurses sqlite postgresql
     libmysqlclient zlib lzo jansson acl glusterfs libceph libcap rocksdb

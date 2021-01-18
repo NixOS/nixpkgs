@@ -1,6 +1,6 @@
-{ stdenv, buildPackages, fetchurl, perl, buildLinux, modDirVersionArg ? null, ... } @ args:
+{ lib, stdenv, buildPackages, fetchurl, perl, buildLinux, modDirVersionArg ? null, ... } @ args:
 
-with stdenv.lib;
+with lib;
 
 buildLinux (args // rec {
   version = "5.11-rc3";
