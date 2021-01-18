@@ -235,6 +235,8 @@ self: super: {
     hnix-store-core = self.hnix-store-core_0_4_1_0; # at least 1.7
   });
 
+  # https://github.com/haskell-nix/hnix-store/issues/127
+  hnix-store-core_0_4_1_0 = addTestToolDepend super.hnix-store-core_0_4_1_0 self.tasty-discover;
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
