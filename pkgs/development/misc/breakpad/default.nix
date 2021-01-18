@@ -25,6 +25,6 @@ in stdenv.mkDerivation {
     homepage = "https://chromium.googlesource.com/breakpad";
     license = licenses.bsd3;
     maintainers = with maintainers; [ berberman ];
-    platforms = with platforms; linux ++ darwin ++ windows;
+    platforms = platforms.all;
   };
 }
