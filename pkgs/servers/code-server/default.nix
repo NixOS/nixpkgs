@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
 , moreutils, jq, git, zip, rsync, pkg-config, yarn, python2
-, nodejs-12_x, libsecret, xorg, ripgrep, nettools }:
+, nodejs-12_x, libsecret, xorg, ripgrep
+, AppKit, Cocoa, Security, cctools }:
 
 let
   system = stdenv.hostPlatform.system;
@@ -12,29 +13,34 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "code-server";
-  version = "3.6.0";
-  commit = "a4a03c14922ccaec2a9ff8d1b7b2af8522a4214d";
+  version = "3.8.0";
+  commit = "c4610f7829701aadb045d450013b84491c30580d";
 
   src = fetchFromGitHub {
     owner = "cdr";
     repo = "code-server";
     rev = "v${version}";
-    sha256 = "1c0p1s0bl3az5ysl97mz3gbynyndz6jd2jj7lx2snz6jqqd43y9p";
-    fetchSubmodules = true;
+    sha256 = "1snc7dbqfz53337h6av2zhkrn54ypanxljs5by4jqczq96c2v6yk";
   };
 
   cloudAgent = buildGoModule rec {
     pname = "cloud-agent";
-    version = "0.1.0";
+    version = "0.2.1";
 
     src = fetchFromGitHub {
       owner = "cdr";
       repo = "cloud-agent";
-      rev = version;
-      sha256 = "1p20cvgvs38604km9ixylz0r3k7blkd80lncmma3z05y5n5fqps1";
+      rev = "v${version}";
+      sha256 = "06fpiwxjz2cgzw4ks9sk3376rprkd02khfnb10hg7dhn3y9gp7x8";
     };
 
-    vendorSha256 = "0yky1v1ak3ysykjf3gm1hd7qyj5rm4fw7amga81sb31x0357jlzr";
+    vendorSha256 = "0k9v10wkzx53r5syf6bmm81gr4s5dalyaa07y9zvx6vv5r2h0661";
+
+    postPatch = ''
+      # the cloud-agent release tag has an empty version string, so add it back in
+      substituteInPlace internal/version/version.go \
+        --replace 'var Version string' 'var Version string = "v${version}"'
+    '';
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -44,11 +50,6 @@ in stdenv.mkDerivation rec {
     nativeBuildInputs = [ yarn' git ];
     buildPhase = ''
       export HOME=$PWD
-
-      patchShebangs ./ci
-
-      # apply code-server patches as code-server has patched vscode yarn.lock
-      yarn vscode:patch
 
       yarn config set yarn-offline-mirror $out
       find "$PWD" -name "yarn.lock" -printf "%h\n" | \
@@ -61,8 +62,9 @@ in stdenv.mkDerivation rec {
 
     # to get hash values use nix-build -A code-server.prefetchYarnCache
     outputHash = {
-      x86_64-linux = "1443qwkllb714s4qw3b9y1mcc6p2ykgc02pw2k3z2gczvvr0g8qv";
-      aarch64-linux = "1443qwkllb714s4qw3b9y1mcc6p2ykgc02pw2k3z2gczvvr0g8qv";
+      x86_64-linux = "0xc1yjz53ydg1mwyc2rp4hq20hg6i4aiirfwsnykjw1zm79qgrgb";
+      aarch64-linux = "0xc1yjz53ydg1mwyc2rp4hq20hg6i4aiirfwsnykjw1zm79qgrgb";
+      x86_64-darwin = "0xc1yjz53ydg1mwyc2rp4hq20hg6i4aiirfwsnykjw1zm79qgrgb";
     }.${system} or (throw "Unsupported system ${system}");
   };
 
@@ -76,19 +78,21 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     nodejs yarn' python pkg-config zip makeWrapper git rsync jq moreutils
   ];
-  buildInputs = [ libsecret xorg.libX11 xorg.libxkbfile ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
+    ++ (with xorg; [ libX11 libxkbfile ])
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit Cocoa Security cctools
+    ];
+
+  patches = [
+    # remove download of coder-cloud agent
+    ./remove-cloud-agent-download.patch
+  ];
 
   postPatch = ''
     export HOME=$PWD
 
     patchShebangs ./ci
-
-    # apply code-server vscode patches
-    yarn vscode:patch
-
-    # allow offline install for vscode
-    substituteInPlace lib/vscode/build/npm/postinstall.js \
-      --replace '--ignore-optional' '--offline'
 
     # remove unnecessary git config command
     substituteInPlace lib/vscode/build/npm/postinstall.js \
@@ -98,16 +102,12 @@ in stdenv.mkDerivation rec {
     grep -rl "yarn install" --include package.json lib/vscode/extensions \
       | xargs sed -i 's/yarn install/yarn install --offline/g'
 
-    # remove download of coder-cloud agent
-    sed -i ':a;N;$!ba;s/OS=.*agent//' ci/build/npm-postinstall.sh
+    substituteInPlace ci/dev/postinstall.sh \
+      --replace 'yarn' 'yarn --ignore-scripts'
 
     # use offline cache when installing release packages
     substituteInPlace ci/build/npm-postinstall.sh \
       --replace 'yarn --production' 'yarn --production --offline'
-
-    # fix path to ifconfig, so vscode can get mac address
-    substituteInPlace lib/vscode/src/vs/base/node/macAddress.ts \
-      --replace '/sbin/ifconfig' '${nettools}/bin/ifconfig'
 
     # disable automatic updates
     sed -i '/update.mode/,/\}/{s/default:.*/default: "none",/g}' \
@@ -129,6 +129,9 @@ in stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    # run yarn offline by default
+    echo '--install.offline true' >> .yarnrc
+
     # set default yarn opts
     ${lib.concatMapStrings (option: ''
       yarn --offline config set ${option}
@@ -137,17 +140,14 @@ in stdenv.mkDerivation rec {
     # set offline mirror to yarn cache we created in previous steps
     yarn --offline config set yarn-offline-mirror "${yarnCache}"
 
-    # set nodedir, so we can build binaries later
-    npm config set nodedir "${nodeSources}"
-
     # link coder-cloud agent from nix store
     ln -s "${cloudAgent}/bin/cloud-agent" ./lib/coder-cloud-agent
 
-    # skip browser downloads for playwright
-    export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD="true"
-
     # skip unnecessary electron download
     export ELECTRON_SKIP_BINARY_DOWNLOAD=1
+  '' + lib.optionalString stdenv.isLinux ''
+    # set nodedir, so we can build binaries later
+    npm config set nodedir "${nodeSources}"
   '';
 
   buildPhase = ''
@@ -166,11 +166,20 @@ in stdenv.mkDerivation rec {
       -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
 
     # patch shebangs of everything, also cached files, as otherwise postinstall
-    # will not be able to find /usr/bin/env, as it does not exists in sandbox
+    # will not be able to find /usr/bin/env, as it does not exist in sandbox
     patchShebangs .
 
-    # rebuild binaries, we use npm here, as yarn does not provider alternative
-    # that would not atempt to try to reinstall everything and break out
+    # Playwright is only needed for tests, we can disable it for builds.
+    # There's an environment variable to disable downloads, but the package makes a breaking call to
+    # sw_vers before that variable is checked.
+    patch -p1 -i ${./playwright.patch}
+  '' + lib.optionalString stdenv.isDarwin ''
+    # fsevents build fails on Darwin. It's an optional package that's only installed as part of Darwin
+    # builds, so the patch will fail if run on non-Darwin systems.
+    patch -p1 -i ${./darwin-fsevents.patch}
+  '' + ''
+    # rebuild binaries, we use npm here, as yarn does not provide an alternative
+    # that would not attempt to try to reinstall everything and break our
     # patching attempts
     npm rebuild --prefix lib/vscode --update-binary
 
@@ -220,6 +229,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/cdr/code-server";
     license = licenses.mit;
     maintainers = with maintainers; [ offline ];
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 }
