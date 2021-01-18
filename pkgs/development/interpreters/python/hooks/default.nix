@@ -2,6 +2,8 @@
 { python
 , lib
 , makeSetupHook
+, makeWrapper
+, wrapAppsHook
 , disabledIf
 , isPy3k
 , ensureNewerSourcesForZipFilesHook
@@ -122,6 +124,12 @@ in rec {
       };
     } ./python-remove-tests-dir-hook.sh) {};
 
+  pythonWrapExecutablesHook = callPackage ({ wrapPython }:
+    makeSetupHook {
+      name = "python-wrap-hook.sh";
+      deps = [ wrapPython wrapAppsHook ];
+    } ./python-wrap-executables-hook.sh) {};
+
   setuptoolsBuildHook = callPackage ({ setuptools, wheel }:
     makeSetupHook {
       name = "setuptools-setup-hook";
@@ -154,4 +162,8 @@ in rec {
       name = "wheel-unpack-hook.sh";
       deps = [ wheel ];
     } ./wheel-unpack-hook.sh) {};
+
+  wrapPython = callPackage ../wrap-python.nix {
+    inherit python makeSetupHook makeWrapper;
+  };
 }

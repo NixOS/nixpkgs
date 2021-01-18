@@ -3,7 +3,6 @@
 { lib
 , config
 , python
-, wrapPython
 , unzip
 , ensureNewerSourcesForZipFilesHook
 # Whether the derivation provides a Python module or not.
@@ -19,6 +18,7 @@
 , pythonNamespacesHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
+, pythonWrapExecutablesHook
 , setuptoolsBuildHook
 , setuptoolsCheckHook
 , wheelUnpackHook
@@ -112,9 +112,9 @@ let
 
     nativeBuildInputs = [
       python
-      wrapPython
       ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
       pythonRemoveTestsDirHook
+      pythonWrapExecutablesHook
     ] ++ lib.optionals catchConflicts [
       setuptools pythonCatchConflictsHook
     ] ++ lib.optionals removeBinBytecode [
@@ -159,10 +159,6 @@ let
       # pass in a hook that sets it.
       setuptoolsCheckHook
     ] ++ checkInputs;
-
-    postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
-      wrapPythonPrograms
-    '' + attrs.postFixup or '''';
 
     # Python packages built through cross-compilation are always for the host platform.
     disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];

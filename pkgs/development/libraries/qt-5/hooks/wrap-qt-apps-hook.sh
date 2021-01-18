@@ -1,3 +1,7 @@
+# shellcheck shell=bash
+appsWrapperArgs=()
+qtWrapperArgs=()
+
 # Inherit arguments given in mkDerivation
 qtWrapperArgs=( ${qtWrapperArgs-} )
 
@@ -33,19 +37,6 @@ qtHostPathHook() {
 }
 addEnvHooks "$hostOffset" qtHostPathHook
 
-makeQtWrapper() {
-    local original="$1"
-    local wrapper="$2"
-    shift 2
-    makeWrapper "$original" "$wrapper" "${qtWrapperArgs[@]}" "$@"
-}
-
-wrapQtApp() {
-    local program="$1"
-    shift 1
-    wrapProgram "$program" "${qtWrapperArgs[@]}" "$@"
-}
-
 qtOwnPathsHook() {
     local xdgDataDir="${!outputBin}/share"
     if [ -d "$xdgDataDir" ]
@@ -60,43 +51,9 @@ qtOwnPathsHook() {
     fi
 
     qtHostPathHook "${!outputBin}"
+
+    # Extend the appsWrapperArgs for wrapAppsHook
+    appsWrapperArgs+=qtWrapperArgs
 }
 
 preFixupPhases+=" qtOwnPathsHook"
-
-# Note: $qtWrapperArgs still gets defined even if ${dontWrapQtApps-} is set.
-wrapQtAppsHook() {
-    # skip this hook when requested
-    [ -z "${dontWrapQtApps-}" ] || return 0
-
-    # guard against running multiple times (e.g. due to propagation)
-    [ -z "$wrapQtAppsHookHasRun" ] || return 0
-    wrapQtAppsHookHasRun=1
-
-    local targetDirs=( "$prefix/bin" "$prefix/sbin" "$prefix/libexec"  )
-    echo "wrapping Qt applications in ${targetDirs[@]}"
-
-    for targetDir in "${targetDirs[@]}"
-    do
-        [ -d "$targetDir" ] || continue
-
-        find "$targetDir" ! -type d -executable -print0 | while IFS= read -r -d '' file
-        do
-            patchelf --print-interpreter "$file" >/dev/null 2>&1 || continue
-
-            if [ -f "$file" ]
-            then
-                echo "wrapping $file"
-                wrapQtApp "$file"
-            elif [ -h "$file" ]
-            then
-                target="$(readlink -e "$file")"
-                echo "wrapping $file -> $target"
-                rm "$file"
-                makeQtWrapper "$target" "$file"
-            fi
-        done
-    done
-}
-
-fixupOutputHooks+=(wrapQtAppsHook)
