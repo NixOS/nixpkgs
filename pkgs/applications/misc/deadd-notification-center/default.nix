@@ -1,44 +1,46 @@
-{ lib, stdenv
-, fetchurl
+{ lib
+, stdenv
+, fetchFromGitHub
 , autoPatchelfHook
+, wrapGAppsHook
+, hicolor-icon-theme
 , gtk3
 , gobject-introspection
 , libxml2
 }:
-
-let
-  version = "1.7.2";
-
-  dbusService = fetchurl {
-    url = "https://github.com/phuhl/linux_notification_center/raw/${version}/com.ph-uhl.deadd.notification.service.in";
-    sha256 = "0jvmi1c98hm8x1x7kw9ws0nbf4y56yy44c3bqm6rjj4lrm89l83s";
-  };
-in
 stdenv.mkDerivation rec {
-  inherit version;
   pname = "deadd-notification-center";
+  version = "1.7.3";
 
-  src = fetchurl {
-    url = "https://github.com/phuhl/linux_notification_center/releases/download/${version}/${pname}";
-    sha256 = "13f15slkjiw2n5dnqj13dprhqm3nf1k11jqaqda379yhgygyp9zm";
+  src = fetchFromGitHub {
+    owner = "phuhl";
+    repo = "linux_notification_center";
+    rev = version;
+    sha256 = "QaOLrtlhQyhMOirk6JO1yMGRrgycHmF9FAdKNbN2TRk=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapGAppsHook
+  ];
 
   buildInputs = [
     gtk3
     gobject-introspection
     libxml2
+    hicolor-icon-theme
   ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/dbus-1/services
-    cp $src $out/bin/deadd-notification-center
-    chmod +x $out/bin/deadd-notification-center
 
-    sed "s|##PREFIX##|$out|g" ${dbusService} > $out/share/dbus-1/services/com.ph-uhl.deadd.notification.service
+    cp $src/.out/${pname} $out/bin/
+    chmod +x $out/bin/${pname}
+
+    sed "s|##PREFIX##|$out|g" $src/${pname}.service.in > \
+      $out/share/dbus-1/services/com.ph-uhl.deadd.notification.service
   '';
 
   meta = with lib; {
