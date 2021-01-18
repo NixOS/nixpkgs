@@ -41,7 +41,6 @@ mkDerivation rec {
     qtx11extras
     libxcb
     libXdmcp
-    qtbase
   ];
 
   meta = with lib; {
