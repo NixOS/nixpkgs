@@ -19,7 +19,7 @@ symlinkJoin {
     rm $out/$autostart
     cp ${fcitx5}/$desktop $out/$desktop
     sed -i $out/$desktop -e "s|^Exec=.*|Exec=$out/bin/fcitx5|g"
-    cp $out/$desktop $out/$autostart
+    ln -s $out/$desktop $out/$autostart
   '';
 
   meta = fcitx5.meta;
