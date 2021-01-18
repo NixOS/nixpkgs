@@ -20,14 +20,7 @@ let
           enable = true;
           database = { inherit type; };
           disableRegistration = true;
-          cache = if (cache == "redis") then {
-            redis.enable = true;
-          } else if (cache == "memcache") then {
-            memcached.enable = true;
-          } else if (cache == "memory") then {
-            memory.enable = true;
-          } else {
-          };
+          cache = { ${cache}.enable = true; };
         };
         environment.systemPackages = [ pkgs.gitea pkgs.jq ];
         services.openssh.enable = true;
