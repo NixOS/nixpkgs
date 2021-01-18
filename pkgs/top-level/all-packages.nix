@@ -150,6 +150,8 @@ in
 
   ankisyncd = callPackage ../servers/ankisyncd { };
 
+  fiche = callPackage ../servers/fiche { };
+
   avro-tools = callPackage ../development/tools/avro-tools { };
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
