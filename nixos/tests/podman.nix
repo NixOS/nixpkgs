@@ -61,6 +61,20 @@ import ./make-test-python.nix (
           podman.succeed("podman stop sleeping")
           podman.succeed("podman rm sleeping")
 
+      # create systemd session for rootless
+      podman.succeed("loginctl enable-linger alice")
+
+      with subtest("Run container rootless with runc"):
+          podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
+          podman.succeed(
+              su_cmd(
+                  "podman run --runtime=runc -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10"
+              )
+          )
+          podman.succeed(su_cmd("podman ps | grep sleeping"))
+          podman.succeed(su_cmd("podman stop sleeping"))
+          podman.succeed(su_cmd("podman rm sleeping"))
+
       with subtest("Run container rootless with crun"):
           podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
           podman.succeed(
@@ -71,7 +85,6 @@ import ./make-test-python.nix (
           podman.succeed(su_cmd("podman ps | grep sleeping"))
           podman.succeed(su_cmd("podman stop sleeping"))
           podman.succeed(su_cmd("podman rm sleeping"))
-      # As of 2020-11-20, the runc backend doesn't work with cgroupsv2 yet, so we don't run that test.
 
       with subtest("Run container rootless with the default backend"):
           podman.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
