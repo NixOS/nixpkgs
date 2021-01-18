@@ -148,7 +148,6 @@ in
       networking.firewall.allowedTCPPorts = [ 80 ];
     };
   };
-
 }
 </programlisting>
       </para>

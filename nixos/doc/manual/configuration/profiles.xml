@@ -13,9 +13,9 @@
   <filename>/etc/configuration.nix</filename> as such:
  </para>
 <programlisting>
-  imports = [
-   &lt;nixpkgs/nixos/modules/profiles/profile-name.nix&gt;
-  ];
+imports = [
+  &lt;nixpkgs/nixos/modules/profiles/profile-name.nix&gt;
+];
 </programlisting>
  <para>
   Even if some of these profiles seem only useful in the context of install

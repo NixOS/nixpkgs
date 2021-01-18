@@ -50,8 +50,7 @@
 
   # Not allowed because the port option doesn't allow strings
   # settings.port = "443";
-}
- </programlisting>
+}</programlisting>
  </example>
  <note>
   <para>

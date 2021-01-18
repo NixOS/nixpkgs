@@ -198,7 +198,6 @@ settings = lib.mkOption {
         Which port this service should listen on.
       '';
     };
-
   };
   default = {};
   description = ''

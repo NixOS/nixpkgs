@@ -38,21 +38,21 @@
    is:
 <programlisting>
 {
-    opt.services.borgbackup.jobs = {
-      { rootBackup = {
-          paths = "/";
-          exclude = [ "/nix" "/path/to/local/repo" ];
-          repo = "/path/to/local/repo";
-          doInit = true;
-          encryption = {
-            mode = "repokey";
-            passphrase = "secret";
-          };
-          compression = "auto,lzma";
-          startAt = "weekly";
+  opt.services.borgbackup.jobs = {
+    { rootBackup = {
+        paths = "/";
+        exclude = [ "/nix" "/path/to/local/repo" ];
+        repo = "/path/to/local/repo";
+        doInit = true;
+        encryption = {
+          mode = "repokey";
+          passphrase = "secret";
         };
-      }
-    };
+        compression = "auto,lzma";
+        startAt = "weekly";
+      };
+    }
+  };
 }</programlisting>
   </para>
   <warning>
@@ -170,18 +170,20 @@ sudo borg init --encryption=repokey-blake2  \
 <para>Add it to your NixOS configuration, e.g.
 <programlisting>
 {
-    services.borgbackup.jobs = {
+  services.borgbackup.jobs = {
     my_Remote_Backup = {
-        paths = [ "/" ];
-        exclude = [ "/nix" "'**/.cache'" ];
-        repo =  "zzz2aaaaa@zzz2aaaaa.repo.borgbase.com:repo";
-          encryption = {
-          mode = "repokey-blake2";
-          passCommand = "cat /run/keys/borgbackup_passphrase";
-        };
-        BORG_RSH = "ssh -i /run/keys/id_ed25519_borgbase";
-        compression = "auto,lzma";
-        startAt = "daily";
+      paths = [ "/" ];
+      exclude = [ "/nix" "'**/.cache'" ];
+
+      repo = "zzz2aaaaa@zzz2aaaaa.repo.borgbase.com:repo";
+        encryption = {
+        mode = "repokey-blake2";
+        passCommand = "cat /run/keys/borgbackup_passphrase";
+      };
+
+      BORG_RSH = "ssh -i /run/keys/id_ed25519_borgbase";
+      compression = "auto,lzma";
+      startAt = "daily";
     };
   };
 }}</programlisting>

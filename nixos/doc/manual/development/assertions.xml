@@ -28,8 +28,7 @@
   </para>
 
 <programlisting>
-<![CDATA[
-{ config, lib, ... }:
+<![CDATA[{ config, lib, ... }:
 {
   config = lib.mkIf config.services.foo.enable {
     warnings =
@@ -39,9 +38,7 @@
                '' ]
       else [];
   }
-}
-]]>
-</programlisting>
+}]]></programlisting>
  </section>
 
  <section xml:id="sec-assertions-assertions">
@@ -57,8 +54,7 @@
   </para>
 
 <programlisting>
-<![CDATA[
-{ config, lib, ... }:
+<![CDATA[{ config, lib, ... }:
 {
   config = lib.mkIf config.services.syslogd.enable {
     assertions =
@@ -67,8 +63,6 @@
         }
       ];
   }
-}
-]]>
-</programlisting>
+}]]></programlisting>
  </section>
 </section>

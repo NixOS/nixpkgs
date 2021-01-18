@@ -11,10 +11,10 @@
 import ./make-test-python.nix {
 
   # Either the configuration of a single machine:
-  machine =
+  machine = {
     { config, pkgs, ... }:
     { <replaceable>configuration…</replaceable>
-    };
+  };
 
   # Or a set of machines:
   nodes =

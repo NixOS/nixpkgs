@@ -87,8 +87,7 @@
   pkg.gcc = pkgs.gcc;
   pkg.hello = pkgs.hello;
   fun.fun = x: x + 2;
-}
-</programlisting>
+}</programlisting>
        </para>
       </example>
      </para>
