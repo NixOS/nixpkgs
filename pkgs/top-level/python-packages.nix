@@ -6383,6 +6383,8 @@ in {
 
   python-awair = callPackage ../development/python-modules/python-awair { };
 
+  python3-saml = callPackage ../development/python-modules/python3-saml { };
+
   python-axolotl = callPackage ../development/python-modules/python-axolotl { };
 
   python-axolotl-curve25519 = callPackage ../development/python-modules/python-axolotl-curve25519 { };
