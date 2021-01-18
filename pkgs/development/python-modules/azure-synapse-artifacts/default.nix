@@ -23,8 +23,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "azure.synapse.artifacts" ];
 
   meta = with lib; {
-    description = "CHANGE";
-    homepage = "https://github.com/CHANGE/azure-synapse-artifacts/";
+    description = "Microsoft Azure Synapse Artifacts Client Library for Python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };
