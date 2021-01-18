@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "whisper";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Short read sequence mapper";
     license = licenses.gpl3;
     homepage = "https://github.com/refresh-bio/whisper";

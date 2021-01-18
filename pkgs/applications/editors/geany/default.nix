@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gtk3
 , which
@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "geany";
-  version = "1.36";
+  version = "1.37.1";
 
   outputs = [ "out" "dev" "doc" "man" ];
 
   src = fetchurl {
     url = "https://download.geany.org/${pname}-${version}.tar.bz2";
-    sha256 = "0gnm17cr4rf3pmkf0axz4a0fxwnvp55ji0q0lzy88yqbshyxv14i";
+    sha256 = "060sachn33xpx3a609f09y97qq5ky17gvv686zbvrn618ij7bi8q";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small and lightweight IDE";
     longDescription = ''
       Geany is a small and lightweight Integrated Development Environment.

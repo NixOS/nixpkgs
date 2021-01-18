@@ -1,5 +1,5 @@
 { stdenv, lib, buildPackages, fetchurl, fetchFromGitLab
-, enableStatic ? false
+, enableStatic ? stdenv.hostPlatform.isStatic
 , enableMinimal ? false
 # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
 # nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
@@ -48,17 +48,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  # TODO: When bumping this version, please validate whether the wget patch is present upstream
-  # and remove the patch if it is. The patch should be present upstream for all versions 1.32.0+.
-  # See NixOs/nixpkgs#94722 for context.
-  name = "busybox-1.31.1";
+  pname = "busybox";
+  version = "1.32.1";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
-    url = "https://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "1659aabzp8w4hayr4z8kcpbk2z1q2wqhw7i1yb0l72b45ykl1yfh";
+    url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
+    sha256 = "1vhd59qmrdyrr1q7rvxmyl96z192mxl089hi87yl0hcp6fyw8mwx";
   };
 
   hardeningDisable = [ "format" "pie" ]
@@ -66,9 +64,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./busybox-in-store.patch
-    ./0001-Fix-build-with-glibc-2.31.patch
-    ./0001-wget-implement-TLS-verification-with-ENABLE_FEATURE_.patch
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
   postPatch = "patchShebangs .";
 
@@ -133,7 +129,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tries to access the net
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
     license = licenses.gpl2;

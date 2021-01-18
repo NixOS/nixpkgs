@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtkmm2, lv2, lvtk, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, gtkmm2, lv2, lvtk, pkgconfig }:
 stdenv.mkDerivation {
   pname = "fmsynth-unstable";
   version = "2015-02-07";
@@ -42,8 +42,8 @@ stdenv.mkDerivation {
       - Hard real-time constraints
     '';
     homepage = "https://github.com/Themaister/libfmsynth";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

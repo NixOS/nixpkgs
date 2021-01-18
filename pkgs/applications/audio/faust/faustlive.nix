@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub
-, llvm, qt48Full, qrencode, libmicrohttpd, libjack2, alsaLib, faust, curl
+{ lib, stdenv, fetchFromGitHub
+, llvm, qt48Full, qrencode, libmicrohttpd_0_9_70, libjack2, alsaLib, faust, curl
 , bc, coreutils, which, libsndfile, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "faustlive";
-  version = "2.5.4";
+  version = "unstable-dev-2020-08-03";
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faustlive";
-    rev = version;
-    sha256 = "0npn8fvq8iafyamq4wrj1k1bmk4xd0my2sp3gi5jdjfx6hc1sm3n";
+    rev = "c16565dc1b616ac0aad7c303c1997fa9e57177ab";
+    sha256 = "1ys661lp1xwz21vy12kwkg248jvjq1z9w433knkh0ldyy2igvmd5";
     fetchSubmodules = true;
   };
 
   buildInputs = [
-    llvm qt48Full qrencode libmicrohttpd libjack2 alsaLib faust curl
+    llvm qt48Full qrencode libmicrohttpd_0_9_70 libjack2 alsaLib faust curl
     bc coreutils which libsndfile pkg-config
   ];
 
@@ -30,14 +30,14 @@ stdenv.mkDerivation rec {
     install rsrc/FaustLive.desktop "$out/share/applications"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A standalone just-in-time Faust compiler";
     longDescription = ''
       FaustLive is a standalone just-in-time Faust compiler. It tries to bring
       together the convenience of a standalone interpreted language with the
       efficiency of a compiled language. It's ideal for fast prototyping.
     '';
-    homepage = "http://faust.grame.fr/";
+    homepage = "https://faust.grame.fr/";
     license = licenses.gpl3;
   };
 }

@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , cmake
 , python3
 , libffi
@@ -54,6 +55,14 @@ in stdenv.mkDerivation ({
     ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  patches = [
+    # Fix missing includes for GCC 10
+    (fetchpatch {
+      url = "https://bugs.gentoo.org/attachment.cgi?id=612792";
+      sha256 = "0rwx6jpqq4xnf4mvfm8v2d4r34y1yi05am0mx5k2d5bha9j64lqg";
+    })
+  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
@@ -141,8 +150,6 @@ in stdenv.mkDerivation ({
   doCheck = stdenv.isLinux && (!stdenv.isx86_32);
 
   checkTarget = "check-all";
-
-  enableParallelBuilding = true;
 
   requiredSystemFeatures = [ "big-parallel" ];
   meta = {

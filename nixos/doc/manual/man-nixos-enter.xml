@@ -136,13 +136,13 @@
    <filename>/mnt</filename>:
   </para>
 <screen>
-# nixos-enter --root /mnt
+<prompt># </prompt>nixos-enter --root /mnt
 </screen>
   <para>
    Run a shell command:
   </para>
 <screen>
-# nixos-enter -c 'ls -l /; cat /proc/mounts'
+<prompt># </prompt>nixos-enter -c 'ls -l /; cat /proc/mounts'
 </screen>
   <para>
    Run a non-shell command:

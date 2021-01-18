@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "Tunnelling for application that don't speak IPv6";
     homepage = "https://github.com/wojtekka/6tunnel";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
     platforms = platforms.unix;
   };
 }

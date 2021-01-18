@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, scdoc, wayland # wayland-scanner
 , wayland-protocols, libseccomp
 }:
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland ];
   buildInputs = [ wayland-protocols ]
-    ++ stdenv.lib.optional stdenv.isLinux libseccomp;
+    ++ lib.optional stdenv.isLinux libseccomp;
 
-  mesonFlags = stdenv.lib.optional stdenv.isLinux "-Dseccomp=enabled";
+  mesonFlags = lib.optional stdenv.isLinux "-Dseccomp=enabled";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A lightweight overlay bar for Wayland";
     longDescription = ''
       A lightweight overlay volume/backlight/progress/anything bar for Wayland,

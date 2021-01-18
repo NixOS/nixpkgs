@@ -2,21 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "navi";
-  version = "2.10.0";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "denisidoro";
     repo = "navi";
     rev = "v${version}";
-    sha256 = "1fpfc3ikb6rhb8m0dp9ybh46mnqaw361rrsbv6yrivwfm3zc4w2w";
+    sha256 = "0nzjcahnx637m24xhzgrhvaic52b1bqx6lkklmy8xlbka7i2xid2";
   };
 
-  cargoSha256 = "0klizxrb92h7qfxs89m08ksdq698wx4kxsdhqhr5ld9dy3b6ks32";
+  cargoSha256 = "12xyh57b6lblplh87fw1cvfwzkx9bz9qbhii34n4yzfzp6sv530n";
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram $out/bin/navi --prefix PATH : ${lib.makeBinPath [ fzf wget ]}
+    wrapProgram $out/bin/navi \
+      --prefix PATH : "$out/bin" \
+      --prefix PATH : ${lib.makeBinPath [ fzf wget ]}
   '';
 
   meta = with lib; {

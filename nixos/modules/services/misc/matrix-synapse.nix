@@ -131,7 +131,12 @@ in {
       plugins = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        defaultText = "with config.services.matrix-synapse.package.plugins [ matrix-synapse-ldap3 matrix-synapse-pam ]";
+        example = literalExample ''
+          with config.services.matrix-synapse.package.plugins; [
+            matrix-synapse-ldap3
+            matrix-synapse-pam
+          ];
+        '';
         description = ''
           List of additional Matrix plugins to make available.
         '';
@@ -708,7 +713,7 @@ in {
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
             --keys-directory ${cfg.dataDir}
         '';
-        ExecReload = "${pkgs.utillinux}/bin/kill -HUP $MAINPID";
+        ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
       };
     };

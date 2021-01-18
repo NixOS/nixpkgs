@@ -16,7 +16,7 @@ buildPythonPackage rec {
   meta = {
     description = "A DNS toolkit for Python 3.x";
     homepage = "http://www.dnspython.org";
-    # BSD-like, check http://www.dnspython.org/LICENSE for details
+    # BSD-like, check https://www.dnspython.org/LICENSE for details
     license = lib.licenses.free;
   };
 }

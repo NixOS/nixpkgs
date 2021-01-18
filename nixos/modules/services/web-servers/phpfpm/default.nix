@@ -26,12 +26,9 @@ let
   phpIni = poolOpts: pkgs.runCommand "php.ini" {
     inherit (poolOpts) phpPackage phpOptions;
     preferLocalBuild = true;
-    nixDefaults = ''
-      sendmail_path = "/run/wrappers/bin/sendmail -t -i"
-    '';
-    passAsFile = [ "nixDefaults" "phpOptions" ];
+    passAsFile = [ "phpOptions" ];
   } ''
-    cat ${poolOpts.phpPackage}/etc/php.ini $nixDefaultsPath $phpOptionsPath > $out
+    cat ${poolOpts.phpPackage}/etc/php.ini $phpOptionsPath > $out
   '';
 
   poolOpts = { name, ... }:

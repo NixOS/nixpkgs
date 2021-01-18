@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, gettext, makeWrapper, PerlMagick, which
+{ lib, stdenv, fetchurl, perlPackages, gettext, makeWrapper, PerlMagick, which, highlight
 , gitSupport ? false, git ? null
 , docutilsSupport ? false, python ? null, docutils ? null
 , monotoneSupport ? false, monotone ? null
@@ -19,19 +19,17 @@ assert mercurialSupport -> (mercurial != null);
 
 let
   name = "ikiwiki";
-  version = "3.20190228";
-
-  lib = stdenv.lib;
+  version = "3.20200202.3";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/i/ikiwiki/${name}_${version}.orig.tar.xz";
-    sha256 = "17pyblaqhkb61lxl63bzndiffism8k859p54k3k4sghclq6lsynh";
+    sha256 = "0skrc8r4wh4mjfgw1c94awr5sacfb9nfsbm4frikanc9xsy16ksr";
   };
 
-  buildInputs = [ which ]
+  buildInputs = [ which highlight ]
     ++ (with perlPackages; [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
           TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
           RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
@@ -62,13 +60,14 @@ stdenv.mkDerivation {
   postInstall = ''
     for a in "$out/bin/"*; do
       wrapProgram $a --suffix PERL5LIB : $PERL5LIB --prefix PATH : ${perlPackages.perl}/bin:$out/bin \
-      ${lib.optionalString gitSupport ''--prefix PATH : ${git}/bin \''}
-      ${lib.optionalString monotoneSupport ''--prefix PATH : ${monotone}/bin \''}
-      ${lib.optionalString bazaarSupport ''--prefix PATH : ${breezy}/bin \''}
-      ${lib.optionalString cvsSupport ''--prefix PATH : ${cvs}/bin \''}
-      ${lib.optionalString cvsSupport ''--prefix PATH : ${cvsps}/bin \''}
-      ${lib.optionalString subversionSupport ''--prefix PATH : ${subversion.out}/bin \''}
-      ${lib.optionalString mercurialSupport ''--prefix PATH : ${mercurial}/bin \''}
+      ${lib.optionalString gitSupport ''--prefix PATH : ${git}/bin ''} \
+      ${lib.optionalString monotoneSupport ''--prefix PATH : ${monotone}/bin ''} \
+      ${lib.optionalString bazaarSupport ''--prefix PATH : ${breezy}/bin ''} \
+      ${lib.optionalString cvsSupport ''--prefix PATH : ${cvs}/bin ''} \
+      ${lib.optionalString cvsSupport ''--prefix PATH : ${cvsps}/bin ''} \
+      ${lib.optionalString subversionSupport ''--prefix PATH : ${subversion.out}/bin ''} \
+      ${lib.optionalString mercurialSupport ''--prefix PATH : ${mercurial}/bin ''} \
+      ${lib.optionalString docutilsSupport ''--prefix PYTHONPATH : "$(toPythonPath ${docutils})" ''} \
       ${lib.concatMapStrings (x: "--prefix PATH : ${x}/bin ") extraUtils}
     done
   '';
@@ -84,8 +83,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
     homepage = "http://ikiwiki.info/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.peti ];
   };
 }

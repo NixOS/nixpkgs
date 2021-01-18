@@ -1,8 +1,8 @@
-{ stdenv, buildDunePackage, ppx_sexp_conv, conduit, ocaml_lwt, sexplib }:
+{ buildDunePackage, ppx_sexp_conv, conduit, ocaml_lwt, sexplib }:
 
 buildDunePackage {
 	pname = "conduit-lwt";
-	inherit (conduit) version src minimumOCamlVersion;
+	inherit (conduit) version src useDune2 minimumOCamlVersion;
 
 	buildInputs = [ ppx_sexp_conv ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl }:
+{ lib, stdenv, fetchgit, perl }:
 
 stdenv.mkDerivation {
   pname = "multimarkdown";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   checkPhase = "make test-all";
   installPhase = "make pkg-install prefix='' DESTDIR=$out; make pkg-install-scripts prefix='' DESTDIR=$out";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A derivative of Markdown that adds new syntax features";
     longDescription = ''
       MultiMarkdown is a lightweight markup language created by
@@ -45,8 +45,8 @@ stdenv.mkDerivation {
     homepage = "https://fletcherpenney.net/multimarkdown/";
     # licensed under GPLv2+ or MIT:
     # https://raw.githubusercontent.com/fletcher/MultiMarkdown-4/master/LICENSE
-    license = with stdenv.lib.licenses; [ gpl2Plus mit ];
+    license = with lib.licenses; [ gpl2Plus mit ];
     platforms = platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ lowfatcomputing ];
+    maintainers = with lib.maintainers; [ lowfatcomputing ];
   };
 }

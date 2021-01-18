@@ -1,7 +1,7 @@
 { buildDhallPackage, fetchFromGitHub, lib }:
 
 # This function is used by `dhall-to-nixpkgs` when given a GitHub repository
-lib.makeOverridable
+lib.makePackageOverridable
   ( { # Arguments passed through to `buildDhallPackage`
       name
     , dependencies ? []
@@ -12,6 +12,8 @@ lib.makeOverridable
       directory ? ""
     , # The file to import, relative to the above directory
       file ? "package.dhall"
+      # Set to `true` to generate documentation for the package
+    , document ? false
 
       # Arguments passed through to `fetchFromGitHub`
     , owner
@@ -22,29 +24,36 @@ lib.makeOverridable
     , ...
     }@args:
 
-    buildDhallPackage {
-      inherit name dependencies source;
+    let
+      versionedName = "${name}-${rev}";
 
-      code =
-        let
-          src = fetchFromGitHub ({
-            name = "${name}-source";
+      src = fetchFromGitHub ({
+        name = "${versionedName}-source";
 
-            inherit owner repo rev;
-          } // removeAttrs args [
-            "name"
-            "dependencies"
-            "source"
-            "directory"
-            "file"
-            "owner"
-            "repo"
-            "rev"
-          ]);
+        inherit owner repo rev;
+      } // removeAttrs args [
+        "name"
+        "dependencies"
+        "document"
+        "source"
+        "directory"
+        "file"
+        "owner"
+        "repo"
+        "rev"
+      ]);
 
-          prefix = lib.optionalString (directory != "") "${directory}/";
+      prefix = lib.optionalString (directory != "") "${directory}/";
 
-        in
-          "${src}/${prefix}${file}";
-    }
+    in
+      buildDhallPackage
+        ( { inherit dependencies source;
+
+            name = versionedName;
+
+            code = "${src}/${prefix}${file}";
+          }
+        // lib.optionalAttrs document
+          { documentationRoot = "${src}/${prefix}"; }
+        )
   )

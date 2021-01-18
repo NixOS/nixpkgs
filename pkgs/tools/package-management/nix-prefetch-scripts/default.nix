@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, buildEnv,
+{ lib, stdenv, makeWrapper, buildEnv,
   breezy, coreutils, cvs, findutils, gawk, git, gnused, mercurial, nix, subversion
 }:
 
@@ -13,16 +13,16 @@ let mkPrefetchScript = tool: src: deps:
     installPhase = ''
       install -vD ${src} $out/bin/$name;
       wrapProgram $out/bin/$name \
-        --prefix PATH : ${stdenv.lib.makeBinPath (deps ++ [ gnused nix ])} \
+        --prefix PATH : ${lib.makeBinPath (deps ++ [ gnused nix ])} \
         --set HOME /homeless-shelter
     '';
 
     preferLocalBuild = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Script used to obtain source hashes for fetch${tool}";
       maintainers = with maintainers; [ bennofs ];
-      platforms = stdenv.lib.platforms.unix;
+      platforms = lib.platforms.unix;
     };
   };
 in rec {
@@ -37,10 +37,10 @@ in rec {
 
     paths = [ nix-prefetch-bzr nix-prefetch-cvs nix-prefetch-git nix-prefetch-hg nix-prefetch-svn ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Collection of all the nix-prefetch-* scripts which may be used to obtain source hashes";
       maintainers = with maintainers; [ bennofs ];
-      platforms = stdenv.lib.platforms.unix;
+      platforms = lib.platforms.unix;
     };
   };
 }

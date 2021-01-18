@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy27, pythonAtLeast
 , graphviz
 , multipledispatch
 , numpy
@@ -22,6 +22,14 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1my94a11jzg1hv6ln8wxklbqrg6z5l2l77vr89aq0829yyxacmv7";
   };
+
+  patches = [
+    # fix tests for pandas 1.1
+    (fetchpatch {
+      url = "https://github.com/ibis-project/ibis/commit/53ef3cefc4ae90d61f3612310cb36da2bcd11305.diff";
+      sha256 = "1i5yjmqridjqpggiinsjaz5spcxca5bd48vy7a0mj4mm1b5flw2m";
+    })
+  ];
 
   propagatedBuildInputs = [
     multipledispatch

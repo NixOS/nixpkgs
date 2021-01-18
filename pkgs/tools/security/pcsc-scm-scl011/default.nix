@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libusb-compat-0_1 }:
+{ lib, stdenv, fetchurl, unzip, libusb-compat-0_1 }:
 
 let
   arch = if stdenv.hostPlatform.system == "i686-linux" then "32"
@@ -30,16 +30,16 @@ stdenv.mkDerivation rec {
     cp -r proprietary/*.bundle $out/pcsc/drivers
   '';
 
-  libPath = stdenv.lib.makeLibraryPath [ libusb-compat-0_1 ];
+  libPath = lib.makeLibraryPath [ libusb-compat-0_1 ];
 
   fixupPhase = ''
     patchelf --set-rpath $libPath \
       $out/pcsc/drivers/SCLGENERIC.bundle/Contents/Linux/libSCLGENERIC.so.${version};
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SCM Microsystems SCL011 chipcard reader user space driver";
-    homepage = "http://www.scm-pc-card.de/index.php?lang=en&page=product&function=show_product&product_id=630";
+    homepage = "https://www.scm-pc-card.de/index.php?lang=en&page=product&function=show_product&product_id=630";
     downloadPage = "https://support.identiv.com/scl010-scl011/";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ sephalon ];

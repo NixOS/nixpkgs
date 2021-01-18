@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, jansson }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, jansson }:
 
 let
   libsailing = fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1s4nlffp683binbdxwwzbsci61kbjylbcr1jf44sv1h1r5d5js05";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ jansson libsailing ];
 
   INSTALL_PATH = "$(out)";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       --replace gcc cc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simulator daemon for autonomous sailing boats";
     homepage = "https://github.com/sails-simulator/sailsd";
     license = licenses.gpl3;

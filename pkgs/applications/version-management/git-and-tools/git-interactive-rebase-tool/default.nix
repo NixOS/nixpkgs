@@ -1,4 +1,4 @@
-{ stdenv, ncurses5, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{ lib, stdenv, ncurses5, fetchFromGitHub, rustPlatform, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-interactive-rebase-tool";
@@ -13,16 +13,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0jc6mhszxmwsdjk73wkfi0jjp9vkzzl9kk0dbnry6w7dyr5if8cc";
 
-  buildInputs = [ ncurses5 ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [ ncurses5 ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  #checkFlagsArray = [ "--test-threads=1" ];
-  doCheck = false;
+  cargoParallelTestThreads = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/MitMaro/git-interactive-rebase-tool";
     description = "Native cross platform full feature terminal based sequence editor for git interactive rebase";
     changelog = "https://github.com/MitMaro/git-interactive-rebase-tool/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ masaeedu ];
+    maintainers = with maintainers; [ masaeedu zowoq ];
   };
 }

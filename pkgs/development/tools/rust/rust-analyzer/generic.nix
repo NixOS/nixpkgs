@@ -1,9 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin
-, useJemalloc ? false
+{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, cmake
+, useMimalloc ? false
 , doCheck ? true
 
 # Version specific args
-, rev, version, sha256, cargoSha256 }:
+, rev, version, sha256, cargoSha256
+}:
 
 rustPlatform.buildRustPackage {
   pname = "rust-analyzer-unwrapped";
@@ -17,9 +18,9 @@ rustPlatform.buildRustPackage {
 
   buildAndTestSubdir = "crates/rust-analyzer";
 
-  cargoBuildFlags = lib.optional useJemalloc "--features=jemalloc";
+  cargoBuildFlags = lib.optional useMimalloc "--features=mimalloc";
 
-  nativeBuildInputs = lib.optionals doCheck [ rustPlatform.rustcSrc ];
+  nativeBuildInputs = lib.optional useMimalloc cmake;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin
     [ darwin.apple_sdk.frameworks.CoreServices ];
@@ -27,16 +28,11 @@ rustPlatform.buildRustPackage {
   RUST_ANALYZER_REV = rev;
 
   inherit doCheck;
-  # Skip tests running `rustup` for `cargo fmt`.
-  preCheck = ''
-    fakeRustup=$(mktemp -d)
-    ln -s $(command -v true) $fakeRustup/rustup
-    export PATH=$PATH''${PATH:+:}$fakeRustup
-    export RUST_SRC_PATH=${rustPlatform.rustcSrc}
+  preCheck = lib.optionalString doCheck ''
+    export RUST_SRC_PATH=${rustPlatform.rustLibSrc}
   '';
 
-  # Temporary disabled until #93119 is fixed.
-  doInstallCheck = false;
+  doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
     versionOutput="$($out/bin/rust-analyzer --version)"
@@ -45,7 +41,7 @@ rustPlatform.buildRustPackage {
     runHook postInstallCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An experimental modular compiler frontend for the Rust language";
     homepage = "https://github.com/rust-analyzer/rust-analyzer";
     license = with licenses; [ mit asl20 ];

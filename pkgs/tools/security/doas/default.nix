@@ -4,18 +4,19 @@
 , bison
 , pam
 
+, withPAM ? true
 , withTimestamp ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "doas";
-  version = "6.6.1";
+  version = "6.8";
 
   src = fetchFromGitHub {
     owner = "Duncaen";
     repo = "OpenDoas";
     rev = "v${version}";
-    sha256 = "07kkc5729p654jrgfsc8zyhiwicgmq38yacmwfvay2b3gmy728zn";
+    sha256 = "1dlwnvy8r6slxcy260gfkximp1ms510wdslpfq9y6xvd2qi5izcb";
   };
 
   # otherwise confuses ./configure
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (lib.optionalString withTimestamp "--with-timestamp") # to allow the "persist" setting
+    (lib.optionalString (!withPAM) "--without-pam")
     "--pamdir=${placeholder "out"}/etc/pam.d"
   ];
 
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -i '/\(chown\|chmod\)/d' bsd.prog.mk
+    sed -i '/\(chown\|chmod\)/d' GNUmakefile
   '';
 
   buildInputs = [ bison pam ];

@@ -5,6 +5,7 @@
 , flask-compress
 , flask-cors
 , flask-sockets
+, imageio
 , numpy
 , scipy
 , pillow
@@ -18,14 +19,29 @@
 
 buildPythonPackage rec {
   pname = "runway-python";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "695d78f8edeb6a7ca98d8351adb36948d56cceeffe8a84896c9fbfd349fc4cb8";
+    sha256 = "66cf1517dd817bf6db3792608920274f964dd0ced8dabecd925b8bc17aa95740";
   };
 
-  propagatedBuildInputs = [ flask flask-compress flask-cors flask-sockets numpy scipy pillow gevent wget six colorcet unidecode urllib3 ];
+  propagatedBuildInputs = [
+    colorcet
+    flask
+    flask-compress
+    flask-cors
+    flask-sockets
+    gevent
+    imageio
+    numpy
+    pillow
+    scipy
+    six
+    unidecode
+    urllib3
+    wget
+  ];
 
   # tests are not packaged in the released tarball
   doCheck = false;

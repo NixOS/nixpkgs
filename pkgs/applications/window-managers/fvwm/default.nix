@@ -1,5 +1,5 @@
 { gestures ? false
-, stdenv, fetchurl, pkgconfig
+, lib, stdenv, fetchurl, pkgconfig
 , cairo, fontconfig, freetype, libXft, libXcursor, libXinerama
 , libXpm, libXt, librsvg, libpng, fribidi, perl
 , libstroke ? null
@@ -21,13 +21,13 @@ stdenv.mkDerivation rec {
     cairo fontconfig freetype
     libXft libXcursor libXinerama libXpm libXt
     librsvg libpng fribidi perl
-  ] ++ stdenv.lib.optional gestures libstroke;
+  ] ++ lib.optional gestures libstroke;
 
   meta = {
     homepage = "http://fvwm.org";
     description = "A multiple large virtual desktop window manager";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ edanaher ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ edanaher ];
   };
 }

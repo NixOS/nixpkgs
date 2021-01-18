@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchPypi
 , buildPythonPackage
 , setuptools_scm
@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pyclipper";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0irs5sn6ldpg70630nfndghjnpxv8jldk61zyczfzp1jcz53b43s";
+    sha256 = "ca3751e93559f0438969c46f17459d07f983281dac170c3479de56492e152855";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pyclipper" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cython wrapper for clipper library";
     homepage    = "https://github.com/fonttools/pyclipper";
     license     = licenses.mit;

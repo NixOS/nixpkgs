@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , tornado
@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "httpretty";
-  version = "1.0.2";
+  version = "1.0.3";
 
   # drop this for version > 0.9.7
   # Flaky tests: https://github.com/gabrielfalcao/HTTPretty/pull/394
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "24a6fd2fe1c76e94801b74db8f52c0fb42718dc4a199a861b305b1a492b9d868";
+    sha256 = "9335cbd8f38745e0e2dc4755d8932a77d378d93e15804969504b1e6b568d613c";
   };
 
   propagatedBuildInputs = [ six ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     "tests.functional.test_requests.test_httpretty_should_allow_adding_and_overwritting_by_kwargs_u2"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://httpretty.readthedocs.org/";
     description = "HTTP client request mocking tool";
     license = licenses.mit;

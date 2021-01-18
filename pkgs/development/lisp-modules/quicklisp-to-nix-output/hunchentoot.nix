@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''hunchentoot'';
-  version = ''v1.2.38'';
+  version = ''v1.3.0'';
 
   parasites = [ "hunchentoot-test" ];
 
@@ -13,8 +13,8 @@ rec {
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-fad" args."cl-ppcre" args."cl-who" args."drakma" args."flexi-streams" args."md5" args."rfc2388" args."split-sequence" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/hunchentoot/2017-12-27/hunchentoot-v1.2.38.tgz'';
-    sha256 = ''1d3gnqbk2s3g9q51sx8mcsp2rmbvcfanbnljsf19npgfmz1ypsgd'';
+    url = ''http://beta.quicklisp.org/archive/hunchentoot/2020-06-10/hunchentoot-v1.3.0.tgz'';
+    sha256 = ''08znpi5lq2dhgv6mhvabk3w4ggrg31dbv4k6gmshr18xd2lq43i8'';
   };
 
   packageName = "hunchentoot";
@@ -27,9 +27,9 @@ rec {
   BORDEAUX-THREADS.  It supports HTTP 1.1, serves static files, has a
   simple framework for user-defined handlers and can be extended
   through subclassing.
-    SHA256 1d3gnqbk2s3g9q51sx8mcsp2rmbvcfanbnljsf19npgfmz1ypsgd URL
-    http://beta.quicklisp.org/archive/hunchentoot/2017-12-27/hunchentoot-v1.2.38.tgz
-    MD5 878a7833eb34a53231011b78e998e2fa NAME hunchentoot FILENAME hunchentoot
+    SHA256 08znpi5lq2dhgv6mhvabk3w4ggrg31dbv4k6gmshr18xd2lq43i8 URL
+    http://beta.quicklisp.org/archive/hunchentoot/2020-06-10/hunchentoot-v1.3.0.tgz
+    MD5 b1bb0c8df41a0ffaba4309e5084930fe NAME hunchentoot FILENAME hunchentoot
     DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
@@ -50,4 +50,4 @@ rec {
      cl-ppcre cl-who drakma flexi-streams md5 rfc2388 split-sequence
      trivial-backtrace trivial-features trivial-garbage trivial-gray-streams
      usocket)
-    VERSION v1.2.38 SIBLINGS NIL PARASITES (hunchentoot-test)) */
+    VERSION v1.3.0 SIBLINGS NIL PARASITES (hunchentoot-test)) */

@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-async-repl'';
-  version = ''cl-async-20191130-git'';
+  version = ''cl-async-20200610-git'';
 
   description = ''REPL integration for CL-ASYNC.'';
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-async" args."cl-async-base" args."cl-async-util" args."cl-libuv" args."cl-ppcre" args."fast-io" args."static-vectors" args."trivial-features" args."trivial-gray-streams" args."vom" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-async/2019-11-30/cl-async-20191130-git.tgz'';
-    sha256 = ''01kadvflif18f4i2l8iwx9jpg9543hrxagv4ad4q1k9500078vv2'';
+    url = ''http://beta.quicklisp.org/archive/cl-async/2020-06-10/cl-async-20200610-git.tgz'';
+    sha256 = ''10fyd36i5zlnxh69y1l7098b3h94l4hqwl0zhv0nshcs4sa7l37h'';
   };
 
   packageName = "cl-async-repl";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-async-repl DESCRIPTION REPL integration for CL-ASYNC. SHA256
-    01kadvflif18f4i2l8iwx9jpg9543hrxagv4ad4q1k9500078vv2 URL
-    http://beta.quicklisp.org/archive/cl-async/2019-11-30/cl-async-20191130-git.tgz
-    MD5 3850bc827b4c41b6047b962e3892bcb2 NAME cl-async-repl FILENAME
+    10fyd36i5zlnxh69y1l7098b3h94l4hqwl0zhv0nshcs4sa7l37h URL
+    http://beta.quicklisp.org/archive/cl-async/2020-06-10/cl-async-20200610-git.tgz
+    MD5 4bf419e7ed94249648eb9d0013e7d360 NAME cl-async-repl FILENAME
     cl-async-repl DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
@@ -39,5 +39,5 @@ rec {
     (alexandria babel bordeaux-threads cffi cffi-grovel cffi-toolchain cl-async
      cl-async-base cl-async-util cl-libuv cl-ppcre fast-io static-vectors
      trivial-features trivial-gray-streams vom)
-    VERSION cl-async-20191130-git SIBLINGS
+    VERSION cl-async-20200610-git SIBLINGS
     (cl-async-ssl cl-async-test cl-async) PARASITES NIL) */

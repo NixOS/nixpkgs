@@ -1,14 +1,14 @@
-{ stdenv, skawarePackages }:
+{ lib, stdenv, skawarePackages }:
 
 with skawarePackages;
 
 buildPackage {
   pname = "s6-rc";
-  version = "0.5.1.2";
-  sha256 = "18m8jsx3bkj566p6xwwnsvdckk10n8wqnhp0na2k88i295h4rnjp";
+  version = "0.5.2.0";
+  sha256 = "1qpygkajalaziszhwfv5rr6hc27q05z8dayyv7im06z6vndimchs";
 
   description = "A service manager for s6-based systems";
-  platforms = stdenv.lib.platforms.linux;
+  platforms = lib.platforms.linux;
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 

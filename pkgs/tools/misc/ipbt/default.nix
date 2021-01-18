@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, ncurses }:
+{ lib, stdenv, fetchurl, perl, ncurses }:
 
 stdenv.mkDerivation rec {
   version = "20190601.d1519e0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   buildInputs = [ ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high-tech ttyrec player for Unix";
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/ipbt/";
     license = licenses.mit;

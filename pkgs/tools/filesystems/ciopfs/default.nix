@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fuse, glib, attr }:
+{ lib, stdenv, fetchurl, pkg-config, fuse, glib, attr }:
 
 stdenv.mkDerivation rec {
   name = "ciopfs-0.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sr9i9b3qfwbfvzvk00yrrg3x2xqk1njadbldkvn7hwwa4z5bm9l";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse glib attr ];
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.brain-dump.org/projects/ciopfs/";
     description = "A case-insensitive filesystem layered on top of any other filesystem";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

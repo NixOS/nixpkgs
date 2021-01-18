@@ -7,10 +7,9 @@
 , runc # Default container runtime
 , crun # Container runtime (default with cgroups v2 for podman/buildah)
 , conmon # Container runtime monitor
-, utillinux # nsenter
+, util-linux # nsenter
 , cni-plugins # not added to path
 , iptables
-, socat
 }:
 
 let
@@ -20,9 +19,8 @@ let
     runc
     crun
     conmon
-    utillinux
+    util-linux
     iptables
-    socat
   ] ++ extraPackages);
 
 in runCommand cri-o.name {

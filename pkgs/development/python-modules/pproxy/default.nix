@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pproxy";
-  version = "2.3.2";
+  version = "2.3.7";
 
   disabled = isPy27;
 
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qwj";
     repo = "python-proxy";
-    rev = "818ab9cc10565789fe429a7be50ddefb9c583781";
-    sha256 = "0g3cyi5lzakhs5p3fpwywbl8jpapnr8890zw9w45dqg8k0svc1fi";
+    rev = "7fccf8dd62204f34b0aa3a70fc568fd6ddff7728";
+    sha256 = "1sl2i0kymnbsk49ina81yjnkxjy09541f7pmic8r6rwsv1s87skc";
   };
 
   propagatedBuildInputs = [

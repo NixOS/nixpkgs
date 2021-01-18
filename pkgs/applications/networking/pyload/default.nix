@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pythonPackages, gocr, unrar, rhino, spidermonkey }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pythonPackages, gocr, unrar, rhino, spidermonkey_38 }:
 
 let
   beautifulsoup = pythonPackages.callPackage ./beautifulsoup.nix {
@@ -30,7 +30,7 @@ in pythonPackages.buildPythonApplication rec {
     in [ configParserPatch setupPyPatch ];
 
   buildInputs = [
-    unrar rhino spidermonkey gocr pythonPackages.paver
+    unrar rhino spidermonkey_38 gocr pythonPackages.paver
   ];
 
   propagatedBuildInputs = with pythonPackages; [
@@ -50,7 +50,7 @@ in pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free and open source downloader for 1-click-hosting sites";
     homepage = "https://github.com/pyload/pyload";
     license = licenses.gpl3;

@@ -1,12 +1,12 @@
-{ fetchFromGitHub, stdenv, pkgconfig, autoreconfHook
+{ fetchFromGitHub, lib, stdenv, pkgconfig, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
 , qrencode, glib, protobuf, yasm, libevent
-, utillinux
+, util-linux
 , enable_Upnp ? false
 , disable_Wallet ? false
 , disable_Daemon ? false }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "dashpay";
   version = "0.12.2.3";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ glib openssl db48 yasm boost zlib libevent
-                  miniupnpc protobuf qrencode utillinux ];
+                  miniupnpc protobuf qrencode util-linux ];
 
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib --with-gui=no" ]
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       private as you make transactions without waits, similar to cash.
     '';
     homepage = "https://www.dash.org";
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     license = licenses.mit;
   };

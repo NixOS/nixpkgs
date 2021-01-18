@@ -1,42 +1,73 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool
-, pkgconfig, dbus, dbus-glib, libxml2, autoconf-archive }:
+{ autoconf
+, autoconf-archive
+, automake
+, dbus
+, dbus-glib
+, docbook_xml_dtd_412
+, docbook-xsl-nons
+, fetchFromGitHub
+, gtk-doc
+, libevdev
+, libtool
+, libxml2
+, lzma
+, pkg-config
+, lib, stdenv
+, upower
+}:
 
 stdenv.mkDerivation rec {
   pname = "thermald";
-  version = "2.2";
+  version = "2.4.1";
+
+  outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "1nrhv3bypyc48h9smj5cpq63rawm6vqyg3cwkhpz69rgjnf1283m";
+    sha256 = "0rlac7v1b59m7gh767hkd8a0r4p001nd24786fnmryygbxynd2s6";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf automake libtool dbus dbus-glib libxml2 autoconf-archive ];
+  nativeBuildInputs = [
+    autoconf
+    autoconf-archive
+    automake
+    docbook-xsl-nons
+    docbook_xml_dtd_412
+    gtk-doc
+    libtool
+    pkg-config
+  ];
 
-  patchPhase = ''sed -e 's/upstartconfdir = \/etc\/init/upstartconfdir = $(out)\/etc\/init/' -i data/Makefile.am'';
-
-  preConfigure = ''
-    export PKG_CONFIG_PATH="${dbus.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
-    ./autogen.sh
-  '';
+  buildInputs = [
+    dbus
+    dbus-glib
+    libevdev
+    libxml2
+    lzma
+    upower
+  ];
 
   configureFlags = [
     "--sysconfdir=${placeholder "out"}/etc"
     "--localstatedir=/var"
+    "--enable-gtk-doc"
     "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
   ];
+
+  preConfigure = "NO_CONFIGURE=1 ./autogen.sh";
 
   postInstall = ''
     cp ./data/thermal-conf.xml $out/etc/thermald/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thermal Daemon";
     homepage = "https://01.org/linux-thermal-daemon";
-    license = licenses.gpl2;
+    changelog = "https://github.com/intel/thermal_daemon/blob/master/README.txt";
+    license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ abbradar ];
   };

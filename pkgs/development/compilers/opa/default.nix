@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qs91rq9xrafv2mf2v415k8lv91ab3ycz0xkpjh1mng5ca3pjlf3";
   };
 
+  patches = [ ./ocaml-4.03.patch ];
+
   # Paths so the opa compiler code generation will use the same programs as were
   # used to build opa.
   codeGeneratorPaths = stdenv.lib.makeBinPath [ ocamlPackages.ocaml gcc binutils gnumake nodejs ];
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
     (
     cat ./compiler/buildinfos/buildInfos.ml.pre
-    ./compiler/buildinfos/generate_buildinfos.sh . --release --version ./compiler/buildinfos/version_major.txt 
+    ./compiler/buildinfos/generate_buildinfos.sh . --release --version ./compiler/buildinfos/version_major.txt
     echo let opa_git_version = ${version}
     echo 'let opa_git_sha = "xxxx"'
     cat ./compiler/buildinfos/buildInfos.ml.post
@@ -34,6 +36,8 @@ stdenv.mkDerivation rec {
     done
     export CAMLP4O=${ocamlPackages.camlp4}/bin/camlp4o
     export CAMLP4ORF=${ocamlPackages.camlp4}/bin/camlp4orf
+    export OCAMLBUILD=${ocamlPackages.ocamlbuild}/bin/ocamlbuild
+    substituteInPlace _tags --replace ', warn_error_A' ""
   '';
 
   prefixKey = "-prefix ";

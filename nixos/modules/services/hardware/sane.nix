@@ -148,7 +148,7 @@ in
           # saned needs to distinguish between IPv4 and IPv6 to open matching data sockets.
           BindIPv6Only = "ipv6-only";
           Accept = true;
-          MaxConnections = 1;
+          MaxConnections = 64;
         };
       };
 

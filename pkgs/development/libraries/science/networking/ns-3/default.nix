@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, fetchpatch
 , python
 , wafHook
 
@@ -26,7 +27,7 @@
 
 # All modules can be enabled by choosing 'all_modules'.
 # we include here the DCE mandatory ones
-, modules ? [ "core" "network" "internet" "point-to-point" "fd-net-device" "netanim"]
+, modules ? [ "core" "network" "internet" "point-to-point" "point-to-point-layout" "fd-net-device" "netanim" ]
 , lib
 }:
 
@@ -38,16 +39,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ns-3";
-  version = "30";
+  version = "33";
 
   src = fetchFromGitLab {
     owner = "nsnam";
     repo   = "ns-3-dev";
     rev    = "ns-3.${version}";
-    sha256 = "0smdi3gglmafpc7a20hj2lbmwks3d5fpsicpn39lmm3svazw0bvp";
+    sha256 = "0ds8h0f2qcb0gc2a8bk38cbhdb122i4sbg589bjn59rblzw0hkq4";
   };
 
-  nativeBuildInputs = [ wafHook ];
+  nativeBuildInputs = [ wafHook python ];
 
   outputs = [ "out" ] ++ lib.optional pythonSupport "py";
 
@@ -97,6 +98,14 @@ stdenv.mkDerivation rec {
     ${pythonEnv.interpreter} ./test.py --nowaf
   '';
 
+  patches = [
+    (fetchpatch {
+      name = "upstream-issue-336.patch";
+      url = "https://gitlab.com/nsnam/ns-3-dev/-/commit/673004edae1112e6cb249b698aad856d728530fb.patch";
+      sha256 = "0q96ividinbh9xlws014b2ir6gaavygnln5ca9m1db06m4vfwhng";
+    })
+  ];
+
   # strictoverflow prevents clang from discovering pyembed when bindings
   hardeningDisable = [ "fortify" "strictoverflow"];
 
@@ -105,6 +114,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     description = "A discrete time event network simulator";
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ teto ];
+    maintainers = with maintainers; [ teto rgrunbla ];
   };
 }

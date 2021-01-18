@@ -7,23 +7,25 @@
 , libsecret
 , openssl
 , pcre
-, pkgconfig
+, pkg-config
 , qtbase
 , qtkeychain
 , qttools
 , qtwebengine
+, qtquickcontrols2
+, qtgraphicaleffects
 , sqlite
 }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "2.6.5";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "0r2n9l383drnnzbyywnbqljh9kxm3kz4g0mv7bnrp6b10b2ma3pg";
+    sha256 = "0idh8i71jivdjjs2y62l22yl3qxwgcr0hf53dad587bzgkkkr223";
   };
 
   patches = [
@@ -31,7 +33,7 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
   ];
 
@@ -44,6 +46,8 @@ mkDerivation rec {
     qtkeychain
     qttools
     qtwebengine
+    qtquickcontrols2
+    qtgraphicaleffects
     sqlite
   ];
 
@@ -60,7 +64,7 @@ mkDerivation rec {
     description = "Nextcloud themed desktop client";
     homepage = "https://nextcloud.com";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ caugner ma27 ];
+    maintainers = with maintainers; [ caugner ];
     platforms = platforms.linux;
   };
 }

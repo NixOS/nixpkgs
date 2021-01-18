@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.10.1";
+  version = "0.11.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d1a0c9d6bd1bc3cadb0364b8f06540f51322a670cf8438d0fde1c1c7317adc0";
+    sha256 = "44e78eaed937c5a87fc7a892c329a7cc091060b67ebd1d0d306b446a74ba01ad";
   };
 
   checkInputs = [ nose ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Statisitical data visualization";
-    homepage = "http://stanford.edu/~mwaskom/software/seaborn/";
+    homepage = "https://seaborn.pydata.org/";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fridh ];
   };

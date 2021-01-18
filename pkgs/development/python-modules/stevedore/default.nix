@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "stevedore";
-  version = "3.2.0";
+  version = "3.2.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1r8m8g7f13wdmfw5m7k0vj7bcx3psfg5yg2i8jlb08nrpsjily9q";
+    sha256 = "f845868b3a3a77a2489d226568abe7328b5c2d4f6a011cc759dfa99144a521f0";
   };
 
   propagatedBuildInputs = [ pbr setuptools six ]

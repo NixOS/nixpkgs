@@ -13,52 +13,47 @@ libav,
 libiio,
 libopus,
 libpulseaudio,
-libusb-compat-0_1,
+libusb1,
 limesuite,
+libbladeRF,
 mkDerivation,
 ocl-icd,
 opencv3,
-pkgconfig,
+pkg-config,
 qtbase,
 qtmultimedia,
+qtserialport,
 qtwebsockets,
 rtl-sdr,
-serialdv
+serialdv,
+soapysdr-with-plugins,
+uhd
 }:
 
-let
-
-  codec2' = codec2.overrideAttrs (old: {
-    src = fetchFromGitHub {
-      owner = "drowe67";
-      repo = "codec2";
-      rev = "567346818c0d4d697773cf66d925fdb031e15668";
-      sha256 = "0ngqlh2cw5grx2lg7xj8baz6p55gfhq4caggxkb4pxlg817pwbpa";
-    };
-  });
-
-in mkDerivation rec {
+mkDerivation rec {
   pname = "sdrangel";
-  version = "4.11.12";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    sha256 = "0zbx0gklylk8npb3wnnmqpam0pdxl40f20i3wzwwh4gqrppxywzx";
+    sha256 = "4iJoKs0BHmBR6JRFuTIqs0GW3SjhPRMPRlqdyTI38T4=";
     fetchSubmodules = false;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    glew opencv3 libusb-compat-0_1 boost libopus limesuite libav libiio libpulseaudio
+    glew opencv3 libusb1 boost libopus limesuite libav libiio libpulseaudio
     qtbase qtwebsockets qtmultimedia rtl-sdr airspy hackrf
-    fftwFloat codec2' cm256cc serialdv
+    fftwFloat codec2 cm256cc serialdv qtserialport
+    libbladeRF uhd soapysdr-with-plugins
   ];
   cmakeFlags = [
     "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
     "-DLIMESUITE_INCLUDE_DIR:PATH=${limesuite}/include"
     "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite.so"
+    "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
   ];
 
   LD_LIBRARY_PATH = "${ocl-icd}/lib";

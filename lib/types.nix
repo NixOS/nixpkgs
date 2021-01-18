@@ -1,12 +1,65 @@
 # Definitions related to run-time type checking.  Used in particular
 # to type-check NixOS configurations.
 { lib }:
-with lib.lists;
-with lib.attrsets;
-with lib.options;
-with lib.trivial;
-with lib.strings;
+
 let
+  inherit (lib)
+    elem
+    flip
+    functionArgs
+    isAttrs
+    isBool
+    isDerivation
+    isFloat
+    isFunction
+    isInt
+    isList
+    isString
+    isStorePath
+    setFunctionArgs
+    toDerivation
+    toList
+    ;
+  inherit (lib.lists)
+    all
+    concatLists
+    count
+    elemAt
+    filter
+    foldl'
+    head
+    imap1
+    last
+    length
+    tail
+    unique
+    ;
+  inherit (lib.attrsets)
+    attrNames
+    filterAttrs
+    hasAttr
+    mapAttrs
+    optionalAttrs
+    zipAttrsWith
+    ;
+  inherit (lib.options)
+    getFiles
+    getValues
+    mergeDefaultOption
+    mergeEqualOption
+    mergeOneOption
+    showFiles
+    showOption
+    ;
+  inherit (lib.strings)
+    concatMapStringsSep
+    concatStringsSep
+    escapeNixString
+    isCoercibleToString
+    ;
+  inherit (lib.trivial)
+    boolToString
+    ;
 
   inherit (lib.modules) mergeDefinitions;
   outer_types =
@@ -104,6 +157,42 @@ rec {
   # When adding new types don't forget to document them in
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
+
+    anything = mkOptionType {
+      name = "anything";
+      description = "anything";
+      check = value: true;
+      merge = loc: defs:
+        let
+          getType = value:
+            if isAttrs value && isCoercibleToString value
+            then "stringCoercibleSet"
+            else builtins.typeOf value;
+
+          # Returns the common type of all definitions, throws an error if they
+          # don't have the same type
+          commonType = foldl' (type: def:
+            if getType def.value == type
+            then type
+            else throw "The option `${showOption loc}' has conflicting option types in ${showFiles (getFiles defs)}"
+          ) (getType (head defs).value) defs;
+
+          mergeFunction = {
+            # Recursively merge attribute sets
+            set = (attrsOf anything).merge;
+            # Safe and deterministic behavior for lists is to only accept one definition
+            # listOf only used to apply mkIf and co.
+            list =
+              if length defs > 1
+              then throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
+              else (listOf anything).merge;
+            # This is the type of packages, only accept a single definition
+            stringCoercibleSet = mergeOneOption;
+            # Otherwise fall back to only allowing all equal definitions
+          }.${commonType} or mergeEqualOption;
+        in mergeFunction loc defs;
+    };
+
     unspecified = mkOptionType {
       name = "unspecified";
     };
@@ -234,7 +323,7 @@ rec {
       name = "attrs";
       description = "attribute set";
       check = isAttrs;
-      merge = loc: foldl' (res: def: mergeAttrs res def.value) {};
+      merge = loc: foldl' (res: def: res // def.value) {};
       emptyValue = { value = {}; };
     };
 
@@ -263,16 +352,14 @@ rec {
       check = isList;
       merge = loc: defs:
         map (x: x.value) (filter (x: x ? value) (concatLists (imap1 (n: def:
-          if isList def.value then
-            imap1 (m: def':
-              (mergeDefinitions
-                (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
-                elemType
-                [{ inherit (def) file; value = def'; }]
-              ).optionalValue
-            ) def.value
-          else
-            throw "The option value `${showOption loc}` in `${def.file}` is not a list.") defs)));
+          imap1 (m: def':
+            (mergeDefinitions
+              (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
+              elemType
+              [{ inherit (def) file; value = def'; }]
+            ).optionalValue
+          ) def.value
+        ) defs)));
       emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
@@ -465,6 +552,7 @@ rec {
         show = v:
                if builtins.isString v then ''"${v}"''
           else if builtins.isInt v then builtins.toString v
+          else if builtins.isBool v then boolToString v
           else ''<${builtins.typeOf v}>'';
       in
       mkOptionType rec {

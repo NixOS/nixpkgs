@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeWrapper, perlPackages }:
+{ fetchurl, lib, stdenv, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "swec-0.4";
@@ -64,9 +64,9 @@ stdenv.mkDerivation rec {
          (well, not exactly true, SWEC will ignore robots.txt).
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

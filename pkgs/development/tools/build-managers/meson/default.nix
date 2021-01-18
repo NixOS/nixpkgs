@@ -3,27 +3,20 @@
 , stdenv
 , writeTextDir
 , substituteAll
-, pkgsHostHost
 , fetchpatch
+, installShellFiles
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.55.1";
+  version = "0.56.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "O1dB+ITgSSi9+hlHRn/wavpsmOYjwlzvda33HKOc4IA=";
+    sha256 = "04vj250bwrzq7c0z1r96b0z0vgirvn0m367wm3ygqmfdy67x6799";
   };
 
   patches = [
-    # Meson 0.55.0 incorrectly considers skipped tests as failures,
-    # which makes some packages like gjs fail to build.
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/7db49db67d4aa7582cf46feb7157235e66aa95b1.diff";
-      sha256 = "1chq52sgk24afdlswssr8n8p6fa2wz8rjlxvkjhpqg1kg3qnqc9p";
-    })
-
     # Upstream insists on not allowing bindir and other dir options
     # outside of prefix for some reason:
     # https://github.com/mesonbuild/meson/issues/2561
@@ -59,13 +52,14 @@ python3.pkgs.buildPythonApplication rec {
     # cut-in-half-by-\0 store path references.
     # Let’s just clear the whole rpath and hope for the best.
     ./clear-old-rpath.patch
+
+    # Patch out default boost search paths to avoid impure builds on
+    # unsandboxed non-NixOS builds, see:
+    # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
+    ./boost-Do-not-add-system-paths-on-nix.patch
   ];
 
   setupHook = ./setup-hook.sh;
-
-  # Ensure there will always be a native C compiler when meson is used, as a
-  # workaround until https://github.com/mesonbuild/meson/pull/6512 lands.
-  depsHostHostPropagated = [ pkgsHostHost.stdenv.cc ];
 
   # 0.45 update enabled tests but they are failing
   doCheck = false;
@@ -82,6 +76,13 @@ python3.pkgs.buildPythonApplication rec {
 
     # Do not propagate Python
     rm $out/nix-support/propagated-build-inputs
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --zsh data/shell-completions/zsh/_meson
+    installShellCompletion --bash data/shell-completions/bash/meson
   '';
 
   meta = with lib; {

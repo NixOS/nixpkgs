@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/gitolite-shell \
-      --prefix PATH : "${git}/bin"
+      --prefix PATH : ${lib.makeBinPath [ git perl ]}
   '';
 
   installPhase = ''
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     echo ${version} > $out/bin/VERSION
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Finely-grained git repository hosting";
     homepage    = "https://gitolite.com/gitolite/index.html";
     license     = licenses.gpl2;

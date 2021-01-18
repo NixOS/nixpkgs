@@ -66,7 +66,7 @@
    <listitem>
     <para>
      For allowing the build of a broken package once, you can use an environment variable for a single invocation of the nix tools:
-<programlisting>$ export NIXPKGS_ALLOW_BROKEN=1</programlisting>
+<screen><prompt>$ </prompt>export NIXPKGS_ALLOW_BROKEN=1</screen>
     </para>
    </listitem>
    <listitem>
@@ -92,7 +92,7 @@
    <listitem>
     <para>
      For allowing the build of an unsupported package once, you can use an environment variable for a single invocation of the nix tools:
-<programlisting>$ export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1</programlisting>
+<screen><prompt>$ </prompt>export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1</screen>
     </para>
    </listitem>
    <listitem>
@@ -122,7 +122,7 @@
    <listitem>
     <para>
      To temporarily allow all unfree packages, you can use an environment variable for a single invocation of the nix tools:
-<programlisting>$ export NIXPKGS_ALLOW_UNFREE=1</programlisting>
+<screen><prompt>$ </prompt>export NIXPKGS_ALLOW_UNFREE=1</screen>
     </para>
    </listitem>
    <listitem>
@@ -157,7 +157,7 @@
      The following example configuration whitelists the licenses <literal>amd</literal> and <literal>wtfpl</literal>:
 <programlisting>
 {
-  whitelistedLicenses = with stdenv.lib.licenses; [ amd wtfpl ];
+  whitelistedLicenses = with lib.licenses; [ amd wtfpl ];
 }
 </programlisting>
     </para>
@@ -165,9 +165,12 @@
      The following example configuration blacklists the <literal>gpl3Only</literal> and <literal>agpl3Only</literal> licenses:
 <programlisting>
 {
-  blacklistedLicenses = with stdenv.lib.licenses; [ agpl3Only gpl3Only ];
+  blacklistedLicenses = with lib.licenses; [ agpl3Only gpl3Only ];
 }
 </programlisting>
+    </para>
+    <para>
+      Note that <literal>whitelistedLicenses</literal> only applies to unfree licenses unless <literal>allowUnfree</literal> is enabled. It is not a generic whitelist for all types of licenses. <literal>blacklistedLicenses</literal> applies to all licenses.
     </para>
    </listitem>
   </itemizedlist>
@@ -187,7 +190,7 @@
    <listitem>
     <para>
      To temporarily allow all insecure packages, you can use an environment variable for a single invocation of the nix tools:
-<programlisting>$ export NIXPKGS_ALLOW_INSECURE=1</programlisting>
+<screen><prompt>$ </prompt>export NIXPKGS_ALLOW_INSECURE=1</screen>
     </para>
    </listitem>
    <listitem>

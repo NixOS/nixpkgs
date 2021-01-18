@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchPypi
 , buildPythonPackage
 , certifi
@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "12.8";
+  version = "13.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hzdnjxqgqv868agaipga4padq2q5s4hd1yzvh3n48b9ck2qcw9j";
+    sha256 = "ca78a41626d728a8f51affa792270e210fa503ed298d395bed2bd1281842dca3";
   };
 
   checkInputs = [ pytest ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "telegram" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This library provides a pure Python interface for the Telegram Bot API.";
     homepage = "https://python-telegram-bot.org";
     license = licenses.lgpl3;

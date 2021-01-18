@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
+{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
 , libuv, lua, ncurses, pkgconfig
 , unibilium, xsel, gperf
 , libvterm-neovim
@@ -9,7 +9,7 @@
 , nodejs ? null, fish ? null, python ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   neovimLuaEnv = lua.withPackages(ps:
@@ -48,7 +48,6 @@ in
     ];
 
     dontFixCmake = true;
-    enableParallelBuilding = true;
 
     buildInputs = [
       gperf
@@ -105,11 +104,11 @@ in
     # triggers on buffer overflow bug while running tests
     hardeningDisable = [ "fortify" ];
 
-    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    preConfigure = lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
 
-    postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+    postInstall = lib.optionalString stdenv.isLinux ''
       sed -i -e "s|'xsel|'${xsel}/bin/xsel|g" $out/share/nvim/runtime/autoload/provider/clipboard.vim
     '';
 

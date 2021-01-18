@@ -4,8 +4,18 @@
   openMPISupport ? false, openmpi ? null,
   buildDocs ? false,
   cudaArchList ? null,
-  numpy, pyyaml, cffi, click, typing, cmake, hypothesis, numactl, psutil,
-  linkFarm, symlinkJoin,
+
+  # Native build inputs
+  cmake, util-linux, linkFarm, symlinkJoin, which,
+
+  # Build inputs
+  numactl,
+
+  # Propagated build inputs
+  dataclasses, numpy, pyyaml, cffi, click, typing-extensions,
+
+  # Unit tests
+  hypothesis, psutil,
 
   # virtual pkg that consistently instantiates blas across nixpkgs
   # See https://github.com/NixOS/nixpkgs/pull/83888
@@ -17,7 +27,7 @@
   # dependencies for torch.utils.tensorboard
   pillow, six, future, tensorflow-tensorboard, protobuf,
 
-  utillinux, which, isPy3k }:
+  isPy3k, pythonOlder }:
 
 assert !openMPISupport || openmpi != null;
 
@@ -102,7 +112,7 @@ let
 in buildPythonPackage rec {
   pname = "pytorch";
   # Don't forget to update pytorch-bin to the same version.
-  version = "1.6.0";
+  version = "1.7.1";
 
   disabled = !isPy3k;
 
@@ -117,23 +127,10 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "14hhjsi6fnpaw9m1a3bhvdinsks6fhss6bbcrfk6jgns64abqdaz";
+    sha256 = "sha256-udpbSL8xnzf20A1pYYNlYjdp8ME8AVaAkMMiw53K6CU=";
   };
 
-  patches = lib.optionals stdenv.isAarch64 [
-    # GNU aarch64 assembler does not support 4s on neon mov:
-    # https://github.com/pytorch/pytorch/issues/33124
-    #
-    # Fix from:
-    # https://github.com/pytorch/pytorch/pull/40584
-    #
-    # This patch can be removed with the next major version (1.7.0).
-    (fetchpatch {
-      name = "qnnpack-neon-fix.patch";
-      url = "https://github.com/pytorch/pytorch/commit/7676682584d0caf9243bce74ea0a88711ec4a807.diff";
-      sha256 = "13spncaqlpsp8qk2850yly7xqwmhhfwznhmzkk8jgpslkbx75vgq";
-    })
-  ] ++ lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     # pthreadpool added support for Grand Central Dispatch in April
     # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
     # that is available starting with macOS 10.13. However, our current
@@ -141,6 +138,13 @@ in buildPythonPackage rec {
     # pthread support.
     ./pthreadpool-disable-gcd.diff
   ];
+
+  # The dataclasses module is included with Python >= 3.7. This should
+  # be fixed with the next PyTorch release.
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'dataclasses'" "'dataclasses; python_version < \"3.7\"'"
+  '';
 
   preConfigure = lib.optionalString cudaSupport ''
     export TORCH_CUDA_ARCH_LIST="${lib.strings.concatStringsSep ";" final_cudaArchList}"
@@ -203,7 +207,7 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    utillinux
+    util-linux
     which
     ninja
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
@@ -217,9 +221,11 @@ in buildPythonPackage rec {
     click
     numpy
     pyyaml
+    typing-extensions
     # the following are required for tensorboard support
     pillow six future tensorflow-tensorboard protobuf
-  ] ++ lib.optionals openMPISupport [ openmpi ];
+  ] ++ lib.optionals openMPISupport [ openmpi ]
+    ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
   checkInputs = [ hypothesis ninja psutil ];
 
@@ -247,6 +253,15 @@ in buildPythonPackage rec {
     mkdir $dev
     cp -r $out/${python.sitePackages}/torch/include $dev/include
     cp -r $out/${python.sitePackages}/torch/share   $dev/share
+
+    # Fix up library paths for split outputs
+    substituteInPlace \
+      $dev/share/cmake/Torch/TorchConfig.cmake \
+      --replace \''${TORCH_INSTALL_PREFIX}/lib "$lib/lib"
+
+    substituteInPlace \
+      $dev/share/cmake/Caffe2/Caffe2Targets-release.cmake \
+      --replace \''${_IMPORT_PREFIX}/lib "$lib/lib"
 
     mkdir $lib
     cp -r $out/${python.sitePackages}/torch/lib     $lib/lib
@@ -282,6 +297,6 @@ in buildPythonPackage rec {
     homepage    = "https://pytorch.org/";
     license     = lib.licenses.bsd3;
     platforms   = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
-    maintainers = with lib.maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    maintainers = with lib.maintainers; [ danieldk teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
   };
 }

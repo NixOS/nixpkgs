@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, xorgproto, libX11, libXext
+{ lib, stdenv, fetchgit, autoreconfHook, xorgproto, libX11, libXext
 , pixman, pkgconfig, utilmacros, xorgserver
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   CFLAGS = "-I${pixman}/include/pixman-1";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cgit.freedesktop.org/xorg/driver/xf86-video-nested";
     description = "A driver to run Xorg on top of Xorg or something else";
     maintainers = [ maintainers.goibhniu ];

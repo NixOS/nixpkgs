@@ -11,31 +11,29 @@
 , glslang
 , lcms2
 , epoxy
+, libGL
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "2.72.0";
+  version = "3.104.0";
+
+  patches = [
+    (fetchpatch {
+      # support glslang>=11.0.0; Upstream MR: https://code.videolan.org/videolan/libplacebo/-/merge_requests/131
+      url = "https://code.videolan.org/videolan/libplacebo/-/commit/affd15a2faa1340d40dcf277a8acffe2987f517c.patch";
+      sha256 = "1nm27mdm9rn3wsbjdif46pici6mbzmfb6521ijl8ah4mxn9p1ikc";
+    })
+  ];
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1yhf9xyxdawbihsx89dpjlac800wrmpwx63rphad2nj225y9q40f";
+    sha256 = "0p5mx8ch7cp7b54yrkl4fs8bcvqma1h461gx6ps4kagn4dsx8asb";
   };
-
-  patches = [
-    # to work with latest glslang, remove on release >2.72.0
-    (fetchpatch {
-      url = "https://code.videolan.org/videolan/libplacebo/-/commit/523056828ab86c2f17ea65f432424d48b6fdd389.patch";
-      sha256 = "051vhd0l3yad1fzn5zayi08kqs9an9j8p7m63kgqyfv1ksnydpcs";
-    })
-    (fetchpatch {
-      url = "https://code.videolan.org/videolan/libplacebo/-/commit/82e3be1839379791b58e98eb049415b42888d5b0.patch";
-      sha256 = "0nklj9gfiwkbbj6wfm1ck33hphaxrvzb84c4h2nfj88bapnlm90l";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -51,6 +49,8 @@ stdenv.mkDerivation rec {
     glslang
     lcms2
     epoxy
+    libGL
+    xorg.libX11
   ];
 
   mesonFlags = [

@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, openssl, avahi, alsaLib
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, avahi, alsaLib
 , libdaemon, popt, pkgconfig, libconfig, libpulseaudio, soxr }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.6";
+  version = "3.3.7";
   pname = "shairport-sync";
 
   src = fetchFromGitHub {
-    sha256 = "0s5aq1a7dmf3n2d6ps6x7xarpn53vvlcbms8k23wl2h5vrx91rwi";
+    sha256 = "110k196y62zy6cmdvcnf74iamqj7jq0ybnqh1q1irjak81s3yz12";
     rev = version;
     repo = "shairport-sync";
     owner = "mikebrady";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Airtunes server and emulator with multi-room capabilities";
     license = licenses.mit;

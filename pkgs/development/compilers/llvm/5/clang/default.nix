@@ -19,10 +19,10 @@ let
     '';
 
     nativeBuildInputs = [ cmake python3 ]
-      ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx;
+      ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx
+      ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-    buildInputs = [ libxml2 llvm ]
-      ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    buildInputs = [ libxml2 llvm ];
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
@@ -71,8 +71,6 @@ let
       mv $out/share/clang/*.py $python/share/clang
       rm $out/bin/c-index-test
     '';
-
-    enableParallelBuilding = true;
 
     passthru = {
       isClang = true;

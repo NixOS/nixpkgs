@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 let
   version = "1.0.1";
   sha256 = "0jmm9h607f7k20yassm6af9mh5l00yih5248wwv4i05bd68yw3p5";
@@ -25,9 +25,11 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -D system76_acpi.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76_acpi.ko
+    mkdir -p $out/lib/udev/hwdb.d
+    mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = [ maintainers.khumba ];
     license = [ licenses.gpl2Only ];
     platforms = [ "i686-linux" "x86_64-linux" ];

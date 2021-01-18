@@ -1,4 +1,4 @@
-# Python
+# Python {#python}
 
 ## User Guide
 
@@ -153,7 +153,7 @@ The dot product of [1 2] and [3 4] is: 11
 But if we maintain the script ourselves, and if there are more dependencies, it
 may be nice to encode those dependencies in source to make the script re-usable
 without that bit of knowledge. That can be done by using `nix-shell` as a
-[shebang](https://en.wikipedia.org/wiki/Shebang_(Unix), like so:
+[shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)), like so:
 
 ```python
 #!/usr/bin/env nix-shell
@@ -567,7 +567,7 @@ test run would be:
   checkPhase = "pytest";
 ```
 
-However, many repositories' test suites do not translate well to nix's build 
+However, many repositories' test suites do not translate well to nix's build
 sandbox, and will generally need many tests to be disabled.
 
 To filter tests using pytest, one can do the following:
@@ -755,8 +755,8 @@ and in this case the `python38` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.7, 3.6, 3.7 and 3.8 of the CPython interpreter are available as
-respectively `python27`, `python36`, `python37` and `python38`. The
+Versions 2.7, 3.6, 3.7, 3.8 and 3.9 of the CPython interpreter are available as
+respectively `python27`, `python36`, `python37`, `python38` and `python39`. The
 aliases `python2` and `python3` correspond to respectively `python27` and
 `python38`. The default interpreter, `python`, maps to `python2`. The PyPy
 interpreters compatible with Python 2.7 and 3 are available as `pypy27` and

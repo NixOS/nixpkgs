@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "git-town";
@@ -14,9 +14,9 @@ buildGoPackage rec {
 
   buildFlagsArray = [ "-ldflags=-X github.com/git-town/git-town/src/cmd.version=v${version} -X github.com/git-town/git-town/src/cmd.buildDate=nix" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generic, high-level git support for git-flow workflows";
-    homepage = "http://www.git-town.com/";
+    homepage = "https://www.git-town.com/";
     maintainers = [ maintainers.allonsy maintainers.blaggacao ];
     license = licenses.mit;
   };

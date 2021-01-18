@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchPypi
 , six
-, nose
 , appdirs
 , scandir
 , backports_os
@@ -15,7 +14,8 @@
 , mock
 , pythonAtLeast
 , isPy3k
-, pytest
+, pytestCheckHook
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ glibcLocales ];
-  checkInputs = [ nose pyftpdlib mock psutil pytest ];
+  checkInputs = [ pyftpdlib mock psutil pytestCheckHook ];
   propagatedBuildInputs = [ six appdirs pytz ]
     ++ lib.optionals (!isPy3k) [ backports_os ]
     ++ lib.optionals (!pythonAtLeast "3.6") [ typing ]
@@ -37,9 +37,23 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.utf-8";
 
-  checkPhase = ''
-    HOME=$(mktemp -d) pytest -k 'not user_data_repr' --ignore=tests/test_opener.py
+  preCheck = ''
+    HOME=$(mktemp -d)
   '';
+
+  pytestFlagsArray = [ "--ignore=tests/test_opener.py" ];
+
+  disabledTests = [
+    "user_data_repr"
+  ] ++ lib.optionals (stdenv.isDarwin) [ # remove if https://github.com/PyFilesystem/pyfilesystem2/issues/430#issue-707878112 resolved
+    "test_ftpfs"
+  ] ++ lib.optionals (pythonAtLeast "3.9") [
+    # update friend version of this commit: https://github.com/PyFilesystem/pyfilesystem2/commit/3e02968ce7da7099dd19167815c5628293e00040
+    # merged into master, able to be removed after >2.4.1
+    "test_copy_sendfile"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Filesystem abstraction";

@@ -1,17 +1,17 @@
-{ stdenv
+{ lib, stdenv
 , cmake
 , fetchFromGitHub
 }:
 
 stdenv.mkDerivation rec {
   pname = "h3";
-  version = "3.6.4";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "uber";
     repo = "h3";
     rev = "v${version}";
-    sha256 = "1a4scs5n9srq6sjkz8d60ffzpc6aadkxmk1i3hdj081j0jzsrpf7";
+    sha256 = "1ccyzbvbacf0bl9av4yp15zmhiqr3679nnbab11yrhxm9csyal16";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_LINTING=OFF"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/uber/h3";
     description = "Hexagonal hierarchical geospatial indexing system";
     license = licenses.asl20;

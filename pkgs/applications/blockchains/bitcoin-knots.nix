@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkgconfig
 , autoreconfHook
@@ -9,7 +9,7 @@
 , miniupnpc
 , libevent
 , protobuf
-, utillinux
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ openssl db5 openssl utillinux
+  buildInputs = [ openssl db5 openssl util-linux
                   protobuf boost zlib miniupnpc libevent ];
 
   configureFlags = [ "--with-incompatible-bdb"
                      "--with-boost-libdir=${boost.out}/lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An enhanced Bitcoin node software";
     homepage = "https://bitcoinknots.org/";
     license = licenses.mit;

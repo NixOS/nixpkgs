@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjack2, pkgconfig }:
+{ lib, stdenv, fetchurl, libjack2, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "jackmeter-0.4";
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libjack2 ];
 
-  meta = { 
+  meta = {
     description = "Console jack loudness meter";
     homepage = "https://www.aelius.com/njh/jackmeter/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.marcweber ];
+    platforms = lib.platforms.linux;
   };
 }

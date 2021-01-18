@@ -14,15 +14,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules makeWrapper ];
   buildInputs = [ qt5.qtbase ki18n kconfig kiconthemes kxmlgui kwindowsystem ];
 
-  enableParallelBuilding = true;
-
-
   postInstall = ''
     wrapProgram $out/bin/kdbg --prefix QT_PLUGIN_PATH : ${qtbase}/${qtbase.qtPluginPrefix}
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.kdbg.org/";
+    homepage = "https://www.kdbg.org/";
     description = ''
       A graphical user interface to gdb, the GNU debugger. It provides an
       intuitive interface for setting breakpoints, inspecting variables, and

@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, autoconf, automake, gettext
+{ lib, stdenv, fetchurl, pkg-config, autoconf, automake, gettext
 , fluxbox, bc, gtkmm2, glibmm, libglademm, libsigcxx }:
 
 stdenv.mkDerivation rec {
 
   pname = "fme";
   version = "1.1.3";
-  
+
   src = fetchurl {
     url = "https://github.com/rdehouss/fme/archive/v${version}.tar.gz";
     sha256 = "d1c81a6a38c0faad02943ad65d6d0314bd205c6de841669a2efe43e4c503e63d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake gettext fluxbox bc gtkmm2 glibmm libglademm libsigcxx ];
 
   preConfigure = ''
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Editor for Fluxbox menus";
     longDescription = ''
       Fluxbox Menu Editor is a menu editor for the Window Manager Fluxbox written in C++

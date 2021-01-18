@@ -10,14 +10,12 @@ stdenv.mkDerivation rec {
   pname = "lld";
   inherit version;
 
-  src = fetch pname "0lqz5cfids0rrl02p0qq5s18p8ikaa9r5gwa2yvj3bismdhvmar8";
+  src = fetch pname "1dq82dkam8x2niha18v7ckh30zmzyclydzipqkf7h41r3ah0vfk0";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvm libxml2 ];
 
   outputs = [ "out" "dev" ];
-
-  enableParallelBuilding = true;
 
   postInstall = ''
     moveToOutput include "$dev"

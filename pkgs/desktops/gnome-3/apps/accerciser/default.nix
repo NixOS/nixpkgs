@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , wrapGAppsHook
@@ -15,15 +15,15 @@
 , adwaita-icon-theme
 }:
 
- python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "accerciser";
-  version = "3.36.3";
+  version = "3.38.0";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0zfhmpaqqwm89k8p4apq4la191icjvqh0097p5aig3yhy87fahp9";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0fd9vv2abd2if2qj4nlfy7mpd7rc4sx18zhmxd5ijlnfhkpggbp5";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@
     gobject-introspection # For setup hook
     itstool
     libxml2
-    pkgconfig
+    pkg-config
     dbus
     wrapGAppsHook
   ];
@@ -63,7 +63,7 @@
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Accerciser";
     description = "Interactive Python accessibility explorer";
     maintainers = teams.gnome.members;

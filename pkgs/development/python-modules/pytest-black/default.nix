@@ -7,17 +7,19 @@
 
 buildPythonPackage rec {
   pname = "pytest-black";
-  version = "0.3.10";
+  version = "0.3.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dvlfic7nvfj97rg5fwj7ahw83n9yj3jjbp5m60n47mlx7z0qg2z";
+    sha256 = "1d339b004f764d6cd0f06e690f6dd748df3d62e6fe1a692d6a5500ac2c5b75a5";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
 
   propagatedBuildInputs = [ black pytest toml ];
 
+  # does not contain tests
+  doCheck = false;
   pythonImportsCheck = [ "pytest_black" ];
 
   meta = with lib; {

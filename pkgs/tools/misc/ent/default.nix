@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{lib, stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
   name = "ent-1.1";
@@ -14,14 +14,14 @@ stdenv.mkDerivation {
 
   buildInputs = [ unzip ];
 
-  buildFlags = stdenv.lib.optional stdenv.cc.isClang "CC=clang";
+  buildFlags = lib.optional stdenv.cc.isClang "CC=clang";
 
   installPhase = ''
     mkdir -p $out/bin
     cp ent $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pseudorandom Number Sequence Test Program";
     homepage = "http://www.fourmilab.ch/random/";
     platforms = platforms.all;

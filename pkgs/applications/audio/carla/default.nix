@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg_3, jack2,
+{ lib, stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg_3, jack2,
   liblo, libpulseaudio, libsndfile, pkgconfig, python3Packages,
   which, withFrontend ? true,
   withQt ? true, qtbase ? null, wrapQtAppsHook ? null,
   withGtk2 ? true, gtk2 ? null,
   withGtk3 ? true, gtk3 ? null }:
 
-with stdenv.lib;
+with lib;
 
 assert withFrontend -> python3Packages ? pyqt5;
 assert withQt -> qtbase != null;
@@ -15,13 +15,13 @@ assert withGtk3 -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0c3y4a6cgi4bv1mg57i3qn5ia6pqjqlaylvkapj6bmpsw71ig22g";
+    sha256 = "B4xoRuNEW4Lz9haP8fqxOTcysGTNEXFOq9UXqUJLSFw=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://kxstudio.sf.net/carla";
     description = "An audio plugin host";
     longDescription = ''

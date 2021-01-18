@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, ucommon, libosip, libexosip, gnutls, zlib }:
+{ fetchurl, lib, stdenv, pkgconfig, ucommon, libosip, libexosip, gnutls, zlib }:
 
 stdenv.mkDerivation rec {
   name = "sipwitch-1.9.15";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Secure peer-to-peer VoIP server that uses the SIP protocol";
     homepage = "https://www.gnu.org/software/sipwitch/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; linux;
   };
 }

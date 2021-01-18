@@ -1,32 +1,30 @@
-{ stdenv, fetchurl, python3Packages, makeWrapper, unzip
+{ lib, stdenv, fetchurl, python3Packages, makeWrapper, unzip
 , guiSupport ? false, tk ? null
 , ApplicationServices
 }:
 
 let
-  inherit (python3Packages) docutils dulwich python;
+  inherit (python3Packages) docutils python;
 
 in python3Packages.buildPythonApplication rec {
   pname = "mercurial";
-  version = "5.4.2";
+  version = "5.6";
 
   src = fetchurl {
     url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-    sha256 = "0ls8nwx3nz26pibphw54fg8pxqb365zmmqx95lqrxqqyf3d972sw";
+    sha256 = "1hk2y30zzdnlv8f71kabvh0xi9c7qhp28ksh20vpd0r712sv79yz";
   };
 
   format = "other";
 
-  inherit python; # pass it so that the same version can be used in hg2git
+  passthru = { inherit python; }; # pass it so that the same version can be used in hg2git
 
   buildInputs = [ makeWrapper docutils unzip ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
-
-  propagatedBuildInputs = [ dulwich ];
+    ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  postInstall = (stdenv.lib.optionalString guiSupport ''
+  postInstall = (lib.optionalString guiSupport ''
     mkdir -p $out/etc/mercurial
     cp contrib/hgk $out/bin
     cat >> $out/etc/mercurial/hgrc << EOF
@@ -58,9 +56,9 @@ in python3Packages.buildPythonApplication rec {
     description = "A fast, lightweight SCM system for very large distributed projects";
     homepage = "https://www.mercurial-scm.org";
     downloadPage = "https://www.mercurial-scm.org/release/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.eelco ];
     updateWalker = true;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

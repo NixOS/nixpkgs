@@ -1,25 +1,25 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, zip, gettext, perl
-, wxGTK31, libXext, libXi, libXt, libXtst, xercesc
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, zip, gettext, perl
+, wxGTK30, libXext, libXi, libXt, libXtst, xercesc
 , qrencode, libuuid, libyubikey, yubikey-personalization
 , curl, openssl, file
 }:
 
 stdenv.mkDerivation rec {
   pname = "pwsafe";
-  version = "3.52.0";
+  version = "3.53.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "${version}";
-    sha256 = "1ka7xsl63v0559fzf3pwc1iqr37gwr4vq5iaxa2hzar2g28hsxvh";
+    rev = version;
+    sha256 = "0nh5jnf5yls2qv5hpfhm6i854zsknyh7d93c987a0cg14sg820fv";
   };
 
-  nativeBuildInputs = [ 
-    cmake gettext perl pkgconfig zip
+  nativeBuildInputs = [
+    cmake gettext perl pkg-config zip
   ];
   buildInputs = [
-    libXext libXi libXt libXtst wxGTK31
+    libXext libXi libXt libXtst wxGTK30
     curl qrencode libuuid openssl xercesc
     libyubikey yubikey-personalization
     file
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     "-DNO_GTEST=ON"
     "-DCMAKE_CXX_FLAGS=-I${yubikey-personalization}/include/ykpers-1"
   ];
-  enableParallelBuilding = true;
 
   postPatch = ''
     # Fix perl scripts used during the build.
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A password database utility";
     longDescription = ''
       Password Safe is a password database utility. Like many other

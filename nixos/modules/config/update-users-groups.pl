@@ -16,8 +16,7 @@ my $gidMap = -e $gidMapFile ? decode_json(read_file($gidMapFile)) : {};
 
 sub updateFile {
     my ($path, $contents, $perms) = @_;
-    write_file("$path.tmp", { binmode => ':utf8', perms => $perms // 0644 }, $contents);
-    rename("$path.tmp", $path) or die;
+    write_file($path, { atomic => 1, binmode => ':utf8', perms => $perms // 0644 }, $contents) or die;
 }
 
 
@@ -98,7 +97,7 @@ sub parseGroup {
     return ($f[0], { name => $f[0], password => $f[1], gid => $gid, members => $f[3] });
 }
 
-my %groupsCur = -f "/etc/group" ? map { parseGroup } read_file("/etc/group") : ();
+my %groupsCur = -f "/etc/group" ? map { parseGroup } read_file("/etc/group", { binmode => ":utf8" }) : ();
 
 # Read the current /etc/passwd.
 sub parseUser {
@@ -109,20 +108,19 @@ sub parseUser {
     return ($f[0], { name => $f[0], fakePassword => $f[1], uid => $uid,
         gid => $f[3], description => $f[4], home => $f[5], shell => $f[6] });
 }
-
-my %usersCur = -f "/etc/passwd" ? map { parseUser } read_file("/etc/passwd") : ();
+my %usersCur = -f "/etc/passwd" ? map { parseUser } read_file("/etc/passwd", { binmode => ":utf8" }) : ();
 
 # Read the groups that were created declaratively (i.e. not by groups)
 # in the past. These must be removed if they are no longer in the
 # current spec.
 my $declGroupsFile = "/var/lib/nixos/declarative-groups";
 my %declGroups;
-$declGroups{$_} = 1 foreach split / /, -e $declGroupsFile ? read_file($declGroupsFile) : "";
+$declGroups{$_} = 1 foreach split / /, -e $declGroupsFile ? read_file($declGroupsFile, { binmode => ":utf8" }) : "";
 
 # Idem for the users.
 my $declUsersFile = "/var/lib/nixos/declarative-users";
 my %declUsers;
-$declUsers{$_} = 1 foreach split / /, -e $declUsersFile ? read_file($declUsersFile) : "";
+$declUsers{$_} = 1 foreach split / /, -e $declUsersFile ? read_file($declUsersFile, { binmode => ":utf8" }) : "";
 
 
 # Generate a new /etc/group containing the declared groups.
@@ -175,7 +173,7 @@ foreach my $name (keys %groupsCur) {
 # Rewrite /etc/group. FIXME: acquire lock.
 my @lines = map { join(":", $_->{name}, $_->{password}, $_->{gid}, $_->{members}) . "\n" }
     (sort { $a->{gid} <=> $b->{gid} } values(%groupsOut));
-updateFile($gidMapFile, encode_json($gidMap));
+updateFile($gidMapFile, to_json($gidMap));
 updateFile("/etc/group", \@lines);
 system("nscd --invalidate group");
 
@@ -211,10 +209,11 @@ foreach my $u (@{$spec->{users}}) {
         }
     }
 
-    # Create a home directory.
+    # Ensure home directory incl. ownership and permissions.
     if ($u->{createHome}) {
         make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
         chown $u->{uid}, $u->{gid}, $u->{home};
+        chmod 0700, $u->{home};
     }
 
     if (defined $u->{passwordFile}) {
@@ -226,6 +225,15 @@ foreach my $u (@{$spec->{users}}) {
         }
     } elsif (defined $u->{password}) {
         $u->{hashedPassword} = hashPassword($u->{password});
+    }
+
+    if (!defined $u->{shell}) {
+        if (defined $existing) {
+            $u->{shell} = $existing->{shell};
+        } else {
+            warn "warning: no declarative or previous shell for ‘$name’, setting shell to nologin\n";
+            $u->{shell} = "/run/current-system/sw/bin/nologin";
+        }
     }
 
     $u->{fakePassword} = $existing->{fakePassword} // "x";
@@ -251,7 +259,7 @@ foreach my $name (keys %usersCur) {
 # Rewrite /etc/passwd. FIXME: acquire lock.
 @lines = map { join(":", $_->{name}, $_->{fakePassword}, $_->{uid}, $_->{gid}, $_->{description}, $_->{home}, $_->{shell}) . "\n" }
     (sort { $a->{uid} <=> $b->{uid} } (values %usersOut));
-updateFile($uidMapFile, encode_json($uidMap));
+updateFile($uidMapFile, to_json($uidMap));
 updateFile("/etc/passwd", \@lines);
 system("nscd --invalidate passwd");
 
@@ -260,7 +268,7 @@ system("nscd --invalidate passwd");
 my @shadowNew;
 my %shadowSeen;
 
-foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow") : ()) {
+foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow", { binmode => ":utf8" }) : ()) {
     chomp $line;
     my ($name, $hashedPassword, @rest) = split(':', $line, -9);
     my $u = $usersOut{$name};;
@@ -281,6 +289,12 @@ foreach my $u (values %usersOut) {
 }
 
 updateFile("/etc/shadow", \@shadowNew, 0600);
+{
+    my $uid = getpwnam "root";
+    my $gid = getgrnam "shadow";
+    my $path = "/etc/shadow";
+    chown($uid, $gid, $path) || die "Failed to change ownership of $path: $!";
+}
 
 # Rewrite /etc/subuid & /etc/subgid to include default container mappings
 

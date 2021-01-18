@@ -39,7 +39,7 @@ pythonPackages.buildPythonApplication rec {
   checkInputs = with pythonPackages; [
     flake8
     mock
-    pytest
+    pytestCheckHook
     pytestcov
     requests
   ];
@@ -52,6 +52,6 @@ pythonPackages.buildPythonApplication rec {
     description = "A Template for PostgreSQL HA with ZooKeeper, etcd or Consul";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.limeytexan ];
+    maintainers = teams.deshaw.members;
   };
 }

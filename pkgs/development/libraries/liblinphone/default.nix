@@ -46,43 +46,18 @@
 , xsd
 , zlib
 }:
-let
-  # Got the following error when building:
-  #
-  #   Your version of Doxygen (1.8.17) is known to malfunction with some of our
-  #   macro definitions, which causes errors while wrapprers generation. Please
-  #   install an older version of Doxygen (< 1.8.17) or disable documentation
-  #   and wrapper generation.
-  #
-  # So, let's then use 1.8.16 version of doxygen in this derivation. Hopefully
-  # this workaround can be removed with some newer release of liblinphone.
-  doxygen_1_8_16 = doxygen.overrideAttrs (
-    oldAttrs: rec {
-      name = "doxygen-1.8.16";
-      src = fetchurl {
-        urls = [
-          "mirror://sourceforge/doxygen/${name}.src.tar.gz" # faster, with https, etc.
-          "http://doxygen.nl/files/${name}.src.tar.gz"
-        ];
-        sha256 = "10iwv8bcz5b5cd85gg8pgn0bmyg04n9hs36xn7ggjjnvynv1z67z";
-      };
-      buildInputs = oldAttrs.buildInputs ++ [ git ];
-    }
-  );
-in
+
 stdenv.mkDerivation rec {
   pname = "liblinphone";
-  # Using master branch for linphone-desktop caused a chain reaction that many
-  # of its dependencies needed to use master branch too.
-  version = "unstable-2020-03-20";
+  version = "4.4.15";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = pname;
-    rev = "1d762a3e0e304aa579798aed4400d2cee2c1ffa0";
-    sha256 = "0ja38payyqbd8z6q5l5w6hi7xarmfj5021gh0qdk0j832br4c6c3";
+    rev = version;
+    sha256 = "16a31c0n5lix4r5xk7p447xlxbrhdlmj11kb4y1krb5fx8hf65cl";
   };
 
   # Do not build static libraries
@@ -103,7 +78,6 @@ stdenv.mkDerivation rec {
     cyrus_sasl
     ffmpeg_3
     gdk-pixbuf
-    git
     glib
     gtk2
     libX11
@@ -133,7 +107,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     bcunit
     cmake
-    doxygen_1_8_16
+    doxygen
     graphviz
     intltool
     makeWrapper
@@ -152,7 +126,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://www.linphone.org/technical-corner/liblinphone";
     description = "Library for SIP calls and instant messaging";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };

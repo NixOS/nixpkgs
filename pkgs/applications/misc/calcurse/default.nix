@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, ncurses, gettext, python3, python3Packages, makeWrapper }:
+{ lib, stdenv, fetchurl, ncurses, gettext, python3, python3Packages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "calcurse";
-  version = "4.6.0";
+  version = "4.7.0";
 
   src = fetchurl {
     url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
-    sha256 = "0hzhdpkkn75jlymanwzl69hrrf1pw29hrchr11wlxqjpl43h62gs";
+    sha256 = "0dc4bka2l9z03bnlygsnl06l1zi2wbn29rkc02b13x2kdab7arpg";
   };
 
   buildInputs = [ ncurses gettext python3 python3Packages.wrapPython ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     patchPythonScript $out/bin/calcurse-caldav
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A calendar and scheduling application for the command line";
     longDescription = ''
       calcurse is a calendar and scheduling application for the command line. It helps
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       customized to suit user needs and a very powerful set of command line options can
       be used to filter and format appointments, making it suitable for use in scripts.
     '';
-    homepage = "http://calcurse.org/";
+    homepage = "https://calcurse.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
   };

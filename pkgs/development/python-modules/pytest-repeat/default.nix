@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-repeat";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nbdmklpi0ra1jnfm032wz96y9nxdlcr4m9sjlnffwm7n4x43g2j";
+    sha256 = "5cd3289745ab3156d43eb9c8e7f7d00a926f3ae5c9cf425bec649b2fe15bad5b";
   };
 
   nativeBuildInputs = [

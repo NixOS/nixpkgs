@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , perlPackages
 , wrapGAppsHook
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/gcstar --prefix PERL5LIB : $PERL5LIB
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.com/Kerenoc/GCstar";
     description = "Manage your collections of movies, games, books, music and more";
     longDescription = ''

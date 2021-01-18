@@ -20,7 +20,7 @@ buildGoPackage rec {
   };
 
   meta = with lib; {
-    description = "Detect ineffectual assignments in Go code.";
+    description = "Detect ineffectual assignments in Go code";
     homepage = "https://github.com/gordonklaus/ineffassign";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];

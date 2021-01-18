@@ -1,30 +1,30 @@
 { lib
 , fetchFromGitHub
-, pytest
 , buildPythonPackage
 , nassl
 , cryptography
 , typing-extensions
 , faker
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "sslyze";
-  version = "3.0.8";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "nabla-c0d3";
     repo = pname;
     rev = version;
-    sha256 = "06mwzxw6xaqin2gwzcqb9r7qhbyx3k7zcxygxywi2bpxyjv9lq32";
+    sha256 = "02p0lgpkfq88dys0dqw0z8bpg9g8pds2lvs9awd9f2w5cb1pwr83";
   };
 
   patchPhase = ''
     substituteInPlace setup.py \
-      --replace "cryptography>=2.6,<=2.9" "cryptography>=2.6,<=3"
+      --replace "cryptography>=2.6,<3.3" "cryptography>=2.6,<4.0"
   '';
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   checkPhase = ''
     # Most of the tests are online; hence, applicable tests are listed
@@ -39,6 +39,7 @@ buildPythonPackage rec {
       tests/plugins_tests/certificate_info/test_certificate_utils.py \
       -k "not (TestScanner and test_client_certificate_missing)"
   '';
+  pythonImportsCheck = [ "sslyze" ];
 
   propagatedBuildInputs = [ nassl cryptography typing-extensions faker ];
 

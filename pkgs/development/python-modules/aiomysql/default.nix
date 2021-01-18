@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aiomysql";
-  version = "0.0.20";
+  version = "0.0.21";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1mxih81zc2k64briirpp5wz4f72l8v05avfyfibaq9fr6lcbih9b";
+    sha256 = "1qvy3phbsxp55161dnppjfx2m1kn82v0irc3xzqw0adfd81vaiad";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "PyMySQL>=0.9,<=0.9.2" "PyMySQL"
+      --replace "PyMySQL>=0.9,<=0.9.3" "PyMySQL"
   '';
 
   checkPhase = ''

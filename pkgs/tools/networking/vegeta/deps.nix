@@ -243,4 +243,13 @@
       sha256 = "00wzr5w8aadipgc3rkk8f11i41znskfj9ix5nhhaxyg7isrslgcj";
     };
   }
+  {
+    goPackagePath = "pgregory.net/rapid";
+    fetch = {
+      type = "git";
+      url = "https://github.com/flyingmutant/rapid";
+      rev = "v0.3.3";
+      sha256 = "04w4dmx753b2xp5z5br5wxalgkkgag8qpbxics2gdcksqgi85vg3";
+    };
+  }
 ]

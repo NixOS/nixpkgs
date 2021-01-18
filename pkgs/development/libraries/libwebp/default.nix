@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchFromGitHub, autoreconfHook, libtool
 , threadingSupport ? true # multi-threading
 , openglSupport ? false, freeglut ? null, libGL ? null, libGLU ? null # OpenGL (required for vwebp)
 , pngSupport ? true, libpng ? null # PNG image format
@@ -27,12 +27,16 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.0.3";
+  version = "1.1.0";
 
-  src = fetchurl {
-    url = "http://downloads.webmproject.org/releases/webp/${pname}-${version}.tar.gz";
-    sha256 = "0kxk4sic34bln3k09mml7crvrmhj97swdk7b1ahbp5w6bj30f2p2";
+  src = fetchFromGitHub {
+    owner  = "webmproject";
+    repo   = pname;
+    rev    = version;
+    sha256 = "1kl6qqa29ygqb2fpv140y59v539gdqx4vcf3mlaxhca2bks98qgm";
   };
+
+  prePatch = "patchShebangs .";
 
   configureFlags = [
     (mkFlag threadingSupport "threading")
@@ -50,6 +54,7 @@ stdenv.mkDerivation rec {
     (mkFlag libwebpdecoderSupport "libwebpdecoder")
   ];
 
+  nativeBuildInputs = [ autoreconfHook libtool ];
   buildInputs = [ ]
     ++ optionals openglSupport [ freeglut libGL libGLU ]
     ++ optional pngSupport libpng

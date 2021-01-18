@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , pkgconfig, wrapQtAppsHook
 , poppler, gnuplot
 , qmake, qtbase, qttools
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.12";
   pname = "qtikz";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Editor for the TikZ language";
     homepage = "https://github.com/fhackenberger/ktikz";
     license = licenses.gpl2;
@@ -31,9 +31,15 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fix version in qtikz.pro
     (fetchpatch {
       url = "https://github.com/fhackenberger/ktikz/commit/972685a406517bb85eb561f2c8e26f029eacd7db.patch";
       sha256 = "13z40rcd4m4n088v7z2ns17lnpn0z3rzp31lsamic3qdcwjwa5k8";
+    })
+    # Fix missing qt5.15 QPainterPath include
+    (fetchpatch {
+      url = "https://github.com/fhackenberger/ktikz/commit/ebe4dfb72ac8a137b475ef688b9f7ac3e5c7f242.patch";
+      sha256 = "GIgPh+iUBPftHKIpZR3a0FxmLhMLuPUapF/t+bCuqMs=";
     })
   ];
 

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, cmake , pkgconfig, libusb1
+, cmake , pkg-config, libusb1
 }:
 
 stdenv.mkDerivation rec {
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
     substituteInPlace airspy-tools/CMakeLists.txt --replace "/etc/udev/rules.d" "$out/etc/udev/rules.d"
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libusb1 ];
 
   cmakeFlags =
     lib.optionals stdenv.isLinux [ "-DINSTALL_UDEV_RULES=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/airspy/airspyone_host";
     description = "Host tools and driver library for the AirSpy SDR";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages }:
+{ lib, stdenv, fetchurl, perlPackages }:
 perlPackages.buildPerlPackage rec {
   pname = "shelldap";
   version = "1.4.0";
@@ -16,7 +16,7 @@ perlPackages.buildPerlPackage rec {
     runHook preInstall
   '';
   outputs = [ "out" ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://bitbucket.org/mahlon/shelldap/";
     description = "A handy shell-like interface for browsing LDAP servers and editing their content";
     license = with licenses; [ bsd3 ];

@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper, shortenPerlShebang
+{ lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper, shortenPerlShebang
 , nixosTests
 }:
 
-with stdenv.lib;
+with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "convos";
-  version = "4.33";
+  version = "5.00";
 
   src = fetchFromGitHub {
     owner = "Nordaaker";
     repo = pname;
     rev = version;
-    sha256 = "0mxq4jpjk4vvhi5lqslj614dvk84iq12rsdyykxr8h9cnjjs57im";
+    sha256 = "0mdbh9q1vclwgnjwvb3z637s7v804h65zxazbhmd7qi3zislnhg1";
   };
 
   nativeBuildInputs = [ makeWrapper ]
@@ -71,7 +71,7 @@ perlPackages.buildPerlPackage rec {
   meta = {
     homepage = "https://convos.chat";
     description = "Convos is the simplest way to use IRC in your browser";
-    license = stdenv.lib.licenses.artistic2;
+    license = lib.licenses.artistic2;
     maintainers = with maintainers; [ sgo ];
   };
 }

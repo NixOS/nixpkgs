@@ -25,7 +25,7 @@ rec {
       system = parse.doubleFromSystem final.parsed;
       config = parse.tripleFromSystem final.parsed;
       # Just a guess, based on `system`
-      platform = platforms.selectBySystem final.system;
+      platform = platforms.select final;
       # Determine whether we are compatible with the provided CPU
       isCompatible = platform: parse.isCompatible final.parsed.cpu platform.parsed.cpu;
       # Derived meta-data
@@ -83,7 +83,7 @@ rec {
         if final.isAarch32 then "arm"
         else if final.isAarch64 then "arm64"
         else if final.isx86_32 then "x86"
-        else if final.isx86_64 then "ia64"
+        else if final.isx86_64 then "x86"
         else if final.isMips then "mips"
         else final.parsed.cpu.name;
 
@@ -124,6 +124,8 @@ rec {
         then "${qemu-user}/bin/qemu-${final.qemuArch}"
         else if final.isWasi
         then "${pkgs.wasmtime}/bin/wasmtime"
+        else if final.isMmix
+        then "${pkgs.mmixware}/bin/mmix"
         else throw "Don't know how to run ${final.config} executables.";
 
     } // mapAttrs (n: v: v final.parsed) inspect.predicates

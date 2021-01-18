@@ -1,6 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, nose
-, fetchpatch
-}:
+{ lib, stdenv, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, pytest, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "credstash";
@@ -25,14 +23,14 @@ buildPythonPackage rec {
   # file ensures that Python imports the module from site-packages library.
   postInstall = "rm $out/bin/credstash.py";
 
-  nativeBuildInputs = [ nose ];
+  nativeBuildInputs = [ pytest ];
 
   propagatedBuildInputs = [ cryptography boto3 pyyaml docutils ];
 
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility for managing secrets in the cloud using AWS KMS and DynamoDB";
     homepage = "https://github.com/LuminalOSS/credstash";
     license = licenses.asl20;

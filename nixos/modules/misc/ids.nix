@@ -135,7 +135,7 @@ in
       #keys = 96; # unused
       #haproxy = 97; # dynamically allocated as of 2020-03-11
       mongodb = 98;
-      openldap = 99;
+      #openldap = 99; # dynamically allocated as of PR#94610
       #users = 100; # unused
       cgminer = 101;
       munin = 102;
@@ -143,7 +143,7 @@ in
       nix-ssh = 104;
       dictd = 105;
       couchdb = 106;
-      searx = 107;
+      #searx = 107; # dynamically allocated as of 2020-10-27
       kippo = 108;
       jenkins = 109;
       systemd-journal-gateway = 110;
@@ -184,7 +184,7 @@ in
       consul = 145;
       mailpile = 146;
       redmine = 147;
-      seeks = 148;
+      #seeks = 148; # removed 2020-06-21
       prosody = 149;
       i2pd = 150;
       systemd-network = 152;
@@ -290,14 +290,14 @@ in
       hound = 259;
       leaps = 260;
       ipfs  = 261;
-      stanchion = 262;
-      riak-cs = 263;
+      # stanchion = 262; # unused, removed 2020-10-14
+      # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;
       couchpotato = 267;
       gogs = 268;
-      pdns-recursor = 269;
+      #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
       geoip = 272;
@@ -346,6 +346,7 @@ in
       paperless = 315;
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
+      # shadow = 318; # unused
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -450,13 +451,13 @@ in
       keys = 96;
       #haproxy = 97; # dynamically allocated as of 2020-03-11
       #mongodb = 98; # unused
-      openldap = 99;
+      #openldap = 99; # dynamically allocated as of PR#94610
       munin = 102;
       #logcheck = 103; # unused
       #nix-ssh = 104; # unused
       dictd = 105;
       couchdb = 106;
-      searx = 107;
+      #searx = 107; # dynamically allocated as of 2020-10-27
       kippo = 108;
       jenkins = 109;
       systemd-journal-gateway = 110;
@@ -467,7 +468,7 @@ in
       #minecraft = 114; # unused
       vault = 115;
       #ripped = 116; # unused
-      #murmur = 117; # unused
+      murmur = 117;
       foundationdb = 118;
       newrelic = 119;
       starbound = 120;
@@ -497,7 +498,7 @@ in
       #consul = 145; # unused
       mailpile = 146;
       redmine = 147;
-      seeks = 148;
+      #seeks = 148; # removed 2020-06-21
       prosody = 149;
       i2pd = 150;
       systemd-network = 152;
@@ -592,8 +593,8 @@ in
       hound = 259;
       leaps = 260;
       ipfs = 261;
-      stanchion = 262;
-      riak-cs = 263;
+      # stanchion = 262; # unused, removed 2020-10-14
+      # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
       sickbeard = 265;
       headphones = 266;
@@ -647,6 +648,7 @@ in
       paperless = 315;
       #mailman = 316;  # removed 2019-08-30
       zigbee2mqtt = 317;
+      shadow = 318;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

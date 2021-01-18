@@ -13,10 +13,12 @@ let
     machine.succeed("id rspamd >/dev/null")
   '';
   checkSocket = socket: user: group: mode: ''
-    machine.succeed("ls ${socket} >/dev/null")
-    machine.succeed('[[ "$(stat -c %U ${socket})" == "${user}" ]]')
-    machine.succeed('[[ "$(stat -c %G ${socket})" == "${group}" ]]')
-    machine.succeed('[[ "$(stat -c %a ${socket})" == "${mode}" ]]')
+    machine.succeed(
+        "ls ${socket} >/dev/null",
+        '[[ "$(stat -c %U ${socket})" == "${user}" ]]',
+        '[[ "$(stat -c %G ${socket})" == "${group}" ]]',
+        '[[ "$(stat -c %a ${socket})" == "${mode}" ]]',
+    )
   '';
   simple = name: enableIPv6: makeTest {
     name = "rspamd-${name}";
@@ -54,33 +56,35 @@ in
       services.rspamd = {
         enable = true;
         workers.normal.bindSockets = [{
-          socket = "/run/rspamd.sock";
+          socket = "/run/rspamd/rspamd.sock";
           mode = "0600";
-          owner = "root";
-          group = "root";
+          owner = "rspamd";
+          group = "rspamd";
         }];
         workers.controller.bindSockets = [{
-          socket = "/run/rspamd-worker.sock";
+          socket = "/run/rspamd/rspamd-worker.sock";
           mode = "0666";
-          owner = "root";
-          group = "root";
+          owner = "rspamd";
+          group = "rspamd";
         }];
       };
     };
 
     testScript = ''
       ${initMachine}
-      machine.wait_for_file("/run/rspamd.sock")
-      ${checkSocket "/run/rspamd.sock" "root" "root" "600" }
-      ${checkSocket "/run/rspamd-worker.sock" "root" "root" "666" }
+      machine.wait_for_file("/run/rspamd/rspamd.sock")
+      ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "600" }
+      ${checkSocket "/run/rspamd/rspamd-worker.sock" "rspamd" "rspamd" "666" }
       machine.log(machine.succeed("cat /etc/rspamd/rspamd.conf"))
       machine.log(
           machine.succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf")
       )
       machine.log(machine.succeed("grep 'CONFDIR/worker-normal.inc' /etc/rspamd/rspamd.conf"))
-      machine.log(machine.succeed("rspamc -h /run/rspamd-worker.sock stat"))
+      machine.log(machine.succeed("rspamc -h /run/rspamd/rspamd-worker.sock stat"))
       machine.log(
-          machine.succeed("curl --unix-socket /run/rspamd-worker.sock http://localhost/ping")
+          machine.succeed(
+              "curl --unix-socket /run/rspamd/rspamd-worker.sock http://localhost/ping"
+          )
       )
     '';
   };
@@ -91,16 +95,16 @@ in
       services.rspamd = {
         enable = true;
         workers.normal.bindSockets = [{
-          socket = "/run/rspamd.sock";
+          socket = "/run/rspamd/rspamd.sock";
           mode = "0600";
-          owner = "root";
-          group = "root";
+          owner = "rspamd";
+          group = "rspamd";
         }];
         workers.controller.bindSockets = [{
-          socket = "/run/rspamd-worker.sock";
+          socket = "/run/rspamd/rspamd-worker.sock";
           mode = "0666";
-          owner = "root";
-          group = "root";
+          owner = "rspamd";
+          group = "rspamd";
         }];
         workers.controller2 = {
           type = "controller";
@@ -116,9 +120,9 @@ in
 
     testScript = ''
       ${initMachine}
-      machine.wait_for_file("/run/rspamd.sock")
-      ${checkSocket "/run/rspamd.sock" "root" "root" "600" }
-      ${checkSocket "/run/rspamd-worker.sock" "root" "root" "666" }
+      machine.wait_for_file("/run/rspamd/rspamd.sock")
+      ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "600" }
+      ${checkSocket "/run/rspamd/rspamd-worker.sock" "rspamd" "rspamd" "666" }
       machine.log(machine.succeed("cat /etc/rspamd/rspamd.conf"))
       machine.log(
           machine.succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf")
@@ -137,9 +141,11 @@ in
       machine.wait_until_succeeds(
           "journalctl -u rspamd | grep -i 'starting controller process' >&2"
       )
-      machine.log(machine.succeed("rspamc -h /run/rspamd-worker.sock stat"))
+      machine.log(machine.succeed("rspamc -h /run/rspamd/rspamd-worker.sock stat"))
       machine.log(
-          machine.succeed("curl --unix-socket /run/rspamd-worker.sock http://localhost/ping")
+          machine.succeed(
+              "curl --unix-socket /run/rspamd/rspamd-worker.sock http://localhost/ping"
+          )
       )
       machine.log(machine.succeed("curl http://localhost:11335/ping"))
     '';
@@ -209,7 +215,7 @@ in
               return false
             end,
             score = 5.0,
-	          description = 'Allow no cows',
+            description = 'Allow no cows',
             group = "cows",
           }
           rspamd_logger.infox(rspamd_config, 'Work dammit!!!')

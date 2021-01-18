@@ -34,12 +34,12 @@ diff --git a/config/initializers/1_settings.rb b/config/initializers/1_settings.
 index 0bea8a4f4b..290248547b 100644
 --- a/config/initializers/1_settings.rb
 +++ b/config/initializers/1_settings.rb
-@@ -255,7 +255,7 @@ Settings.gitlab['user']       ||= 'git'
- Settings.gitlab['user_home']  ||= begin
+@@ -177,7 +177,7 @@ Settings.gitlab['ssh_user'] ||= Settings.gitlab['user']
+ Settings.gitlab['user_home'] ||= begin
    Etc.getpwnam(Settings.gitlab['user']).dir
- rescue ArgumentError # no user configured
--  '/home/' + Settings.gitlab['user']
-+  '/homeless-shelter'
+                                  rescue ArgumentError # no user configured
+-                                   '/home/' + Settings.gitlab['user']
++                                   '/homeless-shelter'
  end
  Settings.gitlab['time_zone'] ||= nil
  Settings.gitlab['signup_enabled'] ||= true if Settings.gitlab['signup_enabled'].nil?

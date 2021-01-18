@@ -42,6 +42,15 @@ in
         '';
     };
 
+    security.sudo.package = mkOption {
+      type = types.package;
+      default = pkgs.sudo;
+      defaultText = "pkgs.sudo";
+      description = ''
+        Which package to use for `sudo`.
+      '';
+    };
+
     security.sudo.wheelNeedsPassword = mkOption {
       type = types.bool;
       default = true;
@@ -208,8 +217,8 @@ in
       '';
 
     security.wrappers = {
-      sudo.source = "${pkgs.sudo.out}/bin/sudo";
-      sudoedit.source = "${pkgs.sudo.out}/bin/sudoedit";
+      sudo.source = "${cfg.package.out}/bin/sudo";
+      sudoedit.source = "${cfg.package.out}/bin/sudoedit";
     };
 
     environment.systemPackages = [ sudo ];

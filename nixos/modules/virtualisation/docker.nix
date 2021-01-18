@@ -159,6 +159,7 @@ in
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
         environment = proxy_env;
         serviceConfig = {
+          Type = "notify";
           ExecStart = [
             ""
             ''
@@ -212,13 +213,10 @@ in
           message = "Option enableNvidia requires 32bit support libraries";
         }];
     }
-    (mkIf cfg.enableNvidia {
-      environment.etc."nvidia-container-runtime/config.toml".source = "${pkgs.nvidia-docker}/etc/config.toml";
-    })
   ]);
 
   imports = [
-    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed in favor of starting docker at boot")
+    (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
   ];
 
 }

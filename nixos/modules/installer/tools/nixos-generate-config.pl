@@ -183,6 +183,11 @@ sub pciCheck {
         push @imports, "(modulesPath + \"/hardware/network/broadcom-43xx.nix\")";
     }
 
+    # In case this is a virtio scsi device, we need to explicitly make this available.
+    if ($vendor eq "0x1af4" && $device eq "0x1004") {
+        push @initrdAvailableKernelModules, "virtio_scsi";
+    }
+
     # Can't rely on $module here, since the module may not be loaded
     # due to missing firmware.  Ideally we would check modules.pcimap
     # here.
@@ -625,10 +630,14 @@ EOF
 
         my $networkingDhcpConfig = generateNetworkingDhcpConfig();
 
+        (my $desktopConfiguration = <<EOF)=~s/^/  /gm;
+@desktopConfiguration@
+EOF
+
         write_file($fn, <<EOF);
 @configuration@
 EOF
-        print STDERR "For more hardware-specific settings, see https://github.com/NixOS/nixos-hardware"
+        print STDERR "For more hardware-specific settings, see https://github.com/NixOS/nixos-hardware.\n"
     } else {
         print STDERR "warning: not overwriting existing $fn\n";
     }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, gtk2, libjack2, libuuid, libxml2
+{ lib, stdenv, fetchurl, alsaLib, gtk2, libjack2, libuuid, libxml2
 , makeWrapper, pkgconfig, readline }:
 
 assert libuuid != null;
@@ -26,7 +26,7 @@ stdenv.mkDerivation  rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Linux Audio Session Handler";
     longDescription = ''
       Session management system for GNU/Linux audio applications.

@@ -51,7 +51,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = ''Script used to wrap Common Lisp implementations'';
+    description = "Script used to wrap Common Lisp implementations";
     maintainers = [stdenv.lib.maintainers.raskin];
   };
 }

@@ -20,9 +20,6 @@ buildPythonPackage rec {
   # errors with vendored libs
   doCheck = false;
 
-  # has vendored python2 code
-  dontUsePythonRecompileBytecode = true;
-
   meta = {
     description = "Pythonic task execution";
     license = lib.licenses.bsd2;

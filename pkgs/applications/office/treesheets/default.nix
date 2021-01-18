@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       --replace "Icon=images/treesheets.svg" "Icon=$out/share/libexec/images/treesheets.svg"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free Form Data Organizer";
 
     longDescription = ''

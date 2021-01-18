@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gtk2 }:
+{ lib, stdenv, fetchurl, pkg-config, libxml2, gtk2 }:
 
 stdenv.mkDerivation rec {
   version = "2.1.11";
@@ -9,14 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "2c4ddc3ab71877ba184523e47b0637526e6f3701bd9afb6472e6dfc25646aed7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxml2 gtk2 ];
 
   configureFlags = [ "--with-all-plugins" ];
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Visualization program for exploring high-dimensional data";
     homepage = "http://www.ggobi.org/";
     license = licenses.cpl10;

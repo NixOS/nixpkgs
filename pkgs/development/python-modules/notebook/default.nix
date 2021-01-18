@@ -28,12 +28,12 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.1.3";
+  version = "6.1.5";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9990d51b9931a31e681635899aeb198b4c4b41586a9e87fbfaaed1a71d0a05b6";
+    sha256 = "3db37ae834c5f3b6378381229d0e5dfcbfb558d08c8ce646b1ad355147f5e91d";
   };
 
   LC_ALL = "en_US.utf8";
@@ -67,6 +67,11 @@ buildPythonPackage rec {
     "TestInstallServerExtension"
     "launch_socket"
     "sock_server"
+    "test_list_formats" # tries to find python MIME type
+    "KernelCullingTest" # has a race condition failing on slower hardware
+  ] ++ lib.optional stdenv.isDarwin [
+    "test_delete"
+    "test_checkpoints_follow_file"
   ];
 
   # Some of the tests use localhost networking.

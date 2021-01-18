@@ -3,49 +3,49 @@
 {
   "kicad" = {
     kicadVersion = {
-      version =			"5.1.6";
+      version =			"5.1.9";
       src = {
-        rev =			"c6e7f7de7df655fd59b57823499efc443009de6b";
-        sha256 =		"1pa3z0h0679jmgxlzc833h6q85b5paxdp69kf2h93vkaryj58622";
+        rev =			"73d0e3b20dec05c4350efa5b69916eb29a7bfcb5";
+        sha256 =		"1cqh3bc9y140hbryfk9qavs2y3lj5sm9q0qjxcf4mm472afzckky";
       };
     };
     libVersion = {
-      version =			"5.1.6";
+      version =			"5.1.9";
       libSources = {
-        i18n.rev =		"5ad171ce5c8d90f4740517c2adecb310d8be51bd";
-        i18n.sha256 =		"0qryi8xjm23ka363zfl7bbga0v5c31fr3d4nyxp3m168vkv9zhha";
-        symbols.rev =		"5150eaa2a7d15cfc6bb1459c527c4ebaa66d7708";
-        symbols.sha256 =	"12w3rdy085drlikkpb27n9ni7cyg9l0pqy7hnr86cxjcw3l5wcx6";
-        templates.rev =		"9213d439f757e6049b7e54f3ea08272a0d0f44a9";
-        templates.sha256 =	"1hppcsrkn4dk6ggby6ckh0q65qxkywrbyxa4lwpaf7pxjyv498xg";
-        footprints.rev =	"a61b4e49762fb355f654e65a1c7db1aaf7bb2332";
-        footprints.sha256 =	"1kmf91a5mmvj9izrv40mkaw1w36yjgn8daczd9rq2wlmd0rdp1zx";
-        packages3d.rev =	"150ff1caf0b01dc04c84f4f966f4f88fedfa8f8c";
-        packages3d.sha256 =	"0b9jglf77fy0n0r8xs4yqkv6zvipyfvp0z5dnqlzp32csy5aqpi1";
+        i18n.rev =		"04f3231f60d55400cb81564b2cd465a57d5192d5";
+        i18n.sha256 =		"04jq1dcag6i2ljjfqrib65mn4wg4c4nmi7i946l3bywc0rkqsx1f";
+        symbols.rev =		"6dec5004b6a2679c19d4857bda2f90c5ab3a5726";
+        symbols.sha256 =	"0n25rq32jwyigfw26faqraillwv6zbi2ywy26dkz5zqlf5xp56ad";
+        templates.rev =		"1ccbaf3704e8ff4030d0915f71e051af621ef7d7";
+        templates.sha256 =	"1a8xfcbdbb4ylrb5m7n2jjk9kwvgmlx1pmnn2cwj327a2b3m4jjs";
+        footprints.rev =	"302ac78bac21825532f970fb92714fa5973ad79b";
+        footprints.sha256 =	"0gyqxryda273hjn2rv8dha461j9bjh054y5dlpiw1wiha65lrf9i";
+        packages3d.rev =	"7abe02f30fd79b8f4f66c01589861df7f8f72f04";
+        packages3d.sha256 =	"1szcin52fcsyb55bj7xq7lz6ig187dpz3lk7blwab7b9c4dn3c3y";
       };
     };
   };
   "kicad-unstable" = {
     kicadVersion = {
-      version =			"2020-08-22";
+      version =			"2020-12-23";
       src = {
-        rev =			"a2341f0f335b0abb9fc8cb86d19cbe6f9b38fade";
-        sha256 =		"0167yb39f800xarq3khn7sbdkgcx9j2ayhy8c7lhhks6kh7459g0";
+        rev =			"912657dd238ad78cfc5d9d5e426ea850d5554fb3";
+        sha256 =		"1p5kr4d4zpajwdmya1f351y1ix8qmvsx1hrnvhzh7yc3g72kgxah";
       };
     };
     libVersion = {
-      version =			"2020-08-22";
+      version =			"2020-12-23";
       libSources = {
-        i18n.rev =		"cbbb1efd940094bf0c3168280698b2b059a8c509";
-        i18n.sha256 =		"1q4jakn6m8smnr2mg7jgb520nrb6fag9mdvlcpx3smp3qbxka818";
-        symbols.rev =		"9ca6a5348cdeb88e699582d4ed051ff7303b44d3";
-        symbols.sha256 =	"13w6pb34rhz96rnar25z7kiscy6q1fm8l39hq1bpb8g9yn86ssz4";
-        templates.rev =		"ae16953b81055855bcede4a33305413599d86a15";
-        templates.sha256 =	"1pkv90p3liy3bj4nklxsvpzh9m56p0k5ldr22armvgqfaqaadx9v";
-        footprints.rev =	"f94c2d5d619d16033f69a555b449f59604d97865";
-        footprints.sha256 =	"1g71sk77jvqaf9xvgq6dkyvd9pij2lb4n0bn0dqnwddhwam935db";
-        packages3d.rev =	"f699b0e3c13fe75618086913e39279c85da14cc7";
-        packages3d.sha256 =	"0m5rb5axa946v729z35ga84in76y4zpk32qzi0hwqx957zy72hs9";
+        i18n.rev =		"e89d9a89bec59199c1ade56ee2556591412ab7b0";
+        i18n.sha256 =		"04zaqyhj3qr4ymyd3k5vjpcna64j8klpsygcgjcv29s3rdi8glfl";
+        symbols.rev =		"e538abb015b4f289910a6f26b2f1b9cb8bf2efdb";
+        symbols.sha256 =	"117y4cm46anlrnw6y6mdjgl1a5gab6h6m7cwx3q7qb284m9bs5gi";
+        templates.rev =		"32a4f6fab863976fdcfa232e3e08fdcf3323a954";
+        templates.sha256 =	"13r94dghrh9slpj7nkzv0zqv5hk49s6pxm4q5ndqx0y8037ivmhk";
+        footprints.rev =	"15ffd67e01257d4d8134dbd6708cb58977eeccbe";
+        footprints.sha256 =	"1ad5k3wh2zqfibrar7pd3g363jk2q51dvraxnq3zlxa2x4znh7mw";
+        packages3d.rev =	"d8b7e8c56d535f4d7e46373bf24c754a8403da1f";
+        packages3d.sha256 =	"0dh8ixg0w43wzj5h3164dz6l1vl4llwxhi3qcdgj1lgvrs28aywd";
       };
     };
   };

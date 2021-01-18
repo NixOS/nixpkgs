@@ -1,23 +1,24 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, requests }:
+{ lib, buildPythonPackage, fetchPypi, python, requests }:
 with lib;
 buildPythonPackage rec {
   pname = "requests-aws4auth";
-  version = "1.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2950f6ff686b5a452a269076d990e4821d959b61cfac319c3d3c6daaa5db55ce";
+    sha256 = "9a4a5f4a61c49f098f5f669410308ac5b0ea2682fd511ee3a4f9ff73b5bb275a";
   };
-
-  postPatch = optionalString isPy3k ''
-    sed "s/path_encoding_style/'path_encoding_style'/" \
-      -i requests_aws4auth/service_parameters.py
-  '';
 
   propagatedBuildInputs = [ requests ];
 
-  # The test fail on Python >= 3 because of module import errors.
-  doCheck = !isPy3k;
+  # pypi package no longer contains tests
+  doCheck = false;
+  checkPhase = ''
+    cd requests_aws4auth
+    ${python.interpreter} test/requests_aws4auth_test.py
+  '';
+
+  pythonImportsCheck = [ "requests_aws4auth" ];
 
   meta = {
     description = "Amazon Web Services version 4 authentication for the Python Requests library.";

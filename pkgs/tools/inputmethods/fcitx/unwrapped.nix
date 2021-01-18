@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cmake, intltool, gettext
+{ lib, stdenv, fetchurl, pkg-config, cmake, intltool, gettext
 , libxml2, enchant2, isocodes, icu, libpthreadstubs
 , pango, cairo, libxkbfile, libXau, libXdmcp, libxkbcommon
 , dbus, gtk2, gtk3, qt4, extra-cmake-modules
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     cp ${dicts} src/module/spell/dict/$(stripHash ${dicts})
     cp ${table} src/im/table/data/$(stripHash ${table})
   ''
-  + stdenv.lib.optionalString withPinyin ''
+  + lib.optionalString withPinyin ''
     cp ${pystroke-data} src/module/pinyin-enhance/data/$(stripHash ${pystroke-data})
     cp ${pytable-data} src/module/pinyin-enhance/data/$(stripHash ${pytable-data})
     cp ${pinyin-data} src/im/pinyin/data/$(stripHash ${pinyin-data})
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     patchShebangs cmake/
   '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules intltool pkgconfig pcre ];
+  nativeBuildInputs = [ cmake extra-cmake-modules intltool pkg-config pcre ];
 
   buildInputs = [
     xkeyboard_config enchant2 gettext isocodes icu libpthreadstubs libXau libXdmcp libxkbfile
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     "-DXKB_RULES_XML_FILE='${xkeyboard_config}/share/X11/xkb/rules/evdev.xml'"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://github.com/fcitx/fcitx";
     description = "A Flexible Input Method Framework";
     license     = licenses.gpl2;

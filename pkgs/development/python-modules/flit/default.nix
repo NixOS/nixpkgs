@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, fetchpatch
 , isPy3k
 , docutils
 , requests
@@ -10,7 +11,6 @@
 , pytest
 , testpath
 , responses
-, pytoml
 , flit-core
 }:
 
@@ -21,19 +21,34 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "2.3.0";
+  version = "3.0.0";
   disabled = !isPy3k;
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "017012b809ec489918afd68af7a70bd7c8c770c87b60159d875c126866e97a4b";
+  src = fetchFromGitHub {
+    owner = "takluyver";
+    repo = "flit";
+    rev = version;
+    sha256 = "zk6mozS3Q9U43PQe/DxgwwsBRJ6Qwb+rSUVGXHijD+g=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
+
+  # Use toml instead of pytoml
+  # Resolves infinite recursion since packaging started using flit.
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/takluyver/flit/commit/b81b1da55ef0f2768413669725d2874fcb0c29fb.patch";
+      sha256 = "11oNaYsm00/j2046V9C0idpSeG7TpY3JtLuxX3ZL/OI=";
+    })
+  ];
 
   propagatedBuildInputs = [
     docutils
     requests
     requests_download
-    pytoml
     flit-core
   ] ++ lib.optionals (pythonOlder "3.6") [
     zipfile36

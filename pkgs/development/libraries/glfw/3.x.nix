@@ -14,14 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "0b5lsxz1xkzip7fvbicjkxvg5ig8gbhx1zrlhandqc0rpk56bvyw";
   };
 
-  enableParallelBuilding = true;
-
   propagatedBuildInputs = [ libGL ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ]
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ libX11 libXrandr libXinerama libXcursor libXi libXext ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa Kernel fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.isDarwin [ Cocoa Kernel ];
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 

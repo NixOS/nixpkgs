@@ -74,7 +74,7 @@ in mkDerivation rec {
   src = fetchFromGitHub {
     owner = "drawpile";
     repo = "drawpile";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-AFFY+FcY9ExAur13OoWR9285RZtBe6jnRIrwi5raiCM=";
   };
 

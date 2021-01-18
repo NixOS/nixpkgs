@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "http://mypaint.org/";
-    description = "Brushes used by MyPaint and other software using libmypaint.";
+    description = "Brushes used by MyPaint and other software using libmypaint";
     license = licenses.cc0;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

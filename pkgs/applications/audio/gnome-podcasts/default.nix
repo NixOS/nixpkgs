@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitLab
 , fetchpatch
@@ -10,7 +10,7 @@
 , python3
 , pkgconfig
 , glib
-, libhandy
+, libhandy_0
 , gtk3
 , dbus
 , openssl
@@ -48,13 +48,14 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     glib
     gtk3
-    libhandy
+    libhandy_0
     dbus
     openssl
     sqlite
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
   ];
 
   # use Meson/Ninja phases
@@ -71,7 +72,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs scripts/compile-gschema.py scripts/cargo.sh scripts/test.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Listen to your favorite podcasts";
     homepage = "https://wiki.gnome.org/Apps/Podcasts";
     license = licenses.gpl3;

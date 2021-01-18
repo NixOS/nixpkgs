@@ -8,21 +8,22 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "18rv5nxk04fgk4ziix7z4s2cargdpqgvqrk3lnp3wvd6yb5g5p98";
+    src = fetch "clang" "0kab4zmkxffg98a3rx95756jlwhxflalin5w05g1anpwxv175xbk";
+    inherit clang-tools-extra_src;
 
     unpackPhase = ''
       unpackFile $src
-      mv clang-${version}* clang
+      mv clang-* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
     nativeBuildInputs = [ cmake python3 lld ]
-      ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx;
+      ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx
+      ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-    buildInputs = [ libxml2 llvm ]
-      ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    buildInputs = [ libxml2 llvm ];
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++14"
@@ -80,13 +81,9 @@ let
       rm $out/bin/c-index-test
     '';
 
-    enableParallelBuilding = true;
-
     passthru = {
       isClang = true;
       inherit llvm;
-    } // stdenv.lib.optionalAttrs (stdenv.targetPlatform.isLinux || (stdenv.cc.isGNU && stdenv.cc.cc ? gcc)) {
-      gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
     };
 
     meta = {

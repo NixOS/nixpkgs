@@ -4,31 +4,16 @@ with lib;
 
 let
   cfg = config.services.redis;
-  redisBool = b: if b then "yes" else "no";
-  condOption = name: value: if value != null then "${name} ${toString value}" else "";
 
-  redisConfig = pkgs.writeText "redis.conf" ''
-    port ${toString cfg.port}
-    ${condOption "bind" cfg.bind}
-    ${condOption "unixsocket" cfg.unixSocket}
-    daemonize no
-    supervised systemd
-    loglevel ${cfg.logLevel}
-    logfile ${cfg.logfile}
-    syslog-enabled ${redisBool cfg.syslog}
-    databases ${toString cfg.databases}
-    ${concatMapStrings (d: "save ${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}\n") cfg.save}
-    dbfilename dump.rdb
-    dir /var/lib/redis
-    ${if cfg.slaveOf != null then "slaveof ${cfg.slaveOf.ip} ${toString cfg.slaveOf.port}" else ""}
-    ${condOption "masterauth" cfg.masterAuth}
-    ${condOption "requirepass" cfg.requirePass}
-    appendOnly ${redisBool cfg.appendOnly}
-    appendfsync ${cfg.appendFsync}
-    slowlog-log-slower-than ${toString cfg.slowLogLogSlowerThan}
-    slowlog-max-len ${toString cfg.slowLogMaxLen}
-    ${cfg.extraConfig}
-  '';
+  mkValueString = value:
+    if value == true then "yes"
+    else if value == false then "no"
+    else generators.mkValueStringDefault { } value;
+
+  redisConfig = pkgs.writeText "redis.conf" (generators.toKeyValue {
+    listsAsDuplicateKeys = true;
+    mkKeyValue = generators.mkKeyValueDefault { inherit mkValueString; } " ";
+  } cfg.settings);
 in
 {
   imports = [
@@ -37,6 +22,7 @@ in
     (mkRemovedOptionModule [ "services" "redis" "dbFilename" ] "The redis module now uses /var/lib/redis/dump.rdb as database dump location.")
     (mkRemovedOptionModule [ "services" "redis" "appendOnlyFilename" ] "This option was never used.")
     (mkRemovedOptionModule [ "services" "redis" "pidFile" ] "This option was removed.")
+    (mkRemovedOptionModule [ "services" "redis" "extraConfig" ] "Use services.redis.settings instead.")
   ];
 
   ###### interface
@@ -87,9 +73,12 @@ in
 
       bind = mkOption {
         type = with types; nullOr str;
-        default = null; # All interfaces
-        description = "The IP interface to bind to.";
-        example = "127.0.0.1";
+        default = "127.0.0.1";
+        description = ''
+          The IP interface to bind to.
+          <literal>null</literal> means "all interfaces".
+        '';
+        example = "192.0.2.1";
       };
 
       unixSocket = mkOption {
@@ -133,12 +122,29 @@ in
       };
 
       slaveOf = mkOption {
-        default = null; # { ip, port }
-        description = "An attribute set with two attributes: ip and port to which this redis instance acts as a slave.";
+        type = with types; nullOr (submodule ({ ... }: {
+          options = {
+            ip = mkOption {
+              type = str;
+              description = "IP of the Redis master";
+              example = "192.168.1.100";
+            };
+
+            port = mkOption {
+              type = port;
+              description = "port of the Redis master";
+              default = 6379;
+            };
+          };
+        }));
+
+        default = null;
+        description = "IP and port to which this redis instance acts as a slave.";
         example = { ip = "192.168.1.100"; port = 6379; };
       };
 
       masterAuth = mkOption {
+        type = with types; nullOr str;
         default = null;
         description = ''If the master is password protected (using the requirePass configuration)
         it is possible to tell the slave to authenticate before starting the replication synchronization
@@ -188,10 +194,20 @@ in
         description = "Maximum number of items to keep in slow log.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Extra configuration options for redis.conf.";
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ bool int str (listOf str) ]);
+        default = {};
+        description = ''
+          Redis configuration. Refer to
+          <link xlink:href="https://redis.io/topics/config"/>
+          for details on supported values.
+        '';
+        example = literalExample ''
+          {
+            unixsocketperm = "700";
+            loadmodule = [ "/path/to/my_module.so" "/path/to/other_module.so" ];
+          }
+        '';
       };
     };
 
@@ -221,6 +237,30 @@ in
     users.groups.redis = {};
 
     environment.systemPackages = [ cfg.package ];
+
+    services.redis.settings = mkMerge [
+      {
+        port = cfg.port;
+        daemonize = false;
+        supervised = "systemd";
+        loglevel = cfg.logLevel;
+        logfile = cfg.logfile;
+        syslog-enabled = cfg.syslog;
+        databases = cfg.databases;
+        save = map (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}") cfg.save;
+        dbfilename = "dump.rdb";
+        dir = "/var/lib/redis";
+        appendOnly = cfg.appendOnly;
+        appendfsync = cfg.appendFsync;
+        slowlog-log-slower-than = cfg.slowLogLogSlowerThan;
+        slowlog-max-len = cfg.slowLogMaxLen;
+      }
+      (mkIf (cfg.bind != null) { bind = cfg.bind; })
+      (mkIf (cfg.unixSocket != null) { unixsocket = cfg.unixSocket; })
+      (mkIf (cfg.slaveOf != null) { slaveof = "${cfg.slaveOf.ip} ${cfg.slaveOf.port}"; })
+      (mkIf (cfg.masterAuth != null) { masterauth = cfg.masterAuth; })
+      (mkIf (cfg.requirePass != null) { requirepass = cfg.requirePass; })
+    ];
 
     systemd.services.redis = {
       description = "Redis Server";

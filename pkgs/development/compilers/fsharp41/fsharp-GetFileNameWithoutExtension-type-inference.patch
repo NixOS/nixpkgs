@@ -1,0 +1,13 @@
+diff --git a/src/scripts/fssrgen.fsx b/src/scripts/fssrgen.fsx
+index 0bee9b79e..e6ceda11e 100644
+--- a/src/scripts/fssrgen.fsx
++++ b/src/scripts/fssrgen.fsx
+@@ -329,7 +329,7 @@ let StringBoilerPlate filename =
+     // END BOILERPLATE        
+ "            
+ 
+-let RunMain(filename, outFilename, outXmlFilenameOpt, projectNameOpt) =
++let RunMain(filename:string, outFilename, outXmlFilenameOpt, projectNameOpt) =
+     try
+         let justfilename = System.IO.Path.GetFileNameWithoutExtension(filename)
+         if justfilename |> Seq.exists (fun c -> not(System.Char.IsLetterOrDigit(c))) then

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk2 }:
+{ lib, stdenv, fetchurl, intltool, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
   version = "0.8.18.1";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "--enable-chooser"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A notepad clone for GTK 2.0";
     homepage = "http://tarot.freeshell.org/leafpad";
     platforms = platforms.linux;

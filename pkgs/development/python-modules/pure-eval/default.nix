@@ -1,8 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, setuptools_scm, toml, pytest }:
+{ buildPythonPackage, isPy3k, lib, fetchFromGitHub, setuptools_scm, toml, pytest }:
 
 buildPythonPackage rec {
   pname = "pure_eval";
   version = "0.1.0";
+
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
@@ -20,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Safely evaluate AST nodes without side effects";
-    homepage = "http://github.com/alexmojaki/pure_eval";
+    homepage = "https://github.com/alexmojaki/pure_eval";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
   };

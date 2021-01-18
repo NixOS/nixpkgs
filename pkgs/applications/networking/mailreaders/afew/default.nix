@@ -1,12 +1,12 @@
-{ stdenv, python3Packages, notmuch }:
+{ lib, stdenv, python3Packages, notmuch }:
 
 python3Packages.buildPythonApplication rec {
   pname = "afew";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "18j3xyzchlslcrkycr2i59jg73cb6yh5s7l3qnl6sa7vgxcbhq7c";
+    sha256 = "0wpfqbqjlfb9z0hafvdhkm7qw56cr9kfy6n8vb0q42dwlghpz1ff";
   };
 
   nativeBuildInputs = with python3Packages; [ sphinx setuptools_scm ];
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/afewmail/afew";
     description = "An initial tagging script for notmuch mail";
     license = licenses.isc;

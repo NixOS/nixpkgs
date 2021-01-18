@@ -1,4 +1,4 @@
-{ pkgconfig, libusb1, buildGoPackage, fetchgit }:
+{ pkg-config, libusb1, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   pname = "go-mtpfs";
@@ -7,7 +7,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/hanwen/go-mtpfs";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];
 
   src = fetchgit {

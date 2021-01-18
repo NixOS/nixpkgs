@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    description = "Libstroke, a library for simple gesture recognition";
+    description = "A library for simple gesture recognition";
     homepage = "https://web.archive.org/web/20161204100704/http://etla.net/libstroke/";
     license = stdenv.lib.licenses.gpl2;
 

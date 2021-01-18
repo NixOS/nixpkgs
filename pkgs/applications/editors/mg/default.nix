@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, buildPackages }:
+{ lib, stdenv, fetchFromGitHub, pkgconfig, ncurses, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "mg";
-  version = "6.7";
+  version = "6.8.1";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "mg";
-    rev = "mg-6.7";
-    sha256 = "15adwibq6xrfxbrxzk765g9250iyfn4wbcxd7kcsabiwn6apm0ai";
+    rev = "mg-6.8.1";
+    sha256 = "0fyqyi5sag13jx8bc22bvkgybddvsr0wdili9ikxnpnqg2w84fx7";
   };
 
   enableParallelBuilding = true;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Micro GNU/emacs, a portable version of the mg maintained by the OpenBSD team";
     homepage = "https://man.openbsd.org/OpenBSD-current/man1/mg.1";
     license = licenses.publicDomain;

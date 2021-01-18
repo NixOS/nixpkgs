@@ -1,5 +1,6 @@
-{stdenv, fetchurl, gettext, jdk, libmatthew_java}:
+{stdenv, fetchurl, gettext, jdk8, libmatthew_java}:
 
+let jdk = jdk8; in
 stdenv.mkDerivation {
   name = "dbus-java-2.7";
   src = fetchurl {

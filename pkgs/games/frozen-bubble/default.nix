@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, pkgconfig, SDL, SDL_mixer, SDL_Pango, glib }:
+{ lib, stdenv, fetchurl, perlPackages, pkg-config, SDL, SDL_mixer, SDL_Pango, glib }:
 
 perlPackages.buildPerlModule {
   pname = "frozen-bubble";
@@ -10,7 +10,7 @@ perlPackages.buildPerlModule {
   };
   patches = [ ./fix-compilation.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs =  [ glib SDL SDL_mixer SDL_Pango perlPackages.SDL perlPackages.FileSlurp ];
   propagatedBuildInputs = with perlPackages; [ AlienSDL CompressBzip2 FileShareDir FileWhich IPCSystemSimple LocaleMaketextLexicon ];
@@ -19,7 +19,7 @@ perlPackages.buildPerlModule {
 
   meta = {
     description = "Puzzle with Bubbles";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ puckipedia ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ puckipedia ];
   };
 }

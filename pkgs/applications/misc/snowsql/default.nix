@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , rpmextract
 , patchelf
@@ -8,20 +8,17 @@
 
 stdenv.mkDerivation rec {
   pname = "snowsql";
-  version = "1.2.5";
+  majorVersion = "1.2";
+  version = "${majorVersion}.9";
 
   src = fetchurl {
-    url = "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowflake-snowsql-1.2.5-1.x86_64.rpm";
-    sha256 = "c66e2044640197f4a5b5a16b89e8e7c6a816aa539004a0fb016aab185795f2d5";
+    url = "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/${majorVersion}/linux_x86_64/snowflake-snowsql-${version}-1.x86_64.rpm";
+    sha256 = "1k9dyr4vyqivpg054kbvs0jdwhbqbmlp9lsyxgazdsviw8ch70c8";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
 
-  libPath =
-    stdenv.lib.makeLibraryPath
-      [
-        openssl
-      ];
+  libPath = lib.makeLibraryPath [ openssl ];
 
   buildCommand = ''
     mkdir -p $out/bin/
@@ -37,10 +34,9 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/lib64/snowflake/snowsql/snowsql $out/bin/snowsql \
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/lib64/snowflake/snowsql \
-
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line client for the Snowflake database";
     homepage = "https://www.snowflake.com";
     license = licenses.unfree;

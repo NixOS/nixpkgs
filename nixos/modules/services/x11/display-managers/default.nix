@@ -37,13 +37,6 @@ let
       . /etc/profile
       cd "$HOME"
 
-      ${optionalString cfg.startDbusSession ''
-        if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-          /run/current-system/systemd/bin/systemctl --user start dbus.socket
-          export `/run/current-system/systemd/bin/systemctl --user show-environment | grep '^DBUS_SESSION_BUS_ADDRESS'`
-        fi
-      ''}
-
       ${optionalString cfg.displayManager.job.logToJournal ''
         if [ -z "$_DID_SYSTEMD_CAT" ]; then
           export _DID_SYSTEMD_CAT=1
@@ -481,6 +474,12 @@ in
             )
             [dms wms]
           );
+
+    # Make xsessions and wayland sessions available in XDG_DATA_DIRS
+    # as some programs have behavior that depends on them being present
+    environment.sessionVariables.XDG_DATA_DIRS = [
+      "${cfg.displayManager.sessionData.desktops}/share"
+    ];
   };
 
   imports = [

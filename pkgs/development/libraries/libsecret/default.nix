@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.20.3";
+  version = "0.20.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1r4habxdzmn02id324m0m4mg5isf22q1z436bg3vjjmcz1b3rjsg";
+    sha256 = "0a4xnfmraxchd9cq5ai66j12jv2vrgjmaaxz25kl031jvda4qnij";
   };
 
   postPatch = ''

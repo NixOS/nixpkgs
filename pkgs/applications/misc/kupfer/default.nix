@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , intltool
 , python3Packages
@@ -15,6 +15,8 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "kupfer";
   version = "319";
+
+  format = "other";
 
   src = fetchurl {
     url = "https://github.com/kupferlauncher/kupfer/releases/download/v${version}/kupfer-v${version}.tar.xz";
@@ -33,20 +35,16 @@ buildPythonApplication rec {
   # see https://github.com/NixOS/nixpkgs/issues/56943 for details
   strictDeps = false;
 
-  postInstall = let
-    pythonPath = (stdenv.lib.concatMapStringsSep ":"
-      (m: "${m}/lib/${python.libPrefix}/site-packages")
-      propagatedBuildInputs);
-  in ''
+  postInstall = ''
     gappsWrapperArgs+=(
-      "--prefix" "PYTHONPATH" : "${pythonPath}"
+      "--prefix" "PYTHONPATH" : "${makePythonPath propagatedBuildInputs}"
       "--set" "PYTHONNOUSERSITE" "1"
     )
   '';
 
   doCheck = false; # no tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A smart, quick launcher";
     homepage    = "https://kupferlauncher.github.io/";
     license     = licenses.gpl3;

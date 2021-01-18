@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, unzip, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, unzip, runtimeShell }:
 stdenv.mkDerivation rec {
   version = "0.9.0";
   pname = "zgrviewer";
@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
     cp -r target/* "$out/share/java/zvtm/"
 
     echo '#!${runtimeShell}' > "$out/bin/zgrviewer"
-    echo "${jre}/lib/openjdk/jre/bin/java -jar '$out/share/java/zvtm/zgrviewer-${version}.jar' \"\$@\"" >> "$out/bin/zgrviewer"
+    echo "${jre}/bin/java -jar '$out/share/java/zvtm/zgrviewer-${version}.jar' \"\$@\"" >> "$out/bin/zgrviewer"
     chmod a+x "$out/bin/zgrviewer"
   '';
   meta = {
     # Quicker to unpack locally than load Hydra
     hydraPlatforms = [];
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    license = stdenv.lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [raskin];
+    license = lib.licenses.lgpl21Plus;
     description = "GraphViz graph viewer/navigator";
-    platforms = with stdenv.lib.platforms; unix;
+    platforms = with lib.platforms; unix;
   };
 }

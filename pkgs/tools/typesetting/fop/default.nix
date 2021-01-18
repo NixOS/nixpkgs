@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ant, jdk, runtimeShell }:
+{ fetchurl, lib, stdenv, ant, jdk, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "fop";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     chmod a+x $out/bin/fop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XML formatter driven by XSL Formatting Objects (XSL-FO)";
     longDescription = ''
       FOP is a Java application that reads a formatting object tree and then

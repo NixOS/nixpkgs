@@ -261,7 +261,7 @@ let
 
   toLua = x:
     if builtins.isString x then ''"${x}"''
-    else if builtins.isBool x then (if x == true then "true" else "false")
+    else if builtins.isBool x then boolToString x
     else if builtins.isInt x then toString x
     else if builtins.isList x then ''{ ${lib.concatStringsSep ", " (map (n: toLua n) x) } }''
     else throw "Invalid Lua value";

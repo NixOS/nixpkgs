@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "09zs1di4dsssl9k322nzildvf41jwipbzhik9p43yb1bcfsp92nw";
   };
   meta = {
-    description = ''Tubing and extrusion library'';
+    description = "Tubing and extrusion library";
     license = stdenv.lib.licenses.gpl2 ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;

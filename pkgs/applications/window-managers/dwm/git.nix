@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libX11, libXinerama, libXft, patches ? [], conf ? null }:
+{ lib, stdenv, fetchgit, libX11, libXinerama, libXft, patches ? [], conf ? null }:
 
 let
   name = "dwm-git-20180602";
@@ -21,13 +21,13 @@ stdenv.mkDerivation {
   inherit patches;
 
   # Allow users to override the entire config file AFTER appying the patches
-  postPatch = stdenv.lib.optionalString (conf!=null) ''
+  postPatch = lib.optionalString (conf!=null) ''
     echo -n '${conf}' > config.def.h
   '';
 
   buildPhase = "make";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://suckless.org/";
     description = "Dynamic window manager for X, development version";
     license = licenses.mit;

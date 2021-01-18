@@ -1,5 +1,5 @@
 { stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
-, python, pkgconfig, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama
+, python, pkg-config, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama
 , libpcap, CoreAudioKit, ForceFeedback
 , installShellFiles }:
 
@@ -7,7 +7,7 @@ with stdenv;
 
 let
   majorVersion = "0";
-  minorVersion = "223";
+  minorVersion = "226";
 
   desktopItem = makeDesktopItem {
     name = "MAME";
@@ -26,7 +26,7 @@ in mkDerivation {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${majorVersion}${minorVersion}";
-    sha256 = "1lh5cmz4f6km2d8fn3m9ns7fc4wzbdp71v0s6vjcynycpyhy3yl1";
+    sha256 = "0pnsvz4vkjkqb1ac5wzwz31vx0iknyg5ffly90nhl13kcr656jrj";
   };
 
   hardeningDisable = [ "fortify" ];
@@ -46,12 +46,14 @@ in mkDerivation {
     ++ lib.optional stdenv.isLinux alsaLib
     ++ lib.optionals stdenv.isDarwin [ libpcap CoreAudioKit ForceFeedback ]
     ;
-  nativeBuildInputs = [ python pkgconfig which makeWrapper installShellFiles ];
+  nativeBuildInputs = [ python pkg-config which makeWrapper installShellFiles ];
 
   # by default MAME assumes that paths with stock resources
   # are relative and that you run MAME changing to
   # install directory, so we add absolute paths here
-  patches = [ ./emuopts.patch ];
+  patches = [
+    ./emuopts.patch
+  ];
 
   postPatch = ''
     substituteInPlace src/emu/emuopts.cpp \
@@ -59,7 +61,7 @@ in mkDerivation {
   '';
 
   installPhase = ''
-    make -f dist.mak PTR64=${stdenv.lib.optionalString stdenv.is64bit "1"}
+    make -f dist.mak PTR64=${lib.optionalString stdenv.is64bit "1"}
     mkdir -p ${dest}
     mv build/release/*/Release/mame/* ${dest}
 

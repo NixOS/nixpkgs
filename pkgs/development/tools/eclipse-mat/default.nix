@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "eclipse-mat";
-  version = "${pVersion}";
+  version = pVersion;
 
   src = fetchurl {
     url = "http://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and feature-rich Java heap analyzer";
     longDescription = ''
       The Eclipse Memory Analyzer is a tool that helps you find memory

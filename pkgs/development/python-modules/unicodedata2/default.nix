@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Backport and updates for the unicodedata module";
-    homepage = "http://github.com/mikekap/unicodedata2";
+    homepage = "https://github.com/mikekap/unicodedata2";
     license = licenses.asl20;
     maintainers = [ maintainers.sternenseemann ];
   };

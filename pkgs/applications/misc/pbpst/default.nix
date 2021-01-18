@@ -1,5 +1,5 @@
-{ llvmPackages, stdenv, fetchFromGitHub
-, python36Packages, which, pkgconfig, curl, git, gettext, jansson
+{ llvmPackages, lib, stdenv, fetchFromGitHub
+, python36Packages, which, pkg-config, curl, git, gettext, jansson
 
 # Optional overrides
 , maxFileSize ? 64 # in MB
@@ -20,7 +20,7 @@ llvmPackages.stdenv.mkDerivation rec {
   nativeBuildInputs = [
     python36Packages.sphinx
     which
-    pkgconfig
+    pkg-config
     curl
     git
     gettext
@@ -39,7 +39,7 @@ llvmPackages.stdenv.mkDerivation rec {
     "--provider=${provider}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command-line libcurl C client for pb deployments";
     inherit (src.meta) homepage;
     license = licenses.gpl2;

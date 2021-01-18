@@ -1,6 +1,6 @@
 # D-Bus configuration and system bus daemon.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -11,6 +11,7 @@ let
   homeDir = "/run/dbus";
 
   configDir = pkgs.makeDBusConf {
+    inherit (cfg) apparmor;
     suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
     serviceDirectories = cfg.packages;
   };
@@ -18,7 +19,6 @@ let
 in
 
 {
-
   ###### interface
 
   options = {
@@ -52,11 +52,26 @@ in
         '';
       };
 
-      socketActivated = mkOption {
-        type = types.bool;
-        default = false;
+      apparmor = mkOption {
+        type = types.enum [ "enabled" "disabled" "required" ];
         description = ''
-          Make the user instance socket activated.
+          AppArmor mode for dbus.
+
+          <literal>enabled</literal> enables mediation when it's
+          supported in the kernel, <literal>disabled</literal>
+          always disables AppArmor even with kernel support, and
+          <literal>required</literal> fails when AppArmor was not found
+          in the kernel.
+        '';
+        default = "disabled";
+      };
+
+      socketActivated = mkOption {
+        type = types.nullOr types.bool;
+        default = null;
+        visible = false;
+        description = ''
+          Removed option, do not use.
         '';
       };
     };
@@ -65,6 +80,14 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    warnings = optional (cfg.socketActivated != null) (
+      let
+        files = showFiles options.services.dbus.socketActivated.files;
+      in
+        "The option 'services.dbus.socketActivated' in ${files} no longer has"
+        + " any effect and can be safely removed: the user D-Bus session is"
+        + " now always socket activated."
+    );
 
     environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
 
@@ -108,7 +131,7 @@ in
         reloadIfChanged = true;
         restartTriggers = [ configDir ];
       };
-      sockets.dbus.wantedBy = mkIf cfg.socketActivated [ "sockets.target" ];
+      sockets.dbus.wantedBy = [ "sockets.target" ];
     };
 
     environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];

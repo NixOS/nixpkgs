@@ -48,6 +48,8 @@ in
           subvolume = "/home";
           extraConfig = ''
             ALLOW_USERS="alice"
+            TIMELINE_CREATE=yes
+            TIMELINE_CLEANUP=yes
           '';
         };
       };
@@ -120,6 +122,16 @@ in
     };
 
     services.dbus.packages = [ pkgs.snapper ];
+
+    systemd.services.snapperd = {
+      description = "DBus interface for snapper";
+      inherit documentation;
+      serviceConfig = {
+        Type = "dbus";
+        BusName = "org.opensuse.Snapper";
+        ExecStart = "${pkgs.snapper}/bin/snapperd";
+      };
+    };
 
     systemd.services.snapper-timeline = {
       description = "Timeline of Snapper Snapshots";

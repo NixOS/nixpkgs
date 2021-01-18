@@ -328,8 +328,9 @@ in rec {
         # Fill `meta.position` to identify the source location of the package.
         // lib.optionalAttrs (pos != null) {
           position = pos.file + ":" + toString pos.line;
-        # Expose the result of the checks for everyone to see.
         } // {
+          # Expose the result of the checks for everyone to see.
+          inherit (validity) unfree broken unsupported insecure;
           available = validity.valid
                    && (if config.checkMetaRecursively or false
                        then lib.all (d: d.meta.available or true) references

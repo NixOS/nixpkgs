@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libxml2, freetype, libGLU, libGL, glew, qt4
+{ fetchurl, lib, stdenv, libxml2, freetype, libGLU, libGL, glew, qt4
 , cmake, makeWrapper, libjpeg, python }:
 
 let version = "5.2.1"; in
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
     homepage = "http://tulip.labri.fr/";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
   };
 }

@@ -41,16 +41,19 @@ in
       };
 
       user = mkOption {
+        type = types.str;
         default = "mongodb";
         description = "User account under which MongoDB runs";
       };
 
       bind_ip = mkOption {
+        type = types.str;
         default = "127.0.0.1";
         description = "IP to bind to";
       };
 
       quiet = mkOption {
+        type = types.bool;
         default = false;
         description = "quieter output";
       };
@@ -68,16 +71,19 @@ in
       };
 
       dbpath = mkOption {
+        type = types.str;
         default = "/var/db/mongodb";
         description = "Location where MongoDB stores its files";
       };
 
       pidFile = mkOption {
+        type = types.str;
         default = "/run/mongodb.pid";
         description = "Location of MongoDB pid file";
       };
 
       replSetName = mkOption {
+        type = types.str;
         default = "";
         description = ''
           If this instance is part of a replica set, set its name here.
@@ -86,6 +92,7 @@ in
       };
 
       extraConfig = mkOption {
+        type = types.lines;
         default = "";
         example = ''
           storage.journal.enabled: false
@@ -176,7 +183,7 @@ in
         postStart = ''
             if test -e "${cfg.dbpath}/.first_startup"; then
               ${optionalString (cfg.initialScript != null) ''
-                ${mongodb}/bin/mongo -u root -p ${cfg.initialRootPassword} admin "${cfg.initialScript}"
+                ${mongodb}/bin/mongo ${optionalString (cfg.enableAuth) "-u root -p ${cfg.initialRootPassword}"} admin "${cfg.initialScript}"
               ''}
               rm -f "${cfg.dbpath}/.first_startup"
             fi

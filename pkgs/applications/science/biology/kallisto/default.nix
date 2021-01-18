@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, cmake, hdf5, zlib }:
+{ lib, stdenv, fetchFromGitHub, autoconf, cmake, hdf5, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "kallisto";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   # Parallel build fails in some cases: https://github.com/pachterlab/kallisto/issues/160
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
-    description = "Kallisto is a program for quantifying abundances of transcripts from RNA-Seq data";
+  meta = with lib; {
+    description = "Program for quantifying abundances of transcripts from RNA-Seq data";
     homepage = "https://pachterlab.github.io/kallisto";
     license = licenses.bsd2;
     platforms = platforms.linux;

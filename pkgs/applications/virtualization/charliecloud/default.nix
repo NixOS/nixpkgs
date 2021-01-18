@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, python3, python3Packages, docker, autoreconfHook, coreutils, makeWrapper, gnused, gnutar, gzip, findutils, sudo, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, python3, python3Packages, docker, autoreconfHook, coreutils, makeWrapper, gnused, gnutar, gzip, findutils, sudo, nixosTests }:
 
 stdenv.mkDerivation rec {
 
-  version = "0.18";
+  version = "0.21";
   pname = "charliecloud";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "charliecloud";
     rev = "v${version}";
-    sha256 = "0x2kvp95ld0yii93z9i0k9sknfx7jkgy4rkw9l369fl7f73ghsiq";
+    sha256 = "Y/tH6Znq//HBA/FHfIm2Wpppx6TiL7CqKtZFDc/XSNc=";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   # Here we wrap those deps so they are resolved inside nixpkgs.
   postInstall = ''
     for file in $out/bin/* ; do \
-      wrapProgram $file --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils docker gnused gnutar gzip findutils sudo ]}
+      wrapProgram $file --prefix PATH : ${lib.makeBinPath [ coreutils docker gnused gnutar gzip findutils sudo ]}
     done
   '';
 
@@ -54,9 +54,9 @@ stdenv.mkDerivation rec {
       on offer.
     '';
     homepage = "https://hpc.github.io/charliecloud";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.bzizou ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.linux;
   };
 
 }

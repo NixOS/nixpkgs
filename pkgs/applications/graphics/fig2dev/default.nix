@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ghostscript, libpng } :
+{ lib, stdenv, fetchurl, ghostscript, libpng } :
 
 let
   version = "3.2.7b";
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
 
   GSEXE="${ghostscript}/bin/gs";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to convert Xfig files to other formats";
     homepage = "http://mcj.sourceforge.net/";
     license = licenses.xfig;

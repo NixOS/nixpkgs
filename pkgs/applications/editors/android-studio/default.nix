@@ -9,19 +9,18 @@ let
     inherit buildFHSUserEnv;
   };
   stableVersion = {
-    version = "4.0.1.0"; # "Android Studio 4.0.1"
-    build = "193.6626763";
-    sha256Hash = "15vm7fvi8c286wx9f28z6ysvm8wqqda759qql0zy9simwx22gy7j";
+    version = "4.1.1.0"; # "Android Studio 4.1.1"
+    build = "201.6953283";
+    sha256Hash = "sha256-aAMhhJWcVFdvEZt8fI3tF12Eg3TzlU+kUFMNeCYN1os=";
   };
   betaVersion = {
-    version = "4.1.0.18"; # "Android Studio 4.1 RC 3"
-    build = "201.6823847";
-    sha256Hash = "sha256-qbxmR9g8DSKzcP09bJuc+am79BSXWG39UQxFEb1bZ88=";
+    version = "4.2.0.18"; # "Android Studio 4.2 Beta 2"
+    build = "202.7008469";
+    sha256Hash = "0323i4mcib84z7bsy801640gadd2k8ps7vr9jbdpb6i9gma6klmh";
   };
   latestVersion = { # canary & dev
-    version = "4.2.0.10"; # "Android Studio 4.2 Canary 10"
-    build = "202.6811877";
-    sha256Hash = "sha256-ZKfETCECIOq+q/5N+I13ceb5dqGMGTXMGrqSeTL9KCc=";
+    version = "2020.3.1.3"; # "Android Studio Arctic Fox Canary 3"
+    sha256Hash = "1nx78j3pqr8qgwprnzfy17w9jmkgiqnlbsw91jnslr9p9fd0ixcx";
   };
 in {
   # Attributes are named by their corresponding release channels

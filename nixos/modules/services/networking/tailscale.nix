@@ -14,36 +14,21 @@ in {
       default = 41641;
       description = "The port to listen on for tunnel traffic (0=autoselect).";
     };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.tailscale;
+      defaultText = "pkgs.tailscale";
+      description = "The package to use for tailscale";
+    };
   };
 
   config = mkIf cfg.enable {
-    systemd.services.tailscale = {
-      description = "Tailscale client daemon";
-
-      after = [ "network-pre.target" ];
-      wants = [ "network-pre.target" ];
+    environment.systemPackages = [ cfg.package ]; # for the CLI
+    systemd.packages = [ cfg.package ];
+    systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
-
-      unitConfig = {
-        StartLimitIntervalSec = 0;
-        StartLimitBurst = 0;
-      };
-
-      serviceConfig = {
-        ExecStart =
-          "${pkgs.tailscale}/bin/tailscaled --port ${toString cfg.port}";
-
-        RuntimeDirectory = "tailscale";
-        RuntimeDirectoryMode = 755;
-
-        StateDirectory = "tailscale";
-        StateDirectoryMode = 750;
-
-        CacheDirectory = "tailscale";
-        CacheDirectoryMode = 750;
-
-        Restart = "on-failure";
-      };
+      serviceConfig.Environment = "PORT=${toString cfg.port}";
     };
   };
 }

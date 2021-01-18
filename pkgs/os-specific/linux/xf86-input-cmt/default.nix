@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, xorgserver, xorgproto,
+{ lib, stdenv, fetchFromGitHub, pkgconfig, xorgserver, xorgproto,
   utilmacros, libgestures, libevdevc }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     "--with-sdkdir=${placeholder "out"}"
   ];
 
-  meta = with stdenv.lib; {
-    description = "Chromebook touchpad driver.";
+  meta = with lib; {
+    description = "Chromebook touchpad driver";
     license = licenses.bsd3;
     platforms = platforms.linux;
     homepage = "https://www.github.com/hugegreenbug/xf86-input-cmt";

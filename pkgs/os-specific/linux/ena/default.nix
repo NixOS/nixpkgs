@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.7";
+  version = "2.3.0";
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "ena_linux_${version}";
-    sha256 = "1ap100xh5wrdvy5h2ydcy6rqcklb4fz6xxs33ad3j9yx3h1ixj2d";
+    sha256 = "sha256-ho6yKCgYo3p50leQUCmzNO/3wqzSzs27Eash3AWBaiE=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     xz $dest/ena.ko
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Amazon Elastic Network Adapter (ENA) driver for Linux";
     homepage = "https://github.com/amzn/amzn-drivers";
     license = licenses.gpl2;

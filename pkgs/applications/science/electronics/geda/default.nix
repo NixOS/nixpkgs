@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, guile, gtk2, flex, gawk, perl }:
+{ lib, stdenv, fetchurl, pkgconfig, guile, gtk2, flex, gawk, perl }:
 
 stdenv.mkDerivation {
   pname = "geda";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ guile gtk2 flex gawk perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Full GPL'd suite of Electronic Design Automation tools";
     homepage = "http://www.geda-project.org/";
     maintainers = with maintainers; [ pjones ];

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "zstandard";
-  version = "0.14.0";
+  version = "0.15.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lkn7n3bfp7zip6hkqwkqwc8pxmhhs4rr699k77h51rfln6kjllh";
+    sha256 = "cb7c6a6f7d62350b9f5539045da54422975630e34dd9069584cc776b9917115f";
   };
 
   propagatedBuildInputs = [ cffi ];

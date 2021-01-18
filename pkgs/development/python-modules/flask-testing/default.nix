@@ -1,12 +1,12 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy3k, flask, blinker, twill }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, isPy3k, flask, blinker, twill }:
 
 buildPythonPackage rec {
   pname = "Flask-Testing";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rkkqgmrzmhpv6y1xysqh0ij03xniic8h631yvghksqwxd9vyjfq";
+    sha256 = "0a734d7b68e63a9410b413cd7b1f96456f9a858bd09a6222d465650cc782eb01";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_testing" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flask unittest integration.";
     homepage = "https://pythonhosted.org/Flask-Testing/";
     license = licenses.bsd3;

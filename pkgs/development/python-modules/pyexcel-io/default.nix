@@ -2,15 +2,18 @@
 , buildPythonPackage
 , fetchPypi
 , lml
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "pyexcel-io";
-  version = "0.5.20";
+  version = "0.6.4";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "CN/jlVO5ljWbFD3j2exD4ZbxE41HyrtzrwShaCG4TXk=";
+    sha256 = "00f15f4bae2947de49b3206f2600f78780008e044380f7aafe0ce52969cda4ca";
   };
 
   propagatedBuildInputs = [

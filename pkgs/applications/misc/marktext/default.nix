@@ -32,7 +32,7 @@ appimageTools.wrapType2 rec {
   extraInstallCommands = "mv $out/bin/${name} $out/bin/${pname}";
 
   meta = with lib; {
-    description = "A simple and elegant markdown editor, available for Linux, macOS and Windows.";
+    description = "A simple and elegant markdown editor, available for Linux, macOS and Windows";
     homepage = "https://marktext.app";
     license = licenses.mit;
     maintainers = with maintainers; [ nh2 ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , runCommandCC
 , fetchPypi
 , buildPythonPackage
@@ -68,7 +68,9 @@ in buildPythonPackage rec {
       --replace 'StrParam(default_dnn_base_path)' 'StrParam('\'''${cudnn}'\''')'
   '';
 
-  preCheck = ''
+  # needs to be postFixup so it runs before pythonImportsCheck even when
+  # doCheck = false (meaning preCheck would be disabled)
+  postFixup = ''
     mkdir -p check-phase
     export HOME=$(pwd)/check-phase
   '';
@@ -81,7 +83,9 @@ in buildPythonPackage rec {
   checkInputs = [ nose ];
   propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "theano" ];
+
+  meta = with lib; {
     homepage = "http://deeplearning.net/software/theano/";
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;

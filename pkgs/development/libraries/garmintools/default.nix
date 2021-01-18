@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     description = "Provides the ability to communicate with the Garmin Forerunner 305 via the USB interface";
     homepage = "https://code.google.com/archive/p/garmintools/"; # community clone at https://github.com/ianmartin/garmintools
     license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.ocharles ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

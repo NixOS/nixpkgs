@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, autoreconfHook, gnome2, gtkmm2,
+{ lib, stdenv, fetchurl, pkg-config, intltool, autoreconfHook, gnome2, gtkmm2,
   libgtop, libxfce4ui, libxfce4util, xfce4-panel, lm_sensors, xfce
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     intltool
   ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://goodies.xfce.org/projects/panel-plugins/xfce4-hardware-monitor-plugin";
     description = "Hardware monitor plugin for the XFCE4 panel";
     license = licenses.gpl3;

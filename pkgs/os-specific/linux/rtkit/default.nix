@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , meson, ninja, pkgconfig, unixtools
 , dbus, libcap, polkit, systemd
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     "-Dsystemd_systemunitdir=${placeholder "out"}/etc/systemd/system"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/heftig/rtkit";
     description = "A daemon that hands out real-time priority to processes";
     license = with licenses; [ gpl3 bsd0 ]; # lib is bsd license

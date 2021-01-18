@@ -1,10 +1,10 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ lib, stdenv, fetchgit, buildPythonPackage
 , python
 , buildGoModule
 , srht, redis, celery, pyyaml, markdown }:
 
 let
-  version = "0.62.6";
+  version = "0.63.4";
 
   buildWorker = src: buildGoModule {
     inherit src version;
@@ -19,7 +19,7 @@ in buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     rev = version;
-    sha256 = "1vSUcqYyOitfGaSZVOj5vkmoiAvQbTHgiDVSV5qJLyQ=";
+    sha256 = "1w3rb685nqg2h0k3ag681svc400si9r1gy0sdim3wa2qh8glbqni";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -45,7 +45,9 @@ in buildPythonPackage rec {
     cp ${buildWorker "${src}/worker"}/bin/worker $out/bin/builds.sr.ht-worker
   '';
 
-  meta = with stdenv.lib; {
+  dontUseSetuptoolsCheck = true;
+
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     description = "Continuous integration service for the sr.ht network";
     license = licenses.agpl3;

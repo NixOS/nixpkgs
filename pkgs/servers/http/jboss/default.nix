@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk }:
+{ lib, stdenv, fetchurl, unzip, jdk }:
 
 stdenv.mkDerivation {
   name = "jboss-as-7.1.1.Final";
@@ -10,14 +10,14 @@ stdenv.mkDerivation {
   buildInputs = [ unzip ];
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-  
+
   installPhase = ''
     mv $PWD $out
     find $out/bin -name \*.sh -print0 | xargs -0 sed -i -e '/#!\/bin\/sh/aJAVA_HOME=${jdk}'
   '';
-  
-  meta = with stdenv.lib; {
-    homepage = "http://www.jboss.org/";
+
+  meta = with lib; {
+    homepage = "https://www.jboss.org/";
     description = "Open Source J2EE application server";
     license = licenses.lgpl21;
     maintainers = [ maintainers.sander ];

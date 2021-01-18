@@ -1,9 +1,8 @@
-{ stdenv, fetchFromGitHub, numactl, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, numactl, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "libpsm2";
-  version = "11.2.156";
-  ifs_version = "10_10_2_0_44";
+  version = "11.2.185";
 
   preConfigure= ''
     export UDEVDIR=$out/etc/udev
@@ -14,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ numactl pkgconfig ];
 
-  installFlags = [ 
+  installFlags = [
     "DESTDIR=$(out)"
     "UDEVDIR=/etc/udev"
     "LIBPSM2_COMPAT_CONF_DIR=/etc"
@@ -23,8 +22,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "opa-psm2";
-    rev = "IFS_RELEASE_${ifs_version}";
-    sha256 = "0ckrfzih1ga9yvximxjdh0z05kn9l858ykqiblv18w6ka3gra1xz";
+    rev = "PSM2_${version}";
+    sha256 = "062hg4r6gz7pla9df70nqs5i2a3mp1wszmp4l0g771fykhhrxsjg";
   };
 
   postInstall = ''
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/intel/opa-psm2";
     description = "The PSM2 library supports a number of fabric media and stacks";
     license = with licenses; [ gpl2 bsd3 ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
 
@@ -13,8 +13,8 @@ python3Packages.buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  meta = with stdenv.lib; {
-    description = "Print license based on selection and user options.";
+  meta = with lib; {
+    description = "Print license based on selection and user options";
     homepage = "https://github.com/licenses/lice";
     license = licenses.bsd3;
     maintainers = with maintainers; [ swflint ];

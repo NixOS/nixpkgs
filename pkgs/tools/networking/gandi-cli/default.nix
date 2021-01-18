@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ lib, stdenv, python3Packages, fetchFromGitHub }:
 
 with python3Packages;
 
@@ -17,10 +17,10 @@ buildPythonApplication rec {
 
   doCheck = false;    # Tests try to contact the actual remote API
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line interface to the public Gandi.net API";
     homepage = "https://cli.gandi.net/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kampka ];
+    maintainers = with maintainers; [ ];
   };
 }

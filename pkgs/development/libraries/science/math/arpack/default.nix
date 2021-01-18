@@ -1,14 +1,9 @@
 { stdenv, fetchFromGitHub, cmake
 , gfortran, blas, lapack, eigen }:
 
-with stdenv.lib;
-
-let
-  version = "3.7.0";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "arpack";
-  inherit version;
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "opencollab";
@@ -18,16 +13,18 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ gfortran blas lapack eigen ];
+  buildInputs = assert (blas.isILP64 == lapack.isILP64); [
+    gfortran
+    blas
+    lapack
+    eigen
+  ];
 
   doCheck = true;
 
-  BLAS_LIBS = "-L${blas}/lib -lblas";
-  LAPACK_LIBS = "-L${lapack}/lib -llapack";
-
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DINTERFACE64=${optionalString blas.isILP64 "1"}"
+    "-DINTERFACE64=${stdenv.lib.optionalString blas.isILP64 "1"}"
   ];
 
   preCheck = if stdenv.isDarwin then ''

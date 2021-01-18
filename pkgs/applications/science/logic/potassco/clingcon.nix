@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , bison
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "potassco";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
     sha256 = "1q7517h10jfvjdk2czq8d6y57r8kr1j1jj2k2ip2qxkpyfigk4rs";
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "Extension of clingo to handle constraints over integers";
-    license = stdenv.lib.licenses.gpl3; # for now GPL3, next version MIT!
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3; # for now GPL3, next version MIT!
+    platforms = lib.platforms.unix;
     homepage = "https://potassco.org/";
     downloadPage = "https://github.com/potassco/clingcon/releases/";
     changelog = "https://github.com/potassco/clingcon/releases/tag/v${version}";

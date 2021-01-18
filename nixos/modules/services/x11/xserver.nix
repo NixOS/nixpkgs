@@ -136,6 +136,7 @@ let
           fi
         done
 
+        echo '${cfg.filesSection}' >> $out
         echo 'EndSection' >> $out
 
         echo "$config" >> $out
@@ -151,6 +152,9 @@ in
       ./desktop-managers/default.nix
       (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
         "See the 16.09 release notes for more information.")
+      (mkRemovedOptionModule
+        [ "services" "xserver" "startDbusSession" ]
+        "The user D-Bus session is now always socket activated and this option can safely be removed.")
       (mkRemovedOptionModule ["services" "xserver" "useXFS" ]
         "Use services.xserver.fontPath instead of useXFS")
     ];
@@ -298,14 +302,6 @@ in
         description = "DPI resolution to use for X server.";
       };
 
-      startDbusSession = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to start a new DBus session when you log in with dbus-launch.
-        '';
-      };
-
       updateDbusEnvironment = mkOption {
         type = types.bool;
         default = false;
@@ -364,6 +360,13 @@ in
           The contents of the configuration file of the X server
           (<filename>xorg.conf</filename>).
         '';
+      };
+
+      filesSection = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''FontPath "/path/to/my/fonts"'';
+        description = "Contents of the first <literal>Files</literal> section of the X server configuration file.";
       };
 
       deviceSection = mkOption {
@@ -512,6 +515,19 @@ in
         example = { x = 2048; y = 2048; };
         description = ''
           Virtual screen size for Xrandr.
+        '';
+      };
+
+      logFile = mkOption {
+        type = types.nullOr types.str;
+        default = "/dev/null";
+        example = "/var/log/Xorg.0.log";
+        description = ''
+          Controls the file Xorg logs to.
+
+          The default of <literal>/dev/null</literal> is set so that systemd services (like <literal>displayManagers</literal>) only log to the journal and don't create their own log files.
+
+          Setting this to <literal>null</literal> will not pass the <literal>-logfile</literal> argument to Xorg which allows it to log to its default logfile locations instead (see <literal>man Xorg</literal>). You probably only want this behaviour when running Xorg manually (e.g. via <literal>startx</literal>).
         '';
       };
 
@@ -675,25 +691,24 @@ in
 
         script = "${cfg.displayManager.job.execCmd}";
 
+        # Stop restarting if the display manager stops (crashes) 2 times
+        # in one minute. Starting X typically takes 3-4s.
+        startLimitIntervalSec = 30;
+        startLimitBurst = 3;
         serviceConfig = {
           Restart = "always";
           RestartSec = "200ms";
           SyslogIdentifier = "display-manager";
-          # Stop restarting if the display manager stops (crashes) 2 times
-          # in one minute. Starting X typically takes 3-4s.
-          StartLimitInterval = "30s";
-          StartLimitBurst = "3";
         };
       };
 
     services.xserver.displayManager.xserverArgs =
       [ "-config ${configFile}"
         "-xkbdir" "${cfg.xkbDir}"
-        # Log at the default verbosity level to stderr rather than /var/log/X.*.log.
-         "-logfile" "/dev/null"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
+        ++ optional (cfg.logFile != null) "-logfile ${toString cfg.logFile}"
         ++ optional (cfg.verbose != null) "-verbose ${toString cfg.verbose}"
         ++ optional (!cfg.enableTCP) "-nolisten tcp"
         ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
@@ -708,7 +723,7 @@ in
 
     system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;
-      nativeBuildInputs = [ pkgs.xkbvalidate ];
+      nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
       xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"

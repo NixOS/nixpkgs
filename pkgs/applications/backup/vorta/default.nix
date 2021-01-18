@@ -28,8 +28,8 @@ buildPythonApplication rec {
   # QT setup in tests broken.
   doCheck = false;
 
-  postFixup = ''
-    wrapQtApp $out/bin/vorta
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with lib; {

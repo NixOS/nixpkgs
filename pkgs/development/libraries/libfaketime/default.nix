@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-date-in-gzip-man-page.patch
-  ];
+  ] ++ (stdenv.lib.optionals stdenv.cc.isClang [
+    # https://github.com/wolfcw/libfaketime/issues/277
+    ./0001-Remove-unsupported-clang-flags.patch
+  ]);
 
   postPatch = ''
     patchShebangs test src
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
   PREFIX = placeholder "out";
   LIBDIRNAME = "/lib";
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type -Wno-error=format-truncation";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=cast-function-type -Wno-error=format-truncation";
 
   checkInputs = [ perl ];
 

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pkgconfig, fuse }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pkgconfig, fuse }:
 
 buildPythonPackage rec {
   pname = "fuse-python";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # no tests in the Pypi archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for FUSE";
     homepage = "https://github.com/libfuse/python-fuse";
     license = licenses.lgpl21;

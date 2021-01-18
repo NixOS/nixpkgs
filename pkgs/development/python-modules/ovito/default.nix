@@ -1,34 +1,42 @@
-{ stdenv, fetchgit
+{ lib, stdenv
+, fetchFromGitLab
 , cmake
-, libav, netcdf, qscintilla, zlib, boost, git, fftw, hdf5, libssh
-, pythonPackages
+, ffmpeg
+, netcdf
+, qscintilla
+, zlib
+, boost
+, git
+, fftw
+, hdf5
+, libssh
+, qt5
+, python
 }:
 
-stdenv.mkDerivation {
-  # compilation error in 2.9.0 https://gitlab.com/stuko/ovito/issues/40
-  # This is not the "released" 3.0.0 just a commit
-  version = "3.0.0";
+stdenv.mkDerivation rec {
+  version = "3.3.5";
   pname = "ovito";
 
-  src = fetchgit {
-    url = "https://gitlab.com/stuko/ovito";
-    rev = "a28c28182a879d2a1b511ec56f9845306dd8a4db";
-    sha256 = "1vqzv3gzwf8r0g05a7fj8hdyvnzq2h3wdfck7j6n1av6rvp7hi5r";
+  src = fetchFromGitLab {
+    owner = "stuko";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "2tptLK0RU0afSFFE7uzL8bZ5j+nyRyh97ujJAHFh0wQ=";
   };
 
-  buildInputs = [ cmake libav netcdf qscintilla zlib boost zlib git fftw hdf5 libssh ];
-  propagatedBuildInputs = with pythonPackages; [ sphinx numpy sip pyqt5 matplotlib ase ];
+  nativeBuildInputs = [ cmake git ];
+  buildInputs = [ ffmpeg netcdf qscintilla zlib boost zlib fftw hdf5 libssh qt5.qtbase qt5.qtsvg ];
 
-  enableParallelBuilding = true;
+  propagatedBuildInputs = with python.pkgs; [ sphinx numpy sip pyqt5 matplotlib ase ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scientific visualization and analysis software for atomistic simulation data";
     homepage = "https://www.ovito.org";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.costrouc ];
+    license = with licenses; [ gpl3Only mit ];
+    maintainers = with maintainers; [ costrouc ];
     # ensures not built on hydra
     # https://github.com/NixOS/nixpkgs/pull/46846#issuecomment-436388048
     hydraPlatforms = [ ];
-    broken = true; # cmake unable to find Qt5Core and other dependencies
   };
 }

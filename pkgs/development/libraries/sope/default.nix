@@ -1,15 +1,19 @@
 { gnustep, lib, fetchFromGitHub , libxml2, openssl_1_1
-, openldap, mysql, libmysqlclient, postgresql }: with lib; gnustep.stdenv.mkDerivation rec {
+, openldap, mysql, libmysqlclient, postgresql }:
+with lib;
+
+gnustep.stdenv.mkDerivation rec {
   pname = "sope";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOPE-${version}";
-    sha256 = "sha256-7NM9wcyHDSVmjjqu489Ff3iJgl9VM+UBF3XYWoiHHTg=";
+    sha256 = "031m8ydr4jhh29332mfbsw0i5d0cjfqfyfs55jm832dlmv4447gb";
   };
 
+  hardeningDisable = [ "format" ];
   nativeBuildInputs = [ gnustep.make ];
   buildInputs = flatten ([ gnustep.base libxml2 openssl_1_1 ]
     ++ optional (openldap != null) openldap
@@ -37,7 +41,7 @@
   '';
 
   meta = {
-    description = "SOPE is an extensive set of frameworks which form a complete Web application server environment";
+    description = "An extensive set of frameworks which form a complete Web application server environment";
     license = licenses.publicDomain;
     homepage = "https://github.com/inverse-inc/sope";
     platforms = platforms.linux;

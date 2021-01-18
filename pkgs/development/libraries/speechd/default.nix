@@ -7,7 +7,7 @@
 , itstool
 , libtool
 , texinfo
-, utillinux
+, util-linux
 , autoreconfHook
 , glib
 , dotconf
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit utillinux;
+      utillinux = util-linux;
     })
   ];
 

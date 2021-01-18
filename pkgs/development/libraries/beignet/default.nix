@@ -30,8 +30,6 @@ stdenv.mkDerivation rec {
 
   patches = [ ./clang_llvm.patch ];
 
-  enableParallelBuilding = true;
-
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace /etc/OpenCL/vendors "\''${CMAKE_INSTALL_PREFIX}/etc/OpenCL/vendors"
     patchShebangs src/git_sha1.sh
@@ -65,8 +63,6 @@ stdenv.mkDerivation rec {
     preConfigure = ''
       cd utests
     '';
-
-    enableParallelBuilding = true;
 
     nativeBuildInputs = [
       cmake

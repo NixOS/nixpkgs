@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, gnupg }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, gnupg }:
 
 buildPythonPackage rec {
   pname   = "python-gnupg";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     --replace "test_search_keys" "disabled__test_search_keys"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A wrapper for the Gnu Privacy Guard";
     homepage    = "https://pypi.python.org/pypi/python-gnupg";
     license     = licenses.bsd3;

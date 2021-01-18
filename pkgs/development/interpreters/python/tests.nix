@@ -1,4 +1,5 @@
-{ python
+{ stdenv
+, python
 , runCommand
 , substituteAll
 , lib
@@ -92,4 +93,4 @@ let
 
 
 
-in environmentTests // integrationTests
+in stdenv.lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests)

@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, zlib, python, bzip2, lzma}:
+{lib, stdenv, fetchFromGitHub, zlib, python, bzip2, lzma}:
 
 stdenv.mkDerivation rec {
   pname = "bedtools";
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   buildPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cxx} CC=${cc} -j $NIX_BUILD_CORES";
   installPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cxx} CC=${cc} install";
 
-  meta = with stdenv.lib; {
-    description = "A powerful toolset for genome arithmetic.";
+  meta = with lib; {
+    description = "A powerful toolset for genome arithmetic";
     license = licenses.gpl2;
     homepage = "https://bedtools.readthedocs.io/en/latest/";
     maintainers = with maintainers; [ jbedo ];

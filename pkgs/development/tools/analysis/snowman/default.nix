@@ -19,8 +19,6 @@ mkDerivation rec {
     export sourceRoot=$sourceRoot/src
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Native code to C/C++ decompiler";
     homepage = "http://derevenets.com/";

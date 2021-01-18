@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, asciidoc, docbook_xsl, libxslt }:
+{ lib, stdenv, fetchgit, asciidoc, docbook_xsl, libxslt }:
 stdenv.mkDerivation {
   pname = "trace-cmd";
   version = "2.9-dev";
@@ -23,10 +23,10 @@ stdenv.mkDerivation {
     "man_dir=${placeholder "man"}/share/man"
     "libdir=${placeholder "lib"}/lib"
     "includedir=${placeholder "dev"}/include"
-    "BASH_COMPLETE_DIR=${placeholder "out"}/etc/bash_completion.d"
+    "BASH_COMPLETE_DIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";
     homepage    = "https://kernelshark.org/";
     license     = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchurl, cmake, pkgconfig, sword, boost, clucene_core
+{ lib, mkDerivation, stdenv, fetchurl, cmake, pkg-config, sword, boost, clucene_core
 , qtbase, qttools, qtsvg, qtwebkit
 }:
 
@@ -13,7 +13,7 @@ mkDerivation rec {
     sha256 = "1s5bvmwbz1gyp3ml8sghpc00h8nhdvx2iyq96iri30kwx1y1jy6i";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
    sword boost clucene_core
    qtbase qttools qtsvg qtwebkit
@@ -29,8 +29,8 @@ mkDerivation rec {
   meta = {
     description = "A Qt4 Bible study tool";
     homepage = "http://www.bibletime.info/";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.piotr ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.piotr ];
   };
 }

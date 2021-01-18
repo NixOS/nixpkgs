@@ -3,7 +3,7 @@
 , flex
 , zlib
 , perlPackages
-, utillinux
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
@@ -29,11 +29,8 @@ stdenv.mkDerivation rec {
   # so let's make sure it knows where to find it:
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     substituteInPlace creduce/creduce_utils.pm --replace \
-      lscpu ${utillinux}/bin/lscpu
+      lscpu ${util-linux}/bin/lscpu
   '';
-
-
-  enableParallelBuilding = true;
 
   postInstall = ''
     wrapProgram $out/bin/creduce --prefix PERL5LIB : "$PERL5LIB"

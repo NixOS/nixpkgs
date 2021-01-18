@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , dimensions ? 6 # works for <= dimensions dimensions, but is only optimized for that exact value
 , doSymlink ? true # symlink the executables to the default location (without dimension postfix)
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "format"
   ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  patchPhase = lib.optionalString stdenv.isDarwin ''
     substituteInPlace GNUmakefile --replace gcc cc
   '';
 
@@ -46,14 +46,14 @@ stdenv.mkDerivation rec {
     for file in poly class cws nef mori; do
         cp -p $file.x "$out/bin/$file-${dim}d.x"
     done
-  '' + stdenv.lib.optionalString doSymlink ''
+  '' + lib.optionalString doSymlink ''
     cd "$out/bin"
     for file in poly class cws nef mori; do
         ln -sf $file-6d.x $file.x
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Package for Analyzing Lattice Polytopes";
     longDescription = ''
       A Package for Analyzing Lattice Polytopes (PALP) is a set of C
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     # version was released that pointed to gplv2 however, so thats probably
     # the right license.
     license = licenses.gpl2;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
   };
 }

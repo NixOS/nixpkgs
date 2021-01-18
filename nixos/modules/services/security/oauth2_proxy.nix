@@ -448,7 +448,7 @@ in
       default = false;
       description = ''
         In case when running behind a reverse proxy, controls whether headers
-	like <literal>X-Real-Ip</literal> are accepted. Usage behind a reverse
+        like <literal>X-Real-Ip</literal> are accepted. Usage behind a reverse
         proxy will require this flag to be set to avoid logging the reverse
         proxy IP address.
       '';
@@ -524,7 +524,7 @@ in
       type = types.nullOr types.str;
       default = null;
       description = ''
-      	Profile access endpoint.
+        Profile access endpoint.
       '';
     };
 

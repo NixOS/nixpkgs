@@ -1,6 +1,7 @@
 { stdenv, runCommand, fetchurl
+, fetchpatch
 , ensureNewerSourcesHook
-, cmake, pkgconfig
+, cmake, pkg-config
 , which, git
 , boost, python3Packages
 , libxml2, zlib, lz4
@@ -27,7 +28,7 @@
 , nss ? null, nspr ? null
 
 # Linux Only Dependencies
-, linuxHeaders, utillinux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
+, linuxHeaders, util-linux, libuuid, udev, keyutils, rdma-core, rabbitmq-c
 , libaio ? null, libxfs ? null, zfs ? null
 , ...
 }:
@@ -35,7 +36,7 @@
 # We must have one crypto library
 assert cryptopp != null || (nss != null && nspr != null);
 
-with stdenv; with stdenv.lib;
+with stdenv; with lib;
 let
   shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
@@ -80,7 +81,7 @@ let
      inherit description;
      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
      maintainers = with maintainers; [ adev ak johanot krav ];
-     platforms = [ "x86_64-linux" ];
+     platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
 
   ceph-common = python3Packages.buildPythonPackage rec{
@@ -121,10 +122,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "15.2.4";
+  version = "15.2.8";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "0jy5dp4r1bqk1l7nrv8l8zpl984k61p3vkvf73ygcn03bxyjjlax";
+    sha256 = "1nmrras3g2zapcd06qr5m7y4zkymnr0r53jkpicjw2g4q7wfmib4";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -133,11 +134,12 @@ in rec {
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
+      ./ceph-glibc-2-32-sigdescr_np.patch
     ];
 
     nativeBuildInputs = [
       cmake
-      pkgconfig which git python3Packages.wrapPython makeWrapper
+      pkg-config which git python3Packages.wrapPython makeWrapper
       python3Packages.python # for the toPythonPath function
       (ensureNewerSourcesHook { year = "1980"; })
     ];
@@ -147,7 +149,7 @@ in rec {
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
       snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
     ] ++ optionals stdenv.isLinux [
-      linuxHeaders utillinux libuuid udev keyutils optLibaio optLibxfs optZfs
+      linuxHeaders util-linux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14
       rdma-core rabbitmq-c
     ] ++ optionals hasRadosgw [
@@ -193,8 +195,6 @@ in rec {
       test -f $out/bin/ceph-volume
     '';
 
-    enableParallelBuilding = true;
-
     outputs = [ "out" "lib" "dev" "doc" "man" ];
 
     doCheck = false; # uses pip to install things from the internet
@@ -207,12 +207,12 @@ in rec {
   ceph-client = runCommand "ceph-client-${version}" {
       meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices";
     } ''
-      mkdir -p $out/{bin,etc,${sitePackages}}
+      mkdir -p $out/{bin,etc,${sitePackages},share/bash-completion/completions}
       cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
       cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
       cp -r ${ceph}/bin/rbd-replay* $out/bin
       cp -r ${ceph}/${sitePackages} $out/${sitePackages}
-      cp -r ${ceph}/etc/bash_completion.d $out/etc
+      cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
       # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
       substituteInPlace $out/bin/ceph          --replace ${ceph} $out
       substituteInPlace $out/bin/.ceph-wrapped --replace ${ceph} $out

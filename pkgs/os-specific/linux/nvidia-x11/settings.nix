@@ -9,13 +9,13 @@ let
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-settings";
-    rev = nvidia_x11.version;
+    rev = nvidia_x11.settingsVersion;
     inherit sha256;
   };
 
   libXNVCtrl = stdenv.mkDerivation {
     pname = "libXNVCtrl";
-    inherit (nvidia_x11) version;
+    version = nvidia_x11.settingsVersion;
     inherit src;
 
     buildInputs = [ libXrandr libXext ];
@@ -42,7 +42,7 @@ in
 
 stdenv.mkDerivation {
   pname = "nvidia-settings";
-  inherit (nvidia_x11) version;
+  version = nvidia_x11.settingsVersion;
   inherit src;
 
   nativeBuildInputs = [ pkgconfig m4 ];
@@ -97,7 +97,7 @@ stdenv.mkDerivation {
     inherit libXNVCtrl;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "Settings application for NVIDIA graphics cards";
     license = licenses.unfreeRedistributable;

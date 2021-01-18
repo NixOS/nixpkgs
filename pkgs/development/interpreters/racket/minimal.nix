@@ -5,11 +5,11 @@ racket.overrideAttrs (oldAttrs: rec {
   name = "racket-minimal-${oldAttrs.version}";
   src = oldAttrs.src.override {
     inherit name;
-    sha256 = "0bbglf9vfacpm2hn3lskhvc8cpg6z088fbnzpqsn17z8qdk8yvb3";
+    sha256 = "0yc5zkpq1bavj64h67pllw6mfjhmdp65fgdpyqcaan3syy6b5cia";
   };
 
   meta = oldAttrs.meta // {
-    description = "Racket without bundled packages, such as Dr. Racket.";
+    description = "Racket without bundled packages, such as Dr. Racket";
     longDescription = ''The essential package racket-libs is included,
       as well as libraries that live in collections. In particular, raco
       and the pkg library are still bundled.

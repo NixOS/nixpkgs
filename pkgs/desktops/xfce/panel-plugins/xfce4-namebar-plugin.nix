@@ -1,29 +1,36 @@
-{ stdenv, pkgconfig, fetchFromGitHub, python2, vala_0_40
-, gtk2, libwnck, libxfce4util, xfce4-panel, wafHook }:
+{ lib, stdenv, pkg-config, fetchFromGitHub, python3, vala_0_46
+, gtk3, libwnck3, libxfce4util, xfce4-panel, wafHook, xfce }:
 
 stdenv.mkDerivation rec {
-  ver = "0.3.1";
-  rev = "07a23b3";
-  name = "xfce4-namebar-plugin-${ver}";
+  pname = "xfce4-namebar-plugin";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "TiZ-EX1";
-    repo = "xfce4-namebar-plugin";
-    rev = rev;
-    sha256 = "1sl4qmjywfvv53ch7hyfysjfd91zl38y7gdw2y3k69vkzd3h18ad";
+    owner = "HugLifeTiZ";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0l70f6mzkscsj4wr43wp5c0l2qnf85vj24cv02bjrh3bzz6wkak8";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
-  buildInputs = [ python2 vala_0_40 gtk2 libwnck libxfce4util xfce4-panel ];
+  nativeBuildInputs = [ pkg-config vala_0_46 wafHook python3 ];
+  buildInputs = [ gtk3 libwnck3 libxfce4util xfce4-panel ];
 
   postPatch = ''
-    substituteInPlace src/preferences.vala --replace 'Environment.get_system_data_dirs()' "{ \"$out/share\" }"
-    substituteInPlace src/namebar.vala     --replace 'Environment.get_system_data_dirs()' "{ \"$out/share\" }"
+    for f in src/preferences.vala src/namebar.vala; do
+      substituteInPlace $f --replace 'var dirs = Environment.get_system_data_dirs()' "string[] dirs = { \"$out/share\" }"
+    done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/TiZ-EX1/xfce4-namebar-plugin";
-    description = "A plugins which integrates titlebar and window controls into the xfce4-panel";
+  passthru.updateScript = xfce.updateScript {
+    inherit pname version;
+    attrPath = "xfce.${pname}";
+    versionLister = xfce.gitLister src.meta.homepage;
+    rev-prefix = "v";
+  };
+
+  meta = with lib; {
+    homepage = "https://github.com/HugLifeTiZ/xfce4-namebar-plugin";
+    description = "Plugin which integrates titlebar and window controls into the xfce4-panel";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.volth ];

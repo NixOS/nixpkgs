@@ -1,26 +1,20 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "wallabag";
-  version = "2.3.8";
+  version = "2.4.0";
 
   # remember to rm -r var/cache/* after a rebuild or unexpected errors will occur
 
   src = fetchurl {
     url = "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz";
-    sha256 = "1sr62hfk2f2rl5by48dg8yd1gchngjnc850as17wr3w287p1kwsq";
+    sha256 = "11vda7aqq82kpr88v4hr7zg19zfq970n3z4qp25my8b1fvlgdjhi";
   };
 
   outputs = [ "out" ];
 
   patches = [
     ./wallabag-data.patch # exposes $WALLABAG_DATA
-    (fetchurl {
-      # Fixes "Uncaught RuntimeException: Setting "piwik_enabled" couldn't be found."; https://github.com/wallabag/wallabag/issues/3662
-      # Remove >= 2.4.0
-      url = "https://github.com/wallabag/wallabag/pull/3868.patch";
-      sha256 = "0pfxsv8ncaxkjkybim3v3iswmfv1vbjlzmvj50nn9blvjwc9gxjg";
-    })
   ];
 
   dontBuild = true;
@@ -30,7 +24,7 @@ stdenv.mkDerivation rec {
     cp -R * $out/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web page archiver";
     longDescription = ''
       wallabag is a self hostable application for saving web pages.

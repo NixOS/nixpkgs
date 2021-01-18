@@ -1,4 +1,4 @@
-{stdenv, fetchurl, makeWrapper, libiconv, ncurses, perl, fortune}:
+{lib, stdenv, fetchurl, makeWrapper, libiconv, ncurses, perl, fortune}:
 
 stdenv.mkDerivation rec {
   pname = "gtypist";
@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ makeWrapper ncurses perl fortune ]
-   ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+   ++ lib.optional stdenv.isDarwin libiconv;
 
   preFixup = ''
      wrapProgram "$out/bin/typefortune" \
        --prefix PATH : "${fortune}/bin" \
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/gtypist";
     description = "Universal typing tutor";
     license = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, SDL_mixer, zlib, libpng, libintl }:
+{ lib, stdenv, fetchurl, SDL, SDL_mixer, zlib, libpng, libintl }:
 
 stdenv.mkDerivation rec {
   pname = "lbreakout2";
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "0vwdlyvh7c4y80q5vp7fyfpzbqk9lq3w8pvavi139njkalbxc14i";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Breakout clone from the LGames series";
     homepage = "http://lgames.sourceforge.net/LBreakout2/";
     license = licenses.gpl2;
     maintainers = [ maintainers.ciil ];
     platforms = platforms.unix;
-    hydraPlatforms = stdenv.lib.platforms.linux; # sdl-config times out on darwin
+    hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
   };
 }

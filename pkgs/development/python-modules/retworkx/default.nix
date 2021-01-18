@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , python
-, fetchpatch
 , fetchFromGitHub
 , pipInstallHook
 , maturin
@@ -13,35 +12,30 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "retworkx";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "retworkx";
     rev = version;
-    sha256 = "1xqp6d39apkjvd0ad9vw81cp2iqzhpagfa4p171xqm3bwfn2imdc";
+    sha256 = "11n30ldg3y3y6qxg3hbj837pnbwjkqw3nxq6frds647mmmprrd20";
   };
 
-  cargoSha256 = "0bma0l14jv5qhcsxck7vw3ak1w3c8v84cq4hii86i4iqk523zns5";
-  cargoPatches = [
-      ( fetchpatch {
-        name = "retworkx-cargo-lock.patch";
-        url = "https://github.com/Qiskit/retworkx/commit/a02fd33d357a92dbe9530696a6d85aa59fe8a5b9.patch";
-        sha256 = "0gvxr1nqp9ll4skfks4p4d964pshal25kb1nbfzhpyipnzddizr5";
-      } )
-  ];
+  cargoSha256 = "1vg4yf0k6yypqf9z46zz818mz7fdrgxj7zl6zjf7pnm2r8mq3qw5";
 
   propagatedBuildInputs = [ python ];
 
   nativeBuildInputs = [ pipInstallHook maturin pip ];
 
-  # Need to check AFTER python wheel is installed (b/c using Rust Build, not buildPythonPackage)
+  # Needed b/c need to check AFTER python wheel is installed (using Rust Build, not buildPythonPackage)
   doCheck = false;
   doInstallCheck = true;
 
+  installCheckInputs = [ pytestCheckHook numpy ];
+
   buildPhase = ''
     runHook preBuild
-    maturin build --release --manylinux off --strip --interpreter ${python.interpreter}
+    maturin build --release --manylinux off --strip
     runHook postBuild
   '';
 
@@ -50,10 +44,9 @@ rustPlatform.buildRustPackage rec {
     pipInstallPhase
   '';
 
-  installCheckInputs = [ pytestCheckHook numpy ];
   preCheck = ''
     export TESTDIR=$(mktemp -d)
-    cp -r $TMP/$sourceRoot/tests $TESTDIR
+    cp -r tests/ $TESTDIR
     pushd $TESTDIR
   '';
   postCheck = "popd";

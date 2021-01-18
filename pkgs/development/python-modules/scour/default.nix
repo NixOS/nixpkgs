@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "scour";
-  version = "0.38";
+  version = "0.38.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf50a13dcdf8cfe1861f0ce334f413604e376a7681c5b181e15322f43c3befcd";
+    sha256 = "6881ec26660c130c5ecd996ac6f6b03939dd574198f50773f2508b81a68e0daf";
   };
 
   propagatedBuildInputs = [ six ];

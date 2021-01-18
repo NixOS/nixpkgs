@@ -9,7 +9,7 @@ in fetchFromGitLab {
   domain = "salsa.debian.org";
   owner = "fonts-team";
   repo = "fonts-open-sans";
-  rev = "debian%2F1.11-1"; # URL-encoded form of "debian/1.11-1" tag
+  rev = "debian/1.11-1";
   postFetch = ''
     tar xf $downloadedFile --strip=1
     mkdir -p $out/share/fonts/truetype

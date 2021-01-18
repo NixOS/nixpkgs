@@ -2,7 +2,7 @@
 
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "docker-tools";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ lnl7 ];
   };
 
@@ -115,9 +115,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker load --input='${examples.nginx}'",
             "docker run --name nginx -d -p 8000:80 ${examples.nginx.imageName}",
         )
-        docker.wait_until_succeeds("curl http://localhost:8000/")
+        docker.wait_until_succeeds("curl -f http://localhost:8000/")
         docker.succeed(
-            "docker rm --force nginx", "docker rmi '${examples.nginx.imageName}'",
+            "docker rm --force nginx",
+            "docker rmi '${examples.nginx.imageName}'",
         )
 
     with subtest("A pulled image can be used as base image"):
@@ -233,6 +234,25 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker load --input='${pkgs.dockerTools.examples.filesInStore}'",
             "docker run --rm file-in-store nix-store --verify --check-contents",
             "docker run --rm file-in-store |& grep 'some data'",
+        )
+
+    with subtest("Ensure cross compiled image can be loaded and has correct arch."):
+        docker.succeed(
+            "docker load --input='${pkgs.dockerTools.examples.cross}'",
+        )
+        assert (
+            docker.succeed(
+                "docker inspect ${pkgs.dockerTools.examples.cross.imageName} "
+                + "| ${pkgs.jq}/bin/jq -r .[].Architecture"
+            ).strip()
+            == "${if pkgs.system == "aarch64-linux" then "amd64" else "arm64"}"
+        )
+
+    with subtest("buildLayeredImage doesn't dereference /nix/store symlink layers"):
+        docker.succeed(
+            "docker load --input='${examples.layeredStoreSymlink}'",
+            "docker run --rm ${examples.layeredStoreSymlink.imageName} bash -c 'test -L ${examples.layeredStoreSymlink.passthru.symlink}'",
+            "docker rmi ${examples.layeredStoreSymlink.imageName}",
         )
   '';
 })

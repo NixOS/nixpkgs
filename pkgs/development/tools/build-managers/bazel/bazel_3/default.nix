@@ -48,9 +48,10 @@ let
       srcs.bazel_skylib
       srcs.io_bazel_rules_sass
       srcs.platforms
-      (if stdenv.hostPlatform.isDarwin
-       then srcs."java_tools_javac11_darwin-v8.0.zip"
-       else srcs."java_tools_javac11_linux-v8.0.zip")
+      # `bazel query` wants all of these to be available regardless of platform.
+      srcs."java_tools_javac11_darwin-v8.0.zip"
+      srcs."java_tools_javac11_linux-v8.0.zip"
+      srcs."java_tools_javac11_windows-v8.0.zip"
       srcs."coverage_output_generator-v2.1.zip"
       srcs.build_bazel_rules_nodejs
       srcs."android_tools_pkg-0.19.0rc1.tar.gz"
@@ -131,9 +132,20 @@ let
   bazelRC = writeTextFile {
     name = "bazel-rc";
     text = ''
-      build --override_repository=${remote_java_tools.name}=${remote_java_tools}
-      build --distdir=${distDir}
       startup --server_javabase=${runJdk}
+
+      # Can't use 'common'; https://github.com/bazelbuild/bazel/issues/3054
+      # Most commands inherit from 'build' anyway.
+      build --distdir=${distDir}
+      fetch --distdir=${distDir}
+      query --distdir=${distDir}
+
+      build --override_repository=${remote_java_tools.name}=${remote_java_tools}
+      fetch --override_repository=${remote_java_tools.name}=${remote_java_tools}
+      query --override_repository=${remote_java_tools.name}=${remote_java_tools}
+
+      # Provide a default java toolchain, this will be the same as ${runJdk}
+      build --host_javabase='@local_jdk//:jdk'
 
       # load default location for the system wide configuration
       try-import /etc/bazel.bazelrc
@@ -534,7 +546,7 @@ stdenv.mkDerivation rec {
     export TEST_TMPDIR=$(pwd)
 
     hello_test () {
-      $out/bin/bazel test --distdir=${distDir} \
+      $out/bin/bazel test \
         --test_output=errors \
         --java_toolchain='${javaToolchain}' \
         examples/cpp:hello-success_test \

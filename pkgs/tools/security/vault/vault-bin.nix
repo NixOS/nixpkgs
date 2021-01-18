@@ -1,30 +1,26 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 let
-  version = "1.5.3";
+  version = "1.6.1";
 
   sources = let
     base = "https://releases.hashicorp.com/vault/${version}";
   in {
     x86_64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_amd64.zip";
-      sha256 = "1chhi7piq04j8rgk15rcszqqp37xd9cjj67plr5pgvdps3s1zihy";
+      sha256 = "1la2pylcj9y5gr7hr4aaa49427y3lgxi2phhl46pqmr7an62pkbm";
     };
     i686-linux = fetchurl {
       url = "${base}/vault_${version}_linux_386.zip";
-      sha256 = "0jbnvypapang025wfyj6i70jdz3g29ggg7rzmg8xh6gfyhwk3vmb";
+      sha256 = "1a2rhv5bpv43qp74a49msrwr7djzy86irsn73jl0xnkh0k6ijci1";
     };
     x86_64-darwin = fetchurl {
       url = "${base}/vault_${version}_darwin_amd64.zip";
-      sha256 = "1m54258lfdr79p2j8janbkhp0a8bs8xbrcr51lqx2s620n7sfbya";
-    };
-    i686-darwin = fetchurl {
-      url = "${base}/vault_${version}_darwin_386.zip";
-      sha256 = "038qkkhlwj86fz9vpcycvv5nb41y8mqypqvhfp0ia11birp8xlsr";
+      sha256 = "0snswwai2ya26crm3ksifrmbdnajr36v4vamh7g65plg6vzban9a";
     };
     aarch64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_arm64.zip";
-      sha256 = "1vivkwcy9j9zs7w65k7y8chix8jnii5pz8zck6rlpwgz5vs0h04k";
+      sha256 = "0ix99da3xd4z200dgvpfc2h1sfx6l8cipichvfjlj39md45grs89";
     };
   };
 
@@ -44,11 +40,11 @@ in stdenv.mkDerivation {
     echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.vaultproject.io";
     description = "A tool for managing secrets, this binary includes the UI";
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" "i686-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
     license = licenses.mpl20;
-    maintainers = with maintainers; [ offline psyanticy mkaito ];
+    maintainers = with maintainers; [ offline psyanticy mkaito Chili-Man ];
   };
 }

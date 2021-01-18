@@ -17,7 +17,7 @@ let
 
   stdenv.mkDerivation rec {
     inherit pname version src description;
-    exec = stdenv.lib.toLower module;
+    exec = lib.toLower module;
     sweethome3dItem = makeDesktopItem {
       inherit exec desktopName;
       name = pname;
@@ -51,7 +51,12 @@ let
 
       cp "${sweethome3dItem}/share/applications/"* $out/share/applications
 
+      # MESA_GL_VERSION_OVERRIDE is needed since the update from MESA 19.3.3 to 20.0.2:
+      # without it a "Profiles [GL4bc, GL3bc, GL2, GLES1] not available on device null"
+      # exception is thrown on startup.
+      # https://discourse.nixos.org/t/glx-not-recognised-after-mesa-update/6753
       makeWrapper ${jre}/bin/java $out/bin/$exec \
+        --set MESA_GL_VERSION_OVERRIDE 2.1 \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
         --add-flags "-Dsun.java2d.opengl=true -jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
     '';
@@ -62,25 +67,25 @@ let
       homepage = "http://www.sweethome3d.com/index.jsp";
       inherit description;
       inherit license;
-      maintainers = [ stdenv.lib.maintainers.edwtjo ];
-      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ lib.maintainers.edwtjo ];
+      platforms = lib.platforms.linux;
     };
   };
 
-  d2u = stdenv.lib.replaceChars ["."] ["_"];
+  d2u = lib.replaceChars ["."] ["_"];
 
 in {
 
   application = mkSweetHome3D rec {
-    pname = stdenv.lib.toLower module + "-application";
-    version = "6.3";
+    pname = lib.toLower module + "-application";
+    version = "6.4.2";
     module = "SweetHome3D";
     description = "Design and visualize your future home";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     src = fetchsvn {
       url = "https://svn.code.sf.net/p/sweethome3d/code/tags/V_" + d2u version + "/SweetHome3D/";
-      sha256 = "1c13g0f73jgbzmjhdm9knqq1kh3vdl04zl3xlp30g9a1n0jkr38i";
-      rev = "6896";
+      sha256 = "13rczayakwb5246hqnp8lnw61p0p7ywr2294bnlp4zwsrz1in9z4";
+      rev = "7504";
     };
     desktopName = "Sweet Home 3D";
     icons = {

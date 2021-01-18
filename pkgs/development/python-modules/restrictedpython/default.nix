@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "RestrictedPython";
-  version = "5.0";
+  version = "5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1g0sffn6ifkl1w8gq15rpaqm8c7l68bsnm77wcd3flyzzydmd050";
+    sha256 = "9ae16e500782b41bd1abefd8554ccb26330817bba9ce090d385aa226f1ca83e8";
   };
 
   #propagatedBuildInputs = [ xmltodict requests ifaddr ];

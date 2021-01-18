@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
+{ lib, stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, libpng, pkgconfig, mock, pytz, pygobject3, gobject-introspection
 , certifi, pillow
@@ -20,14 +20,14 @@ assert enableTk -> (tcl != null)
 assert enableQt -> pyqt5 != null;
 
 buildPythonPackage rec {
-  version = "3.3.1";
+  version = "3.3.3";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "87f53bcce90772f942c2db56736788b39332d552461a5cb13f05ff45c1680f0e";
+    sha256 = "b1b60c6476c4cfe9e5cf8ab0d3127476fd3d5f05de0f343a452badaad0e4bdec";
   };
 
   XDG_RUNTIME_DIR = "/tmp";
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   # order for all of the tests to pass.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python plotting library, making publication quality plots";
     homepage    = "https://matplotlib.org/";
     maintainers = with maintainers; [ lovek323 veprbl ];

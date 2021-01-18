@@ -1,5 +1,6 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27
 , decorator
+, http-parser
 , importlib-metadata
 , python
 , python_magic
@@ -8,22 +9,22 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.8.9";
+  version = "3.9.35";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12gfqp7y7w6bgky3daxdggdzp08cg9ss64hbf5f49kywvsmcs01i";
+    sha256 = "d822a2adfd8e028a2856785fbfe78e7dd8c7a3b623516298aef6d42a4c9149d1";
   };
 
   patchPhase = ''
-    substituteInPlace requirements.txt \
-      --replace "python-magic==0.4.18" "python-magic" \
-      --replace "urllib3==1.25.10" "urllib3"
+    sed -iE "s,python-magic==.*,python-magic," requirements.txt
+    sed -iE "s,urllib3==.*,urllib3," requirements.txt
     substituteInPlace setup.py --replace 'setup_requires=["pipenv"]' "setup_requires=[]"
   '';
 
   propagatedBuildInputs = [
     decorator
+    http-parser
     python_magic
     urllib3
     six

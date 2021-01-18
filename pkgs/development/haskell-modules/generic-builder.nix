@@ -33,7 +33,7 @@ in
 , profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling
 , enableSharedExecutables ? false
-, enableSharedLibraries ? (ghc.enableShared or false)
+, enableSharedLibraries ? !stdenv.hostPlatform.isStatic && (ghc.enableShared or false)
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
 , enableStaticLibraries ? !(stdenv.hostPlatform.isWindows or stdenv.hostPlatform.isWasm)
 , enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
@@ -64,6 +64,7 @@ in
 , patches ? null, patchPhase ? null, prePatch ? "", postPatch ? ""
 , preConfigure ? null, postConfigure ? null
 , preBuild ? null, postBuild ? null
+, preHaddock ? null, postHaddock ? null
 , installPhase ? null, preInstall ? null, postInstall ? null
 , checkPhase ? null, preCheck ? null, postCheck ? null
 , preFixup ? null, postFixup ? null
@@ -658,6 +659,8 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? checkPhase)             { inherit checkPhase; }
 // optionalAttrs (args ? preCheck)               { inherit preCheck; }
 // optionalAttrs (args ? postCheck)              { inherit postCheck; }
+// optionalAttrs (args ? preHaddock)             { inherit preHaddock; }
+// optionalAttrs (args ? postHaddock)            { inherit postHaddock; }
 // optionalAttrs (args ? preInstall)             { inherit preInstall; }
 // optionalAttrs (args ? installPhase)           { inherit installPhase; }
 // optionalAttrs (args ? postInstall)            { inherit postInstall; }

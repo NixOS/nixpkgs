@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, unzip, makeWrapper, setJavaClassPath
 , zulu, glib, libxml2, libav_0_8, ffmpeg_3, libxslt, libGL, alsaLib
-, fontconfig, freetype, gnome2, cairo, gdk-pixbuf, atk, xorg, zlib
+, fontconfig, freetype, pango, gtk2, cairo, gdk-pixbuf, atk, xorg, zlib
 , swingSupport ? true }:
 
 let
@@ -16,8 +16,8 @@ let
 
   libraries = [
     stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg_3 libxslt libGL
-    xorg.libXxf86vm alsaLib fontconfig freetype gnome2.pango
-    gnome2.gtk cairo gdk-pixbuf atk zlib
+    xorg.libXxf86vm alsaLib fontconfig freetype pango
+    gtk2 cairo gdk-pixbuf atk zlib
   ] ++ (lib.optionals swingSupport (with xorg; [
     xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp
     xorg.libXt xorg.libXrender stdenv.cc.cc
@@ -73,7 +73,7 @@ in stdenv.mkDerivation {
       Certified builds of OpenJDK that can be deployed across multiple
       operating systems, containers, hypervisors and Cloud platforms.
     '';
-    maintainers = with maintainers; [ nequissimus fpletz ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, alsaLib, freetype, ftgl, libjack2, libX11, lv2
+{ lib, stdenv, fetchzip, alsaLib, freetype, ftgl, libjack2, libX11, lv2
 , libGLU, libGL, pkgconfig, ttf_bitstream_vera
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation  rec {
     ttf_bitstream_vera
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A DSP tonewheel organ emulator";
     homepage = "http://setbfree.org";
     license = licenses.gpl2;

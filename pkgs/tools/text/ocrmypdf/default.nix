@@ -7,7 +7,7 @@
 , python3
 , python3Packages
 , qpdf
-, stdenv
+, lib, stdenv
 , tesseract4
 , unpaper
 , substituteAll
@@ -29,14 +29,14 @@ let
 in
 buildPythonApplication rec {
   pname = "ocrmypdf";
-  version = "11.0.1";
+  version = "11.3.3";
   disabled = ! python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "194ds9i1zd80ynzwgv7kprax0crh7bbchayawdcvg2lyr64a82xn";
+    sha256 = "0qv34clid65p11dgqalyk7b7myn5ibiz8i9xxhxkmjblw297p6ak";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -74,13 +74,13 @@ buildPythonApplication rec {
   patches = [
     (substituteAll {
       src = ./liblept.patch;
-      liblept = "${stdenv.lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}";
+      liblept = "${lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${stdenv.lib.makeBinPath [ ghostscript jbig2enc pngquant qpdf tesseract4 unpaper ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ghostscript jbig2enc pngquant qpdf tesseract4 unpaper ]}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jbarlow83/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
     license = licenses.gpl3;

@@ -1,41 +1,39 @@
-{ stdenv
-, lib
-, buildGoPackage
-, go
+{ lib
+, fetchFromGitHub
+, buildGoModule
 , makeWrapper
 , nix-prefetch-git
-, fetchFromGitHub
+, go
 }:
 
-buildGoPackage {
+buildGoModule {
   pname = "vgo2nix";
-  version = "unstable-2020-05-05";
-  goPackagePath = "github.com/adisbladis/vgo2nix";
-
-  nativeBuildInputs = [ makeWrapper ];
+  version = "unstable-2020-11-07";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "vgo2nix";
-    rev = "71e59bf268d5257a0f89b2f59cd20fd468c8c6ac";
-    sha256 = "1pcdkknq2v7nrs0siqcvvq2x0qqz5snwdz2lpjnad8i33rwhmayh";
+    rev = "4546d8056ab09ece3d2489594627c0541b15a397";
+    sha256 = "0n9pf0i5y59kiiv6dq8h8w1plaz9w6s67rqr2acqgxa45iq36mkh";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "1lzhhg9wimn8nfzrrla5bshgk1ghnlsdfmq6iask0zqz311g96bv";
+
+  subPackages = [ "." ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   allowGoReference = true;
 
-  postInstall = with stdenv; let
-    binPath = lib.makeBinPath [ nix-prefetch-git go ];
-  in ''
-    wrapProgram $out/bin/vgo2nix --prefix PATH : ${binPath}
+  postInstall = ''
+    wrapProgram $out/bin/vgo2nix --prefix PATH : ${lib.makeBinPath [ nix-prefetch-git go ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert go.mod files to nixpkgs buildGoPackage compatible deps.nix files";
     homepage = "https://github.com/nix-community/vgo2nix";
     license = licenses.mit;
-    maintainers = with maintainers; [ adisbladis ];
+    maintainers = with maintainers; [ adisbladis SuperSandro2000 ];
   };
 
 }

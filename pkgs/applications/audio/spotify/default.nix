@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
+{ fetchurl, lib, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
-, at-spi2-atk, at-spi2-core, libpulseaudio
+, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa
 }:
 
 let
@@ -10,15 +10,14 @@ let
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.1.26.501.gbe11e53b-15";
+  version = "1.1.46.916.g416cacf1";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
   # To get general information:
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "41";
-
+  rev = "43";
 
   deps = [
     alsaLib
@@ -36,10 +35,12 @@ let
     gdk-pixbuf
     glib
     gtk2
+    libdrm
     libgcrypt
     libnotify
     libpng
     libpulseaudio
+    mesa
     nss
     pango
     stdenv.cc.cc
@@ -64,7 +65,7 @@ let
 in
 
 stdenv.mkDerivation {
-  pname = "spotify";
+  pname = "spotify-unwrapped";
   inherit version;
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
@@ -77,7 +78,7 @@ stdenv.mkDerivation {
   # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    sha512 = "41bc8d20388bab39058d0709d99b1c8e324ea37af217620797356b8bc0b24aedbe801eaaa6e00a93e94e26765602e5dc27ad423ce2e777b4bec1b92daf04f81e";
+    sha512 = "5b3d5d1f52a554c8e775b8aed16ef84e96bf3b61a2b53266e10d3c47e341899310af13cc8513b04424fc14532e36543a6fae677f80a036e3f51c75166d8d53d1";
   };
 
   buildInputs = [ squashfsTools makeWrapper ];
@@ -134,7 +135,7 @@ stdenv.mkDerivation {
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath $rpath $out/share/spotify/spotify
 
-      librarypath="${stdenv.lib.makeLibraryPath deps}:$libdir"
+      librarypath="${lib.makeLibraryPath deps}:$libdir"
       wrapProgram $out/share/spotify/spotify \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
         --prefix PATH : "${gnome3.zenity}/bin"
@@ -157,7 +158,7 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.spotify.com/";
     description = "Play music from the Spotify music service";
     license = licenses.unfree;

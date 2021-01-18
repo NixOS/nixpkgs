@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, gnome3 }:
+{ lib, stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-timepp";
-  version = "unstable-2019-03-30";
+  version = "unstable-2020-03-15";
 
   src = fetchFromGitHub {
     owner = "zagortenay333";
     repo = "timepp__gnome";
-    rev = "f90fb5573b37ac89fb57bf62e07d6d3bdb6a2c63";
-    sha256 = "0p6rsbm6lf61vzly775qkwc2rcjjl38bkqdxnv4sccqmw2wwclnp";
+    rev = "34ae477a51267cc1e85992a80cf85a1a7b7005c1";
+    sha256 = "1v0xbrp0x5dwizscxh7h984pax4n92bj8iyw3qvjk27ynpxq8ag1";
   };
 
   uuid = "timepp@zagortenay333";
@@ -19,11 +19,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A todo.txt manager, time tracker, timer, stopwatch, pomodoro, and alarms gnome-shell extension.";
     homepage = "https://github.com/zagortenay333/timepp__gnome";
     license = licenses.gpl3;
     maintainers = with maintainers; [ svsdep ];
-    broken = versionAtLeast gnome3.gnome-shell.version "3.32"; # Dosen't support 3.34 https://github.com/zagortenay333/timepp__gnome/issues/113
   };
 }

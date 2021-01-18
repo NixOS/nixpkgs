@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python37Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor }:
+{ lib, stdenv, fetchFromGitHub, python37Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor }:
 
 let cairocffi-xcffib = python37Packages.cairocffi.override {
     withXcffib = true;
@@ -34,7 +34,18 @@ python37Packages.buildPythonApplication rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib libxcb cairo pango python37Packages.xcffib ];
 
-  pythonPath = with python37Packages; [ xcffib cairocffi-xcffib setuptools setuptools_scm ]; 
+  pythonPath = with python37Packages; [
+    xcffib
+    cairocffi-xcffib
+    setuptools
+    setuptools_scm
+    dateutil
+    dbus-python
+    mpd2
+    psutil
+    pyxdg
+    pygobject3
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/qtile \
@@ -45,7 +56,7 @@ python37Packages.buildPythonApplication rec {
 
   doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.qtile.org/";
     license = licenses.mit;
     description = "A small, flexible, scriptable tiling window manager written in Python";

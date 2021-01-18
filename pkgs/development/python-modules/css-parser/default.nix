@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "css-parser";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c7ab355512ae51334ba6791a7e4d553f87bef17ba2026f1cc9bf3b17a7779d44";
+    sha256 = "4ed448a8a5622edb1d30d616bbc4bd3d30f11be922343d7a92d7e418e324af2e";
   };
 
   # Test suite not included in tarball yet

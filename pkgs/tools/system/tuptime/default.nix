@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , makeWrapper, installShellFiles
 , python3, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "tuptime";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "rfrail3";
     repo = "tuptime";
     rev = version;
-    sha256 = "0izps85p8pxidfrzp7l4hp221fx3dcgapapsix1zavq6jrsl2qyh";
+    sha256 = "0nk3yyjavgmc435vj3f0siw4y5nwipsbcsvsf5m7mgvq0xi8f3ls";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram $out/share/tuptime/db-tuptime-migrate-4.0-to-5.0.sh \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ sqlite ]}"
+      --prefix PATH : "${lib.makeBinPath [ sqlite ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Total uptime & downtime statistics utility";
     homepage = "https://github.com/rfrail3/tuptime";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.evils ];
   };

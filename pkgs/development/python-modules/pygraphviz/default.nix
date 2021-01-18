@@ -1,9 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll, graphviz
+{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, substituteAll, graphviz
 , pkgconfig, doctest-ignore-unicode, mock, nose }:
 
 buildPythonPackage rec {
   pname = "pygraphviz";
   version = "1.6";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -29,7 +31,7 @@ buildPythonPackage rec {
   # https://github.com/pygraphviz/pygraphviz/pull/129
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python interface to Graphviz graph drawing package";
     homepage = "https://github.com/pygraphviz/pygraphviz";
     license = licenses.bsd3;

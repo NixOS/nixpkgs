@@ -1,8 +1,11 @@
 { version
+, url ? null
 , sha256_32bit ? null
 , sha256_64bit
 , settingsSha256
+, settingsVersion ? version
 , persistencedSha256
+, persistencedVersion ? version
 , useGLVND ? true
 , useProfiles ? true
 , preferGtk2 ? false
@@ -11,9 +14,9 @@
 , prePatch ? ""
 , patches ? []
 , broken ? false
-}:
+}@args:
 
-{ stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
+{ lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
 , kernel ? null, perl, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
@@ -24,7 +27,7 @@
   disable32Bit ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 assert !libsOnly -> kernel != null;
 assert versionOlder version "391" -> sha256_32bit != null;
@@ -46,12 +49,12 @@ let
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
+          url = args.url or "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
           sha256 = sha256_64bit;
         }
       else if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
-          url = "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run";
+          url = args.url or "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run";
           sha256 = sha256_32bit;
         }
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
@@ -89,9 +92,10 @@ let
         withGtk3 = !preferGtk2;
       };
       persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
+      inherit persistencedVersion settingsVersion;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://www.nvidia.com/object/unix.html";
       description = "X.org driver and kernel module for NVIDIA graphics cards";
       license = licenses.unfreeRedistributable;

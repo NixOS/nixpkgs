@@ -34,12 +34,14 @@ buildPythonApplication rec {
     sed -i "s/'request.*'/'requests >= 2.2'/" setup.py
   '';
 
+  # test_timeit2 is flakey, and depends sleep being precise to the milisecond
   checkPhase = ''
     ${lib.optionalString stdenv.isDarwin ''
       # network tests fails on darwin
-      rm tests/test_network.py
+      rm tests/test_network.py tests/checker/test_http*.py tests/checker/test_content_allows_robots.py tests/checker/test_noproxy.py
     ''}
-      pytest --ignore=tests/checker/{test_telnet,telnetserver}.py -k 'not TestLoginUrl'
+      pytest --ignore=tests/checker/{test_telnet,telnetserver}.py \
+        -k 'not TestLoginUrl and not test_timeit2'
   '';
 
   meta = {

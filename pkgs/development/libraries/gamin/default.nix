@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, glib }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, autoreconfHook }:
 
-stdenv.mkDerivation (rec {
+let
+  cross = stdenv.hostPlatform != stdenv.buildPlatform;
+in stdenv.mkDerivation (rec {
   name = "gamin-0.1.10";
 
   src = fetchurl {
@@ -8,7 +10,7 @@ stdenv.mkDerivation (rec {
     sha256 = "18cr51y5qacvs2fc2p1bqv32rs8bzgs6l67zhasyl45yx055y218";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
   buildInputs = [ glib ];
 
@@ -27,7 +29,7 @@ stdenv.mkDerivation (rec {
       name = "fix-pthread-mutex.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/gamin/fix-pthread-mutex.patch?h=3.4-stable&id=a1a836b089573752c1b0da7d144c0948b04e8ea8";
       sha256 = "13igdbqsxb3sz0h417k6ifmq2n4siwqspj6slhc7fdl5wd1fxmdz";
-    });
+    }) ++ stdenv.lib.optional (cross) ./abstract-socket-namespace.patch ;
 
 
   meta = with stdenv.lib; {

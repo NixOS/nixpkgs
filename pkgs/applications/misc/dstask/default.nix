@@ -1,14 +1,14 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "dstask";
-  version = "0.20";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "naggie";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hrhvfkqflr4wx1r2xbfbi566pglrp4rp5yq0cr2ml0x6kw3yz0j";
+    sha256 = "0rfz8jim0xqcwdb5n28942v9r3hbvhjrwdgzvbwc9f9psqg2s8d2";
   };
 
   # Set vendorSha256 to null because dstask vendors its dependencies (meaning
@@ -32,7 +32,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/dstask.go" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line todo list with super-reliable git sync";
     homepage = src.meta.homepage;
     license = licenses.mit;

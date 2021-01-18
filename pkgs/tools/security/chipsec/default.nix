@@ -11,6 +11,8 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1rxr9i08a22m15slvlkrhnki30jixi2ds096kmmc2nqzfr9yibmb";
   };
 
+  disabled = !stdenv.isLinux;
+
   nativeBuildInputs = [
     nasm libelf
   ];
@@ -23,7 +25,7 @@ pythonPackages.buildPythonApplication rec {
 
   KERNEL_SRC_DIR = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Platform Security Assessment Framework";
     longDescription = ''
       CHIPSEC is a framework for analyzing the security of PC platforms

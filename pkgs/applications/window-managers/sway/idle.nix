@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, scdoc
 , wayland, wayland-protocols, systemd
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=enabled" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Idle management daemon for Wayland";
     longDescription = ''
       Sway's idle management daemon. It is compatible with any Wayland

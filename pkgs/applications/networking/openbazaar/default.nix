@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 }:
 
@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
     install -D $src $out/bin/openbazaard
   '';
 
-  postFixup = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $out/bin/openbazaard
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Decentralized Peer to Peer Marketplace for Bitcoin - daemon";
     homepage = "https://www.openbazaar.org/";
     license = licenses.mit;

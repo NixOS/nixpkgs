@@ -3,11 +3,11 @@
 buildPythonPackage rec {
 
   pname = "sharedmem";
-  version = "0.3.7";
+  version = "0.3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "483e414b8c5d03093a02baf548449f1d8426a88855556fa42102bba82b86b2a8";
+    sha256 = "c654a6bee2e2f35c82e6cc8b6c262fcabd378f5ba11ac9ef71530f8dabb8e2f7";
   };
 
   propagatedBuildInputs = [ numpy ];

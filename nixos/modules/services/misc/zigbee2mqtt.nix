@@ -70,6 +70,7 @@ in
       description = "Zigbee2mqtt Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      environment.ZIGBEE2MQTT_DATA = cfg.dataDir;
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/zigbee2mqtt";
         User = "zigbee2mqtt";

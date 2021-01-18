@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
+{ lib, stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
 , libwebp, quantumdepth ? 8, fixDarwinDylibNames }:
 
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ bzip2 freetype ghostscript graphviz libjpeg libpng libtiff libX11 libxml2
       zlib libtool libwebp
-    ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ];
 
-  nativeBuildInputs = [ xz ];
+  nativeBuildInputs = [ xz ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   postInstall = ''
     sed -i 's/-ltiff.*'\'/\'/ $out/bin/*
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.graphicsmagick.org";
     description = "Swiss army knife of image processing";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

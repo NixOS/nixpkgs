@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
 , glibcLocales, pytest }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     LC_ALL="en_US.UTF-8" py.test --pyargs ephem.tests -k "not JPLTest"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compute positions of the planets and stars";
     homepage = "https://pypi.python.org/pypi/ephem/";
     license = licenses.lgpl3;

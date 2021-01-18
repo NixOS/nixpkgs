@@ -32,6 +32,7 @@ with lib;
     (mkRemovedOptionModule ["services" "cgmanager" "enable"] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "osquery" ] "The osquery module has been removed")
     (mkRemovedOptionModule [ "services" "fourStore" ] "The fourStore module has been removed")
+    (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " +
@@ -67,6 +68,8 @@ with lib;
       udev rules from libu2f-host to the system. Udev gained native support
       to handle FIDO security tokens, so this isn't necessary anymore.
     '')
+
+    (mkRemovedOptionModule [ "services" "seeks" ] "")
 
     # Do NOT add any option renames here, see top of the file
   ];

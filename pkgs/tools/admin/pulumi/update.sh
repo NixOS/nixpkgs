@@ -1,19 +1,34 @@
 #!/usr/bin/env bash
-
-VERSION="2.6.1"
-
 # Bash 3 compatible for Darwin
+
+# Version of Pulumi from
+# https://www.pulumi.com/docs/get-started/install/versions/
+VERSION="2.17.2"
+
+# Grab latest release ${VERSION} from
+# https://github.com/pulumi/pulumi-${NAME}/releases
 plugins=(
-    # https://github.com/pulumi/pulumi-aws/releases
-    "aws=2.13.0"
-    # https://github.com/pulumi/pulumi-gcp/releases
-    "gcp=3.13.0"
-    # https://github.com/pulumi/pulumi-random/releases
-    "random=2.2.0"
-    # https://github.com/pulumi/pulumi-kubernetes/releases
-    "kubernetes=2.4.0"
-    # https://github.com/pulumi/pulumi-postgresql/releases
-    "postgresql=2.2.2");
+    "auth0=1.5.2"
+    "aws=3.23.0"
+    "cloudflare=2.11.1"
+    "consul=2.6.3"
+    "datadog=2.14.1"
+    "digitalocean=3.2.1"
+    "docker=2.6.1"
+    "gcp=4.7.0"
+    "github=2.4.2"
+    "gitlab=3.4.1"
+    "hcloud=0.5.1"
+    "kubernetes=2.7.6"
+    "mailgun=2.3.2"
+    "mysql=2.3.3"
+    "openstack=2.10.2"
+    "packet=3.2.2"
+    "postgresql=2.5.3"
+    "random=3.0.1"
+    "vault=3.2.1"
+    "vsphere=2.11.4"
+)
 
 function genMainSrc() {
     local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-$1-x64.tar.gz"

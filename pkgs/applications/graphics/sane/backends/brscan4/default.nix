@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb-compat-0_1 }:
+{ lib, stdenv, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb-compat-0_1 }:
 
 let
-  myPatchElf = file: with stdenv.lib; ''
+  myPatchElf = file: with lib; ''
     patchelf --set-interpreter \
       ${stdenv.glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
@@ -11,7 +11,7 @@ let
 
 in stdenv.mkDerivation rec {
   name = "brscan4-0.4.8-1";
-  src = 
+  src =
     if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         url = "http://download.brother.com/welcome/dlf006646/${name}.i386.deb";
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  installPhase = with stdenv.lib; ''
+  installPhase = with lib; ''
     PATH_TO_BRSCAN4="opt/brother/scanner/brscan4"
     mkdir -p $out/$PATH_TO_BRSCAN4
     cp -rp $PATH_TO_BRSCAN4/* $out/$PATH_TO_BRSCAN4
@@ -87,8 +87,8 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Brother brscan4 sane backend driver";
     homepage = "http://www.brother.com";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ jraygauthier ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
   baseName = "ipmiutil";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An easy-to-use IPMI server management utility";
     homepage = "http://ipmiutil.sourceforge.net/";
     maintainers = with maintainers; [ raskin ];

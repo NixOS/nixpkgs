@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, asciidoc, asciidoctor, autoconf, automake, cmake,
+{ lib, stdenv, fetchurl, asciidoc, asciidoctor, autoconf, automake, cmake,
   docbook_xsl, fftw, fftwFloat, gfortran, libtool, libusb1, qtbase,
   qtmultimedia, qtserialport, qttools, texinfo, wrapQtAppsHook }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   # Hamlib builds with autotools, wsjtx builds with cmake
-  # Omitting pkgconfig because it causes issues locating the built hamlib
+  # Omitting pkg-config because it causes issues locating the built hamlib
   nativeBuildInputs = [
     asciidoc asciidoctor autoconf automake cmake docbook_xsl gfortran libtool
     qttools texinfo wrapQtAppsHook
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # Remove Git dependency from superbuild since sources are included
   patches = [ ./super.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Weak-signal digital communication modes for amateur radio";
     longDescription = ''
       WSJT-X implements communication protocols or "modes" called FT4, FT8, JT4,

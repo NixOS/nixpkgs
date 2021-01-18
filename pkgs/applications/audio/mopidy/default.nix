@@ -14,11 +14,9 @@ let
 
     mopidy-gmusic = callPackage ./gmusic.nix { };
 
-    mopidy-local-images = callPackage ./local-images.nix { };
+    mopidy-iris = callPackage ./iris.nix { };
 
-    mopidy-local-sqlite = callPackage ./local-sqlite.nix { };
-
-    mopidy-spotify = callPackage ./spotify.nix { };
+    mopidy-local = callPackage ./local.nix { };
 
     mopidy-moped = callPackage ./moped.nix { };
 
@@ -28,20 +26,21 @@ let
 
     mopidy-mpris = callPackage ./mpris.nix { };
 
+    mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
+
+    mopidy-scrobbler = callPackage ./scrobbler.nix { };
+
     mopidy-somafm = callPackage ./somafm.nix { };
-
-    mopidy-spotify-tunigo = callPackage ./spotify-tunigo.nix { };
-
-    mopidy-youtube = callPackage ./youtube.nix { };
 
     mopidy-soundcloud = callPackage ./soundcloud.nix { };
 
-    mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
+    mopidy-spotify = callPackage ./spotify.nix { };
 
-    mopidy-iris = callPackage ./iris.nix { };
+    mopidy-spotify-tunigo = callPackage ./spotify-tunigo.nix { };
 
     mopidy-tunein = callPackage ./tunein.nix { };
 
+    mopidy-youtube = callPackage ./youtube.nix { };
   };
 
 in self

@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, pycairo, backports_functools_lru_cache
+{ lib, stdenv, fetchPypi, python, buildPythonPackage, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, libpng, pkgconfig, mock, pytz, pygobject3, gobject-introspection, functools32, subprocess32
 , fetchpatch
@@ -77,7 +77,7 @@ buildPythonPackage rec {
   # order for all of the tests to pass.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python plotting library, making publication quality plots";
     homepage    = "https://matplotlib.org/";
     maintainers = with maintainers; [ lovek323 veprbl ];

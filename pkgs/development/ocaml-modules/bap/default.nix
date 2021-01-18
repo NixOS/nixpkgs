@@ -1,23 +1,29 @@
-{ stdenv, fetchFromGitHub, fetchurl
-, ocaml, findlib, ocamlbuild, ocaml_oasis,
- bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp,
- utop, libxml2,
- ppx_tools_versioned,
- which, makeWrapper, writeText
+{ lib, stdenv, fetchFromGitHub, fetchurl
+, ocaml, findlib, ocamlbuild, ocaml_oasis
+, bitstring, camlzip, cmdliner, core_kernel, ezjsonm, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm, frontc, ounit, ppx_jane, parsexp
+, utop, libxml2, ncurses
+, ppx_bitstring
+, ppx_tools_versioned
+, which, makeWrapper, writeText
+, z3
 }:
 
-if stdenv.lib.versionAtLeast core_kernel.version "0.12"
-then throw "BAP needs core_kernel-0.11 (hence OCaml ≤ 4.06)"
+if !lib.versionAtLeast ocaml.version "4.07"
+then throw "BAP is not available for OCaml ${ocaml.version}"
+else
+
+if lib.versionAtLeast core_kernel.version "0.13"
+then throw "BAP needs core_kernel-0.12 (hence OCaml 4.07)"
 else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-bap-${version}";
-  version = "2.0.0";
+  version = "2.1.0";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap";
     rev = "v${version}";
-    sha256 = "0lb9xkfp67wjjqr75p6krivmjra7l5673236v9ny4gp0xi0755bk";
+    sha256 = "10fkr6p798ad18j4h9bvp9dg4pmjdpv3hmj7k389i0vhqniwi5xq";
   };
 
   sigs = fetchurl {
@@ -35,8 +41,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which makeWrapper ];
 
   buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis
-                  llvm ppx_tools_versioned
-                  utop libxml2 ];
+                  llvm ppx_bitstring ppx_tools_versioned
+                  z3
+                  utop libxml2 ncurses ];
 
   propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_jane core_kernel ezjsonm fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi parsexp
                             piqi-ocaml uuidm frontc ounit ];
@@ -55,13 +62,15 @@ stdenv.mkDerivation rec {
 
   disableIda = "--disable-ida";
 
-  patches = [ ./dont-add-curses.patch ];
+  patches = [ ./curses_is_ncurses.patch ];
+
+  preConfigure = ''
+    substituteInPlace oasis/elf --replace bitstring.ppx ppx_bitstring
+  '';
 
   configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm}/bin/llvm-config" ];
 
-  BAPBUILDFLAGS = "-j $(NIX_BUILD_CORES)";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages.";
     homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
     maintainers = [ maintainers.maurer ];

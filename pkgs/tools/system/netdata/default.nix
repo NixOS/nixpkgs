@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config
 , CoreFoundation, IOKit, libossp_uuid
 , curl, libcap,  libuuid, lm_sensors, zlib, fetchpatch
 , nixosTests
@@ -10,22 +10,22 @@
 , withDebug ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.24.0";
+  version = "1.28.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "19zr2wlsc8rbw6a7vjy4ivgq71l34lh70pcgwa0k5sp1vryj7r3d";
+    sha256 = "1266jbfw55r1zh00xi6c90j2fs9hw8hmsb7686rh04l8mffny9f4";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ curl.dev zlib.dev ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Real-time performance monitoring tool";
-    homepage = "https://my-netdata.io/";
+    homepage = "https://www.netdata.cloud/";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.lethalman ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tracy";
-  version = "0.7.1";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
     rev = "v${version}";
-    sha256 = "13zg3ijzhh7qkhgqff2ca23nd4gj7ac8jr0bp9w1gjf2cpgqkm40";
+    sha256 = "0s39kimpc03x48kh7lyhblfs8y4mdzcz3g7f806h90x7zndsmfxj";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $out/bin/Tracy
   '';
 
-  meta = with stdenv.lib; {
-    description = "A real time, nanosecond resolution, remote telemetry frame profiler for games and other applications.";
+  meta = with lib; {
+    description = "A real time, nanosecond resolution, remote telemetry frame profiler for games and other applications";
     homepage = "https://github.com/wolfpld/tracy";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;

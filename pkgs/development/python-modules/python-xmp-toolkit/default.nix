@@ -4,7 +4,7 @@
 , mock
 , pythonOlder
 , pytz
-, stdenv
+, lib, stdenv
 }:
 
 buildPythonPackage {
@@ -35,7 +35,7 @@ buildPythonPackage {
       --replace "ctypes.util.find_library('exempi')" "'${exempi}/lib/libexempi${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/python-xmp-toolkit/python-xmp-toolkit";
     description = "Python XMP Toolkit for working with metadata";
     license = licenses.bsd3;

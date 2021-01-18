@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , makeWrapper
 , fetchurl
 , cabextract
@@ -25,9 +25,9 @@
 }:
 
 let
-  version = "4.3.4";
+  version = "4.4";
 
-  binpath = stdenv.lib.makeBinPath [ 
+  binpath = lib.makeBinPath [
     cabextract
     python
     gettext
@@ -52,7 +52,7 @@ let
     else if stdenv.hostPlatform.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
     else throw "Unsupported platform for PlayOnLinux: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
-  libs = pkgs: stdenv.lib.makeLibraryPath [ xorg.libX11 libGL ];
+  libs = pkgs: lib.makeLibraryPath [ xorg.libX11 libGL ];
 
   python = python2.withPackages(ps: with ps; [
     wxPython
@@ -65,12 +65,12 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.playonlinux.com/script_files/PlayOnLinux/${version}/PlayOnLinux_${version}.tar.gz";
-    sha256 = "019dvb55zqrhlbx73p6913807ql866rm0j011ix5mkk2g79dzhqp";
+    sha256 = "0n40927c8cnjackfns68zwl7h4d7dvhf7cyqdkazzwwx4k2xxvma";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ 
+  buildInputs = [
     xorg.libX11
     libGL
     python
@@ -103,7 +103,7 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for managing Windows programs under linux";
     homepage = "https://www.playonlinux.com/";
     license = licenses.gpl3;

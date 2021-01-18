@@ -22,13 +22,13 @@ let
 
 in mkDerivation rec {
   pname = "evilpixie";
-  version = "0.2";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "bcampbell";
     repo = "evilpixie";
     rev = "v${version}";
-    sha256 = "1yg4ic3kcxqmr7k5bbvrv5iavlnhpdx6510z5wha9k9k5q9c4dvh";
+    sha256 = "0dwgfr8kmkfppgf5wx9i5f7fjz3gxk0ji1l06x1z4r3vj52hdbph";
   };
 
   nativeBuildInputs = [

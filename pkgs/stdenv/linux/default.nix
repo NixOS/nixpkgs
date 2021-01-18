@@ -274,9 +274,9 @@ in
       gmp = super.gmp.override { stdenv = self.makeStaticLibraries self.stdenv; };
       mpfr = super.mpfr.override { stdenv = self.makeStaticLibraries self.stdenv; };
       libmpc = super.libmpc.override { stdenv = self.makeStaticLibraries self.stdenv; };
-      isl_0_17 = super.isl_0_17.override { stdenv = self.makeStaticLibraries self.stdenv; };
+      isl_0_20 = super.isl_0_20.override { stdenv = self.makeStaticLibraries self.stdenv; };
       gcc-unwrapped = super.gcc-unwrapped.override {
-        isl = isl_0_17;
+        isl = isl_0_20;
       };
     };
     extraNativeBuildInputs = [ prevStage.patchelf ] ++

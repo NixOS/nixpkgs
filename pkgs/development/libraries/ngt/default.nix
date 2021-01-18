@@ -1,16 +1,26 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, llvmPackages
+, enableAVX ? stdenv.hostPlatform.avxSupport
+}:
+
 stdenv.mkDerivation rec {
   pname = "NGT";
-  version = "v1.8.4";
-  nativeBuildInputs = [ cmake ];
+  version = "v1.12.3-alpha";
+
   src = fetchFromGitHub {
     owner = "yahoojapan";
     repo = "NGT";
-    rev = version;
-    sha256 = "f2019e7916b81f8aeabc57d682904c8447776bf9ba94525d20265b329aa43eb5";
+    rev = "29c88ff6cd5824d3196986d1f50b834565b6c9dd";
+    sha256 = "sha256-nu0MJNpaenOB4+evoSVLKmPIuZXVj1Rm9x53+TfhezY=";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ llvmPackages.openmp ];
+
+  NIX_ENFORCE_NO_NATIVE = ! enableAVX;
+  __AVX2__ = if enableAVX then 1 else 0;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/yahoojapan/NGT";

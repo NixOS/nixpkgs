@@ -2,18 +2,16 @@
 
 buildGoModule rec {
   pname = "up";
-  version = "0.3.2";
-
-  patches = [ ./gomod.patch ];
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "akavel";
     repo = "up";
     rev = "v${version}";
-    sha256 = "1psixyymk98z52yy92lwb75yfins45dw6rif9cxwd7yiascwg2if";
+    sha256 = "1j8fi14fiwjscfzdfjqxgavjadwvcm5mqr8fb7hx3jmxs4kl58bp";
   };
 
-  vendorSha256 = "1h3w4i7dyh6yagqmdclvflfq6fx0z880jdnpf28assv7fxd9rjsx";
+  vendorSha256 = "1q8wfsfl3rz698ck5q5s5z6iw9k134fxxvwipcp2b052n998rcrx";
 
   doCheck = false;
 

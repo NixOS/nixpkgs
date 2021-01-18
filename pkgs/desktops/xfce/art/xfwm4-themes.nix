@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xfce }:
+{ lib, stdenv, fetchurl, xfce }:
 
 let
   category = "art";
@@ -9,17 +9,17 @@ stdenv.mkDerivation rec {
   version = "4.10.0";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "0xfmdykav4rf6gdxbd6fhmrfrvbdc1yjihz7r7lba0wp1vqda51j";
   };
-  
+
   passthru.updateScript = xfce.updateScript {
     inherit pname version;
     attrPath = "xfce.${pname}";
     versionLister = xfce.archiveLister category pname;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.xfce.org/";
     description = "Themes for Xfce";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, dbus, libgcrypt, pkgconfig, intltool, gobject-introspection, gnome3 }:
+{ lib, stdenv, fetchurl, glib, dbus, libgcrypt, pkg-config, intltool, gobject-introspection, gnome3 }:
 
 let
   pname = "libgnome-keyring";
@@ -8,14 +8,14 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "c4c178fbb05f72acc484d22ddb0568f7532c409b0a13e06513ff54b91e947783";
   };
 
   outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [ glib gobject-introspection dbus libgcrypt ];
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Framework for managing passwords and other secrets";
     homepage = "https://wiki.gnome.org/Projects/GnomeKeyring";
-    license = with stdenv.lib.licenses; [ gpl2Plus lgpl2Plus ];
+    license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
     inherit (glib.meta) platforms maintainers;
 
     longDescription = ''

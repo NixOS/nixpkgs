@@ -9,15 +9,20 @@
 
 buildPythonPackage rec {
   pname = "pytest-mypy";
-  version = "0.6.2";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2560a9b27d59bb17810d12ec3402dfc7c8e100e40539a70d2814bcbb27240f27";
+    sha256 = "63d418a4fea7d598ac40b659723c00804d16a251d90a5cfbca213eeba5aaf01c";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
+
   propagatedBuildInputs = [ pytest mypy filelock ];
+
+  # does not contain tests
+  doCheck = false;
+  pythonImportsCheck = [ "pytest_mypy" ];
 
   meta = with lib; {
     description = "Mypy static type checker plugin for Pytest";

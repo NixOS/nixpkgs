@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , vala
@@ -13,7 +13,7 @@
 , libXi
 , pango
 , gettext
-, pkgconfig
+, pkg-config
 , libxml2
 , bamf
 , gdk-pixbuf
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     libxml2 # xmllint
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     pango
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Elegant, simple, clean dock";
     homepage = "https://github.com/elementary/dock";
     license = licenses.gpl3Plus;

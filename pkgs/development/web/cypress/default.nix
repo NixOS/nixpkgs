@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "4.12.1";
+  version = "6.0.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "00sma1q7hbhzjkjnkv8y37ar0wnxk9mkqlpsplgyyyx3gx81nn3s";
+    sha256 = "0hii7kp48ba07gsd521wwl288p808xr2wqgk1iidxkzj2v6g71by";
   };
 
   # don't remove runtime deps
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/cypress/Cypress $out/bin/Cypress
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
     license = licenses.mit;

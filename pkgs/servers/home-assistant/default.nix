@@ -10,30 +10,19 @@
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
 , packageOverrides ? self: super: {
-  # TODO: Remove this override after updating to cryptography 2.8:
-
 }
 
 # Skip pip install of required packages on startup
 , skipPip ? true }:
 
 let
-
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
 
-    # required by the sun/moon plugins
+    # Pinned due to API changes in astral>=2.0, required by the sun/moon plugins
     # https://github.com/home-assistant/core/issues/36636
     (mkOverride "astral" "1.10.1"
       "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
-
-    # We have 3.x in nixpkgs which is incompatible with home-assistant atm:
-    # https://github.com/home-assistant/core/blob/dev/requirements_all.txt
-    (mkOverride "pyowm" "2.10.0"
-      "1xvcv3sbcn9na8cwz21nnjlixysfk5lymnf65d1nqkbgacc1mm4g")
-
-    (mkOverride "bcrypt" "3.1.7"
-      "0hhywhxx301cxivgxrpslrangbfpccc8y83qbwn1f57cab3nj00b")
 
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
@@ -68,17 +57,17 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.114.4";
+  hassVersion = "2021.1.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
 
-  disabled = pythonOlder "3.5";
+  # check REQUIRED_PYTHON_VER in homeassistant/const.py
+  disabled = pythonOlder "3.7.1";
 
-  patches = [
-    ./relax-dependencies.patch
-  ];
+  # don't try and fail to strip 6600+ python files, it takes minutes!
+  dontStrip = true;
 
   inherit availableComponents;
 
@@ -87,47 +76,116 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0k9px4ny0b72d9ysr3x72idprgfgjab1z91ildr87629826bb4n7";
+    sha256 = "03aa7kd216rnp8h80nv002ahafiy0031lxk1bkwcirrznphcw7sj";
   };
+
+  # leave this in, so users don't have to constantly update their downstream patch handling
+  patches = [];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "yarl==1.4.2" "yarl~=1.4"
+      --replace "aiohttp==3.7.1" "aiohttp>=3.6.3" \
+      --replace "attrs==19.3.0" "attrs>=19.3.0" \
+      --replace "bcrypt==3.1.7" "bcrypt>=3.1.7" \
+      --replace "cryptography==3.2" "cryptography" \
+      --replace "pip>=8.0.3,<20.3" "pip" \
+      --replace "requests==2.25.0" "requests>=2.24.0" \
+      --replace "ruamel.yaml==0.15.100" "ruamel.yaml>=0.15.100"
+    substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
   propagatedBuildInputs = [
     # From setup.py
-    aiohttp astral async-timeout attrs bcrypt certifi importlib-metadata jinja2
+    aiohttp astral async-timeout attrs bcrypt certifi ciso8601 httpx jinja2
     pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
-    setuptools voluptuous voluptuous-serialize
-    # From http, frontend and recorder components and auth.mfa_modules.totp
-    sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode ciso8601
+    setuptools voluptuous voluptuous-serialize yarl
+    # From default_config. frontend, http, image, mobile_app and recorder components as well as
+    # the auth.mfa_modules.totp module
+    aiohttp-cors defusedxml distro emoji hass-frontend pynacl pillow pyotp
+    pyqrcode sqlalchemy
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.isLinux;
 
   checkInputs = [
-    asynctest pytest pytest-aiohttp requests-mock hass-nabucasa netdisco pydispatcher
+    asynctest pytestCheckHook pytest-aiohttp pytest_xdist requests-mock hass-nabucasa netdisco pydispatcher
   ];
 
-  checkPhase = ''
-    # - components' dependencies are not included, so they cannot be tested
-    # - test_merge_id_schema requires pyqwikswitch
-    # - test_loader.py tries to load not-packaged dependencies
-    # - test_notify pyotp doesn't like the short mock keys
-    # - unclear why test_merge fails: assert merge_log_err.call_count != 0
-    # - test_setup_safe_mode_if_no_frontend: requires dependencies for components we have not packaged
-    py.test \
-      --ignore tests/components \
-      --ignore tests/test_loader.py \
-      --ignore tests/auth/mfa_modules/test_notify.py \
-      -k "not test_setup_safe_mode_if_no_frontend and not test_merge_id_schema and not test_merge"
+  # We cannot test all components, since they'd introduce lots of dependencies, some of which are unpackaged,
+  # but we should test very common stuff, like what's in `default_config`.
+  componentTests = [
+    "api"
+    "automation"
+    "config"
+    "configurator"
+    "default_config"
+    "demo"
+    "discovery"
+    "frontend"
+    "group"
+    "history"
+    "homeassistant"
+    "http"
+    "input_boolean"
+    "input_datetime"
+    "input_text"
+    "input_number"
+    "input_select"
+    "logbook"
+    "logger"
+    "media_source"
+    "mobile_app"
+    "person"
+    "scene"
+    "script"
+    "shell_command"
+    "ssdp"
+    "sun"
+    "system_health"
+    "system_log"
+    "tag"
+    "websocket_api"
+    "zeroconf"
+    "zone"
+  ];
 
-    # Some basic components should be tested however
-    py.test \
-      tests/components/{api,config,configurator,demo,discovery,frontend,group,history} \
-      tests/components/{homeassistant,http,logger,script,shell_command,system_log,websocket_api}
+  pytestFlagsArray = [
+    "-n auto"
+    # don't bulk test all components
+    "--ignore tests/components"
+    # prone to race conditions due to parallel file access
+    "--ignore tests/test_config.py"
+    # tries to import unpackaged dependencies
+    "--ignore tests/test_loader.py"
+    # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0
+    "--ignore tests/auth/mfa_modules/test_notify.py"
+    "tests"
+  ] ++ map (component: "tests/components/" + component) componentTests;
+
+  disabledTests = [
+    # AssertionError: merge_log_err.call_count != 0
+    "test_merge"
+    # ModuleNotFoundError: No module named 'pyqwikswitch'
+    "test_merge_id_schema"
+    # AssertionError: assert 'unknown' == 'not_home'
+    "test_device_tracker_not_home"
+    # Racy https://github.com/home-assistant/core/issues/41425
+    "test_cached_event_message"
+    # ValueError: count must be a positive integer (got 0)
+    "test_media_view"
+    # AssertionError: len(events) == 1
+    "test_error_posted_as_event"
+    # keyring.errors.NoKeyringError: No recommended backend was available.
+    "test_secrets_from_unrelated_fails"
+    "test_secrets_credstash"
+    # RuntimeError: Event loop is closed
+    "test_remove_older_logs"
+  ];
+
+  preCheck = ''
+    # the tests require the existance of a media dir
+    mkdir /build/media
   '';
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
@@ -141,7 +199,7 @@ in with py.pkgs; buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://home-assistant.io/";
-    description = "Open-source home automation platform running on Python 3";
+    description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda globin mic92 hexa ];
   };

@@ -1,18 +1,18 @@
-{ stdenv, makeDesktopItem, fetchurl, unzip
+{ lib, stdenv, makeDesktopItem, fetchurl, unzip
 , gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome3
 , xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core
 }:
 
 stdenv.mkDerivation rec {
   pname = "avocode";
-  version = "4.7.0";
+  version = "4.10.4";
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "0kn0422k4vi2qifasnkd0cjf5l6z0rmkqv6l46ygxk3qyykjnqcm";
+    sha256 = "06xf5y2mljk3pd74ap9n90bhhidbzpg5c6wws361ygd4f3x86c46";
   };
 
-  libPath = stdenv.lib.makeLibraryPath (with xorg; [
+  libPath = lib.makeLibraryPath (with xorg; [
     stdenv.cc.cc.lib
     at-spi2-core.out
     gdk-pixbuf
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://avocode.com/";
     description = "The bridge between designers and developers";
     license = licenses.unfree;

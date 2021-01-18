@@ -1,28 +1,32 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests, six, mock }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, six }:
 
 buildPythonPackage rec {
   pname = "spotipy";
-  version = "2.13.0";
+  version = "2.16.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1a85b8831ed60d2290ab9bbba289c548fb9680889757252c02dab2f2327d865";
+    sha256 = "1f50xczv8kgly6wz6zrvqzwdj6nvhdlgx8wnrhmbipjrb6qacr25";
   };
 
   propagatedBuildInputs = [ requests six ];
-  checkInputs = [ mock ];
 
-  preConfigure = ''
-    substituteInPlace setup.py \
-      --replace "mock==2.0.0" "mock"
-  '';
+  # tests want to access the spotify API
+  doCheck = false;
+  pythonImportsCheck = [
+    "spotipy"
+    "spotipy.oauth2"
+  ];
 
-  pythonImportsCheck = [ "spotipy" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://spotipy.readthedocs.org/";
+    changelog = "https://github.com/plamere/spotipy/blob/${version}/CHANGELOG.md";
     description = "A light weight Python library for the Spotify Web API";
     license = licenses.mit;
-    maintainers = [ maintainers.rvolosatovs ];
+    maintainers = with maintainers; [ rvolosatovs ];
   };
 }

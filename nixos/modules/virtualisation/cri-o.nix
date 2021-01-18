@@ -1,16 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
-
 let
   cfg = config.virtualisation.cri-o;
 
   crioPackage = (pkgs.cri-o.override { inherit (cfg) extraPackages; });
 
-  # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
-    cp ${filePath} $out
-  '';
 in
 {
   imports = [
@@ -78,12 +73,19 @@ in
         The final CRI-O package (including extra packages).
       '';
     };
+
+    networkDir = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = "Override the network_dir option.";
+      internal = true;
+    };
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package pkgs.cri-tools ];
 
-    environment.etc."crictl.yaml".source = copyFile "${pkgs.cri-o-unwrapped.src}/crictl.yaml";
+    environment.etc."crictl.yaml".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/crictl.yaml";
 
     environment.etc."crio/crio.conf.d/00-default.conf".text = ''
       [crio]
@@ -95,11 +97,11 @@ in
 
       [crio.network]
       plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
+      ${optionalString (cfg.networkDir != null) ''network_dir = "${cfg.networkDir}"''}
 
       [crio.runtime]
       cgroup_manager = "systemd"
       log_level = "${cfg.logLevel}"
-      manage_ns_lifecycle = true
       pinns_path = "${cfg.package}/bin/pinns"
       hooks_dir = []
 
@@ -110,8 +112,8 @@ in
       ''}
     '';
 
-    environment.etc."cni/net.d/10-crio-bridge.conf".source = copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/10-crio-bridge.conf";
-    environment.etc."cni/net.d/99-loopback.conf".source = copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/99-loopback.conf";
+    environment.etc."cni/net.d/10-crio-bridge.conf".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/10-crio-bridge.conf";
+    environment.etc."cni/net.d/99-loopback.conf".source = utils.copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/99-loopback.conf";
 
     # Enable common /etc/containers configuration
     virtualisation.containers.enable = true;

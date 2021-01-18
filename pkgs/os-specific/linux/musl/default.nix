@@ -35,11 +35,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "musl";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url    = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1s6lix02k1ijm4nmhzpmwzk5w6xfkhn70nvvk8zjs51r24cpppn6";
+    sha256 = "0jz8fzwgvfyjgxjbpw35ixdglp2apqjvp8m386f6yr4zacc6xbv8";
   };
 
   enableParallelBuilding = true;
@@ -61,6 +61,12 @@ stdenv.mkDerivation rec {
     (fetchurl {
       url = "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
+    })
+    # wcsnrtombs destination buffer overflow, remove >= 1.2.2
+    (fetchurl {
+      name = "CVE-2020-28928.patch";
+      url = "https://www.openwall.com/lists/oss-security/2020/11/20/4/1";
+      sha256 = "077n2p165504nz9di6n8y5421591r3lsbcxgih8z26l6mvkhcs2h";
     })
   ];
   CFLAGS = [ "-fstack-protector-strong" ]

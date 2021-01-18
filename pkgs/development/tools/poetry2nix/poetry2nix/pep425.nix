@@ -71,12 +71,13 @@ let
       withPython = ver: abi: x: (isPyVersionCompatible ver x.pyVer) && (isPyAbiCompatible abi x.abi);
       withPlatform =
         if isLinux
-        then (
-          x: x.platform == "manylinux1_${stdenv.platform.kernelArch}"
-            || x.platform == "manylinux2010_${stdenv.platform.kernelArch}"
-            || x.platform == "manylinux2014_${stdenv.platform.kernelArch}"
-            || x.platform == "any"
-        )
+        then
+          (
+            x: x.platform == "manylinux1_${stdenv.platform.kernelArch}"
+              || x.platform == "manylinux2010_${stdenv.platform.kernelArch}"
+              || x.platform == "manylinux2014_${stdenv.platform.kernelArch}"
+              || x.platform == "any"
+          )
         else (x: hasInfix "macosx" x.platform || x.platform == "any");
       filterWheel = x:
         let
@@ -86,7 +87,7 @@ let
       filtered = builtins.filter filterWheel filesWithoutSources;
       choose = files:
         let
-          osxMatches = [ "10_12" "10_11" "10_10" "10_9" "any" ];
+          osxMatches = [ "10_12" "10_11" "10_10" "10_9" "10_8" "10_7" "any" ];
           linuxMatches = [ "manylinux1_" "manylinux2010_" "manylinux2014_" "any" ];
           chooseLinux = x: lib.take 1 (findBestMatches linuxMatches x);
           chooseOSX = x: lib.take 1 (findBestMatches osxMatches x);

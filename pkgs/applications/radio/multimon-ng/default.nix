@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qt4, qmake4Hook, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, qt4, qmake4Hook, libpulseaudio }:
 let
-  version = "1.1.8";
+  version = "1.1.9";
 in
 stdenv.mkDerivation {
   pname = "multimon-ng";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     owner = "EliasOenal";
     repo = "multimon-ng";
     rev = version;
-    sha256 = "1973xfyvzl1viz19zr83cgqlx5laxbjrca35rqabn6dlb6xb5xk8";
+    sha256 = "01716cfhxfzsab9zjply9giaa4nn4b7rm3p3vizrwi7n253yiwm2";
   };
 
   buildInputs = [ qt4 libpulseaudio ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     cp multimon-ng $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multimon is a digital baseband audio protocol decoder";
     longDescription = ''
       multimon-ng a fork of multimon, a digital baseband audio

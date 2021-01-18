@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libusb1, fftwSinglePrec }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libusb1, fftwSinglePrec }:
 
 stdenv.mkDerivation rec {
   pname = "hackrf";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
     cd host
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source SDR platform";
-    homepage = "http://greatscottgadgets.com/hackrf/";
+    homepage = "https://greatscottgadgets.com/hackrf/";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ sjmackenzie ];

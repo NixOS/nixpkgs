@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libX11 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "xrectsel";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     make install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Print the geometry of a rectangular screen region";
     homepage = "https://github.com/lolilolicon/xrectsel";
     license = licenses.gpl3;

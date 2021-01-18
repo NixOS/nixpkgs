@@ -26,7 +26,7 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    description = "Monitor a process and trigger a notification.";
+    description = "Monitor a process and trigger a notification";
     longDescription = ''
       Monitor a process and trigger a notification.
 

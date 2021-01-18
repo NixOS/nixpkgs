@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, pkgconfig, glib, mpv }:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, glib, mpv-unwrapped }:
 
 stdenv.mkDerivation rec {
   pname = "mpv-mpris";
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ glib mpv ];
+  buildInputs = [ glib mpv-unwrapped ];
 
   installFlags = [ "SCRIPTS_DIR=$(out)/share/mpv/scripts" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   stripDebugList = [ "share/mpv/scripts" ];
   passthru.scriptName = "mpris.so";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MPRIS plugin for mpv";
     homepage = "https://github.com/hoyon/mpv-mpris";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests lxml pandas ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pseudo API for Google Trends";
     homepage = "https://github.com/GeneralMills/pytrends";
     license = [ licenses.asl20 ];

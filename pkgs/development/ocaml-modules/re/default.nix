@@ -1,4 +1,4 @@
-{ lib, fetchzip, buildDunePackage, ocaml, ounit, seq }:
+{ lib, fetchurl, buildDunePackage, ocaml, ounit, seq }:
 
 buildDunePackage rec {
   pname = "re";
@@ -6,9 +6,9 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.02";
 
-  src = fetchzip {
-    url = "https://github.com/ocaml/ocaml-re/archive/${version}.tar.gz";
-    sha256 = "07ycb103mr4mrkxfd63cwlsn023xvcjp0ra0k7n2gwrg0mwxmfss";
+  src = fetchurl {
+    url = "https://github.com/ocaml/ocaml-re/releases/download/${version}/re-${version}.tbz";
+    sha256 = "1gas4ky49zgxph3870nffzkr6y41kkpqp4nj38pz1gh49zcf12aj";
   };
 
   buildInputs = lib.optional doCheck ounit;

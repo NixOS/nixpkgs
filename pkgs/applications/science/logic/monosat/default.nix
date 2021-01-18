@@ -1,9 +1,9 @@
-{ stdenv, fetchpatch, fetchFromGitHub, cmake, zlib, gmp, jdk8,
+{ lib, stdenv, fetchpatch, fetchFromGitHub, cmake, zlib, gmp, jdk8,
   # The JDK we use on Darwin currenly makes extensive use of rpaths which are
   # annoying and break the python library, so let's not bother for now
   includeJava ? !stdenv.hostPlatform.isDarwin, includeGplCode ? true }:
 
-with stdenv.lib;
+with lib;
 
 let
   boolToCmake = x: if x then "ON" else "OFF";
@@ -31,7 +31,8 @@ let
   core = stdenv.mkDerivation {
     name = "${pname}-${version}";
     inherit src patches;
-    buildInputs = [ cmake zlib gmp jdk8 ];
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ zlib gmp jdk8 ];
 
     cmakeFlags = [
       "-DBUILD_STATIC=OFF"

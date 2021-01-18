@@ -243,6 +243,8 @@ let
           OnFailure = toString config.onFailure; }
         // optionalAttrs (options.startLimitIntervalSec.isDefined) {
           StartLimitIntervalSec = toString config.startLimitIntervalSec;
+        } // optionalAttrs (options.startLimitBurst.isDefined) {
+          StartLimitBurst = toString config.startLimitBurst;
         };
     };
   };
@@ -545,6 +547,14 @@ in
       type = types.bool;
       description = ''
         Whether to enable cgroup accounting.
+      '';
+    };
+
+    systemd.enableUnifiedCgroupHierarchy = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to enable the unified cgroup hierarchy (cgroupsv2).
       '';
     };
 
@@ -884,14 +894,25 @@ in
 
   config = {
 
-    warnings = concatLists (mapAttrsToList (name: service:
-      let
-        type = service.serviceConfig.Type or "";
-        restart = service.serviceConfig.Restart or "no";
-      in optional
-      (type == "oneshot" && (restart == "always" || restart == "on-success"))
-      "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'")
-      cfg.services);
+    warnings = concatLists (
+      mapAttrsToList
+        (name: service:
+          let
+            type = service.serviceConfig.Type or "";
+            restart = service.serviceConfig.Restart or "no";
+            hasDeprecated = builtins.hasAttr "StartLimitInterval" service.serviceConfig;
+          in
+            concatLists [
+              (optional (type == "oneshot" && (restart == "always" || restart == "on-success"))
+                "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'"
+              )
+              (optional hasDeprecated
+                "Service '${name}.service' uses the attribute 'StartLimitInterval' in the Service section, which is deprecated. See https://github.com/NixOS/nixpkgs/issues/45786."
+              )
+            ]
+        )
+        cfg.services
+    );
 
     system.build.units = cfg.units;
 
@@ -1165,6 +1186,7 @@ in
     boot.kernel.sysctl = mkIf (!cfg.coredump.enable) {
       "kernel.core_pattern" = "core";
     };
+    boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
   };
 
   # FIXME: Remove these eventually.

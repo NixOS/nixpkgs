@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsaLib
+{ lib, stdenv, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsaLib
 , mpg123, releasePath ? null }:
 
-with stdenv.lib;
+with lib;
 
 # To use the full release version:
 # 1) Sign into https://backstage.renoise.com and download the release version to some stable location.
@@ -19,15 +19,15 @@ stdenv.mkDerivation rec {
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
         if releasePath == null then
-		    fetchurl {
-		      urls = [
-		          "https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
-		          "https://web.archive.org/web/https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
-		      ];
-		      sha256 = "1v249kmyidx55kppk3sry7yg6hl1a91ixhnwz36h4y134fs7bkrl";
-		    }
+        fetchurl {
+          urls = [
+              "https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
+              "https://web.archive.org/web/https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
+          ];
+          sha256 = "1v249kmyidx55kppk3sry7yg6hl1a91ixhnwz36h4y134fs7bkrl";
+        }
         else
-        	releasePath
+          releasePath
     else throw "Platform is not supported by Renoise";
 
   buildInputs = [ alsaLib libjack2 libX11 libXcursor libXext libXrandr ];
@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
     cp -r Resources $out
 
     mkdir -p $out/lib/
-
-    mv $out/AudioPluginServer* $out/lib/
 
     cp renoise $out/renoise
 
@@ -56,6 +54,13 @@ stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --set-rpath ${mpg123}/lib:$out/lib \
       $out/renoise
+
+    for path in $out/AudioPluginServer*; do
+      patchelf \
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        --set-rpath $out/lib \
+        $path
+    done
   '';
 
   meta = {

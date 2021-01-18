@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "sh";
-  version = "1.13.1";
+  version = "1.14.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18w6wawmpzfh52s0jimwn59a7rfa7blrmg7bhwnq8siwbqhd58wp";
+    sha256 = "39aa9af22f6558a0c5d132881cf43e34828ca03e4ae11114852ca6a55c7c1d8e";
   };
 
   patches = [

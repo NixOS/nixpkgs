@@ -36,7 +36,6 @@ let
   };
 
   mkDerivation = libsForQt5.callPackage ({ mkDerivation }: mkDerivation) {};
-  qtbase = libsForQt5.callPackage ({ qtbase }: qtbase) {};
 
   packages = self: with self;
     let
@@ -83,7 +82,6 @@ let
             setupHook = args.setupHook or defaultSetupHook;
 
             meta = {
-              broken = lib.versionAtLeast qtbase.version "5.15";
               license = with lib.licenses; [
                 lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
               ];
@@ -120,6 +118,7 @@ let
       ksysguard = callPackage ./ksysguard.nix {};
       kwallet-pam = callPackage ./kwallet-pam.nix {};
       kwayland-integration = callPackage ./kwayland-integration.nix {};
+      kwayland-server = callPackage ./kwayland-server {};
       kwin = callPackage ./kwin {};
       kwrited = callPackage ./kwrited.nix {};
       libkscreen = callPackage ./libkscreen {};
@@ -128,9 +127,11 @@ let
       oxygen = callPackage ./oxygen.nix {};
       plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
       plasma-desktop = callPackage ./plasma-desktop {};
+      plasma-disks = callPackage ./plasma-disks.nix {};
       plasma-integration = callPackage ./plasma-integration {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
+      plasma-thunderbolt = callPackage ./plasma-thunderbolt.nix { };
       plasma-vault = callPackage ./plasma-vault {};
       plasma-workspace = callPackage ./plasma-workspace {};
       plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
@@ -138,7 +139,6 @@ let
       powerdevil = callPackage ./powerdevil.nix {};
       sddm-kcm = callPackage ./sddm-kcm.nix {};
       systemsettings = callPackage ./systemsettings.nix {};
-      user-manager = callPackage ./user-manager.nix {};
       xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix {};
 
       thirdParty = let inherit (libsForQt5) callPackage; in {

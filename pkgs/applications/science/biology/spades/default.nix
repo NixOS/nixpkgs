@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, bzip2, cmake }:
+{ lib, stdenv, fetchurl, zlib, bzip2, cmake, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "SPAdes";
@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ zlib bzip2 ];
+  buildInputs = [ zlib bzip2 python3 ];
 
   doCheck = true;
 
   sourceRoot = "${pname}-${version}/src";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "St. Petersburg genome assembler: assembly toolkit containing various assembly pipelines";
     license = licenses.gpl2;
     homepage = "http://cab.spbu.ru/software/spades/";

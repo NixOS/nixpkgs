@@ -1,22 +1,44 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pyserial, pyserial-asyncio, zigpy
-, asynctest, pytest, pytest-asyncio }:
+{ lib
+, asynctest
+, buildPythonPackage
+, fetchFromGitHub
+, pyserial
+, pyserial-asyncio
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, zigpy }:
 
 buildPythonPackage rec {
   pname = "zigpy-cc";
-  version = "0.5.1";
+  version = "0.5.2";
+  # https://github.com/Martiusweb/asynctest/issues/152
+  # broken by upstream python bug with asynctest and
+  # is used exclusively by home-assistant with python 3.8
+  disabled = pythonOlder "3.8";
 
-  propagatedBuildInputs = [ pyserial pyserial-asyncio zigpy ];
-  checkInputs = [ asynctest pytest pytest-asyncio ];
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "06759615b28c45beaa5f03e594769a373d41674b96aeafefccd5c4e1c67e25ca";
+  src = fetchFromGitHub {
+    owner = "zigpy";
+    repo = "zigpy-cc";
+    rev = version;
+    sha256 = "U3S8tQ3zPlexZDt5GvCd+rOv7CBVeXJJM1NGe7nRl2o=";
   };
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    pyserial
+    pyserial-asyncio
+    zigpy
+  ];
+
+  checkInputs = [
+    asynctest
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  meta = with lib; {
     description = "A library which communicates with Texas Instruments CC2531 radios for zigpy";
-    homepage = "http://github.com/sanyatuning/zigpy-cc";
+    homepage = "https://github.com/zigpy/zigpy-cc";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ etu mvnetbiz ];
     platforms = platforms.linux;

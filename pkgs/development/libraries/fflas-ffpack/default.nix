@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit version;
-    description = ''Finite Field Linear Algebra Subroutines'';
+    description = "Finite Field Linear Algebra Subroutines";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ raskin timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
     homepage = "https://linbox-team.github.io/fflas-ffpack/";
   };

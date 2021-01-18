@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, yacc, flex}:
+{ lib, stdenv, fetchurl, autoreconfHook, yacc, flex}:
 
 stdenv.mkDerivation rec {
   version = "2.4.1";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
-  meta = with stdenv.lib; {
-    description = "SSHGuard protects hosts from brute-force attacks";
+  meta = with lib; {
+    description = "Protects hosts from brute-force attacks";
     longDescription = ''
       SSHGuard can read log messages from various input sources. Log messages are parsed, line-by-line, for recognized patterns.
       If an attack, such as several login failures within a few seconds, is detected, the offending IP is blocked.

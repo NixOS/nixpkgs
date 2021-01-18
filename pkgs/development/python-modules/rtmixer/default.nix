@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spatialaudio";
     repo = "python-rtmixer";
-    rev = "${version}";
+    rev = version;
     sha256 = "1bvgzzxiypvvb3qacbcry6761x9sk3dnx7jga7pli63f69vakg4y";
     fetchSubmodules = true;
   };

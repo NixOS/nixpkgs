@@ -3,7 +3,7 @@ library(data.table)
 library(parallel)
 cl <- makeCluster(10)
 
-biocVersion <- 3.8
+biocVersion <- 3.11
 snapshotDate <- Sys.Date()-1
 
 mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/bioc/src/contrib/")
@@ -43,8 +43,12 @@ nixPrefetch <- function(name, version) {
 
 }
 
+escapeName <- function(name) {
+    switch(name, "import" = "r_import", "assert" = "r_assert", name)
+}
+
 formatPackage <- function(name, version, sha256, depends, imports, linkingTo) {
-    name <- ifelse(name == "import", "r_import", name)
+    name <- escapeName(name)
     attr <- gsub(".", "_", name, fixed=TRUE)
     options(warn=5)
     depends <- paste( if (is.na(depends)) "" else gsub("[ \t\n]+", "", depends)
@@ -56,7 +60,7 @@ formatPackage <- function(name, version, sha256, depends, imports, linkingTo) {
     depends <- lapply(depends, gsub, pattern="([^ \t\n(]+).*", replacement="\\1")
     depends <- lapply(depends, gsub, pattern=".", replacement="_", fixed=TRUE)
     depends <- depends[depends %in% knownPackages]
-    depends <- lapply(depends, function(d) ifelse(d == "import", "r_import", d))
+    depends <- lapply(depends, escapeName)
     depends <- paste(depends)
     depends <- paste(sort(unique(depends)), collapse=" ")
     paste0("  ", attr, " = derive2 { name=\"", name, "\"; version=\"", version, "\"; sha256=\"", sha256, "\"; depends=[", depends, "]; };")

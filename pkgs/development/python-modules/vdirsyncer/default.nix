@@ -1,13 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , isPy27
-, fetchpatch
-, rustPlatform
-, pkg-config
-, openssl
-, CoreServices
-, Security
 , click
 , click-log
 , click-threading
@@ -15,38 +9,21 @@
 , requests
 , requests_oauthlib # required for google oauth sync
 , atomicwrites
-, milksnake
-, shippai
 , hypothesis
-, pytest
+, pytestCheckHook
 , pytest-localserver
 , pytest-subtesthack
 , setuptools_scm
 }:
 
-# Packaging documentation at:
-# https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
 buildPythonPackage rec {
-  version = "unstable-2018-08-05";
+  version = "0.16.8";
   pname = "vdirsyncer";
-  name = "${pname}-${version}";
   disabled = isPy27;
 
-  src = fetchFromGitHub {
-    owner = "spk";
-    repo = pname;
-    # fix-build-style branch, see https://github.com/pimutils/vdirsyncer/pull/798
-    rev = "2c62d03bd73f8b44a47c2e769ade046697896ae9";
-    sha256 = "1q6xvzz5rf5sqdaj3mdvhpgwy5b16isavgg7vardgjwqwv1yal28";
-  };
-
-  native = rustPlatform.buildRustPackage {
-    name = "${name}-native";
-    inherit src;
-    sourceRoot = "source/rust";
-    cargoSha256 = "0cqy0s55pkg6hww86h7qip4xaidh6g8lcypdj84n2x374jq38c5d";
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "bfdb422f52e1d4d60bd0635d203fb59fa7f613397d079661eb48e79464ba13c5";
   };
 
   propagatedBuildInputs = [
@@ -55,8 +32,6 @@ buildPythonPackage rec {
     requests
     requests_oauthlib # required for google oauth sync
     atomicwrites
-    milksnake
-    shippai
   ];
 
   nativeBuildInputs = [
@@ -65,45 +40,28 @@ buildPythonPackage rec {
 
   checkInputs = [
     hypothesis
-    pytest
+    pytestCheckHook
     pytest-localserver
     pytest-subtesthack
   ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/pimutils/vdirsyncer/commit/7b636e8e40d69c495901f965b9c0686513659e44.patch";
-      sha256 = "0vl942ii5iad47y63v0ngmhfp37n30nxyk4j7h64b95fk38vfwx9";
-    })
+  postPatch = ''
+    substituteInPlace setup.py --replace "click>=5.0,<6.0" "click"
+  '';
+
+  preCheck = ''
+    export DETERMINISTIC_TESTS=true
+  '';
+
+  disabledTests = [
+    "test_verbosity"
+    "test_create_collections" # Flaky test exceeds deadline on hydra: https://github.com/pimutils/vdirsyncer/issues/837
   ];
 
-  postPatch = ''
-    # see https://github.com/pimutils/vdirsyncer/pull/805
-    substituteInPlace setup.cfg --replace --duration --durations
-
-    # for setuptools_scm:
-    echo 'Version: ${version}' >PKG-INFO
-
-    sed -i 's/spec.add_external_build(cmd=cmd/spec.add_external_build(cmd="true"/g' setup.py
-
-    # fixing test
-    sed -i "s/invalid value for \"--verbosity\"/invalid value for \\\'--verbosity\\\'/" tests/system/cli/test_sync.py
-  '';
-
-  preBuild = ''
-    mkdir -p rust/target/release
-    ln -s ${native}/lib/libvdirsyncer_rustext* rust/target/release/
-  '';
-
-  checkPhase = ''
-    rm -rf vdirsyncer
-    make DETERMINISTIC_TESTS=true PYTEST_ARGS="--deselect=tests/unit/utils/test_vobject.py::test_replace_uid --deselect=tests/unit/sync/test_sync.py::TestSyncMachine" test
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pimutils/vdirsyncer";
     description = "Synchronize calendars and contacts";
-    maintainers = with maintainers; [ matthiasbeyer gebner ];
     license = licenses.mit;
+    maintainers = with maintainers; [ loewenheim ];
   };
 }

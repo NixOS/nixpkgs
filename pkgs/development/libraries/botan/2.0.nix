@@ -1,9 +1,9 @@
 { callPackage, ... } @ args:
 
 callPackage ./generic.nix (args // {
-  baseVersion = "2.7";
-  revision = "0";
-  sha256 = "142aqabwc266jxn8wrp0f1ffrmcvdxwvyh8frb38hx9iaqazjbg4";
+  baseVersion = "2.17";
+  revision = "2";
+  sha256 = "0v0yiq0qxcrsn5b34j6bz8i6pds8dih2ds90ylmy1msm5gz7vqpb";
   postPatch = ''
     sed -e 's@lang_flags "@&--std=c++11 @' -i src/build-data/cc/{gcc,clang}.txt
   '';

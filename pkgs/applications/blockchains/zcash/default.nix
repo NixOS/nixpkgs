@@ -1,39 +1,55 @@
-{ stdenv, libsodium, fetchFromGitHub, wget, pkgconfig, autoreconfHook, openssl, db62, boost17x
-, zlib, gtest, gmock, callPackage, gmp, qt4, utillinux, protobuf, qrencode, libevent }:
+{ rust, rustPlatform, stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper
+, cargo, pkg-config
+, bash, curl, coreutils, boost17x, db62, libsodium, libevent, utf8cpp, util-linux
+}:
 
-let librustzcash = callPackage ./librustzcash {};
-in
-with stdenv.lib;
-stdenv.mkDerivation rec {
-
+rustPlatform.buildRustPackage rec {
   pname = "zcash";
-  version = "2.1.1-1";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "1g5zlfzfp31my8w8nlg5fncpr2y95iv9fm04x57sjb93rgmjdh5n";
+    sha256 = "185zrw276g545np0niw5hlhlppkjbf5a1r4rwhnbaimdjdii2dil";
   };
 
-  patchPhase = ''
-    sed -i"" 's,-fvisibility=hidden,,g'            src/Makefile.am
+  cargoSha256 = "0qxr6asf8zsya0f1ri39z2cnfpjk96hgwjchz2c7j87vibbvg6dc";
+
+  nativeBuildInputs = [ autoreconfHook cargo makeWrapper pkg-config ];
+  buildInputs = [ bash boost17x db62 libevent libsodium utf8cpp ];
+
+  # Use the stdenv default phases (./configure; make) instead of the
+  # ones from buildRustPackage.
+  configurePhase = "configurePhase";
+  buildPhase = "buildPhase";
+  checkPhase = "checkPhase";
+  installPhase = "installPhase";
+
+  postPatch = ''
+    # Have to do this here instead of in preConfigure because
+    # cargoDepsCopy gets unset after postPatch.
+    configureFlagsArray+=("RUST_VENDORED_SOURCES=$NIX_BUILD_TOP/$cargoDepsCopy")
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ gtest gmock gmp openssl wget db62 boost17x zlib
-                  protobuf libevent libsodium librustzcash ]
-                  ++ optionals stdenv.isLinux [ utillinux ];
-
-  configureFlags = [ "--with-boost-libdir=${boost17x.out}/lib" ];
-
-  postInstall = ''
-    cp zcutil/fetch-params.sh $out/bin/zcash-fetch-params
-  '';
+  configureFlags = [
+    "--disable-tests"
+    "--with-boost-libdir=${lib.getLib boost17x}/lib"
+    "CXXFLAGS=-I${lib.getDev utf8cpp}/include/utf8cpp"
+    "RUST_TARGET=${rust.toRustTargetSpec stdenv.hostPlatform}"
+  ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  # Requires hundreds of megabytes of zkSNARK parameters.
+  doCheck = false;
+
+  postInstall = ''
+    wrapProgram $out/bin/zcash-fetch-params \
+        --set PATH ${lib.makeBinPath [ coreutils curl util-linux ]}
+  '';
+
+  meta = with lib; {
     description = "Peer-to-peer, anonymous electronic cash system";
     homepage = "https://z.cash/";
     maintainers = with maintainers; [ rht tkerber ];

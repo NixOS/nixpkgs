@@ -11,9 +11,9 @@ import ./make-test-python.nix {
       enable = true;
       enableSubmission = true;
       enableSubmissions = true;
-      sslCACert = certs.ca.cert;
-      sslCert = certs.${domain}.cert;
-      sslKey = certs.${domain}.key;
+      tlsTrustedAuthorities = "${certs.ca.cert}";
+      sslCert = "${certs.${domain}.cert}";
+      sslKey = "${certs.${domain}.key}";
       submissionsOptions = {
           smtpd_sasl_auth_enable = "yes";
           smtpd_client_restrictions = "permit";

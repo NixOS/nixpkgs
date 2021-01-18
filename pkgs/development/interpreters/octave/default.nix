@@ -1,4 +1,7 @@
 { stdenv
+# Note: either stdenv.mkDerivation or, for octaveFull, the qt-5 mkDerivation
+# with wrapQtAppsHook (comes from libsForQt5.callPackage)
+, mkDerivation
 , fetchurl
 , gfortran
 , ncurses
@@ -20,15 +23,17 @@
 , fftwSinglePrec
 , zlib
 , curl
-, qrupdate
 , blas, lapack
-, arpack
+# These two should use the same lapack and blas as the above
+, qrupdate, arpack, suitesparse ? null
+# If set to true, the above 5 deps are overriden to use the blas and lapack
+# with 64 bit indexes support. If all are not compatible, the build will fail.
+, use64BitIdx ? false
 , libwebp
 , gl2ps
 , ghostscript ? null
 , hdf5 ? null
 , glpk ? null
-, suitesparse ? null
 , gnuplot ? null
 # - Include support for GNU readline:
 , enableReadline ? true
@@ -38,7 +43,7 @@
 , jdk ? null
 , python ? null
 , overridePlatforms ? null
-, sundials_2 ? null
+, sundials ? null
 # - Build Octave Qt GUI:
 , enableQt ? false
 , qtbase ? null
@@ -53,15 +58,48 @@
 , darwin
 }:
 
-assert (!blas.isILP64) && (!lapack.isILP64);
-
-stdenv.mkDerivation rec {
-  version = "5.2.0";
+let
+  # Not always evaluated
+  blas' = if use64BitIdx then
+    blas.override {
+      isILP64 = true;
+    }
+  else
+    blas
+  ;
+  lapack' = if use64BitIdx then
+    lapack.override {
+      isILP64 = true;
+    }
+  else
+    lapack
+  ;
+  qrupdate' = qrupdate.override {
+    # If use64BitIdx is false, this override doesn't evaluate to a new
+    # derivation, as blas and lapack are not overriden.
+    blas = blas';
+    lapack = lapack';
+  };
+  arpack' = arpack.override {
+    blas = blas';
+    lapack = lapack';
+  };
+  # Not always suitesparse is required at all
+  suitesparse' = if suitesparse != null then
+    suitesparse.override {
+      blas = blas';
+      lapack = lapack';
+    }
+  else
+    null
+  ;
+in mkDerivation rec {
+  version = "6.1.0";
   pname = "octave";
 
   src = fetchurl {
     url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
-    sha256 = "1qcmcpsq1lfka19fxzvxjwjhg113c39a9a0x8plkhvwdqyrn5sig";
+    sha256 = "0mqa1g3fq0q45mqc0didr8vl6bk7jzj6gjsf1522qqjq2r04xwvg";
   };
 
   buildInputs = [
@@ -75,34 +113,36 @@ stdenv.mkDerivation rec {
     fltk
     zlib
     curl
-    blas
-    lapack
+    blas'
+    lapack'
     libsndfile
     fftw
     fftwSinglePrec
     portaudio
-    qrupdate
-    arpack
+    qrupdate'
+    arpack'
     libwebp
     gl2ps
   ]
-  ++ (stdenv.lib.optionals enableQt [
+  ++ stdenv.lib.optionals enableQt [
     qtbase
     qtsvg
     qscintilla
-  ])
-  ++ (stdenv.lib.optional (ghostscript != null) ghostscript)
-  ++ (stdenv.lib.optional (hdf5 != null) hdf5)
-  ++ (stdenv.lib.optional (glpk != null) glpk)
-  ++ (stdenv.lib.optional (suitesparse != null) suitesparse)
-  ++ (stdenv.lib.optional (enableJava) jdk)
-  ++ (stdenv.lib.optional (sundials_2 != null) sundials_2)
-  ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
-  ++ (stdenv.lib.optional (python != null) python)
-  ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ])
-  ++ (stdenv.lib.optionals (stdenv.isDarwin) [ libiconv
-                                               darwin.apple_sdk.frameworks.Accelerate
-                                               darwin.apple_sdk.frameworks.Cocoa ])
+  ]
+  ++ stdenv.lib.optionals (ghostscript != null) [ ghostscript ]
+  ++ stdenv.lib.optionals (hdf5 != null) [ hdf5 ]
+  ++ stdenv.lib.optionals (glpk != null) [ glpk ]
+  ++ stdenv.lib.optionals (suitesparse != null) [ suitesparse' ]
+  ++ stdenv.lib.optionals (enableJava) [ jdk ]
+  ++ stdenv.lib.optionals (sundials != null) [ sundials ]
+  ++ stdenv.lib.optionals (gnuplot != null) [ gnuplot ]
+  ++ stdenv.lib.optionals (python != null) [ python ]
+  ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [
+    libiconv
+    darwin.apple_sdk.frameworks.Accelerate
+    darwin.apple_sdk.frameworks.Cocoa
+  ]
   ;
   nativeBuildInputs = [
     pkgconfig
@@ -112,12 +152,12 @@ stdenv.mkDerivation rec {
     fftwSinglePrec
     texinfo
   ]
-  ++ (stdenv.lib.optional (sundials_2 != null) sundials_2)
-  ++ (stdenv.lib.optional enableJIT llvm)
-  ++ (stdenv.lib.optionals enableQt [
+  ++ stdenv.lib.optionals (sundials != null) [ sundials ]
+  ++ stdenv.lib.optionals enableJIT [ llvm ]
+  ++ stdenv.lib.optionals enableQt [
     qtscript
     qttools
-  ])
+  ]
   ;
 
   doCheck = !stdenv.isDarwin;
@@ -125,14 +165,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # See https://savannah.gnu.org/bugs/?50339
-  F77_INTEGER_8_FLAG = if blas.isILP64 then "-fdefault-integer-8" else "";
+  F77_INTEGER_8_FLAG = if use64BitIdx then "-fdefault-integer-8" else "";
 
   configureFlags = [
     "--with-blas=blas"
     "--with-lapack=lapack"
-    (if blas.isILP64 then "--enable-64" else "--disable-64")
+    (if use64BitIdx then "--enable-64" else "--disable-64")
   ]
-    ++ (if stdenv.isDarwin then [ "--enable-link-all-dependencies" ] else [ ])
+    ++ stdenv.lib.optionals stdenv.isDarwin [ "--enable-link-all-dependencies" ]
     ++ stdenv.lib.optionals enableReadline [ "--enable-readline" ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ "--with-x=no" ]
     ++ stdenv.lib.optionals enableQt [ "--with-qt=5" ]
@@ -146,14 +186,20 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit version;
     sitePath = "share/octave/${version}/site";
+    blas = blas';
+    lapack = lapack';
+    qrupdate = qrupdate';
+    arpack = arpack';
+    suitesparse = suitesparse';
+    inherit python;
+    inherit enableQt enableJIT enableReadline enableJava;
   };
 
   meta = {
     homepage = "https://www.gnu.org/software/octave/";
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [raskin];
+    maintainers = with stdenv.lib.maintainers; [ raskin doronbehar ];
     description = "Scientific Pragramming Language";
     # https://savannah.gnu.org/bugs/?func=detailitem&item_id=56425 is the best attempt to fix JIT
     broken = enableJIT;

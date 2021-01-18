@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   pname = "yuicompressor";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
      "-cp $out/lib/yuicompressor.jar com.yahoo.platform.yui.compressor.YUICompressor"
   '';
   
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A JavaScript and CSS minifier";
     homepage = "http://yui.github.io/yuicompressor/";
     license = licenses.bsd3;

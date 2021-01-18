@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , flac, expat, libidn, qtbase, qtwebkit, libvorbis }:
 assert stdenv.hostPlatform.system == "x86_64-linux";
 
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
   postFixup = ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "$(patchelf --print-rpath $out/opt/google/musicmanager/minidump_upload):${stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
+      --set-rpath "$(patchelf --print-rpath $out/opt/google/musicmanager/minidump_upload):${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
       $out/opt/google/musicmanager/minidump_upload
 
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "$(patchelf --print-rpath $out/opt/google/musicmanager/MusicManager):$out/lib:${stdenv.lib.makeLibraryPath [
+      --set-rpath "$(patchelf --print-rpath $out/opt/google/musicmanager/MusicManager):$out/lib:${lib.makeLibraryPath [
         flac
         expat
         libidn
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       $out/opt/google/musicmanager/MusicManager
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Uploads music from your computer to Google Play";
     homepage    = "https://support.google.com/googleplay/answer/1229970";
     license     = licenses.unfree;

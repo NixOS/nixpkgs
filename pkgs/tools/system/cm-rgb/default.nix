@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonApplication
 , fetchFromGitHub
 , atk
@@ -46,7 +46,7 @@ buildPythonApplication rec {
       > $out/etc/udev/rules.d/60-cm-rgb.rules
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Control AMD Wraith Prism RGB LEDs";
     longDescription = ''
       cm-rgb controls AMD Wraith Prism RGB LEDS.

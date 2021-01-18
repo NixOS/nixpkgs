@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     glib nss nspr gconf fontconfig freetype pango cairo libX11 libXi
     libXcursor libXext libXfixes libXrender libXcomposite alsaLib
     libXdamage libXtst libXrandr expat libcap dbus gtk2 gdk-pixbuf
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
   # its application and shows a generic page
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://spideroak.com/solutions/encryptr";
     description = "Free, private and secure password management tool and e-wallet";
     license = licenses.unfree;

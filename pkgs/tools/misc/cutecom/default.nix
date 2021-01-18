@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "cutecom";
-  version = "0.51.0";
+  version = "0.51.0+patch";
 
   src = fetchFromGitLab {
     owner = "cutecom";
     repo = "cutecom";
-    rev = "v${version}";
-    sha256 = "1zprabjs4z26hsb64fc3k790aiiqiz9d88j666xrzi4983m1bfv8";
+    rev = "70d0c497acf8f298374052b2956bcf142ed5f6ca";
+    sha256 = "X8jeESt+x5PxK3rTNC1h1Tpvue2WH09QRnG2g1eMoEE=";
   };
 
   preConfigure = ''

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , imagemagick7Big
@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "Wand";
-  version = "0.6.2";
+  version = "0.6.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jm1jdrlmm0gkvaxhbwwqic48vfgv8d0j99y90calnjrid3hwi35";
+    sha256 = "ec981b4f07f7582fc564aba8b57763a549392e9ef8b6a338e9da54cdd229cf95";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   passthru.imagemagick = imagemagick7Big;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ctypes-based simple MagickWand API binding for Python";
     homepage = "http://wand-py.org/";
     license = [ licenses.mit ];

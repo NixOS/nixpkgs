@@ -50,7 +50,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = with pkgs; [
-        utillinux
+        util-linux
       ];
       serviceConfig = {
         ExecStart = "${pkgs.salt}/bin/salt-minion";

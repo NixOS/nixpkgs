@@ -2,7 +2,7 @@
 , withCryptodev ? false, cryptodev
 , enableSSL2 ? false
 , enableSSL3 ? false
-, static ? false
+, static ? stdenv.hostPlatform.isStatic
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -160,8 +160,8 @@ in {
   };
 
   openssl_1_1 = common {
-    version = "1.1.1g";
-    sha256 = "0ikdcc038i7jk8h7asq5xcn8b1xc2rrbc88yfm4hqbz3y5s4gc6x";
+    version = "1.1.1i";
+    sha256 = "0hjj1phcwkz69lx1lrvr9grhpl4y529mwqycqc1hdla1zqsnmgp8";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 

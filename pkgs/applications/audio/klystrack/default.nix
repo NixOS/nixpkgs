@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , SDL2, SDL2_image
 , pkgconfig
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       --replace "klystrack %f" "$out/bin/klystrack %f"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A chiptune tracker";
     homepage = "https://kometbomb.github.io/klystrack";
     license = licenses.mit;

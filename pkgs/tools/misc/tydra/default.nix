@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tydra";
@@ -25,10 +25,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion tydra.{bash,fish} _tydra
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shortcut menu-based task runner, inspired by Emacs Hydra";
     homepage = "https://github.com/Mange/tydra";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

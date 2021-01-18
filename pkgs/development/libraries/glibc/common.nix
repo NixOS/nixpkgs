@@ -41,9 +41,9 @@
 } @ args:
 
 let
-  version = "2.31";
-  patchSuffix = "";
-  sha256 = "05zxkyz9bv3j9h0xyid1rhvh3klhsmrpkf3bcs6frvlgyr2gwilj";
+  version = "2.32";
+  patchSuffix = "-25";
+  sha256 = "0di848ibffrnwq7g2dvgqrnn4xqhj3h96csn69q4da51ymafl9qn";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -59,8 +59,14 @@ stdenv.mkDerivation ({
 
   patches =
     [
-      /* Have rpcgen(1) look for cpp(1) in $PATH.  */
-      ./rpcgen-path.patch
+      /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git
+         and using git or something would complicate bootstrapping.
+         Fortunately it's not too big.
+          $ git checkout release/2.32/master; git describe
+          glibc-2.32-25-g0d9793e82a
+          $ git show --reverse glibc-2.32.. | gzip -n -9 --rsyncable - > 2.32-25.patch.gz
+       */
+      ./2.32-25.patch.gz
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
@@ -113,8 +119,6 @@ stdenv.mkDerivation ({
       })
 
       ./fix-x64-abi.patch
-      ./2.30-cve-2020-1752.patch
-      ./2.31-cve-2020-10029.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
@@ -146,8 +150,6 @@ stdenv.mkDerivation ({
   configureFlags =
     [ "-C"
       "--enable-add-ons"
-      "--enable-obsolete-nsl"
-      "--enable-obsolete-rpc"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
@@ -166,6 +168,10 @@ stdenv.mkDerivation ({
       # so the glibc does not depend on its compiler store path
       "libc_cv_as_needed=no"
     ] ++ lib.optional withGd "--with-gd";
+
+  makeFlags = [
+    "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+  ];
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
@@ -208,7 +214,7 @@ stdenv.mkDerivation ({
     configureScript="`pwd`/../$sourceRoot/configure"
 
     ${lib.optionalString (stdenv.cc.libc != null)
-      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"''
+      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"''
     }
 
 
@@ -226,7 +232,7 @@ stdenv.mkDerivation ({
 
   doCheck = false; # fails
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/libc/";
     description = "The GNU C Library";
 
@@ -239,10 +245,10 @@ stdenv.mkDerivation ({
          most systems with the Linux kernel.
       '';
 
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
 
-    maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ eelco ma27 ];
+    platforms = platforms.linux;
   } // meta;
 }
 

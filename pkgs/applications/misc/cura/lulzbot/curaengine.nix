@@ -1,4 +1,4 @@
-{ gcc8Stdenv, callPackage, fetchgit, fetchpatch, cmake, libarcusLulzbot, stb, protobuf }:
+{ lib, gcc8Stdenv, callPackage, fetchgit, fetchpatch, cmake, libarcusLulzbot, stb, protobuf }:
 
 gcc8Stdenv.mkDerivation rec {
   pname = "curaengine-lulzBot";
@@ -17,7 +17,7 @@ gcc8Stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCURA_ENGINE_VERSION=${version}" ];
 
-  meta = with gcc8Stdenv.lib; {
+  meta = with lib; {
     description = "A powerful, fast and robust engine for processing 3D models into 3D printing instruction";
     homepage = "https://code.alephobjects.com/source/curaengine-lulzbot/";
     license = licenses.agpl3;

@@ -36,8 +36,7 @@ let
     patches =
       [
         # Do not look in /usr etc. for dependencies.
-        (if (versionOlder version "5.29.6") then ./no-sys-dirs-5.26.patch
-         else if (versionOlder version "5.31.1") then ./no-sys-dirs-5.29.patch
+        (if (versionOlder version "5.31.1") then ./no-sys-dirs-5.29.patch
          else ./no-sys-dirs-5.31.patch)
       ]
       ++ optional (versionOlder version "5.29.6")
@@ -73,7 +72,7 @@ let
     # Miniperl needs -lm. perl needs -lrt.
     configureFlags =
       (if crossCompiling
-       then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" ]
+       then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" "-Ddefault_inc_excludes_dot" ]
        else [ "-de" "-Dcc=cc" ])
       ++ [
         "-Uinstallusrbinperl"
@@ -175,11 +174,11 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "15ca5359f99698ef0a199bc307b7956c08907abc"; # Aug 27, 2020
+    crossVersion = "b4447944a0aeff9590dc023d64f8ddf3de7669fb"; # Dec 22, 2020
 
     perl-cross-src = fetchurl {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "0pcwv2ac02i2l0fjc8drdw70q6gwbypj2c5a53x2449m919v37h9";
+      sha256 = "1cignplkb29kcvkfwshakyij71w8srlfqbnb9pla98vya6r82rnb";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -215,7 +214,7 @@ in {
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.33.1";
-    sha256 = "1rlnqqqzyhal79ys5dv7fwm3mg81s43dwks28b74x2gcmsngjnw9";
+    version = "5.33.5";
+    sha256 = "04iprc8qz6vpbgzqgwja5rc3csvmgq1rnnnl382l39hy69fsdqpr";
   };
 }

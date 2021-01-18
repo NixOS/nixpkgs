@@ -4,7 +4,7 @@
 , autoreconfHook
 , gettext
 , libtool
-, pkgconfig
+, pkg-config
 , djvulibre
 , exiv2
 , fontconfig
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "1igabfy3fd7qndihmkfk9incc15pjxpxh2cn5pfw5fxfwrpjrarn";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     djvulibre
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Creates djvu files from PDF files";
     homepage = "https://jwilk.net/software/pdf2djvu";
     license = licenses.gpl2;

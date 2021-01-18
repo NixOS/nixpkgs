@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, popt }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, popt }:
 
 stdenv.mkDerivation {
   name = "picotts-unstable-2018-10-19";
@@ -13,11 +13,11 @@ stdenv.mkDerivation {
   sourceRoot = "source/pico";
   preConfigure = "./autogen.sh";
   meta = {
-    description = "Text to speech voice sinthesizer from SVox.";
+    description = "Text to speech voice sinthesizer from SVox";
     homepage = "https://github.com/naggety/picotts";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.canndrew ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.canndrew ];
+    platforms = lib.platforms.linux;
   };
 }
 

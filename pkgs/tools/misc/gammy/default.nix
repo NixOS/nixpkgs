@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, qmake, libXxf86vm, wrapQtAppsHook }:
+{ lib, stdenv, fetchFromGitHub, qmake, libXxf86vm, wrapQtAppsHook }:
 
 let
   pname = "gammy";
-  version = "0.9.58";
+  version = "0.9.59";
 in
 
 stdenv.mkDerivation {
@@ -12,23 +12,14 @@ stdenv.mkDerivation {
     owner = "Fushko";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02f19b7acrzip4kbfjgqk06xv1c257rq77khpdg5gz0ai6ayvwm8";
+    sha256 = "1iz41larqr6ss5kar1pds6zgcrch6ch34cr0ngd71gcaxal0rb72";
   };
 
   nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
   buildInputs = [ libXxf86vm ];
 
-  # FIXME remove when https://github.com/Fushko/gammy/issues/45 is fixed
-  installPhase = ''
-    runHook preInstall
-
-    install gammy -Dt $out/bin/
-
-    runHook postInstall
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI tool for manual- of auto-adjusting of brightness/temperature";
     homepage = "https://github.com/Fushko/gammy";
     license = licenses.gpl3;

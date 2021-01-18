@@ -6,8 +6,8 @@
 
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
-  version = "9-2019-q4-major";
-  subdir = "9-2019q4/RC2.1";
+  version = "9-2020-q2-update";
+  subdir = "9-2020q2";
 
   suffix = {
     aarch64-linux = "aarch64-linux";
@@ -18,13 +18,16 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-${suffix}.tar.bz2";
     sha256 = {
-      aarch64-linux = "1f5b9309006737950b2218250e6bb392e2d68d4f1a764fe66be96e2a78888d83";
-      x86_64-darwin = "1249f860d4155d9c3ba8f30c19e7a88c5047923cea17e0d08e633f12408f01f0";
-      x86_64-linux  = "bcd840f839d5bf49279638e9f67890b2ef3a7c9c7a9b25271e83ec4ff41d177a";
+      aarch64-linux = "1b5q2y710hy7lddj8vj3zl54gfl74j30kx3hk3i81zrcbv16ah8z";
+      x86_64-darwin = "1ils9z16wrvglh72m428y5irmd36biq79yj86756whib8izbifdv";
+      x86_64-linux  = "07zi2yr5gvhpbij5pnj49zswb9g2gw7zqp4xwwniqmq477h2xp2s";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  dontConfigure = true;
+  dontBuild = true;
+  dontPatchELF = true;
+  dontStrip = true;
 
   installPhase = ''
     mkdir -p $out
@@ -32,12 +35,9 @@ stdenv.mkDerivation rec {
     ln -s $out/share/doc/gcc-arm-none-eabi/man $out/man
   '';
 
-  dontPatchELF = true;
-  dontStrip = true;
-
   preFixup = ''
     find $out -type f | while read f; do
-      patchelf $f > /dev/null 2>&1 || continue
+      patchelf "$f" > /dev/null 2>&1 || continue
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
       patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ "$out" stdenv.cc.cc ncurses5 python27 ]} "$f" || true
     done

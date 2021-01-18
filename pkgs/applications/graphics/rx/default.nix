@@ -1,9 +1,9 @@
-{ stdenv, rustPlatform, fetchFromGitHub, makeWrapper
+{ lib, stdenv, rustPlatform, fetchFromGitHub, makeWrapper
 , cmake, pkg-config
 , xorg ? null
 , libGL ? null }:
 
-with stdenv.lib;
+with lib;
 
 rustPlatform.buildRustPackage rec {
   pname = "rx";
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     description = "Modern and extensible pixel editor implemented in Rust";
     homepage = "https://rx.cloudhead.io/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ minijackson filalex77 ];
+    maintainers = with maintainers; [ minijackson Br1ght0ne ];
     platforms = [ "x86_64-linux" ];
   };
 }

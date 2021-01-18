@@ -4,23 +4,8 @@ with lib;
 
 let
   cfg = config.services.molly-brown;
-
-  settingsType = with types;
-    attrsOf (oneOf [
-      int
-      str
-      (listOf str)
-      (attrsOf (oneOf [ int str (listOf str) (attrsOf str) ]))
-    ]) // {
-      description = "primitive expression convertable to TOML";
-    };
-
-  configFile = pkgs.runCommand "molly-brown.toml" {
-    buildInputs = [ pkgs.remarshal ];
-    preferLocalBuild = true;
-    passAsFile = [ "settings" ];
-    settings = builtins.toJSON cfg.settings;
-  } "remarshal -if json -of toml < $settingsPath > $out";
+  settingsFormat = pkgs.formats.toml { };
+ configFile = settingsFormat.generate "molly-brown.toml" cfg.settings;
 in {
 
   options.services.molly-brown = {
@@ -76,7 +61,7 @@ in {
     };
 
     settings = mkOption {
-      type = settingsType;
+      inherit (settingsFormat) type;
       default = { };
       description = ''
         molly-brown configuration. Refer to

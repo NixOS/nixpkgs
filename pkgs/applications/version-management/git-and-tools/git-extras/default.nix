@@ -1,12 +1,12 @@
-{ stdenv, fetchzip, unixtools, which }:
+{ lib, stdenv, fetchzip, unixtools, which }:
 
 stdenv.mkDerivation rec {
   pname = "git-extras";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchzip {
     url = "https://github.com/tj/git-extras/archive/${version}.tar.gz";
-    sha256 = "0mxb3c5lb5n7c76bp10bw7bid564vjxi5f7cvzaj2ss93v5rr11g";
+    sha256 = "12ff9rhgqd71xm72r385hx0h8g75hz0ag0adzqcwfa54k0lhrrrz";
   };
 
   nativeBuildInputs = [ unixtools.column which ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     install -D etc/git-extras-completion.zsh $out/share/zsh/site-functions/_git_extras
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tj/git-extras";
     description = "GIT utilities -- repo summary, repl, changelog population, author commit percentages and more";
     license = licenses.mit;

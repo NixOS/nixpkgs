@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , gettext, gtk2, SDL2, zlib, glib, openal, libGLU, libGL, lua, freetype, libmpeg2, zip }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "fs-uae";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qwzhp34wy7bnd3c0plv11rg9fs5m92rh3ffnr9pn6ng0cpc8vpj";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gettext gtk2 SDL2 zlib glib openal libGLU libGL lua freetype libmpeg2 zip ];
 
   meta = {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     homepage = "https://fs-uae.net";
-    maintainers = with stdenv.lib; [ maintainers.AndersonTorres ];
+    maintainers = with lib; [ maintainers.AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

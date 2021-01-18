@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , gpm, openssl, pkgconfig, libev # Misc.
 , libpng, libjpeg, libtiff, librsvg # graphic formats
 , bzip2, zlib, xz # Transfer encodings
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qqdcghsdqm7l6kyi0k752ws3ak5crw85pqkcb11wy67j62yspi8";
   };
 
-  buildInputs = with stdenv.lib;
+  buildInputs = with lib;
     [ libev librsvg libpng libjpeg libtiff openssl xz bzip2 zlib ]
     ++ optionals stdenv.isLinux [ gpm ]
     ++ optionals enableX11 [ libX11 libXau libXt ]
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig bzip2 ];
 
   configureFlags = [ "--with-ssl" ]
-    ++ stdenv.lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"
-    ++ stdenv.lib.optional enableX11 "--with-x"
-    ++ stdenv.lib.optional enableFB "--with-fb"
-    ++ stdenv.lib.optional enableDirectFB "--with-directfb";
+    ++ lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"
+    ++ lib.optional enableX11 "--with-x"
+    ++ lib.optional enableFB "--with-fb"
+    ++ lib.optional enableDirectFB "--with-directfb";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://links.twibright.com/";
     description = "A small browser with some graphics support";
     maintainers = with maintainers; [ raskin ];

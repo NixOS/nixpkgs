@@ -5,7 +5,6 @@
 , alcotest
 , eigen
 , stdio
-, stdlib-shims
 , openblasCompat
 , owl-base
 , npy
@@ -18,9 +17,9 @@ buildDunePackage rec {
   inherit (owl-base) version src meta useDune2;
 
   checkInputs = [ alcotest ];
-  buildInputs = [ dune-configurator ];
+  buildInputs = [ dune-configurator stdio ];
   propagatedBuildInputs = [
-    eigen stdio stdlib-shims openblasCompat owl-base npy
+    eigen openblasCompat owl-base npy
   ];
 
   doCheck = !stdenv.isDarwin;  # https://github.com/owlbarn/owl/issues/462

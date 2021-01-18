@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , appstream-glib
@@ -11,20 +11,20 @@
 , mutter
 , ninja
 , pango
-, pkgconfig
+, pkg-config
 , vala
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.36.3";
+  version = "3.38.3";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "1p1p2ng095lkly5fp9120b23wlvkj1xf4fhivzsd72css0szy7mi";
+    sha256 = "10ag0mrr4r40414nyarghpgjawvf331asxgq47dqjfxr5w7bz6wc";
   };
 
   patches = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Keruspe/GPaste";
     description = "Clipboard management system with GNOME 3 integration";
     license = licenses.gpl3;

@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A utility to find and clean various forms of lint on a filesystem.";
+    description = "A utility to find and clean various forms of lint on a filesystem";
     homepage = "https://www.pixelbeat.org/fslint/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.dasj19 ];

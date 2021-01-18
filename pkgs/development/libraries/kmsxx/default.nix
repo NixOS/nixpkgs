@@ -13,8 +13,6 @@ stdenv.mkDerivation {
     sha256 = "0xz4m9bk0naawxwpx5cy1j3cm6c8c9m5y551csk88y88x1g0z0xh";
   };
 
-  enableParallelBuilding = true;
-
   cmakeFlags = stdenv.lib.optional (!withPython) "-DKMSXX_ENABLE_PYTHON=OFF";
 
   nativeBuildInputs = [ cmake pkgconfig ];

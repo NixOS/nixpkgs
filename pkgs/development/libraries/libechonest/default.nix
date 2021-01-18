@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake doxygen ];
   buildInputs = [ qt4 qjson ];
 
-  enableParallelBuilding = true;
   doCheck = false; # requires network access
 
   meta = {

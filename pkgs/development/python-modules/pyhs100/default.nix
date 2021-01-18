@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "pyHS100";
-  version = "0.3.5.1";
+  version = "0.3.5.2";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "GadgetReactor";
     repo = pname;
     rev = version;
-    sha256 = "1vddr9sjn6337i1vx0mm7pb3qibvl2gx6nx18vm4fajgv9vcjxny";
+    sha256 = "0z98hzvkp6jmllyd4x4y0f5n6nnxrizw6g5l2clxdn93mifjavp0";
   };
 
   propagatedBuildInputs = [

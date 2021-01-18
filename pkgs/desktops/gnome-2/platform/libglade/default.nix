@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libxml2, python2 ? null, withLibgladeConvert ? false, gettext }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, libxml2, python2 ? null, withLibgladeConvert ? false, gettext }:
 
 assert withLibgladeConvert -> python2 != null;
 
@@ -12,9 +12,9 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 gettext ]
-    ++ stdenv.lib.optional withLibgladeConvert python2;
+    ++ lib.optional withLibgladeConvert python2;
 
   NIX_LDFLAGS = "-lgmodule-2.0";
 

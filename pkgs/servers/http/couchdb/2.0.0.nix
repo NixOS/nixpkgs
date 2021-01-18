@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, icu, openssl, spidermonkey
+{ lib, stdenv, fetchurl, erlang, icu, openssl, spidermonkey_1_8_5
 , coreutils, bash, makeWrapper, python3 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ erlang icu openssl spidermonkey (python3.withPackages(ps: with ps; [ requests ]))];
+  buildInputs = [ erlang icu openssl spidermonkey_1_8_5 (python3.withPackages(ps: with ps; [ requests ]))];
 
   patches = [ ./jsapi.patch ];
   postPatch = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/couchdb --suffix PATH : ${bash}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
     homepage = "http://couchdb.apache.org";
     license = licenses.asl20;

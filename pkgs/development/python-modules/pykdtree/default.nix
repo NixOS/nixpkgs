@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, nose, openmp }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, numpy, nose, openmp }:
 
 buildPythonPackage rec {
   pname = "pykdtree";
-  version = "1.3.1";
+  version = "1.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d49d3bbfa0366dbe29176754ec86df75114a25525b530dcbbb75d3ac4c263e9";
+    sha256 = "bebe5c608129f2997e88510c00010b9a78581b394924c0e3ecd131d52415165d";
   };
 
   buildInputs = [ openmp ];
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "kd-tree implementation for fast nearest neighbour search in Python";
     homepage = "https://github.com/storpipfugl/pykdtree";
     license = licenses.lgpl3;

@@ -1,27 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
 , libcap, ncurses
-, withGtk ? false, gtk2 ? null }:
+, withGtk ? false, gtk3 ? null }:
 
-assert withGtk -> gtk2 != null;
+assert withGtk -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "mtr${lib.optionalString withGtk "-gui"}";
-  version = "0.93";
+  version = "0.94";
 
   src = fetchFromGitHub {
     owner  = "traviscross";
     repo   = "mtr";
     rev    = "v${version}";
-    sha256 = "0n0zr9k61w7a9psnzgp7xnc7ll1ic2xzcvqsbbbyndg3v9rff6bw";
+    sha256 = "0wnz87cr2lcl74bj8qxq9xgai40az3pk9k0z893scyc8svd61xz6";
   };
-  
-  patches = [
-    # https://github.com/traviscross/mtr/pull/315
-    (fetchpatch {
-      url = "https://github.com/traviscross/mtr/pull/315.patch?full_index=1";
-      sha256 = "18qcsj9058snc2qhq6v6gdbqhz021gi5fgw9h7vfczv45gf0qasa";
-    })
-  ];
 
   # we need this before autoreconfHook does its thing
   postPatch = ''
@@ -34,17 +26,17 @@ stdenv.mkDerivation rec {
       --replace ' install-exec-hook' ""
   '';
 
-  configureFlags = stdenv.lib.optional (!withGtk) "--without-gtk";
+  configureFlags = lib.optional (!withGtk) "--without-gtk";
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ ncurses ]
-    ++ stdenv.lib.optional withGtk gtk2
-    ++ stdenv.lib.optional stdenv.isLinux libcap;
+    ++ lib.optional withGtk gtk3
+    ++ lib.optional stdenv.isLinux libcap;
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A network diagnostics tool";
     homepage    = "https://www.bitwizard.nl/mtr/";
     license     = licenses.gpl2;

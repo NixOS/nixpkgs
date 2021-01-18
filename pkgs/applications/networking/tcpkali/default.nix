@@ -1,4 +1,4 @@
-{stdenv, autoreconfHook, fetchFromGitHub, bison}:
+{lib, stdenv, autoreconfHook, fetchFromGitHub, bison}:
 
 let version = "1.1.1"; in
 
@@ -11,13 +11,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "09ky3cccaphcqc6nhfs00pps99lasmzc2pf5vk0gi8hlqbbhilxf";
   };
+  postPatch = ''
+    sed -ie '/sys\/sysctl\.h/d' src/tcpkali_syslimits.c
+  '';
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ bison];
   meta = {
     description = "High performance TCP and WebSocket load generator and sink";
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
     inherit (src.meta) homepage;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ ethercrow ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ethercrow ];
   };
 }

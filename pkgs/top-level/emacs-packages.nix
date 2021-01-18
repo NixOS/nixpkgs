@@ -4,7 +4,7 @@
 #
 # Recommended: simply use `emacsWithPackages` with the packages you want.
 #
-# Alterative: use `emacs`, install everything to a system or user profile
+# Alternative: use `emacs`, install everything to a system or user profile
 # and then add this at the start your `init.el`:
 /*
   (require 'package)
@@ -82,5 +82,6 @@ in lib.makeScope newScope (self: lib.makeOverridable ({
   // {
     inherit emacs melpaBuild trivialBuild;
     emacsWithPackages = emacsWithPackages self;
+    withPackages = emacsWithPackages self;
   })
 ) {})

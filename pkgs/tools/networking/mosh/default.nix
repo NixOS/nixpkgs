@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkgconfig
+{ lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkg-config
 , makeWrapper, perlPackages, openssl, autoreconfHook, openssh, bash-completion
 , libutempter ? null, withUtempter ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
-  name = "mosh-1.3.2";
+  pname = "mosh";
+  version = "1.3.2";
 
   src = fetchurl {
-    url = "https://mosh.org/${name}.tar.gz";
+    url = "https://mosh.org/mosh-${version}.tar.gz";
     sha256 = "05hjhlp6lk8yjcy59zywpf0r6s0h0b9zxq0lw66dh9x8vxrhaq6s";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ protobuf ncurses zlib makeWrapper openssl bash-completion ]
     ++ (with perlPackages; [ perl IOTty ])
     ++ lib.optional withUtempter libutempter;
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./ssh_path.patch
+    ./mosh-client_path.patch
     ./utempter_path.patch
     # Fix w/c++17, ::bind vs std::bind
     (fetchpatch {
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace scripts/mosh.pl \
         --subst-var-by ssh "${openssh}/bin/ssh"
+    substituteInPlace scripts/mosh.pl \
+        --subst-var-by mosh-client "$out/bin/mosh-client"
   '';
 
   configureFlags = [ "--enable-completion" ] ++ lib.optional withUtempter "--with-utempter";
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
-  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   meta = {
     homepage = "https://mosh.org/";
@@ -52,8 +56,8 @@ stdenv.mkDerivation rec {
       Mosh is a replacement for SSH. It's more robust and responsive,
       especially over Wi-Fi, cellular, and long-distance links.
     '';
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = lib.platforms.unix;
   };
 }

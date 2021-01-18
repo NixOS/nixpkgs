@@ -7,14 +7,14 @@
 
 let
   pname = "krename";
-  version = "5.0.0";
+  version = "5.0.1";
 
 in mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "136j1dkqrhv458rjh5v3vzjhvq6dhz7k79zk6mmx8zvqacc7cq8a";
+    sha256 = "0zbadxjp13jqxgb58wslhm0wy2lhpdq1bgbvyhyn21mssfppib6a";
   };
 
   buildInputs = [ taglib exiv2 podofo ];

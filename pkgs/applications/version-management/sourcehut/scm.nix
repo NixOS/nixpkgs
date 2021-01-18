@@ -1,15 +1,15 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ lib, stdenv, fetchgit, buildPythonPackage
 , srht, redis, pyyaml, buildsrht
 , writeText }:
 
 buildPythonPackage rec {
   pname = "scmsrht";
-  version = "0.22.3";
+  version = "0.22.4";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/scm.sr.ht";
     rev = version;
-    sha256 = "MwgWDYGqOuci55gUFAiKnUfUWgLvQVP5omAMNv/2gPY=";
+    sha256 = "1djyrwa44wml9lj3njy6qbxyc3g1msswbh0y9jyjzxh2c02bl3jn";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     description = "Shared support code for sr.ht source control services.";
     license = licenses.agpl3;

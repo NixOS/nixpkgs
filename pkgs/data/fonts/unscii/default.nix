@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, bdftopcf
+{ lib, stdenv, fetchurl, perl, bdftopcf
 , fontforge, SDL, SDL_image, mkfontscale
 }:
 
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     inherit version;
-    description = ''Bitmapped character-art-friendly Unicode fonts'';
+    description = "Bitmapped character-art-friendly Unicode fonts";
     # Basically GPL2+ with font exception — because of the Unifont-augmented
     # version. The reduced version is public domain.
     license = "http://unifoundry.com/LICENSE.txt";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
+    maintainers = [ lib.maintainers.raskin ];
     homepage = "http://pelulamu.net/unscii/";
   };
 }

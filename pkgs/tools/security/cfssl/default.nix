@@ -1,14 +1,14 @@
-{ stdenv, buildGoModule, fetchFromGitHub, go-rice }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, go-rice }:
 
 buildGoModule rec {
   pname = "cfssl";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cfssl";
     rev = "v${version}";
-    sha256 = "07qacg95mbh94fv64y577zyr4vk986syf8h5l8lbcmpr0zcfk0pd";
+    sha256 = "1yzxz2l7h2d3f8j6l9xlm7g9659gsa17zf4q0883s0jh3l3xgs5n";
   };
 
   subPackages = [
@@ -40,7 +40,7 @@ buildGoModule rec {
       -X github.com/cloudflare/cfssl/cli/version.version=v${version}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cfssl.org/";
     description = "Cloudflare's PKI and TLS toolkit";
     license = licenses.bsd2;

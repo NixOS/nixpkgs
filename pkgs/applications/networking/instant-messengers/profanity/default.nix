@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, openssl
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, openssl
 , glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
-, cmocka, libmicrohttpd, expat, sqlite, libmesode
-, autoconf-archive
+, cmocka, libmicrohttpd, expat, sqlite, libmesode, autoconf-archive
 
 , autoAwaySupport ? true,       libXScrnSaver ? null, libX11 ? null
 , notifySupport ? true,         libnotify ? null, gdk-pixbuf ? null
@@ -18,17 +17,17 @@ assert pgpSupport          -> gpgme != null;
 assert pythonPluginSupport -> python != null;
 assert omemoSupport        -> libsignal-protocol-c != null && libgcrypt != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "profanity";
-  version = "0.9.5";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = version;
-    sha256 = "14vbblf639f90bb4npg2xv53cpvk9am9ic4pmc1vnv4m3zsndjg5";
+    sha256 = "0a9rzhnivxcr8v02xxzrbck7pvvv4c66ap2zy0gzxhri5p8ac03r";
   };
 
   patches = [
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    autoreconfHook autoconf-archive glibcLocales pkgconfig
+    autoreconfHook autoconf-archive glibcLocales pkg-config
   ];
 
   buildInputs = [
@@ -76,6 +75,8 @@ stdenv.mkDerivation rec {
     homepage = "http://www.profanity.im/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    changelog = "https://github.com/profanity-im/profanity/releases/tag/${version}";
+    downloadPage = "https://github.com/profanity-im/profanity/releases/";
     maintainers = [ maintainers.devhell ];
     updateWalker = true;
   };

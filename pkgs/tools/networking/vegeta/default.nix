@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "vegeta";
-  version = "12.7.0";
+  version = "12.8.4";
 
   src = fetchFromGitHub {
-    owner = "tsenart";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1wzx9588hjzxq65fxi1zz9xpsw33qq41hpl0j2f077g4m8yxahv5";
+    owner  = "tsenart";
+    repo   = pname;
+    rev    = "v${version}";
+    sha256 = "0sw10k4g370c544dgw2c1sqdnxryld8lf6c1wnyknrm3zsfzn1hl";
   };
 
   goPackagePath = "github.com/tsenart/${pname}";

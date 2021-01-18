@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake, neon, libdiscid, libxml2, pkgconfig }:
+{ stdenv, fetchFromGitHub, cmake, neon, libdiscid, libxml2, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "5.1.0";
   pname = "libmusicbrainz";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake neon libdiscid libxml2 ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ neon libdiscid libxml2 ];
 
   src = fetchFromGitHub {
     owner  = "metabrainz";

@@ -1,4 +1,4 @@
-{ lib, stdenv, echo_colored, noisily, mkRustcDepArgs, mkRustcFeatureArgs }:
+{ lib, stdenv, rust, echo_colored, noisily, mkRustcDepArgs, mkRustcFeatureArgs }:
 {
   build
 , buildDependencies
@@ -17,7 +17,6 @@
 , libName
 , libPath
 , release
-, target_os
 , verbose
 , workspace_member }:
 let version_ = lib.splitString "-" crateVersion;
@@ -124,8 +123,8 @@ in ''
   export CARGO_PKG_AUTHORS="${authors}"
   export CARGO_PKG_DESCRIPTION="${crateDescription}"
 
-  export CARGO_CFG_TARGET_ARCH=${stdenv.hostPlatform.parsed.cpu.name}
-  export CARGO_CFG_TARGET_OS=${target_os}
+  export CARGO_CFG_TARGET_ARCH=${rust.toTargetArch stdenv.hostPlatform}
+  export CARGO_CFG_TARGET_OS=${rust.toTargetOs stdenv.hostPlatform}
   export CARGO_CFG_TARGET_FAMILY="unix"
   export CARGO_CFG_UNIX=1
   export CARGO_CFG_TARGET_ENV="gnu"
@@ -136,8 +135,8 @@ in ''
   export CARGO_MANIFEST_DIR=$(pwd)
   export DEBUG="${toString (!release)}"
   export OPT_LEVEL="${toString optLevel}"
-  export TARGET="${stdenv.hostPlatform.config}"
-  export HOST="${stdenv.hostPlatform.config}"
+  export TARGET="${rust.toRustTargetSpec stdenv.hostPlatform}"
+  export HOST="${rust.toRustTargetSpec stdenv.buildPlatform}"
   export PROFILE=${if release then "release" else "debug"}
   export OUT_DIR=$(pwd)/target/build/${crateName}.out
   export CARGO_PKG_VERSION_MAJOR=${lib.elemAt version 0}
@@ -145,7 +144,7 @@ in ''
   export CARGO_PKG_VERSION_PATCH=${lib.elemAt version 2}
   export CARGO_PKG_VERSION_PRE="${versionPre}"
   export CARGO_PKG_HOMEPAGE="${crateHomepage}"
-  export NUM_JOBS=1
+  export NUM_JOBS=$NIX_BUILD_CORES
   export RUSTC="rustc"
   export RUSTDOC="rustdoc"
 

@@ -1,30 +1,50 @@
-{ buildPythonPackage
-, fetchPypi
-, six
+{ lib, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, ninja
+, which
+, libjpeg_turbo
+, libpng
 , numpy
+, scipy
 , pillow
 , pytorch
-, lib
+, pytest
 }:
 
 buildPythonPackage rec {
-  version = "0.2.1";
-  pname   = "torchvision";
+  pname = "torchvision";
+  version = "0.8.2";
 
-  format = "wheel";
-
-  src = fetchPypi {
-    inherit pname version;
-    format = "wheel";
-    sha256 = "18gvdabkmzfjg47ns0lw38mf85ry28nq1mas5rzlwvb4l5zmw2ms";
+  src = fetchFromGitHub {
+    owner = "pytorch";
+    repo = "vision";
+    rev = "v${version}";
+    sha256 = "0yhpbq7linrk2qp5jxsvlgkmwa5bn38s9kcswy4jzvmx1fjbkpq0";
   };
 
-  propagatedBuildInputs = [ six numpy pillow pytorch ];
+  nativeBuildInputs = [ libpng ninja which ];
 
-  meta = {
+  TORCHVISION_INCLUDE = "${libjpeg_turbo.dev}/include/";
+  TORCHVISION_LIBRARY = "${libjpeg_turbo}/lib/";
+
+  buildInputs = [ libjpeg_turbo libpng ];
+
+  propagatedBuildInputs = [ numpy pillow pytorch scipy ];
+
+  # tries to download many datasets for tests
+  doCheck = false;
+
+  checkPhase = ''
+    HOME=$TMPDIR py.test test --ignore=test/test_datasets_download.py
+  '';
+
+  checkInputs = [ pytest ];
+
+  meta = with lib; {
     description = "PyTorch vision library";
-    homepage    = "https://pytorch.org/";
-    license     = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ericsagnes ];
+    homepage = "https://pytorch.org/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ericsagnes SuperSandro2000 ];
   };
 }

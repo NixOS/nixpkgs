@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, breeze-icons, gnome-icon-theme, numix-icon-theme, numix-icon-theme-circle, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, breeze-icons, gnome-icon-theme, numix-icon-theme, numix-icon-theme-circle, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "zafiro-icons";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "zayronxio";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "05h8qm9izjbp8pnl9jpbw3y9sddhp0zmg94fm1k4d4hhdqnakqhv";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     gtk-update-icon-cache "$out"/share/icons/Zafiro-icons
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Icon pack flat with light colors";
     homepage = "https://github.com/zayronxio/Zafiro-icons";
     license = with licenses; [ gpl3 ];

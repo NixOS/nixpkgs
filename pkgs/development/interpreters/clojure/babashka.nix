@@ -1,25 +1,25 @@
-{ stdenv, fetchurl, graalvm8, glibcLocales }:
+{ stdenv, fetchurl, graalvm11-ce, glibcLocales }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.0.97";
+  version = "0.2.3";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "1gd9ih9l02n1j9qkbxb36d3cb5sddwvxiw8kkicgc4xig77lsa7z";
+    sha256 = "0lbdh3v3g3j00bn99bjhjj3gk1q9ks2alpvl9bxc00xpyw86f7z8";
   };
 
   src = fetchurl {
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "08py6bawfrhg90fbcnv2mq4c91g5wa1q2q6zdjy2i1b9q4x1654r";
+    sha256 = "0vh6k3dkzyk346jjzg6n4mdi65iybrmhb3js9lm73yc3ay2c5dyi";
   };
 
   dontUnpack = true;
 
   LC_ALL = "en_US.UTF-8";
-  nativeBuildInputs = [ graalvm8 glibcLocales ];
+  nativeBuildInputs = [ graalvm11-ce glibcLocales ];
 
   buildPhase = ''
     native-image \
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/borkdude/babashka";
     license = licenses.epl10;
-    platforms = graalvm8.meta.platforms;
+    platforms = graalvm11-ce.meta.platforms;
     maintainers = with maintainers; [ bandresen bhougland DerGuteMoritz jlesquembre ];
   };
 }

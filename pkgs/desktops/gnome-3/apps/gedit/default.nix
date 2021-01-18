@@ -1,29 +1,56 @@
-{ stdenv, meson, fetchurl, python3
-, pkgconfig, gtk3, glib, adwaita-icon-theme
-, libpeas, gtksourceview4, gsettings-desktop-schemas
-, wrapGAppsHook, ninja, libsoup, tepl
-, gnome3, gspell, perl, itstool, desktop-file-utils
+{ lib, stdenv
+, meson
+, fetchurl
+, python3
+, pkg-config
+, gtk3
+, glib
+, adwaita-icon-theme
+, libpeas
+, gtksourceview4
+, gsettings-desktop-schemas
+, wrapGAppsHook
+, ninja
+, libsoup
+, tepl
+, gnome3
+, gspell
+, perl
+, itstool
+, desktop-file-utils
+, vala
 }:
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "3.36.2";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gedit/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "15s1almlhjlgl3m8lxg6jpzln8jhgdxxjr635a3b7cf58d35b1v8";
+    url = "mirror://gnome/sources/gedit/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0kc48a399achcz6vlqq0jk0b8ixbrzyv9xb22s5av76m5hyqalq0";
   };
 
   nativeBuildInputs = [
-    pkgconfig wrapGAppsHook meson ninja
-    python3 perl itstool desktop-file-utils
+    desktop-file-utils
+    itstool
+    meson
+    ninja
+    perl
+    pkg-config
+    python3
+    vala
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk3 glib
-    adwaita-icon-theme libsoup
-    libpeas gtksourceview4
-    gsettings-desktop-schemas gspell
+    adwaita-icon-theme
+    glib
+    gsettings-desktop-schemas
+    gspell
+    gtk3
+    gtksourceview4
+    libpeas
+    libsoup
     tepl
   ];
 
@@ -44,7 +71,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Gedit";
     description = "Official text editor of the GNOME desktop environment";
     maintainers = teams.gnome.members;

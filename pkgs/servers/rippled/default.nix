@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchgit, fetchurl, runCommand, git, cmake, pkgconfig
-, openssl,  zlib, boost, grpc, c-ares, abseil-cpp, protobuf3_8 }:
+{ lib, stdenv, fetchFromGitHub, fetchgit, fetchurl, runCommand, git, cmake, pkg-config
+, openssl,  zlib, boost, grpc, c-ares, abseil-cpp, protobuf3_8, libnsl }:
 
 let
   sqlite3 = fetchurl rec {
@@ -9,7 +9,7 @@ let
   };
 
   boostSharedStatic = boost.override {
-    enableShared = true; 
+    enableShared = true;
     enabledStatic = true;
   };
 
@@ -129,8 +129,8 @@ in stdenv.mkDerivation rec {
   hardeningDisable = ["format"];
   cmakeFlags = ["-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON"];
 
-  nativeBuildInputs = [ pkgconfig cmake git ];
-  buildInputs = [ openssl openssl.dev boostSharedStatic zlib grpc c-ares c-ares.cmake-config abseil-cpp protobuf3_8 ];
+  nativeBuildInputs = [ pkg-config cmake git ];
+  buildInputs = [ openssl openssl.dev boostSharedStatic zlib grpc c-ares c-ares.cmake-config abseil-cpp protobuf3_8 libnsl ];
 
   preConfigure = ''
     export HOME=$PWD
@@ -146,9 +146,9 @@ in stdenv.mkDerivation rec {
     git config --global url."file://${google-test}".insteadOf "${google-test.url}"
     git config --global url."file://${date}".insteadOf "${date.url}"
 
-    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "http://www.sqlite.org/2018/sqlite-amalgamation-3260000.zip" "" 
-    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "https://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" "" 
-    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "http://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" "" 
+    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "http://www.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
+    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "https://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
+    substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "http://www2.sqlite.org/2018/sqlite-amalgamation-3260000.zip" ""
     substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "URL ${sqlite3.url}" "URL ${sqlite3}"
   '';
 
@@ -157,7 +157,7 @@ in stdenv.mkDerivation rec {
     ./rippled --unittest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ripple P2P payment network reference server";
     homepage = "https://github.com/ripple/rippled";
     maintainers = with maintainers; [ ehmry offline RaghavSood ];

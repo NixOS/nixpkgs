@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, perl, dpkg }:
+{ lib, stdenv, fetchurl, perl, dpkg }:
 
 stdenv.mkDerivation rec {
   pname = "bdf2psf";
-  version = "1.196";
+  version = "1.200";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/c/console-setup/bdf2psf_${version}_all.deb";
-    sha256 = "042ly91525q2qj7985qih4njhjk5ndz8jiz01v860jc38bvw595p";
+    sha256 = "07z686h2fv9b3446fcym0sfzxwgkm9cc4bd3zhpv6j8bdfadnjxw";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     mv usr $out
   ";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "BDF to PSF converter";
     homepage = "https://packages.debian.org/sid/bdf2psf";
     longDescription = ''

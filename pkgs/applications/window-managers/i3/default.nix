@@ -1,18 +1,18 @@
-{ fetchurl, stdenv, which, pkgconfig, makeWrapper, installShellFiles, libxcb, xcbutilkeysyms
+{ fetchurl, lib, stdenv, pkg-config, makeWrapper, meson, ninja, installShellFiles, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
 , yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
 , xorgserver, xvfb_run }:
 
 stdenv.mkDerivation rec {
   pname = "i3";
-  version = "4.18.2";
+  version = "4.19";
 
   src = fetchurl {
-    url = "https://i3wm.org/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "030jym6b8b07yf4y6pb806hg8k77zsprv569gy0r72rh5zb1g1mj";
+    url = "https://i3wm.org/downloads/${pname}-${version}.tar.xz";
+    sha256 = "0wjq6lkidg0g474xsln1fhbxci7zclq3748sda10f1n7q01qp95c";
   };
 
-  nativeBuildInputs = [ which pkgconfig makeWrapper installShellFiles ];
+  nativeBuildInputs = [ pkg-config makeWrapper meson ninja installShellFiles ];
 
   buildInputs = [
     libxcb xcbutilkeysyms xcbutil xcbutilwm xcbutilxrm libxkbcommon
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/issues/7957
   doCheck = false; # stdenv.hostPlatform.system == "x86_64-linux";
 
-  checkPhase = stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
+  checkPhase = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
   ''
     (cd testcases && xvfb-run ./complete-run.pl -p 1 --keep-xserver-output)
     ! grep -q '^not ok' testcases/latest/complete-run.log
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tiling window manager";
     homepage    = "https://i3wm.org";
     maintainers = with maintainers; [ modulistic fpletz globin ];

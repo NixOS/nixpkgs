@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, bc, xorgserver, xpra, xrandr }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, bc, xorgserver, xpra, xrandr }:
 
 stdenv.mkDerivation {
   version = "git-2018-06-03";
@@ -17,10 +17,10 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp run_scaled $out/bin
     wrapProgram $out/bin/run_scaled --prefix PATH ":" \
-      ${stdenv.lib.makeBinPath [ bc xorgserver xpra xrandr ]}
+      ${lib.makeBinPath [ bc xorgserver xpra xrandr ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Run an X application scaled via xpra";
     homepage = "https://github.com/kaueraal/run_scaled";
     maintainers = [ maintainers.snaar ];

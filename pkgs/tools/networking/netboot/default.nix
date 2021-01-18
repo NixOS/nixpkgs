@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, yacc, lzo, db4 }:
+{ lib, stdenv, fetchurl, yacc, lzo, db4 }:
 
 stdenv.mkDerivation rec {
   name = "netboot-0.10.2";
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mini PXE server";
     maintainers = [ maintainers.raskin ];
     platforms = ["x86_64-linux"];
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
   };
 }

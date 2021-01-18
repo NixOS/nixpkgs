@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
       # according to official documentation
-      cc rasm_v*.c -O2 -lm -lrt -march=native -o rasm
+      cc rasm_v*.c -O2 -lm -lrt -o rasm
   '';
 
   installPhase = ''
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Z80 assembler";
     # use -n option to display all licenses
     license = licenses.mit; # expat version
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

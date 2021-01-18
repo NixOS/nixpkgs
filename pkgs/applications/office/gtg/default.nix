@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , python3Packages
@@ -11,17 +11,18 @@
 , pango
 , gdk-pixbuf
 , gobject-introspection
+, xvfb_run
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gtg";
-  version = "unstable-2020-08-02";
+  version = "unstable-2020-10-22";
 
   src = fetchFromGitHub {
     owner = "getting-things-gnome";
     repo = "gtg";
-    rev = "6623731f301c1b9c7b727e009f4a6462ad381c68";
-    sha256 = "14gxgg4nl0ki3dn913041jpyfhxsj90fkd55z6mmpyklhr8mwss1";
+    rev = "144814c16723fa9d00e17e047df5d79ab443fc5f";
+    sha256 = "1lpanfbj8y8b6cqp92lgbvfs8irrc5bsdffzcjcycazv19qm7z2n";
   };
 
 
@@ -45,7 +46,6 @@ python3Packages.buildPythonApplication rec {
     pycairo
     pygobject3
     lxml
-    dbus-python
     gst-python
     liblarch
   ];
@@ -53,15 +53,16 @@ python3Packages.buildPythonApplication rec {
   checkInputs = with python3Packages; [
     nose
     mock
+    xvfb_run
   ];
 
   format = "other";
   strictDeps = false; # gobject-introspection does not run with strictDeps (https://github.com/NixOS/nixpkgs/issues/56943)
 
-  checkPhase = "python3 ../run-tests";
+  checkPhase = "xvfb-run python3 ../run-tests";
 
-  meta = with stdenv.lib; {
-    description = " A personal tasks and TODO-list items organizer.";
+  meta = with lib; {
+    description = " A personal tasks and TODO-list items organizer";
     longDescription = ''
       "Getting Things GNOME" (GTG) is a personal tasks and ToDo list organizer inspired by the "Getting Things Done" (GTD) methodology.
       GTG is intended to help you track everything you need to do and need to know, from small tasks to large projects.

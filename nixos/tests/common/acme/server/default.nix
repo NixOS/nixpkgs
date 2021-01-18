@@ -51,10 +51,7 @@
 # that it has to be started _before_ the ACME service.
 { config, pkgs, lib, ... }:
 let
-  testCerts = import ./snakeoil-certs.nix {
-    minica = pkgs.minica;
-    mkDerivation = pkgs.stdenv.mkDerivation;
-  };
+  testCerts = import ./snakeoil-certs.nix;
   domain = testCerts.domain;
 
   resolver = let
@@ -70,7 +67,7 @@ let
     privateKey = testCerts.${domain}.key;
     httpPort = 80;
     tlsPort = 443;
-    ocspResponderURL = "http://0.0.0.0:4002";
+    ocspResponderURL = "http://${domain}:4002";
     strict = true;
   };
 

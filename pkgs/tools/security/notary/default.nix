@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, libtool }:
+{ lib, stdenv, fetchFromGitHub, buildGoPackage, libtool }:
 
 buildGoPackage rec {
   pname = "notary";
@@ -35,8 +35,8 @@ buildGoPackage rec {
     make test PKGS=github.com/theupdateframework/notary/cmd/notary
   '';
 
-  meta = with stdenv.lib; {
-    description = "Notary is a project that allows anyone to have trust over arbitrary collections of data";
+  meta = with lib; {
+    description = "A project that allows anyone to have trust over arbitrary collections of data";
     longDescription = ''
       The Notary project comprises a server and a client for running and
       interacting with trusted collections. See the service architecture

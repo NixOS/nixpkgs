@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , python3
@@ -11,56 +10,47 @@
 , bash-completion
 , dbus
 , gnome3
-, libxml2
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 }:
-
+let
+  isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
+in
 stdenv.mkDerivation rec {
   pname = "dconf";
-  version = "0.36.0";
+  version = "0.38.0";
 
-  outputs = [ "out" "lib" "dev" "devdoc" ];
+  outputs = [ "out" "lib" "dev" ]
+    ++ stdenv.lib.optional (!isCross) "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0bfs069pjv6lhp7xrzmrhz3876ay2ryqxzc6mlva1hhz34ibprlz";
+    sha256 = "0n2gqkp6d61h7gnnp2xnxp6w5wcl7w9ay58krrf729qd6d0hzxj5";
   };
-
-  patches = [
-    # Fix bash-completion installation
-    # https://gitlab.gnome.org/GNOME/dconf/merge_requests/58
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/dconf/commit/b3c9423c6151f3c28e526083ea2f04987a780fdf.patch";
-      sha256 = "0kdapiw3zq041jhzsx90kk08vqfgzr6vy2k541iav984d0m0zcnf";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
     ninja
-    vala
     pkg-config
     python3
     libxslt
-    libxml2
     glib
-    gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_42
-  ];
+  ] ++ stdenv.lib.optional (!isCross) gtk-doc;
 
   buildInputs = [
     glib
     bash-completion
     dbus
-  ];
+  ] ++ stdenv.lib.optional (!isCross) vala;
+  # Vala cross compilation is broken. For now, build dconf without vapi when cross-compiling.
 
   mesonFlags = [
     "--sysconfdir=/etc"
-    "-Dgtk_doc=true"
-  ];
+    "-Dgtk_doc=${stdenv.lib.boolToString (!isCross)}" # gtk-doc does do some gobject introspection, which doesn't yet cross-compile.
+  ] ++ stdenv.lib.optional isCross "-Dvapi=false";
 
   doCheck = !stdenv.isAarch32 && !stdenv.isAarch64 && !stdenv.isDarwin;
 

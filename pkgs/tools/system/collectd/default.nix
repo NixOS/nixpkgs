@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, darwin, callPackage
+{ lib, stdenv, fetchurl, fetchpatch, darwin, callPackage
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , libtool
 , ...
 }@args:
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "1mh97afgq6qgmpvpr84zngh58m0sl1b4wimqgvvk376188q09bjv";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     libtool
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.ApplicationServices
   ] ++ plugins.buildInputs;
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon which collects system performance statistics periodically";
     homepage = "https://collectd.org";
     license = licenses.gpl2;

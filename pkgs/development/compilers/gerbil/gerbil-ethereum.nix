@@ -2,8 +2,8 @@
 
 gerbil-support.gerbilPackage {
   pname = "gerbil-ethereum";
-  version = "unstable-2020-08-02";
-  git-version = "0.0-15-g7cd2dd7";
+  version = "unstable-2020-10-18";
+  git-version = "0.0-26-gf27ada8";
   gerbil-package = "mukn/ethereum";
   gerbil = gerbil-unstable;
   gerbilInputs = with gerbil-support.gerbilPackages-unstable;
@@ -15,8 +15,8 @@ gerbil-support.gerbilPackage {
   src = fetchFromGitHub {
     owner = "fare";
     repo = "gerbil-ethereum";
-    rev = "7cd2dd7436b11917d0729dbafe087cfa8ec38f86";
-    sha256 = "0qq3ch2dg735yrj3l2c9pb9qlvz98x3vjfi2xyr4fwr78smpqgb5";
+    rev = "f27ada8e7f4de4f8fbdfede9fe055914b254d8e7";
+    sha256 = "1lykjqim6a44whj1r8kkpiz68wghkfqx5vjlrc2ldxlmgd4r9gvd";
   };
   meta = {
     description = "Gerbil Ethereum: a Scheme alternative to web3.js";

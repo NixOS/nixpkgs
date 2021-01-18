@@ -7,7 +7,7 @@
 #  $ nix-build '<nixpkgs>' -A dockerTools.examples.redis
 #  $ docker load < result
 
-{ pkgs, buildImage, pullImage, shadowSetup, buildImageWithNixDb }:
+{ pkgs, buildImage, buildLayeredImage, fakeNss, pullImage, shadowSetup, buildImageWithNixDb, pkgsCross }:
 
 rec {
   # 1. basic example
@@ -44,7 +44,7 @@ rec {
   nginx = let
     nginxPort = "80";
     nginxConf = pkgs.writeText "nginx.conf" ''
-      user nginx nginx;
+      user nobody nobody;
       daemon off;
       error_log /dev/stdout info;
       pid /dev/null;
@@ -64,22 +64,19 @@ rec {
       <html><body><h1>Hello from NGINX</h1></body></html>
     '';
   in
-  buildImage {
+  buildLayeredImage {
     name = "nginx-container";
     tag = "latest";
-    contents = pkgs.nginx;
+    contents = [
+      fakeNss
+      pkgs.nginx
+    ];
 
     extraCommands = ''
       # nginx still tries to read this directory even if error_log
       # directive is specifying another file :/
       mkdir -p var/log/nginx
       mkdir -p var/cache/nginx
-    '';
-    runAsRoot = ''
-      #!${pkgs.stdenv.shell}
-      ${shadowSetup}
-      groupadd --system nginx
-      useradd --system --gid nginx nginx
     '';
 
     config = {
@@ -407,4 +404,27 @@ rec {
       contents = [ pkgs.bash pkgs.coreutils ] ++ nonRootShadowSetup { uid = 999; user = "somebody"; };
     };
 
+  # basic example, with cross compilation
+  cross = let
+    # Cross compile for x86_64 if on aarch64
+    crossPkgs =
+      if pkgs.system == "aarch64-linux" then pkgsCross.gnu64
+      else pkgsCross.aarch64-multiplatform;
+  in crossPkgs.dockerTools.buildImage {
+    name = "hello-cross";
+    tag = "latest";
+    contents = crossPkgs.hello;
+  };
+
+  # layered image where a store path is itself a symlink
+  layeredStoreSymlink =
+  let
+    target = pkgs.writeTextDir "dir/target" "Content doesn't matter.";
+    symlink = pkgs.runCommandNoCC "symlink" {} "ln -s ${target} $out";
+  in
+    pkgs.dockerTools.buildLayeredImage {
+      name = "layeredstoresymlink";
+      tag = "latest";
+      contents = [ pkgs.bash symlink ];
+    } // { passthru = { inherit symlink; }; };
 }

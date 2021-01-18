@@ -45,7 +45,7 @@ let
         trusted-substituters = ${toString cfg.trustedBinaryCaches}
         trusted-public-keys = ${toString cfg.binaryCachePublicKeys}
         auto-optimise-store = ${boolToString cfg.autoOptimiseStore}
-        require-sigs = ${if cfg.requireSignedBinaryCaches then "true" else "false"}
+        require-sigs = ${boolToString cfg.requireSignedBinaryCaches}
         trusted-users = ${toString cfg.trustedUsers}
         allowed-users = ${toString cfg.allowedUsers}
         ${optionalString (!cfg.distributedBuilds) ''
@@ -539,7 +539,7 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =
-      { path = [ nix pkgs.utillinux config.programs.ssh.package ]
+      { path = [ nix pkgs.util-linux config.programs.ssh.package ]
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
         environment = cfg.envVars

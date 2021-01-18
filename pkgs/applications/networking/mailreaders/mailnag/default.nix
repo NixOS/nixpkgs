@@ -16,7 +16,7 @@
 # Available plugins (can be overriden)
 , availablePlugins
 # Used in the withPlugins interface at passthru, can be overrided directly, or
-# prefarably via e.g: `mailnag.withPlugins(["goa"])`
+# prefarably via e.g: `mailnag.withPlugins([mailnag.availablePlugins.goa])`
 , mailnag
 , userPlugins ? [ ]
 , pluginsDeps ? [ ]
@@ -24,13 +24,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mailnag";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "pulb";
     repo = "mailnag";
     rev = "v${version}";
-    sha256 = "0q97v9i96br22z3h6r2mz79i68ib8m8x42yxky78szfrf8j60i30";
+    sha256 = "08jqs3v01a9gkjca9xgjidhdgvnlm4541z9bwh9m3k5p2g76sz96";
   };
 
   buildInputs = [
@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     wrapGAppsHook
-    # To later add plugins to 
+    # To later add plugins to
     xorg.lndir
   ];
 
@@ -72,7 +72,10 @@ python3Packages.buildPythonApplication rec {
         pluginsDeps = lib.flatten (lib.catAttrs "buildInputs" plugs);
         self = mailnag;
       in
-        self.override { userPlugins = plugs; };
+        self.override {
+          userPlugins = plugs;
+          inherit pluginsDeps;
+        };
   };
 
   # See https://nixos.org/nixpkgs/manual/#ssec-gnome-common-issues-double-wrapped

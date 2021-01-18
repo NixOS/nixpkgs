@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, utillinux, ncurses, flex, bison }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, util-linux, ncurses, flex, bison }:
 
 stdenv.mkDerivation rec {
   pname = "unnethack";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  nativeBuildInputs = [ utillinux flex bison ];
+  nativeBuildInputs = [ util-linux flex bison ];
 
   configureFlags = [ "--enable-curses-graphics"
                      "--disable-tty-graphics"
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/unnethack
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fork of NetHack";
     homepage = "https://unnethack.wordpress.com/";
     license = "nethack";

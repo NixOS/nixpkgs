@@ -1,6 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
-, alsaLib
-}:
+{ lib, buildPythonPackage, fetchPypi, cython, alsaLib }:
 
 buildPythonPackage rec {
   pname = "rtmidi-python";
@@ -11,7 +9,14 @@ buildPythonPackage rec {
     sha256 = "1wpcaxfpbmsjc78g8841kpixr0a3v6zn0ak058s3mm25kcysp4m0";
   };
 
+  postPatch = ''
+    rm rtmidi_python.cpp
+  '';
+
+  nativeBuildInputs = [ cython ];
   buildInputs = [ alsaLib ];
+
+  setupPyBuildFlags = [ "--from-cython" ];
 
   # package has no tests
   doCheck = false;

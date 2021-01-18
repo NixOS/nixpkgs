@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
+assert lib.versionAtLeast (lib.getVersion ocaml) "3.12";
 
 let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02"
+  if lib.versionAtLeast ocaml.version "4.02"
   then {
     version = "20171003";
     sha256 = "06zwsskri8kaqjdszj9360nf36zvwh886xwf033aija8c9k4w6cx";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   dontBuild = true;
   installFlags = [ "-C" "src" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://gallium.inria.fr/~fpottier/pprint/";
     description = "An OCaml adaptation of Wadler’s and Leijen’s prettier printer";
     license = licenses.cecill-c;

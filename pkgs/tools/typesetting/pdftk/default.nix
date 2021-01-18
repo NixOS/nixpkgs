@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitLab, gradle_5, jre, perl, writeText, runtimeShell }:
+{ lib, stdenv, fetchFromGitLab, gradle, jre, perl, writeText, runtimeShell }:
 
 let
   pname = "pdftk";
-  version = "3.0.8";
+  version = "3.2.1";
 
   src = fetchFromGitLab {
     owner = "pdftk-java";
     repo = "pdftk";
     rev = "v${version}";
-    sha256 = "1bj4a9g5mbxd859mmawzs0mpm0jw7ap4n1imcwkwz142r9x1g6rk";
+    sha256 = "056db8rjczdfkq7fm3bv5g15y042rc9hb4zh5qccjrdw630vk9y4";
   };
 
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit src version;
 
-    nativeBuildInputs = [ gradle_5 perl ];
+    nativeBuildInputs = [ gradle perl ];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -32,7 +32,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "12b7lw1zpj69pv4bpbrm6pi0ip02ay3dfj3vcy2jyikfbwdb3qcz";
+    outputHash = "0p59myc5m3ds7fh0zdz3n7l7hx6dj8bpyqxzlhdrqybsyxwpw4w3";
   };
 
   # Point to our local deps repo
@@ -65,7 +65,7 @@ let
 in stdenv.mkDerivation rec {
   inherit pname version src;
 
-  nativeBuildInputs = [ gradle_5 ];
+  nativeBuildInputs = [ gradle ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
@@ -74,22 +74,23 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/{bin,share/pdftk,share/man/man1}
-    cp build/libs/pdftk.jar $out/share/pdftk
+    cp build/libs/pdftk-all.jar $out/share/pdftk
 
     cat  << EOF > $out/bin/pdftk
     #!${runtimeShell}
-    exec ${jre}/bin/java -jar "$out/share/pdftk/pdftk.jar" "\$@"
+    exec ${jre}/bin/java -jar "$out/share/pdftk/pdftk-all.jar" "\$@"
     EOF
     chmod a+x "$out/bin/pdftk"
 
     cp ${src}/pdftk.1 $out/share/man/man1
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Command-line tool for working with PDFs";
     homepage = "https://gitlab.com/pdftk-java/pdftk";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ raskin averelld ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin averelld ];
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

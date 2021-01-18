@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, freeglut, libGLU, libGL }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, freeglut, libGLU, libGL }:
 
 stdenv.mkDerivation {
   pname = "newtonwars";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH ":" ${libGL}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A space battle game with gravity as the main theme";
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy27
 , h5py
 , matplotlib
 , numpy
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   # tests have type annotations, can only run on 3.5+
   doCheck = (!isPy27);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Toolkit for plotting and analysis of ab initio solid-state calculation data";
     homepage = "https://github.com/SMTG-UCL/sumo";
     license = licenses.mit;

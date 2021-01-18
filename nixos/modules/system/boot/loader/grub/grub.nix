@@ -66,7 +66,7 @@ let
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
         default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios;
       path = with pkgs; makeBinPath (
-        [ coreutils gnused gnugrep findutils diffutils btrfs-progs utillinux mdadm ]
+        [ coreutils gnused gnugrep findutils diffutils btrfs-progs util-linux mdadm ]
         ++ optional (cfg.efiSupport && (cfg.version == 2)) efibootmgr
         ++ optionals cfg.useOSProber [ busybox os-prober ]);
       font = if cfg.font == null then ""
@@ -705,7 +705,7 @@ in
         let
           install-grub-pl = pkgs.substituteAll {
             src = ./install-grub.pl;
-            inherit (pkgs) utillinux;
+            utillinux = pkgs.util-linux;
             btrfsprogs = pkgs.btrfs-progs;
           };
         in pkgs.writeScript "install-grub.sh" (''
@@ -741,7 +741,7 @@ in
             + "'boot.loader.grub.mirroredBoots' to make the system bootable.";
         }
         {
-          assertion = cfg.efiSupport || all (c: c < 2) (mapAttrsToList (_: c: c) bootDeviceCounters);
+          assertion = cfg.efiSupport || all (c: c < 2) (mapAttrsToList (n: c: if n == "nodev" then 0 else c) bootDeviceCounters);
           message = "You cannot have duplicated devices in mirroredBoots";
         }
         {

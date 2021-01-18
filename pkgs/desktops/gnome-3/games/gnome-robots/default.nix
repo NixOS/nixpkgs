@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, wrapGAppsHook
 , librsvg, gsound, gettext, itstool, libxml2, libgnome-games-support
 , libgee, meson, ninja, python3, desktop-file-utils, adwaita-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-robots";
-  version = "3.36.1";
+  version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-robots/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0qmdwrl70ccs3blgwmpcf3sg9k8mcvsl1dr1gds4ba3fq9ca8ipb";
+    url = "mirror://gnome/sources/gnome-robots/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1qpzpsyj9i5dsfy7anfb2dcm602bjkcgqj86fxvnxy6llx56ks0z";
   };
 
   passthru = {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig meson ninja python3
+    pkg-config meson ninja python3
     libxml2 wrapGAppsHook gettext itstool desktop-file-utils
   ];
   buildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Robots";
     description = "Avoid the robots and make them crash into each other";
     maintainers = teams.gnome.members;

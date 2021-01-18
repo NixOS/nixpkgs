@@ -26,7 +26,7 @@ buildPythonPackage {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bose Soundtouch Python library";
     homepage    = "https://github.com/CharlesBlonde/libsoundtouch";
     license     = licenses.asl20;

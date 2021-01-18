@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libjack2, ladspaH, gtk2, alsaLib, libxml2, lrdf }:
+{ lib, stdenv, fetchurl, pkgconfig, libjack2, ladspaH, gtk2, alsaLib, libxml2, lrdf }:
 stdenv.mkDerivation rec {
   name = "jack-rack-1.4.7";
   src = fetchurl {
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
       computer into an effects box.
     '';
     homepage = "http://jack-rack.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.astsmtl ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.astsmtl ];
+    platforms = lib.platforms.linux;
   };
 }

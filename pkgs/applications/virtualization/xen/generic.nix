@@ -1,5 +1,5 @@
 config:
-{ stdenv, cmake, pkgconfig, which
+{ lib, stdenv, cmake, pkg-config, which
 
 # Xen
 , bison, bzip2, checkpolicy, dev86, figlet, flex, gettext, glib
@@ -14,21 +14,23 @@ config:
 # Scripts
 , coreutils, gawk, gnused, gnugrep, diffutils, multipath-tools
 , iproute, inetutils, iptables, bridge-utils, openvswitch, nbd, drbd
-, lvm2, utillinux, procps, systemd
+, lvm2, util-linux, procps, systemd
 
 # Documentation
 # python2Packages.markdown
 , transfig, ghostscript, texinfo, pandoc
 
+, binutils-unwrapped
+
 , ...} @ args:
 
-with stdenv.lib;
+with lib;
 
 let
   #TODO: fix paths instead
   scriptEnvPath = concatMapStringsSep ":" (x: "${x}/bin") [
     which perl
-    coreutils gawk gnused gnugrep diffutils utillinux multipath-tools
+    coreutils gawk gnused gnugrep diffutils util-linux multipath-tools
     iproute inetutils iptables bridge-utils openvswitch nbd drbd
   ];
 
@@ -42,6 +44,17 @@ let
     }
     ( __do )
   '');
+
+  # We don't want to use the wrapped version, because this version of ld is
+  # only used for linking the Xen EFI binary, and the build process really
+  # needs control over the LDFLAGS used
+  efiBinutils = binutils-unwrapped.overrideAttrs (oldAttrs: {
+    name = "efi-binutils";
+    configureFlags = oldAttrs.configureFlags ++ [
+      "--enable-targets=x86_64-pep"
+    ];
+    doInstallCheck = false; # We get a spurious failure otherwise, due to host/target mis-match
+  });
 in
 
 stdenv.mkDerivation (rec {
@@ -53,7 +66,7 @@ stdenv.mkDerivation (rec {
 
   hardeningDisable = [ "stackprotector" "fortify" "pic" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cmake which
 
@@ -119,10 +132,12 @@ stdenv.mkDerivation (rec {
     '')}
   '';
 
-  patches = [ ./0000-fix-ipxe-src.patch
-              ./0000-fix-install-python.patch
-            ] ++ optional (versionOlder version "4.8.5") ./acpica-utils-20180427.patch
-            ++ (config.patches or []);
+  patches = [
+    ./0000-fix-ipxe-src.patch
+    ./0000-fix-install-python.patch
+    ./0004-makefile-use-efi-ld.patch
+    ./0005-makefile-fix-efi-mountdir-use.patch
+  ] ++ (config.patches or []);
 
   postPatch = ''
     ### Hacks
@@ -146,8 +161,8 @@ stdenv.mkDerivation (rec {
       --replace /usr/sbin/lvs ${lvm2}/bin/lvs
 
     substituteInPlace tools/misc/xenpvnetboot \
-      --replace /usr/sbin/mount ${utillinux}/bin/mount \
-      --replace /usr/sbin/umount ${utillinux}/bin/umount
+      --replace /usr/sbin/mount ${util-linux}/bin/mount \
+      --replace /usr/sbin/umount ${util-linux}/bin/umount
 
     substituteInPlace tools/xenmon/xenmon.py \
       --replace /usr/bin/pkill ${procps}/bin/pkill
@@ -185,6 +200,9 @@ stdenv.mkDerivation (rec {
     substituteInPlace tools/hotplug/Linux/xendomains \
       --replace /bin/ls ls
   '';
+
+  EFI_LD = "${efiBinutils}/bin/ld";
+  EFI_VENDOR = "nixos";
 
   # TODO: Flask needs more testing before enabling it by default.
   #makeFlags = [ "XSM_ENABLE=y" "FLASK_ENABLE=y" "PREFIX=$(out)" "CONFIG_DIR=/etc" "XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files" ];
@@ -234,7 +252,7 @@ stdenv.mkDerivation (rec {
                     + "\nIncludes:\n"
                     + withXenfiles (name: x: ''* ${name}: ${x.meta.description or "(No description)"}.'');
     platforms = [ "x86_64-linux" ];
-    maintainers = with stdenv.lib.maintainers; [ eelco tstrobel oxij ];
-    license = stdenv.lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ eelco tstrobel oxij ];
+    license = lib.licenses.gpl2;
   } // (config.meta or {});
 } // removeAttrs config [ "xenfiles" "buildInputs" "patches" "postPatch" "meta" ])

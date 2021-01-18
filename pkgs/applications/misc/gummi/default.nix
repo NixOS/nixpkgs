@@ -1,6 +1,6 @@
-{ stdenv, pkgs
+{ lib, stdenv, pkgs
 , glib, gnome3, gtk3, gtksourceview3, gtkspell3, poppler, texlive
-, pkgconfig, intltool, autoreconfHook, wrapGAppsHook
+, pkg-config, intltool, autoreconfHook, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig intltool autoreconfHook wrapGAppsHook
+    pkg-config intltool autoreconfHook wrapGAppsHook
   ];
   buildInputs = [
     glib gtksourceview3 gtk3 gtkspell3 poppler
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://gummi.app";
     description = "Simple LaTex editor for GTK users";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ flokli ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flokli ];
+    platforms = with lib.platforms; linux;
     inherit version;
   };
 }

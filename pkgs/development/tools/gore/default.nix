@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "gore";
@@ -15,8 +15,8 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    description = "Yet another Go REPL that works nicely.";
+  meta = with lib; {
+    description = "Yet another Go REPL that works nicely";
     homepage = "https://github.com/motemen/gore";
     license = licenses.mit;
     maintainers = with maintainers; [ offline ];

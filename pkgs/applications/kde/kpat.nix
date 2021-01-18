@@ -8,7 +8,7 @@
 }:
 
 mkDerivation {
-  name = "kpat";
+  pname = "kpat";
   nativeBuildInputs = [
     extra-cmake-modules
     shared-mime-info

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spdx-license-list-data";
-  version = "3.10";
+  version = "3.11";
 
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "license-list-data";
     rev = "v${version}";
-    sha256 = "1zza0jrs82112dcjqgkyck2b7hv4kg9s10pmlripi6c1rs37av14";
+    sha256 = "1iwyqhh6lh51a47mhfy98zvjan8yjsvlym8qz0isx2i1zzxlj47a";
   };
 
   phases = [ "unpackPhase" "installPhase" ];

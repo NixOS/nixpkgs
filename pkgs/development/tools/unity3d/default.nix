@@ -129,7 +129,7 @@ in stdenv.mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://unity3d.com/";
     description = "Game development tool";
     longDescription = ''

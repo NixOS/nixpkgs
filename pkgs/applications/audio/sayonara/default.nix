@@ -1,12 +1,12 @@
 { mkDerivation
 , cmake
-, fetchgit
+, fetchFromGitLab
 , gst_all_1
 , lib
 , libpulseaudio
 , ninja
 , pcre
-, pkgconfig
+, pkg-config
 , qtbase
 , qttools
 , taglib
@@ -15,34 +15,16 @@
 
 mkDerivation rec {
   pname = "sayonara-player";
-  version = "1.5.1-stable5";
+  version = "1.6.0-beta6";
 
-  src = fetchgit {
-    url = "https://git.sayonara-player.com/sayonara.git";
+  src = fetchFromGitLab {
+    owner = "luciocarreras";
+    repo = "sayonara-player";
     rev = version;
-    sha256 = "13l7r3gaszrkyf4z8rdijfzxvcnilax4ki2mcm30wqk8d4g4qdzj";
+    sha256 = "sha256-SbJS0DQvbW++CNXbuDHQxFlLRb1kTtDdIdHOqu0YxeQ=";
   };
 
-  # all this can go with version 1.5.2
-  postPatch = ''
-    # if we don't delete this, sayonara will look here instead of the provided taglib
-    rm -r src/3rdParty/taglib
-
-    for f in \
-      src/DBus/DBusNotifications.cpp \
-      src/Gui/Resources/Icons/CMakeLists.txt \
-      src/Utils/Utils.cpp \
-      test/Util/FileHelperTest.cpp \
-      ; do
-
-      substituteInPlace $f --replace /usr $out
-    done
-
-    substituteInPlace src/Components/Shutdown/Shutdown.cpp \
-      --replace /usr/bin/systemctl systemctl
-  '';
-
-  nativeBuildInputs = [ cmake ninja pkgconfig qttools ];
+  nativeBuildInputs = [ cmake ninja pkg-config qttools ];
 
   buildInputs = [
     libpulseaudio

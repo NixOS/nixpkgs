@@ -4,7 +4,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-bindgen-cli";
-  version = "0.2.67";
+  version = "0.2.69";
 
   src =
     let
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
         owner = "rustwasm";
         repo = "wasm-bindgen";
         rev = version;
-        sha256 = "0qx178aicbn59b150j5r78zya5n0yljvw4c4lhvg8x4cpfshjb5j";
+        sha256 = "1psylk3hlx0ahwib3ph8qdk0jwlp8qzc6dv61002rj7ns28vs4mx";
       };
     in runCommand "source" { } ''
       cp -R ${tarball} $out
@@ -23,14 +23,14 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
   nativeBuildInputs = [ pkgconfig ];
 
-  cargoSha256 = "0chpw6syqxn824cbkdjx1s26vmajx511gc4mp9y64vy7b7asba6x";
+  cargoSha256 = "1wrfly7c3an1mjqm7v13mlvx57hwlcxfjijkimicck04q6qdhbp6";
   cargoBuildFlags = [ "-p" pname ];
 
   meta = with lib; {
     homepage = "https://rustwasm.github.io/docs/wasm-bindgen/";
     license = licenses.asl20;
     description = "Facilitating high-level interactions between wasm modules and JavaScript";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ma27 rizary ];
     platforms = platforms.unix;
   };
 }

@@ -1,7 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , zope_schema
+, zope_interface
 }:
 
 buildPythonPackage rec {
@@ -10,12 +11,16 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3fbca4730c871d8e37b9730763c42b69ba44117cf6d0848014495bb301cae2d6";
+    sha256 = "1mp2r80v6ns92j089l7ngh8l9fk95g2661vkp4vqw7c71irs9g1z";
   };
 
-  propagatedBuildInputs = [ zope_schema ];
+  propagatedBuildInputs = [ zope_interface zope_schema ];
 
-  meta = with stdenv.lib; {
+  checkPhase = ''
+    cd src/zope/filerepresentation && python -m unittest
+  '';
+
+  meta = with lib; {
     homepage = "https://zopefilerepresentation.readthedocs.io/";
     description = "File-system Representation Interfaces";
     license = licenses.zpl20;

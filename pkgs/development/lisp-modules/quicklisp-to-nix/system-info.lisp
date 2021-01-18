@@ -7,10 +7,19 @@
   (:export #:dump-image))
 (in-package :ql-to-nix-system-info)
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defparameter *implementation-systems*
+    (append
+      #+sbcl(list :sb-posix :sb-bsd-sockets :sb-rotate-byte :sb-cltl2
+                  :sb-introspect :sb-rt :sb-concurrency)))
+  (mapcar (function require) *implementation-systems*))
+
 (declaim (optimize (debug 3) (speed 0) (space 0) (compilation-speed 0) (safety 3)))
 
 ;; This file cannot have any dependencies beyond quicklisp and asdf.
 ;; Otherwise, we'll miss some dependencies!
+
+;; (Implementation-provided dependencies are special, though)
 
 ;; We can't load quicklisp until runtime (at which point we'll create
 ;; an isolated quicklisp installation).  These wrapper functions are
@@ -440,6 +449,8 @@ Run with --debug and/or --verbose for more info.
 
       (when cache-dir
         (setf cache-dir (pathname-as-directory (parse-namestring cache-dir))))
+
+      (mapcar (function require) *implementation-systems*)
 
       (with-quicklisp (dir) (:cache-dir (or cache-dir :temp))
         (declare (ignore dir))

@@ -6,7 +6,7 @@
 
 let
   # Disable immobile space so we don't run out of memory on large books; see
-  # http://www.cs.utexas.edu/users/moore/acl2/current/HTML/installation/requirements.html#Obtaining-SBCL
+  # https://www.cs.utexas.edu/users/moore/acl2/current/HTML/installation/requirements.html#Obtaining-SBCL
   sbcl = args.sbcl.override { disableImmobileSpace = true; };
 
   # Wrap to add `-model` argument because some of the books in 8.3 need this.
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "acl2-devel";
     repo = "acl2-devel";
-    rev = "${version}";
+    rev = version;
     sha256 = "0c0wimaf16nrr3d6cxq6p7nr7rxffvpmn66hkpwc1m6zpcipf0y5";
   };
 
@@ -121,7 +121,7 @@ in stdenv.mkDerivation rec {
     '' else ''
       The community books are not included in this package.
     '');
-    homepage = "http://www.cs.utexas.edu/users/moore/acl2/";
+    homepage = "https://www.cs.utexas.edu/users/moore/acl2/";
     downloadPage = "https://github.com/acl2-devel/acl2-devel/releases";
     license = with licenses; [
       # ACL2 itself is bsd3

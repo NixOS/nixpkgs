@@ -475,9 +475,12 @@ passthru.updateScript = writeScript "update-zoom-us" ''
 <programlisting>
 passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
 </programlisting>
-     </para>
-     <para>
-      The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running <command>git commit</command> or any other commands that cannot handle that.
+      The script will be run with <varname>UPDATE_NIX_ATTR_PATH</varname> environment variable set to the attribute path it is supposed to update.
+      <note>
+       <para>
+        The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running <command>git commit</command> or any other commands that cannot handle that.
+       </para>
+      </note>
      </para>
      <para>
       For information about how to run the updates, execute <command>nix-shell maintainers/scripts/update.nix</command>.
@@ -1636,10 +1639,6 @@ substitute ./foo.in ./foo.out \
     --subst-var someVar
 </programlisting>
      </para>
-     <para>
-      <function>substitute</function> is implemented using the <command
-      xlink:href="http://replace.richardlloyd.org.uk/">replace</command> command. Unlike with the <command>sed</command> command, you don’t have to worry about escaping special characters. It supports performing substitutions on binary files (such as executables), though there you’ll probably want to make sure that the replacement string is as long as the replaced string.
-     </para>
     </listitem>
    </varlistentry>
    <varlistentry xml:id='fun-substituteInPlace'>
@@ -1836,6 +1835,19 @@ addEnvHooks "$hostOffset" myBashFunction
     </varlistentry>
     <varlistentry>
      <term>
+      <literal>move-systemd-user-units.sh</literal>
+     </term>
+     <listitem>
+      <para>
+       This setup hook moves any systemd user units installed in the lib
+       subdirectory into share. In addition, a link is provided from share to
+       lib for compatibility. This is needed for systemd to find user services
+       when installed into the user profile.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
       <literal>set-source-date-epoch-to-latest.sh</literal>
      </term>
      <listitem>
@@ -1977,7 +1989,7 @@ addEnvHooks "$hostOffset" myBashFunction
      </term>
      <listitem>
       <para>
-       Exports <envar>GDK_PIXBUF_MODULE_FILE</envar> environment variable to the builder. Add librsvg package to <varname>buildInputs</varname> to get svg support.
+       Exports <envar>GDK_PIXBUF_MODULE_FILE</envar> environment variable to the builder. Add librsvg package to <varname>buildInputs</varname> to get svg support. See also the <link linkend="ssec-gnome-hooks-gdk-pixbuf">setup hook description in GNOME platform docs</link>.
       </para>
      </listitem>
     </varlistentry>
@@ -2058,7 +2070,7 @@ nativeBuildInputs = [ breakpointHook ];
        The <literal>installManPage</literal> function takes one or more paths to manpages to install. The manpages must have a section suffix, and may optionally be compressed (with <literal>.gz</literal> suffix). This function will place them into the correct directory.
       </para>
       <para>
-       The <literal>installShellCompletion</literal> function takes one or more paths to shell completion files. By default it will autodetect the shell type from the completion file extension, but you may also specify it by passing one of <literal>--bash</literal>, <literal>--fish</literal>, or <literal>--zsh</literal>. These flags apply to all paths listed after them (up until another shell flag is given). Each path may also have a custom installation name provided by providing a flag <literal>--name NAME</literal> before the path. If this flag is not provided, zsh completions will be renamed automatically such that <literal>foobar.zsh</literal> becomes <literal>_foobar</literal>.
+       The <literal>installShellCompletion</literal> function takes one or more paths to shell completion files. By default it will autodetect the shell type from the completion file extension, but you may also specify it by passing one of <literal>--bash</literal>, <literal>--fish</literal>, or <literal>--zsh</literal>. These flags apply to all paths listed after them (up until another shell flag is given). Each path may also have a custom installation name provided by providing a flag <literal>--name NAME</literal> before the path. If this flag is not provided, zsh completions will be renamed automatically such that <literal>foobar.zsh</literal> becomes <literal>_foobar</literal>. A root name may be provided for all paths using the flag <literal>--cmd NAME</literal>; this synthesizes the appropriate name depending on the shell (e.g. <literal>--cmd foo</literal> will synthesize the name <literal>foo.bash</literal> for bash and <literal>_foo</literal> for zsh). The path may also be a fifo or named fd (such as produced by <literal>&lt;(cmd)</literal>), in which case the shell and name must be provided.
 <programlisting>
 nativeBuildInputs = [ installShellFiles ];
 postInstall = ''
@@ -2069,6 +2081,11 @@ postInstall = ''
   installShellCompletion --zsh --name _foobar share/completions.zsh
   # implicit behavior
   installShellCompletion share/completions/foobar.{bash,fish,zsh}
+  # using named fd
+  installShellCompletion --cmd foobar \
+    --bash &lt;($out/bin/foobar --bash-completion) \
+    --fish &lt;($out/bin/foobar --fish-completion) \
+    --zsh &lt;($out/bin/foobar --zsh-completion)
 '';
 </programlisting>
       </para>

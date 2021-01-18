@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "18230bg4rq9pmm5f8f65j444jpq56rld4fhmpham8q3vr1c1bdjh";
   };
 
+  patches = [
+    ./gcc10.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   # Building the tests currently fails on AArch64 due to internal compiler
@@ -19,8 +23,6 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isAarch64;
   checkTarget = "test";
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Experimental range library for C++11/14/17";

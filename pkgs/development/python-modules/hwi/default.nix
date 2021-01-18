@@ -1,46 +1,47 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, mnemonic
+, fetchFromGitHub
+, bitbox02
 , ecdsa
-, typing-extensions
 , hidapi
 , libusb1
+, mnemonic
 , pyaes
-, trezor
-, btchip
-, ckcc-protocol
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "hwi";
-  version = "1.1.2";
+  version = "1.2.1";
+  disabled = pythonAtLeast "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "eec460a51eb556500c1eca92015be246d5714cd53171407a76da71e4346048ae";
+  src = fetchFromGitHub {
+    owner = "bitcoin-core";
+    repo = "HWI";
+    rev = version;
+    sha256 = "0fs3152lw7y5l9ssr5as8gd739m9lb7wxpv1vc5m77k5nw7l8ax5";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'ecdsa>=0.13.0,<0.14.0'" "'ecdsa'" \
+      --replace "'hidapi>=0.7.99,<0.8.0'" "'hidapi'" \
+      --replace "'mnemonic>=0.18.0,<0.19.0'" "'mnemonic'"
+  '';
+
   propagatedBuildInputs = [
-    mnemonic
+    bitbox02
     ecdsa
-    typing-extensions
     hidapi
     libusb1
+    mnemonic
     pyaes
-    trezor
-    btchip
-    ckcc-protocol
   ];
 
-  patches = [ ./relax-deps.patch ];
-
-  # tests are not packaged in the released tarball
+  # tests require to clone quite a few firmwares
   doCheck = false;
 
-  pythonImportsCheck = [
-    "hwilib"
-  ];
+  pythonImportsCheck = [ "hwilib" ];
 
   meta = {
     description = "Bitcoin Hardware Wallet Interface";

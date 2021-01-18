@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, installShellFiles, gnustep, bzip2, zlib, icu, openssl, wavpack }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, gnustep, bzip2, zlib, icu, openssl, wavpack }:
 
 stdenv.mkDerivation rec {
   pname = "unar";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://theunarchiver.com";
     description = "An archive unpacker program";
     longDescription = ''

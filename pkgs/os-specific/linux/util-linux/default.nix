@@ -1,17 +1,22 @@
-{ lib, stdenv, fetchurl, pkgconfig, zlib, shadow
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, zlib, shadow
 , ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
 stdenv.mkDerivation rec {
   pname = "util-linux";
-  version = "2.36";
+  version = "2.36.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1cg0m4psswg71v6wrqc2bngcw20fsp01vbijxdzvdf8kxdkiqjwy";
+    sha256 = "1vbyydl1b13lx73di4bhc4br9ih24hcqv7bky0kyrn1c2x1c5yh9";
   };
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
+    # Remove patch below in 2.36.2, see https://github.com/karelzak/util-linux/issues/1193
+    (fetchpatch {
+      url = "https://github.com/karelzak/util-linux/commit/52f730e47869ce630fafb24fd46f755dc7ffc691.patch";
+      sha256 = "1fz3p9127lfvmrdj1j1s8jds0jjz2dzkvmia66555ihv7hcfajbg";
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "man" ];

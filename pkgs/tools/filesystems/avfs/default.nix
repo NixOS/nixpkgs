@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fuse, xz }:
+{ lib, stdenv, fetchurl, pkg-config, fuse, xz }:
 
 stdenv.mkDerivation rec {
   pname = "avfs";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1psh8k7g7rb0gn7aygbjv86kxyi9xq07barxksa99nnmq3lc2kjg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ fuse xz ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://avf.sourceforge.net/";
     description = "Virtual filesystem that allows browsing of compressed files";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

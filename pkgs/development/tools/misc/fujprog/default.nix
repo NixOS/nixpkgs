@@ -2,19 +2,20 @@
 , fetchFromGitHub
 , cmake
 , pkgconfig
+, IOKit
 , libftdi1
 , libusb-compat-0_1
 }:
 
 stdenv.mkDerivation rec {
   pname = "fujprog";
-  version = "4.6";
+  version = "4.8";
 
   src = fetchFromGitHub {
     owner = "kost";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "04l5rrfrp3pflwz5ncwvb4ibbsqib2259m23bzfi8m80aj216shd";
+    sha256 = "08kzkzd5a1wfd1aycywdynxh3qy6n7z9i8lihkahmb4xac3chmz5";
   };
 
   nativeBuildInputs = [
@@ -25,13 +26,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libftdi1
     libusb-compat-0_1
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with stdenv.lib; {
-    description = "JTAG programmer for the ULX3S and ULX2S open hardware FPGA development boards.";
+    description = "JTAG programmer for the ULX3S and ULX2S open hardware FPGA development boards";
     homepage = "https://github.com/kost/fujprog";
     license = licenses.bsd2;
     maintainers = with maintainers; [ trepetti ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.all;
+    changelog = "https://github.com/kost/fujprog/releases/tag/v${version}";
   };
 }

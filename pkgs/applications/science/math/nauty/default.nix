@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "27r1";
   src = fetchurl {
     url = "http://pallini.di.uniroma1.it/nauty${version}.tar.gz";
-    sha256 = "1nym0p2djws8ylkpr0kgpxfa6fxdlh46cmvz0gn5vd02jzgs0aww";
+    sha256 = "0xsfqfcknbd6g6wzpa5l7crmmk3bf3zjh37rhylq6b20dqcmvjkn";
   };
   outputs = [ "out" "dev" ];
   configureFlags = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = ''Programs for computing automorphism groups of graphs and digraphs'';
     license = licenses.asl20;
-    maintainers = with maintainers; [ raskin timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
     # I'm not sure if the filename will remain the same for future changelog or
     # if it will track changes to minor releases. Lets see. Better than nothing

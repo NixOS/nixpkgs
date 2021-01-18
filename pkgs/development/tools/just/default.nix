@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.7.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07fjixz8y5rxfwpyr1kiimnn27jhc20gacd17i0yvfcpy5qf8z5p";
+    sha256 = "4B72VYQ+HBvhGQNl577DuZpvWNIvv/6fejRQtVKtFKY=";
   };
 
-  cargoSha256 = "1zn0kiqi8p25lscjd661gczay631nwzadl36cfzqnbww6blayy1j";
+  cargoSha256 = "uOOpDRWPSoH49NTu82rDxxDR/2icoe4ECxVQb/J/45w=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,9 +38,9 @@ rustPlatform.buildRustPackage rec {
         -e "s@#!/usr/bin/env bash@#!${bash}/bin/sh@g"
   '';
 
-  # Skip "edit" when running "cargo test",
-  # since this test case needs "cat".
-  checkFlagsArray = [ "--skip=edit" ];
+  # Skip "edit" when running "cargo test", since this test case needs "cat".
+  # Skip "choose" when running "cargo test", since this test case needs "fzf".
+  checkFlags = [ "--skip=choose" "--skip=edit" ];
 
   meta = with stdenv.lib; {
     description = "A handy way to save and run project-specific commands";

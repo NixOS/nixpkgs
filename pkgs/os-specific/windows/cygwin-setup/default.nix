@@ -2,7 +2,7 @@
 , zlib, bzip2, lzma, libgcrypt
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "cygwin-setup";

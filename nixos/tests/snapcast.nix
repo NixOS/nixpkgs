@@ -6,7 +6,7 @@ let
   httpPort = 10080;
 in {
   name = "snapcast";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ hexa ];
   };
 

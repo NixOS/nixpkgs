@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, file, libuuid, e2fsprogs, zlib, bzip2 }:
+{ lib, stdenv, fetchurl, fetchpatch, file, libuuid, e2fsprogs, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   version = "0.3.2";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ file libuuid e2fsprogs zlib bzip2 ];
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Recover / undelete files from ext3 or ext4 partitions";
     longDescription = ''
       ext4magic can recover/undelete files from ext3 or ext4 partitions

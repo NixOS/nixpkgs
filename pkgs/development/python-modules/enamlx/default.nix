@@ -8,14 +8,20 @@
 
 buildPythonPackage rec {
   pname = "enamlx";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "frmdstryr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yh7bw9ibk758bym5w2wk7sifghf1hkxa8sd719q8nsz279cpfc0";
+    sha256 = "1rlrx3cw6h1zl9svnqbzwdfy8469qa1y7w6576lbhdwpfhpipscy";
   };
+
+  patches = [
+    # Minimally modified version of https://github.com/frmdstryr/enamlx/commit/16df11227b8cee724624541d274e481802ea67e3
+    # (without the change to setup.py), already on master and expected in the first post-0.4.3 release
+    ./replace-unicode-with-str.patch
+  ];
 
   propagatedBuildInputs = [
     enaml

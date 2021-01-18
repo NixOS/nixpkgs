@@ -1,5 +1,5 @@
-{ config, stdenv, fetchurl, fetchFromGitHub, fetchpatch
-, addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
+{ config, lib, stdenv, fetchFromGitHub, fetchpatch
+, addOpenGLRunpath, docutils, perl, pkg-config, python3, wafHook, which
 , ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null
 , CoreFoundation, Cocoa, CoreAudio, MediaPlayer
@@ -31,36 +31,32 @@
   , mesa   ? null
 
 , alsaSupport        ? stdenv.isLinux, alsaLib       ? null
+, archiveSupport     ? true,           libarchive    ? null
 , bluraySupport      ? true,           libbluray     ? null
 , bs2bSupport        ? true,           libbs2b       ? null
 , cacaSupport        ? true,           libcaca       ? null
 , cmsSupport         ? true,           lcms2         ? null
 , dvdnavSupport      ? stdenv.isLinux, libdvdnav     ? null
+, jackaudioSupport   ? false,          libjack2      ? null
 , libpngSupport      ? true,           libpng        ? null
+, openalSupport      ? true,           openalSoft    ? null
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , rubberbandSupport  ? stdenv.isLinux, rubberband    ? null
-# NOTE: samba support should be removed on the next mpv release, see also:
-# https://github.com/NixOS/nixpkgs/pull/89145#issuecomment-636424362
-# Please remove this line on the next mpv release.
-, sambaSupport       ? false,          samba         ? null
 , screenSaverSupport ? true,           libXScrnSaver ? null
 , sdl2Support        ? true,           SDL2          ? null
-, sndioSupport       ? true,           sndio         ? null
+, sixelSupport       ? false,          libsixel      ? null
 , speexSupport       ? true,           speex         ? null
 , swiftSupport       ? false,          swift         ? null
 , theoraSupport      ? true,           libtheora     ? null
 , vaapiSupport       ? stdenv.isLinux, libva         ? null
+, vapoursynthSupport ? false,          vapoursynth   ? null
 , vdpauSupport       ? true,           libvdpau      ? null
 , xineramaSupport    ? stdenv.isLinux, libXinerama   ? null
 , xvSupport          ? stdenv.isLinux, libXv         ? null
 , zimgSupport        ? true,           zimg          ? null
-, archiveSupport     ? true,           libarchive    ? null
-, jackaudioSupport   ? false,          libjack2      ? null
-, openalSupport      ? true,           openalSoft    ? null
-, vapoursynthSupport ? false,          vapoursynth   ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   available = x: x != null;
@@ -80,9 +76,8 @@ assert openalSupport      -> available openalSoft;
 assert pulseSupport       -> available libpulseaudio;
 assert rubberbandSupport  -> available rubberband;
 assert screenSaverSupport -> available libXScrnSaver;
-assert sambaSupport       -> available samba;
 assert sdl2Support        -> available SDL2;
-assert sndioSupport       -> available sndio;
+assert sixelSupport       -> available libsixel;
 assert speexSupport       -> available speex;
 assert theoraSupport      -> available libtheora;
 assert vaapiSupport       -> available libva;
@@ -100,14 +95,22 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mpv";
-  version = "0.32.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner  = "mpv-player";
     repo   = "mpv";
     rev    = "v${version}";
-    sha256 = "0kmy1q0hp87vq4rpv7py04x8bpg1wmlzaibavmkf713jqp6qy596";
+    sha256 = "sha256-3l32qQBpvWVjbLp5CZtO039oDQeH7C/cNAKtJxrzlRk=";
   };
+
+  patches = [
+    # To make mpv build with libplacebo 3.104.0:
+    (fetchpatch { # vo_gpu: placebo: update for upstream API changes
+      url = "https://github.com/mpv-player/mpv/commit/7c4465cefb27d4e0d07535d368febdf77b579566.patch";
+      sha256 = "1yfc6220ak5kc5kf7zklmsa944nr9q0qaa27l507pgrmvcyiyzrx";
+    })
+  ];
 
   postPatch = ''
     patchShebangs ./TOOLS/
@@ -140,17 +143,16 @@ in stdenv.mkDerivation rec {
     (enableFeature cddaSupport     "cdda")
     (enableFeature dvdnavSupport   "dvdnav")
     (enableFeature openalSupport   "openal")
-    (enableFeature sambaSupport    "libsmbclient")
     (enableFeature sdl2Support     "sdl2")
-    (enableFeature sndioSupport    "sndio")
+    (enableFeature sixelSupport    "sixel")
     (enableFeature vaapiSupport    "vaapi")
     (enableFeature waylandSupport  "wayland")
     (enableFeature stdenv.isLinux  "dvbin")
   ] # Disable whilst Swift isn't supported
-    ++ stdenv.lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
+    ++ lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
 
   nativeBuildInputs = [
-    addOpenGLRunpath docutils perl pkgconfig python3 wafHook which
+    addOpenGLRunpath docutils perl pkg-config python3 wafHook which
   ]
     ++ optional swiftSupport swift;
 
@@ -168,10 +170,9 @@ in stdenv.mkDerivation rec {
     ++ optional openalSupport      openalSoft
     ++ optional pulseSupport       libpulseaudio
     ++ optional rubberbandSupport  rubberband
-    ++ optional sambaSupport       samba
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional sdl2Support        SDL2
-    ++ optional sndioSupport       sndio
+    ++ optional sixelSupport       libsixel
     ++ optional speexSupport       speex
     ++ optional theoraSupport      libtheora
     ++ optional vaapiSupport       libva
@@ -196,20 +197,15 @@ in stdenv.mkDerivation rec {
     python3 TOOLS/osxbundle.py -s build/mpv
   '';
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
-    # Fix cocoa backend. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/mpv-player/mpv/commit/188169854313b99d01da8f69fe129f0a487eb7c4.patch";
-      sha256 = "062sz4666prb2wg1rn5q8brqkzlq6lxn8sxic78a8lb0125c01f7";
-    })
-  ];
-
   postInstall = ''
     # Use a standard font
     mkdir -p $out/share/mpv
     ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
 
+    cp TOOLS/mpv_identify.sh $out/bin
     cp TOOLS/umpv $out/bin
+    cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
+    sed -i '/Icon=/ ! s/mpv/umpv/g' $out/share/applications/umpv.desktop
   '' + optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r build/mpv.app $out/Applications
@@ -221,7 +217,7 @@ in stdenv.mkDerivation rec {
     addOpenGLRunpath $out/bin/mpv
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = "https://mpv.io";
     license = licenses.gpl2Plus;

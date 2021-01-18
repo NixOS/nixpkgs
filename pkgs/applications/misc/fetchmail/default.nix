@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl }:
 
 let
-  version = "6.4.8";
+  version = "6.4.14";
 in
 stdenv.mkDerivation {
   pname = "fetchmail";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/fetchmail/fetchmail-${version}.tar.xz";
-    sha256 = "1g893dr3982vrqzxybmflnqfmd1q6yipd9krvxn0avhlrrp97k96";
+    sha256 = "1jxxb3qyrh7118fwqa3bhirjh97j2w8r71s8vcb6vp3w1wwhfis2";
   };
 
   buildInputs = [ openssl ];
@@ -28,8 +28,8 @@ stdenv.mkDerivation {
       IPSEC.
     '';
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.peti ];
-    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.peti ];
+    license = lib.licenses.gpl2Plus;
   };
 }

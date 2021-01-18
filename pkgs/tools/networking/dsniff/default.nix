@@ -1,4 +1,10 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl }:
+{ gcc9Stdenv, lib, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl
+, rpcsvc-proto, libtirpc, libnsl
+}:
+
+# We compile with GCC 9 since GCC 10 segfaults on the code
+# (see https://bugzilla.redhat.com/show_bug.cgi?id=1862809).
+
 let
   /*
   dsniff's build system unconditionnaly wants static libraries and does not
@@ -36,7 +42,7 @@ let
     inherit (openssl) name;
     paths = with openssl.override { static = true; }; [ out dev ];
   };
-in stdenv.mkDerivation {
+in gcc9Stdenv.mkDerivation rec {
   pname = "dsniff";
   version = "2.4b1";
   # upstream is so old that nearly every distribution packages the beta version.
@@ -47,14 +53,15 @@ in stdenv.mkDerivation {
     domain = "salsa.debian.org";
     owner = "pkg-security-team";
     repo = "dsniff";
-    rev = "debian%2F2.4b1%2Bdebian-29"; # %2B = urlquote("+"), %2F = urlquote("/")
+    rev = "debian/${version}+debian-29";
     sha256 = "10zz9krf65jsqvlcr72ycp5cd27xwr18jkc38zqp2i4j6x0caj2g";
     name = "dsniff.tar.gz";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ glib pcap ];
-  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ldl";
+  nativeBuildInputs = [ autoreconfHook rpcsvc-proto ];
+  buildInputs = [ glib pcap libtirpc libnsl ];
+  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ldl -ltirpc";
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
   postPatch = ''
     for patch in debian/patches/*.patch; do
       patch < $patch
@@ -68,7 +75,7 @@ in stdenv.mkDerivation {
     "--with-openssl=${ssl}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "collection of tools for network auditing and penetration testing";
     longDescription = ''
       dsniff, filesnarf, mailsnarf, msgsnarf, urlsnarf, and webspy passively monitor a network for interesting data (passwords, e-mail, files, etc.). arpspoof, dnsspoof, and macof facilitate the interception of network traffic normally unavailable to an attacker (e.g, due to layer-2 switching). sshmitm and webmitm implement active monkey-in-the-middle attacks against redirected SSH and HTTPS sessions by exploiting weak bindings in ad-hoc PKI.

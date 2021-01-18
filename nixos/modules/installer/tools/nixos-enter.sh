@@ -69,6 +69,9 @@ mount --rbind /sys "$mountPoint/sys"
 
     # Run the activation script. Set $LOCALE_ARCHIVE to supress some Perl locale warnings.
     LOCALE_ARCHIVE="$system/sw/lib/locale/locale-archive" chroot "$mountPoint" "$system/activate" 1>&2 || true
+
+    # Create /tmp
+    chroot "$mountPoint" systemd-tmpfiles --create --remove --exclude-prefix=/dev 1>&2 || true
 )
 
 exec chroot "$mountPoint" "${command[@]}"

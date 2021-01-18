@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, ragel, python3
-, coreutils, gnused, utillinux
+, coreutils, gnused, util-linux
 , boost
 , withStatic ? false # build only shared libs by default, build static+shared if true
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     cmake ragel python3
     # Consider simply using busybox for these
     # Need at least: rev, sed, cut, nm
-    coreutils gnused utillinux
+    coreutils gnused util-linux
   ];
 
   cmakeFlags = [

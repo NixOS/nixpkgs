@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "fet-sh";
-  version = "1.5";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "6gk";
     repo = "fet.sh";
     rev = "v${version}";
-    sha256 = "15336cayv3rb79y7f0v0qvn6nhr5aqr8479ayp0r0sihn5mkfg35";
+    sha256 = "1czjsyagwzbf8l023l1saz9ssb1hc245a64nfwc8wl0cn4h9byky";
   };
 
   dontBuild = true;

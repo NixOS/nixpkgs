@@ -29,11 +29,12 @@ buildPythonPackage rec {
     ln -s ${skeinJar} skein/java/skein.jar
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://jcristharif.com/skein";
     description = "A tool and library for easily deploying applications on Apache YARN";
     license = licenses.bsd3;
     maintainers = with maintainers; [ alexbiehl ];
+    broken = true; # maven repo src isn't stable
   };
 
 }

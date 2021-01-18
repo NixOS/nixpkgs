@@ -135,8 +135,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "avast-tl";
-    repo = "retdec";
-    name = "retdec-${version}";
+    repo = pname;
     rev = "refs/tags/v${version}";
     sha256 = "0chky656lsddn20bnm3pmz6ix20y4a0y8swwr42hrhi01vkhmzrp";
   };
@@ -216,8 +215,6 @@ in stdenv.mkDerivation rec {
     substituteInPlace scripts/retdec-config.py --replace /usr/bin/time ${time}/bin/time
     substituteInPlace scripts/retdec-unpacker.py --replace "'upx'" "'${upx}/bin/upx'"
   '';
-
-  enableParallelBuilding = true;
 
   doInstallCheck = true;
   installCheckPhase = ''

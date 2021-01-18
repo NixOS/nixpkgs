@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "ffmpegthumbs";
+  pname = "ffmpegthumbs";
   meta = {
     license = with lib.licenses; [ gpl2 bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];

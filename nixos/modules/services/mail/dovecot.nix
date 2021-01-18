@@ -84,11 +84,9 @@ let
 
     (
       optionalString (cfg.mailboxes != {}) ''
-        protocol imap {
-          namespace inbox {
-            inbox=yes
-            ${concatStringsSep "\n" (map mailboxConfig (attrValues cfg.mailboxes))}
-          }
+        namespace inbox {
+          inbox=yes
+          ${concatStringsSep "\n" (map mailboxConfig (attrValues cfg.mailboxes))}
         }
       ''
     )
@@ -429,12 +427,12 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ cfg.configFile modulesDir ];
 
+      startLimitIntervalSec = 60;  # 1 min
       serviceConfig = {
         ExecStart = "${dovecotPkg}/sbin/dovecot -F";
         ExecReload = "${dovecotPkg}/sbin/doveadm reload";
         Restart = "on-failure";
         RestartSec = "1s";
-        StartLimitInterval = "1min";
         RuntimeDirectory = [ "dovecot2" ];
       };
 

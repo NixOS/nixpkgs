@@ -32,7 +32,7 @@ in
       ${gopherHost}.wait_for_unit("spacecookie.service")
       client.wait_for_unit("network.target")
 
-      fileResponse = client.succeed("curl -s gopher://${gopherHost}//${fileName}")
+      fileResponse = client.succeed("curl -f -s gopher://${gopherHost}//${fileName}")
 
       # the file response should return our created file exactly
       if not (fileResponse == "${fileContent}\n"):
@@ -41,7 +41,7 @@ in
       # sanity check on the directory listing: we serve a directory and a file
       # via gopher, so the directory listing should have exactly two entries,
       # one with gopher file type 0 (file) and one with file type 1 (directory).
-      dirResponse = client.succeed("curl -s gopher://${gopherHost}")
+      dirResponse = client.succeed("curl -f -s gopher://${gopherHost}")
       dirEntries = [l[0] for l in dirResponse.split("\n") if len(l) > 0]
       dirEntries.sort()
 

@@ -10,11 +10,11 @@
 buildPythonPackage rec {
   pname = "networkx";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
-  version = "2.4";
+  version = "2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0r2wr7aqay9fwjrgk35fkjzk8lvvb4i4df7ndaqzkr4ndw5zzx7q";
+    sha256 = "7978955423fbc9639c10498878be59caf99b44dc304c2286162fd24b458c1602";
   };
 
   propagatedBuildInputs = [ decorator setuptools ];

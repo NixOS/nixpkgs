@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "randomconv";
   version = "0.1.3";
 
+  useDune2 = true;
+
   src = fetchurl {
     url = "https://github.com/hannesm/randomconv/releases/download/v${version}/randomconv-v${version}.tbz";
     sha256 = "1iv3r0s5kqxs893b0d55f0r62k777haiahfkkvvfbqwgqsm6la4v";

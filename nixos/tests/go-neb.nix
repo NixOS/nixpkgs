@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }:
 {
   name = "go-neb";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ hexa maralorn ];
   };
 
@@ -34,7 +34,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     start_all()
     server.wait_for_unit("go-neb.service")
     server.wait_until_succeeds(
-        "curl -L http://localhost:4050/services/hooks/d2lraXBlZGlhX3NlcnZpY2U"
+        "curl -fL http://localhost:4050/services/hooks/d2lraXBlZGlhX3NlcnZpY2U"
     )
     server.wait_until_succeeds(
         "journalctl -eu go-neb -o cat | grep -q service_id=wikipedia_service"

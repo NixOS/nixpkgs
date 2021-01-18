@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pbr
 , isPy3k
 }:
 
-buildPythonPackage (rec {
+buildPythonPackage rec {
   pname = "linecache2";
   version = "1.0.0";
 
@@ -18,13 +18,9 @@ buildPythonPackage (rec {
   # circular dependencies for tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A backport of linecache to older supported Pythons";
     homepage = "https://github.com/testing-cabal/linecache2";
     license = licenses.psfl;
   };
-# TODO: move into main set, this was to avoid a rebuild
-} // stdenv.lib.optionalAttrs (!isPy3k ) {
-  # syntax error in tests. Tests are likely Python 3 only.
-  dontUsePythonRecompileBytecode = !isPy3k;
-})
+}

@@ -1,31 +1,17 @@
-{ stdenv, lib, fetchurl, perlPackages, nix, dmidecode, pciutils, usbutils, iproute, nettools
+{ stdenv, lib, perlPackages, nix, dmidecode, pciutils, usbutils, iproute, nettools
 , fetchFromGitHub, makeWrapper
 }:
 
 perlPackages.buildPerlPackage rec {
   pname = "FusionInventory-Agent";
-  version = "2.3.21";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "fusioninventory";
     repo = "fusioninventory-agent";
     rev = version;
-    sha256 = "034clffcn0agx85macjgml4lyhvvck7idn94pqd2c77pk6crvw2y";
+    sha256 = "1hbp5a9m03n6a80xc8z640zs71qhqk4ifafr6fp0vvzzvq097ip2";
   };
-
-  patches = [
-    ./remove_software_test.patch
-    # support for os-release file
-    (fetchurl {
-      url = "https://github.com/fusioninventory/fusioninventory-agent/pull/396.diff";
-      sha256 = "0bxrjmff80ab01n23xggci32ajsah6zvcmz5x4hj6ayy6dzwi6jb";
-    })
-    # support for Nix software inventory
-    (fetchurl {
-      url = "https://github.com/fusioninventory/fusioninventory-agent/pull/397.diff";
-      sha256 = "0pyf7mp0zsb3zcqb6yysr1zfp54p9ciwjn1pzayw6s9flmcgrmbw";
-    })
-    ];
 
   postPatch = ''
 
@@ -68,6 +54,9 @@ perlPackages.buildPerlPackage rec {
     XMLTreePP
   ];
 
+  # Test fails due to "Argument list too long"
+  doCheck = false;
+
   installPhase = ''
     mkdir -p $out
 
@@ -84,10 +73,10 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.fusioninventory.org";
     description = "FusionInventory unified Agent for UNIX, Linux, Windows and MacOSX";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ maintainers.phile314 ];
   };
 }

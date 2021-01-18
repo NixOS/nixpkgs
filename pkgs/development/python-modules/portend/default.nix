@@ -1,16 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , pytest, setuptools_scm, tempora, pytest-black, pytestcov }:
 
 buildPythonPackage rec {
   pname = "portend";
-  version = "2.6";
+  version = "2.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "600dd54175e17e9347e5f3d4217aa8bcf4bf4fa5ffbc4df034e5ec1ba7cdaff5";
+    sha256 = "ac0e57ae557f75dc47467579980af152e8f60bc2139547eff8469777d9110379";
   };
 
-  patches = [ ./black-19.10b0.patch ];
   postPatch = ''
     substituteInPlace pytest.ini --replace "--flake8" ""
   '';
@@ -28,7 +27,7 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Monitor TCP ports for bound or unbound states";
     homepage = "https://github.com/jaraco/portend";
     license = licenses.bsd3;

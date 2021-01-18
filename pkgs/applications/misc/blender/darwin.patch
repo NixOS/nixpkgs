@@ -1,24 +1,26 @@
 diff a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platform/platform_apple.cmake
 --- a/build_files/cmake/platform/platform_apple.cmake
 +++ b/build_files/cmake/platform/platform_apple.cmake
-@@ -35,7 +35,6 @@ else()
+@@ -80,7 +80,6 @@ else()
    message(STATUS "Using pre-compiled LIBDIR: ${LIBDIR}")
  endif()
  if(NOT EXISTS "${LIBDIR}/")
 -  message(FATAL_ERROR "Mac OSX requires pre-compiled libs at: '${LIBDIR}'")
  endif()
  
- if(WITH_OPENAL)
-@@ -86,7 +85,7 @@ endif()
- if(WITH_CODEC_SNDFILE)
-   set(LIBSNDFILE ${LIBDIR}/sndfile)
-   set(LIBSNDFILE_INCLUDE_DIRS ${LIBSNDFILE}/include)
--  set(LIBSNDFILE_LIBRARIES sndfile FLAC ogg vorbis vorbisenc)
-+  set(LIBSNDFILE_LIBRARIES sndfile)
-   set(LIBSNDFILE_LIBPATH ${LIBSNDFILE}/lib ${LIBDIR}/ffmpeg/lib)  # TODO, deprecate
- endif()
+ # -------------------------------------------------------------------------
+@@ -112,10 +111,6 @@ if(WITH_CODEC_SNDFILE)
+   find_library(_sndfile_VORBIS_LIBRARY NAMES vorbis HINTS ${LIBDIR}/ffmpeg/lib)
+   find_library(_sndfile_VORBISENC_LIBRARY NAMES vorbisenc HINTS ${LIBDIR}/ffmpeg/lib)
+   list(APPEND LIBSNDFILE_LIBRARIES
+-    ${_sndfile_FLAC_LIBRARY}
+-    ${_sndfile_OGG_LIBRARY}
+-    ${_sndfile_VORBIS_LIBRARY}
+-    ${_sndfile_VORBISENC_LIBRARY}
+   )
  
-@@ -97,7 +96,7 @@ if(WITH_PYTHON)
+   print_found_status("SndFile libraries" "${LIBSNDFILE_LIBRARIES}")
+@@ -132,7 +127,7 @@ if(WITH_PYTHON)
      # normally cached but not since we include them with blender
      set(PYTHON_INCLUDE_DIR "${LIBDIR}/python/include/python${PYTHON_VERSION}m")
      set(PYTHON_EXECUTABLE "${LIBDIR}/python/bin/python${PYTHON_VERSION}m")
@@ -27,40 +29,18 @@ diff a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platf
      set(PYTHON_LIBPATH "${LIBDIR}/python/lib/python${PYTHON_VERSION}")
      # set(PYTHON_LINKFLAGS "-u _PyMac_Error")  # won't  build with this enabled
    else()
-@@ -162,10 +161,7 @@ if(WITH_CODEC_FFMPEG)
-   set(FFMPEG_INCLUDE_DIRS ${FFMPEG}/include)
-   set(FFMPEG_LIBRARIES
+@@ -173,9 +168,7 @@ endif()
+ if(WITH_CODEC_FFMPEG)
+   set(FFMPEG_FIND_COMPONENTS
      avcodec avdevice avformat avutil
--    mp3lame swscale x264 xvidcore
--    theora theoradec theoraenc
--    vorbis vorbisenc vorbisfile ogg opus
--    vpx swresample)
-+    swscale swresample)
-   set(FFMPEG_LIBPATH ${FFMPEG}/lib)
+-    mp3lame ogg opus swresample swscale
+-    theora theoradec theoraenc vorbis vorbisenc
+-    vorbisfile vpx x264 xvidcore)
++    swresample swscale)
+   find_package(FFmpeg)
  endif()
  
-@@ -206,14 +202,14 @@ if(WITH_OPENCOLLADA)
-   set(OPENCOLLADA ${LIBDIR}/opencollada)
- 
-   set(OPENCOLLADA_INCLUDE_DIRS
--    ${LIBDIR}/opencollada/include/COLLADAStreamWriter
--    ${LIBDIR}/opencollada/include/COLLADABaseUtils
--    ${LIBDIR}/opencollada/include/COLLADAFramework
--    ${LIBDIR}/opencollada/include/COLLADASaxFrameworkLoader
--    ${LIBDIR}/opencollada/include/GeneratedSaxParser
-+    ${LIBDIR}/opencollada/include/opencollada/COLLADAStreamWriter
-+    ${LIBDIR}/opencollada/include/opencollada/COLLADABaseUtils
-+    ${LIBDIR}/opencollada/include/opencollada/COLLADAFramework
-+    ${LIBDIR}/opencollada/include/opencollada/COLLADASaxFrameworkLoader
-+    ${LIBDIR}/opencollada/include/opencollada/GeneratedSaxParser
-   )
- 
--  set(OPENCOLLADA_LIBPATH ${OPENCOLLADA}/lib)
-+  set(OPENCOLLADA_LIBPATH ${OPENCOLLADA}/lib/opencollada)
-   set(OPENCOLLADA_LIBRARIES
-     OpenCOLLADASaxFrameworkLoader
-     -lOpenCOLLADAFramework
-@@ -277,14 +273,13 @@ if(WITH_BOOST)
+@@ -266,7 +259,6 @@ if(WITH_BOOST)
  endif()
  
  if(WITH_INTERNATIONAL OR WITH_CODEC_FFMPEG)
@@ -68,25 +48,8 @@ diff a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platf
  endif()
  
  if(WITH_OPENIMAGEIO)
-   set(OPENIMAGEIO ${LIBDIR}/openimageio)
-   set(OPENIMAGEIO_INCLUDE_DIRS ${OPENIMAGEIO}/include)
-   set(OPENIMAGEIO_LIBRARIES
--    ${OPENIMAGEIO}/lib/libOpenImageIO.a
-+    ${OPENIMAGEIO}/lib/libOpenImageIO.dylib
-     ${PNG_LIBRARIES}
-     ${JPEG_LIBRARIES}
-     ${TIFF_LIBRARY}
-@@ -307,7 +302,7 @@ endif()
- if(WITH_OPENCOLORIO)
-   set(OPENCOLORIO ${LIBDIR}/opencolorio)
-   set(OPENCOLORIO_INCLUDE_DIRS ${OPENCOLORIO}/include)
--  set(OPENCOLORIO_LIBRARIES OpenColorIO tinyxml yaml-cpp)
-+  set(OPENCOLORIO_LIBRARIES OpenColorIO)
-   set(OPENCOLORIO_LIBPATH ${OPENCOLORIO}/lib)
- endif()
- 
-@@ -443,7 +438,7 @@ else()
-   set(CMAKE_CXX_FLAGS_RELEASE "-mdynamic-no-pic -fno-strict-aliasing")
+@@ -439,7 +431,7 @@ else()
+   set(CMAKE_CXX_FLAGS_RELEASE "-O2 -mdynamic-no-pic")
  endif()
  
 -if(${XCODE_VERSION} VERSION_EQUAL 5 OR ${XCODE_VERSION} VERSION_GREATER 5)

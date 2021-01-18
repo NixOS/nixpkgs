@@ -14,6 +14,7 @@
 , python-baseconv
 , pyyaml
 , uvicorn
+, httpx
 # Check Inputs
 , pytestCheckHook
 , pytestrunner
@@ -26,13 +27,13 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.46";
+  version = "0.53";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "datasette";
     rev = version;
-    sha256 = "0g4dfq5ykifa9628cb4i7gvx98p8hvb99gzfxk3bkvq1v9p4kcqq";
+    sha256 = "1rsgxkvav1qy2ia2csm1jvabd8klh3ly8719979gdlx2il1cjjkz";
   };
 
   nativeBuildInputs = [ pytestrunner ];
@@ -52,6 +53,8 @@ buildPythonPackage rec {
     pyyaml
     uvicorn
     setuptools
+    httpx
+    asgiref
   ];
 
   checkInputs = [
@@ -59,7 +62,6 @@ buildPythonPackage rec {
     pytest-asyncio
     aiohttp
     beautifulsoup4
-    asgiref
   ];
 
   postConfigure = ''
@@ -73,19 +75,26 @@ buildPythonPackage rec {
       --replace "PyYAML~=5.3" "PyYAML"
   '';
 
-  # test_html is very slow
-  # test_black fails on darwin
-  dontUseSetuptoolsCheck = true;
+  # takes 30-180 mins to run entire test suite, not worth the cpu resources, slows down reviews
+  # with pytest-xdist, it still takes around 10mins with 32 cores
+  # just run the csv tests, as this should give some indictation of correctness
   pytestFlagsArray = [
-    "--ignore=tests/test_html.py"
-    "--ignore=tests/test_docs.py"
-    "--ignore=tests/test_black.py"
+    "tests/test_csv.py"
   ];
   disabledTests = [
     "facet"
     "_invalid_database" # checks error message when connecting to invalid database
   ];
-  pythonImportsCheck = [ "datasette" ];
+
+  pythonImportsCheck = [
+    "datasette"
+    "datasette.cli"
+    "datasette.app"
+    "datasette.database"
+    "datasette.renderer"
+    "datasette.tracer"
+    "datasette.plugins"
+  ];
 
   meta = with lib; {
     description = "An instant JSON API for your SQLite databases";

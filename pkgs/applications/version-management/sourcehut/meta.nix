@@ -1,11 +1,11 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ lib, stdenv, fetchgit, buildPythonPackage
 , python
 , buildGoModule
 , pgpy, srht, redis, bcrypt, qrcode, stripe, zxcvbn, alembic, pystache
 , sshpubkeys, weasyprint }:
 
 let
-  version = "0.50.2";
+  version = "0.51.2";
 
   buildAPI = src: buildGoModule {
     inherit src version;
@@ -20,7 +20,7 @@ in buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     rev = version;
-    sha256 = "utS/HMFtHPAP1QRYd4WAFApyBPRY5UD72ANmC/SU93c=";
+    sha256 = "0c9y1hzx3dj0awxrhkzrcsmy6q9fqm6v6dbp9y1ria3v47xa3nv7";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -48,7 +48,9 @@ in buildPythonPackage rec {
     cp ${buildAPI "${src}/api"}/bin/api $out/bin/metasrht-api
   '';
 
-  meta = with stdenv.lib; {
+  dontUseSetuptoolsCheck = true;
+
+  meta = with lib; {
     homepage = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     description = "Account management service for the sr.ht network";
     license = licenses.agpl3;

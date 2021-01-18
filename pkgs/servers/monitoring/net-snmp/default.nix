@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, removeReferencesTo
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, removeReferencesTo
 , file, openssl, perl, perlPackages, unzip, nettools, ncurses }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       "--with-openssl=${openssl.dev}"
       "--disable-embedded-perl"
       "--without-perl-modules"
-    ] ++ stdenv.lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
+    ] ++ lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
 
   postPatch = ''
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     find $lib/lib -type f -exec remove-references-to -t $dev '{}' +
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Clients and server for the SNMP network monitoring protocol";
     homepage = "http://net-snmp.sourceforge.net/";
     license = licenses.bsd3;

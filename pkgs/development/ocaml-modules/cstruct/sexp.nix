@@ -6,7 +6,7 @@ else
 
 buildDunePackage rec {
 	pname = "cstruct-sexp";
-	inherit (cstruct) version src meta;
+	inherit (cstruct) version src useDune2 meta;
 
 	doCheck = lib.versionAtLeast ocaml.version "4.03";
 	checkInputs = lib.optional doCheck alcotest;

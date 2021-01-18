@@ -10,6 +10,8 @@ buildDunePackage rec {
   pname = "earlybird";
   version = "0.1.5";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.04";
 
   src = fetchurl {

@@ -1,6 +1,6 @@
 # Configuration for `ssmtp', a trivial mail transfer agent that can
 # replace sendmail/postfix on simple systems.  It delivers email
-# directly to an SMTP server defined in its configuration file, wihout
+# directly to an SMTP server defined in its configuration file, without
 # queueing mail locally.
 
 { config, lib, pkgs, ... }:
@@ -142,6 +142,13 @@ in
 
   config = mkIf cfg.enable {
 
+    assertions = [
+      {
+        assertion = cfg.useSTARTTLS -> cfg.useTLS;
+        message = "services.ssmtp.useSTARTTLS has no effect without services.ssmtp.useTLS";
+      }
+    ];
+
     services.ssmtp.settings = mkMerge [
       ({
         MailHub = cfg.hostName;
@@ -155,15 +162,16 @@ in
       (mkIf (cfg.authPassFile != null) { AuthPassFile = cfg.authPassFile; })
     ];
 
-    environment.etc."ssmtp/ssmtp.conf".source =
-      let
-        toStr = value:
+    # careful here: ssmtp REQUIRES all config lines to end with a newline char!
+    environment.etc."ssmtp/ssmtp.conf".text = with generators; toKeyValue {
+      mkKeyValue = mkKeyValueDefault {
+        mkValueString = value:
           if value == true then "YES"
           else if value == false then "NO"
-          else builtins.toString value
+          else mkValueStringDefault {} value
         ;
-      in
-        pkgs.writeText "ssmtp.conf" (concatStringsSep "\n" (mapAttrsToList (key: value: "${key}=${toStr value}") cfg.settings));
+      } "=";
+    } cfg.settings;
 
     environment.systemPackages = [pkgs.ssmtp];
 

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, makeWrapper, bash, coreutils, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "zookeeper";
-  version = "3.4.13";
+  version = "3.6.2";
 
   src = fetchurl {
-    url = "mirror://apache/zookeeper/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0karf13zks3ba2rdmma2lyabvmasc04cjmgxp227f0nj8677kvbw";
+    url = "mirror://apache/zookeeper/${pname}-${version}/apache-${pname}-${version}-bin.tar.gz";
+    sha512 = "caff5111bb6876b7124760bc006e6fa2523efa54b99321a3c9cd8192ea0d5596abc7d70a054b1aac9b20a411407dae7611c7aba870c23bff28eb1643ba499199";
   };
 
   buildInputs = [ makeWrapper jre ];
@@ -15,40 +15,28 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
-    cp -R conf docs lib ${pname}-${version}.jar $out
+    cp -R conf docs lib $out
+    # Without this, zkCli.sh tries creating a log file in the Nix store.
+    substituteInPlace $out/conf/log4j.properties \
+        --replace 'INFO, RFAAUDIT' 'INFO, CONSOLE'
     mkdir -p $out/bin
-    cp -R bin/{zkCli,zkCleanup,zkEnv,zkServer}.sh $out/bin
+    cp -R bin/{zkCli,zkCleanup,zkEnv,zkServer,zkSnapShotToolkit,zkTxnLogToolkit}.sh $out/bin
     patchShebangs $out/bin
     substituteInPlace $out/bin/zkServer.sh \
         --replace /bin/echo ${coreutils}/bin/echo
-    for i in $out/bin/{zkCli,zkCleanup,zkServer}.sh; do
+    for i in $out/bin/{zkCli,zkCleanup,zkServer,zkSnapShotToolkit,zkTxnLogToolkit}.sh; do
       wrapProgram $i \
         --set JAVA_HOME "${jre}" \
         --prefix PATH : "${bash}/bin"
     done
     chmod -x $out/bin/zkEnv.sh
-
-    mkdir -p $out/share/zooinspector
-    cp -r contrib/ZooInspector/{${pname}-${version}-ZooInspector.jar,icons,lib,config} $out/share/zooinspector
-
-    classpath="$out/${pname}-${version}.jar:$out/share/zooinspector/${pname}-${version}-ZooInspector.jar"
-    for jar in $out/lib/*.jar $out/share/zooinspector/lib/*.jar; do
-      classpath="$classpath:$jar"
-    done
-
-    cat << EOF > $out/bin/zooInspector.sh
-    #!${runtimeShell}
-    cd $out/share/zooinspector
-    exec ${jre}/bin/java -cp $classpath org.apache.zookeeper.inspector.ZooInspector
-    EOF
-    chmod +x $out/bin/zooInspector.sh
   '';
 
-  meta = with stdenv.lib; {
-    homepage = "http://zookeeper.apache.org";
+  meta = with lib; {
+    homepage = "https://zookeeper.apache.org";
     description = "Apache Zookeeper";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nathan-gs cstrahan pradeepchhetri ];
+    maintainers = with maintainers; [ nathan-gs cstrahan pradeepchhetri ztzg ];
     platforms = platforms.unix;
   };
 }

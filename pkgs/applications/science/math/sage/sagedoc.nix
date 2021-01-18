@@ -1,6 +1,6 @@
 { stdenv
 , sage-with-env
-, python
+, python3
 , maxima-ecl
 , tachyon
 , jmol
@@ -17,16 +17,15 @@ stdenv.mkDerivation rec {
   # modules are imported and because matplotlib is used to produce plots.
   buildInputs = [
     sage-with-env.env.lib
-    python
+    python3
     maxima-ecl
     tachyon
     jmol
     cddlib
-  ] ++ (with python.pkgs; [
+  ] ++ (with python3.pkgs; [
     psutil
     future
     sphinx
-    sagenb
     scipy
     sympy
     matplotlib
@@ -35,8 +34,6 @@ stdenv.mkDerivation rec {
     ipykernel
     ipywidgets
     jupyter_client
-    typing
-    pybrial
   ]);
 
   unpackPhase = ''
@@ -47,13 +44,26 @@ stdenv.mkDerivation rec {
     chmod -R 755 "$SAGE_DOC_SRC_OVERRIDE"
   '';
 
+  postPatch = ''
+    # src/doc/bootstrap generates installation instructions for
+    # arch, debian, fedora, cygwin and homebrew. as a hack, disable
+    # including the generated files.
+    sed -i "/literalinclude/d" $SAGE_DOC_SRC_OVERRIDE/en/installation/source.rst
+  '';
+
   buildPhase = ''
     export SAGE_NUM_THREADS="$NIX_BUILD_CORES"
     export HOME="$TMPDIR/sage_home"
     mkdir -p "$HOME"
 
     # needed to link them in the sage docs using intersphinx
-    export PPLPY_DOCS=${python.pkgs.pplpy.doc}/share/doc/pplpy
+    export PPLPY_DOCS=${python3.pkgs.pplpy.doc}/share/doc/pplpy
+
+    # adapted from src/doc/bootstrap
+    OUTPUT_DIR="$SAGE_DOC_SRC_OVERRIDE/en/reference/repl"
+    mkdir -p "$OUTPUT_DIR"
+    OUTPUT="$OUTPUT_DIR/options.txt"
+    ${sage-with-env}/bin/sage -advanced > "$OUTPUT"
 
     ${sage-with-env}/bin/sage -python -m sage_setup.docbuild \
       --mathjax \

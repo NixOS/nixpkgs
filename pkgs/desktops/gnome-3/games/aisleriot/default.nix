@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , pkg-config
 , gnome3
@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "aisleriot";
-  version = "3.22.11";
+  version = "3.22.13";
 
   src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    domain = "gitlab.gnome.org";
-    rev    = "${version}";
-    sha256 = "1asm0y6485xqsysdg586y3hzz8bhxqwnc82k6vhfnxpxz7l62qa1";
+    rev = version;
+    sha256 = "05k84bbgrrxchxg08l1jjcz384kpjdmxd24g0wnf731aa9zcnp5k";
   };
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Aisleriot";
     description = "A collection of patience games written in guile scheme";
     maintainers = teams.gnome.members;

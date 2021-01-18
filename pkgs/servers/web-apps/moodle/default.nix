@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, writeText, plugins ? [ ] }:
 
 let
-  version = "3.9.1";
-  stableVersion = builtins.substring 0 2 (builtins.replaceStrings ["."] [""] version);
+  version = "3.10";
+  stableVersion = lib.concatStrings (lib.take 2 (lib.splitVersion version));
 
 in stdenv.mkDerivation rec {
   pname = "moodle";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
       "https://download.moodle.org/stable${stableVersion}/${pname}-${version}.tgz";
-    sha256 = "sha256-6QJDEInUQQSNj3kThQ65o2cT6JaRy0FrEKy+EcDMVvs=";
+    sha256 = "4aYKZmXym1Tq/462PIgJb4sHGUclEkU0Ok1iQJ6u0aw=";
   };
 
   phpConfig = writeText "config.php" ''
@@ -52,12 +52,12 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Free and open-source learning management system (LMS) written in PHP";
     license = licenses.gpl3Plus;
     homepage = "https://moodle.org/";
-    maintainers = with maintainers; [ aanderse ];
+    maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.all;
   };
 }

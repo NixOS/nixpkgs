@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     nuget sources Add -Name nixos -Source $(pwd)/nixos
 
     # license check is case sensitive
-    mv LICENSE license
+    mv LICENSE license.bak && mv license.bak license
 
     mkdir -p artifacts
     unzip ${xplat} -d artifacts

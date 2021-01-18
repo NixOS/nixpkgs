@@ -1,7 +1,7 @@
-{ config, fetchurl, fetchpatch, stdenv, wrapGAppsHook, autoreconfHook
-, curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme
+{ lib, config, fetchurl, stdenv, wrapGAppsHook, autoreconfHook
+, curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme, gumbo
 , libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
-, openldap, perl, pkgconfig, poppler, python, shared-mime-info
+, openldap, perl, pkg-config, poppler, python, shared-mime-info
 , glib-networking, gsettings-desktop-schemas, libSM, libytnef, libical
 # Build options
 # TODO: A flag to build the manual.
@@ -13,6 +13,7 @@
 , enableNetworkManager ? config.networking.networkmanager.enable or false
 , enablePgp ? true
 , enablePluginArchive ? false
+, enablePluginLitehtmlViewer ? false
 , enablePluginNotificationDialogs ? true
 , enablePluginNotificationSounds ? true
 , enablePluginPdf ? false
@@ -26,29 +27,21 @@
 , enableSpellcheck ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "claws-mail";
-  version = "3.17.6";
+  version = "3.17.7";
 
   src = fetchurl {
-    url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "1s05qw0r0gqwvvkxvrrwbjkbi61dvilixiwrpgcq21qc9csc9r0m";
+    url = "https://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
+    sha256 = "1j6x09621wng0lavh53nwzh9vqjzpspl8kh5azh7kbihpi4ldfb0";
   };
 
   outputs = [ "out" "dev" ];
 
   patches = [
     ./mime.patch
-
-    # Backports a mitigation to the "mailto vulnerability". This patch is
-    # included in the next release and must therefore be removed.
-    (fetchpatch {
-      name = "fix-4373-4374.patch";
-      url = "https://git.claws-mail.org/?p=claws.git;a=patch;h=4c9d15b4b37cdc57edfa16df550a0a881a156153";
-      sha256 = "0sp0vxr6pk2fv5ydpcakb50rmn2w2nma98apgfsgcgan82qmwk7n";
-    })
   ];
 
   preConfigure = ''
@@ -61,7 +54,7 @@ stdenv.mkDerivation rec {
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook python.pkgs.wrapPython ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook python.pkgs.wrapPython ];
   propagatedBuildInputs = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
 
   buildInputs =
@@ -73,6 +66,7 @@ stdenv.mkDerivation rec {
     ++ optional enablePluginArchive libarchive
     ++ optional enablePluginNotificationSounds libcanberra-gtk2
     ++ optional enablePluginNotificationDialogs libnotify
+    ++ optional enablePluginLitehtmlViewer gumbo
     ++ optional enablePluginRssyl libxml2
     ++ optional enableNetworkManager networkmanager
     ++ optional enableLdap openldap
@@ -88,6 +82,7 @@ stdenv.mkDerivation rec {
       "--disable-pgpmime-plugin"
     ]
     ++ optional (!enablePluginArchive) "--disable-archive-plugin"
+    ++ optional (!enablePluginLitehtmlViewer) "--disable-litehtml_viewer-plugin"
     ++ optional (!enablePluginPdf) "--disable-pdf_viewer-plugin"
     ++ optional (!enablePluginPython) "--disable-python-plugin"
     ++ optional (!enablePluginRavatar) "--disable-libravatar-plugin"

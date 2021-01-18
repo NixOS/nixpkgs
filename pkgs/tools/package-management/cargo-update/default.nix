@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , cmake
@@ -15,22 +15,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
-  version = "4.1.1";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "nabijaczleweli";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03yfn6jq33mykk2cicx54cpddilp62pb5ah75n96k1mwy7c46r6g";
+    sha256 = "0bpl4y5p0acn1clxgwn2sifx6ggpq9jqw5zrmva7asjf8p8dx3v5";
   };
 
-  cargoPatches = [ ./0001-Generate-lockfile-for-cargo-update-v4.1.1.patch ];
-  cargoSha256 = "1yaawp015gdnlfqkdmqsf95gszz0h5j1vpfjh763y7kk0bp7zswl";
+  cargoPatches = [ ./0001-Generate-lockfile-for-cargo-update-v4.1.2.patch ];
+  cargoSha256 = "150fpb7wyyxi40z4wai6c94mn84g700c2228316g6y8i07c8ix0d";
 
   nativeBuildInputs = [ cmake installShellFiles pkg-config ronn ];
 
   buildInputs = [ libgit2 libssh2 openssl zlib ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ curl Security ];
+    ++ lib.optionals stdenv.isDarwin [ curl Security ];
 
   postBuild = ''
     # Man pages contain non-ASCII, so explicitly set encoding to UTF-8.
@@ -43,10 +43,10 @@ rustPlatform.buildRustPackage rec {
     installManPage man/*.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     license = licenses.mit;
-    maintainers = with maintainers; [ gerschtli filalex77 johntitor ];
+    maintainers = with maintainers; [ gerschtli Br1ght0ne johntitor ];
   };
 }

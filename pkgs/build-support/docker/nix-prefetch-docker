@@ -127,7 +127,7 @@ trap "rm -rf \"$tmpPath\"" EXIT
 tmpFile="$tmpPath/$(get_name $finalImageName $finalImageTag)"
 
 if test -z "$QUIET"; then
-    skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag"
+    skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag" >&2
 else
     skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag" > /dev/null
 fi
@@ -139,12 +139,12 @@ imageHash=$(nix-hash --flat --type $hashType --base32 "$tmpFile")
 finalPath=$(nix-store --add-fixed "$hashType" "$tmpFile")
 
 if test -z "$QUIET"; then
-    echo "-> ImageName: $imageName"
-    echo "-> ImageDigest: $imageDigest"
-    echo "-> FinalImageName: $finalImageName"
-    echo "-> FinalImageTag: $finalImageTag"
-    echo "-> ImagePath: $finalPath"
-    echo "-> ImageHash: $imageHash"
+    echo "-> ImageName: $imageName" >&2
+    echo "-> ImageDigest: $imageDigest" >&2
+    echo "-> FinalImageName: $finalImageName" >&2
+    echo "-> FinalImageTag: $finalImageTag" >&2
+    echo "-> ImagePath: $finalPath" >&2
+    echo "-> ImageHash: $imageHash" >&2
 fi
 
 if [ "$format" == "nix" ]; then

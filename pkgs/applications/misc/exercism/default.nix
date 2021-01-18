@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "exercism";
@@ -17,10 +17,10 @@ buildGoModule rec {
 
   subPackages = [ "./exercism" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
    inherit (src.meta) homepage;
    description = "A Go based command line tool for exercism.io";
    license     = licenses.mit;
-   maintainers = [ maintainers.rbasso ];
+   maintainers = [ maintainers.rbasso maintainers.nobbz ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "mynewt-newt";
@@ -26,9 +26,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mynewt.apache.org/";
-    description = "Build and package management tool for embedded development.";
+    description = "Build and package management tool for embedded development";
     longDescription = ''
       Apache Newt is a smart build and package management tool,
       designed for C and C++ applications in embedded contexts. Newt

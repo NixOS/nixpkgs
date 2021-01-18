@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rmtrash";
-  version = "1.13";
+  version = "1.14";
 
   src = fetchFromGitHub {
     owner = "PhrozenByte";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04a9c65wnkq1fj8qhdsdbps88xjbp7rn6p27y25v47kaysvrw01j";
+    sha256 = "0wfb2ykzlsxyqn9krfsis9jxhaxy3pxl71a4f15an1ngfndai694";
   };
 
   dontConfigure = true;

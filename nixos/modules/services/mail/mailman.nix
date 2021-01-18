@@ -38,7 +38,7 @@ let
   webSettingsJSON = pkgs.writeText "settings.json" (builtins.toJSON webSettings);
 
   # TODO: Should this be RFC42-ised so that users can set additional options without modifying the module?
-  mtaConfig = pkgs.writeText "mailman-postfix.cfg" ''
+  postfixMtaConfig = pkgs.writeText "mailman-postfix.cfg" ''
     [postfix]
     postmap_command: ${pkgs.postfix}/bin/postmap
     transport_file_type: hash
@@ -81,7 +81,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable Mailman on this host. Requires an active Postfix installation.";
+        description = "Enable Mailman on this host. Requires an active MTA on the host (e.g. Postfix).";
       };
 
       package = mkOption {
@@ -90,6 +90,20 @@ in {
         defaultText = "pkgs.mailman";
         example = literalExample "pkgs.mailman.override { archivers = []; }";
         description = "Mailman package to use";
+      };
+
+      enablePostfix = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          Enable Postfix integration. Requires an active Postfix installation.
+
+          If you want to use another MTA, set this option to false and configure
+          settings in services.mailman.settings.mta.
+
+          Refer to the Mailman manual for more info.
+        '';
       };
 
       siteOwner = mkOption {
@@ -182,7 +196,7 @@ in {
         pid_file = "/run/mailman/master.pid";
       };
 
-      mta.configuration = lib.mkDefault "${mtaConfig}";
+      mta.configuration = lib.mkDefault (if cfg.enablePostfix then "${postfixMtaConfig}" else throw "When Mailman Postfix integration is disabled, set `services.mailman.settings.mta.configuration` to the path of the config file required to integrate with your MTA.");
 
       "archiver.hyperkitty" = lib.mkIf cfg.hyperkitty.enable {
         class = "mailman_hyperkitty.Archiver";
@@ -211,14 +225,22 @@ in {
               See <https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html>.
             '';
           };
-    in [
+    in (lib.optionals cfg.enablePostfix [
       { assertion = postfix.enable;
-        message = "Mailman requires Postfix";
+        message = ''
+          Mailman's default NixOS configuration requires Postfix to be enabled.
+
+          If you want to use another MTA, set services.mailman.enablePostfix
+          to false and configure settings in services.mailman.settings.mta.
+
+          Refer to <https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html>
+          for more info.
+        '';
       }
       (requirePostfixHash [ "relayDomains" ] "postfix_domains")
       (requirePostfixHash [ "config" "transport_maps" ] "postfix_lmtp")
       (requirePostfixHash [ "config" "local_recipient_maps" ] "postfix_lmtp")
-    ];
+    ]);
 
     users.users.mailman = {
       description = "GNU Mailman";
@@ -275,7 +297,7 @@ in {
       '';
     }) ];
 
-    services.postfix = {
+    services.postfix = lib.mkIf cfg.enablePostfix {
       recipientDelimiter = "+";         # bake recipient addresses in mail envelopes via VERP
       config = {
         owner_request_special = "no";   # Mailman handles -owner addresses on its own
@@ -345,7 +367,7 @@ in {
 
       mailman-web-setup = {
         description = "Prepare mailman-web files and database";
-        before = [ "uwsgi.service" "mailman-uwsgi.service" ];
+        before = [ "mailman-uwsgi.service" ];
         requiredBy = [ "mailman-uwsgi.service" ];
         restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
         script = ''
@@ -421,7 +443,7 @@ in {
         inherit startAt;
         restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
         serviceConfig = {
-          ExecStart = "${pythonEnv}/bin/mailman-web runjobs minutely";
+          ExecStart = "${pythonEnv}/bin/mailman-web runjobs ${name}";
           User = cfg.webUser;
           Group = "mailman";
           WorkingDirectory = "/var/lib/mailman-web";

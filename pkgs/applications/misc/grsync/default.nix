@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dee, gtk2, intltool, libdbusmenu-gtk2, libunity, pkg-config, rsync }:
+{ lib, stdenv, fetchurl, dee, gtk2, intltool, libdbusmenu-gtk2, libunity, pkg-config, rsync }:
 
 stdenv.mkDerivation rec {
   version = "1.2.8";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     rsync
   ];
 
-  meta = with stdenv.lib; {
-    description = "Grsync is used to synchronize folders, files and make backups";
+  meta = with lib; {
+    description = "Synchronize folders, files and make backups";
     homepage = "http://www.opbyte.it/grsync/";
     license = licenses.gpl1;
     platforms = platforms.linux;

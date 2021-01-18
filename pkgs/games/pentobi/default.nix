@@ -1,20 +1,20 @@
-{ stdenv, appstream, fetchurl, cmake, gettext, libxslt, librsvg, itstool
-  , qtbase, qtquickcontrols2, qtsvg, qttools, qtwebview, docbook_xsl
-  , wrapQtAppsHook
+{ lib, mkDerivation, appstream, fetchFromGitHub, cmake, gettext, libxslt, librsvg, itstool
+, qtbase, qtquickcontrols2, qtsvg, qttools, qtwebview, docbook_xsl
 }:
 
-with stdenv.lib;
-stdenv.mkDerivation rec {
-  version = "18.1";
+mkDerivation rec {
+  version = "18.4";
   pname = "pentobi";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pentobi/${pname}-${version}.tar.xz";
-    sha256 = "1vfw61lk9z7dngncmx3fggy5ld7ksdk48dpwnsq2vl5fh3f71qbq";
+  src = fetchFromGitHub {
+    owner = "enz";
+    repo = "pentobi";
+    rev = "v${version}";
+    sha256 = "1wawy6s3i4pcc6n6kfspn5b4g957ds0728mgwzw19agp5yyid73b";
   };
 
-  nativeBuildInputs = [ cmake docbook_xsl wrapQtAppsHook ];
-  buildInputs = [ appstream qtbase qtsvg qtquickcontrols2 qttools qtwebview itstool librsvg ];
+  nativeBuildInputs = [ cmake docbook_xsl qttools ];
+  buildInputs = [ appstream qtbase qtsvg qtquickcontrols2 qtwebview itstool librsvg ];
 
   patchPhase = ''
     substituteInPlace pentobi_thumbnailer/CMakeLists.txt --replace "/manpages" "/share/xml/docbook-xsl/manpages/"
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     "-DMETAINFO_ITS=${appstream}/share/gettext/its/metainfo.its"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A computer opponent for the board game Blokus";
     homepage = "https://pentobi.sourceforge.io";
     license = licenses.gpl3;
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
-, utillinux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
+{ lib, stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
+, util-linux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "btrbk";
@@ -32,16 +32,16 @@ stdenv.mkDerivation rec {
 
     # Fix SSH filter script
     sed -i '/^export PATH/d' ssh_filter_btrbk.sh
-    substituteInPlace ssh_filter_btrbk.sh --replace logger ${utillinux}/bin/logger
+    substituteInPlace ssh_filter_btrbk.sh --replace logger ${util-linux}/bin/logger
   '';
 
   preFixup = ''
     wrapProgram $out/sbin/btrbk \
       --set PERL5LIB $PERL5LIB \
-      --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
+      --prefix PATH ':' "${lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A backup tool for btrfs subvolumes";
     homepage = "https://digint.ch/btrbk";
     license = licenses.gpl3;

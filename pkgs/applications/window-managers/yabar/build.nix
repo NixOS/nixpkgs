@@ -45,11 +45,11 @@ stdenv.mkDerivation {
     }
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern and lightweight status bar for X window managers";
     homepage    = "https://github.com/geommer/yabar";
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

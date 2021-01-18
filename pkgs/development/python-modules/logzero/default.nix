@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "logzero";
-  version = "1.5.0";
+  version = "1.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hli2wgwxxackrk1ybmlpdd0rzms6blm11zzwlvrzykd8cp1xyil";
+    sha256 = "1435284574e409b8ec8b680f276bca04cab41f93d6eff4dc8348b7630cddf560";
   };
 
   checkInputs = [ pytest ];

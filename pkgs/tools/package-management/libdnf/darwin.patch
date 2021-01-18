@@ -1,0 +1,35 @@
+--- src/libdnf/hy-iutil.cpp	2020-12-02 07:53:42.000000000 -0800
++++ src/libdnf/hy-iutil.cpp	2020-12-21 14:24:14.000000000 -0800
+@@ -22,7 +22,7 @@
+ #include <errno.h>
+ #include <dirent.h>
+ #include <fcntl.h>
+-#include <linux/limits.h>
++#include <limits.h>
+ #include <pwd.h>
+ #include <unistd.h>
+ #include <stdio.h>
+--- src/libdnf/hy-util.cpp	2020-12-02 07:53:42.000000000 -0800
++++ src/libdnf/hy-util.cpp	2020-12-21 14:23:21.000000000 -0800
+@@ -24,7 +24,20 @@
+ #include <ctype.h>
+ #include <sys/utsname.h>
+ #include <sys/stat.h>
+-#include <sys/auxv.h>
++
++// Darwin compatibility hacks
++typedef int auxv_t;
++#ifndef AT_HWCAP2
++#define AT_HWCAP2 26
++#endif
++#ifndef AT_HWCAP
++#define AT_HWCAP 16
++#endif
++static unsigned long getauxval(unsigned long type)
++{
++  unsigned long ret = 0;
++  return ret;
++}
+ 
+ // hawkey
+ #include "dnf-types.h"

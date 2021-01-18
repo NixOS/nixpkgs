@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qmake, qttools, qtsvg, mkDerivation }:
+{ lib, stdenv, fetchurl, qmake, qttools, qtsvg, mkDerivation }:
 
 mkDerivation rec {
   pname = "cutemaze";
@@ -13,12 +13,12 @@ mkDerivation rec {
 
   buildInputs = [ qtsvg ];
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv CuteMaze.app $out/Applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gottcode.org/cutemaze/";
     description = "Simple, top-down game in which mazes are randomly generated";
     license = licenses.gpl3Plus;

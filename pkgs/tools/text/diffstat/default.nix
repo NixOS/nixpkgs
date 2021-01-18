@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "diffstat-1.63";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vyw200s5dv1257pmrh6c6fdkmw3slyz5szpqfx916xr04sdbpby";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Read output of diff and display a histogram of the changes";
     longDescription = ''
       diffstat reads the output of diff and displays a histogram of the

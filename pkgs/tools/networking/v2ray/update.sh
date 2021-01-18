@@ -14,7 +14,7 @@ echo "Current version:" >&2
 echo "core: $old_core_rev, geoip: $old_geoip_rev, geosite: $old_geosite_rev" >&2
 
 function fetch_latest_rev {
-    curl "https://api.github.com/repos/v2ray/$1/releases" |
+    curl "https://api.github.com/repos/v2fly/$1/releases" |
         jq '.[0].tag_name' --raw-output
 }
 
@@ -28,7 +28,7 @@ echo "core: $core_rev, geoip: $geoip_rev, geosite: $geosite_rev" >&2
 if [[ $core_rev != $old_core_rev ]]; then
     echo "Prefetching core..." >&2
     { read hash; read store_path; } < <(
-        nix-prefetch-url --unpack --print-path "https://github.com/v2ray/v2ray-core/archive/v$core_rev.zip"
+        nix-prefetch-url --unpack --print-path "https://github.com/v2fly/v2ray-core/archive/v$core_rev.zip"
     )
 
     sed --in-place \
@@ -40,7 +40,7 @@ fi
 
 if [[ $geoip_rev != $old_geoip_rev ]]; then
     echo "Prefetching geoip..." >&2
-    hash=$(nix-prefetch-url "https://github.com/v2ray/geoip/releases/download/$geoip_rev/geoip.dat")
+    hash=$(nix-prefetch-url "https://github.com/v2fly/geoip/releases/download/$geoip_rev/geoip.dat")
     sed --in-place \
         -e "s/\bgeoipRev = \".*\"/geoipRev = \"$geoip_rev\"/" \
         -e "s/\bgeoipSha256 = \".*\"/geoipSha256 = \"$hash\"/" \
@@ -49,7 +49,7 @@ fi
 
 if [[ $geosite_rev != $old_geosite_rev ]]; then
     echo "Prefetching geosite..." >&2
-    hash=$(nix-prefetch-url "https://github.com/v2ray/domain-list-community/releases/download/$geosite_rev/dlc.dat")
+    hash=$(nix-prefetch-url "https://github.com/v2fly/domain-list-community/releases/download/$geosite_rev/dlc.dat")
     sed --in-place \
         -e "s/\bgeositeRev = \".*\"/geositeRev = \"$geosite_rev\"/" \
         -e "s/\bgeositeSha256 = \".*\"/geositeSha256 = \"$hash\"/" \

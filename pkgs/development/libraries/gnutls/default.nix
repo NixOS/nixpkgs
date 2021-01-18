@@ -1,6 +1,6 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
 , perl, gmp, autoconf, autogen, automake, libidn, p11-kit, libiconv
-, unbound, dns-root-data, gettext, cacert, utillinux
+, unbound, dns-root-data, gettext, cacert, util-linux
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withSecurity ? false, Security  # darwin Security.framework
@@ -8,7 +8,7 @@
 
 assert guileBindings -> guile != null;
 let
-  version = "3.6.14";
+  version = "3.6.15";
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v3.6/gnutls-${version}.tar.xz";
-    sha256 = "0qwxsfizynly0ns537vnhnlm5lh03la4vbsmz675n0n7vqd7ac2n";
+    sha256 = "0n0m93ymzd0q9hbknxc2ycanz49sqlkyyf73g9fk7n787llc7a0f";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -34,7 +34,10 @@ stdenv.mkDerivation {
 
   patches = [ ./nix-ssl-cert-file.patch ]
     # Disable native add_system_trust.
-    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
+    ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch
+    # fix gnulib tests on 32-bit ARM. Included on gnutls master.
+    # https://lists.gnu.org/r/bug-gnulib/2020-08/msg00225.html
+    ++ lib.optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
 
   # Skip some tests:
   #  - pkgconfig: building against the result won't work before installing (3.5.11)
@@ -75,7 +78,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ perl pkgconfig ]
     ++ lib.optionals (isDarwin && !withSecurity) [ autoconf automake ]
-    ++ lib.optionals doCheck [ which nettools utillinux ];
+    ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ];
 

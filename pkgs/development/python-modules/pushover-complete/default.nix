@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , requests
 , six
 , tox
@@ -11,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pushover-complete";
   version = "1.1.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     pname = "pushover_complete";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , coreutils
 , fetchFromGitHub
 , makeWrapper
@@ -16,7 +16,7 @@
 , which
 }:
 
-with stdenv.lib.strings;
+with lib.strings;
 
 let
 
@@ -30,8 +30,8 @@ let
     fetchSubmodules = true;
   };
 
-  meta = with stdenv.lib; {
-    homepage = "http://faust.grame.fr/";
+  meta = with lib; {
+    homepage = "https://faust.grame.fr/";
     downloadPage = "https://github.com/grame-cncm/faust/";
     license = licenses.gpl2;
     platforms = platforms.linux;
@@ -173,7 +173,7 @@ let
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
 
-      libPath = stdenv.lib.makeLibraryPath propagatedBuildInputs;
+      libPath = lib.makeLibraryPath propagatedBuildInputs;
 
       postFixup = ''
 

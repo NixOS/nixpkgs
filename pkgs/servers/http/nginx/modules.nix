@@ -265,7 +265,7 @@ in
           meta = {
             description = "PageSpeed module for Nginx";
             homepage    = "https://developers.google.com/speed/pagespeed/module/";
-            license     = pkgs.stdenv.lib.licenses.asl20;
+            license     = pkgs.lib.licenses.asl20;
           };
         }
         ''

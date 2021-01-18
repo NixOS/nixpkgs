@@ -2,14 +2,14 @@
 
 with stdenv.lib;
 
-let version = "2.5.3";
+let version = "2.5.4";
 
 in stdenv.mkDerivation {
   pname = "magma";
   inherit version;
   src = fetchurl {
     url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${version}.tar.gz";
-    sha256 = "1xjy3irdx0w1zyhvn4x47zni5fwsh6z97xd4yqldz8zrm5lx40n6";
+    sha256 = "0rrvd21hczxlm8awc9z54fj7iqpjmsb518fy32s6ghz0g90znd3p";
     name = "magma-${version}.tar.gz";
   };
 

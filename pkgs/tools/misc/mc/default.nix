@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , glib
 , gpm
 , file
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sha256 = "12jlnabnc91xsm35g99g2wnh96jmznvrhffd18rj7fqfy8brdhgz";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
     file
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     slang
     unzip
     zip
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s!PKG_CONFIG_PATH=''${PKG_CONFIG_PATH}!PKG_CONFIG_PATH=$(echo "$PKG_CONFIG_PATH" | sed -e 's/./0/g')!" $out/bin/mc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File Manager and User Shell for the GNU Project";
     downloadPage = "https://www.midnight-commander.org/downloads/";
     homepage = "https://www.midnight-commander.org";

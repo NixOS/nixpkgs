@@ -1,8 +1,10 @@
 { fetchurl, fetchpatch, stdenv, pkgconfig, libdaemon, dbus, perlPackages
-, expat, gettext, intltool, glib, libiconv, writeShellScriptBin
+, expat, gettext, intltool, glib, libiconv, writeShellScriptBin, libevent
 , gtk3Support ? false, gtk3 ? null
 , qt4 ? null
 , qt4Support ? false
+, qt5 ? null
+, qt5Support ? false
 , withLibdnssdCompat ? false
 , python ? null
 , withPython ? false }:
@@ -16,11 +18,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "avahi${stdenv.lib.optionalString withLibdnssdCompat "-compat"}-${version}";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchurl {
     url = "https://github.com/lathiat/avahi/releases/download/v${version}/avahi-${version}.tar.gz";
-    sha256 = "0128n7jlshw4bpx0vg8lwj8qwdisjxi7mvniwfafgnkzzrfrpaap";
+    sha256 = "1npdixwxxn3s9q1f365x9n9rc5xgfz39hxf23faqvlrklgbhj0q6";
   };
 
   prePatch = ''
@@ -30,17 +32,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-mkdir-localstatedir.patch
-    (fetchpatch {
-      name ="CVE-2017-6519-CVE-2018-100084.patch";
-      url = "https://github.com/lathiat/avahi/commit/e111def44a7df4624a4aa3f85fe98054bffb6b4f.patch";
-      sha256 = "06n7b7kz6xcc35c7xjfc1kj3k2llyjgi09nhy0ci32l1bhacjw0q";
-    })
   ];
 
-  buildInputs = [ libdaemon dbus glib expat libiconv ]
+  buildInputs = [ libdaemon dbus glib expat libiconv libevent ]
     ++ (with perlPackages; [ perl XMLParser ])
     ++ (stdenv.lib.optional gtk3Support gtk3)
-    ++ (stdenv.lib.optional qt4Support qt4);
+    ++ (stdenv.lib.optional qt4Support qt4)
+    ++ (stdenv.lib.optional qt5Support qt5);
 
   propagatedBuildInputs =
     stdenv.lib.optionals withPython (with python.pkgs; [ python pygobject3 dbus-python ]);
@@ -52,6 +50,7 @@ stdenv.mkDerivation rec {
       "--disable-gtk" "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
       (stdenv.lib.enableFeature gtk3Support "gtk3")
       "--${if qt4Support then "enable" else "disable"}-qt4"
+      "--${if qt5Support then "enable" else "disable"}-qt5"
       (stdenv.lib.enableFeature withPython "python")
       "--localstatedir=/var" "--with-distro=none"
       # A systemd unit is provided by the avahi-daemon NixOS module

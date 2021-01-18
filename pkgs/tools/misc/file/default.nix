@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, file, zlib, libgnurx }:
+{ lib, stdenv, fetchurl, file, zlib, libgnurx }:
 
 stdenv.mkDerivation rec {
   pname = "file";
@@ -18,15 +18,15 @@ stdenv.mkDerivation rec {
     ./webassembly-format-fix.patch
   ];
 
-  nativeBuildInputs = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
+  nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
   buildInputs = [ zlib ]
-              ++ stdenv.lib.optional stdenv.hostPlatform.isWindows libgnurx;
+              ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
   doCheck = true;
 
-  makeFlags = stdenv.lib.optional stdenv.hostPlatform.isWindows "FILE_COMPILE=file";
+  makeFlags = lib.optional stdenv.hostPlatform.isWindows "FILE_COMPILE=file";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://darwinsys.com/file";
     description = "A program that shows the type of files";
     license = licenses.bsd2;

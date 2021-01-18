@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ stdenv, fetchFromGitHub, fetchpatch, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "libargon2";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0p4ry9dn0mi9js0byijxdyiwx74p1nr8zj7wjpd1fjgqva4sk23i";
   };
+
+  nativeBuildInputs = [ fixDarwinDylibNames ];
 
   patches = [
     # TODO: remove when https://github.com/P-H-C/phc-winner-argon2/pull/277 is merged + released

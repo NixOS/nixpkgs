@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, django-gravatar2, django_compressor
+{ lib, stdenv, buildPythonPackage, fetchPypi, django-gravatar2, django_compressor
 , django-allauth, mailmanclient, django, mock
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     PYTHONPATH=.:$PYTHONPATH django-admin.py test --settings=django_mailman3.tests.settings_test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Django library for Mailman UIs";
     homepage = "https://gitlab.com/mailman/django-mailman3";
     license = licenses.gpl3;

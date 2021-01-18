@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libX11, procps, python2, libdwarf, qtbase, qtwebkit, wrapQtAppsHook, libglvnd }:
+{ lib, stdenv, fetchFromGitHub, cmake, libX11, procps, python2, libdwarf, qtbase, qtwebkit, wrapQtAppsHook, libglvnd }:
 
 stdenv.mkDerivation rec {
   pname = "apitrace";
@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
     # to the `RUNPATH` of dispatcher libraries `dlopen()` ing OpenGL drivers.
     # `RUNPATH` doesn't propagate throughout the whole application, but only
     # from the module performing the `dlopen()`.
-    # 
+    #
     # Apitrace wraps programs by running them with `LD_PRELOAD` pointing to `.so`
     # files in $out/lib/apitrace/wrappers.
-    # 
+    #
     # Theses wrappers effectively wrap the `dlopen()` calls from `libglvnd`
     # and other dispatcher libraries, and run `dlopen()`  by themselves.
-    # 
+    #
     # As `RUNPATH` doesn't propagate through the whole library, and they're now the
     # library doing the real `dlopen()`, they also need to have
     # `/run-opengl-driver[-32]` added to their `RUNPATH`.
@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
     for i in $out/bin/eglretrace $out/bin/glretrace
     do
       echo "Patching RPath for $i"
-      patchelf --set-rpath "${stdenv.lib.makeLibraryPath [libglvnd]}:$(patchelf --print-rpath $i)" $i
+      patchelf --set-rpath "${lib.makeLibraryPath [libglvnd]}:$(patchelf --print-rpath $i)" $i
     done
 
     wrapQtApp $out/bin/qapitrace
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://apitrace.github.io";
     description = "Tools to trace OpenGL, OpenGL ES, Direct3D, and DirectDraw APIs";
     license = licenses.mit;

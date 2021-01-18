@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, fltk, zlib, xdg_utils, xorg, libjpeg, libGL }:
+{ lib, stdenv, fetchzip, fltk, zlib, xdg_utils, xorg, libjpeg, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "eureka-editor";
@@ -29,11 +29,12 @@ stdenv.mkDerivation rec {
     cp misc/eureka.6 $out/man/man6
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://eureka-editor.sourceforge.net";
     description = "A map editor for the classic DOOM games, and a few related games such as Heretic and Hexen";
     license = licenses.gpl2;
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ neonfuz ];
   };
 }

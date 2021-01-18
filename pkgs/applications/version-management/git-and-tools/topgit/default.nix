@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, git, perl }:
+{ lib, stdenv, fetchFromGitHub, git, perl }:
 
 stdenv.mkDerivation rec {
   pname = "topgit";
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl git ];
 
   postInstall = ''
-    install -Dm644 README -t"$out/share/doc/${pname}-${version}/"
-    install -Dm755 contrib/tg-completion.bash -t "$out/etc/bash_completion.d/"
+    install -Dm644 README -t "$out/share/doc/${pname}-${version}/"
+    install -Dm755 contrib/tg-completion.bash -t "$out/share/bash-completion/completions/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TopGit manages large amount of interdependent topic branches";
     homepage = "https://github.com/mackyle/topgit";
     license = licenses.gpl2;

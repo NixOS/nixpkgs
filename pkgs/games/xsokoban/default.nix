@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, xorgproto, libXpm, libXt }:
+{ lib, stdenv, fetchurl, libX11, xorgproto, libXpm, libXt }:
 
 stdenv.mkDerivation rec {
   pname = "xsokoban";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share $out/man/man1 $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "X sokoban";
     license = licenses.publicDomain;
     maintainers = [ maintainers.raskin ];

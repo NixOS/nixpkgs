@@ -7,11 +7,11 @@
 }:
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "1.12.0";
+  version = "1.12.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0p19rkvh28klkkd1c6y78h6vb9b9cnlyr7qrshkxghfjkz85xgig";
+    sha256 = "de0e1282330940d52ea92a80fea2e4b9e0da1932aaa570f84d268939d1897b04";
   };
 
   doCheck = false; # meant to be ran with interactive interpreter

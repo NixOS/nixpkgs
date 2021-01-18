@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "1.12";
+  version = "1.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5d6a105928d2285e43afb87d638ada844ed8933cc306c23a3c095684f3d3af4";
+    sha256 = "72652b9edc7bdbfc9c3192235fb2fa1b2fb73a681613368fcaec747d7f5e479f";
   };
 
   disabled = !isPy3k;

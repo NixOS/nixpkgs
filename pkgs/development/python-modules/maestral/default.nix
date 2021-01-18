@@ -1,41 +1,49 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
 , python
-, blinker, bugsnag, click, dropbox, fasteners, keyring, keyrings-alt, pathspec, Pyro5, requests, u-msgpack-python, watchdog
-, sdnotify
-, systemd
+, alembic, bugsnag, click, dropbox, fasteners, keyring, keyrings-alt, packaging, pathspec, Pyro5, requests, setuptools, sdnotify, sqlalchemy, survey, watchdog
+, importlib-metadata
+, importlib-resources
+, dbus-next
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.1.0";
+  version = "1.3.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "v${version}";
-    sha256 = "0d1pxbg69ll07w4bbpzs7zz1yn82qyrym95b0mqmhrrg2ysxjngg";
+    sha256 = "sha256-SspyTdmAbbmWN3AqVp9bj/QfAKLVgU2bLiiHjZO0aCM=";
   };
 
   propagatedBuildInputs = [
-    blinker
+    alembic
     bugsnag
     click
     dropbox
     fasteners
     keyring
     keyrings-alt
+    packaging
     pathspec
     Pyro5
     requests
-    u-msgpack-python
-    watchdog
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    setuptools
     sdnotify
-    systemd
+    sqlalchemy
+    survey
+    watchdog
+  ] ++ stdenv.lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ] ++ stdenv.lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    dbus-next
   ];
 
   makeWrapperArgs = [
@@ -47,7 +55,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source Dropbox client for macOS and Linux";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

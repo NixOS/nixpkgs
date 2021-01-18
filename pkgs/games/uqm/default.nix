@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, libGLU, libGL
+{ stdenv, lib, fetchurl, pkg-config, libGLU, libGL
 , SDL, SDL_image, libpng, libvorbis, libogg, libmikmod
 
 , use3DOVideos ? false, requireFile ? null, writeText ? null
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     sha256 = "10nbvcrr0lc0mxivxfkcbxnibwk3vwmamabrlvwdsjxd9pk8aw65";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod libGLU libGL ];
 
   postUnpack = ''
@@ -65,9 +65,11 @@ in stdenv.mkDerivation rec {
     ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"
   '';
 
-  # Using _STRINGS_H as include guard conflicts with glibc.
   postPatch = ''
+    # Using _STRINGS_H as include guard conflicts with glibc.
     sed -i -e '/^#/s/_STRINGS_H/_UQM_STRINGS_H/g' src/uqm/comm/*/strings.h
+    # See https://github.com/NixOS/nixpkgs/pull/93560
+    sed -i -e 's,/tmp/,$TMPDIR/,' build/unix/config_functions
   '';
 
   # uqm has a 'unique' build system with a root script incidentally called
@@ -100,7 +102,7 @@ in stdenv.mkDerivation rec {
           spin-offs, thereby making zillions more people happy!
     '';
     homepage = "http://sc2.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ jcumming aszlig ];
     platforms = with lib.platforms; linux;
   };

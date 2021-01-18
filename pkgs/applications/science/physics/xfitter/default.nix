@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, apfel, apfelgrid, applgrid, blas, gfortran, lhapdf, lapack, libyaml, lynx, mela, root5, qcdnum, which }:
+{ lib, stdenv, fetchurl, apfel, apfelgrid, applgrid, blas, gfortran, lhapdf, lapack, libyaml, lynx
+, mela, root5, qcdnum, which, libtirpc
+}:
 
 stdenv.mkDerivation rec {
   pname = "xfitter";
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
   #
   #   gfortran: error: unrecognized command line option '-stdlib=libc++'
   #
-    stdenv.lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/Makefile.in \
         --replace "F77LD = \$(F77)" "F77LD = \$(CXXLD)" \
     '';
@@ -37,9 +39,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gfortran which ];
   buildInputs =
-    [ apfel apfelgrid applgrid blas lhapdf lapack mela root5 qcdnum ]
+    [ apfel apfelgrid applgrid blas lhapdf lapack mela root5 qcdnum libtirpc ]
     # pdf2yaml requires fmemopen and open_memstream which are not readily available on Darwin
-    ++ stdenv.lib.optional (!stdenv.isDarwin) libyaml
+    ++ lib.optional (!stdenv.isDarwin) libyaml
     ;
   propagatedBuildInputs = [ lynx ];
 
@@ -47,7 +49,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  NIX_LDFLAGS = [ "-ltirpc" ];
+
+  meta = with lib; {
     description = "The xFitter project is an open source QCD fit framework ready to extract PDFs and assess the impact of new data";
     license     = licenses.gpl3;
     homepage    = "https://www.xfitter.org/xFitter";

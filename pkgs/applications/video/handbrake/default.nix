@@ -1,6 +1,6 @@
-# Upstream distributes HandBrake with bundle of according versions of libraries and patches to them.
-#
-# Derivation patches HandBrake to use Nix closure dependencies.
+# Upstream distributes HandBrake with bundle of according versions of libraries
+# and patches to them. This derivation patches HandBrake to use Nix closure
+# dependencies.
 #
 # NOTE: 2019-07-19: This derivation does not currently support the native macOS
 # GUI--it produces the "HandbrakeCLI" CLI version only. In the future it would
@@ -9,7 +9,7 @@
 
 { stdenv, lib, fetchFromGitHub,
   # Main build tools
-  pkgconfig, autoconf, automake, libtool, m4, lzma, python3,
+  pkg-config, autoconf, automake, libtool, m4, lzma, python3,
   numactl,
   # Processing, video codecs, containers
   ffmpeg-full, nv-codec-headers, libogg, x264, x265, libvpx, libtheora, dav1d,
@@ -44,11 +44,6 @@
   useFdk ? false, fdk_aac ? null
 }:
 
-assert stdenv.isDarwin -> AudioToolbox != null
-       && Foundation != null
-       && libobjc != null
-       && VideoToolbox != null;
-
 stdenv.mkDerivation rec {
   pname = "handbrake";
   version = "1.3.3";
@@ -76,26 +71,38 @@ _EOF
 
     patchShebangs scripts
 
-    substituteInPlace libhb/module.defs \
-      --replace /usr/include/libxml2 ${libxml2.dev}/include/libxml2
-
     # Force using nixpkgs dependencies
     sed -i '/MODULES += contrib/d' make/include/main.defs
     sed -e 's/^[[:space:]]*\(meson\|ninja\|nasm\)[[:space:]]*= ToolProbe.*$//g' \
         -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
         -i make/configure.py
-  '';
+  '' + (lib.optionalString stdenv.isDarwin ''
+    # Use the Nix-provided libxml2 instead of the patched version available on
+    # the Handbrake website.
+    substituteInPlace libhb/module.defs \
+      --replace '$(CONTRIB.build/)include/libxml2' ${libxml2.dev}/include/libxml2
+
+    # Prevent the configure script from failing if xcodebuild isn't available,
+    # which it isn't in the Nix context. (The actual build goes fine without
+    # xcodebuild.)
+    sed -e '/xcodebuild = ToolProbe/s/abort=.\+)/abort=False)/' -i make/configure.py
+  '') + (lib.optionalString stdenv.isLinux ''
+    # Use the Nix-provided libxml2 instead of the system-provided one.
+    substituteInPlace libhb/module.defs \
+      --replace /usr/include/libxml2 ${libxml2.dev}/include/libxml2
+  '');
 
   nativeBuildInputs = [
-    pkgconfig autoconf automake libtool m4 python3
+    pkg-config autoconf automake libtool m4 python3
   ] ++ lib.optionals useGtk [ intltool wrapGAppsHook ];
 
   buildInputs = [
     ffmpeg-full libogg libtheora x264 x265 libvpx dav1d
     libopus lame libvorbis a52dec speex libsamplerate
     libiconv fribidi fontconfig freetype libass jansson libxml2 harfbuzz
-    libdvdread libdvdnav libdvdcss libbluray lzma numactl
-  ] ++ lib.optionals useGtk [
+    libdvdread libdvdnav libdvdcss libbluray lzma
+  ] ++ lib.optional (!stdenv.isDarwin) numactl
+  ++ lib.optionals useGtk [
     glib gtk3 libappindicator-gtk3 libnotify
     gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus-glib udev
     libgudev hicolor-icon-theme
@@ -124,7 +131,7 @@ _EOF
     cd build
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://handbrake.fr/";
     description = "A tool for converting video files and ripping DVDs";
     longDescription = ''

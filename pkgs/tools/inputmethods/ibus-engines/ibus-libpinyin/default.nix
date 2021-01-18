@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , gettext
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , sqlite
 , libpinyin
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     gettext
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     db
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description = "IBus interface to the libpinyin input method";
     license = licenses.gpl2;

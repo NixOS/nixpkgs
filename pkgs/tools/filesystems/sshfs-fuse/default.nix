@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub
-, meson, pkgconfig, ninja, docutils, makeWrapper
+{ lib, stdenv, fetchFromGitHub
+, meson, pkg-config, ninja, docutils, makeWrapper
 , fuse3, glib
 , which, python3Packages
 , openssh
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.7.0";
+  version = "3.7.1";
   pname = "sshfs-fuse";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
     rev = "sshfs-${version}";
-    sha256 = "119qvjaai3nqs2psqk2kv4gxjchrnrcfnmlwk7yxnj3v59pgyxhv";
+    sha256 = "088mgcsqv9f2vly4xn6lvvkmqkgr9jjmjs9qp8938hl7j6rrgd17";
   };
 
-  nativeBuildInputs = [ meson pkgconfig ninja docutils makeWrapper ];
+  nativeBuildInputs = [ meson pkg-config ninja docutils makeWrapper ];
   buildInputs = [ fuse3 glib ];
   checkInputs = [ which python3Packages.pytest ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString
+  NIX_CFLAGS_COMPILE = lib.optionalString
     (stdenv.hostPlatform.system == "i686-linux")
     "-D_FILE_OFFSET_BITS=64";
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     python3 -m pytest test/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
     platforms = platforms.linux;

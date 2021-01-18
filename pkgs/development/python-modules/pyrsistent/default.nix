@@ -1,6 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , six
 , pytest_4
 , hypothesis_4
@@ -9,11 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pyrsistent";
-  version = "0.16.0";
+  version = "0.17.3";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "28669905fe725965daa16184933676547c5bb40a5153055a8dee2a4bd7933ad3";
+    sha256 = "2e636185d9eb976a18a8a8e96efce62f2905fea90041958d8cc2a189756ebf3e";
   };
 
   propagatedBuildInputs = [ six ];
@@ -24,7 +27,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace 'pytest<5' 'pytest'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tobgu/pyrsistent/";
     description = "Persistent/Functional/Immutable data structures";
     license = licenses.mit;

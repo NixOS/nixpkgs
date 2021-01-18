@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy27, fetchFromGitHub, pytest }:
+{ lib, stdenv, buildPythonPackage, isPy27, fetchFromGitHub, pytest }:
 
 buildPythonPackage rec {
   pname = "mergedeep";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   checkPhase = "pytest";
   pythonImportsCheck = [ "mergedeep" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/clarketm/mergedeep";
     description = "A deep merge function for python";
     license = licenses.mit;

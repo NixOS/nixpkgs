@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libogg, libopus }:
+{ lib, stdenv, fetchurl, pkgconfig, openssl, libogg, libopus }:
 
 stdenv.mkDerivation rec {
   name = "opusfile-0.12";
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   patches = [ ./include-multistream.patch ];
   configureFlags = [ "--disable-examples" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-level API for decoding and seeking in .opus files";
-    homepage = "http://www.opus-codec.org/";
+    homepage = "https://www.opus-codec.org/";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];

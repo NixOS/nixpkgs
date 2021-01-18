@@ -1,14 +1,14 @@
-{ stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
+{ lib, stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
   autogen, sqlite, gmp, zlib, fetchurl, unzip, fetchpatch, gettext }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "0.9.0-1";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "01cwcrqysqsrf96bbbj0grm8j5m46a3acgwy0kzxdx05jdzld9sc";
+    sha256 = "022fw6rbn0chg0432h9q05w8qnys0hd9hf1qm2qlnnmamxw4dyfy";
   };
 
   enableParallelBuilding = true;

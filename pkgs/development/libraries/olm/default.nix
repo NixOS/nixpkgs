@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "olm";
-  version = "3.1.5";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://matrix.org/git/olm/-/archive/${version}/${pname}-${version}.tar.gz";
-    sha256 = "15l6cf029ghfk5bf8ii6nyy86gc90ji8n5hspjhj1xmzmk61xb4j";
+    sha256 = "0iacbi9iibhzifh1bk6bi5xin557lvqmbf4ccsb8drj50dbxjiyr";
   };
 
   nativeBuildInputs = [ cmake ];

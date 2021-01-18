@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, meson, vala, ninja
+{ lib, stdenv, fetchFromGitHub, pkg-config, meson, vala, ninja
 , gtk3, poppler, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "1paj8hs27akzsivn01a30fl3zx5gfn1h89wxg2m72fd806hk0hql";
   };
 
-  nativeBuildInputs = [ pkgconfig meson ninja wrapGAppsHook vala ];
+  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook vala ];
   buildInputs = [ gtk3 poppler ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Edit metadata found in PDFs";
     license = licenses.gpl3;
     maintainers = with maintainers; [ leenaars ];

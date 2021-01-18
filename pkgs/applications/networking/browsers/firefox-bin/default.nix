@@ -74,9 +74,9 @@ let
 
   policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
 
-  defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") {} sources;
+  defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
-  source = stdenv.lib.findFirst (sourceMatches systemLocale) defaultSource sources;
+  source = lib.findFirst (sourceMatches systemLocale) defaultSource sources;
 
   name = "firefox-${channel}-bin-unwrapped-${version}";
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation {
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
       (lib.getDev alsaLib)
@@ -131,7 +131,7 @@ stdenv.mkDerivation {
       (lib.getDev libpulseaudio)
       systemd
       ffmpeg
-    ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
+    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
 
@@ -193,7 +193,7 @@ stdenv.mkDerivation {
         then "http://archive.mozilla.org/pub/devedition/releases/"
         else "http://archive.mozilla.org/pub/firefox/releases/";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "http://www.mozilla.org/firefox/";
     license = {

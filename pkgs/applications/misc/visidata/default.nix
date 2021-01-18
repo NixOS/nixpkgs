@@ -11,16 +11,17 @@
 , pandas
 , pyshp
 , setuptools
+, withPcap ? true, dpkt ? null, dnslib ? null
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "1.5.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "19gs8i6chrrwibz706gib5sixx1cjgfzh7v011kp3izcrn524mc0";
+    sha256 = "018z06bfcw0l4k2zdwbgxna9fss4wdqj64ckw5qjis14sb3zkr28";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +35,7 @@ buildPythonApplication rec {
     pandas
     pyshp
     setuptools
-  ];
+  ] ++ lib.optionals withPcap [ dpkt dnslib ];
 
   doCheck = false;
 

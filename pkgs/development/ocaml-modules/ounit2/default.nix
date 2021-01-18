@@ -1,17 +1,20 @@
-{ lib, buildDunePackage, fetchurl, stdlib-shims }:
+{ lib, ocaml, buildDunePackage, fetchurl, stdlib-shims, ncurses }:
 
 buildDunePackage rec {
   minimumOCamlVersion = "4.04";
 
   pname = "ounit2";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchurl {
     url = "https://github.com/gildor478/ounit/releases/download/v${version}/ounit-v${version}.tbz";
-    sha256 = "1naahh24lbyxmrnzpfz8karniqbf1nknivf96mrvsr6zlx5ad072";
+    sha256 = "0i9kiqbf2dp12c4qcvbn4abdpdp6h4g5z54ycsh0q8jpv6jnkh5m";
   };
 
   propagatedBuildInputs = [ stdlib-shims ];
+
+  doCheck = true;
+  checkInputs = lib.optional (lib.versionOlder ocaml.version "4.07") ncurses;
 
   meta = with lib; {
     homepage = "https://github.com/gildor478/ounit";

@@ -1,6 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkgconfig
+, fetchpatch
 , python3
 , meson
 , ninja
@@ -30,6 +31,16 @@ stdenv.mkDerivation rec {
     sha256 = "kSRc5RLkI6SBJirUYw6swZi8IJhaL3y74b2Zw8kh2XA=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # fix compilation with gcc10
+    (fetchpatch {
+      url = "https://github.com/parnold-x/libqalculate/commit/4fa8f2cceada128ef19f82407226b2c230b780d5.patch";
+      extraPrefix = "subprojects/libqalculate/";
+      stripLen = "1";
+      sha256 = "0kbff623zl0s6yx5avx068f2apwzxzvihjahja4qhlkqkhhzj9dm";
+    })
+  ];
 
   nativeBuildInputs = [
     glib # post_install.py
@@ -70,7 +81,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Do maths like a normal person, designed for elementary OS";
     longDescription = ''
       It’s an app where you do maths like a normal person. It lets you

@@ -13,6 +13,8 @@
 buildPythonPackage rec {
   pname = "panel";
   version = "0.9.7";
+  # Version 10 attempts to download models from the web during build-time
+  # https://github.com/holoviz/panel/issues/1819
 
   src = fetchPypi {
     inherit pname version;

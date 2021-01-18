@@ -1,10 +1,11 @@
 { pkgs, stdenv, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
 , libxml2, libxslt, ncurses, openssl, perl, autoconf
-, openjdk ? null # javacSupport
+# TODO: use jdk https://github.com/NixOS/nixpkgs/pull/89731
+, openjdk8 ? null # javacSupport
 , unixODBC ? null # odbcSupport
 , libGL ? null, libGLU ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
 , parallelBuild ? false
-, withSystemd ? stdenv.isLinux, systemd # systemd support in epmd
+, systemd
 }:
 
 { baseName ? "erlang"
@@ -17,8 +18,9 @@
 , enableThreads ? true
 , enableSmpSupport ? true
 , enableKernelPoll ? true
-, javacSupport ? false, javacPackages ? [ openjdk ]
+, javacSupport ? false, javacPackages ? [ openjdk8 ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
+, withSystemd ? stdenv.isLinux # systemd support in epmd
 , wxSupport ? true, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
@@ -36,7 +38,7 @@ assert wxSupport -> (if stdenv.isDarwin
   else libGL != null && libGLU != null && wxGTK != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
-assert javacSupport -> openjdk != null;
+assert javacSupport -> openjdk8 != null;
 
 let
   inherit (stdenv.lib) optional optionals optionalAttrs optionalString;

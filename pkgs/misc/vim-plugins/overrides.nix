@@ -1,14 +1,15 @@
 { lib, stdenv
 , python, cmake, meson, vim, ruby
 , which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
-, llvmPackages, rustPlatform
-, pkgconfig, curl, openssl, libgit2, libiconv
+, llvmPackages, rustPlatform, buildGoModule
+, pkg-config, curl, openssl, libgit2, libiconv
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
 , ycmd, rake
 , gobject-introspection, glib, wrapGAppsHook
 , substituteAll
 , languagetool
+, tabnine
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
 , nodePackages
@@ -59,23 +60,24 @@ self: super: {
   };
 
   LanguageClient-neovim = let
-    version = "0.1.158";
+    version = "0.1.160";
     LanguageClient-neovim-src = fetchFromGitHub {
       owner = "autozimu";
       repo = "LanguageClient-neovim";
       rev = version;
-      sha256 = "14xggdgp5qw4yj4gdsgr8s2nxm098m88q8rx6fzd2j20njv308ki";
+      sha256 = "143cifahav1pfmpx3j1ihx433jrwxf6z27s0wxndgjkd2plkks58";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
-      name = "LanguageClient-neovim-bin";
+      pname = "LanguageClient-neovim-bin";
+      inherit version;
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0nin1gydf6q4mmxljm2xbd1jfl3wpzx3pvlqwspahblv9j2bf5ck";
-      buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+      cargoSha256 = "0mf94j85awdcqa6cyb89bipny9xg13ldkznjf002fq747f55my2a";
+      buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
       #   Undefined symbols for architecture x86_64: "_CFURLResourceIsReachable"
-      preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+      preConfigure = lib.optionalString stdenv.isDarwin ''
         export NIX_LDFLAGS="-F${CoreFoundation}/Library/Frameworks -framework CoreFoundation $NIX_LDFLAGS"
       '';
     };
@@ -178,8 +180,8 @@ self: super: {
     meta = {
       description = "Address-completion for khard via deoplete";
       homepage = "https://github.com/nicoe/deoplete-khard";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ jorsn ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ jorsn ];
     };
   });
 
@@ -228,6 +230,14 @@ self: super: {
     configurePhase = "cd plugins/nvim";
   });
 
+  vimsence = super.vimsence.overrideAttrs(old: {
+    meta = with lib; {
+      description = "Discord rich presence for Vim";
+      homepage = "https://github.com/hugolgst/vimsence";
+      maintainers = with lib.maintainers; [ hugolgst ];
+    };
+  });
+
   vim-gist = super.vim-gist.overrideAttrs(old: {
     dependencies = with super; [ webapi-vim ];
   });
@@ -235,7 +245,7 @@ self: super: {
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;
     preInstall = "cd data/syntax-highlighting/vim";
-    meta.maintainers = with stdenv.lib.maintainers; [ vcunat ];
+    meta.maintainers = with lib.maintainers; [ vcunat ];
   };
 
   ncm2 = super.ncm2.overrideAttrs(old: {
@@ -261,6 +271,10 @@ self: super: {
 
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
+  });
+
+  nvim-lsputils = super.nvim-lsputils.overrideAttrs(old: {
+    dependencies = with super; [ popfix ];
   });
 
   fzf-vim = super.fzf-vim.overrideAttrs(old: {
@@ -307,11 +321,11 @@ self: super: {
       # remove unnecessary duplicated bin wrapper script
       rm -r plugin/vimacs
     '';
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Vim-Improved eMACS: Emacs emulation plugin for Vim";
       homepage = "http://algorithm.com.au/code/vimacs";
       license = licenses.gpl2Plus;
-      maintainers = with stdenv.lib.maintainers; [ millerjason ];
+      maintainers = with lib.maintainers; [ millerjason ];
     };
   });
 
@@ -320,7 +334,7 @@ self: super: {
   });
 
   vim-addon-manager = super.vim-addon-manager.overrideAttrs(old: {
-    buildInputs = stdenv.lib.optional stdenv.isDarwin Cocoa;
+    buildInputs = lib.optional stdenv.isDarwin Cocoa;
   });
 
   vim-addon-actions = super.vim-addon-actions.overrideAttrs(old: {
@@ -379,6 +393,16 @@ self: super: {
 
   vim-beancount = super.vim-beancount.overrideAttrs(old: {
     passthru.python3Dependencies = ps: with ps; [ beancount ];
+  });
+
+  vim-closer = super.vim-closer.overrideAttrs(old: {
+    patches = [
+      # Fix duplicate tag in doc
+      (fetchpatch {
+        url = "https://github.com/rstacruz/vim-closer/commit/a504be8c7050e41b7dfc50c2362948e2cf7c5422.patch";
+        sha256 = "065q30d913fm3pc7r5y53wmnb7q7bhv21qxavm65bkb91242d409";
+      })
+    ];
   });
 
   vim-codefmt = super.vim-codefmt.overrideAttrs(old: {
@@ -447,6 +471,18 @@ self: super: {
     ];
   });
 
+  lens-vim = super.lens-vim.overrideAttrs(old: {
+    # remove duplicate g:lens#animate in doc/lens.txt
+    # https://github.com/NixOS/nixpkgs/pull/105810#issuecomment-740007985
+    # https://github.com/camspiers/lens.vim/pull/40/files
+    patches = [
+      (substituteAll {
+        src = ./patches/lens-vim/remove_duplicate_g_lens_animate.patch;
+        inherit languagetool;
+      })
+    ];
+  });
+
   vim-hier = super.vim-hier.overrideAttrs(old: {
     buildInputs = [ vim ];
   });
@@ -455,6 +491,21 @@ self: super: {
     postPatch = ''
       substituteInPlace ftplugin/python_vimisort.vim \
         --replace 'import vim' 'import vim; import sys; sys.path.append("${python.pkgs.isort}/${python.sitePackages}")'
+    '';
+  });
+
+  vim-markdown-composer =
+  let
+    vim-markdown-composer-bin = rustPlatform.buildRustPackage rec {
+      pname = "vim-markdown-composer-bin";
+      inherit (super.vim-markdown-composer) src version;
+      cargoSha256 = "iuhq2Zhdkib8hw4uvXBjwE5ZiN1kzairlzufaGuVkWc=";
+    };
+  in super.vim-markdown-composer.overrideAttrs(oldAttrs: rec {
+    preFixup = ''
+      substituteInPlace "$out"/share/vim-plugins/vim-markdown-composer/after/ftplugin/markdown/composer.vim \
+        --replace "let l:args = [s:plugin_root . '/target/release/markdown-composer']" \
+        "let l:args = ['${vim-markdown-composer-bin}/bin/markdown-composer']"
     '';
   });
 
@@ -516,7 +567,7 @@ self: super: {
       ln -s ${ycmd}/lib/ycmd third_party
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A code-completion engine for Vim";
       homepage = "https://github.com/Valloric/YouCompleteMe";
       license = licenses.gpl3;
@@ -530,7 +581,7 @@ self: super: {
     buildInputs = [ python3.pkgs.jedi ];
     meta = {
       description = "code-completion for python using python-jedi";
-      license = stdenv.lib.licenses.mit;
+      license = lib.licenses.mit;
     };
   });
 
@@ -551,7 +602,7 @@ self: super: {
     propagatedBuildInputs = [ gnome3.zenity ];
     meta = {
       description = "Simple color selector/picker plugin";
-      license = stdenv.lib.licenses.publicDomain;
+      license = lib.licenses.publicDomain;
     };
   });
 
@@ -570,6 +621,20 @@ self: super: {
       '';
   });
 
+  vim-hexokinase = super.vim-hexokinase.overrideAttrs(old: {
+    preFixup = let
+      hexokinase = buildGoModule {
+        name = "hexokinase";
+        src = old.src + "/hexokinase";
+        vendorSha256 = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+      };
+    in ''
+      ln -s ${hexokinase}/bin/hexokinase $target/hexokinase/hexokinase
+    '';
+
+    meta.platforms = lib.platforms.all;
+  });
+
   vim-clap = super.vim-clap.overrideAttrs(old: {
     preFixup = let
       maple-bin = rustPlatform.buildRustPackage {
@@ -577,32 +642,44 @@ self: super: {
         src = old.src;
 
         nativeBuildInputs = [
-          pkgconfig
+          pkg-config
         ];
 
         buildInputs = [
           openssl
-        ] ++ stdenv.lib.optionals stdenv.isDarwin [
+        ] ++ lib.optionals stdenv.isDarwin [
           CoreServices
           curl
           libgit2
           libiconv
         ];
 
-        cargoSha256 = "0qqys51slz85rnx6knjyivnmyq4rj6rrnz7w72kqcl8da8zjbx7b";
+        cargoSha256 = "6tgSdIC9ThKvyiX1Unihwozhez6+HsQiqebugzNrKVc=";
       };
     in ''
       ln -s ${maple-bin}/bin/maple $target/bin/maple
+    '';
+
+    meta.platforms = lib.platforms.all;
+  });
+
+  completion-tabnine = super.completion-tabnine.overrideAttrs(old: {
+    buildInputs = [ tabnine ];
+
+    postFixup = ''
+      mkdir $target/binaries
+      ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
     '';
   });
 } // (
   let
     nodePackageNames = [
-      "coc-go"
       "coc-css"
+      "coc-diagnostic"
       "coc-emmet"
       "coc-eslint"
       "coc-git"
+      "coc-go"
       "coc-highlight"
       "coc-html"
       "coc-imselect"
@@ -610,6 +687,7 @@ self: super: {
       "coc-jest"
       "coc-json"
       "coc-lists"
+      "coc-markdownlint"
       "coc-metals"
       "coc-pairs"
       "coc-prettier"
@@ -626,6 +704,7 @@ self: super: {
       "coc-tslint-plugin"
       "coc-tsserver"
       "coc-vetur"
+      "coc-vimlsp"
       "coc-vimtex"
       "coc-wxml"
       "coc-yaml"

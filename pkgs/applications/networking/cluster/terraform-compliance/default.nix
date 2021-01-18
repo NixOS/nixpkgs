@@ -27,6 +27,11 @@ buildPythonApplication rec {
     sha256 = "161mszmxqp3wypnda48ama2mmq8yjilkxahwc1mxjwzy1n19sn7v";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "IPython==7.16.1" "IPython"
+  '';
+
   checkInputs = [ pytestCheckHook ];
 
   disabledTests = [
@@ -49,7 +54,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "BDD test framework for terraform";
-    homepage = https://github.com/eerkunt/terraform-compliance;
+    homepage = "https://github.com/eerkunt/terraform-compliance";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
   };

@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , glib
 , gettext
@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "4.6.0";
+  version = "4.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "0ls2ys4x6qqp0j727c4n7a6319m4k1qsy1ybxkfzlzgf750v9xda";
+    sha256 = "0fbgi2r2xikpa04k431qq9akngi9akyflq1kcks8f095qs5gsana";
   };
 
   buildInputs = [
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     wrapGAppsHook
     gettext
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     libtool
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-control-center";
     description = "A collection of configuration plugins used in cinnamon-settings";
     license = licenses.gpl2;

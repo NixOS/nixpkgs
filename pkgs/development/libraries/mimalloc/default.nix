@@ -7,17 +7,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname   = "mimalloc";
-  version = "1.6.4";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner  = "microsoft";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0b6ymi2a9is2q6n49dvlnjxknikj0rfff5ygbc4n7894h5mllvvr";
+    sha256 = "1ymffs3ixc4vkhpr09ph6xhyknm2cx8ij8j5l70cq6119mwilnwa";
   };
 
   nativeBuildInputs = [ cmake ninja ];
-  enableParallelBuilding = true;
   cmakeFlags = stdenv.lib.optional secureBuild [ "-DMI_SECURE=ON" ];
 
   postInstall = let

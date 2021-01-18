@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "groovy";
-  version = "3.0.3";
+  version = "3.0.7";
 
   src = fetchurl {
     url = "http://dl.bintray.com/groovy/maven/apache-groovy-binary-${version}.zip";
-    sha256 = "0xdm70b61pdj8z3g08az16y9b6cpz5hv7iwvwfyfyxrjdi47h419";
+    sha256 = "1xdpjqx7qaq0syw448b32q36g12pgh1hn6knyqi3k5isp0f09qmr";
   };
 
   buildInputs = [ unzip makeWrapper ];

@@ -1,4 +1,4 @@
-{ lib, fetchurl, gettext, pkgconfig, texinfo, wrapGAppsHook
+{ lib, fetchurl, gettext, pkg-config, texinfo, wrapGAppsHook
 , buildPythonApplication, pycairo, pygobject3
 , gobject-introspection, gtk3, librsvg
 , alsaUtils, timidity, mpg123, vorbis-tools, csound, lilypond
@@ -15,10 +15,11 @@ buildPythonApplication rec {
   patches = [
     ./css.patch
     ./menubar.patch
+    ./texinfo.patch
     ./webbrowser.patch
   ];
 
-  nativeBuildInputs = [ gettext pkgconfig texinfo wrapGAppsHook ];
+  nativeBuildInputs = [ gettext pkg-config texinfo wrapGAppsHook ];
   buildInputs = [ gobject-introspection gtk3 librsvg ];
   propagatedBuildInputs = [ pycairo pygobject3 ];
 
@@ -38,7 +39,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Ear training program";
-    homepage = "http://www.solfege.org/";
+    homepage = "https://www.solfege.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor orivej ];

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "sqlmap";
-  version = "1.4.8";
+  version = "1.4.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "af789cc2d9b7cab2f71087967867b3587db9636b38bef1ffb39165a0675a6d87";
+    sha256 = "166adazdrv92azx4p0qng0cm3va6i301vfsr4yyf0azj3sdg0waj";
   };
 
   postPatch = ''
@@ -25,6 +25,8 @@ buildPythonPackage rec {
 
   # No tests in archive
   doCheck = false;
+
+  pythonImportsCheck = [ "sqlmap" ];
 
   meta = with lib; {
     homepage = "http://sqlmap.org";

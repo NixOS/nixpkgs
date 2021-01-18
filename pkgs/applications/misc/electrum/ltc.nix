@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python3Packages
 , wrapQtAppsHook
@@ -27,6 +27,8 @@ python3Packages.buildPythonApplication rec {
     dnspython
     jsonrpclib-pelix
     pysocks
+    trezor
+    btchip
   ];
 
   preBuild = ''
@@ -36,15 +38,15 @@ python3Packages.buildPythonApplication rec {
     sed -i '/Created: .*/d' gui/qt/icons_rc.py
   '';
 
-  postFixup = ''
-    wrapQtApp $out/bin/electrum-ltc
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   checkPhase = ''
     $out/bin/electrum-ltc help >/dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Litecoin thin client";
     longDescription = ''
       Electrum-LTC is a simple, but powerful Litecoin wallet. A twelve-word

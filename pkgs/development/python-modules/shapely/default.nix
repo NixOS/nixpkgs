@@ -1,16 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll
+{ lib, stdenv, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
 , geos, pytest, cython
 , numpy
 }:
 
 buildPythonPackage rec {
   pname = "Shapely";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07lmrihj6pa7f99m97hbf2anqlhhwippcdz03bqkyihnlkhry6p2";
+    sha256 = "0adiz4jwmwxk7k1awqifb1a9bj5x4nx4gglb5dz9liam21674h8n";
   };
+  disabled = pythonOlder "3.5";
 
   nativeBuildInputs = [
     geos # for geos-config
@@ -28,8 +29,7 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./library-paths.patch;
       libgeos_c = GEOS_LIBRARY_PATH;
-      libc = "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}"
-               + stdenv.lib.optionalString (!stdenv.isDarwin) ".6";
+      libc = stdenv.lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
     })
   ];
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     py.test tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Geometric objects, predicates, and operations";
     maintainers = with maintainers; [ knedlsepp ];
     homepage = "https://pypi.python.org/pypi/Shapely/";

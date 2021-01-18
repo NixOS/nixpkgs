@@ -21,15 +21,16 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/espeak-ng)" $out/bin/speak-ng
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source speech synthesizer that supports over 70 languages, based on eSpeak";
-    homepage = src.meta.homepage;
+    homepage = "https://github.com/espeak-ng/espeak-ng";
+    changelog = "https://github.com/espeak-ng/espeak-ng/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3;
     maintainers = with maintainers; [ aske ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

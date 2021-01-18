@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libpng, perl, gettext }:
+{lib, stdenv, fetchurl, libpng, perl, gettext }:
 
 stdenv.mkDerivation {
   name = "xcftools-1.0.7";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
       These tools work independently of the Gimp engine and do not
       require the Gimp to even be installed.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

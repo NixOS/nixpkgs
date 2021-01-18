@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub
+, autoreconfHook, pkg-config
 , fuse, curl, expat }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "archiecobbs";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fuse curl expat ];
 
   autoreconfPhase = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/archiecobbs/s3backer";
     description = "FUSE-based single file backing store via Amazon S3";
     license = licenses.gpl2Plus;

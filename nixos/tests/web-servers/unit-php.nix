@@ -4,7 +4,7 @@ import ../make-test-python.nix ({pkgs, ...}:
 
 in {
   name = "unit-php-test";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ izorkin ];
+  meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
   machine = { config, lib, pkgs, ... }: {
     services.unit = {
@@ -47,7 +47,7 @@ in {
     machine.wait_for_unit("unit.service")
 
     # Check so we get an evaluated PHP back
-    response = machine.succeed("curl -vvv -s http://127.0.0.1:9074/")
+    response = machine.succeed("curl -f -vvv -s http://127.0.0.1:9074/")
     assert "PHP Version ${pkgs.unit.usedPhp74.version}" in response, "PHP version not detected"
 
     # Check so we have database and some other extensions loaded

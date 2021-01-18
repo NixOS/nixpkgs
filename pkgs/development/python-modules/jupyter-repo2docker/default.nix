@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonAtLeast
 , docker
 , escapism
 , jinja2
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "repo2docker.contentproviders.base"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://repo2docker.readthedocs.io/en/latest/";
     description = "Repo2docker: Turn code repositories into Jupyter enabled Docker Images";
     license = licenses.bsdOriginal;

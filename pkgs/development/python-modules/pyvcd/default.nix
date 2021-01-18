@@ -8,13 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.2.3";
+  version = "0.2.4";
   pname = "pyvcd";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c0fd7321143e821033f59dd41fc6b0350d1533ddccd4c8fc1d1f76e21cd667de";
+    sha256 = "071e51a8362908ad5a2a12f078185639b98b20b653a56f01679de169d0fa425d";
   };
 
   buildInputs = [ setuptools_scm ];

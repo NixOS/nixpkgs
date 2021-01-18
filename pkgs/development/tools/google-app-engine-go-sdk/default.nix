@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, python27, python27Packages, makeWrapper }:
+{ stdenv, fetchzip, python3Packages, makeWrapper }:
 
-with python27Packages;
+with python3Packages;
 
 stdenv.mkDerivation rec {
   pname = "google-app-engine-go-sdk";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
         sha256 = "0s8sqyc72lnc7dxd4cl559gyfx83x71jjpsld3i3nbp3mwwamczp";
       };
 
-  buildInputs = [python27 makeWrapper];
+  buildInputs = [ python makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     # create wrappers with correct env
     for i in goapp go-app-stager *.py; do
       makeWrapper "$out/share/go_appengine/$i" "$out/bin/$i" \
-        --prefix PATH : "${python27}/bin" \
+        --prefix PATH : "${python}/bin" \
         --prefix PYTHONPATH : "$(toPythonPath ${cffi}):$(toPythonPath ${cryptography}):$(toPythonPath ${pyopenssl})"
     done
   '';

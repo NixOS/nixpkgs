@@ -1,4 +1,4 @@
-{stdenv, fetchurl, vim, sendmailPath ? "/usr/sbin/sendmail"}:
+{lib, stdenv, fetchurl, vim, sendmailPath ? "/usr/sbin/sendmail"}:
 
 stdenv.mkDerivation {
   name = "cron-4.1";
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   preInstall = "mkdir -p $out/bin $out/sbin $out/share/man/man1 $out/share/man/man5 $out/share/man/man8";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon for running commands at specific times (Vixie Cron)";
     license = licenses.bsd0;
     platforms = with platforms; linux ++ darwin;

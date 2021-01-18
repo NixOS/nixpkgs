@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://launchpad.net/gnuclad";
-    description = "gnuclad tries to help the environment by creating trees.  It's primary use will be generating cladogram trees for the GNU/Linux distro timeline project.";
+    description = "gnuclad tries to help the environment by creating trees.  Its primary use will be generating cladogram trees for the GNU/Linux distro timeline project";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mog ];
     platforms = platforms.linux;

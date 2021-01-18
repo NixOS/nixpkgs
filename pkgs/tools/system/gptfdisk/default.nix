@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libuuid, popt, icu, ncurses }:
+{ fetchurl, lib, stdenv, libuuid, popt, icu, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "gptfdisk";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs gdisk_test.sh
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.mac --replace \
       "-mmacosx-version-min=10.4" "-mmacosx-version-min=10.6"
     substituteInPlace Makefile.mac --replace \
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       "/opt/local/lib/libncurses.a" "${ncurses.out}/lib/libncurses.dylib"
   '';
 
-  buildPhase = stdenv.lib.optionalString stdenv.isDarwin "make -f Makefile.mac";
+  buildPhase = lib.optionalString stdenv.isDarwin "make -f Makefile.mac";
   buildInputs = [ libuuid popt icu ncurses ];
 
   installPhase = ''
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
     license = licenses.gpl2;
     homepage = "https://www.rodsbooks.com/gdisk/";

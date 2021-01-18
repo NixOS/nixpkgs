@@ -1,4 +1,4 @@
-{ stdenv, runtimeShell, fetchFromGitHub, python3, writeText, writeScript
+{ lib, stdenv, runtimeShell, fetchFromGitHub, python3, writeText, writeScript
 , coreutils, sqlite }:
 
 with python3.pkgs;
@@ -17,7 +17,7 @@ let
     );
   '';
 
-  dbScript = writeScript "create_pykms_db.sh" (with stdenv.lib; ''
+  dbScript = writeScript "create_pykms_db.sh" (with lib; ''
     #!${runtimeShell}
 
     set -eEuo pipefail
@@ -81,7 +81,7 @@ in buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Windows KMS (Key Management Service) server written in Python";
     homepage    = "https://github.com/SystemRage/py-kms";
     license     = licenses.mit;

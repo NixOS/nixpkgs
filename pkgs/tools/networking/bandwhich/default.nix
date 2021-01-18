@@ -1,33 +1,21 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.18.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
     rev = version;
-    sha256 = "0qzmkhrg7pqgblmva7xcww6zc4rryba6kkfkhj05mvd31z3c1rz8";
+    sha256 = "014blvrv0kk4gzga86mbk7gd5dl1szajfi972da3lrfznck1w24n";
   };
 
-  cargoSha256 = "0iakw42nip0vxq50jjk73r0xl7xp426szb091ap4isad3zxq6saj";
-  cargoPatches = [
-    # Fixes rDNS support for systems using `systemd-networkd` from v246.
-    # See https://github.com/imsnif/bandwhich/pull/184 for context
-    (fetchpatch {
-      url = "https://github.com/imsnif/bandwhich/commit/19e485a1ce9f749c121d235147e3117cc847379e.patch";
-      sha256 = "03hg73gwlfq0l36k3aq7cfak3js7j05ssfpdbfiiwqq7lynm83jr";
-    })
-    (fetchpatch {
-      url = "https://github.com/imsnif/bandwhich/commit/35f03b716832fba9a735628d1c728d3e305f75c8.patch";
-      sha256 = "1bv837wc1dgg26s640f3lfya28ypnjs0675dykzxxxv5y9ns58l3";
-    })
-  ];
+  cargoSha256 = "0b5pqsdggdjq9sl54rmh2gaq31va6b2crdv7ihh3198ixwasaf02";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A CLI utility for displaying current network utilization";
     longDescription = ''
       bandwhich sniffs a given network interface and records IP packet size, cross
@@ -38,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/imsnif/bandwhich";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ma27 ];
+    maintainers = with maintainers; [ Br1ght0ne ma27 ];
     platforms = platforms.unix;
   };
 }

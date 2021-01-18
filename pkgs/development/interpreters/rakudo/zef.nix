@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zef";
-  version = "0.8.5";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "ugexe";
     repo = "zef";
     rev = "v${version}";
-    sha256 = "17a5ns0ph8626q3b4wv9v2n0zqmhqbqyzjzxa387kr19qs933yy6";
+    sha256 = "0h3lbznzxqmsv2816vr6y244sfdchj13yhbav86zy2m79p8b5lgq";
   };
 
   buildInputs = [ rakudo makeWrapper ];

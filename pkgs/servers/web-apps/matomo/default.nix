@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, makeWrapper, php }:
+{ lib, stdenv, fetchurl, makeWrapper, php }:
 
 let
   versions = {
     matomo = {
-      version = "3.14.0";
-      sha256 = "05ycc4k4w01212pklzgxrbwpzp572jmj8i9ija6s7c01071yjjzv";
+      version = "3.14.1";
+      sha256 = "0gp6v797118z703nh0p77zvsizvdg0c2jkn26996d4sqw5pa78v3";
     };
 
     matomo-beta = {
-      version = "3.14.0";
+      version = "3.14.1";
       # `beta` examples: "b1", "rc1", null
       # TOOD when updating: use null if stable version is >= latest beta or release candidate
       beta = null;
-      sha256 = "05ycc4k4w01212pklzgxrbwpzp572jmj8i9ija6s7c01071yjjzv";
+      sha256 = "0gp6v797118z703nh0p77zvsizvdg0c2jkn26996d4sqw5pa78v3";
     };
   };
   common = pname: { version, sha256, beta ? null }:
     let
-      fullVersion = version + stdenv.lib.optionalString (beta != null) "-${toString beta}";
+      fullVersion = version + lib.optionalString (beta != null) "-${toString beta}";
       name = "${pname}-${fullVersion}";
     in
 
@@ -97,7 +97,7 @@ let
           popd > /dev/null
         '';
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "A real-time web analytics application";
           license = licenses.gpl3Plus;
           homepage = "https://matomo.org/";
@@ -106,4 +106,4 @@ let
         };
       };
 in
-stdenv.lib.mapAttrs common versions
+lib.mapAttrs common versions

@@ -15,19 +15,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "btcpayserver";
-  version = "1.0.5.5";
+  version = "1.0.5.9";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "11h1nrmb7f44msbhhiz9ddqh5ss2kz6d8ysnvd070x3xj5krgnxz";
+    sha256 = "011pp94i49fx587ng16m6ml63vwiysjvpkijihrk6xamz78zddgx";
   };
 
-  nativeBuildInputs = [ dotnetSdk dotnetPackages.Nuget ];
+  nativeBuildInputs = [ dotnetSdk dotnetPackages.Nuget makeWrapper ];
 
-  # Due to a bug in btcpayserver, we can't just `dotnet publish` to create a binary.
-  # Build with `dotnet build` instead and add a custom `dotnet run` script.
   buildPhase = ''
     export HOME=$TMP/home
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
@@ -37,21 +35,15 @@ stdenv.mkDerivation rec {
     nuget init ${linkFarmFromDrvs "deps" deps} $TMP/nuget
 
     dotnet restore --source $TMP/nuget BTCPayServer/BTCPayServer.csproj
-    dotnet build -c Release BTCPayServer/BTCPayServer.csproj
+    dotnet publish --no-restore --output $out/share/$pname -c Release BTCPayServer/BTCPayServer.csproj
   '';
 
-  runScript =  ''
-    #!${bash}/bin/bash
-    DOTNET_CLI_TELEMETRY_OPTOUT=1 exec ${dotnetSdk}/bin/dotnet run --no-launch-profile --no-build \
-      -c Release -p @@SHARE@@/BTCPayServer/BTCPayServer.csproj -- "$@"
-  '';
-
+  # btcpayserver requires the publish directory as its working dir
+  # https://github.com/btcpayserver/btcpayserver/issues/1894
   installPhase = ''
-    cd ..
-    share=$out/share/$pname
-    mkdir -p $share
-    mv -T source $share
-    install -D -m500 <(echo "$runScript" | sed "s|@@SHARE@@|$share|") $out/bin/$pname
+    makeWrapper $out/share/$pname/BTCPayServer $out/bin/$pname \
+      --set DOTNET_ROOT "${dotnetSdk}" \
+      --run "cd $out/share/$pname"
   '';
 
   dontStrip = true;

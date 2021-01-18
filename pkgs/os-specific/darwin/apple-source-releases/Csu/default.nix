@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation }:
+{ lib, stdenv, appleDerivation }:
 
 appleDerivation {
   prePatch = ''
@@ -18,7 +18,7 @@ appleDerivation {
 
   installFlags = [ "DSTROOT=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Apple's common startup stubs for darwin";
     maintainers = with maintainers; [ copumpkin ];
     platforms   = platforms.darwin;

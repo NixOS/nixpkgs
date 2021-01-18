@@ -12,7 +12,7 @@
 
 let
 
-minSdkVersion = "9.0";
+minSdkVersion = targetPlatform.minSdkVersion or "9.0";
 
 iosPlatformArch = { parsed, ... }: {
   armv7a  = "armv7";
@@ -37,6 +37,10 @@ rec {
     bintools = binutils-unwrapped;
     extraBuildCommands = ''
       echo "-arch ${iosPlatformArch targetPlatform}" >> $out/nix-support/libc-ldflags
+    '' + lib.optionalString (sdk.platform == "iPhoneSimulator") ''
+      echo "-platform_version ios-sim ${minSdkVersion} ${sdk.version}" >> $out/nix-support/libc-ldflags
+    '' + lib.optionalString (sdk.platform == "iPhoneOS") ''
+      echo "-platform_version ios ${minSdkVersion} ${sdk.version}" >> $out/nix-support/libc-ldflags
     '';
   };
 
@@ -50,9 +54,9 @@ rec {
       mv cc-cflags.tmp $out/nix-support/cc-cflags
       echo "-target ${targetPlatform.config} -arch ${iosPlatformArch targetPlatform}" >> $out/nix-support/cc-cflags
       echo "-isystem ${sdk}/usr/include${lib.optionalString (lib.versionAtLeast "10" sdk.version) " -isystem ${sdk}/usr/include/c++/4.2.1/ -stdlib=libstdc++"}" >> $out/nix-support/cc-cflags
-    '' + stdenv.lib.optionalString (sdk.platform == "iPhoneSimulator") ''
+    '' + lib.optionalString (sdk.platform == "iPhoneSimulator") ''
       echo "-mios-simulator-version-min=${minSdkVersion}" >> $out/nix-support/cc-cflags
-    '' + stdenv.lib.optionalString (sdk.platform == "iPhoneOS") ''
+    '' + lib.optionalString (sdk.platform == "iPhoneOS") ''
       echo "-miphoneos-version-min=${minSdkVersion}" >> $out/nix-support/cc-cflags
     '';
   }) // {

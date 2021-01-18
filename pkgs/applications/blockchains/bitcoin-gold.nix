@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , openssl
 , boost
@@ -16,10 +16,10 @@
 , wrapQtAppsHook ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  
+
   pname = "bitcoin" + toString (optional (!withGui) "d") + "-gold";
   version = "0.15.2";
 

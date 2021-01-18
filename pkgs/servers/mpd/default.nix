@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
 # Inputs
-, curl, libmms, libnfs, samba
+, curl, libmms, libnfs, liburing, samba
 # Archive support
 , bzip2, zziplib
 # Codecs
@@ -24,12 +24,11 @@
 , python3Packages # for sphinx-build
 # For tests
 , gtest
-, fetchpatch # used to fetch an upstream patch fixing a failing test
 , zip
 }:
 
 let
-  lib = stdenv.lib;
+  concatAttrVals = nameList: set: lib.concatMap (x: set.${x} or []) nameList;
 
   featureDependencies = {
     # Storage plugins
@@ -37,6 +36,7 @@ let
     webdav        = [ curl expat ];
     # Input plugins
     curl          = [ curl ];
+    io_uring      = [ liburing ];
     mms           = [ libmms ];
     nfs           = [ libnfs ];
     smbclient     = [ samba ];
@@ -85,15 +85,19 @@ let
     zeroconf      = [ avahi dbus ];
   };
 
+  nativeFeatureDependencies = {
+    documentation = [ doxygen python3Packages.sphinx ];
+  };
+
   run = { features ? null }:
     let
       # Disable platform specific features if needed
       # using libmad to decode mp3 files on darwin is causing a segfault -- there
       # is probably a solution, but I'm disabling it for now
       platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "nfs" "smbclient" ]
-                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "systemd" "syslog" ];
+                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "io_uring" "systemd" "syslog" ];
 
-      knownFeatures = builtins.attrNames featureDependencies;
+      knownFeatures = builtins.attrNames featureDependencies ++ builtins.attrNames nativeFeatureDependencies;
       platformFeatures = lib.subtractLists platformMask knownFeatures;
 
       features_ = if (features == null )
@@ -110,13 +114,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.21.25";
+      version = "0.22.3";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "1yjp8pwr2zn0mp39ls1w0pl37zrjn5m9ycgjmcsw2wpa4709r356";
+        sha256 = "0323zxmgyrkbklnqm8i6napz8pva50cw14mzr9bvmyg64x404jgj";
       };
 
       buildInputs = [
@@ -128,16 +132,15 @@ let
         #    Run-time dependency GTest found: YES 1.10.0
         gtest
       ]
-        ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
+        ++ concatAttrVals features_ featureDependencies
         ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
 
       nativeBuildInputs = [
         meson
         ninja
         pkg-config
-        python3Packages.sphinx
-        doxygen
-      ];
+      ]
+        ++ concatAttrVals features_ nativeFeatureDependencies;
 
       # Otherwise, the meson log says:
       #
@@ -150,13 +153,13 @@ let
 
       mesonAutoFeatures = "disabled";
 
-      outputs = [ "out" "doc" "man" ];
+      outputs = [ "out" "doc" ]
+        ++ lib.optional (builtins.elem "documentation" features_) "man";
 
       mesonFlags = [
-        # Documentation is enabled unconditionally but it's not installed
-        # unconditionally thanks to the outputs being split
-        "-Ddocumentation=true"
         "-Dtest=true"
+        "-Dmanpages=true"
+        "-Dhtml_manual=true"
       ]
         ++ map (x: "-D${x}=enabled") features_
         ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
@@ -167,7 +170,7 @@ let
 
       passthru.tests.nixos = nixosTests.mpd;
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "A flexible, powerful daemon for playing music";
         homepage    = "https://www.musicpd.org/";
         license     = licenses.gpl2;
@@ -186,14 +189,14 @@ in
   mpd = run { };
   mpd-small = run { features = [
     "webdav" "curl" "mms" "bzip2" "zzip"
-    "audiofile" "faad" "flac" "gme" "mad"
+    "audiofile" "faad" "flac" "gme"
     "mpg123" "opus" "vorbis" "vorbisenc"
     "lame" "libsamplerate" "shout"
     "libmpdclient" "id3tag" "expat" "pcre"
     "yajl" "sqlite"
     "soundcloud" "qobuz" "tidal"
   ] ++ lib.optionals stdenv.isLinux [
-    "alsa" "systemd" "syslog"
+    "alsa" "systemd" "syslog" "io_uring"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "mad" "jack" "nfs"
   ]; };

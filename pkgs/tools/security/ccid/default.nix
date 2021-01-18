@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pcsclite, pkgconfig, libusb1, perl }:
+{ lib, stdenv, fetchurl, pcsclite, pkg-config, libusb1, perl }:
 
 stdenv.mkDerivation rec {
   pname = "ccid";
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--enable-usbdropdir=$out/pcsc/drivers")
   '';
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkg-config perl ];
   buildInputs = [ pcsclite libusb1 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ccid drivers for pcsclite";
     homepage = "https://ccid.apdu.fr/";
     license = licenses.gpl2Plus;

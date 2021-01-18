@@ -20,7 +20,7 @@ let
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
 
   isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
-  optional = pkgs.stdenv.lib.optionalString;
+  optional = pkgs.lib.optionalString;
 
   configTxt =
     pkgs.writeText "config.txt" (''

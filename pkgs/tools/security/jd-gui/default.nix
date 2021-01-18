@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre, jdk, gradle_5, makeDesktopItem, perl, writeText, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, jre, jdk, gradle_5, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell }:
 
 let
   pname = "jd-gui";
@@ -55,9 +55,9 @@ let
     }
   '';
 
-  desktopItem = launcher: makeDesktopItem {
+  desktopItem = makeDesktopItem {
     name = "jd-gui";
-    exec = "${launcher} %F";
+    exec = "jd-gui %F";
     icon = "jd-gui";
     comment = "Java Decompiler JD-GUI";
     desktopName = "JD-GUI";
@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
   inherit pname version src;
   name = "${pname}-${version}";
 
-  nativeBuildInputs = [ jdk gradle_5 ];
+  nativeBuildInputs = [ jdk gradle_5 copyDesktopItems ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
@@ -81,6 +81,8 @@ in stdenv.mkDerivation rec {
   installPhase = let
     jar = "$out/share/jd-gui/${name}.jar";
   in ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/{jd-gui,icons/hicolor/128x128/apps}
     cp build/libs/${name}.jar ${jar}
     cp src/linux/resources/jd_icon_128.png $out/share/icons/hicolor/128x128/apps/jd-gui.png
@@ -92,10 +94,12 @@ in stdenv.mkDerivation rec {
     EOF
     chmod +x $out/bin/jd-gui
 
-    ${(desktopItem "$out/bin/jd-gui").buildCommand}
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  desktopItems = [ desktopItem ];
+
+  meta = with lib; {
     description = "Fast Java Decompiler with powerful GUI";
     homepage    = "https://java-decompiler.github.io/";
     license     = licenses.gpl3;

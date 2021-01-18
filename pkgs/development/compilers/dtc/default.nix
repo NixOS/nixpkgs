@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ flex bison pkgconfig which ] ++ lib.optionals pythonSupport [ python swig ];
-  buildInputs = lib.optionals pythonSupport [ python ];
 
   postPatch = ''
     patchShebangs pylibfdt/

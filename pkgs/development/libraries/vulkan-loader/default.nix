@@ -3,21 +3,22 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-loader";
-  version = "1.2.131.2";
+  version = "1.2.162.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Loader";
     rev = "sdk-${version}";
-    sha256 = "12n4mxc6db89258k8i47ql1zna7k94lkwv7lpxg39nm8ypa1ywrv";
+    sha256 = "0w9i2pliw4ccmjyfzff4i2f3hxwsfd54jg7ahv2v634qmx59bsbi";
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ python3 xlibsWrapper libxcb libXrandr libXext wayland ];
-  enableParallelBuilding = true;
 
   preConfigure = ''
-    substituteInPlace loader/vulkan.pc.in --replace 'includedir=''${prefix}/include' 'includedir=${vulkan-headers}/include'
+    substituteInPlace loader/vulkan.pc.in \
+      --replace 'includedir=''${prefix}/include' 'includedir=${vulkan-headers}/include' \
+      --replace 'libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@' 'libdir=@CMAKE_INSTALL_LIBDIR@'
   '';
 
   cmakeFlags = [

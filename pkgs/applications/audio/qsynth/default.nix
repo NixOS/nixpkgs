@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, fluidsynth, libjack2, autoconf, pkgconfig
+{ lib, stdenv, fetchurl, alsaLib, fluidsynth, libjack2, autoconf, pkgconfig
 , mkDerivation, qtbase, qttools, qtx11extras
 }:
 
@@ -17,7 +17,7 @@ mkDerivation  rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fluidsynth GUI";
     homepage = "https://sourceforge.net/projects/qsynth";
     license = licenses.gpl2Plus;

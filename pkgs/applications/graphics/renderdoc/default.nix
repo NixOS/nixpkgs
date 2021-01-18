@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, mkDerivation
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, mkDerivation
 , qtbase, qtx11extras, qtsvg, makeWrapper
 , vulkan-loader, libglvnd, xorg, python3, python3Packages
 , bison, pcre, automake, autoconf, addOpenGLRunpath
@@ -13,14 +13,14 @@ let
   pythonPackages = python3Packages;
 in
 mkDerivation rec {
-  version = "1.9";
+  version = "1.11";
   pname = "renderdoc";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "18nparkd435hdbm924jfdvmym7f3xd2fcy96jr4lrkl5rhj2sf85";
+    sha256 = "01r4fq03fpyhwvn47wx3dw29vcadcd0qml00h36q38cq3pi9x42j";
   };
 
   buildInputs = [
@@ -61,9 +61,7 @@ mkDerivation rec {
     addOpenGLRunpath $out/lib/librenderdoc.so
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A single-frame graphics debugger";
     homepage = "https://renderdoc.org/";
     license = licenses.mit;

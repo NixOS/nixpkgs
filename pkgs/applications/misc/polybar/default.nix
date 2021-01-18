@@ -1,5 +1,5 @@
-{ cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
-, python3, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
+{ cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkg-config
+, python3, lib, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
 , xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
 , removeReferencesTo
 
@@ -27,17 +27,17 @@ assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
     pname = "polybar";
-    version = "3.4.3";
+    version = "3.5.2";
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
       rev = version;
-      sha256 = "0fsfh3xv0c0hz10xqzvd01c0p0wvzcnanbyczi45zhaxfrisb39w";
+      sha256 = "1ir8fdnzrba9fkkjfvax5szx5h49lavwgl9pabjzrpbvif328g3x";
       fetchSubmodules = true;
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://polybar.github.io/";
       description = "A fast and easy-to-use tool for creating status bars";
       longDescription = ''
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
         having a black belt in shell scripting.
       '';
       license = licenses.mit;
-      maintainers = with maintainers; [ afldcr filalex77 ];
+      maintainers = with maintainers; [ afldcr Br1ght0ne ];
       platforms = platforms.linux;
     };
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     '' else "";
 
     nativeBuildInputs = [
-      cmake pkgconfig removeReferencesTo
+      cmake pkg-config removeReferencesTo
     ];
 
     postFixup = ''

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , six
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A python package that provides useful locks";
     homepage = "https://github.com/harlowja/fasteners";
     license = licenses.asl20;

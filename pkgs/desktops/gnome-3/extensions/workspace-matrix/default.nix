@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, findutils, glib }:
+{ lib, stdenv, fetchFromGitHub, findutils, glib }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-workspace-matrix";
-  version = "4.0.1";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "mzur";
     repo = "gnome-shell-wsmatrix";
     rev = "v${version}";
-    sha256 = "1xx2h8k981657lws614f7x4mqjk900xq9907j2h5jdhbbic5ppy6";
+    sha256 = "0dbn6b3fdd7yblk0mhsmaiqs3mwgcf3khkx1dsnlqn5hcs0a3myd";
   };
 
   uuid = "wsmatrix@martin.zurowietz.de";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Arrange workspaces in a two dimensional grid with workspace thumbnails";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chkno ];

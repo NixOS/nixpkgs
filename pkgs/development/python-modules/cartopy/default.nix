@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchPypi {
     inherit version;
     pname = "Cartopy";
-    sha256 = "0q9ckfi37cxj7jwnqnzij62vwcf4krccx576vv5lhvpgvplxjjs2";
+    sha256 = "0d24fk0cbp29gmkysrwq05vry13swmwi3vx3cpcy04c0ixz33ykz";
   };
 
   checkInputs = [ filelock mock pytest_4 pep8 ];

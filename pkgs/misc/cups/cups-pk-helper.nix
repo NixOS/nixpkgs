@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, glib, polkit, cups, fetchpatch }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, glib, polkit, cups, fetchpatch }:
 
 stdenv.mkDerivation rec {
   version = "0.2.6";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0a52jw6rm7lr5nbyksiia0rn7sasyb5cjqcb95z1wxm2yprgi6lm";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
   buildInputs = [ glib polkit cups ];
 
   patches = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PolicyKit helper to configure cups with fine-grained privileges";
     homepage = "http://www.freedesktop.org/wiki/Software/cups-pk-helper/";
     license = licenses.gpl2;

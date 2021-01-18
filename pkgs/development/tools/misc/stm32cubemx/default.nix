@@ -1,7 +1,7 @@
 { stdenv, requireFile, makeDesktopItem, libicns, imagemagick, jre, fetchzip }:
 
 let
-  version = "5.6.1";
+  version = "6.0.1";
   desktopItem = makeDesktopItem {
     name = "stm32CubeMX";
     exec = "stm32cubemx";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}.zip";
-    sha256 = "1y4a340wcjl88kjw1f1x85ffp4b5g1psryn9mgkd717w2bfpf29l";
+    sha256 = "15vxca1pgpgxgiz4wisrw0lylffdwnn4n46z9n0q37f8hmzlrk8f";
     stripRoot= false;
   };
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       microcontrollers and microprocessors, as well as the generation of the
       corresponding initialization C code for the Arm® Cortex®-M core or a
       partial Linux® Device Tree for Arm® Cortex®-A core), through a
-      step-by-step process.        
+      step-by-step process.
     '';
     homepage = "https://www.st.com/en/development-tools/stm32cubemx.html";
     license = licenses.unfree;

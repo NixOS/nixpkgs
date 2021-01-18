@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-scriptName=update-source-versions # do not use the .wrapped name
+scriptName=update-source-version # do not use the .wrapped name
 
 die() {
     echo "$scriptName: error: $1" >&2
@@ -10,8 +10,8 @@ die() {
 
 usage() {
     echo "Usage: $scriptName <attr> <version> [<new-source-hash>] [<new-source-url>]"
-    echo "                              [--version-key=<version-key>] [--system=<system>] [--file=<file-to-update>]"
-    echo "                              [--ignore-same-hash]"
+    echo "                              [--version-key=<version-key>] [--system=<system>] [--file=<file-to-update>] [--rev=<revision>]"
+    echo "                              [--ignore-same-hash] [--print-changes]"
 }
 
 args=()
@@ -30,8 +30,14 @@ for arg in "$@"; do
                 die "Could not find provided file $nixFile"
             fi
         ;;
+        --rev=*)
+            newRevision="${arg#*=}"
+        ;;
         --ignore-same-hash)
             ignoreSameHash="true"
+        ;;
+        --print-changes)
+            printChanges="true"
         ;;
         --help)
             usage
@@ -102,7 +108,17 @@ fi
 
 if [[ "$oldVersion" = "$newVersion" ]]; then
     echo "$scriptName: New version same as old version, nothing to do." >&2
+    if [ -n "$printChanges" ]; then
+        printf '[]\n'
+    fi
     exit 0
+fi
+
+if [[ -n "$newRevision" ]]; then
+    oldRevision=$(nix-instantiate $systemArg --eval -E "with import ./. {}; $attr.src.rev" | tr -d '"')
+    if [[ -z "$oldRevision" ]]; then
+        die "Couldn't evaluate source revision from '$attr.src'!"
+    fi
 fi
 
 # Escape regex metacharacter that are allowed in store path names
@@ -168,6 +184,15 @@ if cmp -s "$nixFile" "$nixFile.bak"; then
     die "Failed to replace source hash of '$attr' to a temporary hash!"
 fi
 
+# Replace new revision, if given
+if [[ -n "$newRevision" ]]; then
+    sed -i "$nixFile" -re "s|\"$oldRevision\"|\"$newRevision\"|"
+
+    if cmp -s "$nixFile" "$nixFile.bak"; then
+        die "Failed to replace source revision '$oldRevision' to '$newRevision' in '$attr'!"
+    fi
+fi
+
 # If new hash not given on the command line, recalculate it ourselves.
 if [[ -z "$newHash" ]]; then
     nix-build $systemArg --no-out-link -A "$attr.src" 2>"$attr.fetchlog" >/dev/null || true
@@ -197,3 +222,7 @@ fi
 
 rm -f "$nixFile.bak"
 rm -f "$attr.fetchlog"
+
+if [ -n "$printChanges" ]; then
+    printf '[{"attrPath":"%s","oldVersion":"%s","newVersion":"%s","files":["%s"]}]\n' "$attr" "$oldVersion" "$newVersion" "$nixFile"
+fi

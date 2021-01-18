@@ -6,6 +6,7 @@
 , cython
 , enum34
 , gfortran
+, isPy27
 , isPy3k
 , numpy
 , pytest
@@ -17,6 +18,8 @@
 buildPythonPackage rec {
   pname = "scikits.odes";
   version = "2.6.1";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -42,11 +45,11 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A scikit offering extra ode/dae solvers, as an extension to what is available in scipy";
     homepage = "https://github.com/bmcage/odes";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ flokli idontgetoutmuch ];
+    maintainers = with maintainers; [ idontgetoutmuch ];
     platforms = [ "aarch64-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

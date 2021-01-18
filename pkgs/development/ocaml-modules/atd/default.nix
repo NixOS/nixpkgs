@@ -1,4 +1,4 @@
-{ stdenv, menhir, easy-format, fetchFromGitHub, buildDunePackage, which, biniou, yojson }:
+{ lib, menhir, easy-format, fetchFromGitHub, buildDunePackage, which, biniou, yojson }:
 
 buildDunePackage rec {
   pname = "atd";
@@ -18,7 +18,7 @@ buildDunePackage rec {
   buildInputs = [ which menhir ];
   propagatedBuildInputs = [ easy-format biniou yojson ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mjambon/atd";
     description = "Syntax for cross-language type definitions";
     license = licenses.bsd3;

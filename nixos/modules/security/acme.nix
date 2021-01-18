@@ -63,7 +63,7 @@ let
     script = with builtins; concatStringsSep "\n" (mapAttrsToList (cert: data: ''
       for fixpath in /var/lib/acme/${escapeShellArg cert} /var/lib/acme/.lego/${escapeShellArg cert}; do
         if [ -d "$fixpath" ]; then
-          chmod -R 750 "$fixpath"
+          chmod -R u=rwX,g=rX,o= "$fixpath"
           chown -R acme:${data.group} "$fixpath"
         fi
       done
@@ -104,12 +104,13 @@ let
     mkHash = with builtins; val: substring 0 20 (hashString "sha256" val);
     certDir = mkHash hashData;
     domainHash = mkHash "${concatStringsSep " " extraDomains} ${data.domain}";
-    othersHash = mkHash "${toString acmeServer} ${data.keyType}";
+    othersHash = mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
     accountDir = "/var/lib/acme/.lego/accounts/" + othersHash;
 
     protocolOpts = if useDns then (
       [ "--dns" data.dnsProvider ]
       ++ optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
+      ++ optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
     ) else (
       [ "--http" "--http.webroot" data.webroot ]
     );
@@ -121,19 +122,22 @@ let
       "--email" data.email
       "--key-type" data.keyType
     ] ++ protocolOpts
-      ++ optionals data.ocspMustStaple [ "--must-staple" ]
       ++ optionals (acmeServer != null) [ "--server" acmeServer ]
       ++ concatMap (name: [ "-d" name ]) extraDomains
       ++ data.extraLegoFlags;
 
+    # Although --must-staple is common to both modes, it is not declared as a
+    # mode-agnostic argument in lego and thus must come after the mode.
     runOpts = escapeShellArgs (
       commonOpts
       ++ [ "run" ]
+      ++ optionals data.ocspMustStaple [ "--must-staple" ]
       ++ data.extraLegoRunFlags
     );
     renewOpts = escapeShellArgs (
       commonOpts
       ++ [ "renew" "--reuse-key" ]
+      ++ optionals data.ocspMustStaple [ "--must-staple" ]
       ++ data.extraLegoRenewFlags
     );
 
@@ -207,7 +211,7 @@ let
 
     renewService = {
       description = "Renew ACME certificate for ${cert}";
-      after = [ "network.target" "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps;
+      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps;
       wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps;
 
       # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
@@ -249,7 +253,8 @@ let
         echo '${domainHash}' > domainhash.txt
 
         # Check if we can renew
-        if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' ]; then
+        # Certificates and account credentials must exist
+        if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a "$(ls -1 accounts)" ]; then
 
           # When domains are updated, there's no need to do a full
           # Lego run, but it's likely renew won't work if days is too low.
@@ -267,7 +272,7 @@ let
 
         mv domainhash.txt certificates/
         chmod 640 certificates/*
-        chmod -R 700 accounts/*
+        chmod -R u=rwX,g=,o= accounts/*
 
         # Group might change between runs, re-apply it
         chown 'acme:${data.group}' certificates/*
@@ -400,6 +405,17 @@ let
         description = ''
           DNS Challenge provider. For a list of supported providers, see the "code"
           field of the DNS providers listed at <link xlink:href="https://go-acme.github.io/lego/dns/"/>.
+        '';
+      };
+
+      dnsResolver = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "1.1.1.1:53";
+        description = ''
+          Set the resolver to use for performing recursive DNS queries. Supported:
+          host:port. The default is to use the system resolvers, or Google's DNS
+          resolvers if the system's cannot be determined.
         '';
       };
 
