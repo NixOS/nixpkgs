@@ -12,6 +12,7 @@
   # Specify binaries to build in the form { foo.src = "src/foo.cr"; }
   # The default `crystal build` options can be overridden with { foo.options = [ "--no-debug" ]; }
 , crystalBinaries ? { }
+, enableParallelBuilding ? true
 , ...
 }@args:
 
@@ -37,6 +38,19 @@ let
 
   buildDirectly = shardsFile == null || crystalBinaries != { };
 
+  mkCrystalBuildArgs = bin: attrs:
+    lib.concatStringsSep " " ([
+      "crystal"
+      "build"
+    ] ++ lib.optionals enableParallelBuilding [
+      "--threads"
+      "$NIX_BUILD_CORES"
+    ] ++ [
+      "-o"
+      bin
+      (attrs.src or (throw "No source file for crystal binary ${bin} provided"))
+      (lib.concatStringsSep " " (attrs.options or defaultOptions))
+    ]);
 in
 stdenv.mkDerivation (mkDerivationArgs // {
 
@@ -67,16 +81,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
     "runHook preBuild"
   ] ++ lib.optional (format == "make")
     ''make ''${buildTargets:-build} $makeFlags''
-  ++ lib.optionals (format == "crystal") (lib.mapAttrsToList
-    (bin: attrs: ''
-      crystal ${lib.escapeShellArgs ([
-        "build"
-        "-o"
-        bin
-        (attrs.src or (throw "No source file for crystal binary ${bin} provided"))
-      ] ++ (attrs.options or defaultOptions))}
-    '')
-    crystalBinaries)
+  ++ lib.optionals (format == "crystal") (lib.mapAttrsToList mkCrystalBuildArgs crystalBinaries)
   ++ lib.optional (format == "shards")
     "shards build --local --production ${lib.concatStringsSep " " defaultOptions}"
   ++ [ "runHook postBuild" ]));
