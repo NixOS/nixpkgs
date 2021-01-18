@@ -69,6 +69,12 @@ in stdenv.mkDerivation rec {
     wayland
   ];
 
+  postInstall = ''
+    substituteInPlace $out/share/pkgconfig/wayland-eglstream.pc \
+      --replace "prefix}/$dev" "prefix}" \
+      --replace 'Requires:' 'Requires.private'
+  '';
+
   meta = with lib; {
     description = "The EGLStream-based Wayland external platform";
     homepage = "https://github.com/NVIDIA/egl-wayland/";

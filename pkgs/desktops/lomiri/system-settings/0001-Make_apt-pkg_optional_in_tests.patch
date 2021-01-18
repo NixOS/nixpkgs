@@ -1,0 +1,31 @@
+From 508bd9a07a52b7397d890a32bcb1da39ad59188f Mon Sep 17 00:00:00 2001
+From: OPNA2608 <christoph.neidahl@gmail.com>
+Date: Sun, 3 Jan 2021 22:51:07 +0100
+Subject: [PATCH] Make apt-pkg optional in tests
+
+---
+ tests/mocks/Ubuntu/SystemSettings/Update/CMakeLists.txt | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/tests/mocks/Ubuntu/SystemSettings/Update/CMakeLists.txt b/tests/mocks/Ubuntu/SystemSettings/Update/CMakeLists.txt
+index 373dfaf4..1e5f076f 100644
+--- a/tests/mocks/Ubuntu/SystemSettings/Update/CMakeLists.txt
++++ b/tests/mocks/Ubuntu/SystemSettings/Update/CMakeLists.txt
+@@ -6,9 +6,13 @@ include_directories(
+     /usr/include/apt-pkg/
+ )
+ 
++if (DEB_SYSTEM)
++  set(apt-pkg apt-pkg)
++endif(DEP_SYSTEM)
++
+ set(PLUGIN_LIBS
+     UpdatePlugin
+-    apt-pkg
++    ${apt-pkg}
+ )
+ 
+ set(MOCK_SYSTEMUPDATE_SRCS
+-- 
+2.29.2
+

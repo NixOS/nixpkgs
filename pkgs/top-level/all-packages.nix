@@ -3754,6 +3754,8 @@ in
 
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
+  wlcs = callPackage ../tools/wayland/wlcs { };
+
   wlsunset = callPackage ../tools/wayland/wlsunset { };
 
   wob = callPackage ../tools/misc/wob { };
@@ -12841,6 +12843,7 @@ in
 
   abseil-cpp = callPackage ../development/libraries/abseil-cpp { };
 
+  accountsservice_0642 = callPackage ../development/libraries/accountsservice/0.6.42.nix { };
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
   acl = callPackage ../development/libraries/acl { };
@@ -23409,6 +23412,9 @@ in
 
   mailspring = callPackage ../applications/networking/mailreaders/mailspring {};
 
+  mir_1 = callPackage ../applications/window-managers/mir/1.x.nix { };
+  mir = callPackage ../applications/window-managers/mir { };
+
   mm = callPackage ../applications/networking/instant-messengers/mm { };
 
   mm-common = callPackage ../development/libraries/mm-common { };
@@ -24110,6 +24116,10 @@ in
 
   qiv = callPackage ../applications/graphics/qiv { };
 
+  process-cpp = callPackage ../development/libraries/process-cpp {
+    inherit (lomiri) cmake-extras;
+  };
+
   processing = callPackage ../applications/graphics/processing {
     jdk = oraclejdk8;
   };
@@ -24122,7 +24132,9 @@ in
     python = python3;
   } // (config.profanity or {}));
 
-  properties-cpp = callPackage ../development/libraries/properties-cpp { };
+  properties-cpp = callPackage ../development/libraries/properties-cpp {
+    inherit (lomiri) cmake-extras;
+  };
 
   protonmail-bridge = callPackage ../applications/networking/protonmail-bridge { };
 
@@ -27119,6 +27131,11 @@ in
   imwheel = callPackage ../tools/X11/imwheel { };
 
   kakasi = callPackage ../tools/text/kakasi { };
+
+  lomiri = recurseIntoAttrs (import ../desktops/lomiri {
+    inherit pkgs libsForQt5;
+    inherit (lib) makeScope;
+  });
 
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 

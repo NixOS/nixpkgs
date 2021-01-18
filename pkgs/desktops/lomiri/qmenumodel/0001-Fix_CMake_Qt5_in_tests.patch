@@ -1,0 +1,68 @@
+From e67dde2fe33650b5c3252f2bcb0b20273ccf004f Mon Sep 17 00:00:00 2001
+From: OPNA2608 <christoph.neidahl@gmail.com>
+Date: Sun, 3 Jan 2021 17:28:43 +0100
+Subject: [PATCH] Fix CMake Qt5 in tests
+
+---
+ tests/client/CMakeLists.txt | 12 ++++++++++--
+ tests/script/CMakeLists.txt |  7 +++++--
+ 2 files changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/tests/client/CMakeLists.txt b/tests/client/CMakeLists.txt
+index ed2f1aa..5a05c78 100644
+--- a/tests/client/CMakeLists.txt
++++ b/tests/client/CMakeLists.txt
+@@ -1,11 +1,17 @@
+ macro(declare_test testname)
+     add_executable(${testname} ${testname}.cpp)
+-    qt5_use_modules(${testname} Core DBus Widgets Test Qml Quick)
++    find_package(Qt5Core REQUIRED)
++    find_package(Qt5DBus REQUIRED)
++    find_package(Qt5Widgets REQUIRED)
++    find_package(Qt5Test REQUIRED)
++    find_package(Qt5Qml REQUIRED)
++    find_package(Qt5Quick REQUIRED)
+     target_link_libraries(${testname}
+                           qmenumodel
+                           dbusmenuscript
+                           ${GLIB_LDFLAGS}
+                           ${GIO_LDFLAGS}
++                          Qt5::Core Qt5::DBus Qt5::Widgets Qt5::Test Qt5::Qml Qt5::Quick
+     )
+ 
+     if(TEST_XML_OUTPUT)
+@@ -27,11 +33,13 @@ endmacro(declare_test testname)
+ 
+ macro(declare_simple_test testname)
+     add_executable(${testname} ${testname}.cpp)
+-    qt5_use_modules(${testname} Core Test)
++    find_package(Qt5Core REQUIRED)
++    find_package(Qt5Test REQUIRED)
+     target_link_libraries(${testname}
+                           qmenumodel
+                           ${GLIB_LDFLAGS}
+                           ${GIO_LDFLAGS}
++                          Qt5::Core Qt5::Test
+     )
+ 
+     add_test(${testname}
+diff --git a/tests/script/CMakeLists.txt b/tests/script/CMakeLists.txt
+index afa073b..22ea04c 100644
+--- a/tests/script/CMakeLists.txt
++++ b/tests/script/CMakeLists.txt
+@@ -2,7 +2,10 @@ project(dbusmenuscript)
+ 
+ add_library(dbusmenuscript STATIC dbusmenuscript.cpp)
+ 
+-set_target_properties(dbusmenuscript PROPERTIES COMPILE_FLAGS -fPIC)
++find_package(Qt5Core REQUIRED)
++find_package(Qt5DBus REQUIRED)
++find_package(Qt5Test REQUIRED)
++target_link_libraries(dbusmenuscript Qt5::Core Qt5::DBus Qt5::Test)
+ 
+-qt5_use_modules(dbusmenuscript Core DBus Test)
++set_target_properties(dbusmenuscript PROPERTIES COMPILE_FLAGS -fPIC)
+ 
+-- 
+2.29.2
+

@@ -1,0 +1,62 @@
+From 2f58c1295b95a6adf0be4b7ad34e97b51617a84e Mon Sep 17 00:00:00 2001
+From: OPNA2608 <christoph.neidahl@gmail.com>
+Date: Fri, 18 Dec 2020 21:01:17 +0100
+Subject: [PATCH] Add git_build to fix lack of .git dir
+
+---
+ src/contacts/contacts.pro               | 2 ++
+ src/organizer/organizer.pro             | 2 ++
+ src/versit/versit.pro                   | 2 ++
+ src/versitorganizer/versitorganizer.pro | 2 ++
+ 4 files changed, 8 insertions(+)
+
+diff --git a/src/contacts/contacts.pro b/src/contacts/contacts.pro
+index 55226af7..9e7f2ee6 100644
+--- a/src/contacts/contacts.pro
++++ b/src/contacts/contacts.pro
+@@ -80,4 +80,6 @@ SOURCES += \
+ 
+ HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
+ 
++CONFIG += git_build
+ load(qt_module)
++load(qt_module_headers)
+diff --git a/src/organizer/organizer.pro b/src/organizer/organizer.pro
+index 8038914f..e3fbc42d 100644
+--- a/src/organizer/organizer.pro
++++ b/src/organizer/organizer.pro
+@@ -67,4 +67,6 @@ SOURCES += \
+ 
+ HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
+ 
++CONFIG += git_build
+ load(qt_module)
++load(qt_module_headers)
+diff --git a/src/versit/versit.pro b/src/versit/versit.pro
+index c91928cb..2e30d677 100644
+--- a/src/versit/versit.pro
++++ b/src/versit/versit.pro
+@@ -57,4 +57,6 @@ SOURCES += \
+ 
+ HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
+ 
++CONFIG += git_build
+ load(qt_module)
++load(qt_module_headers)
+diff --git a/src/versitorganizer/versitorganizer.pro b/src/versitorganizer/versitorganizer.pro
+index d39ac819..d00a165d 100644
+--- a/src/versitorganizer/versitorganizer.pro
++++ b/src/versitorganizer/versitorganizer.pro
+@@ -1,7 +1,9 @@
+ TARGET = QtVersitOrganizer
+ QT = core versit-private organizer
+ 
++CONFIG += git_build
+ load(qt_module)
++load(qt_module_headers)
+ 
+ PUBLIC_HEADERS += \
+     qversitorganizerglobal.h \
+-- 
+2.28.0
+

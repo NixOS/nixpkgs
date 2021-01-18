@@ -1,30 +1,24 @@
-{ stdenv
-, fetchurl
-, cmake
-, pkg-config
-, gtest
-, doxygen
-, graphviz
-, lcov
+{ stdenv, fetchFromGitHub
+, cmake, cmake-extras
 }:
 
 stdenv.mkDerivation rec {
-  pname = "properties-cpp";
-  version = "0.0.1";
+  pname = "properties-cpp-unstable";
+  version = "2014-07-30";
 
-  src = let srcver = "${version}+14.10.20140730"; in
-    fetchurl {
-      url = "https://launchpad.net/ubuntu/+archive/primary/+files/${pname}_${srcver}.orig.tar.gz";
-      sha256 = "08vjyv7ibn6jh2ikj5v48kjpr3n6hlkp9qlvdn8r0vpiwzah0m2w";
-    };
+  src = fetchFromGitHub {
+    owner = "ubports";
+    repo = "properties-cpp";
+    rev = "20742e41f883161534218191b593b32318f838af";
+    sha256 = "1dj3imffbl8fqf3nsymcgv92k0h5mp0df4xnxbr6zrjqafi7h89a";
+  };
 
   postPatch = ''
-    sed -i "/add_subdirectory(tests)/d" CMakeLists.txt
+    substituteInPlace tests/CMakeLists.txt \
+      --replace 'find_package(Gtest REQUIRED)' 'find_package(PkgConfig REQUIRED)''\nfind_package(GMock REQUIRED)'
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-
-  buildInputs = [ gtest doxygen graphviz lcov ];
+  nativeBuildInputs = [ cmake cmake-extras ];
 
   meta = with stdenv.lib; {
     homepage = "https://launchpad.net/properties-cpp";
