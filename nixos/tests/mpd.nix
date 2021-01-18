@@ -107,7 +107,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         for track in tracks.splitlines():
             server.succeed(f"{mpc} add {track}")
 
-        _, added_tracks = server.execute(f"{mpc} listall")
+        _, added_tracks = server.execute(f"{mpc} playlist")
 
         # Check we succeeded adding audio tracks to the playlist
         assert len(added_tracks.splitlines()) > 0
