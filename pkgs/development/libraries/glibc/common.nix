@@ -42,7 +42,7 @@
 
 let
   version = "2.32";
-  patchSuffix = "-24";
+  patchSuffix = "-25";
   sha256 = "0di848ibffrnwq7g2dvgqrnn4xqhj3h96csn69q4da51ymafl9qn";
 in
 
@@ -63,10 +63,10 @@ stdenv.mkDerivation ({
          and using git or something would complicate bootstrapping.
          Fortunately it's not too big.
           $ git checkout release/2.32/master; git describe
-          glibc-2.32-24-g1d49bede4d
-          $ git show --reverse glibc-2.32.. | gzip -n -9 --rsyncable - > 2.32-24.patch.gz
+          glibc-2.32-25-g0d9793e82a
+          $ git show --reverse glibc-2.32.. | gzip -n -9 --rsyncable - > 2.32-25.patch.gz
        */
-      ./2.32-24.patch.gz
+      ./2.32-25.patch.gz
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch

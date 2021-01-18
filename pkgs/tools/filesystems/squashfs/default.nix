@@ -1,10 +1,7 @@
 { lib, stdenv, fetchFromGitHub, zlib, xz
-, lz4 ? null
-, lz4Support ? false
+, lz4
 , zstd
 }:
-
-assert lz4Support -> (lz4 != null);
 
 stdenv.mkDerivation {
   pname = "squashfs";
@@ -24,15 +21,13 @@ stdenv.mkDerivation {
     ./4k-align.patch
   ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
-  buildInputs = [ zlib xz zstd ]
-    ++ lib.optional lz4Support lz4;
+  buildInputs = [ zlib xz zstd lz4 ];
 
   preBuild = "cd squashfs-tools";
 
   installFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
-  makeFlags = [ "XZ_SUPPORT=1" "ZSTD_SUPPORT=1" ]
-    ++ lib.optional lz4Support "LZ4_SUPPORT=1";
+  makeFlags = [ "XZ_SUPPORT=1" "ZSTD_SUPPORT=1" "LZ4_SUPPORT=1" ];
 
   meta = {
     homepage = "http://squashfs.sourceforge.net/";
