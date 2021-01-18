@@ -29,13 +29,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "elogind";
-  version = "243.7";
+  version = "246.9.2";
 
   src = fetchFromGitHub {
     owner = "elogind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cihdf7blhncm2359qxli24j9l3dkn15gjys5vpjwny80zlym5ma";
+    sha256 = "sha256-EsW19D6eoEO4RJO+jwMA/SMFus+cxq9Fcy2zrcn9pd8=";
   };
 
   nativeBuildInputs = [
