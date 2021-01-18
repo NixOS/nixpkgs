@@ -30,6 +30,7 @@ let
       "timers.target"
       "paths.target"
       "rpcbind.target"
+      "boot-complete.target"
 
       # Rescue mode.
       "rescue.target"
@@ -105,6 +106,9 @@ let
       "systemd-backlight@.service"
       "systemd-rfkill.service"
       "systemd-rfkill.socket"
+
+      #"systemd-boot-check-no-failures.service"
+      "systemd-bless-boot.service"
 
       # Hibernate / suspend.
       "hibernate.target"
