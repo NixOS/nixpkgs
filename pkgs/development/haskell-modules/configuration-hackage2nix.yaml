@@ -3915,6 +3915,7 @@ broken-packages:
   - cgi-utils
   - cgrep
   - chainweb-mining-client
+  - chakra
   - chalkboard
   - chalkboard-viewer
   - character-cases
