@@ -1397,6 +1397,8 @@ in
 
   ssh-import-id = python3Packages.callPackage ../tools/admin/ssh-import-id { };
 
+  sshchecker = callPackage ../tools/security/sshchecker { };
+
   titaniumenv = callPackage ../development/mobile/titaniumenv { };
 
   abootimg = callPackage ../development/mobile/abootimg {};
