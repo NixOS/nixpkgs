@@ -1,4 +1,12 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, coverage, pytest, pytestcov }:
+{ lib
+, buildPythonPackage
+, coverage
+, fetchPypi
+, isPy27
+, pytest-cov
+, pytestCheckHook
+, toml
+}:
 
 buildPythonPackage rec {
   pname = "vulture";
@@ -10,8 +18,15 @@ buildPythonPackage rec {
     sha256 = "0ryrmsm72z3fzaanyblz49q40h9d3bbl4pspn2lvkkp9rcmsdm83";
   };
 
-  checkInputs = [ coverage pytest pytestcov ];
-  checkPhase = "pytest";
+  propagatedBuildInputs = [ toml ];
+
+  checkInputs = [
+    coverage
+    pytest-cov
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "vulture" ];
 
   meta = with lib; {
     description = "Finds unused code in Python programs";
