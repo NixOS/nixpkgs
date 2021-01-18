@@ -138,7 +138,9 @@ in
           TasksMax = "infinity";
           User = optionalString cfg.dropPrivileges "nomad";
         }
-        (mkIf cfg.enableDocker { SupplementaryGroups = "docker"; }) # space-separated string
+        (mkIf cfg.enableDocker {
+          SupplementaryGroups = "docker"; # space-separated string
+        })
         (mkIf (cfg.settings.data_dir == "/var/lib/nomad") { StateDirectory = "nomad"; })
       ];
 
