@@ -4,6 +4,7 @@ let
   inherit (pkgs.lib) listToAttrs optionalString recurseIntoAttrs mapAttrs filterAttrs;
 
   # These are attributes in compiler and packages that don't support integer-simple.
+  # TODO remove when packages is refactor like compiler
   integerSimpleExcludes = [
     "ghc822Binary"
     "ghc865Binary"
@@ -16,6 +17,7 @@ let
     "ghcHEAD"
   ];
 
+  # TODO remove when packages is refactor like compiler
   nativeBignumIncludes = [
     "ghcHEAD"
   ];
