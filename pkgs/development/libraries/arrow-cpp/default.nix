@@ -106,7 +106,6 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optionals (!enableShared) [
     "-DARROW_TEST_LINKAGE=static"
   ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # needed for tests
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 

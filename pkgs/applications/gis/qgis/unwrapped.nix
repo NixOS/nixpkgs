@@ -45,8 +45,7 @@ in mkDerivation rec {
        --replace 'sip_dir = cfg.default_sip_dir' 'sip_dir = "${python3Packages.pyqt5}/share/sip/PyQt5"'
    '';
 
-  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-                 "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
+  cmakeFlags = [ "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
                  "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5" ]
                  ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
                  ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";

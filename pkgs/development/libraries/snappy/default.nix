@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ];
 
   postInstall = ''

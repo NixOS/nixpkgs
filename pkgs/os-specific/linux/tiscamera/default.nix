@@ -63,10 +63,6 @@ stdenv.mkDerivation rec {
     "-DTCAM_INSTALL_GIR=${placeholder "out"}/share/gir-1.0"
     "-DTCAM_INSTALL_TYPELIB=${placeholder "out"}/lib/girepository-1.0"
     "-DTCAM_INSTALL_SYSTEMD=${placeholder "out"}/etc/systemd/system"
-    # There are gobject introspection commands launched as part of the build. Those have a runtime
-    # dependency on `libtcam` (which itself is built as part of this build). In order to allow
-    # that, we set the dynamic linker's path to point on the build time location of the library.
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ];
 
   postPatch = ''
