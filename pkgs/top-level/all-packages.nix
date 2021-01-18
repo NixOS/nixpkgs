@@ -150,6 +150,8 @@ in
 
   ankisyncd = callPackage ../servers/ankisyncd { };
 
+  fiche = callPackage ../servers/fiche { };
+
   avro-tools = callPackage ../development/tools/avro-tools { };
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
@@ -27987,6 +27989,8 @@ in
   scilab = callPackage ../applications/science/math/scilab { };
 
   scilab-bin = callPackage ../applications/science/math/scilab-bin {};
+
+  scilla = callPackage ../tools/security/scilla { };
 
   scotch = callPackage ../applications/science/math/scotch { };
 
