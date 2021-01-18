@@ -913,7 +913,7 @@
     "vultr" = ps: with ps; [ vultr ];
     "w800rf32" = ps: with ps; [ ]; # missing inputs: pyW800rf32
     "wake_on_lan" = ps: with ps; [ wakeonlan ];
-    "waqi" = ps: with ps; [ ]; # missing inputs: waqiasync
+    "waqi" = ps: with ps; [ waqiasync ];
     "water_heater" = ps: with ps; [ ];
     "waterfurnace" = ps: with ps; [ waterfurnace ];
     "watson_iot" = ps: with ps; [ ]; # missing inputs: ibmiotf
