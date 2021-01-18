@@ -122,25 +122,26 @@ in
         iptables
       ]);
 
-      serviceConfig = {
-        DynamicUser = cfg.dropPrivileges;
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
-          concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths;
-        KillMode = "process";
-        KillSignal = "SIGINT";
-        LimitNOFILE = 65536;
-        LimitNPROC = "infinity";
-        OOMScoreAdjust = -1000;
-        Restart = "on-failure";
-        RestartSec = 2;
-        # Agrees with the default `data_dir = "/var/lib/nomad"` in `settings` above.
-        StateDirectory = "nomad";
-        TasksMax = "infinity";
-        User = optionalString cfg.dropPrivileges "nomad";
-      } // (optionalAttrs cfg.enableDocker {
-        SupplementaryGroups = "docker"; # space-separated string
-      });
+      serviceConfig = mkMerge [
+        {
+          DynamicUser = cfg.dropPrivileges;
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
+            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths;
+          KillMode = "process";
+          KillSignal = "SIGINT";
+          LimitNOFILE = 65536;
+          LimitNPROC = "infinity";
+          OOMScoreAdjust = -1000;
+          Restart = "on-failure";
+          RestartSec = 2;
+          # Agrees with the default `data_dir = "/var/lib/nomad"` in `settings` above.
+          StateDirectory = "nomad";
+          TasksMax = "infinity";
+          User = optionalString cfg.dropPrivileges "nomad";
+        }
+        (mkIf cfg.enableDocker { SupplementaryGroups = "docker"; }) # space-separated string
+      ];
 
       unitConfig = {
         StartLimitIntervalSec = 10;
