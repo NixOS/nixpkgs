@@ -90,11 +90,15 @@ in {
     services.mysql = mkIf cfg.createDatabase {
       enable = true;
       package = mkDefault pkgs.mysql;
-      ensureUsers = [{
-        name = "engelsystem";
-        ensurePermissions = { "engelsystem.*" = "ALL PRIVILEGES"; };
-      }];
-      ensureDatabases = [ "engelsystem" ];
+      activationScripts.engelsystem =
+        let
+          unix_socket = if (lib.getName config.services.mysql.package == lib.getName pkgs.mariadb) then "unix_socket" else "auth_socket";
+        in ''
+          ( echo "create database if not exists engelsystem;"
+            echo "create user if not exists engelsystem@localhost identified with ${unix_socket};"
+            echo "grant all privileges on engelsystem.* to engelsystem@localhost;"
+          ) | ${config.services.mysql.package}/bin/mysql -N
+        '';
     };
 
     environment.etc."engelsystem/config.php".source =
@@ -170,7 +174,7 @@ in {
       script = ''
         ${cfg.package}/bin/migrate
       '';
-      after = [ "engelsystem-init.service" "mysql.service" ];
+      after = [ "engelsystem-init.service" ] ++ lib.optional cfg.createDatabase "mysql-activation-scripts.service";
     };
     systemd.services."phpfpm-engelsystem".after =
       [ "engelsystem-migrate.service" ];

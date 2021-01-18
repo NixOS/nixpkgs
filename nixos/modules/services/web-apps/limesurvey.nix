@@ -188,14 +188,15 @@ in
     services.mysql = mkIf mysqlLocal {
       enable = true;
       package = mkDefault pkgs.mariadb;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = {
-            "${cfg.database.name}.*" = "SELECT, CREATE, INSERT, UPDATE, DELETE, ALTER, DROP, INDEX";
-          };
-        }
-      ];
+      activationScripts.limesurvey =
+        let
+          unix_socket = if (lib.getName config.services.mysql.package == lib.getName pkgs.mariadb) then "unix_socket" else "auth_socket";
+        in ''
+          ( echo "create database if not exists \`${cfg.database.name}\`;"
+            echo "create user if not exists '${cfg.database.user}'@'localhost' identified with ${unix_socket};"
+            echo "grant select, create, insert, update, delete, alter, drop, index on \`${cfg.database.name}\`.* to '${cfg.database.user}'@'localhost';"
+          ) | ${config.services.mysql.package}/bin/mysql -N
+        '';
     };
 
     services.phpfpm.pools.limesurvey = {
@@ -255,7 +256,7 @@ in
     systemd.services.limesurvey-init = {
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-limesurvey.service" ];
-      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      after = optional mysqlLocal "mysql-activation-scripts.service" ++ optional pgsqlLocal "postgresql.service";
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required

@@ -203,14 +203,15 @@ in
     services.mysql = mkIf mysqlLocal {
       enable = true;
       package = mkDefault pkgs.mariadb;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = {
-            "${cfg.database.name}.*" = "SELECT, INSERT, UPDATE, DELETE, CREATE, CREATE TEMPORARY TABLES, DROP, INDEX, ALTER";
-          };
-        }
-      ];
+      activationScripts.moodle =
+        let
+          unix_socket = if (lib.getName config.services.mysql.package == lib.getName pkgs.mariadb) then "unix_socket" else "auth_socket";
+        in ''
+          ( echo "create database if not exists \`${cfg.database.name}\`;"
+            echo "create user if not exists '${cfg.database.user}'@'localhost' identified with ${unix_socket};"
+            echo "grant select, insert, update, delete, create, create temporary tables, drop, index, alter on \`${cfg.database.name}\`.* to '${cfg.database.user}'@'localhost';"
+          ) | ${config.services.mysql.package}/bin/mysql -N
+        '';
     };
 
     services.postgresql = mkIf pgsqlLocal {
@@ -264,7 +265,7 @@ in
     systemd.services.moodle-init = {
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-moodle.service" ];
-      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      after = optional mysqlLocal "mysql-activation-scripts.service" ++ optional pgsqlLocal "postgresql.service";
       environment.MOODLE_CONFIG = moodleConfig;
       script = ''
         ${phpExt}/bin/php ${cfg.package}/share/moodle/admin/cli/check_database_schema.php && rc=$? || rc=$?

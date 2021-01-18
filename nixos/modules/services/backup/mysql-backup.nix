@@ -88,15 +88,15 @@ in
       };
     };
 
-    services.mysql.ensureUsers = [{
-      name = cfg.user;
-      ensurePermissions = with lib;
-        let
-          privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
-          grant = db: nameValuePair "${db}.*" privs;
-        in
-          listToAttrs (map grant cfg.databases);
-    }];
+    services.mysql.activationScripts.mysql-backup =
+      let
+        unix_socket = if (lib.getName config.services.mysql.package == lib.getName pkgs.mariadb) then "unix_socket" else "auth_socket";
+      in ''
+
+        ( echo "create user if not exists '${cfg.user}'@'localhost' identified with ${unix_socket};"
+          ${concatMapStringsSep "\n" (db: ''echo "grant select, show view, trigger, lock tables on \`${db}\`.* to '${cfg.user}'@'localhost';"'') cfg.databases}
+        ) | ${config.services.mysql.package}/bin/mysql -N
+      '';
 
     systemd = {
       timers.mysql-backup = {
@@ -110,6 +110,7 @@ in
       };
       services.mysql-backup = {
         description = "Mysql backup service";
+        after = [ "mysql-activation-scripts.service" ];
         enable = true;
         serviceConfig = {
           User = cfg.user;

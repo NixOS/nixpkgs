@@ -9,8 +9,12 @@ import ./../make-test-python.nix ({ pkgs, ... } : {
     master = { pkgs, ... }: {
       services.mysql = {
         enable = true;
-        initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
         package = pkgs.mysql;
+        initialScript = pkgs.writeText "mysql-backup.sql" ''
+          create database if not exists testdb;
+          use testdb;
+          ${builtins.readFile ./testdb.sql}
+        '';
       };
 
       services.mysqlBackup = {

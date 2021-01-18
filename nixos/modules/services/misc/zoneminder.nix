@@ -213,11 +213,16 @@ in {
       mysql = lib.mkIf cfg.database.createLocally {
         enable = true;
         package = lib.mkDefault pkgs.mariadb;
-        ensureDatabases = [ cfg.database.name ];
-        ensureUsers = [{
-          name = cfg.database.username;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-        }];
+
+      activationScripts.zoneminder =
+        let
+          unix_socket = if (lib.getName config.services.mysql.package == lib.getName pkgs.mariadb) then "unix_socket" else "auth_socket";
+        in ''
+          ( echo "create database if not exists \`${cfg.database.name}\`;"
+            echo "create user if not exists '${cfg.database.username}'@'localhost' identified with ${unix_socket};"
+            echo "grant all privileges on \`${cfg.database.name}\`.* to '${cfg.database.username}'@'localhost';"
+          ) | ${config.services.mysql.package}/bin/mysql -N
+        '';
       };
 
       nginx = lib.mkIf useNginx {
@@ -316,7 +321,7 @@ in {
           procps
           psmisc
         ];
-        after = [ "nginx.service" ] ++ lib.optional cfg.database.createLocally "mysql.service";
+        after = [ "nginx.service" ] ++ lib.optional cfg.database.createLocally "mysql-activation-scripts.service";
         wantedBy = [ "multi-user.target" ];
         restartTriggers = [ defaultsFile configFile ];
         preStart = lib.optionalString useCustomDir ''

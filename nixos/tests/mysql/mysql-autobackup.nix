@@ -9,7 +9,11 @@ import ./../make-test-python.nix ({ pkgs, lib, ... }:
     {
       services.mysql.enable = true;
       services.mysql.package = pkgs.mysql;
-      services.mysql.initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
+      services.mysql.initialScript = pkgs.writeText "mysql-backup.sql" ''
+        create database if not exists testdb;
+        use testdb;
+        ${builtins.readFile ./testdb.sql}
+      '';
 
       services.automysqlbackup.enable = true;
     };

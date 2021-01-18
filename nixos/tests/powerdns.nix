@@ -15,11 +15,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     services.mysql = {
       enable = true;
       package = pkgs.mariadb;
-      ensureDatabases = [ "powerdns" ];
-      ensureUsers = lib.singleton
-        { name = "pdns";
-          ensurePermissions = { "powerdns.*" = "ALL PRIVILEGES"; };
-        };
+      activationScripts.powerdns = ''
+        ( echo "create database if not exists powerdns;"
+          echo "create user if not exists 'pdns'@'localhost' identified with unix_socket;"
+          echo "grant all privileges on powerdns.* to 'pdns'@'localhost';"
+        ) | ${pkgs.mariadb}/bin/mysql -N
+      '';
     };
 
     environment.systemPackages = with pkgs;
@@ -30,7 +31,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     import re
 
     with subtest("PowerDNS database exists"):
-        server.wait_for_unit("mysql")
+        server.wait_for_unit("mysql-activation-scripts.service")
         server.succeed("echo 'SHOW DATABASES;' | sudo -u pdns mysql -u pdns >&2")
 
     with subtest("Loading the MySQL schema works"):

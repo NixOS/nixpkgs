@@ -38,16 +38,13 @@ in {
       services.mysql = {
         enable = true;
         package = pkgs.mariadb;
-        ensureDatabases = [ "testdb" ];
-        ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
-          };
-        }];
-        initialScript = pkgs.writeText "mariadb-init.sql" ''
-          GRANT ALL PRIVILEGES ON *.* TO 'check_repl'@'localhost' IDENTIFIED BY 'check_pass' WITH GRANT OPTION;
-          FLUSH PRIVILEGES;
+        activationScripts.mariadb-galera-mariabackup = ''
+          ( echo "grant all privileges on *.* to 'check_repl'@'localhost' identified by 'check_pass' with grant option;"
+            echo "create database if not exists testdb;"
+            echo "create user if not exists 'testuser'@'localhost' identified with unix_socket;"
+            echo "grant all privileges on testdb.* to 'testuser'@'localhost';"
+            echo "flush privileges;"
+          ) | ${pkgs.mariadb}/bin/mysql -N
         '';
         settings = {
           mysqld = {
@@ -169,7 +166,7 @@ in {
 
   testScript = ''
     galera_01.start()
-    galera_01.wait_for_unit("mysql")
+    galera_01.wait_for_unit("mysql-activation-scripts.service")
     galera_01.wait_for_open_port(3306)
     galera_01.succeed(
         "sudo -u testuser mysql -u testuser -e 'use testdb; create table db1 (test_id INT, PRIMARY KEY (test_id)) ENGINE = InnoDB;'"
@@ -178,10 +175,10 @@ in {
         "sudo -u testuser mysql -u testuser -e 'use testdb; insert into db1 values (37);'"
     )
     galera_02.start()
-    galera_02.wait_for_unit("mysql")
+    galera_02.wait_for_unit("mysql-activation-scripts.service")
     galera_02.wait_for_open_port(3306)
     galera_03.start()
-    galera_03.wait_for_unit("mysql")
+    galera_03.wait_for_unit("mysql-activation-scripts.service")
     galera_03.wait_for_open_port(3306)
     galera_02.succeed(
         "sudo -u testuser mysql -u testuser -e 'use testdb; select test_id from db1;' -N | grep 37"

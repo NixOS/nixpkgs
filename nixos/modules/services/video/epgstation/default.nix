@@ -225,12 +225,16 @@ in
     services.mysql = {
       enable = mkDefault true;
       package = mkDefault pkgs.mysql;
-      ensureDatabases = [ cfg.database.name ];
-      # FIXME: enable once mysqljs supports auth_socket
-      # ensureUsers = [ {
-      #   name = username;
-      #   ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-      # } ];
+      activationScripts.epgstation =
+        let
+          unix_socket = if (lib.getName config.services.mysql.package == lib.getName pkgs.mariadb) then "unix_socket" else "auth_socket";
+        in ''
+          ( echo "create database if not exists \`${cfg.database.name}\`;"
+            # FIXME: enable once mysqljs supports auth_socket
+            # echo "create user if not exists '${cfg.database.user}'@'localhost' identified with ${unix_socket};"
+            # echo "grant all privileges on \`${cfg.database.name}\`.* to '${cfg.database.user}'@'localhost';"
+          ) | ${config.services.mysql.package}/bin/mysql -N
+        '';
     };
 
     services.epgstation.settings = let
@@ -279,7 +283,7 @@ in
       after = [
         "network.target"
       ] ++ optional config.services.mirakurun.enable "mirakurun.service"
-        ++ optional config.services.mysql.enable "mysql.service";
+        ++ optional config.services.mysql.enable "mysql-activation-scripts.service";
 
       serviceConfig = {
         ExecStart = "${pkgs.epgstation}/bin/epgstation start";

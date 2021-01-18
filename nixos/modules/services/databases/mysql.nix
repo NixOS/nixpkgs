@@ -16,12 +16,79 @@ let
     optionalString (cfg.extraOptions != null) "[mysqld]\n${cfg.extraOptions}"
   );
 
+  addAttributeName = mapAttrs (a: v: v // {
+    text = ''
+      #### MySQL activation script snippet ${a}:
+      _localstatus=0
+      ${v.text}
+      if (( _localstatus > 0 )); then
+        printf "MySQL activation script snippet '%s' failed (%s)\n" "${a}" "$_localstatus"
+      fi
+    '';
+  });
+
+  scriptType = with types;
+    let scriptOptions =
+      { deps = mkOption
+          { type = types.listOf types.str;
+            default = [ ];
+            description = "List of dependencies. The script will run after these.";
+          };
+        text = mkOption
+          { type = types.lines;
+            description = "The content of the script.";
+          };
+      };
+    in either str (submodule { options = scriptOptions; });
+
+  commonServiceConfig = {
+    # User and group
+    User = cfg.user;
+    Group = cfg.group;
+    # Capabilities
+    CapabilityBoundingSet = "";
+    # Security
+    NoNewPrivileges = true;
+    # Sandboxing
+    ProtectSystem = "strict";
+    ProtectHome = true;
+    PrivateTmp = true;
+    PrivateDevices = true;
+    ProtectHostname = true;
+    ProtectKernelTunables = true;
+    ProtectKernelModules = true;
+    ProtectControlGroups = true;
+    RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+    LockPersonality = true;
+    MemoryDenyWriteExecute = true;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    PrivateMounts = true;
+    # System Call Filtering
+    SystemCallArchitectures = "native";
+  };
+
 in
 
 {
   imports = [
     (mkRemovedOptionModule [ "services" "mysql" "pidDir" ] "Don't wait for pidfiles, describe dependencies through systemd.")
     (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
+    (mkRemovedOptionModule [ "services" "mysql" "initialDatabases" ] ''
+      This option often resulted in systems which weren't reproducible. If you wish to provision databases please review
+      the services.mysql.activationScripts option and carefully consider the pros and cons of this option with respect to
+      reproduciblity.
+    '')
+    (mkRemovedOptionModule [ "services" "mysql" "ensureDatabases" ] ''
+      This option often resulted in systems which weren't reproducible. If you wish to provision databases please review
+      the services.mysql.activationScripts option and carefully consider the pros and cons of this option with respect to
+      reproduciblity.
+    '')
+    (mkRemovedOptionModule [ "services" "mysql" "ensureUsers" ] ''
+      This option often resulted in systems which weren't reproducible. If you wish to provision databases please review
+      the services.mysql.activationScripts option and carefully consider the pros and cons of this option with respect to
+      reproduciblity.
+    '')
   ];
 
   ###### interface
@@ -142,115 +209,65 @@ in
         '';
       };
 
-      initialDatabases = mkOption {
-        type = types.listOf (types.submodule {
-          options = {
-            name = mkOption {
-              type = types.str;
-              description = ''
-                The name of the database to create.
-              '';
-            };
-            schema = mkOption {
-              type = types.nullOr types.path;
-              default = null;
-              description = ''
-                The initial schema of the database; if null (the default),
-                an empty database is created.
-              '';
-            };
-          };
-        });
-        default = [];
-        description = ''
-          List of database names and their initial schemas that should be used to create databases on the first startup
-          of MySQL. The schema attribute is optional: If not specified, an empty database is created.
-        '';
-        example = [
-          { name = "foodatabase"; schema = literalExample "./foodatabase.sql"; }
-          { name = "bardatabase"; }
-        ];
-      };
-
       initialScript = mkOption {
         type = types.nullOr types.path;
         default = null;
         description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database.";
       };
 
-      ensureDatabases = mkOption {
-        type = types.listOf types.str;
-        default = [];
+      activationScripts = mkOption {
+        type = types.attrsOf scriptType;
+        default = {};
         description = ''
-          Ensures that the specified databases exist.
-          This option will never delete existing databases, especially not when the value of this
-          option is changed. This means that databases created once through this option or
-          otherwise have to be removed manually.
+          A set of shell script fragments that are executed when a NixOS
+          system configuration is activated, after MySQL has started. Since
+          these are executed every time you boot the system or run
+          <command>nixos-rebuild</command>, it's important that they are
+          idempotent and fast. Useful for:
+          <itemizedlist>
+            <listitem><para>creating databases</para></listitem>
+            <listitem><para>creating local accounts with socket authentication</para></listitem>
+            <listitem><para>granting certain permissions on a database</para></listitem>
+          </itemizedlist>
+          <warning>
+            <para>
+              This should <emphasis>NOT</emphasis> contain any sensitive data such as credentials
+              because the contents of this option will end up in the world readable nix store.
+            </para>
+            <para>
+              Using this option can result in systems which are not reproducible, working against
+              the general Nix philosophy. You are advised to exercise caution when using this
+              option, carefully weighing the pros and cons with respect to reproduciblity.
+            </para>
+          </warning>
         '';
-        example = [
-          "nextcloud"
-          "matomo"
-        ];
-      };
+        example = lib.literalExample ''
+          { nextcloud =
+            '''
+              ( echo "create database if not exists `nextcloud`;"
+                echo "create user if not exists 'nextcloud'@'localhost' identified with unix_socket;"
+                echo "grant all privileges on nextcloud.* to 'nextcloud'@'localhost';"
+              ) | ${pkgs.mariadb}/bin/mysql -N
+            ''';
+          }
+        '';
+        apply = set: {
+          script = ''
+            #! ${pkgs.runtimeShell}
 
-      ensureUsers = mkOption {
-        type = types.listOf (types.submodule {
-          options = {
-            name = mkOption {
-              type = types.str;
-              description = ''
-                Name of the user to ensure.
-              '';
-            };
-            ensurePermissions = mkOption {
-              type = types.attrsOf types.str;
-              default = {};
-              description = ''
-                Permissions to ensure for the user, specified as attribute set.
-                The attribute names specify the database and tables to grant the permissions for,
-                separated by a dot. You may use wildcards here.
-                The attribute values specfiy the permissions to grant.
-                You may specify one or multiple comma-separated SQL privileges here.
+            _status=0
+            trap "_status=1 _localstatus=\$?" ERR
 
-                For more information on how to specify the target
-                and on which privileges exist, see the
-                <link xlink:href="https://mariadb.com/kb/en/library/grant/">GRANT syntax</link>.
-                The attributes are used as <code>GRANT ''${attrName} ON ''${attrValue}</code>.
-              '';
-              example = literalExample ''
-                {
-                  "database.*" = "ALL PRIVILEGES";
-                  "*.*" = "SELECT, LOCK TABLES";
-                }
-              '';
-            };
-          };
-        });
-        default = [];
-        description = ''
-          Ensures that the specified users exist and have at least the ensured permissions.
-          The MySQL users will be identified using Unix socket authentication. This authenticates the Unix user with the
-          same name only, and that without the need for a password.
-          This option will never delete existing users or remove permissions, especially not when the value of this
-          option is changed. This means that users created and permissions assigned once through this option or
-          otherwise have to be removed manually.
-        '';
-        example = literalExample ''
-          [
-            {
-              name = "nextcloud";
-              ensurePermissions = {
-                "nextcloud.*" = "ALL PRIVILEGES";
-              };
+            ${
+              let
+                set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
+                withHeadlines = addAttributeName set';
+              in textClosureMap id (withHeadlines) (attrNames withHeadlines)
             }
-            {
-              name = "backup";
-              ensurePermissions = {
-                "*.*" = "SELECT, LOCK TABLES";
-              };
-            }
-          ]
-        '';
+
+            exit $_status
+          '';
+        };
       };
 
       replication = {
@@ -404,29 +421,6 @@ in
                 echo "GRANT ALL PRIVILEGES ON *.* TO '${cfg.user}'@'localhost' WITH GRANT OPTION;"
               ) | ${cfg.package}/bin/mysql -u ${superUser} -N
 
-              ${concatMapStrings (database: ''
-                # Create initial databases
-                if ! test -e "${cfg.dataDir}/${database.name}"; then
-                    echo "Creating initial database: ${database.name}"
-                    ( echo 'create database `${database.name}`;'
-
-                      ${optionalString (database.schema != null) ''
-                      echo 'use `${database.name}`;'
-
-                      # TODO: this silently falls through if database.schema does not exist,
-                      # we should catch this somehow and exit, but can't do it here because we're in a subshell.
-                      if [ -f "${database.schema}" ]
-                      then
-                          cat ${database.schema}
-                      elif [ -d "${database.schema}" ]
-                      then
-                          cat ${database.schema}/mysql-databases/*.sql
-                      fi
-                      ''}
-                    ) | ${cfg.package}/bin/mysql -u ${superUser} -N
-                fi
-              '') cfg.initialDatabases}
-
               ${optionalString (cfg.replication.role == "master")
                 ''
                   # Set up the replication master
@@ -458,62 +452,40 @@ in
 
               rm ${cfg.dataDir}/mysql_init
           fi
-
-          ${optionalString (cfg.ensureDatabases != []) ''
-            (
-            ${concatMapStrings (database: ''
-              echo "CREATE DATABASE IF NOT EXISTS \`${database}\`;"
-            '') cfg.ensureDatabases}
-            ) | ${cfg.package}/bin/mysql -N
-          ''}
-
-          ${concatMapStrings (user:
-            ''
-              ( echo "CREATE USER IF NOT EXISTS '${user.name}'@'localhost' IDENTIFIED WITH ${if isMariaDB then "unix_socket" else "auth_socket"};"
-                ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
-                  echo "GRANT ${permission} ON ${database} TO '${user.name}'@'localhost';"
-                '') user.ensurePermissions)}
-              ) | ${cfg.package}/bin/mysql -N
-            '') cfg.ensureUsers}
         '';
 
-        serviceConfig = {
-          Type = if hasNotify then "notify" else "simple";
-          Restart = "on-abort";
-          RestartSec = "5s";
-          # The last two environment variables are used for starting Galera clusters
-          ExecStart = "${cfg.package}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
-          # User and group
-          User = cfg.user;
-          Group = cfg.group;
-          # Runtime directory and mode
-          RuntimeDirectory = "mysqld";
-          RuntimeDirectoryMode = "0755";
-          # Access write directories
-          ReadWritePaths = [ cfg.dataDir ];
-          # Capabilities
-          CapabilityBoundingSet = "";
-          # Security
-          NoNewPrivileges = true;
-          # Sandboxing
-          ProtectSystem = "strict";
-          ProtectHome = true;
-          PrivateTmp = true;
-          PrivateDevices = true;
-          ProtectHostname = true;
-          ProtectKernelTunables = true;
-          ProtectKernelModules = true;
-          ProtectControlGroups = true;
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          PrivateMounts = true;
-          # System Call Filtering
-          SystemCallArchitectures = "native";
-        };
+        serviceConfig = mkMerge [
+          commonServiceConfig
+          {
+            Type = if hasNotify then "notify" else "simple";
+            Restart = "on-abort";
+            RestartSec = "5s";
+            # The last two environment variables are used for starting Galera clusters
+            ExecStart = "${cfg.package}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
+            # Runtime directory and mode
+            RuntimeDirectory = "mysqld";
+            RuntimeDirectoryMode = "0755";
+            # Access write directories
+            ReadWritePaths = [ cfg.dataDir ];
+          }
+        ];
       };
+
+    systemd.services.mysql-activation-scripts = {
+      description = "Run MySQL-specific NixOS activation";
+      after = [ "mysql.service" ];
+      wantedBy = [ "multi-user.target" ];
+
+      serviceConfig = mkMerge [
+        commonServiceConfig
+        {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          SyslogIdentifier = "mysql-activation-scripts";
+          ExecStart = pkgs.writeScript "mysql-activation-scripts.sh" cfg.activationScripts.script;
+        }
+      ];
+    };
 
   };
 

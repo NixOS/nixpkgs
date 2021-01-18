@@ -220,14 +220,17 @@ in
     services.mysql = optionalAttrs mysqlLocal {
       enable = true;
       package = mkDefault pkgs.mariadb;
-    };
 
-    systemd.services.mysql.postStart = mkAfter (optionalString mysqlLocal ''
-      ( echo "CREATE DATABASE IF NOT EXISTS \`${cfg.database.name}\` CHARACTER SET utf8 COLLATE utf8_bin;"
-        echo "CREATE USER IF NOT EXISTS '${cfg.database.user}'@'localhost' IDENTIFIED WITH ${if (getName config.services.mysql.package == getName pkgs.mariadb) then "unix_socket" else "auth_socket"};"
-        echo "GRANT ALL PRIVILEGES ON \`${cfg.database.name}\`.* TO '${cfg.database.user}'@'localhost';"
-      ) | ${config.services.mysql.package}/bin/mysql -N
-    '');
+      activationScripts.zabbix-server =
+        let
+          unix_socket = if (lib.getName config.services.mysql.package == lib.getName pkgs.mariadb) then "unix_socket" else "auth_socket";
+        in ''
+          ( echo "create database if not exists \`${cfg.database.name}\` character set utf8 collate utf8_bin;"
+            echo "create user if not exists '${cfg.database.user}'@'localhost' identified with ${unix_socket};"
+            echo "grant all privileges on \`${cfg.database.name}\`.* to '${cfg.database.user}'@'localhost';"
+          ) | ${config.services.mysql.package}/bin/mysql -N
+        '';
+    };
 
     services.postgresql = optionalAttrs pgsqlLocal {
       enable = true;
@@ -257,7 +260,7 @@ in
       description = "Zabbix Server";
 
       wantedBy = [ "multi-user.target" ];
-      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      after = optional mysqlLocal "mysql-activation-scripts.service" ++ optional pgsqlLocal "postgresql.service";
 
       path = [ "/run/wrappers" ] ++ cfg.extraPackages;
       preStart = ''

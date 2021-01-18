@@ -277,12 +277,15 @@ in
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;
       package = mkDefault pkgs.mariadb;
-      ensureDatabases = mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
-      ensureUsers = mapAttrsToList (hostName: cfg:
-        { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-        }
-      ) eachSite;
+      activationScripts.wordpress =
+        let
+          unix_socket = if (lib.getName config.services.mysql.package == lib.getName pkgs.mariadb) then "unix_socket" else "auth_socket";
+        in concatMapStringsSep "\n" (cfg: optionalString cfg.database.createLocally ''
+          ( echo "create database if not exists \`${cfg.database.name}\`;"
+            echo "create user if not exists '${cfg.database.user}'@'localhost' identified with ${unix_socket};"
+            echo "grant all privileges on \`${cfg.database.name}\`.* to '${cfg.database.user}'@'localhost';"
+          ) | ${config.services.mysql.package}/bin/mysql -N
+        '') (attrValues eachSite);
     };
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
@@ -342,7 +345,7 @@ in
         nameValuePair "wordpress-init-${hostName}" {
           wantedBy = [ "multi-user.target" ];
           before = [ "phpfpm-wordpress-${hostName}.service" ];
-          after = optional cfg.database.createLocally "mysql.service";
+          after = optional cfg.database.createLocally "mysql-activation-scripts.service";
           script = secretsScript (stateDir hostName);
 
           serviceConfig = {
