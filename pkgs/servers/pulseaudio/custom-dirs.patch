@@ -1,0 +1,59 @@
+diff --git a/src/modules/alsa/alsa-mixer.c b/src/modules/alsa/alsa-mixer.c
+index cd99a75f8..ed4a8f678 100644
+--- a/src/modules/alsa/alsa-mixer.c
++++ b/src/modules/alsa/alsa-mixer.c
+@@ -2573,12 +2573,13 @@ static int path_verify(pa_alsa_path *p) {
+ }
+ 
+ static const char *get_default_paths_dir(void) {
++    char *env = getenv("PA_ALSA_PATHS_DIR");
+ #ifdef HAVE_RUNNING_FROM_BUILD_TREE
+     if (pa_run_from_build_tree())
+         return PA_SRCDIR "/modules/alsa/mixer/paths/";
+     else
+ #endif
+-        return PA_ALSA_PATHS_DIR;
++        return (env ? env : PA_ALSA_PATHS_DIR);
+ }
+ 
+ pa_alsa_path* pa_alsa_path_new(const char *paths_dir, const char *fname, pa_alsa_direction_t direction) {
+@@ -4414,6 +4415,7 @@ pa_alsa_profile_set* pa_alsa_profile_set_new(const char *fname, const pa_channel
+     pa_alsa_profile *p;
+     pa_alsa_mapping *m;
+     pa_alsa_decibel_fix *db_fix;
++    char *env;
+     char *fn;
+     int r;
+     void *state;
+@@ -4459,11 +4461,13 @@ pa_alsa_profile_set* pa_alsa_profile_set_new(const char *fname, const pa_channel
+     if (!fname)
+         fname = "default.conf";
+ 
++    env = getenv("PA_ALSA_PROFILE_SETS_DIR");
++
+     fn = pa_maybe_prefix_path(fname,
+ #ifdef HAVE_RUNNING_FROM_BUILD_TREE
+                               pa_run_from_build_tree() ? PA_SRCDIR "/modules/alsa/mixer/profile-sets/" :
+ #endif
+-                              PA_ALSA_PROFILE_SETS_DIR);
++                              (env ? env : PA_ALSA_PROFILE_SETS_DIR));
+ 
+     r = pa_config_parse(fn, NULL, items, NULL, false, ps);
+     pa_xfree(fn);
+diff --git a/src/tests/alsa-mixer-path-test.c b/src/tests/alsa-mixer-path-test.c
+index ee40587b7..dd5d16bdb 100644
+--- a/src/tests/alsa-mixer-path-test.c
++++ b/src/tests/alsa-mixer-path-test.c
+@@ -15,10 +15,11 @@
+ 
+ /* This function was copied from alsa-mixer.c */
+ static const char *get_default_paths_dir(void) {
++    char *env = getenv("PA_ALSA_PATHS_DIR");
+     if (pa_run_from_build_tree())
+         return PA_SRCDIR "/modules/alsa/mixer/paths/";
+     else
+-        return PA_ALSA_PATHS_DIR;
++        return (env ? env : PA_ALSA_PATHS_DIR);
+ }
+ 
+ static pa_strlist *load_makefile() {
