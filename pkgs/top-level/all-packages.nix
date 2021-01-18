@@ -7824,6 +7824,8 @@ in
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  tangram = callPackage ../applications/networking/instant-messengers/tangram { };
+
   t1utils = callPackage ../tools/misc/t1utils { };
 
   talkfilters = callPackage ../misc/talkfilters {};
