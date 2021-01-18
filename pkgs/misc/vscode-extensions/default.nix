@@ -397,7 +397,7 @@ let
           sha256 = "sha256-9i3TgCFThnFF5ccwzS4ATj5c2Xoe/4tDFGv75jJxeQ4=";
         };
         meta = {
-          license = stdenv.lib.licenses.mit;
+          license = lib.licenses.mit;
         };
       };
 
