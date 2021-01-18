@@ -1,21 +1,35 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, pytest
+{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy
 , numpy, zlib, netcdf, hdf5, curl, libjpeg, cython, cftime
+, mpi4py ? null, openssh ? null
 }:
+assert (mpi4py != null) -> 
+  openssh != null
+  && hdf5.mpi == mpi4py.mpi 
+  && netcdf.mpi == mpi4py.mpi;
+
+let 
+  mpiSupport = (mpi4py != null);
+  mpi = if mpiSupport then mpi4py.mpi else null;
+in
 buildPythonPackage rec {
   pname = "netCDF4";
   version = "1.5.5.1";
 
   disabled = isPyPy;
-
+  
   src = fetchPypi {
     inherit pname version;
     sha256 = "d957e55a667d1fc651ddef22fea10ded0f142b7d9dbbf4d08c0012d32f445abd";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ netcdf numpy ] ++ lib.optionals mpiSupport [ mpi4py openssh ];
+
+  nativeBuildInputs = [
+    cython 
+  ];
 
   buildInputs = [
-    cython
+    mpi 
   ];
 
   propagatedBuildInputs = [
@@ -26,21 +40,29 @@ buildPythonPackage rec {
     hdf5
     curl
     libjpeg
-  ];
+  ] ++ lib.optionals mpiSupport [mpi4py mpi openssh];
+
+  #patches=[./skipDapTest.patch];
+
+  makeFlags = lib.optionals mpiSupport [ "CC=mpicc" "CXX=mpicxx" ];
 
   checkPhase = ''
-    py.test test/tst_*.py
+    cd test
+    rm tst_dap.py # does not fail in the nix-shell  
+    python -m unittest tst_*.py
   '';
 
-  # Tests need fixing.
-  doCheck = false;
 
   # Variables used to configure the build process
   USE_NCCONFIG="0";
   HDF5_DIR = lib.getDev hdf5;
-  NETCDF4_DIR=netcdf;
-  CURL_DIR=curl.dev;
-  JPEG_DIR=libjpeg.dev;
+  NETCDF4_DIR="${netcdf}";
+  CURL_DIR="${curl.dev}";
+  JPEG_DIR="${libjpeg.dev}";
+  
+  passthru = {
+    inherit mpi mpiSupport;
+  }; 
 
   meta = with lib; {
     description = "Interface to netCDF library (versions 3 and 4)";
