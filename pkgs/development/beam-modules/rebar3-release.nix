@@ -3,7 +3,7 @@
 
 { name, version
 , src
-, checkouts ? null
+, beamDeps ? []
 , releaseType
 , buildInputs ? []
 , setupHook ? null
@@ -33,7 +33,7 @@ let
     inherit version;
 
     buildInputs = buildInputs ++ [ erlang rebar3 openssl ];
-    propagatedBuildInputs = [checkouts];
+    propagatedBuildInputs = beamDeps;
 
     dontStrip = true;
 
@@ -45,10 +45,11 @@ let
 
     configurePhase = ''
       runHook preConfigure
-      ${if checkouts != null then
-          ''cp --no-preserve=all -R ${checkouts}/_checkouts .''
-        else
-          ''''}
+      rm -rf _build
+      mkdir _checkouts
+      for dep in ${toString beamDeps}; do
+          ln -s $dep _checkouts/
+      done
       runHook postConfigure
     '';
 
