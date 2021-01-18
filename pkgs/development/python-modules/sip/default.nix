@@ -1,44 +1,41 @@
-{ lib, fetchurl, buildPythonPackage, python, isPyPy, sip-module ? "sip" }:
+{ lib
+, fetchurl
+, buildPythonPackage
+, isPyPy
+, packaging
+, toml
+, pythonOlder
+, python
+}:
 
 buildPythonPackage rec {
-  pname = sip-module;
-  version = "4.19.24";
-  format = "other";
+  pname = "sip";
+  # Latest stable. No idea why they call it "dev".
+  version = "5.5.0.dev2010041444";
 
-  disabled = isPyPy;
+  disabled = pythonOlder "3.5" || isPyPy;
 
   src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/sip/${version}/sip-${version}.tar.gz";
-    sha256 = "1ra15vb5i9gkg2vdvh16cq9x2mmzw1yi3xphxs8q34q1pf83gkgd";
+    url = "https://www.riverbankcomputing.com/static/Downloads/sip/sip-${version}.tar.gz";
+    sha256 = "sha256-MNUzjRIuVVTZmRzjCAQwvcSZtlyfJ6W+ZacHfBv9c7g=";
   };
 
-  configurePhase = ''
-    ${python.executable} ./configure.py \
-      --sip-module ${sip-module} \
-      -d $out/${python.sitePackages} \
-      -b $out/bin -e $out/include
-  '';
+  propagatedBuildInputs = [
+    packaging
+    toml
+  ];
 
-  enableParallelBuilding = true;
+  pythonImportsCheck = [
+    "sipbuild"
+  ];
 
-  installCheckPhase = let
-    modules = [
-      sip-module
-      "sipconfig"
-    ];
-    imports = lib.concatMapStrings (module: "import ${module};") modules;
-  in ''
-    echo "Checking whether modules can be imported..."
-    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH ${python.interpreter} -c "${imports}"
-  '';
-
-  doCheck = true;
+  # No tests in archive
+  doCheck = false;
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
     homepage    = "http://www.riverbankcomputing.co.uk/";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ lovek323 sander ];
-    platforms   = platforms.all;
   };
 }
