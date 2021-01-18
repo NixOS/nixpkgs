@@ -879,4 +879,11 @@ mapAliases ({
     sddm
   ;
 
+  /* https://github.com/NixOS/nixpkgs/issues/107280 */
+  deluge-1_x = lib.trivial.warn ''
+    Deluge 1.x will be removed in NixOS 21.09. Please back up your configuration
+    directory and upgrade to Deluge 2.x. In case you are using the services.deluge module
+    this is done by setting `services.deluge.package = pkgs.deluge-2_x;`.
+    For more information visit https://github.com/NixOS/nixpkgs/issues/107280
+  '' deluge-1_x-deprecated;
 })

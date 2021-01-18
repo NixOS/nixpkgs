@@ -3438,7 +3438,7 @@ in
     pythonPackages = python3Packages;
     libtorrent-rasterbar = libtorrent-rasterbar-1_2_x.override { python = python3; };
   };
-  deluge-1_x = callPackage ../applications/networking/p2p/deluge/1.nix {
+  deluge-1_x-deprecated = callPackage ../applications/networking/p2p/deluge/1.nix {
     pythonPackages = python2Packages;
     libtorrent-rasterbar = libtorrent-rasterbar-1_1_x;
   };
