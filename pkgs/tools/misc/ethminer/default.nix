@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  clangStdenv,
   fetchFromGitHub,
   opencl-headers,
   cmake,
@@ -17,13 +16,9 @@
   openssl,
   pkg-config,
   cli11
-}@args:
+}:
 
-# Note that this requires clang < 9.0 to build, and currently
-# clangStdenv provides clang 7.1 which satisfies the requirement.
-let stdenv = if cudaSupport then clangStdenv else args.stdenv;
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ethminer";
   version = "0.19.0";
 
@@ -43,9 +38,11 @@ in stdenv.mkDerivation rec {
     "-DAPICORE=ON"
     "-DETHDBUS=OFF"
     "-DCMAKE_BUILD_TYPE=Release"
-  ] ++ lib.optionals (!cudaSupport) [
+  ] ++ (if cudaSupport then [
+    "-DCUDA_PROPAGATE_HOST_FLAGS=off"
+  ] else [
     "-DETHASHCUDA=OFF" # on by default
-  ];
+  ]);
 
   nativeBuildInputs = [
     cmake
@@ -81,6 +78,5 @@ in stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ nand0p atemu ];
     license = licenses.gpl3Only;
-    broken = cudaSupport;
   };
 }
