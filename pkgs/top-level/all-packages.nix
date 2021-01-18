@@ -23219,6 +23219,8 @@ in
 
   mediathekview = callPackage ../applications/video/mediathekview { };
 
+  megapixels = callPackage ../applications/graphics/megapixels { };
+
   meteo = callPackage ../applications/networking/weather/meteo { };
 
   meld = callPackage ../applications/version-management/meld { };
