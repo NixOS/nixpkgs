@@ -40,7 +40,7 @@ in
 
       enableDocker = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
           Enable Docker support. Needed for Nomad's docker driver.
 
