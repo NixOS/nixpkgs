@@ -206,7 +206,7 @@ Success!
     <link linkend="opt-services.nginx.virtualHosts._name_.root">root</link> = pkgs.element-web.override {
       conf = {
         default_server_config."m.homeserver" = {
-          "base_url" = "${config.networking.domain}";
+          "base_url" = "https://${fqdn}";
           "server_name" = "${fqdn}";
         };
       };
