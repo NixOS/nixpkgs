@@ -5,6 +5,7 @@
 <p align="center">
   <a href="https://www.codetriage.com/nixos/nixpkgs"><img src="https://www.codetriage.com/nixos/nixpkgs/badges/users.svg" alt="Code Triagers badge" /></a>
   <a href="https://opencollective.com/nixos"><img src="https://opencollective.com/nixos/tiers/supporter/badge.svg?label=Supporter&color=brightgreen" alt="Open Collective supporters" /></a>
+  <a href="https://merge-chance.info/target?repo=nixos/nixpkgs"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fmerge-chance.info%2Fbadge%3Frepo%3Dnixos/nixpkgs" alt="Merge Chance badge" /></a>
 </p>
 
 [Nixpkgs](https://github.com/nixos/nixpkgs) is a collection of over
