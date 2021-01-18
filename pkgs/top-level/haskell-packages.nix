@@ -1,6 +1,8 @@
 { buildPackages, pkgs, newScope, stdenv }:
 
 let
+  inherit (pkgs.lib) listToAttrs optionalString recurseIntoAttrs mapAttrs filterAttrs;
+
   # These are attributes in compiler and packages that don't support integer-simple.
   integerSimpleExcludes = [
     "ghc822Binary"
@@ -42,125 +44,245 @@ let
   # Use this rather than `rec { ... }` below for sake of overlays.
   inherit (pkgs.haskell) compiler packages;
 
-in {
-  lib = haskellLib;
+  # NOTE: Attr names must not depend on derivations, to avoid forcing all
+  #       compiler derivations when evaluating pkgs.haskell.compiler to WHNF.
+  #       So this is why we can't reuse compiler.version
+  compilerVersions = [
+    {
+      name = "ghc";
+      major = 8;
+      minor = 2;
+      patch = 2;
+      suffix = "Binary";
+      supportsIntegerSimple = false;
+      compiler = callPackage ../development/compilers/ghc/8.2.2-binary.nix { };
+    }
+    {
+      name = "ghc";
+      major = 8;
+      minor = 6;
+      patch = 5;
+      suffix = "Binary";
+      supportsIntegerSimple = false;
+      compiler = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
+    }
+    {
+      name = "ghc";
+      major = 8;
+      minor = 10;
+      patch = 2;
+      suffix = "Binary";
+      supportsIntegerSimple = false;
+      compiler = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
+        llvmPackages = pkgs.llvmPackages_9;
+      };
+    }
+    {
+      name = "ghc";
+      major = 8;
+      minor = 10;
+      patch = 2;
+      suffix = "BinaryMinimal";
+      supportsIntegerSimple = false;
+      compiler = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
+        llvmPackages = pkgs.llvmPackages_9;
+        minimal = true;
+      };
+    }
+    
+    {
+      name = "ghc";
+      major = 8;
+      minor = 6;
+      patch = 5;
+      suffix = "";
+      supportsIntegerSimple = true;
+      compiler = callPackage ../development/compilers/ghc/8.6.5.nix {
+        bootPkgs = packages.ghc822Binary;
+        inherit (buildPackages.python3Packages) sphinx;
+        buildLlvmPackages = buildPackages.llvmPackages_6;
+        llvmPackages = pkgs.llvmPackages_6;
+      };
+    }
+    {
+      name = "ghc";
+      major = 8;
+      minor = 8;
+      patch = 2;
+      suffix = "";
+      supportsIntegerSimple = true;
+      compiler = callPackage ../development/compilers/ghc/8.8.2.nix {
+        bootPkgs = packages.ghc865Binary;
+        inherit (buildPackages.python3Packages) sphinx;
+        buildLlvmPackages = buildPackages.llvmPackages_7;
+        llvmPackages = pkgs.llvmPackages_7;
+      };
+    }
+    {
+      name = "ghc";
+      major = 8;
+      minor = 8;
+      patch = 3;
+      suffix = "";
+      supportsIntegerSimple = true;
+      compiler = callPackage ../development/compilers/ghc/8.8.3.nix {
+        bootPkgs = packages.ghc865Binary;
+        inherit (buildPackages.python3Packages) sphinx;
+        buildLlvmPackages = buildPackages.llvmPackages_7;
+        llvmPackages = pkgs.llvmPackages_7;
+      };
+    }
+    {
+      name = "ghc";
+      major = 8;
+      minor = 8;
+      patch = 4;
+      suffix = "";
+      supportsIntegerSimple = true;
+      compiler = callPackage ../development/compilers/ghc/8.8.4.nix {
+        # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
+        bootPkgs = if stdenv.isAarch64 then
+            packages.ghc8102BinaryMinimal
+          else
+            packages.ghc865Binary;
+        inherit (buildPackages.python3Packages) sphinx;
+        buildLlvmPackages = buildPackages.llvmPackages_7;
+        llvmPackages = pkgs.llvmPackages_7;
+      };
+    }
+    {
+      name = "ghc";
+      major = 8;
+      minor = 10;
+      patch = 1;
+      suffix = "";
+      supportsIntegerSimple = true;
+      compiler = callPackage ../development/compilers/ghc/8.10.1.nix {
+        bootPkgs = packages.ghc865Binary;
+        inherit (buildPackages.python3Packages) sphinx;
+        buildLlvmPackages = buildPackages.llvmPackages_9;
+        llvmPackages = pkgs.llvmPackages_9;
+      };
+    }
+    {
+      name = "ghc";
+      major = 8;
+      minor = 10;
+      patch = 2;
+      suffix = "";
+      supportsIntegerSimple = true;
+      compiler = callPackage ../development/compilers/ghc/8.10.2.nix {
+        # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
+        bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
+            packages.ghc8102BinaryMinimal
+          else
+            packages.ghc865Binary;
+        inherit (buildPackages.python3Packages) sphinx;
+        buildLlvmPackages = buildPackages.llvmPackages_9;
+        llvmPackages = pkgs.llvmPackages_9;
+      };
+    }
+    {
+      name = "ghc";
+      major = 8;
+      minor = 10;
+      patch = 3;
+      suffix = "";
+      supportsIntegerSimple = true;
+      compiler = callPackage ../development/compilers/ghc/8.10.3.nix {
+        # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
+        bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
+            packages.ghc8102BinaryMinimal
+          else
+            packages.ghc865Binary;
+        inherit (buildPackages.python3Packages) sphinx;
+        buildLlvmPackages = buildPackages.llvmPackages_9;
+        llvmPackages = pkgs.llvmPackages_9;
+      };
+    }
+    {
+      name = "ghc";
+      major = 9;
+      minor = 0;
+      patch = 1;
+      suffix = "";
+      supportsIntegerSimple = false;
+      compiler = callPackage ../development/compilers/ghc/9.0.1.nix {
+        bootPkgs = packages.ghc8102Binary;
+        inherit (buildPackages.python3Packages) sphinx;
+        buildLlvmPackages = buildPackages.llvmPackages_10;
+        llvmPackages = pkgs.llvmPackages_10;
+      };
+    }
+    {
+      name = "ghc";
+      major = "";
+      minor = "";
+      patch = "";
+      suffix = "HEAD";
+      supportsIntegerSimple = false;
+      supportsNativeBignum = true;
+      compiler = callPackage ../development/compilers/ghc/head.nix {
+        bootPkgs = packages.ghc883; # no binary yet
+        inherit (buildPackages.python3Packages) sphinx;
+        buildLlvmPackages = buildPackages.llvmPackages_10;
+        llvmPackages = pkgs.llvmPackages_10;
+        libffi = pkgs.libffi;
+      };
+    }
+    {
+      name = "ghcjs";
+      major = 8;
+      minor = 6;
+      patch = "";
+      suffix = "";
+      supportsIntegerSimple = false;
+      compiler = callPackage ../development/compilers/ghcjs-ng {
+        bootPkgs = packages.ghc865;
+        ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.6/git.json;
+        stage0 = ../development/compilers/ghcjs-ng/8.6/stage0.nix;
+        ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.6/dep-overrides.nix {};
+      };
+    }
+  ];
 
-  compiler = {
+  shorthandAttrs = listToAttrs (map (attrs@{ name, major, minor, patch, suffix, compiler, ... }: {
+    name = "${name}${toString major}${toString minor}${toString patch}${toString suffix}";
+    value = attrs;
+  }) compilerVersions);
 
-    ghc822Binary = callPackage ../development/compilers/ghc/8.2.2-binary.nix { };
+  toFullName = { name, major, minor, patch, suffix }:
+    "${name}-${toString major}_${toString minor}${optionalString (patch != "") "_"}${toString patch}${optionalString (suffix != "") "-"}${toString suffix}";
 
-    ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
+  fullAttrs = listToAttrs (map (attrs@{ name, major, minor, patch, suffix, compiler, ... }: {
+    name = toFullName { inherit name major minor patch suffix; };
+    value = attrs;
+  }) compilerVersions);
 
-    ghc8102Binary = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
-      llvmPackages = pkgs.llvmPackages_9;
-    };
+  compilerVersionAttrs = shorthandAttrs // fullAttrs;
 
-    ghc8102BinaryMinimal = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
-      llvmPackages = pkgs.llvmPackages_9;
-      minimal = true;
-    };
-
-    ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
-      bootPkgs = packages.ghc822Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_6;
-      llvmPackages = pkgs.llvmPackages_6;
-    };
-    ghc882 = callPackage ../development/compilers/ghc/8.8.2.nix {
-      bootPkgs = packages.ghc865Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_7;
-      llvmPackages = pkgs.llvmPackages_7;
-    };
-    ghc883 = callPackage ../development/compilers/ghc/8.8.3.nix {
-      bootPkgs = packages.ghc865Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_7;
-      llvmPackages = pkgs.llvmPackages_7;
-    };
-    ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
-      # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-      bootPkgs = if stdenv.isAarch64 then
-          packages.ghc8102BinaryMinimal
-        else
-          packages.ghc865Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_7;
-      llvmPackages = pkgs.llvmPackages_7;
-    };
-    ghc8101 = callPackage ../development/compilers/ghc/8.10.1.nix {
-      bootPkgs = packages.ghc865Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_9;
-      llvmPackages = pkgs.llvmPackages_9;
-    };
-    ghc8102 = callPackage ../development/compilers/ghc/8.10.2.nix {
-      # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
-          packages.ghc8102BinaryMinimal
-        else
-          packages.ghc865Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_9;
-      llvmPackages = pkgs.llvmPackages_9;
-    };
-    ghc8103 = callPackage ../development/compilers/ghc/8.10.3.nix {
-      # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
-      bootPkgs = if stdenv.isAarch64 || stdenv.isAarch32 then
-          packages.ghc8102BinaryMinimal
-        else
-          packages.ghc865Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_9;
-      llvmPackages = pkgs.llvmPackages_9;
-    };
-    ghc901 = callPackage ../development/compilers/ghc/9.0.1.nix {
-      bootPkgs = packages.ghc8102Binary;
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_10;
-      llvmPackages = pkgs.llvmPackages_10;
-    };
-    ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc883; # no binary yet
-      inherit (buildPackages.python3Packages) sphinx;
-      buildLlvmPackages = buildPackages.llvmPackages_10;
-      llvmPackages = pkgs.llvmPackages_10;
-      libffi = pkgs.libffi;
-    };
+  aliases = {
     ghcjs = compiler.ghcjs86;
-    ghcjs86 = callPackage ../development/compilers/ghcjs-ng {
-      bootPkgs = packages.ghc865;
-      ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.6/git.json;
-      stage0 = ../development/compilers/ghcjs-ng/8.6/stage0.nix;
-      ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.6/dep-overrides.nix {};
-    };
 
     # The integer-simple attribute set contains all the GHC compilers
     # build with integer-simple instead of integer-gmp.
-    integer-simple = let
-      integerSimpleGhcNames = pkgs.lib.filter
-        (name: ! builtins.elem name integerSimpleExcludes)
-        (pkgs.lib.attrNames compiler);
-    in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
-      integerSimpleGhcNames
-      (name: compiler.${name}.override { enableIntegerSimple = true; }));
+    integer-simple =
+      recurseIntoAttrs
+        (mapAttrs (k: v: v.compiler)
+          (filterAttrs (k: v: v.supportsIntegerSimple)
+            compilerVersionAttrs));
 
     # Starting from GHC 9, integer-{simple,gmp} is replaced by ghc-bignum
     # with "native" and "gmp" backends.
-    native-bignum = let
-      nativeBignumGhcNames = pkgs.lib.filter
-        (name: builtins.elem name nativeBignumIncludes)
-        (pkgs.lib.attrNames compiler);
-    in pkgs.recurseIntoAttrs (pkgs.lib.genAttrs
-      nativeBignumGhcNames
-      (name: compiler.${name}.override { enableNativeBignum = true; }));
+    native-bignum =
+      recurseIntoAttrs
+        (mapAttrs (k: v: v.compiler)
+          (filterAttrs (k: v: v.supportsNativeBignum or false)
+            compilerVersionAttrs));
   };
 
-  # Default overrides that are applied to all package sets.
-  packageOverrides = self : super : {};
-
   # Always get compilers from `buildPackages`
-  packages = let bh = buildPackages.haskell; in {
+  packages' = let bh = buildPackages.haskell; in {
 
     ghc822Binary = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc822Binary;
@@ -266,4 +388,14 @@ in {
       };
     });
   };
+
+in {
+  lib = haskellLib;
+
+  # Default overrides that are applied to all package sets.
+  packageOverrides = self : super : {};
+
+  compiler = mapAttrs (k: v: v.compiler) compilerVersionAttrs // aliases;
+
+  packages = packages';
 }
