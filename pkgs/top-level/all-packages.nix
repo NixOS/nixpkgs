@@ -27988,6 +27988,8 @@ in
 
   scilab-bin = callPackage ../applications/science/math/scilab-bin {};
 
+  scilla = callPackage ../tools/security/scilla { };
+
   scotch = callPackage ../applications/science/math/scotch { };
 
   mininet = callPackage ../tools/virtualization/mininet { };
