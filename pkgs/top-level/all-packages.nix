@@ -2652,6 +2652,8 @@ in
 
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
+  rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
+
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
 
   ryujinx = callPackage ../misc/emulators/ryujinx { };
@@ -4914,6 +4916,8 @@ in
   haskell-language-server = callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix { };
 
   hasmail = callPackage ../applications/networking/mailreaders/hasmail { };
+
+  haste-client = callPackage ../tools/misc/haste-client { };
 
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
 
@@ -22574,6 +22578,8 @@ in
   multilockscreen = callPackage ../misc/screensavers/multilockscreen { };
 
   i3minator = callPackage ../tools/misc/i3minator { };
+
+  i3nator = callPackage ../tools/misc/i3nator { };
 
   i3pystatus = callPackage ../applications/window-managers/i3/pystatus.nix { };
 

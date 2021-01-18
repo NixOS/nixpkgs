@@ -37,8 +37,6 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/lib/
 
-    mv $out/AudioPluginServer* $out/lib/
-
     cp renoise $out/renoise
 
     for path in ${toString buildInputs}; do
@@ -56,6 +54,13 @@ stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --set-rpath ${mpg123}/lib:$out/lib \
       $out/renoise
+
+    for path in $out/AudioPluginServer*; do
+      patchelf \
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        --set-rpath $out/lib \
+        $path
+    done
   '';
 
   meta = {
