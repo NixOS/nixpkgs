@@ -2652,6 +2652,8 @@ in
 
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
+  rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
+
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
 
   ryujinx = callPackage ../misc/emulators/ryujinx { };
