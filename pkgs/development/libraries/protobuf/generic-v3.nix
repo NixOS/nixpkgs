@@ -1,16 +1,12 @@
-{ stdenv
-, fetchFromGitHub
-, autoreconfHook, zlib, gmock, buildPackages
+{ stdenv, fetchFromGitHub, lib
+, zlib, cmake, gmock
 , version, sha256
 , ...
 }:
-
-let
-mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+  # make sure you test also -A pythonPackages.protobuf
   pname = "protobuf";
   inherit version;
-
-  # make sure you test also -A pythonPackages.protobuf
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf";
@@ -18,28 +14,42 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
     inherit sha256;
   };
 
-  postPatch = ''
-    rm -rf gmock
-    cp -r ${gmock.src}/googlemock gmock
-    cp -r ${gmock.src}/googletest googletest
-    chmod -R a+w gmock
-    chmod -R a+w googletest
-    ln -s ../googletest gmock/gtest
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/google/protobuf/testing/googletest.cc \
+  patches =
+    [ ./protobuf-cmake.patch ]
+    # In version 3.6.X,
+    # CMake doesn't generate the version.rc file from version.rc.in.
+    ++ lib.optional
+       (lib.versionAtLeast version "3.6" && lib.versionOlder version "3.7")
+       ./protobuf-3.6-cmake-versionrc.patch;
+
+  postPatch = 
+    (if lib.versionAtLeast version "3.6.0"
+     then ''
+       rm -rf third_party/googletest
+       cp -a ${gmock.src} third_party/googletest
+       chmod -R a+w third_party/googletest
+       ''
+     else ''
+     cp -a ${gmock.src}/googlemock gmock
+     cp -a ${gmock.src}/googletest googletest
+     chmod -R a+w gmock
+     chmod -R a+w googletest
+     ln -s ../googletest gmock/gtest
+     '')
+    + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace src/google/protobuf/testing/googletest.cc \
       --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
-  '';
+      '';
 
-  nativeBuildInputs = [ autoreconfHook buildPackages.which buildPackages.stdenv.cc buildProtobuf ];
-
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
-  configureFlags = if buildProtobuf == null then [] else [ "--with-protoc=${buildProtobuf}/bin/protoc" ];
 
   enableParallelBuilding = true;
-
   doCheck = true;
 
   dontDisableStatic = true;
+
+  cmakeDir = "../cmake";
 
   meta = {
     description = "Google's data interchange format";
@@ -48,13 +58,11 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
         yet extensible format. Google uses Protocol Buffers for almost all of
         its internal RPC protocols and file formats.
       '';
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     homepage = "https://developers.google.com/protocol-buffers/";
+    maintainers = [ lib.maintainers.eamsden ];
   };
 
-  passthru.version = version;
-};
-in mkProtobufDerivation(if (stdenv.buildPlatform != stdenv.hostPlatform)
-                        then (mkProtobufDerivation null buildPackages.stdenv)
-                        else null) stdenv
+}
+
