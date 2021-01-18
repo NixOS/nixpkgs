@@ -8632,6 +8632,10 @@ in {
 
   xmlschema = callPackage ../development/python-modules/xmlschema { };
 
+  xmlsec = callPackage ../development/python-modules/xmlsec {
+    inherit (pkgs) libxslt libxml2 libtool pkg-config xmlsec;
+  };
+
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 
   xmodem = callPackage ../development/python-modules/xmodem { };
