@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dbeaver-ce";
-  version = "7.3.2"; # When updating also update fetchedMavenDeps.sha256
+  version = "7.3.3"; # When updating also update fetchedMavenDeps.sha256
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-gh3++IEQzWOKGsazqeMp0aHuZ835etAou62cgz0GoNQ=";
+    sha256 = "sha256-FlnPPf7Fa4FH4/ORMgZbeUT3ScCRNtLDuZCRnqUAjU0=";
   };
 
   fetchedMavenDeps = stdenv.mkDerivation {
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     dontFixup = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-uTKevwZvKiYOBz0hshh1rLEj7htYF7FQiTq6vZiVs7Q=";
+    outputHash = "sha256-M/10RGfhlBJzmFzTkEIo3AgA4B5yGDBL+elV0M65nn0=";
   };
 
   buildInputs = [
