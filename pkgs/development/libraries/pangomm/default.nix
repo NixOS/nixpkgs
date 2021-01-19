@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm, gnome3
+{ stdenv, fetchurl, pkg-config, pango, glibmm, cairomm, gnome3
 , ApplicationServices }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ] ++ stdenv.lib.optional stdenv.isDarwin [
+  nativeBuildInputs = [ pkg-config ] ++ stdenv.lib.optional stdenv.isDarwin [
     ApplicationServices
   ];
   propagatedBuildInputs = [ pango glibmm cairomm ];

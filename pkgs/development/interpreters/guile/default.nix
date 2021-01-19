@@ -1,5 +1,5 @@
 { stdenv, pkgsBuildBuild, buildPackages
-, fetchurl, makeWrapper, gawk, pkgconfig
+, fetchurl, makeWrapper, gawk, pkg-config
 , libffi, libtool, readline, gmp, boehmgc, libunistring
 , coverageAnalysis ? null
 , fetchpatch
@@ -25,7 +25,7 @@
   depsBuildBuild = [ buildPackages.stdenv.cc ]
     ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
                            pkgsBuildBuild.guile;
-  nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
+  nativeBuildInputs = [ makeWrapper gawk pkg-config ];
   buildInputs = [ readline libtool libunistring libffi ];
 
   propagatedBuildInputs = [
@@ -58,7 +58,8 @@
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
 
   # don't have "libgcc_s.so.1" on darwin
-  LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+  LDFLAGS = stdenv.lib.optionalString
+    (!stdenv.isDarwin && !stdenv.hostPlatform.isStatic) "-lgcc_s";
 
   configureFlags = [ "--with-libreadline-prefix=${readline.dev}" ]
     ++ stdenv.lib.optionals stdenv.isSunOS [

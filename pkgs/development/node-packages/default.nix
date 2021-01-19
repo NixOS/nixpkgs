@@ -225,7 +225,7 @@ let
     };
 
     vega-cli = super.vega-cli.override {
-      nativeBuildInputs = [ pkgs.pkgconfig ];
+      nativeBuildInputs = [ pkgs.pkg-config ];
       buildInputs = with pkgs; [
         super.node-pre-gyp
         pixman
@@ -271,6 +271,14 @@ let
       buildInputs = [ self.node-pre-gyp ];
       postInstall = ''
         echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
+      '';
+    };
+
+    yaml-language-server = super.yaml-language-server.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/yaml-language-server" \
+        --prefix NODE_PATH : ${self.prettier}/lib/node_modules
       '';
     };
   };

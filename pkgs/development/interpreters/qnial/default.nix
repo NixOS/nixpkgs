@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, pkgconfig, makeWrapper, ncurses }:
+{ stdenv, fetchFromGitHub, unzip, pkg-config, makeWrapper, ncurses }:
 
 stdenv.mkDerivation {
   pname = "qnial";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
      unzip
-     pkgconfig
+     pkg-config
      ncurses
   ];
 

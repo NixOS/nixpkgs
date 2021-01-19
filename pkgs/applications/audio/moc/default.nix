@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , ncurses, db , popt, libtool
 # Sound sub-systems
 , alsaSupport ? true, alsaLib
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     ++ opt withffmpeg4 ./moc-ffmpeg4.patch
     ++ opt pulseSupport ./pulseaudio.patch;
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ opt pulseSupport autoreconfHook;
 
   buildInputs = [ ncurses db popt libtool ]

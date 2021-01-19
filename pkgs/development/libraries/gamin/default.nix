@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, autoreconfHook }:
+{ stdenv, fetchurl, fetchpatch, pkg-config, glib, autoreconfHook }:
 
 let
   cross = stdenv.hostPlatform != stdenv.buildPlatform;
@@ -10,7 +10,7 @@ in stdenv.mkDerivation (rec {
     sha256 = "18cr51y5qacvs2fc2p1bqv32rs8bzgs6l67zhasyl45yx055y218";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [ glib ];
 

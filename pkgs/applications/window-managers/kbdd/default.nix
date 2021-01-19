@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, dbus-glib, autoreconfHook, xorg }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, dbus-glib, autoreconfHook, xorg }:
 
 stdenv.mkDerivation {
   pname = "kbdd";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "068iqkqxh7928xlmz2pvnykszn9bcq2qgkkiwf37k1vm8fdmgzlj";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ xorg.libX11 dbus-glib ];
 
   meta = {

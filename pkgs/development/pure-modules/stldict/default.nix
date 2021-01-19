@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure }:
+{ stdenv, fetchurl, pkg-config, pure }:
 
 stdenv.mkDerivation rec {
   baseName = "stldict";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;

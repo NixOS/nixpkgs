@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, bison, file, flex
+{ lib, stdenv, fetchurl, pkg-config, bison, file, flex
 , asciidoc, libxslt, findXMLCatalogs, docbook_xml_dtd_45, docbook_xsl
 , libmnl, libnftnl, libpcap
 , gmp, jansson, readline
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig bison file flex
+    pkg-config bison file flex
     asciidoc docbook_xml_dtd_45 docbook_xsl findXMLCatalogs libxslt
   ];
 

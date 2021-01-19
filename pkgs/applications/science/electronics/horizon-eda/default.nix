@@ -13,7 +13,7 @@
 , libuuid
 , libzip
 , opencascade
-, pkgconfig
+, pkg-config
 , podofo
 , python3
 , sqlite
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     boost.dev
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

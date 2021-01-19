@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, perl, pkgconfig, libbson
+{ stdenv, fetchzip, perl, pkg-config, libbson
 , openssl, which, zlib, snappy
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vnnk3pwbcmwva1010bl111kdcdx3yb2w7j7a78hhvrm1k9r1wp8";
   };
 
-  nativeBuildInputs = [ pkgconfig which perl ];
+  nativeBuildInputs = [ pkg-config which perl ];
   buildInputs = [ openssl zlib ];
   propagatedBuildInputs = [ libbson snappy ];
 

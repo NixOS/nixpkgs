@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libmnl }:
+{ stdenv, fetchurl, pkg-config, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "libnetfilter_cttimeout";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "aeab12754f557cba3ce2950a2029963d817490df7edb49880008b34d7ff8feba";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];
 
   meta = {

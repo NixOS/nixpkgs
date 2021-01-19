@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, pkg-config
 , doxygen, freetype, libX11, libftdi, libusb-compat-0_1, libusb1, ncurses, perl }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ freetype libX11 libftdi libusb-compat-0_1 libusb1 ncurses ];
-  nativeBuildInputs = [ autoreconfHook doxygen makeWrapper pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook doxygen makeWrapper pkg-config ];
 
   # In 0.5.9: gcc: error: libbignum.a: No such file or directory
   enableParallelBuilding = false;

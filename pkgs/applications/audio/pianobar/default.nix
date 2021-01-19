@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, pkgconfig, libao, json_c, libgcrypt, ffmpeg_3, curl }:
+{ fetchurl, lib, stdenv, pkg-config, libao, json_c, libgcrypt, ffmpeg_3, curl }:
 
 stdenv.mkDerivation rec {
   name = "pianobar-2020.11.28";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1znlwybfpxsjqr1jmr8j0ci8wzmpzmk2yxb0qcx9w9a8nnbgnfv5";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libao json_c libgcrypt ffmpeg_3 curl
   ];

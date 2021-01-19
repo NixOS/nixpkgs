@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, unbound, openssl, boost
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, unbound, openssl, boost
 , lmdb, miniupnpc, readline }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l6i21wkq5f6z8xr756i7vqgkzk7lixaa31ydy34fkfcqxppgxz3";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ boost miniupnpc openssl lmdb unbound readline ];
 
   meta = with lib; {

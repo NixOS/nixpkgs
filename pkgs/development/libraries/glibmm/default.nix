@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnum4, glib, libsigcxx, gnome3, darwin }:
+{ stdenv, fetchurl, pkg-config, gnum4, glib, libsigcxx, gnome3, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gnum4
     glib # for glib-compile-schemas
   ];

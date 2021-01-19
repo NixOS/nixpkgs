@@ -1,7 +1,7 @@
 { lib, stdenv
 , rustPlatform
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , makeWrapper
 , dbus
 , libpulseaudio
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0qqkcgl9iz4kxl1a2vv2p7vy7wxn970y28jynf3n7hfp16i3liy2";
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ dbus libpulseaudio notmuch ];
 

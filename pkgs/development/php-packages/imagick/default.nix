@@ -20,7 +20,7 @@ buildPecl {
   ];
 
   configureFlags = [ "--with-imagick=${pkgs.imagemagick7.dev}" ];
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   buildInputs = [ pcre' ];
 
   meta.maintainers = lib.teams.php.members;

@@ -1,7 +1,7 @@
 { lib, stdenv
 , mkDerivation
 , fetchurl
-, pkgconfig
+, pkg-config
 , djvulibre
 , qtbase
 , qttools
@@ -20,7 +20,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qttools
   ];
 

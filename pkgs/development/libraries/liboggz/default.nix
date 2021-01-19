@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libogg, pkgconfig }:
+{ stdenv, fetchurl, libogg, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "liboggz-1.1.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libogg ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with stdenv.lib; {
     homepage = "https://xiph.org/oggz/";

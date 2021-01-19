@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
 , boost, openssl, log4cpp, libopus, protobuf }:
 with lib; stdenv.mkDerivation {
   pname = "mumlib";
@@ -12,7 +12,7 @@ with lib; stdenv.mkDerivation {
   };
 
   buildInputs = [ boost openssl libopus protobuf log4cpp ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   installPhase = ''
     install -Dm555 libmumlib.so $out/lib/libmumlib.so
     cp -a ../include $out

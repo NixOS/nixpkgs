@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, libusb1, pkgconfig, pmutils, udev} :
+{ lib, stdenv, fetchgit, libusb1, pkg-config, pmutils, udev} :
 
 let
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     sha256 = "0m2q01sbgf8z4559jpr6k3jivb8x98vxv1fhgx8nfcjbwz1q83gb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 pmutils udev ];
 
   # shell thing didn't work so i replaced it using nix

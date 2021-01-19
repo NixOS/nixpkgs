@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cmake, perl }:
+{ stdenv, fetchurl, pkg-config, cmake, perl }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ga7rqmppa8ady665736cx443icscqlgflkqmxd4xbkzypmdj9bk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ cmake perl ];
 
   meta = with stdenv.lib; {

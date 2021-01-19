@@ -1,4 +1,4 @@
-{stdenv, lib, fetchurl, ocaml, findlib, gdome2, libxslt, pkgconfig}:
+{stdenv, lib, fetchurl, ocaml, findlib, gdome2, libxslt, pkg-config}:
 
 let
   pname = "gmetadom";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ocaml findlib gdome2 libxslt];
   propagatedBuildInputs = [gdome2];
 

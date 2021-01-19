@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, glib, libxml2, meson, ninja, pkgconfig, gnome3, libsysprof-capture
+{ stdenv, lib, fetchurl, glib, libxml2, meson, ninja, pkg-config, gnome3, libsysprof-capture
 , gnomeSupport ? true, sqlite, glib-networking, gobject-introspection, vala
 , libpsl, python3, brotli
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     libsysprof-capture
   ];
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala glib ];
+  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala glib ];
   propagatedBuildInputs = [ glib libxml2 ];
 
   NIX_CFLAGS_COMPILE = [ "-lpthread" ];

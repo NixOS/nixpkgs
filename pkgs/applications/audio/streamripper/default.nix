@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl , glib, pkgconfig, libogg, libvorbis, libmad }:
+{ lib, stdenv, fetchurl , glib, pkg-config, libogg, libvorbis, libmad }:
 
 stdenv.mkDerivation rec {
   pname = "streamripper";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hnyv3206r0rfprn3k7k6a0j959kagsfyrmyjm3gsf3vkhp5zmy1";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libogg libvorbis libmad ];
 
   meta = with lib; {

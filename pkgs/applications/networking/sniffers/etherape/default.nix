@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libtool, gtk3, libpcap, goocanvas2,
+{ lib, stdenv, fetchurl, pkg-config, libtool, gtk3, libpcap, goocanvas2,
 popt, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0w63vg2q6if3wvy2md66in8b6cdw9q40hny5xy6yrxky58l4kmg7";
   };
 
-  nativeBuildInputs = [ itstool pkgconfig (lib.getBin libxml2) ];
+  nativeBuildInputs = [ itstool pkg-config (lib.getBin libxml2) ];
   buildInputs = [
     libtool gtk3 libpcap goocanvas2 popt
   ];

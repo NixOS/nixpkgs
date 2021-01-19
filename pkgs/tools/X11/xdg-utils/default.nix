@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub
+{ lib, stdenv, fetchgit, fetchFromGitHub
 , file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
 , w3m, gnugrep, gnused, coreutils, xset, perlPackages
 , mimiSupport ? false, gawk ? null }:
@@ -22,11 +22,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "xdg-utils";
-  version = "1.1.3";
+  version = "unstable-2020-10-21";
 
-  src = fetchurl {
-    url = "https://portland.freedesktop.org/download/${pname}-${version}.tar.gz";
-    sha256 = "1nai806smz3zcb2l5iny4x7li0fak0rzmjg6vlyhdqm8z25b166p";
+  src = fetchgit {
+    url = "https://gitlab.freedesktop.org/xdg/${pname}.git";
+    rev = "d11b33ec7f24cfb1546f6b459611d440013bdc72";
+    sha256 = "sha256-8PtXfI8hRneEpnUvIV3M+6ACjlkx0w/NEiJFdGbbHnQ=";
   };
 
   # just needed when built from git

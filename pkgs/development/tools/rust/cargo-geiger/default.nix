@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, rustPlatform, pkgconfig, openssl
+, rustPlatform, pkg-config, openssl
 # testing packages
 , cargo-insta
 # darwin dependencies
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   # FIXME: Use impure version of CoreFoundation because of missing symbols.
   # CFURLSetResourcePropertyForKey is defined in the headers but there's no

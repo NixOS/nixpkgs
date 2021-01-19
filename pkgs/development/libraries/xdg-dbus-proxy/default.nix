@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , libxslt
 , docbook_xsl
 , docbook_xml_dtd_43
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     libxslt
     docbook_xsl
     docbook_xml_dtd_43

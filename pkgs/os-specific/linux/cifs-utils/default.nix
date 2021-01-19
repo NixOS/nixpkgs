@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoreconfHook, docutils, pkgconfig
+{ stdenv, lib, fetchurl, autoreconfHook, docutils, pkg-config
 , kerberos, keyutils, pam, talloc }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "175cp509wn1zv8p8mv37hkf6sxiskrsxdnq22mhlsg61jazz3n0q";
   };
 
-  nativeBuildInputs = [ autoreconfHook docutils pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook docutils pkg-config ];
 
   buildInputs = [ kerberos keyutils pam talloc ];
 

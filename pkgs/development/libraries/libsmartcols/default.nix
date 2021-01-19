@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python3 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python3 }:
 
 stdenv.mkDerivation rec {
   name = "libsmartcols";
   version = "v2.36.1";
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python3 ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 ];
 
   src = fetchFromGitHub {
     owner = "karelzak";

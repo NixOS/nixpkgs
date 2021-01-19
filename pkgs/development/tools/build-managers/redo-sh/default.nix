@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, coreutils }:
 
 stdenv.mkDerivation {
-  version = "4.0.3";
+  version = "4.0.4";
   pname = "redo-sh";
 
   src = fetchurl {
     url = "http://news.dieweltistgarnichtso.net/bin/archives/redo-sh.tar.gz";
-    sha256 = "1n84ld4fihqa7a6kn3f177dknz89qcvissfwz1m21bwdq950avia";
+    sha256 = "0d3hz3vy5qmjr9r4f8a5cx9hikpzs8h8f0fsl3dpbialf4wck24g";
   };
 
   buildInputs = [ makeWrapper ];

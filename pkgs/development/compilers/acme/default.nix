@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "acme";
-  version = "120";
+  version = "unstable-2020-12-27";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/acme-crossass/code-0/trunk";
-    rev = version;
-    sha256 = "0w17b8f8bis22m6l5bg8qg8nniy20f8yg2xmzjipblmc39vpv6s2";
+    rev = "314";
+    sha256 = "08zg26rh19nlif7id91nv0syx5n243ssxhfw0nk2r2bhjm5jrjz1";
   };
 
   sourceRoot = "code-0-r${src.rev}/src";

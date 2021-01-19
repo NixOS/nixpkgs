@@ -1,6 +1,6 @@
 { stdenv
 , fetchFromGitHub
-, autoreconfHook, pkgconfig
+, autoreconfHook, pkg-config
 , zlib, libffi, elfutils, libdwarf
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wafyfhwd7nf7xdici0djpwgykizaz7jlarn0r1b4spnpjx1zbx4";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ zlib libffi elfutils libdwarf ];
 
   meta = with stdenv.lib; {

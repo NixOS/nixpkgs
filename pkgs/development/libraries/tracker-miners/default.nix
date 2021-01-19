@@ -11,7 +11,7 @@
 , tracker
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , wrapGAppsHook
 , bzip2
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];

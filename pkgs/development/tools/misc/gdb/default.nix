@@ -1,7 +1,7 @@
 { stdenv, targetPackages
 
 # Build time
-, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs, buildPackages
+, fetchurl, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ./darwin-target-match.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ];
+  nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
 
   buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile ]
     ++ stdenv.lib.optional pythonSupport python3

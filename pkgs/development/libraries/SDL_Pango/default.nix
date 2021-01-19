@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchurl, SDL, autoreconfHook, pango, pkgconfig }:
+{ stdenv, fetchpatch, fetchurl, SDL, autoreconfHook, pango, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_Pango";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "autoreconf -i -f";
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ SDL pango ];
 
   meta = with stdenv.lib; {

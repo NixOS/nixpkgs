@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , libjack2, gettext, intltool, guile_2_0, lilypond
 , glib, libxml2, librsvg, libsndfile, aubio
 , gtk3, gtksourceview, evince, fluidsynth, rubberband
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     intltool
     gettext
-    pkgconfig
+    pkg-config
   ];
 
   meta = with lib; {

@@ -16,7 +16,7 @@ let
     homepage = "https://github.com/zadam/trilium";
     license = licenses.agpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ emmanuelrosa dtzWill kampka ];
+    maintainers = with maintainers; [ emmanuelrosa dtzWill ];
   };
 
   version = "0.43.3";

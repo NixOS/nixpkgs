@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , clang-unwrapped
 , llvm
 , libdrm
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     python3
   ];
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     nativeBuildInputs = [
       cmake
       python3
-      pkgconfig
+      pkg-config
       makeWrapper
     ];
 

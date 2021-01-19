@@ -19,7 +19,7 @@ nodePackages."${packageName}".override {
 
   meta = with lib; {
     description = "A Matrix <--> Slack bridge";
-    maintainers = with maintainers; [ kampka ];
+    maintainers = with maintainers; [ ];
     license = licenses.asl20;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, git, pkgconfig }:
+{ lib, python3, fetchFromGitHub, git, pkg-config }:
 
 # Note:
 # Conan has specific dependency demands; check
@@ -72,7 +72,7 @@ in newPython.pkgs.buildPythonApplication rec {
   ];
 
   checkInputs = [
-    pkgconfig
+    pkg-config
     git
   ] ++ (with newPython.pkgs; [
     codecov

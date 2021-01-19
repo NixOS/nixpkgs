@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, pkgconfig, ois, ogre, libX11, boost }:
+{ stdenv, fetchurl, fetchpatch, cmake, pkg-config, ois, ogre, libX11, boost }:
 
 stdenv.mkDerivation rec {
   pname = "ogre-paged";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ ois ogre libX11 boost ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [ "-DPAGEDGEOMETRY_BUILD_SAMPLES=OFF" ];
 

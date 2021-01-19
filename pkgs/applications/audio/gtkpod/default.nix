@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, wrapGAppsHook, intltool, libgpod, curl, flac,
+{ lib, stdenv, fetchurl, pkg-config, wrapGAppsHook, intltool, libgpod, curl, flac,
   gnome3, gtk3, gettext, perlPackages, flex, libid3tag, gdl,
   libvorbis, gdk-pixbuf }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xisrpx069f7bjkyc8vqxb4k0480jmx1wscqxr6cpq1qj6pchzd5";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook intltool ];
   buildInputs = [
     curl gettext
     flex libgpod libid3tag flac libvorbis gtk3 gdk-pixbuf

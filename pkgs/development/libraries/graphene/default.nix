@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , nix-update-script
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , python3
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     meson
     ninja
-    pkgconfig
+    pkg-config
     gobject-introspection
     python3
   ];

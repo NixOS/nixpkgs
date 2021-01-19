@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, gettext, python3
+{ stdenv, fetchgit, autoreconfHook, pkg-config, gettext, python3
 , ncurses, swig, glib, util-linux, cryptsetup, nss, gpgme
 , autoconf, automake, libtool
 , buildPackages
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "man" "dev" "py" ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig gettext swig ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config gettext swig ];
 
   buildInputs = [ autoreconfHook glib cryptsetup nss util-linux gpgme ncurses ];
 

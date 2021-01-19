@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, coin3d, qtbase, cmake, pkgconfig }:
+{ fetchFromGitHub, stdenv, coin3d, qtbase, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "soqt";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ coin3d qtbase ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/coin3d/soqt";

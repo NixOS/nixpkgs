@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libsodium, ncurses, libopus
-, libvpx, check, libconfig, pkgconfig }:
+, libvpx, check, libconfig, pkg-config }:
 
 stdenv.mkDerivation {
   name = "tox-core-new-20160727";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   ];
 
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [
     autoreconfHook libsodium ncurses check libconfig
   ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [

@@ -580,6 +580,8 @@ let
 
     mezzo = callPackage ../development/compilers/mezzo { };
 
+    mimic = callPackage ../development/ocaml-modules/mimic { };
+
     minisat = callPackage ../development/ocaml-modules/minisat { };
 
     mirage = callPackage ../development/ocaml-modules/mirage { };

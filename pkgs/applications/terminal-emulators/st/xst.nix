@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, libX11, ncurses, libXext, libXft, fontconfig }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libX11, ncurses, libXext, libXft, fontconfig }:
 
 with lib;
 
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
     sha256 = "1fplgy30gyrwkjsw3z947327r98i13zd1whwkplpj9fzckhb9vs9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 ncurses libXext libXft fontconfig ];
 
   installPhase = ''

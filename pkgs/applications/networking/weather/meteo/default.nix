@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, vala, python3, pkgconfig, meson, ninja, gtk3
+{ lib, stdenv, fetchFromGitLab, vala, python3, pkg-config, meson, ninja, gtk3
 , json-glib, libsoup, webkitgtk, geocode-glib, nix-update-script
 , libappindicator, desktop-file-utils, appstream, wrapGAppsHook }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

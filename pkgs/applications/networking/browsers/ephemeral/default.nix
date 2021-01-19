@@ -11,7 +11,7 @@
 , meson
 , ninja
 , pantheon
-, pkgconfig
+, pkg-config
 , python3
 , webkitgtk
 , wrapGAppsHook
@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ephemeral";
-  version = "7.0.4";
+  version = "7.0.5";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "ephemeral";
     rev = version;
-    sha256 = "18chvfdmka21zvjgqfpinm3nrj0ba09szxhhm39anpvpbj92ra8j";
+    sha256 = "sha256-dets4YoTUgFCDOrvzNuAwJb3/MsnjOSBx9PBZuT0ruk=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];

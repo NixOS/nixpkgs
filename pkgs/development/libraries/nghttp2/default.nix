@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, fetchurl, pkg-config
 
 # Optional Dependencies
 , openssl ? null, zlib ? null
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" "dev" "lib" ]
     ++ optional enablePython "python";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
     ++ optional enableLibEv libev
     ++ [ zlib ]

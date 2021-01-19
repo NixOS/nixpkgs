@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, fuse, adb }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, fuse, adb }:
 
 stdenv.mkDerivation rec {
   pname = "adbfs-rootless";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse ];
 
   postPatch = ''

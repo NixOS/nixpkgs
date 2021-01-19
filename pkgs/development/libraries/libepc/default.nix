@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk-doc, glib, avahi, gnutls, libuuid, libsoup, gtk3, gnome3 }:
+{ stdenv, fetchurl, pkg-config, intltool, gtk-doc, glib, avahi, gnutls, libuuid, libsoup, gtk3, gnome3 }:
 
 let
   avahiWithGtk = avahi.override { gtk3Support = true; };
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
     gtk-doc
   ];

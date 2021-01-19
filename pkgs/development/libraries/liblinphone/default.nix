@@ -34,7 +34,7 @@
 , openldap
 , ortp
 , pango
-, pkgconfig
+, pkg-config
 , python
 , readline
 , soci
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     graphviz
     intltool
     makeWrapper
-    pkgconfig
+    pkg-config
   ];
 
   # Some grammar files needed to be copied too from some dependencies. I suppose

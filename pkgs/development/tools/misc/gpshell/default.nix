@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, globalplatform, pcsclite, gppcscconnectionplugin
+{ stdenv, fetchurl, pkg-config, globalplatform, pcsclite, gppcscconnectionplugin
 , makeWrapper
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "19a77zvyf2vazbv17185s4pynhylk2ky8vhl4i8pg9zww29sicqi";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ globalplatform pcsclite makeWrapper ];
 
   postFixup = ''

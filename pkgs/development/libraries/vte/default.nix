@@ -3,7 +3,7 @@
 , fetchurl
 , fetchpatch
 , gettext
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gnome3
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 

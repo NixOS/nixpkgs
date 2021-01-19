@@ -2,7 +2,7 @@
 , fetchurl
 , gtk3
 , which
-, pkgconfig
+, pkg-config
 , intltool
 , file
 , libintl
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
     libintl
     which

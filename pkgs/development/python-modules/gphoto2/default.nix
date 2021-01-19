@@ -1,5 +1,5 @@
 { lib, stdenv, fetchPypi, buildPythonPackage
-, pkgconfig
+, pkg-config
 , libgphoto2 }:
 
 buildPythonPackage rec {
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "48b4c4ab70826d3ddaaf7440564d513c02d78680fa690994b0640d383ffb8a7d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libgphoto2 ];
 

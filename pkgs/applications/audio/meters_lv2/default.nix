@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , lv2, libGLU, libGL, gtk2, cairo, pango, fftwFloat, libjack2 }:
 
 let
@@ -25,7 +25,7 @@ in
 stdenv.mkDerivation {
   inherit name;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ lv2 libGLU libGL gtk2 cairo pango fftwFloat libjack2 ];
 
   srcs = [ src robtkSrc ];

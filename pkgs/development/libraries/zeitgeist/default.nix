@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitLab
 , fetchpatch
-, pkgconfig
+, pkg-config
 , glib
 , sqlite
 , gobject-introspection
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
     gettext
     gobject-introspection
     vala

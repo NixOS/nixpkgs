@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja, makeFontsConf, vala, fetchpatch
+{ stdenv, fetchurl, pkg-config, meson, ninja, makeFontsConf, vala, fetchpatch
 , gnome3, glib, json-glib, libarchive, libsoup, gobject-introspection }:
 
 let
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1jmn6i4vsm89q1axlq4ajqkzqmlmjaml9xhw3h9jnal46db6y00w";
   };
 
-  nativeBuildInputs = [ vala gobject-introspection meson ninja pkgconfig ];
+  nativeBuildInputs = [ vala gobject-introspection meson ninja pkg-config ];
   buildInputs = [ glib gnome3.libgee json-glib libsoup libarchive ];
 
   # Fixes build with vala >=0.42

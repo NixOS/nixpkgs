@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cimg, imagemagick }:
+{ stdenv, fetchFromGitHub, pkg-config, cimg, imagemagick }:
 
 stdenv.mkDerivation rec {
   pname = "pHash";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   # at runtime
   propagatedBuildInputs = [ imagemagick ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   configureFlags = ["--enable-video-hash=no" "--enable-audio-hash=no"];
   postInstall = ''

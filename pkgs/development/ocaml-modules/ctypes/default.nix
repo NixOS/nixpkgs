@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, ocaml, findlib, libffi, pkgconfig, ncurses, integers }:
+{ lib, stdenv, fetchzip, ocaml, findlib, libffi, pkg-config, ncurses, integers }:
 
 if !lib.versionAtLeast ocaml.version "4.02"
 then throw "ctypes is not available for OCaml ${ocaml.version}"
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "16brmdnz7wi2z25qqhd5s5blyq4app6jbv6g9pa4vyg6h0nzbcys";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ocaml findlib ncurses ];
   propagatedBuildInputs = [ integers libffi ];
 

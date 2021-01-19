@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libGL, glib, gdk-pixbuf, xorg, libintl
+{ stdenv, fetchurl, fetchpatch, pkg-config, libGL, glib, gdk-pixbuf, xorg, libintl
 , pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome3
 , mesa, automake, autoconf
 , gstreamerSupport ? true, gst_all_1 }:
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig libintl automake autoconf ];
+  nativeBuildInputs = [ pkg-config libintl automake autoconf ];
 
   configureFlags = [
     "--enable-introspection"

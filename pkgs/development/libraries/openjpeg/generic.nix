@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkg-config
 , libpng, libtiff, lcms2, jpylyzer
 , mj2Support ? true # MJ2 executables
 , jpwlLibSupport ? true # JPWL library & executables
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     (mkFlag testsSupport "BUILD_TESTING")
   ] ++ extraFlags;
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ ]
     ++ optionals jpipServerSupport [ curl fcgi ]

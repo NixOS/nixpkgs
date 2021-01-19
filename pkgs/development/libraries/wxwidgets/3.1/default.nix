@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , fetchurl
-, pkgconfig
+, pkg-config
 , libXinerama
 , libSM
 , libXxf86vm
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   ++ optional withWebKit webkitgtk
   ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 

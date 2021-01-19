@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "rapidjson";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jixgb8w97l9gdh3inihz7avz7i770gy2j2irvvlyrq3wi41f5ab";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace "-Werror" ""

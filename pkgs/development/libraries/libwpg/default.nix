@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libwpd, zlib, librevenge }:
+{ stdenv, fetchurl, pkg-config, libwpd, zlib, librevenge }:
 
 stdenv.mkDerivation rec {
   name = "libwpg-0.3.3";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libwpd zlib librevenge ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with stdenv.lib; {
     homepage = "http://libwpg.sourceforge.net";

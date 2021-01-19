@@ -4,7 +4,7 @@
 , meson
 , ninja
 , python3
-, pkgconfig
+, pkg-config
 , dmd
 , dconf
 , dbus
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     dmd
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];

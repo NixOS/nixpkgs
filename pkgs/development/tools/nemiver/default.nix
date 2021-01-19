@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , libxml2
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libxml2
     intltool
     itstool
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

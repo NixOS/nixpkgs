@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, zlib, pcre, expat, sqlite, openssl, unixODBC, libmysqlclient }:
+{ stdenv, fetchurl, cmake, pkg-config, zlib, pcre, expat, sqlite, openssl, unixODBC, libmysqlclient }:
 
 stdenv.mkDerivation rec {
   pname = "poco";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jilzh0h6ik5lr167nax7q6nrpzxl99p11pkl202ig06pgh32nbz";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ zlib pcre expat sqlite openssl unixODBC libmysqlclient ];
 

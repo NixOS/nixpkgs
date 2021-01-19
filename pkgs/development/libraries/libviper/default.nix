@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, ncurses, gpm}:
+{stdenv, fetchurl, pkg-config, glib, ncurses, gpm}:
 stdenv.mkDerivation rec {
   name = "libviper-1.4.6";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib ncurses gpm];
 
   meta = with stdenv.lib; {

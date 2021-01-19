@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libGL, ApplicationServices }:
+{ stdenv, fetchurl, pkg-config, libGL, ApplicationServices }:
 
 stdenv.mkDerivation rec {
   pname = "glu";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1g2m634p73mixkzv1qz1d0flwm390ydi41bwmchiqvdssqnlqnpv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libGL ]
     ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
 

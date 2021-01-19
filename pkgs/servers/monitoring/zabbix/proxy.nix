@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libevent, libiconv, openssl, pcre, zlib
+{ lib, stdenv, fetchurl, pkg-config, libevent, libiconv, openssl, pcre, zlib
 , odbcSupport ? true, unixODBC
 , snmpSupport ? true, net-snmp
 , sshSupport ? true, libssh2
@@ -25,7 +25,7 @@ in
         inherit sha256;
       };
 
-      nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ pkg-config ];
       buildInputs = [
         libevent
         libiconv

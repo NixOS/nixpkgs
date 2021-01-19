@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
+{ lib, stdenv, fetchurl, pkg-config, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, python3, libcap, glib
 , libssh, nghttp2, zlib, cmake, fetchpatch, makeWrapper
 , withQt ? true, qt5 ? null
@@ -34,7 +34,7 @@ in stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
   nativeBuildInputs = [
-    bison cmake flex pkgconfig
+    bison cmake flex pkg-config
   ] ++ optional withQt qt5.wrapQtAppsHook;
 
   buildInputs = [

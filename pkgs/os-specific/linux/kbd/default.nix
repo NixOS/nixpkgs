@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook,
-  gzip, bzip2, pkgconfig, flex, check,
+  gzip, bzip2, pkg-config, flex, check,
   pam, coreutils
 }:
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
 
   buildInputs = [ check pam ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig flex ];
+  nativeBuildInputs = [ autoreconfHook pkg-config flex ];
 
   makeFlags = [ "setowner=" ];
 

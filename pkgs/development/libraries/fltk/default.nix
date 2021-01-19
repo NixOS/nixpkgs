@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xlibsWrapper, xorgproto, libXi
+{ stdenv, fetchurl, pkg-config, xlibsWrapper, xorgproto, libXi
 , freeglut, libGL, libGLU, libjpeg, zlib, libXft, libpng
 , libtiff, freetype, Cocoa, AGL, GLUT
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./nsosv.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libGLU libGL libjpeg zlib libpng libXft ]
     ++ stdenv.lib.optional stdenv.isDarwin [ AGL Cocoa GLUT ];
 

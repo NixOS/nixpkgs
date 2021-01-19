@@ -10,7 +10,7 @@
 , meson
 , ninja
 , pango
-, pkgconfig
+, pkg-config
 , python3
 , rustc
 , rustPlatform
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
     glib # for glib-compile-resources

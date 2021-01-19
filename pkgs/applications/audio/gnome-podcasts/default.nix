@@ -8,7 +8,7 @@
 , cargo
 , rustc
 , python3
-, pkgconfig
+, pkg-config
 , glib
 , libhandy_0
 , gtk3
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     cargo
     rustc

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, openssl, autoreconfHook }:
+{ stdenv, fetchFromGitHub, pkg-config, openssl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "pkcs11-helper";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1idrqip59bqzcgddpnk2inin5n5yn4y0dmcyaggfpdishraiqgd5";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ openssl ];
 
   enableParallelBuilding = true;

@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
+{ lib, stdenv, python3, pkg-config, which, libtool, autoconf, automake,
   autogen, sqlite, gmp, zlib, fetchurl, unzip, fetchpatch, gettext }:
 
 with lib;
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which unzip gettext ];
+  nativeBuildInputs = [ autoconf autogen automake libtool pkg-config which unzip gettext ];
   buildInputs =
     let py3 = python3.withPackages (p: [ p.Mako ]);
     in [ sqlite gmp zlib py3 ];

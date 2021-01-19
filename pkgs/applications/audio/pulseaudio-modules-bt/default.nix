@@ -2,7 +2,7 @@
 , runCommand
 , fetchFromGitHub
 , pulseaudio
-, pkgconfig
+, pkg-config
 , ffmpeg
 , patchelf
 , fdk_aac
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     patchelf
     cmake
   ];

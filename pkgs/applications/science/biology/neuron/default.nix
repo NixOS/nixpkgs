@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , automake
 , autoconf
 , libtool
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   pname = "neuron";
   version = "7.5";
 
-  nativeBuildInputs = [ which pkgconfig automake autoconf libtool ];
+  nativeBuildInputs = [ which pkg-config automake autoconf libtool ];
   buildInputs = [ ncurses readline python mpi iv ];
 
   src = fetchurl {

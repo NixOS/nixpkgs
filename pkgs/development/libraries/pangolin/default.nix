@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen, libGL, glew
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
 , xorg , ffmpeg_3, python3 , libjpeg, libpng, libtiff, eigen
 , Carbon ? null, Cocoa ? null
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "0pfbaarlsw7f7cmsppm7m13nz0k530wwwyczy2l9k448p3v7x9j0";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig doxygen ];
+  nativeBuildInputs = [ cmake pkg-config doxygen ];
 
   buildInputs = [
     libGL

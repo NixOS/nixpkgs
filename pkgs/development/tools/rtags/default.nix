@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, apple_sdk, emacs, pkgconfig }:
+{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, apple_sdk, emacs, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "rtags";
   version = "2.38";
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ llvmPackages.llvm openssl emacs ]
     ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ]
     ++ lib.optionals stdenv.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];

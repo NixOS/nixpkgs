@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gobject-introspection
 , vala
 , gtk-doc
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=true"
   ];
 
-  # Uses define_variable in pkgconfig, but we still need it to use the glade output
+  # Uses define_variable in pkg-config, but we still need it to use the glade output
   PKG_CONFIG_GLADEUI_2_0_MODULEDIR = "${placeholder "glade"}/lib/glade/modules";
   PKG_CONFIG_GLADEUI_2_0_CATALOGDIR = "${placeholder "glade"}/share/glade/catalogs";
 

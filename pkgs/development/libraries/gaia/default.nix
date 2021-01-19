@@ -4,7 +4,7 @@
 , libyaml
 , swig
 , eigen
-, pkgconfig
+, pkg-config
 , python2
 , wafHook
 , makeWrapper
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python2 # For wafHook
     swig
     wafHook

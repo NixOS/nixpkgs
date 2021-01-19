@@ -1,4 +1,4 @@
-{ stdenv, autoreconfHook, fetchFromGitHub, pkgconfig, enablePython ? false, python, glib }:
+{ stdenv, autoreconfHook, fetchFromGitHub, pkg-config, enablePython ? false, python, glib }:
 
 stdenv.mkDerivation rec {
   pname = "libplist";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   outputs = ["bin" "dev" "out" ] ++ stdenv.lib.optional enablePython "py";
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
   ] ++ stdenv.lib.optionals enablePython [
     python

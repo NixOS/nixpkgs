@@ -5,7 +5,7 @@
 , libssh
 , cmake
 , perl
-, pkgconfig
+, pkg-config
 , rustPlatform
 , curl
 , libiconv
@@ -30,7 +30,7 @@ buildRustPackage rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     perl
   ];
 

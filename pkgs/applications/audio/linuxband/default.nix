@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, MMA, libjack2, libsmf, python2Packages }:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, MMA, libjack2, libsmf, python2Packages }:
 
 let
   inherit (python2Packages) pyGtkGlade pygtksourceview python;
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1r71h4yg775m4gax4irrvygmrsclgn503ykmc2qwjsxa42ri4n2n";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ makeWrapper MMA libjack2 libsmf python pyGtkGlade pygtksourceview ];
 
   patchPhase = ''

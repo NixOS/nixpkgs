@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, pkgconfig, glib, gperf, util-linux, kmod}:
+{lib, stdenv, fetchurl, pkg-config, glib, gperf, util-linux, kmod}:
 let
   s = # Generated upstream information
   rec {
@@ -9,7 +9,7 @@ let
     sha256 = "1z6lfhhbjs6j7pbp6ybn17ywjsdl87ql6g1p3m2y26aa10cqcqc9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     glib gperf util-linux kmod
   ];

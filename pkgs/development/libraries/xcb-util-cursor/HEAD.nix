@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, pkgconfig
+{ stdenv, fetchgit, autoconf, automake, libtool, pkg-config
 , xorg, gnum4, libxcb, gperf }:
 
 stdenv.mkDerivation {
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     gperf
     libtool
     libxcb
-    pkgconfig
+    pkg-config
     xorg.utilmacros
     xorg.xcbutilimage
     xorg.xcbutilrenderutil

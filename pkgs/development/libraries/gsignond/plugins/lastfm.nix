@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkgconfig, meson, ninja, vala, glib, gsignond, json-glib, libsoup, gobject-introspection }:
+{ stdenv, fetchFromGitLab, pkg-config, meson, ninja, vala, glib, gsignond, json-glib, libsoup, gobject-introspection }:
 
 stdenv.mkDerivation {
   pname = "gsignond-plugin-lastfm";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 

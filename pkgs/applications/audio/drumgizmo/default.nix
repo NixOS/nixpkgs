@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, alsaLib, expat, glib, libjack2, libXext, libX11, libpng
-, libpthreadstubs, libsmf, libsndfile, lv2, pkgconfig, zita-resampler
+, libpthreadstubs, libsmf, libsndfile, lv2, pkg-config, zita-resampler
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsaLib expat glib libjack2 libXext libX11 libpng libpthreadstubs
-    libsmf libsndfile lv2 pkgconfig zita-resampler
+    libsmf libsndfile lv2 pkg-config zita-resampler
   ];
 
   meta = with lib; {

@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , givaro
-, pkgconfig
+, pkg-config
 , blas
 , lapack
 , fflas-ffpack
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

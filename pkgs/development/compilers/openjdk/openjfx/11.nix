@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, writeText, gradleGen, pkgconfig, perl, cmake
+{ stdenv, lib, fetchurl, writeText, gradleGen, pkg-config, perl, cmake
 , gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib, ffmpeg_3, python, ruby
 , openjdk11-bootstrap }:
 
@@ -20,7 +20,7 @@ let
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg_3 ];
-    nativeBuildInputs = [ gradle_ perl pkgconfig cmake gperf python ruby ];
+    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python ruby ];
 
     dontUseCmakeConfigure = true;
 

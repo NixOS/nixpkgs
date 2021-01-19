@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, bison, flex, libsepol, libselinux, bzip2, audit
+{ lib, stdenv, fetchurl, pkg-config, bison, flex, libsepol, libselinux, bzip2, audit
 , enablePython ? true, swig ? null, python ? null
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ] ++ optional enablePython "py";
 
-  nativeBuildInputs = [ bison flex pkgconfig ];
+  nativeBuildInputs = [ bison flex pkg-config ];
   buildInputs = [ libsepol libselinux bzip2 audit ]
     ++ optionals enablePython [ swig python ];
 

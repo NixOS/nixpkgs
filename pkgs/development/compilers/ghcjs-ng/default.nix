@@ -12,7 +12,7 @@
 , makeWrapper
 , xorg
 , gmp
-, pkgconfig
+, pkg-config
 , gcc
 , lib
 , ghcjsDepOverrides ? (_:_:{})
@@ -73,7 +73,7 @@ in stdenv.mkDerivation {
       makeWrapper
       xorg.lndir
       gmp
-      pkgconfig
+      pkg-config
     ] ++ lib.optionals stdenv.isDarwin [
       gcc # https://github.com/ghcjs/ghcjs/issues/663
     ];

@@ -1,8 +1,8 @@
-{lib, stdenv, boost, cmake, pkgconfig, nix, ... }:
+{lib, stdenv, boost, cmake, pkg-config, nix, ... }:
 stdenv.mkDerivation rec {
   name = "nixos-option";
   src = ./.;
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ boost nix ];
   meta = {
     license = stdenv.lib.licenses.lgpl2Plus;

@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , libxslt
 , docbook-xsl-ns
 , glib
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     libxslt
     docbook-xsl-ns
   ];

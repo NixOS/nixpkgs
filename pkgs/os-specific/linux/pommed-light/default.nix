@@ -4,7 +4,7 @@
 , libconfuse
 , alsaLib
 , audiofile
-, pkgconfig
+, pkg-config
 , zlib
 , eject
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     substituteInPlace pommed/cd_eject.c --replace /usr/bin/eject ${eject}/bin/eject
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     pciutils
     libconfuse

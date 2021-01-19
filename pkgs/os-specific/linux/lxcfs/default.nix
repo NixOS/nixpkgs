@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse
+{ config, lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, help2man, fuse
 , util-linux, makeWrapper
 , enableDebugBuild ? config.lxcfs.enableDebugBuild or false }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fp2q4y3ql4xd2lp4bpcl8s6xryr5xbb56da9d20w2cdr2d0lwyv";
   };
 
-  nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];
+  nativeBuildInputs = [ pkg-config help2man autoreconfHook ];
   buildInputs = [ fuse makeWrapper ];
 
   preConfigure = lib.optionalString enableDebugBuild ''

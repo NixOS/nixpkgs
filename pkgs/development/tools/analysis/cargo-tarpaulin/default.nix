@@ -1,4 +1,4 @@
-{ lib, pkgconfig, rustPlatform, fetchFromGitHub, openssl }:
+{ lib, pkg-config, rustPlatform, fetchFromGitHub, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-tarpaulin";
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
   buildInputs = [ openssl ];
 

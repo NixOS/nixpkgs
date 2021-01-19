@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gperf
+{ lib, stdenv, fetchurl, pkg-config, gperf
 , buildsystem
 , libdom
 , libhubbub
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LA3PlS8c2ILD6VQB75RZ8W27U8XT5FEjObL563add4E=";
   };
 
-  nativeBuildInputs = [ pkgconfig gperf ];
+  nativeBuildInputs = [ pkg-config gperf ];
   buildInputs = [
     libdom
     libhubbub

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, lcms2, pkgconfig }:
+{ stdenv, fetchFromGitHub, autoreconfHook, lcms2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libraw";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ lcms2 ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   enableParallelBuilding = true;
 

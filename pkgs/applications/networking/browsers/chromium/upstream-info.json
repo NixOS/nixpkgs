@@ -18,9 +18,9 @@
     }
   },
   "beta": {
-    "version": "88.0.4324.87",
-    "sha256": "0pfrx8b2rmrxx5dfv4kc1ggrgi7kj7gbxrzqzd7rsvjpasyidbxg",
-    "sha256bin64": "07xl02zg5pi89l6dqrbqx2ibl8pm9v6njqfl8p4l2hwsb881hx8g",
+    "version": "88.0.4324.96",
+    "sha256": "17y7x50cx2d3bbz0hna25j8pyqsk0914266mpvrpk5am52xwb5c9",
+    "sha256bin64": "1v7bpidqs8y3k7kzfp52q8xsdc515mnf9arfw9pp5bsp79fl3rik",
     "deps": {
       "gn": {
         "version": "2020-11-05",
@@ -44,9 +44,9 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "87.0.4280.88",
-    "sha256": "1h09g9b2zxad85vd146ymvg3w2kpngpi78yig3dn1vrmhwr4aiiy",
-    "sha256bin64": "0n3fm6wf8zfkv135d50xl8xxrnng3q55vyxkck1da8jyvh18bijb",
+    "version": "87.0.4280.141",
+    "sha256": "0x9k809m36pfirnw2vnr9pk93nxdbgrvna0xf1rs3q91zkbr2x8l",
+    "sha256bin64": "0wq3yi0qyxzcid390w5rh4xjq92fjajvlifjl70g6sqnbk6vgvdp",
     "deps": {
       "gn": {
         "version": "2020-09-09",
@@ -55,8 +55,8 @@
         "sha256": "0x4c7amxwzxs39grqs3dnnz0531mpf1p75niq7zhinyfqm86i4dk"
       },
       "ungoogled-patches": {
-        "rev": "87.0.4280.88-1",
-        "sha256": "0w2137w8hfcgl6f938hqnb4ffp33v5r8vdzxrvs814w7dszkiqgg"
+        "rev": "87.0.4280.141-1",
+        "sha256": "0r09d27jrdz01rcwifchbq7ksh2bac15h8svq18jx426mr56dzla"
       }
     }
   }

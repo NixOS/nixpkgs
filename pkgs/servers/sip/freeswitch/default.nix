@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchpatch, stdenv, lib, pkgconfig, autoreconfHook
+{ fetchFromGitHub, fetchpatch, stdenv, lib, pkg-config, autoreconfHook
 , ncurses, gnutls, readline
 , openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
 , ldns, libedit, yasm, which, libsndfile, libtiff
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     openssl ncurses gnutls readline perl libjpeg
     sqlite pcre speex ldns libedit yasm which

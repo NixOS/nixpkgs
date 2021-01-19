@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, doxygen, perl, pam, nspr, nss, openldap
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, doxygen, perl, pam, nspr, nss, openldap
 , db, cyrus_sasl, svrcore, icu, net-snmp, kerberos, pcre, perlPackages, libevent, openssl, python
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "141iv1phgk1lw74sfjj3v7wy6qs0q56lvclwv2p0hqn1wg8ic4q6";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig doxygen ];
+  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
   buildInputs = [
     perl pam nspr nss openldap db cyrus_sasl svrcore icu
     net-snmp kerberos pcre libevent openssl python

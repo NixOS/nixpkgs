@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgconfig, autoreconfHook,
+{ lib, stdenv, pkg-config, autoreconfHook,
 glib, check, python3, dsview
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     export sourceRoot=$sourceRoot/libsigrokdecode4DSL
   '';
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
     python3 glib check

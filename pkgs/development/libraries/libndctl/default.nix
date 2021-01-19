@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook
-, asciidoctor, pkgconfig, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
+, asciidoctor, pkg-config, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
 , json_c, kmod, which, util-linux, udev, keyutils
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "man" "dev" ];
 
   nativeBuildInputs =
-    [ autoreconfHook asciidoctor pkgconfig xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+    [ autoreconfHook asciidoctor pkg-config xmlto docbook_xml_dtd_45 docbook_xsl libxslt
       which
     ];
 

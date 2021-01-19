@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, guileSupport ? false, pkgconfig ? null , guile ? null }:
+{ stdenv, fetchurl, guileSupport ? false, pkg-config ? null , guile ? null }:
 
-assert guileSupport -> ( pkgconfig != null && guile != null );
+assert guileSupport -> ( pkg-config != null && guile != null );
 
 let
   version = "4.3";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     ./impure-dirs.patch
   ];
 
-  nativeBuildInputs = stdenv.lib.optionals guileSupport [ pkgconfig ];
+  nativeBuildInputs = stdenv.lib.optionals guileSupport [ pkg-config ];
   buildInputs = stdenv.lib.optionals guileSupport [ guile ];
 
   configureFlags = stdenv.lib.optional guileSupport "--with-guile"

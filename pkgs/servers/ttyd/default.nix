@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, pkgconfig, cmake, xxd
+, pkg-config, cmake, xxd
 , openssl, libwebsockets, json_c, libuv, zlib
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ifgw93g8jaaa6fgfqjnn83n5ccr6l72ynwwwa97hfwjk90r14fg";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake xxd ];
+  nativeBuildInputs = [ pkg-config cmake xxd ];
   buildInputs = [ openssl libwebsockets json_c libuv zlib ];
 
   outputs = [ "out" "man" ];

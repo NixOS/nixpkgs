@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, cmake, pkgconfig }:
+, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libmodule";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   meta = with stdenv.lib; {
