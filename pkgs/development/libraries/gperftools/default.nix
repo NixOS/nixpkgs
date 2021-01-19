@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin
-    "-D_XOPEN_SOURCE -Wno-aligned-allocation-unavailable";
+    "-D_XOPEN_SOURCE";
 
   # some packages want to link to the static tcmalloc_minimal
   # to drop the runtime dependency on gperftools
