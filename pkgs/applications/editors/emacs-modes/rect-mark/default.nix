@@ -1,4 +1,4 @@
-{stdenv, fetchurl, emacs}:
+{ lib, stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation {
   name = "rect-mark-1.4";

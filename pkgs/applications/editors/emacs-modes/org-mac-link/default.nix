@@ -1,4 +1,4 @@
-{stdenv, fetchurl, emacs}:
+{ lib, stdenv, fetchurl, emacs }:
 
 stdenv.mkDerivation {
   name = "org-mac-link-1.2";

@@ -11,13 +11,13 @@
 
 mkDerivation rec {
   pname = "k4dirstat";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "jeromerobert";
     repo = pname;
     rev = version;
-    sha256 = "15xjb80jq6vhzvzx4l341f40d8a23w1334qh6cczqm9adfnzycp7";
+    sha256 = "sha256-U5p/gW5GPxRoM9XknP8G7iVhLDoqmvgspeRsmCRdxDg=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];
