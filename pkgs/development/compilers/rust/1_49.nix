@@ -39,9 +39,11 @@ import ./default.nix {
   bootstrapHashes = {
     i686-unknown-linux-gnu = "7fdb8836a1f0427d5b47e6a2d496f67ebff04350407411f57cf20c9b3544e26f";
     x86_64-unknown-linux-gnu = "950420a35b2dd9091f1b93a9ccd5abc026ca7112e667f246b1deb79204e2038b";
+    x86_64-unknown-linux-musl = "4ed9627f57b4e0b9807fc5e7513d9731f4791668b7f875b9e44e65e21072c56f";
     arm-unknown-linux-gnueabihf = "e68a81eebd4570343a0fc35cb8ee24cad911d6cee2e374f284b76546ca6636d5";
     armv7-unknown-linux-gnueabihf = "3aed4a63ebdd57690a31d11afbe95e6407edc224a6769be5694a1ed43bf899cb";
     aarch64-unknown-linux-gnu = "c4769418d8d89f432e4a3a21ad60f99629e4b13bbfc29aef7d9d51c4e8ee8a8a";
+    aarch64-unknown-linux-musl = "ac4de580a28e45a9773b389b296d13bfeeb08263cb1f8343859577a54940dae9";
     x86_64-apple-darwin = "20e727cad10f43e3abcedb2a80979ae26923038e0e8a855e8a783da255054113";
     powerpc64le-unknown-linux-gnu = "e6457a0214f3b1b04bd5b2618bba7e3826e254216420dede2971b571a1c13bb1";
   };
