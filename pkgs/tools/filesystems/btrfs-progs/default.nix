@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "5.9";
+  version = "5.10";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "14d7hz07kfczfgmy1ixkgccjn393gpkjn7givz5kwxddcnk5i4xq";
+    sha256 = "sha256-5xoNbdUE86XZV/zpowKB62Hs+ZHIrzFf4AYaG5eh0CE=";
   };
 
   nativeBuildInputs = [
