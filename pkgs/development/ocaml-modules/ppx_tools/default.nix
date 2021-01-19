@@ -1,9 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, buildDunePackage, ocaml, findlib }:
+{ lib, stdenv, fetchFromGitHub, buildDunePackage, ocaml, findlib, cppo }:
 
 let param =
-  let v6_2 = {
-    version = "6.2";
-    sha256 = "0qf4fwnn4hhk52kjw9frv21v23azqnn4mjvwf1hs0nxf7q4kacb5";
+  let v6_3 = {
+    version = "6.3";
+    sha256 = "1skf4njvkifwx0qlsrc0jn891gvvcp5ryd6kkpx56hck7nnxv8x6";
+    useDune2 = lib.versionAtLeast ocaml.version "4.12";
+    buildInputs = [cppo];
   }; in
 {
   "4.02" = {
@@ -25,10 +27,11 @@ let param =
   "4.07" = {
     version = "5.1+4.06.0";
     sha256 = "1ww4cspdpgjjsgiv71s0im5yjkr3544x96wsq1vpdacq7dr7zwiw"; };
-  "4.08" = v6_2;
-  "4.09" = v6_2;
-  "4.10" = v6_2;
-  "4.11" = v6_2;
+  "4.08" = v6_3;
+  "4.09" = v6_3;
+  "4.10" = v6_3;
+  "4.11" = v6_3;
+  "4.12" = v6_3;
 }.${ocaml.meta.branch};
 in
 
@@ -50,7 +53,7 @@ if lib.versionAtLeast param.version "6.0"
 then
   buildDunePackage {
     inherit pname src meta;
-    inherit (param) version;
+    inherit (param) version useDune2 buildInputs;
   }
 else
   stdenv.mkDerivation {
