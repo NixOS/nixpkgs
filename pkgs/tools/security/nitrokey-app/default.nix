@@ -3,20 +3,15 @@
 
 stdenv.mkDerivation rec {
   pname = "nitrokey-app";
-  version = "1.3.2";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app";
     rev = "v${version}";
-    sha256 = "193kzlz3qn9il56h78faiqkgv749hdils1nn1iw6g3wphgx5fjs2";
+    sha256 = "1k0w921hfrya4q2r7bqn7kgmwvwb7c15k9ymlbnksmfc9yyjyfcv";
     fetchSubmodules = true;
   };
-
-  postPatch = ''
-    substituteInPlace libnitrokey/CMakeLists.txt \
-      --replace '/data/41-nitrokey.rules' '/libnitrokey/data/41-nitrokey.rules'
-  '';
 
   buildInputs = [
     bash-completion
