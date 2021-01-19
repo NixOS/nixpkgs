@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 stdenv.mkDerivation {
   name = "kak-auto-pairs";
   version = "2020-07-14";

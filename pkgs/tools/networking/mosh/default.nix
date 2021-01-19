@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./ssh_path.patch
+    ./mosh-client_path.patch
     ./utempter_path.patch
     # Fix w/c++17, ::bind vs std::bind
     (fetchpatch {
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace scripts/mosh.pl \
         --subst-var-by ssh "${openssh}/bin/ssh"
+    substituteInPlace scripts/mosh.pl \
+        --subst-var-by mosh-client "$out/bin/mosh-client"
   '';
 
   configureFlags = [ "--enable-completion" ] ++ lib.optional withUtempter "--with-utempter";

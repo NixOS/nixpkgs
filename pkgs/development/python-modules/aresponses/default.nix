@@ -5,12 +5,13 @@
 , isPy3k
 , pytest
 , pytest-asyncio
+, pytest-cov
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "aresponses";
-  version = "2.1.0";
+  version = "2.1.2";
 
   disabled = !isPy3k;
 
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "CircleUp";
     repo = pname;
     rev = version;
-    sha256 = "0dc1y4s6kpmr0ar63kkyghvisgbmb8qq5wglmjclrpzd5180mjcl";
+    sha256 = "007wrk4wdy97a81imgzxd6sm5dly9v7abmxh9fyfi0vp1p7s75bw";
   };
 
   propagatedBuildInputs = [
@@ -32,8 +33,9 @@ buildPythonPackage rec {
 
   checkInputs = [
     aiohttp
-    pytestCheckHook
     pytest-asyncio
+    pytest-cov
+    pytestCheckHook
   ];
 
   # Disable tests which requires network access
@@ -41,6 +43,8 @@ buildPythonPackage rec {
     "test_foo"
     "test_passthrough"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "aresponses" ];
 

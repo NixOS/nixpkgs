@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
 
   postInstall = optional withGui ''
     install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
-    install -Dm644 share/pixmaps/bitcoin128.png $out/share/pixmaps/bitcoin128.png
+    substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace "Icon=bitcoin128" "Icon=bitcoin"
+    install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
   '';
 
   configureFlags = [
