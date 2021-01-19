@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation  rec {
   pname = "jalv";
-  version = "1.6.4";
+  version = "1.6.6";
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "1wwfn7yzbs37s2rdlfjgks63svd5g14yyzd2gdl7h0z12qncwsy2";
+    sha256 = "sha256-ktFBeBtmQ3MgfDQ868XpuM7UYfryb9zLld8AB7BjnhY=";
   };
 
   nativeBuildInputs = [ pkg-config wafHook ];
