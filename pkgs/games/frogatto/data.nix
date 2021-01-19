@@ -1,9 +1,9 @@
 { lib, stdenv, fetchFromGitHub }:
-  
+
 stdenv.mkDerivation {
   pname = "frogatto-data";
   version = "unstable-2018-12-18";
-  
+
   src = fetchFromGitHub {
     owner = "frogatto";
     repo = "frogatto";

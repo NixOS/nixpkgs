@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     # To find new versions, visit
     # http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX and search for
     # some printer like for instance "WF-7110" to get to the most recent
-    # version.  
+    # version.
     # NOTE: Don't forget to update the webarchive link too!
     urls = [
       "https://download3.ebz.epson.net/dsc/f/03/00/09/83/26/f90d0f70b33a9d7d77a2408364c47fba1ccbf943/epson-inkjet-printer-escpr-1.7.3-1lsb3.2.tar.gz"

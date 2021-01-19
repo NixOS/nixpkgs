@@ -5,8 +5,8 @@
   text
   '';
   d=''
-    Multi-line text with special characters - 
-    like \ (backslash) and ''${} (dollar + 
+    Multi-line text with special characters -
+    like \ (backslash) and ''${} (dollar +
     curly braces) and $ (dollar) and ' (quote)
     and " (double quote).
   '';

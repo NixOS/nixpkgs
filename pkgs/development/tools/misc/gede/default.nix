@@ -20,7 +20,7 @@ mkDerivation rec {
   installPhase = ''
     python build.py install --verbose --prefix="$out"
     wrapProgram $out/bin/gede \
-      --prefix PATH : ${lib.makeBinPath [ ctags gdb ]} 
+      --prefix PATH : ${lib.makeBinPath [ ctags gdb ]}
   '';
 
   meta = with lib; {

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man1
     cp minimap2.1 $out/share/man/man1
   '';
-  
+
   meta = with lib; {
     description = "A versatile pairwise aligner for genomic and spliced nucleotide sequences";
     homepage = "https://lh3.github.io/minimap2";

@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 #
 #  configureFlags = if transitional then "--transitional" else "--strict";
 #
-#  buildFlags = [ "world.opt" ];		
+#  buildFlags = [ "world.opt" ];
 
   meta = {
     description = "Omake build system";

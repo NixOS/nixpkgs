@@ -1,20 +1,20 @@
 {stdenv, lib, dict}:
 ({dictlist, allowList ? ["127.0.0.1"], denyList ? []}:
 /*
- dictlist is a list of form 
+ dictlist is a list of form
  [ { filename = /path/to/files/basename;
  name = "name"; } ]
- basename.dict.dz and basename.index should be 
+ basename.dict.dz and basename.index should be
  dict files. Or look below for other options.
  allowList is a list of IP/domain *-wildcarded strings
  denyList is the same..
 */
 
 let
-	link_arguments = map 
+	link_arguments = map
 			(x: '' "${x.filename}" '')
-			dictlist; 
-	databases = lib.concatStrings (map (x : 
+			dictlist;
+	databases = lib.concatStrings (map (x :
 		"${x.name}	${x.filename}\n") dictlist);
 	allow = lib.concatStrings (map (x: "allow ${x}\n") allowList);
 	deny = lib.concatStrings (map (x: "deny ${x}\n") denyList);
@@ -24,18 +24,18 @@ let
 			${deny}
 		}
 	";
-	installPhase = ''  
+	installPhase = ''
   	mkdir -p $out/share/dictd
 	cd $out/share/dictd
-	echo "${databases}" >databases.names 
+	echo "${databases}" >databases.names
 	echo "${accessSection}" > dictd.conf
-	for j in ${toString link_arguments}; do 
+	for j in ${toString link_arguments}; do
 		name="$(egrep '	'"$j"\$ databases.names)"
 		name=''${name%	$j}
 		if test -d "$j"; then
 			if test -d "$j"/share/dictd ; then
 				echo "Got store path $j"
-				j="$j"/share/dictd 
+				j="$j"/share/dictd
 			fi
 			echo "Directory reference: $j"
 			i=$(ls "$j""/"*.index)
@@ -47,8 +47,8 @@ let
 		locale=$(cat "$(dirname "$i")"/locale)
 		base="$(basename "$i")"
 		echo "Locale is $locale"
-		export LC_ALL=$locale 
-		export LANG=$locale 
+		export LC_ALL=$locale
+		export LANG=$locale
 		if test -e "$i".dict.dz; then
 			ln -s "$i".dict.dz
 		else

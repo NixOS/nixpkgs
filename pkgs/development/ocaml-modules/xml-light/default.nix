@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     make all
     make opt
   '';
-  
+
   installPhase = ''
     make install_ocamlfind
     mkdir -p $out/share

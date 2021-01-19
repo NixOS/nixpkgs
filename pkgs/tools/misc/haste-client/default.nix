@@ -4,7 +4,7 @@
 , ruby
 }:
 
-let 
+let
   version = "0.2.3";
   deps = bundlerEnv rec {
     name = "haste-client-${version}";

@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     make x11-dist-install PREFIX=$out
     mv $out/lib/libglfw.so $out/lib/libglfw.so.2
     ln -s libglfw.so.2 $out/lib/libglfw.so
-  ''; 
-  
-  meta = with stdenv.lib; { 
+  '';
+
+  meta = with stdenv.lib; {
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
     homepage = "http://glfw.sourceforge.net/";
     license = licenses.zlib;

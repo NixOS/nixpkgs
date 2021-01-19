@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "06mb2bq7v37wn0lza61917zqgb4bsg1xxb73myjyn88p6khl6yl2";
   };
 
-  configureFlags = [ 
-     "--prefix=$out" 
+  configureFlags = [
+     "--prefix=$out"
      "--libdir=$out/lib/ocaml/${ocaml.version}/site-lib/mysql"
   ];
 

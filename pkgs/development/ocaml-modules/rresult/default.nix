@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 	buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
   propagatedBuildInputs = [ result ];
-  
+
 	inherit (topkg) buildPhase installPhase;
 
 	meta = {

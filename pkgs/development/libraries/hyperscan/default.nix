@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
       Hyperscan uses hybrid automata techniques to allow simultaneous
       matching of large numbers (up to tens of thousands) of regular
-      expressions and for the matching of regular expressions across 
+      expressions and for the matching of regular expressions across
       streams of data.
 
       Hyperscan is typically used in a DPI library stack.

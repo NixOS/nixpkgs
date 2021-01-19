@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--cache-file=config.cache" "--with-downloader=true" ];
 
   postConfigure = ''
-    cp $srcAmr 26104-b00.zip 
+    cp $srcAmr 26104-b00.zip
   '';
 
   meta = {

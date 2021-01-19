@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A 'top' like tool for PostgreSQL";
-    longDescription = '' 
-      pg_top allows you to: 
+    longDescription = ''
+      pg_top allows you to:
        * View currently running SQL statement of a process.
        * View query plan of a currently running SQL statement.
        * View locks held by a process.

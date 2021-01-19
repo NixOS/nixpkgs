@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url    = "http://concurrencykit.org/releases/ck-${version}.tar.gz";
     sha256 = "1pv21p7sjwwmbs2xblpy1lqk53r2i212yrqyjlr5dr3rlv87vqnp";
   };
-  
+
   #Deleting this line causes "Unknown option --disable-static"
   configurePhase = "./configure --prefix=$out";
 

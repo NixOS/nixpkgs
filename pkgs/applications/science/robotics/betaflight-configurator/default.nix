@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
-  
+
   buildInputs = [ unzip gsettings-desktop-schemas gtk3 ];
-  
+
   installPhase = ''
     mkdir -p $out/bin \
              $out/opt/${pname}
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "The Betaflight flight control system configuration tool";
     longDescription = ''
       A crossplatform configuration tool for the Betaflight flight control system.
-      Various types of aircraft are supported by the tool and by Betaflight, e.g. 
+      Various types of aircraft are supported by the tool and by Betaflight, e.g.
       quadcopters, hexacopters, octocopters and fixed-wing aircraft.
     '';
     homepage    = "https://github.com/betaflight/betaflight/wiki";

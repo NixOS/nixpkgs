@@ -20,7 +20,7 @@ stdenv.mkDerivation {
       xmlcatalog --noout --create $cat
       grep PUBLIC DTD/*.soc | while read x; do
           eval a=($x)
-          xmlcatalog --noout --add public "''${a[1]}" "''${a[2]}" $cat 
+          xmlcatalog --noout --add public "''${a[1]}" "''${a[2]}" $cat
       done
     ''; # */
 

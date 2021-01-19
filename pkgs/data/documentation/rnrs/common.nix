@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ texinfo ];
 
-  # Tell the builder about the name of the report.  
+  # Tell the builder about the name of the report.
   reportName = name;
 
   builder = ./builder.sh;

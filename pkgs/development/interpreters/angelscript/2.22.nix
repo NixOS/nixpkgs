@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     cd angelscript/projects/gnuc
     sed -i makefile -e "s@LOCAL = .*@LOCAL = $out@"
-    export SHARED=1 
+    export SHARED=1
     export VERSION="${s.version}"
     mkdir -p "$out/lib" "$out/bin" "$out/share" "$out/include"
   '';

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, zlib, libarchive, openssl }: 
+{ stdenv, fetchFromGitHub, zlib, libarchive, openssl }:
 
-stdenv.mkDerivation rec { 
+stdenv.mkDerivation rec {
   version = "1.0";
   pname = "makerpm";
 

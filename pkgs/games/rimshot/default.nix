@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   unpackPhase = ''
     unzip -j $src
-  '';  
+  '';
 
   installPhase =
   ''

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''substituteInPlace configure \
     --replace /usr/local /
   '';
-  
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ] ++ stdenv.lib.optionals stdenv.isLinux [ libbsd ] ;
 

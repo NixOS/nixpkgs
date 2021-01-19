@@ -4,7 +4,7 @@
 # each is an url for sync
 
 # selector is mtn selector, like h:org.example.branch
-# 
+#
 {name ? "mtn-checkout", dbs ? [], sha256
 , selector ? "h:" + branch, branch}:
 

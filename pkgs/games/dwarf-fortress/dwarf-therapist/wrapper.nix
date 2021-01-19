@@ -6,10 +6,10 @@ let
   inifile = "linux/v0.${dwarf-fortress.baseVersion}.${dwarf-fortress.patchVersion}_${platformSlug}.ini";
 
 in
-  
+
 stdenv.mkDerivation {
   name = "dwarf-therapist-${dwarf-therapist.version}";
-  
+
   wrapper = ./dwarf-therapist.in;
 
   paths = [ dwarf-therapist ];

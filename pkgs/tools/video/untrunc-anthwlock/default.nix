@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "14i2lq68q990hnm2kkfamlsi67bcml85zl8yjsyxc5h8ncc2f3dp";
   };
 
-  
+
   buildInputs = [ ffmpeg libui ];
 
   postBuild = ''

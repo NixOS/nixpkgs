@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  checkInputs = [ 
+  checkInputs = [
     pytest-cov
     pytestCheckHook
   ];
