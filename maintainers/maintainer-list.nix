@@ -8703,6 +8703,12 @@
     githubId = 1315818;
     name = "Felix Bühler";
   };
+  stupremee = {
+      email = "jutus.k@protonmail.com";
+      github = "Stupremee";
+      githubId = 39732259;
+      name = "Justus K";
+  };
   suhr = {
     email = "suhr@i2pmail.org";
     github = "suhr";
