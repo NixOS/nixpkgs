@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cdk";
-  version ="5.0-20200923";
+  version ="5.0-20210109";
 
   buildInputs = [
     ncurses
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
       "ftp://ftp.invisible-island.net/cdk/cdk-${version}.tgz"
       "https://invisible-mirror.net/archives/cdk/cdk-${version}.tgz"
     ];
-    sha256 = "1vdakz119a13d7p7w53hk56fdmbkhv6y9xvdapcfnbnbh3l5szq0";
+    sha256 = "sha256-xBbJh793tPGycD18XkM7qUWMi+Uma/RUy/gBrYfnKTY=";
   };
 
   meta = with stdenv.lib; {
