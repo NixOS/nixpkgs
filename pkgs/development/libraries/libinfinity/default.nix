@@ -13,10 +13,10 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "libinfinity";
-    version = "0.7.1";
+    version = "0.7.2";
     src = fetchurl {
-      url = "http://releases.0x539.de/libinfinity/${pname}-${version}.tar.gz";
-      sha256 = "1jw2fhrcbpyz99bij07iyhy9ffyqdn87vl8cb1qz897y3f2f0vk2";
+      url = "https://github.com/gobby/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
+      sha256 = "17i3g61hxz9pzl3ryd1yr15142r25m06jfzjrpdy7ic1b8vjjw3f";
     };
 
     outputs = [ "bin" "out" "dev" "man" "devdoc" ];
@@ -43,7 +43,7 @@ let
     };
 
     meta = {
-      homepage = "http://gobby.0x539.de/";
+      homepage = "https://gobby.github.io/";
       description = "An implementation of the Infinote protocol written in GObject-based C";
       license = stdenv.lib.licenses.lgpl2Plus;
       maintainers = [ stdenv.lib.maintainers.phreedom ];

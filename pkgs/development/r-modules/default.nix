@@ -280,6 +280,7 @@ let
     mwaved = [ pkgs.fftw.dev ];
     ncdf4 = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt pkgs.pkgconfig ];
+    n1qn1 = [ pkgs.gfortran ];
     odbc = [ pkgs.unixODBC ];
     pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
@@ -415,6 +416,11 @@ let
     systemfonts = [ pkgs.pkgconfig ];
     tesseract = [ pkgs.pkgconfig ];
     Cairo = [ pkgs.pkgconfig ];
+    CLVTools = [ pkgs.gsl ];
+    JMcmprsk = [ pkgs.gsl ];
+    mashr = [ pkgs.gsl ];
+    hadron = [ pkgs.gsl ];
+    AMOUNTAIN = [ pkgs.gsl ];
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
     tcltk2 = [ pkgs.tcl pkgs.tk ];
     tikzDevice = [ pkgs.which pkgs.texlive.combined.scheme-medium ];
@@ -802,7 +808,7 @@ let
     openssl = old.openssl.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
-        '';
+      '';
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
     });
@@ -852,6 +858,12 @@ let
     });
 
     magick = old.magick.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
+    libgeos = old.libgeos.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
         '';

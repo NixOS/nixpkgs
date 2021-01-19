@@ -1144,6 +1144,8 @@ in
 
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader {};
 
+  corsmisc = callPackage ../tools/security/corsmisc { };
+
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
   cpuid = callPackage ../os-specific/linux/cpuid { };
@@ -1709,6 +1711,8 @@ in
     # Choices: [ tmux screen ];
     textual-window-manager = tmux;
   };
+
+  bypass403 = callPackage ../tools/security/bypass403 { };
 
   bsh = fetchurl {
     url = "http://www.beanshell.org/bsh-2.0b5.jar";
@@ -11003,6 +11007,8 @@ in
 
   lxrandr = callPackage ../desktops/lxde/core/lxrandr { };
 
+  lxsession = callPackage ../desktops/lxde/core/lxsession { };
+
   kona = callPackage ../development/interpreters/kona {};
 
   lolcode = callPackage ../development/interpreters/lolcode { };
@@ -12962,6 +12968,8 @@ in
   backward-cpp = callPackage ../development/libraries/backward-cpp { };
 
   bamf = callPackage ../development/libraries/bamf { };
+
+  inherit (callPackages ../development/libraries/bashup-events { }) bashup-events32 bashup-events44;
 
   bcg729 = callPackage ../development/libraries/bcg729 { };
 
@@ -22372,6 +22380,10 @@ in
 
   hdhomerun-config-gui = callPackage ../applications/video/hdhomerun-config-gui { };
 
+  hdr-plus = callPackage ../applications/graphics/hdr-plus {
+    stdenv = clangStdenv;
+  };
+
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
   hello = callPackage ../applications/misc/hello { };
@@ -23210,6 +23222,8 @@ in
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
   mediathekview = callPackage ../applications/video/mediathekview { };
+
+  megapixels = callPackage ../applications/graphics/megapixels { };
 
   meteo = callPackage ../applications/networking/weather/meteo { };
 
@@ -25769,6 +25783,8 @@ in
     desktopSupport = "xfce4";
   };
 
+  xmountains = callPackage ../applications/graphics/xmountains { };
+
   xmpp-client = callPackage ../applications/networking/instant-messengers/xmpp-client { };
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
@@ -26665,6 +26681,8 @@ in
   quake3demodata = callPackage ../games/quake3/content/demo.nix { };
 
   quake3pointrelease = callPackage ../games/quake3/content/pointrelease.nix { };
+
+  quake3hires = callPackage ../games/quake3/content/hires.nix { };
 
   quakespasm = callPackage ../games/quakespasm { };
   vkquake = callPackage ../games/quakespasm/vulkan.nix { };

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "ipmicfg";
-  version = "1.30.0";
-  buildVersion = "190710";
+  version = "1.32.0";
+  buildVersion = "200910";
 
   src = fetchzip {
     url = "https://www.supermicro.com/wftp/utility/IPMICFG/IPMICFG_${version}_build.${buildVersion}.zip";
-    sha256 = "0srkzivxa4qlf3x9zdkri7xfq7kjj4fsmn978vzmzsvbxkqswd5a";
+    sha256 = "1mncinwgx5d8jkvnvhccqlj2xp0xa5xjsab4r5mblmcnvm609rr3";
   };
 
   installPhase = ''

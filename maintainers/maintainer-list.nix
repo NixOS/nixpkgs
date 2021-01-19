@@ -1699,16 +1699,6 @@
     githubId = 46303707;
     name = "Christian Lütke-Stetzkamp";
   };
-  kampka = {
-    email = "christian@kampka.net";
-    github = "kampka";
-    githubId = 422412;
-    name = "Christian Kampka";
-    keys = [{
-      longkeyid = "ed25519/0x1CBE9645DD68E915";
-      fingerprint = "F7FA 0BD0 8775 337C F6AB  4A14 1CBE 9645 DD68 E915";
-    }];
-  };
   ckauhaus = {
     email = "kc@flyingcircus.io";
     github = "ckauhaus";
@@ -4976,6 +4966,10 @@
     github = "kyleondy";
     githubId = 1640900;
     name = "Kyle Ondy";
+    keys = [{
+      longkeyid = "rsa4096/0xDB0E3C33491F91C9";
+      fingerprint = "3C79 9D26 057B 64E6 D907  B0AC DB0E 3C33 491F 91C9";
+    }];
   };
   kylesferrazza = {
     name = "Kyle Sferrazza";
@@ -9088,6 +9082,12 @@
     github = "thiagokokada";
     githubId = 844343;
     name = "Thiago K. Okada";
+  };
+  thibautmarty = {
+    email = "github@thibautmarty.fr";
+    github = "ThibautMarty";
+    githubId = 3268082;
+    name = "Thibaut Marty";
   };
   thmzlt = {
     email = "git@thomazleite.com";
