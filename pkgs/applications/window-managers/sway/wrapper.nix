@@ -1,5 +1,5 @@
 { lib, stdenv
-, sway-unwrapped, swaybg
+, sway-unwrapped
 , makeWrapper, symlinkJoin, writeShellScriptBin
 , withBaseWrapper ? true, extraSessionCommands ? "", dbus
 , withGtkWrapper ? false, wrapGAppsHook, gdk-pixbuf, glib, gtk3
@@ -42,7 +42,6 @@ in symlinkJoin {
     ${optionalString withGtkWrapper "gappsWrapperArgsHook"}
 
     wrapProgram $out/bin/sway \
-      --prefix PATH : "${swaybg}/bin" \
       ${optionalString withGtkWrapper ''"''${gappsWrapperArgs[@]}"''} \
       ${optionalString (extraOptions != []) "${concatMapStrings (x: " --add-flags " + x) extraOptions}"}
   '';
