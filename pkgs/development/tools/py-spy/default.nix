@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsBuildBuild, rustPlatform, fetchFromGitHub, pkgconfig, libunwind, python3 }:
+{ lib, stdenv, pkgsBuildBuild, rustPlatform, fetchFromGitHub, pkg-config, libunwind, python3 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "py-spy";

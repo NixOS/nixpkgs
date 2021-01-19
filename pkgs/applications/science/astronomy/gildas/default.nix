@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gtk2-x11 , pkgconfig , python3 , gfortran , lesstif
+{ lib, stdenv, fetchurl, gtk2-x11 , pkg-config , python3 , gfortran , lesstif
 , cfitsio , getopt , perl , groff , which, darwin, ncurses
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "9faa0b3e674b5ffe5b1aee88027d7401a46ae28cd0b306595300547605d6222a";
   };
 
-  nativeBuildInputs = [ pkgconfig groff perl getopt gfortran which ];
+  nativeBuildInputs = [ pkg-config groff perl getopt gfortran which ];
 
   buildInputs = [ gtk2-x11 lesstif cfitsio python3Env ncurses ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation ]);

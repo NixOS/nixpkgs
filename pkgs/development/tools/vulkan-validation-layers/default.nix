@@ -8,7 +8,7 @@
 , vulkan-headers
 , vulkan-loader
 , glslang
-, pkgconfig
+, pkg-config
 , xlibsWrapper
 , libxcb
 , libXrandr
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
     python3
   ];

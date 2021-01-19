@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libtool, pkgconfig
+{ stdenv, fetchFromGitHub, autoreconfHook, libtool, pkg-config
 , openssl }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     "--with-enginesdir=${placeholder "out"}/lib/engines"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libtool ];
+  nativeBuildInputs = [ autoreconfHook pkg-config libtool ];
 
   buildInputs = [ openssl ];
 

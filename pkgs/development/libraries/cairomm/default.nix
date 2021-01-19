@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, darwin, cairo, fontconfig, freetype, libsigcxx }:
+{ fetchurl, stdenv, pkg-config, darwin, cairo, fontconfig, freetype, libsigcxx }:
 stdenv.mkDerivation rec {
   pname = "cairomm";
   version = "1.12.2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ cairo libsigcxx ];
   buildInputs = [ fontconfig freetype ]
   ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [

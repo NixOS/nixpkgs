@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, freetype, cmake, python }:
+{ stdenv, fetchurl, pkg-config, freetype, cmake, python }:
 
 stdenv.mkDerivation rec {
   version = "1.3.14";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1790ajyhk0ax8xxamnrk176gc9gvhadzy78qia4rd8jzm89ir7gr";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ freetype ];
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./macosx.patch ];

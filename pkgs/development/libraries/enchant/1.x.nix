@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, aspell, pkgconfig, glib, hunspell, hspell }:
+{ stdenv, fetchurl, aspell, pkg-config, glib, hunspell, hspell }:
 
 stdenv.mkDerivation rec {
   version = "1.6.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xg3m7mniyqyff8qv46jbfwgchb6di6qxdjnd5sfir7jzv0dkw5y";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ aspell glib hunspell hspell ];
 
   meta = with stdenv.lib; {

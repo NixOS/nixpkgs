@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig, gtk-doc, xkeyboard_config, libxml2, xorg, docbook_xsl
+{ stdenv, fetchgit, autoreconfHook, pkg-config, gtk-doc, xkeyboard_config, libxml2, xorg, docbook_xsl
 , glib, isocodes, gobject-introspection }:
 
 let
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # TODO: enable xmodmap support, needs xmodmap DB
   propagatedBuildInputs = with xorg; [ libX11 libXi xkeyboard_config libxml2 libICE glib libxkbfile isocodes ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig gtk-doc docbook_xsl ];
+  nativeBuildInputs = [ autoreconfHook pkg-config gtk-doc docbook_xsl ];
 
   buildInputs = [ gobject-introspection ];
 

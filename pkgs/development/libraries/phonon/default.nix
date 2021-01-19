@@ -4,7 +4,7 @@
 , cmake
 , libGLU
 , libGL
-, pkgconfig
+, pkg-config
 , libpulseaudio
 , extra-cmake-modules
 , qtbase
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     extra-cmake-modules
   ];
 

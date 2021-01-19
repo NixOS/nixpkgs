@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, guile, guile-lib, gwrap
-, pkgconfig, gconf, glib, gnome_vfs, gtk2
+, pkg-config, gconf, glib, gnome_vfs, gtk2
 , libglade, libgnome, libgnomecanvas, libgnomeui
 , pango, guile-cairo, texinfo
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    texinfo guile gwrap pkgconfig gconf glib gnome_vfs gtk2
+    texinfo guile gwrap pkg-config gconf glib gnome_vfs gtk2
     libglade libgnome libgnomecanvas libgnomeui pango guile-cairo
   ] ++ lib.optional doCheck guile-lib;
 

@@ -4,7 +4,7 @@
 , cmake
 , ninja
 , vala
-, pkgconfig
+, pkg-config
 , pantheon
 , gtk3
 , glib
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libxml2
     ninja
     vala
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

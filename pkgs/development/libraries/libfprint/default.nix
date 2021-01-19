@@ -1,6 +1,6 @@
 { stdenv
 , fetchFromGitLab
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gusb
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gtk-doc

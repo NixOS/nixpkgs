@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libspotify, alsaLib, readline, pkgconfig, apiKey ? null, unzip, gnused }:
+{ stdenv, fetchurl, libspotify, alsaLib, readline, pkg-config, apiKey ? null, unzip, gnused }:
 
 let
   version = "12.1.51";
@@ -65,7 +65,7 @@ else stdenv.mkDerivation {
         pname = "libspotify-samples";
         inherit version;
         src = libspotify.src;
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
         buildInputs = [ libspotify readline ]
           ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
         postUnpack = "sourceRoot=$sourceRoot/share/doc/libspotify/examples";

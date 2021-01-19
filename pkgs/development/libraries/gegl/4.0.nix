@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , vala
 , gobject-introspection
 , gtk-doc
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     meson
     ninja

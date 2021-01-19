@@ -1,5 +1,5 @@
 { gestures ? false
-, lib, stdenv, fetchurl, pkgconfig
+, lib, stdenv, fetchurl, pkg-config
 , cairo, fontconfig, freetype, libXft, libXcursor, libXinerama
 , libXpm, libXt, librsvg, libpng, fribidi, perl
 , libstroke ? null
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bliqcnap7vb3m2rn8wvxyfhbf35h9x34s41fl4301yhrkrlrihv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cairo fontconfig freetype
     libXft libXcursor libXinerama libXpm libXt

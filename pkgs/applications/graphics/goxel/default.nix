@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, scons, pkgconfig, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, scons, pkg-config, wrapGAppsHook
 , glfw3, gtk3, libpng12 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./disable-imgui_ini.patch ];
 
-  nativeBuildInputs = [ scons pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ scons pkg-config wrapGAppsHook ];
   buildInputs = [ glfw3 gtk3 libpng12 ];
   NIX_LDFLAGS = "-lpthread";
 

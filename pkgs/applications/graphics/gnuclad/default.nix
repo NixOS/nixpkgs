@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig
+{ stdenv, lib, fetchurl, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=catch-value";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     homepage = "https://launchpad.net/gnuclad";

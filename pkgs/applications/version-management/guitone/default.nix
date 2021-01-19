@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchmtn, qt4, qmake4Hook, pkgconfig, graphviz }:
+{ lib, stdenv, fetchmtn, qt4, qmake4Hook, pkg-config, graphviz }:
 
 let version = "1.0-mtn-head"; in
 stdenv.mkDerivation {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   patches = [ ./parallel-building.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ qt4 qmake4Hook graphviz ];
 
   qmakeFlags = [ "guitone.pro" ];

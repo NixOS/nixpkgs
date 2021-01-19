@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , cmake
-, pkgconfig
+, pkg-config
 , libffi
 , boehmgc
 , openssl
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
            # build extensions
            export ${platformLdLibraryPath}="$(pwd)/build"
            '';
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [ libffi boehmgc openssl zlib ] ++ stdenv.lib.optional odbcSupport libiodbc;
 

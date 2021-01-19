@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libsamplerate, libsndfile, fftw
+{ stdenv, fetchurl, pkg-config, libsamplerate, libsndfile, fftw
 , vamp-plugin-sdk, ladspaH }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "4f5b9509364ea876b4052fc390c079a3ad4ab63a2683aad09662fb905c2dc026";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH ];
 
   meta = with stdenv.lib; {

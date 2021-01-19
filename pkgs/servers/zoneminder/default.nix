@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, substituteAll, cmake, makeWrapper, pkgconfig
+{ stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, substituteAll, cmake, makeWrapper, pkg-config
 , curl, ffmpeg_3, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
 , polkit, util-linuxMinimal, x264, zlib
 , coreutils, procps, psmisc, nixosTests }:
@@ -157,7 +157,7 @@ in stdenv.mkDerivation rec {
     CryptEksblowfish DataEntropy # zmupdate.pl
   ]);
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
 
   cmakeFlags = [
     "-DWITH_SYSTEMD=ON"

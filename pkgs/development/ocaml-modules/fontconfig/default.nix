@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, fontconfig, ocaml }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, fontconfig, ocaml }:
 
 stdenv.mkDerivation {
   name = "ocaml-fontconfig-20131103";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1fw6bzydmnyh2g4x35mcbg0hypnxqhynivk4nakcsx7prr8zr3yh";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ocaml fontconfig ];
   makeFlags = [
     "OCAML_STDLIB_DIR=$(out)/lib/ocaml/${lib.getVersion ocaml}/site-lib/"

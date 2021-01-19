@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , pcre
-, pkgconfig
+, pkg-config
 , check
 , autoreconfHook
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "09cixbms817p6nb77wz3rxp0znnac8ybycvsrrzgwlbfn58a3zwl";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ check ];
   propagatedBuildInputs = [ pcre ];

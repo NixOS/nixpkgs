@@ -8,7 +8,7 @@
 , libidn2
 , libunistring
 , libxslt
-, pkgconfig
+, pkg-config
 , python3
 , valgrind
 , publicsuffix-list
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     gtk-doc
     lzip
-    pkgconfig
+    pkg-config
     python3
     libxslt
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [

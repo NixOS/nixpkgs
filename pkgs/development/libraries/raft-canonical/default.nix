@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, file, libuv }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv }:
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0swn95cf11fqczllmxr0nj3ig532rw4n3w6g3ckdnqka8520xjyr";
   };
 
-  nativeBuildInputs = [ autoreconfHook file pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook file pkg-config ];
   buildInputs = [ libuv ];
 
   preConfigure = ''

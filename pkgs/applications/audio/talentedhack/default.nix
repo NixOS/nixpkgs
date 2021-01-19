@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, lv2, fftwFloat, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, lv2, fftwFloat, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "talentedhack";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kwvayalysmk7y49jq0k16al252md8d45z58hphzsksmyz6148bx";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ lv2 fftwFloat ];
 

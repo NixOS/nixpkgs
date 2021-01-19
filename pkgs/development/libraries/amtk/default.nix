@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , gtk3
-, pkgconfig
+, pkg-config
 , gobject-introspection
 , gnome3
 , dbus
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     dbus
     gobject-introspection
   ];

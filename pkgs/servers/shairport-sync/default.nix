@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, avahi, alsaLib
-, libdaemon, popt, pkgconfig, libconfig, libpulseaudio, soxr }:
+, libdaemon, popt, pkg-config, libconfig, libpulseaudio, soxr }:
 
 stdenv.mkDerivation rec {
   version = "3.3.7";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "mikebrady";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     openssl

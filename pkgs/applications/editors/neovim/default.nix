@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
-, libuv, lua, ncurses, pkgconfig
+, libuv, lua, ncurses, pkg-config
 , unibilium, xsel, gperf
 , libvterm-neovim
 , glibcLocales ? null, procps ? null
@@ -74,7 +74,7 @@ in
     nativeBuildInputs = [
       cmake
       gettext
-      pkgconfig
+      pkg-config
     ];
 
     # extra programs test via `make functionaltest`

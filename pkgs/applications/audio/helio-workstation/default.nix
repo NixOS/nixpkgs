@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , alsaLib, freetype, xorg, curl, libGL, libjack2, gnome3
-, pkgconfig, makeWrapper
+, pkg-config, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     xorg.libXcursor xorg.libXcomposite curl libGL libjack2 gnome3.zenity
   ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   preBuild = ''
     cd Projects/LinuxMakefile

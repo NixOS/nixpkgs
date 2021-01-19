@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev, darwin }:
+{ stdenv, fetchurl, pkg-config, udev, darwin }:
 
 stdenv.mkDerivation rec {
   name = "libserialport-0.1.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "17ajlwgvyyrap8z7f16zcs59pksvncwbmd3mzf98wj7zqgczjaja";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = stdenv.lib.optional stdenv.isLinux udev
     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.IOKit;
 

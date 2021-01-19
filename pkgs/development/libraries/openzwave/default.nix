@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, doxygen, fontconfig, graphviz-nox, libxml2, pkgconfig, which
+, doxygen, fontconfig, graphviz-nox, libxml2, pkg-config, which
 , systemd }:
 
 let
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
     sha256 = "04g8fb4f4ihakvvsmzcnncgfdd2ikmki7s22i9c6layzdwavbwf1";
   };
 
-  nativeBuildInputs = [ doxygen fontconfig graphviz-nox libxml2 pkgconfig which ];
+  nativeBuildInputs = [ doxygen fontconfig graphviz-nox libxml2 pkg-config which ];
 
   buildInputs = [ systemd ];
 
@@ -48,7 +48,7 @@ in stdenv.mkDerivation {
       --replace dir=    dir=$out
 
     substituteInPlace $out/bin/ozw_config \
-      --replace pcfile=${pkgconfig} pcfile=$out
+      --replace pcfile=${pkg-config} pcfile=$out
   '';
 
   meta = with stdenv.lib; {

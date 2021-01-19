@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libdaemon, dbus, perlPackages
+{ fetchurl, fetchpatch, stdenv, pkg-config, libdaemon, dbus, perlPackages
 , expat, gettext, intltool, glib, libiconv, writeShellScriptBin, libevent
 , gtk3Support ? false, gtk3 ? null
 , qt4 ? null
@@ -13,7 +13,7 @@ assert qt4Support -> qt4 != null;
 
 let
   # despite the configure script claiming it supports $PKG_CONFIG, it doesnt respect it
-  pkgconfig-helper = writeShellScriptBin "pkg-config" ''exec $PKG_CONFIG "$@"'';
+  pkg-config-helper = writeShellScriptBin "pkg-config" ''exec $PKG_CONFIG "$@"'';
 in
 
 stdenv.mkDerivation rec {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs =
     stdenv.lib.optionals withPython (with python.pkgs; [ python pygobject3 dbus-python ]);
 
-  nativeBuildInputs = [ pkgconfig pkgconfig-helper gettext intltool glib ];
+  nativeBuildInputs = [ pkg-config pkg-config-helper gettext intltool glib ];
 
   configureFlags =
     [ "--disable-qt3" "--disable-gdbm" "--disable-mono"

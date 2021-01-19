@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, nixosTests
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, nixosTests
 , boost, libyamlcpp, libsodium, sqlite, protobuf, openssl, systemd
 , mysql57, postgresql, lua, openldap, geoip, curl, unixODBC
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip
     libyamlcpp libsodium curl unixODBC openssl systemd

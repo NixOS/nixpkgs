@@ -2,7 +2,7 @@
 , fetchurl
 , fetchpatch
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , gettext
 , gobject-introspection
 , gtk-doc
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     gettext
     gobject-introspection

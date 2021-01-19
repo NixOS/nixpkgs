@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, glib, pkgconfig, python, scons }:
+{ lib, stdenv, fetchgit, glib, pkg-config, python, scons }:
 
 stdenv.mkDerivation {
   pname = "hammer";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     rev = "47f34b81e4de834fd3537dd71928c4f3cdb7f533";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib python scons ];
 
   meta = with lib; {

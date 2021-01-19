@@ -6,7 +6,7 @@
 , meson
 , ninja
 , systemd
-, pkgconfig
+, pkg-config
 , doxygen
 , graphviz
 , valgrind
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     graphviz
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

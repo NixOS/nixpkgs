@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, cairo, expat, fftwSinglePrec, fluidsynth, glib
-, gtk2, libjack2, ladspaH , libglade, lv2, pkgconfig }:
+, gtk2, libjack2, ladspaH , libglade, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "calf";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo expat fftwSinglePrec fluidsynth glib gtk2 libjack2 ladspaH
-    libglade lv2 pkgconfig
+    libglade lv2 pkg-config
   ];
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, mpd_clientlib, sphinx, libiconv }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, mpd_clientlib, sphinx, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "mpc";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mpd_clientlib ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig sphinx ];
+  nativeBuildInputs = [ meson ninja pkg-config sphinx ];
 
   meta = with lib; {
     description = "A minimalist command line interface to MPD";

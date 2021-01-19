@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, ocaml, findlib, pkgconfig, perl
+, ocaml, findlib, pkg-config, perl
 , gmp
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   inherit (source) version;
   src = fetchurl { inherit (source) url sha256; };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ocaml findlib perl ];
   propagatedBuildInputs = [ gmp ];
 

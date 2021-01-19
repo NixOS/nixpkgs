@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, glib, util-linux, scowl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, util-linux, scowl }:
 
 stdenv.mkDerivation rec {
   pname = "halfempty";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0838pw0ccjvlxmjygzrnppz1fx1a10vjzdgjbxgb4wgpqjr8v6vc";
   };
 
-  nativeBuildInputs = [ pkgconfig util-linux ];
+  nativeBuildInputs = [ pkg-config util-linux ];
   buildInputs = [ glib ];
 
   enableParallelBuilding = true;

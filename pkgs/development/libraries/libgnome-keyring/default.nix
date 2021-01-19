@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, dbus, libgcrypt, pkgconfig, intltool }:
+{ stdenv, fetchurl, glib, dbus, libgcrypt, pkg-config, intltool }:
 
 stdenv.mkDerivation rec {
   pname = "libgnome-keyring";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [ glib dbus libgcrypt ];
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
   meta = {
     inherit (glib.meta) platforms maintainers;

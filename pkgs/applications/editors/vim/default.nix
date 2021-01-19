@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, callPackage, ncurses, gettext, pkgconfig
+{ lib, stdenv, fetchurl, callPackage, ncurses, gettext, pkg-config
 # default vimrc
 , vimrc ? fetchurl {
     name = "default-vimrc";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   inherit (common) version src postPatch hardeningDisable enableParallelBuilding meta;
 
-  nativeBuildInputs = [ gettext pkgconfig ];
+  nativeBuildInputs = [ gettext pkg-config ];
   buildInputs = [ ncurses ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
 

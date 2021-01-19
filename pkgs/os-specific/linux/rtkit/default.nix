@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
-, meson, ninja, pkgconfig, unixtools
+, meson, ninja, pkg-config, unixtools
 , dbus, libcap, polkit, systemd
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig unixtools.xxd ];
+  nativeBuildInputs = [ meson ninja pkg-config unixtools.xxd ];
   buildInputs = [ dbus libcap polkit systemd ];
 
   mesonFlags = [

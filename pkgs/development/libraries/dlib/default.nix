@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, libpng, libjpeg
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libpng, libjpeg
 , guiSupport ? false, libX11
 
   # see http://dlib.net/compile.html
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "-DUSE_DLIB_USE_CUDA=${if cudaSupport then "1" else "0"}"
     "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}" ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libpng libjpeg ] ++ lib.optional guiSupport libX11;
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, pkg-config
 , xlibsWrapper, libxcb, libXrandr, libXext, wayland, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0w9i2pliw4ccmjyfzff4i2f3hxwsfd54jg7ahv2v634qmx59bsbi";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ python3 xlibsWrapper libxcb libXrandr libXext wayland ];
 
   preConfigure = ''

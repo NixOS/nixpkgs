@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , asciidoc
-, pkgconfig
+, pkg-config
 , libxslt
 , libxml2
 , docbook_xml_dtd_45
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     asciidoc
-    pkgconfig
+    pkg-config
     libxslt # xsltproc
     libxml2 # xmllint
     docbook_xml_dtd_45

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, pkgconfig, gnutls
+{ stdenv, fetchFromGitHub, automake, autoconf, libtool, pkg-config, gnutls
 , libgcrypt, libtasn1, glib, libplist, libusbmuxd }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
   ];
   propagatedBuildInputs = [
     glib

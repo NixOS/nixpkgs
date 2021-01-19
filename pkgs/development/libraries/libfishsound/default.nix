@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libvorbis, speex, flac, pkgconfig }:
+{ stdenv, fetchurl, libvorbis, speex, flac, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "libfishsound-1.0.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libvorbis speex flac ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with stdenv.lib; {
     homepage = "https://xiph.org/fishsound/";

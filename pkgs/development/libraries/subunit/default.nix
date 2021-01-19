@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, check, cppunit, perl, pythonPackages }:
+{ stdenv, fetchurl, pkg-config, check, cppunit, perl, pythonPackages }:
 
 # NOTE: for subunit python library see pkgs/top-level/python-packages.nix
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h7i5ifcx20qkya24j11nbwa829klw7dvnlljdgivgvcx6b20y80";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ check cppunit perl pythonPackages.wrapPython ];
 
   propagatedBuildInputs = with pythonPackages; [ testtools testscenarios ];

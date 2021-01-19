@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, fetchpatch, pkgconfig, freetype, pango, libpng, libtiff
+{lib, stdenv, fetchurl, fetchpatch, pkg-config, freetype, pango, libpng, libtiff
 , giflib, libjpeg, netpbm}:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rzc1alph03j67lrr66499zl0wqndiipmj99nqgvh9xzm1qdb023";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freetype pango libpng libtiff giflib libjpeg netpbm ];
 
   patches = [

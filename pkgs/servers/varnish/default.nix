@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkgconfig, readline, libedit
+{ lib, stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkg-config, readline, libedit
 , python3, makeWrapper }:
 
 let
@@ -14,7 +14,7 @@ let
 
       passthru.python = python3;
 
-      nativeBuildInputs = with python3.pkgs; [ pkgconfig docutils sphinx ];
+      nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx ];
       buildInputs = [
         pcre libxslt groff ncurses readline libedit makeWrapper python3
       ];

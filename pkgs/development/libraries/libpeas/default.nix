@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3
+{ stdenv, fetchurl, meson, ninja, pkg-config, gettext, gnome3
 , glib, gtk3, gobject-introspection, python3, ncurses
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "05cb7drn6arc4gi02wgsvzibigi2riz5gnfnmlb0zmbfnj9ikna2";
   };
 
-  nativeBuildInputs = [ pkgconfig meson ninja gettext gobject-introspection ];
+  nativeBuildInputs = [ pkg-config meson ninja gettext gobject-introspection ];
   buildInputs =  [ glib gtk3 ncurses python3 python3.pkgs.pygobject3 ];
   propagatedBuildInputs = [
     # Required by libpeas-1.0.pc

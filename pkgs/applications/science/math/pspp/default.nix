@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk3, gsl
-, pkgconfig, gtksourceview, pango, gettext, dconf
+, pkg-config, gtksourceview, pango, gettext, dconf
 , makeWrapper, gsettings-desktop-schemas, hicolor-icon-theme
 , texinfo, ssw, python3
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lqrash677b09zxdlxp89z6k02y4i23mbqg83956dwl69wc53dan";
   };
 
-  nativeBuildInputs = [ pkgconfig texinfo python3 ];
+  nativeBuildInputs = [ pkg-config texinfo python3 ];
   buildInputs = [ libxml2 readline zlib perl cairo gtk3 gsl
     gtksourceview pango gettext
     makeWrapper gsettings-desktop-schemas hicolor-icon-theme ssw

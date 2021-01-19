@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, doxygen, graphviz, valgrind
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, doxygen, graphviz, valgrind
 , glib, dbus, gst_all_1, alsaLib, ffmpeg_4, libjack2, udev, libva, xorg
 , sbc, SDL2, makeFontsConf
 }:
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "doc" ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig doxygen graphviz valgrind
+    meson ninja pkg-config doxygen graphviz valgrind
   ];
   buildInputs = [
     glib dbus gst_all_1.gst-plugins-base gst_all_1.gstreamer

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, boost, mpd_clientlib, ncurses, pkgconfig, readline
+{ lib, stdenv, fetchurl, boost, mpd_clientlib, ncurses, pkg-config, readline
 , libiconv, icu, curl
 , outputsSupport ? true # outputs screen
 , visualizerSupport ? false, fftw ? null # visualizer screen
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ++ optional clockSupport "--enable-clock"
     ++ optional taglibSupport "--with-taglib";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ boost mpd_clientlib ncurses readline libiconv icu curl ]
     ++ optional visualizerSupport fftw

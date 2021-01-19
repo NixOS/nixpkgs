@@ -5,7 +5,7 @@
 , libevent
 , autoreconfHook
 , db4
-, pkgconfig
+, pkg-config
 , protobuf
 , hexdump
 , zeromq
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     hexdump
   ] ++ optionals withGui [
     wrapQtAppsHook

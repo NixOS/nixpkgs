@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libjack2, fftwFloat, gtk2 }:
+{ lib, stdenv, fetchurl, pkg-config, libjack2, fftwFloat, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "spectrojack";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url = "http://sed.free.fr/spectrojack/${pname}-${version}.tar.gz";
     sha256 = "1kiwx0kag7kq7rhg0bvckfm8r7pqmbk76ppa39cq2980jb5v8rfp";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjack2 fftwFloat gtk2 ];
   configurePhase= ''
     sed -i 's/.*home.*/#&/' ./Makefile

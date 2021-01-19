@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libopus }:
+{ stdenv, fetchurl, pkg-config, libopus }:
 
 let
   version = "0.2.1";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libopus ];
 
   meta = with stdenv.lib; {

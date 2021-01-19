@@ -3,7 +3,7 @@
 
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 
 , at-spi2-core
 , atk
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "z6AIpa+CKzauYofxgYLEDJHdaZxV+qOGBYge0XXKRk8=";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ at-spi2-core atk dbus glib libxml2 ];
 
   doCheck = false; # fails with "No test data file provided"

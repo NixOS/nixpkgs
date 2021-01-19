@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub , cmake, libjack2, libsndfile, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub , cmake, libjack2, libsndfile, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "sfizz";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ libjack2 libsndfile ];
 

@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, pkgconfig
+, pkg-config
 , which
 , cairo
 , pango
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ pkgconfig which doxygen ]
+  nativeBuildInputs = [ pkg-config which doxygen ]
   ++ (if stdenv.isDarwin then [ wxmac ] else [ wxGTK ]);
 
   buildInputs = [ ncurses libintl ]

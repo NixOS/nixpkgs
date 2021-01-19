@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, curl, libevent, libiconv, libxml2, openssl, pcre, zlib
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, curl, libevent, libiconv, libxml2, openssl, pcre, zlib
 , jabberSupport ? true, iksemel
 , ldapSupport ? true, openldap
 , odbcSupport ? true, unixODBC
@@ -25,7 +25,7 @@ in
         inherit sha256;
       };
 
-      nativeBuildInputs = [ autoreconfHook pkgconfig ];
+      nativeBuildInputs = [ autoreconfHook pkg-config ];
       buildInputs = [
         curl
         libevent

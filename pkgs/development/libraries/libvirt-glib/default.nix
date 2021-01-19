@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gobject-introspection, intltool, vala
+{ stdenv, fetchurl, pkg-config, gobject-introspection, intltool, vala
 , libcap_ng, libvirt, libxml2
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zpbv4ninc57c9rw4zmmkvvqn7154iv1qfr20kyxn8xplalqrzvz";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool vala gobject-introspection ];
+  nativeBuildInputs = [ pkg-config intltool vala gobject-introspection ];
   buildInputs = [ libcap_ng libvirt libxml2 gobject-introspection ];
 
   enableParallelBuilding = true;

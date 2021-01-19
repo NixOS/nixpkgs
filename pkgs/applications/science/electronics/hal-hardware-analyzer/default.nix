@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, python3Packages
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config, python3Packages
 , boost, rapidjson, qtbase, qtsvg, igraph, spdlog, wrapQtAppsHook
 , fmt, graphviz, llvmPackages ? null
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     shopt -u extglob
   '';
 
-  nativeBuildInputs = [ cmake ninja pkgconfig ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
   buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog fmt graphviz wrapQtAppsHook ]
     ++ (with python3Packages; [ python pybind11 ])
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;

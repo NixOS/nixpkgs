@@ -3,7 +3,7 @@
 , lib
 , libnotify
 , mkDerivation
-, pkgconfig
+, pkg-config
 , qtbase
 , qtdeclarative
 , qtgraphicaleffects
@@ -23,7 +23,7 @@ mkDerivation rec {
     sha256 = "1p0z8hkbxaxrqjmknjwxb0mpf3xdssik3m5cwrsv1881k1x2x5qs";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     libnotify

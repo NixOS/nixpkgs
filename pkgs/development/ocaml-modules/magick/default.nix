@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, which, pkgconfig, ocaml, findlib, imagemagick }:
+{ stdenv, lib, fetchurl, which, pkg-config, ocaml, findlib, imagemagick }:
 
 if lib.versionAtLeast ocaml.version "4.06"
 then throw "magick is not available for OCaml ${ocaml.version}"
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0gn9l2qdr8gby2x8c2mb59x1kipb2plr45rbq6ymcxyi0wmzfh3q";
   };
 
-  nativeBuildInputs = [ which pkgconfig ];
+  nativeBuildInputs = [ which pkg-config ];
   buildInputs = [ ocaml findlib imagemagick ];
 
   createFindlibDestdir = true;

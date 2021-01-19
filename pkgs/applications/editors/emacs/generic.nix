@@ -7,7 +7,7 @@
   , patches ? [ ]
 }:
 { stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
-, Xaw3d, libXcursor,  pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
+, Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , jansson, harfbuzz
@@ -92,7 +92,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ""
   ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ]
+  nativeBuildInputs = [ pkg-config makeWrapper ]
     ++ lib.optionals srcRepo [ autoreconfHook texinfo ]
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 

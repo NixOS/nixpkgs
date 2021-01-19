@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, SDL, libjack2, libGLU, libGL, pkgconfig }:
+{ lib, stdenv, fetchurl, SDL, libjack2, libGLU, libGL, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "jack_oscrolloscope";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pl55in0sj7h5r06n1v91im7d18pplvhbjhjm1fdl39zwnyxiash";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL libjack2 libGLU libGL ];
 
   installPhase = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, pkgconfig
+{ stdenv, fetchFromGitHub, automake, autoconf, libtool, pkg-config
 , libusb1
 , readline
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

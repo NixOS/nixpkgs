@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, sqlite }:
+{ stdenv, fetchurl, pkg-config, pure, sqlite }:
 
 stdenv.mkDerivation rec {
   baseName = "sql3";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "b9f79dd443c8ffc5cede51e2af617f24726f5c0409aab4948c9847e6adb53c37";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure sqlite ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;

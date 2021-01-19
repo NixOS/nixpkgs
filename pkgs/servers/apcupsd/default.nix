@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, systemd, util-linux, coreutils, wall, hostname, man
+{ lib, stdenv, fetchurl, pkg-config, systemd, util-linux, coreutils, wall, hostname, man
 , enableCgiScripts ? true, gd
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rwqiyzlg9p0szf3x6q1ppvrw6f6dbpn2rc5z623fk3bkdalhxyv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ util-linux man ] ++ lib.optional enableCgiScripts gd;
 
   prePatch = ''

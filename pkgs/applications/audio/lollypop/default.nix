@@ -3,7 +3,7 @@
 , nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gtk3
 , gst_all_1
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication rec  {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

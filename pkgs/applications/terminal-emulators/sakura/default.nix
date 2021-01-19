@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , cmake
-, pkgconfig
+, pkg-config
 , gtk3
 , perl
 , vte
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-cppODnUKQpS9kFkkOqxU3yqAElAVn8VQtQsP4Carkos=";
   };
 
-  nativeBuildInputs = [ cmake perl pkgconfig makeWrapper ];
+  nativeBuildInputs = [ cmake perl pkg-config makeWrapper ];
 
   buildInputs = [ gtk3 vte pcre2 glib ];
 

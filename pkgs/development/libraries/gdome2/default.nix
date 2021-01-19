@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, libxml2, gtk-doc}:
+{stdenv, fetchurl, pkg-config, glib, libxml2, gtk-doc}:
 
 let
   pname = "gdome2";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libxml2 gtk-doc ];
   propagatedBuildInputs = [glib libxml2];
   patches = [ ./xml-document.patch ];

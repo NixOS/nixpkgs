@@ -23,7 +23,7 @@
 , perl
 , phodav
 , pixman
-, pkgconfig
+, pkg-config
 , polkit
 , python3
 , spice-protocol
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     perl
-    pkgconfig
+    pkg-config
     python3
     python3.pkgs.pyparsing
     python3.pkgs.six

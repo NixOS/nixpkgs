@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, pkgconfig, qttools, alsaLib, drumstick, qtbase, qtsvg }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, qttools, alsaLib, drumstick, qtbase, qtsvg }:
 
 stdenv.mkDerivation rec {
   pname = "kmetronome";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0bzm6vzlm32kjrgn1nvp096b2d41ybys2sk145nhy992wg56v32s";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
+  nativeBuildInputs = [ cmake pkg-config qttools ];
 
   buildInputs = [ alsaLib drumstick qtbase qtsvg ];
 

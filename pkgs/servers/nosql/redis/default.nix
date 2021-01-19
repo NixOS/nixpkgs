@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, lua, pkgconfig, systemd, jemalloc, nixosTests
+{ lib, stdenv, fetchurl, lua, pkg-config, systemd, jemalloc, nixosTests
 , tlsSupport ? true, openssl
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ lua ]
     ++ lib.optional (stdenv.isLinux && !stdenv.hostPlatform.isMusl) systemd

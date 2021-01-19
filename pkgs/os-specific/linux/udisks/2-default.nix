@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, libtool, pkgconfig, gettext, gnused
+{ lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, libtool, pkg-config, gettext, gnused
 , gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
 , expat, libxslt, docbook_xsl, util-linux, mdadm, libgudev, libblockdev, parted
 , gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43, autoconf, automake
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoconf automake pkgconfig libtool gettext which gobject-introspection
+    autoconf automake pkg-config libtool gettext which gobject-introspection
     gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
   ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , python3
 , perl
 , perlPackages
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool perl perlPackages.XMLParser
     itstool
     wrapGAppsHook

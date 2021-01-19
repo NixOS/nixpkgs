@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , freetype, fribidi
 , libXext, libXft, libXpm, libXrandr, libXrender, xorgproto
 , libXinerama
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h1f70y40qd225dqx937vzb4k2cz219agm1zvnjxakn5jkz7b37w";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ freetype fribidi libXext libXft libXpm libXrandr libXrender xorgproto libXinerama imlib2 ];
 

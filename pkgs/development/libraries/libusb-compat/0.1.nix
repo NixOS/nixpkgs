@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , patchelf
-, pkgconfig
+, pkg-config
 , libusb1
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
   outputBin = "dev";
 
-  nativeBuildInputs = [ autoreconfHook patchelf pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook patchelf pkg-config ];
 
   buildInputs = [ libusb1 ];
 

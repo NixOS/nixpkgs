@@ -471,6 +471,8 @@ mapAliases ({
   pidginsipe = pidgin-sipe; # added 2018-01-08
   pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
   piwik = matomo; # added 2018-01-16
+  pkgconfig = pkg-config; # added 2018-02-02, moved to aliases.nix 2021-01-18
+  pkgconfigUpstream = pkg-configUpstream; # added 2018-02-02
   pltScheme = racket; # just to be sure
   plexpy = tautulli; # plexpy got renamed to tautulli, added 2019-02-22
   pmtools = acpica-tools; # added 2018-11-01

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, fftwFloat, lv2 }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, fftwFloat, lv2 }:
 
 stdenv.mkDerivation rec {
   pname = "noise-repellent";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = ("--prefix=${placeholder "out"}/lib/lv2");
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [
     fftwFloat lv2
   ];

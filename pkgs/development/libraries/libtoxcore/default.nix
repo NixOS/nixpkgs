@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, libsodium, ncurses, libopus, msgpack
-, libvpx, check, libconfig, pkgconfig }:
+, libvpx, check, libconfig, pkg-config }:
 
 let
   generic = { version, sha256 }:
@@ -26,7 +26,7 @@ let
       libopus libvpx
     ];
 
-    nativeBuildInputs = [ cmake pkgconfig ];
+    nativeBuildInputs = [ cmake pkg-config ];
 
     doCheck = false; # hangs, tries to access the net?
     checkInputs = [ check ];

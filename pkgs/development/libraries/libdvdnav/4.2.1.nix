@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, libdvdread}:
+{stdenv, fetchurl, pkg-config, libdvdread}:
 
 stdenv.mkDerivation {
   name = "libdvdnav-4.2.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "7fca272ecc3241b6de41bbbf7ac9a303ba25cb9e0c82aa23901d3104887f2372";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [libdvdread];
 
   configureScript = "./configure2"; # wtf?

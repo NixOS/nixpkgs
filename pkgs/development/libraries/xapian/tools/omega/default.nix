@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xapian, perl, pcre, zlib, libmagic }:
+{ stdenv, fetchurl, pkg-config, xapian, perl, pcre, zlib, libmagic }:
 
 stdenv.mkDerivation rec {
   pname = "xapian-omega";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ xapian perl pcre zlib libmagic ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with stdenv.lib; {
     description = "Indexer and CGI search front-end built on Xapian library";

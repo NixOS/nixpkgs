@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, pkgconfig, intltool
+, pkg-config, intltool
 , glib, dbus, gtk3, libappindicator-gtk3, gst_all_1
 , librsvg, wrapGAppsHook
 , pulseaudioSupport ? true, libpulseaudio ? null }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # https://bugs.launchpad.net/audio-recorder/+bug/1784622
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
 
   buildInputs = [
     glib dbus gtk3 librsvg libappindicator-gtk3

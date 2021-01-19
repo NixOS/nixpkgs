@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pure, pkgconfig, gsl }:
+{ stdenv, fetchurl, pure, pkg-config, gsl }:
 
 stdenv.mkDerivation rec {
   baseName = "gsl";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "06bdd873d5417d90ca35093056a060b77365123ed24c3ac583cd3922d4c78a75";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure gsl ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;

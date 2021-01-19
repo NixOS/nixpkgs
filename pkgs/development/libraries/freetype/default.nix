@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , buildPackages
-, pkgconfig, which, makeWrapper
+, pkg-config, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
 
 , # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
 
   # dependence on harfbuzz is looser than the reverse dependence
-  nativeBuildInputs = [ pkgconfig which makeWrapper ]
+  nativeBuildInputs = [ pkg-config which makeWrapper ]
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ optional (!stdenv.isLinux) gnumake;
 
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = glib.flattenInclude + ''
     substituteInPlace $dev/bin/freetype-config \
-      --replace ${buildPackages.pkgconfig} ${pkgconfig}
+      --replace ${buildPackages.pkg-config} ${pkg-config}
 
     wrapProgram "$dev/bin/freetype-config" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"

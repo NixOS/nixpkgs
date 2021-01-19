@@ -3,7 +3,7 @@
 , nix-update-script
 , pantheon
 , vala
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , python3
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

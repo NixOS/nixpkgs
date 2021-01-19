@@ -1,4 +1,4 @@
-{ config, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ config, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , librdf_raptor2, ladspaH, openssl, zlib
 , doCheck ? config.doCheckByDefault or false, ladspaPlugins
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's:usr/local:${ladspaPlugins}:' examples/{instances,remove}_test.c
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   propagatedBuildInputs = [ librdf_raptor2 ];
 

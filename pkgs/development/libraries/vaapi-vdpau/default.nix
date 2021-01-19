@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libvdpau, libGLU, libGL, libva, pkgconfig }:
+{ stdenv, fetchurl, fetchpatch, libvdpau, libGLU, libGL, libva, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libva-vdpau-driver";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
                   sha256 = "1m4is6lk580mppsx2mvdv1xifj6gvx724si4qynsm9qrdfdc9fby"; })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libvdpau libGLU libGL libva ];
 
   postPatch = ''

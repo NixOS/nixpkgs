@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, automake, autoconf, libtool, gettext
+{ lib, stdenv, fetchFromGitHub, pkg-config, automake, autoconf, libtool, gettext
 , which, xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp
 , libXmu, libpng, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./0001-Fix-Gettext-Requirement.patch ];
 
-  nativeBuildInputs = [ pkgconfig automake autoconf libtool gettext which ];
+  nativeBuildInputs = [ pkg-config automake autoconf libtool gettext which ];
 
   buildInputs = [
     libX11

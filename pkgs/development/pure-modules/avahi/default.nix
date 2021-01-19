@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, avahi }:
+{ stdenv, fetchurl, pkg-config, pure, avahi }:
 
 stdenv.mkDerivation rec {
   baseName = "avahi";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "5fac8a6e3a54e45648ceb207ee0061b22eac8c4e668b8d53f13eb338b09c9160";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure avahi ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;

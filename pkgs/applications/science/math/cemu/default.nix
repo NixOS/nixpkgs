@@ -9,7 +9,7 @@
 , qmake
 , git
 , libpng_apng
-, pkgconfig
+, pkg-config
 }:
 
 mkDerivation rec {
@@ -26,7 +26,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     qmake
     git
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

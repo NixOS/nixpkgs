@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lv2, pkgconfig, python3, serd, sord, sratom, wafHook }:
+{ stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "lilv";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./lilv-pkgconfig.patch ];
 
-  nativeBuildInputs = [ pkgconfig python3 wafHook ];
+  nativeBuildInputs = [ pkg-config python3 wafHook ];
   buildInputs = [ serd sord sratom ];
   propagatedBuildInputs = [ lv2 ];
 

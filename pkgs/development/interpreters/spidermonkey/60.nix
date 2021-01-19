@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip, buildPackages
+{ stdenv, fetchurl, fetchpatch, autoconf213, pkg-config, perl, python2, zip, buildPackages
 , which, readline, zlib, icu }:
 
 with stdenv.lib;
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
   setOutputFlags = false; # Configure script only understands --includedir
 
   buildInputs = [ readline zlib icu ];
-  nativeBuildInputs = [ autoconf213 pkgconfig perl which python2 zip ];
+  nativeBuildInputs = [ autoconf213 pkg-config perl which python2 zip ];
 
   patches = [
     # Fixed in 62.0

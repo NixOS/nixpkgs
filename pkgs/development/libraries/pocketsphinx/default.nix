@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , sphinxbase
-, pkgconfig
+, pkg-config
 , python27 # >= 2.6
 , swig2 # 2.0
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ sphinxbase ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ python27 swig2 ];
 
   meta = {

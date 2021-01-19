@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, cairo, harfbuzz
+{ stdenv, fetchurl, fetchpatch, pkg-config, cairo, harfbuzz
 , libintl, libthai, gobject-introspection, darwin, fribidi, gnome3
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, makeFontsConf, freefont_ttf
 , meson, ninja, glib
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson ninja
     glib # for glib-mkenum
-    pkgconfig gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
+    pkg-config gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [
     fribidi

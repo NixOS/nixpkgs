@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome3 }:
+{ stdenv, fetchurl, pkg-config, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ epoxy ];
 
   propagatedBuildInputs = [ glibmm gtk3 atkmm cairomm pangomm ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, perl, lvm2, libaio, gzip, readline, systemd, liburcu, json_c }:
+{ lib, stdenv, fetchurl, pkg-config, perl, lvm2, libaio, gzip, readline, systemd, liburcu, json_c }:
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       $(find * -name Makefile\*)
   '';
 
-  nativeBuildInputs = [ gzip pkgconfig perl ];
+  nativeBuildInputs = [ gzip pkg-config perl ];
   buildInputs = [ systemd lvm2 libaio readline liburcu json_c ];
 
   makeFlags = [

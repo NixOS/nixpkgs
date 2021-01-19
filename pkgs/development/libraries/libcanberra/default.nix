@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, libtool
+{ stdenv, lib, fetchurl, fetchpatch, pkg-config, libtool
 , gtk ? null
 , libpulseaudio, gst_all_1, libvorbis, libcap
 , CoreServices
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wps39h8rx2b00vyvkia5j40fkak3dpipp1kzilqla0cgvk73dn2";
   };
 
-  nativeBuildInputs = [ pkgconfig libtool ];
+  nativeBuildInputs = [ pkg-config libtool ];
   buildInputs = [
     libpulseaudio libvorbis gtk
   ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ])

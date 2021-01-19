@@ -3,7 +3,7 @@
 , lib
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , alsaLib
 , boost
 , chromaprint
@@ -77,7 +77,7 @@ mkDerivation rec {
   ])
   ++ lib.optional withVlc libvlc;
 
-  nativeBuildInputs = [ cmake ninja pkgconfig qttools ];
+  nativeBuildInputs = [ cmake ninja pkg-config qttools ];
 
   cmakeFlags = [
     "-DUSE_SYSTEM_TAGLIB=ON"

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, which
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, which
 , gettext, libffi, libiconv, libtasn1
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # at the same time, libtasn1 in buildInputs provides the libasn1 library
   # to link against for the target platform.
   # hence, libtasn1 is required in both native and build inputs.
-  nativeBuildInputs = [ autoreconfHook pkgconfig which libtasn1 ];
+  nativeBuildInputs = [ autoreconfHook pkg-config which libtasn1 ];
   buildInputs = [ gettext libffi libiconv libtasn1 ];
 
   autoreconfPhase = ''

@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , mono
 , gtk-sharp-2_0
 , gettext
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     gettext
     makeWrapper

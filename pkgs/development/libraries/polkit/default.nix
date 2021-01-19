@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, expat, pam, perl, fetchpatch
+{ stdenv, fetchurl, pkg-config, glib, expat, pam, perl, fetchpatch
 , intltool, spidermonkey_78, gobject-introspection, libxslt, docbook_xsl, dbus
 , docbook_xml_dtd_412, gtk-doc, coreutils
 , useSystemd ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl), systemd, elogind
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   nativeBuildInputs =
-    [ glib gtk-doc pkgconfig intltool perl ]
+    [ glib gtk-doc pkg-config intltool perl ]
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
     [ expat pam spidermonkey_78 ]
