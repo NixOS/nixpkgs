@@ -5,11 +5,11 @@ stdenv.mkDerivation rec {
   version = "20090101";
 
   src = fetchcvs {
-		cvsRoot = ":pserver:anonymous@xmpppy.cvs.sourceforge.net:/cvsroot/xmpppy";
-		module = "xmpppy/mail-transport";
-		date = "2009-01-01";
-		sha256 = "15301252e52b4ccb2156baefed8982a2a0cce3ae8eae3caf3cc28dfa615c8d6e";
-	};
+    cvsRoot = ":pserver:anonymous@xmpppy.cvs.sourceforge.net:/cvsroot/xmpppy";
+    module = "xmpppy/mail-transport";
+    date = "2009-01-01";
+    sha256 = "15301252e52b4ccb2156baefed8982a2a0cce3ae8eae3caf3cc28dfa615c8d6e";
+  };
 
   pythonPath = [ xmpppy ];
   buildInputs = [ pythonPackages.wrapPython ];

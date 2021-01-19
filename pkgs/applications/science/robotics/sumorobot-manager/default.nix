@@ -1,5 +1,5 @@
 { lib, stdenv, python3, qt5, fetchFromGitHub, wrapPython, pyqt5, pyserial }:
- 
+
 stdenv.mkDerivation rec {
   pname = "sumorobot-manager";
   version = "0.9.0";

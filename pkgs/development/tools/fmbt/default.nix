@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     python.pkgs.wrapPython ];
 
   buildInputs = [ python gettext libedit glib imagemagick libxml2 boost
-    gnuplot graphviz tesseract gts 
+    gnuplot graphviz tesseract gts
     ];
 
   propagatedBuildInputs = with python.pkgs; [

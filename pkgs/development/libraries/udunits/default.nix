@@ -5,7 +5,7 @@
 stdenv.mkDerivation rec {
   pname = "udunits";
   version = "2.2.27.6";
-  
+
   src = fetchFromGitHub {
     owner = "Unidata";
     repo = "UDUNITS-2";
