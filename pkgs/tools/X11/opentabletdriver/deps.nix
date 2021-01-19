@@ -11,13 +11,13 @@
   })
   (fetchNuGet {
     name = "Eto.Forms";
-    version = "2.5.6";
-    sha256 = "035ny8jlanchwq16gcq0xb6ywabjl71c7qbpv26sjwg96na8vz51";
+    version = "2.5.10";
+    sha256 = "1d71wglk4ixfqfbm6sxmj753x5iwbar8i9zzjy3bh64fy1dn8lz7";
   })
   (fetchNuGet {
     name = "Eto.Platform.Gtk";
-    version = "2.5.6";
-    sha256 = "1ijkjd3lc7x59yk369kxipzgk1zhyr9g6k319wc0n033vij26mwl";
+    version = "2.5.10";
+    sha256 = "1pkqvlfx7bzracnw19bl50i9jg4ym376vihmy9qq7m5z5nfdqn4g";
   })
   (fetchNuGet {
     name = "GdkSharp";
@@ -41,8 +41,8 @@
   })
   (fetchNuGet {
     name = "HidSharpCore";
-    version = "1.1.0";
-    sha256 = "122s5j3wrv8hcgnbxrnjqydvcfz7gdm8xq0wlwzrgwdjk44lr45a";
+    version = "1.2.1";
+    sha256 = "0vcw38skr9g691gxbzv3cf6y9rk11vh5pvcyjshdgii2z1z8a4g2";
   })
   (fetchNuGet {
     name = "MessagePack.Annotations";
@@ -120,9 +120,9 @@
     sha256 = "0w2fbji1smd2y7x25qqibf1qrznmv4s6s0jvrbvr6alb7mfyqvh5";
   })
   (fetchNuGet {
-    name = "Newtonsoft.Json";
-    version = "12.0.3";
-    sha256 = "17dzl305d835mzign8r15vkmav2hq8l6g7942dfjpnzr17wwl89x";
+    name = "Octokit";
+    version = "0.48.0";
+    sha256 = "17ria1shx04rb6knbaswpqndmwam6v3r3lsfsd486q584798ccn8";
   })
   (fetchNuGet {
     name = "PangoSharp";
@@ -205,6 +205,11 @@
     sha256 = "1x0g58pbpjrmj2x2qw17rdwwnrcl0wvim2hdwz48lixvwvp22n9c";
   })
   (fetchNuGet {
+    name = "SharpZipLib";
+    version = "1.3.1";
+    sha256 = "09zypjfils38143da507s5fi4hzvdlz32wfav219hksnpl35y8x0";
+  })
+  (fetchNuGet {
     name = "StreamJsonRpc";
     version = "2.6.121";
     sha256 = "0xzvpk17w2skndzdg47j7gkrrvw6521db4mv8lc3v8hm97vs9m76";
@@ -228,11 +233,6 @@
     name = "System.CommandLine";
     version = "2.0.0-beta1.20253.1";
     sha256 = "16saf1fm9q80bb624fkqz0ksrwpnbw9617d7xg3jib7a2wgagm2r";
-  })
-  (fetchNuGet {
-    name = "System.CommandLine";
-    version = "2.0.0-beta1.20303.1";
-    sha256 = "0isnz8ipqlqim06hf56zlaq2vnsy5facvf5nvq6kzm5h1dm3l2vn";
   })
   (fetchNuGet {
     name = "System.ComponentModel.Annotations";
@@ -318,11 +318,6 @@
     name = "System.Net.WebSockets";
     version = "4.3.0";
     sha256 = "1gfj800078kggcgl0xyl00a6y5k4wwh2k2qm69rjy22wbmq7fy4p";
-  })
-  (fetchNuGet {
-    name = "System.Numerics.Vectors";
-    version = "4.5.0";
-    sha256 = "1kzrj37yzawf1b19jq0253rcs8hsq1l2q8g69d7ipnhzb0h97m59";
   })
   (fetchNuGet {
     name = "System.Reflection.Emit.Lightweight";
