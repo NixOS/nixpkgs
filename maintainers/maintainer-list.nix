@@ -5134,6 +5134,12 @@
     githubId = 480920;
     name = "Luca Bruno";
   };
+  leungbk = {
+    email = "leungbk@mailfence.com";
+    github = "leungbk";
+    githubId = 29217594;
+    name = "Brian Leung";
+  };
   lewo = {
     email = "lewo@abesis.fr";
     github = "nlewo";
