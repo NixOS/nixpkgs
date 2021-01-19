@@ -1667,6 +1667,8 @@ in {
 
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
 
+  devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
+
   devpi-common = callPackage ../development/python-modules/devpi-common { };
 
   dftfit = callPackage ../development/python-modules/dftfit { };
