@@ -28,7 +28,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  allConfigPaths = [configFile] ++ cfg.extraConfigPaths;
+  allConfigPaths = [configFile] ++ cfg.extraSettingsPaths;
 
   configOptions = escapeShellArgs (concatMap (p: ["-config" p]) allConfigPaths);
 
@@ -95,7 +95,7 @@ in
           Confidential values should not be specified here because this option's
           value is written to the Nix store, which is publicly readable.
           Provide credentials and such in a separate file using
-          <xref linkend="opt-services.vault.extraConfigPaths"/>.
+          <xref linkend="opt-services.vault.extraSettingsPaths"/>.
         '';
       };
 
@@ -111,7 +111,7 @@ in
         description = "Extra text appended to <filename>vault.hcl</filename>.";
       };
 
-      extraConfigPaths = mkOption {
+      extraSettingsPaths = mkOption {
         type = types.listOf types.path;
         default = [];
         description = ''
@@ -134,7 +134,7 @@ in
             ${"''"};
             user = "vault";
           };
-          services.vault.extraConfigPaths = ["/run/keys/vault.hcl"];
+          services.vault.extraSettingsPaths = ["/run/keys/vault.hcl"];
           services.vault.storageBackend = "postgresql";
           users.users.vault.extraGroups = ["keys"];
           ]]></programlisting>
