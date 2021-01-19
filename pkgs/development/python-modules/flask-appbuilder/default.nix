@@ -5,6 +5,7 @@
 , apispec
 , colorama
 , click
+, email_validator
 , flask
 , flask-babel
 , flask_login
@@ -19,18 +20,17 @@
 , python-dateutil
 , prison
 , pyjwt
-, pyyaml
 , sqlalchemy-utils
 }:
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "2.3.0";
+  version = "3.1.1";
 
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    sha256 = "04bsswi7daaqda01a83rd1f2gq6asii520f9arjf7bsy24pmbprc";
+    sha256 = "076b020b0ba125339a2e710e74eab52648cde2b18599f7cb0fa1eada9bbb648c";
   };
 
   checkInputs = [
@@ -41,6 +41,7 @@ buildPythonPackage rec {
     apispec
     colorama
     click
+    email_validator
     flask
     flask-babel
     flask_login
@@ -56,20 +57,17 @@ buildPythonPackage rec {
     prison
     pyjwt
     sqlalchemy-utils
-    pyyaml
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "apispec[yaml]>=1.1.1, <2" "apispec" \
-      --replace "jsonschema>=3.0.1, <4" "jsonschema" \
-      --replace "marshmallow>=2.18.0, <4.0.0" "marshmallow" \
-      --replace "PyJWT>=1.7.1" "PyJWT" \
-      --replace "Flask-SQLAlchemy>=2.4, <3" "Flask-SQLAlchemy" \
-      --replace "Flask-JWT-Extended>=3.18, <4" "Flask-JWT-Extended" \
+      --replace "apispec[yaml]>=3.3, <4" "apispec" \
       --replace "Flask-Login>=0.3, <0.5" "Flask-Login" \
-      --replace "Flask-Babel>=1, <2" "Flask-Babel"
+      --replace "Flask-Babel>=1, <2" "Flask-Babel" \
+      --replace "marshmallow-sqlalchemy>=0.22.0, <0.24.0" "marshmallow-sqlalchemy" \
+      --replace "prison>=0.1.3, <1.0.0" "prison"
   '';
+
 
   # majority of tests require network access or mongo
   doCheck = false;
