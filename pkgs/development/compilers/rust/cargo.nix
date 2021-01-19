@@ -1,4 +1,4 @@
-{ stdenv, file, curl, pkgconfig, python3, openssl, cmake, zlib
+{ stdenv, file, curl, pkg-config, python3, openssl, cmake, zlib
 , installShellFiles, makeWrapper, libiconv, cacert, rustPlatform, rustc
 , CoreFoundation, Security
 }:
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  nativeBuildInputs = [ pkgconfig cmake installShellFiles makeWrapper ];
+  nativeBuildInputs = [ pkg-config cmake installShellFiles makeWrapper ];
   buildInputs = [ cacert file curl python3 openssl zlib ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
 

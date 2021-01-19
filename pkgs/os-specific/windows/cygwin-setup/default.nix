@@ -1,4 +1,4 @@
-{ stdenv, fetchcvs, autoconf, automake, libtool, flex, bison, pkgconfig
+{ stdenv, fetchcvs, autoconf, automake, libtool, flex, bison, pkg-config
 , zlib, bzip2, lzma, libgcrypt
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "024wxaaxkf7p1i78bh5xrsqmfz7ss2amigbfl2r5w9h87zqn9aq3";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool flex bison pkgconfig ];
+  nativeBuildInputs = [ autoconf automake libtool flex bison pkg-config ];
 
   buildInputs = let
     mkStatic = flip overrideDerivation (o: {

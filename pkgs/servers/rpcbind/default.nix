@@ -1,4 +1,4 @@
-{ fetchgit, lib, stdenv, pkgconfig, libnsl, libtirpc, autoreconfHook
+{ fetchgit, lib, stdenv, pkg-config, libnsl, libtirpc, autoreconfHook
 , useSystemd ? true, systemd }:
 
 stdenv.mkDerivation {
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     "--with-rpcuser=rpc"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = with lib; {
     description = "ONC RPC portmapper";

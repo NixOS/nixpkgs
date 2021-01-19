@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg_3, jack2,
-  liblo, libpulseaudio, libsndfile, pkgconfig, python3Packages,
+  liblo, libpulseaudio, libsndfile, pkg-config, python3Packages,
   which, withFrontend ? true,
   withQt ? true, qtbase ? null, wrapQtAppsHook ? null,
   withGtk2 ? true, gtk2 ? null,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    python3Packages.wrapPython pkgconfig which wrapQtAppsHook
+    python3Packages.wrapPython pkg-config which wrapQtAppsHook
   ];
 
   pythonPath = with python3Packages; [

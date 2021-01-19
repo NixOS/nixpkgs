@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, nss, nspr, pkgconfig }:
+{ fetchurl, stdenv, nss, nspr, pkg-config }:
 
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ nss nspr ];
 

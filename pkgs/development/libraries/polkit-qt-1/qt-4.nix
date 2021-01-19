@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, polkit, automoc4, glib, qt4 }:
+{ stdenv, fetchurl, cmake, pkg-config, polkit, automoc4, glib, qt4 }:
 
 with stdenv.lib;
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake pkgconfig automoc4 ];
+  nativeBuildInputs = [ cmake pkg-config automoc4 ];
 
   propagatedBuildInputs = [ polkit glib qt4 ];
 

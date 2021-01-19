@@ -3,7 +3,7 @@
 , automake
 , libtool
 , intltool
-, pkgconfig
+, pkg-config
 , jansson
 # deadbeef can use either gtk2 or gtk3
 , gtk2Support ? false, gtk2 ? null
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     automake
     intltool
     libtool
-    pkgconfig
+    pkg-config
   ] ++ lib.optional gtk3Support wrapGAppsHook;
 
   enableParallelBuilding = true;

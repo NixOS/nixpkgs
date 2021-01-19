@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gdk-pixbuf, pango, cairo, libxml2
+{ lib, stdenv, fetchurl, pkg-config, glib, gdk-pixbuf, pango, cairo, libxml2
 , bzip2, libintl, darwin, rustc, cargo, gnome3
 , vala, gobject-introspection }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
 
-  nativeBuildInputs = [ pkgconfig rustc cargo vala gobject-introspection ]
+  nativeBuildInputs = [ pkg-config rustc cargo vala gobject-introspection ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       ApplicationServices
     ]);

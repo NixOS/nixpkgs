@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libevent, openssl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libevent, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "fstrm";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libevent openssl ];
 
   preBuild = ''

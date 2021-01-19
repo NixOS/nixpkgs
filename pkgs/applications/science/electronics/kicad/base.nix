@@ -13,7 +13,7 @@
 , curl
 , openssl
 , boost
-, pkgconfig
+, pkg-config
 , doxygen
 , pcre
 , libpthreadstubs
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     ]
   ;
 
-  nativeBuildInputs = [ cmake doxygen pkgconfig lndir ];
+  nativeBuildInputs = [ cmake doxygen pkg-config lndir ];
 
   buildInputs = [
     libGLU

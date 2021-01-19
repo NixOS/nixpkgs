@@ -225,7 +225,7 @@ let
     };
 
     vega-cli = super.vega-cli.override {
-      nativeBuildInputs = [ pkgs.pkgconfig ];
+      nativeBuildInputs = [ pkgs.pkg-config ];
       buildInputs = with pkgs; [
         super.node-pre-gyp
         pixman

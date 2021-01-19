@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libogg, libvorbis, pkgconfig}:
+{stdenv, fetchurl, libogg, libvorbis, pkg-config}:
 
 stdenv.mkDerivation rec {
   name = "libtheora-1.1.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
   outputDoc = "devdoc";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libogg libvorbis ];
 
   # GCC's -fforce-addr flag is not supported by clang

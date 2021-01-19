@@ -1,7 +1,7 @@
 { stdenv
 , autoreconfHook
 , fetchbzr
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , file
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     gobject-introspection
   ];

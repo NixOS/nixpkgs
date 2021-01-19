@@ -1,6 +1,6 @@
 { fetchurl, stdenv, substituteAll
 , libtool, gettext, zlib, bzip2, flac, libvorbis
-, exiv2, libgsf, rpm, pkgconfig, fetchpatch
+, exiv2, libgsf, rpm, pkg-config, fetchpatch
 , gstreamerSupport ? true, gst_all_1 ? null
 # ^ Needed e.g. for proper id3 and FLAC support.
 #   Set to `false` to decrease package closure size by about 87 MB (53%).
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   buildInputs =
    [ libtool gettext zlib bzip2 flac libvorbis exiv2
      libgsf rpm
-     pkgconfig
+     pkg-config
    ] ++ stdenv.lib.optionals gstreamerSupport
           ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
      ++ stdenv.lib.optionals gtkSupport [ glib gtk3 ]

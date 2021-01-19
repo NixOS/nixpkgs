@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, wrapGAppsHook, gtk2, gnome2, gnome3,
+{ stdenv, fetchurl, pkg-config, wrapGAppsHook, gtk2, gnome2, gnome3,
   libstartup_notification, libgtop, perlPackages,
   autoreconfHook, intltool, docbook_xsl, xauth
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig autoreconfHook intltool docbook_xsl wrapGAppsHook
+    pkg-config autoreconfHook intltool docbook_xsl wrapGAppsHook
   ];
 
   buildInputs = [

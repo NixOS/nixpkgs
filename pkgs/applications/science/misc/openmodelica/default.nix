@@ -1,6 +1,6 @@
 {lib, stdenv, fetchgit, fetchsvn, autoconf, automake, libtool, gfortran, clang, cmake, gnumake,
 hwloc, jre, lapack, blas, hdf5, expat, ncurses, readline, qt4, webkitgtk, which,
-lp_solve, omniorb, sqlite, libatomic_ops, pkgconfig, file, gettext, flex, bison,
+lp_solve, omniorb, sqlite, libatomic_ops, pkg-config, file, gettext, flex, bison,
 doxygen, boost, openscenegraph, gnome2, xorg, git, bash, gtk2, makeWrapper }:
 
 let
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   buildInputs = [autoconf cmake automake libtool gfortran clang gnumake
     hwloc jre lapack blas hdf5 expat ncurses readline qt4 webkitgtk which
-    lp_solve omniorb sqlite libatomic_ops pkgconfig file gettext flex bison
+    lp_solve omniorb sqlite libatomic_ops pkg-config file gettext flex bison
     doxygen boost openscenegraph gnome2.gtkglext xorg.libXmu
     git gtk2 makeWrapper];
 

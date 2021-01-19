@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, cmake, ftgl, gl2ps, glew, gsl, llvm_5
 , libX11, libXpm, libXft, libXext, libGLU, libGL, libxml2, lz4, lzma, pcre
-, pkgconfig, python, xxHash, zlib, zstd
+, pkg-config, python, xxHash, zlib, zstd
 , libAfterImage, giflib, libjpeg, libtiff, libpng
 , Cocoa, OpenGL, noSplash ? false }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mqvj42nax0bmz8h83jjlwjm3xxjy1n0n10inc8csip9ly28fs64";
   };
 
-  nativeBuildInputs = [ makeWrapper cmake pkgconfig ];
+  nativeBuildInputs = [ makeWrapper cmake pkg-config ];
   buildInputs = [ ftgl gl2ps glew pcre zlib zstd llvm_5 libxml2 lz4 lzma gsl xxHash libAfterImage giflib libjpeg libtiff libpng python.pkgs.numpy ]
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]

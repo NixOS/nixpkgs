@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, autoconf, automake, libtool, gtk2, pkgconfig, perlPackages,
+{ lib, stdenv, fetchgit, autoconf, automake, libtool, gtk2, pkg-config, perlPackages,
 libxml2, gettext, python, libxml2Python, docbook5, docbook_xsl,
 libxslt, intltool, libart_lgpl, withGNOME ? false, libgnomeui,
 gtk-mac-integration-gtk2 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
       ++ lib.optional withGNOME libgnomeui
       ++ lib.optional stdenv.isDarwin gtk-mac-integration-gtk2;
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig intltool ]
+  nativeBuildInputs = [ autoconf automake libtool pkg-config intltool ]
     ++ (with perlPackages; [ perl XMLParser ]);
 
   preConfigure = ''

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitLab, pkgconfig, lxml, libvirt, nose }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitLab, pkg-config, lxml, libvirt, nose }:
 
 buildPythonPackage rec {
   pname = "libvirt";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "sha256-A3eRfzQAfubyPefDlq5bAiFJ/G90D2JKdJO2Em0wE00=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libvirt lxml ];
 
   checkInputs = [ nose ];

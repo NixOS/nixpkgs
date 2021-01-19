@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, ncurses, pkgconfig, glib, libviper, libpseudo, gpm,
+{lib, stdenv, fetchurl, ncurses, pkg-config, glib, libviper, libpseudo, gpm,
 libvterm}:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/include
   '';
  
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses glib libviper libpseudo gpm libvterm ];
  
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libestr, json_c, pcre, fastJson }:
+{ stdenv, fetchurl, pkg-config, libestr, json_c, pcre, fastJson }:
 
 stdenv.mkDerivation rec {
   name = "liblognorm-2.0.6";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wpn15c617r7lfm1z9d5aggmmi339s6yn4pdz698j0r2bkl5gw6g";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libestr json_c pcre fastJson ];
 
   configureFlags = [ "--enable-regexp" ];

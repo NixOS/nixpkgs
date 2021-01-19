@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, automake, autoconf
+{ stdenv, lib, fetchFromGitHub, pkg-config, automake, autoconf
 , zlib, boost, openssl, libtool, python, libiconv, ncurses
 }:
 
@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
+  nativeBuildInputs = [ automake autoconf libtool pkg-config ];
   buildInputs = [ boostPython openssl zlib python libiconv ncurses ];
   preConfigure = "./autotool.sh";
 

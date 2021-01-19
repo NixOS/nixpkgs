@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xorg, mesa, meson, ninja }:
+{ stdenv, fetchurl, pkg-config, xorg, mesa, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "libvdpau";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = with xorg; [ xorgproto libXext ];
 
   propagatedBuildInputs = [ xorg.libX11 ];

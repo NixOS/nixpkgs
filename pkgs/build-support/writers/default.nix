@@ -122,7 +122,7 @@ rec {
           pkgs.coreutils
           pkgs.findutils
           pkgs.gcc
-          pkgs.pkgconfig
+          pkgs.pkg-config
         ]}
         export PKG_CONFIG_PATH=${concatMapStringsSep ":" (pkg: "${pkg}/lib/pkgconfig") libraries}
         gcc \

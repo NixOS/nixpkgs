@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, pkgconfig, flex, bison
+, cmake, pkg-config, flex, bison
 , llvmPackages, kernel, elfutils
 , libelf, libbfd, libbpf, libopcodes, bcc
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       libbpf libbfd libopcodes
     ];
 
-  nativeBuildInputs = [ cmake pkgconfig flex bison ]
+  nativeBuildInputs = [ cmake pkg-config flex bison ]
     # libelf is incompatible with elfutils-libelf
     ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, readline }:
+{ stdenv, fetchurl, pkg-config, pure, readline }:
 
 stdenv.mkDerivation rec {
   baseName = "readline";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "db8e6663b1c085466c09662fe86d952b6f4ffdafeecffe805c681ab91c910886";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure readline ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;

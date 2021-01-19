@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, openssl, libX11, krb5, libXcursor, libtasn1, nettle, gnutls, pkgconfig, autoreconfHook
+{lib, stdenv, fetchFromGitHub, openssl, libX11, krb5, libXcursor, libtasn1, nettle, gnutls, pkg-config, autoreconfHook
 , enableCredssp ? (!stdenv.isDarwin)
 } :
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation (rec {
     sha256 = "1s6k1jwd28y38ymk3lfv76ch4arpfwrbdhpkbnwwy3fc4617gb78";
   };
 
-  nativeBuildInputs = [pkgconfig autoreconfHook];
+  nativeBuildInputs = [pkg-config autoreconfHook];
   buildInputs = [openssl libX11 libXcursor libtasn1 nettle gnutls]
     ++ lib.optional enableCredssp krb5;
 

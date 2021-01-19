@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libcap }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libcap }:
 
 stdenv.mkDerivation rec {
   pname = "smcroute";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mjq9cx093b0825rqbcq3z0lzy81pd8h0fz6rda6npg3604rxj81";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libcap ];
 
   configureFlags = [

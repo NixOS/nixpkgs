@@ -144,7 +144,7 @@ let
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
         pdf-tools = super.pdf-tools.overrideAttrs (old: {
-          nativeBuildInputs = [ external.pkgconfig ];
+          nativeBuildInputs = [ external.pkg-config ];
           buildInputs = with external; old.buildInputs ++ [ autoconf automake libpng zlib poppler ];
           preBuild = "make server/epdfinfo";
           recipe = pkgs.writeText "recipe" ''
@@ -373,7 +373,7 @@ let
           nativeBuildInputs = [
             external.autoconf
             external.automake
-            external.pkgconfig
+            external.pkg-config
             external.libtool
             (external.zeromq.override { enableDrafts = true; })
           ];

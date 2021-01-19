@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, pkg-config
 , avahi, dbus, gettext, git, gnutar, gzip, bzip2, ffmpeg_3, libiconv, openssl, python
 , v4l-utils, which, zlib }:
 
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
     which zlib
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" "-Wno-error=stringop-truncation" ];
 

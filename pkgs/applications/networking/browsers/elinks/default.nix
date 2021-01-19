@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, xlibsWrapper, bzip2, zlib
-, brotli, zstd, lzma, openssl, autoreconfHook, gettext, pkgconfig, libev
+, brotli, zstd, lzma, openssl, autoreconfHook, gettext, pkg-config, libev
 , gpm, libidn, tre, expat
 , # Incompatible licenses, LGPLv3 - GPLv2
   enableGuile        ? false,                                         guile ? null
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enablePerl perl
     ;
 
-  nativeBuildInputs = [ autoreconfHook gettext pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook gettext pkg-config ];
 
   configureFlags = [
     "--enable-finger"

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libwpg, libwpd, lcms, pkgconfig, librevenge, icu, boost, cppunit }:
+{ stdenv, fetchurl, libwpg, libwpd, lcms, pkg-config, librevenge, icu, boost, cppunit }:
 
 stdenv.mkDerivation rec {
   name = "libcdr-0.1.6";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libwpg libwpd lcms librevenge icu boost cppunit ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   CXXFLAGS="--std=gnu++0x"; # For c++11 constants in lcms2.h
 

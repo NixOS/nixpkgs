@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, xlibsWrapper, libpng, libjpeg, expat, libXaw
+{ lib, stdenv, fetchurl, pkg-config, xlibsWrapper, libpng, libjpeg, expat, libXaw
 , yacc, libtool, fontconfig, pango, gd, libwebp
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "39b8e1f2ba4cc1f5bdc8e39c7be35e5f831253008e4ee2c176984f080416676c";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xlibsWrapper libpng libjpeg expat libXaw yacc
     libtool fontconfig pango gd libwebp

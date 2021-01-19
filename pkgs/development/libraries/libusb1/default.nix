@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , enableUdev ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
 , udev ? null
 , libobjc
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   propagatedBuildInputs =
     stdenv.lib.optional enableUdev udev ++
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];

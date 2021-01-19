@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, gettext
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, gettext
 , xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
 , libstemmer, glib, xapian, libxml2, libyaml, gobject-introspection
 , pcre, itstool, gperf, vala, lmdb, libsoup
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext
+    meson ninja pkg-config gettext
     libxslt xmlto docbook_xsl docbook_xml_dtd_45
     gobject-introspection itstool vala
   ];

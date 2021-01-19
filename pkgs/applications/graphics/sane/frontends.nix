@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, sane-backends, libX11, gtk2, pkgconfig, libusb-compat-0_1 ? null }:
+{ lib, stdenv, fetchurl, sane-backends, libX11, gtk2, pkg-config, libusb-compat-0_1 ? null }:
 
 stdenv.mkDerivation rec {
   pname = "sane-frontends";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ sane-backends libX11 gtk2 ]
     ++ lib.optional (libusb-compat-0_1 != null) libusb-compat-0_1;
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   enableParallelBuilding = true;
 

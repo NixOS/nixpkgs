@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_ttf, zlib, libpng, pkgconfig, lua5 }:
+{ lib, stdenv, fetchurl, SDL, SDL_image, SDL_ttf, zlib, libpng, pkg-config, lua5 }:
 
 stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0svsy6rqmdj11b400c242i2ixihyz0hds0dgicqz6g6dcgmcl62q";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL SDL_image SDL_ttf libpng zlib lua5 ];
 
   preBuild = "cd src";

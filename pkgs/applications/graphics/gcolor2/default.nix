@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, gtk2, perlPackages, pkgconfig } :
+{lib, stdenv, fetchurl, gtk2, perlPackages, pkg-config } :
 
 let version = "0.4"; in
 stdenv.mkDerivation {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
         [ ./gcolor2-amd64.patch ] else
         [ ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 ]
     ++ (with perlPackages; [ perl XMLParser ]);
 

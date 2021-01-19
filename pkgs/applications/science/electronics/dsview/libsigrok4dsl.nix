@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgconfig, autoreconfHook,
+{ lib, stdenv, pkg-config, autoreconfHook,
 glib, libzip, libserialport, check, libusb1, libftdi,
 systemd, alsaLib, dsview
 }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     export sourceRoot=$sourceRoot/libsigrok4DSL
   '';
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
     glib libzip libserialport libusb1 libftdi systemd check alsaLib

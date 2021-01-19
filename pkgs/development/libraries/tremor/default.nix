@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, libogg }:
+{ stdenv, fetchFromGitLab, autoreconfHook, pkg-config, libogg }:
 
 stdenv.mkDerivation {
   name = "tremor-unstable-2018-03-16";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   propagatedBuildInputs = [ libogg ];
 
   preConfigure = ''

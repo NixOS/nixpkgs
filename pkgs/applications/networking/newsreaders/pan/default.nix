@@ -1,5 +1,5 @@
 { spellChecking ? true
-, lib, stdenv, fetchurl, pkgconfig, gtk3, gtkspell3 ? null
+, lib, stdenv, fetchurl, pkg-config, gtk3, gtkspell3 ? null
 , gmime2, gettext, intltool, itstool, libxml2, libnotify, gnutls
 , makeWrapper, gnupg
 , gnomeSupport ? true, libsecret, gcr
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     sha256 = "17agd27sn4a7nahvkpg0w39kv74njgdrrygs74bbvpaj8rk2hb55";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext intltool itstool libxml2 makeWrapper ];
+  nativeBuildInputs = [ pkg-config gettext intltool itstool libxml2 makeWrapper ];
   buildInputs = [ gtk3 gmime2 libnotify gnutls ]
     ++ lib.optional spellChecking gtkspell3
     ++ lib.optionals gnomeSupport [ libsecret gcr ];

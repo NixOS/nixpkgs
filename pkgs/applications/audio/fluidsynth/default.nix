@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake
+{ stdenv, lib, fetchFromGitHub, pkg-config, cmake
 , alsaLib, glib, libjack2, libsndfile, libpulseaudio
 , AudioUnit, CoreAudio, CoreMIDI, CoreServices
 , version ? "2"
@@ -30,7 +30,7 @@ stdenv.mkDerivation  {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [ glib libsndfile libpulseaudio libjack2 ]
     ++ lib.optionals stdenv.isLinux [ alsaLib ]

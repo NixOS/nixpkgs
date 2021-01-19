@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pixman
 , alsaLib
 , openssl
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     spice-protocol
     python3
     python3.pkgs.six

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, libxml2, libzip, boost, lua, luabind, tbb, expat}:
+{lib, stdenv, fetchFromGitHub, cmake, pkg-config, bzip2, libxml2, libzip, boost, lua, luabind, tbb, expat}:
 
 stdenv.mkDerivation rec {
   pname = "osrm-backend";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=pessimizing-move" "-Wno-error=redundant-move" ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ bzip2 libxml2 libzip boost lua luabind tbb expat ];
 
   postInstall = "mkdir -p $out/share/osrm-backend && cp -r ../profiles $out/share/osrm-backend/profiles";

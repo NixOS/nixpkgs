@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, pkgconfig, lv2, gtkmm2, boost }:
+{ lib, stdenv, fetchzip, pkg-config, lv2, gtkmm2, boost }:
 
 stdenv.mkDerivation rec {
   pname = "lv2-cpp-tools";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sed -r 's,/sbin/ldconfig,ldconfig,g' -i ./Makefile.template
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ lv2 gtkmm2 boost ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, systemd, pkgconfig }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, systemd, pkg-config }:
 
 buildPythonPackage rec {
   pname = "systemd";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ systemd ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   doCheck = false;
 

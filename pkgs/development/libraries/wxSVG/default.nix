@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, pkgconfig, wxGTK
+, pkg-config, wxGTK
 , ffmpeg_3, libexif
 , cairo, pango }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0agmmwg0zlsw1idygvqjpj1nk41akzlbdha0hsdk1k8ckz6niq8d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ wxGTK ffmpeg_3 libexif ];
 

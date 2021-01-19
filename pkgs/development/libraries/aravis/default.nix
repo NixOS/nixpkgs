@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-doc, intltool
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk-doc, intltool
 , audit, glib, libusb1, libxml2
 , wrapGAppsHook
 , gstreamer ? null
@@ -46,7 +46,7 @@ in
 
     nativeBuildInputs = [
       autoreconfHook
-      pkgconfig
+      pkg-config
       intltool
       gtk-doc
     ] ++ stdenv.lib.optional enableViewer wrapGAppsHook;

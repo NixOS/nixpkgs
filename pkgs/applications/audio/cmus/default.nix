@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkgconfig
+{ config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkg-config
 , libiconv, CoreAudio
 
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     "CONFIG_WAV=y"
   ] ++ concatMap (a: a.flags) opts);
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]
     ++ lib.optional stdenv.cc.isClang clangGCC
     ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]

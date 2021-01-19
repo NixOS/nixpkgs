@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gettext
 , gobject-introspection
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     gobject-introspection
-    pkgconfig
+    pkg-config
     python3
 
     # documentation

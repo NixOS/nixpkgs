@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libtool
+{ stdenv, fetchurl, pkg-config, libtool
 , xlibsWrapper, xbitmaps, libXrender, libXmu, libXt
 , expat, libjpeg, libpng, libiconv
 , flex
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     expat libjpeg libpng libiconv
   ];
 
-  nativeBuildInputs = [ pkgconfig flex ];
+  nativeBuildInputs = [ pkg-config flex ];
 
   propagatedBuildInputs = [ libXp libXau ];
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libjpeg, libpng, libmng, lcms1, libtiff, openexr, libGL
-, libX11, pkgconfig, OpenGL
+, libX11, pkg-config, OpenGL
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr libGL libX11 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ OpenGL ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   configureFlags = [ "--enable-ILU" "--enable-ILUT" ];
 

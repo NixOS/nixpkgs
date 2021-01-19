@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cairo, libjpeg, libXft, pkgconfig, python2, wafHook }:
+{ stdenv, fetchFromGitHub, cairo, libjpeg, libXft, pkg-config, python2, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "ntk";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0j38mhnfqy6swcrnc5zxcwlqi8b1pgklyghxk6qs1lf4japv2zc0";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
+  nativeBuildInputs = [ pkg-config wafHook ];
   buildInputs = [
     cairo libjpeg libXft python2
   ];

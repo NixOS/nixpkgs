@@ -5,7 +5,7 @@
 , ninja
 , patchelf
 , perl
-, pkgconfig
+, pkg-config
 , python3
 , expat
 , libdrm
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     ninja
     patchelf
     perl
-    pkgconfig
+    pkg-config
     python3
   ];
 

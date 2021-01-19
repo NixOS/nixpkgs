@@ -1,4 +1,4 @@
-{ lib, pythonPackages, pkgconfig
+{ lib, pythonPackages, pkg-config
 , qmake, qtbase, qtsvg, qtwebengine
 , wrapQtAppsHook
 }:
@@ -27,7 +27,7 @@ in buildPythonPackage rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
     sip
     qtbase

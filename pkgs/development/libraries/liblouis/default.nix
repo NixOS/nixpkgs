@@ -1,7 +1,7 @@
 { fetchFromGitHub
 , stdenv
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , gettext
 , python3
 , texinfo
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     gettext
     python3
     # Docs, man, info

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, scdoc
+, meson, ninja, pkg-config, scdoc
 , wayland, wayland-protocols, systemd
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace "version: '1.5'" "version: '${version}'"
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
   buildInputs = [ wayland wayland-protocols systemd ];
 
   mesonFlags = [ "-Dman-pages=enabled" "-Dlogind=enabled" ];

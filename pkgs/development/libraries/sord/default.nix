@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python3, serd, pcre, wafHook }:
+{ stdenv, fetchurl, pkg-config, python3, serd, pcre, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "sord";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mwh4qvp9q4vgrgg5bz9sgjhxscncrylf2b06h0q55ddwzs9hndi";
   };
 
-  nativeBuildInputs = [ pkgconfig python3 wafHook ];
+  nativeBuildInputs = [ pkg-config python3 wafHook ];
   buildInputs = [ pcre ];
   propagatedBuildInputs = [ serd ];
 

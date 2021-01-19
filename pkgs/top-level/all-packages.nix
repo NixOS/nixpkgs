@@ -398,7 +398,7 @@ in
       # break dependency cycles
       fetchurl = stdenv.fetchurlBoot;
       zlib = buildPackages.zlib.override { fetchurl = stdenv.fetchurlBoot; };
-      pkgconfig = buildPackages.pkgconfig.override (old: {
+      pkg-config = buildPackages.pkg-config.override (old: {
         pkg-config = old.pkg-config.override {
           fetchurl = stdenv.fetchurlBoot;
         };
@@ -431,12 +431,12 @@ in
           else old.gssSupport or true; # `? true` is the default
       libkrb5 = buildPackages.libkrb5.override {
         fetchurl = stdenv.fetchurlBoot;
-        inherit pkgconfig perl openssl;
+        inherit pkg-config perl openssl;
         keyutils = buildPackages.keyutils.override { fetchurl = stdenv.fetchurlBoot; };
       };
       nghttp2 = buildPackages.nghttp2.override {
         fetchurl = stdenv.fetchurlBoot;
-        inherit zlib pkgconfig openssl;
+        inherit zlib pkg-config openssl;
         c-ares = buildPackages.c-ares.override { fetchurl = stdenv.fetchurlBoot; };
         libev = buildPackages.libev.override { fetchurl = stdenv.fetchurlBoot; };
       };
@@ -580,7 +580,7 @@ in
   iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
   validatePkgConfig = makeSetupHook
-    { name = "validate-pkg-config"; deps = [ findutils pkgconfig ]; }
+    { name = "validate-pkg-config"; deps = [ findutils pkg-config ]; }
     ../build-support/setup-hooks/validate-pkg-config.sh;
 
   #package writers
@@ -9804,7 +9804,7 @@ in
     langCC = false;
     langC = false;
     profiledCompiler = false;
-    inherit zip unzip zlib boehmgc gettext pkgconfig perl;
+    inherit zip unzip zlib boehmgc gettext pkg-config perl;
     inherit (gnome2) libart_lgpl;
   });
 
@@ -12420,14 +12420,12 @@ in
   pkg-config = callPackage ../build-support/pkg-config-wrapper {
     pkg-config = pkg-config-unwrapped;
   };
-  pkgconfig = pkg-config; # added 2018-02-02
 
   pkg-configUpstream = lowPrio (pkg-config.override (old: {
     pkg-config = old.pkg-config.override {
       vanilla = true;
     };
   }));
-  pkgconfigUpstream = pkg-configUpstream; # added 2018-02-02
 
   inherit (nodePackages) postcss-cli;
 
@@ -21575,7 +21573,7 @@ in
       inherit (haskellPackages)
         ghc-mod structured-haskell-mode Agda hindent;
       inherit
-        autoconf automake editorconfig-core-c git libffi libpng pkgconfig
+        autoconf automake editorconfig-core-c git libffi libpng pkg-config
         poppler rtags w3m zlib substituteAll rustPlatform cmake llvmPackages
         libtool zeromq openssl ott;
     };

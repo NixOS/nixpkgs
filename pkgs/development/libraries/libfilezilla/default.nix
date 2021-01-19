@@ -4,7 +4,7 @@
 , gettext
 , gnutls
 , nettle
-, pkgconfig
+, pkg-config
 , libiconv
 , ApplicationServices
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0akvki7n5rwmc52wss25i3h4nwl935flhjypf8dx3lvf4jszxxiv";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ gettext gnutls nettle ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];

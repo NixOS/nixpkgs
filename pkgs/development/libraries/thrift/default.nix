@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, boost, zlib, libevent, openssl, python, cmake, pkgconfig
+{ stdenv, fetchurl, fetchpatch, boost, zlib, libevent, openssl, python, cmake, pkg-config
 , bison, flex, twisted
 , static ? stdenv.hostPlatform.isStatic
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
-  nativeBuildInputs = [ cmake pkgconfig bison flex ];
+  nativeBuildInputs = [ cmake pkg-config bison flex ];
   buildInputs = [ boost zlib libevent openssl ]
     ++ stdenv.lib.optionals (!static) [ python twisted ];
 

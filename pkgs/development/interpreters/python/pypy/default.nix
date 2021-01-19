@@ -1,5 +1,5 @@
 { stdenv, substituteAll, fetchurl
-, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi, libunwind, Security
+, zlib ? null, zlibSupport ? true, bzip2, pkg-config, libffi, libunwind, Security
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
 , self, gdbm, db, lzma
 , python-setup-hook
@@ -49,7 +49,7 @@ in with passthru; stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
   ]  ++ optionals isPy3k [

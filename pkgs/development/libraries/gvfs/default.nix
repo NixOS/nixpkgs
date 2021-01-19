@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , dbus
 , glib
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3
-    pkgconfig
+    pkg-config
     gettext
     wrapGAppsHook
     libxml2

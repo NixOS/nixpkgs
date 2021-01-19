@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, udev, libcec_platform, libraspberrypi ? null }:
+{ stdenv, fetchurl, cmake, pkg-config, udev, libcec_platform, libraspberrypi ? null }:
 
 let version = "4.0.7"; in
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0nii8qh3qrn92g8x3canj4glb2bjn6gc1p3f6hfp59ckd4vjrndw";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ udev libcec_platform ] ++
     stdenv.lib.optional (libraspberrypi != null) libraspberrypi;
 

@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 
 , bison
 , flex

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, writeText, libX11, ncurses
+{ lib, stdenv, fetchurl, pkg-config, writeText, libX11, ncurses
 , libXft, conf ? null, patches ? [], extraLibs ? []}:
 
 with lib;
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     substituteInPlace config.mk --replace "-lrt" ""
   '';
 
-  nativeBuildInputs = [ pkgconfig ncurses ];
+  nativeBuildInputs = [ pkg-config ncurses ];
   buildInputs = [ libX11 libXft ] ++ extraLibs;
 
   installPhase = ''

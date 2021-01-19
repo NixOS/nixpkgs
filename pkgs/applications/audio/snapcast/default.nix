@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
 , alsaLib, asio, avahi, boost170, flac, libogg, libvorbis, soxr
 , nixosTests }:
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     sha256 = "152ic8hlyawcmj9pykb33xc6yx7il6yb9ilmsy6m9nlh40m8yxls";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig boost170.dev ];
+  nativeBuildInputs = [ cmake pkg-config boost170.dev ];
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
   buildInputs = [

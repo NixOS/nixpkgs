@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, cmrt, libdrm, libva, libX11, libGL, wayland }:
+{ stdenv, fetchurl, autoreconfHook, pkg-config, cmrt, libdrm, libva, libX11, libGL, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "intel-hybrid-driver";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ cmrt libdrm libva libX11 libGL wayland ];
 

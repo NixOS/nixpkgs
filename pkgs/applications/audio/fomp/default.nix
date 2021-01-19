@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, lv2, pkgconfig, python2, wafHook }:
+{ lib, stdenv, fetchurl, lv2, pkg-config, python2, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "fomp";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "01ld6yjrqrki6zwac8lmwmqkr5rv0sdham4pfbfkjwck4hi1gqqw";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
+  nativeBuildInputs = [ pkg-config wafHook ];
   buildInputs = [ lv2 python2 ];
 
   meta = with lib; {

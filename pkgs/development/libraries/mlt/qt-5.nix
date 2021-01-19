@@ -9,7 +9,7 @@
 , libvorbis
 , libxml2
 , movit
-, pkgconfig
+, pkg-config
 , sox
 , qtbase
 , qtsvg
@@ -45,7 +45,7 @@ mkDerivation rec {
     libvorbis
     libxml2
     movit
-    pkgconfig
+    pkg-config
     qtbase
     qtsvg
     sox

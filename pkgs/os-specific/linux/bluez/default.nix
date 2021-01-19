@@ -6,7 +6,7 @@
 , glib
 , json_c
 , libical
-, pkgconfig
+, pkg-config
 , python3
 , readline
 , systemd
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python3.pkgs.wrapPython
   ];
 

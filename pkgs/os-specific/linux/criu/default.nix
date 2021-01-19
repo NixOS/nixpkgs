@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, protobuf, protobufc, asciidoc, iptables
-, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkgconfig
+, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config
 , which, python3, makeWrapper, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig docbook_xsl which makeWrapper docbook_xml_dtd_45 python3 python3.pkgs.wrapPython ];
+  nativeBuildInputs = [ pkg-config docbook_xsl which makeWrapper docbook_xml_dtd_45 python3 python3.pkgs.wrapPython ];
   buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet iptables ];
   propagatedBuildInputs = with python3.pkgs; [ python python3.pkgs.protobuf ];
 

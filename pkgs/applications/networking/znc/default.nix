@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, pkgconfig
+{ lib, stdenv, fetchurl, openssl, pkg-config
 , withPerl ? false, perl
 , withPython ? false, python3
 , withTcl ? false, tcl
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "03fyi0j44zcanj1rsdx93hkdskwfvhbywjiwd17f9q1a7yp8l8zz";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
     ++ optional withPerl perl

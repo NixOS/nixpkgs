@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake
+{ stdenv, lib, fetchFromGitHub, pkg-config, cmake
 , opentracing-cpp, protobuf, zlib
 , enableGrpc ? false, grpc ? null, openssl ? null, c-ares ? null
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig
+    cmake pkg-config
   ];
 
   buildInputs = [

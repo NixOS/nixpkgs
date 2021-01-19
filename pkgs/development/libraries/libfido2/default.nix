@@ -2,7 +2,7 @@
 , fetchurl
 , fetchpatch
 , cmake
-, pkgconfig
+, pkg-config
 , hidapi
 , libcbor
 , openssl
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "08iizxq3w8mpkwfrfpl59csffc20yz8x398bl3kf23rrr4izk42r";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ hidapi libcbor openssl ]
     ++ stdenv.lib.optionals stdenv.isLinux [ udev ];

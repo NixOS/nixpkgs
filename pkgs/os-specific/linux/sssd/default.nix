@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, glibc, augeas, dnsutils, c-ares, curl,
   cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
-  python, python3, pam, popt, talloc, tdb, tevent, pkgconfig, ldb, openldap,
+  python, python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
   pcre, kerberos, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
   libuuid, ldap, systemd, nspr, check, cmocka, uid_wrapper,
   nss_wrapper, ncurses, Po4a, http-parser, jansson,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
                   samba nfs-utils doxygen python python3 popt
-                  talloc tdb tevent pkgconfig ldb pam openldap pcre kerberos
+                  talloc tdb tevent pkg-config ldb pam openldap pcre kerberos
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
                   libuuid ldap systemd nspr check cmocka uid_wrapper
                   nss_wrapper ncurses Po4a http-parser jansson ];

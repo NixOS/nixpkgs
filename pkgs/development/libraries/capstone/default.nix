@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig }:
+{ stdenv, fetchurl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "capstone";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     + "PREFIX=$out ./make.sh install";
   
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   enableParallelBuilding = true;

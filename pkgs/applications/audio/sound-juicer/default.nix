@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gtk3, intltool, itstool, libxml2, brasero
+{ lib, stdenv, fetchurl, pkg-config, glib, gtk3, intltool, itstool, libxml2, brasero
 , libcanberra-gtk3, gnome3, gst_all_1, libmusicbrainz5, libdiscid, isocodes
 , gsettings-desktop-schemas, wrapGAppsHook }:
 
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "19qg4xv0f9rkq34lragkmhii1llxsa87llbl28i759b0ks4f6sny";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool itstool libxml2 wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config intltool itstool libxml2 wrapGAppsHook ];
   buildInputs = [
     glib gtk3 brasero libcanberra-gtk3 gnome3.adwaita-icon-theme
     gsettings-desktop-schemas libmusicbrainz5 libdiscid isocodes

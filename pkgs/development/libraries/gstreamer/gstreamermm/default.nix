@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, file, glibmm, gst_all_1, gnome3 }:
+{ stdenv, fetchurl, pkg-config, file, glibmm, gst_all_1, gnome3 }:
 stdenv.mkDerivation rec {
   pname = "gstreamermm";
   version = "1.10.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig file ];
+  nativeBuildInputs = [ pkg-config file ];
 
   propagatedBuildInputs = [ glibmm gst_all_1.gst-plugins-base ];
 

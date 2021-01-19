@@ -3,7 +3,7 @@
 , libjpeg, libtiff, giflib, libpng, libwebp
 # imlib2 can load images from ID3 tags.
 , libid3tag
-, freetype , bzip2, pkgconfig
+, freetype , bzip2, pkg-config
 , x11Support ? true, xlibsWrapper ? null
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     bzip2 freetype libid3tag
   ] ++ optional x11Support xlibsWrapper;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   enableParallelBuilding = true;
 

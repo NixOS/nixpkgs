@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake
-, qhull, flann, boost, vtk, eigen, pkgconfig, qtbase
+, qhull, flann, boost, vtk, eigen, pkg-config, qtbase
 , libusb1, libpcap, libXt, libpng, Cocoa, AGL, OpenGL
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cli2rxqsk6nxp36p5mgvvahjz8hm4fb68yi8cf9nw4ygbcvcwb1";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ qhull flann boost eigen libusb1 libpcap
                   libpng vtk qtbase libXt ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa AGL ];

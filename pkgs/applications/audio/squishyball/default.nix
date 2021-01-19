@@ -1,5 +1,5 @@
 { lib, stdenv, autoreconfHook, fetchsvn, flac, libao, libvorbis, ncurses
-, opusfile, pkgconfig
+, opusfile, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "013vq52q9z6kpg9iyc2jnb3m2gihcjblvwpg4yj4wy1q2c05pzqp";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ flac libao libvorbis ncurses opusfile ];
 

@@ -14,7 +14,7 @@
 , mpfr
 , gmp
 , glib
-, pkgconfig
+, pkg-config
 , harfbuzz
 , gettext
 , freetype
@@ -38,7 +38,7 @@ mkDerivation rec {
     sha256 = "1qz384jqgk75zxk7sqd22ma9pyd94kh4h6a207ldx7p9rny6vc5l";
   };
 
-  nativeBuildInputs = [ bison flex pkgconfig gettext qmake ];
+  nativeBuildInputs = [ bison flex pkg-config gettext qmake ];
 
   buildInputs = [
     eigen boost glew opencsg cgal mpfr gmp glib

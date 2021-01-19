@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, mpd_clientlib, dbus-glib, audacious, gtk2, gsl
+{ lib, stdenv, fetchurl, pkg-config, mpd_clientlib, dbus-glib, audacious, gtk2, gsl
 , libaudclient }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1a1vv4r0vnxjdyl0jyv7gga3zfd5azxlwjm1l6hjrf71lb228zn8";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ mpd_clientlib dbus-glib audacious gtk2 gsl libaudclient ];
 

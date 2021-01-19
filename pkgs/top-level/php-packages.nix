@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgs, fetchgit, phpPackage, autoconf, pkgconfig, re2c
+{ stdenv, lib, pkgs, fetchgit, phpPackage, autoconf, pkg-config, re2c
 , gettext, bzip2, curl, libxml2, openssl, gmp, icu64, oniguruma, libsodium
 , html-tidy, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl
 , uwimap, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng
@@ -176,7 +176,7 @@ lib.makeScope pkgs.newScope (self: with self; {
         "--with-zmq=${pkgs.zeromq}"
       ];
 
-      nativeBuildInputs = [ pkgs.pkgconfig ];
+      nativeBuildInputs = [ pkgs.pkg-config ];
 
       meta.maintainers = lib.teams.php.members;
       meta.broken = lib.versionAtLeast php.version "7.3";
@@ -206,7 +206,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       sourceRoot = "php-${php.version}/ext/${name}";
 
       enableParallelBuilding = true;
-      nativeBuildInputs = [ php.unwrapped autoconf pkgconfig re2c ];
+      nativeBuildInputs = [ php.unwrapped autoconf pkg-config re2c ];
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
 

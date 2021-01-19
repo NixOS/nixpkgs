@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, sane-backends, sane-frontends, libX11, gtk2, pkgconfig, libpng
+{ lib, stdenv, fetchurl, sane-backends, sane-frontends, libX11, gtk2, pkg-config, libpng
 , libusb-compat-0_1 ? null
 , gimpSupport ? false, gimp ? null
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     chmod a+rX -R .
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [libpng sane-backends sane-frontends libX11 gtk2 ]
     ++ (if libusb-compat-0_1 != null then [libusb-compat-0_1] else [])
     ++ lib.optional gimpSupport gimp;

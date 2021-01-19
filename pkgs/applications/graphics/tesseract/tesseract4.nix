@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf-archive, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf-archive, pkg-config
 , leptonica, libpng, libtiff, icu, pango, opencl-headers }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook autoconf-archive ];
+  nativeBuildInputs = [ pkg-config autoreconfHook autoconf-archive ];
   buildInputs = [ leptonica libpng libtiff icu pango opencl-headers ];
 
   meta = {

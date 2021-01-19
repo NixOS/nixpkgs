@@ -14,7 +14,7 @@
 , libX11
 , graphicsmagick
 , pcre
-, pkgconfig
+, pkg-config
 , libGL
 , libGLU
 , fltk
@@ -145,7 +145,7 @@ in mkDerivation rec {
   ]
   ;
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gfortran
     # Listed here as well because it's outputs are split
     fftw

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, glib, pkgconfig, gettext, libxslt, python3
+{ stdenv, fetchurl, fetchpatch, glib, pkg-config, gettext, libxslt, python3
 , docbook_xsl, docbook_xml_dtd_42 , libgcrypt, gobject-introspection, vala
 , gtk-doc, gnome3, gjs, libintl, dbus, xvfb_run }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [
-    pkgconfig gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl
+    pkg-config gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl
     gobject-introspection vala gtk-doc glib
   ];
   buildInputs = [ libgcrypt ];

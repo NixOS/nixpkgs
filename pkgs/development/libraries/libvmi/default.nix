@@ -4,7 +4,7 @@
   bison,
   flex,
   glib,
-  pkgconfig,
+  pkg-config,
   json_c,
   xen,
   libvirt,
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib libvirt json_c ] ++ (optional xenSupport xen);
-  nativeBuildInputs = [ autoreconfHook bison flex pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook bison flex pkg-config ];
 
   configureFlags = optional (!xenSupport) "--disable-xen";
 

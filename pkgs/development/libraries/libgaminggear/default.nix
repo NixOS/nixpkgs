@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gettext
+{ stdenv, fetchurl, cmake, pkg-config, gettext
 , gtk2, libcanberra, libnotify, pcre, sqlite, xorg
 , harfbuzz
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "bin" ];
 
-  nativeBuildInputs = [ cmake pkgconfig gettext ];
+  nativeBuildInputs = [ cmake pkg-config gettext ];
 
   propagatedBuildInputs = [
     gtk2 libcanberra libnotify pcre sqlite xorg.libXdmcp xorg.libpthreadstubs

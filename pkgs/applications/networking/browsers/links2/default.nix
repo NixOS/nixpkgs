@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, gpm, openssl, pkgconfig, libev # Misc.
+, gpm, openssl, pkg-config, libev # Misc.
 , libpng, libjpeg, libtiff, librsvg # graphic formats
 , bzip2, zlib, xz # Transfer encodings
 , enableFB ? true
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ++ optionals enableX11 [ libX11 libXau libXt ]
     ++ optional enableDirectFB [ directfb ];
 
-  nativeBuildInputs = [ pkgconfig bzip2 ];
+  nativeBuildInputs = [ pkg-config bzip2 ];
 
   configureFlags = [ "--with-ssl" ]
     ++ lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"

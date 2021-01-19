@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
+{ lib, stdenv, fetchurl, pkg-config, mod_ca, apr, aprutil }:
 
 stdenv.mkDerivation rec {
   pname = "mod_ocsp";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wy5363m4gq1w08iny2b3sh925bnznlln88pr9lgj9vgbn8pqnrn";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ mod_ca apr aprutil ];
   inherit (mod_ca) configureFlags installFlags;
 

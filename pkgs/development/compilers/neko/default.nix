@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boehmgc, zlib, sqlite, pcre, cmake, pkgconfig
+{ stdenv, fetchurl, boehmgc, zlib, sqlite, pcre, cmake, pkg-config
 , git, apacheHttpd, apr, aprutil, libmysqlclient, mbedtls, openssl, pkgs, gtk2, libpthreadstubs
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qv47zaa0vzhjlq5wb71627n7dbsxpc1gqpg0hsngjxnbnh1q46g";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig git ];
+  nativeBuildInputs = [ cmake pkg-config git ];
   buildInputs =
     [ boehmgc zlib sqlite pcre apacheHttpd apr aprutil
       libmysqlclient mbedtls openssl libpthreadstubs ]

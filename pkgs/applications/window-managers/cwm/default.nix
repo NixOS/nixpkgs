@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libX11, libXinerama, libXrandr, libXft, yacc, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXinerama, libXrandr, libXft, yacc, pkg-config }:
 
 stdenv.mkDerivation rec {
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0f9xmki2hx10k8iisfzc7nm1l31zkf1r06pdgn06ar9w9nizrld9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 libXinerama libXrandr libXft yacc ];
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';

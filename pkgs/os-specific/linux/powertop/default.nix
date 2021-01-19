@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, gettext, libnl, ncurses, pciutils, pkgconfig, zlib }:
+{ lib, stdenv, fetchurl, fetchpatch, gettext, libnl, ncurses, pciutils, pkg-config, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "powertop";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gettext libnl ncurses pciutils zlib ];
 
   patches = lib.optional stdenv.hostPlatform.isMusl (

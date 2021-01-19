@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , patchelf
 , cmake
-, pkgconfig
+, pkg-config
 
 , intel-gmmlib
 , intel-graphics-compiler
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "19scbbr6jf3yp2v7z8xyzzm01g44jym7xfkf1dz64d5nhvjw6ig5";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ intel-gmmlib intel-graphics-compiler libva ];
 

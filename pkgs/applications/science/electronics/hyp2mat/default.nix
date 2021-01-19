@@ -7,7 +7,7 @@
 , groff
 , libharu
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , libpng
 , zlib
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

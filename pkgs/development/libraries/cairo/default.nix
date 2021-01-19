@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, fetchpatch, pkgconfig, libiconv
+{ config, stdenv, fetchurl, fetchpatch, pkg-config, libiconv
 , libintl, expat, zlib, libpng, pixman, fontconfig, freetype
 , x11Support? !stdenv.isDarwin, libXext, libXrender
 , gobjectSupport ? true, glib
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
   outputBin = "dev"; # very small
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

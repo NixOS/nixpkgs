@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, makeDesktopItem, unzip, fpc, lazarus,
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, unzip, fpc, lazarus,
 libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dyx778756zhvz5sxgdvy49p2c0x44w4nmcfd90wqrmgfknncnf5";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     unzip fpc lazarus stdenv.cc
     libX11 glib gtk2 gdk-pixbuf pango atk cairo openssl

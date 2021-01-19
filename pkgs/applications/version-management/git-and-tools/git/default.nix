@@ -15,7 +15,7 @@
 , sendEmailSupport
 , darwin
 , withLibsecret ? false
-, pkgconfig, glib, libsecret
+, pkg-config, glib, libsecret
 , gzip # needed at runtime by gitweb.cgi
 }:
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation {
     ++ lib.optionals guiSupport [tcl tk]
     ++ lib.optionals withpcre2 [ pcre2 ]
     ++ lib.optionals stdenv.isDarwin [ darwin.Security ]
-    ++ lib.optionals withLibsecret [ pkgconfig glib libsecret ];
+    ++ lib.optionals withLibsecret [ pkg-config glib libsecret ];
 
   # required to support pthread_cancel()
   NIX_LDFLAGS = lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"

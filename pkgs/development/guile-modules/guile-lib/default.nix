@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, guile, texinfo, pkgconfig }:
+{ lib, stdenv, fetchurl, guile, texinfo, pkg-config }:
 
 assert stdenv ? cc && stdenv.cc.isGNU;
 
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     sha256 = "0aizxdif5dpch9cvs8zz5g8ds5s4xhfnwza2il5ji7fv2h7ks7bd";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ guile texinfo ];
 
   doCheck = true;

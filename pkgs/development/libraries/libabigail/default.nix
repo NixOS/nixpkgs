@@ -3,7 +3,7 @@
 , autoreconfHook
 , elfutils
 , libxml2
-, pkgconfig
+, pkg-config
 , strace
 , python3
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     strace
   ];
 

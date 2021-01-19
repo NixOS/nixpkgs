@@ -1,5 +1,5 @@
 {
-  fetchFromGitHub, stdenv, pkgconfig, autoreconfHook,
+  fetchFromGitHub, stdenv, pkg-config, autoreconfHook,
   acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib, zstd,
 
   # Optional but increases closure only negligibly. Also, while libxml2
@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs =
     stdenv.lib.optional stdenv.hostPlatform.isUnix sharutils
     ++ [ zlib bzip2 openssl xz lzo zstd ]
     ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
     ++ stdenv.lib.optional xarSupport libxml2;
 
-  # Without this, pkgconfig-based dependencies are unhappy
+  # Without this, pkg-config-based dependencies are unhappy
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isLinux [ attr acl ];
 
   configureFlags = stdenv.lib.optional (!xarSupport) "--without-xml2";

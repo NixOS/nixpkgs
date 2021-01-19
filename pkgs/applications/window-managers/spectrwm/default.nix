@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, xorg }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, xorg }:
 
 stdenv.mkDerivation {
   pname = "spectrwm";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0bf0d25yr0craksamczn2mdy6cjp27l88smihlw9bw4p6a2qhi41";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = with xorg; [
     libXrandr
     libXcursor

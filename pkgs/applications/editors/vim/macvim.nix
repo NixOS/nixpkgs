@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, runCommand, ncurses, gettext
-, pkgconfig, cscope, ruby, tcl, perl, luajit
+, pkg-config, cscope, ruby, tcl, perl, luajit
 , darwin
 
 , usePython27 ? false
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig buildSymlinks ];
+  nativeBuildInputs = [ pkg-config buildSymlinks ];
   buildInputs = [
     gettext ncurses cscope luajit ruby tcl perl python.pkg
   ];

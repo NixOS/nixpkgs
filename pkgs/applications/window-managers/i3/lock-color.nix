@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libxcb,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libxcb,
   xcbutilkeysyms , xcbutilimage, pam, libX11, libev, cairo, libxkbcommon,
   libxkbfile, libjpeg_turbo, xcbutilxrm
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "10h50a6p9ivqjz8hd5pn9l03vz6y9dxdx68bprqssfzdkzqnzaiv";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libxcb xcbutilkeysyms xcbutilimage pam libX11
     libev cairo libxkbcommon libxkbfile libjpeg_turbo xcbutilxrm ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, cmake, pkgconfig, zlib, libpng, cairo, freetype
+{ lib, stdenv, fetchgit, cmake, pkg-config, zlib, libpng, cairo, freetype
 , json_c, fontconfig, gtkmm3, pangomm, glew, libGLU, xorg, pcre
 , wrapGAppsHook
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig cmake wrapGAppsHook
+    pkg-config cmake wrapGAppsHook
   ];
   buildInputs = [
     zlib libpng cairo freetype

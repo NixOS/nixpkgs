@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , IOKit
 , libftdi1
 , libusb-compat-0_1
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

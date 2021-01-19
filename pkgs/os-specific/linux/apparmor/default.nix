@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook
-, pkgconfig, which
+, pkg-config, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gawk
@@ -67,7 +67,7 @@ let
       autoreconfHook
       bison
       flex
-      pkgconfig
+      pkg-config
       swig
       ncurses
       which
@@ -154,7 +154,7 @@ let
     src = apparmor-sources;
 
     nativeBuildInputs = [
-      pkgconfig
+      pkg-config
       libapparmor
       gawk
       which
@@ -206,7 +206,7 @@ let
     name = "apparmor-pam-${apparmor-version}";
     src = apparmor-sources;
 
-    nativeBuildInputs = [ pkgconfig which ];
+    nativeBuildInputs = [ pkg-config which ];
 
     buildInputs = [ libapparmor pam ];
 

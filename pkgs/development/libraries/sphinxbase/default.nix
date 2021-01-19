@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , bison
-, pkgconfig
+, pkg-config
 , python27 # >= 2.6
 , swig2 # 2.0
 , multipleOutputs ? false #Uses incomplete features of nix!
@@ -15,7 +15,7 @@ stdenv.mkDerivation (rec {
     sha256 = "0vr4k8pv5a8nvq9yja7kl13b5lh0f9vha8fc8znqnm8bwmcxnazp";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ swig2 python27 bison ];
 
   meta = {

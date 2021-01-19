@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , libX11, libXext, libXft }:
 
 let version = "1.40"; in
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1fx4jwq4s98p2wpvawsiww7d6568bpjgcjpks61dzfj8p2j32s4d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 libXext libXft ];
 
   postPatch =

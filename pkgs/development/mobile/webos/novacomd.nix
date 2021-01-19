@@ -1,6 +1,6 @@
 { lib, stdenv,
 fetchFromGitHub, fetchpatch,
-webos, cmake, pkgconfig,
+webos, cmake, pkg-config,
 libusb-compat-0_1 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig webos.cmake-modules ];
+  nativeBuildInputs = [ cmake pkg-config webos.cmake-modules ];
 
   buildInputs = [ libusb-compat-0_1 ];
 

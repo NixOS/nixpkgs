@@ -9,7 +9,7 @@
 , nfs-utils
 , gawk, gnugrep, gnused, systemd
 , smartmontools, sysstat, sudo
-, pkgconfig
+, pkg-config
 
 # Kernel dependencies
 , kernel ? null
@@ -91,7 +91,7 @@ let
 
       nativeBuildInputs = [ autoreconfHook269 nukeReferences ]
         ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ])
-        ++ optional buildUser pkgconfig;
+        ++ optional buildUser pkg-config;
       buildInputs = optionals buildUser [ zlib libuuid attr libtirpc ]
         ++ optional buildUser openssl
         ++ optional (buildUser && enablePython) python3;

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPackages, pkgconfig, openssl
+{ lib, fetchFromGitHub, rustPackages, pkg-config, openssl
 , withALSA ? true, alsaLib ? null
 , withPulseAudio ? false, libpulseaudio ? null
 , withPortAudio ? false, portaudio ? null
@@ -26,7 +26,7 @@ rustPackages.rustPlatform.buildRustPackage rec {
     "${lib.optionalString withALSA "alsa_backend,"}${lib.optionalString withPulseAudio "pulseaudio_backend,"}${lib.optionalString withPortAudio "portaudio_backend,"}${lib.optionalString withMpris "dbus_mpris,"}${lib.optionalString withKeyring "dbus_keyring,"}"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
     ++ lib.optional withALSA alsaLib

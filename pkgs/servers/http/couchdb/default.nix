@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, erlang, icu, openssl, spidermonkey_1_8_5, curl, help2man
-, sphinx, which, file, pkgconfig, getopt }:
+, sphinx, which, file, pkg-config, getopt }:
 
 stdenv.mkDerivation rec {
   pname = "couchdb";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b9cbdrmh1i71mrwvhm17v4cf7lckpil1vvq7lpmxyn6zfk0l84i";
   };
 
-  nativeBuildInputs = [ help2man which file pkgconfig sphinx ];
+  nativeBuildInputs = [ help2man which file pkg-config sphinx ];
   buildInputs = [ erlang icu openssl spidermonkey_1_8_5 curl ];
 
   postInstall = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, bluez, pkgconfig, withBluez ? false }:
+{ stdenv, fetchurl, flex, bison, bluez, pkg-config, withBluez ? false }:
 
 with stdenv.lib;
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ flex bison ]
-    ++ optionals withBluez [ bluez.dev pkgconfig ];
+    ++ optionals withBluez [ bluez.dev pkg-config ];
 
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glib, openssl, pkgconfig, autoreconfHook }:
+{ stdenv, fetchFromGitHub, glib, openssl, pkg-config, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "sofia-sip";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib openssl ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = with stdenv.lib; {
     description = "Open-source SIP User-Agent library, compliant with the IETF RFC3261 specification";

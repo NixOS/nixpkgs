@@ -23,7 +23,7 @@
 , lilv
 , lrdf
 , lv2
-, pkgconfig
+, pkg-config
 , python2
 , sassc
 , serd
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     gettext
     hicolor-icon-theme
     intltool
-    pkgconfig
+    pkg-config
     python2
     wafHook
     wrapGAppsHook

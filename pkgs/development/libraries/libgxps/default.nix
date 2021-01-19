@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobject-introspection, cairo
+{ stdenv, fetchurl, meson, ninja, pkg-config, glib, gobject-introspection, cairo
 , libarchive, freetype, libjpeg, libtiff, gnome3, lcms2
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "157s4c9gjjss6yd7qp7n4q6s72gz1k4ilsx4xjvp357azk49z4qs";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection ];
   buildInputs = [ glib cairo freetype libjpeg libtiff lcms2 ];
   propagatedBuildInputs = [ libarchive ];
 
