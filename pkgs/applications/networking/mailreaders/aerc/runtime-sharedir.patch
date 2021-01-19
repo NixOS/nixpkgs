@@ -29,10 +29,15 @@ diff --git a/config/config.go b/config/config.go
 index 32d07fc..8ffd3e8 100644
 --- a/config/config.go
 +++ b/config/config.go
-@@ -472,6 +472,11 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
+@@ -472,6 +472,16 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
  			return nil, err
  		}
  	}
++	if sec, err := file.GetSection("ui"); err == nil {
++		if key, err := sec.GetKey("stylesets-dirs"); err == nil {
++			sec.NewKey("stylesets-dirs", strings.ReplaceAll(key.String(), "@SHAREDIR@", sharedir))
++		}
++	}
 +	if sec, err := file.GetSection("templates"); err == nil {
 +		if key, err := sec.GetKey("template-dirs"); err == nil {
 +			sec.NewKey("template-dirs", strings.ReplaceAll(key.String(), "@SHAREDIR@", sharedir))
