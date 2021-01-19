@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, fetchurl
-, libasyncns, pkgconfig }:
+, libasyncns, pkg-config }:
 
 buildPythonPackage rec {
   pname = "libasyncns-python";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   patches = [ ./libasyncns-fix-res-consts.patch ];
 
   buildInputs = [ libasyncns ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   doCheck = false; # requires network access
 
   meta = with lib; {

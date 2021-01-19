@@ -7,7 +7,7 @@
 , xdg_utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2
 
-, python2Packages, perl, pkgconfig
+, python2Packages, perl, pkg-config
 , nspr, systemd, kerberos
 , util-linux, alsaLib
 , bison, gperf
@@ -126,7 +126,7 @@ let
 
     nativeBuildInputs = [
       llvmPackages.lldClang.bintools
-      ninja which python2Packages.python perl pkgconfig
+      ninja which python2Packages.python perl pkg-config
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar python2Packages.setuptools
     ];

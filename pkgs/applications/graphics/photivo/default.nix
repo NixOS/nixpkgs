@@ -1,5 +1,5 @@
 { lib, stdenv, fetchhg, fetchpatch, cmake, qt4, fftw, graphicsmagick_q16,
-  lcms2, lensfun, pkgconfig, libjpeg, exiv2, liblqr1 }:
+  lcms2, lensfun, pkg-config, libjpeg, exiv2, liblqr1 }:
 
 stdenv.mkDerivation {
   name = "photivo-2014-01-25";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     sed '1i#include <math.h>' -i Sources/filters/ptFilter_StdCurve.cpp
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ qt4 fftw graphicsmagick_q16 lcms2 lensfun libjpeg exiv2 liblqr1 ];
 

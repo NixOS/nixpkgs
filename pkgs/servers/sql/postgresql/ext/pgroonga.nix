@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, postgresql, msgpack, groonga }:
+{ lib, stdenv, fetchurl, pkg-config, postgresql, msgpack, groonga }:
 
 stdenv.mkDerivation rec {
   pname = "pgroonga";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rd3cxap9rqpg5y8y48r5bd7rki3lck6qsrb0bqdqm9xffnibw8j";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ postgresql msgpack groonga ];
 
   makeFlags = [ "HAVE_MSGPACK=1" ];

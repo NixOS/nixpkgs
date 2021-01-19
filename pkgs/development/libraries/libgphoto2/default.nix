@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gettext
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gettext
 , libusb1
 , libtool
 , libexif
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     gettext
     libtool
   ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, perl, pkgconfig, python, openssl }:
+{ stdenv, fetchFromGitHub, zlib, perl, pkg-config, python, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "rdkafka";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "12cc7l5vpxyrm8ca0cpm8sdl54hb8dranal8sz55r9y8igz1q1wb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ zlib perl python openssl ];
 

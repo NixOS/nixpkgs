@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "0.29.2";
 
   src = fetchurl {
-    url = "https://pkgconfig.freedesktop.org/releases/${pname}-${version}.tar.gz";
+    url = "https://pkg-config.freedesktop.org/releases/${pname}-${version}.tar.gz";
     sha256 = "14fmwzki1rlz8bs2p810lk6jqdxsk966d8drgsjmi54cd00rrikg";
   };
 

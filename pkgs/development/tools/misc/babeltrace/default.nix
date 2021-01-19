@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libuuid, popt, elfutils }:
+{ stdenv, fetchurl, pkg-config, glib, libuuid, popt, elfutils }:
 
 stdenv.mkDerivation rec {
   name = "babeltrace-1.5.8";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hkg3phnamxfrhwzmiiirbhdgckzfkqwhajl0lmr1wfps7j47wcz";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libuuid popt elfutils ];
 
   meta = with stdenv.lib; {

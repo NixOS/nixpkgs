@@ -6,7 +6,7 @@
 , intltool
 , json_c
 , libtool
-, pkgconfig
+, pkg-config
 , python3
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     automake
     intltool
     libtool
-    pkgconfig
+    pkg-config
     python3
   ];
 

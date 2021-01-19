@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, substituteAll
 , libXrender, libXinerama, libXcursor, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
-, libmng, which, libGLU, openssl, dbus, cups, pkgconfig
+, libmng, which, libGLU, openssl, dbus, cups, pkg-config
 , libtiff, glib, icu, libmysqlclient, postgresql, sqlite, perl, coreutils, libXi
 , alsaLib
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
@@ -199,7 +199,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals gtkStyle [ gtk2 gdk-pixbuf ]
     ++ lib.optionals stdenv.isDarwin [ ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
-  nativeBuildInputs = [ perl pkgconfig which ];
+  nativeBuildInputs = [ perl pkg-config which ];
 
   enableParallelBuilding = true;
 

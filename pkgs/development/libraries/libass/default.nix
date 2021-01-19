@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, yasm
+{ stdenv, fetchurl, pkg-config, yasm
 , freetype, fribidi, harfbuzz
 , encaSupport ? true, enca ? null # enca support
 , fontconfigSupport ? true, fontconfig ? null # fontconfig support
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     (mkFlag largeTilesSupport "large-tiles")
   ];
 
-  nativeBuildInputs = [ pkgconfig yasm ];
+  nativeBuildInputs = [ pkg-config yasm ];
 
   buildInputs = [ freetype fribidi harfbuzz ]
     ++ optional encaSupport enca

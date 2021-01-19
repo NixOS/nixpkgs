@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchpatch
 , fetchurl
-, pkgconfig
+, pkg-config
 , util-linux
 , libuuid
 , thin-provisioning-tools, libaio
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "1m4xpda8vbyd89ca0w8nacvnl4j34yzsa625gn990fb5sh84ab44";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev libuuid thin-provisioning-tools libaio ];
 
   configureFlags = [

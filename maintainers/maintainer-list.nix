@@ -1583,6 +1583,12 @@
     githubId = 33503784;
     name = "Yucheng Zhang";
   };
+  cheriimoya = {
+    email = "github@hausch.xyz";
+    github = "cheriimoya";
+    githubId = 28303440;
+    name = "Max Hausch";
+  };
   chessai = {
     email = "chessai1996@gmail.com";
     github = "chessai";
@@ -8707,6 +8713,12 @@
     githubId = 1315818;
     name = "Felix Bühler";
   };
+  stupremee = {
+      email = "jutus.k@protonmail.com";
+      github = "Stupremee";
+      githubId = 39732259;
+      name = "Justus K";
+  };
   suhr = {
     email = "suhr@i2pmail.org";
     github = "suhr";
@@ -8748,6 +8760,12 @@
     github = "sveitser";
     githubId = 1040871;
     name = "Mathis Antony";
+  };
+  svend = {
+    email = "svend@svends.net";
+    github = "svend";
+    githubId = 306190;
+    name = "Svend Sorensen";
   };
   svrana = {
     email = "shaw@vranix.com";

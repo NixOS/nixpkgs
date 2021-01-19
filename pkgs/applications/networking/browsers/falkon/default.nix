@@ -1,5 +1,5 @@
 { stdenv, mkDerivation, lib, fetchFromGitHub, fetchpatch
-, cmake, extra-cmake-modules, pkgconfig, qmake
+, cmake, extra-cmake-modules, pkg-config, qmake
 , libpthreadstubs, libxcb, libXdmcp
 , qtsvg, qttools, qtwebengine, qtx11extras
 , qtwayland, wrapQtAppsHook
@@ -41,7 +41,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    pkgconfig
+    pkg-config
     qmake
     qttools
     wrapQtAppsHook

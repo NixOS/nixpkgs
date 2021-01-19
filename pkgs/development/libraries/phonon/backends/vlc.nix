@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, phonon, pkgconfig, libvlc
+{ stdenv, lib, fetchurl, cmake, phonon, pkg-config, libvlc
 , extra-cmake-modules, qttools, qtbase, qtx11extras
 , debug ? false
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     qttools
     extra-cmake-modules
   ];

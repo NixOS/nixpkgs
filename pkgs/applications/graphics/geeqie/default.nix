@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, autoconf, automake, gettext, intltool
+{ lib, stdenv, fetchurl, pkg-config, autoconf, automake, gettext, intltool
 , gtk3, lcms2, exiv2, libchamplain, clutter-gtk, ffmpegthumbnailer, fbida
 , wrapGAppsHook, fetchpatch
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  nativeBuildInputs = [ pkgconfig autoconf automake gettext intltool
+  nativeBuildInputs = [ pkg-config autoconf automake gettext intltool
     wrapGAppsHook
   ];
 

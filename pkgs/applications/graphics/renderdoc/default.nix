@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, mkDerivation
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, mkDerivation
 , qtbase, qtx11extras, qtsvg, makeWrapper
 , vulkan-loader, libglvnd, xorg, python3, python3Packages
 , bison, pcre, automake, autoconf, addOpenGLRunpath
@@ -28,7 +28,7 @@ mkDerivation rec {
   ]; # ++ (with pythonPackages; [pyside2 pyside2-tools shiboken2]);
   # TODO: figure out how to make cmake recognise pyside2
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig bison pcre automake autoconf addOpenGLRunpath ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addOpenGLRunpath ];
 
   postUnpack = ''
     cp -r ${custom_swig} swig

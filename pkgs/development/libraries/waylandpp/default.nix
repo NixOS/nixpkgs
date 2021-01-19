@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , pugixml
 , wayland
 , libGL
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "-DWAYLAND_SCANNERPP=${buildPackages.waylandpp}/bin/wayland-scanner++"
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ] ++ optional docSupport doxygen;
+  nativeBuildInputs = [ cmake pkg-config ] ++ optional docSupport doxygen;
   buildInputs = [ pugixml wayland libGL libffi ];
 
   outputs = [ "bin" "dev" "lib" "out" ] ++ optionals docSupport [ "doc" "devman" ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, libnotify, gdk-pixbuf }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, curl, libnotify, gdk-pixbuf }:
 
 stdenv.mkDerivation {
   version = "2020-07-23";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
   # building
   configureFlags = [ "--enable-libnotify" ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ curl libnotify gdk-pixbuf ];
 
   meta = with lib; {

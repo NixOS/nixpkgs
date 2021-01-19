@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, gtk2
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, gtk2
 , libjack2, libsndfile
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "16fgyw6jnscx9279dczv72092dddghwlp53rkfw469kcgvjhwx0z";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
     buildInputs = [ autoconf automake gtk2 libjack2
       libsndfile
     ];

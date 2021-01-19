@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, makeDesktopItem, pkgconfig, makeWrapper
+{ stdenv, lib, fetchgit, makeDesktopItem, pkg-config, makeWrapper
 # Build
 , python2, autoconf213, yasm, perl
 , unzip, gnome2, gnum4
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gnum4 makeWrapper perl pkgconfig python2
+    gnum4 makeWrapper perl pkg-config python2
   ];
 
   buildInputs = [

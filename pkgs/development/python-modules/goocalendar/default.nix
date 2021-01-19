@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchPypi
 , buildPythonPackage
-, pkgconfig
+, pkg-config
 , gtk3
 , gobject-introspection
 , pygtk
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gobject-introspection
   ];
 

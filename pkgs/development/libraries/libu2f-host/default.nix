@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, json_c, hidapi }:
+{ stdenv, fetchurl, fetchpatch, pkg-config, json_c, hidapi }:
 
 stdenv.mkDerivation rec {
   pname = "libu2f-host";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ json_c hidapi ];
 
   doCheck = true;

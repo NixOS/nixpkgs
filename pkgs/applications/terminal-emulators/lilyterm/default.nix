@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchFromGitHub
-, pkgconfig
+, pkg-config
 , autoconf, automake, intltool, gettext
 , gtk, vte
 , flavour ? "stable"
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   inherit (stuff) src version;
 
-  nativeBuildInputs = [ pkgconfig autoconf automake intltool gettext ];
+  nativeBuildInputs = [ pkg-config autoconf automake intltool gettext ];
   buildInputs = [ gtk vte ];
 
   preConfigure = "sh autogen.sh";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, gtk3, glib, libid3tag, id3lib, taglib
+{ lib, stdenv, fetchurl, pkg-config, intltool, gtk3, glib, libid3tag, id3lib, taglib
 , libvorbis, libogg, opusfile, flac, itstool, libxml2, gsettings-desktop-schemas
 , gnome3, wrapGAppsHook
 }:
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lid3tag -lz";
 
-  nativeBuildInputs = [ pkgconfig intltool itstool libxml2 wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config intltool itstool libxml2 wrapGAppsHook ];
   buildInputs = [
     gtk3 glib libid3tag id3lib taglib libvorbis libogg opusfile flac
     gsettings-desktop-schemas gnome3.adwaita-icon-theme

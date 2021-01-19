@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, libtool, autoconf, automake
+{ lib, stdenv, fetchFromGitHub, pkg-config, libtool, autoconf, automake
 , libjpeg, libexif
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig libtool autoconf automake ];
+  nativeBuildInputs = [ pkg-config libtool autoconf automake ];
 
   propagatedBuildInputs = [ libjpeg libexif ];
 

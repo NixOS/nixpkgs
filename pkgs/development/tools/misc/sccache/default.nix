@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cargo, rustc, rustPlatform, pkgconfig, glib, openssl, darwin }:
+{ stdenv, fetchFromGitHub, cargo, rustc, rustPlatform, pkg-config, glib, openssl, darwin }:
 
 rustPlatform.buildRustPackage rec {
   version = "0.2.14";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--features=all" ];
   nativeBuildInputs = [
-    pkgconfig cargo rustc
+    pkg-config cargo rustc
   ];
   buildInputs = [
     openssl

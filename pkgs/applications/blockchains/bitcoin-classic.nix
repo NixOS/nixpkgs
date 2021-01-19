@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db48, boost
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, openssl, db48, boost
 , zlib, miniupnpc, qtbase ? null, qttools ? null, util-linux, protobuf, qrencode, libevent
 , withGui }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "06ij9v7zbdnhxq9429nnxiw655cp8idldj18l7fmj94gqx07n5vh";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib
                   miniupnpc util-linux protobuf libevent ]
                   ++ optionals withGui [ qtbase qttools qrencode ];

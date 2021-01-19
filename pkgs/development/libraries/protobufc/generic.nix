@@ -1,5 +1,5 @@
 { stdenv, src, version
-, autoreconfHook, pkgconfig, protobuf, zlib
+, autoreconfHook, pkg-config, protobuf, zlib
 , ...
 }:
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   inherit src;
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ protobuf zlib ];
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, numactl, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, numactl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libpsm2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ numactl pkgconfig ];
+  buildInputs = [ numactl pkg-config ];
 
   installFlags = [
     "DESTDIR=$(out)"

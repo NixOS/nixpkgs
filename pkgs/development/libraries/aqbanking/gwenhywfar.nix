@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnutls, openssl, libgcrypt, libgpgerror, pkgconfig, gettext
+{ stdenv, fetchurl, gnutls, openssl, libgcrypt, libgpgerror, pkg-config, gettext
 , which
 
 # GUI support
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
       configure
   '';
 
-  nativeBuildInputs = [ pkgconfig gettext which ];
+  nativeBuildInputs = [ pkg-config gettext which ];
 
   buildInputs = [ gtk2 gtk3 qt5.qtbase gnutls openssl libgcrypt libgpgerror ];
 

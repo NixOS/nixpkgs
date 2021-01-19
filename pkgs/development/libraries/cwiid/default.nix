@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, bison, flex, bluez, pkgconfig, gtk2 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, bison, flex, bluez, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "cwiid-${version}-git";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bison flex bluez gtk2 ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   NIX_LDFLAGS = "-lbluetooth";
 

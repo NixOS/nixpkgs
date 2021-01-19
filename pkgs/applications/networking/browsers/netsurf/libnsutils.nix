@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , buildsystem
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eQxlFjRKvoL2KJ1lY5LpzOvkdbIMx+Hi2EMBE4X3rvA=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ buildsystem ];
 
   makeFlags = [

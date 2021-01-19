@@ -1,7 +1,7 @@
 { python2
 , lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , libXext
 , libXxf86vm
 , libX11
@@ -38,7 +38,7 @@ in buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   preConfigure = ''

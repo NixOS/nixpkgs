@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook,
-  libtool, pkgconfig, re2, texinfo }:
+  libtool, pkg-config, re2, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "cre2";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     libtool
-    pkgconfig
+    pkg-config
   ];
   buildInputs = [ re2 texinfo ];
 

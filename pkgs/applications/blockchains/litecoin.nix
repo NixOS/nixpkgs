@@ -1,5 +1,5 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub
-, pkgconfig, autoreconfHook
+, pkg-config, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
 , glib, protobuf, util-linux, qrencode
 , AppKit
@@ -22,7 +22,7 @@ mkDerivation rec {
     sha256 = "11753zhyx1kmrlljc6kbjwrcb06dfcrsqvmw3iaki9a132qk6l5c";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib zeromq
                   miniupnpc glib protobuf util-linux libevent ]
                   ++ optionals stdenv.isDarwin [ AppKit ]

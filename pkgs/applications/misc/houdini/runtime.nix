@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.sidefx.com";
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
+    hydraPlatforms = [ ]; # requireFile src's should be excluded
     maintainers = [ lib.maintainers.canndrew ];
   };
 }

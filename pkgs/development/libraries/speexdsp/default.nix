@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, fftw }:
+{ stdenv, fetchurl, autoreconfHook, pkg-config, fftw }:
 
 stdenv.mkDerivation rec {
   name = "speexdsp-1.2.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fftw ];
 
   configureFlags = [

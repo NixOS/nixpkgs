@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , fetchpatch
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , zstd
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

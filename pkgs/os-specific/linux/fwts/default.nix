@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, autoreconfHook, pkgconfig, glib, libtool, pcre
+{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, glib, libtool, pcre
 , json_c, flex, bison, dtc, pciutils, dmidecode, iasl, libbsd }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libtool ];
+  nativeBuildInputs = [ autoreconfHook pkg-config libtool ];
   buildInputs = [ glib pcre json_c flex bison dtc pciutils dmidecode iasl libbsd ];
 
   postPatch = ''

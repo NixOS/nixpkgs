@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libidn, glib, pkgconfig, zlib }:
+{ stdenv, fetchurl, openssl, libidn, glib, pkg-config, zlib }:
 
 stdenv.mkDerivation rec {
   version = "1.5.3";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ openssl libidn glib zlib ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with stdenv.lib; {
     description = "A lightweight C library for the Jabber protocol";

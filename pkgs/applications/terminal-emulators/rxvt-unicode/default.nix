@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, makeDesktopItem
 , libX11, libXt, libXft, libXrender
 , ncurses, fontconfig, freetype
-, pkgconfig, gdk-pixbuf, perl
+, pkg-config, gdk-pixbuf, perl
 , perlSupport      ? true
 , gdkPixbufSupport ? true
 , unicode3Support  ? true
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ libX11 libXt libXft ncurses  # required to build the terminfo file
-      fontconfig freetype pkgconfig libXrender
+      fontconfig freetype pkg-config libXrender
     ] ++ optional perlSupport perl
       ++ optional gdkPixbufSupport gdk-pixbuf;
 

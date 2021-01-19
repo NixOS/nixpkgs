@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , libgcrypt, libgpgerror, libtasn1
 
 # Optional Dependencies
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   # Fixes support for gcrypt 1.6+
   patches = [ ./gcrypt-fix.patch ./freebsd-unistd.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libgcrypt libgpgerror libtasn1 optPam optLibidn optGnutls ];
 
   configureFlags = [

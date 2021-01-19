@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , libX11, libXext, libXaw
-, pkgconfig, imlib2, libast }:
+, pkg-config, imlib2, libast }:
 
 stdenv.mkDerivation rec {
   pname = "eterm";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g71szjklkiczxwzbjjfm59y6v9w4hp8mg7cy99z1g7qcjm0gfbj";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 libXext libXaw imlib2 ];
   propagatedBuildInputs = [ libast ];
 

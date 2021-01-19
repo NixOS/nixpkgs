@@ -2,7 +2,7 @@
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget
 , fetchurl, file, python3
 , darwin, cmake, rust, rustPlatform
-, pkgconfig, openssl
+, pkg-config, openssl
 , which, libffi
 , withBundledLLVM ? false
 , enableRustcDev ? true
@@ -133,7 +133,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     file python3 rustPlatform.rust.rustc cmake
-    which libffi removeReferencesTo pkgconfig
+    which libffi removeReferencesTo pkg-config
   ];
 
   buildInputs = [ openssl ]

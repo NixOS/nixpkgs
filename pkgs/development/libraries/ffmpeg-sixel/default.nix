@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libsixel, yasm
+{ stdenv, fetchFromGitHub, pkg-config, libsixel, yasm
 }:
 
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "00s2lggfdj2ibpngpyqqg7360p7yb69ys1ppg59yvv0m0mxk5x3k";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libsixel
     yasm

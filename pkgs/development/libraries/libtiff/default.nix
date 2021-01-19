@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 
-, pkgconfig
+, pkg-config
 , cmake
 
 , zlib
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     moveToOutput include/tiffiop.h $dev_private
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   propagatedBuildInputs = [ zlib libjpeg xz ]; #TODO: opengl support (bogus configure detection)
 

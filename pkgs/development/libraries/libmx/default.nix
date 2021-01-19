@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, libtool, pkgconfig, automake, autoconf, intltool
+, libtool, pkg-config, automake, autoconf, intltool
 , glib, gobject-introspection, gtk2, gtk-doc
 , clutter, clutter-gtk
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   configureScript = "sh autogen.sh";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     automake autoconf libtool
     intltool

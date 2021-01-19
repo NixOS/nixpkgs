@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, pkgconfig, libtool
+, pkg-config, libtool
 , libX11, libXt, libXpm }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jfl71gz3k7zh3kxdb8lxi06kajjnx7bq1rxjgk680l209jxask1";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libtool libX11 libXt libXpm ];
 
   configurePhase = ''

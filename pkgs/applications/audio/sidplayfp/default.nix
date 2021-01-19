@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, pkgconfig
+, pkg-config
 , libsidplayfp
 , alsaSupport ? stdenv.hostPlatform.isLinux
 , alsaLib
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "1s2dfs9z1hwarpfzawg11wax9nh0zcqx4cafwq7iysckyg4scz4k";
   };
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ optional alsaSupport alsaLib
     ++ optional pulseSupport libpulseaudio;
 

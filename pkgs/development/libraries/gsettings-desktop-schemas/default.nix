@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , glib
 , gobject-introspection
 , meson
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     glib
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
   ];
 

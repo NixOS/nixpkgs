@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , gettext
 , docbook_xsl
 , docbook_xml_dtd_43
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     sassc
   ] ++ setupHooks ++ optionals withGtkDoc [

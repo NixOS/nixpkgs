@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkgconfig, libGLU, libGL, makeWrapper }:
+{ stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkg-config, libGLU, libGL, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "smpeg-svn${version}";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL gtk2 libGLU libGL ];
 
-  nativeBuildInputs = [ autoconf automake libtool m4 pkgconfig makeWrapper ];
+  nativeBuildInputs = [ autoconf automake libtool m4 pkg-config makeWrapper ];
 
   preConfigure = ''
     touch NEWS AUTHORS ChangeLog
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       $out/include/smpeg/*.h
 
     wrapProgram $out/bin/smpeg-config \
-      --prefix PATH ":" "${pkgconfig}/bin" \
+      --prefix PATH ":" "${pkg-config}/bin" \
       --prefix PKG_CONFIG_PATH ":" "${SDL.dev}/lib/pkgconfig"
   '';
 

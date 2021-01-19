@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libuchardet, pkgconfig, shntool, flac
+{ stdenv, lib, fetchFromGitHub, cmake, libuchardet, pkg-config, shntool, flac
 , opusTools, vorbis-tools, mp3gain, lame, wavpack, vorbisgain, gtk3, qtbase
 , qttools, wrapQtAppsHook }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "04yp3aym7h70xjni9ancqv5lc4zds5a8dgw3fzgqs8k5nmh074gv";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [ qtbase qttools libuchardet ];
 
   bin_path = lib.makeBinPath [

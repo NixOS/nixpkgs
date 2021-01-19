@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, glib, pkgconfig, udev, libgudev, doxygen }:
+{ stdenv, fetchFromGitHub, meson, ninja, glib, pkg-config, udev, libgudev, doxygen }:
 
 stdenv.mkDerivation rec {
   pname = "libwacom";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "10wphlk5v591mlvcyr6bjqp60zmhbpqg3lmsq9dza738v97ws8ci";
   };
 
-  nativeBuildInputs = [ pkgconfig meson ninja doxygen ];
+  nativeBuildInputs = [ pkg-config meson ninja doxygen ];
 
   mesonFlags = [ "-Dtests=disabled" ];
 

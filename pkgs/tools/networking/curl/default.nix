@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, perl
+{ stdenv, lib, fetchurl, pkg-config, perl
 , http2Support ? true, nghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkg-config perl ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of

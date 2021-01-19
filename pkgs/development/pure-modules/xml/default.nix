@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, libxml2, libxslt }:
+{ stdenv, fetchurl, pkg-config, pure, libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
   baseName = "xml";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "e862dec060917a285bc3befc90f4eb70b6cc33136fb524ad3aa173714a35b0f7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure libxml2 libxslt ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, python3, sphinx
+, meson, ninja, pkg-config, python3, sphinx
 , acl, curl, fuse, libselinux, udev, xz, zstd
 , fuseSupport ? true
 , selinuxSupport ? true
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
                 ++ lib.optionals (fuseSupport) [ fuse ]
                 ++ lib.optionals (selinuxSupport) [ libselinux ]
                 ++ lib.optionals (udevSupport) [ udev ];
-  nativeBuildInputs = [ meson ninja pkgconfig python3 sphinx ];
+  nativeBuildInputs = [ meson ninja pkg-config python3 sphinx ];
   checkInputs = [ glibcLocales rsync ];
 
   postPatch = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, fribidi, vala
+{ stdenv, fetchurl, pkg-config, atk, cairo, glib, gtk3, pango, fribidi, vala
 , libxml2, perl, gettext, gnome3, gobject-introspection, dbus, xvfb_run, shared-mime-info
 , meson, ninja }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext perl gobject-introspection vala ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext perl gobject-introspection vala ];
 
   checkInputs = [ xvfb_run dbus ];
 

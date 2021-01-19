@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgconfig, fetchFromGitHub, libbsd }:
+{ lib, stdenv, pkg-config, fetchFromGitHub, libbsd }:
 
 stdenv.mkDerivation rec {
   pname = "kcgi";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     --replace /usr/local /
   '';
   
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ] ++ stdenv.lib.optionals stdenv.isLinux [ libbsd ] ;
 
   dontAddPrefix = true;

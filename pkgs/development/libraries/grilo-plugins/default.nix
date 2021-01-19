@@ -3,7 +3,7 @@
 , substituteAll
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , gperf
 , sqlite
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     itstool
     gperf # for lua-factory

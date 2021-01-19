@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, pkgconfig, libmatchbox, libX11, libXext }:
+{ lib, stdenv, fetchurl, pkg-config, libmatchbox, libX11, libXext }:
 
 stdenv.mkDerivation rec {
   pname = "matchbox";
   version = "1.2";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmatchbox ];
   NIX_LDFLAGS = "-lX11 -L${libX11}/lib -lXext -L${libXext}/lib";
 

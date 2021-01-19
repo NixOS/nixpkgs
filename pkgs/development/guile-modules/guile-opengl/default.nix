@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, guile }:
+{ lib, stdenv, fetchurl, pkg-config, guile }:
 
 let
   name = "guile-opengl-${version}";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     sha256 = "13qfx4xh8baryxqrv986l848ygd0piqwm6s2s90pxk9c0m9vklim";
   };
 
-  nativeBuildInputs = [ pkgconfig guile ];
+  nativeBuildInputs = [ pkg-config guile ];
 
   meta = with lib; {
     description = "Guile bindings for the OpenGL graphics API";

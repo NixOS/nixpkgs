@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, pkgconfig, libusb1-axoloti }:
+{ lib, stdenv, fetchurl, pkg-config, libusb1-axoloti }:
 
 stdenv.mkDerivation rec {
   pname = "dfu-util";
   version = "0.8";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1-axoloti ];
 
   src = fetchurl {

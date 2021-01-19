@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, openssl, libevent, libasr,
-  python2, pkgconfig, lua5, perl, libmysqlclient, postgresql, sqlite, hiredis,
+  python2, pkg-config, lua5, perl, libmysqlclient, postgresql, sqlite, hiredis,
   enablePython ? true,
   enableLua ? true,
   enablePerl ? true,
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b1mx71bvmv92lbm08wr2p60g3qhikvv3n15zsr6dcwbk9aqahzq";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl libevent
     libasr python2 lua5 perl libmysqlclient postgresql sqlite hiredis ];
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     "--with-scheduler-python"
 
   ] ++ lib.optionals enableLua [
-    "--with-lua=${pkgconfig}"
+    "--with-lua=${pkg-config}"
     "--with-filter-lua"
 
   ] ++ lib.optionals enablePerl [

@@ -4,7 +4,7 @@
 # 2019-08-29, nixpkgs does not have v8 6.x, and v8_5 is bumped to 5.4.232, which
 # is a bit outdated.  plv8 3.x is planned to support v8 7.x
 
-{ stdenv, lib, fetchgit, fetchFromGitHub, gn, ninja, python, glib, pkgconfig
+{ stdenv, lib, fetchgit, fetchFromGitHub, gn, ninja, python, glib, pkg-config
 , doCheck ? false
 , snapshot ? true
 }:
@@ -158,7 +158,7 @@ stdenv.mkDerivation rec {
         use_custom_libcxx_for_host=false
   '';
 
-  nativeBuildInputs = [ gn ninja pkgconfig ];
+  nativeBuildInputs = [ gn ninja pkg-config ];
   buildInputs = [ python glib ];
 
   buildPhase = ''

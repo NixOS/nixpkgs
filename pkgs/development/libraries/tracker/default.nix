@@ -4,7 +4,7 @@
 , gettext
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , asciidoc
 , gobject-introspection
 , python3
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     asciidoc
     gettext
     libxslt
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     python3 # for data-generators
     systemd # used for checks to install systemd user service
-    dbus # used for checks and pkgconfig to install dbus service/s
+    dbus # used for checks and pkg-config to install dbus service/s
   ];
 
   buildInputs = [

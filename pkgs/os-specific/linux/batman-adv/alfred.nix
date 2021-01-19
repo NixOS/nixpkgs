@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gpsd, libcap, libnl }:
+{ lib, stdenv, fetchurl, pkg-config, gpsd, libcap, libnl }:
 
 let cfg = import ./version.nix; in
 
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = cfg.sha256.${pname};
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gpsd libcap libnl ];
 
   preBuild = ''
-    makeFlags="PREFIX=$out PKG_CONFIG=${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config"
+    makeFlags="PREFIX=$out PKG_CONFIG=${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config"
   '';
 
   meta = {

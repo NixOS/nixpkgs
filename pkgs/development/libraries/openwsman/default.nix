@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkg-config
 , curl, libxml2, pam, sblim-sfcc }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "19dj38jyzhhhvk863cikcwk5awzlq3337pxmsaqqm4wrcygrkfmx";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ curl libxml2 pam sblim-sfcc ];
 

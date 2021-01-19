@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2 }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2 }:
 
 stdenv.mkDerivation {
   pname = "scite";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0h16wk2986nkkhhdv5g4lxlcn02qwyja24x1r6vf02r1hf46b9q2";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 ];
   sourceRoot = "scintilla/gtk";
 

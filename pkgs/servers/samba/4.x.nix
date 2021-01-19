@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , python
-, pkgconfig
+, pkg-config
 , bison
 , flex
 , perl
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     bison
     flex
     perl

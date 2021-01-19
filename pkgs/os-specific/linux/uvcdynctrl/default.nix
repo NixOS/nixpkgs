@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, libxml2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libxml2 }:
 
 stdenv.mkDerivation {
   version = "0.3.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0s15xxgdx8lnka7vi8llbf6b0j4rhbjl6yp0qxaihysf890xj73s";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libxml2 ];
 
   prePatch = ''

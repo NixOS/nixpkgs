@@ -480,7 +480,7 @@ stdenv.mkDerivation {
     rustc cargo
 
     # Example Build-time Additional Dependencies
-    pkgconfig
+    pkg-config
   ];
   buildInputs = [
     # Example Run-time Additional Dependencies
@@ -522,7 +522,7 @@ stdenv.mkDerivation {
     latest.rustChannels.nightly.rust
 
     # Add some extra dependencies from `pkgs`
-    pkgconfig openssl
+    pkg-config openssl
   ];
 
   # Set Environment Variables

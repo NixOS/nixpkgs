@@ -1,4 +1,4 @@
-{stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkgconfig, ncurses, libx86}:
+{stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkg-config, ncurses, libx86}:
 let
   s = # Generated upstream information
   {
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
 
-  nativeBuildInputs = [ pkgconfig ncurses ];
+  nativeBuildInputs = [ pkg-config ncurses ];
   inherit buildInputs;
 
   preConfigure = ''

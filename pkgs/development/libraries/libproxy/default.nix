@@ -1,6 +1,6 @@
 { stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , cmake
 , zlib
 , fetchpatch
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "py3" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
     makeWrapper
   ];

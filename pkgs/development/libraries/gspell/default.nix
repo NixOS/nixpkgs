@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , libxml2
 , glib
 , gtk3
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     vala
     gobject-introspection
     libxml2
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    # required for pkgconfig
+    # required for pkg-config
     enchant2
   ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libatomic_ops
 , enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libatomic_ops ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   outputs = [ "out" "dev" "doc" ];
   separateDebugInfo = stdenv.isLinux;

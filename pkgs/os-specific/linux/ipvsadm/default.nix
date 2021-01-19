@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libnl, popt, gnugrep }:
+{ lib, stdenv, fetchurl, pkg-config, libnl, popt, gnugrep }:
 
 stdenv.mkDerivation rec {
   pname = "ipvsadm";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-lnl" "$(pkg-config --libs libnl-genl-3.0)"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnl popt ];
 
   preBuild = ''

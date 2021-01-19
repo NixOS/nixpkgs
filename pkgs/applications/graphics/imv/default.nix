@@ -8,7 +8,7 @@
 , fontconfig
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , icu
 , pango
 , inih
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

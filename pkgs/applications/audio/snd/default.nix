@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , gtk2, alsaLib
 , fftw, gsl
 }:
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "016slh34gb6qqb38m8k9yg48rbhc5p12084szcwvanhh5v7fc7mk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     gtk2 alsaLib

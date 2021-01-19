@@ -6,7 +6,7 @@
 , fetchpatch
 , fetchzip
 , jack_capture
-, pkgconfig
+, pkg-config
 , pulseaudioFull
 , qtbase
 , makeWrapper
@@ -48,7 +48,7 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

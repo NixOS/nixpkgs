@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkgconfig, meson, ninja
+{ stdenv, fetchFromGitLab, pkg-config, meson, ninja
 , libevdev, mtdev, udev, libwacom
 , documentationSupport ? false, doxygen ? null, graphviz ? null # Documentation
 , eventGUISupport ? false, cairo ? null, glib ? null, gtk3 ? null # GUI event viewer support
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "--libexecdir=${placeholder "bin"}/libexec"
   ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja ]
+  nativeBuildInputs = [ pkg-config meson ninja ]
     ++ optionals documentationSupport [ doxygen graphviz sphinx-build ];
 
   buildInputs = [

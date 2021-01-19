@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, freetype, libXft, pango, fontconfig }:
+{ stdenv, fetchurl, pkg-config, freetype, libXft, pango, fontconfig }:
 
 stdenv.mkDerivation rec {
   version = "2.3.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "9b07c6e91108b1fa87411af4a57e25522784cfea0deb79b34ced608444f2ed65";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freetype libXft pango fontconfig];
 
   NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype2";

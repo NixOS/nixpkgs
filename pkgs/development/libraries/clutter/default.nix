@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libGLU, libGL, libX11, libXext, libXfixes
+{ stdenv, fetchurl, pkg-config, libGLU, libGL, libX11, libXext, libXfixes
 , libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib
 , gobject-introspection, gtk3, gnome3, libinput, libgudev, libxkbcommon
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = [ gtk3 ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs =
     [ libX11 libGL libGLU libXext libXfixes libXdamage libXcomposite libXi cogl pango
       atk json-glib gobject-introspection libxcb libinput libgudev libxkbcommon

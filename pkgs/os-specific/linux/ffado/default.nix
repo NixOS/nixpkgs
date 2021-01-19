@@ -11,7 +11,7 @@
 , libiec61883
 , libraw1394
 , libxmlxx3
-, pkgconfig
+, pkg-config
 , python3
 , sconsPackages
 , which
@@ -46,7 +46,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     desktop-file-utils
     sconsPackages.scons_3_1_2
-    pkgconfig
+    pkg-config
     which
     python
     pyqt5

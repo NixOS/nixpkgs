@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
-, pkgconfig
+, pkg-config
 , systemd, libyaml, openzwave, cython, pyserial
 , six, pydispatcher, urwid }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ systemd libyaml openzwave cython ];
   propagatedBuildInputs = [ six urwid pydispatcher pyserial ];
 

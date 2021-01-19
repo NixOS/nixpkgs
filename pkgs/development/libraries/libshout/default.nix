@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, fetchurl, pkg-config
 , libvorbis, libtheora, speex }:
 
-# need pkgconfig so that libshout installs ${out}/lib/pkgconfig/shout.pc
+# need pkg-config so that libshout installs ${out}/lib/pkgconfig/shout.pc
 
 stdenv.mkDerivation rec {
   name = "libshout-2.4.4";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libvorbis libtheora speex ];
 
   meta = {

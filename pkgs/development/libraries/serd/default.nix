@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python3, wafHook }:
+{ stdenv, fetchurl, pkg-config, python3, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "serd";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "168rn3m32c59qbar120f83ibcnnd987ij9p053kybgl7cmm6358c";
   };
 
-  nativeBuildInputs = [ pkgconfig python3 wafHook ];
+  nativeBuildInputs = [ pkg-config python3 wafHook ];
 
   meta = with stdenv.lib; {
     homepage = "http://drobilla.net/software/serd";

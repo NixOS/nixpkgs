@@ -3,7 +3,7 @@
 , nix-update-script
 , fetchpatch
 , vala
-, pkgconfig
+, pkg-config
 , python3
 , glib
 , gtk3
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];

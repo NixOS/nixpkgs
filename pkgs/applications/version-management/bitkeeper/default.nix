@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, perl, gperf, bison, groff
-, pkgconfig, libXft, pcre
+, pkg-config, libXft, pcre
 , libtomcrypt, libtommath, lz4 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     perl gperf bison groff libXft
     pcre libtomcrypt libtommath lz4

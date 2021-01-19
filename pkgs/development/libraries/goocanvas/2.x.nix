@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gtk-doc, gobject-introspection, python2, gtk3, cairo, glib }:
+{ stdenv, fetchurl, pkg-config, gettext, gtk-doc, gobject-introspection, python2, gtk3, cairo, glib }:
 
 let
   version = "2.0.4";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "141fm7mbqib0011zmkv3g8vxcjwa7hypmq71ahdyhnj2sjvy4a67";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext gtk-doc python2 ];
+  nativeBuildInputs = [ pkg-config gettext gtk-doc python2 ];
   buildInputs = [ gtk3 cairo glib gobject-introspection ];
 
   configureFlags = [

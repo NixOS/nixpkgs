@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dbus, glib, pkgconfig, expat }:
+{ stdenv, fetchurl, dbus, glib, pkg-config, expat }:
 
 stdenv.mkDerivation rec {
   pname = "dbus-cplusplus";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus glib expat ];
 
   configureFlags = [ "--disable-ecore" "--disable-tests" ];

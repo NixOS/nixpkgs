@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, pango}:
+{stdenv, fetchurl, pkg-config, glib, pango}:
 
 stdenv.mkDerivation {
   name = "pangoxsl-1.6.0.3";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "1wcd553nf4nwkrfrh765cyzwj9bsg7zpkndg2hjs8mhwgx04lm8n";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     glib
     pango

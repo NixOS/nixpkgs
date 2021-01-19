@@ -1,5 +1,5 @@
 { lib, stdenv, substituteAll, fetchFromGitHub, python3Packages, libunistring,
-  harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
+  harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel,
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
   lcms2,
@@ -52,7 +52,7 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig sphinx ncurses
+    pkg-config sphinx ncurses
     installShellFiles
   ] ++ lib.optionals stdenv.isDarwin [
     imagemagick

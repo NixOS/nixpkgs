@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , babl
 , libpng
 , cairo
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ babl libpng cairo libjpeg librsvg pango gtk2 bzip2 intltool libintl ]
     ++ stdenv.lib.optional stdenv.isDarwin OpenGL;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   doCheck = false; # fails 3 out of 19 tests
 

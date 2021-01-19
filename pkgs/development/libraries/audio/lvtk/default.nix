@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, gtkmm2, lv2, pkgconfig, python, wafHook }:
+{ stdenv, fetchurl, boost, gtkmm2, lv2, pkg-config, python, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "lvtk";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "03nbj2cqcklqwh50zj2gwm07crh5iwqbpxbpzwbg5hvgl4k4rnjd";
   };
 
-  nativeBuildInputs = [ pkgconfig python wafHook ];
+  nativeBuildInputs = [ pkg-config python wafHook ];
   buildInputs = [ boost gtkmm2 lv2 ];
 
   enableParallelBuilding = true;

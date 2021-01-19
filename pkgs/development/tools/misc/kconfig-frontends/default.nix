@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, bison, flex, gperf, ncurses, pythonPackages }:
+{ stdenv, fetchurl, pkg-config, bison, flex, gperf, ncurses, pythonPackages }:
 
 stdenv.mkDerivation rec {
   basename = "kconfig-frontends";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     url = "http://ymorin.is-a-geek.org/download/${basename}/${name}.tar.xz";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ bison flex gperf ncurses pythonPackages.python pythonPackages.wrapPython ];
 
   configureFlags = [

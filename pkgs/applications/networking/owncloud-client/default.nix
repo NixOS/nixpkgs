@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, mkDerivation, cmake, pkgconfig, qtbase, qtkeychain, sqlite, libsecret }:
+{ lib, stdenv, fetchurl, mkDerivation, cmake, pkg-config, qtbase, qtkeychain, sqlite, libsecret }:
 
 mkDerivation rec {
   pname = "owncloud-client";
@@ -9,7 +9,7 @@ mkDerivation rec {
     sha256 = "1xcklhvbyg34clm9as2rjnjfwxpwq77lmdxj6qc0w7q43viqvlz3";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ qtbase qtkeychain sqlite ];
 
   qtWrapperArgs = [

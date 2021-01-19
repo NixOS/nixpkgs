@@ -9,7 +9,7 @@
 , autoconf
 , automake
 , libtool
-, pkgconfig
+, pkg-config
 , bison
 , flex
 , groff
@@ -145,7 +145,7 @@ in stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
     bison
     flex
     groff

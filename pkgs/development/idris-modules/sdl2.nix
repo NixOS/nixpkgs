@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , effects
 , lib
-, pkgconfig
+, pkg-config
 , SDL2
 , SDL2_gfx
 }:
@@ -13,7 +13,7 @@ build-idris-package rec {
   idrisDeps = [ effects ];
 
   extraBuildInputs = [
-    pkgconfig
+    pkg-config
     SDL2
     SDL2_gfx
   ];

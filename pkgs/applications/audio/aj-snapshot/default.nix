@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, jack2Full, minixml, pkgconfig }:
+{ lib, stdenv, fetchurl, alsaLib, jack2Full, minixml, pkg-config }:
 
 stdenv.mkDerivation rec {
   name =  packageName + "-" + version ;
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsaLib minixml jack2Full ];
 
   meta = with lib; {

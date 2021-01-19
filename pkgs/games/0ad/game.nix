@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     # Delete shipped libraries which we don't need.
     rm -rf libraries/source/{enet,miniupnpc,nvtt,spidermonkey}
 
-    # Workaround invalid pkgconfig name for mozjs
-    mkdir pkgconfig
-    ln -s ${spidermonkey_38}/lib/pkgconfig/* pkgconfig/mozjs-38.pc
+    # Workaround invalid pkg-config name for mozjs
+    mkdir pkg-config
+    ln -s ${spidermonkey_38}/lib/pkgconfig/* pkg-config/mozjs-38.pc
     PKG_CONFIG_PATH="$PWD/pkgconfig:$PKG_CONFIG_PATH"
 
     # Update Makefiles

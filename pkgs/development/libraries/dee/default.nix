@@ -1,7 +1,7 @@
 { stdenv
 , fetchgit
 , fetchpatch
-, pkgconfig
+, pkg-config
 , glib
 , icu
 , gobject-introspection
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     vala
     autoreconfHook
     gobject-introspection

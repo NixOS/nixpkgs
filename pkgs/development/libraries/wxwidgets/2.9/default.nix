@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
+{ stdenv, fetchurl, pkg-config, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
 , setfile
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , withMesa ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     ++ optional withMesa libGLU
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QuickTime ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 

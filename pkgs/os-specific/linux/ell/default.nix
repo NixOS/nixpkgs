@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchgit
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , dbus
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
   ];
 

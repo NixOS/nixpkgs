@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "120xgf7cgjmz9d3yp10lks6lhkgxqb4skbmbiiwf46gx868qxsq6";
   };
 
-  # Fix pkgconfig file paths
+  # Fix pkg-config file paths
   postPatch = ''
     sed -i CMakeLists.txt \
       -e 's#\\''${exec_prefix}/''${CMAKE_INSTALL_LIBDIR}#''${CMAKE_INSTALL_FULL_LIBDIR}#' \

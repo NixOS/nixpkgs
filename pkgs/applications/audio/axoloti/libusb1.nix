@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, systemd ? null, libobjc, IOKit, fetchpatch }:
+{ stdenv, lib, fetchurl, pkg-config, systemd ? null, libobjc, IOKit, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "libusb-1.0.19";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
 
-  buildInputs = [ pkgconfig ];
+  buildInputs = [ pkg-config ];
   propagatedBuildInputs =
     lib.optional stdenv.isLinux systemd ++
     lib.optionals stdenv.isDarwin [ libobjc IOKit ];

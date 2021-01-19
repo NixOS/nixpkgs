@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, fuse, pcre }: 
+{ lib, stdenv, fetchFromGitHub, pkg-config, fuse, pcre }: 
 
 stdenv.mkDerivation {
   pname = "rewritefs";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "15bcxprkxf0xqxljsqhb0jpi7p1vwqcb00sjs7nzrj7vh2p7mqla";
   };
  
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse pcre ];
 
   prePatch = ''

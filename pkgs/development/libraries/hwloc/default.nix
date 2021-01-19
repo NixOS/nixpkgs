@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, expat, ncurses, pciutils, numactl
+{ stdenv, fetchurl, pkg-config, expat, ncurses, pciutils, numactl
 , x11Support ? false, libX11 ? null, cairo ? null
 }:
 
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
   ];
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   # Filter out `null' inputs.  This allows users to `.override' the
   # derivation and set optional dependencies to `null'.

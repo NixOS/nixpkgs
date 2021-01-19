@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub,
-  libtool, gettext, pkgconfig,
+  libtool, gettext, pkg-config,
   vala, gnome-common, gobject-introspection,
   libgee, json-glib, skk-dicts, libxkbcommon }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ skk-dicts libxkbcommon ];
-  nativeBuildInputs = [ vala gnome-common gobject-introspection libtool gettext pkgconfig ];
+  nativeBuildInputs = [ vala gnome-common gobject-introspection libtool gettext pkg-config ];
   propagatedBuildInputs = [ libgee json-glib ];
 
   preConfigure = ''

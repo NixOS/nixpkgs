@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, cmake, extra-cmake-modules, pkgconfig, wrapGAppsHook
+{ lib, stdenv, mkDerivation, fetchurl, cmake, extra-cmake-modules, pkg-config, wrapGAppsHook
 , kconfig, kinit, kdoctools, kio, kparts, kwidgetsaddons
 , qtbase, qtsvg
 , boost, graphviz
@@ -19,7 +19,7 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cmake extra-cmake-modules pkgconfig wrapGAppsHook
+    cmake extra-cmake-modules pkg-config wrapGAppsHook
     kdoctools
   ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, smlnj, rsync }:
+{ lib, stdenv, fetchurl, pkg-config, smlnj, rsync }:
 
 stdenv.mkDerivation rec {
   pname = "twelf";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fi1kbs9hrdrm1x4k13angpjasxlyd1gc3ys8ah54i75qbcd9c4i";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ smlnj rsync ];
 
   buildPhase = ''

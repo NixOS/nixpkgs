@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     cairo
     cinnamon-desktop
     cinnamon-common
-    gnome3.libgnomekbd
+    libgnomekbd
     gnome3.caribou
 
     # things

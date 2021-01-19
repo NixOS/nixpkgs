@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , udev
 , glib
 , gobject-introspection
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0drf39qhsdz35kwb18hnfj2ig4yfxhfks66m783zlhnvy2narbhv";
   };
 
-  nativeBuildInputs = [ pkgconfig gobject-introspection ];
+  nativeBuildInputs = [ pkg-config gobject-introspection ];
   buildInputs = [ udev glib ];
 
   # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway.

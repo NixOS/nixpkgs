@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, atk, glibmm, pkgconfig, gnome3 }:
+{ stdenv, fetchurl, atk, glibmm, pkg-config, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "atkmm";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ atk glibmm ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   doCheck = true;
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, automake, autoconf, intltool, pkgconfig, gtk3, vte, wrapGAppsHook
+{ lib, stdenv, fetchurl, automake, autoconf, intltool, pkg-config, gtk3, vte, wrapGAppsHook
 , libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    automake autoconf intltool pkgconfig wrapGAppsHook
+    automake autoconf intltool pkg-config wrapGAppsHook
     libxslt docbook_xml_dtd_412 docbook_xsl libxml2 findXMLCatalogs
   ];
 

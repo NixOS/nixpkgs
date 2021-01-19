@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit
-, pkgconfig, wrapGAppsHook
+, pkg-config, wrapGAppsHook
 , glib, gcr, glib-networking, gsettings-desktop-schemas, gtk, libsoup, webkitgtk
 , xorg, dmenu, findutils, gnused, coreutils
 , patches ? null
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pjsv2q8c74sdmqsalym8wa2lv55lj4pd36miam5wd12769xw68m";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [ glib gcr glib-networking gsettings-desktop-schemas gtk libsoup webkitgtk ];
 
   inherit patches;

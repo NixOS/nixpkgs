@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, gettext, meson, ninja, pkgconfig, perl, python3
+{ config, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
 , libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
@@ -29,7 +29,7 @@ assert stdenv.isLinux -> util-linuxMinimal != null;
   * Support org.freedesktop.Application, including D-Bus activation from desktop files
 */
 let
-  # Some packages don't get "Cflags" from pkgconfig correctly
+  # Some packages don't get "Cflags" from pkg-config correctly
   # and then fail to build when directly including like <glib/...>.
   # This is intended to be run in postInstall of any package
   # which has $out/include/ containing just some disjunct directories.
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   ]);
 
   nativeBuildInputs = [
-    meson ninja pkgconfig perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45
+    meson ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];

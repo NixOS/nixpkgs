@@ -1,4 +1,4 @@
-{ source ? "default", callPackage, lib, stdenv, ncurses, pkgconfig, gettext
+{ source ? "default", callPackage, lib, stdenv, ncurses, pkg-config, gettext
 , writeText, config, glib, gtk2-x11, gtk3-x11, lua, python3, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
@@ -119,7 +119,7 @@ in stdenv.mkDerivation rec {
   ++ lib.optional ximSupport          "--enable-xim";
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ]
   ++ lib.optional wrapPythonDrv makeWrapper
   ++ lib.optional nlsSupport gettext

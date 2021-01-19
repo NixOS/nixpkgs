@@ -1,4 +1,4 @@
-{stdenv, fetchurl, curl, libnxml, pkgconfig}:
+{stdenv, fetchurl, curl, libnxml, pkg-config}:
 
 stdenv.mkDerivation {
   name = "libmrss-0.19.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "02r1bgj8qlkn63xqfi5yq8y7wrilxcnkycaag8qskhg5ranic507";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ curl libnxml ];
 
   meta = {
