@@ -67,19 +67,19 @@ in
           Configuration for Nomad. See the <link xlink:href="https://www.nomadproject.io/docs/configuration">documentation</link>
           for supported values.
 
-          Notes about `data_dir`:
+          Notes about <literal>data_dir</literal>:
 
-          If `data_dir` is set to a value other than the default value of
-          `"/var/lib/nomad"` it is the Nomad cluster manager's responsibility
-          to make sure that this directory exists and has the appropriate
-          permissions. One way to ensure this is the case to create the
-          directory and adjust its permissions as needed using the
-          `ExecStartPre` feature of systemd.
+          If <literal>data_dir</literal> is set to a value other than the
+          default value of <literal>"/var/lib/nomad"</literal> it is the Nomad
+          cluster manager's responsibility to make sure that this directory
+          exists and has the appropriate permissions.
 
-          Additionally, if `dropPrivileges` is `true` then `data_dir`
-          **cannot** be customized.  Setting `dropPrivileges` to `true` enables
-          the `DynamicUser` feature of systemd which directly manages and
-          operates on `StateDirectory`.
+          Additionally, if <literal>dropPrivileges</literal> is
+          <literal>true</literal> then <literal>data_dir</literal>
+          <emphasis>cannot</emphasis> be customized. Setting
+          <literal>dropPrivileges</literal> to <literal>true</literal> enables
+          the <literal>DynamicUser</literal> feature of systemd which directly
+          manages and operates on <literal>StateDirectory</literal>.
         '';
         example = literalExample ''
           {
