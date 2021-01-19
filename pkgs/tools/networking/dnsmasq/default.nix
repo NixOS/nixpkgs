@@ -12,11 +12,12 @@ let
   ]);
 in
 stdenv.mkDerivation rec {
-  name = "dnsmasq-2.82";
+  pname = "dnsmasq";
+  version = "2.83";
 
   src = fetchurl {
-    url = "http://www.thekelleys.org.uk/dnsmasq/${name}.tar.xz";
-    sha256 = "0cn1xd1s6xs78jmrmwjnh9m6w3q38pk6dyqy2phvasqiyd33cll4";
+    url = "http://www.thekelleys.org.uk/dnsmasq/${pname}-${version}.tar.xz";
+    sha256 = "1sjamz1v588qf35m8z6wcqkjk5w12bqhj7d7p48dj8jyn3lgghgz";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
