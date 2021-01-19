@@ -4420,6 +4420,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  git-hound = callPackage ../tools/security/git-hound { };
+
   git-hub = callPackage ../applications/version-management/git-and-tools/git-hub { };
 
   git-ignore = callPackage ../applications/version-management/git-and-tools/git-ignore { };
