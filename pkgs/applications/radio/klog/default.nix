@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, hamlib, pkgconfig, qt5, qtbase, qttools, qtserialport, qtcharts, qmake, wrapQtAppsHook }:
+{ stdenv, fetchurl, hamlib, pkg-config, qt5, qtbase, qttools, qtserialport, qtcharts, qmake, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "klog";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1d5x7rq0mgfrqws3q1y4z8wh2qa3gvsmd0ssf2yqgkyq3fhdrb5c";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapQtAppsHook qmake qttools ];
+  nativeBuildInputs = [ pkg-config wrapQtAppsHook qmake qttools ];
   buildInputs = [ hamlib qtbase qtserialport qtcharts ];
 
   qmakeFlags = [ "KLog.pro" ];
