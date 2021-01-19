@@ -1,28 +1,38 @@
-{ lib, stdenv, fetchurl, python3Packages }:
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, isPy3k
+, mock
+, pytestCheckHook
+, cloudpickle
+, pyinotify
+, macfsevents
+}:
 
-let
-
-  name = "doit";
+buildPythonPackage rec {
+  pname = "doit";
   version = "0.32.0";
 
-in python3Packages.buildPythonApplication {
-  name = "${name}-${version}";
+  disabled = !isPy3k;
 
-  src = fetchurl {
-    url = "mirror://pypi/d/${name}/${name}-${version}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "033m6y9763l81kgqd07rm62bngv3dsm3k9p28nwsn2qawl8h8g9j";
   };
 
-  buildInputs = with python3Packages; [ mock pytest ];
-
-  propagatedBuildInputs = with python3Packages; [ cloudpickle ]
+  propagatedBuildInputs = [ cloudpickle ]
     ++ lib.optional stdenv.isLinux pyinotify
     ++ lib.optional stdenv.isDarwin macfsevents;
 
-  # Tests fail due to mysterious gdbm.open() resource temporarily
-  # unavailable errors.
-  doCheck = false;
-  checkPhase = "py.test";
+  checkInputs = [ mock pytestCheckHook ];
+
+  disabledTests = [
+    # depends on doit-py, which has a circular dependency on doit
+    "test___main__.py"
+    # https://github.com/pydoit/doit/issues/341
+    "test_not_picklable_raises_InvalidTask"
+  ];
 
   meta = with lib; {
     homepage = "https://pydoit.org/";
@@ -36,6 +46,5 @@ in python3Packages.buildPythonApplication {
       available.
     '';
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.all;
   };
 }
