@@ -268,6 +268,18 @@ let
         };
       };
 
+      graphql.vscode-graphql = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-graphql";
+          publisher = "GraphQL";
+          version = "0.3.13";
+          sha256 = "sha256-JjEefVHQUYidUsr8Ce/dh7hLDm21WkyS+2RwsXHoY04=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       haskell.haskell = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "haskell";
