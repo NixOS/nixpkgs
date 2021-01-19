@@ -260,7 +260,7 @@
     "flexit" = ps: with ps; [ pymodbus ]; # missing inputs: pyflexit
     "flic" = ps: with ps; [ ]; # missing inputs: pyflic-homeassistant
     "flick_electric" = ps: with ps; [ ]; # missing inputs: PyFlick
-    "flo" = ps: with ps; [ ]; # missing inputs: aioflo
+    "flo" = ps: with ps; [ aioflo ];
     "flock" = ps: with ps; [ ];
     "flume" = ps: with ps; [ ]; # missing inputs: pyflume
     "flunearyou" = ps: with ps; [ ]; # missing inputs: pyflunearyou
