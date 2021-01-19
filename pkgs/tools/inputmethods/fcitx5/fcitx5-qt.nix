@@ -7,6 +7,7 @@
 , qtx11extras
 , libxcb
 , libXdmcp
+, qtbase
 }:
 
 mkDerivation rec {
@@ -20,8 +21,14 @@ mkDerivation rec {
     sha256 = "BVOumk2xj3vmwmm4KwiktQhWyTuUA2OFwYXNR6HgwyM=";
   };
 
+  preConfigure = ''
+    substituteInPlace qt5/platforminputcontext/CMakeLists.txt \
+      --replace \$"{CMAKE_INSTALL_QT5PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
+  '';
+
   cmakeFlags = [
     "-DENABLE_QT4=0"
+    "-DENABLE_QT6=0"
   ];
 
   nativeBuildInputs = [
