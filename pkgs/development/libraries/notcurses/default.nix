@@ -1,9 +1,9 @@
-{ stdenv, cmake, pkg-config, pandoc, libunistring, ncurses, ffmpeg,
+{ stdenv, cmake, pkg-config, pandoc, libunistring, ncurses, ffmpeg, readline,
   fetchFromGitHub, lib,
   multimediaSupport ? true
 }:
 let
-  version = "2.1.0";
+  version = "2.1.5";
 in
 stdenv.mkDerivation {
   pname = "notcurses";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkg-config pandoc ];
 
-  buildInputs = [ libunistring ncurses ]
+  buildInputs = [ libunistring ncurses readline ]
     ++ lib.optional multimediaSupport ffmpeg;
 
   cmakeFlags =
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     owner  = "dankamongmen";
     repo   = "notcurses";
     rev    = "v${version}";
-    sha256 = "0jvngg40c1sqf85kqy6ya0vflpxsj7j4g6cw609992rifaghxiny";
+    sha256 = "02x9a0z7mbgry2wsfai1l3jwb2zpcg4gq6a2w5d920ap2fixzy8b";
   };
 
   meta = {
