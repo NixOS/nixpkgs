@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "doit";
-  version = "0.32.0";
+  version = "0.33.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "033m6y9763l81kgqd07rm62bngv3dsm3k9p28nwsn2qawl8h8g9j";
+    sha256 = "37c3b35c2151647b968b2af24481112b2f813c30f695366db0639d529190a143";
   };
 
   propagatedBuildInputs = [ cloudpickle ]
@@ -30,8 +30,6 @@ buildPythonPackage rec {
   disabledTests = [
     # depends on doit-py, which has a circular dependency on doit
     "test___main__.py"
-    # https://github.com/pydoit/doit/issues/341
-    "test_not_picklable_raises_InvalidTask"
   ];
 
   meta = with lib; {
