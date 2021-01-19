@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   src = ./.;
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ boost nix ];
-  meta = {
-    license = stdenv.lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ chkno ];
+  meta = with lib; {
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ chkno ];
   };
 }
