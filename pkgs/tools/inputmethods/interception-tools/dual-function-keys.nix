@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkg-config, libyamlcpp, libevdev }:
+{ stdenv, lib, fetchFromGitLab, pkg-config, libyamlcpp, libevdev }:
 
 stdenv.mkDerivation rec {
   pname = "dual-function-keys";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.com/interception/linux/plugins/dual-function-keys";
     description = "Tap for one key, hold for another.";
     license = licenses.mit;
