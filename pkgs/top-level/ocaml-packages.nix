@@ -391,8 +391,6 @@ let
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
-    imagelib-unix = callPackage ../development/ocaml-modules/imagelib/unix.nix { };
-
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
     integers = callPackage ../development/ocaml-modules/integers { };
