@@ -155,8 +155,11 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
   dontStrip = true;
 
-  passthru.tests = {
-    otd-runs = nixosTests.opentabletdriver;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      otd-runs = nixosTests.opentabletdriver;
+    };
   };
 
   meta = with lib; {
