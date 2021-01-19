@@ -1,11 +1,20 @@
-{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, libunwind }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, libunwind
+}:
 
 stdenv.mkDerivation rec {
-  name = "gperftools-2.8";
+  pname = "gperftools";
+  version = "2.8.1";
 
-  src = fetchurl {
-    url = "https://github.com/gperftools/gperftools/releases/download/${name}/${name}.tar.gz";
-    sha256 = "0gjiplvday50x695pwjrysnvm5wfvg2b0gmqf6b4bdi8sv6yl394";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "19bj2vlsbfwq7m826v2ccqg47kd7cb5vcz1yw2x0v5qzhaxbakk1";
   };
 
   patches = [
@@ -29,8 +38,6 @@ stdenv.mkDerivation rec {
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.am --replace stdc++ c++
-    substituteInPlace Makefile.in --replace stdc++ c++
-    substituteInPlace libtool --replace stdc++ c++
   '';
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
