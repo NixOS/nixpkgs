@@ -3219,6 +3219,8 @@ in
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
+  bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
+
   code-browser-qt = libsForQt5.callPackage ../applications/editors/code-browser { withQt = true;
                                                                                 };
   code-browser-gtk = callPackage ../applications/editors/code-browser { withGtk = true;

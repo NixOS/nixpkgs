@@ -1583,6 +1583,12 @@
     githubId = 33503784;
     name = "Yucheng Zhang";
   };
+  cheriimoya = {
+    email = "github@hausch.xyz";
+    github = "cheriimoya";
+    githubId = 28303440;
+    name = "Max Hausch";
+  };
   chessai = {
     email = "chessai1996@gmail.com";
     github = "chessai";
