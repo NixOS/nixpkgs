@@ -281,6 +281,8 @@ let
 
     eigen = callPackage ../development/ocaml-modules/eigen { };
 
+    either = callPackage ../development/ocaml-modules/either { };
+
     elina = callPackage ../development/ocaml-modules/elina { };
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
