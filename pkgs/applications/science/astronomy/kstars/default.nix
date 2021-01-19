@@ -14,11 +14,11 @@
 
 mkDerivation rec {
   pname = "kstars";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/kstars-${version}.tar.xz";
-    sha256 = "0fpkm75abn0hhdhfyvpfl6n0fr7gvw63xhb4hvwdrglhkf2nxam1";
+    sha256 = "sha256-gf+yaXiYQFuO1/nvdP6OOuD4QrRtPAQTwQZAbYNKxUU=";
   };
 
   patches = [
