@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libebml";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner  = "Matroska-Org";
     repo   = "libebml";
     rev    = "release-${version}";
-    sha256 = "052v4mjynndj9xgfl4lmlsnx9ai0pah0kjyr5fm34l7gj8vhc5s7";
+    sha256 = "sha256-NZ7mqVzAFClKlc7iM2AWdP5UFqvZiA3HnpVv8k4MdhE=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
