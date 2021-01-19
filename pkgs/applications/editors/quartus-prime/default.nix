@@ -89,6 +89,7 @@ let
       description = "FPGA design and simulation software";
       license = lib.licenses.unfree;
       platforms = lib.platforms.linux;
+      hydraPlatforms = [ ]; # requireFile srcs cannot be fetched by hydra, ignore
       maintainers = with lib.maintainers; [ kwohlfahrt ];
     };
   };
