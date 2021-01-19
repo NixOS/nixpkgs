@@ -4539,6 +4539,8 @@ in
 
   gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
 
+  gitleaks = callPackage ../tools/security/gitleaks { };
+
   gitaly = callPackage ../applications/version-management/gitlab/gitaly {
     ruby = ruby_2_7;
   };
