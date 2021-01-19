@@ -333,6 +333,18 @@ let
         };
       };
 
+      mikestead.dotenv = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "dotenv";
+          publisher = "mikestead";
+          version = "1.0.1";
+          sha256 = "sha256-dieCzNOIcZiTGu4Mv5zYlG7jLhaEsJR05qbzzzQ7RWc=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       mskelton.one-dark-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "one-dark-theme";
