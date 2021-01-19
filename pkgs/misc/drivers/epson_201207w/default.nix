@@ -63,11 +63,11 @@ in
            Epson L550 Series
            Epson L555 Series
 
-	To use the driver adjust your configuration.nix file:
-	  services.printing = {
-	    enable = true;
-	    drivers = [ pkgs.epson_201207w ];
-	  };
+        To use the driver adjust your configuration.nix file:
+          services.printing = {
+            enable = true;
+            drivers = [ pkgs.epson_201207w ];
+          };
       '';
       license = with licenses; [ lgpl21 epson ];
       maintainers = [ maintainers.romildo ];
