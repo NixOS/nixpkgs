@@ -164,7 +164,7 @@
     "device_automation" = ps: with ps; [ ];
     "device_sun_light_trigger" = ps: with ps; [ aiohttp-cors pillow ];
     "device_tracker" = ps: with ps; [ ];
-    "devolo_home_control" = ps: with ps; [ aiohttp-cors zeroconf ]; # missing inputs: devolo-home-control-api
+    "devolo_home_control" = ps: with ps; [ aiohttp-cors devolo-home-control-api zeroconf ];
     "dexcom" = ps: with ps; [ pydexcom ];
     "dht" = ps: with ps; [ ]; # missing inputs: Adafruit-DHT
     "dialogflow" = ps: with ps; [ aiohttp-cors ];
