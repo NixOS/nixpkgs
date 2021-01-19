@@ -8751,6 +8751,12 @@
     githubId = 1040871;
     name = "Mathis Antony";
   };
+  svend = {
+    email = "svend@svends.net";
+    github = "svend";
+    githubId = 306190;
+    name = "Svend Sorensen";
+  };
   svrana = {
     email = "shaw@vranix.com";
     github = "svrana";
