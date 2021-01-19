@@ -17500,6 +17500,8 @@ in
 
   engelsystem = callPackage ../servers/web-apps/engelsystem { };
 
+  envoy = callPackage ../servers/http/envoy { };
+
   etcd = callPackage ../servers/etcd { };
   etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
 
