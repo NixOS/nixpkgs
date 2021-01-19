@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
-  
+
   installFlags = [ "PREFIX=$(out)" ];
 
   # fix the libtheft.pc file to use the right installation
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/pkgconfig/libtheft.pc \
       --replace "/usr/local" "$out"
   '';
-  
+
   meta = with stdenv.lib; {
     description = "A C library for property-based testing";
     homepage    = "https://github.com/silentbicycle/theft/";

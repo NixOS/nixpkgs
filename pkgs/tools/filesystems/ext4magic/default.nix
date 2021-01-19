@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
       If the information in the journal are sufficient, ext4magic can
       recover the most file types, with original filename, owner and group,
-      file mode bits and also the old atime/mtime stamps. 
+      file mode bits and also the old atime/mtime stamps.
 
       It's much more effective and works much better than extundelete.
     '';
