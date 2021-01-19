@@ -253,7 +253,7 @@
     "filter" = ps: with ps; [ aiohttp-cors sqlalchemy ];
     "fints" = ps: with ps; [ fints ];
     "fireservicerota" = ps: with ps; [ ]; # missing inputs: pyfireservicerota
-    "firmata" = ps: with ps; [ ]; # missing inputs: pymata-express
+    "firmata" = ps: with ps; [ pymata-express ];
     "fitbit" = ps: with ps; [ aiohttp-cors fitbit ];
     "fixer" = ps: with ps; [ fixerio ];
     "fleetgo" = ps: with ps; [ ]; # missing inputs: ritassist
