@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, pkgconfig, libnl
+{ lib, stdenv, fetchurl, openssl, pkg-config, libnl
 , dbus, readline ? null, pcsclite ? null
 }:
 
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl libnl dbus readline pcsclite ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8

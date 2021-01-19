@@ -2,7 +2,7 @@
 , autoconf
 , automake
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoconf
     automake
-    pkgconfig
+    pkg-config
   ];
 
   preConfigure = "./autogen.sh";

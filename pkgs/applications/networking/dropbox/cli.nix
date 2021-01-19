@@ -1,6 +1,6 @@
 { lib, stdenv
 , substituteAll
-, pkgconfig
+, pkg-config
 , fetchurl
 , python3
 , dropbox
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gobject-introspection
     gdk-pixbuf
     # only for build, the install command also wants to use GTK through introspection

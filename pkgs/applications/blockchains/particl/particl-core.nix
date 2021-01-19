@@ -6,7 +6,7 @@
 , libevent
 , miniupnpc
 , openssl
-, pkgconfig
+, pkg-config
 , zeromq
 , zlib
 , unixtools
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "11y5q2srkh6r2samppjb5mg6hl79y16j2lj1r23p0968vb9c45kl";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib miniupnpc libevent zeromq unixtools.hexdump python3 ];
 
   configureFlags = [

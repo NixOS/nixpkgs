@@ -3,7 +3,7 @@
 , fetchFromGitLab
 , fetchpatch
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , pcsclite
 , PCSC
 , xcbuild
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ] ++ lib.optional stdenv.isDarwin xcbuild;
   buildInputs = if stdenv.isDarwin then [ PCSC ] else [ pcsclite ];
 

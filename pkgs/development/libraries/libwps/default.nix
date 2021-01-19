@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, pkgconfig, librevenge, zlib }:
+{ stdenv, fetchurl, boost, pkg-config, librevenge, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libwps";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "16c6vq6hhi5lcvgyb9dwarr3kz69l1g5fs39b2hwqhkwzx5igpcl";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ boost librevenge zlib ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";

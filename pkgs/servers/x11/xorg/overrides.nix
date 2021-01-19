@@ -4,7 +4,7 @@
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkgconfig, llvm_6, libxslt,
+  mcpp, epoxy, openssl, pkg-config, llvm_6, libxslt,
   ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
@@ -467,7 +467,7 @@ self: super:
     configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
 
     # 1: compatibility for X11/xkb location
-    # 2: I think pkgconfig/ is supposed to be in /lib/
+    # 2: I think pkg-config/ is supposed to be in /lib/
     postInstall = ''
       ln -s share "$out/etc"
       mkdir -p "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
@@ -589,7 +589,7 @@ self: super:
             url = "mirror://xorg/individual/xserver/xorg-server-1.17.4.tar.bz2";
             sha256 = "0mv4ilpqi5hpg182mzqn766frhi6rw48aba3xfbaj4m82v0lajqc";
           };
-          nativeBuildInputs = [ pkgconfig ];
+          nativeBuildInputs = [ pkg-config ];
           buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
           meta.platforms = lib.platforms.unix;
         } else if (abiCompat == "1.18") then {
@@ -599,7 +599,7 @@ self: super:
               url = "mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2";
               sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
             };
-            nativeBuildInputs = [ pkgconfig ];
+            nativeBuildInputs = [ pkg-config ];
             buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
             postPatch = lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
             meta.platforms = lib.platforms.unix;

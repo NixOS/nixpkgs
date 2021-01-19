@@ -1,4 +1,4 @@
-{stdenv, fetchurl, boost, icu, libpng, librevenge, zlib, doxygen, pkgconfig, cppunit}:
+{stdenv, fetchurl, boost, icu, libpng, librevenge, zlib, doxygen, pkg-config, cppunit}:
 
 stdenv.mkDerivation rec {
   pname = "libzmf";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ boost icu libpng librevenge zlib cppunit ];
-  nativeBuildInputs = [ doxygen pkgconfig ];
+  nativeBuildInputs = [ doxygen pkg-config ];
   configureFlags = [ "--disable-werror" ];
 
   meta = {

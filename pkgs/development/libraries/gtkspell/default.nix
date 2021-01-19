@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk2, aspell, pkgconfig, enchant, intltool}:
+{stdenv, fetchurl, gtk2, aspell, pkg-config, enchant, intltool}:
 
 stdenv.mkDerivation {
   name = "gtkspell-2.0.16";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "00hdv28bp72kg1mq2jdz1sdw2b8mb9iclsp7jdqwpck705bdriwg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [aspell gtk2 enchant intltool];
 
   meta = with stdenv.lib; {

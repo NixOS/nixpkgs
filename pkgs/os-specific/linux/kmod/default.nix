@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig
+{ stdenv, lib, fetchurl, autoreconfHook, pkg-config
 , libxslt, xz, elf-header
 , withStatic ? stdenv.hostPlatform.isStatic
 }:
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
     sha256 = "035wzfzjx4nwidk747p8n085mgkvy531ppn16krrajx2dkqzply1";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libxslt ];
+  nativeBuildInputs = [ autoreconfHook pkg-config libxslt ];
   buildInputs = [ xz ] ++ lib.optional stdenv.isDarwin elf-header;
 
   configureFlags = [

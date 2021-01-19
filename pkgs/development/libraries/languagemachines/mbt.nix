@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, automake, autoconf, bzip2, libtar, libtool, pkgconfig, autoconf-archive
+, automake, autoconf, bzip2, libtar, libtool, pkg-config, autoconf-archive
 , libxml2
 , languageMachines
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "mbt-${release.version}.tar.gz"; };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ automake autoconf bzip2 libtar libtool autoconf-archive
                   libxml2
                   languageMachines.ticcutils

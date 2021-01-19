@@ -4,7 +4,7 @@
 , meson
 , ninja
 , nixosTests
-, pkgconfig
+, pkg-config
 , glib
 , gettext
 , makeWrapper
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     makeWrapper
     python3 # for install_script

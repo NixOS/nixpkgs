@@ -1,5 +1,5 @@
 { boost, cmake, fetchFromGitHub, freeglut, freetype, glew, libjpeg, libmypaint
-, libpng, libtiff, libusb1, lz4, lzma, lzo, openblas, pkgconfig, qtbase
+, libpng, libtiff, libusb1, lz4, lzma, lzo, openblas, pkg-config, qtbase
 , qtmultimedia, qtscript, lib, stdenv, superlu, wrapQtAppsHook, }:
 let source = import ./source.nix { inherit fetchFromGitHub; };
 in stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ in stdenv.mkDerivation rec {
   pname = "opentoonz";
   version = source.versions.opentoonz;
 
-  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
   buildInputs = [
     boost

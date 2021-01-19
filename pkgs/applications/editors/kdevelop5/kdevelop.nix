@@ -1,5 +1,5 @@
 
-{ mkDerivation, lib, fetchurl, cmake, gettext, pkgconfig, extra-cmake-modules
+{ mkDerivation, lib, fetchurl, cmake, gettext, pkg-config, extra-cmake-modules
 , qtquickcontrols, qtwebkit, qttools, kde-cli-tools, qtbase
 , kconfig, kdeclarative, kdoctools, kiconthemes, ki18n, kitemmodels, kitemviews
 , kjobwidgets, kcmutils, kio, knewstuff, knotifyconfig, kparts, ktexteditor
@@ -18,7 +18,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake gettext pkgconfig extra-cmake-modules makeWrapper
+    cmake gettext pkg-config extra-cmake-modules makeWrapper
   ];
 
   buildInputs = [

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromBitbucket, autoreconfHook, gtk-doc, gettext
-, pkgconfig, glib, libxml2, gobject-introspection, gnome-common, unzip
+, pkg-config, glib, libxml2, gobject-introspection, gnome-common, unzip
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext glib libxml2 gobject-introspection gnome-common
     unzip ];
-  nativeBuildInputs = [ autoreconfHook gtk-doc gettext pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook gtk-doc gettext pkg-config ];
 
   meta = {
     inherit version;

@@ -25,7 +25,7 @@
 , ostree
 , pcre
 , pcre2
-, pkgconfig
+, pkg-config
 , python3
 , sysprof
 , template-glib
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     python3.pkgs.wrapPython
     wrapGAppsHook

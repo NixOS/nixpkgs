@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchurl, pkgconfig, pcre, libxml2, zlib, bzip2, which, file
+{ lib, stdenv, buildPackages, fetchurl, pkg-config, pcre, libxml2, zlib, bzip2, which, file
 , openssl, enableMagnet ? false, lua5_1 ? null
 , enableMysql ? false, libmysqlclient ? null
 , enableLdap ? false, openldap ? null
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcre pcre.dev libxml2 zlib bzip2 which file openssl ]
              ++ lib.optional enableMagnet lua5_1
              ++ lib.optional enableMysql libmysqlclient

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, redland, pkgconfig, gmp, zlib, librdf_raptor2
+{ lib, stdenv, fetchurl, redland, pkg-config, gmp, zlib, librdf_raptor2
   , librdf_rasqal }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hc1fjfbfvggl72zqx27v4wy84f5m7bp4dnwd8g41aw8lgynbgaq";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gmp redland zlib librdf_raptor2 librdf_rasqal ];
 
   preConfigure = ''

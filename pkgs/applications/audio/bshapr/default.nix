@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "BShapr";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "04zd3a178i2nivg5rjailzqvc5mlnilmhj1ziygmbhshbrywplri";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorg.libX11 cairo lv2
   ];

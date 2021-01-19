@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     chmod -R +w $out
     ${patchLibs}
 
-    # Write pkgconfig file.
+    # Write pkg-config file.
     mkdir $out/lib/pkgconfig
     cat > $out/lib/pkgconfig/tensorflow.pc << EOF
     Name: TensorFlow

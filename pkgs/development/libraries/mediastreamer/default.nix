@@ -23,7 +23,7 @@
 , libv4l
 , libvpx
 , ortp
-, pkgconfig
+, pkg-config
 , python
 , SDL
 , speex
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     cmake
     doxygen
     intltool
-    pkgconfig
+    pkg-config
     python
   ];
 

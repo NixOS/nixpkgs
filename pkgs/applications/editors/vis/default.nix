@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, makeWrapper, makeDesktopItem
+{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper, makeDesktopItem
 , ncurses, libtermkey, lpeg, lua
 , acl ? null, libselinux ? null
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "martanne";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [
     ncurses

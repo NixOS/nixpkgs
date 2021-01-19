@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, pkgconfig, gtk2, Carbon
+{ config, stdenv, fetchurl, pkg-config, gtk2, Carbon
 , useGTK ? config.libiodbc.gtk or false }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qpvklgr1lcn5g8xbz7fbc9rldqf9r8s6xybhqj20m4sglxgziai";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = stdenv.lib.optionals useGTK [ gtk2 ]
                 ++ stdenv.lib.optional stdenv.isDarwin Carbon;
 

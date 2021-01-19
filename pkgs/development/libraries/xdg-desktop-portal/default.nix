@@ -3,7 +3,7 @@
 , nixosTests
 , substituteAll
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , libxml2
 , glib
 , pipewire
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     libxml2
     wrapGAppsHook
   ];

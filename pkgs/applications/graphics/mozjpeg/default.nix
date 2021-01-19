@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libpng, nasm }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libpng, nasm }:
 
 stdenv.mkDerivation rec {
   version = "3.3.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1na68860asn8b82ny5ilwbhh4nyl9gvx2yxmm4wr2v1v95v51fky";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libpng nasm ];
 
   meta = {

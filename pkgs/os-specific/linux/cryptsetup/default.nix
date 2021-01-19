@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, lvm2, json_c
-, openssl, libuuid, pkgconfig, popt }:
+, openssl, libuuid, pkg-config, popt }:
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "--with-crypto_backend=openssl"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ lvm2 json_c openssl libuuid popt ];
 
   doCheck = true;

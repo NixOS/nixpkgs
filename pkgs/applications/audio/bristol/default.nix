@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, libjack2, pkgconfig, libpulseaudio, xorg }:
+{ lib, stdenv, fetchurl, alsaLib, libjack2, pkg-config, libpulseaudio, xorg }:
 
 stdenv.mkDerivation  rec {
   pname = "bristol";
@@ -9,7 +9,7 @@ stdenv.mkDerivation  rec {
     sha256 = "1fi2m4gmvxdi260821y09lxsimq82yv4k5bbgk3kyc3x1nyhn7vx";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     alsaLib libjack2 libpulseaudio xorg.libX11 xorg.libXext
     xorg.xorgproto

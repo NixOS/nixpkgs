@@ -1,6 +1,6 @@
 { fetchurl
 , stdenv
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , glib
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];

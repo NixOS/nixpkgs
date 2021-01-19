@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, gtk2, pkgconfig }:
+{ lib, stdenv, fetchurl, alsaLib, gtk2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "praat";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp praat $out/bin
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsaLib gtk2 ];
 
   meta = {

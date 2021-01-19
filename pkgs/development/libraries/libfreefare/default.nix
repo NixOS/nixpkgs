@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libnfc, openssl
+{ stdenv, fetchurl, pkg-config, libnfc, openssl
 , libobjc ? null }:
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0r5wfvwgf35lb1v65wavnwz2wlfyfdims6a9xpslf4lsm4a1v8xz";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnfc openssl ] ++ stdenv.lib.optional stdenv.isDarwin libobjc;
 
   meta = with stdenv.lib; {

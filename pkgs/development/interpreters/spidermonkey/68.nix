@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, python3, zip, buildPackages
+{ stdenv, fetchurl, fetchpatch, autoconf213, pkg-config, perl, python2, python3, zip, buildPackages
 , which, readline, zlib, icu, cargo, rustc, llvmPackages }:
 
 with stdenv.lib;
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoconf213
-    pkgconfig
+    pkg-config
     perl
     which
     python2

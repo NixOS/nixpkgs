@@ -2,7 +2,7 @@
 , fetchgit
 , fetchpatch
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , ell
 , coreutils
 , docutils
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docutils
-    pkgconfig
+    pkg-config
     python3Packages.wrapPython
   ];
 

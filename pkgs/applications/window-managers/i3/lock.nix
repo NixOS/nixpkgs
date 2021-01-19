@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, which, pkgconfig, libxcb, xcbutilkeysyms, xcbutilimage,
+{ fetchurl, lib, stdenv, which, pkg-config, libxcb, xcbutilkeysyms, xcbutilimage,
   xcbutilxrm, pam, libX11, libev, cairo, libxkbcommon, libxkbfile }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "02szjsaz7rqrdkd0r2nwgwa85c4hwfrcskxw7ryk695kmjcfhzv3";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ which libxcb xcbutilkeysyms xcbutilimage xcbutilxrm
     pam libX11 libev cairo libxkbcommon libxkbfile ];
 

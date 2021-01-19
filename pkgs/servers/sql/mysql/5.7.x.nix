@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, bison, pkgconfig
+{ lib, stdenv, fetchurl, cmake, bison, pkg-config
 , boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
 , cctools, CoreServices, developer_cmds
 , libtirpc, rpcsvc-proto
@@ -21,7 +21,7 @@ self = stdenv.mkDerivation rec {
     export PATH=$PATH:$TMPDIR
   '';
 
-  nativeBuildInputs = [ cmake bison pkgconfig rpcsvc-proto ];
+  nativeBuildInputs = [ cmake bison pkg-config rpcsvc-proto ];
 
   buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib libtirpc ]
      ++ lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ];

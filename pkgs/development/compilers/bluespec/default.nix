@@ -11,7 +11,7 @@
 , perl
 , flex
 , bison
-, pkgconfig
+, pkg-config
 , itktcl
 , incrtcl
 , tcl
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     perl
     flex
     bison
-    pkgconfig
+    pkg-config
     ghcWithPackages
   ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig, pkgconfig
+{ lib, stdenv, fetchurl, fetchpatch, xorg, ncurses, freetype, fontconfig, pkg-config
 , makeWrapper, nixosTests, writeScript, common-updater-scripts, git, nixfmt, nix
 , gnused, coreutils, enableDecLocator ? true }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ncurses
     freetype
     fontconfig
-    pkgconfig
+    pkg-config
     xorg.libXft
     xorg.luit
     makeWrapper

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cairo, fftw, gtkmm2, lv2, lvtk, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cairo, fftw, gtkmm2, lv2, lvtk, pkg-config
 , wafHook, python3 }:
 
 stdenv.mkDerivation  rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation  rec {
     sha256 = "1lz2mvk4gqsyf92yxd3aaldx0d0qi28h4rnnvsaz4ls0ccqm80nk";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook python3 ];
+  nativeBuildInputs = [ pkg-config wafHook python3 ];
   buildInputs = [ cairo fftw gtkmm2 lv2 lvtk ];
 
   meta = with lib; {

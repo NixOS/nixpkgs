@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, pkgconfig, glib, libgsf, libxml2, librevenge }:
+{ stdenv, fetchurl, zlib, pkg-config, glib, libgsf, libxml2, librevenge }:
 
 stdenv.mkDerivation rec {
   name = "libwpd-0.10.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ glib libgsf libxml2 zlib librevenge ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with stdenv.lib; {
     description = "A library for importing and exporting WordPerfect documents";

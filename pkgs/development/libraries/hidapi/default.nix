@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, udev, libusb1
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, udev, libusb1
 , darwin }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1nr4z4b10vpbh3ss525r7spz4i43zim2ba5qzfl15dgdxshxxivb";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ ]
     ++ stdenv.lib.optionals stdenv.isLinux [ libusb1 udev ];

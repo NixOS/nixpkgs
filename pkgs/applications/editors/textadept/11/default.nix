@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchhg, fetchFromGitHub, fetchurl, gtk2, glib, pkgconfig, unzip, ncurses, zip }:
+{ lib, stdenv, fetchhg, fetchFromGitHub, fetchurl, gtk2, glib, pkg-config, unzip, ncurses, zip }:
 
 stdenv.mkDerivation rec {
   version = "11.0_beta";
   pname = "textadept11";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gtk2 ncurses glib unzip zip
   ];

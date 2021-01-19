@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libnfnetlink, libmnl }:
+{ stdenv, fetchurl, pkg-config, libnfnetlink, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "libnetfilter_log";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libmnl ];
   propagatedBuildInputs = [ libnfnetlink ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with stdenv.lib; {
     description = "Userspace library providing interface to packets that have been logged by the kernel packet filter";

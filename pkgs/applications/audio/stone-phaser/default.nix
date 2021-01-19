@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, libjack2, mesa, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, libjack2, mesa, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "stone-phaser";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorg.libX11 cairo lv2 libjack2 mesa
   ];

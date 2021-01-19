@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, orc, pkgconfig, fetchpatch, autoreconfHook }:
+{ stdenv, fetchurl, orc, pkg-config, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation {
   name = "schroedinger-1.0.11";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ orc ];
 
   doCheck = (!stdenv.isDarwin);

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, libgcrypt, libnl, pkgconfig, python3Packages, wireless-regdb }:
+{ lib, stdenv, fetchurl, fetchpatch, libgcrypt, libnl, pkg-config, python3Packages, wireless-regdb }:
 
 stdenv.mkDerivation rec {
   pname = "crda";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libgcrypt libnl ];
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python3Packages.pycrypto
   ];
 

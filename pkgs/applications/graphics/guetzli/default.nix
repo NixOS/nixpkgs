@@ -1,4 +1,4 @@
-{ lib, stdenv, libpng, fetchFromGitHub, pkgconfig }:
+{ lib, stdenv, libpng, fetchFromGitHub, pkg-config }:
 let
   version = "1.0.1";
 in
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     rev = "v${version}";
     sha256 = "1wy9wfvyradp0aigfv8yijvj0dgb5kpq2yf2xki15f605jc1r5dm";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpng ];
 
   installPhase = ''

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch
 # native deps.
-, runCommand, pkgconfig, meson, ninja, makeWrapper
+, runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
 , knot-dns, luajitPackages, libuv, gnutls, lmdb
 , systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
@@ -50,7 +50,7 @@ unwrapped = stdenv.mkDerivation rec {
     patchShebangs scripts/
   '';
 
-  nativeBuildInputs = [ pkgconfig meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]

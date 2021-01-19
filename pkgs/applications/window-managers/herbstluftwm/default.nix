@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, pkgconfig, python3, libX11, libXext, libXinerama, libXrandr, asciidoc
+{ lib, stdenv, fetchurl, cmake, pkg-config, python3, libX11, libXext, libXinerama, libXrandr, asciidoc
 , xdotool, xorgserver, xsetroot, xterm, runtimeShell
 , nixosTests }:
 
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     python3
   ] ++ lib.optional (!cross) asciidoc;
 

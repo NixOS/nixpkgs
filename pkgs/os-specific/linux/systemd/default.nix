@@ -6,7 +6,7 @@
 , ninja
 , meson
 , m4
-, pkgconfig
+, pkg-config
 , coreutils
 , gperf
 , getent
@@ -250,7 +250,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs =
     [
-      pkgconfig
+      pkg-config
       gperf
       ninja
       meson

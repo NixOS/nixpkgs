@@ -2,7 +2,7 @@
 , ghostscript, atk, gtk2, glib, fontconfig, freetype
 , libgnomecanvas, libgnomeprint, libgnomeprintui
 , pango, libX11, xorgproto, zlib, poppler
-, autoconf, automake, libtool, pkgconfig}:
+, autoconf, automake, libtool, pkg-config}:
 
 let
   isGdkQuartzBackend = (gtk2.gdktarget == "quartz");
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     libgnomeprint libgnomeprintui
   ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
 
   NIX_LDFLAGS = "-lz"
     + lib.optionalString (!isGdkQuartzBackend) " -lX11";

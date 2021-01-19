@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, freetype, cairo, libintl
+{ stdenv, fetchFromGitHub, pkg-config, glib, freetype, cairo, libintl
 , meson, ninja
 , gobject-introspection
 , icu, graphite2, harfbuzz # The icu variant uses and propagates the non-icu one.
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     ninja
     gobject-introspection
     libintl
-    pkgconfig
+    pkg-config
     python3
     gtk-doc
     docbook-xsl-nons

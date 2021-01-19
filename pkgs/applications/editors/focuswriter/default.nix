@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, qmake, qttools, hunspell, qtbase, qtmultimedia, mkDerivation }:
+{ lib, stdenv, fetchurl, pkg-config, qmake, qttools, hunspell, qtbase, qtmultimedia, mkDerivation }:
 
 mkDerivation rec {
   pname = "focuswriter";
@@ -9,7 +9,7 @@ mkDerivation rec {
     sha256 = "0h85f6cs9zbxv118mjfxqfv41j19zkx2xq36mpnlmrlzkjj7dx9l";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake qttools ];
+  nativeBuildInputs = [ pkg-config qmake qttools ];
   buildInputs = [ hunspell qtbase qtmultimedia ];
 
   enableParallelBuilding = true;

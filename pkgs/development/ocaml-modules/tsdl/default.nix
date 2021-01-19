@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkgconfig, ocb-stubblr }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkg-config, ocb-stubblr }:
 
 if !lib.versionAtLeast ocaml.version "4.03"
 then throw "tsdl is not available for OCaml ${ocaml.version}"
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     sha256 = "1zwv0ixkigh1gzk5n49rwvz2f2m62jdkkqg40j7dclg4gri7691f";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
   propagatedBuildInputs = [ SDL2 ctypes ];
 

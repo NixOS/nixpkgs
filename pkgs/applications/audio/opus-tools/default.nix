@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, libogg, libao, pkgconfig, flac, opusfile, libopusenc}:
+{lib, stdenv, fetchurl, libogg, libao, pkg-config, flac, opusfile, libopusenc}:
 
 stdenv.mkDerivation rec {
   name = "opus-tools-0.2";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "11pzl27s4vcz4m18ch72nivbhww2zmzn56wspb7rll1y1nq6rrdl";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libogg libao flac opusfile libopusenc ];
 
   meta = {

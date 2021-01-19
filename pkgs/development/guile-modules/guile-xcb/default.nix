@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, guile, texinfo }:
+{ lib, stdenv, fetchurl, pkg-config, guile, texinfo }:
 
 let
   name = "guile-xcb-${version}";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     sha256 = "04dvbqdrrs67490gn4gkq9zk8mqy3mkls2818ha4p0ckhh0pm149";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ guile texinfo ];
 
   preConfigure = ''

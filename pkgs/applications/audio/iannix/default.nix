@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, alsaLib, pkgconfig, qtbase, qtscript, qmake
+{ mkDerivation, lib, fetchFromGitHub, alsaLib, pkg-config, qtbase, qtscript, qmake
 }:
 
 mkDerivation rec {
@@ -12,7 +12,7 @@ mkDerivation rec {
     sha256 = "AhoP+Ok78Vk8Aee/RP572hJeM8O7v2ZTvFalOZZqRy8=";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [ alsaLib qtbase qtscript ];
 
   qmakeFlags = [ "PREFIX=/" ];

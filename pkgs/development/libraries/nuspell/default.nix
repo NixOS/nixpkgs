@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, icu, catch2, pandoc }:
+{ stdenv, fetchFromGitHub, cmake, pkg-config, icu, catch2, pandoc }:
 
 stdenv.mkDerivation rec {
   pname = "nuspell";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sQ3Q2+FOf2bXCKcgd6XvEb+QZzzDccs/4+CpJbEd1PQ=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig pandoc ];
+  nativeBuildInputs = [ cmake pkg-config pandoc ];
   buildInputs = [ icu ];
 
   outputs = [ "out" "lib" "dev" "man" ];

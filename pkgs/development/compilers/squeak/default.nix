@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, coreutils, dbus, freetype, glib, gnused
-, libpthreadstubs, pango, pkgconfig, libpulseaudio, which }:
+, libpthreadstubs, pango, pkg-config, libpulseaudio, which }:
 
 stdenv.mkDerivation rec {
   pname = "squeak";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ coreutils dbus freetype glib gnused libpthreadstubs
     pango libpulseaudio which ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   postPatch = ''
     for i in squeak.in squeak.sh.in; do

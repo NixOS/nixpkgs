@@ -63,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # 0.45 update enabled tests but they are failing
   doCheck = false;
-  # checkInputs = [ ninja pkgconfig ];
+  # checkInputs = [ ninja pkg-config ];
   # checkPhase = "python ./run_project_tests.py";
 
   postFixup = ''

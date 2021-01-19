@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, automake, fftw, ladspaH, libxml2, pkgconfig
+{ lib, stdenv, fetchurl, autoreconfHook, automake, fftw, ladspaH, libxml2, pkg-config
 , perlPackages }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rqwh8xrw6hnp69dg4gy336bfbfpmbx4fjrk0nb8ypjcxkz91c6i";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fftw ladspaH libxml2 perlPackages.perl  perlPackages.XMLParser ];
 
   patchPhase = ''

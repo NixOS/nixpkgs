@@ -2,7 +2,7 @@
 , autoreconfHook
 , glib
 , db
-, pkgconfig
+, pkg-config
 }:
 
 let
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     tar -xzf ${modelData} -C $sourceRoot/data
   '';
 
-  nativeBuildInputs = [ autoreconfHook glib db pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook glib db pkg-config ];
 
   meta = with stdenv.lib; {
     description = "Library for intelligent sentence-based Chinese pinyin input method";

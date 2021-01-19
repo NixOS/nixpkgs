@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , rustPlatform
 , Security
-, pkgconfig, openssl
+, pkg-config, openssl
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-lvxEYjVMJoAFFRG5iVfGwxUeJObIxfEaWokk69l++nI=";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {

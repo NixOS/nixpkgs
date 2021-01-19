@@ -11,7 +11,7 @@
 , vala
 , sqlite
 , webkitgtk
-, pkgconfig
+, pkg-config
 , gnome3
 , gst_all_1
 , libgudev
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     itstool
     gettext
     desktop-file-utils

@@ -1,4 +1,4 @@
-{ config, lib, stdenv, autoreconfHook, fetchFromGitHub, pkgconfig
+{ config, lib, stdenv, autoreconfHook, fetchFromGitHub, pkg-config
 , alsaLib, libtool, icu
 , pulseaudioSupport ? config.pulseaudio or false, libpulseaudio }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

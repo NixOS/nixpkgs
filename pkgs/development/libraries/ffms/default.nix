@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, ffmpeg_3, pkgconfig }:
+{ stdenv, fetchFromGitHub, zlib, ffmpeg_3, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "ffms";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-fPIC";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib ffmpeg_3 ];
 
   # ffms includes a built-in vapoursynth plugin, see:

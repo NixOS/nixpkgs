@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , itstool
 , python3
 , libxml2
@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     libxml2
     itstool
     python3

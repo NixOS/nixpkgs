@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, openssl, pkgconfig, python3, xorg, cmake, libgit2, darwin
+{ lib, stdenv, fetchFromGitHub, rustPlatform, openssl, pkg-config, python3, xorg, cmake, libgit2, darwin
 , curl }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "09v991rl2w4c4jh7ga7q1lk6wyl2vr71j5cpniij8mcvszrz78qf";
 
-  nativeBuildInputs = [ cmake pkgconfig python3 ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
   buildInputs = [ openssl xorg.libxcb libgit2 ] ++ lib.optionals stdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [ curl Security AppKit ]);
 

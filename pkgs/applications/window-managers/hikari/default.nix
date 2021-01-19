@@ -1,5 +1,5 @@
 { lib, stdenv, fetchzip,
-  pkgconfig, bmake,
+  pkg-config, bmake,
   cairo, glib, libevdev, libinput, libxkbcommon, linux-pam, pango, pixman,
   libucl, wayland, wayland-protocols, wlroots,
   features ? {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     sha256 = "0sln1n5f67i3vxkybfi6xhzplb45djqyg272vqkv64m72rmm8875";
   };
 
-  nativeBuildInputs = [ pkgconfig bmake ];
+  nativeBuildInputs = [ pkg-config bmake ];
 
   buildInputs = [
     cairo

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libplist }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libplist }:
 
 stdenv.mkDerivation rec {
   pname = "libusbmuxd";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "139pzsnixkck6ly1q6p0diqr0hgd0mx0pr4xx1jamm3f3656kpf9";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libplist ];
 
   meta = with stdenv.lib; {

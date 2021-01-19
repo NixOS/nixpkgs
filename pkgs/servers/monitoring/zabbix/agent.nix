@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libiconv, openssl, pcre }:
+{ lib, stdenv, fetchurl, pkg-config, libiconv, openssl, pcre }:
 
 import ./versions.nix ({ version, sha256 }:
   stdenv.mkDerivation {
@@ -10,7 +10,7 @@ import ./versions.nix ({ version, sha256 }:
       inherit sha256;
     };
 
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [
       libiconv
       openssl

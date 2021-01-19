@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libjack2, pkgconfig }:
+{ lib, stdenv, fetchurl, libjack2, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "jackmeter-0.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cnvgx3jv0yvxlqy0l9k285zgvazmh5k8m4l7lxckjfm5bn6hm1r";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjack2 ];
 
   meta = {

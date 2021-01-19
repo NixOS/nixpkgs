@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
 , libjpeg ? null
 , zlib ? null
 , libpng ? null
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libjpeg zlib libpng eigen libtiff ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-std=c++11"

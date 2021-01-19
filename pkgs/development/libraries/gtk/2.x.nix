@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, pkgconfig, gettext, glib, atk, pango, cairo, perl, xorg
+{ config, stdenv, fetchurl, pkg-config, gettext, glib, atk, pango, cairo, perl, xorg
 , gdk-pixbuf, xlibsWrapper, gobject-introspection
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups ? null
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     ./hooks/drop-icon-theme-cache.sh
   ];
 
-  nativeBuildInputs = setupHooks ++ [ perl pkgconfig gettext gobject-introspection ];
+  nativeBuildInputs = setupHooks ++ [ perl pkg-config gettext gobject-introspection ];
 
   patches = [
     ./patches/2.0-immodules.cache.patch

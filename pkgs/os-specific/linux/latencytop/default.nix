@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, glib, pkgconfig, gtk2 }:
+{ lib, stdenv, fetchurl, ncurses, glib, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "latencytop-0.5";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vq3j9zdab6njly2wp900b3d5244mnxfm88j2bkiinbvxbxp4zwy";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses glib gtk2 ];
 
   meta = {

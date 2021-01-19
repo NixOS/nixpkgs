@@ -1,4 +1,4 @@
-{ coreutils, db, fetchurl, openssl, pcre, perl, pkgconfig, lib, stdenv
+{ coreutils, db, fetchurl, openssl, pcre, perl, pkg-config, lib, stdenv
 , enableLDAP ? false, openldap
 , enableMySQL ? false, libmysqlclient, zlib
 , enableAuthDovecot ? false, dovecot
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1nsb2i5mqxfz1sl1bmbxmpb2qiaf3wffhfiw4j9vfpagy3xfhzpp";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ coreutils db openssl perl pcre ]
     ++ lib.optional enableLDAP openldap
     ++ lib.optionals enableMySQL [ libmysqlclient zlib ]

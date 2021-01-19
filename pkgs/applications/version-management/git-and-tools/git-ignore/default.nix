@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, rustPlatform, pkgconfig, openssl, darwin }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, rustPlatform, pkg-config, openssl, darwin }:
 
 with rustPlatform;
 
@@ -15,7 +15,7 @@ buildRustPackage rec {
 
   cargoSha256 = "sha256-D1CIITuZSAsKYsK8U0q8HwPsYCyrfkTXZThxufEEkWU=";
 
-  nativeBuildInputs = [ pkgconfig installShellFiles ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ openssl ]
   ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security

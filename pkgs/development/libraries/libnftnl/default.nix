@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libmnl }:
+{ stdenv, fetchurl, pkg-config, libmnl }:
 
 stdenv.mkDerivation rec {
   version = "1.1.8";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "04dp797llg3cqzivwrql30wg9mfr0ngnp0v5gs7jcdmp11dzm8q4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl ];
 
   meta = with stdenv.lib; {

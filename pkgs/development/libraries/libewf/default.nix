@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, zlib, openssl, libuuid, pkgconfig }:
+{ fetchurl, stdenv, zlib, openssl, libuuid, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "20201129";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "168k1az9hm0lajh57zlbknsq5m8civ1rzp81zz4sd7v64xilzxdk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib openssl libuuid ];
 
   meta = {

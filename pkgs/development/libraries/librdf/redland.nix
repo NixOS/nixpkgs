@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libxslt, perl
+{ stdenv, fetchurl, pkg-config, openssl, libxslt, perl
 , curl, pcre, libxml2, librdf_rasqal, gmp
 , libmysqlclient, withMysql ? false
 , postgresql, withPostgresql ? false
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "de1847f7b59021c16bdc72abb4d8e2d9187cd6124d69156f3326dd34ee043681";
   };
 
-  nativeBuildInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkg-config ];
 
   buildInputs = [ openssl libxslt curl pcre libxml2 gmp ]
     ++ stdenv.lib.optional withMysql libmysqlclient

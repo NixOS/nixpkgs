@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, rustPlatform, qt5, git, cmake
-, pkgconfig, makeWrapper }:
+, pkg-config, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "panopticon";
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1zv87nqhrzsxx0m891df4vagzssj3kblfv9yp7j96dw0vn9950qa";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ makeWrapper ];
   propagatedBuildInputs = with qt5; [
      qt5.qtbase

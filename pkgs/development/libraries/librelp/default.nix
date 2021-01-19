@@ -2,7 +2,7 @@
 , autoreconfHook
 , gnutls
 , openssl
-, pkgconfig
+, pkg-config
 , zlib
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "0miqjck9zh1hgsx1v395n0d4f1a1p5a8khybv2nsfjq04g9359c9";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ gnutls zlib openssl ];
 
   meta = with stdenv.lib; {

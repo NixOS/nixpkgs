@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, deadbeef, gtkmm3, libxmlxx3 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, deadbeef, gtkmm3, libxmlxx3 }:
 
 stdenv.mkDerivation {
   pname = "deadbeef-lyricbar-plugin";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "108hx5530f4xm8p9m2bk79nq7jkhcj39ad3vmxb2y6h6l2zv5kwl";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ deadbeef gtkmm3 libxmlxx3 ];
 
   buildFlags = [ "gtk3" ];

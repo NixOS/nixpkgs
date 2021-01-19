@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, autoreconfHook, fuse }:
+{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, fuse }:
 
 stdenv.mkDerivation {
   name = "afuse-0.4.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1sfhicmxppkvdd4z9klfn63snb71gr9hff6xij1gzk94xg6m0ycc";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fuse ];
 
   meta = {

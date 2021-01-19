@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, python3, libsigrok, check }:
+{ stdenv, fetchurl, pkg-config, glib, python3, libsigrok, check }:
 
 stdenv.mkDerivation rec {
   name = "libsigrokdecode-0.5.3";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h1zi1kpsgf6j2z8j8hjpv1q7n49i3fhqjn8i178rka3cym18265";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib python3 libsigrok check ];
 
   meta = with stdenv.lib; {

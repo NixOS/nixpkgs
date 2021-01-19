@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, cmake, pkgconfig, qt, darwin }:
+{ stdenv, fetchurl, openssl, cmake, pkg-config, qt, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "qca";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "00kv1vsrc8fp556hm8s6yw3240vx3l4067q6vfxrb3gdwgcd45np";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ openssl qt ]
     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 

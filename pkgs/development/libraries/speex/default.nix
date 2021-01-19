@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, fftw, speexdsp }:
+{ stdenv, fetchurl, autoreconfHook, pkg-config, fftw, speexdsp }:
 
 stdenv.mkDerivation rec {
   name = "speex-1.2.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fftw speexdsp ];
 
   # TODO: Remove this will help with immediate backward compatability

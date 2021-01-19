@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, cmake, ninja, pkgconfig, libiconv, libintl
+{ stdenv, lib, fetchurl, fetchpatch, cmake, ninja, pkg-config, libiconv, libintl
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     ++ optional utils nss
     ++ optional introspectionSupport gobject-introspection;
 
-  nativeBuildInputs = [ cmake ninja pkgconfig ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
   # Workaround #54606
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''

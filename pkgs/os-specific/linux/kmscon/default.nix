@@ -8,7 +8,7 @@
 , libGLU, libGL
 , pango
 , pixman
-, pkgconfig
+, pkg-config
 , docbook_xsl
 , libxslt
 }:
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docbook_xsl
-    pkgconfig
+    pkg-config
   ];
 
   configureFlags = [

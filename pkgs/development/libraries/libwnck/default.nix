@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, intltool, xorg }:
+{ stdenv, fetchurl, pkg-config, gtk2, intltool, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "libwnck";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 intltool xorg.libX11 xorg.libXres ];
   # ?another optional: startup-notification
 

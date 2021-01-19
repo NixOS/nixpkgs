@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub
 , buildPackages
-, pkgconfig
+, pkg-config
 , libusb-compat-0_1, readline, libewf, perl, zlib, openssl
 , libuv, file, libzip, xxHash
 , gtk2 ? null, vte ? null, gtkdialog ? null
@@ -78,7 +78,7 @@ let
       enableParallelBuilding = true;
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-      nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ pkg-config ];
       buildInputs = [ file readline libusb-compat-0_1 libewf perl zlib openssl libuv ]
         ++ optional useX11 [ gtkdialog vte gtk2 ]
         ++ optional rubyBindings [ ruby ]

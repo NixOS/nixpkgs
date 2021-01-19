@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gperf, pkgconfig, librevenge, libxml2, boost, icu
+{ stdenv, fetchurl, gperf, pkg-config, librevenge, libxml2, boost, icu
 , cppunit, zlib, liblangtag
 }:
 
@@ -13,7 +13,7 @@ let
     sha256="1yg1vws1wggzhjw672bpgh2x541g5i9wryf67g51m0r79zrqz3by";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gperf librevenge libxml2 boost icu cppunit zlib liblangtag
   ];

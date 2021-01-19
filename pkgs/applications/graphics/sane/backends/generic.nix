@@ -1,5 +1,5 @@
 { lib, stdenv
-, gettext, pkgconfig
+, gettext, pkg-config
 , avahi, libgphoto2, libieee1284, libjpeg, libpng, libtiff, libusb1, libv4l, net-snmp
 
 # List of { src name backend } attibute sets - see installFirmware below:
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     gettext
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

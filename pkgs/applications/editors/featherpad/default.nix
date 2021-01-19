@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, pkgconfig, qmake, qttools, qtbase, qtsvg, qtx11extras, fetchFromGitHub }:
+{ lib, stdenv, mkDerivation, pkg-config, qmake, qttools, qtbase, qtsvg, qtx11extras, fetchFromGitHub }:
 mkDerivation rec {
   pname = "featherpad";
   version = "0.10.0";
@@ -10,7 +10,7 @@ mkDerivation rec {
     sha256 = "1wrbs6kni9s3x39cckm9kzpglryxn5vyarilvh9pafbzpc6rc57p";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig qttools ];
+  nativeBuildInputs = [ qmake pkg-config qttools ];
   buildInputs = [ qtbase qtsvg qtx11extras ];
 
   meta = with lib; {

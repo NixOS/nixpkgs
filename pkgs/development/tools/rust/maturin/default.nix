@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, dbus, gmp, openssl, pkgconfig
+{ lib, stdenv, fetchFromGitHub, rustPlatform, dbus, gmp, openssl, pkg-config
 , darwin }:
 
 let
@@ -16,7 +16,7 @@ in rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1n0sxkhcdg2rbzqd7826pa7sxlnn0c2sc8l6lc98xw21vvqisc8n";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gmp openssl ]
     ++ stdenv.lib.optional stdenv.isDarwin Security

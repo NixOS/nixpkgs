@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, pkgconfig, which, qtbase, qtsvg, qttools, qtwebkit }:
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, which, qtbase, qtsvg, qttools, qtwebkit }:
 
 mkDerivation rec {
   pname = "notepadqq";
@@ -12,7 +12,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig which qttools
+    pkg-config which qttools
   ];
 
   buildInputs = [

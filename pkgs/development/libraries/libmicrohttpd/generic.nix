@@ -1,11 +1,11 @@
-{ stdenv, libgcrypt, curl, gnutls, pkgconfig, libiconv, libintl, version, src }:
+{ stdenv, libgcrypt, curl, gnutls, pkg-config, libiconv, libintl, version, src }:
 
 stdenv.mkDerivation rec {
   pname = "libmicrohttpd";
   inherit version src;
 
   outputs = [ "out" "dev" "devdoc" "info" ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libgcrypt curl gnutls libiconv libintl ];
 
   preCheck = ''

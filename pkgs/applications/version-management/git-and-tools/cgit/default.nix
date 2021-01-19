@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
-, docbook_xsl, pkgconfig, luajit
+, docbook_xsl, pkg-config, luajit
 , coreutils, gnused, groff, docutils
 , gzip, bzip2, lzip, xz, zstd
 , python, wrapPython, pygments, markdown
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "09lzwa183nblr6l8ib35g2xrjf9wm9yhk3szfvyzkwivdv69c9r2";
   };
 
-  nativeBuildInputs = [ pkgconfig ] ++ [ python wrapPython ];
+  nativeBuildInputs = [ pkg-config ] ++ [ python wrapPython ];
   buildInputs = [
     openssl zlib asciidoc libxml2 libxslt docbook_xsl luajit
   ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, doxygen, gperf, pkgconfig, librevenge, libxml2, perl }:
+{ stdenv, fetchurl, boost, doxygen, gperf, pkg-config, librevenge, libxml2, perl }:
 
 stdenv.mkDerivation rec {
   pname = "libabw";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ boost doxygen gperf librevenge libxml2 perl ];
 
   meta = with stdenv.lib; {

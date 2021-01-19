@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcddb, pkgconfig, ncurses, help2man, libiconv, Carbon, IOKit }:
+{ stdenv, fetchurl, libcddb, pkg-config, ncurses, help2man, libiconv, Carbon, IOKit }:
 
 stdenv.mkDerivation rec {
   name = "libcdio-2.1.0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ pkgconfig help2man ];
+  nativeBuildInputs = [ pkg-config help2man ];
   buildInputs = [ libcddb ncurses ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
 

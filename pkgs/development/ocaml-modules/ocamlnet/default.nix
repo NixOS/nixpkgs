@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, ncurses, ocaml, findlib, ocaml_pcre, camlzip
+{ stdenv, lib, fetchurl, pkg-config, ncurses, ocaml, findlib, ocaml_pcre, camlzip
 , gnutls, nettle
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1x703mjqsv9nvffnkj5i36ij2s5zfvxxll2z1qj6a7p428b2yfnm";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ocaml findlib ocaml_pcre camlzip gnutls nettle ];
 
   createFindlibDestdir = true;

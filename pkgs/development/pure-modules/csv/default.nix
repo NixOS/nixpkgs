@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure }:
+{ stdenv, fetchurl, pkg-config, pure }:
 
 stdenv.mkDerivation rec {
   baseName = "csv";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "fe7c4edebe8208c54d5792a9eefaeb28c4a58b9094d161a6dda8126f0823ab3c";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;

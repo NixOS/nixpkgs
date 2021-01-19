@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchpatch, fetchFromGitHub, qmake, pkgconfig
+{ mkDerivation, lib, stdenv, fetchpatch, fetchFromGitHub, qmake, pkg-config
 , qtbase, qtsvg, qttools, qtserialport, boost, libgit2
 }:
 
@@ -32,7 +32,7 @@ mkDerivation rec {
 
   buildInputs = [ qtbase qtsvg qtserialport boost libgit2 ];
 
-  nativeBuildInputs = [ qmake pkgconfig qttools ];
+  nativeBuildInputs = [ qmake pkg-config qttools ];
 
   patches = [(fetchpatch {
     name = "fix-libgit2-version.patch";

@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl, pkgconfig, qtbase, qttools, libjack2, alsaLib, liblo, lv2 }:
+{ mkDerivation, lib, stdenv, fetchurl, pkg-config, qtbase, qttools, libjack2, alsaLib, liblo, lv2 }:
 
 mkDerivation rec {
   pname = "synthv1";
@@ -11,7 +11,7 @@ mkDerivation rec {
 
   buildInputs = [ qtbase qttools libjack2 alsaLib liblo lv2 ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "An old-school 4-oscillator subtractive polyphonic synthesizer with stereo fx";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig }:
+{ stdenv, fetchurl, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "socket_wrapper-1.2.5";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wb3gq0rj5h92mhq6f1hb2qy4ypkxvn8y87ag88c7gc71nkpa1fx";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with stdenv.lib; {
     description = "A library passing all socket communications through unix sockets";

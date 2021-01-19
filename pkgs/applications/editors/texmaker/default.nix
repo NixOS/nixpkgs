@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchurl, qtbase, qtscript, qmake, zlib, pkgconfig, poppler }:
+{ lib, mkDerivation, fetchurl, qtbase, qtscript, qmake, zlib, pkg-config, poppler }:
 
 mkDerivation rec {
   pname = "texmaker";
@@ -10,7 +10,7 @@ mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtscript poppler zlib ];
-  nativeBuildInputs = [ pkgconfig poppler qmake ];
+  nativeBuildInputs = [ pkg-config poppler qmake ];
   NIX_CFLAGS_COMPILE="-I${poppler.dev}/include/poppler";
 
   qmakeFlags = [

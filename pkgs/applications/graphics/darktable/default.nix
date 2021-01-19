@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, libsoup, graphicsmagick, json-glib, wrapGAppsHook
 , cairo, cmake, ninja, curl, perl, llvm, desktop-file-utils, exiv2, glib
 , ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
-, libpng, librsvg, libtiff, openexr, osm-gps-map, pkgconfig, sqlite, libxslt
+, libpng, librsvg, libtiff, openexr, osm-gps-map, pkg-config, sqlite, libxslt
 , openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome3
 , ocl-icd, pcre, gtk-mac-integration, isocodes, llvmPackages
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "6dd3de1f5ea9f94af92838c0be5ff30fdaa599aa1d737dcb562f9e0b2b2dbdda";
   };
 
-  nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop-file-utils wrapGAppsHook ];
+  nativeBuildInputs = [ cmake ninja llvm pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
 
   buildInputs = [
     cairo curl exiv2 glib gtk3 ilmbase lcms2 lensfun libexif

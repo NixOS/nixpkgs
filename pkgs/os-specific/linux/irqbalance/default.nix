@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, ncurses, libcap_ng }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, ncurses, libcap_ng }:
 
 stdenv.mkDerivation rec {
   pname = "irqbalance";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1677ap6z4hvwga0vb8hrvpc0qggyarg9mlg11pxywz7mq94vdx19";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ glib ncurses libcap_ng ];
 
   LDFLAGS = "-lncurses";

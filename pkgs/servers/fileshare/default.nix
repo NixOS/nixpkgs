@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, pkgconfig, git, libmicrohttpd_0_9_70 }:
+{ stdenv, lib, fetchgit, pkg-config, git, libmicrohttpd_0_9_70 }:
 
 stdenv.mkDerivation rec {
   pname = "fileshare";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sed -i 's,$(shell git rev-parse --short HEAD),/${version},g' Makefile
   '';
 
-  nativeBuildInputs = [ pkgconfig git ];
+  nativeBuildInputs = [ pkg-config git ];
   buildInputs = [ libmicrohttpd_0_9_70 ];
 
   makeFlags = [ "BUILD=release" ];

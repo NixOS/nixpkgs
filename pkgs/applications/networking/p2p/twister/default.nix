@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkgconfig, python2
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkg-config, python2
 , boost, db, openssl, geoip, libiconv, miniupnpc
 , srcOnly, fetchgit
 }:
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     "--with-boost-libdir=${boostPython.out}/lib"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     autoconf automake libtool python2
     boostPython db openssl geoip miniupnpc libiconv

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, libtool, curl
+{ lib, stdenv, fetchFromGitHub, pkg-config, libtool, curl
 , python3, munge, perl, pam, zlib, shadow, coreutils
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
 , readline, freeipmi, xorg, lz4, rdma-core, nixosTests
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   # this doesn't fix tests completely at least makes slurmd to launch
   hardeningDisable = [ "bindnow" ];
 
-  nativeBuildInputs = [ pkgconfig libtool python3 ];
+  nativeBuildInputs = [ pkg-config libtool python3 ];
   buildInputs = [
     curl python3 munge perl pam zlib
       libmysqlclient ncurses gtk2 lz4 rdma-core

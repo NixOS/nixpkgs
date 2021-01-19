@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig
+{ stdenv, fetchurl, autoreconfHook, pkg-config
 , openssl
 , odbcSupport ? true, unixODBC ? null }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     openssl
   ] ++ stdenv.lib.optional odbcSupport unixODBC;
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = with stdenv.lib; {
     description = "Libraries to natively talk to Microsoft SQL Server and Sybase databases";

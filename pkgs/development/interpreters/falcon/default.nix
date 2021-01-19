@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, zlib, sqlite }:
+{ stdenv, fetchFromGitHub, cmake, pkg-config, pcre, zlib, sqlite }:
 
 stdenv.mkDerivation {
   pname = "falcon";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1x3gdcz1gqhi060ngqi0ghryf69v8bn50yrbzfad8bhblvhzzdlf";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cmake pcre zlib sqlite ];
 
   meta = with stdenv.lib; {

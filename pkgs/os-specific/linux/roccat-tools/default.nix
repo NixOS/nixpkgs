@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, pkgconfig, gettext
+{ lib, stdenv, fetchurl, cmake, pkg-config, gettext
 , dbus, dbus-glib, libgaminggear, libgudev, lua
 , harfbuzz
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     }' libroccat/roccat_helper.c
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig gettext ];
+  nativeBuildInputs = [ cmake pkg-config gettext ];
   buildInputs = [ dbus dbus-glib libgaminggear libgudev lua ];
 
   cmakeFlags = [

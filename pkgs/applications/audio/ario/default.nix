@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, gtk3, intltool,
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, intltool,
   wrapGAppsHook, libxml2, curl, mpd_clientlib, dbus-glib,
   libsoup, avahi, taglib
   }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "16nhfb3h5pc7flagfdz7xy0iq6kvgy6h4bfpi523i57rxvlfshhl";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext intltool wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config gettext intltool wrapGAppsHook ];
   buildInputs = [
     gtk3 libxml2 curl mpd_clientlib dbus-glib libsoup avahi taglib
   ];

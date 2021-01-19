@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, gtk2 }:
+{ stdenv, mkDerivation, fetchFromGitHub, qmake, pkg-config, gtk2 }:
 
 mkDerivation {
   name = "qtstyleplugins-2017-03-11";
@@ -12,7 +12,7 @@ mkDerivation {
 
   patches = [ ./fix-build-against-Qt-5.15.patch ];
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [ gtk2 ];
 
   meta = with stdenv.lib; {

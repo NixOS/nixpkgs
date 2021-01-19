@@ -2,7 +2,7 @@
 , lib, stdenv
 , fetchurl
 , intltool
-, pkgconfig
+, pkg-config
 , portaudio
 , SDL2
 , ffmpeg
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     intltool
-    pkgconfig
+    pkg-config
   ]
     ++ lib.optionals (useGtk) [ wrapGAppsHook ]
     ++ lib.optionals (useQt) [ wrapQtAppsHook ]

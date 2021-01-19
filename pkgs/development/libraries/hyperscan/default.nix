@@ -4,8 +4,8 @@
 , withStatic ? false # build only shared libs by default, build static+shared if true
 }:
 
-# NOTICE: pkgconfig, pcap and pcre intentionally omitted from build inputs
-#         pcap used only in examples, pkgconfig used only to check for pcre
+# NOTICE: pkg-config, pcap and pcre intentionally omitted from build inputs
+#         pcap used only in examples, pkg-config used only to check for pcre
 #         which is fixed 8.41 version requirement (nixpkgs have 8.42+, and
 #         I not see any reason (for now) to backport 8.41.
 

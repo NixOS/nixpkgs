@@ -3,7 +3,7 @@
 , stdenv
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , atk
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     makeWrapper
     which # for locale detection
     libxml2 # for xml-stripblanks

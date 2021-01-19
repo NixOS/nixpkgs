@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, bison, flex
+{ lib, stdenv, fetchurl, pkg-config, bison, flex
 , buildsystem
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/JjcqdfvpnCWRwpdlsAjFG4lv97AjA23RmHHtNsEU9A=";
   };
 
-  nativeBuildInputs = [ pkgconfig bison flex ];
+  nativeBuildInputs = [ pkg-config bison flex ];
   buildInputs = [ buildsystem ];
 
   makeFlags = [

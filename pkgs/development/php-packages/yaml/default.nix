@@ -8,7 +8,7 @@ buildPecl {
 
   configureFlags = [ "--with-yaml=${pkgs.libyaml}" ];
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
 
   meta.maintainers = lib.teams.php.members;
 }

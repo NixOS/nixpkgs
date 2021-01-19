@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , libtool
 , autoconf
 , automake
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l1ms3nxnjzh4mpiadikvngcr9k3jnjqy3yna207za0va0c28dj5";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake libtool curl ncurses ocl-icd opencl-headers
     xorg.libX11 xorg.libXext xorg.libXinerama jansson libusb1 ];
 

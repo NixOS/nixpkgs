@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, wrapGAppsHook, gsettings-desktop-schemas, gspell, gtksourceview4, libgee
-, tepl, amtk, gnome3, glib, pkgconfig, intltool, itstool, libxml2 }:
+, tepl, amtk, gnome3, glib, pkg-config, intltool, itstool, libxml2 }:
 let
   version = "3.38.0";
   pname = "gnome-latex";
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
   configureFlags = ["--disable-dconf-migration"];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     itstool
     intltool

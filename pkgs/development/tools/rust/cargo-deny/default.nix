@@ -2,7 +2,7 @@
 , lib
 , rustPlatform
 , fetchFromGitHub
-, perl, pkgconfig, openssl, Security, libiconv, curl
+, perl, pkg-config, openssl, Security, libiconv, curl
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkg-config ];
 
   buildInputs = [ openssl  ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Security libiconv curl ];

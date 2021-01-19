@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, autogen, flac, libogg, libopus, libvorbis, pkgconfig, python3
+{ stdenv, fetchFromGitHub, autoreconfHook, autogen, flac, libogg, libopus, libvorbis, pkg-config, python3
 , Carbon, AudioToolbox
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rh79y4s4m2wcm2kahmzs2kijpdpayif2gyca6m71f3k7jbhgcwa";
   };
 
-  nativeBuildInputs = [ autoreconfHook autogen pkgconfig python3 ];
+  nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];
   buildInputs = [ flac libogg libopus libvorbis ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , libltc, libsndfile, libsamplerate, ftgl, freefont_ttf, libjack2
 , libGLU, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1av05ykph8x67018hm9zfgh1vk0zi39mvrsxkj6bm4hkarxf0vvl";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libGLU ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat zita-convolver ];
 
   # Don't remove this. The default fails with 'do not know how to unpack source archive'
