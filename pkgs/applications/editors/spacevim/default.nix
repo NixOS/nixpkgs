@@ -13,12 +13,12 @@ let
   spacevimdir = format.generate "init.toml" spacevim_config;
 in mkDerivation rec {
   pname = "spacevim";
-  version = "1.5.0";
+  version = "1.6.0";
   src = fetchFromGitHub {
     owner = "SpaceVim";
     repo = "SpaceVim";
     rev = "v${version}";
-    sha256 = "1xw4l262x7wzs1m65bddwqf3qx4254ykddsw3c3p844pb3mzqhh7";
+    sha256 = "sha256-QQdtjEdbuzmf0Rw+u2ZltLihnJt8LqkfTrLDWLAnCLE=";
   };
 
   nativeBuildInputs = [ makeWrapper vim-customized];
