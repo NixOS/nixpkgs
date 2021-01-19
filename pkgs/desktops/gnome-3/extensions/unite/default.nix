@@ -1,6 +1,6 @@
 { lib, stdenv, gnome3, fetchFromGitHub, xprop, glib, coreutils }:
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-extension-unite-shell";
+  pname = "gnome-shell-extension-unite";
   version = "44";
 
   src = fetchFromGitHub {

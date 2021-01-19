@@ -27283,7 +27283,7 @@ in
     tilingnome = callPackage ../desktops/gnome-3/extensions/tilingnome { };
     timepp = callPackage ../desktops/gnome-3/extensions/timepp { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
-    unite-shell = callPackage ../desktops/gnome-3/extensions/unite-shell { };
+    unite = callPackage ../desktops/gnome-3/extensions/unite { };
     window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
     window-is-ready-remover = callPackage ../desktops/gnome-3/extensions/window-is-ready-remover { };
     workspace-matrix = callPackage ../desktops/gnome-3/extensions/workspace-matrix { };
