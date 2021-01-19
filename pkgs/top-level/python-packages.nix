@@ -214,6 +214,8 @@ in {
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
+  aioflo = callPackage ../development/python-modules/aioflo { };
+
   aioftp = callPackage ../development/python-modules/aioftp { };
 
   aioguardian = callPackage ../development/python-modules/aioguardian { };
@@ -1668,6 +1670,8 @@ in {
   deskcon = callPackage ../development/python-modules/deskcon { };
 
   detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
+
+  devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
 
   devpi-common = callPackage ../development/python-modules/devpi-common { };
 
@@ -5537,6 +5541,8 @@ in {
   pymaging = callPackage ../development/python-modules/pymaging { };
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
+
+  pymata-express = callPackage ../development/python-modules/pymata-express { };
 
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 

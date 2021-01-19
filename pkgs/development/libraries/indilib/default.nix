@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "indilib";
-  version = "1.8.7";
+  version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${version}";
-    sha256 = "0cy9l1vpsnfilxslvmn88hhq8iw8cnx3xpbnl78c0dgjyfv5xmhz";
+    sha256 = "sha256-WTRfV6f764tDGKnQVd1jeYN/qXa/VRTFK0mMalc+9aU=";
   };
 
   patches = [

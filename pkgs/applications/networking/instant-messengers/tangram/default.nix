@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, appstream-glib, desktop-file-utils, gdk-pixbuf
 , gettext, gjs, glib, gobject-introspection, gsettings-desktop-schemas, gtk3
-, hicolor-icon-theme, meson, ninja, pkgconfig, python3, webkitgtk, wrapGAppsHook
+, hicolor-icon-theme, meson, ninja, pkg-config, python3, webkitgtk, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];

@@ -242,6 +242,8 @@ in
 
   enum4linux = callPackage ../tools/security/enum4linux {};
 
+  enum4linux-ng = python3Packages.callPackage ../tools/security/enum4linux-ng { };
+
   onesixtyone = callPackage ../tools/security/onesixtyone {};
 
   creddump = callPackage ../tools/security/creddump {};
@@ -4277,7 +4279,7 @@ in
 
   gallery-dl = python3Packages.callPackage ../applications/misc/gallery-dl { };
 
-  gandi-cli = callPackage ../tools/networking/gandi-cli { };
+  gandi-cli = python3Packages.callPackage ../tools/networking/gandi-cli { };
 
   gandom-fonts = callPackage ../data/fonts/gandom-fonts { };
 
@@ -7453,6 +7455,8 @@ in
   rowhammer-test = callPackage ../tools/system/rowhammer-test { };
 
   rpPPPoE = callPackage ../tools/networking/rp-pppoe { };
+
+  rpi-imager = libsForQt5.callPackage ../tools/misc/rpi-imager { };
 
   rpiboot-unstable = callPackage ../development/misc/rpiboot/unstable.nix { };
 
@@ -17496,6 +17500,8 @@ in
 
   engelsystem = callPackage ../servers/web-apps/engelsystem { };
 
+  envoy = callPackage ../servers/http/envoy { };
+
   etcd = callPackage ../servers/etcd { };
   etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
 
@@ -17568,6 +17574,8 @@ in
   gerbera = callPackage ../servers/gerbera {};
 
   gobetween = callPackage ../servers/gobetween { };
+
+  graph-cli = callPackage ../tools/graphics/graph-cli { };
 
   h2o = callPackage ../servers/http/h2o { };
 
@@ -24081,6 +24089,8 @@ in
 
   purple-facebook = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-facebook { };
 
+  pikopixel = callPackage ../applications/graphics/pikopixel { };
+
   pithos = callPackage ../applications/audio/pithos {
     pythonPackages = python3Packages;
   };
@@ -28259,6 +28269,8 @@ in
   gutenprint = callPackage ../misc/drivers/gutenprint { };
 
   gutenprintBin = callPackage ../misc/drivers/gutenprint/bin.nix { };
+
+  carps-cups = callPackage ../misc/cups/drivers/carps-cups { };
 
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 

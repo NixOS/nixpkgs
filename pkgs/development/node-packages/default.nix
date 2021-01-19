@@ -273,5 +273,13 @@ let
         echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
       '';
     };
+
+    yaml-language-server = super.yaml-language-server.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/yaml-language-server" \
+        --prefix NODE_PATH : ${self.prettier}/lib/node_modules
+      '';
+    };
   };
 in self

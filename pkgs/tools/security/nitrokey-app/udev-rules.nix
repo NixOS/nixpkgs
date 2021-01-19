@@ -1,6 +1,5 @@
-{ lib, stdenv, nitrokey-app
-, group ? "nitrokey"
-}:
+{ lib, stdenv, nitrokey-app }:
+
 
 stdenv.mkDerivation {
   name = "nitrokey-udev-rules-${lib.getVersion nitrokey-app}";
@@ -8,10 +7,6 @@ stdenv.mkDerivation {
   inherit (nitrokey-app) src;
 
   dontBuild = true;
-
-  patchPhase = ''
-    substituteInPlace libnitrokey/data/41-nitrokey.rules --replace plugdev "${group}"
-  '';
 
   installPhase = ''
     mkdir -p $out/etc/udev/rules.d
