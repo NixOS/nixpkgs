@@ -1,4 +1,4 @@
-{stdenv, lib, fetchFromGitHub, autoreconfHook, darwin}:
+{stdenv, lib, fetchFromGitHub, autoreconfHook, ApplicationServices}:
 
 stdenv.mkDerivation rec {
   pname = "duti";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [autoreconfHook];
-  buildInputs = [darwin.apple_sdk.frameworks.ApplicationServices];
+  buildInputs = [ApplicationServices];
   configureFlags = [
     "--with-macosx-sdk=/homeless-shelter"
 
