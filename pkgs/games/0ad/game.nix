@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     # Workaround invalid pkg-config name for mozjs
     mkdir pkg-config
     ln -s ${spidermonkey_38}/lib/pkgconfig/* pkg-config/mozjs-38.pc
-    PKG_CONFIG_PATH="$PWD/pkgconfig:$PKG_CONFIG_PATH"
+    PKG_CONFIG_PATH="$PWD/pkg-config:$PKG_CONFIG_PATH"
 
     # Update Makefiles
     pushd build/workspaces
