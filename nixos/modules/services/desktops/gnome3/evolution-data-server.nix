@@ -53,6 +53,7 @@ with lib;
           enable = true;
           plugins = [ pkgs.evolution ] ++ config.programs.evolution.plugins;
         };
+        services.gnome3.gnome-keyring.enable = true;
       })
     ];
 }
