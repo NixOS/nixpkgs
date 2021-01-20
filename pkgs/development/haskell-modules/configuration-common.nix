@@ -1420,6 +1420,10 @@ self: super: {
     lsp-test = dontCheck self.lsp-test_0_11_0_7;
     fourmolu = self.fourmolu_0_3_0_0;
   });
+  # 2021-01-20
+  # apply-refact 0.9.0.0 get's a build error with hls-hlint-plugin 0.8.0
+  # https://github.com/haskell/haskell-language-server/issues/1240
+  apply-refact = super.apply-refact_0_8_2_1;
 
   fourmolu = dontCheck super.fourmolu;
   # 1. test requires internet
