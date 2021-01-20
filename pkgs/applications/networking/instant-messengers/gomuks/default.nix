@@ -1,4 +1,15 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, olm, makeDesktopItem }:
+{ lib
+, stdenv
+, substituteAll
+, buildGoModule
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, libnotify
+, olm
+, pulseaudio
+, sound-theme-freedesktop
+}:
 
 buildGoModule rec {
   pname = "gomuks";
@@ -15,7 +26,13 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildInputs = [ olm ];
+  buildInputs = [ makeWrapper olm ];
+
+  # Upstream issue: https://github.com/tulir/gomuks/issues/260
+  patches = lib.optional stdenv.isLinux (substituteAll {
+    src = ./hardcoded_path.patch;
+    soundTheme = sound-theme-freedesktop;
+  });
 
   postInstall = ''
     cp -r ${
@@ -30,13 +47,15 @@ buildGoModule rec {
       }
     }/* $out/
     substituteAllInPlace $out/share/applications/*
+    wrapProgram $out/bin/gomuks \
+      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.isLinux [ libnotify pulseaudio ])}"
   '';
 
   meta = with lib; {
     homepage = "https://maunium.net/go/gomuks/";
     description = "A terminal based Matrix client written in Go";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ tilpner emily ];
+    maintainers = with maintainers; [ charvp emily ];
     platforms = platforms.unix;
   };
 }
