@@ -1,15 +1,16 @@
 { lib
-, stdenv
 , buildPythonPackage
-, fetchPypi
 , fetchFromGitHub
-, fetchpatch
+, pythonOlder
 , alembic
+, argcomplete
 , cached-property
+, cattrs
 , configparser
 , colorlog
 , croniter
 , dill
+, email_validator
 , flask
 , flask-appbuilder
 , flask-admin
@@ -21,7 +22,10 @@
 , funcsigs
 , future
 , GitPython
+, graphviz
 , gunicorn
+, importlib-metadata
+, importlib-resources
 , iso8601
 , json-merge-patch
 , jinja2
@@ -29,68 +33,63 @@
 , lxml
 , lazy-object-proxy
 , markdown
+, marshmallow-sqlalchemy
 , pandas
 , pendulum
 , psutil
 , pygments
 , python-daemon
 , python-dateutil
+, python-nvd3
+, python-slugify
 , requests
 , setproctitle
-, snakebite
 , sqlalchemy
+, sqlalchemy-jsonfield
 , tabulate
 , tenacity
 , termcolor
-, text-unidecode
 , thrift
+, typing-extensions
 , tzlocal
 , unicodecsv
+, werkzeug
 , zope_deprecation
-, enum34
-, typing
-, nose
-, python
-, pythonOlder
-, pythonAtLeast
+# Test inputs
+, pytestCheckHook
+, azure-common
+, freezegun
+, hdfs
+, hvac
+, parameterized
+, psycopg2
+, procps
+, sentry-sdk
+, snakebite
 }:
 
 buildPythonPackage rec {
   pname = "apache-airflow";
-  version = "1.10.5";
-  # Upstream does not yet support python 3.8
-  # https://github.com/apache/airflow/issues/8674
-  disabled = pythonOlder "3.5" || pythonAtLeast "3.8";
+  version = "1.10.14";
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub rec {
     owner = "apache";
     repo = "airflow";
     rev = version;
-    sha256 = "14fmhfwx977c9jdb2kgm93i6acx43l45ggj30rb37r68pzpb6l6h";
+    sha256 = "1kvrdx0xiw56q9913wqchir4xbwfixqm5kbvrsaygg9fqarghl1g";
   };
-
-  patches = [
-       # Not yet accepted: https://github.com/apache/airflow/pull/6562
-     (fetchpatch {
-       name = "avoid-warning-from-abc.collections";
-       url = "https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6562.patch";
-       sha256 = "0swpay1qlb7f9kgc56631s1qd9k82w4nw2ggvkm7jvxwf056k61z";
-     })
-       # Not yet accepted: https://github.com/apache/airflow/pull/6561
-     (fetchpatch {
-       name = "pendulum2-compatibility";
-       url = "https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6561.patch";
-       sha256 = "17hw8qyd4zxvib9zwpbn32p99vmrdz294r31gnsbkkcl2y6h9knk";
-     })
-  ];
 
   propagatedBuildInputs = [
     alembic
+    argcomplete
     cached-property
+    cattrs
     colorlog
     configparser
     croniter
     dill
+    email_validator
     flask
     flask-admin
     flask-appbuilder
@@ -102,7 +101,9 @@ buildPythonPackage rec {
     funcsigs
     future
     GitPython
+    graphviz
     gunicorn
+    importlib-resources
     iso8601
     json-merge-patch
     jinja2
@@ -110,86 +111,126 @@ buildPythonPackage rec {
     lxml
     lazy-object-proxy
     markdown
+    marshmallow-sqlalchemy
     pandas
     pendulum
     psutil
     pygments
     python-daemon
     python-dateutil
+    python-nvd3
+    python-slugify
     requests
     setproctitle
     sqlalchemy
+    sqlalchemy-jsonfield
     tabulate
     tenacity
     termcolor
-    text-unidecode
     thrift
     tzlocal
     unicodecsv
+    werkzeug
     zope_deprecation
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+    typing-extensions
   ];
 
   checkInputs = [
+    pytestCheckHook
+    azure-common
+    freezegun
+    gunicorn
+    hdfs
+    hvac
+    parameterized
+    procps  # used for pgrep
+    psycopg2
+    sentry-sdk
     snakebite
-    nose
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "flask>=1.1.0, <2.0" "flask" \
       --replace "jinja2>=2.10.1, <2.11.0" "jinja2" \
-      --replace "pandas>=0.17.1, <1.0.0" "pandas" \
+      --replace "pandas>=0.17.1, <2.0" "pandas" \
       --replace "flask-caching>=1.3.3, <1.4.0" "flask-caching" \
-      --replace "flask-appbuilder>=1.12.5, <2.0.0" "flask-appbuilder" \
-      --replace "flask-admin==1.5.3" "flask-admin" \
+      --replace "flask-appbuilder~=2.2" "flask-appbuilder" \
+      --replace "flask-admin==1.5.4" "flask-admin" \
       --replace "flask-login>=0.3, <0.5" "flask-login" \
       --replace "pendulum==1.4.4" "pendulum" \
       --replace "cached_property~=1.5" "cached_property" \
-      --replace "dill>=0.2.2, <0.3" "dill" \
+      --replace "dill>=0.2.2, <0.4" "dill" \
       --replace "configparser>=3.5.0, <3.6.0" "configparser" \
-      --replace "jinja2>=2.10.1, <2.11.0" "jinja2" \
+      --replace "jinja2>=2.10.1, <2.12.0" "jinja2" \
       --replace "colorlog==4.0.2" "colorlog" \
-      --replace "funcsigs==1.0.0" "funcsigs" \
-      --replace "flask-swagger==0.2.13" "flask-swagger" \
-      --replace "python-daemon>=2.1.1, <2.2" "python-daemon" \
+      --replace "funcsigs>=1.0.0, <2.0.0" "funcsigs" \
+      --replace "flask-swagger>=0.2.13, <0.3" "flask-swagger" \
+      --replace "python-daemon>=2.1.1" "python-daemon" \
       --replace "alembic>=1.0, <2.0" "alembic" \
       --replace "markdown>=2.5.2, <3.0" "markdown" \
-      --replace "future>=0.16.0, <0.17" "future" \
+      --replace "future>=0.16.0, <0.19" "future" \
       --replace "tenacity==4.12.0" "tenacity" \
-      --replace "text-unidecode==1.2" "text-unidecode" \
       --replace "tzlocal>=1.4,<2.0.0" "tzlocal" \
       --replace "sqlalchemy~=1.3" "sqlalchemy" \
-      --replace "gunicorn>=19.5.0, <20.0" "gunicorn"
+      --replace "sqlalchemy_jsonfield~=0.9" "sqlalchemy_jsonfield>=0.1" \
+      --replace "gunicorn>=19.5.0, <21.0" "gunicorn" \
+      --replace "werkzeug<1.0.0" "werkzeug" \
+      --replace "importlib_resources~=1.4" "importlib_resources" \
+      --replace "importlib-metadata~=2.0" "importlib-metadata>=1.0" \
+      --replace "marshmallow-sqlalchemy>=0.16.1, <0.24.0" "marshmallow-sqlalchemy" \
+      --replace "requests>=2.20.0, <2.24.0" "requests>=2.20.0" \
+      --replace "lazy_object_proxy<1.5.0" "lazy-object-proxy"
+    # NOTE: preference above is to relax the constraint completely, but when the constraint
+    # is of format ``package>1.0.0; python_version<"3.7"``, we have to put ANY bound
 
-    # dumb-init is only needed for CI and Docker, not relevant for NixOS.
-    substituteInPlace setup.py \
-      --replace "'dumb-init>=1.2.2'," ""
+    # fix issues w/ upgrade to pendulum >= 2.0
+    substituteInPlace airflow/settings.py \
+      --replace "from pendulum import Pendulum" "from pendulum import DateTime as Pendulum"
+    substituteInPlace tests/core/test_core.py \
+      --replace "from pendulum import utcnow" "import pendulum; import functools; utcnow = functools.partial(pendulum.now, 'UTC')"
 
-    substituteInPlace tests/core.py \
-      --replace "/bin/bash" "${stdenv.shell}"
+    # --replace "from pendulum import utcnow" "from datetime import datetime as _dt; utcnow = _dt.utcnow"
   '';
 
   # allow for gunicorn processes to have access to python packages
   makeWrapperArgs = [ "--prefix PYTHONPATH : $PYTHONPATH" ];
 
-  checkPhase = ''
-   export HOME=$(mktemp -d)
-   export AIRFLOW_HOME=$HOME
-   export AIRFLOW__CORE__UNIT_TEST_MODE=True
-   export AIRFLOW_DB="$HOME/airflow.db"
-   export PATH=$PATH:$out/bin
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export AIRFLOW_HOME=$HOME
+    export AIRFLOW__CORE__UNIT_TEST_MODE=True
+    export AIRFLOW_DB="$HOME/airflow.db"
+    export PATH=$PATH:$out/bin
 
-   airflow version
-   airflow initdb
-   airflow resetdb -y
-   nosetests tests.core.CoreTest
-   ## all tests
-   # nosetests --cover-package=airflow
+    airflow version
+    airflow initdb
+    airflow db reset -y
   '';
+  pytestFlagsArray = [
+    # Subset of tests
+    "tests/core/"
+    "--durations=20"  # print duration of slowest 20 tests
+  ];
+  disabledTests = [
+    # Broken with KeyError: visibility_timeout in "section_dict"
+    "test_broker_transport_options"
+
+    # Disabling tests > 20 seconds
+    # not worth disabling test_cli_* or test_should_be* b/c it seems those do some slow setup, then remaining tests are fast
+    "test_param_setup"
+    "test_get_connections_env_var"
+    "test_env_var_priority"
+    "test_dbapi_get_sqlalchemy_engine"
+    "test_dbapi_get_uri"
+  ];
 
   meta = with lib; {
     description = "Programmatically author, schedule and monitor data pipelines";
     homepage = "http://airflow.apache.org/";
+    changelog = "http://airflow.apache.org/docs/apache-airflow/stable/changelog.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple costrouc ingenieroariel ];
   };

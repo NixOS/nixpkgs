@@ -1159,6 +1159,8 @@ in {
 
   catalogue = callPackage ../development/python-modules/catalogue { };
 
+  cattrs = callPackage ../development/python-modules/cattrs { };
+
   cbeams = callPackage ../misc/cbeams { };
 
   cbor2 = callPackage ../development/python-modules/cbor2 { };
@@ -2857,6 +2859,8 @@ in {
   hcs_utils = callPackage ../development/python-modules/hcs_utils { };
 
   hdbscan = callPackage ../development/python-modules/hdbscan { };
+
+  hdfs = callPackage ../development/python-modules/hdfs { };
 
   hdlparse = callPackage ../development/python-modules/hdlparse { };
 
@@ -6261,6 +6265,8 @@ in {
 
   python-nomad = callPackage ../development/python-modules/python-nomad { };
 
+  python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
+
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
   pythonocc-core = toPythonModule (callPackage ../development/python-modules/pythonocc-core {
@@ -7307,6 +7313,8 @@ in {
   sqlalchemy-i18n = callPackage ../development/python-modules/sqlalchemy-i18n { };
 
   SQLAlchemy-ImageAttach = callPackage ../development/python-modules/sqlalchemy-imageattach { };
+
+  sqlalchemy-jsonfield = callPackage ../development/python-modules/sqlalchemy-jsonfield { };
 
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
