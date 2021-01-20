@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mda-lv2";
-  version = "1.2.4";
+  version = "1.2.6";
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "1a3cv6w5xby9yn11j695rbh3c4ih7rxfxmkca9s1324ljphh06m8";
+    sha256 = "sha256-zWYRcCSuBJzzrKg/npBKcCdyJOI6lp9yqcXQEKSYV9s=";
   };
 
   nativeBuildInputs = [ pkg-config wafHook python3 ];
