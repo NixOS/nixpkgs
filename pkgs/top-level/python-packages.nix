@@ -6050,6 +6050,8 @@ in {
 
   pytest-openfiles = callPackage ../development/python-modules/pytest-openfiles { };
 
+  pytest-order = callPackage ../development/python-modules/pytest-order { };
+
   pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
 
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
