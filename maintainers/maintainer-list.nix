@@ -5128,6 +5128,12 @@
     githubId = 42153076;
     name = "Alexey Nikashkin";
   };
+  lesuisse = {
+    email = "thomas@gerbet.me";
+    github = "LeSuisse";
+    githubId = 737767;
+    name = "Thomas Gerbet";
+  };
   lethalman = {
     email = "lucabru@src.gnome.org";
     github = "lethalman";
