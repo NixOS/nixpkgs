@@ -4281,8 +4281,6 @@ in
 
   gallery-dl = python3Packages.callPackage ../applications/misc/gallery-dl { };
 
-  gandi-cli = python3Packages.callPackage ../tools/networking/gandi-cli { };
-
   gandom-fonts = callPackage ../data/fonts/gandom-fonts { };
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin {};
@@ -5610,8 +5608,6 @@ in
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse.plugins;
 
   matrix-synapse-tools = recurseIntoAttrs matrix-synapse.tools;
-
-  matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack {};
 
   matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
 
@@ -23657,8 +23653,6 @@ in
   smtube = libsForQt514.callPackage ../applications/video/smtube {};
 
   softmaker-office = callPackage ../applications/office/softmaker/softmaker_office.nix {};
-
-  spacegun = callPackage ../applications/networking/cluster/spacegun {};
 
   stride = callPackage ../applications/networking/instant-messengers/stride { };
 
