@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./proc_path.diff # TODO: upstream to OpenSMTPD, see https://github.com/NixOS/nixpkgs/issues/54045
+    ./CVE-2020-35679.patch
+    ./CVE-2020-35680.patch
   ];
 
   # See https://github.com/OpenSMTPD/OpenSMTPD/issues/885 for the `sh bootstrap`
