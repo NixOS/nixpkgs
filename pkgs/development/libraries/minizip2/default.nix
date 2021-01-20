@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "minizip";
-  version = "2.10.4";
+  version = "2.10.6";
 
   src = fetchFromGitHub {
     owner = "nmoinvaz";
     repo = pname;
     rev = version;
-    sha256 = "15bbagngvm738prkzv7lfs64pn4pq7jkhwz571j0w0nb5nw9c01x";
+    sha256 = "sha256-OAm4OZeQdP2Q/UKYI9bR7OV9RmLmYF/j2NpK5TPoE60=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
