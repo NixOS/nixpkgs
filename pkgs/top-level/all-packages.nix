@@ -2207,6 +2207,8 @@ in
 
   fast-cli = nodePackages.fast-cli;
 
+  fast-cpp-csv-parser = callPackage ../development/libraries/fast-cpp-csv-parser { };
+
   faudio = callPackage ../development/libraries/faudio { };
 
   fd = callPackage ../tools/misc/fd { };
