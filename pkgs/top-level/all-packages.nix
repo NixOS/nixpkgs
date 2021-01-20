@@ -29514,7 +29514,9 @@ in
 
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {};
 
-  duti = callPackage ../os-specific/darwin/duti {};
+  duti = callPackage ../os-specific/darwin/duti {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   dnstracer = callPackage ../tools/networking/dnstracer {
     inherit (darwin) libresolv;
