@@ -13513,10 +13513,10 @@ let
 
   MojoliciousPluginWebpack = buildPerlPackage {
     pname = "Mojolicious-Plugin-Webpack";
-    version = "0.13";
+    version = "0.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-Webpack-0.13.tar.gz";
-      sha256 = "7848c0698e1b52909c71add638f7523f5affdfb8133b4ddb6f23a3bca485e761";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-Webpack-0.14.tar.gz";
+      sha256 = "0b1a9rm5rlpqj6skgic4qzy4b1p35r2dhkh3rwaaypf9ha70i9gc";
     };
     propagatedBuildInputs = [ Mojolicious ];
     meta = {
