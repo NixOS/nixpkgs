@@ -1,4 +1,4 @@
-{ stdenv, windows, fetchurl }:
+{ lib, stdenv, windows, fetchurl }:
 
 let
   version = "6.0.0";
