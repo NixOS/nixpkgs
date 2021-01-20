@@ -1,4 +1,4 @@
-{ stdenv, fetchcvs, autoconf, automake, libtool, flex, bison, pkg-config
+{ lib, stdenv, fetchcvs, autoconf, automake, libtool, flex, bison, pkg-config
 , zlib, bzip2, lzma, libgcrypt
 }:
 

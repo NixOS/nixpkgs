@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, qt48, qmake4Hook, flex }:
+{ lib, stdenv, fetchgit, qt48, qmake4Hook, flex }:
 
 # At the time of committing this, the expression fails for me to cross-build in
 # both mingw32 and mingw64.
