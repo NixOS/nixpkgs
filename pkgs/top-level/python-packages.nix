@@ -5278,8 +5278,6 @@ in {
 
   pydot = callPackage ../development/python-modules/pydot { inherit (pkgs) graphviz; };
 
-  pydotplus = callPackage ../development/python-modules/pydotplus { };
-
   pydrive = callPackage ../development/python-modules/pydrive { };
 
   pydsdl = callPackage ../development/python-modules/pydsdl { };
