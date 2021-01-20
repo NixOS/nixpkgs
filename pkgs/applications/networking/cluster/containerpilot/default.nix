@@ -10,4 +10,12 @@ buildGoPackage rec {
   };
   goPackagePath = "github.com/joyent/${pname}";
   goDeps = ./deps.nix;
+
+  meta = with lib; {
+    homepage = "https://www.joyent.com/containerpilot";
+    description = "An application centric micro-orchestrator.";
+    platforms = platforms.unix;
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ cpcloud ];
+  };
 }
