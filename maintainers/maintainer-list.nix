@@ -8485,6 +8485,12 @@
     githubId = 4477729;
     name = "Sergey Mironov";
   };
+  smunix = {
+    email = "Providence.Salumu@smunix.com";
+    github = "smunix";
+    githubId = 540621;
+    name = "Providence Salumu";
+  };
   sna = {
     email = "abouzahra.9@wright.edu";
     github = "s-na";
