@@ -11152,10 +11152,10 @@ let
 
   LinkEmbedder = buildPerlPackage {
     pname = "LinkEmbedder";
-    version = "1.15";
+    version = "1.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.15.tar.gz";
-      sha256 = "0ij2jvsiqnqz3qlzw8k3q37ys05wfh1ks2n692hs3bpg7ds3n8bc";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.16.tar.gz";
+      sha256 = "0pm5h5rlfparfvsi3ygj53mwjg8lwhql5mj0macfvsvfnfvnnp6j";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ Mojolicious ];
