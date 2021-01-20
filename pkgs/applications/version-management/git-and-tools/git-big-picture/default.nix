@@ -1,27 +1,20 @@
-{ fetchFromGitHub, python3Packages, lib, git, graphviz }:
+{ python3Packages, lib, git, graphviz }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-big-picture";
-  version = "1.0.0";
+  version = "1.1.1";
+  format = "wheel";
 
-  src = fetchFromGitHub {
-    owner = "git-big-picture";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "14yf71iwgk78nw8w0bpijsnnl4vg3bvxsw3vvypxmbrc1nh0bdha";
+  src = python3Packages.fetchPypi {
+    inherit format version;
+    pname = "git_big_picture";  # underscores needed for working download URL
+    python = "py3";  # i.e. no Python 2.7
+    sha256 = "a20a480057ced1585c4c38497d27a5012f12dd29697313f0bb8fa6ddbb5c17d8";
   };
-
-  buildInputs = [ git graphviz ];
-
-  # NOTE: Tests are disabled due to unpackaged test dependency "Scruf".
-  #       When bumping to 1.1.0, please re-enable and use:
-  #checkInputs = [ cram git pytest ];
-  #checkPhase = "pytest test.py";
-  doCheck = false;
 
   postFixup = ''
     wrapProgram $out/bin/git-big-picture \
-      --prefix PATH ":" ${ lib.makeBinPath buildInputs  }
+      --prefix PATH ":" ${ lib.makeBinPath [ git graphviz ]  }
     '';
 
   meta = {
