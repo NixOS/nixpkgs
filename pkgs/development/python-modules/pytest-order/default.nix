@@ -19,14 +19,14 @@ buildPythonPackage rec {
     sha256 = "1mfw2x8r5hn4g5cd6jca92lvqrd9297gsc5bvz18dzjlrm8zlycc";
   };
 
-  propagatedBuildInputs = [
-    pytest
+  propagatedBuildInputs = [ pytest ];
+
+  checkInputs = [
+    pytestCheckHook
     pytest-xdist
     pytest-dependency
     pytest-mock
   ];
-
-  checkInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Pytest plugin that allows you to customize the order in which your tests are run";
