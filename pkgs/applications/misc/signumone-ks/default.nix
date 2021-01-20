@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "signumone-ks";
-  version = "3.1.2";
+  version = "3.1.3";
 
   src = fetchurl {
     url = "https://cdn-dist.signum.one/${version}/${pname}-${version}.deb";
-    sha256 = "4efd80e61619ccf26df1292194fcec68eb14d77dfcf0a1a673da4cf5bf41f4b7";
+    sha256 = "00wlya3kb6qac2crflm86km9r48r29bvngjq1wgzj9w2xv0q32b9";
   };
 
   # Necessary to avoid using multiple ffmpeg and gtk libs
