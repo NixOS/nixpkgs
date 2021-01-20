@@ -7,11 +7,14 @@
 , libpng
 , libjpeg
 , dav1d
+, gdk-pixbuf
 }:
 
 stdenv.mkDerivation rec {
   pname = "libavif";
   version = "0.8.4";
+
+  outputs = [ "out" "gdkPixbufLoader" ];
 
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
@@ -22,12 +25,15 @@ stdenv.mkDerivation rec {
 
   # reco: encode libaom slowest but best, decode dav1d fastest
 
+  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "gdkPixbufLoader"}/${gdk-pixbuf.moduleDir}";
+
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DAVIF_CODEC_AOM=ON" # best encoder (slow but small)
     "-DAVIF_CODEC_DAV1D=ON" # best decoder (fast)
     "-DAVIF_CODEC_AOM_DECODE=OFF"
     "-DAVIF_BUILD_APPS=ON"
+    "-DAVIF_BUILD_GDK_PIXBUF=ON"
   ];
 
   nativeBuildInputs = [
@@ -36,12 +42,18 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gdk-pixbuf
     libaom
     zlib
     libpng
     libjpeg
     dav1d
   ];
+
+  postInstall = ''
+    mkdir -p ${placeholder "gdkPixbufLoader"}/share/thumbnailers
+    substitute "${./thumbnailer}" "${placeholder "gdkPixbufLoader"}/share/thumbnailers/libavif.thumbnailer" --subst-var-by bindir "${gdk-pixbuf}/bin"
+  '';
 
   meta = with stdenv.lib; {
     description  = "C implementation of the AV1 Image File Format";

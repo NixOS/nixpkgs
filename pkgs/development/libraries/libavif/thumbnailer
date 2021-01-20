@@ -1,0 +1,5 @@
+[Thumbnailer Entry]
+TryExec=@bindir@/gdk-pixbuf-thumbnailer
+Exec=@bindir@/gdk-pixbuf-thumbnailer -s %s %u %o
+MimeType=image/avif;image/avif-sequence;
+
