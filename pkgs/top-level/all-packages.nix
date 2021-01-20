@@ -18211,6 +18211,8 @@ in
 
   sickrage = callPackage ../servers/sickbeard/sickrage.nix { };
 
+  sigurlx = callPackage ../tools/security/sigurlx { };
+
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
   slimserver = callPackage ../servers/slimserver { };
