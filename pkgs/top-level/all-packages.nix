@@ -13184,6 +13184,8 @@ in
 
   cointop = callPackage ../applications/misc/cointop { };
 
+  cog = callPackage ../development/web/cog { };
+
   ctl = callPackage ../development/libraries/ctl { };
 
   ctpp2 = callPackage ../development/libraries/ctpp2 { };
@@ -15455,6 +15457,10 @@ in
   libxsmm = callPackage ../development/libraries/libxsmm { };
 
   libixp_hg = callPackage ../development/libraries/libixp-hg { };
+
+  libwpe = callPackage ../development/libraries/libwpe { };
+
+  libwpe-fdo = callPackage ../development/libraries/libwpe/fdo.nix { };
 
   libyaml = callPackage ../development/libraries/libyaml { };
 
