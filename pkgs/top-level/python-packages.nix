@@ -6031,6 +6031,8 @@ in {
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
+  pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
+
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
   pytest-lazy-fixture = callPackage ../development/python-modules/pytest-lazy-fixture { };
