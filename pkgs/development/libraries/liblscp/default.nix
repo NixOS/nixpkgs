@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig }:
+{ stdenv, fetchurl, autoconf, automake, libtool, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "liblscp";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rl7ssdzj0z3658yvdijmb27n2lcwmplx4qxg5mwrm07pvs7i75k";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
 
   preConfigure = "make -f Makefile.git";
 

@@ -1,0 +1,33 @@
+diff --git i/cmake/ExternalLibraries.cmake w/cmake/ExternalLibraries.cmake
+index d8c88ae..47a12c0 100644
+--- i/cmake/ExternalLibraries.cmake
++++ w/cmake/ExternalLibraries.cmake
+@@ -2,24 +2,20 @@ include(FetchContent)
+ 
+ set(QAPPLICATION_CLASS QApplication)
+ FetchContent_Declare(SingleApplication
+-    GIT_REPOSITORY https://github.com/itay-grudev/SingleApplication
+-    GIT_TAG v3.2.0
++    SOURCE_DIR @singleapplication@
+ )
+ 
+ FetchContent_Declare(QTaskbarControl
+-    GIT_REPOSITORY https://github.com/Skycoder42/QTaskbarControl
+-    GIT_TAG 2.0.2
++    SOURCE_DIR @qtaskbarcontrol@
+ )
+ 
+ option(QHOTKEY_INSTALL OFF)
+ FetchContent_Declare(QHotkey
+-    GIT_REPOSITORY https://github.com/Skycoder42/QHotkey
+-    GIT_TAG 1.4.2
++    SOURCE_DIR @qhotkey@
+ )
+ 
+ FetchContent_Declare(QOnlineTranslator
+-    GIT_REPOSITORY https://github.com/crow-translate/QOnlineTranslator
+-    GIT_TAG 1.4.1
++    SOURCE_DIR @qonlinetranslator@
+ )
+ 
+ FetchContent_MakeAvailable(SingleApplication QTaskbarControl QHotkey QOnlineTranslator)

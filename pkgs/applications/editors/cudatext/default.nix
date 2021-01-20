@@ -30,22 +30,21 @@ let
   deps = lib.mapAttrs
     (name: spec:
       fetchFromGitHub {
-        owner = "Alexey-T";
         repo = name;
-        inherit (spec) rev sha256;
+        inherit (spec) owner rev sha256;
       }
     )
     (builtins.fromJSON (builtins.readFile ./deps.json));
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.111.0";
+  version = "1.118.2";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    sha256 = "1ai0g8fmw4m237dqh5dkr8w9qqricyvp49ijz2ivvmg9dsdfzjfp";
+    sha256 = "0d6f4qfs7vifz7qkw2vkdjgd5w717wfpnxbc4qa4hs4g6y86ywmm";
   };
 
   patches = [
@@ -74,6 +73,7 @@ stdenv.mkDerivation rec {
     cp -r --no-preserve=mode ${dep} ${name}
   '') deps) + ''
     lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
+      bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
       EncConv/encconv/encconv_package.lpk \
       ATBinHex-Lazarus/atbinhex/atbinhex_package.lpk \
       ATFlatControls/atflatcontrols/atflatcontrols_package.lpk \
@@ -106,6 +106,7 @@ stdenv.mkDerivation rec {
       Search and replace with RegEx. Extendable by Python plugins and themes.
     '';
     homepage = "http://www.uvviewsoft.com/cudatext/";
+    changelog = "http://uvviewsoft.com/cudatext/history.txt";
     license = licenses.mpl20;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;

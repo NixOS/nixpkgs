@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
+{ stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
 , ncurses, cpio, gperf, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex, db
-, gmp, readline, file, numactl, xen, libapparmor, jansson
+, gmp, readline, file, numactl, libapparmor, jansson
 , getopt, perlPackages, ocamlPackages
 , libtirpc
 , appliance ? null
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "ad6562c48c38e922a314cb45a90996843d81045595c4917f66b02a6c2dfe8058";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
   buildInputs = [
     ncurses cpio gperf jansson
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex db
-    numactl xen libapparmor getopt perlPackages.ModuleBuild
+    numactl libapparmor getopt perlPackages.ModuleBuild
     libtirpc
   ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
     ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt gettext-stub ounit ])
@@ -91,5 +91,7 @@ stdenv.mkDerivation rec {
     homepage = "https://libguestfs.org/";
     maintainers = with maintainers; [offline];
     platforms = platforms.linux;
+    # this is to avoid "output size exceeded"
+    hydraPlatforms = if appliance != null then appliance.meta.hydraPlatforms else platforms.linux;
   };
 }

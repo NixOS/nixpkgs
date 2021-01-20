@@ -1,0 +1,58 @@
+{
+  "x86_64-linux": {
+    "alpha": {
+      "experimental": {
+        "name": "factorio_alpha_x64-1.1.12.tar.xz",
+        "needsAuth": true,
+        "sha256": "1b6rccm3vvvgs1sky0nrm001hsrzahrd8hc0pgldgyk0i6g5bmss",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/1.1.12/alpha/linux64",
+        "version": "1.1.12"
+      },
+      "stable": {
+        "name": "factorio_alpha_x64-1.0.0.tar.xz",
+        "needsAuth": true,
+        "sha256": "0zixscff0svpb0yg8nzczp2z4filqqxi1k0z0nrpzn2hhzhf1464",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/1.0.0/alpha/linux64",
+        "version": "1.0.0"
+      }
+    },
+    "demo": {
+      "experimental": {
+        "name": "factorio_demo_x64-1.1.12.tar.xz",
+        "needsAuth": false,
+        "sha256": "037lipqxgfxycjsjffgd6rnx3xv62r40fmkyarcclww3yi596zrw",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/1.1.12/demo/linux64",
+        "version": "1.1.12"
+      },
+      "stable": {
+        "name": "factorio_demo_x64-1.0.0.tar.xz",
+        "needsAuth": false,
+        "sha256": "0h9cqbp143w47zcl4qg4skns4cngq0k40s5jwbk0wi5asjz8whqn",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/1.0.0/demo/linux64",
+        "version": "1.0.0"
+      }
+    },
+    "headless": {
+      "experimental": {
+        "name": "factorio_headless_x64-1.1.12.tar.xz",
+        "needsAuth": false,
+        "sha256": "0chgv7ymsiz4rrjmp04ckdhk2yzgi4ly7rwl0nv2fswajhl7ngmf",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/1.1.12/headless/linux64",
+        "version": "1.1.12"
+      },
+      "stable": {
+        "name": "factorio_headless_x64-1.0.0.tar.xz",
+        "needsAuth": false,
+        "sha256": "0r0lplns8nxna2viv8qyx9mp4cckdvx6k20w2g2fwnj3jjmf3nc1",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/1.0.0/headless/linux64",
+        "version": "1.0.0"
+      }
+    }
+  }
+}

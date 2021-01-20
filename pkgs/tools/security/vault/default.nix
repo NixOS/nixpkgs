@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, buildGoPackage, installShellFiles, nixosTests }:
 
 buildGoPackage rec {
   pname = "vault";
-  version = "1.5.4";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "0bin0r0qmyz8xal910csbclzc6ng2xv69jszyi69gd6n6f43vqw8";
+    sha256 = "1pgyyl2zgnr3wy4k8c5xsk2s5dpl97xdfq67lpfss7fz1bij8x47";
   };
 
   goPackagePath = "github.com/hashicorp/vault";
@@ -24,9 +24,12 @@ buildGoPackage rec {
     installShellCompletion vault.bash
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests.vault = nixosTests.vault;
+
+  meta = with lib; {
     homepage = "https://www.vaultproject.io/";
     description = "A tool for managing secrets";
+    changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
     maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri ];

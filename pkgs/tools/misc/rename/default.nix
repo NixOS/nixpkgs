@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, perlPackages }:
 
 perlPackages.buildPerlPackage {
   pname = "rename";
@@ -10,7 +10,7 @@ perlPackages.buildPerlPackage {
     rev = "d46f1d0ced25dc5849acb5d5974a3e2e9d97d536";
     sha256 = "0qahs1cqfaci2hdf1xncrz4k0z5skkfr43apnm3kybs7za33apzw";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rename files according to a Perl rewrite expression";
     homepage = "https://github.com/pstray/rename";
     maintainers = with maintainers; [ mkg ];

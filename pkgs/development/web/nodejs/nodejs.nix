@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, openssl, python, zlib, libuv, utillinux, http-parser
-, pkgconfig, which
+{ stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
+, pkg-config, which
 # Updater dependencies
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
 , gnupg
@@ -28,7 +28,7 @@ let
     "--shared-${name}-libpath=${getLib sharedLibDeps.${name}}/lib"
     /** Closure notes: we explicitly avoid specifying --shared-*-includes,
      *  as that would put the paths into bin/nodejs.
-     *  Including pkgconfig in build inputs would also have the same effect!
+     *  Including pkg-config in build inputs would also have the same effect!
      */
   ]) (builtins.attrNames sharedLibDeps) ++ [
     "--with-intl=system-icu"
@@ -55,7 +55,7 @@ in
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu ];
 
-    nativeBuildInputs = [ which utillinux pkgconfig python ]
+    nativeBuildInputs = [ which util-linux pkg-config python ]
       ++ optionals stdenv.isDarwin [ xcbuild ];
 
     configureFlags = let

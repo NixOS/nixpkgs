@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook
 , gtk2
 , libxml2
@@ -6,7 +6,7 @@
 , pango
 , pangoxsl
 , perl
-, pkgconfig
+, pkg-config
 , popt
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dgp72094lx9i9gvg21pp8ak7bg39707rdf6wz011p9s6n6lrq5g";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [
     libxml2
     libxslt
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "docs" ""  # docs target wants to download from network
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XSL Formatter";
     homepage = "http://xmlroff.org/";
     platforms = platforms.unix;

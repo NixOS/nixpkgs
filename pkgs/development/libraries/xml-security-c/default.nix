@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xalanc, xercesc, openssl, pkgconfig }:
+{ stdenv, fetchurl, xalanc, xercesc, openssl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "xml-security-c";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     "--with-xalan"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ xalanc xercesc openssl ];
 
   meta = {

@@ -1,4 +1,4 @@
-{ stdenv, libgit2, fetchgit }:
+{ lib, stdenv, libgit2, fetchgit }:
 
 stdenv.mkDerivation rec {
   pname = "stagit";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libgit2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "git static site generator";
     homepage = "https://git.codemadness.org/stagit/";
     license = licenses.mit;

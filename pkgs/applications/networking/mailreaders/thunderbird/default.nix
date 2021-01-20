@@ -2,6 +2,7 @@
 , bzip2
 , cargo
 , common-updater-scripts
+, copyDesktopItems
 , coreutils
 , curl
 , dbus
@@ -13,13 +14,15 @@
 , freetype
 , glib
 , gnugrep
+, gnupg
 , gnused
+, gpgme
 , icu
 , jemalloc
 , lib
+, libevent
 , libGL
 , libGLU
-, libevent
 , libjpeg
 , libnotify
 , libpng
@@ -32,10 +35,10 @@
 , nasm
 , nodejs
 , nspr
-, nss
+, nss_3_53
 , pango
 , perl
-, pkgconfig
+, pkg-config
 , python2
 , python3
 , runtimeShell
@@ -70,25 +73,26 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.3.2";
+  version = "78.6.1";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "3c5b9400k3nrlabr2cvm5s3nz4ngy9qnz0j44mczh67v5xsmxi1hks8dx75s8sbbhnzmg0id4vlxfwd7i259p2xc039nkzkahmfn2wc";
+      "1vzka0msy6gqyxgwyp2dknp6rmgzhcjsyq2hf798wf4wrb7rrrsyrgqrd8skss929wakda0slqng505lhig79za7wyyh531f7i9qbv7";
   };
 
   nativeBuildInputs = [
     autoconf213
     cargo
+    copyDesktopItems
     gnused
     llvmPackages.llvm
     m4
     nasm
     nodejs
     perl
-    pkgconfig
+    pkg-config
     python2
     python3
     rust-cbindgen
@@ -118,7 +122,7 @@ stdenv.mkDerivation rec {
     libvpx
     libwebp
     nspr
-    nss
+    nss_3_53
     pango
     perl
     sqlite
@@ -142,7 +146,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE =[
     "-I${glib.dev}/include/gio-unix-2.0"
-    "-I${nss.dev}/include/nss"
+    "-I${nss_3_53.dev}/include/nss"
   ];
 
   patches = [
@@ -257,14 +261,14 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  postInstall = let
-    desktopItem = makeDesktopItem {
+  desktopItems = [
+    (makeDesktopItem {
       categories = lib.concatStringsSep ";" [ "Application" "Network" ];
       desktopName = "Thunderbird";
       genericName = "Mail Reader";
       name = "thunderbird";
       exec = "thunderbird %U";
-      icon = "$out/lib/thunderbird/chrome/icons/default/default256.png";
+      icon = "thunderbird";
       mimeType = lib.concatStringsSep ";" [
         # Email
         "x-scheme-handler/mailto"
@@ -278,13 +282,23 @@ stdenv.mkDerivation rec {
         "x-scheme-handler/snews"
         "x-scheme-handler/nntp"
       ];
-    };
-  in ''
+    })
+  ];
+
+  postInstall = ''
     # TODO: Move to a dev output?
     rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
-
-    ${desktopItem.buildCommand}
+    install -Dm 444 $out/lib/thunderbird/chrome/icons/default/default256.png $out/share/icons/hicolor/256x256/apps/thunderbird.png
   '';
+
+  # Note on GPG support:
+  # Thunderbird's native GPG support does not yet support smartcards.
+  # The official upstream recommendation is to configure fall back to gnupg
+  # using the Thunderbird config `mail.openpgp.allow_external_gnupg`
+  # and GPG keys set up; instructions with pictures at:
+  # https://anweshadas.in/how-to-use-yubikey-or-any-gpg-smartcard-in-thunderbird-78/
+  # For that to work out of the box, it requires `gnupg` on PATH and
+  # `gpgme` in `LD_LIBRARY_PATH`; we do this below.
 
   preFixup = ''
     # Needed to find Mozilla runtime
@@ -295,6 +309,8 @@ stdenv.mkDerivation rec {
       --set SNAP_NAME "thunderbird"
       --set MOZ_LEGACY_PROFILES 1
       --set MOZ_ALLOW_DOWNGRADE 1
+      --prefix PATH : "${lib.getBin gnupg}/bin"
+      --prefix LD_LIBRARY_PATH : "${lib.getLib gpgme}/lib"
     )
   '';
 
@@ -321,7 +337,9 @@ stdenv.mkDerivation rec {
       gnugrep curl runtimeShell;
   };
 
-  meta = with stdenv.lib; {
+  requiredSystemFeatures = [ "big-parallel" ];
+
+  meta = with lib; {
     description = "A full-featured e-mail client";
     homepage = "https://www.thunderbird.net";
     maintainers = with maintainers; [

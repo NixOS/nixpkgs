@@ -1,11 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
-, aiohttp, deepmerge, yarl
-, aresponses, pytest, pytest-asyncio, pytestcov }:
+{ lib
+, aiohttp
+, aresponses
+, buildPythonPackage
+, deepmerge
+, fetchFromGitHub
+, pytest-asyncio
+, pytestCheckHook
+, pytestcov
+, yarl
+}:
 
 buildPythonPackage rec {
   pname = "pyipp";
   version = "0.11.0";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
    owner = "ctalkington";
@@ -22,14 +29,26 @@ buildPythonPackage rec {
 
   checkInputs = [
     aresponses
-    pytest
     pytest-asyncio
     pytestcov
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest -q .
-  '';
+  # Some tests are failing due to encoding issues
+  # https://github.com/ctalkington/python-ipp/issues/121
+  disabledTests = [
+    "test_internal_session"
+    "test_request_port"
+    "est_http_error426"
+    "test_unexpected_response"
+    "test_printer"
+    "test_raw"
+    "test_ipp_request"
+    "test_request_tls"
+    "test_ipp_error_0x0503"
+  ];
+
+  pythonImportsCheck = [ "pyipp" ];
 
   meta = with lib; {
     description = "Asynchronous Python client for Internet Printing Protocol (IPP)";

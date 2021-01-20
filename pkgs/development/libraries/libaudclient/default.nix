@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, dbus-glib }:
+{ stdenv, fetchurl, pkg-config, glib, dbus-glib }:
 
 stdenv.mkDerivation rec {
   name = "libaudclient-3.5-rc2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nhpgz0kg8r00z54q5i96pjk7s57krq3fvdypq496c7fmlv9kdap";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib dbus-glib ];
 
   meta = with stdenv.lib; {

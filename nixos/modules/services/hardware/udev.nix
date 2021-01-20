@@ -57,8 +57,8 @@ let
         substituteInPlace $i \
           --replace \"/sbin/modprobe \"${pkgs.kmod}/bin/modprobe \
           --replace \"/sbin/mdadm \"${pkgs.mdadm}/sbin/mdadm \
-          --replace \"/sbin/blkid \"${pkgs.utillinux}/sbin/blkid \
-          --replace \"/bin/mount \"${pkgs.utillinux}/bin/mount \
+          --replace \"/sbin/blkid \"${pkgs.util-linux}/sbin/blkid \
+          --replace \"/bin/mount \"${pkgs.util-linux}/bin/mount \
           --replace /usr/bin/readlink ${pkgs.coreutils}/bin/readlink \
           --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename
       done
@@ -205,7 +205,7 @@ in
       extraRules = mkOption {
         default = "";
         example = ''
-          KERNEL=="eth*", ATTR{address}=="00:1D:60:B9:6D:4F", NAME="my_fast_network_card"
+          SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="00:1D:60:B9:6D:4F", KERNEL=="eth*", NAME="my_fast_network_card"
         '';
         type = types.lines;
         description = ''
@@ -280,7 +280,7 @@ in
 
     services.udev.packages = [ extraUdevRules extraHwdbFile ];
 
-    services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux udev ];
+    services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.util-linux udev ];
 
     boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 

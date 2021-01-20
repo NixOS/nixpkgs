@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchPypi, requests, zeroconf, netifaces, pytest }:
+{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, requests, zeroconf, netifaces, pytest }:
 
 buildPythonPackage rec {
   pname = "netdisco";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python library to scan local network for services and devices";
     homepage = "https://github.com/home-assistant/netdisco";
     license = licenses.asl20;

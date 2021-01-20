@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, nettools, nixosTests, nodejs
+, ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
 , fixup_yarn_lock, replace
 }:
@@ -27,6 +27,10 @@ let
         grpc = x.grpc // {
           patches = [ ./fix-grpc-ar.patch ];
           dontBuild = false;
+        };
+        # the openssl needs the openssl include files
+        openssl = x.openssl // {
+          buildInputs = [ openssl ];
         };
       };
     groups = [
@@ -89,8 +93,9 @@ let
 
       bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
       bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake webpack:compile RAILS_ENV=production NODE_ENV=production NODE_OPTIONS="--max_old_space_size=3072"
+      bundle exec rake gitlab:assets:compile_webpack_if_needed RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
 
       runHook postBuild
     '';

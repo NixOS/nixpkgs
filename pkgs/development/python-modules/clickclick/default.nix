@@ -21,7 +21,7 @@ buildPythonPackage rec {
     "test_choice_default"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Click command line utilities";
     homepage = "https://github.com/hjacobs/python-clickclick/";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ stdenv, fetchFromGitHub, pkg-config
 , openssl ? null, libpcap ? null
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   # libsrtp.pc references -lcrypto -lpcap without -L
   propagatedBuildInputs = [ openssl libpcap ];

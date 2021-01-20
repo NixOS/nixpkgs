@@ -1,38 +1,37 @@
-{ mkDerivation, stdenv, fetchurl, qmake, qtbase, qtwebkit }:
+{ mkDerivation
+, cmark-gfm
+, fetchurl
+, qmake
+, qtbase
+, qtwebkit
+, lib, stdenv
+, wrapGAppsHook
+}:
 
 mkDerivation rec {
   pname = "mindforger";
-  version = "1.48.2";
+  version = "1.52.0";
 
   src = fetchurl {
-    url = "https://github.com/dvorka/mindforger/releases/download/1.48.0/mindforger_${version}.tgz";
-    sha256 = "1wlrl8hpjcpnq098l3n2d1gbhbjylaj4z366zvssqvmafr72iyw4";
+    url = "https://github.com/dvorka/mindforger/releases/download/${version}/mindforger_${version}.tgz";
+    sha256 = "1pghsw8kwvjhg3jpmjs0n892h2l0pm0cs6ymi8b23fwk0kfj67rd";
   };
 
-  nativeBuildInputs = [ qmake ] ;
-  buildInputs = [ qtbase qtwebkit ] ;
+  nativeBuildInputs = [ qmake wrapGAppsHook ] ;
+  buildInputs = [ qtbase qtwebkit cmark-gfm ] ;
 
   doCheck = true;
-
-  enableParallelBuilding = true ;
 
   patches = [ ./build.patch ] ;
 
   postPatch = ''
-    substituteInPlace deps/discount/version.c.in --subst-var-by TABSTOP 4
+    substituteInPlace lib/src/install/installer.cpp --replace /usr "$out"
     substituteInPlace app/resources/gnome-shell/mindforger.desktop --replace /usr "$out"
-  '';
-
-  preConfigure = ''
-    export AC_PATH="$PATH"
-    pushd deps/discount
-    ./configure.sh
-    popd
   '';
 
   qmakeFlags = [ "-r mindforger.pro" "CONFIG+=mfnoccache" ] ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thinking Notebook & Markdown IDE";
     longDescription = ''
      MindForger is actually more than an editor or IDE - it's human
@@ -41,5 +40,6 @@ mkDerivation rec {
     homepage = "https://www.mindforger.com";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
+    maintainers = with maintainers; [ cyplo ];
   };
 }

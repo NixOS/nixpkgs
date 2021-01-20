@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
   name = "dlx-2012.07.08";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.davidviner.com/dlx.php";
     description = "DLX Simulator";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

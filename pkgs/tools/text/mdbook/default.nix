@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, rustPlatform, CoreServices, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "rust-lang-nursery";
     repo = "mdBook";
     rev = "v${version}";
-    sha256 = "1566jabmvafv6aiw5nvb6y2zcnxc7pbb9dl3s4vi6mx21kqp68ag";
+    sha256 = "11v2x0q8pn7hbmznqy872ksr7szyiki9cfhapymjhkf5nwfvcdbb";
   };
 
-  cargoSha256 = "0sa1h3qzdhgk2h3wrc0kg0ajq6zbkvn1ry4672gfn3j9gpgvy2bb";
+  cargoSha256 = "1psgqj04hzv7p18h4phsahxg4rj9yz38b8mh111k6l8m4r83kd75";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create books from MarkDown";
     homepage = "https://github.com/rust-lang-nursery/mdbook";
     license = [ licenses.mpl20 ];

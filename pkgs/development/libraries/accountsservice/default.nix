@@ -2,7 +2,7 @@
 , fetchurl
 , fetchpatch
 , substituteAll
-, pkgconfig
+, pkg-config
 , glib
 , shadow
 , gobject-introspection
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
   ];
 

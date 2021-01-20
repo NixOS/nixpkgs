@@ -9,7 +9,7 @@
   The test itself can be run interactively. This is particularly useful when
   developing or debugging a test:
 <screen>
-<prompt>$ </prompt>nix-build nixos/tests/login.nix -A driver
+<prompt>$ </prompt>nix-build nixos/tests/login.nix -A driverInteractive
 <prompt>$ </prompt>./result/bin/nixos-test-driver
 starting VDE switch for network 1
 <prompt>&gt;</prompt>
@@ -30,7 +30,7 @@ starting VDE switch for network 1
  <para>
   To just start and experiment with the VMs, run:
 <screen>
-<prompt>$ </prompt>nix-build nixos/tests/login.nix -A driver
+<prompt>$ </prompt>nix-build nixos/tests/login.nix -A driverInteractive
 <prompt>$ </prompt>./result/bin/nixos-run-vms
 </screen>
   The script <command>nixos-run-vms</command> starts the virtual machines

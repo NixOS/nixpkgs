@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "numactl";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # building ~5% slower until reboot. Ugh!
   doCheck = false; # never ever!
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
     homepage = "https://github.com/numactl/numactl";
     license = with licenses; [ gpl2 lgpl21 ]; # libnuma is lgpl21

@@ -49,6 +49,11 @@ lib.makeOverridable (
 , propagatedUserEnvPkgs ? []
 , buildFlags ? []
 , passthru ? {}
+# bundler expects gems to be stored in the cache directory for certain actions
+# such as `bundler install --redownload`.
+# At the cost of increasing the store size, you can keep the gems to have closer
+# alignment with what Bundler expects.
+, keepGemCache ? false
 , ...} @ attrs:
 
 let
@@ -207,8 +212,8 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     # looks like useless files which break build repeatability and consume space
     pushd $out/${ruby.gemPath}
     rm -fv doc/*/*/created.rid || true
-    rm -fv {gems/*/ext/*,extensions/*/*/*}/{mkmf.log,gem_make.out} || true
-    rm -fvr cache
+    rm -fv {gems/*/ext/*,extensions/*/*/*}/{Makefile,mkmf.log,gem_make.out} || true
+    ${if keepGemCache then "" else "rm -fvr cache"}
     popd
 
     # write out metadata and binstubs

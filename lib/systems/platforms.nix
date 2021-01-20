@@ -47,7 +47,6 @@ rec {
       arch = "armv5te";
     };
 
-    kernelMajor = "2.6";
     kernelBaseConfig = "multi_v5_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -70,7 +69,6 @@ rec {
 
   sheevaplug = {
     name = "sheevaplug";
-    kernelMajor = "2.6";
     kernelBaseConfig = "multi_v5_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -182,7 +180,6 @@ rec {
 
   raspberrypi = {
     name = "raspberrypi";
-    kernelMajor = "2.6";
     kernelBaseConfig = "bcm2835_defconfig";
     kernelDTB = true;
     kernelArch = "arm";
@@ -203,6 +200,35 @@ rec {
   # Legacy attribute, for compatibility with existing configs only.
   raspberrypi2 = armv7l-hf-multiplatform;
 
+  zero-gravitas = {
+    name = "zero-gravitas";
+    kernelBaseConfig = "zero-gravitas_defconfig";
+    kernelArch = "arm";
+    # kernelTarget verified by checking /boot on reMarkable 1 device
+    kernelTarget = "zImage";
+    kernelAutoModules = false;
+    kernelDTB = true;
+    gcc = {
+      fpu = "neon";
+      cpu = "cortex-a9";
+    };
+  };
+
+  zero-sugar = {
+    name = "zero-sugar";
+    kernelBaseConfig = "zero-sugar_defconfig";
+    kernelArch = "arm";
+    kernelDTB = true;
+    kernelAutoModules = false;
+    kernelPreferBuiltin = true;
+    kernelTarget = "zImage";
+    gcc = {
+      cpu = "cortex-a7";
+      fpu = "neon-vfpv4";
+      float-abi = "hard";
+    };
+  };
+
   scaleway-c1 = armv7l-hf-multiplatform // {
     gcc = {
       cpu = "cortex-a9";
@@ -212,7 +238,6 @@ rec {
 
   utilite = {
     name = "utilite";
-    kernelMajor = "2.6";
     kernelBaseConfig = "multi_v7_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -265,7 +290,6 @@ rec {
 
   armv7l-hf-multiplatform = {
     name = "armv7l-hf-multiplatform";
-    kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
     kernelBaseConfig = "multi_v7_defconfig";
     kernelArch = "arm";
     kernelDTB = true;
@@ -313,7 +337,6 @@ rec {
 
   aarch64-multiplatform = {
     name = "aarch64-multiplatform";
-    kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
     kernelBaseConfig = "defconfig";
     kernelArch = "arm64";
     kernelDTB = true;
@@ -352,7 +375,6 @@ rec {
 
   ben_nanonote = {
     name = "ben_nanonote";
-    kernelMajor = "2.6";
     kernelArch = "mips";
     gcc = {
       arch = "mips32";
@@ -362,7 +384,6 @@ rec {
 
   fuloong2f_n32 = {
     name = "fuloong2f_n32";
-    kernelMajor = "2.6";
     kernelBaseConfig = "lemote2f_defconfig";
     kernelArch = "mips";
     kernelAutoModules = false;
@@ -442,10 +463,9 @@ rec {
   ## Other
   ##
 
-  riscv-multiplatform = bits: {
+  riscv-multiplatform = {
     name = "riscv-multiplatform";
     kernelArch = "riscv";
-    bfdEmulation = "elf${bits}lriscv";
     kernelTarget = "vmlinux";
     kernelAutoModules = true;
     kernelBaseConfig = "defconfig";
@@ -455,17 +475,23 @@ rec {
     '';
   };
 
-  selectBySystem = system: {
-      i486-linux = pc32;
-      i586-linux = pc32;
-      i686-linux = pc32;
-      x86_64-linux = pc64;
-      armv5tel-linux = sheevaplug;
-      armv6l-linux = raspberrypi;
-      armv7a-linux = armv7l-hf-multiplatform;
-      armv7l-linux = armv7l-hf-multiplatform;
-      aarch64-linux = aarch64-multiplatform;
-      mipsel-linux = fuloong2f_n32;
-      powerpc64le-linux = powernv;
-    }.${system} or pcBase;
+  select = platform:
+    # x86
+    /**/ if platform.isx86_32 then pc32
+    else if platform.isx86_64 then pc64
+
+    # ARM
+    else if platform.isAarch32 then let
+      version = platform.parsed.cpu.version or null;
+      in     if version == null then pcBase
+        else if lib.versionOlder version "6" then sheevaplug
+        else if lib.versionOlder version "7" then raspberrypi
+        else armv7l-hf-multiplatform
+    else if platform.isAarch64 then aarch64-multiplatform
+
+    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then fuloong2f_n32
+
+    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then powernv
+
+    else pcBase;
 }

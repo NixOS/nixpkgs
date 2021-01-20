@@ -1,4 +1,4 @@
-{ stdenv, lib, edk2, utillinux, nasm, iasl
+{ stdenv, lib, edk2, util-linux, nasm, iasl
 , csmSupport ? false, seabios ? null
 , secureBoot ? false
 }:
@@ -24,7 +24,7 @@ edk2.mkDerivation projectDscPath {
 
   outputs = [ "out" "fd" ];
 
-  buildInputs = [ utillinux nasm iasl ];
+  buildInputs = [ util-linux nasm iasl ];
 
   hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
 
@@ -59,7 +59,7 @@ edk2.mkDerivation projectDscPath {
   meta = {
     description = "Sample UEFI firmware for QEMU and KVM";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
     platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin"];
   };
 }

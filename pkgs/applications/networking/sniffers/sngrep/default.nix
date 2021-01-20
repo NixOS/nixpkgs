@@ -1,14 +1,14 @@
-{ stdenv, autoconf, automake, fetchFromGitHub, libpcap, ncurses, openssl, pcre }:
+{ lib, stdenv, autoconf, automake, fetchFromGitHub, libpcap, ncurses, openssl, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "sngrep";
-  version = "1.4.7";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "irontec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1dx5l48m4634y0zi6wjky412g80lfxqq1nphv7pi1kwvm1k5m5ri";
+    sha256 = "0lnwsw9x4y4lr1yh749y24f71p5zsghwh5lp28zqfanw025mipf2";
   };
 
   buildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for displaying SIP calls message flows from terminal";
     homepage = "https://github.com/irontec/sngrep";
     license = licenses.gpl3;

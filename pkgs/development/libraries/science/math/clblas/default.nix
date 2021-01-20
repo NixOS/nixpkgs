@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
      "-DBUILD_TEST=OFF"
   ];
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    cmake
     gfortran
     blas
     python
@@ -52,8 +52,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [
     OpenCL
   ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/clMathLibraries/clBLAS";

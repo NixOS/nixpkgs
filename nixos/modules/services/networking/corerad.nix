@@ -4,13 +4,7 @@ with lib;
 
 let
   cfg = config.services.corerad;
-
-  writeTOML = name: x:
-    pkgs.runCommandNoCCLocal name {
-      passAsFile = ["config"];
-      config = builtins.toJSON x;
-      buildInputs = [ pkgs.go-toml ];
-    } "jsontoml < $configPath > $out";
+  settingsFormat = pkgs.formats.toml {};
 
 in {
   meta.maintainers = with maintainers; [ mdlayher ];
@@ -19,7 +13,7 @@ in {
     enable = mkEnableOption "CoreRAD IPv6 NDP RA daemon";
 
     settings = mkOption {
-      type = types.uniq types.attrs;
+      type = settingsFormat.type;
       example = literalExample ''
         {
           interfaces = [
@@ -64,7 +58,7 @@ in {
 
   config = mkIf cfg.enable {
     # Prefer the config file over settings if both are set.
-    services.corerad.configFile = mkDefault (writeTOML "corerad.toml" cfg.settings);
+    services.corerad.configFile = mkDefault (settingsFormat.generate "corerad.toml" cfg.settings);
 
     systemd.services.corerad = {
       description = "CoreRAD IPv6 NDP RA daemon";

@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ lib, stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "distro";
@@ -12,9 +12,9 @@ buildPythonPackage rec {
   # tests are very targeted at individual linux distributions
   doCheck = false;
 
-  pythonImportcheck = [ "distro" ];
+  pythonImportsCheck = [ "distro" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/nir0s/distro";
     description = "Linux Distribution - a Linux OS platform information API.";
     license = licenses.asl20;

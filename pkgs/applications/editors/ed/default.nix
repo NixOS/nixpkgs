@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lzip
+{ lib, stdenv, fetchurl, lzip
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -33,14 +33,14 @@ stdenv.mkDerivation (rec {
       full-screen editors such as GNU Emacs or GNU Moe.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     homepage = "https://www.gnu.org/software/ed/";
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
-} // stdenv.lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+} // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   # This may be moved above during a stdenv rebuild.
   preConfigure = ''
     configureFlagsArray+=("CC=$CC")

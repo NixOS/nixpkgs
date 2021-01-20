@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, meson, ninja, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, pkgconfig, glib, gtk3, cairo, sqlite, gnome3
+{ fetchurl, stdenv, meson, ninja, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, pkg-config, glib, gtk3, cairo, sqlite, gnome3
 , clutter-gtk, libsoup, gobject-introspection /*, libmemphis */ }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
+  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
 
   buildInputs = [ sqlite libsoup ];
 

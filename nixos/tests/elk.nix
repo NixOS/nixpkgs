@@ -12,7 +12,7 @@ let
   mkElkTest = name : elk :
     import ./make-test-python.nix ({
     inherit name;
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ eelco offline basvandijk ];
     };
     nodes = {

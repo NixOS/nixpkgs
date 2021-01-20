@@ -15,6 +15,11 @@
     sha256 = "0y5z444wrbhlmsqpy2sxmajl1fbf74843lvgj3y6vz260dn2q0l0";
   })
   (fetchNuGet {
+    name = "Crc32.NET";
+    version = "1.2.0";
+    sha256 = "0qaj3192k1vfji87zf50rhydn5mrzyzybrs2k4v7ap29k8i0vi5h";
+  })
+  (fetchNuGet {
     name = "DiscordRichPresence";
     version = "1.0.150";
     sha256 = "0qmbi4sccia3w80q8xfvj3bw62nvz047wq198n2b2aflkf47bq79";
@@ -236,8 +241,8 @@
   })
   (fetchNuGet {
     name = "OpenTK.NetStandard";
-    version = "1.0.5.12";
-    sha256 = "1n8j6k47189l5b6rnhyq391d84v6zkpiiqq41cccb6qizvrcgl69";
+    version = "1.0.5.22";
+    sha256 = "10bdhc4qbffac862zg03ab5j3iqrr33bydxmnmrxn82brldahm23";
   })
   (fetchNuGet {
     name = "PangoSharp";
@@ -488,6 +493,11 @@
     name = "Ryujinx.Graphics.Nvdec.Dependencies";
     version = "4.3.0";
     sha256 = "0szgbdhyhvzpw8nb9k2ww37p5qipab1pdll8idkk57y5xnl2f7ll";
+  })
+  (fetchNuGet {
+    name = "SharpZipLib";
+    version = "1.2.0";
+    sha256 = "0ynhx1qkjm723bwjwsrdviw1d2s9azndpa12dagrjshhma3igqm5";
   })
   (fetchNuGet {
     name = "System.AppContext";

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
 , atomicwrites
 , attrs
 , funcsigs
@@ -21,14 +21,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.0.1";
+  version = "6.1.2";
   pname = "pytest";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "85228d75db9f45e06e57ef9bf4429267f81ac7c0d742cc9ed63d09886a9fe6f4";
+    sha256 = "c0a7e94a8cdbc5422a51ccdad8e6f1024795939cc89159a0ae7f0b316ad3823e";
   };
 
   checkInputs = [ hypothesis pygments ];
@@ -58,6 +58,12 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths" --ignore=testing/test_junitxml.py
+
+    # tests leave behind unreproducible pytest binaries in the output directory, remove:
+    find $out/lib -name "*-pytest-${version}.pyc" -delete
+    # specifically testing/test_assertion.py and testing/test_assertrewrite.py leave behind those:
+    find $out/lib -name "*opt-2.pyc" -delete
+
     runHook postCheck
   '';
 
@@ -73,7 +79,7 @@ buildPythonPackage rec {
     "pytest"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.pytest.org";
     description = "Framework for writing tests";
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];

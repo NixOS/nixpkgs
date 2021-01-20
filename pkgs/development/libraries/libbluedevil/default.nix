@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0p4f0brhcz9gfxfd6114fa5x6swfdmgzv350xwncdr0s1qnamk8c";
   };
 
-  buildInputs = [ cmake qt4 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qt4 ];
 
   meta = {
     platforms = stdenv.lib.platforms.unix;

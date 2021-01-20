@@ -1,5 +1,5 @@
 {stdenv, fetchFromGitHub
-, gsasl, gnutls, pkgconfig, cmake, zlib, libtasn1, libgcrypt, gtk3
+, gsasl, gnutls, pkg-config, cmake, zlib, libtasn1, libgcrypt, gtk3
 # this will not work on non-nixos systems
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gsasl gnutls zlib libtasn1 libgcrypt gtk3 ];
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   cmakeFlags = [
     "-DVMIME_SENDMAIL_PATH=${sendmailPath}"

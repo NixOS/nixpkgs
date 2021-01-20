@@ -9,10 +9,10 @@
   # "sourceforge", "gnu", etc.
 
   luarocks = [
-    "https://luarocks.org"
+    "https://luarocks.org/"
     "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/"
-    "http://luafr.org/moonrocks"
-    "http://luarocks.logiceditor.com/rocks"
+    "http://luafr.org/moonrocks/"
+    "http://luarocks.logiceditor.com/rocks/"
   ];
 
   # SourceForge.

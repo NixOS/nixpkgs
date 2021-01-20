@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, geopandas, descartes, matplotlib, networkx, numpy
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, geopandas, descartes, matplotlib, networkx, numpy
 , pandas, requests, Rtree, shapely, pytest, coverage, coveralls, folium, scikitlearn, scipy}:
 
 buildPythonPackage rec {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   #  coverage run --source osmnx -m pytest --verbose
   #'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package to easily download, construct, project, visualize, and analyze complex street networks from OpenStreetMap with NetworkX.";
     homepage = "https://github.com/gboeing/osmnx";
     license = licenses.mit;

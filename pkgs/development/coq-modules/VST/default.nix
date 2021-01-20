@@ -1,17 +1,15 @@
-{ stdenv, fetchFromGitHub, coq, compcert }:
+{ lib, mkCoqDerivation, coq, compcert, version ? null }:
 
-stdenv.mkDerivation rec {
+with lib; mkCoqDerivation {
   pname = "coq${coq.coq-version}-VST";
-  version = "2.6";
-
-  src = fetchFromGitHub {
-    owner = "PrincetonUniversity";
-    repo = "VST";
-    rev = "v${version}";
-    sha256 = "00bf9hl4pvmsqa08lzjs1mrxyfgfxq4k6778pnldmc8ichm90jgk";
-  };
-
-  buildInputs = [ coq ];
+  namePrefix = [];
+  displayVersion = { coq = false; };
+  owner = "PrincetonUniversity";
+  repo = "VST";
+  inherit version;
+  defaultVersion = if coq.coq-version == "8.11" then "2.6" else null;
+  release."2.6".sha256 = "00bf9hl4pvmsqa08lzjs1mrxyfgfxq4k6778pnldmc8ichm90jgk";
+  releaseRev = v: "v${v}";
   propagatedBuildInputs = [ compcert ];
 
   preConfigure = "patchShebangs util";
@@ -30,14 +28,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  enableParallelBuilding = true;
-
-  passthru.compatibleCoqVersions = stdenv.lib.flip builtins.elem [ "8.11" ];
-
   meta = {
     description = "Verified Software Toolchain";
     homepage = "https://vst.cs.princeton.edu/";
     inherit (compcert.meta) platforms;
   };
-
 }

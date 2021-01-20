@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , gupnp
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   propagatedBuildInputs = [

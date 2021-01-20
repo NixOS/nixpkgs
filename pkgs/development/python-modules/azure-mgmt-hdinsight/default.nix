@@ -1,21 +1,27 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
 , azure-common
+, azure-mgmt-core
 , msrest
 , msrestazure
 }:
 
 buildPythonPackage rec {
-  version = "1.7.0";
+  version = "7.0.0";
   pname = "azure-mgmt-hdinsight";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d1120bd9760687d87594ec5ce9257b7335504afbe55b3cda79462c1e07a095b";
+    sha256 = "d0070817ee2be611d45af91eabc5665dd53f024eaa7a55e490ace4f71a55c733";
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ azure-common msrest msrestazure ];
+  propagatedBuildInputs = [
+    azure-common
+    azure-mgmt-core
+    msrest
+    msrestazure
+  ];
 
   # no tests included
   doCheck = false;

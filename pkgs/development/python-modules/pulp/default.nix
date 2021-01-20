@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchPypi
 , buildPythonPackage
 , pyparsing
@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "PuLP";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d8ecf532868cc31fa9ff59ee5d5b2049600c5c902c18c794a2bad677c1f92e5";
+    sha256 = "b2aff10989b3692e3a59301a0cb0acddeb25dcea378f8804c86007075eae55b5";
   };
 
   propagatedBuildInputs = [ pyparsing amply ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pulp" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/coin-or/pulp";
     description = "PuLP is an LP modeler written in python";
     maintainers = with maintainers; [ teto ];

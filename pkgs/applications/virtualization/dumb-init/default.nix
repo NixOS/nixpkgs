@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, glibc }:
+{ lib, stdenv, fetchFromGitHub, glibc }:
 
 stdenv.mkDerivation rec {
   pname = "dumb-init";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15hgl8rz5dmrl5gx21sq5269l1hq539qn68xghjx0bv9hgbx0g20";
+    sha256 = "0v6ggfjl3q5p4hf002ygs8rryyzrg0fqy836p403fq2fgm30k0xx";
   };
 
   buildInputs = [ glibc.static ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A minimal init system for Linux containers";
     homepage = "https://github.com/Yelp/dumb-init";
     license = licenses.mit;

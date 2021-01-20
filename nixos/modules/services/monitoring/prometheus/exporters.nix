@@ -23,6 +23,7 @@ let
   exporterOpts = genAttrs [
     "apcupsd"
     "bind"
+    "bird"
     "blackbox"
     "collectd"
     "dnsmasq"
@@ -37,13 +38,18 @@ let
     "modemmanager"
     "nextcloud"
     "nginx"
+    "nginxlog"
     "node"
     "openvpn"
     "postfix"
     "postgres"
+    "py-air-control"
     "redis"
     "rspamd"
+    "rtl_433"
     "snmp"
+    "smokeping"
+    "sql"
     "surfboard"
     "tor"
     "unifi"
@@ -217,13 +223,21 @@ in
         Please specify either 'services.prometheus.exporters.mail.configuration'
           or 'services.prometheus.exporters.mail.configFile'.
       '';
+    } {
+      assertion = cfg.sql.enable -> (
+        (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
+      );
+      message = ''
+        Please specify either 'services.prometheus.exporters.sql.configuration' or
+          'services.prometheus.exporters.sql.configFile'
+      '';
     } ];
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
     services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
-  })] ++ [(mkIf config.services.rspamd.enable {
-    services.prometheus.exporters.rspamd.url = mkDefault "http://localhost:11334/stat";
+  })] ++ [(mkIf config.services.prometheus.exporters.rtl_433.enable {
+    hardware.rtl-sdr.enable = mkDefault true;
   })] ++ [(mkIf config.services.nginx.enable {
     systemd.services.prometheus-nginx-exporter.after = [ "nginx.service" ];
     systemd.services.prometheus-nginx-exporter.requires = [ "nginx.service" ];

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cpp-utilities, qttools, qtbase, cmake, pkgconfig }:
+{ stdenv, fetchFromGitHub, cpp-utilities, qttools, qtbase, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "qtutilities";
-  version = "6.0.6";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0g3f18530w5f8dlzrh45k868hspga5p3m8qpz7pcg3nsdjda8cwz";
+    sha256 = "sha256-vHx2JMPqioY8jUpBOIFdhhN1mIUV3LS8ayQOo3g7bY0=";
   };
 
   buildInputs = [ qtbase cpp-utilities ];

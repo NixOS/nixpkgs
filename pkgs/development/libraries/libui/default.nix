@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gtk3, Cocoa }:
+{ stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, Cocoa }:
 
 let
   shortName = "libui";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "0bm6xvqk4drg2kw6d304x6mlfal7gh8mbl5a9f0509smmdzgdkwm";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux gtk3
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage    = "https://github.com/andlabs/libui";
-    description = "Simple and portable (but not inflexible) GUI library in C that uses the native GUI technologies of each platform it supports.";
+    description = "Simple and portable (but not inflexible) GUI library in C that uses the native GUI technologies of each platform it supports";
     license     = licenses.mit;
     platforms   = platforms.unix;
   };

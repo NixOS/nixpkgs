@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ocamlbuild
+{ stdenv, lib, fetchFromGitHub, fetchpatch, ocaml, findlib, ocamlbuild
 , ocaml_lwt # optional lwt support
 , ounit, fileutils # only for tests
 }:
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 	checkInputs = [ ounit fileutils ];
 
 	configureFlags = [ "--enable-lwt"
-	  (stdenv.lib.optionalString doCheck "--enable-tests") ];
+	  (lib.optionalString doCheck "--enable-tests") ];
 
-	postConfigure = stdenv.lib.optionalString doCheck ''
+	postConfigure = lib.optionalString doCheck ''
 	  echo '<lib_test/test_inotify_lwt.*>: pkg_threads' | tee -a _tags
 	'';
 
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
 
 	meta = {
 		description = "Bindings for Linux’s filesystem monitoring interface, inotify";
-		license = stdenv.lib.licenses.lgpl21;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		license = lib.licenses.lgpl21;
+		maintainers = [ lib.maintainers.vbgl ];
 		inherit (src.meta) homepage;
-		platforms = stdenv.lib.platforms.linux;
+		platforms = lib.platforms.linux;
 	};
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc, wayland }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "kanshi";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config scdoc ];
   buildInputs = [ wayland ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic display configuration tool";
     longDescription = ''
       kanshi allows you to define output profiles that are automatically enabled

@@ -5,7 +5,7 @@
 , gtk-doc
 , docbook_xsl
 , docbook_xml_dtd_43
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , git
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     git
-    pkgconfig
+    pkg-config
     vala
     gettext
     gobject-introspection

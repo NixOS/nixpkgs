@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, nasm
+{ lib, stdenv, fetchurl, nasm
 , alsaLib, curl, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, libGLU, libGL, SDL2, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "scummvm";
-  version = "2.1.2";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "http://scummvm.org/frs/scummvm/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1c4fz1nfg0nqnqx9iipayhzcsiqdmfxm2i95nw9dbhshhsdnrhf4";
+    sha256 = "FGllflk72Ky8+sC4ObCG9kDr8SBjPpPxFsq2UrWyc4c=";
   };
 
   nativeBuildInputs = [ nasm ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
     homepage = "https://www.scummvm.org/";
     license = licenses.gpl2;

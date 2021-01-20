@@ -42,7 +42,7 @@
 
 let
   version = "2.32";
-  patchSuffix = "";
+  patchSuffix = "-25";
   sha256 = "0di848ibffrnwq7g2dvgqrnn4xqhj3h96csn69q4da51ymafl9qn";
 in
 
@@ -59,6 +59,15 @@ stdenv.mkDerivation ({
 
   patches =
     [
+      /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git
+         and using git or something would complicate bootstrapping.
+         Fortunately it's not too big.
+          $ git checkout release/2.32/master; git describe
+          glibc-2.32-25-g0d9793e82a
+          $ git show --reverse glibc-2.32.. | gzip -n -9 --rsyncable - > 2.32-25.patch.gz
+       */
+      ./2.32-25.patch.gz
+
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
 
@@ -160,6 +169,10 @@ stdenv.mkDerivation ({
       "libc_cv_as_needed=no"
     ] ++ lib.optional withGd "--with-gd";
 
+  makeFlags = [
+    "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+  ];
+
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
   outputs = [ "out" "bin" "dev" "static" ];
@@ -201,7 +214,7 @@ stdenv.mkDerivation ({
     configureScript="`pwd`/../$sourceRoot/configure"
 
     ${lib.optionalString (stdenv.cc.libc != null)
-      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"''
+      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"''
     }
 
 

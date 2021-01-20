@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "periods";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "xocolatl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gdnlbh7kp7c0kvsrri2kxdbmm2qgib1qqpl37203z6c3fk45kfh";
+    sha256 = "13aix61qzlb7cs042dz4x0z4sc2xayg4nzi2cks46zibxm5i4gzm";
   };
 
   buildInputs = [ postgresql ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension *.control
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PostgreSQL extension implementing SQL standard functionality for PERIODs and SYSTEM VERSIONING";
     homepage = "https://github.com/xocolatl/periods";
     maintainers = with maintainers; [ ivan ];

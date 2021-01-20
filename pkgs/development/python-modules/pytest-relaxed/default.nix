@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pytest tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pytest-relaxed.readthedocs.io/";
     description = "Relaxed test discovery/organization for pytest";
     license = licenses.bsd0;

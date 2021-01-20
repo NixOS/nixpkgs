@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, cairo, glib, pkgconfig, gnome3 }:
+{ stdenv, fetchurl, gtk2, cairo, glib, pkg-config, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "goocanvas";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "07kicpcacbqm3inp7zq32ldp95mxx4kfxpaazd0x5jk7hpw2w1qw";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 cairo glib ];
 
   passthru = {

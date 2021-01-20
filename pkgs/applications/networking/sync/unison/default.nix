@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, ocamlPackages, fontschumachermisc, xset, makeWrapper, ncurses, gnugrep
+{lib, stdenv, fetchFromGitHub, ocamlPackages, fontschumachermisc, xset, makeWrapper, ncurses, gnugrep
 , enableX11 ? true}:
 
 let inherit (ocamlPackages) ocaml lablgtk; in
@@ -6,12 +6,12 @@ let inherit (ocamlPackages) ocaml lablgtk; in
 stdenv.mkDerivation (rec {
 
   pname = "unison";
-  version = "2.51.2";
+  version = "2.51.3";
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${version}";
-    sha256 = "1bykiyc0dc5pkw8x370qkg2kygq9pq7yqzsgczd3y13b6ivm4sdq";
+    sha256 = "sha256-42hmdMwOYSWGiDCmhuqtpCWtvtyD2l+kA/bhHD/Qh5Y=";
   };
 
   buildInputs = [ ocaml makeWrapper ncurses ];
@@ -25,13 +25,7 @@ stdenv.mkDerivation (rec {
   makeFlags = [
     "INSTALLDIR=$(out)/bin/"
     "UISTYLE=${if enableX11 then "gtk2" else "text"}"
-  ] ++ stdenv.lib.optional (!ocaml.nativeCompilers) "NATIVE=false";
-
-  patches = [
-    # NOTE: Only needed until Unison 2.51.3 is released!
-    ./4.08-compatibility.patch
-    ./lablgtk.patch
-  ];
+  ] ++ lib.optional (!ocaml.nativeCompilers) "NATIVE=false";
 
   preInstall = "mkdir -p $out/bin";
 
@@ -47,9 +41,9 @@ stdenv.mkDerivation (rec {
   meta = {
     homepage = "https://www.cis.upenn.edu/~bcpierce/unison/";
     description = "Bidirectional file synchronizer";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; unix;
   };
 
 })

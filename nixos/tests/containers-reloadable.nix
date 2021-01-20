@@ -16,7 +16,7 @@ let
   };
 in {
   name = "containers-reloadable";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ danbst ];
   };
 

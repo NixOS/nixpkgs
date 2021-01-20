@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "trezord";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = with maintainers; [ mmahut _1000101 ];
   };
   nodes = {
@@ -14,6 +14,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     start_all()
     machine.wait_for_unit("trezord.service")
     machine.wait_for_open_port(21325)
-    machine.wait_until_succeeds("curl -L http://localhost:21325/status/ | grep Version")
+    machine.wait_until_succeeds("curl -fL http://localhost:21325/status/ | grep Version")
   '';
 })

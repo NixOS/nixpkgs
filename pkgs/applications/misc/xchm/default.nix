@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, chmlib }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, chmlib }:
 
 stdenv.mkDerivation rec {
   pname = "xchm";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     export LDFLAGS="$LDFLAGS $(${wxGTK30}/bin/wx-config --libs | sed -e s@-pthread@@) -lwx_gtk2u_aui-3.0"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A viewer for Microsoft HTML Help files";
     homepage = "https://github.com/rzvncj/xCHM";
     license = licenses.gpl2;

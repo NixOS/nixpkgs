@@ -1,7 +1,7 @@
-{ config, fetchgit, stdenv, wrapGAppsHook, autoreconfHook, bison, flex
+{ lib, config, fetchgit, stdenv, wrapGAppsHook, autoreconfHook, bison, flex
 , curl, dbus, dbus-glib, enchant, gtk3, gnutls, gnupg, gpgme
 , libarchive, libcanberra-gtk3, libetpan, libnotify, libsoup, libxml2, networkmanager
-, openldap, perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk
+, openldap, perl, pkg-config, poppler, python, shared-mime-info, webkitgtk
 , glib-networking, gsettings-desktop-schemas, libSM, libytnef, libical
 # Build options
 # TODO: A flag to build the manual.
@@ -27,16 +27,16 @@
 , enableSpellcheck ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "claws-mail-gtk3";
-  version = "3.17.5";
+  version = "3.99.0";
 
   src = fetchgit {
     url = "git://git.claws-mail.org/claws.git";
-    rev = "c1e1902323c2b5dfe82144328b7933dc857ef343"; # this commit is "for release 3.17.5"
-    sha256 = "0cqzlzcms6alvsdsbcc06bsdi1h349b16qngn2z1p8fz16x6s6cy";
+    rev = version;
+    sha256 = "176h1swh1zx6dqyzfz470x4a1xicnv0zhy8ir47k7p23g6y17i2k";
   };
 
   outputs = [ "out" "dev" ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
 
-  nativeBuildInputs = [ autoreconfHook bison flex pkgconfig wrapGAppsHook python.pkgs.wrapPython ];
+  nativeBuildInputs = [ autoreconfHook bison flex pkg-config wrapGAppsHook python.pkgs.wrapPython ];
   propagatedBuildInputs = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
 
   buildInputs =

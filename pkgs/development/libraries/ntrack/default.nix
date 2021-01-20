@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, pkgconfig, libnl, python }:
+{ stdenv, fetchurl, qt4, pkg-config, libnl, python }:
 
 let
   version = "016";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libnl qt4 ];
 
-  nativeBuildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ pkg-config python ];
 
   # error: ISO C does not support '__FUNCTION__' predefined identifier [-Werror=pedantic]
   NIX_CFLAGS_COMPILE = "-Wno-error";

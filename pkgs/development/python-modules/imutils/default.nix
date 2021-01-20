@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , opencv3
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jrosebr1/imutils";
     description = "A series of convenience functions to make basic image processing functions";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
   name = "libmongo-client-0.1.8";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cjx06i3gd9zkyvwm2ysjrf0hkhr7bjg3c27s7n0y31j10igfjp0";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ ];
   propagatedBuildInputs = [ glib ];
 

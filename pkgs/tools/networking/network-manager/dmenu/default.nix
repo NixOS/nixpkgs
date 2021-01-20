@@ -1,4 +1,4 @@
-{ stdenv, glib, fetchFromGitHub, networkmanager, python3Packages
+{ lib, stdenv, glib, fetchFromGitHub, networkmanager, python3Packages
 , gobject-introspection }:
 
 let inherit (python3Packages) python pygobject3;
@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "networkmanager-dmenu";
-    rev = "${version}";
+    rev = version;
     sha256 = "1liidqh8c33pxyb07qyj0jkd0fdak73g9r2iwiq62vfzrpik09k0";
   };
 
@@ -30,11 +30,11 @@ in stdenv.mkDerivation rec {
   '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description  = "Small script to manage NetworkManager connections with dmenu instead of nm-applet";
     homepage     = "https://github.com/firecat53/networkmanager-dmenu";
-    license      = stdenv.lib.licenses.mit;
-    maintainers  = [ stdenv.lib.maintainers.jensbin ];
-    platforms    = stdenv.lib.platforms.all;
+    license      = lib.licenses.mit;
+    maintainers  = [ lib.maintainers.jensbin ];
+    platforms    = lib.platforms.all;
   };
 }

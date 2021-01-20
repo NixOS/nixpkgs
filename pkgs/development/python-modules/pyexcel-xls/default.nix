@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pyexcel-xls";
-  version = "0.5.9";
+  version = "0.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1Wyt6gpmBoRFaXbZgFJVTTu+KnivxfmpHIaR9iZghVU=";
+    sha256 = "c4cc1fb4ac5d1682a44d9a368a43ec2e089ad6fc46884648ccfad46863e3da0a";
   };
 
   propagatedBuildInputs = [

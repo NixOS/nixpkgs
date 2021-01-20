@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
         --set PERL5LIB "${perlPackages.makePerlPath [ perlPackages.TemplateToolkit ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://tsung.erlang-projects.org/";
-    description = "A high-performance benchmark framework for various protocols including HTTP, XMPP, LDAP, etc.";
+    description = "A high-performance benchmark framework for various protocols including HTTP, XMPP, LDAP, etc";
     longDescription = ''
       Tsung is a distributed load testing tool. It is protocol-independent and
       can currently be used to stress HTTP, WebDAV, SOAP, PostgreSQL, MySQL,

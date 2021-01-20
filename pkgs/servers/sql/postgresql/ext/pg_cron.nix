@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pg_cron";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp *.control $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Run Cron jobs through PostgreSQL";
     homepage    = "https://github.com/citusdata/pg_cron";
     maintainers = with maintainers; [ thoughtpolice ];

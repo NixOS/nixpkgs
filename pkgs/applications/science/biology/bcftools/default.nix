@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, htslib, zlib, bzip2, lzma, curl, perl, python, bash }:
+{ lib, stdenv, fetchurl, htslib, zlib, bzip2, lzma, curl, perl, python, bash }:
 
 stdenv.mkDerivation rec {
   pname = "bcftools";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for manipulating BCF2/VCF/gVCF format, SNP and short indel sequence variants";
     license = licenses.mit;
     homepage = "http://www.htslib.org/";

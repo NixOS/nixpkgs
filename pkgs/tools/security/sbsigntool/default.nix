@@ -1,5 +1,5 @@
-{ stdenv
-, fetchgit, autoconf, automake, pkgconfig, help2man
+{ lib, stdenv
+, fetchgit, autoconf, automake, pkg-config, help2man
 , openssl, libuuid, gnu-efi, libbfd
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   prePatch = "patchShebangs .";
 
-  nativeBuildInputs = [ autoconf automake pkgconfig help2man ];
+  nativeBuildInputs = [ autoconf automake pkg-config help2man ];
   buildInputs = [ openssl libuuid libbfd gnu-efi ];
 
   configurePhase = ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     make install
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for maintaining UEFI signature databases";
     homepage    = "http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases";
     maintainers = [ maintainers.tstrobel ];

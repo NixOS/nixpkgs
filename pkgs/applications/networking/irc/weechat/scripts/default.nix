@@ -1,6 +1,8 @@
 { callPackage, luaPackages, python3Packages }:
 
 {
+  colorize_nicks = callPackage ./colorize_nicks { };
+
   weechat-matrix-bridge = callPackage ./weechat-matrix-bridge {
     inherit (luaPackages) cjson luaffi;
   };

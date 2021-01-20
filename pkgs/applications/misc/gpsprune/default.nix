@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jdk }:
+{ fetchurl, lib, stdenv, makeDesktopItem, makeWrapper, unzip, jdk }:
 
 stdenv.mkDerivation rec {
   pname = "gpsprune";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ${unzip}/bin/unzip -p $src tim/prune/gui/images/window_icon_64.png > $out/share/pixmaps/gpsprune.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application for viewing, editing and converting GPS coordinate data";
     homepage = "https://activityworkshop.net/software/gpsprune/";
     license = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, krb5 }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, krb5 }:
 
 buildPythonPackage rec {
   pname = "pykerberos";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # there are no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-level interface to Kerberos";
     license     = licenses.asl20;
     maintainers = with maintainers; [ catern ];

@@ -3,10 +3,10 @@
 { fetchurl, stdenv }:
 let
   defaultRepos = [
-    "http://repo1.maven.org/maven2"
-    "http://oss.sonatype.org/content/repositories/releases"
-    "http://oss.sonatype.org/content/repositories/public"
-    "http://repo.typesafe.com/typesafe/releases"
+    "https://repo1.maven.org/maven2"
+    "https://oss.sonatype.org/content/repositories/releases"
+    "https://oss.sonatype.org/content/repositories/public"
+    "https://repo.typesafe.com/typesafe/releases"
   ];
 in
 
@@ -17,6 +17,8 @@ args@
   artifactId
 , # Example: "4.3.6"
   version
+, # Example: "jdk11"
+  classifier ? null
 , # List of maven repositories from where to fetch the artifact.
   # Example: [ http://oss.sonatype.org/content/repositories/public ].
   repos ? defaultRepos
@@ -48,7 +50,7 @@ let
       (replaceChars ["."] ["/"] groupId)
       artifactId
       version
-      "${artifactId}-${version}.jar"
+      "${artifactId}-${version}${optionalString (!isNull classifier) "-${classifier}"}.jar"
     ];
   urls_ =
     if url != "" then [url]
@@ -56,7 +58,7 @@ let
     else map mkJarUrl repos;
   jar =
     fetchurl (
-      builtins.removeAttrs args ["groupId" "artifactId" "version" "repos" "url" ]
+      builtins.removeAttrs args ["groupId" "artifactId" "version" "classifier" "repos" "url" ]
         // { urls = urls_; name = "${name_}.jar"; }
     );
 in

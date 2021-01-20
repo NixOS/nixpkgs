@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libde265, x265, libpng,
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libde265, x265, libpng,
   libjpeg, libaom }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hjs1i076jmy4ryj8y2zs293wx53kzg38y8i42cbcsqydvsdp6hz";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libde265 x265 libpng libjpeg libaom ];
   # TODO: enable dav1d and rav1e codecs when libheif can find them via pkg-config
 

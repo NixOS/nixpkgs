@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "cminpack-1.3.6";
-  
+
   src = fetchurl {
     url = "http://devernay.free.fr/hacks/cminpack/${name}.tar.gz";
     sha256 = "17yh695aim508x1kn9zf6g13jxwk3pi3404h5ix4g5lc60hzs1rw";

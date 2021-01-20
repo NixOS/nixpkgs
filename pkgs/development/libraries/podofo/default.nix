@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
-, openssl, libpng, lua5, pkgconfig, libidn, expat, fetchpatch
+, openssl, libpng, lua5, pkg-config, libidn, expat, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "lib" ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng
                   libidn expat lua5 ];

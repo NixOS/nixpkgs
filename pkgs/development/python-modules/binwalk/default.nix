@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , zlib
@@ -11,6 +11,8 @@
 , cabextract
 , cramfsprogs
 , cramfsswap
+, sasquatch
+, squashfsTools
 , lzma
 , matplotlib
 , nose
@@ -32,7 +34,7 @@ buildPythonPackage {
     sha256 = "1bxgj569fzwv6jhcbl864nmlsi9x1k1r20aywjxc8b9b1zgqrlvc";
   };
 
-  propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract cramfsswap cramfsprogs lzma pycrypto ]
+  propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract cramfsswap cramfsprogs sasquatch squashfsTools lzma pycrypto ]
   ++ stdenv.lib.optionals visualizationSupport [ matplotlib pyqtgraph ];
 
   # setup.py only installs version.py during install, not test
@@ -47,7 +49,7 @@ buildPythonPackage {
 
   checkInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ReFirmLabs/binwalk";
     description = "A tool for searching a given binary image for embedded files";
     maintainers = [ maintainers.koral ];

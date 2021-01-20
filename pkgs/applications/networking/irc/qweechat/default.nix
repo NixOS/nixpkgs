@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python27Packages }:
+{ lib, stdenv, fetchFromGitHub, python27Packages }:
 
 python27Packages.buildPythonApplication rec {
   version = "2016-07-29";
@@ -21,7 +21,7 @@ python27Packages.buildPythonApplication rec {
      pyside setuptools
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/weechat/qweechat";
     description = "Qt remote GUI for WeeChat";
     license = licenses.gpl3;

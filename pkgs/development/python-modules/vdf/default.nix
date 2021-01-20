@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub
 , pytest, pytestcov, mock }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest pytestcov mock ];
   checkPhase = "make test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for working with Valve's VDF text format";
     homepage = "https://github.com/ValvePython/vdf";
     license = licenses.mit;

@@ -1,11 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , dateutil, mock, isPy3k }:
 
 buildPythonPackage rec {
   pname = "aniso8601";
-  version = "8.0.0";
+  version = "8.1.0";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Parses ISO 8601 strings.";
     homepage    = "https://bitbucket.org/nielsenb/aniso8601";
     license     = licenses.bsd3;
@@ -17,6 +17,6 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "529dcb1f5f26ee0df6c0a1ee84b7b27197c3c50fc3a6321d66c544689237d072";
+    sha256 = "246bf8d3611527030889e6df970878969d3a2f760ba3eb694fa1fb10e6ce53f9";
   };
 }

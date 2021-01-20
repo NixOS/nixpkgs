@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libfixposix";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1x4q6yspi5g2s98vq4qszw4z3zjgk9l5zs8471w4d4cs6l97w08j";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/sionescu/libfixposix";

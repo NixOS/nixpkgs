@@ -1,9 +1,9 @@
 { alsaLib, autoPatchelfHook, fetchurl, gtk3, libnotify
-, makeDesktopItem, makeWrapper, nss, stdenv, udev, xdg_utils
+, makeDesktopItem, makeWrapper, nss, lib, stdenv, udev, xdg_utils
 , xorg
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   bits = "x86_64";
@@ -57,7 +57,7 @@ in stdenv.mkDerivation {
       --prefix PATH : ${xdg_utils}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wavebox messaging application";
     homepage = "https://wavebox.io";
     license = licenses.mpl20;

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, makeWrapper, curl, jq, gnugrep, libnotify, scrot, which, xclip }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, jq, gnugrep, libnotify, scrot, which, xclip }:
 
-let deps = stdenv.lib.makeBinPath [ curl jq gnugrep libnotify scrot which xclip ];
+let deps = lib.makeBinPath [ curl jq gnugrep libnotify scrot which xclip ];
 in stdenv.mkDerivation rec {
   version = "2.0.0";
   pname = "imgur-screenshot";
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/imgur-screenshot --prefix PATH ':' ${deps}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for easy screencapping and uploading to imgur";
     homepage = "https://github.com/jomo/imgur-screenshot/";
     platforms = platforms.linux;

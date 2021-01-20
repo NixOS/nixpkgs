@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, fetchFromGitHub, ruby, dune_2, ocamlPackages
+{ lib, stdenv, fetchzip, fetchFromGitHub, ruby, dune_2, ocamlPackages
 , ipaexfont, junicode, lmodern, lmmath
 }:
 let
@@ -67,7 +67,7 @@ in
       cp -r lib-satysfi/dist/ $out/share/satysfi/
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/gfngfn/SATySFi";
       description = "A statically-typed, functional typesetting system";
       license = licenses.lgpl3;

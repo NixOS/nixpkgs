@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.xserver.windowManager.exwm;
   loadScript = pkgs.writeText "emacs-exwm-load" ''
-    (require 'exwm)
+    ${cfg.loadScript}
     ${optionalString cfg.enableDefaultConfig ''
       (require 'exwm-config)
       (exwm-config-default)
@@ -19,6 +19,18 @@ in
   options = {
     services.xserver.windowManager.exwm = {
       enable = mkEnableOption "exwm";
+      loadScript = mkOption {
+        default = "(require 'exwm)";
+        example = literalExample ''
+          (require 'exwm)
+          (exwm-enable)
+        '';
+        description = ''
+          Emacs lisp code to be run after loading the user's init
+          file. If enableDefaultConfig is true, this will be run
+          before loading the default config.
+        '';
+      };
       enableDefaultConfig = mkOption {
         default = true;
         type = lib.types.bool;
@@ -36,7 +48,7 @@ in
         description = ''
           Extra packages available to Emacs. The value must be a
           function which receives the attrset defined in
-          <varname>emacsPackages</varname> as the sole argument.
+          <varname>emacs.pkgs</varname> as the sole argument.
         '';
       };
     };

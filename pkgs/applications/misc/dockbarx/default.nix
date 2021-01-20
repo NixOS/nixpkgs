@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, gnome2, keybinder }:
+{ lib, stdenv, fetchFromGitHub, pythonPackages, gnome2, keybinder }:
 
 pythonPackages.buildPythonApplication rec {
   ver = "0.93";
@@ -28,9 +28,12 @@ pythonPackages.buildPythonApplication rec {
     ++ (with gnome2; [ gnome_python gnome_python_desktop ])
     ++ [ keybinder ];
 
-  meta = with stdenv.lib; {
+  # no tests
+  doCheck = false;
+
+  meta = with lib; {
     homepage = "https://launchpad.net/dockbar/";
-    description = "DockBarX is a lightweight taskbar / panel replacement for Linux which works as a stand-alone dock";
+    description = "Lightweight taskbar / panel replacement for Linux which works as a stand-alone dock";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.volth ];

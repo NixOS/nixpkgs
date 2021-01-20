@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "subfinder";
@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Subdomain discovery tool";
     longDescription = ''
       SubFinder is a subdomain discovery tool that discovers valid
@@ -24,6 +24,6 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/projectdiscovery/subfinder";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz filalex77 ];
+    maintainers = with maintainers; [ fpletz Br1ght0ne ];
   };
 }

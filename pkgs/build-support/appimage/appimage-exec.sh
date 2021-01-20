@@ -1,4 +1,6 @@
 #!@shell@
+# shellcheck shell=bash
+
 if [ -n "$DEBUG" ] ; then
   set -x
 fi
@@ -13,8 +15,10 @@ unpack() {
   local out="$2"
 
   # https://github.com/AppImage/libappimage/blob/ca8d4b53bed5cbc0f3d0398e30806e0d3adeaaab/src/libappimage/utils/MagicBytesChecker.cpp#L45-L63
-  local appimageSignature=$(readelf -h "$src" | awk 'NR==2{print $10$11;}')
-  local appimageType=$(readelf -h "$src" | awk 'NR==2{print $12;}')
+  local appimageSignature;
+  appimageSignature="$(LC_ALL=C readelf -h "$src" | awk 'NR==2{print $10$11;}')"
+  local appimageType;
+  appimageType="$(LC_ALL=C readelf -h "$src" | awk 'NR==2{print $12;}')"
 
   # check AppImage signature
   if [ "$appimageSignature" != "4149" ]; then
@@ -35,7 +39,7 @@ unpack() {
 
       # multiarch offset one-liner using same method as AppImage
       # see https://gist.github.com/probonopd/a490ba3401b5ef7b881d5e603fa20c93
-      offset=$(readelf -h "$src" | awk 'NR==13{e_shoff=$5} NR==18{e_shentsize=$5} NR==19{e_shnum=$5} END{print e_shoff+e_shentsize*e_shnum}')
+      offset=$(LC_ALL=C readelf -h "$src" | awk 'NR==13{e_shoff=$5} NR==18{e_shentsize=$5} NR==19{e_shnum=$5} END{print e_shoff+e_shentsize*e_shnum}')
       echo "Uncompress $(basename "$src") of type $appimageType @ offset $offset"
       unsquashfs -q -d "$out" -o "$offset" "$src"
       chmod go-w "$out"

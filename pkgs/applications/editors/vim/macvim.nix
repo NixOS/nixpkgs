@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, runCommand, ncurses, gettext
-, pkgconfig, cscope, ruby, tcl, perl, luajit
+{ lib, stdenv, fetchFromGitHub, runCommand, ncurses, gettext
+, pkg-config, cscope, ruby, tcl, perl, luajit
 , darwin
 
 , usePython27 ? false
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig buildSymlinks ];
+  nativeBuildInputs = [ pkg-config buildSymlinks ];
   buildInputs = [
     gettext ncurses cscope luajit ruby tcl perl python.pkg
   ];
@@ -93,6 +93,19 @@ stdenv.mkDerivation {
   # passes arguments to ld that it meant for clang.
   + ''
     unset LD
+  ''
+  # When building with nix-daemon, we need to pass -derivedDataPath or else it tries to use
+  # a folder rooted in /var/empty and fails. Unfortunately we can't just pass -derivedDataPath
+  # by itself as this flag requires the use of -scheme or -xctestrun (not sure why), but MacVim
+  # by default just runs `xcodebuild -project src/MacVim/MacVim.xcodeproj`, relying on the default
+  # behavior to build the first target in the project. Experimentally, there seems to be a scheme
+  # called MacVim, so we'll explicitly select that. We also need to specify the configuration too
+  # as the scheme seems to have the wrong default.
+  + ''
+    configureFlagsArray+=(
+      XCODEFLAGS="-scheme MacVim -derivedDataPath $NIX_BUILD_TOP/derivedData"
+      --with-xcodecfg="Release"
+    )
   ''
   ;
 
@@ -162,7 +175,7 @@ stdenv.mkDerivation {
     (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vim - the text editor - for macOS";
     homepage    = "https://github.com/macvim-dev/macvim";
     license = licenses.vim;

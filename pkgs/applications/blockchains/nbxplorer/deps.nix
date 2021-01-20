@@ -31,8 +31,8 @@
   })
   (fetchNuGet {
     name = "Microsoft.CodeCoverage";
-    version = "16.6.1";
-    sha256 = "01ffm4nflqdb93vq4xl0j3377x360fgx6c6h12mpkcy85ixbv3rl";
+    version = "16.7.1";
+    sha256 = "1farw63445cdyciplfs6l9j1gayxw16rkzmrwsiswfyjhqz70xd4";
   })
   (fetchNuGet {
     name = "Microsoft.CSharp";
@@ -126,8 +126,8 @@
   })
   (fetchNuGet {
     name = "Microsoft.NET.Test.Sdk";
-    version = "16.6.1";
-    sha256 = "0jjdg468jc6pv2z764f3xc19lcr772nzjm9cjfqq3bqw8vkpzmhv";
+    version = "16.7.1";
+    sha256 = "0yqxipj74ax2n76w9ccydppx78ym8m5fda88qnvj4670qjvl0kf8";
   })
   (fetchNuGet {
     name = "Microsoft.NETCore.Platforms";
@@ -156,13 +156,13 @@
   })
   (fetchNuGet {
     name = "Microsoft.TestPlatform.ObjectModel";
-    version = "16.6.1";
-    sha256 = "0q98q1nw6jl4bajm66z4a9vvh928w8ffsd3k6fpsps23ykpsky7h";
+    version = "16.7.1";
+    sha256 = "0s9dyh99gzdpk1i5v468i2r9m6i3jrr41r394pwdwiajsz99kay0";
   })
   (fetchNuGet {
     name = "Microsoft.TestPlatform.TestHost";
-    version = "16.6.1";
-    sha256 = "0anzvb2mda548swb2ll1hv65knb8gwjm01hwbl0pzzr607my3lix";
+    version = "16.7.1";
+    sha256 = "1xik06rxn9ps83in0zn9vcl2ibv3acmdqvrx07qq89lxj1sgqlhs";
   })
   (fetchNuGet {
     name = "Microsoft.Win32.Primitives";
@@ -181,18 +181,23 @@
   })
   (fetchNuGet {
     name = "NBitcoin.Altcoins";
-    version = "2.0.19";
-    sha256 = "12a3bf1pi6sq78z6h3clyczvycx7cjry8fby4fyi748wjwljjizz";
+    version = "2.0.21";
+    sha256 = "0xmygiwjlia7fbxy63893jb15g6fxggxxr9bbm8znd9bs3jzp2g1";
   })
   (fetchNuGet {
     name = "NBitcoin.TestFramework";
-    version = "2.0.11";
-    sha256 = "09jrbq9p5k67kdic2038s7q299y2nc8ij6m55m3m8hys7jdrrv05";
+    version = "2.0.12";
+    sha256 = "1d6lmymc9x3p74c8hc2x3m61ncnkqqgrddw9cw2m0zkvilkncsns";
   })
   (fetchNuGet {
     name = "NBitcoin";
-    version = "5.0.54";
-    sha256 = "0mx2gr8j8bc4mf1vi1fvqj3672qalxvzvincc61if79p46cik24b";
+    version = "5.0.58";
+    sha256 = "0qim9xbbj380254iyi1jsh2gnr90ddwd2593jw9a8bjwnlk7qr2c";
+  })
+  (fetchNuGet {
+    name = "NBitcoin";
+    version = "5.0.60";
+    sha256 = "0pin4ldfz5lfxyd47mj1ypyp8lmj0v5nq5zvygdjna956vphd39v";
   })
   (fetchNuGet {
     name = "NETStandard.Library";
@@ -1061,8 +1066,8 @@
   })
   (fetchNuGet {
     name = "xunit.runner.visualstudio";
-    version = "2.4.2";
-    sha256 = "0fi85h43nyrhfc5jzg07znh01r7cpb7bpjdc6mzb9z1pm14ppfm6";
+    version = "2.4.3";
+    sha256 = "0j1d0rbcm7pp6dypi61sjxp8l22sv261252z55b243l39jgv2rp3";
   })
   (fetchNuGet {
     name = "xunit";

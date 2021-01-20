@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "ksystemlog";
+  pname = "ksystemlog";
 
   nativeBuildInputs = [ extra-cmake-modules gettext kdoctools ];
   propagatedBuildInputs = [ karchive kconfig kio ];

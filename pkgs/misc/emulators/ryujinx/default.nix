@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
 , dotnet-sdk_3, dotnetPackages, dotnetCorePackages
 , SDL2, libX11, openal
 , gtk3, gobject-introspection, wrapGAppsHook
@@ -13,13 +13,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "ryujinx";
-  version = "1.0.5346";
+  version = "1.0.5551"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "2ce59c44bcb2d789f4d6312b26cf41f36915d73c";
-    sha256 = "0hk8jdacg8ryhh0mpnfjbzrrpy8gv87f4hp0hybyypglmaxz8grm";
+    rev = "2dcc6333f8cbb959293832f52857bdaeab1918bf";
+    sha256 = "1hfa498fr9mdxas9s02y25ncb982wa1sqhl06jpnkhqsiicbkgcf";
   };
 
   nativeBuildInputs = [ dotnet-sdk_3 dotnetPackages.Nuget makeWrapper wrapGAppsHook gobject-introspection ];
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
 
     makeWrapper $out/lib/ryujinx/Ryujinx $out/bin/Ryujinx \
       --set DOTNET_ROOT "${dotnetCorePackages.netcore_3_1}" \
-      --suffix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath runtimeDeps}" \
+      --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
       ''${gappsWrapperArgs[@]}
 
     for i in 16 32 48 64 96 128 256 512 1024; do
@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
   # Strip breaks the executable.
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Experimental Nintendo Switch Emulator written in C#";
     homepage = "https://ryujinx.org/";
     license = licenses.mit;

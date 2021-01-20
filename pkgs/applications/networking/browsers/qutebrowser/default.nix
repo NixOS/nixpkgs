@@ -12,12 +12,12 @@ assert withMediaPlayback -> gst_all_1 != null;
 let
   python3Packages = python3.pkgs;
   pdfjs = let
-    version = "2.4.456";
+    version = "2.6.347";
   in
   fetchzip rec {
     name = "pdfjs-${version}";
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-    sha256 = "02hpy96pi06gdq2s7n56ycm34d6d3gf8ly22y366np5vpwmc29rx";
+    sha256 = "0d016fyg81cq464li01xlkf9rxrb3rpsvmk5gh9m4d5yzmcakkfm";
     stripRoot = false;
   };
 
@@ -31,12 +31,12 @@ let
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.14.0";
+  version = "1.14.1";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0jip413yvyhdaywz0iadc32aaanjnhbx1d1vwzx3z1xbgc4i9svn";
+    sha256 = "15l7jphy1qjsh6y6kd5mgkxsl6ymm9564g1yypa946jbyrgi8k2m";
   };
 
   # Needs tox
@@ -113,7 +113,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
       --add-flags '--backend ${backend}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://github.com/The-Compiler/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, gdk-pixbuf, gobject-introspection, gnome3, fetchpatch }:
+{ stdenv, fetchurl, meson, ninja, pkg-config, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, gdk-pixbuf, gobject-introspection, gnome3, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "libmediaart";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "a57be017257e4815389afe4f58fdacb6a50e74fd185452b23a652ee56b04813d";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gtk-doc docbook_xsl docbook_xml_dtd_412 gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkg-config vala gtk-doc docbook_xsl docbook_xml_dtd_412 gobject-introspection ];
   buildInputs = [ glib gdk-pixbuf ];
 
   patches = [

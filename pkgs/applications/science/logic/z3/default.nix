@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, fixDarwinDylibNames
+{ lib, stdenv, fetchFromGitHub, python, fixDarwinDylibNames
 , javaBindings ? false
 , ocamlBindings ? false
 , pythonBindings ? true
@@ -9,7 +9,7 @@
 assert javaBindings -> jdk != null;
 assert ocamlBindings -> ocaml != null && findlib != null && zarith != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "z3";
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hnbzq10d23drd7ksm3c1n2611c3kd0q0yxgz8y78zaafwczvwxx";
   };
 
-  buildInputs = [ python fixDarwinDylibNames ]
+  nativeBuildInputs = optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs = [ python ]
   ++ optional javaBindings jdk
   ++ optionals ocamlBindings [ ocaml findlib zarith ]
   ;
@@ -58,8 +59,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A high-performance theorem prover and SMT solver";
     homepage    = "https://github.com/Z3Prover/z3";
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.x86_64;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ttuegel ];
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ttuegel ];
   };
 }

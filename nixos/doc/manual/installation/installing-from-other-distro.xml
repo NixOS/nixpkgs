@@ -161,6 +161,13 @@ nixpkgs https://nixos.org/channels/nixpkgs-unstable</screen>
      existing systems without the help of a rescue USB drive or similar.
     </para>
    </warning>
+   <note>
+    <para>
+     On some distributions there are separate PATHS for programs intended only for root.
+     In order for the installation to succeed, you might have to use <literal>PATH="$PATH:/usr/sbin:/sbin"</literal>
+     in the following command.
+    </para>
+   </note>
 <screen><prompt>$ </prompt>sudo PATH="$PATH" NIX_PATH="$NIX_PATH" `which nixos-install` --root /mnt</screen>
    <para>
     Again, please refer to the <literal>nixos-install</literal> step in

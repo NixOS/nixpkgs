@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, which, cmake
+{ stdenv, fetchFromGitHub, fetchpatch, pkg-config, which, cmake
 , fftwSinglePrec, libsamplerate, qtbase
 , darwin }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "04r14prydxshjgfws3pjajjmp2msszhjjs1mjh8s66yg29vq620l";
   })];
 
-  nativeBuildInputs = [ pkgconfig which cmake ];
+  nativeBuildInputs = [ pkg-config which cmake ];
   buildInputs = [ fftwSinglePrec libsamplerate qtbase ]
     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
 

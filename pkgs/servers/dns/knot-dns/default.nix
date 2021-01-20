@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
+{ lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2
 , autoreconfHook
 }:
 
-let inherit (stdenv.lib) optional optionals; in
+let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "97af6724b04308f691392c80d75564ff8b246871f2f59c4f03cede3c4dd401bb";
+    sha256 = "fbc51897ef0ed0639ebad59b988a91382b9544288a2db8254f0b1de433140e38";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ./runtime-deps.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     gnutls liburcu libidn2 libunistring
     nettle libedit
@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
   CFLAGS = [ "-O2" "-DNDEBUG" ];
 
   doCheck = true;
-  doInstallCheck = false; # needs pykeymgr?
+  doInstallCheck = true;
 
   postInstall = ''
     rm -r "$out"/lib/*.la
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Authoritative-only DNS server from .cz domain registry";
     homepage = "https://knot-dns.cz";
     license = licenses.gpl3Plus;

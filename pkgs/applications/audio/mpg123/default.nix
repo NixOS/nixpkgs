@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeWrapper
 
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ perl ] ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
+  buildInputs = [ perl ] ++ lib.optional (!stdenv.isDarwin) alsaLib;
 
-  configureFlags = stdenv.lib.optional
+  configureFlags = lib.optional
     (stdenv.hostPlatform ? mpg123)
     "--with-cpu=${stdenv.hostPlatform.mpg123.cpu}";
 
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Fast console MPEG Audio Player and decoder library";
     homepage = "http://mpg123.org";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.ftrvxmtrx ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.ftrvxmtrx ];
+    platforms = lib.platforms.unix;
   };
 }

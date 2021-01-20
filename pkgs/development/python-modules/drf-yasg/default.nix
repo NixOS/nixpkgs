@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib, stdenv,
   buildPythonPackage,
   fetchPypi,
   inflection,
@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.17.1";
+  version = "1.20.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5572e9d5baab9f6b49318169df9789f7399d0e3c7bdac8fdb8dfccf1d5d2b1ca";
+    sha256 = "d50f197c7f02545d0b736df88c6d5cf874f8fea2507ad85ad7de6ae5bf2d9e5a";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     djangorestframework
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generation of Swagger/OpenAPI schemas for Django REST Framework";
     homepage = "https://github.com/axnsan12/drf-yasg";
     maintainers = with maintainers; [ ivegotasthma ];

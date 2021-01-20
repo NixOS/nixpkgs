@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, substituteAll, pkgconfig, meson, ninja, gettext, gnome3, wrapGAppsHook, packagekit, ostree
+{ lib, stdenv, fetchurl, substituteAll, pkg-config, meson, ninja, gettext, gnome3, wrapGAppsHook, packagekit, ostree
 , glib, appstream-glib, libsoup, polkit, isocodes, gspell, libxslt, gobject-introspection, flatpak, fwupd
 , gtk3, gsettings-desktop-schemas, gnome-desktop, libxmlb, gnome-online-accounts
-, json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gtk-doc, desktop-file-utils }:
+, json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gtk-doc, desktop-file-utils
+, libsysprof-capture }:
 
 let
 
@@ -11,11 +12,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnome-software";
-  version = "3.36.1";
+  version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-software/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0vkgpy2afb33rrk94zqlm2q728xhzjj8s24n9wh9ylw00z3nckad";
+    url = "mirror://gnome/sources/gnome-software/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0rjm486vgn6gi9mv1rqdcvr9cilmw6in4r6djqkxbxqll89cp2l7";
   };
 
   patches = [
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext wrapGAppsHook libxslt docbook_xml_dtd_42 docbook_xml_dtd_43
+    meson ninja pkg-config gettext wrapGAppsHook libxslt docbook_xml_dtd_42 docbook_xml_dtd_43
     valgrind-light docbook_xsl gtk-doc desktop-file-utils gobject-introspection
   ];
 
@@ -34,8 +35,8 @@ stdenv.mkDerivation rec {
     gtk3 glib packagekit appstream-glib libsoup
     gsettings-desktop-schemas gnome-desktop
     gspell json-glib libsecret ostree
-    polkit flatpak libxmlb gnome-online-accounts
-  ] ++ stdenv.lib.optionals withFwupd [
+    polkit flatpak libxmlb gnome-online-accounts libsysprof-capture
+  ] ++ lib.optionals withFwupd [
     fwupd
   ];
 
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     "-Dgudev=false"
     # FIXME: package malcontent parental controls
     "-Dmalcontent=false"
-  ] ++ stdenv.lib.optionals (!withFwupd) [
+  ] ++ lib.optionals (!withFwupd) [
     "-Dfwupd=false"
   ];
 
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software store that lets you install and update applications and system extensions";
     homepage = "https://wiki.gnome.org/Apps/Software";
     license = licenses.gpl2;

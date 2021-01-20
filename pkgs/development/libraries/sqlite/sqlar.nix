@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ fuse zlib ];
 
-  buildFlags = [ "sqlar" "sqlarfs" ];
+  buildFlags = [ "sqlar" "sqlarfs" "CFLAGS=-Wno-error" ];
 
   installPhase = ''
     install -D -t $out/bin sqlar sqlarfs

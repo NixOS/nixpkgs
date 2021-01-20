@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, intltool, gettext, makeWrapper, coreutils, gnused, gnome3
-, gnugrep, parted, glib, libuuid, pkgconfig, gtkmm3, libxml2
-, gpart, hdparm, procps, utillinux, polkit, wrapGAppsHook, substituteAll
+{ lib, stdenv, fetchurl, intltool, gettext, makeWrapper, coreutils, gnused, gnome3
+, gnugrep, parted, glib, libuuid, pkg-config, gtkmm3, libxml2
+, gpart, hdparm, procps, util-linux, polkit, wrapGAppsHook, substituteAll
 }:
 
 stdenv.mkDerivation rec {
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-doc" ];
 
   buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin gnome3.adwaita-icon-theme  ];
-  nativeBuildInputs = [ intltool gettext pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ intltool gettext pkg-config wrapGAppsHook ];
 
   preFixup = ''
     gappsWrapperArgs+=(
-       --prefix PATH : "${stdenv.lib.makeBinPath [ gpart hdparm utillinux procps coreutils gnused gnugrep ]}"
+       --prefix PATH : "${lib.makeBinPath [ gpart hdparm util-linux procps coreutils gnused gnugrep ]}"
     )
   '';
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       $out/share/polkit-1/actions/org.gnome.gparted.policy
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical disk partitioning tool";
     longDescription = ''
       GNOME Partition Editor for creating, reorganizing, and deleting disk

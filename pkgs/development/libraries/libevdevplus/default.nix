@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig }:
+{ stdenv, fetchFromGitHub, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libevdevplus";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "18z6pn4j7fhmwwh0q22ip5nn7sc1hfgwvkdzqhkja60i8cw2cvvj";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

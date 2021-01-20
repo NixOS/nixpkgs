@@ -1,33 +1,52 @@
-{ stdenv, python3, glibcLocales, installShellFiles, jq }:
+{ lib, stdenv
+, python3
+, glibcLocales
+, installShellFiles
+, jq
+}:
 
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;
 in
 buildPythonApplication rec {
   pname = "todoman";
-  version = "3.8.0";
+  version = "3.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1aq7f63bhs9dnwzp15nfr07f2ki6s3lnqfap3b09rhchn6lfznwb";
+    sha256 = "e7e5cab13ecce0562b1f13f46ab8cbc079caed4b462f2371929f8a4abff2bcbe";
   };
 
-    LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux
-      "${glibcLocales}/lib/locale/locale-archive";
-    LANG = "en_US.UTF-8";
-    LC_TYPE = "en_US.UTF-8";
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+  propagatedBuildInputs = with python3.pkgs; [
+    atomicwrites
+    click
+    click-log
+    click-repl
+    configobj
+    humanize
+    icalendar
+    parsedatetime
+    python-dateutil
+    pyxdg
+    tabulate
+    urwid
+  ];
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = with python3.pkgs;
-    [ atomicwrites click click-log click-repl configobj humanize icalendar parsedatetime
-      python-dateutil pyxdg tabulate urwid ];
+  checkInputs = with python3.pkgs; [
+    flake8
+    flake8-import-order
+    freezegun
+    hypothesis
+    pytest
+    pytestrunner
+    pytestcov
+    glibcLocales
+  ];
 
-  checkInputs = with python3.pkgs;
-    [ flake8 flake8-import-order freezegun hypothesis pytest pytestrunner pytestcov ];
-
-  makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
-                      "--set CHARSET en_us.UTF-8" ];
+  LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
@@ -41,7 +60,7 @@ buildPythonApplication rec {
     rm tests/test_cli.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''

@@ -38,7 +38,7 @@
   assigned by setting the user's
   <link linkend="opt-users.users._name_.hashedPassword">hashedPassword</link>
   option. A hashed password can be generated using <command>mkpasswd -m
-  sha-512</command> after installing the <literal>mkpasswd</literal> package.
+  sha-512</command>.
  </para>
  <para>
   A user ID (uid) is assigned automatically. You can also specify a uid

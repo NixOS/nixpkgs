@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, tmux }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, tmux }:
 
 stdenv.mkDerivation {
   name = "tmux-cssh-20151015";
@@ -33,9 +33,9 @@ stdenv.mkDerivation {
       like most server do.
       '';
 
-    license = stdenv.lib.licenses.asl20;
+    license = lib.licenses.asl20;
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ zimbatm ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

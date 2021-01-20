@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, jre
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, jre
 , useCCTweaked ? true
 }:
 
@@ -6,7 +6,7 @@ let
   version = "1.1.1";
   rev = "af12e2e4da586275ba931eae8f40a2201251bf59";
 
-  baseUrl = "https://emux.cc/versions/${stdenv.lib.substring 0 8 rev}/CCEmuX";
+  baseUrl = "https://emux.cc/versions/${lib.substring 0 8 rev}/CCEmuX";
   jar =
     if useCCTweaked
     then fetchurl {
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modular ComputerCraft emulator";
     homepage = "https://github.com/CCEmuX/CCEmuX";
     license = licenses.mit;

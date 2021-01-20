@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "syncthing-relay";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ delroth ];
+  meta.maintainers = with pkgs.lib.maintainers; [ delroth ];
 
   machine = {
     environment.systemPackages = [ pkgs.jq ];
@@ -19,7 +19,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.wait_for_open_port(12346)
 
     out = machine.succeed(
-        "curl -sS http://localhost:12346/status | jq -r '.options.\"provided-by\"'"
+        "curl -sSf http://localhost:12346/status | jq -r '.options.\"provided-by\"'"
     )
     assert "nixos-test" in out
   '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ stdenv, fetchFromGitHub, pkg-config
 , freetype, glib, imagemagick, libjpeg, libpng, libxml2, zlib
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0i2w5hg8mbgmgabxyd48qp1gx2mhk33hgr3jqvg72k0nhkd2jhf6";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib imagemagick libpng glib freetype libjpeg libxml2 ];
   enableParallelBuilding = true;
 

@@ -1,9 +1,8 @@
 { stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , gobject-introspection
 , bison
@@ -16,40 +15,36 @@
 , darwin
 , elfutils # for libdw
 , bash-completion
-, docbook_xsl
-, docbook_xml_dtd_43
-, gtk-doc
 , lib
 , CoreServices
 }:
 
 stdenv.mkDerivation rec {
   pname = "gstreamer";
-  version = "1.16.2";
+  version = "1.18.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs, see:
+    # - https://github.com/NixOS/nixpkgs/pull/98767
+    # - https://github.com/NixOS/nixpkgs/issues/98769#issuecomment-702296551
+  ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0kp93622y29pck8asvil1fmzf55s2gx76wv475a6izc3cwj49w73";
+    sha256 = "0ijlmvr660m8zn09xlmnq1ajrziqsivp2hig5a9mabhcjx7ypkb6";
   };
 
   patches = [
     ./fix_pkgconfig_includedir.patch
-
-    # Fix build with bash-completion 2.10
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/436
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/commit/dd2ec3681e2d38e13e01477efa36e851650690fb.patch";
-      sha256 = "07hwf67vndsibm1khvs4rfq30sbs9fss8k5vs502xc0kccbi1ih8";
-    })
   ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     bison
     flex
@@ -60,9 +55,7 @@ stdenv.mkDerivation rec {
     bash-completion
 
     # documentation
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_43
+    # TODO add hotdoc here
   ];
 
   buildInputs = [
@@ -82,8 +75,9 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Ddbghelp=disabled" # not needed as we already provide libunwind and libdw, and dbghelp is a fallback to those
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ] ++ lib.optionals stdenv.isDarwin [
-    # darwin.libunwind doesn't have pkgconfig definitions so meson doesn't detect it.
+    # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
     "-Dlibunwind=disabled"
     "-Dlibdw=disabled"
   ];
@@ -93,13 +87,14 @@ stdenv.mkDerivation rec {
       gst/parse/get_flex_version.py \
       gst/parse/gen_grammar.py.in \
       gst/parse/gen_lex.py.in \
-      libs/gst/helpers/ptp_helper_post_install.sh
+      libs/gst/helpers/ptp_helper_post_install.sh \
+      scripts/extract-release-date-from-doap-file.py
   '';
 
   postInstall = ''
     for prog in "$dev/bin/"*; do
         # We can't use --suffix here due to quoting so we craft the export command by hand
-        wrapProgram "$prog" --run 'export GST_PLUGIN_SYSTEM_PATH=$GST_PLUGIN_SYSTEM_PATH''${GST_PLUGIN_SYSTEM_PATH:+:}$(unset _tmp; for profile in $NIX_PROFILES; do _tmp="$profile/lib/gstreamer-1.0''${_tmp:+:}$_tmp"; done; printf '%s' "$_tmp")'
+        wrapProgram "$prog" --run 'export GST_PLUGIN_SYSTEM_PATH_1_0=$GST_PLUGIN_SYSTEM_PATH_1_0''${GST_PLUGIN_SYSTEM_PATH_1_0:+:}$(unset _tmp; for profile in $NIX_PROFILES; do _tmp="$profile/lib/gstreamer-1.0''${_tmp:+:}$_tmp"; done; printf '%s' "$_tmp")'
     done
   '';
 

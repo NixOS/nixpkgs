@@ -1,24 +1,50 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook
-, itstool, gsound, libxml2
-, meson, ninja, python3, vala, desktop-file-utils
+{ lib, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, gtk3
+, gnome3
+, gdk-pixbuf
+, librsvg
+, wrapGAppsHook
+, itstool
+, gsound
+, libxml2
+, meson
+, ninja
+, python3
+, vala
+, desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "iagno";
-  version = "3.36.4";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/iagno/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1fh2cvyqbz8saf2wij0bz2r9bja2k4gy6fqvbvig4gv0lx66gl29";
+    url = "mirror://gnome/sources/iagno/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "097dw1l92l73xah9l56ka5mi3dvx48ffpiv33ni5i5rqw0ng7fc4";
   };
 
   nativeBuildInputs = [
-    meson ninja python3 vala desktop-file-utils
-    pkgconfig wrapGAppsHook itstool libxml2
+    meson
+    ninja
+    python3
+    vala
+    desktop-file-utils
+    pkg-config
+    wrapGAppsHook
+    itstool
+    libxml2
   ];
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk-pixbuf librsvg gsound ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    gtk3
+    gnome3.adwaita-icon-theme
+    gdk-pixbuf
+    librsvg
+    gsound
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -27,11 +53,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Iagno";
     description = "Computer version of the game Reversi, more popularly called Othello";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

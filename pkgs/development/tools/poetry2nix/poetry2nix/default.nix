@@ -71,7 +71,7 @@ in
 lib.makeScope pkgs.newScope (self: {
 
   # Poetry2nix version
-  version = "1.13.0";
+  version = "1.14.0";
 
   /*
      Returns an attrset { python, poetryPackages, pyProject, poetryLock } for the given pyproject/lockfile.

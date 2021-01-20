@@ -21,18 +21,18 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "0pvw0mbrx2i3v46lhjnka962gcl4ym0b9hp0xw56hpdd2abc58f6";
+      sha256 = "0ziz7cipi3m4aiba6ljz8419w2rps20rii6nwv0pyq5j7qvlvnqp";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "0p5vbg5s3xsi3y7x4s3v3mxcw87x349h6bz6w7xgc141l4g08vh3";
+      sha256 = "1a9mqhqzmn0zfc1ab6jmac15yn192cmqkijw34di3ld6syqvaziw";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "314.0.0";
+  version = "323.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
@@ -74,8 +74,8 @@ in stdenv.mkDerivation rec {
     disable_update_check = true" >> $out/google-cloud-sdk/properties
 
     # setup bash completion
-    mkdir -p $out/etc/bash_completion.d
-    mv $out/google-cloud-sdk/completion.bash.inc $out/etc/bash_completion.d/gcloud.inc
+    mkdir -p $out/share/bash-completion/completions
+    mv $out/google-cloud-sdk/completion.bash.inc $out/share/bash-completion/completions/gcloud.inc
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
@@ -93,13 +93,13 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for the google cloud platform";
     longDescription = "The Google Cloud SDK. This package has the programs: gcloud, gsutil, and bq";
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
-    maintainers = with maintainers; [ pradyuman stephenmw zimbatm ];
+    maintainers = with maintainers; [ iammrinal0 pradyuman stephenmw zimbatm ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , cargo
 , dbus
@@ -8,7 +8,7 @@
 , glib
 , gst_all_1
 , gtk3
-, libhandy
+, libhandy_0
 , meson
 , ninja
 , openssl
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     gdk-pixbuf
     glib
     gtk3
-    libhandy
+    libhandy_0
     openssl
     sqlite
   ] ++ (with gst_all_1; [
@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs build-aux/meson/postinstall.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Shortwave";
     description = "Find and listen to internet radio stations";
     longDescription = ''

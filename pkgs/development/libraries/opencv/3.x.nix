@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub, fetchpatch
-, cmake, pkgconfig, unzip, zlib, pcre, hdf5
+, cmake, pkg-config, unzip, zlib, pcre, hdf5
 , glog, boost, gflags, protobuf
 , config
 
@@ -206,7 +206,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
-  nativeBuildInputs = [ cmake pkgconfig unzip ];
+  nativeBuildInputs = [ cmake pkg-config unzip ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -244,8 +244,6 @@ stdenv.mkDerivation {
     # Autodetection broken by https://github.com/opencv/opencv/pull/13337
     "-DEIGEN_INCLUDE_PATH=${eigen}/include/eigen3"
   ];
-
-  enableParallelBuilding = true;
 
   postBuild = lib.optionalString enableDocs ''
     make doxygen

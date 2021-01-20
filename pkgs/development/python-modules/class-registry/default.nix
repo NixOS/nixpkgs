@@ -4,6 +4,8 @@
   lib,
   nose,
   six,
+  typing,
+  isPy27,
 }:
 
 buildPythonPackage rec {
@@ -15,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0zjf9nczl1ifzj07bgs6mwxsfd5xck9l0lchv2j0fv2n481xp2v7";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ six ] ++ lib.optional isPy27 typing;
   checkInputs = [ nose ];
 
   # Tests currently failing.

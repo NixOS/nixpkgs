@@ -2,11 +2,12 @@
 , fetchFromGitHub
 , kernel
 , stdenv
-, utillinux
+, lib
+, util-linux
 }:
 
 let
-  common = import ../../../development/python-modules/openrazer/common.nix { inherit stdenv fetchFromGitHub; };
+  common = import ../../../development/python-modules/openrazer/common.nix { inherit lib stdenv fetchFromGitHub; };
 in
 stdenv.mkDerivation (common // {
   name = "openrazer-${common.version}-${kernel.version}";
@@ -28,7 +29,7 @@ stdenv.mkDerivation (common // {
     substituteInPlace $RAZER_RULES_OUT \
       --replace razer_mount $RAZER_MOUNT_OUT
     substituteInPlace $RAZER_MOUNT_OUT \
-      --replace /usr/bin/logger ${utillinux}/bin/logger \
+      --replace /usr/bin/logger ${util-linux}/bin/logger \
       --replace chgrp ${coreutils}/bin/chgrp \
       --replace "PATH='/sbin:/bin:/usr/sbin:/usr/bin'" ""
   '';

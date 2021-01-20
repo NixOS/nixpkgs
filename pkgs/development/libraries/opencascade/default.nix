@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, libGL, libGLU, libXmu, cmake, ninja,
-  pkgconfig, fontconfig, freetype, expat, freeimage, vtk, gl2ps, tbb,
+  pkg-config, fontconfig, freetype, expat, freeimage, vtk, gl2ps, tbb,
   OpenCL, Cocoa
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "17wy8dcf44vqisishv1jjf3cmcxyygqq29y9c3wjdj983qi2hsig";
   };
 
-  nativeBuildInputs = [ cmake ninja pkgconfig ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
   buildInputs = [
     libGL libGLU libXmu freetype fontconfig expat freeimage vtk
     gl2ps tbb

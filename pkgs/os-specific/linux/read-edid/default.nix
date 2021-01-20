@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace 'COPYING' 'LICENSE'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for reading and parsing EDID data from monitors";
     homepage = "http://www.polypux.org/projects/read-edid/";
     license = licenses.bsd2; # Quoted: "This is an unofficial license. Let's call it BSD-like."

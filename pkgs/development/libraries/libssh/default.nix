@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cmake, zlib, openssl, libsodium }:
+{ stdenv, fetchurl, pkg-config, cmake, zlib, openssl, libsodium }:
 
 stdenv.mkDerivation rec {
   pname = "libssh";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib openssl libsodium ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with stdenv.lib; {
     description = "SSH client library";

@@ -1,4 +1,4 @@
-{ stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
+{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
 , libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
@@ -6,18 +6,18 @@
 , e2fsprogs, krb5, libdrm, mesa
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   curlWithGnuTls = curl.override { gnutlsSupport = true; sslSupport = false; };
 in
 stdenv.mkDerivation rec {
   pname = "gitkraken";
-  version = "7.3.2";
+  version = "7.4.1";
 
   src = fetchzip {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-    sha256 = "0bw75m87qbnnn1gjphik3xcjx2zwczsa37rpr16la1zjhqjl5m7j";
+    sha256 = "1c9cyxx5sqvnilf6xp3ildq3lwl6mj8v1vl0wzyjpaiqky99lj9p";
   };
 
   dontBuild = true;

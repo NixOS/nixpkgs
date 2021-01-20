@@ -1,7 +1,7 @@
 # Test whether mysqlBackup option works
 import ./../make-test-python.nix ({ pkgs, ... } : {
   name = "mysql-backup";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ rvl ];
   };
 

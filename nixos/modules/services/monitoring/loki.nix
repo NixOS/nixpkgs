@@ -39,7 +39,7 @@ in {
     };
 
     configuration = mkOption {
-      type = types.attrs;
+      type = (pkgs.formats.json {}).type;
       default = {};
       description = ''
         Specify the configuration for Loki in Nix.
@@ -77,6 +77,8 @@ in {
         'services.loki.configFile'.
       '';
     }];
+
+    environment.systemPackages = [ pkgs.grafana-loki ]; # logcli
 
     users.groups.${cfg.group} = { };
     users.users.${cfg.user} = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, callPackage, pkgconfig, cmake, vala, libxml2,
+{ lib, stdenv, fetchFromGitHub, substituteAll, callPackage, pkg-config, cmake, vala, libxml2,
   glib, pcre, gtk2, gtk3, xorg, libxkbcommon, epoxy, at-spi2-core, dbus-glib, bamf,
   xfce, libwnck3, libdbusmenu, gobject-introspection }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "06rykdr2c9rnzxwinwdynd73v9wf0gjkx6qfva7sx2n94ajsdnaw";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake vala libxml2.bin ];
+  nativeBuildInputs = [ pkg-config cmake vala libxml2.bin ];
   buildInputs = [ (callPackage ./appmenu-gtk-module.nix {})
                   glib pcre gtk2 gtk3 xorg.libpthreadstubs xorg.libXdmcp libxkbcommon epoxy
                   at-spi2-core dbus-glib bamf xfce.xfce4panel_gtk3 xfce.libxfce4util xfce.xfconf
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.gitLister src.meta.homepage;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Global Menu applet for XFCE4";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ jD91mZM2 ];

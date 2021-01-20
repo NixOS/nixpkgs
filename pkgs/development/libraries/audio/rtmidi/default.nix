@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2, alsaLib, pkgconfig }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2, alsaLib, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "4.0.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake libtool libjack2 alsaLib ];
 
   preConfigure = ''

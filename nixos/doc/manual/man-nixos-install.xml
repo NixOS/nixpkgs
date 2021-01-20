@@ -50,6 +50,12 @@
    </arg>
 
    <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--impure</option></arg>
+    </group>
+   </arg>
+
+   <arg>
      <arg choice='plain'>
        <option>--channel</option>
      </arg>
@@ -97,6 +103,12 @@
    <arg>
     <arg choice='plain'>
      <option>--show-trace</option>
+    </arg>
+   </arg>
+
+   <arg>
+    <arg choice='plain'>
+     <option>--keep-going</option>
     </arg>
    </arg>
 
@@ -292,6 +304,17 @@
      <para>
       Causes Nix to print out a stack trace in case of Nix expression
       evaluation errors.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--keep-going</option>
+    </term>
+    <listitem>
+     <para>
+      Causes Nix to continue building derivations as far as possible
+      in the face of failed builds.
      </para>
     </listitem>
    </varlistentry>

@@ -1,35 +1,38 @@
-{ stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
-, ncurses, perl, pixman, vde2, alsaLib, texinfo, flex
+{ lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
+, perl, pixman, vde2, alsaLib, texinfo, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, Hypervisor, rez, setfile
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio
-, sdlSupport ? !stdenv.isDarwin, SDL2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, vte, wrapGAppsHook
-, vncSupport ? true, libjpeg, libpng
-, smartcardSupport ? true, libcacard
-, spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
+, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
+, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
+, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2
+, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
+, vncSupport ? !nixosTestRunner, libjpeg, libpng
+, smartcardSupport ? !nixosTestRunner, libcacard
+, spiceSupport ? !stdenv.isDarwin && !nixosTestRunner, spice, spice-protocol
+, ncursesSupport ? !nixosTestRunner, ncurses
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
 , cephSupport ? false, ceph
 , openGLSupport ? sdlSupport, mesa, epoxy, libdrm
 , virglSupport ? openGLSupport, virglrenderer
+, libiscsiSupport ? true, libiscsi
 , smbdSupport ? false, samba
 , tpmSupport ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
-                    then (stdenv.lib.optional stdenv.isx86_64 "i386-softmmu"
+                    then (lib.optional stdenv.isx86_64 "i386-softmmu"
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
                     else null)
 , nixosTestRunner ? false
 }:
 
-with stdenv.lib;
+with lib;
 let
-  audio = optionalString (hasSuffix "linux" stdenv.hostPlatform.system) "alsa,"
+  audio = optionalString alsaSupport "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 
@@ -38,22 +41,23 @@ in
 stdenv.mkDerivation rec {
   version = "5.1.0";
   pname = "qemu"
-    + stdenv.lib.optionalString xenSupport "-xen"
-    + stdenv.lib.optionalString hostCpuOnly "-host-cpu-only"
-    + stdenv.lib.optionalString nixosTestRunner "-for-vm-tests";
+    + lib.optionalString xenSupport "-xen"
+    + lib.optionalString hostCpuOnly "-host-cpu-only"
+    + lib.optionalString nixosTestRunner "-for-vm-tests";
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
     sha256 = "1rd41wwlvp0vpialjp2czs6i3lsc338xc72l3zkbb7ixjfslw5y9";
   };
 
-  nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ]
+  nativeBuildInputs = [ python python.pkgs.sphinx pkg-config flex bison ]
     ++ optionals gtkSupport [ wrapGAppsHook ];
   buildInputs =
-    [ zlib glib ncurses perl pixman
+    [ zlib glib perl pixman
       vde2 texinfo makeWrapper lzo snappy
       gnutls nettle curl
     ]
+    ++ optionals ncursesSupport [ ncurses ]
     ++ optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
     ++ optionals seccompSupport [ libseccomp ]
     ++ optionals numaSupport [ numactl ]
@@ -69,6 +73,7 @@ stdenv.mkDerivation rec {
     ++ optionals cephSupport [ ceph ]
     ++ optionals openGLSupport [ mesa epoxy libdrm ]
     ++ optionals virglSupport [ virglrenderer ]
+    ++ optionals libiscsiSupport [ libiscsi ]
     ++ optionals smbdSupport [ samba ];
 
   enableParallelBuilding = true;
@@ -79,6 +84,13 @@ stdenv.mkDerivation rec {
     ./no-etc-install.patch
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
+    ./CVE-2020-27617.patch
+    (fetchpatch {
+      # e1000e: infinite loop scenario in case of null packet descriptor, remove for QEMU >= 5.2.0-rc3
+      name = "CVE-2020-28916.patch";
+      url = "https://git.qemu.org/?p=qemu.git;a=patch;h=c2cb511634012344e3d0fe49a037a33b12d8a98a";
+      sha256 = "1kvm6wl4vry0npiisxsn76h8nf1iv5fmqsyjvb46203f1yyg5pis";
+    })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
@@ -95,6 +107,15 @@ stdenv.mkDerivation rec {
       sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
     })
   ];
+
+  # Remove CVE-2020-{29129,29130} for QEMU >5.1.0
+  postPatch = ''
+    (cd slirp && patch -p1 < ${fetchpatch {
+      name = "CVE-2020-29129_CVE-2020-29130.patch";
+      url = "https://gitlab.freedesktop.org/slirp/libslirp/-/commit/2e1dcbc0c2af64fcb17009eaf2ceedd81be2b27f.patch";
+      sha256 = "01vbjqgnc0kp881l5p6b31cyyirhwhavm6x36hlgkymswvl3wh9w";
+    }})
+  '';
 
   hardeningDisable = [ "stackprotector" ];
 
@@ -119,7 +140,7 @@ stdenv.mkDerivation rec {
     ++ optional smartcardSupport "--enable-smartcard"
     ++ optional spiceSupport "--enable-spice"
     ++ optional usbredirSupport "--enable-usb-redir"
-    ++ optional (hostCpuTargets != null) "--target-list=${stdenv.lib.concatStringsSep "," hostCpuTargets}"
+    ++ optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
     ++ optional stdenv.isDarwin "--enable-cocoa"
     ++ optional stdenv.isDarwin "--enable-hvf"
     ++ optional stdenv.isLinux "--enable-linux-aio"
@@ -129,6 +150,7 @@ stdenv.mkDerivation rec {
     ++ optional openGLSupport "--enable-opengl"
     ++ optional virglSupport "--enable-virglrenderer"
     ++ optional tpmSupport "--enable-tpm"
+    ++ optional libiscsiSupport "--enable-libiscsi"
     ++ optional smbdSupport "--smbd=${samba}/bin/smbd";
 
   doCheck = false; # tries to access /dev
@@ -161,7 +183,7 @@ stdenv.mkDerivation rec {
     qemu-system-i386 = "bin/qemu-system-i386";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.qemu.org/";
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
 , libarchive, db, pcre, libedit, libossp_uuid, libXpm
-, libSM, libXt, freetype, pkgconfig, fontconfig
+, libSM, libXt, freetype, pkg-config, fontconfig
 , cmake, libyaml, Security
 , libjpeg, libX11, libXext, libXft, libXinerama
 , extraLibraries ? [ jdk unixODBC libXpm libSM libXt freetype fontconfig ]
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ gmp readline openssl
     libarchive libyaml db pcre libedit libossp_uuid

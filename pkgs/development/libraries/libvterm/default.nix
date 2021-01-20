@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, ncurses }:
+{ stdenv, fetchurl, pkg-config, glib, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "libvterm-0.99.7";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib ncurses ];
 
   meta = with stdenv.lib; {

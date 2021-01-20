@@ -8,18 +8,18 @@
 , iptables
 , perl
 , perlPackages
-, stdenv
+, lib, stdenv
 , tree
-, utillinux
+, util-linux
 }:
 let
-  PATH = stdenv.lib.concatStringsSep ":"
+  PATH = lib.concatStringsSep ":"
            [ "${coreutils}/bin"
              "${iproute}/bin"
              "${iptables}/bin"
              "${ipset}/bin"
              "${ebtables}/bin"
-             "${utillinux}/bin"
+             "${util-linux}/bin"
              "${gnugrep}/bin"
              "${gnused}/bin"
            ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ipset
     iptables
     ebtables
-    utillinux
+    util-linux
     gnugrep
     gnused
     perl
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
       not use Netfilter's ipchains compatibility mode and can thus take
       advantage of Netfilter's connection state tracking capabilities.
     '';
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

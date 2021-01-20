@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, gnome3
+{ stdenv, fetchurl, autoconf, automake, libtool, pkg-config, gnome3
 , gtk-doc, gtk2, python2Packages, lua, gobject-introspection
 }:
 
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0kkplz5snycik5xknwq1s8rnmls3qsp32z09mdpmaacydcw7g3cf";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     autoconf automake libtool gnome3.gnome-common gtk-doc gtk2
     python pygtk lua gobject-introspection

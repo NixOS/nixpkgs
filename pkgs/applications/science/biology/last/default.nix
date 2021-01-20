@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, unzip, zlib, python3, parallel }:
+{ lib, stdenv, fetchurl, unzip, zlib, python3, parallel }:
 
 stdenv.mkDerivation rec {
   pname = "last";
-  version = "1066";
+  version = "1170";
 
   src = fetchurl {
     url = "http://last.cbrc.jp/last-${version}.zip";
-    sha256 = "098j3f3a80rmhd01ds7rnb9y1xykmll2yh5ivpnvskssd8z2vc4r";
+    sha256 = "sha256-hBuG6QGXtBrvNrtaZU+i8gxu2ZQw+srFRkbuWoL5JHc=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Genomic sequence aligner";
     homepage = "http://last.cbrc.jp/";
     license = licenses.gpl3;

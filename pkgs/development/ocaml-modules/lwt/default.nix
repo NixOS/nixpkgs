@@ -1,4 +1,4 @@
-{ lib, fetchzip, pkgconfig, ncurses, libev, buildDunePackage, ocaml
+{ lib, fetchzip, pkg-config, ncurses, libev, buildDunePackage, ocaml
 , cppo, ocaml-migrate-parsetree, ocplib-endian, result
 , mmap, seq
 }:
@@ -14,7 +14,7 @@ buildDunePackage rec {
     sha256 = "15hgy3220m2b8imipa514n7l65m1h5lc6l1hanqwwvs7ghh2aqp2";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ cppo ocaml-migrate-parsetree ]
    ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
   propagatedBuildInputs = [ libev mmap ocplib-endian seq result ];

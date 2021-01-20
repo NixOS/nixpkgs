@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, btrfs-progs }:
+{ lib, stdenv, fetchFromGitHub, btrfs-progs }:
 
 stdenv.mkDerivation rec {
   pname = "compsize";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     install -m 0444 compsize.8 $out/share/man/man8
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "btrfs: Find compression type/ratio on a file or set of files";
     homepage    = "https://github.com/kilobyte/compsize";
     license     = licenses.gpl2;

@@ -22,9 +22,9 @@
 , libXtst
 , muffin
 , networkmanager
-, pkgconfig
+, pkg-config
 , polkit
-, stdenv
+, lib, stdenv
 , wrapGAppsHook
 , libxml2
 , gtk-doc
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     libXtst
     muffin
     networkmanager
-    pkgconfig
+    pkg-config
     polkit
     libxml2
     libgnomekbd
@@ -160,7 +160,7 @@ stdenv.mkDerivation rec {
     providedSessions = ["cinnamon" "cinnamon2d"];
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon";
     description = "The Cinnamon desktop environment";
     license = [ licenses.gpl2 ];

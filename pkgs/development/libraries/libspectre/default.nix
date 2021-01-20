@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, ghostscript, cairo }:
+{ fetchurl, stdenv, pkg-config, ghostscript, cairo }:
 
 stdenv.mkDerivation rec {
   name = "libspectre-0.2.7";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # Need `libgs.so'.
-    pkgconfig ghostscript cairo /*for tests*/
+    pkg-config ghostscript cairo /*for tests*/
   ];
 
   doCheck = true;

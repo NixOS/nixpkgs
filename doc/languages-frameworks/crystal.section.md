@@ -1,4 +1,4 @@
-# Crystal
+# Crystal {#crystal}
 
 ## Building a Crystal package
 

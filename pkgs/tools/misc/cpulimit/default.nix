@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   pname = "cpulimit";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://limitcpu.sourceforge.net/";
     description = "A tool to throttle the CPU usage of programs";
     platforms = with platforms; linux ++ freebsd;

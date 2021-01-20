@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, qt4, clucene_core, librdf_redland, libiodbc
-, pkgconfig }:
+, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "soprano-2.9.4";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # We disable the Java backend, since we do not need them and they make the closure size much bigger
   buildInputs = [ qt4 clucene_core librdf_redland libiodbc ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   meta = {
     homepage = "http://soprano.sourceforge.net/";

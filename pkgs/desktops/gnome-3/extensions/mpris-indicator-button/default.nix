@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , gnome3
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple MPRIS indicator button for GNOME Shell";
     license = licenses.gpl3;
     maintainers = with maintainers; [ worldofpeace ];

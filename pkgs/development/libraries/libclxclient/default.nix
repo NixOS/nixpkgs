@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libclthreads, libX11, libXft, xorg, pkgconfig }:
+{ stdenv, fetchurl, libclthreads, libX11, libXft, xorg, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libclxclient";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libclthreads libX11 libXft xorg.xorgproto ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   NIX_CFLAGS_COMPILE = "-I${xorg.xorgproto}/include -I${libXft.dev}/include";
 

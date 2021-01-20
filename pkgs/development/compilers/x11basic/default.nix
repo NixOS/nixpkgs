@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "http://x11-basic.sourceforge.net/";
-    description = "A Basic interpreter and compiler with graphics capabilities.";
+    description = "A Basic interpreter and compiler with graphics capabilities";
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.unix;

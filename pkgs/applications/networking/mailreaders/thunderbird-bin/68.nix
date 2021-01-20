@@ -1,6 +1,6 @@
 # This pakcage is keeped until Thunderbird 78 supports OpenPGP.
 # https://www.thunderbird.net/en-US/thunderbird/78.0.1/releasenotes/
-{ stdenv, fetchurl, config, makeWrapper
+{ lib, stdenv, fetchurl, config, makeWrapper
 , alsaLib
 , at-spi2-atk
 , atk
@@ -60,9 +60,9 @@ let
 
   systemLocale = config.i18n.defaultLocale or "en-US";
 
-  defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") {} sources;
+  defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
-  source = stdenv.lib.findFirst (sourceMatches systemLocale) defaultSource sources;
+  source = lib.findFirst (sourceMatches systemLocale) defaultSource sources;
 
   name = "thunderbird-bin-${version}";
 in
@@ -77,7 +77,7 @@ stdenv.mkDerivation {
 
   phases = "unpackPhase installPhase";
 
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       alsaLib
       at-spi2-atk
@@ -112,7 +112,7 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
-    ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
+    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
 
@@ -170,14 +170,14 @@ stdenv.mkDerivation {
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = "http://www.mozilla.org/thunderbird/";
     license = {
       free = false;
       url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
     };
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ ];
     platforms = platforms.linux;
     knownVulnerabilities = [ "Support ended around Semptember 2020." ];
   };

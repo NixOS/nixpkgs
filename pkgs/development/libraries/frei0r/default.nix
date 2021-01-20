@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, cairo, opencv, pkgconfig }:
+{ stdenv, fetchurl, autoconf, cairo, opencv, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "frei0r-plugins";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pji26fpd0dqrx1akyhqi6729s394irl73dacnyxk58ijqq4dhp0";
   };
 
-  nativeBuildInputs = [ autoconf pkgconfig ];
+  nativeBuildInputs = [ autoconf pkg-config ];
   buildInputs = [ cairo opencv ];
 
   postInstall = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''

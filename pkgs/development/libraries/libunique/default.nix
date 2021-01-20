@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk2, dbus-glib }:
+{ stdenv, fetchurl, pkg-config, glib, gtk2, dbus-glib }:
 
 stdenv.mkDerivation rec {
   pname = "libunique";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ./1.1.6-include-terminator.patch
   ] ++ [ ./gcc7-bug.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib gtk2 dbus-glib ];
 
   # Don't make deprecated usages hard errors

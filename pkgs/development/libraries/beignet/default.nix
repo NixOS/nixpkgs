@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , clang-unwrapped
 , llvm
 , libdrm
@@ -30,8 +30,6 @@ stdenv.mkDerivation rec {
 
   patches = [ ./clang_llvm.patch ];
 
-  enableParallelBuilding = true;
-
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace /etc/OpenCL/vendors "\''${CMAKE_INSTALL_PREFIX}/etc/OpenCL/vendors"
     patchShebangs src/git_sha1.sh
@@ -54,7 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     python3
   ];
 
@@ -66,12 +64,10 @@ stdenv.mkDerivation rec {
       cd utests
     '';
 
-    enableParallelBuilding = true;
-
     nativeBuildInputs = [
       cmake
       python3
-      pkgconfig
+      pkg-config
       makeWrapper
     ];
 

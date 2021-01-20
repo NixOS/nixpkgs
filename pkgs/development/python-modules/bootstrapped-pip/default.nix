@@ -2,6 +2,7 @@
 , pipInstallHook
 , setuptoolsBuildHook
 , wheel, pip, setuptools
+, isPy27
 }:
 
 stdenv.mkDerivation rec {
@@ -40,21 +41,21 @@ stdenv.mkDerivation rec {
     mv wheel* wheel
     # Set up PYTHONPATH. The above folders need to be on PYTHONPATH
     # $out is where we are installing to and takes precedence
-    export PYTHONPATH="$out/${python.sitePackages}:$(pwd)/pip/src:$(pwd)/setuptools:$(pwd)/setuptools/pkg_resources:$(pwd)/wheel"
+    export PYTHONPATH="$out/${python.sitePackages}:$(pwd)/pip/src:$(pwd)/setuptools:$(pwd)/setuptools/pkg_resources:$(pwd)/wheel:$PYTHONPATH"
 
     echo "Building setuptools wheel..."
     pushd setuptools
-    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache --build tmpbuild .
+    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
     popd
 
     echo "Building wheel wheel..."
     pushd wheel
-    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache --build tmpbuild .
+    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
     popd
 
     echo "Building pip wheel..."
     pushd pip
-    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache --build tmpbuild .
+    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
     popd
   '';
 

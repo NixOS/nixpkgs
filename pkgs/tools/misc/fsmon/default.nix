@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "fsmon";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "nowsecure";
     repo = "fsmon";
     rev = version;
-    sha256 = "0i7irqs4100j0g19jh64p2plbwipl6p3ld6w4sscc7n8lwkxmj03";
+    sha256 = "0y0gqb07girhz3r7gn9yrrysvhj5fapdafim0q8n7krk5y23hmh0";
   };
 
   installPhase = ''
     make install PREFIX=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FileSystem Monitor utility";
     homepage = "https://github.com/nowsecure/fsmon";
     license = licenses.mit;

@@ -63,7 +63,7 @@ let
     script = with builtins; concatStringsSep "\n" (mapAttrsToList (cert: data: ''
       for fixpath in /var/lib/acme/${escapeShellArg cert} /var/lib/acme/.lego/${escapeShellArg cert}; do
         if [ -d "$fixpath" ]; then
-          chmod -R 750 "$fixpath"
+          chmod -R u=rwX,g=rX,o= "$fixpath"
           chown -R acme:${data.group} "$fixpath"
         fi
       done
@@ -104,7 +104,7 @@ let
     mkHash = with builtins; val: substring 0 20 (hashString "sha256" val);
     certDir = mkHash hashData;
     domainHash = mkHash "${concatStringsSep " " extraDomains} ${data.domain}";
-    othersHash = mkHash "${toString acmeServer} ${data.keyType}";
+    othersHash = mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
     accountDir = "/var/lib/acme/.lego/accounts/" + othersHash;
 
     protocolOpts = if useDns then (
@@ -253,7 +253,8 @@ let
         echo '${domainHash}' > domainhash.txt
 
         # Check if we can renew
-        if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' ]; then
+        # Certificates and account credentials must exist
+        if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a "$(ls -1 accounts)" ]; then
 
           # When domains are updated, there's no need to do a full
           # Lego run, but it's likely renew won't work if days is too low.
@@ -271,7 +272,7 @@ let
 
         mv domainhash.txt certificates/
         chmod 640 certificates/*
-        chmod -R 700 accounts/*
+        chmod -R u=rwX,g=,o= accounts/*
 
         # Group might change between runs, re-apply it
         chown 'acme:${data.group}' certificates/*

@@ -7,7 +7,7 @@ stdenv.mkDerivation {
      url = "mirror://sourceforge/tix/tix/8.4.3/Tix8.4.3-src.tar.gz";
      sha256 = "1jq3dkyk9mqkj4cg7mdk5r0cclqsby9l2b7wrysi0zk5yw7h8bsn";
   };
-  patches = [ 
+  patches = [
   (fetchpatch {
     name = "tix-8.4.3-tcl8.5.patch";
     url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-tcltk/tix/files/tix-8.4.3-tcl8.5.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   buildInputs = [ tcl tk ];
   # the configure script expects to find the location of the sources of
   # tcl and tk in {tcl,tk}Config.sh
-  # In fact, it only needs some private headers. We copy them in 
+  # In fact, it only needs some private headers. We copy them in
   # the private_headers folders and trick the configure script into believing
   # the sources are here.
   preConfigure = ''

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage
+{ lib, stdenv, buildPythonPackage
 , aiohttp
 , aiozeroconf
 , asynctest
@@ -18,13 +18,12 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "v0.7.4";
-
+  version = "0.7.5";
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
-    rev = version;
-    sha256 = "17gsamn4aibsx4w50r9dwr5kr9anc7dd0f0dvmdl717rkgh13zyi";
+    rev = "v${version}";
+    sha256 = "06qj6r9kcal2nimg8rpjfid8rnlz43l7hn0v9v1mpayjmv2fl8sp";
   };
 
   nativeBuildInputs = [ pytestrunner];
@@ -37,7 +36,6 @@ buildPythonPackage rec {
     cryptography
     netifaces
     zeroconf
-    pytestCheckHook
   ];
 
   checkInputs = [
@@ -45,9 +43,12 @@ buildPythonPackage rec {
     pytest
     pytest-aiohttp
     pytest-asyncio
+    pytestCheckHook
   ];
 
-  meta = with stdenv.lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
     description = "A python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
     license = licenses.mit;

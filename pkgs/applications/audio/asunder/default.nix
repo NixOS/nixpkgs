@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, gtk2, libcddb, intltool, pkgconfig, cdparanoia
+{ lib, stdenv, fetchurl, makeWrapper, gtk2, libcddb, intltool, pkg-config, cdparanoia
 , mp3Support ? false, lame
 , oggSupport ? true, vorbis-tools
 , flacSupport ? true, flac
@@ -9,17 +9,17 @@
 #, aacSupport ? false, TODO: neroAacEnc
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "2.9.6";
+  version = "2.9.7";
   pname = "asunder";
   src = fetchurl {
     url = "http://littlesvr.ca/asunder/releases/${pname}-${version}.tar.bz2";
-    sha256 = "1ycnd82lh7qy1pcbngd4b41s16j9hnm2kyfrncg4cwr3bfk7yg7a";
+    sha256 = "1x3l308ss0iqhz90qyjb94gyd8b4piyrm2nzjmg5kf049k9prjf1";
   };
 
-  nativeBuildInputs = [ intltool makeWrapper pkgconfig ];
+  nativeBuildInputs = [ intltool makeWrapper pkg-config ];
   buildInputs = [ gtk2 libcddb ];
 
   runtimeDeps =

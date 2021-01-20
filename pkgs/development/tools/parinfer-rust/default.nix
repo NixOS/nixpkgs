@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, llvmPackages }:
 
 rustPlatform.buildRustPackage rec {
   pname = "parinfer-rust";
@@ -27,8 +27,8 @@ rustPlatform.buildRustPackage rec {
       plugin/parinfer.vim >$rtpPath/plugin/parinfer.vim
   '';
 
-  meta = with stdenv.lib; {
-    description = "Infer parentheses for Clojure, Lisp, and Scheme.";
+  meta = with lib; {
+    description = "Infer parentheses for Clojure, Lisp, and Scheme";
     homepage = "https://github.com/eraserhd/parinfer-rust";
     license = licenses.isc;
     maintainers = with maintainers; [ eraserhd ];

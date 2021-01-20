@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, mock, six }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, mock, six }:
 
 buildPythonPackage rec {
   pname = "whisper";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
   checkInputs = [ mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://graphite.wikidot.com/";
     description = "Fixed size round-robin style database";
     maintainers = with maintainers; [ offline basvandijk ];

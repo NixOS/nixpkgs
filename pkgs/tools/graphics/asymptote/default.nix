@@ -1,23 +1,31 @@
-{ stdenv, fetchFromGitHub, fetchurl
+{ lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
 , autoreconfHook, bison, glm, yacc, flex
 , freeglut, ghostscriptX, imagemagick, fftw
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
 , python3Packages
-, zlib, perl
+, zlib, perl, curl
 , texLive, texinfo
 , darwin
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.66";
+  version = "2.67";
   pname = "asymptote";
 
   src = fetchFromGitHub {
     owner = "vectorgraphics";
     repo = pname;
     rev = version;
-    sha256 = "0c445j950n6nxgr1zxj7a26daa5d9f3i91506b7r7627s943b1kd";
+    sha256 = "sha256:1lawj2gf0985clzbyym26s5mxxp2syl1dqqxfzk0sq9s30l2rj3l";
   };
+
+  patches =
+    (lib.optional (lib.versionOlder version "2.68")
+      (fetchpatch {
+        url = "https://github.com/vectorgraphics/asymptote/commit/3361214340d58235f4dbb8f24017d0cd5d94da72.patch";
+        sha256 = "sha256:1z2b41x8v7683myd45lq6niixpdjy0b185x0xl61130vrijhq5nm";
+      }))
+  ;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -30,7 +38,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ghostscriptX imagemagick fftw
     boehmgc ncurses readline gsl libsigsegv
-    zlib perl
+    zlib perl curl
     texLive
   ] ++ (with python3Packages; [
     python
@@ -39,9 +47,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     glm
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     freeglut libGLU libGL mesa.osmesa
-  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT Cocoa
   ]);
 
@@ -68,7 +76,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =  "A tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin maintainers.peti ];

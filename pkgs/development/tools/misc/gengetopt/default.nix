@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
+  # attempts to open non-existent file
+  preCheck = ''
+    rm tests/test_conf_parser_save.sh
+  '';
 
   enableParallelBuilding = true;
 

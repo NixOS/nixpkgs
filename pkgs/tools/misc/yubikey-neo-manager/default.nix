@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python27Packages
+{ lib, stdenv, fetchurl, python27Packages
 , libykneomgr, yubikey-personalization, libu2f-host }:
 
 python27Packages.buildPythonPackage rec {
@@ -18,7 +18,7 @@ python27Packages.buildPythonPackage rec {
     "--set LD_PRELOAD '${libykneomgr}/lib/libykneomgr.so ${yubikey-personalization}/lib/libykpers-1.so ${libu2f-host}/lib/libu2f-host.so'"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-neo-manager";
     description = "Cross platform personalization tool for the YubiKey NEO";
     license = licenses.bsd2;

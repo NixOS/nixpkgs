@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
+{ lib, stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
 , substituteAll, gd, geoip, gperftools, jemalloc
 , withDebug ? false
 , withMail ? false
@@ -7,7 +7,7 @@
 , ...
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "2.3.2";
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A web server based on Nginx and has many advanced features, originated by Taobao.";
+    description = "A web server based on Nginx and has many advanced features, originated by Taobao";
     homepage    = "https://tengine.taobao.org";
     license     = licenses.bsd2;
     platforms   = platforms.all;

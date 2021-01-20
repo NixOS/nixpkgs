@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Storage Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer olcai mwilsoninsight ];
+    maintainers = with maintainers; [ jonringer olcai maxwilson ];
   };
 }

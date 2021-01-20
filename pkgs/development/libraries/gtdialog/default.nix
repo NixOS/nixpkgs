@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cdk, unzip, gtk2, glib, ncurses, pkgconfig}:
+{stdenv, fetchurl, cdk, unzip, gtk2, glib, ncurses, pkg-config}:
 let
   s = # Generated upstream information
   rec {
@@ -9,7 +9,7 @@ let
     url="https://foicica.com/gtdialog/download/gtdialog_1.4.zip";
     sha256="1lhsaz56s8m838fi6vnfcd2r6djymvy3n2pbqhii88hraapq3rfk";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cdk unzip gtk2 glib ncurses
   ];

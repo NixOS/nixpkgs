@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, autoreconfHook, gettext, glib, buildPackages }:
+{ fetchurl, stdenv, pkg-config, autoreconfHook, gettext, glib, buildPackages }:
 
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     glib  # required to satisfy AM_PATH_GLIB_2_0
   ];

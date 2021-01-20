@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-runtime";
-  version = "3.8.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCR-Runtime";
     rev = "rocm-${version}";
-    sha256 = "1lm4cbx1d727zll85vjc1kykc72mk82nfhyyhjljv82gd4mnz00c";
+    hash = "sha256-8hNb0Yo9ApedOG7xrUr5rwiA/YsqDTcyr6dBRg8lXro=";
   };
 
   sourceRoot = "source/src";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ clang-unwrapped elfutils llvm ];
 
   cmakeFlags = [
-   "-DBITCODE_DIR=${rocm-device-libs}/lib"
+   "-DBITCODE_DIR=${rocm-device-libs}/amdgcn/bitcode"
    "-DCMAKE_PREFIX_PATH=${rocm-thunk}"
   ];
 

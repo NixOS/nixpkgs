@@ -3,20 +3,21 @@
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
-, openssl, gperf, cppunit, poppler, utillinux
+, openssl, gperf, cppunit, poppler, util-linux
 , librsvg, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus-glib, clucene_core, libcdr, lcms, vigra
+, libwpg, dbus-glib, clucene_core, libcdr, lcms
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
-, fontsConf, pkgconfig, bluez5, libtool, carlito
+, fontsConf, pkg-config, bluez5, libtool, carlito
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
-, librevenge, libe-book, libmwaw, glm, glew, gst_all_1
+, librevenge, libe-book, libmwaw, glm, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
 , gnome3, glib, ncurses, epoxy, gpgme
 , langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
 , ki18n ? null, kconfig ? null, kcoreaddons ? null, kio ? null, kwindowsystem ? null
+, wrapQtAppsHook ? null
 , variant ? "fresh"
 } @ args:
 
@@ -299,11 +300,16 @@ in (mkDrv rec {
     cp -r sysui/desktop/icons  "$out/share"
     sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
 
-    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH")
-
     mkdir -p $dev
     cp -r include $dev
+  '' + lib.optionalString kdeIntegration ''
+      for prog in $out/bin/*
+      do
+        wrapQtApp $prog
+      done
   '';
+
+  dontWrapQtApps = true;
 
   configureFlags = [
     (if withHelp then "" else "--without-help")
@@ -336,8 +342,6 @@ in (mkDrv rec {
     # Schema files for validation are not included in the source tarball
     "--without-export-validation"
 
-    "--disable-libnumbertext" # system-libnumbertext"
-
     # We do tarball prefetching ourselves
     "--disable-fetch-external"
     "--enable-build-opensymbol"
@@ -360,6 +364,7 @@ in (mkDrv rec {
     "--without-system-libfreehand"
     "--without-system-liblangtag"
     "--without-system-libmspub"
+    "--without-system-libnumbertext"
     "--without-system-libpagemaker"
     "--without-system-libstaroffice"
     "--without-system-libepubgen"
@@ -381,8 +386,9 @@ in (mkDrv rec {
   '';
 
   nativeBuildInputs = [
-    gdb fontforge autoconf automake bison pkgconfig libtool
-  ] ++ lib.optional (!kdeIntegration) wrapGAppsHook;
+    gdb fontforge autoconf automake bison pkg-config libtool
+  ] ++ lib.optional (!kdeIntegration) wrapGAppsHook
+    ++ lib.optional kdeIntegration wrapQtAppsHook;
 
   buildInputs = with xorg;
     [ ant ArchiveZip boost cairo clucene_core
@@ -393,14 +399,18 @@ in (mkDrv rec {
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs libGLU libGL mythes
       glib libmysqlclient
-      neon nspr nss openldap openssl pam perl pkgconfig poppler
-      python3 sane-backends unzip vigra which zip zlib
+      neon nspr nss openldap openssl pam perl pkg-config poppler
+      python3 sane-backends unzip which zip zlib
       mdds bluez5 libcmis libwps libabw libzmf
-      libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
-      librevenge libe-book libmwaw glm glew ncurses epoxy
+      libxshmfence libatomic_ops graphite2 harfbuzz gpgme util-linux
+      librevenge libe-book libmwaw glm ncurses epoxy
       libodfgen CoinMP librdf_rasqal gnome3.adwaita-icon-theme gettext
     ]
-    ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
+      gst-libav
+    ])
     ++ lib.optional kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
 
   passthru = {

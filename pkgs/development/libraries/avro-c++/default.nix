@@ -11,18 +11,13 @@ stdenv.mkDerivation {
     sha256 = "1ars58bfw83s8f1iqbhnqp4n9wc9cxsph0gs2a8k7r9fi09vja2k";
   };
 
-  buildInputs = [
-    cmake
-    python2
-    boost
-  ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ python2 boost ];
 
   preConfigure = ''
     substituteInPlace test/SchemaTests.cc --replace "BOOST_CHECKPOINT" "BOOST_TEST_CHECKPOINT"
     substituteInPlace test/buffertest.cc --replace "BOOST_MESSAGE" "BOOST_TEST_MESSAGE"
   '';
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "A C++ library which implements parts of the Avro Specification";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, curl, openssl, fuse, libxml2, json_c, file }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, curl, openssl, fuse, libxml2, json_c, file }:
 
 stdenv.mkDerivation rec {
   pname = "hubicfuse";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1x988hfffxgvqxh083pv3lj5031fz03sbgiiwrjpaiywfbhm8ffr";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ curl openssl fuse libxml2 json_c file ];
   postInstall = ''
     install hubic_token $out/bin
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ln -sf $out/bin/hubicfuse $out/sbin/mount.hubicfuse
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/TurboGit/hubicfuse";
     description = "FUSE-based filesystem to access hubic cloud storage";
     platforms = platforms.linux;

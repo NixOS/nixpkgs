@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnome3, meson, ninja, pkgconfig, vala, libssh2
+{ stdenv, fetchurl, gnome3, meson, ninja, pkg-config, vala, libssh2
 , gtk-doc, gobject-introspection, libgit2, glib, python3 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala gtk-doc gobject-introspection
+    meson ninja pkg-config vala gtk-doc gobject-introspection
   ];
 
   propagatedBuildInputs = [

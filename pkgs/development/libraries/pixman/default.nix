@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libpng, glib /*just passthru*/ }:
+{ stdenv, fetchurl, pkg-config, libpng, glib /*just passthru*/ }:
 
 stdenv.mkDerivation rec {
   pname = "pixman";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l0m48lnmdlmnaxn2021qi5cj366d9fzfjxkqgcj9bs14pxbgaw4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libpng ];
 

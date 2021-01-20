@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, astring }:
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, astring }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+if !lib.versionAtLeast ocaml.version "4.03"
 then throw "fpath is not available for OCaml ${ocaml.version}"
 else
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
   meta = {
     description = "An OCaml module for handling file system paths with POSIX and Windows conventions";
     homepage = "https://erratique.ch/software/fpath";
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -8,28 +8,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.10.0";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    sha256 = "01nsviw5nc5lb6z3j2yiymiwhiq719nwqpvqbyb5p65s98sph7yh";
+    sha256 = "0hskb72gnp66vkyxsqnxhjcqgvjj7wbd2nm5wxp94abc5l1fiigv";
   };
 
-  cargoSha256 = "098p4645air5402shqignc57zdm6755shahhby17nqv1s27gfinc";
-
-  RUSTC_BOOTSTRAP = 1;
+  cargoSha256 = "0s1gdngpf6gxz2lyapblxxmc6aydg2i9kmrfvngkbmqh4as1a2vl";
 
   nativeBuildInputs = [ pkg-config zlib ];
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  # Remove after https://github.com/NixOS/nixpkgs/pull/97000 lands into master
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    unset SDKROOT
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "For when you really just want to serve some files over HTTP right now!";
     homepage = "https://github.com/svenstaro/miniserve";
     license = with licenses; [ mit ];

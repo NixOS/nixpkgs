@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "simpleitk";
-  version = "2.0.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "SimpleITK";
     repo = "SimpleITK";
     rev = "v${version}";
-    sha256 = "1nf3cl3ywqg04446xhkb97kcashrgibsihxn2sqrs81i9d0rw5kn";
+    sha256 = "1q51jmd6skrr31avxlrxx433lawc838ilzrj5vvv38a9f4gl45v8";
   };
 
   nativeBuildInputs = [ cmake swig ];

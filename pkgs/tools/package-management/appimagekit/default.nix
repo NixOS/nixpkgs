@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, cmake, autoconf, automake, libtool, makeWrapper
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, cmake, autoconf, automake, libtool, makeWrapper
 , wget, xxd, desktop-file-utils, file
 , gnupg, glib, zlib, cairo, openssl, fuse, xz, squashfuse, inotify-tools, libarchive
 , squashfsTools
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
   patches = [ ./nix.patch ];
 
   nativeBuildInputs = [
-    pkgconfig cmake autoconf automake libtool wget xxd
+    pkg-config cmake autoconf automake libtool wget xxd
     desktop-file-utils
   ];
 
@@ -98,7 +98,7 @@ in stdenv.mkDerivation rec {
     cp "${desktop-file-utils}/bin/desktop-file-validate" "$out/bin"
 
     wrapProgram "$out/bin/appimagetool" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ file gnupg ]}"
+      --prefix PATH : "${lib.makeBinPath [ file gnupg ]}"
   '';
 
   checkInputs = [ gtest ];
@@ -109,7 +109,7 @@ in stdenv.mkDerivation rec {
     squashfuse = appimagekit_squashfuse;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to package desktop applications as AppImages";
     longDescription = ''
       AppImageKit is an implementation of the AppImage format that

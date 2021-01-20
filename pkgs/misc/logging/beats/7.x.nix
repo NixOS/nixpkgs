@@ -15,7 +15,7 @@ let beat = package : extraArgs : buildGoPackage (rec {
 
       subPackages = [ package ];
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.elastic.co/products/beats";
         license = licenses.asl20;
         maintainers = with maintainers; [ fadenb basvandijk ];
@@ -45,7 +45,7 @@ in {
       journal entries from Linuxes with systemd.
     '';
     buildInputs = [ systemd.dev ];
-    postFixup = let libPath = stdenv.lib.makeLibraryPath [ (lib.getLib systemd) ]; in ''
+    postFixup = let libPath = lib.makeLibraryPath [ (lib.getLib systemd) ]; in ''
       patchelf --set-rpath ${libPath} "$out/bin/journalbeat"
     '';
   };

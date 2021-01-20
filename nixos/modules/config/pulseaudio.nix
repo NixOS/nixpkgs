@@ -36,6 +36,8 @@ let
         ${addModuleIf cfg.zeroconf.discovery.enable "module-zeroconf-discover"}
         ${addModuleIf cfg.tcp.enable (concatStringsSep " "
            ([ "module-native-protocol-tcp" ] ++ allAnon ++ ipAnon))}
+        ${addModuleIf config.services.jack.jackd.enable "module-jack-sink"}
+        ${addModuleIf config.services.jack.jackd.enable "module-jack-source"}
         ${cfg.extraConfig}
       '';
     };
@@ -144,7 +146,9 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.pulseaudio;
+        default = if config.services.jack.jackd.enable
+                  then pkgs.pulseaudioFull
+                  else pkgs.pulseaudio;
         defaultText = "pkgs.pulseaudio";
         example = literalExample "pkgs.pulseaudioFull";
         description = ''
@@ -259,7 +263,7 @@ in {
           (drv: drv.override { pulseaudio = overriddenPackage; })
           cfg.extraModules;
         modulePaths = builtins.map
-          (drv: "${drv}/lib/pulse-${overriddenPackage.version}/modules")
+          (drv: "${drv}/${overriddenPackage.pulseDir}/modules")
           # User-provided extra modules take precedence
           (overriddenModules ++ [ overriddenPackage ]);
       in lib.concatStringsSep ":" modulePaths;
@@ -284,6 +288,8 @@ in {
             RestartSec = "500ms";
             PassEnvironment = "DISPLAY";
           };
+        } // optionalAttrs config.services.jack.jackd.enable {
+          environment.JACK_PROMISCUOUS_SERVER = "jackaudio";
         };
         sockets.pulseaudio = {
           wantedBy = [ "sockets.target" ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cvs, zlib }:
+{ lib, stdenv, fetchurl, fetchpatch, cvs, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "cvsps";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       same time (using a single "cvs commit" command).
     '';
     homepage = "http://www.cobite.com/cvsps/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , makeWrapper, makeDesktopItem, mkYarnPackage
-, electron_9, element-web
+, electron, element-web
 }:
 # Notes for maintainers:
 # * versions of `element-web` and `element-desktop` should be kept in sync.
@@ -8,15 +8,13 @@
 
 let
   executableName = "element-desktop";
-  version = "1.7.9";
+  version = "1.7.17";
   src = fetchFromGitHub {
     owner = "vector-im";
-    repo = "riot-desktop";
+    repo = "element-desktop";
     rev = "v${version}";
-    sha256 = "0hk9y6zzabfdi35fqzl9987d98a6k74fi0mzmhhvhvvpj8i1ldrn";
+    sha256 = "sha256-3GFfldQoD5plIeuAOd4OcB/q7m8tKU6so+M8MlB6Uuc=";
   };
-  electron = electron_9;
-
 in mkYarnPackage rec {
   name = "element-desktop-${version}";
   inherit version src;
@@ -57,10 +55,10 @@ in mkYarnPackage rec {
   '';
 
   # The desktop item properties should be kept in sync with data from upstream:
-  # https://github.com/vector-im/riot-desktop/blob/develop/package.json
+  # https://github.com/vector-im/element-desktop/blob/develop/package.json
   desktopItem = makeDesktopItem {
     name = "element-desktop";
-    exec = executableName;
+    exec = "${executableName} %u";
     icon = "element";
     desktopName = "Element (Riot)";
     genericName = "Matrix Client";
@@ -68,10 +66,11 @@ in mkYarnPackage rec {
     categories = "Network;InstantMessaging;Chat;";
     extraEntries = ''
       StartupWMClass=element
+      MimeType=x-scheme-handler/element;
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A feature-rich client for Matrix.org";
     homepage = "https://element.io/";
     license = licenses.asl20;

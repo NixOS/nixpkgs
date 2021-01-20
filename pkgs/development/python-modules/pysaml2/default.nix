@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , isPy3k
 , fetchFromGitHub
@@ -49,10 +49,11 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test -k "not test_load_extern_incommon \
             and not test_load_remote_encoding \
-            and not test_load_external"
+            and not test_load_external \
+            and not test_conf_syslog"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/rohe/pysaml2";
     description = "Python implementation of SAML Version 2 Standard";
     license = licenses.asl20;

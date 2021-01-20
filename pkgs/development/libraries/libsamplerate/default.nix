@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libsndfile, ApplicationServices, Carbon, CoreServices }:
+{ stdenv, fetchurl, pkg-config, libsndfile, ApplicationServices, Carbon, CoreServices }:
 
 let
   inherit (stdenv.lib) optionals optionalString;
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1ha46i0nbibq0pl0pjwcqiyny4hj8lp1bnl4dpxm64zjw9lb2zha";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ]
     ++ optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
 

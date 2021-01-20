@@ -44,8 +44,20 @@
       mv "$unpackDir/$fn" "$out"
     '' else ''
       mv "$unpackDir" "$out"
-    '') #*/
-    + extraPostFetch;
+    '')
+    + extraPostFetch
+    # Remove write permissions for files unpacked with write bits set
+    # Fixes https://github.com/NixOS/nixpkgs/issues/38649
+    #
+    # However, we should (for the moment) retain write permission on the directory
+    # itself, to avoid tickling https://github.com/NixOS/nix/issues/4295 in
+    # single-user Nix installations. This is because in sandbox mode we'll try to
+    # move the path, and if we don't have write permissions on the directory,
+    # then we can't update the ".." entry.
+    + ''
+      chmod -R a-w "$out"
+      chmod u+w "$out"
+    '';
 } // removeAttrs args [ "stripRoot" "extraPostFetch" ])).overrideAttrs (x: {
   # Hackety-hack: we actually need unzip hooks, too
   nativeBuildInputs = x.nativeBuildInputs ++ [ unzip ];

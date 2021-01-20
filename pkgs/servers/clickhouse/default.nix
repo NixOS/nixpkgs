@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libtool, lldClang, ninja
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, libtool, lldClang, ninja
 , boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
 , icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
 , poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "20.5.2.7";
+  version = "20.11.4.13";
 
   src = fetchFromGitHub {
     owner  = "ClickHouse";
     repo   = "ClickHouse";
     rev    = "v${version}-stable";
     fetchSubmodules = true;
-    sha256 = "15b499czsv727wwdb1i1ja5wfsk6ii3pqpk6dlqic9cdmkh8c8ic";
+    sha256 = "0c87k0xqwj9sc3xy2f3ngfszgjiz4rzd787bdg6fxp94w1adjhny";
   };
 
   nativeBuildInputs = [ cmake libtool lldClang.bintools ninja ];
@@ -23,6 +23,15 @@ stdenv.mkDerivation rec {
     icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl perl
     poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
     xxHash zstd
+  ];
+
+  patches = [
+    # This patch is only required for 20.11.4.13 - it should be included in the
+    # next stable release from upstream by default
+    (fetchpatch {
+      url = "https://github.com/ClickHouse/ClickHouse/commit/e31753b4db7aa0a72a85757dc11fc403962e30db.patch";
+      sha256 = "12ax02dh9y9k8smkj6v50yfr46iprscbrvd4bb9vfbx8xqgw7grb";
+    })
   ];
 
   postPatch = ''
@@ -46,6 +55,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
+    "-DENABLE_EMBEDDED_COMPILER=ON"
+    "-USE_INTERNAL_LLVM_LIBRARY=OFF"
   ];
 
   postInstall = ''
@@ -59,7 +70,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://clickhouse.tech/";
     description = "Column-oriented database management system";
     license = licenses.asl20;

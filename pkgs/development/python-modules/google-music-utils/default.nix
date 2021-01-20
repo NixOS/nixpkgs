@@ -1,30 +1,35 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, audio-metadata, multidict, wrapt
-, pytest
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, audio-metadata
+, multidict
+, poetry
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "google-music-utils";
-  version = "2.1.0";
+  version = "2.5.0";
 
   # Pypi tarball doesn't contain tests
   src = fetchFromGitHub {
     owner = "thebigmunch";
     repo = "google-music-utils";
     rev = version;
-    sha256 = "0fn4zp0gf1wx2x06dbc840qcq21j4p3ajghxp7646w2n6n9gxhh7";
+    sha256 = "0vwbrgakk23fypjspmscz4gllnb3dksv2njy4j4bm8vyr6fwbi5f";
   };
+  format = "pyproject";
 
-  propagatedBuildInputs = [
-    audio-metadata multidict wrapt
-  ];
-
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    pytest
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'multidict = "^4.0"' 'multidict = ">4.0"'
   '';
 
-  disabled = pythonOlder "3.6";
+  nativeBuildInputs = [ poetry ];
+
+  propagatedBuildInputs = [ audio-metadata multidict ];
+
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/thebigmunch/google-music-utils";

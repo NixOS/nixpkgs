@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchsvn
 , jdk
@@ -41,13 +41,13 @@ stdenv.mkDerivation {
     cp ${osmpbf} lib/compile/${osmpbf.name}
     cp ${protobuf} lib/compile/${protobuf.name}
     cp ${xpp3} lib/compile/${xpp3.name}
-  '' + stdenv.lib.optionalString doCheck ''
+  '' + lib.optionalString doCheck ''
     mkdir -p lib/test
     cp ${junit} lib/test/${junit.name}
     cp ${hamcrest-core} lib/test/${hamcrest-core.name}
 
     mkdir -p test/resources/in/osm
-    ${stdenv.lib.concatMapStringsSep "\n" (res: ''
+    ${lib.concatMapStringsSep "\n" (res: ''
       cp ${res} test/resources/in/${builtins.replaceStrings [ "__" ] [ "/" ] res.name}
     '') testInputs}
   '';
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
       --add-flags "-jar $out/share/java/splitter/splitter.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Utility for splitting OpenStreetMap maps into tiles";
     homepage = "http://www.mkgmap.org.uk";
     license = licenses.gpl2Only;

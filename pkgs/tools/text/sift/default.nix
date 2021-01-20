@@ -17,7 +17,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    description = "sift is a fast and powerful alternative to grep";
+    description = "A fast and powerful alternative to grep";
     homepage = "https://sift-tool.org";
     maintainers = [ maintainers.carlsverre ];
     license = licenses.gpl3;

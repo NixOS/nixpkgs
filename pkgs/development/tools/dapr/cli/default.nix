@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, stdenv }:
+{ buildGoModule, fetchFromGitHub, lib, stdenv }:
 
 let
   pname = "dapr";
@@ -22,7 +22,7 @@ in buildGoModule {
     mv $out/bin/cli $out/bin/dapr
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://dapr.io";
     description = "A CLI for managing Dapr, the distributed application runtime";
     license = licenses.mit;

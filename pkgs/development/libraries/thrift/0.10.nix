@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, zlib, libevent, openssl, python, pkgconfig, bison
+{ stdenv, fetchurl, boost, zlib, libevent, openssl, python, pkg-config, bison
 , flex, twisted
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost zlib libevent openssl python bison flex twisted
   ];

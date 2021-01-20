@@ -1,5 +1,5 @@
 { stdenv, fetchurl,
-  pkgconfig, pure, haskellPackages }:
+  pkg-config, pure, haskellPackages }:
 
 stdenv.mkDerivation rec {
   baseName = "gen";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   hsEnv = haskellPackages.ghcWithPackages (hsPkgs : [hsPkgs.language-c]);
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ hsEnv pure ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
 

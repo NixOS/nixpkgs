@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt4 ? null
+{ stdenv, fetchFromGitHub, cmake, pkg-config, qt4 ? null
 , withQt5 ? false, qtbase ? null, qttools ? null
 , darwin ? null
 , libsecret
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ];
 
   nativeBuildInputs = [ cmake ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pkgconfig ] # for finding libsecret
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pkg-config ] # for finding libsecret
   ;
 
   buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ libsecret ]

@@ -1,25 +1,28 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, six
 }:
 
 buildPythonPackage rec {
   pname = "Genshi";
-  version = "0.7.3";
+  version = "0.7.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7933c95151d7dd2124a2b4c8dd85bb6aec881ca17c0556da0b40e56434b313a0";
+    sha256 = "c12d6c2abf7df0ec661d9ff2e197522eae846e43dc58abd5a36443d05bc41135";
   };
 
   # FAIL: test_sanitize_remove_script_elem (genshi.filters.tests.html.HTMLSanitizerTestCase)
   # FAIL: test_sanitize_remove_src_javascript (genshi.filters.tests.html.HTMLSanitizerTestCase)
   doCheck = false;
 
-  buildInputs = [ setuptools ];
+  propagatedBuildInputs = [
+    setuptools six
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python components for parsing HTML, XML and other textual content";
     longDescription = ''
       Python library that provides an integrated set of components for

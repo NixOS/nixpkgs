@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, darwin, perl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wrangler";
-  version = "1.10.3";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0703zlrmv0if575rj1mrgfg1a5qbf98sqjhhj09hab69i96wbrk9";
+    sha256 = "0xhldarzb71x4k7ydk4yd6g0qv6y2l0mn2lc43hvl9jm29pnz95q";
   };
 
-  cargoSha256 = "0znzyqzvbqcl4mmxpsvaf592xrs968x57czj45jibmafq033dbfa";
+  cargoSha256 = "0w845virvw7mvibc76ar2hbffhfzj2v8v1xkrsssrgzyaryb48jk";
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [ perl ] ++ stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
 
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ openssl ]
     ++ stdenv.lib.optionals stdenv.isDarwin [
@@ -26,10 +26,10 @@ rustPlatform.buildRustPackage rec {
   # tries to use "/homeless-shelter" and fails
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A CLI tool designed for folks who are interested in using Cloudflare Workers";
     homepage = "https://github.com/cloudflare/wrangler";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

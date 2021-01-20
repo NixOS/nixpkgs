@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, ucommon, openssl, libgcrypt }:
+{ stdenv, fetchurl, pkg-config, ucommon, openssl, libgcrypt }:
 
 stdenv.mkDerivation rec {
   name = "ccrtp-2.1.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "17ili8l7zqbbkzr1rcy4hlnazkf50mds41wg6n7bfdsx3c7cldgh";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ ucommon openssl libgcrypt ];
 
   configureFlags = [

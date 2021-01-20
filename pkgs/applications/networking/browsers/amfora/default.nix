@@ -1,19 +1,22 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "amfora";
-  version = "1.5.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "makeworld-the-better-one";
     repo = "amfora";
     rev = "v${version}";
-    sha256 = "011h5xzwiafh3fdp9wil8n618p45ph9swa66lw6s82ijpiizz79s";
+    sha256 = "KAOIx401G/kB/TclhidOnUja1P+mLo/mUwAqGJfVfyg=";
   };
 
-  vendorSha256 = "10f3bh3r3jc1185r8r1ihg8rprdpl8qwg5b6wqwsda96ydkbpi2b";
+  vendorSha256 = "rOEM7iEkm42g8yJxY7qdTCSbkPMDHqlAsK7/ud8IDLY=";
 
-  doCheck = false;
+  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+    sed -i "s:amfora:$out/bin/amfora:" amfora.desktop
+    install -Dm644 amfora.desktop -t $out/share/applications
+  '';
 
   meta = with lib; {
     description = "A fancy terminal browser for the Gemini protocol";

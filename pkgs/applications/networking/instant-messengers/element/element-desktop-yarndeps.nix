@@ -3042,11 +3042,11 @@
       };
     }
     {
-      name = "ini___ini_1.3.5.tgz";
+      name = "ini___ini_1.3.8.tgz";
       path = fetchurl {
-        name = "ini___ini_1.3.5.tgz";
-        url  = "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz";
-        sha1 = "eee25f56db1c9ec6085e0c22778083f596abf927";
+        name = "ini___ini_1.3.8.tgz";
+        url  = "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz";
+        sha1 = "a29da425b48806f34767a4efce397269af28432c";
       };
     }
     {
@@ -4394,11 +4394,11 @@
       };
     }
     {
-      name = "npm_user_validate___npm_user_validate_1.0.0.tgz";
+      name = "npm_user_validate___npm_user_validate_1.0.1.tgz";
       path = fetchurl {
-        name = "npm_user_validate___npm_user_validate_1.0.0.tgz";
-        url  = "https://registry.yarnpkg.com/npm-user-validate/-/npm-user-validate-1.0.0.tgz";
-        sha1 = "8ceca0f5cea04d4e93519ef72d0557a75122e951";
+        name = "npm_user_validate___npm_user_validate_1.0.1.tgz";
+        url  = "https://registry.yarnpkg.com/npm-user-validate/-/npm-user-validate-1.0.1.tgz";
+        sha1 = "31428fc5475fe8416023f178c0ab47935ad8c561";
       };
     }
     {

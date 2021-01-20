@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , isPy27
 , fetchPypi
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   # dictionaries needed for tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "pyenchant: Python bindings for the Enchant spellchecker";
     homepage = "https://github.com/pyenchant/pyenchant";
     license = licenses.lgpl21;

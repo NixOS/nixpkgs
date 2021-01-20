@@ -1,7 +1,7 @@
 { fetchurl
-, stdenv
+, lib, stdenv
 , gtk
-, pkgconfig
+, pkg-config
 , libgsf
 , libofx
 , intltool
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1piiyyxjsjbw9gcqydvknzxmmfgh8kdqal12ywrxyxih2afwnvbw";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [
     gtk
     libgsf
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
   ];
 
-  meta = with stdenv.lib; {
-    description = "A personnal accounting application.";
+  meta = with lib; {
+    description = "A personnal accounting application";
     longDescription = ''
       Grisbi is an application written by French developers, so it perfectly
       respects French accounting rules. Grisbi can manage multiple accounts,

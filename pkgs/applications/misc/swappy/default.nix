@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson
 , ninja
 , wayland
 , cairo
 , pango
 , gtk
-, pkgconfig
+, pkg-config
 , cmake
 , scdoc
 , libnotify
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "14ac2jmnak7avcz0jhqjm30vk7pv3gq5aq5rdyh84k8c613kkicf";
   };
 
-  nativeBuildInputs = [ glib meson ninja pkgconfig cmake scdoc ];
+  nativeBuildInputs = [ glib meson ninja pkg-config cmake scdoc ];
 
   buildInputs = [ cairo pango gtk libnotify wayland glib ];
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jtheoof/swappy";
     description = "A Wayland native snapshot editing tool, inspired by Snappy on macOS ";
     license = licenses.mit;

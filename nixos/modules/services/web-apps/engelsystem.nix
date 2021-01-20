@@ -10,7 +10,7 @@ in {
         default = false;
         example = true;
         description = ''
-          Whether to enable engelsystem, an online tool for coordinating helpers
+          Whether to enable engelsystem, an online tool for coordinating volunteers
           and shifts on large events.
         '';
         type = lib.types.bool;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , python
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     ${python.interpreter} test_progress.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/verigak/progress/";
     description = "Easy to use progress bars";
     license = licenses.mit;

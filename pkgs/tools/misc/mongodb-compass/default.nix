@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, dpkg
+{ lib, stdenv, fetchurl, dpkg
 , alsaLib, at-spi2-atk, at-spi2-core, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, gnome3, libnotify, libsecret, libuuid, libxcb, nspr, nss, systemd, xorg, wrapGAppsHook }:
+, gnome2, gdk-pixbuf, gtk3, pango, libnotify, libsecret, libuuid, libxcb, nspr, nss, systemd, xorg, wrapGAppsHook }:
 
 let
-  version = "1.22.1";
+  version = "1.23.0";
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     alsaLib
     at-spi2-atk
     at-spi2-core
@@ -19,9 +19,9 @@ let
     freetype
     glib
     gnome2.GConf
-    gnome2.gdk_pixbuf
-    gnome3.gtk
-    gnome2.pango
+    gdk-pixbuf
+    gtk3
+    pango
     libnotify
     libsecret
     libuuid
@@ -49,7 +49,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.mongodb.com/compass/mongodb-compass_${version}_amd64.deb";
-        sha256 = "1wbjj2w4dii644lprvmwnlval53yqh4y0f58cad657jjw8101rd9";
+        sha256 = "1kmhki4kq28z8h249p4imcpb0nz2dx5bmpv8ldhhqh3rcq5vzxsv";
       }
     else
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
@@ -60,7 +60,7 @@ in stdenv.mkDerivation {
 
   inherit src;
 
-  buildInputs = [ dpkg wrapGAppsHook gnome3.gtk ];
+  buildInputs = [ dpkg wrapGAppsHook gtk3 ];
   dontUnpack = true;
 
   buildCommand = ''
@@ -92,7 +92,7 @@ in stdenv.mkDerivation {
     wrapGAppsHook $out/bin/mongodb-compass
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GUI for MongoDB";
     homepage = "https://www.mongodb.com/products/compass";
     license = licenses.unfree;

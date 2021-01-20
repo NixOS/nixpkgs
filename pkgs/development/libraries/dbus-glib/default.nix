@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPackages
-, pkgconfig, expat, gettext, libiconv, dbus, glib
+, pkg-config, expat, gettext, libiconv, dbus, glib
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig gettext glib ];
+  nativeBuildInputs = [ pkg-config gettext glib ];
 
   buildInputs = [ expat libiconv ];
 

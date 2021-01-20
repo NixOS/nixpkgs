@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coreutils, makeWrapper
+{ lib, stdenv, fetchFromGitHub, coreutils, makeWrapper
 , rsync, python3, pythonPackages }:
 
 stdenv.mkDerivation rec {
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  postInstall = with stdenv.lib; ''
+  postInstall = with lib; ''
     wrapProgram $out/bin/mergerfs.balance --prefix PATH : ${makeBinPath [ rsync ]}
     wrapProgram $out/bin/mergerfs.dup --prefix PATH : ${makeBinPath [ rsync ]}
     wrapProgram $out/bin/mergerfs.mktrash --prefix PATH : ${makeBinPath [ pythonPackages.xattr ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Optional tools to help manage data in a mergerfs pool";
     homepage = "https://github.com/trapexit/mergerfs-tools";
     license = licenses.isc;

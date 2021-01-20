@@ -1,10 +1,12 @@
-{ stdenvNoCC
+{ stdenv
+, callPackage
+, stdenvNoCC
 , fetchurl
 , rpmextract
 , undmg
 , darwin
 , validatePkgConfig
-, enableStatic ? false
+, enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
 /*
@@ -19,12 +21,11 @@ let
   # Darwin is pinned to 2019.3 because the DMG does not unpack; see here for details:
   # https://github.com/matthewbauer/undmg/issues/4
   year = if stdenvNoCC.isDarwin then "2019" else "2020";
-  spot = if stdenvNoCC.isDarwin then "3" else "3";
-  rel = if stdenvNoCC.isDarwin then "199" else "279";
+  spot = if stdenvNoCC.isDarwin then "3" else "4";
+  rel = if stdenvNoCC.isDarwin then "199" else "304";
 
-  # Replace `openmpSpot` by `spot` after 2020.3. Release 2020.03
-  # adresses performance regressions and does not update OpenMP.
-  openmpSpot = if stdenvNoCC.isDarwin then spot else "2";
+  # Replace `openmpSpot` by `spot` after 2020.
+  openmpSpot = if stdenvNoCC.isDarwin then spot else "3";
 
   rpm-ver = "${year}.${spot}-${rel}-${year}.${spot}-${rel}";
 
@@ -46,8 +47,8 @@ in stdenvNoCC.mkDerivation {
       })
     else
       (fetchurl {
-        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16903/l_mkl_${version}.tgz";
-        sha256 = "013shn3c823bjfssq4jyl3na5lbzj99s09ds608ljqllri7473ib";
+        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16917/l_mkl_${version}.tgz";
+        hash = "sha256-IxTUZTaXTb0I8qTk+emhVdx+eeJ5jHTn3fqtAKWRfqU=";
       });
 
   nativeBuildInputs = [ validatePkgConfig ] ++ (if stdenvNoCC.isDarwin
@@ -90,7 +91,8 @@ in stdenvNoCC.mkDerivation {
       substituteInPlace $f \
         --replace "prefix=<INSTALLDIR>/mkl" "prefix=$out" \
         --replace $\{MKLROOT} "$out" \
-        --replace "lib/intel64_lin" "lib"
+        --replace "lib/intel64_lin" "lib" \
+        --replace "lib/intel64" "lib"
     done
 
     for f in $(find opt/intel -name 'mkl*iomp.pc') ; do
@@ -155,6 +157,8 @@ in stdenvNoCC.mkDerivation {
   # Per license agreement, do not modify the binary
   dontStrip = true;
   dontPatchELF = true;
+
+  passthru.tests.pkg-config = callPackage ./test { };
 
   meta = with stdenvNoCC.lib; {
     description = "Intel Math Kernel Library";

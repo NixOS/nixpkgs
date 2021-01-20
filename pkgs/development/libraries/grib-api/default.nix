@@ -23,9 +23,8 @@ stdenv.mkDerivation rec {
     substituteInPlace "src/grib_jasper_encoding.c" --replace "image.inmem_    = 1;" ""
   '';
 
-  buildInputs = [ cmake
-                  netcdf
-                  gfortran
+  nativeBuildInputs = [ cmake gfortran ];
+  buildInputs = [ netcdf
                   libpng
                   openjpeg
                 ] ++ stdenv.lib.optionals enablePython [
@@ -41,8 +40,6 @@ stdenv.mkDerivation rec {
                  "-DENABLE_FORTRAN=ON"
                  "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/${openjpeg.incDir}"
                ];
-
-  enableParallelBuilding = true;
 
   doCheck = true;
 

@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "15s9hswnl3qqi7yh29jyrg0hma2n99haxznvcywmsp8kjqlyg75q";
   };
 
-  buildInputs = [ zlib libpng cmake ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib libpng ];
 
   meta = {
     description = "Cross platform, open source library for generating PDF files";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gnome3 }:
+{ lib, stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-appindicator";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "AppIndicator/KStatusNotifierItem support for GNOME Shell";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jonafato ];

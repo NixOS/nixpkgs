@@ -1,12 +1,12 @@
 { lib, mkDerivation, fetchFromGitHub, SDL2
 , qtbase, qtcharts, qtlocation, qtserialport, qtsvg, qtquickcontrols2
 , qtgraphicaleffects, qtspeech, qtx11extras, qmake, qttools
-, gst_all_1, wayland, pkgconfig
+, gst_all_1, wayland, pkg-config
 }:
 
 mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.0.10";
+  version = "4.0.11";
 
   qtInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
@@ -19,7 +19,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
   buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
-  nativeBuildInputs = [ pkgconfig qmake qttools ];
+  nativeBuildInputs = [ pkg-config qmake qttools ];
 
   preConfigure = ''
     mkdir build
@@ -62,7 +62,7 @@ mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jmhhd2nwxq3m9rzzmrjls8f6hhj52ia71b1sv4vvcjh802cha8g";
+    sha256 = "14pk1vmcpg2cc5p100chbhnynclcwyqmyb2n2w11vvk0l2c9z1gz";
     fetchSubmodules = true;
   };
 

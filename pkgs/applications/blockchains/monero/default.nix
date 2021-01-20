@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, cmake, pkg-config
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
 , randomx, rapidjson
@@ -10,32 +10,25 @@
 ,   python3  ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert stdenv.isDarwin -> IOKit != null;
 assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
 
 stdenv.mkDerivation rec {
   pname = "monero";
-  version = "0.17.0.1";
+  version = "0.17.1.9";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "1v0phvg5ralli4dr09a60nq032xqlci5d6v4zfq8304vgrn1ffgp";
+    sha256 = "0jqss4csvkcrhrmaa3vrnyv6yiwqpbfw7037clx9xcfm4qrrfiwy";
     fetchSubmodules = true;
   };
 
   patches = [
     ./use-system-libraries.patch
-
-    # This fixes a bug in the monero-gui build system,
-    # remove it once the PR has been merged
-    (fetchpatch {
-      url = "https://github.com/monero-project/monero/pull/6867.patch";
-      sha256 = "0nxa6861df1fadrm9bmhqf2g6mljgr4jndsbxqp7g501hv9z51j3";
-    })
   ];
 
   postPatch = ''
@@ -45,7 +38,7 @@ stdenv.mkDerivation rec {
     cp -r . $source
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     boost miniupnpc openssl unbound
@@ -65,7 +58,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "source" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Private, secure, untraceable currency";
     homepage    = "https://getmonero.org/";
     license     = licenses.bsd3;

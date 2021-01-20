@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "3mux";
@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-rcbnyScD2GU1DLY6dTEPgFNXZfgkxXPn5lt6HRqa0d8=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terminal multiplexer inspired by i3";
     longDescription = ''
       3mux is a terminal multiplexer with out-of-the-box support for search,
@@ -22,7 +22,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/aaronjanse/3mux";
     license = licenses.mit;
-    maintainers = with maintainers; [ aaronjanse filalex77 ];
+    maintainers = with maintainers; [ aaronjanse Br1ght0ne ];
     platforms = platforms.unix;
   };
 }

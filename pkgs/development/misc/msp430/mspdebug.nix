@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoPatchelfHook
 , libusb-compat-0_1
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional (!enableReadline) "WITHOUT_READLINE=1";
   unameS = stdenv.lib.optionalString stdenv.isDarwin "Darwin";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free programmer, debugger, and gdb proxy for MSP430 MCUs";
     homepage = "https://dlbeer.co.nz/mspdebug/";
     license = licenses.gpl2;

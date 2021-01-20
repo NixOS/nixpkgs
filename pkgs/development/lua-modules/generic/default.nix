@@ -1,11 +1,14 @@
 { lua, writeText, toLuaModule }:
 
-{ disabled ? false, ... } @ attrs:
+{ disabled ? false
+, propagatedBuildInputs ? [ ]
+, ...
+} @ attrs:
 
 if disabled then
   throw "${attrs.name} not supported by interpreter lua-${lua.luaversion}"
 else
-  toLuaModule( lua.stdenv.mkDerivation (
+  toLuaModule (lua.stdenv.mkDerivation (
     {
       makeFlags = [
         "PREFIX=$(out)"
@@ -18,8 +21,8 @@ else
     //
     {
       name = "lua${lua.luaversion}-" + attrs.name;
-      propagatedBuildInputs = [
+      propagatedBuildInputs = propagatedBuildInputs ++ [
         lua # propagate it for its setup-hook
       ];
     }
-  ) )
+  ))

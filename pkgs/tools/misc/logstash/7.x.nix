@@ -1,12 +1,12 @@
 { elk7Version
 , enableUnfree ? true
-, stdenv
+, lib, stdenv
 , fetchurl
 , makeWrapper
 , jre
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = elk7Version;
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     cp -r {Gemfile*,modules,vendor,lib,bin,config,data,logstash-core,logstash-core-plugin-api} $out
 
@@ -41,9 +42,10 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/logstash-plugin \
        --set JAVA_HOME "${jre}"
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Logstash is a data pipeline that helps you process logs and other event data from a variety of systems";
     homepage    = "https://www.elastic.co/products/logstash";
     license     = if enableUnfree then licenses.elastic else licenses.asl20;

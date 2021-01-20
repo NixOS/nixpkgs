@@ -1,18 +1,19 @@
 # This script was inspired by the ArchLinux User Repository package:
 #
 #   https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=oh-my-zsh-git
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, nixosTests, writeScript, common-updater-scripts
+, git, nix, nixfmt, jq, coreutils, gnused, curl, cacert }:
 
 stdenv.mkDerivation rec {
-  version = "2020-10-14";
+  version = "2021-01-16";
   pname = "oh-my-zsh";
-  rev = "53cbd658f5ae6874af0d804cee6748dfba69e786";
+  rev = "efcbd9f3480a28ec69c607c46adcbfd8d230ac9f";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    sha256 = "llWUdN/4pCM5x8uJu6y8pIUzuY4nyGu6e+m53khcZB4=";
+    sha256 = "1zngxqkhm49m2qczvyp5mws7d4bwxbb3fq20xqbbdpgk35smwnxc";
   };
 
   installPhase = ''
@@ -65,7 +66,43 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    tests = { inherit (nixosTests) oh-my-zsh; };
+
+    updateScript = writeScript "update.sh" ''
+      #!${stdenv.shell}
+      set -o errexit
+      PATH=${
+        lib.makeBinPath [
+          common-updater-scripts
+          curl
+          cacert
+          git
+          nixfmt
+          nix
+          jq
+          coreutils
+          gnused
+        ]
+      }
+
+      oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion oh-my-zsh" | tr -d '"')"
+      latestSha="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits\?sha\=master\&since\=$oldVersion | jq -r '.[0].sha')"
+
+      if [ ! "null" = "$latestSha" ]; then
+        nixpkgs="$(git rev-parse --show-toplevel)"
+        default_nix="$nixpkgs/pkgs/shells/zsh/oh-my-zsh/default.nix"
+        latestDate="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
+        update-source-version oh-my-zsh "$latestSha" --version-key=rev
+        update-source-version oh-my-zsh "$latestDate" --ignore-same-hash
+        nixfmt "$default_nix"
+      else
+        echo "${pname} is already up-to-date"
+      fi
+    '';
+  };
+
+  meta = with lib; {
     description = "A framework for managing your zsh configuration";
     longDescription = ''
       Oh My Zsh is a framework for managing your zsh configuration.

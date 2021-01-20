@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pyserial, pyftdi, pyusb
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pyserial, pyftdi, pyusb
 , pyopenssl, nose, isPy3k, pythonOlder, mock }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   checkInputs = [ nose mock ];
   pythonImportsCheck = [ "alarmdecoder" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/nutechsoftware/alarmdecoder";
     description =
       "Python interface for the Alarm Decoder (AD2) family of alarm devices. (AD2USB, AD2SERIAL and AD2PI)";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoPatchelfHook
 , dpkg
 , fahviewer
@@ -7,8 +7,8 @@
 , python2
 }:
 let
-  majMin = stdenv.lib.versions.majorMinor version;
-  version = "7.6.13";
+  majMin = lib.versions.majorMinor version;
+  version = "7.6.21";
 
   python = python2.withPackages
     (
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.foldingathome.org/releases/public/release/fahcontrol/debian-stable-64bit/v${majMin}/fahcontrol_${version}-1_all.deb";
-    sha256 = "0qfvhwc29cgqkwf2bkhq4gr2d1c4jgccfs58916ss03n4rwz9gng";
+    sha256 = "1vfrdqkrvdlyxaw3f6z92w5dllrv6810lmf8yhcmjcwmphipvf71";
   };
 
   nativeBuildInputs = [
@@ -53,8 +53,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Folding@home control";
     homepage = "https://foldingathome.org/";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.zimbatm ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.zimbatm ];
     platforms = [ "x86_64-linux" ];
   };
 }

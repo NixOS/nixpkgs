@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , libGL, libGLU, freeglut, libX11 }:
 
 let
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
     install -Dm755 twilight $out/bin/twilight
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Redo of IRIX twilight backdrop in old school OpenGL";
     homepage = src.meta.homepage;
     license = licenses.mit;

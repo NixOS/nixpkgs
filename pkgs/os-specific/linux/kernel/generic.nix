@@ -6,6 +6,7 @@
 , gmp ? null
 , libmpc ? null
 , mpfr ? null
+, lib
 , stdenv
 
 , # The kernel source tarball.
@@ -45,6 +46,11 @@
                        stdenv.hostPlatform != stdenv.buildPlatform
 , extraMeta ? {}
 
+, isXen      ? features.xen_dom0 or false
+, isZen      ? false
+, isLibre    ? false
+, isHardened ? false
+
 # easy overrides to stdenv.hostPlatform.platform members
 , autoModules ? stdenv.hostPlatform.platform.kernelAutoModules
 , preferBuiltin ? stdenv.hostPlatform.platform.kernelPreferBuiltin or false
@@ -61,9 +67,6 @@
 assert stdenv.isLinux;
 
 let
-
-  lib = stdenv.lib;
-
   # Combine the `features' attribute sets of all the kernel patches.
   kernelFeatures = lib.fold (x: y: (x.features or {}) // y) ({
     iwlwifi = true;
@@ -76,7 +79,7 @@ let
   } // features) kernelPatches;
 
   commonStructuredConfig = import ./common-config.nix {
-    inherit stdenv version ;
+    inherit lib stdenv version;
 
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
@@ -108,7 +111,7 @@ let
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ perl gmp libmpc mpfr ]
-      ++ lib.optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ];
+      ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ];
 
     platformName = stdenv.hostPlatform.platform.name;
     # e.g. "defconfig"
@@ -168,14 +171,16 @@ let
   }; # end of configfile derivation
 
   kernel = (callPackage ./manual-config.nix {}) {
-    inherit version modDirVersion src kernelPatches randstructSeed stdenv extraMeta configfile;
+    inherit version modDirVersion src kernelPatches randstructSeed lib stdenv extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };
 
   passthru = {
     features = kernelFeatures;
-    inherit commonStructuredConfig;
+    inherit commonStructuredConfig isXen isZen isHardened isLibre;
+    kernelOlder = lib.versionOlder version;
+    kernelAtLeast = lib.versionAtLeast version;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
   };
 

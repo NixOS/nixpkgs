@@ -10,7 +10,7 @@
 , libwnck3
 , glib
 , vala
-, pkgconfig
+, pkg-config
 , libstartup_notification
 , gobject-introspection
 , gtk-doc
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     gtk-doc
     libtool
-    pkgconfig
+    pkg-config
     vala
     which
     wrapGAppsHook

@@ -17,7 +17,7 @@ let
     inherit (config.system.build) earlyMountScript;
     path = lib.makeBinPath ([
       pkgs.coreutils
-      pkgs.utillinux
+      pkgs.util-linux
     ] ++ lib.optional useHostResolvConf pkgs.openresolv);
     fsPackagesPath = lib.makeBinPath config.system.fsPackages;
     postBootCommands = pkgs.writeText "local-cmds"

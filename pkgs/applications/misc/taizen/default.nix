@@ -1,4 +1,4 @@
-{ rustPlatform, lib, fetchFromGitHub, ncurses, openssl, pkgconfig, Security, stdenv }:
+{ rustPlatform, lib, fetchFromGitHub, ncurses, openssl, pkg-config, Security, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "taizen";
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = [ ncurses openssl ] ++ lib.optional stdenv.isDarwin Security;
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   cargoSha256 = "0chrgwm97y1a3gj218x25yqk1y1h74a6gzyxjdm023msvs58nkni";
 

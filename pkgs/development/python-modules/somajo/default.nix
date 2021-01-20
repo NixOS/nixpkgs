@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitHub, buildPythonPackage, isPy3k, regex }:
+{ pkgs, lib, stdenv, fetchFromGitHub, buildPythonPackage, isPy3k, regex }:
 
 buildPythonPackage rec {
   pname = "SoMaJo";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ regex ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tokenizer and sentence splitter for German and English web texts";
     homepage = "https://github.com/tsproisl/SoMaJo";
     license = licenses.gpl3;

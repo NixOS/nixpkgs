@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Shared files for Pharo";
-    homepage = "http://pharo.org";
+    homepage = "https://pharo.org";
     license = stdenv.lib.licenses.mit;
     maintainers = [ ];
   };

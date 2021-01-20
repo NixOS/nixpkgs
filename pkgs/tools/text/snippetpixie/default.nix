@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
 , ninja
 , vala
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , appstream
 , desktop-file-utils
@@ -24,20 +24,20 @@
 
 stdenv.mkDerivation rec {
   pname = "snippetpixie";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "bytepixie";
     repo = pname;
     rev = version;
-    sha256 = "1db3fbawh4qwdqby5ji4g26pksi4q253r5zvd3kv1m2ljmwrrwj0";
+    sha256 = "1cb76kzw34yr1r135lyd75ddm9v99m7i3lyirm353cdch8qspfmv";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     appstream
     desktop-file-utils
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Your little expandable text snippet helper";
     longDescription = ''
       Your little expandable text snippet helper.

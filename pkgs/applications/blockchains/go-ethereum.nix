@@ -1,18 +1,18 @@
-{ stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit }:
 
 buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.9.22";
+  version = "1.9.25";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08i31xil2lygfcn2igsvn4hpg8xnf8l6g914f78hgl4wj6v1dja9";
+    sha256 = "0cbgqs17agwdap4g37sb2g6mhyn7qkqbjk7kwb5jvj8nbi5n3kbd";
   };
 
   runVend = true;
-  vendorSha256 = "1qbg44cryiv9kvcak6qjrbmkc9bxyk5fybj62vdkskqfjvv86068";
+  vendorSha256 = "08wgah8gxb5bscm5ca6zkfgssnmw2y2l6k9gfw7gbxyflsx74lya";
 
   doCheck = false;
 
@@ -35,9 +35,9 @@ buildGoModule rec {
 
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs =
-    stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
     license = with licenses; [ lgpl3 gpl3 ];

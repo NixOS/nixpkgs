@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, flex }:
+{ lib, stdenv, fetchurl, bison, flex }:
 
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ACPICA Tools";
     homepage = "https://www.acpica.org/";
     license = with licenses; [ gpl2 bsd3 ];

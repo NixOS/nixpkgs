@@ -1,6 +1,6 @@
 { mkDerivation
-, stdenv
-, pkgconfig
+, lib, stdenv
+, pkg-config
 , zlib
 , qtbase
 , qtsvg
@@ -20,7 +20,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
   ];
 
@@ -46,9 +46,9 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://chessx.sourceforge.net/";
-    description = "ChessX allows you to browse and analyse chess games";
+    description = "Browse and analyse chess games";
     license = licenses.gpl2;
     maintainers = [ maintainers.luispedro ];
     platforms = platforms.linux;

@@ -480,13 +480,8 @@ Retype new UNIX password: ***</screen>
 <prompt>$ </prompt>passwd eelco</screen>
     </para>
     <para>
-     You may also want to install some software. For instance,
-<screen>
-<prompt>$ </prompt>nix-env -qaP \*</screen>
-     shows what packages are available, and
-<screen>
-<prompt>$ </prompt>nix-env -f '&lt;nixpkgs&gt;' -iA w3m</screen>
-     installs the <literal>w3m</literal> browser.
+     You may also want to install some software. This will be covered
+     in <xref linkend="sec-package-management" />.
     </para>
    </listitem>
   </orderedlist>

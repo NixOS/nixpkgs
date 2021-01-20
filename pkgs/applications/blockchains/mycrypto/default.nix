@@ -4,8 +4,8 @@
 
 let
   pname = "MyCrypto";
-  version = "1.7.12";
-  sha256 = "0zmdmkli9zxygrcvrd4lbi0xqyq32dqlkxby8lsjknj1nd6l26n3";
+  version = "1.7.13";
+  sha256 = "15m21n68lxnz6fxwf1bb3cxg5qi6nrwcnqymiw8s9wizvv575vj7";
   name = "${pname}-${version}";
 
   src = fetchurl {

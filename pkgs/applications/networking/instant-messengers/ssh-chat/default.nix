@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "ssh-chat";
-  version = "1.9";
+  version = "1.10";
 
   goPackagePath = "github.com/shazow/ssh-chat";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "shazow";
     repo = "ssh-chat";
     rev = "v${version}";
-    sha256 = "04yszan6a7x9498s80xymf7wd10530yjrxcdw4czbplyhjdigxlg";
+    sha256 = "e4COAyheY+mE5zltR1Ms2OJ3I8iG/N1CZ6D7I9PDW5U=";
   };
 
   goDeps = ./deps.nix;

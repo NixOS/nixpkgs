@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, pkgconfig
+{ stdenv, fetchgit, autoreconfHook, pkg-config
 , boost, openssl, log4shib, xercesc, xml-security-c, xml-tooling-c, zlib
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost openssl log4shib xercesc xml-security-c xml-tooling-c zlib
   ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   configureFlags = [ "--with-xmltooling=${xml-tooling-c}" ];
 

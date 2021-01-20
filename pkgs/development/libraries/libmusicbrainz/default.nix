@@ -3,7 +3,8 @@
 stdenv.mkDerivation rec {
   name = "libmusicbrainz-3.0.3";
 
-  buildInputs = [ cmake neon libdiscid ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ neon libdiscid ];
 
   src = fetchurl {
     url = "ftp://ftp.musicbrainz.org/pub/musicbrainz/${name}.tar.gz";

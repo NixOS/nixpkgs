@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, pkgconfig, mono, dotnetPackages }:
+{ stdenv, fetchsvn, pkg-config, mono, dotnetPackages }:
 
 let
   newtonsoft-json = dotnetPackages.NewtonsoftJson;
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     sha256 = "0b0rvgg3xsbbg2fdrpz0ywsy9rcahlyfskndaagd3yzm83gi6bhk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ mono newtonsoft-json ];
 
   sourceRoot = "svn-r1217/clients/cs";

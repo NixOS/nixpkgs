@@ -37,8 +37,6 @@ stdenv.mkDerivation rec {
     moveToOutput lib "$lib"
   '';
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "A set of cuda-enabled texture tools and compressors";
     homepage = "https://github.com/castano/nvidia-texture-tools";

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, substituteAll, autoreconfHook, pkgconfig, gtk-doc
+{ stdenv, fetchFromGitHub, substituteAll, autoreconfHook, pkg-config, gtk-doc
 , docbook_xml_dtd_43, python3, gobject-introspection, glib, udev, kmod, parted
-, cryptsetup, lvm2, dmraid, utillinux, libbytesize, libndctl, nss, volume_key
+, cryptsetup, lvm2, dmraid, util-linux, libbytesize, libndctl, nss, volume_key
 , libxslt, docbook_xsl, gptfdisk, libyaml, autoconf-archive
 , thin-provisioning-tools, makeWrapper
 }:
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig gtk-doc libxslt docbook_xsl docbook_xml_dtd_43
+    autoreconfHook pkg-config gtk-doc libxslt docbook_xsl docbook_xml_dtd_43
     python3 gobject-introspection autoconf-archive makeWrapper
   ];
 
   buildInputs = [
-    glib udev kmod parted gptfdisk cryptsetup lvm2 dmraid utillinux libbytesize
+    glib udev kmod parted gptfdisk cryptsetup lvm2 dmraid util-linux libbytesize
     libndctl nss volume_key libyaml
   ];
 

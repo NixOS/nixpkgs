@@ -1,10 +1,10 @@
-{ stdenv, callPackage, fetchFromGitHub
+{ lib, stdenv, callPackage, fetchFromGitHub
 , cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
 , steam, udev, libusb1, jsoncpp, libhdhomerun, zlib
 , python2Packages, expat, glib, nspr, nss, openssl
 , libssh, libarchive, lzma, bzip2, lz4, lzo }:
 
-with stdenv.lib;
+with lib;
 
 let self = rec {
 
@@ -47,7 +47,8 @@ let self = rec {
       sha256 = "1r3gs3c6zczmm66qcxh9mr306clwb3p7ykzb70r3jv5jqggiz199";
     };
 
-    buildInputs = [ cmake kodiPlain libcec_platform tinyxml ];
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ kodiPlain libcec_platform tinyxml ];
   };
 
   mkKodiPlugin = { plugin, namespace, version, sourceDir ? null, ... }@args:
@@ -75,8 +76,8 @@ let self = rec {
 
     dontStrip = true;
 
-    buildInputs = [ cmake kodiPlain kodi-platform libcec_platform ]
-               ++ extraBuildInputs;
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ kodiPlain kodi-platform libcec_platform ] ++ extraBuildInputs;
 
     inherit extraRuntimeDependencies;
 
@@ -467,7 +468,7 @@ let self = rec {
     propagatedBuildInputs = [
       simpleplugin
       python2Packages.requests
-      python2Packages.libtorrentRasterbar
+      python2Packages.libtorrent-rasterbar
     ];
 
     meta = {
@@ -481,12 +482,12 @@ let self = rec {
 
     plugin = "inputstream-adaptive";
     namespace = "inputstream.adaptive";
-    version = "2.3.12";
+    version = "2.4.6";
 
     src = fetchFromGitHub {
       owner = "peak3d";
       repo = "inputstream.adaptive";
-      rev = version;
+      rev = "${version}-${rel}";
       sha256 = "09d9b35mpaf3g5m51viyan9hv7d2i8ndvb9wm0j7rs5gwsf0k71z";
     };
 
@@ -518,7 +519,7 @@ let self = rec {
       sha256 = "044kkzcpzvbyih4vys33r4hqw38xa82snmvl4qj1r80wnszc8af1";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "SFTP Virtual Filesystem add-on for Kodi";
       license = licenses.gpl2Plus;
       platforms = platforms.all;
@@ -540,7 +541,7 @@ let self = rec {
       sha256 = "01qhv095h5j67ispm4iw18pd3kl7a0mnjkgm92al9qqiyif8lzgh";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "LibArchive Virtual Filesystem add-on for Kodi";
       license = licenses.gpl2Plus;
       platforms = platforms.all;

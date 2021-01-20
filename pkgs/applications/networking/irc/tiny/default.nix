@@ -11,18 +11,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny";
-  version = "0.5.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "osa1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1m57xsrc7lzkrm8k1wh3yx3in5bhd0qjzygxdwr8lvigpsiy5caa";
+    sha256 = "07a50shv6k4fwl2gmv4j0maxaqqkjpwwmqkxkqs0gvx38lc5f7m7";
   };
 
-  cargoSha256 = "1s93zxk85wa7zw8745ba1sgipal75w1y18nc9vca6sig4pzvvj41";
+  cargoSha256 = "009jqizj4qg1bqslna35myxcark40hwlqsz58fbps9nsgp1i0hq2";
 
-  RUSTC_BOOTSTRAP = 1;
+  cargoPatches = [
+    # Fix Cargo.lock version. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/osa1/tiny/commit/b1caf48a6399dad8875de1d965d1ad445e49585d.patch";
+      sha256 = "1zkjhx94nwmd69cfwwwzg51ipcwq01wyvgsmn0vq7iaa2h0d286i";
+    })
+  ];
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
   buildInputs = lib.optionals stdenv.isLinux [ dbus openssl ] ++ lib.optional stdenv.isDarwin Foundation;
@@ -30,7 +36,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A console IRC client";
     homepage = "https://github.com/osa1/tiny";
+    changelog = "https://github.com/osa1/tiny/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

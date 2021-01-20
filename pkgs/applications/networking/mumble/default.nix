@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, qt5
+{ lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkg-config, qt5
 , avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsaLib, python
 , rnnoise
@@ -16,7 +16,7 @@ assert pulseSupport -> libpulseaudio != null;
 assert iceSupport -> zeroc-ice != null;
 assert grpcSupport -> (grpc != null && c-ares != null && abseil-cpp != null && which != null);
 
-with stdenv.lib;
+with lib;
 let
   generic = overrides: source: qt5.mkDerivation (source // overrides // {
     pname = overrides.type;
@@ -25,7 +25,7 @@ let
     patches = (source.patches or [])
       ++ [ ./fix-rnnoise-argument.patch ];
 
-    nativeBuildInputs = [ pkgconfig python qt5.qmake ]
+    nativeBuildInputs = [ pkg-config python qt5.qmake ]
       ++ (overrides.nativeBuildInputs or [ ]);
 
     buildInputs = [ boost protobuf avahi ]
@@ -133,14 +133,14 @@ let
   } source;
 
   source = rec {
-    version = "1.3.2";
+    version = "1.3.3";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
       rev = version;
-      sha256 = "1ljn7h7dr9iyhvq7rdh0prl7hzn9d2hhnxv0ni6dha6f7d9qbfy6";
+      sha256 = "1jaq5bl5gdpzd4pskpcd2j93g2w320znn4s8ck8f4jz5f46da1bj";
       fetchSubmodules = true;
     };
   };

@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , gettext
 , meson
 , ninja
-, fetchFromGitLab
+, fetchurl
 , pkg-config
 , gtk3
 , glib
@@ -13,34 +13,26 @@
 , wrapGAppsHook
 , python3
 , gnome3
-, config
+, libhandy
+, librsvg
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gnome-tour";
-  version = "0.0.1";
+  version = "3.38.0";
 
-  # We don't use the uploaded tar.xz because it comes pre-vendored
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "gnome-tour";
-    rev = version;
-    sha256 = "0lbkspnlziq3z177071w3jpghmdwflzra1krdwchzmkfmrhy50ch";
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-hV/C/Lyz6e9zhe3FRw4Sox5gMqThDP57wVCTgcekjng=";
   };
 
-  cargoSha256 = "0k1wp9wswr57fv2d9bysxn97fchd4vz29n5r8gfyp0gcm8rclmij";
-
-  mesonFlags = [
-    "-Ddistro_name=NixOS"
-    "-Ddistro_icon_name=nix-snowflake"
-    "-Ddistro_version=20.09"
-  ];
+  cargoVendorDir = "vendor";
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
     gettext
+    glib # glib-compile-resources
     meson
     ninja
     pkg-config
@@ -52,6 +44,8 @@ rustPlatform.buildRustPackage rec {
     gdk-pixbuf
     glib
     gtk3
+    libhandy
+    librsvg
   ];
 
   # Don't use buildRustPackage phases, only use it for rust deps setup
@@ -65,13 +59,13 @@ rustPlatform.buildRustPackage rec {
     patchShebangs build-aux/meson_post_install.py
   '';
 
-  # passthru = {
-  #   updateScript = gnome3.updateScript {
-  #     packageName = pname;
-  #   };
-  # };
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tour";
     description = "GNOME Greeter & Tour";
     maintainers = teams.gnome.members;

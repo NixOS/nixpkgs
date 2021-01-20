@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unzip }:
+{ fetchurl, lib, stdenv, unzip }:
 
 let
   version = "2.9";
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = stdenv.lib.optional (stdenv.lib.hasSuffix ".zip" url) unzip;
+  nativeBuildInputs = lib.optional (lib.hasSuffix ".zip" url) unzip;
 
   installPhase = ''
     mkdir -p $out/bin $out/share/kindlegen/doc
@@ -41,7 +41,8 @@ in stdenv.mkDerivation {
     cp -r *.txt *.html docs/* $out/share/kindlegen/doc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = true; # download links got removed
     description = "Convert documents to .mobi for use with Amazon Kindle";
     homepage = "https://www.amazon.com/gp/feature.html?docId=1000765211";
     license = licenses.unfree;

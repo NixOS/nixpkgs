@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, qttools, alsaLib }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, qttools, alsaLib }:
 
 mkDerivation rec {
   version = "1.5.1";
@@ -17,7 +17,7 @@ mkDerivation rec {
   ];
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small cross-platform editor of the OPL3 FM banks of different formats";
     homepage = src.meta.homepage;
     license = licenses.gpl3;

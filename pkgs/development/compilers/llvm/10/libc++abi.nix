@@ -1,5 +1,6 @@
 { stdenv, cmake, fetch, libcxx, libunwind, llvm, version
-, enableShared ? true }:
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation {
   pname = "libc++abi";

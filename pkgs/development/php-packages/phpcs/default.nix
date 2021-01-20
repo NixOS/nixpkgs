@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, pkgs, lib, php }:
 let
   pname = "phpcs";
-  version = "3.5.5";
+  version = "3.5.8";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-    sha256 = "0jl038l55cmzn5ml61qkv4z1w4ri0h3v7h00pcb04xhz3gznlbsa";
+    sha256 = "037mdnpbgd9xaj556pf14h02a4a6f5zzdg58p2z1sivxcygf8aka";
   };
 
   phases = [ "installPhase" ];

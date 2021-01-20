@@ -1,22 +1,21 @@
 { lib, fetchFromGitHub, buildDunePackage
-, calendar, csv, hex, re
+, calendar, csv, hex, ppx_deriving, ppx_sexp_conv, re, rresult, sexplib
 }:
 
 buildDunePackage rec {
   pname = "pgocaml";
-  version = "4.0";
+  version = "4.2.2";
   src = fetchFromGitHub {
     owner = "darioteixeira";
     repo = "pgocaml";
-    rev = "v${version}";
-    sha256 = "1s8c5prr7jb9k76bz990m836czm6k8rv5bvp6s2zg9ra0w19w90j";
+    rev = version;
+    sha256 = "1rdypc83nap9j2ml9r6n1pzgf79gk1yffwyi6fmcrl7zmy01cg0n";
   };
 
-  minimumOCamlVersion = "4.05";
+  minimumOCamlVersion = "4.07";
+  useDune2 = true;
 
-  preConfigure = "patchShebangs src/genconfig.sh";
-
-  propagatedBuildInputs = [ calendar csv hex re ];
+  propagatedBuildInputs = [ calendar csv hex ppx_deriving ppx_sexp_conv re rresult sexplib ];
 
   meta = with lib; {
     description = "An interface to PostgreSQL databases for OCaml applications";

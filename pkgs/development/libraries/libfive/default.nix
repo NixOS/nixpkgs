@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , cmake
 , ninja
-, pkgconfig
+, pkg-config
 , eigen
 , zlib
 , libpng
@@ -23,7 +23,7 @@ mkDerivation {
     sha256 = "102zw2n3vzv84i323is4qrwwqqha8v1cniw54ss8f4bq6dmic0bg";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkgconfig ];
+  nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config ];
   buildInputs = [ eigen zlib libpng boost guile ];
 
   # Link "Studio" binary to "libfive-studio" to be more obvious:

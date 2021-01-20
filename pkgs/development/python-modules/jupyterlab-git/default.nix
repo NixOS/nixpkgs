@@ -1,4 +1,4 @@
-{ lib
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -10,15 +10,18 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab_git";
-  version = "0.22.1";
+  version = "0.23.3";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e0fe2503d08dc00cda781b1ff89eb10c0decb45b5f8983b4970525b8f108dc02";
+    sha256 = "20a4954d8d1b1eb6f9111cd15d6a598bd7ff72b08797cf5e86c5a55827c85a1d";
   };
 
   propagatedBuildInputs = [ notebook nbdime git ];
+
+  # all Tests on darwin fail or are skipped due to sandbox
+  doCheck = !stdenv.isDarwin;
 
   checkInputs = [ pytest ];
 

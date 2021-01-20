@@ -19,7 +19,7 @@
 , libxslt
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pngquant
 }:
 stdenv.mkDerivation rec {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

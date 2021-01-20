@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, mint-x-icons, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, mint-x-icons, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "iconpack-obsidian";
-  version = "4.13";
+  version = "4.14";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hh0hnd2d08l4n5r73fkngv08f8230pp94k9qq8xgmchvjfg6j8y";
+    sha256 = "1rhs8k88gh6673flr22cb3gbbw37wyzhd6jyysx6qgjjsnjvl2h8";
   };
 
   nativeBuildInputs = [ gtk3 ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gnome icon pack based upon Faenza";
     homepage = "https://github.com/madmaxms/iconpack-obsidian";
     license = licenses.lgpl3;

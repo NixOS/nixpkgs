@@ -1,0 +1,22 @@
+diff --git a/test/test_main.py b/test/test_main.py
+index 71d605a..0ea3c74 100644
+--- a/test/test_main.py
++++ b/test/test_main.py
+@@ -63,17 +63,12 @@ def test_readme():
+     _test(u'hello world', u'həloʊ wɜːld ')
+     _test(u'hello world', u'həloʊ wɜːld ', '--verbose')
+     _test(u'hello world', u'həloʊ wɜːld ', '--quiet')
+-    _test(u'hello world', u'hhaxlow werld', '-b festival --strip')
+     _test(u'hello world', u'həloʊ wɜːld ', '-l en-us')
+     _test(u'bonjour le monde', u'bɔ̃ʒuʁ lə mɔ̃d ', '-l fr-fr')
+     _test(u'bonjour le monde', u'b ɔ̃ ʒ u ʁ ;eword l ə ;eword m ɔ̃ d ;eword ',
+           '-l fr-fr -p " " -w ";eword "')
+ 
+ 
+-@pytest.mark.skipif(
+-    '2.1' in backend.FestivalBackend.version(),
+-    reason='festival-2.1 gives different results than further versions '
+-    'for syllable boundaries')
+ def test_readme_festival_syll():
+     _test(u'hello world',
+           u'hh ax ;esyll l ow ;esyll ;eword w er l d ;esyll ;eword ',

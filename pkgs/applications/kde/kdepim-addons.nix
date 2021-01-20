@@ -9,7 +9,7 @@
 }:
 
 mkDerivation {
-  name = "kdepim-addons";
+  pname = "kdepim-addons";
   meta = {
     license = with lib.licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = kdepimTeam;

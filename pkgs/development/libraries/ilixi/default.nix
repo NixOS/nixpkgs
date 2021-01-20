@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, directfb, libsigcxx, libxml2, fontconfig }:
+{ stdenv, fetchurl, pkg-config, directfb, libsigcxx, libxml2, fontconfig }:
 
 # TODO: optional deps: baresip, FusionDale, FusionSound, SaWMan, doxygen,
 # Reflex, Wnn, NLS
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kmdmqf68jiv7y6as41bhbgdy70yy2i811a3l6kccbazlzpif34v";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ directfb libsigcxx libxml2 fontconfig ];
 
   configureFlags = [

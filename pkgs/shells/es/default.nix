@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, readline, yacc }:
+{ lib, stdenv, fetchurl, readline, yacc }:
 
 let
   version = "0.9.1";
@@ -24,8 +24,8 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-readline" ];
 
-  meta = with stdenv.lib; {
-    description = "Es is an extensible shell";
+  meta = with lib; {
+    description = "An extensible shell with higher order functions";
     longDescription =
       ''
         Es is an extensible shell. The language was derived

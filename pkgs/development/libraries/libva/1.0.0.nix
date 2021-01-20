@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libX11, pkgconfig, libXext, libdrm, libXfixes, wayland, libffi
+{ stdenv, lib, fetchurl, libX11, pkg-config, libXext, libdrm, libXfixes, wayland, libffi
 , libGL, mesa
 , minimal ? false, libva1-minimal
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libva1-minimal libX11 libXext libXfixes wayland libffi libGL ];

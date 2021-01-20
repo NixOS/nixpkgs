@@ -1,4 +1,4 @@
-{ callPackage, openssl, icu, python2, enableNpm ? true }:
+{ callPackage, openssl, icu, python2, stdenv, enableNpm ? true }:
 
 let
   buildNodejs = callPackage ./nodejs.nix {
@@ -8,6 +8,7 @@ let
 in
   buildNodejs {
     inherit enableNpm;
-    version = "12.19.0";
-    sha256 = "1qainpkakkl3xip9xz2wbs74g95gvc6125cc05z6vyckqi2iqrrv";
+    version = "12.20.1";
+    sha256 = "0lqq6a2byw4qmig98j45gqnl0593xdhx1dr9k7x2nnvhblrfw3p0";
+    patches = stdenv.lib.optional stdenv.isDarwin ./bypass-xcodebuild.diff;
   }

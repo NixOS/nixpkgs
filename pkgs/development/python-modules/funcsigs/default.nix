@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , isPyPy, isPy3k, unittest2
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # https://github.com/testing-cabal/funcsigs/issues/10
   patches = stdenv.lib.optional (isPyPy && isPy3k) [ ./fix-pypy3-tests.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+";
     homepage = "https://github.com/aliles/funcsigs";
     maintainers = with maintainers; [ ];

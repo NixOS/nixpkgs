@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, mpd_clientlib, ncurses, pcre, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, mpd_clientlib, ncurses, pcre, pkg-config
 , taglib, curl }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lswzkap2nm7v5h7ppb6a64cb35rajysd09nb204rxgrkij4m6nx";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ mpd_clientlib ncurses pcre taglib curl ];
 
   postInstall = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp doc/vimpcrc.example $out/etc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A vi/vim inspired client for the Music Player Daemon (mpd)";
     homepage = "https://github.com/boysetsfrog/vimpc";
     license = licenses.gpl3;

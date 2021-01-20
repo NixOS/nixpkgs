@@ -1,14 +1,15 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
+  # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
-  version = "1.20200902";
+  version = "1.20201201";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "firmware";
     rev = version;
-    sha256 = "1dj5vyhz2ljka7hwhl6s14hd017fspix1xp7zbm7lzdyys9jb9ni";
+    sha256 = "09yha3k72yqx29rwnv2j2zm73lzc4jgmcbmcc6yrl1i07x84lx3n";
   };
 
   installPhase = ''
@@ -16,9 +17,11 @@ stdenv.mkDerivation rec {
     cp -R boot/* $out/share/raspberrypi/boot
   '';
 
+  dontConfigure = true;
+  dontBuild = true;
   dontFixup = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Firmware for the Raspberry Pi board";
     homepage = "https://github.com/raspberrypi/firmware";
     license = licenses.unfreeRedistributableFirmware; # See https://github.com/raspberrypi/firmware/blob/master/boot/LICENCE.broadcom

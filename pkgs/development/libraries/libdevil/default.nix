@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libjpeg, libpng, libmng, lcms1, libtiff, openexr, libGL
-, libX11, pkgconfig, OpenGL
+, libX11, pkg-config, OpenGL
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr libGL libX11 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ OpenGL ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   configureFlags = [ "--enable-ILU" "--enable-ILUT" ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ( fetchurl {
-        url = "http://patch-tracker.debian.org/patch/series/dl/devil/1.7.8-6.1/03_CVE-2009-3994.diff";
+        url = "https://sources.debian.org/data/main/d/devil/1.7.8-10/debian/patches/03_CVE-2009-3994.diff";
         sha256 = "0qkx2qfv02igbrmsn6z5a3lbrbwjfh3rb0c2sj54wy0j1f775hbc";
       } )
       ./ftbfs-libpng15.patch

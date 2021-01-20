@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , debugger
 , fetchPypi
@@ -24,12 +24,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.2.1";
+  version = "4.3.1";
   pname = "pwntools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fh7sq9wrcfvn44qryln9cyg99pilvyq9bp80758lgdd6ss6hdqd";
+    sha256 = "12ja913kz8wl4afrmpzxh9fx6j7rcwc2vqzkvfr1fxn42gkqhqf4";
   };
 
   # Upstream has set an upper bound on unicorn because of https://github.com/Gallopsled/pwntools/issues/1538,
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     makeWrapper "${debugger}/bin/${stdenv.lib.strings.getName debugger}" "$out/bin/pwntools-gdb"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pwntools.com";
     description = "CTF framework and exploit development library";
     license = licenses.mit;

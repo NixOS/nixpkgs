@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1z22zfw9lb86z4hcan9hlvji49c9b7vznh7gjm95gnvsh43zsgx8";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   patchPhase = ''
     # include <unistd.h> to fix undefined getcwd

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, meson, ninja, pkgconfig, gettext, gtk-doc, docbook_xsl, gobject-introspection, gnome3, libsoup, json-glib, glib }:
+{ fetchurl, stdenv, meson, ninja, pkg-config, gettext, gtk-doc, docbook_xsl, gobject-introspection, gnome3, libsoup, json-glib, glib }:
 
 stdenv.mkDerivation rec {
   pname = "geocode-glib";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1l8g0f13xgkrk335afr9w8k46mziwb2jnyhl07jccl5yl37q9zh1";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gtk-doc docbook_xsl gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext gtk-doc docbook_xsl gobject-introspection ];
   buildInputs = [ glib libsoup json-glib ];
 
   patches = [

@@ -1,24 +1,26 @@
-{ stdenv, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome3, gtk3, gdk-pixbuf,
-  tag ? "", xvfb_run, dbus, glibcLocales, glib, glib-networking, gobject-introspection,
+{ lib, stdenv, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome3, gtk3, gdk-pixbuf, librsvg,
+  tag ? "", xvfb_run, dbus, glibcLocales, glib, glib-networking, gobject-introspection, hicolor-icon-theme,
   gst_all_1, withGstPlugins ? true,
   xineBackend ? false, xineLib,
   withDbusPython ? false, withPyInotify ? false, withMusicBrainzNgs ? false, withPahoMqtt ? false,
   webkitgtk ? null,
   keybinder3 ? null, gtksourceview ? null, libmodplug ? null, kakasi ? null, libappindicator-gtk3 ? null }:
 
-let optionals = stdenv.lib.optionals; in
+let optionals = lib.optionals; in
 python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchurl {
     url = "https://github.com/quodlibet/quodlibet/releases/download/release-${version}/quodlibet-${version}.tar.gz";
-    sha256 = "0b1rvr4hqs2bjmhayms7vxxkn3d92k9v7p1269rjhf11hpk122l7";
+    sha256 = "1q17ckblfa4fcs7wsjwsq1dj7360ymrdyjkyqmj864wzlqkw1rd2";
   };
+
+  patches = [ ./quodlibet-feedparser6.patch ];
 
   nativeBuildInputs = [ wrapGAppsHook gettext ];
 
-  checkInputs = [ gdk-pixbuf ] ++ (with python3.pkgs; [ pytest pytest_xdist polib xvfb_run dbus.daemon glibcLocales ]);
+  checkInputs = [ gdk-pixbuf hicolor-icon-theme ] ++ (with python3.pkgs; [ pytest pytest_xdist polib xvfb_run dbus.daemon glibcLocales ]);
 
   buildInputs = [ gnome3.adwaita-icon-theme libsoup glib glib-networking gtk3 webkitgtk gdk-pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
     ++ (if xineBackend then [ xineLib ] else with gst_all_1;
@@ -33,9 +35,13 @@ python3.pkgs.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  pytestFlags = stdenv.lib.optionals (xineBackend || !withGstPlugins) [
+  pytestFlags = lib.optionals (xineBackend || !withGstPlugins) [
     "--ignore=tests/plugin/test_replaygain.py"
   ] ++ [
+    # requires networking
+    "--ignore=tests/test_browsers_iradio.py"
+    # the default theme doesn't have the required icons
+    "--ignore=tests/plugin/test_trayicon.py"
     # upstream does actually not enforce source code linting
     "--ignore=tests/quality"
     # build failure on Arch Linux
@@ -45,7 +51,13 @@ python3.pkgs.buildPythonApplication rec {
 
   checkPhase = ''
     runHook preCheck
+    # newer gettext spews some warnings which fail the tests
+    substituteInPlace tests/test_po.py --replace "strict=True" "strict=False"
+    # otherwise tests can't find the app icons; instead of creating index.theme from scratch
+    # I re-used the one from hicolor-icon-theme which seems to work
+    cp "${hicolor-icon-theme}/share/icons/hicolor/index.theme" quodlibet/images/hicolor
     env XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_ICON_DIRS:$XDG_DATA_DIRS" \
+      GDK_PIXBUF_MODULE_FILE=${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
       HOME=$(mktemp -d) \
       xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
         --config-file=${dbus.daemon}/share/dbus-1/session.conf \
@@ -53,9 +65,9 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  preFixup = stdenv.lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
+  preFixup = lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK-based audio player written in Python, using the Mutagen tagging library";
     license = licenses.gpl2Plus;
 
@@ -73,7 +85,7 @@ python3.pkgs.buildPythonApplication rec {
       & internet radio, and all major audio formats.
     '';
 
-    maintainers = with maintainers; [ coroa sauyon ];
+    maintainers = with maintainers; [ coroa pbogdan ];
     homepage = "https://quodlibet.readthedocs.io/en/latest/";
   };
 }

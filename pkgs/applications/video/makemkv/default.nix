@@ -1,23 +1,33 @@
-{ stdenv, mkDerivation, fetchurl, autoPatchelfHook
-, ffmpeg_3, openssl, qtbase, zlib, pkgconfig
+{ lib, stdenv
+, mkDerivation
+, fetchurl
+, autoPatchelfHook
+, pkg-config
+, ffmpeg_3
+, openssl
+, qtbase
+, zlib
+
+, withJava ? true
+, jre_headless
 }:
 
 let
-  version = "1.15.2";
+  version = "1.15.4";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    sha256 = "1dbips0qllbwhak44c50nlwn8n3kx8i6773cal5zl3dv4v2nf6ql";
+    hash = "sha256-Reun5hp7Rnsf6N5yL6iQ1Vbhnz/AKnt/jYRqyOK625o=";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    sha256 = "1wnhzlz5fw6qwh82hjcpimg60xb3a9a54zb6gcjhqr9zdly2zphy";
+    hash = "sha256-gtBi1IRNF5ASk/ZdzkDmOuEIT9gazNaRNCftqbLEP+M=";
   };
 in mkDerivation {
   pname = "makemkv";
@@ -27,9 +37,16 @@ in mkDerivation {
 
   sourceRoot = "makemkv-oss-${version}";
 
-  nativeBuildInputs = [ autoPatchelfHook pkgconfig ];
+  nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
   buildInputs = [ ffmpeg_3 openssl qtbase zlib ];
+
+  qtWrapperArgs =
+    let
+      binPath = lib.makeBinPath [ jre_headless ];
+    in lib.optionals withJava [
+      ''--prefix PATH : ${binPath}''
+    ];
 
   installPhase = ''
     runHook preInstall
@@ -41,7 +58,7 @@ in mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert blu-ray and dvd to mkv";
     longDescription = ''
       makemkv is a one-click QT application that transcodes an encrypted

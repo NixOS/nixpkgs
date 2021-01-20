@@ -1,14 +1,20 @@
 { stdenv, substituteAll, fetchurl
-, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi, libunwind, Security
+, zlib ? null, zlibSupport ? true, bzip2, pkg-config, libffi, libunwind, Security
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
 , self, gdbm, db, lzma
 , python-setup-hook
 # For the Python package set
 , packageOverrides ? (self: super: {})
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
 , sourceVersion
 , pythonVersion
 , sha256
 , passthruFun
+, pythonAttr ? "pypy${stdenv.lib.substring 0 1 pythonVersion}${stdenv.lib.substring 2 3 pythonVersion}"
 }:
 
 assert zlibSupport -> zlib != null;
@@ -22,9 +28,14 @@ let
     implementation = "pypy";
     libPrefix = "pypy${pythonVersion}";
     executable = "pypy${if isPy3k then "3" else ""}";
-    pythonForBuild = self; # No cross-compiling for now.
     sitePackages = "site-packages";
     hasDistutilsCxxPatch = false;
+
+    pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
+    pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
+    pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
+    pythonOnHostForHost = pkgsHostHost.${pythonAttr};
+    pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or {};
   };
   pname = passthru.executable;
   version = with sourceVersion; "${major}.${minor}.${patch}";
@@ -38,7 +49,7 @@ in with passthru; stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
   ]  ++ optionals isPy3k [
@@ -151,7 +162,7 @@ in with passthru; stdenv.mkDerivation rec {
     homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "aarch64-linux" "i686-linux" "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ andersk ];
   };
 }

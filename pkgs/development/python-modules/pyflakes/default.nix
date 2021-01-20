@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, unittest2 }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, unittest2 }:
 
 buildPythonPackage rec {
   pname = "pyflakes";
@@ -11,7 +11,10 @@ buildPythonPackage rec {
 
   checkInputs = [ unittest2 ];
 
-  meta = with stdenv.lib; {
+  # some tests are output dependent, which have changed slightly
+  doCheck = pythonOlder "3.9";
+
+  meta = with lib; {
     homepage = "https://launchpad.net/pyflakes";
     description = "A simple program which checks Python source files for errors";
     license = licenses.mit;

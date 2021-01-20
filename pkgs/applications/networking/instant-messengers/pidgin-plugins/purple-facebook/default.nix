@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchhg, pidgin, glib, json-glib, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, fetchhg, pidgin, glib, json-glib, autoreconfHook }:
 
 
 let
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ pidgin glib json-glib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Facebook protocol plugin for libpurple";
     license = licenses.gpl2;

@@ -146,5 +146,12 @@ in rec {
     gcc = gcc9;
   };
 
-  cudatoolkit_11 = cudatoolkit_11_0;
+  cudatoolkit_11_1 = common {
+    version = "11.1.1";
+    url = "https://developer.download.nvidia.com/compute/cuda/11.1.1/local_installers/cuda_11.1.1_455.32.00_linux.run";
+    sha256 = "13yxv2fgvdnqqbwh1zb80x4xhyfkbajfkwyfpdg9493010kngbiy";
+    gcc = gcc9;
+  };
+
+  cudatoolkit_11 = cudatoolkit_11_1;
 }

@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, gtk, webkitgtk }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, gtk, webkitgtk }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gnvim-unwrapped";
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     make install PREFIX="${placeholder "out"}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for neovim, without any web bloat";
     homepage = "https://github.com/vhakulinen/gnvim";
     license = licenses.mit;

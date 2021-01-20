@@ -2,21 +2,21 @@
 
 buildGoModule rec {
   pname = "curlie";
-  version = "1.5.4";
+  version = "1.6.0";
 
   src= fetchFromGitHub {
     owner = "rs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0z92gz39m0gk8j7l2nwa5vrfr3mq160vr1b15sy13jwi1zspc7hx";
+    sha256 = "sha256-rrwdqaKrC37BaI9RuTTv6EiOZ3ztgd7nGuplmeW02h8=";
   };
 
-  vendorSha256 = "1qnl15b9cs6xi8z368a9n34v3wr2adwp376cjzhyllni7sf6v1mm";
+  vendorSha256 = "sha256-tYZtnD7RUurhl8yccXlTIvOxybBJITM+it1ollYJ1OI=";
 
   doCheck = false;
 
   meta = with lib; {
-    description = "Curlie is a frontend to curl that adds the ease of use of httpie, without compromising on features and performance";
+    description = "Frontend to curl that adds the ease of use of httpie, without compromising on features and performance";
     homepage = "https://curlie.io/";
     maintainers = with maintainers; [ ma27 ];
     license = licenses.mit;

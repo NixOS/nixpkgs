@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   name = "emma-2.0.5312";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/emma/emma-2.0.5312.zip";
     sha256 = "0xxy39s2lvgs56vicjzpcz936l1vjaplliwa0dm7v3iyvw6jn7vj";

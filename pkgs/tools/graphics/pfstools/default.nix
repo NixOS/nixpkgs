@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, cmake, pkgconfig, darwin
+{ lib, stdenv, mkDerivation, fetchurl, cmake, pkg-config, darwin
 , openexr, zlib, imagemagick, libGLU, libGL, freeglut, fftwFloat
-, fftw, gsl, libexif, perl, opencv2, qt5, netpbm
+, fftw, gsl, libexif, perl, opencv2, qtbase, netpbm
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "pfstools";
   version = "2.1.0";
 
@@ -18,17 +18,17 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     rm cmake/FindNETPBM.cmake
-    echo "SET(NETPBM_LIBRARY `find ${stdenv.lib.getLib netpbm} -name "*.${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
-    echo "SET(NETPBM_LIBRARIES `find ${stdenv.lib.getLib netpbm} -name "*.${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
-    echo "SET(NETPBM_INCLUDE_DIR ${stdenv.lib.getDev netpbm}/include/netpbm)" >> cmake/FindNETPBM.cmake
+    echo "SET(NETPBM_LIBRARY `find ${lib.getLib netpbm} -name "*.${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
+    echo "SET(NETPBM_LIBRARIES `find ${lib.getLib netpbm} -name "*.${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
+    echo "SET(NETPBM_INCLUDE_DIR ${lib.getDev netpbm}/include/netpbm)" >> cmake/FindNETPBM.cmake
     echo "INCLUDE(FindPackageHandleStandardArgs)" >> cmake/FindNETPBM.cmake
     echo "FIND_PACKAGE_HANDLE_STANDARD_ARGS(NETPBM DEFAULT_MSG NETPBM_LIBRARY NETPBM_INCLUDE_DIR)" >> cmake/FindNETPBM.cmake
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     openexr zlib imagemagick fftwFloat
-    fftw gsl libexif perl opencv2 qt5.qtbase netpbm
+    fftw gsl libexif perl opencv2 qtbase netpbm
   ] ++ (if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT
   ]) else [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./threads.patch ./pfstools.patch ./pfsalign.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pfstools.sourceforge.net/";
     description = "Toolkit for manipulation of HDR images";
     platforms = platforms.linux;

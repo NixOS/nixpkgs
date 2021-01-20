@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, zlib, perl, pkgconfig, python, openssl }:
+{ stdenv, fetchFromGitHub, zlib, perl, pkg-config, python, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "rdkafka";
-  version = "1.4.4";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "edenhill";
     repo = "librdkafka";
     rev = "v${version}";
-    sha256 = "0y4m29wyvhhxb7fap9z07zwgcqlr4ifwynf8a7yp5ldjpzfzxpix";
+    sha256 = "12cc7l5vpxyrm8ca0cpm8sdl54hb8dranal8sz55r9y8igz1q1wb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ zlib perl python openssl ];
 
@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/edenhill/librdkafka";
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ boothead ];
+    maintainers = with maintainers; [ commandodev ];
   };
 }

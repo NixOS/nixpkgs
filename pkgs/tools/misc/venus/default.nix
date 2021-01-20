@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, pythonPackages, libxslt, libxml2, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python, pythonPackages, libxslt, libxml2, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "venus";
@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
       single combined feed, latest news first.
     '';
     homepage = "http://intertwingly.net/code/venus/docs/index.html";
-    license = stdenv.lib.licenses.psfl;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.psfl;
+    platforms = lib.platforms.all;
     maintainers = [];
   };
 }

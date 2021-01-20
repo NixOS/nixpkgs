@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, gpm }:
+{ lib, stdenv, fetchurl, ncurses, gpm }:
 
 stdenv.mkDerivation rec {
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "--enable-largefile"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A portable fork of Joe's editor";
     longDescription = ''
       This is the portable version of JOE's Own Editor, which is currently

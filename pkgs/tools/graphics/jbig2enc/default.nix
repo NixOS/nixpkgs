@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, leptonica, zlib, libwebp, giflib, libjpeg, libpng, libtiff }:
+{ lib, stdenv, fetchurl, leptonica, zlib, libwebp, giflib, libjpeg, libpng, libtiff }:
 
 stdenv.mkDerivation {
   name = "jbig2enc-0.28";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Encoder for the JBIG2 image compression format";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, php }:
+{ lib, stdenv, fetchurl, makeWrapper, php }:
 
 let
   versions = {
@@ -17,7 +17,7 @@ let
   };
   common = pname: { version, sha256, beta ? null }:
     let
-      fullVersion = version + stdenv.lib.optionalString (beta != null) "-${toString beta}";
+      fullVersion = version + lib.optionalString (beta != null) "-${toString beta}";
       name = "${pname}-${fullVersion}";
     in
 
@@ -97,7 +97,7 @@ let
           popd > /dev/null
         '';
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "A real-time web analytics application";
           license = licenses.gpl3Plus;
           homepage = "https://matomo.org/";
@@ -106,4 +106,4 @@ let
         };
       };
 in
-stdenv.lib.mapAttrs common versions
+lib.mapAttrs common versions

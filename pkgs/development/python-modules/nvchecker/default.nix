@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.1";
+  version = "2.2";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zf9vhf8ka0v1mf1xhbvkc2nr54m0rkiw1i68ps4sgx2mdj6qrfk";
+    sha256 = "0b17pikqyxcsid69lwnjl44n8z46ydjmxxdnbzasfdl7r83l7ijr";
   };
 
   nativeBuildInputs = [ installShellFiles docutils ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-m 'not needs_net'" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/lilydjwg/nvchecker";
     description = "New version checker for software";
     license = licenses.mit;

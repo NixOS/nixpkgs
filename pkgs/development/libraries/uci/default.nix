@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchgit, pkgconfig, libubox }:
+{ stdenv, cmake, fetchgit, pkg-config, libubox }:
 
 stdenv.mkDerivation {
   pname = "uci";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "all" ];
   cmakeFlags = [ "-D BUILD_LUA:BOOL=OFF" ];
   buildInputs = [ libubox ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with stdenv.lib; {
     description = "OpenWrt Unified Configuration Interface";

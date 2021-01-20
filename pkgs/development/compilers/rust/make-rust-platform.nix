@@ -18,4 +18,8 @@ rec {
   rustcSrc = callPackage ./rust-src.nix {
     inherit rustc;
   };
+
+  rustLibSrc = callPackage ./rust-lib-src.nix {
+    inherit rustc;
+  };
 }

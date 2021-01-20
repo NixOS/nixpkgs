@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchpatch, fetchFromGitHub, cmake, boost17x, ceres-solver, eigen,
+{ mkDerivation, lib, fetchFromGitHub, cmake, boost17x, ceres-solver, eigen,
   freeimage, glog, libGLU, glew, qtbase,
   cudaSupport ? false, cudatoolkit ? null }:
 
@@ -7,21 +7,14 @@ assert !cudaSupport || cudatoolkit != null;
 let boost_static = boost17x.override { enableStatic = true; };
 in
 mkDerivation rec {
-  version = "3.5";
+  version = "3.6";
   pname = "colmap";
   src = fetchFromGitHub {
      owner = "colmap";
      repo = "colmap";
      rev = version;
-     sha256 = "1vnb62p0y2bnga173wmjs0lnyqdjikv0fkcxjzxm8187khk2lly8";
+     sha256 = "1kfivdmhpmdxjjf30rr57y2iy7xmdpg4h8aw3qgacv8ckfpgda3n";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/colmap/colmap/commit/6af3d8b0048cecc3b9fc6f4e78c3214dd038180b.patch";
-      sha256 = "1zv5girmv4hv78w1xn131v8njwhpbyylc1m15731lnhrs8bri0jq";
-    })
-  ];
 
   buildInputs = [
     boost_static ceres-solver eigen

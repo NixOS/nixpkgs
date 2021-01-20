@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , gevent
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ gevent ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "gevent-cooperative child processes and IPC";
     longDescription = ''
       Usage of Python's multiprocessing package in a gevent-powered
@@ -27,6 +27,8 @@ buildPythonPackage rec {
     '';
     homepage = "http://gehrcke.de/gipc";
     license = licenses.mit;
+    # gipc only has support for older versions of gevent
+    broken = versionOlder "1.6" gevent.version;
   };
 
 }

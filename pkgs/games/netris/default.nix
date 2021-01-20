@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation {
   pname = "netris";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     cp ./netris $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free networked version of T*tris";
     license = licenses.gpl2;
     maintainers = with maintainers; [ patryk27 ];

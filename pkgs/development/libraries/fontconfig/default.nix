@@ -83,7 +83,6 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
     "--with-cache-dir=/var/cache/fontconfig" # otherwise the fallback is in $out/
-    "--disable-docs"
     # just <1MB; this is what you get when loading config fails for some reason
     "--with-default-fonts=${dejavu_fonts.minimal}"
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -108,6 +107,9 @@ stdenv.mkDerivation rec {
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \
       > fonts.conf.tmp
     mv fonts.conf.tmp $out/etc/fonts/fonts.conf
+    # We don't keep section 3 of the manpages, as they are quite large and
+    # probably not so useful.
+    rm -r $bin/share/man/man3
   '';
 
   meta = with stdenv.lib; {

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy27
 , bleach
 , mt-940
 , pytest
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytest . --ignore=tests/test_client.py -k 'not robust_mode'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/raphaelm/python-fints/";
     description = "Pure-python FinTS (formerly known as HBCI) implementation";
     license = licenses.lgpl3;

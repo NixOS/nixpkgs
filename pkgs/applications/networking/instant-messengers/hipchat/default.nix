@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
+{ lib, stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
 , alsaLib, dbus, zlib, libxml2, libxslt, makeWrapper, xkeyboard_config, systemd
 , libGL, xcbutilkeysyms, xdg_utils, libtool }:
 
 let
   version = "4.30.5.1682";
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     xdg_utils
     xorg.libXext
     xorg.libSM
@@ -43,7 +43,7 @@ in stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";
+    url = "https://atlassian.artifactoryonline.com/artifactory/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";
     sha256 = "03pz8wskafn848yvciq29kwdvqcgjrk6sjnm8nk9acl89xf0sn96";
   };
 
@@ -78,7 +78,7 @@ in stdenv.mkDerivation {
       --set QT_PLUGIN_PATH "$d/plugins"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop client for HipChat services";
     homepage = "http://www.hipchat.com";
     license = licenses.unfree;

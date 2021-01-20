@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , isPy27
 , fetchPypi
@@ -27,7 +28,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.4.0";
+  version = "2.4.1";
   pname = "Scrapy";
 
   disabled = isPy27;
@@ -79,11 +80,14 @@ buildPythonPackage rec {
     "test_retry_dns_error"
     "test_custom_asyncio_loop_enabled_true"
     "test_custom_loop_asyncio"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ "test_xmliter_encoding" ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "test_xmliter_encoding"
+    "test_download"
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ea7fbc902ee0b0a79b154d07a5f4e747e2146f272a748557941946000728479";
+    sha256 = "68c48f01a58636bdf0f6fcd5035a19ecf277b58af24bd70c36dc6e556df3e005";
   };
 
   postInstall = ''
@@ -92,7 +96,9 @@ buildPythonPackage rec {
     install -m 644 -D extras/scrapy_zsh_completion $out/share/zsh/site-functions/_scrapy
   '';
 
-  meta = with stdenv.lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
     description = "A fast high-level web crawling and web scraping framework, used to crawl websites and extract structured data from their pages";
     homepage = "https://scrapy.org/";
     license = licenses.bsd3;

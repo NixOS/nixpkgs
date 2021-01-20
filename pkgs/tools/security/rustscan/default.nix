@@ -1,31 +1,32 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, nmap
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, nmap, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustscan";
-  version = "1.8.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "RustScan";
     repo = pname;
-    rev = "${version}";
-    sha256 = "0rkqsh4i58cf18ad97yr4f68s5jg6z0ybz4bw8607lz7cjkfvjay";
+    rev = version;
+    sha256 = "0fdbsz1v7bb5dm3zqjs1qf73lb1m4qzkqyb3h3hbyrp9vklgxsgw";
   };
 
-  cargoSha256 = "0mj214f2md7kjknmcayc5dcfmlk2b8mqkn7kxzdis8qv9a5xcbk8";
+  cargoSha256 = "039xarscwqndpyrr3sgzkhqna3c908zh06id8x2qaykm8l248zs9";
 
   postPatch = ''
     substituteInPlace src/main.rs \
       --replace 'Command::new("nmap")' 'Command::new("${nmap}/bin/nmap")'
   '';
 
+  buildInputs = lib.optional stdenv.isDarwin Security;
+
   checkFlags = [
     "--skip=infer_ulimit_lowering_no_panic"
     "--skip=google_dns_runs"
-    "--skip=parse_correct_ips_or_hosts"
+    "--skip=parse_correct_host_addresses"
+    "--skip=parse_hosts_file_and_incorrect_hosts"
+    "--skip=run_perl_script"
+    "--skip=run_python_script"
   ];
 
   meta = with lib; {

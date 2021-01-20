@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, boost, zlib, libevent, openssl, python, cmake, pkgconfig
-, bison, flex, twisted, static ? false }:
+{ stdenv, fetchurl, fetchpatch, boost, zlib, libevent, openssl, python, cmake, pkg-config
+, bison, flex, twisted
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "thrift";
@@ -23,9 +25,9 @@ stdenv.mkDerivation rec {
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ boost zlib libevent openssl python bison flex ]
-    ++ stdenv.lib.optional (!static) twisted;
+  nativeBuildInputs = [ cmake pkg-config bison flex ];
+  buildInputs = [ boost zlib libevent openssl ]
+    ++ stdenv.lib.optionals (!static) [ python twisted ];
 
   preConfigure = "export PY_PREFIX=$out";
 

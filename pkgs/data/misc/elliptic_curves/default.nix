@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ${python.interpreter} ${spkg-install}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Databases of elliptic curves";
     longDescription = ''
       Includes two databases:
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
   };
 }

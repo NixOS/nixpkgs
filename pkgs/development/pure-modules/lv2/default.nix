@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, lv2 }:
+{ stdenv, fetchurl, pkg-config, pure, lv2 }:
 
 stdenv.mkDerivation rec {
   baseName = "lv2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "721cacd831781d8309e7ecabb0ee7c01da17e75c5642a5627cf158bfb36093e1";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure lv2 ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;

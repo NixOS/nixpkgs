@@ -309,10 +309,8 @@ index e3534561a5..3b01424e67 100644
 -xcode_copy_phase_strip_setting.value = NO
 -QMAKE_MAC_XCODE_SETTINGS += xcode_copy_phase_strip_setting
 diff --git a/mkspecs/features/mac/sdk.mk b/mkspecs/features/mac/sdk.mk
-deleted file mode 100644
-index c40f58c987..0000000000
 --- a/mkspecs/features/mac/sdk.mk
-+++ /dev/null
++++ b/mkspecs/features/mac/sdk.mk
 @@ -1,25 +0,0 @@
 -
 -ifeq ($(QT_MAC_SDK_NO_VERSION_CHECK),)

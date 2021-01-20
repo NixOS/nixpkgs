@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib }:
+{ stdenv, fetchurl, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
   name = "libvisual-0.4.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1my1ipd5k1ixag96kwgf07bgxkjlicy9w22jfxb2kq95f6wgsk8b";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib ];
 
   hardeningDisable = [ "format" ];

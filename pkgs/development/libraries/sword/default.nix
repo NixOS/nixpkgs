@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, icu, clucene_core, curl }:
+{ stdenv, fetchurl, pkg-config, icu, clucene_core, curl }:
 
 stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "14syphc47g6svkbg018nrsgq4z6hid1zydax243g8dx747vsi6nf";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ icu clucene_core curl ];
 
   prePatch = ''

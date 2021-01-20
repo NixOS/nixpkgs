@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook
-, libtool, pkgconfig, gtk2, libGLU, file
+{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook
+, libtool, pkg-config, gtk2, libGLU, file
 }:
 
 let
@@ -7,10 +7,10 @@ let
     pname    = "gtkglarea";
     version = "2.1.0";
     src = fetchurl {
-      url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
       sha256 = "1pl2vdj6l64j864ilhkq1bcggb3hrlxjwk5m029i7xfjfxc587lf";
     };
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs       = [ gtk2 libGLU ];
     hardeningDisable  = [ "format" ];
   };
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   version = "0.9-1";
 
   src = fetchFromGitHub {
-    owner  = "mcuelenaere"; 
+    owner  = "mcuelenaere";
     repo   = "fsv";
     rev    = "${pname}-${version}";
     sha256 = "0n09jd7yqj18mx6zqbg7kab4idg5llr15g6avafj74fpg1h7iimj";
@@ -31,11 +31,11 @@ in stdenv.mkDerivation rec {
    sed -i 's/AM_GNU_GETTEXT/AM_GNU_GETTEXT([external])/' configure.in
   '';
 
-  nativeBuildInputs = [ autoreconfHook libtool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
   buildInputs       = [ file gtk2 libGLU gtkglarea ];
 
-  meta = with stdenv.lib; {
-    description     = "fsv is a file system visualizer in cyberspace";
+  meta = with lib; {
+    description     = "File system visualizer in cyberspace";
     longDescription = ''
       fsv (pronounced eff-ess-vee) is a file system visualizer in cyberspace.
       It lays out files and directories in three dimensions, geometrically

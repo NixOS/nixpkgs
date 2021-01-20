@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -7,15 +7,15 @@
 
 buildPythonPackage rec {
   pname = "ruamel.ordereddict";
-  version = "0.4.14";
+  version = "0.4.15";
   disabled = isPy3k || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "281051d26eb2b18ef3d920e1e260716a52bd058a6b1a2f324102fc6a15cb8d4a";
+    sha256 = "d7d9cf8b11e7662deb460260cf062980cd84b87a1d0457132060ab9d44e0a5f4";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A version of dict that keeps keys in insertion resp. sorted order";
     homepage = "https://sourceforge.net/projects/ruamel-ordereddict/";
     license = licenses.mit;

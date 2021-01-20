@@ -1,27 +1,16 @@
-{ stdenv, fetchFromGitHub, coq }:
+{ lib, mkCoqDerivation, coq, callPackage }:
 
-let mkContrib = repo: revs: param:
-  stdenv.mkDerivation rec {
-    name = "coq${coq.coq-version}-${repo}-${version}";
-    version = param.version;
-
-    src = fetchFromGitHub {
+with lib; let mkContrib = pname: coqs: param:
+  let contribVersion = {version ? null}: mkCoqDerivation ({
+      inherit pname version;
       owner = "coq-contribs";
-      repo = repo;
-      rev = param.rev;
-      sha256 = param.sha256;
-    };
-
-    buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
-
-    installFlags =
-       stdenv.lib.optional (stdenv.lib.versionAtLeast coq.coq-version "8.9") "-f Makefile.coq"
-    ++ [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
-
-    passthru = {
-      compatibleCoqVersions = v: builtins.elem v revs;
-    };
-  }; in
+      mlPlugin = true;
+    } // optionalAttrs (builtins.elem coq.coq-version coqs) ({
+      defaultVersion = param.version;
+      release = { "${param.version}" = { inherit (param) rev sha256; }; };
+    } // (removeAttrs param [ "version" "rev" "sha256" ]))
+  ); in
+  makeOverridable contribVersion {} ; in
 {
   aac-tactics = mkContrib "aac-tactics" [ "8.7" "8.8" ] {
     "8.7" = {
@@ -353,10 +342,10 @@ let mkContrib = repo: revs: param:
     sha256 = "02jcp74i5icv92xkq3mcx91786d56622ghgnjiz3b51wfqs6ldic";
   };
 
-  firing-squad = mkContrib "firing-squad" [ "8.6" "8.7" ] {
-    version = "v8.5.0-9-gbe728cd";
-    rev = "be728cddbee58088809b51c25425d2a4bdf9b823";
-    sha256 = "0i0v5x6lncjasxk22pras3644ff026q8jai45dbimf2fz73312c9";
+  firing-squad = mkContrib "firing-squad" [ "8.6" ] {
+      version = "v8.5.0-9-gbe728cd";
+      rev = "be728cddbee58088809b51c25425d2a4bdf9b823";
+      sha256 = "0i0v5x6lncjasxk22pras3644ff026q8jai45dbimf2fz73312c9";
   };
 
   float = mkContrib "float" [ "8.7" ] {
@@ -525,6 +514,7 @@ let mkContrib = repo: revs: param:
     version = "v8.6.0";
     rev = "6279ed83244dc4aec2e23ffb4c87e3f10a50326d";
     sha256 = "1yvlnqwa7ka4a0yg0j7zrzvayhsm1shvsjjawjv552sxc9519aag";
+    installFlags = [ "COQBIN=$(out)/lib/coq/${coq.coq-version}/bin/" ]; # hack
   };
 
   ipc = mkContrib "ipc" [ "8.6" "8.7" ] {
@@ -633,12 +623,6 @@ let mkContrib = repo: revs: param:
     version = "v8.5.0-7-ge54c9a8";
     rev = "e54c9a86df5cb90ef6ea04d3753273186bb2d906";
     sha256 = "19csz50846gvfwmhhc37nmlvf70g53cpb1kpmcnjlj82y8r63ajz";
-  };
-
-  math-classes = mkContrib "math-classes" [ "8.6" ] {
-    version = "v8.6.0-19-ge2c6453";
-    rev = "e2c6453e2f6cc1b7f0e1371675f4a76b19fab2c7";
-    sha256 = "0das56i8wi7v0s30lbadjlfqas1jlq0mm13yxq6s7zqqbdl5r0bk";
   };
 
   maths = mkContrib "maths" [ "8.5" "8.6" "8.7" ] {

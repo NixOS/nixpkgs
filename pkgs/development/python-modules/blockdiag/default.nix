@@ -1,30 +1,28 @@
-{ stdenv, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
-, pillow, webcolors, funcparserlib
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub
+, setuptools, funcparserlib, pillow, webcolors, reportlab, docutils
 }:
 
 buildPythonPackage rec {
   pname = "blockdiag";
-  version = "1.5.3";
+  version = "2.0.1";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/blockdiag/blockdiag/get/${version}.tar.bz2";
-    sha256 = "0r0qbmv0ijnqidsgm2rqs162y9aixmnkmzgnzgk52hiy7ydm4k8f";
+  src = fetchFromGitHub {
+    owner = "blockdiag";
+    repo = "blockdiag";
+    rev = version;
+    sha256 = "1cvcl66kf4wdh2n4fdk37zk59lp58wd2fhf84n7pbn0lilyksk5x";
   };
 
-  buildInputs = [ pep8 nose unittest2 docutils ];
+  propagatedBuildInputs = [ setuptools funcparserlib pillow webcolors reportlab docutils ];
 
-  propagatedBuildInputs = [ pillow webcolors funcparserlib ];
-
-  # One test fails:
-  #   ...
-  #   FAIL: test_auto_font_detection (blockdiag.tests.test_boot_params.TestBootParams)
+  # require network and fail
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor SuperSandro2000 ];
   };
 }

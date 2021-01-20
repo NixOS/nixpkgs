@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.confluent.io/";
     description = "Confluent event streaming platform based on Apache Kafka";
     license = licenses.asl20;

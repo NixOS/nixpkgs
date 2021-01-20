@@ -1,4 +1,4 @@
-{ stdenv, cabextract, fetchurl, fetchFromGitHub, libusb1 }:
+{ lib, stdenv, cabextract, fetchurl, fetchFromGitHub, libusb1 }:
 
 stdenv.mkDerivation rec {
   pname = "xow";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cabextract ];
   buildInputs = [ libusb1 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/medusalix/xow";
     description = "Linux driver for the Xbox One wireless dongle";
     license = licenses.gpl2Plus;

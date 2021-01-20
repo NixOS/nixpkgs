@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig }:
+{ stdenv, fetchFromGitHub, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libebml";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "052v4mjynndj9xgfl4lmlsnx9ai0pah0kjyr5fm34l7gj8vhc5s7";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=YES"

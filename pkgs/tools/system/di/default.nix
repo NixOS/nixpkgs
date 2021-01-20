@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "di";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALL_DIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Disk information utility; displays everything 'df' does and more";
     homepage = "https://gentoo.com/di/";
     license = licenses.zlib;

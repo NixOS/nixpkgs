@@ -30,14 +30,13 @@ let
   src = fetchFromBitbucket {
     owner = "multicoreware";
     repo = "x265_git";
-    rev = "${version}";
+    rev = version;
     sha256 = "1jzgv2hxhcwmsdf6sbgyzm88a46dp09ll1fqj92g9vckvh9a7dsn";
   };
 
   buildLib = has12Bit: stdenv.mkDerivation rec {
     name = "libx265-${if has12Bit then "12" else "10"}-${version}";
     inherit src;
-    enableParallelBuilding = true;
 
     postPatch = ''
       sed -i 's/unknown/${version}/g' source/cmake/version.cmake
@@ -68,8 +67,6 @@ stdenv.mkDerivation rec {
   pname = "x265";
   inherit version src;
 
-  enableParallelBuilding = true;
-
   postPatch = ''
     sed -i 's/unknown/${version}/g' source/cmake/version.cmake
     sed -i 's/0.0/${version}/g' source/cmake/version.cmake
@@ -79,7 +76,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_SHARED=ON"
     "-DHIGH_BIT_DEPTH=OFF"
     "-DENABLE_HDR10_PLUS=OFF"
-  ] ++ stdenv.lib.optionals is64bit [
+  ] ++ stdenv.lib.optionals (is64bit && !(stdenv.isAarch64 && stdenv.isLinux)) [
     "-DEXTRA_LIB=${libx265-10}/lib/libx265.a;${libx265-12}/lib/libx265.a"
     "-DLINKED_10BIT=ON"
     "-DLINKED_12BIT=ON"

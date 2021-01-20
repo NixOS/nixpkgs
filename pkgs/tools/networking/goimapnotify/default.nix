@@ -9,7 +9,7 @@ buildGoPackage rec {
   src = fetchFromGitLab {
     owner = "shackra";
     repo = "goimapnotify";
-    rev = "${version}";
+    rev = version;
     sha256 = "1d42gd3m2rkvy985d181dbcm5i3f7xsg2z8z6s4bpvw24pfnzs42";
   };
 

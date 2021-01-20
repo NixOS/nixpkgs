@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, polkit, glib, qtbase }:
+{ stdenv, fetchurl, cmake, pkg-config, polkit, glib, qtbase }:
 
 with stdenv.lib;
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1ip78x20hjqvm08kxhp6gb8hf6k5n6sxyx6kk2yvvq53djzh7yv7";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   propagatedBuildInputs = [ polkit glib qtbase ];
 

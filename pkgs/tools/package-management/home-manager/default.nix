@@ -1,7 +1,7 @@
 #Adapted from
 #https://github.com/rycee/home-manager/blob/2c07829be2bcae55e04997b19719ff902a44016d/home-manager/default.nix
 
-{ bash, coreutils, findutils, gnused, less, stdenv, makeWrapper, fetchFromGitHub }:
+{ bash, coreutils, findutils, gnused, less, lib, stdenv, makeWrapper, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       "$out/share/bash-completion/completions/home-manager"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A user environment configurator";
     homepage = "https://rycee.gitlab.io/home-manager/";
     platforms = platforms.unix;

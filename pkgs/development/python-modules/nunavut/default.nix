@@ -2,12 +2,12 @@
 
  buildPythonPackage rec {
   pname = "nunavut";
-  version = "0.3.6";
+  version = "0.6.2";
   disabled = pythonOlder "3.5"; # only python>=3.5 is supported
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "434edabdc431b9af719896e0de4bd0deead657777d1d8aa4e3cd0dcdff6298bc";
+    sha256 = "48b6802722d78542ca5d7bbc0d6aa9b0a31e1be0070c47b41527f227eb6a1443";
   };
 
   propagatedBuildInputs = [

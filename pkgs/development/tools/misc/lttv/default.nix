@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk2, popt, babeltrace }:
+{ stdenv, fetchurl, pkg-config, glib, gtk2, popt, babeltrace }:
 
 stdenv.mkDerivation rec {
   name = "lttv-1.5";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1faldxnh9dld5k0vxckwpqw241ya1r2zv286l6rpgqr500zqw7r1";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib gtk2 popt babeltrace ];
 
   meta = with stdenv.lib; {

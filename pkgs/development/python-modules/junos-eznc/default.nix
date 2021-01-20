@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , six
@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "521659fe94da796897abc16773c3d84fa44d3e1f5386c71fbaef44cb80159855";
+    sha256 = "bf036d0af9ee5c5e4f517cb5fc902fe891fa120e18f459805862c53d4a97193a";
   };
 
   checkInputs = [ nose ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     nosetests -v --with-coverage --cover-package=jnpr.junos --cover-inclusive -a unit
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.github.com/Juniper/py-junos-eznc";
     description = "Junos 'EZ' automation for non-programmers";
     license = licenses.asl20;

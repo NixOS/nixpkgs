@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , isPy3k
-, stdenv
+, lib, stdenv
 , numpy
 , wxPython
 , matplotlib
@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "pyspread";
-  version = "1.99.2";
+  version = "1.99.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "117268cbeb225e0aca4c59381b7bdf5333bf95ca85c1db410a326a887a74f3da";
+    sha256 = "d396c2f94bf1ef6140877ab19205e6f2375bfe01d1bf50ff33bb63384744dd78";
   };
 
   propagatedBuildInputs = [ numpy wxPython matplotlib pycairo python-gnupg xlrd xlwt jedi pyenchant basemap pygtk ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     cp $desktopItem/share/applications/* $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pyspread is a non-traditional spreadsheet application that is based on and written in the programming language Python";
     homepage = "https://manns.github.io/pyspread/";
     license = licenses.gpl3;

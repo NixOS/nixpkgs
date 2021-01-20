@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation {
   name = "sysklogd-1.5.1";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   preInstall = "mkdir -p $out/share/man/man5/ $out/share/man/man8/ $out/sbin";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A system logging daemon";
     platforms = platforms.linux;
     license = licenses.gpl2;

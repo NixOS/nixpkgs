@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , openssl_1_0_2
 , zlib
 , libssh
 , cmake
 , perl
-, pkgconfig
+, pkg-config
 , rustPlatform
 , curl
 , libiconv
@@ -30,7 +30,7 @@ buildRustPackage rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     perl
   ];
 
@@ -38,14 +38,14 @@ buildRustPackage rec {
     openssl_1_0_2
     libssh
     zlib
-  ] ++ stdenv.lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.isDarwin) [
     curl
     libiconv
     CoreFoundation
     Security
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Decentralized Issue Tracking for git";
     # This has not had a release in years and its cargo vendored dependencies

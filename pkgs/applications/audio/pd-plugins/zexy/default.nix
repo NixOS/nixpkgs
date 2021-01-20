@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, puredata }:
+{ lib, stdenv, fetchurl, autoconf, automake, puredata }:
 
 stdenv.mkDerivation rec {
   pname = "zexy";
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The swiss army knife for puredata";
     homepage = "http://puredata.info/downloads/zexy";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

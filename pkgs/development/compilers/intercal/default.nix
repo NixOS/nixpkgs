@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, pkgconfig
+, pkg-config
 , bison, flex
 , makeWrapper }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-  [ pkgconfig bison flex makeWrapper ];
+  [ pkg-config bison flex makeWrapper ];
 
   # Intercal invokes gcc, so we need an explicit PATH
   postInstall = ''

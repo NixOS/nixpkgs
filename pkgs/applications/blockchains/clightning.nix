@@ -1,19 +1,19 @@
-{ stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
+{ lib, stdenv, python3, pkg-config, which, libtool, autoconf, automake,
   autogen, sqlite, gmp, zlib, fetchurl, unzip, fetchpatch, gettext }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "4923e2fa001cfc2403d1bed368710499d5def322e6384b8eea2bd39d3351a417";
+    sha256 = "022fw6rbn0chg0432h9q05w8qnys0hd9hf1qm2qlnnmamxw4dyfy";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which unzip gettext ];
+  nativeBuildInputs = [ autoconf autogen automake libtool pkg-config which unzip gettext ];
   buildInputs =
     let py3 = python3.withPackages (p: [ p.Mako ]);
     in [ sqlite gmp zlib py3 ];

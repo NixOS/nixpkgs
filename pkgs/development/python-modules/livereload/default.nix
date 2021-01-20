@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "livereload";
-  version = "2.6.1";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "python-livereload";
-    rev = "v${version}";
-    sha256 = "15v2a0af897ijnsfjh2r8f7l5zi5i2jdm6z0xzlyyvp9pxd6mpfm";
+    rev = version;
+    sha256 = "1alp83h3l3771l915jqa1ylyllad7wxnmblayan0z0zj37jkp9n7";
   };
 
   buildInputs = [ django ];

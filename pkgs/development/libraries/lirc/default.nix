@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, help2man, python3,
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, help2man, python3,
   alsaLib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     touch lib/lirc/input_map.inc
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig help2man
+  nativeBuildInputs = [ autoreconfHook pkg-config help2man
     (python3.withPackages (p: with p; [ pyyaml setuptools ])) ];
 
   buildInputs = [ alsaLib xlibsWrapper libxslt systemd libusb-compat-0_1 libftdi1 ];

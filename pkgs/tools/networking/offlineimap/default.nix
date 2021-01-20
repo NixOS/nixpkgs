@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages,
+{ lib, stdenv, fetchFromGitHub, python2Packages,
   asciidoc, cacert, libxml2, libxslt, docbook_xsl }:
 
 python2Packages.buildPythonApplication rec {
@@ -34,7 +34,7 @@ python2Packages.buildPythonApplication rec {
   meta = {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ endocrimes ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ endocrimes ];
   };
 }

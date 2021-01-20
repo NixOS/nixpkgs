@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, asciidoc, libxml2, docbook_xml_dtd_45, libxslt
+{ lib, stdenv, fetchurl, asciidoc, libxml2, docbook_xml_dtd_45, libxslt
 , docbook_xsl, diffutils, coreutils, gnugrep, gnused
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
         -i "$out/bin/autorevision"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extracts revision metadata from your VCS repository";
     homepage = "https://autorevision.github.io/";
     license = licenses.mit;

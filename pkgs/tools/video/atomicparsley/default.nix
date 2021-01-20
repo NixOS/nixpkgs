@@ -1,39 +1,31 @@
-{ stdenv, fetchhg, autoreconfHook, zlib, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, cmake, zlib, Cocoa }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "atomicparsley";
-  version = "0.9.6";
+  version = "20210114.184825.1dbe1be";
 
-  src = fetchhg {
-    url = "https://bitbucket.org/wez/atomicparsley";
-    sha256 = "05n4kbn91ps52h3wi1qb2jwygjsc01qzx4lgkv5mvwl5i49rj8fm";
+  src = fetchFromGitHub {
+    owner = "wez";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-dyrfr3bsRzEWaAr9K+7SchFVl63cZawyIjmstOI9e5I=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ zlib ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+                ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
-  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # AC_FUNC_MALLOC is broken on cross builds.
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
-  ];
+  installPhase = ''
+    runHook preInstall
+    install -D AtomicParsley $out/bin/AtomicParsley
+    runHook postInstall
+  '';
 
-  installPhase = "install -D AtomicParsley $out/bin/AtomicParsley";
-
-  meta = with stdenv.lib; {
-    description = ''
-      A lightweight command line program for reading, parsing and
-      setting metadata into MPEG-4 files
-    '';
-
-    longDescription = ''
-      This is a maintained fork of the original AtomicParsley.
-    '';
-
-    homepage = "https://bitbucket.org/wez/atomicparsley";
-    license = licenses.gpl2;
+  meta = with lib; {
+    description = "A CLI program for reading, parsing and setting metadata into MPEG-4 files";
+    homepage = "https://github.com/wez/atomicparsley";
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pjones ];
   };

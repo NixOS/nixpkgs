@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, isPy3k
 , lml
 , pyexcel-io
 , texttable
@@ -10,12 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pyexcel";
-  version = "0.6.4";
-  disabled = isPy27;
+  version = "0.6.6";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "pPNYnimHhW7SL6X6OLwagZoadTD7IdUSbO7vAqQPQu8=";
+    sha256 = "39b0bb8f033d9b5523b126cf5a5259d1990ea82b8a23c8eab7aa5e23116803df";
   };
 
   propagatedBuildInputs = [

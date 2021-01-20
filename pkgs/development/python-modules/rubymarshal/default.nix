@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, hypothesis, isPy3k }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, hypothesis, isPy3k }:
 
 buildPythonPackage rec {
   pname = "rubymarshal";
@@ -12,7 +12,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ hypothesis ];
 
-  meta = with stdenv.lib; {
+  # pypi doesn't distribute tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "rubymarshal" ];
+
+  meta = with lib; {
     homepage = "https://github.com/d9pouces/RubyMarshal/";
     description = "Read and write Ruby-marshalled data";
     license = licenses.wtfpl;

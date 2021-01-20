@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python3Packages
 , fetchFromGitHub
 , systemd
@@ -6,7 +6,7 @@
 
 let
   python = python3Packages.python;
-  version = "1.10.1";
+  version = "1.11";
 in
   stdenv.mkDerivation {
     pname = "autorandr";
@@ -21,6 +21,8 @@ in
         --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
     '';
 
+    outputs = [ "out" "man" ];
+
     installPhase = ''
       runHook preInstall
       make install TARGETS='autorandr' PREFIX=$out
@@ -28,6 +30,8 @@ in
       make install TARGETS='bash_completion' DESTDIR=$out/share/bash-completion/completions
 
       make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
+
+      make install TARGETS='manpage' PREFIX=$man
 
       ${if systemd != null then ''
         make install TARGETS='systemd udev' PREFIX=$out DESTDIR=$out \
@@ -49,10 +53,10 @@ in
       owner = "phillipberndt";
       repo = "autorandr";
       rev = version;
-      sha256 = "0msw9b1hdy3gbq9w5d04mfizhyirz1c648x84mlcbzl8salm7vpg";
+      sha256 = "0rmnqk2bi6bbd2if1rll37mlzlqxzmnazfffdhcpzskxwyaj4yn5";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://github.com/phillipberndt/autorandr/";
       description = "Automatically select a display configuration based on connected devices";
       license = licenses.gpl3Plus;

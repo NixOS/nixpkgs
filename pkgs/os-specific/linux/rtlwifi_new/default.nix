@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "The newest Realtek rtlwifi codes";
     inherit (src.meta) homepage;
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ tvorog ];
     priority = -1;

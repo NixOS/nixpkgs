@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0a3yrig78plzjbazfqcfrzqhnw17xd0dcayvp4z4kp415kgs2a3s";
   };
 
-  buildInputs = [ cmake ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description = "A blocking, shuffling and loss-less compression library";

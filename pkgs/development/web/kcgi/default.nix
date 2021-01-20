@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, fetchFromGitHub, libbsd }:
+{ lib, stdenv, pkg-config, fetchFromGitHub, libbsd }:
 
 stdenv.mkDerivation rec {
   pname = "kcgi";
@@ -14,15 +14,15 @@ stdenv.mkDerivation rec {
   patchPhase = ''substituteInPlace configure \
     --replace /usr/local /
   '';
-  
-  nativeBuildInputs = [ pkgconfig ];
+
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ] ++ stdenv.lib.optionals stdenv.isLinux [ libbsd ] ;
 
   dontAddPrefix = true;
 
   installFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://kristaps.bsd.lv/kcgi";
     description = "Minimal CGI and FastCGI library for C/C++";
     license = licenses.isc;

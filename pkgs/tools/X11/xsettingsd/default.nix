@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, scons, pkgconfig, libX11 }:
+{ lib, stdenv, fetchFromGitHub, scons, pkg-config, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "xsettingsd";
@@ -15,20 +15,20 @@ stdenv.mkDerivation rec {
     ./SConstruct.patch
   ];
 
-  nativeBuildInputs = [ scons pkgconfig ];
+  nativeBuildInputs = [ scons pkg-config ];
 
   buildInputs = [ libX11 ];
 
   buildPhase = ''
     scons -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
   '';
-  
+
   installPhase = ''
     install -D -t "$out"/bin xsettingsd dump_xsettings
     install -D -t "$out"/usr/share/man/man1 xsettingsd.1 dump_xsettings.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides settings to X11 applications via the XSETTINGS specification";
     homepage = "https://github.com/derat/xsettingsd";
     license = licenses.bsd3;

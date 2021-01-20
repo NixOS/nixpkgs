@@ -39,9 +39,9 @@ import ./make-test-python.nix ({ pkgs, ...}: {
     machine.wait_for_unit("multi-user.target")
     machine.wait_for_unit("haproxy.service")
     machine.wait_for_unit("httpd.service")
-    assert "We are all good!" in machine.succeed("curl -k http://localhost:80/index.txt")
+    assert "We are all good!" in machine.succeed("curl -fk http://localhost:80/index.txt")
     assert "haproxy_process_pool_allocated_bytes" in machine.succeed(
-        "curl -k http://localhost:80/metrics"
+        "curl -fk http://localhost:80/metrics"
     )
 
     with subtest("reload"):
@@ -49,7 +49,7 @@ import ./make-test-python.nix ({ pkgs, ...}: {
         # wait some time to ensure the following request hits the reloaded haproxy
         machine.sleep(5)
         assert "We are all good!" in machine.succeed(
-            "curl -k http://localhost:80/index.txt"
+            "curl -fk http://localhost:80/index.txt"
         )
   '';
 })

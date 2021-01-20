@@ -59,6 +59,6 @@ in stdenv.mkDerivation {
     homepage = "https://gn.googlesource.com/gn";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ stesie matthewbauer ];
+    maintainers = with maintainers; [ stesie matthewbauer primeos ];
   };
 }

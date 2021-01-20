@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, sqlite, expat, zlib, proj, geos, libspatialite, readosm }:
+{ stdenv, fetchurl, pkg-config, sqlite, expat, zlib, proj, geos, libspatialite, readosm }:
 
 stdenv.mkDerivation rec {
   name = "spatialite-tools-4.1.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "14aqmhvab63ydbb82fglsbig7jw1wmci8jjvci07aavdhvh1pyrv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ sqlite expat zlib proj geos libspatialite readosm ];
 
   configureFlags = [ "--disable-freexl" ];

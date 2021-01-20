@@ -1,4 +1,4 @@
-{ stdenv, lib, autoconf213, fetchurl, fetchpatch, pkgconfig, nspr, perl, python2, zip }:
+{ stdenv, lib, autoconf213, fetchurl, fetchpatch, pkg-config, nspr, perl, python2, zip }:
 
 stdenv.mkDerivation {
   pname = "spidermonkey";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ nspr ];
 
-  nativeBuildInputs = [ pkgconfig ] ++ lib.optional stdenv.isAarch32 autoconf213;
+  nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isAarch32 autoconf213;
   buildInputs = [ perl python2 zip ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";

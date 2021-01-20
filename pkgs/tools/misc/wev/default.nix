@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pkg-config, scdoc, wayland
 , wayland-protocols, libxkbcommon
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wayland event viewer";
     longDescription = ''
       This is a tool for debugging events on a Wayland window, analagous to the

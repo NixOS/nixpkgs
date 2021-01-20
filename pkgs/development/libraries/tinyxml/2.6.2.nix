@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
   };
 
   patches = [
-    # add pkgconfig file
+    # add pkg-config file
     ./2.6.2-add-pkgconfig.patch
 
     # https://sourceforge.net/tracker/index.php?func=detail&aid=3031828&group_id=13559&atid=313559

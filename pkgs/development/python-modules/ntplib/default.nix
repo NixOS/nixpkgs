@@ -1,21 +1,21 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "ntplib";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c4621b64d50be9461d9bd9a71ba0b4af06fbbf818bbd483752d95c1a4e273ede";
+    sha256 = "9fc99f71b14641b31698e4ced3d5f974eec225bfbae089ebe44b5808ba890f71";
   };
 
   # Require networking
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python NTP library";
     homepage = "http://code.google.com/p/ntplib/";
     license = licenses.mit;

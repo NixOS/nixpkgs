@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchurl, nixosTests }:
+{ lib, stdenv, buildGoModule, fetchurl, nixosTests }:
 
 buildGoModule rec {
   pname = "ipfs";
@@ -35,7 +35,7 @@ buildGoModule rec {
       --replace /usr/bin/ipfs $out/bin/ipfs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A global, versioned, peer-to-peer filesystem";
     homepage = "https://ipfs.io/";
     license = licenses.mit;

@@ -1,19 +1,19 @@
-{ stdenv, lib, fetchurl, pkgconfig, meson, ninja, libpthreadstubs, libpciaccess
+{ stdenv, lib, fetchurl, pkg-config, meson, ninja, libpthreadstubs, libpciaccess
 , withValgrind ? valgrind-light.meta.available, valgrind-light, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.102";
+  version = "2.4.103";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0nx0bd9dhymdsd99v4ifib77yjirkvkxf5hzdkbr7qr8dhrzkjwb";
+    sha256 = "08h2nnf4w96b4ql7485mvjgbbsb8rwc0qa93fdm1cq34pbyszq1z";
   };
 
   outputs = [ "out" "dev" "bin" ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [ libpthreadstubs libpciaccess ]
     ++ lib.optional withValgrind valgrind-light;
 

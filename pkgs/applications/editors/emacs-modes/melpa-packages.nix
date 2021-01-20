@@ -6,8 +6,8 @@ To update the list of packages from MELPA,
 
 1. Run ./update-melpa
 2. Check for evaluation errors:
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackages.melpaStablePackages
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackages.melpaPackages
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacs.pkgs..melpaStablePackages
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacs.pkgs..melpaPackages
 3. `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
 
 ## Update from overlay
@@ -143,13 +143,8 @@ let
 
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
-        gnuplot = super.gnuplot.overrideAttrs (old: {
-          nativeBuildInputs =
-            (old.nativeBuildInputs or [ ]) ++ [ pkgs.autoreconfHook ];
-        });
-
         pdf-tools = super.pdf-tools.overrideAttrs (old: {
-          nativeBuildInputs = [ external.pkgconfig ];
+          nativeBuildInputs = [ external.pkg-config ];
           buildInputs = with external; old.buildInputs ++ [ autoconf automake libpng zlib poppler ];
           preBuild = "make server/epdfinfo";
           recipe = pkgs.writeText "recipe" ''
@@ -252,12 +247,6 @@ let
             (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
         });
 
-        magit-stgit = super.magit-stgit.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
-        });
-
         magit-tbdiff = super.magit-tbdiff.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
@@ -352,6 +341,7 @@ let
         # Telega has a server portion for it's network protocol
         telega = super.telega.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
+          nativeBuildInputs = [ external.pkg-config ];
 
           postBuild = ''
             cd source/server
@@ -384,7 +374,7 @@ let
           nativeBuildInputs = [
             external.autoconf
             external.automake
-            external.pkgconfig
+            external.pkg-config
             external.libtool
             (external.zeromq.override { enableDrafts = true; })
           ];
@@ -427,19 +417,34 @@ let
         initsplit = markBroken super.initsplit;
 
         # upstream issue: missing file header
+        instapaper = markBroken super.instapaper;
+
+        # upstream issue: missing file header
         jsfmt = markBroken super.jsfmt;
 
         # upstream issue: missing file header
         maxframe = markBroken super.maxframe;
 
         # upstream issue: doesn't build
+        magit-stgit = markBroken super.magit-stgit;
+
+        # upstream issue: missing file header
+        melancholy-theme = markBroken super.melancholy-theme;
+
+        # upstream issue: doesn't build
         eterm-256color = markBroken super.eterm-256color;
+
+        # upstream issue: doesn't build
+        per-buffer-theme = markBroken super.per-buffer-theme;
 
         # upstream issue: missing file header
         qiita = markBroken super.qiita;
 
         # upstream issue: missing file header
         speech-tagger = markBroken super.speech-tagger;
+
+        # upstream issue: missing file header
+        sql-presto = markBroken super.sql-presto;
 
         # upstream issue: missing file header
         textmate = markBroken super.textmate;
@@ -574,7 +579,8 @@ let
         };
 
         vterm = super.vterm.overrideAttrs (old: {
-          buildInputs = old.buildInputs ++ [ self.emacs pkgs.cmake pkgs.libvterm-neovim ];
+          nativeBuildInputs = [ pkgs.cmake ];
+          buildInputs = old.buildInputs ++ [ self.emacs pkgs.libvterm-neovim ];
           cmakeFlags = [
             "-DEMACS_SOURCE=${self.emacs.src}"
             "-DUSE_SYSTEM_LIBVTERM=ON"

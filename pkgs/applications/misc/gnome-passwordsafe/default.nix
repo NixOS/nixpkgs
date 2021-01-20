@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , meson
 , ninja
 , pkg-config
 , gettext
 , fetchFromGitLab
 , python3
-, libhandy
+, libhandy_0
 , libpwquality
 , wrapGAppsHook
 , gtk3
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
     glib
     gdk-pixbuf
-    libhandy
+    libhandy_0
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -68,7 +68,7 @@ python3.pkgs.buildPythonApplication rec {
     libpwquality # using the python bindings
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     broken = stdenv.hostPlatform.isStatic; # libpwquality doesn't provide bindings when static
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";
     homepage = "https://gitlab.gnome.org/World/PasswordSafe";

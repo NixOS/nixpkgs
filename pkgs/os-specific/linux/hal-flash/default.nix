@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, dbus, glib, libtool, pkgconfig, udisks2 }:
+{ lib, stdenv, fetchurl, autoconf, automake, dbus, glib, libtool, pkg-config, udisks2 }:
 
 stdenv.mkDerivation {
   name = "hal-flash-0.3.3";
@@ -8,12 +8,12 @@ stdenv.mkDerivation {
     sha256 = "0dw9bx190mrh0dycw4rfvfmwwvh2sgypffr99nfnr36b38jrd6y6";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake dbus glib libtool udisks2 ];
 
   preConfigure = "libtoolize && aclocal && autoconf && automake --add-missing";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cshorler/hal-flash";
     description = "libhal stub library to satisfy the Flash Player DRM requirements";
     longDescription =

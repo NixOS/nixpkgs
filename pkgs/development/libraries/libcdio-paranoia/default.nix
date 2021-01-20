@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libcdio, pkgconfig,
+{ stdenv, fetchFromGitHub, autoreconfHook, libcdio, pkg-config,
   libiconv, IOKit, DiskArbitration}:
 
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1wjgmmaca4baw7k5c3vdap9hnjc49ciagi5kvpvync3aqfmdvkha";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libcdio ] ++
     stdenv.lib.optionals stdenv.isDarwin [ libiconv IOKit DiskArbitration ];
 

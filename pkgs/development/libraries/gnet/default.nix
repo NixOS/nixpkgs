@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, pkgconfig, autoconf, automake, glib, libtool }:
+{stdenv, fetchFromGitHub, pkg-config, autoconf, automake, glib, libtool }:
 
 stdenv.mkDerivation {
   name = "gnet-2.0.8";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1cy78kglzi235md964ikvm0rg801bx0yk9ya8zavndjnaarzqq87";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake glib libtool ];
 
   preConfigure = "./autogen.sh";

@@ -1,5 +1,5 @@
-{ stdenv, fetchzip,
-  pkgconfig, bmake,
+{ lib, stdenv, fetchzip,
+  pkg-config, bmake,
   cairo, glib, libevdev, libinput, libxkbcommon, linux-pam, pango, pixman,
   libucl, wayland, wayland-protocols, wlroots,
   features ? {
@@ -12,7 +12,7 @@
 
 let
   pname = "hikari";
-  version = "2.1.2";
+  version = "2.2.2";
 in
 
 stdenv.mkDerivation {
@@ -20,10 +20,10 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://hikari.acmelabs.space/releases/${pname}-${version}.tar.gz";
-    sha256 = "1qzbwc8dgsvp5jb4faapcrg9npsl11gq8jvhbbk2h7hj52c5lgmv";
+    sha256 = "0sln1n5f67i3vxkybfi6xhzplb45djqyg272vqkv64m72rmm8875";
   };
 
-  nativeBuildInputs = [ pkgconfig bmake ];
+  nativeBuildInputs = [ pkg-config bmake ];
 
   buildInputs = [
     cairo
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   # Must replace GNU Make by bmake
-  buildPhase = with stdenv.lib; concatStringsSep " " (
+  buildPhase = with lib; concatStringsSep " " (
     [ "bmake" "-j$NIX_BUILD_CORES" "PREFIX=$out" ]
     ++ optional stdenv.isLinux "WITH_POSIX_C_SOURCE=YES"
     ++ mapAttrsToList (feat: enabled:
@@ -65,7 +65,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stacking Wayland compositor which is actively developed on FreeBSD but also supports Linux";
     homepage    = "https://hikari.acmelabs.space";
     license     = licenses.bsd2;

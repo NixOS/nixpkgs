@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab }:
+{ lib, stdenv, fetchFromGitLab }:
 
 stdenv.mkDerivation {
   name = "case.kak";
@@ -16,8 +16,8 @@ stdenv.mkDerivation {
     cp -r rc/case.kak $out/share/kak/autoload/plugins
   '';
 
-  meta = with stdenv.lib; {
-    description = "Ease navigation between opened buffers in Kakoune";
+  meta = with lib; {
+    description = "Case convention conversion for Kakoune";
     homepage = "https://gitlab.com/FlyingWombat/case.kak";
     license = licenses.unlicense;
     maintainers = with maintainers; [ eraserhd ];

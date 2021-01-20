@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, fetchurl, pkg-config
 
 # Optional Dependencies
 , openssl ? null, zlib ? null
@@ -8,7 +8,7 @@
 , enableAsioLib ? false, boost ? null
 , enableGetAssets ? false, libxml2 ? null
 , enableJemalloc ? false, jemalloc ? null
-, enableApp ? !stdenv.hostPlatform.isWindows
+, enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic
 , enablePython ? false, python ? null, cython ? null, ncurses ? null, setuptools ? null
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" "dev" "lib" ]
     ++ optional enablePython "python";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
     ++ optional enableLibEv libev
     ++ [ zlib ]

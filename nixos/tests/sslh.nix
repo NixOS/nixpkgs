@@ -78,6 +78,6 @@ import ./make-test-python.nix {
         server.succeed(f"grep '{ip}' /tmp/foo{arg}")
 
         # check that http through sslh works
-        assert client.succeed(f"curl {arg} http://server:443").strip() == "hello world"
+        assert client.succeed(f"curl -f {arg} http://server:443").strip() == "hello world"
   '';
 }

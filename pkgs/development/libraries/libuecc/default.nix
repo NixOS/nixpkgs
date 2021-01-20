@@ -10,9 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sm05aql75sh13ykgsv3ns4x4zzw9lvzid6misd22gfgf6r9n5fs";
   };
 
-  buildInputs = [ cmake ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description = "Very small Elliptic Curve Cryptography library";

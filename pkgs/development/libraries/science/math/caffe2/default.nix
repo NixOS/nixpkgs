@@ -126,7 +126,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false;
-  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://caffe2.ai/";

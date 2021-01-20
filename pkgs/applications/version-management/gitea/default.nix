@@ -1,18 +1,18 @@
-{ stdenv, buildGoPackage, fetchurl, makeWrapper
+{ lib, stdenv, buildGoPackage, fetchurl, makeWrapper
 , git, bash, gzip, openssh, pam
 , sqliteSupport ? true
 , pamSupport ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 buildGoPackage rec {
   pname = "gitea";
-  version = "1.12.5";
+  version = "1.13.1";
 
   src = fetchurl {
     url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
-    sha256 = "03p4nn7xklqr43h4d98qvv2xc14ly7mbb90njnxljj64yh7svw4n";
+    sha256 = "sha256-tah7ciq+jkkROJq/V+yPRtWPuWaSnf5hKndjnifsQYc=";
   };
 
   unpackPhase = ''
@@ -37,7 +37,7 @@ buildGoPackage rec {
 
   preBuild = let
     tags = optional pamSupport "pam"
-        ++ optional sqliteSupport "sqlite";
+        ++ optional sqliteSupport "sqlite sqlite_unlock_notify";
     tagsString = concatStringsSep " " tags;
   in ''
     export buildFlagsArray=(

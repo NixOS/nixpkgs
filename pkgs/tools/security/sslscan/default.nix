@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "sslscan";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "CC=cc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tests SSL/TLS services and discover supported cipher suites";
     homepage = "https://github.com/rbsec/sslscan";
     license = licenses.gpl3;

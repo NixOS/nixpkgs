@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libsixel }:
+{ stdenv, fetchFromGitHub, pkg-config, libsixel }:
 
 stdenv.mkDerivation {
   pname = "SDL_sixel";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--enable-video-sixel" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsixel ];
 
   meta = with stdenv.lib; {

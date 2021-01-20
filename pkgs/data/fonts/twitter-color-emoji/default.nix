@@ -1,7 +1,7 @@
 # Based upon https://src.fedoraproject.org/rpms/twitter-twemoji-fonts
 # The main difference is that we use “Twitter Color Emoji” name (which is recognized by upstream fontconfig)
 
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cairo
 , imagemagick
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = let
-    templateSubstitutions = stdenv.lib.concatStringsSep "; " [
+    templateSubstitutions = lib.concatStringsSep "; " [
       ''s#Noto Color Emoji#Twitter Color Emoji#''
       ''s#NotoColorEmoji#TwitterColorEmoji#''
       ''s#Copyright .* Google Inc\.#Twitter, Inc and other contributors.#''
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     install -Dm644 TwitterColorEmoji.ttf $out/share/fonts/truetype/TwitterColorEmoji.ttf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Color emoji font with a flat visual style, designed and used by Twitter";
     longDescription = ''
       A bitmap color emoji font built from the Twitter Emoji for

@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, pkgconfig, libseccomp }:
+{ lib, stdenv, fetchurl, pkg-config, libseccomp }:
 
 let version = "0.6.7";
 in stdenv.mkDerivation {
   pname = "solo5";
   inherit version;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux) libseccomp;
 
   src = fetchurl {
@@ -45,7 +45,7 @@ in stdenv.mkDerivation {
     null;
 
   meta = with lib; {
-    description = "Sandboxed execution environment.";
+    description = "Sandboxed execution environment";
     homepage = "https://github.com/solo5/solo5";
     license = licenses.isc;
     maintainers = [ maintainers.ehmry ];

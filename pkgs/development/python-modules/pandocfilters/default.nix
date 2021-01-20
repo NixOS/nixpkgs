@@ -1,21 +1,21 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
-  version = "1.4.2";
+  version = "1.4.3";
   pname = "pandocfilters";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b3dd70e169bb5449e6bc6ff96aea89c5eea8c5f6ab5e207fc2f521a2cf4a0da9";
+    sha256 = "bc63fbb50534b4b1f8ebe1860889289e8af94a23bff7445259592df25a3906eb";
   };
 
   # No tests available
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A python module for writing pandoc filters, with a collection of examples";
     homepage = "https://github.com/jgm/pandocfilters";
     license = licenses.mit;

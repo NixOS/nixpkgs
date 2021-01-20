@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libusb1 }:
+{ stdenv, fetchurl, pkg-config, libusb1 }:
 
 stdenv.mkDerivation rec {
   pname = "usbredir";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libusb1 ];
 
   outputs = [ "out" "dev" ];

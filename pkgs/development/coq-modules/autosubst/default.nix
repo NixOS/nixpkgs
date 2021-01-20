@@ -1,33 +1,22 @@
-{ stdenv, fetchgit, coq, mathcomp }:
+{ lib, mkCoqDerivation, coq, mathcomp, version ? null }:
 
-stdenv.mkDerivation rec {
+with lib; mkCoqDerivation {
+  pname   = "autosubst";
+  owner   = "uds-psl";
+  inherit version;
+  defaultVersion = with versions;
+    if range "8.5" "8.7" coq.coq-version then "5b40a32e" else null;
 
-  name = "coq-autosubst-${coq.coq-version}-${version}";
-  version = "5b40a32e";
+  release."5b40a32e".rev    = "1c3bb3bbf5477e3b33533a0fc090399f45fe3034";
+  release."5b40a32e".sha256 = "1wqfzc9az85fvx71xxfii502jgc3mp0r3xwfb8vnb03vkk625ln0";
 
-  src = fetchgit {
-    url = "git://github.com/uds-psl/autosubst.git";
-    rev = "1c3bb3bbf5477e3b33533a0fc090399f45fe3034";
-    sha256 = "06pcjbngzwqyncvfwzz88j33wvdj9kizxyg5adp7y6186h8an341";
-  };
-
-  buildInputs = [ coq ];
-  propagatedBuildInputs = [ mathcomp ];
+  propagatedBuildInputs = [ mathcomp.ssreflect ];
 
   patches = [./0001-changes-to-work-with-Coq-8.6.patch];
 
-  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
-
-  meta = with stdenv.lib; {
+  meta = {
     homepage = "https://www.ps.uni-saarland.de/autosubst/";
     description = "Automation for de Bruijn syntax and substitution in Coq";
     maintainers = with maintainers; [ jwiegley ];
-    platforms = coq.meta.platforms;
   };
-
-  passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" ];
-  };
-
-
 }

@@ -518,6 +518,19 @@ in
         '';
       };
 
+      logFile = mkOption {
+        type = types.nullOr types.str;
+        default = "/dev/null";
+        example = "/var/log/Xorg.0.log";
+        description = ''
+          Controls the file Xorg logs to.
+
+          The default of <literal>/dev/null</literal> is set so that systemd services (like <literal>displayManagers</literal>) only log to the journal and don't create their own log files.
+
+          Setting this to <literal>null</literal> will not pass the <literal>-logfile</literal> argument to Xorg which allows it to log to its default logfile locations instead (see <literal>man Xorg</literal>). You probably only want this behaviour when running Xorg manually (e.g. via <literal>startx</literal>).
+        '';
+      };
+
       verbose = mkOption {
         type = types.nullOr types.int;
         default = 3;
@@ -678,25 +691,24 @@ in
 
         script = "${cfg.displayManager.job.execCmd}";
 
+        # Stop restarting if the display manager stops (crashes) 2 times
+        # in one minute. Starting X typically takes 3-4s.
+        startLimitIntervalSec = 30;
+        startLimitBurst = 3;
         serviceConfig = {
           Restart = "always";
           RestartSec = "200ms";
           SyslogIdentifier = "display-manager";
-          # Stop restarting if the display manager stops (crashes) 2 times
-          # in one minute. Starting X typically takes 3-4s.
-          StartLimitInterval = "30s";
-          StartLimitBurst = "3";
         };
       };
 
     services.xserver.displayManager.xserverArgs =
       [ "-config ${configFile}"
         "-xkbdir" "${cfg.xkbDir}"
-        # Log at the default verbosity level to stderr rather than /var/log/X.*.log.
-         "-logfile" "/dev/null"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
+        ++ optional (cfg.logFile != null) "-logfile ${toString cfg.logFile}"
         ++ optional (cfg.verbose != null) "-verbose ${toString cfg.verbose}"
         ++ optional (!cfg.enableTCP) "-nolisten tcp"
         ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"

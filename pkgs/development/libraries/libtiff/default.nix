@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 
-, pkgconfig
+, pkg-config
 
 , zlib
 , libjpeg
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ zlib libjpeg xz ]; #TODO: opengl support (bogus configure detection)
 

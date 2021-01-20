@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, autoreconfHook, gtk3, mate, hicolor-icon-theme }:
+{ lib, stdenv, fetchurl, autoreconfHook, gtk3, mate, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "mate-icon-theme-faenza";
   version = "1.20.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "000vr9cnbl2qlysf2gyg1lsjirqdzmwrnh6d3hyrsfc0r2vh4wna";
   };
 
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Faenza icon theme from MATE";
     homepage = "https://mate-desktop.org";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

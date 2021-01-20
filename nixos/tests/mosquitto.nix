@@ -7,7 +7,7 @@ let
   topic = "test/foo";
 in {
   name = "mosquitto";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = with maintainers; [ peterhoeg ];
   };
 

@@ -63,7 +63,7 @@ case "$op" in
             mv "$NIX_QUICKLISP_DIR/quicklisp"{,-old-$(date +%Y%m%d-%H%M%S)}
         fi
 
-        ln -sfT "@out@/lib/common-lisp/quicklisp/quicklisp" "$NIX_QUICKLISP_DIR/quicklisp"
+        cp -rfT "@out@/lib/common-lisp/quicklisp/quicklisp" "$NIX_QUICKLISP_DIR/quicklisp"
 
         "@clwrapper@/bin/common-lisp.sh" "$NIX_LISP_EXEC_CODE" \
           "(load \"$NIX_QUICKLISP_DIR/setup.lisp\")" "$NIX_LISP_EXEC_CODE" \

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnu-efi }:
+{ lib, stdenv, fetchurl, gnu-efi }:
 
 let
   archids = {
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-toolchain.patch
+    ./0001-Fix-GCC-10-compile-problem.patch
   ];
 
   buildInputs = [ gnu-efi ];
@@ -103,7 +104,7 @@ stdenv.mkDerivation rec {
     sed -i 's,`which \(.*\)`,`type -p \1`,g' $out/bin/refind-mkfont
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A graphical {,U}EFI boot manager";
     longDescription = ''
       rEFInd is a graphical boot manager for EFI- and UEFI-based

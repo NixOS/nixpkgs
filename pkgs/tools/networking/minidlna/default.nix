@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, ffmpeg_3, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext }:
+{ lib, stdenv, fetchurl, ffmpeg_3, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext }:
 
-let version = "1.2.1"; in
+let version = "1.3.0"; in
 
 stdenv.mkDerivation {
   pname = "minidlna";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/minidlna/minidlna/${version}/minidlna-${version}.tar.gz";
-    sha256 = "1v1ffhmaqxpvf2vv4yyvjsks4skr9y088853awsh7ixh7ai8nf37";
+    sha256 = "0qrw5ny82p5ybccw4pp9jma8nwl28z927v0j2561m0289imv1na7";
   };
 
   preConfigure = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     cp minidlnad.8 $out/share/man/man8
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Media server software";
     longDescription = ''
       MiniDLNA (aka ReadyDLNA) is server software with the aim of being fully

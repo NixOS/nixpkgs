@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
   version = "1.0.15";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/visit1985/mdp";
     description = "A command-line based markdown presentation tool";
     maintainers = with maintainers; [ matthiasbeyer vrthra ];

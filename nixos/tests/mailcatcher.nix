@@ -24,7 +24,7 @@ import ./make-test-python.nix ({ lib, ... }:
         'echo "this is the body of the email" | mail -s "subject" root@example.org'
     )
     assert "this is the body of the email" in machine.succeed(
-        "curl http://localhost:1080/messages/1.source"
+        "curl -f http://localhost:1080/messages/1.source"
     )
   '';
 })

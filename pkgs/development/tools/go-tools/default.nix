@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "go-tools";
-  version = "2020.1.5";
+  version = "2020.2";
 
   src = fetchFromGitHub {
     owner = "dominikh";
     repo = "go-tools";
     rev = version;
-    sha256 = "1ry3ywncc9qkmh8ihh67v6k8nmqhq2gvfyrl1ykl4z6s56b7f9za";
+    sha256 = "1qqpr481rx6n75xp1racsjjyn2fa8f28pcb0r9kd56qq890h3qgj";
   };
 
-  vendorSha256 = "0nbbngsphklzhcmqafrw1im2l1vnfcma9sb4vskdpdrsadv5ss5r";
+  vendorSha256 = "1axci0l7pymy66j6lilm49ksrwp7dvnj5krai2kvy96n3arcnsvq";
 
   doCheck = false;
 

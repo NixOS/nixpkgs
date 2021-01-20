@@ -52,7 +52,7 @@ buildPythonPackage rec {
     HOME=$TMPDIR OMP_NUM_THREADS=1 pytest -k "not test_feature_importance_regression" --pyargs sklearn
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of python modules for machine learning and data mining";
     changelog = let
       major = versions.major version;

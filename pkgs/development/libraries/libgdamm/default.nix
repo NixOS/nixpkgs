@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glibmm, libgda, libxml2, gnome3
+{ stdenv, fetchurl, pkg-config, glibmm, libgda, libxml2, gnome3
 , mysqlSupport ? false
 , postgresSupport ? false }:
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1fyh15b3f8hmwbswalxk1g4l04yvvybksn5nm7gznn5jl5q010p9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glibmm libxml2 ];
   propagatedBuildInputs = [ gda ];
 

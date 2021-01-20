@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , alsaLib
 , aubio
@@ -12,17 +12,14 @@
 , fftw
 , fftwSinglePrec
 , flac
-, fluidsynth
 , glibc
 , glibmm
 , graphviz
 , gtkmm2
-, hidapi
 , itstool
 , libarchive
 , libjack2
 , liblo
-, libltc
 , libogg
 , libpulseaudio
 , librdf_raptor
@@ -42,11 +39,11 @@
 , perl
 , pkg-config
 , python3
-, qm-dsp
 , readline
 , rubberband
 , serd
 , sord
+, soundtouch
 , sratom
 , suil
 , taglib
@@ -55,13 +52,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "6.2";
+  version = "6.5";
 
   # don't fetch releases from the GitHub mirror, they are broken
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    sha256 = "17jxbqavricy01x4ymq6d302djsqfnv84m7dm4fd8cpka0dqjp1y";
+    sha256 = "0sd38hchyr16biq9hcxha4ljy3pf0yhcgn90i5zfqcznnc57ildx";
   };
 
   patches = [
@@ -91,15 +88,12 @@ stdenv.mkDerivation rec {
     fftw
     fftwSinglePrec
     flac
-    fluidsynth
     glibmm
     gtkmm2
-    hidapi
     itstool
     libarchive
     libjack2
     liblo
-    libltc
     libogg
     libpulseaudio
     librdf_raptor
@@ -118,11 +112,11 @@ stdenv.mkDerivation rec {
     pango
     perl
     python3
-    qm-dsp
     readline
     rubberband
     serd
     sord
+    soundtouch
     sratom
     suil
     taglib
@@ -136,11 +130,11 @@ stdenv.mkDerivation rec {
     "--no-phone-home"
     "--optimize"
     "--ptformat"
-    "--qm-dsp-include=${qm-dsp}/include/qm-dsp"
     "--run-tests"
     "--test"
-    "--use-external-libs"
   ];
+  # removed because it fixes https://tracker.ardour.org/view.php?id=8161 and https://tracker.ardour.org/view.php?id=8437
+  # "--use-external-libs"
 
   # Ardour's wscript requires git revision and date to be available.
   # Since they are not, let's generate the file manually.
@@ -168,7 +162,7 @@ stdenv.mkDerivation rec {
 
   LINKFLAGS = "-lpthread";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-track hard disk recording software";
     longDescription = ''
       Ardour is a digital audio workstation (DAW), You can use it to

@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "filelight";
+  pname = "filelight";
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ fridh vcunat ];

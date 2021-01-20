@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchFromGitHub, bash, makeWrapper, bat
+{ lib, stdenv, callPackage, fetchFromGitHub, bash, makeWrapper, bat
 # batdiff, batgrep, and batwatch
 , coreutils
 , less
@@ -13,7 +13,7 @@
 , withEntr ? entr != null, entr ? null
 # batdiff
 , gitMinimal
-, withDelta ? gitAndTools?delta, gitAndTools ? null
+, withDelta ? delta != null, delta ? null
 }:
 
 let
@@ -76,7 +76,7 @@ let
     # The per-script derivations will go ahead and patch the files they actually install.
     dontPatchShebangs = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Bash scripts that integrate bat with various command line tools";
       homepage    = "https://github.com/eth-p/bat-extras";
       license     = with licenses; [ mit ];
@@ -116,9 +116,9 @@ let
         runHook preInstall
         mkdir -p $out/bin
         cp -p bin/${name} $out/bin/${name}
-      '' + stdenv.lib.optionalString (dependencies != []) ''
+      '' + lib.optionalString (dependencies != []) ''
         wrapProgram $out/bin/${name} \
-          --prefix PATH : ${stdenv.lib.makeBinPath dependencies}
+          --prefix PATH : ${lib.makeBinPath dependencies}
       '' + ''
         runHook postInstall
       '';
@@ -130,10 +130,10 @@ let
     };
   optionalDep = cond: dep:
     assert cond -> dep != null;
-    stdenv.lib.optional cond dep;
+    lib.optional cond dep;
 in
 {
-  batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta gitAndTools.delta);
+  batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
   batgrep = script "batgrep" [ less coreutils ripgrep ];
   batman = script "batman" [];
   batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);

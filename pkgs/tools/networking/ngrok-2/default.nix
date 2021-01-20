@@ -1,6 +1,6 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
-with stdenv.lib;
+with lib;
 
 let versions = builtins.fromJSON (builtins.readFile ./versions.json);
     arch = if stdenv.isi686 then "386"
@@ -35,10 +35,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "ngrok";
-    longDescription = ''
-      Allows you to expose a web server running on your local machine to the internet.
-    '';
+    description = "Allows you to expose a web server running on your local machine to the internet";
     homepage = "https://ngrok.com/";
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];

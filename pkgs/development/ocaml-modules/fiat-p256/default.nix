@@ -5,6 +5,7 @@
 buildDunePackage rec {
   pname = "fiat-p256";
   version = "0.2.1";
+  useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/mirage/fiat/releases/download/v${version}/${pname}-v${version}.tbz";

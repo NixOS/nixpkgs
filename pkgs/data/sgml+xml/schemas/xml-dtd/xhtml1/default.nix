@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2 }:
+{ lib, stdenv, fetchurl, libxml2 }:
 
 stdenv.mkDerivation {
   name = "xhtml1-20020801";
@@ -27,6 +27,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.w3.org/TR/xhtml1/";
     description = "DTDs for XHTML 1.0, the Extensible HyperText Markup Language";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, python3Packages, file, less, highlight
 , imagePreviewSupport ? true, w3m ? null}:
 
-with stdenv.lib;
+with lib;
 
 assert imagePreviewSupport -> w3m != null;
 
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
       --replace "/bin/echo" "echo"
 
     substituteInPlace ranger/__init__.py \
-      --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${stdenv.lib.getBin less}/bin/less'"
+      --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${lib.getBin less}/bin/less'"
 
     for i in ranger/config/rc.conf doc/config/rc.conf ; do
       substituteInPlace $i --replace /usr/share $out/share

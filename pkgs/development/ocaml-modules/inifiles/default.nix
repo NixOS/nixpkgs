@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, ocaml, findlib, ocaml_pcre }:
+{ stdenv, lib, fetchurl, fetchpatch, ocaml, findlib, ocaml_pcre }:
 
 stdenv.mkDerivation {
 	name = "ocaml${ocaml.version}-inifiles-1.2";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
 	meta = {
 		description = "A small OCaml library to read and write .ini files";
-		license = stdenv.lib.licenses.lgpl21Plus;
+		license = lib.licenses.lgpl21Plus;
 		inherit (ocaml.meta) platforms;
 	};
 }

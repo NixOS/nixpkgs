@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ntc-templates";
-  version = "1.5.0";
+  version = "1.6.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0pvd9n7hcmxl9cr8m1xlqcjmy3k2hga0qmn2k3x9hripjis7pbbi";
+    rev = "dc27599b0c5f3bb6ff23049e781b5dab2849c2c3";  # not tagged
+    sha256 = "1vg5y5c51vc9dj3b8qcffh6dz85ri11zb1azxmyvgbq86pcvbx9f";
   };
 
   propagatedBuildInputs = [ textfsm ];

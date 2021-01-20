@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libogg, pkgconfig }:
+{ stdenv, fetchurl, libogg, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "libvorbis-1.3.7";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libogg ];
 
   doCheck = true;

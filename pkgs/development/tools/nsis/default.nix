@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchzip
 , sconsPackages
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
   prefixKey = "PREFIX=";
   installTargets = [ "install-compiler" ];
 
-  meta = with stdenv.lib; {
-    description = "NSIS is a free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
+  meta = with lib; {
+    description = "A free scriptable win32 installer/uninstaller system that doesn't suck and isn't huge";
     homepage = "https://nsis.sourceforge.io/";
     license = licenses.zlib;
     platforms = platforms.linux;

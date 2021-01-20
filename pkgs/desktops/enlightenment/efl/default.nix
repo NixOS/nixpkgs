@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -46,7 +46,7 @@
 , python3Packages
 , systemd
 , udev
-, utillinux
+, util-linux
 , wayland
 , wayland-protocols
 , writeText
@@ -56,11 +56,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.25.0";
+  version = "1.25.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0vlmf0rp2qxdl06pdmrd1xdfa10sdz30vnxzc98inpdg1n8iz52k";
+    sha256 = "0svybbrvpf6q955y6fclxh3md64z0dgmh0x54x2j60503hhs071m";
   };
 
   nativeBuildInputs = [
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     mint-x-icons # Mint-X is a parent icon theme of Enlightenment-X
     openjpeg
     poppler
-    utillinux
+    util-linux
     wayland
     xorg.libXScrnSaver
     xorg.libXcomposite
@@ -203,7 +203,7 @@ stdenv.mkDerivation rec {
     patchelf --add-needed ${libsndfile.out}/lib/libsndfile.so $out/lib/libecore_audio.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enlightenment foundation libraries";
     homepage = "https://enlightenment.org/";
     license = with licenses; [ bsd2 lgpl2Only licenses.zlib ];

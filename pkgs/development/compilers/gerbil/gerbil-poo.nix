@@ -2,8 +2,8 @@
 
 gerbil-support.gerbilPackage {
   pname = "gerbil-ethereum";
-  version = "unstable-2020-08-02";
-  git-version = "0.0-13-g1014154";
+  version = "unstable-2020-10-17";
+  git-version = "0.0-35-g44d490d";
   gerbil-package = "clan/poo";
   gerbil = gerbil-unstable;
   gerbilInputs = with gerbil-support.gerbilPackages-unstable; [gerbil-utils gerbil-crypto];
@@ -14,8 +14,8 @@ gerbil-support.gerbilPackage {
   src = fetchFromGitHub {
     owner = "fare";
     repo = "gerbil-poo";
-    rev = "1014154fe4943dfbec7524666c831b601ba88559";
-    sha256 = "0g8l5mi007n07qs79m9h3h3am1p7h0kzq7yb49h562b8frh5gp97";
+    rev = "44d490d95b9d1b5d54eaedf2602419af8e086837";
+    sha256 = "082ndpy281saybcnp3bdidcibkk2ih6glrkbb5fdj1524ban4d0k";
   };
   meta = {
     description = "Gerbil POO: Prototype Object Orientation for Gerbil Scheme";

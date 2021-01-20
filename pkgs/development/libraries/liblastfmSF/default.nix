@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, curl, openssl }:
+{ stdenv, fetchurl, pkg-config, curl, openssl }:
 
 stdenv.mkDerivation {
   name = "liblastfm-SF-0.5";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ curl openssl ];
 

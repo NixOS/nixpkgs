@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python
 }:
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
     ${pythonEnv.interpreter} ${spkg-install}
   '';
 
-  meta = with stdenv.lib; {
-    description = "Contains a small database of Conway polynomials.";
+  meta = with lib; {
+    description = "Contains a small database of Conway polynomials";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
   };
 }

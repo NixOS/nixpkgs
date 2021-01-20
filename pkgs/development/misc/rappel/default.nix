@@ -2,7 +2,7 @@
 , libedit
 , makeWrapper
 , nasm
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/yrp604/rappel";
     description = "A pretty janky assembly REPL";
     license = licenses.bsdOriginal;

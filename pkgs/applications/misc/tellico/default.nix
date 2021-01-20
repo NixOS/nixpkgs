@@ -1,7 +1,7 @@
 { lib
 , fetchurl
 , mkDerivation
-, kdeApplications
+, libkcddb
 , kinit
 , kdelibs4support
 , solid
@@ -42,11 +42,10 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    cmake
     exempi
     extra-cmake-modules
     karchive
-    kdeApplications.libkcddb
+    libkcddb
     kdelibs4support
     kfilemetadata
     khtml

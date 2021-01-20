@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pytest
@@ -8,14 +8,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.15.1";
+  version = "0.15.3";
   pname = "authlib";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
     rev = "v${version}";
-    sha256 = "0jh4kdi5spzhmgvq3ffz2q467hjycz3wg97f7n53rffiwd86jrh5";
+    sha256 = "1lqicv8awyygqh1z8vhwvx38dw619kgbirdn8c9sc3qilagq1rdx";
   };
 
   propagatedBuildInputs = [ cryptography requests ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     PYTHONPATH=$PWD:$PYTHONPATH pytest tests/{core,files}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/lepture/authlib";
     description = "The ultimate Python library in building OAuth and OpenID Connect servers. JWS,JWE,JWK,JWA,JWT included.";
     maintainers = with maintainers; [ flokli ];

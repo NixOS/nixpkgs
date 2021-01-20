@@ -39,7 +39,7 @@
 , marble
 , libGL
 , libGLU
-, opencv3
+, opencv
 , pcre
 , threadweaver
 , x265
@@ -83,7 +83,7 @@ mkDerivation rec {
     libusb1
     libGL
     libGLU
-    opencv3
+    opencv
     pcre
     x265
 
@@ -109,18 +109,20 @@ mkDerivation rec {
     threadweaver
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
     "-DENABLE_INTERNALMYSQL=1"
     "-DENABLE_MEDIAPLAYER=1"
     "-DENABLE_QWEBENGINE=on"
+    "-DENABLE_APPSTYLES=on"
   ];
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
-    gappsWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${qtbase.qtPluginPrefix}/${pname})
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
+    qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${qtbase.qtPluginPrefix}/${pname})
     substituteInPlace $out/bin/digitaglinktree \
       --replace "/usr/bin/perl" "${perl}/bin/perl" \
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"

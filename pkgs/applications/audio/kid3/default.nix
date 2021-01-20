@@ -1,5 +1,5 @@
-{ stdenv, fetchurl
-, pkgconfig, cmake, python3, ffmpeg_3, phonon, automoc4
+{ lib, stdenv, fetchurl
+, pkg-config, cmake, python3, ffmpeg_3, phonon, automoc4
 , chromaprint, docbook_xml_dtd_45, docbook_xsl, libxslt
 , id3lib, taglib, mp4v2, flac, libogg, libvorbis
 , zlib, readline , qtbase, qttools, qtmultimedia, qtquickcontrols
@@ -15,12 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WYuEOqMu2VMOv6mkVCRXnmInFER/DWfPNqYuaTJ3vAc=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
-  buildInputs = [
-    pkgconfig cmake python3 ffmpeg_3 phonon automoc4
-    chromaprint docbook_xml_dtd_45 docbook_xsl libxslt
-    id3lib taglib mp4v2 flac libogg libvorbis zlib readline
-    qtbase qttools qtmultimedia qtquickcontrols ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  buildInputs = [ python3 ffmpeg_3 phonon automoc4 chromaprint
+    docbook_xml_dtd_45 docbook_xsl libxslt id3lib taglib mp4v2 flac
+    libogg libvorbis zlib readline qtbase qttools qtmultimedia
+    qtquickcontrols ];
 
   cmakeFlags = [ "-DWITH_APPS=Qt;CLI" ];
   NIX_LDFLAGS = "-lm -lpthread";
@@ -29,9 +28,7 @@ stdenv.mkDerivation rec {
     export DOCBOOKDIR="${docbook_xsl}/xml/xsl/docbook/"
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple and powerful audio tag editor";
     longDescription = ''
       If you want to easily tag multiple MP3, Ogg/Vorbis, FLAC, MPC, MP4/AAC,

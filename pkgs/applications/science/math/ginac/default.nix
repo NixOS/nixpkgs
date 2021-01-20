@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, cln, pkgconfig, readline, gmp, python }:
+{ lib, stdenv, fetchurl, cln, pkg-config, readline, gmp, python }:
 
 stdenv.mkDerivation rec {
-  name = "ginac-1.7.9";
+  name = "ginac-1.8.0";
 
   src = fetchurl {
     url    = "${meta.homepage}/${name}.tar.bz2";
-    sha256 = "08cqc87qq4w6z3l053x5gfqsa4zkgkicq8skxsbsj39nli1zzkb7";
+    sha256 = "0l9byzfxq3f9az5pcdldnl95ws8mpirkqky46f973mvxi5541d24";
   };
 
   propagatedBuildInputs = [ cln ];
 
-  buildInputs = [ readline ] ++ stdenv.lib.optional stdenv.isDarwin gmp;
+  buildInputs = [ readline ] ++ lib.optional stdenv.isDarwin gmp;
 
-  nativeBuildInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ pkg-config python ];
 
   preConfigure = "patchShebangs ginsh";
 
   configureFlags = [ "--disable-rpath" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GiNaC is Not a CAS";
     homepage    = "http://www.ginac.de/";
     maintainers = with maintainers; [ lovek323 ];

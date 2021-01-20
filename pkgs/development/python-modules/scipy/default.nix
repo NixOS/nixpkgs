@@ -9,11 +9,11 @@ let
   });
 in buildPythonPackage rec {
   pname = "scipy";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "066c513d90eb3fd7567a9e150828d39111ebd88d3e924cdfc9f8ce19ab6f90c9";
+    sha256 = "0rh5b1rwdcvvagld8vpxnpaibszy1skpx39a0fwzd5gx5pwcjvfb";
   };
 
   checkInputs = [ nose pytest ];
@@ -36,8 +36,6 @@ in buildPythonPackage rec {
   preBuild = ''
     ln -s ${numpy.cfg} site.cfg
   '';
-
-  enableParallelBuilding = true;
 
   checkPhase = ''
     runHook preCheck

@@ -76,7 +76,7 @@ let result = stdenv.mkDerivation rec {
         i686-linux    = "linux-i586";
         x86_64-linux  = "linux-x64";
         armv7l-linux  = "linux-arm32-vfp-hflt";
-        aarch64-linux = "linux-arm64-vfp-hflt";
+        aarch64-linux = "linux-aarch64";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     in requireFile {
       name = "jdk-${productVersion}u${patchVersion}-${platformName}.tar.gz";

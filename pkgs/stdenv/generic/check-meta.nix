@@ -49,6 +49,18 @@ let
 
   isUnfree = licenses: lib.lists.any (l: !l.free or true) licenses;
 
+  hasUnfreeLicense = attrs:
+    hasLicense attrs &&
+    isUnfree (lib.lists.toList attrs.meta.license);
+
+  isMarkedBroken = attrs: attrs.meta.broken or false;
+
+  hasUnsupportedPlatform = attrs:
+    (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
+      lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or []));
+
+  isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or []) != [];
+
   # Alow granular checks to allow only some unfree packages
   # Example:
   # {pkgs, ...}:
@@ -62,16 +74,15 @@ let
   # package has an unfree license and is not explicitely allowed by the
   # `allowUnfreePredicate` function.
   hasDeniedUnfreeLicense = attrs:
+    hasUnfreeLicense attrs &&
     !allowUnfree &&
-    hasLicense attrs &&
-    isUnfree (lib.lists.toList attrs.meta.license) &&
     !allowUnfreePredicate attrs;
 
   allowInsecureDefaultPredicate = x: builtins.elem (getName x) (config.permittedInsecurePackages or []);
   allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
 
   hasAllowedInsecure = attrs:
-    (attrs.meta.knownVulnerabilities or []) == [] ||
+    !(isMarkedInsecure attrs) ||
     allowInsecurePredicate attrs ||
     builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
@@ -80,21 +91,46 @@ let
   pos_str = meta: meta.position or "«unknown-file»";
 
   remediation = {
-    unfree = remediate_whitelist "Unfree";
-    broken = remediate_whitelist "Broken";
-    unsupported = remediate_whitelist "UnsupportedSystem";
+    unfree = remediate_whitelist "Unfree" remediate_unfree_predicate;
+    broken = remediate_whitelist "Broken" (x: "");
+    unsupported = remediate_whitelist "UnsupportedSystem" (x: "");
     blacklisted = x: "";
     insecure = remediate_insecure;
     broken-outputs = remediateOutputsToInstall;
     unknown-meta = x: "";
   };
-  remediate_whitelist = allow_attr: attrs:
+  remediation_env_var = allow_attr: {
+    Unfree = "NIXPKGS_ALLOW_UNFREE";
+    Broken = "NIXPKGS_ALLOW_BROKEN";
+    UnsupportedSystem = "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM";
+  }.${allow_attr};
+  remediation_phrase = allow_attr: {
+    Unfree = "unfree packages";
+    Broken = "broken packages";
+    UnsupportedSystem = "packages that are unsupported for this system";
+  }.${allow_attr};
+  remediate_unfree_predicate = attrs:
     ''
-      a) For `nixos-rebuild` you can set
+
+      Alternatively you can configure a predicate to whitelist specific packages:
+        { nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+            "${lib.getName attrs}"
+          ];
+        }
+    '';
+
+  remediate_whitelist = allow_attr: rebuild_amendment: attrs:
+    ''
+      a) To temporarily allow ${remediation_phrase allow_attr}, you can use an environment variable
+         for a single invocation of the nix tools.
+
+           $ export ${remediation_env_var allow_attr}=1
+
+      b) For `nixos-rebuild` you can set
         { nixpkgs.config.allow${allow_attr} = true; }
       in configuration.nix to override this.
-
-      b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+      ${rebuild_amendment attrs}
+      c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
         { allow${allow_attr} = true; }
       to ~/.config/nixpkgs/config.nix.
     '';
@@ -178,6 +214,9 @@ let
     platforms = listOf str;
     hydraPlatforms = listOf str;
     broken = bool;
+    unfree = bool;
+    unsupported = bool;
+    insecure = bool;
     # TODO: refactor once something like Profpatsch's types-simple will land
     # This is currently dead code due to https://github.com/NixOS/nix/issues/2532
     tests = attrsOf (mkOptionType {
@@ -229,17 +268,22 @@ let
   #
   # Return { valid: Bool } and additionally
   # { reason: String; errormsg: String } if it is not valid, where
-  # reason is one of "unfree", "blacklisted" or "broken".
+  # reason is one of "unfree", "blacklisted", "broken", "insecure", ...
+  # Along with a boolean flag for each reason
   checkValidity = attrs:
-    if hasDeniedUnfreeLicense attrs && !(hasWhitelistedLicense attrs) then
+    {
+      unfree = hasUnfreeLicense attrs;
+      broken = isMarkedBroken attrs;
+      unsupported = hasUnsupportedPlatform attrs;
+      insecure = isMarkedInsecure attrs;
+    }
+    // (if hasDeniedUnfreeLicense attrs && !(hasWhitelistedLicense attrs) then
       { valid = false; reason = "unfree"; errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)"; }
     else if hasBlacklistedLicense attrs then
       { valid = false; reason = "blacklisted"; errormsg = "has a blacklisted license (‘${showLicense attrs.meta.license}’)"; }
     else if !allowBroken && attrs.meta.broken or false then
       { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
-    else if !allowUnsupportedSystem &&
-            (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
-              lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or [])) then
+    else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
       { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
@@ -247,14 +291,14 @@ let
       { valid = false; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
     else let res = checkMeta (attrs.meta or {}); in if res != [] then
       { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
-    else { valid = true; };
+    else { valid = true; });
 
   assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
     in validity // {
       # Throw an error if trying to evaluate an non-valid derivation
       handled = if !validity.valid
-        then handleEvalIssue { inherit meta attrs; } (removeAttrs validity ["valid"])
+        then handleEvalIssue { inherit meta attrs; } { inherit (validity) reason errormsg; }
         else true;
   };
 

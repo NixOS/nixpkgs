@@ -7,7 +7,7 @@
 , gtk-doc
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , shared-mime-info
 , nixosTests
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     meson
     ninja
-    pkgconfig
+    pkg-config
     (python3.withPackages (pkgs: with pkgs; [ setuptools ]))
     shared-mime-info
   ];

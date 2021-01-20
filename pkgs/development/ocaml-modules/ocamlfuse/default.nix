@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, camlidl, fuse }:
+{ lib, buildDunePackage, fetchFromGitHub, camlidl, fuse }:
 
 buildDunePackage {
   pname = "ocamlfuse";
@@ -16,8 +16,8 @@ buildDunePackage {
   meta = {
     homepage = "https://sourceforge.net/projects/ocamlfuse";
     description = "OCaml bindings for FUSE";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ bennofs ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bennofs ];
   };
 }

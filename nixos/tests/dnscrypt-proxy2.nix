@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "dnscrypt-proxy2";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ joachifm ];
   };
 

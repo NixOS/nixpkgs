@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, lapack
+{ stdenv, fetchFromGitHub, cmake, pkg-config, boost, lapack
 , Accelerate, CoreGraphics, CoreVideo
 }:
 
@@ -17,11 +17,9 @@ stdenv.mkDerivation rec {
     ./disable-cpack.patch   #disable the need of cpack/rpm
   ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ boost lapack ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ];
-
-  enableParallelBuilding = true;
 
   doCheck = !stdenv.isDarwin;
 

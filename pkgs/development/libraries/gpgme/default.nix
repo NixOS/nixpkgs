@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch
-, autoreconfHook, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
+, autoreconfHook, libgpgerror, gnupg, pkg-config, glib, pth, libassuan
 , file, which, ncurses
 , texinfo
 , buildPackages
@@ -14,11 +14,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.14.0";
+  version = "1.15.1";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    sha256 = "01s3rlspykbm9vmi5rfbdm3d20ip6yni69r48idqzlmhlq8ggwff";
+    sha256 = "1bg13l5s8x9p1v0jyv29n84bay27pflindpzjsc9gj7i4wdkrg7f";
   };
 
   patches = [
@@ -34,7 +34,9 @@ stdenv.mkDerivation rec {
       sha256 = "00d4sxq63601lzdp2ha1i8fvybh7dzih4531jh8bx07fab3sw65g";
     })
     # Disable python tests on Darwin as they use gpg (see configureFlags below)
-  ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch;
+  ] ++ lib.optional stdenv.isDarwin ./disable-python-tests.patch
+  # Fix _AC_UNDECLARED_WARNING for autoconf≥2.70. See https://lists.gnupg.org/pipermail/gnupg-devel/2020-November/034643.html
+  ++ lib.optional stdenv.cc.isClang ./fix-clang-autoconf-undeclared-warning.patch;
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ pkgconfig gnupg texinfo autoreconfHook ]
+  nativeBuildInputs = [ pkg-config gnupg texinfo autoreconfHook ]
   ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

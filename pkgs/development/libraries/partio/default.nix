@@ -16,8 +16,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ unzip cmake doxygen ];
   buildInputs = [ freeglut libGLU libGL zlib swig python xorg.libXi xorg.libXmu ];
 
-  enableParallelBuilding = true;
-
   buildPhase = ''
     make partio
 

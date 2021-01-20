@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gnome3 }:
+{ lib, stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-timepp";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A todo.txt manager, time tracker, timer, stopwatch, pomodoro, and alarms gnome-shell extension.";
     homepage = "https://github.com/zagortenay333/timepp__gnome";
     license = licenses.gpl3;

@@ -9,7 +9,14 @@ with lib;
 
   isoImage.edition = "gnome";
 
-  services.xserver.desktopManager.gnome3.enable = true;
+  services.xserver.desktopManager.gnome3 = {
+    # Add firefox to favorite-apps
+    favoriteAppsOverride = ''
+      [org.gnome.shell]
+      favorite-apps=[ 'firefox.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Calendar.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop' ]
+    '';
+    enable = true;
+  };
 
   services.xserver.displayManager = {
     gdm = {

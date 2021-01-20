@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, gfortran, pkgconfig
+{ stdenv, lib, fetchurl, gfortran, pkg-config
 , blas, zlib, bzip2
 , withGurobi ? false, gurobi
 , withCplex ? false, cplex }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     [ blas zlib bzip2 ]
     ++ lib.optional withGurobi gurobi
     ++ lib.optional withCplex cplex;
-  nativeBuildInputs = [ gfortran pkgconfig ];
+  nativeBuildInputs = [ gfortran pkg-config ];
   configureFlags =
     lib.optionals withGurobi [ "--with-gurobi-incdir=${gurobi}/include" "--with-gurobi-lib=-lgurobi${gurobi.libSuffix}" ]
     ++ lib.optionals withCplex [ "--with-cplex-incdir=${cplex}/cplex/include/ilcplex" "--with-cplex-lib=-lcplex${cplex.libSuffix}" ];

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "python-nomad";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # Tests require nomad agent
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python client library for Hashicorp Nomad";
     homepage = "https://github.com/jrxFive/python-nomad";
     license = licenses.mit;

@@ -29,7 +29,7 @@ import ./make-test-python.nix ({ pkgs, ... } : let
 in {
 
   name = "matrix-synapse";
-  meta = with pkgs.stdenv.lib; {
+  meta = with pkgs.lib; {
     maintainers = teams.matrix.members;
   };
 
@@ -77,12 +77,12 @@ in {
     start_all()
     serverpostgres.wait_for_unit("matrix-synapse.service")
     serverpostgres.wait_until_succeeds(
-        "curl -L --cacert ${ca_pem} https://localhost:8448/"
+        "curl --fail -L --cacert ${ca_pem} https://localhost:8448/"
     )
     serverpostgres.require_unit_state("postgresql.service")
     serversqlite.wait_for_unit("matrix-synapse.service")
     serversqlite.wait_until_succeeds(
-        "curl -L --cacert ${ca_pem} https://localhost:8448/"
+        "curl --fail -L --cacert ${ca_pem} https://localhost:8448/"
     )
     serversqlite.succeed("[ -e /var/lib/matrix-synapse/homeserver.db ]")
   '';

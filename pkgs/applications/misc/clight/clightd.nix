@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
-, dbus, cmake, pkgconfig
+, dbus, cmake, pkg-config
 , glib, udev, polkit, libmodule
-, pcre, libXdmcp, utillinux, libpthreadstubs
+, pcre, libXdmcp, util-linux, libpthreadstubs
 , enableDdc ? true, ddcutil
 , enableDpms ? true, libXext
 , enableGamma ? true, libXrandr
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     dbus
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = with lib; [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
     pcre
     libXdmcp
-    utillinux
+    util-linux
     libpthreadstubs
   ] ++ optional enableDdc ddcutil
     ++ optional enableDpms libXext

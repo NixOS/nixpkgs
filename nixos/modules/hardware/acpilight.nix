@@ -19,6 +19,7 @@ in
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [ acpilight ];
     services.udev.packages = with pkgs; [ acpilight ];
   };
 }

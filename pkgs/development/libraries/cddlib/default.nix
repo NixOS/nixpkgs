@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cddlib";
-  version = "0.94l";
+  version = "0.94m";
   src = fetchFromGitHub {
     owner = "cddlib";
     repo = "cddlib";
     rev = version;
-    sha256 = "0934a0i2m2bamlibi4cbrf1md1pz7dp35jbfamb0k7x644sayl4k";
+    sha256 = "09s8323h5w9j6mpl1yc6lm770dkskfxd2ayyafkcjllmnncxzfa0";
   };
   buildInputs = [gmp];
   nativeBuildInputs = [
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
   meta = with stdenv.lib; {
     inherit version;
-    description = ''An implementation of the Double Description Method for generating all vertices of a convex polyhedron'';
+    description = "An implementation of the Double Description Method for generating all vertices of a convex polyhedron";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [raskin timokau];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
     homepage = "https://www.inf.ethz.ch/personal/fukudak/cdd_home/index.html";
   };

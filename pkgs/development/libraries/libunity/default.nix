@@ -1,6 +1,6 @@
 { stdenv
 , fetchgit
-, pkgconfig
+, pkg-config
 , glib
 , vala
 , dee
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     autoreconfHook
     gobject-introspection
     intltool
-    pkgconfig
+    pkg-config
     python3
     vala
   ];

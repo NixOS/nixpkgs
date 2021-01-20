@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi,
+{ lib, stdenv, buildPythonPackage, fetchPypi,
   rcssmin, rjsmin, django_appconf }:
 buildPythonPackage rec {
     pname = "django_compressor";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
     propagatedBuildInputs = [ rcssmin rjsmin django_appconf ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Compresses linked and inline JavaScript or CSS into single cached files";
       homepage = "https://django-compressor.readthedocs.org/en/latest/";
       license = licenses.mit;

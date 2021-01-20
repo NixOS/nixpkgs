@@ -1,20 +1,26 @@
-{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkgconfig, kmod
+{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkg-config, kmod
 , enable-tools ? true
 , enablePython ? false, python3, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
-  version = "1.5.2";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
-    sha256 = "1bknh7kn5gxc8xwf913lsdm9zgn1bwj42nsnp6kbkyn6ip7s6c4r";
+    sha256 = "1k8mxkzvd6y9aawxghddrjkldzskhb6607qhbwjfl9f945ns87qa";
   };
+
+  patches = [
+    # cross compiling fix
+    # https://github.com/brgl/libgpiod/pull/45
+    ./0001-Drop-AC_FUNC_MALLOC-and-_REALLOC-and-check-for-them-.patch
+  ];
 
   buildInputs = [ kmod ] ++ lib.optionals enablePython [ python3 ncurses ];
   nativeBuildInputs = [
     autoconf-archive
-    pkgconfig
+    pkg-config
     autoreconfHook
   ];
 

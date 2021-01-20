@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , udev
 , glib
 , gobject-introspection
@@ -9,16 +9,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libgudev";
-  version = "233";
+  version = "234";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "00xvva04lgqamhnf277lg32phjn971wgpc9cxvgf5x13xdq4jz2q";
+    sha256 = "0drf39qhsdz35kwb18hnfj2ig4yfxhfks66m783zlhnvy2narbhv";
   };
 
-  nativeBuildInputs = [ pkgconfig gobject-introspection ];
+  nativeBuildInputs = [ pkg-config gobject-introspection ];
   buildInputs = [ udev glib ];
 
   # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway.

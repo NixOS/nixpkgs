@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "8.0.0";
+  version = "9.1.0";
 
   # tests not included in pypi tarball
   src = fetchFromGitHub {
     owner = "willmcgugan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hv27b22x7dbx1i7nzsd8y8fymmvdak2hcx9242jwk4c1a7jr151";
+    sha256 = "18iha0fs8vm0j11k39yxj26h8qxrp27ijhx6h1yyizbygmr5b5nk";
   };
   format = "pyproject";
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "rich" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
     homepage = "https://github.com/willmcgugan/rich";
     license = licenses.mit;

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "man-pages";
-  version = "5.08";
+  version = "5.09";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/${pname}-${version}.tar.xz";
-    sha256 = "1xzp3f6wvw3wplk1a1x09zfv0jp0pdc9wh95czndh3h8z0qwv9yf";
+    sha256 = "1whbxim4diyan97y9pz9k4ck16rmjalw5i1m0dg6ycv3pxv386nz";
   };
 
   makeFlags = [ "MANDIR=$(out)/share/man" ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
   outputDocdev = "out";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux development manual pages";
     homepage = "https://www.kernel.org/doc/man-pages/";
     repositories.git = "http://git.kernel.org/pub/scm/docs/man-pages/man-pages";

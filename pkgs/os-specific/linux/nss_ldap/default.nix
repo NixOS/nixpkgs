@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openldap, perl}:
+{lib, stdenv, fetchurl, openldap, perl}:
 
 stdenv.mkDerivation {
   name = "nss_ldap-265";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ openldap perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LDAP module for the Solaris Nameservice Switch (NSS)";
     license = licenses.gpl2;
     platforms = platforms.linux;

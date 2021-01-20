@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libXScrnSaver, libX11 }:
+{ lib, stdenv, fetchurl, libXScrnSaver, libX11 }:
 
 stdenv.mkDerivation rec {
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     gcc -lXss -lX11 $src -o $out/bin/x11idle
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Compute consecutive idle time for current X11 session with millisecond resolution
     '';

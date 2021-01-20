@@ -1,4 +1,5 @@
-{ stdenv
+{ lib, stdenv
+, nixosTests
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -11,25 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
-  version = "0.16.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "161pfix42j767ziyp4mslffdd20v9i0ncplvjw2pmpccwdm106kg";
+    sha256 = "1kbziqm00skj65gpjq6m83hmfk9g3xyx88gai1r80pzsx8g239w1";
   };
 
-  cargoSha256 = "19vhhxfyx3nrngcs6dvwldnk9h4lvs7xjkb31aj1y0pyawz882h9";
+  cargoSha256 = "1pdja5jhk036hpgv77xc3fcvra1sw0z5jc1ry53i0r7362lnwapz";
 
   nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
-
-  # Remove after https://github.com/NixOS/nixpkgs/pull/97000 lands into master
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    unset SDKROOT
-  '';
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
@@ -40,10 +36,12 @@ rustPlatform.buildRustPackage rec {
   # expected with certain flag combinations.
   postFixup = ''
     wrapProgram "$out/bin/bat" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ less ]}"
+      --prefix PATH : "${lib.makeBinPath [ less ]}"
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = { inherit (nixosTests) bat; };
+
+  meta = with lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
     license = with licenses; [ asl20 /* or */ mit ];

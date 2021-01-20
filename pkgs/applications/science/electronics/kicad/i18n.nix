@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , cmake
 , gettext
 , src
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   pname = "kicad-i18n";
 
   nativeBuildInputs = [ cmake gettext ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2; # https://github.com/KiCad/kicad-i18n/issues/3
     platforms = platforms.all;
   };

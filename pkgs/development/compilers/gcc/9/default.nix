@@ -8,7 +8,12 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, enableShared ? true
+, # N.B. the defult is intentionally not from an `isStatic`. See
+  # https://gcc.gnu.org/install/configure.html - this is about target
+  # platform libraries not host platform ones unlike normal. But since
+  # we can't rebuild those without also rebuilding the compiler itself,
+  # we opt to always build everything unlike our usual policy.
+  enableShared ? true
 , enableLTO ? true
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
@@ -58,7 +63,13 @@ let majorVersion = "9";
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-         optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
+      # Fix ICE: Max. number of generated reload insns per insn is achieved (90)
+      #
+      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96796
+      #
+      # This patch can most likely be removed by a post 9.3.0-release.
+      [ ./avoid-cycling-subreg-reloads.patch ]
+      ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       /* ++ optional (hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
         url = "https://git.busybox.net/buildroot/plain/package/gcc/${version}/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
@@ -68,10 +79,9 @@ let majorVersion = "9";
       ++ optional langD ../libphobos.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
-        url = "https://raw.githubusercontent.com/lhmouse/MINGW-packages/${import ../common/mfcgthreads-patches-repo.nix}/mingw-w64-gcc-git/9000-gcc-${majorVersion}-branch-Added-mcf-thread-model-support-from-mcfgthread.patch";
-        sha256 = "1in5kvcknlpi9z1vvjw6jfmwy8k12zvbqlqfnq84qpm99r0rh00a";
-      });
+
+      # Obtain latest patch with ../update-mcfgthread-patches.sh
+      ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";

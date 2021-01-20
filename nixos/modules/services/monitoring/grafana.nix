@@ -5,10 +5,11 @@ with lib;
 let
   cfg = config.services.grafana;
   opt = options.services.grafana;
+  declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: { name = pkg.pname; path = pkg; }) cfg.declarativePlugins);
 
   envOptions = {
     PATHS_DATA = cfg.dataDir;
-    PATHS_PLUGINS = "${cfg.dataDir}/plugins";
+    PATHS_PLUGINS = if builtins.isNull cfg.declarativePlugins then "${cfg.dataDir}/plugins" else declarativePlugins;
     PATHS_LOGS = "${cfg.dataDir}/log";
 
     SERVER_PROTOCOL = cfg.protocol;
@@ -259,6 +260,12 @@ in {
       default = pkgs.grafana;
       defaultText = "pkgs.grafana";
       type = types.package;
+    };
+    declarativePlugins = mkOption {
+      type = with types; nullOr (listOf path);
+      default = null;
+      description = "If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot be manually installed.";
+      example = literalExample "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
     };
 
     dataDir = mkOption {

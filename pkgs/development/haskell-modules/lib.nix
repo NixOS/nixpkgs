@@ -86,11 +86,11 @@ rec {
      future.
 
      Instead of jailbreaking, you can patch the cabal file.
-     
+
      Note that jailbreaking at this time, doesn't lift bounds on
-     conditional branches. 
+     conditional branches.
      https://github.com/peti/jailbreak-cabal/issues/7 has further details.
-     
+
    */
   doJailbreak = drv: overrideCabal drv (drv: { jailbreak = true; });
 
@@ -156,8 +156,11 @@ rec {
   addBuildDepend = drv: x: addBuildDepends drv [x];
   addBuildDepends = drv: xs: overrideCabal drv (drv: { buildDepends = (drv.buildDepends or []) ++ xs; });
 
+  addTestToolDepend = drv: x: addTestToolDepends drv [x];
+  addTestToolDepends = drv: xs: overrideCabal drv (drv: { testToolDepends = (drv.testToolDepends or []) ++ xs; });
+
   addPkgconfigDepend = drv: x: addPkgconfigDepends drv [x];
-  addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkgconfigDepends = (drv.pkgconfigDepends or []) ++ xs; });
+  addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { pkg-configDepends = (drv.pkg-configDepends or []) ++ xs; });
 
   addSetupDepend = drv: x: addSetupDepends drv [x];
   addSetupDepends = drv: xs: overrideCabal drv (drv: { setupHaskellDepends = (drv.setupHaskellDepends or []) ++ xs; });
@@ -231,6 +234,31 @@ rec {
     installPhase = "install -D dist/${drv.pname}-*.tar.gz $out/${drv.pname}-${drv.version}.tar.gz";
     fixupPhase = ":";
   });
+
+  /* Create a documentation tarball suitable for uploading to Hackage instead
+     of building the package.
+   */
+  documentationTarball = pkg:
+    pkgs.lib.overrideDerivation pkg (drv: {
+      name = "${drv.name}-docs";
+      # Like sdistTarball, disable the "doc" output here.
+      outputs = [ "out" ];
+      buildPhase = ''
+        runHook preHaddock
+        ./Setup haddock --for-hackage
+        runHook postHaddock
+      '';
+      haddockPhase = ":";
+      checkPhase = ":";
+      installPhase = ''
+        runHook preInstall
+        mkdir -p "$out"
+        tar --format=ustar \
+          -czf "$out/${drv.name}-docs.tar.gz" \
+          -C dist/doc/html "${drv.name}-docs"
+        runHook postInstall
+      '';
+    });
 
   /* Use the gold linker. It is a linker for ELF that is designed
      "to run as fast as possible on modern systems"
@@ -386,13 +414,13 @@ rec {
   */
   generateOptparseApplicativeCompletion = exeName: pkg: overrideCabal pkg (drv: {
     postInstall = (drv.postInstall or "") + ''
-      bashCompDir="$out/share/bash-completion/completions"
-      zshCompDir="$out/share/zsh/vendor-completions"
-      fishCompDir="$out/share/fish/vendor_completions.d"
+      bashCompDir="''${!outputBin}/share/bash-completion/completions"
+      zshCompDir="''${!outputBin}/share/zsh/vendor-completions"
+      fishCompDir="''${!outputBin}/share/fish/vendor_completions.d"
       mkdir -p "$bashCompDir" "$zshCompDir" "$fishCompDir"
-      "$out/bin/${exeName}" --bash-completion-script "$out/bin/${exeName}" >"$bashCompDir/${exeName}"
-      "$out/bin/${exeName}" --zsh-completion-script "$out/bin/${exeName}" >"$zshCompDir/_${exeName}"
-      "$out/bin/${exeName}" --fish-completion-script "$out/bin/${exeName}" >"$fishCompDir/${exeName}.fish"
+      "''${!outputBin}/bin/${exeName}" --bash-completion-script "''${!outputBin}/bin/${exeName}" >"$bashCompDir/${exeName}"
+      "''${!outputBin}/bin/${exeName}" --zsh-completion-script "''${!outputBin}/bin/${exeName}" >"$zshCompDir/_${exeName}"
+      "''${!outputBin}/bin/${exeName}" --fish-completion-script "''${!outputBin}/bin/${exeName}" >"$fishCompDir/${exeName}.fish"
 
       # Sanity check
       grep -F ${exeName} <$bashCompDir/${exeName} >/dev/null || {

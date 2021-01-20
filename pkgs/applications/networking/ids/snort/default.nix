@@ -1,4 +1,4 @@
-{stdenv, pkgconfig, luajit, openssl, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison, makeWrapper
+{lib, stdenv, pkg-config, luajit, openssl, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison, makeWrapper
 , libtirpc
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "13lzvjli6kbsnkd7lf0rm71l2mnz38pxk76ia9yrjb6clfhlbb73";
   };
 
-  buildInputs = [ makeWrapper pkgconfig luajit openssl libpcap pcre libdnet daq zlib flex bison libtirpc ];
+  buildInputs = [ makeWrapper pkg-config luajit openssl libpcap pcre libdnet daq zlib flex bison libtirpc ];
 
   NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
 
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Network intrusion prevention and detection system (IDS/IPS)";
     homepage = "https://www.snort.org";
-    maintainers = with stdenv.lib.maintainers; [ aycanirican ];
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [ aycanirican ];
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux;
   };
 }

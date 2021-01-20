@@ -1,4 +1,4 @@
-{ qtModule, stdenv, qtbase, qtdeclarative, pkgconfig
+{ qtModule, stdenv, qtbase, qtdeclarative, pkg-config
 , alsaLib, gstreamer, gst-plugins-base, libpulseaudio, wayland
 }:
 
@@ -7,7 +7,7 @@ with stdenv.lib;
 qtModule {
   name = "qtmultimedia";
   qtInputs = [ qtbase qtdeclarative ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gstreamer gst-plugins-base libpulseaudio ]
     ++ optional (stdenv.isLinux) alsaLib
     ++ optional (versionAtLeast qtbase.version "5.14.0" && stdenv.isLinux) wayland;

@@ -1,23 +1,24 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , SDL2, cmake, curl, duktape, fontconfig, freetype, icu, jansson, libGLU
-, libiconv, libpng, libpthreadstubs, libzip, openssl, pkgconfig, speexdsp, zlib
+, libiconv, libpng, libpthreadstubs, libzip, nlohmann_json, openssl, pkg-config
+, speexdsp, zlib
 }:
 
 let
-  version = "0.3.0";
+  version = "0.3.2";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${version}";
-    sha256 = "0xs8pnn3lq30iy76pv42hywsrabapcrrkl597dhjafwh1xaxxj91";
+    sha256 = "1fd32wniiy6qz2046ppqfj2sb3rf2qf086rf9v1bdhyj254d0b1z";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
-    rev = "v1.0.16";
-    sha256 = "1xz50ghiqj9rm0m6d65j09ich6dlhyj36zah6zvmmzr4kg6svnk5";
+    rev = "v1.0.18";
+    sha256 = "1v9424kxdppg8vszv0vyq91lzljkrjc3nmk58wbwlpcwj6dip07s";
   };
 
   title-sequences-src = fetchFromGitHub {
@@ -35,7 +36,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation {
     libpng
     libpthreadstubs
     libzip
+    nlohmann_json
     openssl
     speexdsp
     zlib
@@ -66,11 +68,9 @@ stdenv.mkDerivation {
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
-  enableParallelBuilding = true;
-
   preFixup = "ln -s $out/share/openrct2 $out/bin/data";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source re-implementation of RollerCoaster Tycoon 2 (original game required)";
     homepage = "https://openrct2.io/";
     license = licenses.gpl3;

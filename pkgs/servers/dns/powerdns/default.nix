@@ -1,29 +1,36 @@
-{ stdenv, fetchurl, pkgconfig, nixosTests
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, nixosTests
 , boost, libyamlcpp, libsodium, sqlite, protobuf, openssl, systemd
-, mysql57, postgresql, lua, openldap, geoip, curl, opendbx, unixODBC
+, mysql57, postgresql, lua, openldap, geoip, curl, unixODBC
 }:
 
 stdenv.mkDerivation rec {
   pname = "powerdns";
-  version = "4.2.3";
+  version = "4.3.1";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    sha256 = "1vf03hssk9rfhvhzfc5ca2r4ly67wq0czr0ysvdrk8pnb0yk6yfi";
+    sha256 = "0if27znz528sir52y9i4gcfhdsym7yxiwjgffy9lpscf1426q56m";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  patches = [
+    (fetchpatch { # remove for >= 4.4.0
+      name = "gcc-10_undefined-reference.diff";
+      url = "https://github.com/PowerDNS/pdns/commit/05c9dd77b28.diff";
+      sha256 = "1m9szbi02h9kcabgw3kb8k9qrb54d34z0qzizrlfiw3hxs6c2zql";
+    })
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip
-    libyamlcpp libsodium curl opendbx unixODBC openssl systemd
+    libyamlcpp libsodium curl unixODBC openssl systemd
   ];
 
   # nix destroy with-modules arguments, when using configureFlags
   preConfigure = ''
     configureFlagsArray=(
-      "--with-modules=bind gmysql geoip godbc gpgsql gsqlite3 ldap lua mydns opendbx pipe random remote"
+      "--with-modules=bind gmysql geoip godbc gpgsql gsqlite3 ldap lua2 pipe random remote"
       --with-sqlite3
-      --with-socketdir=/var/lib/powerdns
       --with-libcrypto=${openssl.dev}
       --with-libsodium
       --enable-tools
@@ -42,7 +49,7 @@ stdenv.mkDerivation rec {
     nixos = nixosTests.powerdns;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Authoritative DNS server";
     homepage = "https://www.powerdns.com";
     platforms = platforms.unix;

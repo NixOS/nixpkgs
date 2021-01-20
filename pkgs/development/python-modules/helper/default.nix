@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pyyaml, mock }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pyyaml, mock }:
 
 buildPythonPackage rec {
   pname = "helper";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # No tests in the pypi tarball
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Development library for quickly writing configurable applications and daemons";
     homepage = "https://helper.readthedocs.org/";
     license = licenses.bsd3;

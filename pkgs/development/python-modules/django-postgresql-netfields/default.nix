@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , django
 , netaddr
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jimfunk";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1rrh38f3zl3jk5ijs6g75dxxvxygf4lczbgc7ahrgzf58g4a48lm";
   };
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     six
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Django PostgreSQL netfields implementation";
     homepage = "https://github.com/jimfunk/django-postgresql-netfields";
     license = licenses.bsd2;

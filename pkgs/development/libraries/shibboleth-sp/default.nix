@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook, boost, fcgi, openssl, opensaml-cpp, log4shib, pkgconfig, xercesc, xml-security-c, xml-tooling-c }:
+{ stdenv, fetchgit, autoreconfHook, boost, fcgi, openssl, opensaml-cpp, log4shib, pkg-config, xercesc, xml-security-c, xml-tooling-c }:
 
 stdenv.mkDerivation rec {
   pname = "shibboleth-sp";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qb4dbz5gk10b9w1rf6f4vv7c2wb3a8bfzif6yiaq96ilqad7gdr";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ boost fcgi openssl opensaml-cpp log4shib xercesc xml-security-c xml-tooling-c ];
 
   configureFlags = [

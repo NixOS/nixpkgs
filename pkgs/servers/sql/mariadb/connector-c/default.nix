@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, cmake
+{ lib, stdenv, fetchurl, cmake
 , curl, openssl, zlib
 , libiconv
 , version, sha256, ...
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   pname = "mariadb-connector-c";
@@ -41,8 +41,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ curl openssl zlib ];
   buildInputs = [ libiconv ];
-
-  enableParallelBuilding = true;
 
   postInstall = ''
     moveToOutput bin/mariadb_config "$dev"

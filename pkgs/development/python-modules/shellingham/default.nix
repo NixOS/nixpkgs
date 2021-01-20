@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 }:
 
 buildPythonPackage rec {
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "576c1982bea0ba82fb46c36feb951319d7f42214a82634233f58b40d858a751e";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to Detect Surrounding Shell";
     homepage = "https://github.com/sarugaku/shellingham";
     license = licenses.isc;

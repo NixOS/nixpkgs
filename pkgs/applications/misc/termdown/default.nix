@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , buildPythonApplication
 , click
@@ -20,7 +20,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ dateutil click pyfiglet setuptools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Starts a countdown to or from TIMESPEC";
     longDescription = "Countdown timer and stopwatch in your terminal";
     homepage = "https://github.com/trehn/termdown";

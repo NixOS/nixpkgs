@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Mid-side multiband distortion for jack and lv2";
     homepage = "https://github.com/magnetophon/MBdistortion";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
   };
 }

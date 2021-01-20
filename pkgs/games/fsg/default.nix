@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, glib, pkgconfig, libGLU, libGL, wxGTK, libX11, xorgproto
+{ lib, stdenv, fetchurl, gtk2, glib, pkg-config, libGLU, libGL, wxGTK, libX11, xorgproto
 , runtimeShell }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 glib libGLU libGL wxGTK libX11 xorgproto ];
 
   preBuild = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Cellular automata engine tuned towards the likes of Falling Sand";
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2 }:
+{ stdenv, fetchurl, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "gtkdatabox-0.9.3.1";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rdxnjgh6v3yjqgsfmamyzpfxckzchps4kqvvz88nifmd7ckhjfh";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ gtk2 ];
 

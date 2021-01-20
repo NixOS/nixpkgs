@@ -1,14 +1,16 @@
-{ pkgs, gccStdenv, callPackage, fetchFromGitHub }:
+{ pkgs, lib, gccStdenv, callPackage, fetchFromGitHub }:
 # See ../gambit/build.nix regarding gccStdenv
 
 rec {
   # Gerbil libraries
   gerbilPackages-unstable = {
+    gerbil-libp2p = callPackage ./gerbil-libp2p.nix { };
     gerbil-utils = callPackage ./gerbil-utils.nix { };
     gerbil-crypto = callPackage ./gerbil-crypto.nix { };
     gerbil-poo = callPackage ./gerbil-poo.nix { };
     gerbil-persist = callPackage ./gerbil-persist.nix { };
     gerbil-ethereum = callPackage ./gerbil-ethereum.nix { };
+    smug-gerbil = callPackage ./smug-gerbil.nix { };
   };
 
   # Use this function in any package that uses Gerbil libraries, to define the GERBIL_LOADPATH.
@@ -23,6 +25,7 @@ rec {
     gambit-params ? pkgs.gambit-support.stable-params,
     gerbilInputs ? [],
     buildInputs ? [],
+    buildScript ? "./build.ss",
     softwareName ? ""} :
     let buildInputs_ = buildInputs; in
     gccStdenv.mkDerivation rec {
@@ -33,8 +36,8 @@ rec {
         set -e ;
         if [ -n "${version-path}.ss" ] ; then
           echo -e '(import :clan/versioning${builtins.concatStringsSep ""
-                     (map (x : if x.passthru.version-path != ""
-                               then " :${x.passthru.gerbil-package}/${x.passthru.version-path}" else "")
+                     (map (x : lib.optionalString (x.passthru.version-path != "")
+                               " :${x.passthru.gerbil-package}/${x.passthru.version-path}")
                           gerbilInputs)
                      })\n(register-software "${softwareName}" "v${git-version}")\n' > "${passthru.version-path}.ss"
         fi
@@ -50,7 +53,7 @@ rec {
 
       buildPhase = ''
         runHook preBuild
-        ./build.ss
+        ${buildScript}
         runHook postBuild
       '';
 

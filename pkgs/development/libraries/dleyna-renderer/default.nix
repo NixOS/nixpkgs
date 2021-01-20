@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , dleyna-connector-dbus
 , dleyna-core
 , gssdp
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     makeWrapper
   ];
 

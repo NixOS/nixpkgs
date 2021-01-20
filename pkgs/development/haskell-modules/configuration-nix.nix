@@ -94,8 +94,6 @@ self: super: builtins.intersectAttrs super {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
-  # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
-  cachix = disableLibraryProfiling super.cachix;
   hercules-ci-agent = disableLibraryProfiling super.hercules-ci-agent;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
@@ -502,7 +500,7 @@ self: super: builtins.intersectAttrs super {
   # requires autotools to build
   secp256k1 = addBuildTools super.secp256k1 [ pkgs.buildPackages.autoconf pkgs.buildPackages.automake pkgs.buildPackages.libtool ];
 
-  # requires libsecp256k1 in pkgconfig-depends
+  # requires libsecp256k1 in pkg-config-depends
   secp256k1-haskell = addPkgconfigDepend super.secp256k1-haskell pkgs.secp256k1;
 
   # tests require git and zsh
@@ -548,6 +546,12 @@ self: super: builtins.intersectAttrs super {
 
   # Break infinite recursion cycle between devtools and mprelude.
   devtools = super.devtools.override { mprelude = dontCheck super.mprelude; };
+
+  # Break dependency cycle between tasty-hedgehog and tasty-expected-failure
+  tasty-hedgehog = dontCheck super.tasty-hedgehog;
+
+  # Break dependency cycle between hedgehog, tasty-hedgehog and lifted-async
+  lifted-async = dontCheck super.lifted-async;
 
   # loc and loc-test depend on each other for testing. Break that infinite cycle:
   loc-test = super.loc-test.override { loc = dontCheck self.loc; };
@@ -653,16 +657,9 @@ self: super: builtins.intersectAttrs super {
 
   spago =
     let
-      # Spago needs a small patch to work with the latest versions of rio.
-      # https://github.com/purescript/spago/pull/647
-      spagoWithPatches = appendPatch super.spago (pkgs.fetchpatch {
-        url = "https://github.com/purescript/spago/pull/647/commits/917ee541a966db74f0f5d11f2f86df0030c35dd7.patch";
-        sha256 = "1nspqgcjk6z90cl9zhard0rn2q979kplcqz72x8xv5mh57zabk0w";
-      });
-
       # spago requires an older version of megaparsec, but it appears to work
       # fine with newer versions.
-      spagoWithOverrides = doJailbreak spagoWithPatches;
+      spagoWithOverrides = doJailbreak super.spago;
 
       # This defines the version of the purescript-docs-search release we are using.
       # This is defined in the src/Spago/Prelude.hs file in the spago source.
@@ -720,7 +717,7 @@ self: super: builtins.intersectAttrs super {
 
   # mplayer-spot uses mplayer at runtime.
   mplayer-spot =
-    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.mplayer ];
+    let path = pkgs.lib.makeBinPath [ pkgs.mplayer ];
     in overrideCabal (addBuildTool super.mplayer-spot pkgs.makeWrapper) (oldAttrs: {
       postInstall = ''
         wrapProgram $out/bin/mplayer-spot --prefix PATH : "${path}"
@@ -729,9 +726,10 @@ self: super: builtins.intersectAttrs super {
 
   # break infinite recursion with base-orphans
   primitive = dontCheck super.primitive;
+  primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
 
   cut-the-crap =
-    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg_3 ];
+    let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg_3 pkgs.youtube-dl ];
     in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \
@@ -796,5 +794,14 @@ self: super: builtins.intersectAttrs super {
         ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_version}
         ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_major_version}
        '';
+    testToolDepends = [ self.cabal-install pkgs.git ];
+    testTarget = "func-test"; # wrapper test accesses internet
+    preCheck = ''
+      export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
+      export HOME=$TMPDIR
+    '';
   });
+
+  # tests depend on a specific version of solc
+  hevm = dontCheck (doJailbreak super.hevm);
 }

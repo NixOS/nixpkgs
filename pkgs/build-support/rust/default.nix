@@ -4,6 +4,10 @@
 , cargo
 , diffutils
 , fetchCargoTarball
+, runCommandNoCC
+, rustPlatform
+, callPackage
+, remarshal
 , git
 , rust
 , rustc
@@ -11,7 +15,13 @@
 }:
 
 { name ? "${args.pname}-${args.version}"
-, cargoSha256 ? "unset"
+
+  # SRI hash
+, cargoHash ? ""
+
+  # Legacy hash
+, cargoSha256 ? ""
+
 , src ? null
 , srcs ? null
 , unpackPhase ? null
@@ -26,11 +36,14 @@
 , cargoBuildFlags ? []
 , buildType ? "release"
 , meta ? {}
-, target ? null
+, target ? rust.toRustTargetSpec stdenv.hostPlatform
 , cargoVendorDir ? null
 , checkType ? buildType
 , depsExtraArgs ? {}
 , cargoParallelTestThreads ? true
+
+# Toggles whether a custom sysroot is created when the target is a .json file.
+, __internal_dontAddSysroot ? false
 
 # Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
 # contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
@@ -39,7 +52,7 @@
 , buildAndTestSubdir ? null
 , ... } @ args:
 
-assert cargoVendorDir == null -> cargoSha256 != "unset";
+assert cargoVendorDir == null -> !(cargoSha256 == "" && cargoHash == "");
 assert buildType == "release" || buildType == "debug";
 
 let
@@ -47,6 +60,7 @@ let
   cargoDeps = if cargoVendorDir == null
     then fetchCargoTarball ({
         inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
+        hash = cargoHash;
         patches = cargoPatches;
         sha256 = cargoSha256;
       } // depsExtraArgs)
@@ -54,7 +68,7 @@ let
 
   # If we have a cargoSha256 fixed-output derivation, validate it at build time
   # against the src fixed-output derivation to check consistency.
-  validateCargoDeps = cargoSha256 != "unset";
+  validateCargoDeps = !(cargoHash == "" && cargoSha256 == "");
 
   # Some cargo builds include build hooks that modify their own vendor
   # dependencies. This copies the vendor directory into the build tree and makes
@@ -69,13 +83,26 @@ let
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';
 
-  rustTarget = if target == null then rust.toRustTarget stdenv.hostPlatform else target;
+  targetIsJSON = stdenv.lib.hasSuffix ".json" target;
+  useSysroot = targetIsJSON && !__internal_dontAddSysroot;
+
+  # see https://github.com/rust-lang/cargo/blob/964a16a28e234a3d397b2a7031d4ab4a428b1391/src/cargo/core/compiler/compile_kind.rs#L151-L168
+  # the "${}" is needed to transform the path into a /nix/store path before baseNameOf
+  shortTarget = if targetIsJSON then
+      (stdenv.lib.removeSuffix ".json" (builtins.baseNameOf "${target}"))
+    else target;
+
+  sysroot = (callPackage ./sysroot {}) {
+    inherit target shortTarget;
+    RUSTFLAGS = args.RUSTFLAGS or "";
+    originalCargoToml = src + /Cargo.toml; # profile info is later extracted
+  };
 
   ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  releaseDir = "target/${rustTarget}/${buildType}";
+  releaseDir = "target/${shortTarget}/${buildType}";
   tmpDir = "${releaseDir}-tmp";
 
   # Specify the stdenv's `diff` by abspath to ensure that the user's build
@@ -85,7 +112,13 @@ let
 
 in
 
-stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
+# Tests don't currently work for `no_std`, and all custom sysroots are currently built without `std`.
+# See https://os.phil-opp.com/testing/ for more information.
+assert useSysroot -> !(args.doCheck or true);
+
+stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optionalAttrs useSysroot {
+  RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
+} // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
@@ -115,7 +148,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
     [target."${rust.toRustTarget stdenv.buildPlatform}"]
     "linker" = "${ccForBuild}"
     ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-    [target."${rustTarget}"]
+    [target."${shortTarget}"]
     "linker" = "${ccForHost}"
     ${# https://github.com/rust-lang/rust/issues/46651#issuecomment-433611633
       stdenv.lib.optionalString (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64) ''
@@ -185,7 +218,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
       "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
       cargo build -j $NIX_BUILD_CORES \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
-        --target ${rustTarget} \
+        --target ${target} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 
@@ -205,7 +238,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
   '';
 
   checkPhase = args.checkPhase or (let
-    argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${rustTarget} --frozen";
+    argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${target} --frozen";
     threads = if cargoParallelTestThreads then "$NIX_BUILD_CORES" else "1";
   in ''
     ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}

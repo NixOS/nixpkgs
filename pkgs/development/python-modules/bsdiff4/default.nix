@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , aflplusplus
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     python -c 'import bsdiff4; bsdiff4.test()'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "binary diff and patch using the BSDIFF4-format";
     homepage = "https://github.com/ilanschnell/bsdiff4";
     license = licenses.bsdProtection;

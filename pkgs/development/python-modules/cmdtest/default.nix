@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchurl
 , cliapp
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   # TODO: cmdtest tests must be run before the buildPhase
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = "http://liw.fi/cmdtest/";
+  meta = with lib; {
+    homepage = "https://liw.fi/cmdtest/";
     description = "Black box tests Unix command line tools";
     license = licenses.gpl3;
   };

@@ -189,7 +189,7 @@ stdenv.mkDerivation (rec {
   strictDeps = true;
 
   # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
-	dontAddExtraLibs = true;
+  dontAddExtraLibs = true;
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3 sphinx
@@ -241,6 +241,7 @@ stdenv.mkDerivation (rec {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
+    timeout = 24 * 3600;
     inherit (ghc.meta) license platforms;
   };
 

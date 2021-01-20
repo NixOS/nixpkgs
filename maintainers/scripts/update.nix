@@ -34,7 +34,7 @@ let
 
   /* Recursively find all packages (derivations) in `pkgs` matching `cond` predicate.
 
-    Type: packagesWithPath :: AttrPath → (AttrPath → derivation → bool) → (AttrSet | List) → List<AttrSet{attrPath :: str; package :: derivation; }>
+    Type: packagesWithPath :: AttrPath → (AttrPath → derivation → bool) → AttrSet → List<AttrSet{attrPath :: str; package :: derivation; }>
           AttrPath :: [str]
 
     The packages will be returned as a list of named pairs comprising of:
@@ -60,8 +60,6 @@ let
                 if path == rootPath || evaluatedPathContent.recurseForDerivations or false || evaluatedPathContent.recurseForRelease or false then
                   dedupResults (lib.mapAttrsToList (name: elem: packagesWithPathInner (path ++ [name]) elem) evaluatedPathContent)
                 else []
-              else if lib.isList evaluatedPathContent then
-                dedupResults (lib.imap0 (i: elem: packagesWithPathInner (path ++ [i]) elem) evaluatedPathContent)
               else []
           else [];
     in

@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , substituteAll
 , gdb
-, colorama
 , flask
 , psutil
 , pytest-timeout
@@ -18,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.0.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1cxwbq97n5pfmq0hji1ybbc6i1jg5bjy830dq23zqxbwxxwjx98m";
+    sha256 = "1dgjbbhy228w2zbfq5pf0hkai7742zw8mmybnzjdc9l6pw7360rq";
   };
 
   patches = [
@@ -32,6 +31,11 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./hardcode-gdb.patch;
       inherit gdb;
+    })
+
+    (substituteAll {
+      src = ./hardcode-version.patch;
+      inherit version;
     })
 
     # Fix importing debugpy in:
@@ -60,7 +64,6 @@ buildPythonPackage rec {
   )'';
 
   checkInputs = [
-    colorama
     flask
     psutil
     pytest-timeout

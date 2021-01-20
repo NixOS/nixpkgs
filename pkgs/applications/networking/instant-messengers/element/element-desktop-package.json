@@ -2,12 +2,12 @@
   "name": "element-desktop",
   "productName": "Element",
   "main": "src/electron-main.js",
-  "version": "1.7.9",
+  "version": "1.7.17",
   "description": "A feature-rich client for Matrix.org",
   "author": "Element",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vector-im/riot-desktop"
+    "url": "https://github.com/vector-im/element-desktop"
   },
   "license": "Apache-2.0",
   "files": [],
@@ -21,7 +21,7 @@
     "build32": "electron-builder --ia32",
     "build64": "electron-builder --x64",
     "build": "electron-builder",
-    "docker:setup": "docker build -t riot-desktop-dockerbuild dockerbuild",
+    "docker:setup": "docker build -t element-desktop-dockerbuild dockerbuild",
     "docker:build:native": "scripts/in-docker.sh yarn run hak",
     "docker:build": "scripts/in-docker.sh yarn run build",
     "docker:install": "scripts/in-docker.sh yarn install",
@@ -57,12 +57,12 @@
     "tar": "^6.0.1"
   },
   "hakDependencies": {
-    "matrix-seshat": "^2.2.1",
+    "matrix-seshat": "^2.2.3",
     "keytar": "^5.6.0"
   },
   "build": {
     "appId": "im.riot.app",
-    "electronVersion": "10.1.1",
+    "electronVersion": "10.2.0",
     "files": [
       "package.json",
       {

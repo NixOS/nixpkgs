@@ -1,6 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , setuptools_scm
 , m2r
 , pyyaml
@@ -11,6 +12,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-openapi";
   version = "0.7.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,7 +24,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";
     description = "OpenAPI (fka Swagger) spec renderer for Sphinx";
     license = licenses.bsd0;

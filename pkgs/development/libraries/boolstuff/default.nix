@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig }:
+{ stdenv, fetchurl, pkg-config }:
 
 let baseurl = "https://perso.b2b2c.ca/~sarrazip/dev"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "10qynbyw723gz2vrvn4xk2var172kvhlz3l3l80qbdsfb3d12wn0";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = {
     description = "Library for operations on boolean expression binary trees";

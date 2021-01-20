@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "2.0";
+  version = "2.1.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ebeb62b71a5c683a84c1b16bbf415708af5a46841b142b85ac3a22ec2d7613b0";
+    sha256 = "fa1d48bcb85bbed90f6ffee6936578f65ff0e93aa607397bd88eaeb408bd96d8";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    pytest --pyargs public
+    pytest
   '';
 
   meta = with lib; {

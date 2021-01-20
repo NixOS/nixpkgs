@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, glibc }:
+{ lib, stdenv, fetchFromGitHub, cmake, glibc }:
 
 stdenv.mkDerivation rec {
   version = "0.19.0";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ glibc glibc.static ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tiny but valid init for containers";
     homepage = "https://github.com/krallin/tini";
     license = licenses.mit;

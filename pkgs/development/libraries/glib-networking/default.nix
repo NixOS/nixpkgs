@@ -4,7 +4,7 @@
 , meson
 , ninja
 , nixosTests
-, pkgconfig
+, pkg-config
 , glib
 , gettext
 , makeWrapper
@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
-  version = "2.64.3";
+  version = "2.66.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0s518l4bwvdvcp51lbjqcw8g0vq18bznpf5hq2zi6a054jqhcylk";
+    sha256 = "16807qwflbghp0c66jdx2gnaffvdp4bla35ppzp9dlgx6wjbxmy5";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     makeWrapper
     python3 # for install_script

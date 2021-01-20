@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, rustPlatform, cmake, pkgconfig, openssl
+{ lib, stdenv, fetchFromGitLab, rustPlatform, cmake, pkg-config, openssl
 , darwin, installShellFiles
 
 , x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD
@@ -16,23 +16,23 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "ffsend";
-  version = "0.2.65";
+  version = "0.2.68";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "02yw129rw072jlf36k60jbhfdv9ayx2wb5il61fc0v07h1nd7i0d";
+    sha256 = "0ga1v4s8ks2v632mim8ljya0gi2j8bbwj98yfm3g00p0z1i526qk";
   };
 
-  cargoSha256 = "04waki61b5pjlgznbhbrjpi9rxgdwg9mjbx2apfh9swvfip602r6";
+  cargoSha256 = "1n9pf29xid6jcas5yx94k4cpmqgx0kpqq7gwf83jisjywxzygh6w";
 
-  nativeBuildInputs = [ cmake pkgconfig installShellFiles ];
+  nativeBuildInputs = [ cmake pkg-config installShellFiles ];
   buildInputs =
     if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
     else [ openssl ];
 
-  preBuild = stdenv.lib.optionalString (x11Support && usesX11) (
+  preBuild = lib.optionalString (x11Support && usesX11) (
     if preferXsel && xsel != null then ''
       export XSEL_PATH="${xsel}/bin/xsel"
     '' else ''
@@ -45,7 +45,7 @@ buildRustPackage rec {
   '';
   # There's also .elv and .ps1 completion files but I don't know where to install those
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Easily and securely share files from the command line. A fully featured Firefox Send client";
     longDescription = ''
       Easily and securely share files and directories from the command line through a safe, private

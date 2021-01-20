@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
+{ stdenv, fetchurl, pkg-config, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
 , libX11, cairo
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , withMesa ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 libXinerama libSM libXxf86vm xorgproto libX11 cairo ]
     ++ optional withMesa libGLU;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   hardeningDisable = [ "format" ];
 

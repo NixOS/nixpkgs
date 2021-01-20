@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk2, t1lib, glib, libxml2, popt, gmetadom ? null }:
+{stdenv, fetchurl, pkg-config, gtk2, t1lib, glib, libxml2, popt, gmetadom ? null }:
 
 let
   pname = "gtkmathview";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0hwcamf5fi35frg7q6kgisc9v0prqbhsplb2gl55cg3av9sh3hqx";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ t1lib glib gmetadom libxml2 popt];
   propagatedBuildInputs = [gtk2 t1lib];
 

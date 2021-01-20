@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libxkbcommon, pkgconfig, cmake }:
+{ stdenv, fetchFromGitHub, libxkbcommon, pkg-config, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "libtsm";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxkbcommon ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with stdenv.lib; {
     description = "Terminal-emulator State Machine";

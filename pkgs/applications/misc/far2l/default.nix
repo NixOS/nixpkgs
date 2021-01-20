@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
+{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkg-config, wxGTK30, glib, pcre, m4, bash,
   xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
 
 let
@@ -20,15 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "1ssd3hwz4b7vl4r858d9whl61cn23pgcamcjmvfa6ysf4x2b7sgi";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
+  nativeBuildInputs = [ cmake pkg-config m4 makeWrapper imagemagick ];
 
   buildInputs = [ wxGTK30 glib pcre ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace far2l/bootstrap/trash.sh \
       --replace 'gvfs-trash'  '${gvfs}/bin/gvfs-trash'
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace far2l/CMakeLists.txt \
       --replace "-framework System" -lSystem
   '' + ''
@@ -70,15 +70,13 @@ stdenv.mkDerivation rec {
       mkdir -p $out/share/icons/hicolor/$size/apps
       convert -size $size ../far2l/DE/icons/hicolor/$size/apps/far2l.svg $out/share/icons/hicolor/$size/apps/far2l.png
     done
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     wrapProgram $out/bin/far2l --argv0 $out/bin/far2l
   '';
 
   stripDebugList = [ "bin" "share" ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An orthodox file manager";
     homepage = "https://github.com/elfmz/far2l";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui,
+{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel, libxfce4ui,
   gtk2, exo, gnutls, libgcrypt, xfce }:
 
 let
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
   version = "1.2.0";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "1bfw3smwivr9mzdyq768biqrl4aq94zqi3xjzq6kqnd8561cqjk2";
   };
 
   nativeBuildInputs = [
     intltool
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     versionLister = xfce.archiveLister category pname;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-mailwatch-plugin";
     description = "Mail watcher plugin for Xfce panel";
     license = licenses.gpl2;

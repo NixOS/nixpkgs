@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [gmp mpfr];
   meta = {
     inherit version;
-    description = ''Lattice algorithms using floating-point arithmetic'';
+    description = "Lattice algorithms using floating-point arithmetic";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;

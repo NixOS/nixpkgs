@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, bash, coreutils, python3
+{ lib, stdenv, fetchurl, bash, coreutils, python3
 , libcap_ng, policycoreutils, selinux-python, dbus
 , xorgserver, openbox, xmodmap }:
 
 # this is python3 only as it depends on selinux-python
 
-with stdenv.lib; 
+with lib;
 with python3.pkgs;
 
 stdenv.mkDerivation rec {
@@ -58,4 +58,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

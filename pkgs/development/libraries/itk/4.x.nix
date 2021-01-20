@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
     "-DModule_ITKReview=ON"
   ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake xz ];
   buildInputs = [ libX11 libuuid vtk_7 ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
 

@@ -12,7 +12,7 @@ in
 nodePackages.newman.override {
   meta = with lib; {
     homepage = "https://www.getpostman.com";
-    description = "Newman is a command-line collection runner for Postman";
+    description = "A command-line collection runner for Postman";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.asl20;
   };

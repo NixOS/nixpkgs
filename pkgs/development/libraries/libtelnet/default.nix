@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, zlib }:
+{ stdenv, fetchFromGitHub, pkg-config, autoreconfHook, zlib }:
 
 stdenv.mkDerivation {
   pname = "libtelnet";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1lp6gdbndsp2w8mhy88c2jknxj2klvnggvq04ln7qjg8407ifpda";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ zlib ];
 
   meta = {

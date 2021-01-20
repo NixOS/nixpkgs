@@ -1,5 +1,5 @@
 { pname, version, src, binaryName, desktopName
-, autoPatchelfHook, fetchurl, makeDesktopItem, stdenv, wrapGAppsHook
+, autoPatchelfHook, fetchurl, makeDesktopItem, lib, stdenv, wrapGAppsHook
 , alsaLib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
 , freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     libcxx systemd libpulseaudio
     stdenv.cc.cc alsaLib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
     gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update-discord.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "All-in-one cross-platform voice and text chat for gamers";
     homepage = "https://discordapp.com/";
     downloadPage = "https://discordapp.com/download";

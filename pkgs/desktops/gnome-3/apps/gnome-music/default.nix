@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , meson
 , ninja
 , gettext
@@ -14,7 +14,7 @@
 , gnome-online-accounts
 , grilo
 , grilo-plugins
-, pkgconfig
+, pkg-config
 , gtk3
 , pango
 , glib
@@ -30,13 +30,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "3.36.4.1";
+  version = "3.38.2";
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0zdpjgwf48bqb66wrl6k33pzcmc2g3m1046ma7z8xaj9idpi37jh";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0c2051wngf3jrifl5bv5kyqcci459n62vixxkryiryjcaqwbd1am";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     ninja
     gettext
     itstool
-    pkgconfig
+    pkg-config
     libxml2
     wrapGAppsHook
     desktop-file-utils
@@ -103,7 +103,7 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Music";
     description = "Music player and management application for the GNOME desktop environment";
     maintainers = teams.gnome.members;

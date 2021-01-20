@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkg-config
 # required
 , libupnp, libuuid, pugixml, libiconv, sqlite, zlib, spdlog, fmt
@@ -16,18 +16,18 @@
 , enableInotifyTools ? true
 }:
 
-with stdenv.lib;
+with lib;
 let
   optionOnOff = option: if option then "on" else "off";
 in stdenv.mkDerivation rec {
   pname = "gerbera";
-  version = "1.6.1";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "sha256:05ca27r9sidbl7xns9hcdan8wgjrpg26n1wq1vp247c9bqhpyql8";
+    sha256 = "0vkgbw2ibvfr0zffnmmws7389msyqsiw8anfad6awvkda3z3rxjm";
   };
 
   cmakeFlags = [
@@ -63,8 +63,8 @@ in stdenv.mkDerivation rec {
   ++ optionals enableFFmpegThumbnailer [ pkgs.ffmpegthumbnailer ];
 
 
-  meta = with stdenv.lib; {
-    homepage = https://docs.gerbera.io/;
+  meta = with lib; {
+    homepage = "https://docs.gerbera.io/";
     description = "UPnP Media Server for 2020";
     longDescription = ''
       Gerbera is a Mediatomb fork.

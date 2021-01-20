@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
   pname = "autotalent";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sed -r 's/^const LADSPA_Descriptor \*/__attribute__ ((visibility ("default"))) \0/' -i autotalent.c
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://tombaran.info/autotalent.html";
     description = "A real-time pitch correction LADSPA plugin (no MIDI control)";
     license = licenses.gpl2;

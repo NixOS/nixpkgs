@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, automake, autoconf, pkgconfig, libtool, python2Packages, glib, jansson}:
+{stdenv, fetchFromGitHub, automake, autoconf, pkg-config, libtool, python2Packages, glib, jansson}:
 
 stdenv.mkDerivation rec {
   version = "3.2.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./libsearpc.pc.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ automake autoconf libtool python2Packages.python python2Packages.simplejson ];
   propagatedBuildInputs = [ glib jansson ];
 

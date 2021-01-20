@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "endlessh";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SSH tarpit that slowly sends an endless banner";
     homepage = "https://github.com/skeeto/endlessh";
     changelog = "https://github.com/skeeto/endlessh/releases/tag/${version}";

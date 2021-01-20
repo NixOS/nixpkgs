@@ -1,14 +1,14 @@
 { mkDerivation, fetchurl, pkgs, lib, php }:
 let
   pname = "psysh";
-  version = "0.10.3";
+  version = "0.10.4";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
-    sha256 = "0glply451fy0g7zbasyp350qvmk2aglrlcrcdd7w0igylgwfkg71";
+    sha256 = "005xh5rz12bsy9yvzzr69zpr0p7v4sh6cafhpinpfrvbwfq068f1";
   };
 
   phases = [ "installPhase" ];

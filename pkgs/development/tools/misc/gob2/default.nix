@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, bison, flex, gnome3 }:
+{ stdenv, fetchurl, pkg-config, glib, bison, flex, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gob2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   # configure script looks for d-bus but it is only needed for tests
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib bison flex ];
 
   passthru = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libv4l, gd }:
+{ lib, stdenv, fetchurl, libv4l, gd }:
 
 stdenv.mkDerivation rec {
   name = "fswebcam-20200725";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Neat and simple webcam app";
     homepage = "http://www.sanslogic.co.uk/fswebcam";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2;
   };
 }

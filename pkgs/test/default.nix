@@ -23,9 +23,12 @@ with pkgs;
   stdenv-inputs = callPackage ./stdenv-inputs { };
 
   haskell-shellFor = callPackage ./haskell-shellFor { };
+  haskell-documentationTarball = callPackage ./haskell-documentationTarball { };
 
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
+
+  install-shell-files = callPackage ./install-shell-files {};
 
   kernel-config = callPackage ./kernel.nix {};
 
@@ -34,6 +37,9 @@ with pkgs;
   macOSSierraShared = callPackage ./macos-sierra-shared {};
 
   cross = callPackage ./cross {};
+
+  rustCustomSysroot = callPackage ./rust-sysroot {};
+  buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
 
   nixos-functions = callPackage ./nixos-functions {};
 

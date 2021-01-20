@@ -20,7 +20,6 @@
 , sympy
 , vcrpy
 , pytest
-, pytestpep8
 , pytest-flakes
 , pytestcov
 , pytestrunner
@@ -42,7 +41,7 @@ buildPythonPackage rec {
   ] ++ lib.optional (!isPy3k) futures;
 
   checkInputs = [
-    sympy vcrpy pytest pytestpep8 pytest-flakes
+    sympy vcrpy pytest pytest-flakes
     pytestcov pytestrunner
   ];
 

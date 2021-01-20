@@ -38,7 +38,7 @@ buildEnv {
     ++ lib.optional enableDwarfTherapist dwarf-therapist
     ++ lib.optional enableLegendsBrowser legends-browser;
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "An opinionated wrapper for Dwarf Fortress";
     maintainers = with maintainers; [ Baughn numinit ];
     license = licenses.mit;

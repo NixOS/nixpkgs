@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
+{ lib, stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
 , atk, at-spi2-atk, at-spi2-core, alsaLib, cairo, cups, dbus, expat, gdk-pixbuf, glib, gtk3
 , freetype, fontconfig, nss, nspr, pango, udev, libuuid, libX11, libxcb, libXi
 , libXcursor, libXdamage, libXrandr, libXcomposite, libXext, libXfixes
@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "postman";
-  version = "7.32.0";
+  version = "7.36.0";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "0dn9awzhaafsdsiwwj6870zyqw4spsmc08zgcc5dhnpcnjcyldf3";
+    sha256 = "1wdbwlli9lzxxcwbc94fybfq6ipzvsv0waqcr1mjqzlfjqaqgrsb";
     name = "${pname}.tar.gz";
   };
 
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.getpostman.com";
     description = "API Development Environment";
     license = licenses.postman;

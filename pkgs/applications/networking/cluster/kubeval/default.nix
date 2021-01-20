@@ -7,7 +7,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "instrumenta";
     repo = "kubeval";
-    rev = "${version}";
+    rev = version;
     sha256 = "05li0qv4q7fy2lr50r6c1r8dhx00jb1g01qmgc72a9zqp378yiq0";
   };
 

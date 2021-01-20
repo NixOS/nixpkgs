@@ -6,7 +6,7 @@
 , fetchpatch
 , fetchzip
 , jack_capture
-, pkgconfig
+, pkg-config
 , pulseaudioFull
 , qtbase
 , makeWrapper
@@ -32,6 +32,11 @@ mkDerivation rec {
       url = "https://github.com/falkTX/Cadence/commit/1fd3275e7daf4b75f59ef1f85a9e2e93bd5c0731.patch";
       sha256 = "0q791jsh8vmjg678dzhbp1ykq8xrrlxl1mbgs3g8if1ccj210vd8";
     })
+    # Fix build with Qt 5.15
+    (fetchpatch {
+      url = "https://github.com/falkTX/Cadence/commit/c167f35fbb76c4246c730b29262a59da73010412.patch";
+      sha256 = "1gm9q6gx03sla5vcnisznc95pjdi2703f8b3mj2kby9rfx2pylyh";
+    })
   ];
 
   postPatch = ''
@@ -43,7 +48,7 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -93,8 +98,8 @@ mkDerivation rec {
   meta = {
     homepage = "https://github.com/falkTX/Cadence/";
     description = "Collection of tools useful for audio production";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ genesis worldofpeace ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ worldofpeace ];
     platforms = [ "x86_64-linux" ];
   };
 }

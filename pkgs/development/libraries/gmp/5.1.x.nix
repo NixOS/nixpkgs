@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, m4, cxx ? true, withStatic ? true }:
+{ stdenv, fetchurl, m4
+, cxx ? true
+, withStatic ? stdenv.hostPlatform.isStatic
+}:
 
 let inherit (stdenv.lib) optional; in
 

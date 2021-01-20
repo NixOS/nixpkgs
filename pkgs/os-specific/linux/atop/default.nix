@@ -1,22 +1,24 @@
-{stdenv, fetchurl, zlib, ncurses}:
+{lib, stdenv, fetchurl, zlib, ncurses}:
 
 stdenv.mkDerivation rec {
-  version = "2.4.0";
   pname = "atop";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "https://www.atoptool.nl/download/atop-${version}.tar.gz";
-    sha256 = "0s9xlxlzz688a80zxld840zkrmzw998rdkkg6yc7ssq8fw50275y";
+    sha256 = "nsLKOlcWkvfvqglfmaUQZDK8txzCLNbElZfvBIEFj3I=";
   };
 
   buildInputs = [zlib ncurses];
 
   makeFlags = [
-    ''SCRPATH=$out/etc/atop''
-    ''LOGPATH=/var/log/atop''
-    ''INIPATH=$out/etc/rc.d/init.d''
-    ''CRNPATH=$out/etc/cron.d''
-    ''ROTPATH=$out/etc/logrotate.d''
+    "SCRPATH=$out/etc/atop"
+    "LOGPATH=/var/log/atop"
+    "INIPATH=$out/etc/rc.d/init.d"
+    "SYSDPATH=$out/lib/systemd/system"
+    "CRNPATH=$out/etc/cron.d"
+    "DEFPATH=$out/etc/default"
+    "ROTPATH=$out/etc/logrotate.d"
   ];
 
   preConfigure = ''
@@ -28,12 +30,12 @@ stdenv.mkDerivation rec {
     sed -e 's/chmod 04711/chmod 0711/g' -i Makefile
   '';
 
+  installTargets = [ "systemdinstall" ];
   preInstall = ''
     mkdir -p "$out"/{bin,sbin}
-    make systemdinstall $makeFlags
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];
     description = ''Console system performance monitor'';
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
       Atop is an ASCII full-screen performance monitor that is capable of reporting the activity of all processes (even if processes have finished during the interval), daily logging of system and process activity for long-term analysis, highlighting overloaded system resources by using colors, etc. At regular intervals, it shows system-level activity related to the CPU, memory, swap, disks and network layers, and for every active process it shows the CPU utilization, memory growth, disk utilization, priority, username, state, and exit code.
     '';
     inherit version;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     downloadPage = "http://atoptool.nl/downloadatop.php";
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , ffmpeg_3
 , imagemagick
 , makeWrapper
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
 
     install -Dm755 gopro -t $out/bin
     wrapProgram $out/bin/gopro \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ ffmpeg_3 imagemagick mplayer ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg_3 imagemagick mplayer ]}"
 
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line interface for processing media filmed on GoPro HERO 3, 4, 5, 6, and 7 cameras";
     homepage = "https://github.com/KonradIT/gopro-linux";
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "bfcf9411ef4bf3db7579063e0546938b1edda3d69f4e1fb8756991f5951f85d4";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Test utilities for code working with files and commands";
     license = licenses.mit;
     homepage = "https://github.com/jupyter/testpath";

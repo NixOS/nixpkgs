@@ -1,7 +1,7 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
+{ lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
 xercesc, ode, eigen, qtbase, qttools, qtwebengine, qtxmlpatterns, wrapQtAppsHook,
 opencascade-occt, gts, hdf5, vtk, medfile, zlib, python3Packages, swig,
-gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkgconfig, mpi ? null }:
+gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkg-config, mpi ? null }:
 
 assert mpi != null;
 
@@ -9,29 +9,31 @@ let
   pythonPackages = python3Packages;
 in mkDerivation rec {
   pname = "freecad-unstable";
-  version = "2020-09-25";
+  version = "2020-12-08";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
-    rev = "7616153b3c31ace006169cdc2fdafab484498858";
-    sha256 = "1vffvzv3gkndfj2k8ik0afyk9rgngnr4aai5py66qd63qd7kmxch";
+    rev = "daea30341ea2d5eaf2bfb65614128a5fa2abc8b7";
+    sha256 = "1fza64lygqq35v7kzgqmiq5dvl5rpgkhlzv06f9dszdz44hznina";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    pkgconfig
+    pkg-config
     pythonPackages.pyside2-tools
     wrapQtAppsHook
   ];
 
   buildInputs = [
-    cmake coin3d xercesc ode eigen opencascade-occt gts
+    coin3d xercesc ode eigen opencascade-occt gts
     zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
     libGLU libXmu qtbase qttools qtwebengine qtxmlpatterns
   ] ++ (with pythonPackages; [
     matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
+    GitPython # for addon manager
+    scipy pyyaml # (at least for) PyrateWorkbench
   ]);
 
   cmakeFlags = [
@@ -66,7 +68,7 @@ in mkDerivation rec {
     mv $out/share/doc $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
     homepage = "https://www.freecadweb.org/";
     license = licenses.lgpl2Plus;

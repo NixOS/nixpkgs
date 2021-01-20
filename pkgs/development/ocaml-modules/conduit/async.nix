@@ -1,6 +1,6 @@
-{ stdenv, buildDunePackage, async, async_ssl, ppx_sexp_conv, conduit }:
+{ lib, buildDunePackage, async, async_ssl, ppx_sexp_conv, conduit }:
 
-if !stdenv.lib.versionAtLeast conduit.version "1.0"
+if !lib.versionAtLeast conduit.version "1.0"
 then conduit
 else
 

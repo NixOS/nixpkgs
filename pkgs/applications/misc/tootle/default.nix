@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , fetchpatch
 , vala
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , libgee
 , gsettings-desktop-schemas
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple Mastodon client designed for elementary OS";
     homepage = "https://github.com/bleakgrey/tootle";
     license = licenses.gpl3;

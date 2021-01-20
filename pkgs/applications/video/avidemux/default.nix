@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, pkgconfig
+{ stdenv, lib, fetchurl, cmake, pkg-config
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs =
-    [ yasm cmake pkgconfig ]
+    [ yasm cmake pkg-config ]
     ++ lib.optional withQT wrapQtAppsHook;
   buildInputs = [
     zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withVPX libvpx;
 
   buildCommand = let
-    qtVersion = "5.${stdenv.lib.versions.minor qtbase.version}";
+    qtVersion = "5.${lib.versions.minor qtbase.version}";
     wrapWith = makeWrapper: filename:
       "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
     wrapQtApp = wrapWith "wrapQtApp";
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
     ${wrapProgram "$out/bin/avidemux3_cli"}
 
-    ${stdenv.lib.optionalString withQT ''
+    ${lib.optionalString withQT ''
       ${wrapQtApp "$out/bin/avidemux3_qt5"}
       ${wrapQtApp "$out/bin/avidemux3_jobs_qt5"}
     ''}
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     fixupPhase
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://fixounet.free.fr/avidemux/";
     description = "Free video editor designed for simple video editing tasks";
     maintainers = with maintainers; [ abbradar ma27 ];

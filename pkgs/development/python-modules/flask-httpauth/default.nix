@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-HTTPAuth";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e028e4375039a49031eb9ecc40be4761f0540476040f6eff329a31dabd4d000";
+    sha256 = "8c7e49e53ce7dc14e66fe39b9334e4b7ceb8d0b99a6ba1c3562bb528ef9da84a";
   };
 
   propagatedBuildInputs = [ flask ];

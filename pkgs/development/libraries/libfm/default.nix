@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, intltool, menu-cache, pango, pkgconfig, vala
+{ stdenv, fetchurl, glib, intltool, menu-cache, pango, pkg-config, vala
 , extraOnly ? false
 , withGtk3 ? false, gtk2, gtk3 }:
 let
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r6gl49xrykldwz8y4h2s7gjarxigg3bbkrj0gphxjj1vr5j9ccn";
   };
 
-  nativeBuildInputs = [ vala pkgconfig intltool ];
+  nativeBuildInputs = [ vala pkg-config intltool ];
   buildInputs = [ glib gtk pango ] ++ optional (!extraOnly) menu-cache;
 
   configureFlags = [

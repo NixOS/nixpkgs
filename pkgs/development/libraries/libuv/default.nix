@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, ApplicationServices, CoreServices }:
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
   version = "1.40.0";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       sed '/${tdRegexp}/d' -i test/test-list.h
     '';
 
-  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
+  nativeBuildInputs = [ automake autoconf libtool pkg-config ];
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
 
   preConfigure = ''

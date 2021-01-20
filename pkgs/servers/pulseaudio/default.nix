@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchurl, pkg-config, autoreconfHook
 , libsndfile, libtool, makeWrapper, perlPackages
 , xorg, libcap, alsaLib, glib, dconf
 , avahi, libjack2, libasyncns, lirc, dbus
@@ -31,16 +31,16 @@
 
 stdenv.mkDerivation rec {
   name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
-  version = "13.0";
+  version = "14.0";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "0mw0ybrqj7hvf8lqs5gjzip464hfnixw453lr0mqzlng3b5266wn";
+    sha256 = "0qf20rgg0ysrnvg3359j56ndls07qmfn5rsy9r85bc42jdfpfd58";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook makeWrapper perlPackages.perl perlPackages.XMLParser ];
+  nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper perlPackages.perl perlPackages.XMLParser ];
 
   propagatedBuildInputs =
     lib.optionals stdenv.isLinux [ libcap ];
@@ -93,7 +93,8 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional (jackaudioSupport && !libOnly) "--enable-jack"
     ++ lib.optional stdenv.isDarwin "--with-mac-sysroot=/"
-    ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user";
+    ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--disable-gsettings";
 
   enableParallelBuilding = true;
 
@@ -118,11 +119,15 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
   '';
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString (stdenv.isLinux  && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
     wrapProgram $out/libexec/pulse/gsettings-helper \
      --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
+
+  passthru = {
+    pulseDir = "lib/pulse-" + lib.versions.majorMinor version;
+  };
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";

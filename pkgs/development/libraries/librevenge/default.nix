@@ -1,4 +1,4 @@
-{stdenv, fetchurl, boost, pkgconfig, cppunit, zlib}:
+{stdenv, fetchurl, boost, pkg-config, cppunit, zlib}:
 let
   s = # Generated upstream information
   rec {
@@ -9,7 +9,7 @@ let
     url="mirror://sourceforge/project/libwpd/librevenge/librevenge-0.0.4/librevenge-0.0.4.tar.xz";
     sha256="1cj76cz4mqcy2mgv9l5xlc95bypyk8zbq0ls9cswqrs2y0lhfgwk";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost cppunit zlib
   ];

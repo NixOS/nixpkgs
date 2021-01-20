@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "elasticsearch-dsl";
-  version = "7.2.1";
+  version = "7.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1e345535164cb684de4b825e1d0daf81b75554b30d3905446584a9e4af0cc3e7";
+    sha256 = "0ed75f6ff037e36b2397a8e92cae0ddde79b83adc70a154b8946064cb62f7301";
   };
 
   propagatedBuildInputs = [ elasticsearch python-dateutil six ]
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # Tests require a local instance of elasticsearch
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High level Python client for Elasticsearch";
     longDescription = ''
       Elasticsearch DSL is a high-level library whose aim is to help with

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-blob";
-  version = "12.5.0";
+  version = "12.7.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1469a5a0410296fb5ff96c326618d939c9cb0c0ea45eb931c89c98fa742d8daa";
+    sha256 = "8194a5007ec1bda903d58bc976c98131ffd4b2f9a3b718f558c730c28ac152c6";
   };
 
   propagatedBuildInputs = [
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Client library for Microsoft Azure Storage services containing the blob service APIs";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai mwilsoninsight ];
+    maintainers = with maintainers; [ cmcdragonkai maxwilson ];
   };
 }

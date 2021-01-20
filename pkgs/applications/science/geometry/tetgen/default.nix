@@ -1,4 +1,4 @@
-{stdenv, fetchurl}: 
+{lib, stdenv, fetchurl}:
 
 let version = "1.5.1"; in
 stdenv.mkDerivation {
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     inherit version;
     description = "Quality Tetrahedral Mesh Generator and 3D Delaunay Triangulator";
     homepage = "http://tetgen.org/";
-    license = stdenv.lib.licenses.agpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, boost, gtk2, pkgconfig, python, wafHook }:
+{ stdenv, fetchgit, boost, gtk2, pkg-config, python, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "raul";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1z37jb6ghc13b8nv8a8hcg669gl8vh4ni9djvfgga9vcz8rmcg8l";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
+  nativeBuildInputs = [ pkg-config wafHook ];
   buildInputs = [ boost gtk2 python ];
 
   meta = with stdenv.lib; {

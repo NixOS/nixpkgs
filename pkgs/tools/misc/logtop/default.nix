@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, uthash, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, ncurses, uthash, pkg-config }:
 
 stdenv.mkDerivation {
   name = "logtop-0.7";
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace /usr ""
   '';
 
-  meta = with stdenv.lib; {
-    description = "Displays a real-time count of strings received from stdin.";
+  meta = with lib; {
+    description = "Displays a real-time count of strings received from stdin";
     longDescription = ''
       logtop displays a real-time count of strings received from stdin.
       It can be useful in some cases, like getting the IP flooding your

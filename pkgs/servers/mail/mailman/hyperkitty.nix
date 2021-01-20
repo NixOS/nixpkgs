@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, isort, coverage, mock
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, isort, coverage, mock
 , robot-detection, django_extensions, rjsmin, cssmin, django-mailman3
 , django-haystack, flufl_lock, networkx, dateutil, defusedxml
 , django-paintstore, djangorestframework, django, django-q
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://www.gnu.org/software/mailman/";
     description = "Archiver for GNU Mailman v3";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ peti globin ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ peti globin ];
   };
 }

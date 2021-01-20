@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , expat, fftwFloat, fontconfig, freetype, libjack2, jack2Full, libclthreads, libclxclient
 , libsndfile, libxcb, xorg
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/tetraproc --prefix PATH : "${jack2Full}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Converts the A-format signals from a tetrahedral Ambisonic microphone into B-format signals ready for recording";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/";
     license = licenses.gpl2;

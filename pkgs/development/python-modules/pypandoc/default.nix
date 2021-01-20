@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch
 , pandoc, haskellPackages, texlive }:
 
 buildPythonPackage rec {
@@ -12,6 +12,14 @@ buildPythonPackage rec {
     sha256 = "1lpslfns6zxx7b0xr13bzg921lwrj5am8za0b2dviywk6iiib0ld";
   };
 
+  # https://github.com/bebraw/pypandoc/pull/204
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/sternenseemann/pypandoc/commit/e422e277dd667c77dae11fad931dbb6015e9a784.patch";
+      sha256 = "11l11kh2a4k0h1g4yvijb60076kzxlkrvda3x6dc1s8fz352bpg3";
+    })
+  ];
+
   postPatch = ''
     # set pandoc path statically
     sed -i '/^__pandoc_path = None$/c__pandoc_path = "${pandoc}/bin/pandoc"' pypandoc/__init__.py
@@ -24,7 +32,7 @@ buildPythonPackage rec {
     export PATH="${haskellPackages.pandoc-citeproc}/bin:${texlive.combined.scheme-small}/bin:$PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thin wrapper for pandoc";
     homepage = "https://github.com/bebraw/pypandoc";
     license = licenses.mit;

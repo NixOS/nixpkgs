@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "aws-iam-authenticator";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "1ghl2vms9wmvczdl2raqhy0gffxmk24h158gjb5mlw7rggzvb7bg";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kubernetes-sigs/aws-iam-authenticator";
     description = "AWS IAM credentials for Kubernetes authentication";
     license = licenses.asl20;

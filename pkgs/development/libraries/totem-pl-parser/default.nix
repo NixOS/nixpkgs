@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2, gobject-introspection, gnome3 }:
+{ stdenv, fetchurl, meson, ninja, pkg-config, gettext, libxml2, gobject-introspection, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "totem-pl-parser";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext gobject-introspection ];
   buildInputs = [ libxml2 ];
 
   meta = with stdenv.lib; {

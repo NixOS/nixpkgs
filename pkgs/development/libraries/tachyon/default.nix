@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     inherit version;
-    description = ''A Parallel / Multiprocessor Ray Tracing System'';
+    description = "A Parallel / Multiprocessor Ray Tracing System";
     license = stdenv.lib.licenses.bsd3;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = with stdenv.lib.platforms; linux ++ cygwin ++ darwin;

@@ -1,4 +1,12 @@
-{ stdenv, fetchFromGitLab, cmake, extra-cmake-modules, gtk3, kdeFrameworks, hicolor-icon-theme }:
+{ lib, stdenv
+, fetchFromGitLab
+, cmake
+, extra-cmake-modules
+, gtk3
+, plasma-framework
+, kwindowsystem
+, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation {
   pname = "maia-icon-theme";
@@ -17,8 +25,8 @@ stdenv.mkDerivation {
     cmake
     extra-cmake-modules
     gtk3
-    kdeFrameworks.plasma-framework
-    kdeFrameworks.kwindowsystem
+    plasma-framework
+    kwindowsystem
   ];
 
   propagatedBuildInputs = [
@@ -33,7 +41,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Icons based on Breeze and Super Flat Remix";
     homepage = "https://gitlab.manjaro.org/artwork/themes/maia";
     license = licenses.lgpl3;

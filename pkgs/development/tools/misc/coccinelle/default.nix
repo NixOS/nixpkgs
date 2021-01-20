@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig }:
+{ fetchurl, stdenv, python, ncurses, ocamlPackages, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "coccinelle";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = with ocamlPackages; [
     ocaml findlib menhir
     ocaml_pcre pycaml
-    python ncurses pkgconfig
+    python ncurses pkg-config
   ];
 
   doCheck = !stdenv.isDarwin;

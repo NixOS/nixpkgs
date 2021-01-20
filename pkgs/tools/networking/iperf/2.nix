@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "iperf-2.0.13";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/iperf2 $out/bin/iperf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/projects/iperf/";
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = platforms.unix;

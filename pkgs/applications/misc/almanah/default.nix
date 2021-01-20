@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , atk
 , cairo
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   version = "0.12.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "IWYOnOu0C9uQ9k1dgWkJ6Kv+o/jY+6Llfsi4PusHE24=";
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small GTK application to allow to keep a diary of your life";
     homepage = "https://wiki.gnome.org/Apps/Almanah_Diary";
     license = licenses.gpl3Plus;

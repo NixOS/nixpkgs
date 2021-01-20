@@ -4,7 +4,7 @@
 , fetchpatch
 , mediastreamer
 , openh264
-, pkgconfig
+, pkg-config
 , stdenv
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "140hs5lzpshzswvl39klcypankq3v2qck41696j22my7s4wsa0hr";
   };
 
-  nativeBuildInputs = [ autoreconfHook cmake pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook cmake pkg-config ];
   buildInputs = [ mediastreamer openh264 ];
 
   # Do not build static libraries

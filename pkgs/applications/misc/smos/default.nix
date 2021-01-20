@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , unzip
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   unpackCmd = "${unzip}/bin/unzip -d $out $curSrc";
   sourceRoot = ".";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A comprehensive self-management system";
     homepage = https://smos.online;
     license = licenses.mit;

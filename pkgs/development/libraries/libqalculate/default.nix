@@ -1,21 +1,22 @@
-{ stdenv, fetchFromGitHub, mpfr, libxml2, intltool, pkgconfig, doxygen,
+{ stdenv, fetchFromGitHub, mpfr, libxml2, intltool, pkg-config, doxygen,
   autoreconfHook, readline, libiconv, icu, curl, gnuplot, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "libqalculate";
-  version = "3.13.0";
+  version = "3.16.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${version}";
-    sha256 = "0nd0hrnp0a9p7hy6l6s45kfd267r7qg91aqn8g2dyam5hngskayk";
+    sha256 = "0nrf03q3qrsvxf6kjpv69l49yfal79834a3jv75mzi6y674ach9g";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ intltool pkgconfig autoreconfHook doxygen ];
+  nativeBuildInputs = [ intltool pkg-config autoreconfHook doxygen ];
   buildInputs = [ curl gettext libiconv readline ];
+  configureFlags = ["--with-readline=${readline.dev}"];
   propagatedBuildInputs = [ libxml2 mpfr icu ];
   enableParallelBuilding = true;
 

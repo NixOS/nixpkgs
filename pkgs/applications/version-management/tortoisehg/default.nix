@@ -4,16 +4,16 @@
 let
   tortoisehgSrc = fetchurl rec {
     meta.name = "tortoisehg-${meta.version}";
-    meta.version = "5.2.1";
-    url = "https://bitbucket.org/tortoisehg/thg/get/14221e991a5b623e0072d3bd340b759dbe9072ca.tar.gz";
-    sha256 = "01rpzf5z99izcdda1ps9bhqvhw6qghagd8c1y7x19rv223zi05dv";
+    meta.version = "5.6";
+    url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${meta.version}.tar.gz";
+    sha256 = "031bafj88wggpvw0lgvl0djhlbhs9nls9vzwvni8yn0m0bgzc9gr";
   };
 
   tortoiseMercurial = mercurial.overridePythonAttrs (old: rec {
     inherit (tortoisehgSrc.meta) version;
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "1pxkd37b0a1mi2zakk1hi122lgz1ffy2fxdnbs8acwlqpw55bc8q";
+      sha256 = "1hk2y30zzdnlv8f71kabvh0xi9c7qhp28ksh20vpd0r712sv79yz";
     };
   });
 

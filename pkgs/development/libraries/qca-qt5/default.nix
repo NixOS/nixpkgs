@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, openssl, pkgconfig, qtbase }:
+{ stdenv, fetchurl, cmake, openssl, pkg-config, qtbase }:
 
 stdenv.mkDerivation rec {
   pname = "qca-qt5";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl qtbase ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   # Without this patch cmake fails with a "No known features for CXX compiler"
   # error on darwin

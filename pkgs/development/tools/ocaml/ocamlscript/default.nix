@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, camlp4}:
+{lib, stdenv, fetchurl, ocaml, findlib, camlp4}:
 stdenv.mkDerivation {
   name = "ocamlscript-2.0.3";
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   preInstall = "mkdir $out/bin";
   createFindlibDestdir = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://martin.jambon.free.fr/ocamlscript.html";
     license = licenses.boost;
     platforms = ocaml.meta.platforms or [];

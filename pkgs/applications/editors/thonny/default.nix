@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.2.7";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gzvdgg5l4j0wgkh7lp4wjabrpxvvs5m7mnpszqixxijdffjd4cj";
+    sha256 = "1pzy7v48x4ip8v6aqm8hl5ywx7xiqbsfypxxifih8gnlangp1n8y";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -37,7 +37,7 @@ buildPythonApplication rec {
   # Tests need a DISPLAY
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python IDE for beginners";
     longDescription = ''
       Thonny is a Python IDE for beginners. It supports different ways

@@ -13,9 +13,9 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "5.0.2";
+    version = "5.0.3";
     url = "https://dl.winehq.org/wine/source/5.0/wine-${version}.tar.xz";
-    sha256 = "1g7c5djbi262h6zivmxbk26rsflwq8mrghr7hci3ajw7f3s89hn2";
+    sha256 = "sha256-nBo1Ni/VE9/1yEW/dtpj6hBaeUrHFEqlA/cTYa820i8=";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
@@ -31,24 +31,34 @@ in rec {
 
     ## see http://wiki.winehq.org/Mono
     mono = fetchurl rec {
-      version = "4.9.4";
-      url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}.msi";
-      sha256 = "1p8g45xphxnns7dkg9rbaknarbjy5cjhrngaf0fsgk9z68wgz9ji";
+      version = "5.1.1";
+      url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
+      sha256 = "09wjrfxbw0072iv6d2vqnkc3y7dzj15vp8mv4ay44n1qp5ji4m3l";
     };
+
+    patches = [
+      # Also look for root certificates at $NIX_SSL_CERT_FILE
+      ./cert-path-stable.patch
+    ];
   };
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "5.18";
-    url = "https://dl.winehq.org/wine/source/5.x/wine-${version}.tar.xz";
-    sha256 = "0hpkcpi6j162bkgcgzzj8y471777q06j7pydl61yp6qscn4g80ch";
+    version = "6.0-rc4";
+    url = "https://dl.winehq.org/wine/source/6.0/wine-${version}.tar.xz";
+    sha256 = "sha256-ndeBORgnfYmtPbvZEesaetocknePF8cnyjqfulkcfsU=";
     inherit (stable) mono gecko32 gecko64;
+
+    patches = [
+      # Also look for root certificates at $NIX_SSL_CERT_FILE
+      ./cert-path.patch
+     ];
   };
 
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "0bwcvkf1g1dsq1qmric3jfl85rfjzhq6x4h839hfqc536lkfbrpy";
+    sha256 = "sha256-GdFiCGnGSDOxGERlfsPMJdSrQTvnx8gf4z4joqIKT7c=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
@@ -59,8 +69,8 @@ in rec {
 
   winetricks = fetchFromGitHub rec {
     # https://github.com/Winetricks/winetricks/releases
-    version = "20200412";
-    sha256 = "0ccr8wdmhkhbccxs5hvn44ppl969n8j0c3rnnir5v6akjcb2nzzv";
+    version = "20201206";
+    sha256 = "1xs09v1zr98yvwvdsmzgryc2hbk92mwn54yxx8162l461465razc";
     owner = "Winetricks";
     repo = "winetricks";
     rev = version;

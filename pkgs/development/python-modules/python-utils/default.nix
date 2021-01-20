@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytestrunner, pytestcov, pytest-flakes, pytestpep8, sphinx, six }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytestrunner, pytestcov, pytest-flakes, sphinx, six }:
 
 buildPythonPackage rec {
   pname = "python-utils";
@@ -12,13 +12,10 @@ buildPythonPackage rec {
   postPatch = ''
     rm -r tests/__pycache__
     rm tests/*.pyc
+    substituteInPlace pytest.ini --replace "--pep8" ""
   '';
 
-  checkInputs = [ pytest pytestrunner pytestcov pytest-flakes pytestpep8 sphinx ];
-
-  checkPhase = ''
-    py.test tests
-  '';
+  checkInputs = [ pytestCheckHook pytestrunner pytestcov pytest-flakes sphinx ];
 
   propagatedBuildInputs = [ six ];
 

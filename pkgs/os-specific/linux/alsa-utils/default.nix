@@ -1,12 +1,12 @@
-{stdenv, fetchurl, alsaLib, gettext, makeWrapper, ncurses, libsamplerate, pciutils, which, fftw}:
+{lib, stdenv, fetchurl, alsaLib, gettext, makeWrapper, ncurses, libsamplerate, pciutils, which, fftw}:
 
 stdenv.mkDerivation rec {
   pname = "alsa-utils";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://alsa/utils/${pname}-${version}.tar.bz2";
-    sha256 = "1ai1z4kf91b1m3qrpwqkc1af5vm2fkdkknqv95xdwf19q94aw6gz";
+    sha256 = "09m4dnn4kplawprd2bl15nwa0b4r1brab3x44ga7f1fyk7aw5zwq";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
   installFlags = [ "ASOUND_STATE_DIR=$(TMPDIR)/dummy" ];
 
   postFixup = ''
-    wrapProgram $out/bin/alsa-info.sh --prefix PATH : "${stdenv.lib.makeBinPath [ which pciutils ]}"
+    wrapProgram $out/bin/alsa-info.sh --prefix PATH : "${lib.makeBinPath [ which pciutils ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.alsa-project.org/";
     description = "ALSA, the Advanced Linux Sound Architecture utils";
     longDescription = ''

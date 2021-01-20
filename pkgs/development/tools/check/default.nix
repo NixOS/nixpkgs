@@ -21,7 +21,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    description = "A set of utilities for checking Go sources.";
+    description = "A set of utilities for checking Go sources";
     homepage = "https://gitlab.com/opennota/check";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kalbasit ];

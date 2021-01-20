@@ -1,5 +1,5 @@
-{ stdenv, fetchPypi, buildPythonPackage,
-	wrapt, pytest, tox }:
+{ lib, stdenv, fetchPypi, buildPythonPackage,
+  wrapt, pytest, tox }:
 
 buildPythonPackage rec {
   pname = "Deprecated";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ wrapt ];
   checkInputs = [ pytest ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tantale/deprecated";
     description = "Python @deprecated decorator to deprecate old python classes, functions or methods";
     platforms = platforms.all;

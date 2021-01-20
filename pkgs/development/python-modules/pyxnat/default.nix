@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pyxnat";
-  version = "1.3";
+  version = "1.4";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "113d13cs5ab7wy4vmyqyh8isjhlgfvan7y2g8n25vcpn3j4j00h0";
+    sha256 = "22524120d744b50d25ef6bfc7052637e4ead9e2afac92563231ec89848f5adf5";
   };
 
   propagatedBuildInputs = [ lxml requests ];

@@ -46,15 +46,6 @@
     };
   }
   {
-    goPackagePath = "github.com/pkg/term";
-    fetch = {
-      type = "git";
-      url = "https://github.com/pkg/term";
-      rev = "aa71e9d9e942";
-      sha256 = "1gyxnj4jq3z2k4gjwwlz8hn56c1ys8jvafdd61nd6qs8jwp6iqp3";
-    };
-  }
-  {
     goPackagePath = "github.com/pmezard/go-difflib";
     fetch = {
       type = "git";
@@ -124,15 +115,6 @@
       url = "https://gopkg.in/check.v1";
       rev = "20d25e280405";
       sha256 = "0k1m83ji9l1a7ng8a7v40psbymxasmssbrrhpdv2wl4rhs0nc3np";
-    };
-  }
-  {
-    goPackagePath = "gopkg.in/urfave/cli.v1";
-    fetch = {
-      type = "git";
-      url = "https://gopkg.in/urfave/cli.v1";
-      rev = "v1.20.0";
-      sha256 = "0y6f4sbzkiiwrxbl15biivj8c7qwxnvm3zl2dd3mw4wzg4x10ygj";
     };
   }
   {

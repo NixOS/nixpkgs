@@ -235,7 +235,7 @@ in
     hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_libs32;
 
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
-      ++ filter (p: p != null) [ nvidia_x11.persistenced ];
+      ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ];
 
     systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;
 

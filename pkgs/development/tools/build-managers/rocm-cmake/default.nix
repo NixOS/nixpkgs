@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-cmake";
-  version = "3.8.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocm-cmake";
     rev = "rocm-${version}";
-    sha256 = "1x1mj1acarhin319zycms8sqm9ylw2mcdbkpqjlb8yfsgiaa99ja";
+    hash = "sha256-1T0S2GWA/ojRZMRyWgtFQ2rzmIqvMvaa19jI4Fl9R44=";
   };
 
   nativeBuildInputs = [ cmake ];

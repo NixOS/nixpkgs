@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, llvmPackages, libxml2, zlib, substituteAll }:
 
 llvmPackages.stdenv.mkDerivation rec {
-  version = "0.6.0";
+  version = "0.7.1";
   pname = "zig";
 
   src = fetchFromGitHub {
     owner = "ziglang";
     repo = pname;
     rev = version;
-    sha256 = "13dwm2zpscn4n0p5x8ggs9n7mwmq9cgip383i3qqphg7m3pkls8z";
+    sha256 = "1z6c4ym9jmga46cw2arn7zv2drcpmrf3vw139gscxp27n7q2z5md";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,7 +26,7 @@ llvmPackages.stdenv.mkDerivation rec {
 
   checkPhase = ''
     runHook preCheck
-    ./zig test $src/test/stage1/behavior.zig
+    ./zig test --cache-dir "$TMPDIR" -I $src/test $src/test/stage1/behavior.zig
     runHook postCheck
   '';
 

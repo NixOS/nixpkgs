@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   version = "13.5.1";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       --add-flags "-Xmx1G -Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
     homepage = "https://mediathekview.de/";
     license = licenses.gpl3;

@@ -10,11 +10,11 @@ with lib;
 
 buildPythonPackage rec {
   pname = "openwrt-luci-rpc";
-  version = "1.1.3";
+  version = "1.1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8c27c98c0a1deac2d32d417c4ca536b08be2655a9a6de8a7897e8bc6431858c";
+    sha256 = "8074c1ed24cdd1fadc5a99bd63d9313a0a44703714473ed781ed11e7fb45c96f";
   };
 
   postPatch = ''

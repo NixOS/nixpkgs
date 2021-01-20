@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkg-config
 , libebml }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yhr9hhgljva1fx3b0r4s3wkkypdfgsysbl35a4g3krkbhaa9rsd";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ libebml ];
 

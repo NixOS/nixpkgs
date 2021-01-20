@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , nose
-, pkgconfig
+, pkg-config
 , libjpeg
 , libpng
 , libtiff
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   };
 
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ nose libjpeg libpng libtiff libwebp ];
   propagatedBuildInputs = [ numpy ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python package to load images as numpy arrays";
     homepage = "https://imread.readthedocs.io/en/latest/";
     maintainers = with maintainers; [ luispedro ];

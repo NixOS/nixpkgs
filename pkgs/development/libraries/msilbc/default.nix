@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ilbc, mediastreamer, pkgconfig }:
+{ stdenv, fetchurl, ilbc, mediastreamer, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "msilbc-2.1.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ ilbc mediastreamer ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   configureFlags = [
     "ILBC_LIBS=ilbc" "ILBC_CFLAGS=-I${ilbc}/include"

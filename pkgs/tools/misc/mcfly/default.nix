@@ -1,14 +1,14 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mcfly";
-  version = "0.5.0";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "cantino";
     repo = "mcfly";
     rev = "v${version}";
-    sha256 = "155x745jakfcpr6kmp24cy8xwdhv81jdfjjhd149bnw5ilg0z037";
+    sha256 = "1p51wdv47cyg6dmb81fm0d92x1kp7bwwpgax6vlh669nkddiwvmm";
   };
 
   postInstall = ''
@@ -20,11 +20,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 -t $out/share/mcfly mcfly.fish
   '';
 
-  cargoSha256 = "0y6sjbzg5qqqip9sc9ajyd5ra3n2wwvarj6nhpzjhh05kqz3qja4";
+  cargoSha256 = "0gcdgca8w8i978b067rwm5zrc81rxb704006k9pbcwizkq2281yy";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cantino/mcfly";
     description = "An upgraded ctrl-r for Bash whose history results make sense for what you're working on right now";
+    changelog = "https://github.com/cantino/mcfly/blob/v${version}/CHANGELOG.txt";
     license = licenses.mit;
     maintainers = [ maintainers.melkor333 ];
   };

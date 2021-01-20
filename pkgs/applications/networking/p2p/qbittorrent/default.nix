@@ -1,29 +1,32 @@
-{ mkDerivation, lib, fetchFromGitHub, pkgconfig
-, boost, libtorrentRasterbar, qtbase, qttools, qtsvg
-, debugSupport ? false # Debugging
+{ mkDerivation, lib, fetchFromGitHub, makeWrapper, pkg-config
+, boost, libtorrent-rasterbar, qtbase, qttools, qtsvg
+, debugSupport ? false
 , guiSupport ? true, dbus ? null # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
+, trackerSearch ? true, python3 ? null
 }:
 
 assert guiSupport -> (dbus != null);
-with lib;
+assert trackerSearch -> (python3 != null);
 
+with lib;
 mkDerivation rec {
   pname = "qbittorrent";
-  version = "4.2.5";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qbittorrent";
     rev = "release-${version}";
-    sha256 = "1n613ylg6i9gisgk0dbr2kpfasyizrkdjff1r8smd4vri2qrdksn";
+    sha256 = "17ih00q7idrpl3b2vgh4smva6lazs5jw06pblriscn1lrwdvrc38";
   };
 
   # NOTE: 2018-05-31: CMake is working but it is not officially supported
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
-  buildInputs = [ boost libtorrentRasterbar qtbase qttools qtsvg ]
-    ++ optional guiSupport dbus; # D(esktop)-Bus depends on GUI support
+  buildInputs = [ boost libtorrent-rasterbar qtbase qttools qtsvg ]
+    ++ optional guiSupport dbus # D(esktop)-Bus depends on GUI support
+    ++ optional trackerSearch python3;
 
   # Otherwise qm_gen.pri assumes lrelease-qt5, which does not exist.
   QMAKE_LRELEASE = "lrelease";
@@ -35,7 +38,11 @@ mkDerivation rec {
     ++ optional (!webuiSupport) "--disable-webui"
     ++ optional debugSupport "--enable-debug";
 
-  enableParallelBuilding = true;
+  postInstall = "wrapProgram $out/bin/${
+    if guiSupport
+    then "qbittorrent"
+    else "qbittorrent-nox"
+  } --prefix PATH : ${makeBinPath [ python3 ]}";
 
   meta = {
     description = "Featureful free software BitTorrent client";

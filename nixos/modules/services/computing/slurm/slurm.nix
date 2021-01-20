@@ -34,13 +34,12 @@ let
      ${cfg.extraCgroupConfig}
    '';
 
-  slurmdbdConf = pkgs.writeTextDir "slurmdbd.conf"
+  slurmdbdConf = pkgs.writeText "slurmdbd.conf"
    ''
      DbdHost=${cfg.dbdserver.dbdHost}
      SlurmUser=${cfg.user}
      StorageType=accounting_storage/mysql
      StorageUser=${cfg.dbdserver.storageUser}
-     ${optionalString (cfg.dbdserver.storagePass != null) "StoragePass=${cfg.dbdserver.storagePass}"}
      ${cfg.dbdserver.extraConfig}
    '';
 
@@ -95,26 +94,12 @@ in
           '';
         };
 
-        storagePass = mkOption {
-          type = types.nullOr types.str;
+        storagePassFile = mkOption {
+          type = with types; nullOr str;
           default = null;
           description = ''
-            Database password. Note that this password will be publicable
-            readable in the nix store. Use <option>configFile</option>
-            to store the and config file and password outside the nix store.
-          '';
-        };
-
-        configFile = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          description = ''
-            Path to <literal>slurmdbd.conf</literal>. The password for the database connection
-            is stored in the config file. Use this option to specfify a path
-            outside the nix store. If this option is unset a configuration file
-            will be generated. See also:
-            <citerefentry><refentrytitle>slurmdbd.conf</refentrytitle>
-            <manvolnum>8</manvolnum></citerefentry>.
+            Path to file with database password. The content of this will be used to
+            create the password for the <literal>StoragePass</literal> option.
           '';
         };
 
@@ -122,7 +107,9 @@ in
           type = types.lines;
           default = "";
           description = ''
-            Extra configuration for <literal>slurmdbd.conf</literal>
+            Extra configuration for <literal>slurmdbd.conf</literal> See also:
+            <citerefentry><refentrytitle>slurmdbd.conf</refentrytitle>
+            <manvolnum>8</manvolnum></citerefentry>.
           '';
         };
       };
@@ -292,6 +279,16 @@ in
 
   };
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "slurm" "dbdserver" "storagePass" ] ''
+      This option has been removed so that the database password is not exposed via the nix store.
+      Use services.slurm.dbdserver.storagePassFile to provide the database password.
+    '')
+    (mkRemovedOptionModule [ "services" "slurm" "dbdserver" "configFile" ] ''
+      This option has been removed. Use services.slurm.dbdserver.storagePassFile
+      and services.slurm.dbdserver.extraConfig instead.
+    '')
+  ];
 
   ###### implementation
 
@@ -386,23 +383,34 @@ in
       '';
     };
 
-    systemd.services.slurmdbd = mkIf (cfg.dbdserver.enable) {
+    systemd.services.slurmdbd = let
+      # slurm strips the last component off the path
+      configPath = "$RUNTIME_DIRECTORY/slurmdbd.conf";
+    in mkIf (cfg.dbdserver.enable) {
       path = with pkgs; [ wrappedSlurm munge coreutils ];
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "munged.service" "mysql.service" ];
       requires = [ "munged.service" "mysql.service" ];
 
-      # slurm strips the last component off the path
-      environment.SLURM_CONF =
-        if (cfg.dbdserver.configFile == null) then
-          "${slurmdbdConf}/slurm.conf"
-        else
-          cfg.dbdserver.configFile;
+      preStart = ''
+        cp ${slurmdbdConf} ${configPath}
+        chmod 600 ${configPath}
+        chown ${cfg.user} ${configPath}
+        ${optionalString (cfg.dbdserver.storagePassFile != null) ''
+          echo "StoragePass=$(cat ${cfg.dbdserver.storagePassFile})" \
+            >> ${configPath}
+        ''}
+      '';
+
+      script = ''
+        export SLURM_CONF=${configPath}
+        exec ${cfg.package}/bin/slurmdbd -D
+      '';
 
       serviceConfig = {
-        Type = "forking";
-        ExecStart = "${cfg.package}/bin/slurmdbd";
+        RuntimeDirectory = "slurmdbd";
+        Type = "simple";
         PIDFile = "/run/slurmdbd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };

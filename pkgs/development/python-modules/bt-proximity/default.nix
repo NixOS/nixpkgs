@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub
 , pybluez }:
 
 buildPythonPackage {
@@ -18,7 +18,7 @@ buildPythonPackage {
   # there are no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bluetooth Proximity Detection using Python";
     homepage = "https://github.com/FrederikBolding/bluetooth-proximity";
     maintainers = with maintainers; [ peterhoeg ];

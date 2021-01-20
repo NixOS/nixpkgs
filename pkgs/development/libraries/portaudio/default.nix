@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, pkgconfig, libjack2
+{ stdenv, fetchurl, alsaLib, pkg-config, libjack2
 , AudioUnit, AudioToolbox, CoreAudio, CoreServices, Carbon }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "04qmin6nj144b8qb9kkd9a52xfvm0qdgm8bg8jbl7s3frmyiv8pm";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjack2 ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 

@@ -3,7 +3,7 @@
 
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gobject-introspection
 , gsettings-desktop-schemas
 , makeWrapper
@@ -20,16 +20,16 @@
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.36.1";
+  version = "2.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0m3crrdbc9vdn9dr4lssdwrjmm8z5wxs2qhhnbkh1w5vkn87nhcp";
+    sha256 = "hONsP+ZoYhM/X+Ipdyt2qiUm4Q3lAUo3ePL6Rs5VDaU=";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection makeWrapper ];
+  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection makeWrapper ];
   buildInputs = [ libX11 libXtst libXi ];
   # In atspi-2.pc dbus-1 glib-2.0
   propagatedBuildInputs = [ dbus glib ];

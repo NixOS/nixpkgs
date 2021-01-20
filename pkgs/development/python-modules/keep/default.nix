@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , PyGithub
@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "keep";
-  version = "2.9";
+  version = "2.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0902kcvhbmy5q5n0ai1df29ybf87qaljz306c5ssl8j9xdjipcq2";
+    sha256 = "ce71d14110df197ab5afdbd26a14c0bd266b79671118ae1351835fa192e61d9b";
   };
 
   propagatedBuildInputs = [
@@ -24,9 +24,10 @@ buildPythonPackage rec {
   ];
 
   # no tests
+  doCheck = false;
   pythonImportsCheck = [ "keep" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/orkohunter/keep";
     description = "A Meta CLI toolkit: Personal shell command keeper and snippets manager";
     platforms = platforms.all;

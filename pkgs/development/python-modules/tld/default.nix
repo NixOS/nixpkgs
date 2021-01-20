@@ -1,39 +1,39 @@
-{ stdenv, fetchPypi, python }:
+{ lib
+, buildPythonPackage
+, factory_boy
+, faker
+, fetchPypi
+, pytest-cov
+, pytestCheckHook
+, six
+, tox
+}:
 
-python.pkgs.buildPythonPackage rec {
-  pname   = "tld";
-  version = "0.12.2";
+buildPythonPackage rec {
+  pname = "tld";
+  version = "0.12.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf8410a7ed7b9477f563fa158dabef5117d8374cba55f65142ba0af6dcd15d4d";
+    sha256 = "0d1lbbg2qdw5jjxks0dqlf69bki5885mhj8ysvgylmrni56hjqqv";
   };
 
-  propagatedBuildInputs = with python.pkgs; [ six ];
-  checkInputs = with python.pkgs; [ factory_boy faker pytestcov tox pytestCheckHook];
-
-  # https://github.com/barseghyanartur/tld/issues/54
-  disabledTests = [
-    "test_1_update_tld_names"
-    "test_1_update_tld_names_command"
-    "test_2_update_tld_names_module"
+  checkInputs = [
+    factory_boy
+    faker
+    pytest-cov
+    pytestCheckHook
+    tox
   ];
 
-  preCheck = ''
-    export PATH="$PATH:$out/bin"
-  '';
+  pythonImportsCheck = [ "tld" ];
 
-  dontUseSetuptoolsCheck = true;
-
-  pythonImportsCheck = [
-    "tld"
-  ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/barseghyanartur/tld";
     description = "Extracts the top level domain (TLD) from the URL given";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ genesis ];
+    # https://github.com/barseghyanartur/tld/blob/master/README.rst#license
+    # MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-or-later
+    license = with licenses; [ lgpl21Plus mpl11 gpl2Only ];
+    maintainers = with maintainers; [ fab ];
   };
-
 }

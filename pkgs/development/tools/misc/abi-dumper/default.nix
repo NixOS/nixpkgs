@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abi-dumper";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "lvc";
     repo = "abi-dumper";
     rev = version;
-    sha256 = "1byhw132aj7a5a5zh5s3pnjlrhdk4cz6xd5irp1y08jl980qba5j";
+    sha256 = "1i00rfnddrrb9lb1l6ib19g3a76pyasl9lb7rqz2p998gav1gjp2";
   };
 
   patchPhase = ''

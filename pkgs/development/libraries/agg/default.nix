@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig
+{ stdenv, fetchurl, autoconf, automake, libtool, pkg-config
 , freetype, SDL, libX11 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     url = "http://www.antigrain.com/${name}.tar.gz";
     sha256 = "07wii4i824vy9qsvjsgqxppgqmfdxq0xa87i5yk53fijriadq7mb";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake libtool freetype SDL libX11 ];
 
   postPatch = ''

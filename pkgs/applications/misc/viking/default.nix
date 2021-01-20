@@ -1,5 +1,5 @@
-{ fetchurl, fetchpatch, stdenv, makeWrapper
-, pkgconfig, intltool, gettext, gtk2, expat, curl
+{ fetchurl, fetchpatch, lib, stdenv, makeWrapper
+, pkg-config, intltool, gettext, gtk2, expat, curl
 , gpsd, bc, file, gnome-doc-utils, libexif, libxml2, libxslt, scrollkeeper
 , docbook_xml_dtd_412, gexiv2, gpsbabel, expect
 , withMapnik ? false, mapnik
@@ -25,22 +25,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ makeWrapper intltool gettext gtk2 expat curl gpsd bc file gnome-doc-utils
     libexif libxml2 libxslt scrollkeeper docbook_xml_dtd_412 gexiv2
-  ] ++ stdenv.lib.optional withMapnik mapnik
-    ++ stdenv.lib.optional withGeoClue geoclue2
-    ++ stdenv.lib.optional withMd5Hash nettle
-    ++ stdenv.lib.optional withOAuth liboauth
-    ++ stdenv.lib.optional withMBTiles sqlite;
+  ] ++ lib.optional withMapnik mapnik
+    ++ lib.optional withGeoClue geoclue2
+    ++ lib.optional withMd5Hash nettle
+    ++ lib.optional withOAuth liboauth
+    ++ lib.optional withMBTiles sqlite;
 
   configureFlags = [
     "--disable-scrollkeeper"
-    (stdenv.lib.enableFeature withMapnik "mapnik")
-    (stdenv.lib.enableFeature withGeoClue "geoclue")
-    (stdenv.lib.enableFeature withMd5Hash "nettle")
-    (stdenv.lib.enableFeature withOAuth "oauth")
-    (stdenv.lib.enableFeature withMBTiles "mbtiles")
+    (lib.enableFeature withMapnik "mapnik")
+    (lib.enableFeature withGeoClue "geoclue")
+    (lib.enableFeature withMd5Hash "nettle")
+    (lib.enableFeature withOAuth "oauth")
+    (lib.enableFeature withMBTiles "mbtiles")
   ];
 
   preBuild = ''
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${expect}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GPS data editor and analyzer";
     longDescription = ''
       Viking is a free/open source program to manage GPS data.  You

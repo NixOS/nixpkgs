@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost
+{ lib, stdenv, fetchFromGitHub, cmake, boost
 , opencl-headers, ocl-icd, qtbase , zlib }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Go engine modeled after AlphaGo Zero";
     homepage    = "https://github.com/gcp/leela-zero";
     license     = licenses.gpl3;

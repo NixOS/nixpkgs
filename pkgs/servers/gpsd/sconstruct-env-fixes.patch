@@ -1,0 +1,15 @@
+--- SConstruct.orig	2020-12-03 12:39:40.759793977 -0600
++++ gpsd-3.21/SConstruct	2020-12-03 12:44:30.858761753 -0600
+@@ -516,9 +516,11 @@
+     'CWRAPPERS_CONFIG_DIR',      # pkgsrc
+     # Variables used in testing
+     'WRITE_PAD',       # So we can test WRITE_PAD values on the fly.
++    'LD_LIBRARY_PATH', # Allows running 'scons check' without 'chrpath'
++    'XML_CATALOG_FILES', # Enables validating the manual with 'xmlto' using nix build system
+ )
+ 
+-envs = {}
++envs = os.environ
+ for var in import_env:
+     if var in os.environ:
+         envs[var] = os.environ[var]

@@ -3,7 +3,7 @@
 
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 
 , at-spi2-core
 , atk
@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-atk";
-  version = "2.34.2";
+  version = "2.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1w7l4xg00qx3dwhn0zaa64daiv5f073hdvjdxh0mrw7fw37264wh";
+    sha256 = "z6AIpa+CKzauYofxgYLEDJHdaZxV+qOGBYge0XXKRk8=";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ at-spi2-core atk dbus glib libxml2 ];
 
   doCheck = false; # fails with "No test data file provided"

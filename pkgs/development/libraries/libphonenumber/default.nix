@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gmock, boost, pkgconfig, protobuf, icu }:
+{ stdenv, fetchFromGitHub, cmake, gmock, boost, pkg-config, protobuf, icu }:
 
 stdenv.mkDerivation rec {
   pname = "phonenumber";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     gmock
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

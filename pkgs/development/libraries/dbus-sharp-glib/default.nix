@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, mono, dbus-sharp-2_0, autoreconfHook }:
+{ stdenv, fetchFromGitHub, pkg-config, mono, dbus-sharp-2_0, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "dbus-sharp-glib";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0i39kfg731as6j0hlmasgj8dyw5xsak7rl2dlimi1naphhffwzm8";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ mono dbus-sharp-2_0 ];
 
   dontStrip = true;

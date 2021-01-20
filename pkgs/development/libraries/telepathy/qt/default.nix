@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qtbase, pkgconfig, python3Packages, dbus-glib, dbus
+{ stdenv, fetchurl, cmake, qtbase, pkg-config, python3Packages, dbus-glib, dbus
 , telepathy-farstream, telepathy-glib, fetchpatch }:
 
 let
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     sha256 = "bf8e2a09060addb80475a4938105b9b41d9e6837999b7a00e5351783857e18ad";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig python ];
+  nativeBuildInputs = [ cmake pkg-config python ];
   propagatedBuildInputs = [ qtbase telepathy-farstream telepathy-glib ];
   buildInputs = [ dbus-glib ];
   checkInputs = [ dbus.daemon dbus-python ];
@@ -20,7 +20,6 @@ in stdenv.mkDerivation rec {
   # On 0.9.7, they do not even build with QT4
   cmakeFlags = stdenv.lib.optional (!doCheck) "-DENABLE_TESTS=OFF";
 
-  enableParallelBuilding = true;
   doCheck = false; # giving up for now
 
   meta = with stdenv.lib; {

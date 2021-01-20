@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, curl, Accelerate, CoreGraphics, CoreVideo
+{ lib, stdenv, fetchurl, cmake, curl, Accelerate, CoreGraphics, CoreVideo
 , fftwSinglePrec, netcdf, pcre, gdal, blas, lapack, glibc, ghostscript, dcw-gmt
 , gshhg-gmt }:
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       "-DBLAS_LIBRARY=${blas}/lib/libblas.so"
     ]);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.generic-mapping-tools.org";
     description = "Tools for manipulating geographic and cartesian data sets";
     longDescription = ''

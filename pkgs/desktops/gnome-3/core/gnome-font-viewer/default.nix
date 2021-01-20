@@ -1,5 +1,5 @@
-{ stdenv, meson, ninja, gettext, fetchurl
-, pkgconfig, gtk3, glib, libxml2, gnome-desktop, adwaita-icon-theme
+{ lib, stdenv, meson, ninja, gettext, fetchurl
+, pkg-config, gtk3, glib, libxml2, gnome-desktop, adwaita-icon-theme
 , wrapGAppsHook, gnome3, harfbuzz }:
 
 stdenv.mkDerivation rec {
@@ -7,13 +7,13 @@ stdenv.mkDerivation rec {
   version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-font-viewer/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-font-viewer/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "12xrsqwmvid7hksiw4zhj4jd1qwxn8w0czskbq4yqfprwn1havxa";
   };
 
   doCheck = true;
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook libxml2 ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext wrapGAppsHook libxml2 ];
   buildInputs = [ gtk3 glib gnome-desktop adwaita-icon-theme harfbuzz ];
 
   # Do not run meson-postinstall.sh
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Program that can preview fonts and create thumbnails for fonts";
     maintainers = teams.gnome.members;
     license = licenses.gpl2;

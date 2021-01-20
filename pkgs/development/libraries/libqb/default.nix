@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig }:
+{ stdenv, fetchurl, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "libqb-0.17.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zpl45p3n6dn1jgbsrrmccrmv2mvp8aqmnl0qxfjf7ymkrj9qhcs";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/clusterlabs/libqb";

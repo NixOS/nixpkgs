@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , mock, requests, six, urllib3 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   buildInputs = [ mock ];
   propagatedBuildInputs = [ requests six urllib3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Persistent cache for requests library";
     homepage = "https://pypi.python.org/pypi/requests-cache";
     license = licenses.bsd3;

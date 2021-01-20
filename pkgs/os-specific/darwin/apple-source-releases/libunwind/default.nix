@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation }:
+{ lib, stdenv, appleDerivation }:
 
 appleDerivation {
   buildPhase = ":";
@@ -9,7 +9,7 @@ appleDerivation {
     cp -R include $out/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ copumpkin lnl7 ];
     platforms   = platforms.darwin;
     license     = licenses.apsl20;

@@ -10,8 +10,8 @@ if [[ "$CURRENT_VERSION" == "$TARGET_VERSION" ]]; then
     exit 0
 fi
 
-wget $ZIGBEE2MQTT/package.json
-wget $ZIGBEE2MQTT/npm-shrinkwrap.json
+curl -LO $ZIGBEE2MQTT/package.json
+curl -LO $ZIGBEE2MQTT/npm-shrinkwrap.json
 
 node2nix --nodejs-12 \
   -l npm-shrinkwrap.json \

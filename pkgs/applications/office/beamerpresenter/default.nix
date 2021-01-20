@@ -1,15 +1,15 @@
-{ stdenv, mkDerivation, fetchFromGitHub, installShellFiles,
+{ lib, stdenv, mkDerivation, fetchFromGitHub, installShellFiles,
   qmake, qtbase, poppler, qtmultimedia }:
 
 mkDerivation rec {
   pname = "beamerpresenter";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "stiglers-eponym";
     repo = "BeamerPresenter";
     rev = "v${version}";
-    sha256 = "12xngnhwa3haf0pdxczgvhq1j20zbsr30y2bfn9qwmlhbwklhkj2";
+    sha256 = "1nbcqrfdjcsc6czqk1v163whka4x1w883b1298aws8yi7vac4f1i";
   };
 
   nativeBuildInputs = [ qmake installShellFiles ];
@@ -30,7 +30,7 @@ mkDerivation rec {
     installManPage man/*.{1,5}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple dual screen pdf presentation software";
     homepage = "https://github.com/stiglers-eponym/BeamerPresenter";
     license = licenses.gpl3Plus;

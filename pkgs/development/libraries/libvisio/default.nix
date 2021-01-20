@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, libwpd, libwpg, pkgconfig, zlib, gperf
+{ stdenv, fetchurl, boost, libwpd, libwpg, pkg-config, zlib, gperf
 , librevenge, libxml2, icu, perl, cppunit, doxygen
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0k7adcbbf27l7n453cca1m6s9yj6qvb5j6bsg2db09ybf3w8vbwg";
   };
 
-  nativeBuildInputs = [ pkgconfig cppunit doxygen ];
+  nativeBuildInputs = [ pkg-config cppunit doxygen ];
   buildInputs = [ boost libwpd libwpg zlib gperf librevenge libxml2 icu perl ];
 
   configureFlags = [

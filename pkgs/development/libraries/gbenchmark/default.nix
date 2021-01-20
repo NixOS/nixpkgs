@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     chmod -R u+w googletest
   '';
 
-  enableParallelBuilding = true;
   doCheck = true;
 
   meta = with stdenv.lib; {

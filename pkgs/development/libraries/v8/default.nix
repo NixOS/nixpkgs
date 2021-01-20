@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, fetchFromGitHub
-, gn, ninja, python, glib, pkgconfig, icu
+, gn, ninja, python, glib, pkg-config, icu
 , xcbuild, darwin
 , fetchpatch
 }:
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   gnFlags = [
     "use_custom_libcxx=false"
-    "is_clang=${if stdenv.cc.isClang then "true" else "false"}"
+    "is_clang=${lib.boolToString stdenv.cc.isClang}"
     "use_sysroot=false"
     # "use_system_icu=true"
     "is_component_build=false"
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   # to be exceeded
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-class-memaccess";
 
-  nativeBuildInputs = [ gn ninja pkgconfig python ]
+  nativeBuildInputs = [ gn ninja pkg-config python ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ xcbuild darwin.DarwinTools ];
   buildInputs = [ glib icu ];
 

@@ -1,4 +1,4 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, ocplib-endian, cmdliner, afl-persistent
+{ lib, stdenv, buildDunePackage, fetchFromGitHub, ocplib-endian, cmdliner, afl-persistent
 , calendar, fpath, pprint, uutf, uunf, uucp }:
 
 buildDunePackage rec {
@@ -22,7 +22,7 @@ buildDunePackage rec {
   # uunf is broken on aarch64
   doCheck = !stdenv.isAarch64;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Property fuzzing for OCaml";
     homepage = "https://github.com/stedolan/crowbar";
     license = licenses.mit;

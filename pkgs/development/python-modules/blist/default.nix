@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://stutzbachenterprises.com/blist/";
     description = "A list-like type with better asymptotic performance and similar performance on small lists";
     license = licenses.bsd0;

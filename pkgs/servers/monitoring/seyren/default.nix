@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   pname = "seyren";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     makeWrapper "${jre}/bin/java" "$out"/bin/seyren --add-flags "-jar $src"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An alerting dashboard for Graphite";
     homepage = "https://github.com/scobal/seyren";
     license = licenses.asl20;

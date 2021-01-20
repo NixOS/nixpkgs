@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, zeromq }:
+{ stdenv, fetchFromGitHub, cmake, pkg-config, zeromq }:
 
 stdenv.mkDerivation rec {
   pname = "zmqpp";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   propagatedBuildInputs = [ zeromq ];
 

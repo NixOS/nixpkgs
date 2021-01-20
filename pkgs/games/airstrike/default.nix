@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, SDL, SDL_image }:
+{ lib, stdenv, fetchurl, makeWrapper, SDL, SDL_image }:
 
 stdenv.mkDerivation rec {
   pname = "airstrike-pre";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       --run "cd $out/share"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 2d dogfighting game";
     homepage = "https://icculus.org/airstrike/";
     license = licenses.gpl2;

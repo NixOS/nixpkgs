@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2 }:
+{ stdenv, fetchurl, pkg-config, intltool, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-engine-murrine";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "129cs5bqw23i76h3nmc29c9mqkm9460iwc8vkl7hs4xr07h8mip9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ intltool gtk2 ];
 
   meta = {

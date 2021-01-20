@@ -7,7 +7,7 @@
 , perl
 , libedit
 , ninja
-, pkgconfig
+, pkg-config
 , sqlite
 , swig
 , bash
@@ -141,7 +141,7 @@ stdenv.mkDerivation {
     makeWrapper
     ninja
     perl
-    pkgconfig
+    pkg-config
     python
     rsync
     which
@@ -155,7 +155,7 @@ stdenv.mkDerivation {
     libgit2
     python
   ];
-  propagatedUserEnvPkgs = [ git pkgconfig ];
+  propagatedUserEnvPkgs = [ git pkg-config ];
 
   hardeningDisable = [ "format" ]; # for LLDB
 

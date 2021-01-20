@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "iterm2";
-  version = "1.16";
+  version = "1.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8dead057b09ed4ac03c6caae7890489da1d823215ec5166789739ece941bdcbc";
+    sha256 = "88ca7dd76242205dc82761bf98932a42e6c1ba338cb065f1cc775413ef4e0dc2";
   };
 
   propagatedBuildInputs = [ protobuf websockets ];
@@ -26,6 +26,7 @@ buildPythonPackage rec {
     description = "Python interface to iTerm2's scripting API";
     homepage = "https://github.com/gnachman/iTerm2";
     license = licenses.gpl2;
+    platforms = platforms.darwin;
     maintainers = with maintainers; [ jeremyschlatter ];
   };
 }

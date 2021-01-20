@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -11,7 +11,7 @@
 , vala
 , sqlite
 , webkitgtk
-, pkgconfig
+, pkg-config
 , gnome3
 , gst_all_1
 , libgudev
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   version = "0.31.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0ywzr6vgcz8yy60v0jp55na9lgqi4dbh2vakfphkcml1gpah0r2l";
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     itstool
     gettext
     desktop-file-utils
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Popular photo organizer for the GNOME desktop";
     homepage = "https://wiki.gnome.org/Apps/Shotwell";
     license = licenses.lgpl21Plus;

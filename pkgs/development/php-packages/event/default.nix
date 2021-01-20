@@ -1,11 +1,9 @@
 { buildPecl, lib, pkgs, php }:
-let
-in
 buildPecl {
   pname = "event";
 
-  version = "2.5.3";
-  sha256 = "12liry5ldvgwp1v1a6zgfq8w6iyyxmsdj4c71bp157nnf58cb8hb";
+  version = "3.0.2";
+  sha256 = "1ws4l014z52vb23xbsfj6viwkf7fmh462af639xgbp0n6syf77dq";
 
   configureFlags = [
     "--with-event-libevent-dir=${pkgs.libevent.dev}"
@@ -20,7 +18,7 @@ buildPecl {
       ':'
   '';
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   buildInputs = with pkgs; [ openssl libevent ];
   internalDeps = [ php.extensions.sockets ];
 

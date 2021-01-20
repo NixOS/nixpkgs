@@ -1,6 +1,9 @@
-{ stdenv, fetchgit }:
+{ stdenv
+, fetchgit
+, unstableGitUpdater
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "qbe";
   version = "unstable-2019-07-11";
 
@@ -11,6 +14,9 @@ stdenv.mkDerivation {
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.updateScript = unstableGitUpdater { };
+
   meta = with stdenv.lib; {
     homepage = "https://c9x.me/compile/";
     description = "A small compiler backend written in C";
@@ -19,4 +25,3 @@ stdenv.mkDerivation {
     platforms = platforms.all;
   };
 }
-

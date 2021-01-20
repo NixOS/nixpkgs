@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, unzip
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, unzip
 , zlib
 , enablePython ? false, pythonPackages
 , enableGtk2 ? false, gtk2
@@ -19,13 +19,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "opencv";
-  version = "2.4.13";
+  version = "2.4.13.7";
 
   src = fetchFromGitHub {
-    owner = "Itseez";
+    owner = "opencv";
     repo = "opencv";
     rev = version;
-    sha256 = "1k29rxlvrhgc5hadg2nc50wa3d2ls9ndp373257p756a0aividxh";
+    sha256 = "062js7zhh4ixi2wk61wyi23qp9zsk5vw24iz2i5fab2hp97y5zq3";
   };
 
   patches =
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
-  nativeBuildInputs = [ cmake pkgconfig unzip ];
+  nativeBuildInputs = [ cmake pkg-config unzip ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -69,11 +69,9 @@ stdenv.mkDerivation rec {
     (opencvFlag "GSTREAMER" enableGStreamer)
   ];
 
-  enableParallelBuilding = true;
-
   hardeningDisable = [ "bindnow" "relro" ];
 
-  # Fix pkgconfig file that gets broken with multiple outputs
+  # Fix pkg-config file that gets broken with multiple outputs
   postFixup = ''
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_old=.*|includedir_old=$dev/include/opencv|"
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_new=.*|includedir_new=$dev/include|"
@@ -87,6 +85,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    broken = true;
   };
 }

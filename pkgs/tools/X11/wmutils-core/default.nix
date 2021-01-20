@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxcb }:
+{ lib, stdenv, fetchurl, libxcb }:
 
 stdenv.mkDerivation rec {
   pname = "wmutils-core";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of window manipulation tools";
     homepage = "https://github.com/wmutils/core";
     license = licenses.isc;

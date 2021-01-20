@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "line_profiler";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7218ad6bd81f8649b211974bf108933910f016d66b49651effe7bbf63667d141";
+    sha256 = "e73ff429236d59d48ce7028484becfa01449b3d52abdcf7337e0ff2acdc5093c";
   };
 
   nativeBuildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4, zlib, eigen, openbabel, pkgconfig, libGLU, libGL, libX11, doxygen }:
+{ lib, stdenv, fetchurl, cmake, qt4, zlib, eigen, openbabel, pkg-config, libGLU, libGL, libX11, doxygen }:
 
 stdenv.mkDerivation rec {
   name = "avogadro-1.1.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 eigen zlib openbabel libGL libGLU libX11 ];
 
-  nativeBuildInputs = [ cmake pkgconfig doxygen ];
+  nativeBuildInputs = [ cmake pkg-config doxygen ];
 
   NIX_CFLAGS_COMPILE = "-include ${libGLU.dev}/include/GL/glu.h";
 
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Molecule editor and visualizer";
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    maintainers = with maintainers; [ danielbarter ];
+    platforms = platforms.mesaPlatforms;
   };
 }

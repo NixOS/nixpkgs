@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl,
-  pkgconfig, pure, glpk, gmp, libtool, libmysqlclient, libiodbc }:
+  pkg-config, pure, glpk, gmp, libtool, libmysqlclient, libiodbc }:
 
 stdenv.mkDerivation rec {
   baseName = "glpk";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
                        "--with-gmp=yes" ];
   });
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure glpkWithExtras ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;

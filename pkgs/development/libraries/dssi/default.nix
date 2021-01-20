@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ladspaH, libjack2, liblo, alsaLib, qt4, libX11, libsndfile, libSM
-, libsamplerate, libtool, autoconf, automake, xorgproto, libICE, pkgconfig
+, libsamplerate, libtool, autoconf, automake, xorgproto, libICE, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ ladspaH libjack2 liblo alsaLib qt4 libX11 libsndfile libSM
-      libsamplerate libtool autoconf automake xorgproto libICE pkgconfig
+      libsamplerate libtool autoconf automake xorgproto libICE pkg-config
     ];
 
   meta = with stdenv.lib; {

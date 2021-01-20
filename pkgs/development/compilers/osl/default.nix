@@ -1,6 +1,6 @@
 { clangStdenv, stdenv, fetchFromGitHub, cmake, zlib, openexr,
 openimageio, llvm, boost165, flex, bison, partio, pugixml,
-utillinux, python
+util-linux, python
 }:
 
 let boost_static = boost165.override { enableStatic = true; };
@@ -18,14 +18,14 @@ in clangStdenv.mkDerivation rec {
   };
 
   cmakeFlags = [ "-DUSE_BOOST_WAVE=ON" "-DENABLERTTI=ON" ];
-  enableParallelBuilding = true;
 
   preConfigure = '' patchShebangs src/liboslexec/serialize-bc.bash '';
-  
+
+  nativeBuildInputs = [ cmake boost_static flex bison];
   buildInputs = [
-     cmake zlib openexr openimageio llvm
-     boost_static flex bison partio pugixml
-     utillinux # needed just for hexdump
+     zlib openexr openimageio llvm
+     partio pugixml
+     util-linux # needed just for hexdump
      python # CMake doesn't check this?
   ];
   # TODO: How important is partio? CMake doesn't seem to find it

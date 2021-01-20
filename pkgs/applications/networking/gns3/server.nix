@@ -35,7 +35,9 @@ in python.pkgs.buildPythonPackage {
 
   postPatch = ''
     # yarl 1.4+ only requires Python 3.6+
-    sed -iE "s/yarl==1.3.0//" requirements.txt
+    substituteInPlace requirements.txt \
+      --replace "aiohttp==3.6.2" "aiohttp>=3.6.2" \
+      --replace "yarl==1.3.0" ""
   '';
 
   propagatedBuildInputs = with python.pkgs; [
@@ -51,7 +53,7 @@ in python.pkgs.buildPythonPackage {
     rm $out/bin/gns3loopback # For Windows only
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical Network Simulator 3 server (${branch} release)";
     longDescription = ''
       The GNS3 server manages emulators such as Dynamips, VirtualBox or

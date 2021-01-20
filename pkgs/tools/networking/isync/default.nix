@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, perl
+{ lib, stdenv, fetchurl, pkg-config, perl
 , openssl, db, zlib, cyrus_sasl
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config perl ];
   buildInputs = [ openssl db cyrus_sasl zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://isync.sourceforge.net/";
     # https://sourceforge.net/projects/isync/
     changelog = "https://sourceforge.net/p/isync/isync/ci/v${version}/tree/NEWS";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libbsd, openssl, libmilter
+{ stdenv, fetchurl, pkg-config, libbsd, openssl, libmilter
 , autoreconfHook, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
 
   buildInputs = [ libbsd openssl libmilter perl ];
 

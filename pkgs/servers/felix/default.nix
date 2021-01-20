@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   pname = "apache-felix";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     cp -av * $out
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An OSGi gateway";
     homepage = "https://felix.apache.org";
     license = licenses.asl20;

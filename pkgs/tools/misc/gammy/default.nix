@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, qmake, libXxf86vm, wrapQtAppsHook }:
+{ lib, stdenv, fetchFromGitHub, qmake, libXxf86vm, wrapQtAppsHook }:
 
 let
   pname = "gammy";
-  version = "0.9.58a";
+  version = "0.9.62";
 in
 
 stdenv.mkDerivation {
@@ -12,14 +12,14 @@ stdenv.mkDerivation {
     owner = "Fushko";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02kwfzh7h2dbsfb6b3qlsc7zga1hq21qvg45wf22vm03mahc28za";
+    sha256 = "sha256-fyr+khLgaX5xbKCW3pqt6fFvZBHGEVs1BsMireZDxP0=";
   };
 
   nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
   buildInputs = [ libXxf86vm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI tool for manual- of auto-adjusting of brightness/temperature";
     homepage = "https://github.com/Fushko/gammy";
     license = licenses.gpl3;

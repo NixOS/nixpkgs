@@ -12,6 +12,10 @@ let
     aarch64 = "arm64";
 
   in {
+    "1.24.3-x86_64-darwin" = fetchurl {
+      url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
+      sha256 = "1n4cq4jrms4j0yl54b3w14agcgy8dbipv5788jziwk8q06a8c69l";
+    };
     "1.24.3-x86_64-linux" = fetchurl {
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
       sha256 = "16sm02wbkj328ni0z1z4n4msi12lb8ijxzmbbfamvg766mycj8z3";
@@ -23,6 +27,10 @@ let
     "1.24.3-aarch64-linux" = fetchurl {
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
       sha256 = "1p5bn04gr91chcszgmw5ng8mlzgwsrdr2v7k7ppwr1slkx97fsrh";
+    };
+    "2.7.2-x86_64-darwin" = fetchurl {
+      url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
+      sha256 = "111zl075qdk2zd4d4mmfkn30jmzsri9nq3nspnmc2l245gdq34jj";
     };
     "2.7.2-x86_64-linux" = fetchurl {
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
@@ -36,6 +44,18 @@ let
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
       sha256 = "1p66fkdh1kv0ypmadmg67c3y3li3aaf1lahqh2g6r6qrzbh5da2p";
     };
+    "2.10.0-x86_64-darwin" = fetchurl {
+      url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
+      sha256 = "1n4qgsax5wi7krgvvs0dy7fz39nlykiw8gr0gdacc85hgyhqg09j";
+    };
+    "2.10.0-x86_64-linux" = fetchurl {
+      url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
+      sha256 = "0dncmsfbwcn3ygflhp83i6z4bvc02fbpaq1vzdzw8xdk3sbynchb";
+    };
+    "2.9.0-4.0.dev-x86_64-darwin" = fetchurl {
+      url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
+      sha256 = "0gj91pbvqrxsvxaj742cllqha2z65867gggzq9hq5139vkkpfj9s";
+    };
     "2.9.0-4.0.dev-x86_64-linux" = fetchurl {
       url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
       sha256 = "16d9842fb3qbc0hy0zmimav9zndfkq96glgykj20xssc88qpjk2r";
@@ -47,6 +67,14 @@ let
     "2.9.0-4.0.dev-aarch64-linux" = fetchurl {
       url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
       sha256 = "1x6mlmc4hccmx42k7srhma18faxpxvghjwqahna80508rdpljwgc";
+    };
+    "2.11.0-161.0.dev-x86_64-darwin" = fetchurl {
+      url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
+      sha256 = "0mlwxp7jkkjafxkc4vqlgwl62y0hk1arhfrvc9hpm9dv98g3bdjj";
+    };
+    "2.11.0-161.0.dev-x86_64-linux" = fetchurl {
+      url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
+      sha256 = "05difz4w2fyh2yq5p5pkrqk59jqljlxhc1i6lmy5kihh6z69r12i";
     };
   };
 
@@ -69,9 +97,7 @@ stdenv.mkDerivation {
     mkdir -p $out
     cp -R * $out/
     echo $libPath
-    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-             --set-rpath $libPath \
-             $out/bin/dart
+    find $out/bin -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
   '';
 
   libPath = makeLibraryPath [ stdenv.cc.cc ];
@@ -87,7 +113,7 @@ stdenv.mkDerivation {
       with C-style syntax. It offers compilation to JavaScript, interfaces,
       mixins, abstract classes, reified generics, and optional typing.
     '';
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
     license = licenses.bsd3;
   };
 }

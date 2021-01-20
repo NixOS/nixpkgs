@@ -43,9 +43,16 @@ let
 
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
+
+    [hooks]
+    custom_hooks_dir = "${cfg.statePath}/custom_hooks"
+
+    [gitlab]
     secret_file = "${cfg.statePath}/gitlab_shell_secret"
-    gitlab_url = "http+unix://${pathUrlQuote gitlabSocket}"
-    http_settings = { self_signed_cert = false }
+    url = "http+unix://${pathUrlQuote gitlabSocket}"
+
+    [gitlab.http-settings]
+    self_signed_cert = false
 
     ${concatStringsSep "\n" (attrValues (mapAttrs (k: v: ''
     [[storage]]
@@ -61,7 +68,6 @@ let
     repos_path = "${cfg.statePath}/repositories";
     secret_file = "${cfg.statePath}/gitlab_shell_secret";
     log_file = "${cfg.statePath}/log/gitlab-shell.log";
-    custom_hooks_dir = "${cfg.statePath}/custom_hooks";
     redis = {
       bin = "${pkgs.redis}/bin/redis-cli";
       host = "127.0.0.1";
@@ -119,6 +125,7 @@ let
         receive_pack = true;
       };
       workhorse.secret_file = "${cfg.statePath}/.gitlab_workhorse_secret";
+      gitlab_kas.secret_file = "${cfg.statePath}/.gitlab_kas_secret";
       git.bin_path = "git";
       monitoring = {
         ip_whitelist = [ "127.0.0.0/8" "::1/128" ];
@@ -653,7 +660,7 @@ in {
       script = ''
         set -eu
 
-        PSQL="${pkgs.utillinux}/bin/runuser -u ${pgsql.superUser} -- psql --port=${toString pgsql.port}"
+        PSQL="${pkgs.util-linux}/bin/runuser -u ${pgsql.superUser} -- psql --port=${toString pgsql.port}"
 
         $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.databaseName}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${cfg.databaseName}" OWNER "${cfg.databaseUsername}"'
         current_owner=$($PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${cfg.databaseName}'")
@@ -668,6 +675,7 @@ in {
             rm "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
         fi
         $PSQL '${cfg.databaseName}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
+        $PSQL '${cfg.databaseName}' -tAc "CREATE EXTENSION IF NOT EXISTS btree_gist;"
       '';
 
       serviceConfig = {
@@ -728,7 +736,7 @@ in {
       environment = gitlabEnv;
       path = with pkgs; [
         postgresqlPackage
-        gitAndTools.git
+        git
         ruby
         openssh
         nodejs
@@ -750,12 +758,13 @@ in {
     };
 
     systemd.services.gitaly = {
-      after = [ "network.target" ];
+      after = [ "network.target" "gitlab.service" ];
+      bindsTo = [ "gitlab.service" ];
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
         openssh
         procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
-        gitAndTools.git
+        git
         cfg.packages.gitaly.rubyEnv
         cfg.packages.gitaly.rubyEnv.wrappedRuby
         gzip
@@ -797,7 +806,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
         exiftool
-        gitAndTools.git
+        git
         gnutar
         gzip
         openssh
@@ -839,13 +848,13 @@ in {
     };
 
     systemd.services.gitlab = {
-      after = [ "gitlab-workhorse.service" "gitaly.service" "network.target" "gitlab-postgresql.service" "redis.service" ];
+      after = [ "gitlab-workhorse.service" "network.target" "gitlab-postgresql.service" "redis.service" ];
       requires = [ "gitlab-sidekiq.service" ];
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
         postgresqlPackage
-        gitAndTools.git
+        git
         openssh
         nodejs
         procps

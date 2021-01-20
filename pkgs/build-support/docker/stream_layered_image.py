@@ -83,7 +83,11 @@ def archive_paths_to(obj, paths, mtime):
 
         for path in paths:
             path = pathlib.Path(path)
-            files = itertools.chain([path], path.rglob("*"))
+            if path.is_symlink():
+                files = [path]
+            else:
+                files = itertools.chain([path], path.rglob("*"))
+
             for filename in sorted(files):
                 ti = append_root(tar.gettarinfo(filename))
 

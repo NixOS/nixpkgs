@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , go
 , fetchurl
 , curl
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Secure UUCP-like store-and-forward exchanging";
     longDescription = ''
       This utilities are intended to help build up small size (dozens of

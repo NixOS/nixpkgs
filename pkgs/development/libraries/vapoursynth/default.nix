@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, makeWrapper
+{ stdenv, fetchFromGitHub, pkg-config, autoreconfHook, makeWrapper
 , zimg, libass, python3, libiconv
 , ApplicationServices
 , ocrSupport ?  false, tesseract ? null
@@ -12,16 +12,16 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "R49";
+  version = "R52";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = version;
-    sha256 = "1d298mlb24nlc2x7pixfbkd0qbpv4c706c32idsgpi96z1spkhvl";
+    sha256 = "1krfdzc2x2vxv4nq9kiv1c09hgj525qn120ah91fw2ikq8ldvmx4";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook makeWrapper ];
+  nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper ];
   buildInputs = [
     zimg libass
     (python3.withPackages (ps: with ps; [ sphinx cython ]))

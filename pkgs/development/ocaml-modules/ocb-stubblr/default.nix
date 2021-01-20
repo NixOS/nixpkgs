@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, topkg, astring }:
+{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild, topkg, astring }:
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-ocb-stubblr-0.1.0";
@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   meta = {
     description = "OCamlbuild plugin for C stubs";
     homepage = "https://github.com/pqwy/ocb-stubblr";
-    license = stdenv.lib.licenses.isc;
+    license = lib.licenses.isc;
     inherit (ocaml.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

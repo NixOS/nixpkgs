@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "hashcat-utils";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small utilities that are useful in advanced password cracking";
     homepage = "https://github.com/hashcat/hashcat-utils";
     license = licenses.mit;

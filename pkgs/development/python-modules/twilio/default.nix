@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub
 , pyjwt, pysocks, pytz, requests, six, nose, mock }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyjwt pysocks pytz six requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Twilio API client and TwiML generator";
     homepage = "https://github.com/twilio/twilio-python/";
     license = licenses.mit;

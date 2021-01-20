@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python2, perl, yacc, flex
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python2, perl, yacc, flex
 , texinfo, perlPackages
 , openldap, libcap_ng, sqlite, openssl, db, libedit, pam
 , CoreFoundation, Security, SystemConfiguration
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./heimdal-make-missing-headers.patch ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex texinfo ]
+  nativeBuildInputs = [ autoreconfHook pkg-config python2 perl yacc flex texinfo ]
     ++ (with perlPackages; [ JSON ]);
   buildInputs = optionals (stdenv.isLinux) [ libcap_ng ]
     ++ [ db sqlite openssl libedit openldap pam]

@@ -31,14 +31,14 @@ in
       after = [ "NetworkManager-wait-online.service" "network.target" ];
       preStart = "mkdir -pv /var/lib/teamviewer /var/log/teamviewer";
 
+      startLimitIntervalSec = 60;
+      startLimitBurst = 10;
       serviceConfig = {
         Type = "forking";
         ExecStart = "${pkgs.teamviewer}/bin/teamviewerd -d";
         PIDFile = "/run/teamviewerd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-abort";
-        StartLimitInterval = "60";
-        StartLimitBurst = "10";
       };
     };
   };

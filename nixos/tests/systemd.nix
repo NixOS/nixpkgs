@@ -26,7 +26,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     systemd.shutdown.test = pkgs.writeScript "test.shutdown" ''
       #!${pkgs.runtimeShell}
-      PATH=${lib.makeBinPath (with pkgs; [ utillinux coreutils ])}
+      PATH=${lib.makeBinPath (with pkgs; [ util-linux coreutils ])}
       mount -t 9p shared -o trans=virtio,version=9p2000.L /tmp/shared
       touch /tmp/shared/shutdown-test
       umount /tmp/shared
@@ -82,6 +82,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "systemd-run --pty --property=Type=oneshot --property=DynamicUser=yes --property=User=iamatest whoami"
         )
 
+    with subtest("regression test for https://bugs.freedesktop.org/show_bug.cgi?id=77507"):
+        retcode, output = machine.execute("systemctl status testservice1.service")
+        assert retcode in [0, 3]  # https://bugs.freedesktop.org/show_bug.cgi?id=77507
+
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35268
     with subtest("file system with x-initrd.mount is not unmounted"):
         machine.succeed("mountpoint -q /test-x-initrd-mount")
@@ -122,17 +126,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.wait_for_unit("multi-user.target")
         assert "fq_codel" in machine.succeed("sysctl net.core.default_qdisc")
 
-    # Test cgroup accounting is enabled
-    with subtest("systemd cgroup accounting is enabled"):
-        machine.wait_for_unit("multi-user.target")
-        assert "yes" in machine.succeed(
-            "systemctl show testservice1.service -p IOAccounting"
-        )
-
-        retcode, output = machine.execute("systemctl status testservice1.service")
-        assert retcode in [0, 3]  # https://bugs.freedesktop.org/show_bug.cgi?id=77507
-        assert "CPU:" in output
-
     # Test systemd is configured to manage a watchdog
     with subtest("systemd manages hardware watchdog"):
         machine.wait_for_unit("multi-user.target")
@@ -168,5 +161,25 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.succeed("systemctl status systemd-cryptsetup@luks1.service")
         machine.succeed("mkdir -p /tmp/luks1")
         machine.succeed("mount /dev/mapper/luks1 /tmp/luks1")
+
+    # Do some IP traffic
+    output_ping = machine.succeed(
+        "systemd-run --wait -- /run/wrappers/bin/ping -c 1 127.0.0.1 2>&1"
+    )
+
+    with subtest("systemd reports accounting data on system.slice"):
+        output = machine.succeed("systemctl status system.slice")
+        assert "CPU:" in output
+        assert "Memory:" in output
+
+        assert "IP:" in output
+        assert "0B in, 0B out" not in output
+
+        assert "IO:" in output
+        assert "0B read, 0B written" not in output
+
+    with subtest("systemd per-unit accounting works"):
+        assert "IP traffic received: 84B" in output_ping
+        assert "IP traffic sent: 84B" in output_ping
   '';
 })

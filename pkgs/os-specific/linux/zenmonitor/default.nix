@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gtk3, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gtk3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "zenmonitor";
@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gtk3 ];
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Monitoring software for AMD Zen-based CPUs";
     homepage = "https://github.com/ocerman/zenmonitor";
     license = licenses.mit;

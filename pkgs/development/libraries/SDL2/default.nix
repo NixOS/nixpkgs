@@ -1,4 +1,4 @@
-{ stdenv, config, fetchurl, pkgconfig
+{ stdenv, config, fetchurl, pkg-config
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
       --replace 'WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`' 'WAYLAND_SCANNER=`pkg-config --variable=wayland_scanner wayland-scanner`'
   '';
 
-  depsBuildBuild = [ pkgconfig ];
+  depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ pkgconfig ] ++ optionals waylandSupport [ wayland ];
+  nativeBuildInputs = [ pkg-config ] ++ optionals waylandSupport [ wayland ];
 
   propagatedBuildInputs = dlopenPropagatedBuildInputs;
 

@@ -1,8 +1,8 @@
-{ stdenv, fetchgit, cmake, boost, miniupnpc_2, openssl, unbound
+{ lib, stdenv, fetchgit, cmake, boost, miniupnpc_2, openssl, unbound
 , readline, libsodium, rapidjson, fetchurl
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   randomwowVersion = "1.1.7";

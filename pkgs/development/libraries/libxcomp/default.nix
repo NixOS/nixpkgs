@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, libjpeg, libpng, libX11, zlib }:
+{ stdenv, fetchurl, autoreconfHook, pkg-config, libjpeg, libpng, libX11, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libxcomp";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libjpeg libpng libX11 zlib ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   preAutoreconf = ''
     cd nxcomp/

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, pcsclite, libusb-compat-0_1
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, pcsclite, libusb-compat-0_1
 , doxygen, libxslt
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ pcsclite libusb-compat-0_1 doxygen libxslt ];
 
   preInstall = ''

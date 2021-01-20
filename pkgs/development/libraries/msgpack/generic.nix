@@ -11,12 +11,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  enableParallelBuilding = true;
-
-  cmakeFlags = []
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-                           "-DMSGPACK_BUILD_EXAMPLES=OFF"
-    ;
+  cmakeFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DMSGPACK_BUILD_EXAMPLES=OFF";
 
   meta = with stdenv.lib; {
     description = "MessagePack implementation for C and C++";

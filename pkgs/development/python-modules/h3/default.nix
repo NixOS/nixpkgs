@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , cmake
 , fetchPypi
@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "h3";
-  version = "3.6.4";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "416e35d736ef6ec9c1f73b9d4a9d5c696cc2a7561811f8bcfa08c8c4912f2289";
+    sha256 = "cd27fc8ecd9183f93934079b7c986401f499030ff2e2171eace9de462fab561d";
   };
 
   patches = [
@@ -25,7 +25,7 @@ buildPythonPackage rec {
       --subst-var-by libh3_path ${h3}/lib/libh3${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/uber/h3-py";
     description = "This library provides Python bindings for the H3 Core Library.";
     license = licenses.asl20;

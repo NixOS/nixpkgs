@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, openssh, makeWrapper }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, openssh, makeWrapper }:
 
 buildGoModule rec {
   pname = "assh";
@@ -27,7 +27,7 @@ buildGoModule rec {
     $out/bin/assh --help > /dev/null
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced SSH config - Regex, aliases, gateways, includes and dynamic hosts";
     homepage = "https://github.com/moul/assh";
     changelog = "https://github.com/moul/assh/releases/tag/v${version}";

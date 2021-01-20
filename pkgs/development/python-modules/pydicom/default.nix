@@ -1,31 +1,57 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , isPy27
-, pytest
 , pytestrunner
 , pytestCheckHook
 , numpy
 , pillow
 }:
 
-buildPythonPackage rec {
-  version = "2.0.0";
+let
   pname = "pydicom";
-  disabled = isPy27;
+  version = "2.1.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "594c91f715c415ef439f498351ae68fb770c776fc5aa72f3c87eb500dc2a7470";
+  src = fetchFromGitHub {
+    owner = "${pname}";
+    repo = "${pname}";
+    rev = "v${version}";
+    sha256 = "sha256-iExy+mUs1uqs/u9N6btlqyP6/TvoPVsuOuzs56zZAS8=";
   };
+
+  # Pydicom needs pydicom-data to run some tests. If these files are downloaded
+  # before the package creation, it'll try to download during the checkPhase.
+  test_data = fetchFromGitHub {
+    owner = "${pname}";
+    repo = "${pname}-data";
+    rev = "bbb723879690bb77e077a6d57657930998e92bd5";
+    sha256 = "sha256-dCI1temvpNWiWJYVfQZKy/YJ4ad5B0e9hEKHJnEeqzk=";
+  };
+
+in
+buildPythonPackage {
+  inherit pname version src;
+  disabled = isPy27;
 
   propagatedBuildInputs = [ numpy pillow ];
 
-  checkInputs = [ pytest pytestrunner pytestCheckHook ];
-  disabledTests = [ "test_invalid_bit_depth_raises" ];
-  # harmless failure; see https://github.com/pydicom/pydicom/issues/1119
+  checkInputs = [ pytestrunner pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  # Setting $HOME to prevent pytest to try to create a folder inside
+  # /homeless-shelter which is read-only.
+  # Linking pydicom-data dicom files to $HOME/.pydicom/data
+  preCheck = ''
+    export HOME=$TMP/test-home
+    mkdir -p $HOME/.pydicom/
+    ln -s ${test_data}/data_store/data $HOME/.pydicom/data
+  '';
+
+  # This test try to remove a dicom inside $HOME/.pydicom/data/ and download it again.
+  disabledTests = [
+    "test_fetch_data_files"
+  ];
+
+  meta = with lib; {
     homepage = "https://pydicom.github.io";
     description = "Pure-Python package for working with DICOM files";
     license = licenses.mit;

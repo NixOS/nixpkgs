@@ -24,16 +24,6 @@ let
     (mkOverride "astral" "1.10.1"
       "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
 
-    # Pinned due to an API change in pyowm>=3.0
-    # Remove after https://github.com/home-assistant/core/pull/39839 gets merged
-    (mkOverride "pyowm" "2.10.0"
-      "1xvcv3sbcn9na8cwz21nnjlixysfk5lymnf65d1nqkbgacc1mm4g")
-
-    # Pinned, because v1.5.0 broke the google_translate integration
-    # https://github.com/home-assistant/core/pull/38428
-    (mkOverride "yarl" "1.4.2"
-      "0jzpgrdl6415zzl8js7095q8ks14555lhgxah76mimffkr39rkaq")
-
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
@@ -67,7 +57,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.116.2";
+  hassVersion = "2021.1.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -76,6 +66,9 @@ in with py.pkgs; buildPythonApplication rec {
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
   disabled = pythonOlder "3.7.1";
 
+  # don't try and fail to strip 6600+ python files, it takes minutes!
+  dontStrip = true;
+
   inherit availableComponents;
 
   # PyPI tarball is missing tests/ directory
@@ -83,28 +76,27 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0q4yqcikkph05mkvg160664lyf0f1qkpm7yc6kh9hgigambxi0yp";
+    sha256 = "03aa7kd216rnp8h80nv002ahafiy0031lxk1bkwcirrznphcw7sj";
   };
 
-  patches = [
-    (fetchpatch {
-      #  Fix group tests when run in parallel, remove >= 0.117.0
-      url = "https://github.com/home-assistant/core/pull/41446/commits/c79dc478b7136b6df43707bf0ad6b53419c8a909.patch";
-      sha256 = "1cl81swq960vd2f733dcqq60c0jjzrkm0l2sibcblhmyw597b4vj";
-    })
-  ];
+  # leave this in, so users don't have to constantly update their downstream patch handling
+  patches = [];
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "aiohttp==3.7.1" "aiohttp>=3.6.3" \
+      --replace "attrs==19.3.0" "attrs>=19.3.0" \
       --replace "bcrypt==3.1.7" "bcrypt>=3.1.7" \
-      --replace "cryptography==2.9.2" "cryptography" \
+      --replace "cryptography==3.2" "cryptography" \
+      --replace "pip>=8.0.3,<20.3" "pip" \
+      --replace "requests==2.25.0" "requests>=2.24.0" \
       --replace "ruamel.yaml==0.15.100" "ruamel.yaml>=0.15.100"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
   propagatedBuildInputs = [
     # From setup.py
-    aiohttp astral async-timeout attrs bcrypt certifi ciso8601 jinja2
+    aiohttp astral async-timeout attrs bcrypt certifi ciso8601 httpx jinja2
     pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
     setuptools voluptuous voluptuous-serialize yarl
     # From default_config. frontend, http, image, mobile_app and recorder components as well as
@@ -180,6 +172,15 @@ in with py.pkgs; buildPythonApplication rec {
     "test_device_tracker_not_home"
     # Racy https://github.com/home-assistant/core/issues/41425
     "test_cached_event_message"
+    # ValueError: count must be a positive integer (got 0)
+    "test_media_view"
+    # AssertionError: len(events) == 1
+    "test_error_posted_as_event"
+    # keyring.errors.NoKeyringError: No recommended backend was available.
+    "test_secrets_from_unrelated_fails"
+    "test_secrets_credstash"
+    # RuntimeError: Event loop is closed
+    "test_remove_older_logs"
   ];
 
   preCheck = ''
@@ -198,7 +199,7 @@ in with py.pkgs; buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://home-assistant.io/";
-    description = "Open-source home automation platform running on Python 3";
+    description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda globin mic92 hexa ];
   };

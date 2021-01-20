@@ -1,25 +1,25 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libsodium, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, libsodium, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
-  version = "1.8.18";
+  version = "1.8.23";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "shadowsocks";
     repo = pname;
-    sha256 = "1kxf0qcyg5mhddrzwv0hd1fy901wl0ydmxi6b1k2217xmgiyi2s6";
+    sha256 = "1ylasv33478cgwmr8wrd4705azfzrw495w629ncynamv7z17w3k3";
   };
 
-  cargoSha256 = "0vmd4sjagyhrc7q7fszwcjh4nhhmhckmx48i1h2xhr68bwncmyif";
+  cargoSha256 = "060k2dil38bx4zb5nnkr3mj6aayginbhr3aqjv0h071q0vlvp05p";
 
   SODIUM_USE_PKG_CONFIG = 1;
 
   buildInputs = [ openssl libsodium ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
-  nativeBuildInputs = [ pkgconfig ];
+    ++ lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [ pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/shadowsocks/shadowsocks-rust";
     description = "A Rust port of shadowsocks";
     license = licenses.mit;

@@ -41,11 +41,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2020.5";
+  version = "2020.7";
 
   src = fetchurl {
     url = "https://www.mullvad.net/media/app/MullvadVPN-${version}_amd64.deb";
-    sha256 = "131z6qlpjwxcn5a62f1f147f2z1xg185jmr0vbin8h0dwa1182vn";
+    sha256 = "07vryz1nq8r4m5y9ry0d0v62ykz1cnnsv628x34yvwiyazbav4ri";
   };
 
   nativeBuildInputs = [
@@ -80,13 +80,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ Br1ght0ne ];
   };
 
 }

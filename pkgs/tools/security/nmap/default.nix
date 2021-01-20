@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libpcap, pkgconfig, openssl, lua5_3
+{ lib, stdenv, fetchurl, fetchpatch, libpcap, pkg-config, openssl, lua5_3
 , pcre, liblinear, libssh2
 , graphicalSupport ? false
 , libX11 ? null
@@ -8,15 +8,15 @@
 , withLua ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";
-  version = "7.90";
+  version = "7.80";
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "1s20i84m9bci70lrl0p2j7h3kpbi9snmvyhc3lzc9s3mh92w6msm";
+    sha256 = "1aizfys6l9f9grm82bk878w56mg0zpkfns3spzj157h98875mypw";
   };
 
   patches = [ ./zenmap.patch ]
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     pygtk pysqlite pygobject2 pycairo
   ];
 
-  nativeBuildInputs = [ pkgconfig ] ++ optionals graphicalSupport [ python2.pkgs.wrapPython ];
+  nativeBuildInputs = [ pkg-config ] ++ optionals graphicalSupport [ python2.pkgs.wrapPython ];
   buildInputs = [ pcre liblinear libssh2 libpcap openssl ] ++ optionals graphicalSupport (with python2.pkgs; [
     python2 libX11 gtk2
   ]);

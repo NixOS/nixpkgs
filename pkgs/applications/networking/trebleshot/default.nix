@@ -10,7 +10,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "genonbeta";
     repo = "TrebleShot-Desktop";
-    rev = "${version}";
+    rev = version;
     sha256 = "1k8wagw6arsi1lqkhn1nl6j11mb122vi1qs0q2np6nznwfy7pn1k";
   };
 

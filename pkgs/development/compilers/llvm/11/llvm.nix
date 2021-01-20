@@ -32,12 +32,12 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "1k7i2syqdm29l10di3ws64i02snh9jhd1s2jzgh8565b0vg25wlc";
-  polly_src = fetch "polly" "0l0n09f6sy30x825w85v8n7pvya0ciq89r0abv66n8ggwmrk3rnw";
+  src = fetch pname "0a5mb65xa5bal8q6cb37xgkqis2bip87fsafgq3wbsva9cjprn6c";
+  polly_src = fetch "polly" "1smrqm9s0r2g9h0v0nil6y9wn2ih4l5bddk4dhgn538ngc7cxpq8";
 
   unpackPhase = ''
     unpackFile $src
-    mv llvm-${version}* llvm
+    mv llvm-${release_version}* llvm
     sourceRoot=$PWD/llvm
   '' + optionalString enablePolly ''
     unpackFile $polly_src
@@ -96,7 +96,7 @@ in stdenv.mkDerivation (rec {
   '';
 
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):
-  LDFLAGS = optionalString enableSharedLibraries "-Wl,--build-id=sha1";
+  LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
 
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
@@ -152,18 +152,16 @@ in stdenv.mkDerivation (rec {
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   '';
 
-  doCheck = stdenv.isLinux && (!stdenv.isx86_32);
+  doCheck = stdenv.isLinux && (!stdenv.isx86_32) && (!stdenv.hostPlatform.isMusl);
 
   checkTarget = "check-all";
-
-  enableParallelBuilding = true;
 
   requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = "https://llvm.org/";
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill primeos ];
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {

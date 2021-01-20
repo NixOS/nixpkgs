@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , asciidoc, libxslt, docbook_xsl
 , pam, yubikey-personalization, libyubikey, libykclient }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "10dq8dqi3jldllj6p8r9hldx9sank9n82c44w8akxrs1vli6nj3m";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig asciidoc libxslt docbook_xsl ];
+  nativeBuildInputs = [ autoreconfHook pkg-config asciidoc libxslt docbook_xsl ];
   buildInputs = [ pam yubikey-personalization libyubikey libykclient ];
 
   meta = with stdenv.lib; {

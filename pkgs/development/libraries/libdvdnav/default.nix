@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, libdvdread}:
+{stdenv, fetchurl, pkg-config, libdvdread}:
 
 stdenv.mkDerivation rec {
   pname = "libdvdnav";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nzf1ir27s5vs1jrisdiw9ag2sc160k3gv7nplv9ypppm5gb35zn";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [libdvdread];
 
   meta = {

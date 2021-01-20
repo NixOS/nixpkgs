@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages, gnupg1orig, openssl, git }:
+{ lib, stdenv, fetchFromGitHub, python2Packages, gnupg1orig, openssl, git }:
 
 python2Packages.buildPythonApplication rec {
   pname = "mailpile";
@@ -32,14 +32,14 @@ python2Packages.buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/mailpile \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg1orig openssl ]}" \
+      --prefix PATH ":" "${lib.makeBinPath [ gnupg1orig openssl ]}" \
       --set-default MAILPILE_SHARED "$out/share/mailpile"
   '';
 
   # No tests were found
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern, fast web-mail client with user-friendly encryption and privacy features";
     homepage = "https://www.mailpile.is/";
     license = [ licenses.asl20 licenses.agpl3 ];

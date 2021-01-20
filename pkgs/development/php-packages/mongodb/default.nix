@@ -3,10 +3,10 @@
 buildPecl {
   pname = "mongodb";
 
-  version = "1.6.1";
-  sha256 = "1j1w4n33347j9kwvxwsrix3gvjbiqcn1s5v59pp64s536cci8q0m";
+  version = "1.9.0";
+  sha256 = "16mbw3p80qxsj86nmjbfch8wv6jaq8wbz4rlpmixvhj9nwbp37hs";
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   buildInputs = with pkgs; [
     cyrus_sasl
     icu64

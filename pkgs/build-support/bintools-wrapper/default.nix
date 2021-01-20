@@ -167,7 +167,7 @@ stdenv.mkDerivation {
       else if targetPlatform.isWindows then "pe"
       else "elf" + toString targetPlatform.parsed.cpu.bits;
     endianPrefix = if targetPlatform.isBigEndian then "big" else "little";
-    sep = optionalString (!targetPlatform.isMips && !targetPlatform.isPower) "-";
+    sep = optionalString (!targetPlatform.isMips && !targetPlatform.isPower && !targetPlatform.isRiscV) "-";
     arch =
       /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
       else if targetPlatform.isAarch32     then endianPrefix + "arm"
@@ -179,12 +179,15 @@ stdenv.mkDerivation {
           mips64   = "btsmip";
           mips64el = "ltsmip";
         }.${targetPlatform.parsed.cpu.name}
+      else if targetPlatform.isMmix then "mmix"
       else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
       else if targetPlatform.isSparc then "sparc"
       else if targetPlatform.isMsp430 then "msp430"
       else if targetPlatform.isAvr then "avr"
       else if targetPlatform.isAlpha then "alpha"
       else if targetPlatform.isVc4 then "vc4"
+      else if targetPlatform.isOr1k then "or1k"
+      else if targetPlatform.isRiscV then "lriscv"
       else throw "unknown emulation for platform: ${targetPlatform.config}";
     in if targetPlatform.useLLVM or false then ""
        else targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
@@ -234,25 +237,20 @@ stdenv.mkDerivation {
       if [ -n "''${dynamicLinker-}" ]; then
         echo $dynamicLinker > $out/nix-support/dynamic-linker
 
-    '' + (if targetPlatform.isDarwin then ''
-        printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
-      '' else ''
-        if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
-          echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
-        fi
-      ''
-      # The dynamic linker is passed in `ldflagsBefore' to allow
-      # explicit overrides of the dynamic linker by callers to ld
-      # (the *last* value counts, so ours should come first).
-      + ''
-        echo -dynamic-linker "$dynamicLinker" >> $out/nix-support/libc-ldflags-before
-    '') + ''
+        ${if targetPlatform.isDarwin then ''
+          printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
+        '' else ''
+          if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
+            echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+          fi
+          touch $out/nix-support/ld-set-dynamic-linker
+        ''}
       fi
     '')
 
     # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
     + optionalString stdenv.targetPlatform.isMacOS ''
-      echo "-macosx_version_min 10.12 -sdk_version 10.12 -no_uuid" >> $out/nix-support/libc-ldflags-before
+      echo "-sdk_version 10.12 -no_uuid" >> $out/nix-support/libc-ldflags-before
     ''
 
     ##

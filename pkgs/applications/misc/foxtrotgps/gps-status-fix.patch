@@ -1,0 +1,14 @@
+--- foxtrot/src/gps_functions.c.orig	2020-12-04 15:02:22.290163204 -0600
++++ foxtrot/src/gps_functions.c	2020-12-04 15:04:54.470648534 -0600
+@@ -762,7 +762,11 @@
+ 		{
+ 			gpsdata->fix.time = (time_t) 0;
+ 		}
++#if GPSD_API_MAJOR_VERSION >= 9
++      gpsdata->valid = (libgps_gpsdata.fix.status != STATUS_NO_FIX);
++#else
+ 		gpsdata->valid = (libgps_gpsdata.status != STATUS_NO_FIX);
++#endif
+ 		if (gpsdata->valid)
+ 		{
+ 			gpsdata->seen_valid = TRUE;

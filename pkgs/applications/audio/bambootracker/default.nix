@@ -1,9 +1,8 @@
 { mkDerivation
-, stdenv
+, lib, stdenv
 , fetchFromGitHub
 , qmake
 , qtbase
-, qtmultimedia
 , qttools
 , alsaSupport ? stdenv.hostPlatform.isLinux
 , alsaLib
@@ -14,25 +13,25 @@
 }:
 let
 
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 
 in
 mkDerivation rec {
   pname = "bambootracker";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "rerrahkr";
     repo = "BambooTracker";
     rev = "v${version}";
-    sha256 = "0d0f4jqzknsiq725pvfndarfjg183f92rb0lim3wzshnsixr5vdc";
+    sha256 = "0ibi0sykxf6cp5la2c4pgxf5gvy56yv259fbmdwdrdyv6vlddf42";
   };
 
   sourceRoot = "source/BambooTracker";
 
   nativeBuildInputs = [ qmake qttools ];
 
-  buildInputs = [ qtbase qtmultimedia ]
+  buildInputs = [ qtbase ]
     ++ optional alsaSupport alsaLib
     ++ optional pulseSupport libpulseaudio
     ++ optional jackSupport libjack2;
@@ -41,7 +40,7 @@ mkDerivation rec {
     ++ optional pulseSupport "CONFIG+=use_pulse"
     ++ optionals jackSupport [ "CONFIG+=use_jack" "CONFIG+=jack_has_rename" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
     homepage = "https://github.com/rerrahkr/BambooTracker";
     license = licenses.gpl2Only;

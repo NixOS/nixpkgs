@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgs }:
+{ lib, stdenv, fetchFromGitHub, pkgs }:
 
 # To make use of this derivation, use
 # `programs.zsh.interactiveShellInit = "source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh";`
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     install -D scripts/* --target-directory=$out/share/zsh-nix-shell/scripts
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "zsh plugin that lets you use zsh in nix-shell shell";
     homepage = src.meta.homepage;
     license = licenses.bsd3;

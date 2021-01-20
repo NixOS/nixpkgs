@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   doCheck = false; # another test that depends on the network.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python crypto and SSL toolkit";
     homepage = "https://gitlab.com/m2crypto/m2crypto";
     license = licenses.mit;

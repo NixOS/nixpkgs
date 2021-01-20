@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , sassc
 , autoreconfHook
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/doc/${pname} AUTHORS *.md
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";
     homepage = "https://github.com/jnsh/arc-theme";
     license = licenses.gpl3Only;

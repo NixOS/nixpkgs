@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fuse }:
+{ lib, stdenv, fetchurl, fuse }:
 
 stdenv.mkDerivation rec {
   name = "aefs-0.4pre259-8843b7c";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fuse ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/edolstra/aefs";
     description = "A cryptographic filesystem implemented in userspace using FUSE";
     platforms = platforms.linux;

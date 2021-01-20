@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, libxml2, pkgconfig, perl
+{ stdenv, fetchurl, libxml2, pkg-config, perl
 , compressionSupport ? true, zlib ? null
 , sslSupport ? true, openssl ? null
-, static ? false
-, shared ? true
+, static ? stdenv.hostPlatform.isStatic
+, shared ? !stdenv.hostPlatform.isStatic
 }:
 
 assert compressionSupport -> zlib != null;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   patches = optionals stdenv.isDarwin [ ./0.29.6-darwin-fix-configure.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [libxml2 openssl]
     ++ stdenv.lib.optional compressionSupport zlib;
 

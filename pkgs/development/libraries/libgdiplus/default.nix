@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, cairo, Carbon, fontconfig
+{ stdenv, fetchFromGitHub, pkg-config, glib, cairo, Carbon, fontconfig
 , libtiff, giflib, libjpeg, libpng
 , libXrender, libexif, autoreconfHook, fetchpatch }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   configureFlags = stdenv.lib.optional stdenv.cc.isClang "--host=${stdenv.hostPlatform.system}";
 

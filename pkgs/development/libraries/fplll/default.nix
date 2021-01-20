@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    description = ''Lattice algorithms using floating-point arithmetic'';
+    description = "Lattice algorithms using floating-point arithmetic";
     changelog = [
       # Some release notes are added to the github tags, though they are not
       # always complete.
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       "https://groups.google.com/forum/#!searchin/fplll-devel/FPLLL$20${version}"
     ];
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [raskin timokau];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
   };
 }

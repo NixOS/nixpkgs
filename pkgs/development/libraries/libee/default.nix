@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libestr }:
+{ stdenv, fetchurl, pkg-config, libestr }:
 stdenv.mkDerivation {
   name = "libee-0.4.1";
 
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "09xhgzmsq0g3jsyj24vy67bhzk2fv971w5ixdkhfwgar70cw1nn0";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libestr];
 
   meta = {

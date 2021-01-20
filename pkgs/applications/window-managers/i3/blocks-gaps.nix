@@ -1,10 +1,10 @@
-{ fetchFromGitHub, stdenv, perl, makeWrapper
+{ fetchFromGitHub, lib, stdenv, perl, makeWrapper
 , iproute, acpi, sysstat, alsaUtils
 , scripts ? [ "bandwidth" "battery" "cpu_usage" "disk" "iface"
               "load_average" "memory" "volume" "wifi" ]
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   perlscripts = [ "battery" "cpu_usage" "openvpn" "temperature" ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${makeBinPath (optional (elem "volume" scripts) alsaUtils)}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A flexible scheduler for your i3bar blocks -- this is a fork to use with i3-gaps";
     homepage = "https://github.com/Airblader/i3blocks-gaps";
     license = licenses.gpl3;

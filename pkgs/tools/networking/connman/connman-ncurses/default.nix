@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, pkgconfig, dbus, json_c, ncurses, connman }:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, pkg-config, dbus, json_c, ncurses, connman }:
 
 stdenv.mkDerivation {
   pname = "connman-ncurses";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ dbus ncurses json_c connman ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     cp -va connman_ncurses "$out/bin/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple ncurses UI for connman";
     homepage = "https://github.com/eurogiciel-oss/connman-json-client";
     license = licenses.gpl2;

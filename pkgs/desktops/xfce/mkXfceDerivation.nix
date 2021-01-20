@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitLab, pkg-config, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook }:
 
 { category
 , pname
@@ -14,7 +14,7 @@
 
 let
   inherit (builtins) filter getAttr head isList;
-  inherit (stdenv.lib) attrNames concatLists recursiveUpdate zipAttrsWithNames;
+  inherit (lib) attrNames concatLists recursiveUpdate zipAttrsWithNames;
 
   filterAttrNames = f: attrs:
     filter (n: f (getAttr n attrs)) (attrNames attrs);
@@ -23,14 +23,16 @@ let
     zipAttrsWithNames (filterAttrNames isList (head attrsets)) (_: concatLists) attrsets;
 
   template = rec {
-    name = "${pname}-${version}";
+    inherit pname version;
 
-    nativeBuildInputs = [ pkgconfig xfce4-dev-tools wrapGAppsHook ];
+    nativeBuildInputs = [ pkg-config xfce4-dev-tools wrapGAppsHook ];
     buildInputs = [ hicolor-icon-theme ];
     configureFlags = [ "--enable-maintainer-mode" ];
 
-    src = fetchgit {
-      url = "git://git.xfce.org/${category}/${pname}";
+    src = fetchFromGitLab {
+      domain = "gitlab.xfce.org";
+      owner = category;
+      repo = pname;
       inherit rev sha256;
     };
 
@@ -41,11 +43,11 @@ let
 
     passthru.updateScript = xfce.updateScript {
       inherit pname version attrPath rev-prefix odd-unstable patchlevel-unstable;
-      versionLister = xfce.gitLister src.url;
+      versionLister = xfce.gitLister src.meta.homepage;
     };
 
-    meta = with stdenv.lib; {
-      homepage = "https://git.xfce.org/${category}/${pname}/about";
+    meta = with lib; {
+      homepage = "https://gitlab.xfce.org/${category}/${pname}/about";
       license = licenses.gpl2; # some libraries are under LGPLv2+
       platforms = platforms.linux;
     };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobject-introspection, flex, bison, vala, gettext, gnome3, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
+{ stdenv, fetchurl, meson, ninja, pkg-config, glib, gobject-introspection, flex, bison, vala, gettext, gnome3, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
 let
   version = "3.34.0";
   pname = "template-glib";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "1z9xkin5fyfh071ma9y045jcw83hgx33dfbjraw6cxk0qdmfysr1";
   };
 
-  buildInputs = [ meson ninja pkgconfig gettext flex bison vala glib gtk-doc docbook_xsl docbook_xml_dtd_43 ];
+  buildInputs = [ meson ninja pkg-config gettext flex bison vala glib gtk-doc docbook_xsl docbook_xml_dtd_43 ];
   nativeBuildInputs = [ glib gobject-introspection ];
 
   mesonFlags = [

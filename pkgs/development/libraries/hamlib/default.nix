@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, python2, swig, gd, libxml2, tcl, libusb-compat-0_1, pkgconfig,
+{stdenv, fetchurl, perl, python2, swig, gd, libxml2, tcl, libusb-compat-0_1, pkg-config,
  boost, libtool, perlPackages }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ perl perlPackages.ExtUtilsMakeMaker python2 swig gd libxml2
-                  tcl libusb-compat-0_1 pkgconfig boost libtool ];
+                  tcl libusb-compat-0_1 pkg-config boost libtool ];
 
   configureFlags = [ "--with-perl-binding" "--with-python-binding"
                      "--with-tcl-binding" "--with-rigmatrix" ];

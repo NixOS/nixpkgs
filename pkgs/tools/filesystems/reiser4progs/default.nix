@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libaal}:
+{lib, stdenv, fetchurl, libaal}:
 
 let version = "2.0.1"; in
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace ./run-ldconfig true
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     homepage = "https://sourceforge.net/projects/reiser4/";
     description = "Reiser4 utilities";

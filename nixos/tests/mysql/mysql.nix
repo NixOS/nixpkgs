@@ -1,6 +1,6 @@
 import ./../make-test-python.nix ({ pkgs, ...} : {
   name = "mysql";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eelco shlevy ];
   };
 
@@ -98,7 +98,7 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
         }];
         services.mysql.settings = {
           mysqld = {
-            plugin-load-add = [ "ha_tokudb.so" "ha_rocksdb.so" ];
+            plugin-load-add = [ "ha_rocksdb.so" ];
           };
         };
         services.mysql.package = pkgs.mariadb;
@@ -184,20 +184,6 @@ import ./../make-test-python.nix ({ pkgs, ...} : {
     )
     mariadb.succeed(
         "echo 'use testdb; drop table rocksdb;' | sudo -u testuser mysql -u testuser"
-    )
-  '' + pkgs.stdenv.lib.optionalString pkgs.stdenv.isx86_64 ''
-    # Check if TokuDB plugin works
-    mariadb.succeed(
-        "echo 'use testdb; create table tokudb (test_id INT, PRIMARY KEY (test_id)) ENGINE = TokuDB;' | sudo -u testuser mysql -u testuser"
-    )
-    mariadb.succeed(
-        "echo 'use testdb; insert into tokudb values (25);' | sudo -u testuser mysql -u testuser"
-    )
-    mariadb.succeed(
-        "echo 'use testdb; select test_id from tokudb;' | sudo -u testuser mysql -u testuser -N | grep 25"
-    )
-    mariadb.succeed(
-        "echo 'use testdb; drop table tokudb;' | sudo -u testuser mysql -u testuser"
     )
   '';
 })

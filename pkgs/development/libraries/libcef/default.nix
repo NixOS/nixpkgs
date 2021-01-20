@@ -15,12 +15,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cef-binary";
-  version = "74.1.14-g50c3c5c";
+  version = "75.1.14-gc81164e";
 
   src = fetchurl {
-    name = "cef_binary_74.1.14+g50c3c5c+chromium-74.0.3729.131_linux64_minimal.tar.bz2";
-    url = "http://opensource.spotify.com/cefbuilds/cef_binary_74.1.19%2Bgb62bacf%2Bchromium-74.0.3729.157_linux64_minimal.tar.bz2";
-    sha256 = "0v3540kq4y68gq7mb4d8a9issm363lm5ngrd6d96pcc7vckkw4wn";
+    name = "cef_binary_75.1.14+gc81164e+chromium-75.0.3770.100_linux64_minimal.tar.bz2";
+    url = "http://opensource.spotify.com/cefbuilds/cef_binary_75.1.14%2Bgc81164e%2Bchromium-75.0.3770.100_linux64_minimal.tar.bz2";
+    sha256 = "0985b2bx505j0q693hifjgidzb597wqf5idql5aqxs8lfxhc2pgg";
   };
 
   nativeBuildInputs = [ cmake ];

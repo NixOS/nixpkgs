@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, getopt, libjpeg, libpng12, libungif }:
+{ lib, stdenv, fetchurl, getopt, libjpeg, libpng12, libungif }:
 
 stdenv.mkDerivation rec {
   name = "fbv-1.0b";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,man/man1}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "View pictures on a linux framebuffer device";
     homepage = "http://s-tech.elsat.net.pl/fbv/";
     license = licenses.gpl2;

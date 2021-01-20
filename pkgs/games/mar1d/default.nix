@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , libGLU
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "First person Super Mario Bros";
     longDescription = ''
       The original Super Mario Bros as you've never seen it. Step into Mario's

@@ -151,7 +151,7 @@ rec {
 
     # Set the system time from the hardware clock.  Works around an
     # apparent KVM > 1.5.2 bug.
-    ${pkgs.utillinux}/bin/hwclock -s
+    ${pkgs.util-linux}/bin/hwclock -s
 
     export NIX_STORE=${storeDir}
     export NIX_BUILD_TOP=/tmp
@@ -270,7 +270,7 @@ rec {
   defaultCreateRootFS = ''
     mkdir /mnt
     ${e2fsprogs}/bin/mkfs.ext4 /dev/${hd}
-    ${utillinux}/bin/mount -t ext4 /dev/${hd} /mnt
+    ${util-linux}/bin/mount -t ext4 /dev/${hd} /mnt
 
     if test -e /mnt/.debug; then
       exec ${bash}/bin/sh
@@ -317,7 +317,7 @@ rec {
     with pkgs; runInLinuxVM (
     stdenv.mkDerivation {
       name = "extract-file";
-      buildInputs = [ utillinux ];
+      buildInputs = [ util-linux ];
       buildCommand = ''
         ln -s ${kernel}/lib /lib
         ${kmod}/bin/modprobe loop
@@ -342,7 +342,7 @@ rec {
     with pkgs; runInLinuxVM (
     stdenv.mkDerivation {
       name = "extract-file-mtd";
-      buildInputs = [ utillinux mtdutils ];
+      buildInputs = [ util-linux mtdutils ];
       buildCommand = ''
         ln -s ${kernel}/lib /lib
         ${kmod}/bin/modprobe mtd
@@ -417,7 +417,7 @@ rec {
 
         # Make the Nix store available in /mnt, because that's where the RPMs live.
         mkdir -p /mnt${storeDir}
-        ${utillinux}/bin/mount -o bind ${storeDir} /mnt${storeDir}
+        ${util-linux}/bin/mount -o bind ${storeDir} /mnt${storeDir}
 
         # Newer distributions like Fedora 18 require /lib etc. to be
         # symlinked to /usr.
@@ -427,7 +427,7 @@ rec {
           ln -s /usr/sbin /mnt/sbin
           ln -s /usr/lib /mnt/lib
           ln -s /usr/lib64 /mnt/lib64
-          ${utillinux}/bin/mount -t proc none /mnt/proc
+          ${util-linux}/bin/mount -t proc none /mnt/proc
         ''}
 
         echo "unpacking RPMs..."
@@ -445,7 +445,7 @@ rec {
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
           rpm --initdb
 
-        ${utillinux}/bin/mount -o bind /tmp /mnt/tmp
+        ${util-linux}/bin/mount -o bind /tmp /mnt/tmp
 
         echo "installing RPMs..."
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
@@ -456,8 +456,8 @@ rec {
 
         rm /mnt/.debug
 
-        ${utillinux}/bin/umount /mnt${storeDir} /mnt/tmp ${lib.optionalString unifiedSystemDir "/mnt/proc"}
-        ${utillinux}/bin/umount /mnt
+        ${util-linux}/bin/umount /mnt${storeDir} /mnt/tmp ${lib.optionalString unifiedSystemDir "/mnt/proc"}
+        ${util-linux}/bin/umount /mnt
       '';
 
       passthru = { inherit fullName; };
@@ -587,9 +587,9 @@ rec {
 
         # Make the Nix store available in /mnt, because that's where the .debs live.
         mkdir -p /mnt/inst${storeDir}
-        ${utillinux}/bin/mount -o bind ${storeDir} /mnt/inst${storeDir}
-        ${utillinux}/bin/mount -o bind /proc /mnt/proc
-        ${utillinux}/bin/mount -o bind /dev /mnt/dev
+        ${util-linux}/bin/mount -o bind ${storeDir} /mnt/inst${storeDir}
+        ${util-linux}/bin/mount -o bind /proc /mnt/proc
+        ${util-linux}/bin/mount -o bind /dev /mnt/dev
 
         # Misc. files/directories assumed by various packages.
         echo "initialising Dpkg DB..."
@@ -635,10 +635,10 @@ rec {
 
         rm /mnt/.debug
 
-        ${utillinux}/bin/umount /mnt/inst${storeDir}
-        ${utillinux}/bin/umount /mnt/proc
-        ${utillinux}/bin/umount /mnt/dev
-        ${utillinux}/bin/umount /mnt
+        ${util-linux}/bin/umount /mnt/inst${storeDir}
+        ${util-linux}/bin/umount /mnt/proc
+        ${util-linux}/bin/umount /mnt/dev
+        ${util-linux}/bin/umount /mnt
       '';
 
       passthru = { inherit fullName; };
@@ -1196,4 +1196,4 @@ rec {
      `debDistros' sets. */
   diskImages = lib.mapAttrs (name: f: f {}) diskImageFuns;
 
-} // import ./windows pkgs
+}

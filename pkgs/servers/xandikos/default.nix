@@ -1,6 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python3Packages
+, installShellFiles
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -24,10 +25,17 @@ python3Packages.buildPythonApplication rec {
     prometheus_client
   ];
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage xandikos.1
+  '';
+
+  meta = with lib; {
     description = "Lightweight CalDAV/CardDAV server";
     homepage = "https://github.com/jelmer/xandikos";
     license = licenses.gpl3Plus;
+    changelog = "https://github.com/jelmer/xandikos/blob/v${version}/NEWS";
     maintainers = with maintainers; [ _0x4A6F ];
   };
 }

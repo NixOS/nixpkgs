@@ -7,7 +7,7 @@ let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
   inherit (buildPackages)
     fetchurl removeReferencesTo
-    pkgconfig coreutils gnugrep gnused glibcLocales;
+    pkg-config coreutils gnugrep gnused glibcLocales;
 in
 
 { pname
@@ -33,7 +33,7 @@ in
 , profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling
 , enableSharedExecutables ? false
-, enableSharedLibraries ? (ghc.enableShared or false)
+, enableSharedLibraries ? !stdenv.hostPlatform.isStatic && (ghc.enableShared or false)
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
 , enableStaticLibraries ? !(stdenv.hostPlatform.isWindows or stdenv.hostPlatform.isWasm)
 , enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
@@ -54,7 +54,7 @@ in
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
 , passthru ? {}
-, pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
+, pkg-configDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
 , benchmarkDepends ? [], benchmarkHaskellDepends ? [], benchmarkSystemDepends ? [], benchmarkFrameworkDepends ? []
 , testTarget ? ""
@@ -64,6 +64,7 @@ in
 , patches ? null, patchPhase ? null, prePatch ? "", postPatch ? ""
 , preConfigure ? null, postConfigure ? null
 , preBuild ? null, postBuild ? null
+, preHaddock ? null, postHaddock ? null
 , installPhase ? null, preInstall ? null, postInstall ? null
 , checkPhase ? null, preCheck ? null, postCheck ? null
 , preFixup ? null, postFixup ? null
@@ -233,7 +234,7 @@ let
 
   isHaskellPkg = x: x ? isHaskellLibrary;
 
-  allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
+  allPkgconfigDepends = pkg-configDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
   depsBuildBuild = [ nativeGhc ];
@@ -242,7 +243,7 @@ let
     optionals doCheck testToolDepends ++
     optionals doBenchmark benchmarkToolDepends;
   nativeBuildInputs =
-    [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
+    [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkg-config ++
     setupHaskellDepends ++ collectedToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputsHaskell =
@@ -284,7 +285,7 @@ let
   '';
 in stdenv.lib.fix (drv:
 
-assert allPkgconfigDepends != [] -> pkgconfig != null;
+assert allPkgconfigDepends != [] -> pkg-config != null;
 
 stdenv.mkDerivation ({
   name = "${pname}-${version}";
@@ -531,7 +532,7 @@ stdenv.mkDerivation ({
         libraryPkgconfigDepends
         librarySystemDepends
         libraryToolDepends
-        pkgconfigDepends
+        pkg-configDepends
         setupHaskellDepends
         ;
     } // stdenv.lib.optionalAttrs doCheck {
@@ -615,7 +616,7 @@ stdenv.mkDerivation ({
 
         depsBuildBuild = stdenv.lib.optional isCross ghcEnvForBuild;
         nativeBuildInputs =
-          [ ghcEnv ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
+          [ ghcEnv ] ++ optional (allPkgconfigDepends != []) pkg-config ++
           collectedToolDepends;
         buildInputs =
           otherBuildInputsSystem;
@@ -658,6 +659,8 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? checkPhase)             { inherit checkPhase; }
 // optionalAttrs (args ? preCheck)               { inherit preCheck; }
 // optionalAttrs (args ? postCheck)              { inherit postCheck; }
+// optionalAttrs (args ? preHaddock)             { inherit preHaddock; }
+// optionalAttrs (args ? postHaddock)            { inherit postHaddock; }
 // optionalAttrs (args ? preInstall)             { inherit preInstall; }
 // optionalAttrs (args ? installPhase)           { inherit installPhase; }
 // optionalAttrs (args ? postInstall)            { inherit postInstall; }

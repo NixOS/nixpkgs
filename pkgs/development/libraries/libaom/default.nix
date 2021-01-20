@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, yasm, perl, cmake, pkgconfig, python3 }:
+{ stdenv, fetchgit, yasm, perl, cmake, pkg-config, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libaom";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   patches = [ ./outputs.patch ];
 
   nativeBuildInputs = [
-    yasm perl cmake pkgconfig python3
+    yasm perl cmake pkg-config python3
   ];
 
   preConfigure = ''

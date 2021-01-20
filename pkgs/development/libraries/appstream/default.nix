@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, gettext
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, gettext
 , xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
 , libstemmer, glib, xapian, libxml2, libyaml, gobject-introspection
 , pcre, itstool, gperf, vala, lmdb, libsoup
@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "appstream";
-  version = "0.12.11";
+  version = "0.13.1";
 
   outputs = [ "out" "dev" ];
 
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     owner  = "ximion";
     repo   = "appstream";
     rev    = "v${version}";
-    sha256 = "sha256-bCDyMwQdn9Csxs2hy4dm+LjtxK4+YBK6yDkAdhu1QVU=";
+    sha256 = "16nxaw4fx78maldi3kvr8fiwzhmy5276wd4x2fxny16zzf01098j";
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext
+    meson ninja pkg-config gettext
     libxslt xmlto docbook_xsl docbook_xml_dtd_45
     gobject-introspection itstool vala
   ];

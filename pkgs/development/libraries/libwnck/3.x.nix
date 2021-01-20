@@ -3,7 +3,7 @@
 , fetchpatch
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gtk-doc
 , docbook_xsl
 , docbook_xml_dtd_412
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     gobject-introspection
     gtk-doc

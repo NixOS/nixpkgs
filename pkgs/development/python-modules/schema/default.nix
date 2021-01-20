@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, contextlib2, pytest, mock }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, contextlib2, pytest, mock }:
 
 buildPythonPackage rec {
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest mock ];
   checkPhase = "pytest ./test_schema.py";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for validating Python data structures";
     homepage = "https://github.com/keleshev/schema";
     license = licenses.mit;

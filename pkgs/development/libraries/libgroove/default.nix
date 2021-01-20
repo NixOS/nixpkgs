@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-warnings-as-errors.patch ];
 
-  buildInputs = [ cmake libav SDL2 chromaprint libebur128 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libav SDL2 chromaprint libebur128 ];
 
   meta = with stdenv.lib; {
     description = "Streaming audio processing library";

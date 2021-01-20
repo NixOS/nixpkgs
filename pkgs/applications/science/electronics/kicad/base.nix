@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , cmake
 , libGLU
@@ -13,7 +13,7 @@
 , curl
 , openssl
 , boost
-, pkgconfig
+, pkg-config
 , doxygen
 , pcre
 , libpthreadstubs
@@ -43,28 +43,17 @@
 , gtk3
 }:
 
-assert stdenv.lib.asserts.assertMsg (!(withOCE && stdenv.isAarch64)) "OCE fails a test on Aarch64";
-assert stdenv.lib.asserts.assertMsg (!(withOCC && withOCE))
+assert lib.asserts.assertMsg (!(withOCE && stdenv.isAarch64)) "OCE fails a test on Aarch64";
+assert lib.asserts.assertMsg (!(withOCC && withOCE))
   "Only one of OCC and OCE may be enabled";
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 in
 stdenv.mkDerivation rec {
   pname = "kicad-base";
   version = kicadVersion;
 
   src = kicadSrc;
-
-  # quick fix for #72248
-  # should be removed if a a more permanent fix is published
-  patches = [
-    (
-      fetchpatch {
-        url = "https://github.com/johnbeard/kicad/commit/dfb1318a3989e3d6f9f2ac33c924ca5030ea273b.patch";
-        sha256 = "00ifd3fas8lid8svzh1w67xc8kyx89qidp7gm633r014j3kjkgcd";
-      }
-    )
-  ];
 
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
@@ -105,7 +94,7 @@ stdenv.mkDerivation rec {
     ]
   ;
 
-  nativeBuildInputs = [ cmake doxygen pkgconfig lndir ];
+  nativeBuildInputs = [ cmake doxygen pkg-config lndir ];
 
   buildInputs = [
     libGLU
@@ -151,7 +140,7 @@ stdenv.mkDerivation rec {
       the libraries are passed via an env var in the wrapper, default.nix
     '';
     homepage = "https://www.kicad-pcb.org/";
-    license = stdenv.lib.licenses.agpl3;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.agpl3;
+    platforms = lib.platforms.all;
   };
 }

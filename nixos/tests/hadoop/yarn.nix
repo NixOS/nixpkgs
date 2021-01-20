@@ -40,7 +40,7 @@ import ../make-test-python.nix ({...}: {
     nodemanager.wait_for_open_port(8042)
     nodemanager.wait_for_open_port(8041)
 
-    resourcemanager.succeed("curl http://localhost:8088")
-    nodemanager.succeed("curl http://localhost:8042")
+    resourcemanager.succeed("curl -f http://localhost:8088")
+    nodemanager.succeed("curl -f http://localhost:8042")
   '';
 })

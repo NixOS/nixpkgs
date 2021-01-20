@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libxcb, mkDerivation, qmake
+{ lib, fetchFromGitHub, pkg-config, libxcb, mkDerivation, qmake
 , qtbase, qtdeclarative, qtquickcontrols, qtquickcontrols2
 , ffmpeg-full, gst_all_1, libpulseaudio, alsaLib, jack2
 , v4l-utils }:
@@ -22,14 +22,14 @@ mkDerivation rec {
     v4l-utils
   ];
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
 
   qmakeFlags = [
     "Webcamoid.pro"
     "INSTALLQMLDIR=${placeholder "out"}/lib/qt/qml"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Webcam Capture Software";
     longDescription = "Webcamoid is a full featured and multiplatform webcam suite.";
     homepage = "https://github.com/webcamoid/webcamoid/";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 , packr
@@ -39,7 +39,7 @@ buildGoModule rec {
        -X github.com/trezor/blockbook/common.buildDate=unknown
   '';
 
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.isDarwin ''
     ulimit -n 8192
   '' + ''
     export CGO_LDFLAGS="-L${stdenv.cc.cc.lib}/lib -lrocksdb -lz -lbz2 -lsnappy -llz4 -lm -lstdc++"
@@ -54,7 +54,7 @@ buildGoModule rec {
     cp -r $src/static/css/ $out/share/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
     license = licenses.agpl3;

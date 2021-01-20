@@ -1,19 +1,19 @@
 { stdenv, lib, fetchFromGitHub,
-  pkgconfig, autoreconfHook,
+  pkg-config, autoreconfHook,
   flex, yacc, zlib, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "igraph";
-  version = "0.8.2";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = pname;
     rev = version;
-    sha256 = "015yh9s19lmxm7l1ld8adlsqh1lrmzicl801saixdwl9w05hfva4";
+    sha256 = "0cb0kp6mpmgz74kbymqw4xxads8ff7jh0n59dsm76xy6nn8hpqcz";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ flex yacc zlib libxml2 ];
 
   # Normally, igraph wants us to call bootstrap.sh, which will call

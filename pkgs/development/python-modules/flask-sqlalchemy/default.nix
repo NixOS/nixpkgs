@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, flask, mock, sqlalchemy, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, flask, mock, sqlalchemy, pytest }:
 
 buildPythonPackage rec {
   pname = "Flask-SQLAlchemy";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SQLAlchemy extension for Flask";
     homepage = "http://flask-sqlalchemy.pocoo.org/";
     license = licenses.bsd3;

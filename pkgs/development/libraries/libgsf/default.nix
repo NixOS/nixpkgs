@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
+{ fetchurl, stdenv, pkg-config, intltool, gettext, glib, libxml2, zlib, bzip2
 , perl, gdk-pixbuf, libiconv, libintl, gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kbpp9ksl7977xiga37sk1gdw1r039v6zviqznl7alvvg39yp26i";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool libintl ];
+  nativeBuildInputs = [ pkg-config intltool libintl ];
 
   buildInputs = [ gettext bzip2 zlib ];
   checkInputs = [ perl ];

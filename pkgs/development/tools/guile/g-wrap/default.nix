@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, guile, guile-lib, libffi, pkgconfig, glib }:
+{ fetchurl, stdenv, guile, guile-lib, libffi, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
   pname = "g-wrap";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ak0bha37dfpj9kmyw1r8fj8nva639aw5xr66wr5gd3l1rqf5xhg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   # Note: Glib support is optional, but it's quite useful (e.g., it's used by
   # Guile-GNOME).

@@ -1,11 +1,11 @@
 { stdenv, fetchzip, expat, libiconv, libjpeg, libpng, libtiff, zlib
 # darwin only attributes
 , derez, rez, setfile
-, AGL, Cocoa, Kernel
+, AGL, Cocoa, Kernel, WebKit
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.4";
+  version = "3.0.5.1";
   pname = "wxmac";
 
   src = fetchzip {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     expat libiconv libjpeg libpng libtiff zlib
     derez rez setfile
-    AGL Cocoa Kernel
+    AGL Cocoa Kernel WebKit
   ];
 
   postPatch = ''

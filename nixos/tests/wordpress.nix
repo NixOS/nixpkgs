@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "wordpress";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [
       flokli
       grahamc # under duress!
@@ -40,7 +40,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
     with subtest("website returns welcome screen"):
         for site_name in site_names:
-            assert "Welcome to the famous" in machine.succeed(f"curl -L {site_name}")
+            assert "Welcome to the famous" in machine.succeed(f"curl -fL {site_name}")
 
     with subtest("wordpress-init went through"):
         for site_name in site_names:

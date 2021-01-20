@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, intltool, pkgconfig, python3Packages, bluez, gtk3
+{ config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
 , obex_data_server, xdg_utils, dnsmasq, dhcp, libappindicator, iproute
 , gnome3, librsvg, wrapGAppsHook, gobject-introspection, autoreconfHook
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio, fetchpatch }:
@@ -9,15 +9,15 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1pngqbwapbvywhkmflapqvs0wa0af7d1a87wy56l5hg2r462xl1v";
+    sha256 = "1nk46s1s8yrlqv37sc7la05nnn7sdgqhkrcdm98qin34llwkv70x";
   };
 
   nativeBuildInputs = [
-    gobject-introspection intltool pkgconfig pythonPackages.cython
+    gobject-introspection intltool pkg-config pythonPackages.cython
     pythonPackages.wrapPython wrapGAppsHook
     autoreconfHook # drop when below patch is removed
   ];

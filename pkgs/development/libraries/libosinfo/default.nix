@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gettext
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     vala

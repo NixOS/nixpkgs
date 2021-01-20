@@ -28,6 +28,7 @@
    </para>
 
    <para>
+    NOTE: DO NOT USE THIS in nixpkgs.
     Further overlays can be added by calling the <literal>pkgs.extend</literal> or <literal>pkgs.appendOverlays</literal>, although it is often preferable to avoid these functions, because they recompute the Nixpkgs fixpoint, which is somewhat expensive to do.
    </para>
   </section>

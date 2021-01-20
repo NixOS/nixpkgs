@@ -1,7 +1,7 @@
 # currently needs to be installed into an environment and needs a `kbuildsycoca5` run afterwards for plugin discovery
 {
   mkDerivation, fetchFromGitHub, fetchpatch, lib, makeWrapper,
-  cmake, extra-cmake-modules, pkgconfig,
+  cmake, extra-cmake-modules, pkg-config,
   libkcddb, kconfig, kconfigwidgets, ki18n, kdelibs4support, kio, solid, kwidgetsaddons, kxmlgui,
   qtbase, phonon,
   taglib,
@@ -62,8 +62,8 @@ mkDerivation rec {
       stripLen = 1;
     })
   ];
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig kdelibs4support makeWrapper ];
+
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config kdelibs4support makeWrapper ];
   propagatedBuildInputs = [ libkcddb kconfig kconfigwidgets ki18n kdelibs4support kio solid kwidgetsaddons kxmlgui qtbase phonon];
   buildInputs = [ taglib ] ++ runtimeDeps;
   # encoder plugins go to ${out}/lib so they're found by kbuildsycoca5

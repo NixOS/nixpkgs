@@ -1,24 +1,24 @@
-diff --git a/bin/flutter b/bin/flutter
-index cdf974233..1f7de1c1b 100755
---- a/bin/flutter
-+++ b/bin/flutter
-@@ -185,8 +185,6 @@ fi
- # FLUTTER_TOOL_ARGS="--enable-asserts $FLUTTER_TOOL_ARGS"
- # FLUTTER_TOOL_ARGS="$FLUTTER_TOOL_ARGS --observe=65432"
+diff --git a/bin/internal/shared.sh b/bin/internal/shared.sh
+index 8d613de739..a673466726 100644
+--- a/bin/internal/shared.sh
++++ b/bin/internal/shared.sh
+@@ -204,8 +204,6 @@ function shared::execute() {
+   # FLUTTER_TOOL_ARGS="--enable-asserts $FLUTTER_TOOL_ARGS"
+   # FLUTTER_TOOL_ARGS="$FLUTTER_TOOL_ARGS --observe=65432"
  
--(upgrade_flutter) 3< "$PROG_NAME"
+-  upgrade_flutter 7< "$PROG_NAME"
 -
- # FLUTTER_TOOL_ARGS isn't quoted below, because it is meant to be considered as
- # separate space-separated args.
- "$DART" --packages="$FLUTTER_TOOLS_DIR/.packages" $FLUTTER_TOOL_ARGS "$SNAPSHOT_PATH" "$@"
+   BIN_NAME="$(basename "$PROG_NAME")"
+   case "$BIN_NAME" in
+     flutter*)
 diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-index b3e69714f..a9eb76234 100644
+index 8a1a1e29da..778f253358 100644
 --- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
 +++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-@@ -301,13 +301,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+@@ -293,13 +293,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+           globals.flutterUsage.suppressAnalytics = true;
          }
  
-         _checkFlutterCopy();
 -        try {
 -          await globals.flutterVersion.ensureVersionFile();
 -        } on FileSystemException catch (e) {

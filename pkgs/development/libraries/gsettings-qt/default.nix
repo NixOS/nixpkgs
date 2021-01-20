@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkgconfig
+{ stdenv, fetchFromGitLab, pkg-config
 , qmake, qtbase, qtdeclarative, wrapQtAppsHook
 , glib, gobject-introspection
 , genericUpdater, common-updater-scripts
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
     gobject-introspection
     wrapQtAppsHook

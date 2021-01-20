@@ -29,7 +29,8 @@ stdenv.mkDerivation (rec {
     name = "v1.5.0.tar.gz";
   };
 
-  buildInputs = [ makeWrapper which libxml2 cmake z3 ];
+  nativeBuildInputs = [ cmake makeWrapper which ];
+  buildInputs = [ libxml2 z3 ];
   propagatedBuildInputs = [ cc ];
 
   # Sandbox disallows network access, so disabling problematic networking tests
@@ -82,8 +83,6 @@ stdenv.mkDerivation (rec {
     ++ stdenv.lib.optionals stdenv.isDarwin [ "bits=64" ]
     ++ stdenv.lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];
@@ -107,7 +106,7 @@ stdenv.mkDerivation (rec {
     description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
     homepage = "https://www.ponylang.org";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ doublec kamilchm patternspandemic redvers ];
+    maintainers = with maintainers; [ kamilchm patternspandemic redvers ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 })

@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 let
   s = # Generated upstream information
   rec {
@@ -29,8 +29,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = ''Tool to detach from controlling TTY and attach to another'';
-    license = stdenv.lib.licenses.gpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , which
 , libtool
 , liblo
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig which libtool ];
+  nativeBuildInputs = [ autoreconfHook pkg-config which libtool ];
 
   buildInputs = [
     liblo
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A live looping sampler capable of immediate loop recording, overdubbing, multiplying, reversing and more";
     longDescription = ''
       It allows for multiple simultaneous multi-channel loops limited only by your computer's available memory.

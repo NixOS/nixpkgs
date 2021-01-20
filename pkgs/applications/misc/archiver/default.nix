@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "archiver";
-  version = "3.3.2";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "mholt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fi86g27c660g3mv9c5rfm0mmvh5q08704c19xnvrpwlg65glqrz";
+    sha256 = "0fdkqfs87svpijccz8m11gvby8pvmznq6fs9k94vbzak0kxhw1wg";
   };
 
-  vendorSha256 = "1rqhra3rfarq8f750zszkrm0jcsxa4sjbfpmcdlj5z000df699zq";
+  vendorSha256 = "0avnskay23mpl3qkyf1h75rr7szpsxis2bj5pplhwf8q8q0212xf";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev} -X main.date=unknown" ];
 

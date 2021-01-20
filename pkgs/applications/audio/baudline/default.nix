@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, libXmu, libXt, libX11, libXext, libXxf86vm, libjack2
+{ lib, stdenv, fetchurl, libXmu, libXt, libX11, libXext, libXxf86vm, libjack2
 , makeWrapper
 }:
 
 let
-  rpath = stdenv.lib.makeLibraryPath
+  rpath = lib.makeLibraryPath
     [ libXmu libXt libX11 libXext libXxf86vm libjack2 ];
 in
 stdenv.mkDerivation rec {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scientific signal analysis application";
     longDescription = ''
       Baudline is a time-frequency browser designed for scientific

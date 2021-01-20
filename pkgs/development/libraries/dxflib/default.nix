@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp -pr *.so* $out/lib
     install -d -m 0755 $out/include/dxflib
     cp -pr src/*.h $out/include/dxflib
-    # Generate pkgconfig file
+    # Generate pkg-config file
     install -d -m 0755 $out/lib/pkgconfig
     cat << 'EOF' > $out/lib/pkgconfig/dxflib.pc
     prefix=${placeholder "out"}
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
   meta = {
     maintainers = with stdenv.lib.maintainers; [raskin];
     platforms = stdenv.lib.platforms.linux;
-    description = ''DXF file format library'';
+    description = "DXF file format library";
   };
 }

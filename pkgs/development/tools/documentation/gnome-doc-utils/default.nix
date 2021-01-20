@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2Python, libxslt, intltool, gnome3
+{ stdenv, fetchurl, pkg-config, libxml2Python, libxslt, intltool, gnome3
 , python2Packages }:
 
 python2Packages.buildPythonApplication rec {
@@ -12,7 +12,7 @@ python2Packages.buildPythonApplication rec {
     sha256 = "19n4x25ndzngaciiyd8dd6s2mf9gv6nv3wv27ggns2smm7zkj1nb";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig libxslt.dev ];
+  nativeBuildInputs = [ intltool pkg-config libxslt.dev ];
   buildInputs = [ libxslt ];
 
   configureFlags = [ "--disable-scrollkeeper" ];

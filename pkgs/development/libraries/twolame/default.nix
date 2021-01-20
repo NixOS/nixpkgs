@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, autoreconfHook, pkgconfig
+, autoreconfHook, pkg-config
 , libsndfile }:
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "1rq3yc8ygzdqid9zk6pixmm4w9sk2vrlx217lhn5bjaglv7iyf7x";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libsndfile ];
 
   doCheck = false; # fails with "../build-scripts/test-driver: line 107: -Mstrict: command not found"

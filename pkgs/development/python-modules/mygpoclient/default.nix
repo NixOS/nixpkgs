@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, nose, minimock }:
+{ lib, stdenv, fetchFromGitHub, buildPythonPackage, nose, minimock }:
 
 buildPythonPackage rec {
   pname = "mypgoclient";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   doCheck = (!stdenv.isDarwin);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A gpodder.net client library";
     longDescription = ''
         The mygpoclient library allows developers to utilize a Pythonic interface

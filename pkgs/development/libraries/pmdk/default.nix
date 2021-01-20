@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, autoconf, libndctl, pkgconfig
+, autoconf, libndctl, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1833sq0f1msaqwn31dn1fp37a6d5zp995i9gkazanydmppi2qy0i";
   };
 
-  nativeBuildInputs = [ autoconf pkgconfig ];
+  nativeBuildInputs = [ autoconf pkg-config ];
   buildInputs = [ libndctl ];
   enableParallelBuilding = true;
 

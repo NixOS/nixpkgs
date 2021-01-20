@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "glow";
-  version = "1.0.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "glow";
     rev = "v${version}";
-    sha256 ="0jyl5ln7c2naawmw7bljzrldr96xyb5rbis6y6blmyghr0vx07zb";
+    sha256 = "1y5cdqmyc2z2qk74l0r2c4mnw0jfibrf2ry7qcnmh96nhalq9m7j";
   };
 
-  vendorSha256 = "0z3r8fvpy36ybgb18sr0lril1sg8z7s99xv1a6g1v3zdnj3zimav";
+  vendorSha256 = "11x6hshbqg1a39a1hwpfivgrhyk7ykw2aqylira3dqv039b1f639";
 
   doCheck = false;
 
@@ -20,7 +20,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "Render markdown on the CLI, with pizzazz!";
     homepage = "https://github.com/charmbracelet/glow";
+    changelog = "https://github.com/charmbracelet/glow/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ehmry filalex77 penguwin ];
+    maintainers = with maintainers; [ Br1ght0ne penguwin ];
   };
 }

@@ -31,11 +31,12 @@
 , mbedtls
 , mediastreamer
 , mediastreamer-openh264
+, minizip2
 , mkDerivation
 , openldap
 , ortp
 , pango
-, pkgconfig
+, pkg-config
 , python
 , qtbase
 , qtgraphicaleffects
@@ -47,81 +48,30 @@
 , stdenv
 , udev
 , zlib
-  # For Minizip 2.2.7:
-, fetchFromGitHub
-, libbsd
 }:
-let
-  # Linphone Desktop requires Minizip 2.2.7. Nixpkgs contains a very old version
-  # from the time when it was part of zlib. The most recent release of Minizip
-  # is currently 2.9.2 but Linphone Desktop didn't work with that. So, even if
-  # we added most recent Minizip version to nixpkgs, probably Minizip 2.2.7 is
-  # only needed here and we shouldn't add this semi-old version to
-  # all-packages.nix. Therefore, just define it here locally.
-  minizip2 = stdenv.mkDerivation rec {
-    pname = "minizip";
-    version = "2.2.7";
 
-    disabled = stdenv.isAarch32;
-
-    src = fetchFromGitHub {
-      owner = "nmoinvaz";
-      repo = pname;
-      rev = version;
-      sha256 = "1a88v1gjlflsd17mlrgxh420rpa38q0d17yh9q8j1zzqfrd1azch";
-    };
-
-    nativeBuildInputs = [ cmake pkgconfig ];
-
-    cmakeFlags = [
-      "-DBUILD_SHARED_LIBS=YES"
-    ];
-
-    buildInputs = [
-      zlib
-      libbsd # required in 2.2.7 but not in 2.9.2?
-    ];
-
-    meta = with stdenv.lib; {
-      description = "Compression library implementing the deflate compression method found in gzip and PKZIP";
-      homepage = "https://github.com/nmoinvaz/minizip";
-      license = licenses.zlib;
-      platforms = platforms.unix;
-    };
-  };
-in
 mkDerivation rec {
   pname = "linphone-desktop";
-  # Latest release is 4.1.1 old and doesn't build with the latest releases of
-  # some of the dependencies so let's use the latest commit.
-  version = "unstable-2020-03-06";
+  version = "4.2.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = pname;
-    rev = "971997e162558d37051f89c9c34bbc240135f704";
-    sha256 = "02ji4r8bpcm2kyisn9d3054m026l33g2574i1ag1cmb2dz2p8i1c";
+    rev = version;
+    sha256 = "1gq4l9p21rbrcksa7fbkzn9fzbbynqmn6ni6lhnvzk359sb1xvbz";
   };
 
-  # Without this patch, the build fails with:
-  #
-  #   No rule to make target
-  #   'minizip_OUTPUT/nix/store/...linphone-desktop.../lib/libminizip.so',
-  #
-  # So, the makefile tries to use a full absolute path to the library but does
-  # it incorrectly. As we have installed Minizip properly, it's sufficient to
-  # just use "minizip" and the library is found automatically. If this patched
-  # target_link_libraries line was removed entirely, the build would fail at the
-  # very end when linking minizip.
   patches = [
-    ./fix_minizip_linking.patch
+    ./do-not-build-linphone-sdk.patch
+    ./remove-bc_compute_full_version-usage.patch
   ];
 
   # See: https://gitlab.linphone.org/BC/public/linphone-desktop/issues/21
   postPatch = ''
-    substituteInPlace src/app/AppController.cpp \
+    echo "project(linphoneqt VERSION ${version})" >linphone-app/linphoneqt_version.cmake
+    substituteInPlace linphone-app/src/app/AppController.cpp \
       --replace "LINPHONE_QT_GIT_VERSION" "\"${version}\""
   '';
 
@@ -175,7 +125,7 @@ mkDerivation rec {
     graphviz
     intltool
     makeWrapper
-    pkgconfig
+    pkg-config
   ];
 
   cmakeFlags = [
@@ -214,14 +164,13 @@ mkDerivation rec {
   # those just need to be copied manually below.
   installPhase = ''
     mkdir -p $out/bin
-    cp linphone $out/bin/
+    cp linphone-app/linphone $out/bin/
     wrapProgram $out/bin/linphone \
       --set MEDIASTREAMER_PLUGINS_DIR \
             ${mediastreamer-openh264}/lib/mediastreamer/plugins
     mkdir -p $out/share/applications
-    sed -i "s@/build/.*/OUTPUT/bin@$out/bin@" linphone.desktop
-    cp linphone.desktop $out/share/applications/
-    cp -r ../assets/icons $out/share/
+    cp linphone-app/linphone.desktop $out/share/applications/
+    cp -r ../linphone-app/assets/icons $out/share/
     mkdir -p $out/share/belr/grammars
     ln -s ${liblinphone}/share/belr/grammars/* $out/share/belr/grammars/
     mkdir -p $out/share/linphone
@@ -231,7 +180,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.linphone.org/";
     description = "Open source SIP phone for voice/video calls and instant messaging";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };

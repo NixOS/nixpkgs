@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, yasm, bzip2, zlib, perl, bash
+{ stdenv, fetchurl, pkg-config, yasm, bzip2, zlib, perl, bash
 , mp3Support    ? true,   lame      ? null
 , speexSupport  ? true,   speex     ? null
 , theoraSupport ? true,   libtheora ? null
@@ -81,7 +81,7 @@ let
       "--enable-cross-compile"
     ];
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkg-config perl ];
     buildInputs = [ lame yasm zlib bzip2 SDL bash ]
       ++ [ perl ] # for install-man target
       ++ optional mp3Support lame

@@ -1,24 +1,28 @@
 { buildPythonPackage
 , fetchPypi
 , lib
+, isPy27
 
 # pythonPackages
 , msal
+, pathlib2
 , portalocker
 }:
 
 buildPythonPackage rec {
   pname = "msal-extensions";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "31414753c484679bb3b6c6401623eb4c3ccab630af215f2f78c1d5c4f8e1d1a9";
+    sha256 = "0qbq5qn46053aclpwyzac5zs2xgqirn4hwrf1plrg0m8bnhxy8sm";
   };
 
   propagatedBuildInputs = [
     msal
     portalocker
+  ] ++ lib.optionals isPy27 [
+    pathlib2
   ];
 
   # No tests found

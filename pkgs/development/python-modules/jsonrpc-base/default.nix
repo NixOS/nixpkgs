@@ -1,17 +1,17 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "jsonrpc-base";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7bda99589b4566f5027c2aeae122f409d8ccf4c811b278b8cfb616903871efb2";
+    sha256 = "7f374c57bfa1cb16d1f340d270bc0d9f1f5608fb1ac6c9ea15768c0e6ece48b7";
   };
 
   propagatedBuildInputs = [ ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A JSON-RPC client library base interface";
     homepage = "https://github.com/armills/jsonrpc-base";
     license = licenses.bsd3;

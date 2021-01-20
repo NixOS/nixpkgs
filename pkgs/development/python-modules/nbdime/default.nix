@@ -24,12 +24,12 @@
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "2.0.0";
+  version = "2.1.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pbi22mc5al29pvsw7bhai2d58i8n77gv09r7avr1wap6ni7jvw9";
+    sha256 = "4e3efdcfda31c3074cb565cd8e76e2e5421b1c4560c3a00c56f8679dd15590e5";
   };
 
   checkInputs = [

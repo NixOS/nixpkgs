@@ -1,0 +1,29 @@
+diff --git a/phonemizer/backend/espeak.py b/phonemizer/backend/espeak.py
+index 387c11c..ceb5e7e 100644
+--- a/phonemizer/backend/espeak.py
++++ b/phonemizer/backend/espeak.py
+@@ -81,10 +81,7 @@ class BaseEspeakBackend(BaseBackend):
+         if _ESPEAK_DEFAULT_PATH:
+             return _ESPEAK_DEFAULT_PATH
+ 
+-        espeak = distutils.spawn.find_executable('espeak-ng')
+-        if not espeak:  # pragma: nocover
+-            espeak = distutils.spawn.find_executable('espeak')
+-        return espeak
++        return "@espeak@"
+ 
+     @classmethod
+     def is_available(cls):
+diff --git a/phonemizer/backend/festival.py b/phonemizer/backend/festival.py
+index b5bc56d..0833160 100644
+--- a/phonemizer/backend/festival.py
++++ b/phonemizer/backend/festival.py
+@@ -78,7 +78,7 @@ class FestivalBackend(BaseBackend):
+         if _FESTIVAL_DEFAULT_PATH:
+             return _FESTIVAL_DEFAULT_PATH
+ 
+-        return distutils.spawn.find_executable('festival')
++        return "@festival@"
+ 
+     @classmethod
+     def is_available(cls):

@@ -2,7 +2,8 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
+, python3
 , gettext
 , gobject-introspection
 , gst-plugins-base
@@ -11,14 +12,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.16.2";
+  version = "1.18.2";
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0vn23nxwvs96g7gcxw5zbnw23hkhky8a8r42wq68411vgf1s41yy";
+    sha256 = "1qjlp7az0hkzxvq53hwnp55sp6xhbybfwzaj66hp45jslsmj4fcp";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
+  ];
 
   patches = [
     # To use split outputs, we need this so double prefix won't be used in the
@@ -34,7 +39,11 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     gobject-introspection
-    pkgconfig
+    pkg-config
+    python3
+
+    # documentation
+    # TODO add hotdoc here
   ];
 
   buildInputs = [
@@ -44,7 +53,13 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ];
+
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
 
   meta = with stdenv.lib; {
     description = "GStreamer RTSP server";

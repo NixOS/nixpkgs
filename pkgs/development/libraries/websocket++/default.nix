@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "12ffczcrryh74c1xssww35ic6yiy2l2xgdd30lshiq9wnzl2brgy";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.zaphoyd.com/websocketpp/";

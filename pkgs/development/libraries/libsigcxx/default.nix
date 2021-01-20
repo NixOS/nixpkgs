@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnum4, gnome3 }:
+{ stdenv, fetchurl, pkg-config, gnum4, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "libsigc++";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "00v08km4wwzbh6vjxb21388wb9dm6g2xh14rgwabnv4c2wk5z8n9";
   };
 
-  nativeBuildInputs = [ pkgconfig gnum4 ];
+  nativeBuildInputs = [ pkg-config gnum4 ];
 
   doCheck = true;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "jnetmap";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
         --add-flags "-jar \"$out/lib/jnetmap.jar\""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical network monitoring and documentation tool";
     homepage = "http://www.rakudave.ch/jnetmap/";
     license = licenses.gpl3Plus;

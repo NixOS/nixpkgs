@@ -1,14 +1,16 @@
 { buildPythonPackage
-, stdenv
+, lib, stdenv
 , fetchFromGitHub
-, boto3
+, isPy39
+, cookiecutter
 , filelock
 , regex
 , requests
 , numpy
+, pandas
 , parameterized
+, protobuf
 , sacremoses
-, sentencepiece
 , timeout-decorator
 , tokenizers
 , tqdm
@@ -17,28 +19,30 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "3.3.1";
+  version = "4.1.1";
+  disabled = isPy39;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1j9nzhl0zw5z9rnvzfih7v6bax353rxp05b3f0cvkii3b5dbkc2j";
+    sha256 = "1l1gxdsakjmzsgggypq45pnwm87brhlccjfzafs43460pz0wbd6k";
   };
 
   propagatedBuildInputs = [
-    boto3
+    cookiecutter
     filelock
     numpy
+    protobuf
     regex
     requests
     sacremoses
-    sentencepiece
     tokenizers
     tqdm
   ];
 
   checkInputs = [
+    pandas
     parameterized
     pytestCheckHook
     timeout-decorator
@@ -46,7 +50,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "tokenizers == 0.8.1.rc2" "tokenizers>=0.8"
+      --replace "tokenizers == 0.9.4" "tokenizers"
   '';
 
   preCheck = ''
@@ -67,11 +71,15 @@ buildPythonPackage rec {
 
   # Disable tests that require network access.
   disabledTests = [
-    "PegasusTokenizationTest"
-    "T5TokenizationTest"
+    "BlenderbotSmallTokenizerTest"
+    "Blenderbot3BTokenizerTests"
+    "GetFromCacheTests"
+    "TokenizationTest"
+    "TestTokenizationBart"
     "test_all_tokenizers"
     "test_batch_encoding_is_fast"
     "test_batch_encoding_pickle"
+    "test_batch_encoding_word_to_tokens"
     "test_config_from_model_shortcut"
     "test_config_model_type_from_model_identifier"
     "test_from_pretrained_use_fast_toggle"
@@ -86,9 +94,10 @@ buildPythonPackage rec {
     "test_tokenizer_from_pretrained"
     "test_tokenizer_from_tokenizer_class"
     "test_tokenizer_identifier_with_correct_config"
+    "test_tokenizer_identifier_non_existent"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/huggingface/transformers";
     description = "State-of-the-art Natural Language Processing for TensorFlow 2.0 and PyTorch";
     changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, writeText }:
+{ lib, stdenv, fetchFromGitHub, writeText }:
 
 stdenv.mkDerivation rec {
   pname = "dokuwiki";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "splitbrain";
-    repo = "${pname}";
+    repo = pname;
     rev = "release_stable_${version}";
     sha256 = "09swcqyd06l3481k190gmlr3b33dlv1lw1kk9nyh5b4sa5p3k7kk";
   };
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     cp ${phpPluginsLocalConfig} $out/share/dokuwiki/conf/plugins.local.php
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple to use and highly versatile Open Source wiki software that doesn't require a database";
     license = licenses.gpl2;
     homepage = "https://www.dokuwiki.org";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl } :
+{ lib, stdenv, fetchurl } :
 
 let
   major = "3";
@@ -21,10 +21,10 @@ in fetchurl rec {
   sha256 = "32d6f07f1ff08c764357f8478892b2ba5ade23427af99759f34a0ba24bcd2e37";
 
   meta = {
-    description = "Pan-unicode version of Fixedsys, a classic DOS font.";
+    description = "Pan-unicode version of Fixedsys, a classic DOS font";
     homepage = "http://www.fixedsysexcelsior.com/";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.publicDomain;
-    maintainers = [ stdenv.lib.maintainers.ninjatrappeur ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.publicDomain;
+    maintainers = [ lib.maintainers.ninjatrappeur ];
   };
 }

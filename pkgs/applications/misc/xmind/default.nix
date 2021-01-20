@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     ln -s ${jre} $out/libexec/jre
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mind-mapping software";
     longDescription = ''
       XMind is a mind mapping and brainstorming software. In addition

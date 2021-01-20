@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, pkgconfig, addOpenGLRunpath, perl, texinfo, yasm
+{ stdenv, buildPackages, fetchurl, pkg-config, addOpenGLRunpath, perl, texinfo, yasm
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libssh, libtheora, libva, libdrm, libvorbis, libvpx, lzma, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
@@ -167,7 +167,7 @@ stdenv.mkDerivation rec {
   ] ++ optional stdenv.cc.isClang "--cc=clang");
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
+  nativeBuildInputs = [ addOpenGLRunpath perl pkg-config texinfo yasm ];
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora

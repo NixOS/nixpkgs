@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, chromaprint }:
+{ lib, stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook, chromaprint }:
 
 python3Packages.buildPythonApplication rec {
   pname = "puddletag";
@@ -13,6 +13,8 @@ python3Packages.buildPythonApplication rec {
 
   sourceRoot = "source/source";
 
+  nativeBuildInputs = [ wrapQtAppsHook ];
+
   propagatedBuildInputs = [ chromaprint ] ++ (with python3Packages; [
     configobj
     mutagen
@@ -20,16 +22,19 @@ python3Packages.buildPythonApplication rec {
     pyqt5
   ]);
 
-  doCheck = false;   # there are no tests
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
-  dontStrip = true;  # we are not generating any binaries
+  doCheck = false; # there are no tests
 
-  meta = with stdenv.lib; {
+  dontStrip = true; # we are not generating any binaries
+
+  meta = with lib; {
     description = "An audio tag editor similar to the Windows program, Mp3tag";
     homepage = "https://docs.puddletag.net";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
-    broken = true; # Needs Qt wrapping
   };
 }

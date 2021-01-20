@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "prefix=${placeholder "out"}" "install" ];
 
   meta = {
-    description = "A simple dependency manager for the Pony language.";
+    description = "A simple dependency manager for the Pony language";
     homepage = "https://www.ponylang.org";
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ dipinhora kamilchm patternspandemic ];

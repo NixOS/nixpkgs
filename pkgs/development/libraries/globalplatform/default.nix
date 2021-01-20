@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, zlib, openssl_1_0_2, pcsclite }:
+{ stdenv, fetchurl, pkg-config, zlib, openssl_1_0_2, pcsclite }:
 
 stdenv.mkDerivation rec {
   pname = "globalplatform";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "191s9005xbc7i90bzjk4rlw15licd6m0rls9fxli8jyymz2021zy";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib openssl_1_0_2 pcsclite ];
 
   meta = with stdenv.lib; {

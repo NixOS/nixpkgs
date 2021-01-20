@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "nixos-generators";
-  version = "1.1.0";
+  version = "1.2.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixos-generators";
     rev = version;
-    sha256 = "04cfhj42c2m7lafir9ksh36n3nhx3x20lhamyk4zc5p3pm1xdbs6";
+    sha256 = "1iwc39hzvzzyndxwbnl3fck7phxnjpnhy8zn4nyp8is1fiw0648v";
   };
   nativeBuildInputs = [ makeWrapper ];
   installFlags = [ "PREFIX=$(out)" ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ jq coreutils findutils nix ] }
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of image builders";
     homepage    = "https://github.com/nix-community/nixos-generators";
     license     = licenses.mit;

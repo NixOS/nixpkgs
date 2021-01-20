@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig }:
+{ stdenv, fetchFromGitHub, pkg-config }:
 
 with stdenv.lib;
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0r5b1r0sxngx349s5a3zkkvfw5by9y492kr34b25gjspzvjchlxq";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

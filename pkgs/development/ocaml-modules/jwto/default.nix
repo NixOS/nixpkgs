@@ -5,6 +5,8 @@ buildDunePackage rec {
   pname = "jwto";
   version = "0.3.0";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.05";
 
   src = fetchFromGitHub {

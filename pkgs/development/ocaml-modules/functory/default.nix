@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, ocaml, findlib }:
+{ lib, stdenv, fetchurl, ocaml, findlib }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.11";
+assert lib.versionAtLeast (lib.getVersion ocaml) "3.11";
 
 let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
+  if lib.versionAtLeast ocaml.version "4.02" then {
     version = "0.6";
     sha256 = "18wpyxblz9jh5bfp0hpffnd0q8cq1b0dqp0f36vhqydfknlnpx8y";
   } else {
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.lri.fr/~filliatr/functory/";
     description = "A distributed computing library for Objective Caml which facilitates distributed execution of parallelizable computations in a seamless fashion";
     license = licenses.lgpl21;

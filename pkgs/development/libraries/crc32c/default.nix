@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake, gflags
-, staticOnly ? false }:
+, staticOnly ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "crc32c";

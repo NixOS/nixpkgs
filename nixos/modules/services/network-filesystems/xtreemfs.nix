@@ -112,7 +112,7 @@ in
           description = ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
-            the `utillinux` package.
+            the `util-linux` package.
           '';
         };
         port = mkOption {
@@ -232,7 +232,7 @@ in
           description = ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
-            the `utillinux` package.
+            the `util-linux` package.
           '';
         };
         port = mkOption {
@@ -370,7 +370,7 @@ in
           description = ''
             Must be set to a unique identifier, preferably a UUID according to
             RFC 4122. UUIDs can be generated with `uuidgen` command, found in
-            the `utillinux` package.
+            the `util-linux` package.
           '';
         };
         port = mkOption {

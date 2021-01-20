@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, dbus, cmake, pkgconfig, bash-completion
+, dbus, cmake, pkg-config, bash-completion
 , gsl, popt, clightd, systemd, libconfig, libmodule
 , withGeoclue ? true, geoclue2
 , withUpower ? true, upower }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     dbus
     cmake
-    pkgconfig
+    pkg-config
     bash-completion
   ];
 

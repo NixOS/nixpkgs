@@ -41,7 +41,7 @@ gnustep.stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "SOPE is an extensive set of frameworks which form a complete Web application server environment";
+    description = "An extensive set of frameworks which form a complete Web application server environment";
     license = licenses.publicDomain;
     homepage = "https://github.com/inverse-inc/sope";
     platforms = platforms.linux;

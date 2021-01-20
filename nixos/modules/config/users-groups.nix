@@ -35,8 +35,7 @@ let
   '';
 
   hashedPasswordDescription = ''
-    To generate a hashed password install the <literal>mkpasswd</literal>
-    package and run <literal>mkpasswd -m sha-512</literal>.
+    To generate a hashed password run <literal>mkpasswd -m sha-512</literal>.
 
     If set to an empty string (<literal>""</literal>), this user will
     be able to log in without being asked for a password (but not via remote
@@ -139,8 +138,22 @@ let
         '';
       };
 
+      pamMount = mkOption {
+        type = with types; attrsOf str;
+        default = {};
+        description = ''
+          Attributes for user's entry in
+          <filename>pam_mount.conf.xml</filename>.
+          Useful attributes might include <code>path</code>,
+          <code>options</code>, <code>fstype</code>, and <code>server</code>.
+          See <link
+          xlink:href="http://pam-mount.sourceforge.net/pam_mount.conf.5.html" />
+          for more information.
+        '';
+      };
+
       shell = mkOption {
-        type = types.either types.shellPackage types.path;
+        type = types.nullOr (types.either types.shellPackage types.path);
         default = pkgs.shadow;
         defaultText = "pkgs.shadow";
         example = literalExample "pkgs.bashInteractive";
@@ -185,10 +198,8 @@ let
         type = types.bool;
         default = false;
         description = ''
-          If true, the home directory will be created automatically. If this
-          option is true and the home directory already exists but is not
-          owned by the user, directory owner and group will be changed to
-          match the user.
+          Whether to create the home directory and ensure ownership as well as
+          permissions to match the user.
         '';
       };
 

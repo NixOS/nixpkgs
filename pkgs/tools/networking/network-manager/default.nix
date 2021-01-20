@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, intltool, pkgconfig, fetchpatch, dbus
+{ lib, stdenv, fetchurl, substituteAll, intltool, pkg-config, fetchpatch, dbus
 , gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
 , libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
 , gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
   version = "1.26.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/NetworkManager/${stdenv.lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
+    url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
     sha256 = "0isdqwp58d7r92sqsk7l2vlqwy518n8b7c7z94jk9gc1bdmjf8sj";
   };
 
@@ -62,6 +62,13 @@ in stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # Fix build
+    # https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/620
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/54e25f23f53af889703dfc50d51a8afeeea8a439.patch";
+      sha256 = "oy/AZhOC15anWeIMYJfDBcITqJ7CiU715he68XvPRxk=";
+    })
   ];
 
   buildInputs = [
@@ -72,7 +79,7 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gnutls libgcrypt ];
 
   nativeBuildInputs = [
-    meson ninja intltool pkgconfig
+    meson ninja intltool pkg-config
     vala gobject-introspection dbus
     # Docs
     gtk-doc libxslt docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_42 docbook_xml_dtd_43 pythonForDocs
@@ -101,7 +108,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/NetworkManager";
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;

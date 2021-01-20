@@ -4,6 +4,7 @@
 , isPy27
 , numpy
 , scikitlearn
+, pytestCheckHook
 , pytorch
 , torchvision
 , tqdm
@@ -11,15 +12,15 @@
 
 buildPythonPackage rec {
   pname   = "pytorch-metric-learning";
-  version = "0.9.81";
+  version = "0.9.95";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "KevinMusgrave";
     repo = pname;
-    rev = "cb23328aba64f7f4658374cc2920ef5d56cda5c8";  # no version tag
-    sha256 = "0c2dyi4qi7clln43481xq66f6r4fadrz84jphjc5phz97bp33ds8";
+    rev = "v${version}";
+    sha256 = "1msvs1j3n47762ahm21bnkk2qqabxw8diiyi7s420x4zg24mr23g";
   };
 
   propagatedBuildInputs = [
@@ -28,6 +29,22 @@ buildPythonPackage rec {
     scikitlearn
     torchvision
     tqdm
+  ];
+
+  preCheck = ''
+    export HOME=$TMP
+    export TEST_DEVICE=cpu
+    export TEST_DTYPES=float32,float64  # half-precision tests fail on CPU
+  '';
+  # package only requires `unittest`, but use `pytest` to exclude tests
+  checkInputs = [ pytestCheckHook ];
+  disabledTests = [
+    # requires FAISS (not in Nixpkgs)
+    "test_accuracy_calculator_and_faiss"
+    # require network access:
+    "test_get_nearest_neighbors"
+    "test_tuplestoweights_sampler"
+    "test_untrained_indexer"
   ];
 
   meta = {

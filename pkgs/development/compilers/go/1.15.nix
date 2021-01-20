@@ -1,5 +1,5 @@
 { stdenv, fetchurl, tzdata, iana-etc, runCommand
-, perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
+, perl, which, pkg-config, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
 , buildPackages
 , pkgsBuildTarget
@@ -36,15 +36,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.15.3";
+  version = "1.15.6";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1228nv4vyzbqv768dl0bimsic47x9yyqld61qbgqqk75f0jn0sl9";
+    sha256 = "05sqcx4fm1nxfm46j6xriq0fnnah4bm8bqw027xrzcg2qmrvl2w9";
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkgconfig patch procps ];
+  nativeBuildInputs = [ perl which pkg-config patch procps ];
   buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
@@ -250,7 +250,6 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ goBootstrap ];
 
   meta = with stdenv.lib; {
-    branch = "1.15";
     homepage = "http://golang.org/";
     description = "The Go Programming language";
     license = licenses.bsd3;

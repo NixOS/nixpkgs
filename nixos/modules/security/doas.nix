@@ -12,6 +12,7 @@ let
 
   mkOpts = rule: concatStringsSep " " [
     (optionalString rule.noPass "nopass")
+    (optionalString rule.noLog "nolog")
     (optionalString rule.persist "persist")
     (optionalString rule.keepEnv "keepenv")
     "setenv { SSH_AUTH_SOCK ${concatStringsSep " " rule.setEnv} }"
@@ -115,6 +116,16 @@ in
               description = ''
                 If <code>true</code>, the user is not required to enter a
                 password.
+              '';
+            };
+
+            noLog = mkOption {
+              type = with types; bool;
+              default = false;
+              description = ''
+                If <code>true</code>, successful executions will not be logged
+                to
+                <citerefentry><refentrytitle>syslogd</refentrytitle><manvolnum>8</manvolnum></citerefentry>.
               '';
             };
 

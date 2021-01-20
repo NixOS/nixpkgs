@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, meson, ninja, glib, check, python3, vala, gtk-doc, glibcLocales
-, libxml2, libxslt, pkgconfig, sqlite, docbook_xsl, docbook_xml_dtd_43, gobject-introspection }:
+, libxml2, libxslt, pkg-config, sqlite, docbook_xsl, docbook_xml_dtd_43, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "libaccounts-glib";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 

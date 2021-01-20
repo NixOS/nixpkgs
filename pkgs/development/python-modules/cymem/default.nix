@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , cython
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover -p "*test*"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cython memory pool for RAII-style memory management";
     homepage = "https://github.com/explosion/cymem";
     license = licenses.mit;

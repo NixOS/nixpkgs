@@ -1,4 +1,4 @@
-{ stdenv, ffmpeg, addOpenGLRunpath, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
+{ stdenv, ffmpeg, addOpenGLRunpath, fetchurl, fetchpatch, pkg-config, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -111,6 +111,7 @@
 , opensslExtlib ? false, openssl ? null
 , libpulseaudio ? null # Pulseaudio input support
 , rav1e ? null # AV1 encoder (focused on speed and safety)
+, svt-av1 ? null # AV1 encoder/decoder (focused on speed and correctness)
 , rtmpdump ? null # RTMP[E] support
 #, libquvi ? null # Quvi input support
 , samba ? null # Samba protocol
@@ -164,9 +165,8 @@
  *   utvideo vo-aacenc vo-amrwbenc xvmc zvbi blackmagic-design-desktop-video
  *
  * Need fixes to support Darwin:
- *   frei0r game-music-emu gsm libjack2 libmfx(intel-media-sdk) libssh
- *   libvpx(stable 1.3.0) openal openjpeg pulseaudio rtmpdump samba vid-stab
- *   wavpack x265 xavs
+ *   gsm libjack2 libmodplug libmfx(intel-media-sdk) nvenc pulseaudio samba
+ *   vid-stab
  *
  * Need fixes to support AArch64:
  *   libmfx(intel-media-sdk) nvenc
@@ -243,6 +243,20 @@ assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 stdenv.mkDerivation rec {
   pname = "ffmpeg-full";
   inherit (ffmpeg) src version;
+
+  # this should go away in the next release
+  patches = [
+    (fetchpatch {
+      url = "https://git.videolan.org/?p=ffmpeg.git;a=patch;h=7c59e1b0f285cd7c7b35fcd71f49c5fd52cf9315";
+      sha256 = "sha256-dqpmpDFETTuWHWolMoLaubU4BeDEuQaBNA0wmzL1f8o=";
+      name = "fix_libsrt.patch";
+    })
+    # Patch ffmpeg for svt-av1 until version 4.4
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/AOMediaCodec/SVT-AV1/v0.8.4/ffmpeg_plugin/0001-Add-ability-for-ffmpeg-to-run-svt-av1.patch";
+      sha256 = "1p4g8skr5gjw5h1648j7qrks81zx49lrnx9g0p81qgnrvxc2wwx0";
+    })
+  ];
 
   prePatch = ''
     patchShebangs .
@@ -385,6 +399,7 @@ stdenv.mkDerivation rec {
     (enableFeature (libpulseaudio != null) "libpulse")
     #(enableFeature quvi "libquvi")
     (enableFeature (rav1e != null) "librav1e")
+    (enableFeature (svt-av1 != null) "libsvtav1")
     (enableFeature (rtmpdump != null) "librtmp")
     #(enableFeature (schroedinger != null) "libschroedinger")
     (enableFeature (SDL2 != null) "sdl2")
@@ -415,13 +430,13 @@ stdenv.mkDerivation rec {
     "--enable-cross-compile"
   ];
 
-  nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
+  nativeBuildInputs = [ addOpenGLRunpath perl pkg-config texinfo yasm ];
 
   buildInputs = [
     bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXv libXext lzma openal openjpeg libpulseaudio rav1e rtmpdump opencore-amr
+    libxcb libXv libXext lzma openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
     samba SDL2 soxr speex srt vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
     zeromq4 zlib
   ] ++ optionals openglExtlib [ libGL libGLU ]

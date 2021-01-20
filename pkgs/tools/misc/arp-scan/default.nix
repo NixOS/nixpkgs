@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libpcap, makeWrapper, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libpcap, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "arp-scan";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     done;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ARP scanning and fingerprinting tool";
     longDescription = ''
       Arp-scan is a command-line tool that uses the ARP protocol to discover

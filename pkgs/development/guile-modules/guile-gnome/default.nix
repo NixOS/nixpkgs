@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, guile, guile-lib, gwrap
-, pkgconfig, gconf, glib, gnome_vfs, gtk2
+{ fetchurl, lib, stdenv, guile, guile-lib, gwrap
+, pkg-config, gconf, glib, gnome_vfs, gtk2
 , libglade, libgnome, libgnomecanvas, libgnomeui
 , pango, guile-cairo, texinfo
 }:
@@ -14,16 +14,16 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    texinfo guile gwrap pkgconfig gconf glib gnome_vfs gtk2
+    texinfo guile gwrap pkg-config gconf glib gnome_vfs gtk2
     libglade libgnome libgnomecanvas libgnomeui pango guile-cairo
-  ] ++ stdenv.lib.optional doCheck guile-lib;
+  ] ++ lib.optional doCheck guile-lib;
 
   # The test suite tries to open an X display, which fails.
   doCheck = false;
 
   GUILE_AUTO_COMPILE = 0;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME bindings for GNU Guile";
     longDescription = ''
       GNU guile-gnome brings the power of Scheme to your graphical application.

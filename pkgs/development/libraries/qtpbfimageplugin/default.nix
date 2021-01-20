@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtpbfimageplugin";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "QtPBFImagePlugin";
     rev = version;
-    sha256 = "1w2d33g13vkjasabmcgvhsmfqv3jmwbxhqxm1jnyc7d4nlk4jwmb";
+    sha256 = "063agzcrcihasqqk2yqxqxg9xknjs99y6vx3n1v7md7dqnfv4iva";
   };
 
   nativeBuildInputs = [ qmake ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     # Fix plugin dir
     substituteInPlace pbfplugin.pro \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
-
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     # Fix darwin build
     substituteInPlace pbfplugin.pro \
       --replace '$$PROTOBUF/lib/libprotobuf-lite.a' '${protobuf}/lib/libprotobuf-lite.dylib'
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       vector tiles without (almost) any application modifications.
     '';
     homepage = "https://github.com/tumic0/QtPBFImagePlugin";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };

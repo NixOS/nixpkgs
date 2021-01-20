@@ -24,32 +24,30 @@ in {
         description = "the thermald manual configuration file.";
       };
 
-      adaptive = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable adaptive mode, only working on kernel versions greater than 5.8.
-          Thermald will detect this itself, safe to enable on kernel versions below 5.8.
-        '';
+      package = mkOption {
+        type = types.package;
+        default = pkgs.thermald;
+        defaultText = "pkgs.thermald";
+        description = "Which thermald package to use.";
       };
     };
   };
 
   ###### implementation
   config = mkIf cfg.enable {
-    services.dbus.packages = [ pkgs.thermald ];
+    services.dbus.packages = [ cfg.package ];
 
     systemd.services.thermald = {
       description = "Thermal Daemon Service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.thermald}/sbin/thermald \
+          ${cfg.package}/sbin/thermald \
             --no-daemon \
             ${optionalString cfg.debug "--loglevel=debug"} \
             ${optionalString (cfg.configFile != null) "--config-file ${cfg.configFile}"} \
-            ${optionalString cfg.adaptive "--adaptive"} \
-            --dbus-enable
+            --dbus-enable \
+            --adaptive
         '';
       };
     };

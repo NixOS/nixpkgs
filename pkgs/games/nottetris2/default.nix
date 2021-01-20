@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zip, love_0_7, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchFromGitHub, zip, love_0_7, makeWrapper, makeDesktopItem }:
 
 let
   pname = "nottetris2";
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "It's like Tetris, but it's not";
     platforms = platforms.linux;
     license = licenses.wtfpl;

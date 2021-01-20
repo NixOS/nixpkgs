@@ -80,7 +80,7 @@ import ./make-test-python.nix (
           ), "SLAAC temporary address was not configured on client after router advertisement"
 
       with subtest("Verify HTTP debug server is configured"):
-          out = router.succeed("curl localhost:9430/metrics")
+          out = router.succeed("curl -f localhost:9430/metrics")
 
           assert (
               "corerad_build_info" in out

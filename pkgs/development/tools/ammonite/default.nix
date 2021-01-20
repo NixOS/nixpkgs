@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, jre, disableRemoteLogging ? true }:
+{ stdenv, fetchurl, jre, nixosTests, writeScript, common-updater-scripts, git
+, nixfmt, nix, coreutils, gnused, disableRemoteLogging ? true }:
 
 with stdenv.lib;
 
 let
+  repo = "git@github.com:lihaoyi/Ammonite.git";
+
   common = { scalaVersion, sha256 }:
     stdenv.mkDerivation rec {
       pname = "ammonite";
-      version = "2.2.0";
+      version = "2.3.8";
 
       src = fetchurl {
         url =
@@ -20,9 +23,40 @@ let
         install -Dm755 $src $out/bin/amm
         sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
       '' + optionalString (disableRemoteLogging) ''
-        sed -i '0,/ammonite.Main/{s|ammonite.Main|ammonite.Main --no-remote-logging|}' $out/bin/amm
+        sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
         sed -i '1i #!/bin/sh' $out/bin/amm
       '';
+
+      passthru = {
+        tests = { inherit (nixosTests) ammonite; };
+
+        updateScript = writeScript "update.sh" ''
+          #!${stdenv.shell}
+          set -o errexit
+          PATH=${
+            stdenv.lib.makeBinPath [
+              common-updater-scripts
+              coreutils
+              git
+              gnused
+              nix
+              nixfmt
+            ]
+          }
+          oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
+          latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} '*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3)"
+          if [ "$oldVersion" != "$latestTag" ]; then
+            nixpkgs="$(git rev-parse --show-toplevel)"
+            default_nix="$nixpkgs/pkgs/development/tools/ammonite/default.nix"
+            update-source-version ${pname}_2_12 "$latestTag" --version-key=version --print-changes
+            sed -i "s|$latestTag|$oldVersion|g" "$default_nix"
+            update-source-version ${pname}_2_13 "$latestTag" --version-key=version --print-changes
+            nixfmt "$default_nix"
+          else
+            echo "${pname} is already up-to-date"
+          fi
+        '';
+      };
 
       meta = {
         description = "Improved Scala REPL";
@@ -41,10 +75,10 @@ let
 in {
   ammonite_2_12 = common {
     scalaVersion = "2.12";
-    sha256 = "0nclfqwy3jfn1680z1hd0zzmc0b79wpvx6gn1jnm19aq7qcvh5zp";
+    sha256 = "1kzk0437h2wd9jhwkvjkiaj6mscz4bh85iv266x9zz4zssb355hs";
   };
   ammonite_2_13 = common {
     scalaVersion = "2.13";
-    sha256 = "104bnahn382sb6vwjvchsg0jrnkkwjn08rfh0g5ra7lwhgcj2719";
+    sha256 = "0js84m6yqjd7d77md38z6nk3qzlm1ms8brzczaw05zq2c90pdbz7";
   };
 }

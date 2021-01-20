@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, python, emacsPackages }:
+{ stdenv, fetchurl, python, emacs }:
 
 stdenv.mkDerivation rec {
   pname = "cask";
 
-  inherit (emacsPackages.melpaStablePackages.cask) src version;
+  inherit (emacs.pkgs.melpaStablePackages.cask) src version;
 
   doCheck = true;
 
-  nativeBuildInputs = [ emacsPackages.emacs ];
-  buildInputs = with emacsPackages; [
+  nativeBuildInputs = [ emacs ];
+  buildInputs = with emacs.pkgs; [
     s f dash ansi ecukes servant ert-runner el-mock
     noflet ert-async shell-split-string git package-build
   ] ++ [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://cask.readthedocs.io/en/latest/index.html";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.flexw ];
   };
 }

@@ -6,11 +6,11 @@ assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "libgcrypt";
-  version = "1.8.6";
+  version = "1.8.7";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
-    sha256 = "0xdrsxgqw5v7szshjdgdv60rgpvzzaqic32ahqrzr6bvc402gfhc";
+    sha256 = "0j27jxhjay78by940d64778nxwbysxynv5mq6iq1nmlrh810zdq3";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
   # Necessary to generate correct assembly when compiling for aarch32 on
   # aarch64
   configurePlatforms = [ "host" "build" ];
+
+  postConfigure = ''
+    sed -i configure \
+        -e 's/NOEXECSTACK_FLAGS=$/NOEXECSTACK_FLAGS="-Wa,--noexecstack"/'
+  '';
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config

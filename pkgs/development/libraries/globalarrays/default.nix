@@ -3,7 +3,7 @@
 } :
 
 let
-  version = "5.7.2";
+  version = "5.8";
 
 in stdenv.mkDerivation {
   pname = "globalarrays";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     owner = "GlobalArrays";
     repo = "ga";
     rev = "v${version}";
-    sha256 = "0c1y9a5jpdw9nafzfmvjcln1xc2gklskaly0r1alm18ng9zng33i";
+    sha256 = "0bky91ncz6vy0011ps9prsnq9f4a5s5xwr23kkmi39xzg0417mnd";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook, gnome3 }:
+{ lib, stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook, gnome3 }:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A desktop wiki";
     homepage = "http://zim-wiki.org";
     license = licenses.gpl2Plus;

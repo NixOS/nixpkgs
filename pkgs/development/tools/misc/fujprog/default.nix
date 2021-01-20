@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , IOKit
 , libftdi1
 , libusb-compat-0_1
@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kost";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "08kzkzd5a1wfd1aycywdynxh3qy6n7z9i8lihkahmb4xac3chmz5";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

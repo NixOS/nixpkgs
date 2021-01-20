@@ -39,7 +39,7 @@ in
         default = false;
         description = ''
           Whether to enable the Siproxd SIP
-	  proxy/masquerading daemon.
+          proxy/masquerading daemon.
         '';
       };
 
@@ -57,29 +57,29 @@ in
 
       hostsAllowReg = mkOption {
         type = types.listOf types.str;
-	default = [ ];
+        default = [ ];
         example = [ "192.168.1.0/24" "192.168.2.0/24" ];
-	description = ''
+        description = ''
           Acess control list for incoming SIP registrations.
         '';
       };
 
       hostsAllowSip = mkOption {
         type = types.listOf types.str;
-	default = [ ];
+        default = [ ];
         example = [ "123.45.0.0/16" "123.46.0.0/16" ];
-	description = ''
+        description = ''
           Acess control list for incoming SIP traffic.
         '';
       };
 
       hostsDenySip = mkOption {
         type = types.listOf types.str;
-	default = [ ];
+        default = [ ];
         example = [ "10.0.0.0/8" "11.0.0.0/8" ];
-	description = ''
+        description = ''
           Acess control list for denying incoming
-	   SIP registrations and traffic.
+          SIP registrations and traffic.
         '';
       };
 
@@ -87,7 +87,7 @@ in
         type = types.int;
         default = 5060;
         description = ''
-	  Port to listen for incoming SIP messages.
+          Port to listen for incoming SIP messages.
         '';
       };
 

@@ -1,7 +1,7 @@
 { stdenv
 , glib
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , systemd
 , fetchFromGitLab
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

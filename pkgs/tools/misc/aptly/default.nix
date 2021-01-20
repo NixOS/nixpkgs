@@ -1,15 +1,15 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles, makeWrapper, gnupg, bzip2, xz, graphviz }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, installShellFiles, makeWrapper, gnupg, bzip2, xz, graphviz }:
 
 let
 
-  version = "1.3.0";
+  version = "1.4.0";
   rev = "v${version}";
 
   aptlySrc = fetchFromGitHub {
     inherit rev;
     owner = "aptly-dev";
     repo = "aptly";
-    sha256 = "032gw8qkxcgc0jyrvzqh7jkbmk4k0gf7j74hyhclfnjmd9548f5l";
+    sha256 = "06cq761r3bxybb9xn58jii0ggp79mcp3810z1r2z3xcvplwhwnhy";
   };
 
   aptlyCompletionSrc = fetchFromGitHub {
@@ -34,10 +34,10 @@ buildGoPackage {
   postInstall = ''
     installShellCompletion --bash ${aptlyCompletionSrc}/aptly
     wrapProgram "$out/bin/aptly" \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg bzip2 xz graphviz ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ gnupg bzip2 xz graphviz ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.aptly.info";
     description = "Debian repository management tool";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libosip, openssl, pkgconfig, fetchpatch }:
+{ stdenv, fetchurl, libosip, openssl, pkg-config, fetchpatch }:
 
 stdenv.mkDerivation rec {
  pname = "libexosip2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "17cna8kpc8nk1si419vgr6r42k2lda0rdk50vlxrw8rzg0xp2xrw";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libosip openssl ];
 
   patches = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, fetchurl, fetchFromGitHub, cmake, pkg-config
 , opencl-clhpp, ocl-icd, fftw, fftwFloat
 , blas, lapack, boost, mesa, libGLU, libGL
 , freeimage, python, clfft, clblas
@@ -36,11 +36,9 @@ stdenv.mkDerivation rec {
     export CUDA_PATH="${cudatoolkit}"
   '';
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     python
   ];
 

@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, samba, pkgconfig
+{ lib, stdenv, buildPythonPackage, fetchPypi
+, samba, pkg-config
 , setuptools }:
 
 buildPythonPackage rec {
@@ -12,10 +12,10 @@ buildPythonPackage rec {
     sha256 = "14b75f358ical7zzqh3g1qkh2dxwxn2gz7sah5f5svndqkd3z8jy";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ setuptools samba ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "libsmbclient binding for Python";
     homepage = "https://github.com/hamano/pysmbc";
     license = licenses.gpl2Plus;

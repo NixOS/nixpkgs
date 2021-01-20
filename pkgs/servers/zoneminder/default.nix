@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, substituteAll, cmake, makeWrapper, pkgconfig
+{ stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, substituteAll, cmake, makeWrapper, pkg-config
 , curl, ffmpeg_3, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
-, polkit, utillinuxMinimal, x264, zlib
+, polkit, util-linuxMinimal, x264, zlib
 , coreutils, procps, psmisc, nixosTests }:
 
 # NOTES:
@@ -78,13 +78,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.34.16";
+  version = "1.34.22";
 
   src = fetchFromGitHub {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    sha256 = "azQbm8EkbypBf2NjplDVCb6duEC476hhKDA0EGqxxWE=";
+    sha256 = "1144j9crm0q5pwxnkmy3ahw1vbkddpbk2ys2m2pxxxiqifdhll83";
   };
 
   patches = [
@@ -148,7 +148,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     curl ffmpeg_3 glib libjpeg libselinux libsepol mp4v2 libmysqlclient mysql.client pcre perl polkit x264 zlib
-    utillinuxMinimal # for libmount
+    util-linuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies
     DateManip DBI DBDmysql LWP SysMmap
@@ -157,9 +157,7 @@ in stdenv.mkDerivation rec {
     CryptEksblowfish DataEntropy # zmupdate.pl
   ]);
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
 
   cmakeFlags = [
     "-DWITH_SYSTEMD=ON"
@@ -196,7 +194,7 @@ in stdenv.mkDerivation rec {
     ln -s $out/share/zoneminder/www $out/share/zoneminder/www/zm
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Video surveillance software system";
     homepage = "https://zoneminder.com";
     license = licenses.gpl3;

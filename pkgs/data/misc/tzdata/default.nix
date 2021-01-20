@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, buildPackages }:
+{ lib, stdenv, fetchurl, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "tzdata";
-  version = "2019c";
+  version = "2020f";
 
   srcs =
     [ (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
-        sha256 = "0z7w1yv37cfk8yhix2cillam091vgp1j4g8fv84261q9mdnq1ivr";
+        sha256 = "10b8cr55x6ji14n3kqkn3avj1s9b79b8gszh81fxrrisij8k248j";
       })
       (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
-        sha256 = "1m3y2rnf1nggxxhxplab5zdd5whvar3ijyrv7lifvm82irkd7szn";
+        sha256 = "1i998crd9fxdfhv4jd241j1arx0ng7j7cvczpmj4y5j5fwmfmvng";
       })
     ];
 
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     "MANDIR=$(man)/share/man"
     "AWK=awk"
     "CFLAGS=-DHAVE_LINK=0"
+    "CFLAGS+=-DZIC_BLOAT_DEFAULT=\\\"fat\\\""
     "cc=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
@@ -63,9 +64,10 @@ stdenv.mkDerivation rec {
 
   setupHook = ./tzdata-setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
+    changelog = "https://github.com/eggert/tz/blob/${version}/NEWS";
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
   };

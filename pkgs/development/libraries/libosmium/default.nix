@@ -2,18 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmium";
-  version = "2.15.6";
+  version = "2.16.0";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "libosmium";
     rev = "v${version}";
-    sha256 = "0rqy18bbakp41f44y5id9ixh0ar2dby46z17p4115z8k1vv9znq2";
+    sha256 = "1na51g6xfm1bx0d0izbg99cwmqn0grp0g41znn93xnhs202qnb2h";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ protozero zlib bzip2 expat boost ];
+
+  cmakeFlags = [ "-DINSTALL_GDALCPP:BOOL=ON" ];
 
   doCheck = true;
 

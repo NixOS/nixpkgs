@@ -1,8 +1,6 @@
-{ stdenv, fetchurl, ncurses, xmlto }:
+{ lib, stdenv, fetchurl, ncurses, xmlto }:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
-
   pname = "vms-empire";
   version = "1.15";
 
@@ -22,7 +20,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = {
+  meta = with lib; {
     description = "The ancestor of all expand/explore/exploit/exterminate games";
     longDescription = ''
       Empire is a simulation of a full-scale war between two emperors, the

@@ -26,6 +26,7 @@
 , libXext
 , libXfixes
 , libXi
+, libxkbcommon
 , libXrandr
 , libXrender
 , libXScrnSaver
@@ -61,6 +62,7 @@ rpath = lib.makeLibraryPath [
   libdrm
   libpulseaudio
   libX11
+  libxkbcommon
   libXScrnSaver
   libXcomposite
   libXcursor
@@ -86,16 +88,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.12.112";
+  version = "1.18.78";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "0nvxmz1wrr6cfyhbnrfjsy9szbjmvjl6080pgkp25xa8rcql5gmb";
+    sha256 = "3M5W3BWGHtP+kfZZsH1nVzyGAsub4gjXyBwO8kR/Qvs=";
   };
 
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
+  doInstallCheck = true;
 
   nativeBuildInputs = [ dpkg wrapGAppsHook ];
 
@@ -145,7 +148,14 @@ stdenv.mkDerivation rec {
       ln -sf ${xdg_utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
   '';
 
-  meta = with stdenv.lib; {
+  installCheckPhase = ''
+    # Bypass upstream wrapper which suppresses errors
+    $out/opt/brave.com/brave/brave --version
+  '';
+
+  passthru.updateScript = ./update.sh;
+
+  meta = with lib; {
     homepage = "https://brave.com/";
     description = "Privacy-oriented browser for Desktop and Laptop computers";
     changelog = "https://github.com/brave/brave-browser/blob/v${version}/CHANGELOG.md";
@@ -155,7 +165,7 @@ stdenv.mkDerivation rec {
       contribute to your favorite creators automatically.
     '';
     license = licenses.mpl20;
-    maintainers = with maintainers; [ uskudnik rht jefflabonte ];
+    maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm ];
     platforms = [ "x86_64-linux" ];
   };
 }

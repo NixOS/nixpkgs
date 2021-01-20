@@ -18,9 +18,13 @@
   bootSize ? "256M"
 
 , # The files and directories to be placed in the target file system.
-  # This is a list of attribute sets {source, target} where `source'
-  # is the file system object (regular file or directory) to be
-  # grafted in the file system at path `target'.
+  # This is a list of attribute sets {source, target, mode, user, group} where
+  # `source' is the file system object (regular file or directory) to be
+  # grafted in the file system at path `target', `mode' is a string containing
+  # the permissions that will be set (ex. "755"), `user' and `group' are the
+  # user and group name that will be set as owner of the files.
+  # `mode', `user', and `group' are optional.
+  # When setting one of `user' or `group', the other needs to be set too.
   contents ? []
 
 , # Type of partition table to use; either "legacy", "efi", or "none".
@@ -28,6 +32,9 @@
   #   partition of reasonable size is created in addition to the root partition.
   # For "legacy", the msdos partition table is used and a single large root
   #   partition is created.
+  # For "legacy+gpt", the GPT partition table is used, a 1MiB no-fs partition for
+  #   use by the bootloader is created, and a single large root partition is
+  #   created.
   # For "hybrid", the GPT partition table is used and a mandatory ESP
   #   partition of reasonable size is created in addition to the root partition.
   #   Also a legacy MBR will be present.
@@ -54,9 +61,14 @@
   format ? "raw"
 }:
 
-assert partitionTableType == "legacy" || partitionTableType == "efi" || partitionTableType == "hybrid" || partitionTableType == "none";
+assert partitionTableType == "legacy" || partitionTableType == "legacy+gpt" || partitionTableType == "efi" || partitionTableType == "hybrid" || partitionTableType == "none";
 # We use -E offset=X below, which is only supported by e2fsprogs
 assert partitionTableType != "none" -> fsType == "ext4";
+# Either both or none of {user,group} need to be set
+assert lib.all
+         (attrs: ((attrs.user  or null) == null)
+              == ((attrs.group or null) == null))
+         contents;
 
 with lib;
 
@@ -75,6 +87,7 @@ let format' = format; in let
 
   rootPartition = { # switch-case
     legacy = "1";
+    "legacy+gpt" = "2";
     efi = "2";
     hybrid = "3";
   }.${partitionTableType};
@@ -84,6 +97,16 @@ let format' = format; in let
       parted --script $diskImage -- \
         mklabel msdos \
         mkpart primary ext4 1MiB -1
+    '';
+    "legacy+gpt" = ''
+      parted --script $diskImage -- \
+        mklabel gpt \
+        mkpart no-fs 1MB 2MB \
+        set 1 bios_grub on \
+        align-check optimal 1 \
+        mkpart primary ext4 2MB -1 \
+        align-check optimal 2 \
+        print
     '';
     efi = ''
       parted --script $diskImage -- \
@@ -120,7 +143,7 @@ let format' = format; in let
 
   binPath = with pkgs; makeBinPath (
     [ rsync
-      utillinux
+      util-linux
       parted
       e2fsprogs
       lkl
@@ -134,6 +157,9 @@ let format' = format; in let
   # !!! should use XML.
   sources = map (x: x.source) contents;
   targets = map (x: x.target) contents;
+  modes   = map (x: x.mode  or "''") contents;
+  users   = map (x: x.user  or "''") contents;
+  groups  = map (x: x.group or "''") contents;
 
   closureInfo = pkgs.closureInfo { rootPaths = [ config.system.build.toplevel channelSources ]; };
 
@@ -160,22 +186,33 @@ let format' = format; in let
     set -f
     sources_=(${concatStringsSep " " sources})
     targets_=(${concatStringsSep " " targets})
+    modes_=(${concatStringsSep " " modes})
     set +f
 
     for ((i = 0; i < ''${#targets_[@]}; i++)); do
       source="''${sources_[$i]}"
       target="''${targets_[$i]}"
+      mode="''${modes_[$i]}"
 
+      if [ -n "$mode" ]; then
+        rsync_chmod_flags="--chmod=$mode"
+      else
+        rsync_chmod_flags=""
+      fi
+      # Unfortunately cptofs only supports modes, not ownership, so we can't use
+      # rsync's --chown option. Instead, we change the ownerships in the
+      # VM script with chown.
+      rsync_flags="-a --no-o --no-g $rsync_chmod_flags"
       if [[ "$source" =~ '*' ]]; then
         # If the source name contains '*', perform globbing.
         mkdir -p $root/$target
         for fn in $source; do
-          rsync -a --no-o --no-g "$fn" $root/$target/
+          rsync $rsync_flags "$fn" $root/$target/
         done
       else
         mkdir -p $root/$(dirname $target)
         if ! [ -e $root/$target ]; then
-          rsync -a --no-o --no-g $source $root/$target
+          rsync $rsync_flags $source $root/$target
         else
           echo "duplicate entry $target -> $source"
           exit 1
@@ -225,7 +262,7 @@ let format' = format; in let
 in pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
     { preVM = prepareImage;
-      buildInputs = with pkgs; [ utillinux e2fsprogs dosfstools ];
+      buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
       postVM = ''
         ${if format == "raw" then ''
           mv $diskImage $out/${filename}
@@ -269,6 +306,21 @@ in pkgs.vmTools.runInLinuxVM (
 
       # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
       rm -f $mountPoint/etc/machine-id
+
+      # Set the ownerships of the contents. The modes are set in preVM.
+      # No globbing on targets, so no need to set -f
+      targets_=(${concatStringsSep " " targets})
+      users_=(${concatStringsSep " " users})
+      groups_=(${concatStringsSep " " groups})
+      for ((i = 0; i < ''${#targets_[@]}; i++)); do
+        target="''${targets_[$i]}"
+        user="''${users_[$i]}"
+        group="''${groups_[$i]}"
+        if [ -n "$user$group" ]; then
+          # We have to nixos-enter since we need to use the user and group of the VM
+          nixos-enter --root $mountPoint -- chown -R "$user:$group" "$target"
+        fi
+      done
 
       umount -R /mnt
 

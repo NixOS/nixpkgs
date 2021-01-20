@@ -86,14 +86,16 @@ in {
 
     dbd =
       { pkgs, ... } :
-      {
+      let
+        passFile = pkgs.writeText "dbdpassword" "password123";
+      in {
         networking.firewall.enable = false;
         systemd.tmpfiles.rules = [
           "f /etc/munge/munge.key 0400 munge munge - mungeverryweakkeybuteasytointegratoinatest"
         ];
         services.slurm.dbdserver = {
           enable = true;
-          storagePass = "password123";
+          storagePassFile = "${passFile}";
         };
         services.mysql = {
           enable = true;

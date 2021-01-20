@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , dulwich
@@ -26,7 +26,7 @@ buildPythonPackage rec {
       sha256 = "12r4qzbc5xcqwv0kvf8g4wjji7n45421zkbf6i75vyi4nl6n4j15";
     };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Push and pull from a Git server using Mercurial";
     homepage = "http://hg-git.github.com/";
     maintainers = with maintainers; [ koral ];

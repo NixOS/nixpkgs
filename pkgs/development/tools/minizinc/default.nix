@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   pname = "minizinc";
   inherit version;
 
-  buildInputs = [ cmake flex bison ];
+  nativeBuildInputs = [ cmake flex bison ];
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = "https://www.minizinc.org/";
-    description = "MiniZinc is a medium-level constraint modelling language.";
+    description = "A medium-level constraint modelling language";
 
     longDescription = ''
       MiniZinc is a medium-level constraint modelling

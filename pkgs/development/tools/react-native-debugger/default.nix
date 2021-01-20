@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, cairo, xorg, gdk-pixbuf, fontconfig, pango, gnome3, atk, at-spi2-atk, at-spi2-core
+{ lib, stdenv, fetchurl, unzip, cairo, xorg, gdk-pixbuf, fontconfig, pango, gnome3, atk, at-spi2-atk, at-spi2-core
 , gtk3, glib, freetype, dbus, nss, nspr, alsaLib, cups, expat, udev, makeDesktopItem
 }:
 
@@ -38,10 +38,10 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "react-native-debugger";
-  version = "0.11.4";
+  version = "0.11.5";
   src = fetchurl {
     url = "https://github.com/jhen0409/react-native-debugger/releases/download/v${version}/rn-debugger-linux-x64.zip";
-    sha256 = "1dnlxdqcn90r509ff5003fibkrprdr0ydpnwg5p0xzs6rz3k8698";
+    sha256 = "0b917lihypx7ansy64dmwvgi943yy0n6fs8myam635bsr4l1srzb";
   };
 
   buildInputs = [ unzip ];
@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
     categories = "Development;Debugger;";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jhen0409/react-native-debugger";
     license = licenses.mit;
     description = "The standalone app based on official debugger of React Native, and includes React Inspector / Redux DevTools";

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, rdkafka, requests, avro3k, avro, futures, enum34 }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, rdkafka, requests, avro3k, avro, futures, enum34 }:
 
 buildPythonPackage rec {
   version = "1.5.0";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # No tests in PyPi Tarball
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Confluent's Apache Kafka client for Python";
     homepage = "https://github.com/confluentinc/confluent-kafka-python";
     license = licenses.asl20;

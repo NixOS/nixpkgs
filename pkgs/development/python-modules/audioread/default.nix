@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "audioread";
-  version = "2.1.8";
+  version = "2.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "073904fabc842881e07bd3e4a5776623535562f70b1655b635d22886168dd168";
+    sha256 = "a3480e42056c8e80a8192a54f6729a280ef66d27782ee11cbd63e9d4d1523089";
   };
 
   nativeBuildInputs = [ pytestrunner ];

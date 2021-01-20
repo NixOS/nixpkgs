@@ -15,6 +15,7 @@
 , ecm
 , flint
 , gd
+, giac
 , givaro
 , glpk
 , gsl
@@ -51,6 +52,7 @@
 , libbraiding
 , gmpy2
 , pplpy
+, sqlite
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -94,6 +96,7 @@ buildPythonPackage rec {
     ecm
     fflas-ffpack
     flint
+    giac
     givaro
     glpk
     gsl
@@ -124,6 +127,7 @@ buildPythonPackage rec {
     libbraiding
     gmpy2
     pplpy
+    sqlite
   ];
 
   buildPhase = ''

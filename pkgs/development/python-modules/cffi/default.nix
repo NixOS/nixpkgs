@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytest }:
+{ lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytest }:
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
-  version = "1.14.2";
+  version = "1.14.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ae8f34d50af2c2154035984b8b5fc5d9ed63f32fe615646ab435b05b132ca91b";
+    sha256 = "1a465cbe98a7fd391d47dce4b8f7e5b921e6cd805ef421d04f5f66ba8f06086c";
   };
 
   outputs = [ "out" "dev" ];
@@ -37,7 +37,7 @@ if isPyPy then null else buildPythonPackage rec {
     py.test -k "not test_char_pointer_conversion"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ domenkozar lnl7 ];
     homepage = "https://cffi.readthedocs.org/";
     license = with licenses; [ mit ];

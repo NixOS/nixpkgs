@@ -1,9 +1,9 @@
 # General list operations.
 
 { lib }:
-with lib.trivial;
 let
   inherit (lib.strings) toInt;
+  inherit (lib.trivial) compare min;
 in
 rec {
 
@@ -640,13 +640,7 @@ rec {
        unique [ 3 2 3 4 ]
        => [ 3 2 4 ]
    */
-  unique = list:
-    if list == [] then
-      []
-    else
-      let
-        x = head list;
-      in [x] ++ unique (remove x list);
+ unique = foldl' (acc: e: if elem e acc then acc else acc ++ [ e ]) [];
 
   /* Intersects list 'e' and another list. O(nm) complexity.
 

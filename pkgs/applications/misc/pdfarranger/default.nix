@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
-    owner = "jeromerobert";
+    owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "03siz4ar6flyvrrgh7hr7sslc6n9x5d9i13lc5rm2qnssd0qdich";
+    sha256 = "wJ6ImWpszfgErfLh7YgHirVKFIt0ij8A/CdYJmkNBP0=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,10 @@ python3Packages.buildPythonApplication rec {
 
   # incompatible with wrapGAppsHook
   strictDeps = false;
+  dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   doCheck = false; # no tests
 

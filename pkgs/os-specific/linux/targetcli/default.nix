@@ -1,4 +1,4 @@
-{ stdenv, python3, fetchFromGitHub }:
+{ lib, stdenv, python3, fetchFromGitHub }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "targetcli";
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     install -D targetclid.8 -t $out/share/man/man8/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command shell for managing the Linux LIO kernel target";
     homepage = "https://github.com/open-iscsi/targetcli-fb";
     license = licenses.asl20;

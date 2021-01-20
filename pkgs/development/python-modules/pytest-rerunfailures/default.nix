@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, pytest, mock }:
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchPypi, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     py.test test_pytest_rerunfailures.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "pytest plugin to re-run tests to eliminate flaky failures";
     homepage = "https://github.com/pytest-dev/pytest-rerunfailures";
     license = licenses.mpl20;

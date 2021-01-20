@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub
+{ lib, stdenv, buildPythonApplication, fetchFromGitHub
 , poetry, pygls, pyparsing
 , cmake, pytest, pytest-datadir
 , fetchpatch
@@ -34,7 +34,7 @@ buildPythonApplication rec {
   dontUseCmakeConfigure = true;
   checkPhase = "pytest";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/regen100/cmake-language-server";
     description = "CMake LSP Implementation";
     license = licenses.mit;

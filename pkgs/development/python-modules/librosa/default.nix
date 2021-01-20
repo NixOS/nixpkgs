@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , joblib
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # check that import works, this allows to capture errors like https://github.com/librosa/librosa/issues/1160
   pythonImportsCheck = [ "librosa" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python module for audio and music processing";
     homepage = "http://librosa.github.io/";
     license = licenses.isc;

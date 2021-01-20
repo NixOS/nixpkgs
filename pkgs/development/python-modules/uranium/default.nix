@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python, cmake
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python, cmake
 , pyqt5, numpy, scipy, shapely, libarcus, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage rec {
@@ -27,7 +27,7 @@ buildPythonPackage rec {
      UM/Application.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python framework for building Desktop applications";
     homepage = "https://github.com/Ultimaker/Uranium";
     license = licenses.lgpl3Plus;

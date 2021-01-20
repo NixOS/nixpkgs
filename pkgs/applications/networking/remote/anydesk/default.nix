@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem
 , atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg
 , lsb-release, freetype, fontconfig, polkit, polkit_gnome
 , pulseaudio }:
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath "${stdenv.lib.makeLibraryPath buildInputs}" \
+      --set-rpath "${lib.makeLibraryPath buildInputs}" \
       $out/bin/anydesk
 
     # pangox is not actually necessary (it was only added as a part of gtkglext)
@@ -73,13 +73,13 @@ in stdenv.mkDerivation rec {
       $out/bin/anydesk
 
     wrapProgram $out/bin/anydesk \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ lsb-release ]}
+      --prefix PATH : ${lib.makeBinPath [ lsb-release ]}
 
     substituteInPlace $out/share/applications/*.desktop \
       --subst-var out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit description;
     homepage = "https://www.anydesk.com";
     license = licenses.unfree;

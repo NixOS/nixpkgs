@@ -2,7 +2,7 @@
 , fetchurl
 , fetchpatch
 , libnice
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , gstreamer
 , gst-plugins-base
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     gobject-introspection
   ];

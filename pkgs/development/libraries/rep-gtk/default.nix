@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, librep, gtk2 }:
+{ stdenv, fetchurl, pkg-config, autoreconfHook, librep, gtk2 }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hgkkywm8zczir3lqr727bn7ybgg71x9cwj1av8fykkr8pdpard9";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ ];
   propagatedBuildInputs = [ librep gtk2 ];
 

@@ -109,6 +109,13 @@ in
         description = "Host to bind to. Defaults binding on all addresses.";
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.murmur;
+        defaultText = "pkgs.murmur";
+        description = "Overridable attribute of the murmur package to use.";
+      };
+
       password = mkOption {
         type = types.str;
         default = "";
@@ -278,6 +285,10 @@ in
       home            = "/var/lib/murmur";
       createHome      = true;
       uid             = config.ids.uids.murmur;
+      group           = "murmur";
+    };
+    users.groups.murmur = {
+      gid             = config.ids.gids.murmur;
     };
 
     systemd.services.murmur = {
@@ -295,11 +306,12 @@ in
         Type = if forking then "forking" else "simple";
         PIDFile = mkIf forking "/run/murmur/murmurd.pid";
         EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStart = "${pkgs.murmur}/bin/murmurd -ini /run/murmur/murmurd.ini";
+        ExecStart = "${cfg.package}/bin/murmurd -ini /run/murmur/murmurd.ini";
         Restart = "always";
         RuntimeDirectory = "murmur";
         RuntimeDirectoryMode = "0700";
         User = "murmur";
+        Group = "murmur";
       };
     };
   };

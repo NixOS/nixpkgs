@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , frozendict, simplejson, six, isPy27
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     frozendict simplejson six
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/matrix-org/python-canonicaljson";
     description = "Encodes objects and arrays as RFC 7159 JSON.";
     license = licenses.asl20;

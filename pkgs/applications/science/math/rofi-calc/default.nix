@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , rofi-unwrapped
 , libqalculate
 , glib
@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-calc";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vwb9c3xvd2cms6cw8j8parg7w4bsxvvrd1wgggr8sz2p8rrvy5p";
+    sha256 = "ZGY4ZtAG/ZnEnC80modZBV4RdRQElbkjeoKCEFVrncE=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     gobject-introspection
     wrapGAppsHook
   ];
@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     sed "s|qalc_binary = \"qalc\"|qalc_binary = \"${libqalculate}/bin/qalc\"|" -i src/calc.c
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Do live calculations in rofi!";
     homepage = "https://github.com/svenstaro/rofi-calc";
     license = licenses.mit;
     maintainers = with maintainers; [ luc65r albakham ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = with platforms; linux;
   };
 }
 

@@ -1,6 +1,6 @@
 { stdenv
 , fetchFromGitLab
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gusb
@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libfprint";
-  version = "1.90.2";
+  version = "1.90.5";
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     owner = "libfprint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0g890y49anqd7yfz86iyvywxgbfmfmj6813fy58m5n8jain7iy1b";
+    sha256 = "1wfwka2ik4hbb5wk5dp533040sqygwswg91c3v5fvpmmixh5qx9j";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gtk-doc
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     glib
     nss
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
 
   mesonFlags = [
     "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"

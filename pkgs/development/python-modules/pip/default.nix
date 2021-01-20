@@ -14,20 +14,16 @@
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "20.1.1";
+  version = "20.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = version;
-    sha256 = "01wq01ysv0ijcrg8a4mj72zb8al15b8vw8g3ywhxq53kbsyhfxn4";
+    sha256 = "e/2/0MrGY3myELmvuTAbNfXCBuT8kmvz9qTwITdDtQU=";
     name = "${pname}-${version}-source";
   };
-
-  # Remove when solved https://github.com/NixOS/nixpkgs/issues/81441
-  # Also update pkgs/development/interpreters/python/hooks/pip-install-hook.sh accordingly
-  patches = [ ./reproducible.patch ];
 
   nativeBuildInputs = [ bootstrapped-pip ];
 

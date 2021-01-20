@@ -4,7 +4,7 @@
 }:
 
 mkDerivation {
-  name = "bovo";
+  pname = "bovo";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.bovo";
     description = "Five in a row application";

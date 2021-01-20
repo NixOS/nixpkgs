@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, electron_4, makeDesktopItem, makeWrapper, nodePackages, autoPatchelfHook}:
+{ lib, stdenv, fetchurl, electron_10, makeDesktopItem, makeWrapper, nodePackages, autoPatchelfHook}:
 
 let
-  electron = electron_4;
+  electron = electron_10;
 in
 stdenv.mkDerivation rec {
   pname = "teleprompter";
-  version = "2.3.4";
+  version = "2.4.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/teleprompter-imaginary-films/imaginary-${pname}-${version}-64bit.tar.gz";
-    sha256 = "084ml2l3qg46bsazaapyxdx4zavvxp0j4ycsdpdwk3f94g9xb120";
+    url = "https://github.com/ImaginarySense/Imaginary-Teleprompter-Electron/releases/download/${lib.versions.majorMinor version}/imaginary-teleprompter-${version}.tar.gz";
+    sha256 = "bgdtK8l5d26avv1WUw9cfOgZrIL1q/a9890Ams4yidQ=";
   };
 
   dontBuild = true;
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The most complete, free, teleprompter app on the web";
-    license = [ licenses.gpl3 ];
+    license = [ licenses.gpl3Plus ];
     homepage = "https://github.com/ImaginarySense/Teleprompter-Core";
     platforms = platforms.linux;
     maintainers = with maintainers; [ Scriptkiddi ];

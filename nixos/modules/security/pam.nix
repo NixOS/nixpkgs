@@ -318,6 +318,42 @@ let
         '';
       };
 
+      gnupg = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If enabled, pam_gnupg will attempt to automatically unlock the
+            user's GPG keys with the login password via
+            <command>gpg-agent</command>. The keygrips of all keys to be
+            unlocked should be written to <filename>~/.pam-gnupg</filename>,
+            and can be queried with <command>gpg -K --with-keygrip</command>.
+            Presetting passphrases must be enabled by adding
+            <literal>allow-preset-passphrase</literal> in
+            <filename>~/.gnupg/gpg-agent.conf</filename>.
+          '';
+        };
+
+        noAutostart = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Don't start <command>gpg-agent</command> if it is not running.
+            Useful in conjunction with starting <command>gpg-agent</command> as
+            a systemd user service.
+          '';
+        };
+
+        storeOnly = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Don't send the password immediately after login, but store for PAM
+            <literal>session</literal>.
+          '';
+        };
+      };
+
       text = mkOption {
         type = types.nullOr types.lines;
         description = "Contents of the PAM service file.";
@@ -358,9 +394,9 @@ let
           ${optionalString cfg.requireWheel
               "auth required pam_wheel.so use_uid"}
           ${optionalString cfg.logFailures
-              "auth required pam_tally.so"}
+              "auth required pam_faillock.so"}
           ${optionalString (config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth)
-              "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
+              "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=${lib.concatStringsSep ":" config.services.openssh.authorizedKeysFiles}"}
           ${optionalString cfg.fprintAuth
               "auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so"}
           ${let p11 = config.security.pam.p11; in optionalString cfg.p11Auth
@@ -386,6 +422,7 @@ let
             || cfg.enableKwallet
             || cfg.enableGnomeKeyring
             || cfg.googleAuthenticator.enable
+            || cfg.gnupg.enable
             || cfg.duoSecurity.enable)) ''
               auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
@@ -393,10 +430,14 @@ let
               ${optionalString cfg.pamMount
                 "auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
               ${optionalString cfg.enableKwallet
-                ("auth optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
-                 " kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5")}
+                ("auth optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so" +
+                 " kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5")}
               ${optionalString cfg.enableGnomeKeyring
                 "auth optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so"}
+              ${optionalString cfg.gnupg.enable
+                "auth optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"
+                + optionalString cfg.gnupg.storeOnly " store-only"
+               }
               ${optionalString cfg.googleAuthenticator.enable
                 "auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp"}
               ${optionalString cfg.duoSecurity.enable
@@ -468,10 +509,14 @@ let
           ${optionalString (cfg.enableAppArmor && config.security.apparmor.enable)
               "session optional ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so order=user,group,default debug"}
           ${optionalString (cfg.enableKwallet)
-              ("session optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
-               " kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5")}
+              ("session optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so" +
+               " kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5")}
           ${optionalString (cfg.enableGnomeKeyring)
               "session optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start"}
+          ${optionalString cfg.gnupg.enable
+              "session optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so"
+              + optionalString cfg.gnupg.noAutostart " no-autostart"
+           }
           ${optionalString (config.virtualisation.lxc.lxcfs.enable)
                "session optional ${pkgs.lxc}/lib/security/pam_cgfs.so -c all"}
         '');

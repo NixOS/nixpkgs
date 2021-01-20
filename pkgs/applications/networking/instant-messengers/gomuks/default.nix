@@ -1,17 +1,17 @@
-{ stdenv, buildGoModule, fetchFromGitHub, olm, makeDesktopItem }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, olm, makeDesktopItem }:
 
 buildGoModule rec {
   pname = "gomuks";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
-    rev = "v" + version;
-    sha256 = "0sf1nqwimxqql8wm6763jyc5rclhd4zxgg9gfi0qvg5ccm1r1z5q";
+    rev = "v${version}";
+    sha256 = "169xyd44jyfh5njwmhsmkah8njfgnp9q9c2b13p0ry5saicwm5h5";
   };
 
-  vendorSha256 = "sha256:0n9mwbzjkvlljlns7sby8nb9gm4vj0v4idp1zxv5xssqr5qalihf";
+  vendorSha256 = "1l8qnz0qy90zpywfx7pbkqpxg7rkvc9j622zcmkf38kdc1z6w20a";
 
   doCheck = false;
 
@@ -32,7 +32,7 @@ buildGoModule rec {
     substituteAllInPlace $out/share/applications/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://maunium.net/go/gomuks/";
     description = "A terminal based Matrix client written in Go";
     license = licenses.gpl3;

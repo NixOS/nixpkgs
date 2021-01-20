@@ -3,6 +3,7 @@ var_templates_list=(
     NIX_IGNORE_LD_THROUGH_GCC
     NIX_LDFLAGS
     NIX_LDFLAGS_BEFORE
+    NIX_DYNAMIC_LINKER
     NIX_LDFLAGS_AFTER
     NIX_LDFLAGS_HARDEN
     NIX_HARDENING_ENABLE
@@ -23,6 +24,10 @@ done
 
 if [ -e @out@/nix-support/libc-ldflags ]; then
     NIX_LDFLAGS_@suffixSalt@+=" $(< @out@/nix-support/libc-ldflags)"
+fi
+
+if [ -z "$NIX_DYNAMIC_LINKER_@suffixSalt@" ] && [ -e @out@/nix-support/ld-set-dynamic-linker ]; then
+    NIX_DYNAMIC_LINKER_@suffixSalt@="$(< @out@/nix-support/dynamic-linker)"
 fi
 
 if [ -e @out@/nix-support/libc-ldflags-before ]; then

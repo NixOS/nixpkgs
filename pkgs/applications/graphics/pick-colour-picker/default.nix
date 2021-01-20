@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , buildPythonPackage
 , pygobject3
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     sed "s|os.environ.get('SNAP'), \"usr\"|'$out'|g" -i "$pickLoc/__main__.py"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://kryogenix.org/code/pick/";
     license = licenses.mit;
     platforms = platforms.linux;

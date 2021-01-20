@@ -1,20 +1,46 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, aiohttp, crccheck, pycryptodome, pycrypto, voluptuous
-, pytest, pytest-asyncio, asynctest }:
+{ lib
+, aiohttp
+, aiosqlite
+, asynctest
+, buildPythonPackage
+, crccheck
+, fetchFromGitHub
+, pycrypto
+, pycryptodome
+, pytest-aiohttp
+, pytest-asyncio
+, pytestCheckHook
+, tox
+, voluptuous }:
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.22.2";
+  version = "0.30.0";
 
-  propagatedBuildInputs = [ aiohttp crccheck pycrypto pycryptodome voluptuous ];
-  checkInputs = [ pytest pytest-asyncio asynctest ];
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a43129932c6e4af0d2d57542218faf7695e2424ce18a5a8915d016e1303f5e44";
+  src = fetchFromGitHub {
+    owner = "zigpy";
+    repo = "zigpy";
+    rev = version;
+    sha256 = "14qyxm7bj62fsvxfp6x3r1ygjlv7q3jjvq6gzj30na78x1fqr9g1";
   };
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    aiohttp
+    aiosqlite
+    crccheck
+    pycrypto
+    pycryptodome
+    voluptuous
+  ];
+
+  checkInputs = [
+    asynctest
+    pytest-aiohttp
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  meta = with lib; {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
     license = licenses.gpl3Plus;

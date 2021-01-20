@@ -5,14 +5,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.2.5";
+  version = "1.4.1";
   pname = "xmlschema";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "v${version}";
-    sha256 = "0rsa75x86gdjalvy4riq7613szb616hff80crx006chyppzdkxmq";
+    sha256 = "1yd7whf74z8bw99gldxlnrs8bjnjzald29b5cf2ka0i144sxbvad";
   };
 
   propagatedBuildInputs = [ elementpath ];

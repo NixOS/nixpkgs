@@ -1,4 +1,4 @@
-{ stdenv, lib, src, pkgconfig, tcl, libXft, patches ? []
+{ stdenv, lib, src, pkg-config, tcl, libXft, patches ? []
 , enableAqua ? stdenv.isDarwin, darwin
 , ... }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   ] ++ stdenv.lib.optional stdenv.is64bit "--enable-64bit"
     ++ stdenv.lib.optional enableAqua "--enable-aqua";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional enableAqua (with darwin.apple_sdk.frameworks; [ Cocoa ]);
 
   propagatedBuildInputs = [ tcl libXft ];

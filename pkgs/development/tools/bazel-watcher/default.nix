@@ -13,13 +13,13 @@ let
 in
 buildBazelPackage rec {
   name = "bazel-watcher-${version}";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "0n28q27510ymg5d455hrbk7z8wawszgjmqjjhb4zximqhvxks7kh";
+    sha256 = "0gigl1lg8sb4bj5crvj54329ws4yirldbncs15f96db6vhp0ig7r";
   };
 
   nativeBuildInputs = [ go git python ];
@@ -56,7 +56,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "0rfdwss8aahydiybwhi3j0qw12j1l91k9lbn1vaip0bmnq5qfwh9";
+    sha256 = "0yl5rs6y1xifxjfsa9zv8bjcwiky7rxk9y3rmi01pqpsm7ik12a9";
   };
 
   buildAttrs = {
@@ -64,6 +64,8 @@ buildBazelPackage rec {
 
     preBuild = ''
       patchShebangs .
+
+      substituteInPlace ibazel/BUILD --replace '{STABLE_GIT_VERSION}' ${version}
     '';
 
     installPhase = ''
@@ -73,9 +75,11 @@ buildBazelPackage rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bazelbuild/bazel-watcher";
-    description = "Tools for building Bazel targets when source files change.";
+    description = "Tools for building Bazel targets when source files change";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.all;
+    # broken on darwin, see https://github.com/NixOS/nixpkgs/issues/105573
+    broken = stdenv.isDarwin;
   };
 }

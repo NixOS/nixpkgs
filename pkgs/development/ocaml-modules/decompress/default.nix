@@ -7,6 +7,8 @@ buildDunePackage rec {
 	version = "0.9.0";
 	pname = "decompress";
 
+	useDune2 = true;
+
 	src = fetchurl {
 		url = "https://github.com/mirage/decompress/releases/download/v${version}/decompress-v${version}.tbz";
 		sha256 = "0fryhcvv96vfca51c7kqdn3n3canqsbbvfbi75ya6lca4lmpipbh";

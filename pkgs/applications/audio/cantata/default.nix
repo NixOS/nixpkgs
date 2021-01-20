@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
 , qtbase, qtsvg, qttools, perl
 
 # Cantata doesn't build with cdparanoia enabled so we disable that
@@ -31,7 +31,7 @@ assert withReplaygain -> withTaglib;
 assert withLibVlc -> withHttpStream;
 
 let
-  version = "2.4.1";
+  version = "2.4.2";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
@@ -47,7 +47,7 @@ in mkDerivation {
     owner  = "CDrummond";
     repo   = "cantata";
     rev    = "v${version}";
-    sha256 = "0ix7xp352bziwz31mw79y7wxxmdn6060p8ry2px243ni1lz1qx1c";
+    sha256 = "15qfx9bpfdplxxs08inwf2j8kvf7g5cln5sv1wj1l2l41vbf1mjr";
   };
 
   patches = [
@@ -73,9 +73,7 @@ in mkDerivation {
     ++ lib.optional  withUdisks udisks2
     ++ lib.optional  withLibVlc libvlc;
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake pkg-config qttools ];
 
   cmakeFlags = lib.flatten [
     (fstats withTaglib        [ "TAGLIB" "TAGLIB_EXTRAS" ])

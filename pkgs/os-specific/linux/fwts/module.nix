@@ -1,4 +1,4 @@
-{ stdenv, fwts, kernel }:
+{ lib, stdenv, fwts, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "fwts-efi-runtime";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (fwts.meta) homepage license;
     description = fwts.meta.description + "(efi-runtime kernel module)";
     maintainers = with maintainers; [ dtzWill ];

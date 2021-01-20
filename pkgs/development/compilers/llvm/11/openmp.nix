@@ -10,12 +10,10 @@ stdenv.mkDerivation rec {
   pname = "openmp";
   inherit version;
 
-  src = fetch pname "1yq7m0kwnlgq8ni719g9fny0x5wrvm8szp11b3q8zz39rqqyphsz";
+  src = fetch pname "19rcv25y41ww3zlfg0lwprzijl3cn7jgc0v5540jzpp7j0ds45ad";
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [ llvm ];
-
-  enableParallelBuilding = true;
 
   meta = {
     description = "Components required to build an executable OpenMP program";

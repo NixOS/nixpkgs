@@ -1,5 +1,5 @@
 { gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python2, lndir
-, openssl_1_1, openldap, sope, libmemcached, curl, libsodium, libzip, pkgconfig }:
+, openssl_1_1, openldap, sope, libmemcached, curl, libsodium, libzip, pkg-config }:
 with lib; gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
   version = "5.0.1";
@@ -12,7 +12,7 @@ with lib; gnustep.stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ gnustep.make makeWrapper python2 ];
-  buildInputs = [ gnustep.base sope openssl_1_1 libmemcached (curl.override { openssl = openssl_1_1; }) libsodium libzip pkgconfig ]
+  buildInputs = [ gnustep.base sope openssl_1_1 libmemcached (curl.override { openssl = openssl_1_1; }) libsodium libzip pkg-config ]
     ++ optional (openldap != null) openldap;
 
   patches = [
@@ -67,7 +67,7 @@ with lib; gnustep.stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "SOGo is a very fast and scalable modern collaboration suite (groupware)";
+    description = "A very fast and scalable modern collaboration suite (groupware)";
     license = with licenses; [ gpl2 lgpl21 ];
     homepage = "https://sogo.nu/";
     platforms = platforms.linux;

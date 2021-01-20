@@ -1,5 +1,5 @@
 { stdenv, pkgsBuildBuild, buildPackages
-, fetchurl, makeWrapper, gawk, pkgconfig
+, fetchurl, makeWrapper, gawk, pkg-config
 , libffi, libtool, readline, gmp, boehmgc, libunistring
 , coverageAnalysis ? null
 , fetchpatch
@@ -25,7 +25,7 @@
   depsBuildBuild = [ buildPackages.stdenv.cc ]
     ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
                            pkgsBuildBuild.guile;
-  nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
+  nativeBuildInputs = [ makeWrapper gawk pkg-config ];
   buildInputs = [ readline libtool libunistring libffi ];
 
   propagatedBuildInputs = [
@@ -38,7 +38,13 @@
     libtool libunistring
   ];
 
-  enableParallelBuilding = true;
+  # According to Bernhard M. Wiedemann <bwiedemann suse de> on
+  # #reproducible-builds on irc.oftc.net, (2020-01-29): they had to
+  # build Guile without parallel builds to make it reproducible.
+  #
+  # re: https://issues.guix.gnu.org/issue/20272
+  # re: https://build.opensuse.org/request/show/732638
+  enableParallelBuilding = false;
 
   patches = [
     ./eai_system.patch
@@ -52,7 +58,8 @@
   # "libgcc_s.so.1 must be installed for pthread_cancel to work".
 
   # don't have "libgcc_s.so.1" on darwin
-  LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+  LDFLAGS = stdenv.lib.optionalString
+    (!stdenv.isDarwin && !stdenv.hostPlatform.isStatic) "-lgcc_s";
 
   configureFlags = [ "--with-libreadline-prefix=${readline.dev}" ]
     ++ stdenv.lib.optionals stdenv.isSunOS [
@@ -109,4 +116,3 @@
     '';
   };
 })
-

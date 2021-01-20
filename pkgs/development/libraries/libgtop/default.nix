@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , glib
-, pkgconfig
+, pkg-config
 , perl
 , gettext
 , gobject-introspection
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gtk-doc
     perl
     gettext

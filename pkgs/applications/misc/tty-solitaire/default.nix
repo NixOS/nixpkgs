@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "tty-solitaire";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=cc" "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Klondike Solitaire in your ncurses terminal";
     license = licenses.mit;
     homepage = "https://github.com/mpereira/tty-solitaire";

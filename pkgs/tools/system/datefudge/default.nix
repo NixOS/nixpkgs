@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchpatch }:
+{ lib, stdenv, fetchgit, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "datefudge";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "chmod +x $out/lib/datefudge/datefudge.so";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fake the system date";
     longDescription = ''
       datefudge is a small utility that pretends that the system time is

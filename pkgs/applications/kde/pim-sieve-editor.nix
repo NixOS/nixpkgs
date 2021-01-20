@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "pim-sieve-editor";
+  pname = "pim-sieve-editor";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;

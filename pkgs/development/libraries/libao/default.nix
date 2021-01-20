@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig, libpulseaudio, alsaLib, libcap
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config, libpulseaudio, alsaLib, libcap
 , CoreAudio, CoreServices, AudioUnit
 , usePulseAudio }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux  [ alsaLib libcap ] ++
     lib.optionals stdenv.isDarwin [ CoreAudio CoreServices AudioUnit ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = with stdenv.lib; {
     longDescription = ''

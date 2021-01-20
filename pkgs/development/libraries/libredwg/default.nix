@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ] 
+  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ]
     ++ lib.optional enablePython swig;
 
   buildInputs = [ pcre2 ]

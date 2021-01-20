@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkg-config
 , arrayfire, expat, fontconfig, freeimage, freetype, boost
 , mesa, libGLU, libGL, glfw3, SDL2, cudatoolkit
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

@@ -1,8 +1,8 @@
-{ stdenv, go, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, go, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "pushgateway";
-  version = "1.2.0";
+  version = "1.3.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/pushgateway";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "pushgateway";
-    sha256 = "0q57pvdfapi1xx8mw7ykvxs64alypyqbxwvrqjcrgv2jidbcd1mm";
+    sha256 = "0ll6s8yqcx3fgn6gzmfb1bsfykl0ra6383nyw1kjbj260w200gls";
   };
 
   buildUser = "nix@nixpkgs";
@@ -24,7 +24,7 @@ buildGoPackage rec {
         -X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.Branch=${rev}
         -X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.BuildUser=${buildUser}
         -X github.com/prometheus/pushgateway/vendor/github.com/prometheus/common/version.BuildDate=${buildDate}
-        -X main.goVersion=${stdenv.lib.getVersion go}
+        -X main.goVersion=${lib.getVersion go}
   '';
 
   doInstallCheck = true;
@@ -39,7 +39,7 @@ buildGoPackage rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allows ephemeral and batch jobs to expose metrics to Prometheus";
     homepage = "https://github.com/prometheus/pushgateway";
     license = licenses.asl20;

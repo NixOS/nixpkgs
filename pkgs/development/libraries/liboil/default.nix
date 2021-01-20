@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig }:
+{stdenv, fetchurl, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "liboil-0.3.17";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev"; # oil-bugreport
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   # fix "argb_paint_i386.c:53:Incorrect register `%rax' used with `l' suffix"
   # errors

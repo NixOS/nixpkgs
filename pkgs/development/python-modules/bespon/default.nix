@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "bespon" ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Encodes and decodes data in the BespON format.";
     homepage = "https://github.com/gpoore/bespon_py";
     license = licenses.lgpl3;

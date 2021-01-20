@@ -1,15 +1,15 @@
-{ stdenv, python3, beancount }:
+{ lib, stdenv, python3, beancount }:
 
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;
 in
 buildPythonApplication rec {
   pname = "fava";
-  version = "1.15";
+  version = "1.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "037fhimfjiqay28wg7hd5sm7r0935ynw9d905iszn965ihr1qsgz";
+    sha256 = "21336b695708497e6f00cab77135b174c51feb2713b657e0e208282960885bf5";
   };
 
   checkInputs = [ python3.pkgs.pytest ];
@@ -38,7 +38,7 @@ buildPythonApplication rec {
   meta = {
     homepage = "https://beancount.github.io/fava";
     description = "Web interface for beancount";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sconsPackages, qt3, lcms1, libtiff, vigra }:
+{ lib, stdenv, fetchurl, sconsPackages, qt3, lcms1, libtiff, vigra }:
 
 /*  how to calibrate your monitor:
     Eg see https://wiki.archlinux.org/index.php/ICC_Profiles#Loading_ICC_Profiles
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Little CMS ICC profile construction set";
     homepage = "https://sourceforge.net/projects/lprof";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

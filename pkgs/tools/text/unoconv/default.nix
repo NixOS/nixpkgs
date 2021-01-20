@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, libreoffice-unwrapped, asciidoc, makeWrapper
+{ lib, stdenv, fetchFromGitHub, python3, libreoffice-unwrapped, asciidoc, makeWrapper
 # whether to install odt2pdf/odt2doc/... symlinks to unoconv
 , installSymlinks ? true
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     make install-links prefix="$out"
   '' else "");
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert between any document format supported by LibreOffice/OpenOffice";
     homepage = "http://dag.wieers.com/home-made/unoconv/";
     license = licenses.gpl2;

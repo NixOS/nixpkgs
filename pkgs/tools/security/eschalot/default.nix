@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "eschalot";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     install -D -t $out/bin eschalot worgen
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tor hidden service name generator";
     homepage = src.meta.homepage;
     license = licenses.isc;

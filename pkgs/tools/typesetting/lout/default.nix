@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ghostscript}:
+{lib, stdenv, fetchurl, ghostscript}:
 
 stdenv.mkDerivation rec {
   name = "lout-3.40";
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
     # Wiki: https://sourceforge.net/p/lout/wiki/
     homepage = "https://savannah.nongnu.org/projects/lout/";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

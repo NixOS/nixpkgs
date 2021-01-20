@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , cmake
 , ninja
 , intltool
@@ -6,7 +6,7 @@
 , libxml2
 , webkitgtk
 , highlight
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , libnotify
@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.36.5";
+  version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1hpjd5d3z52xcjcc1hg5z8ypnx2y6ml9snyrlpflg9bx16yhxm1x";
+    url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1whjgfhcxpb5yhhvyqb8pv71vprw6fv02czin4k4z6dxrxsq32qx";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     itstool
     libxml2
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
 
   PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Evolution";
     description = "Personal information management application that provides integrated mail, calendaring and address book functionality";
     maintainers = teams.gnome.members;

@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, static ? false }:
+{ stdenv, fetchFromGitHub, cmake
+, static ? stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "snappy";

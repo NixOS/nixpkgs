@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromBitbucket {
     owner = "jpcgt";
-    repo = "${pname}";
+    repo = pname;
     rev = "533afd6a1772857cb633c011b5e0a15b60b1e92e"; # 8.5 with Red Hat packaging.
     sha256 = "199kiiml18k34z1zhk2hbhibphmnv0kb11kxiajq52alps0mjb3m";
   };
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "2-D post processing for PCB fabrication on CNC routers.";
+    description = "2-D post processing for PCB fabrication on CNC routers";
     homepage = "https://bitbucket.org/jpcgt/flatcam";
     license = licenses.mit;
     maintainers = with maintainers; [ trepetti ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libsepol }:
+{ lib, stdenv, fetchurl, libsepol }:
 
 stdenv.mkDerivation rec {
   pname = "semodule-utils";
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+    "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SELinux policy core utilities (packaging additions)";
     license = licenses.gpl2;
     inherit (libsepol.meta) homepage platforms;

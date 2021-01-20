@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication {
   name = "xdxf2slob-unstable-2015-06-30";
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication {
 
   propagatedBuildInputs = [ python3Packages.PyICU python3Packages.slob ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to convert XDXF dictionary files to slob format";
     homepage = "https://github.com/itkach/xdxf2slob/";
     license = licenses.gpl3;

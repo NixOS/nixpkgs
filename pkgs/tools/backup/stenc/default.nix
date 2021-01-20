@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "1.0.7";
@@ -7,15 +7,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "scsitape";
     repo = "stenc";
-    rev = "${version}";
+    rev = version;
     sha256 = "1778m1zcyzyf42k5m496yqh0gv6kqhb0sq5983dhky1fccjl905k";
   };
 
   meta = {
     description = "SCSI Tape Encryption Manager";
     homepage = "https://github.com/scsitape/stenc";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ woffs ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ woffs ];
+    platforms = lib.platforms.linux;
   };
 }

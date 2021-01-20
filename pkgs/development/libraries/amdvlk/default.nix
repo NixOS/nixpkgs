@@ -5,7 +5,7 @@
 , ninja
 , patchelf
 , perl
-, pkgconfig
+, pkg-config
 , python3
 , expat
 , libdrm
@@ -21,13 +21,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2020.Q3.6";
+  version = "2020.Q4.6";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "05bvxxgaz94y85g1sq0jzjxd4j8vgdfan04q2fzmfcw3h6p7syjy";
+    sha256 = "wminJxfku8Myag+SI7iLSvS+VzHlUd4c86BbpF/cr1w=";
   };
 
   buildInputs = [
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     ninja
     patchelf
     perl
-    pkgconfig
+    pkg-config
     python3
   ];
 

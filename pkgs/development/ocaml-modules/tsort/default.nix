@@ -2,6 +2,7 @@
 
 buildDunePackage rec {
   pname = "tsort";
+  useDune2 = true;
   version = "2.0.0";
   src = fetchFromGitHub {
     owner = "dmbaturin";

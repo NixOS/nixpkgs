@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , wrapGAppsHook
@@ -20,17 +20,17 @@
 
 stdenv.mkDerivation rec {
   pname = "devhelp";
-  version = "3.36.2";
+  version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/devhelp/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0phcjdxnwgg0a0z9kyidp977jy365pny6bh2qhdyzcpvkqqq8nlb";
+    url = "mirror://gnome/sources/devhelp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "13sa25mmlc49kn520hdfbskma65y7smvwmyhfggj0n9s3fazba2d";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     itstool
     wrapGAppsHook
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "API documentation browser for GNOME";
     homepage = "https://wiki.gnome.org/Apps/Devhelp";
     license = licenses.gpl3Plus;

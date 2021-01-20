@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchurl
 , sphinx
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = "http://liw.fi/larch/";
+  meta = with lib; {
+    homepage = "https://liw.fi/larch/";
     description = "Python B-tree library";
     license = licenses.gpl3;
     maintainers = [];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , makeWrapper
 , fetchFromGitHub
 , nixosTests
@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
     shattered-pixel-dungeon-starts = nixosTests.shattered-pixel-dungeon;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://shatteredpixel.com/";
     downloadPage = "https://github.com/00-Evan/shattered-pixel-dungeon/releases";
     description = "Traditional roguelike game with pixel-art graphics and simple interface";

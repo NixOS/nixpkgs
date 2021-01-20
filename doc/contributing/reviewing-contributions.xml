@@ -7,8 +7,8 @@
  <warning>
   <para>
    The following section is a draft, and the policy for reviewing is still being discussed in issues such as <link
-	   xlink:href="https://github.com/NixOS/nixpkgs/issues/11166">#11166 </link> and <link
-	   xlink:href="https://github.com/NixOS/nixpkgs/issues/20836">#20836 </link>.
+    xlink:href="https://github.com/NixOS/nixpkgs/issues/11166">#11166 </link> and <link
+    xlink:href="https://github.com/NixOS/nixpkgs/issues/20836">#20836 </link>.
   </para>
  </warning>
  <para>
@@ -47,18 +47,6 @@
   </para>
 
   <itemizedlist>
-   <listitem>
-    <para>
-     Add labels to the pull request. (Requires commit rights)
-    </para>
-    <itemizedlist>
-     <listitem>
-      <para>
-       <literal>8.has: package (update)</literal> and any topic label that fit the updated package.
-      </para>
-     </listitem>
-    </itemizedlist>
-   </listitem>
    <listitem>
     <para>
      Ensure that the package versioning fits the guidelines.
@@ -188,18 +176,6 @@
   <itemizedlist>
    <listitem>
     <para>
-     Add labels to the pull request. (Requires commit rights)
-    </para>
-    <itemizedlist>
-     <listitem>
-      <para>
-       <literal>8.has: package (new)</literal> and any topic label that fit the new package.
-      </para>
-     </listitem>
-    </itemizedlist>
-   </listitem>
-   <listitem>
-    <para>
      Ensure that the package versioning is fitting the guidelines.
     </para>
    </listitem>
@@ -304,18 +280,6 @@
   <itemizedlist>
    <listitem>
     <para>
-     Add labels to the pull request. (Requires commit rights)
-    </para>
-    <itemizedlist>
-     <listitem>
-      <para>
-       <literal>8.has: module (update)</literal> and any topic label that fit the module.
-      </para>
-     </listitem>
-    </itemizedlist>
-   </listitem>
-   <listitem>
-    <para>
      Ensure that the module maintainers are notified.
     </para>
     <itemizedlist>
@@ -406,18 +370,6 @@
   </para>
 
   <itemizedlist>
-   <listitem>
-    <para>
-     Add labels to the pull request. (Requires commit rights)
-    </para>
-    <itemizedlist>
-     <listitem>
-      <para>
-       <literal>8.has: module (new)</literal> and any topic label that fit the module.
-      </para>
-     </listitem>
-    </itemizedlist>
-   </listitem>
    <listitem>
     <para>
      Ensure that the module tests, if any, are succeeding.
@@ -515,18 +467,18 @@
    It is possible for community members that have enough knowledge and experience on a special topic to contribute by merging pull requests.
   </para>
 
-  <para>
-   TODO: add the procedure to request merging rights.
-  </para>
-
 <!--
-The following paragraph about how to deal with unactive contributors is just a
+The following paragraphs about how to deal with unactive contributors is just a
 proposition and should be modified to what the community agrees to be the right
 policy.
 
 <para>Please note that contributors with commit rights unactive for more than
   three months will have their commit rights revoked.</para>
 -->
+
+  <para>
+   Please see the discussion in <link xlink:href="https://github.com/NixOS/nixpkgs/issues/50105">GitHub nixpkgs issue #50105</link> for information on how to proceed to be granted this level of access.
+  </para>
 
   <para>
    In a case a contributor definitively leaves the Nix community, they should create an issue or post on <link

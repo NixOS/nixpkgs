@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   name = "poly";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       and languages that use the Latin script and its variants.
     '';
     homepage = "http://www.fontsquirrel.com/fonts/poly";
-    license = stdenv.lib.licenses.ofl;
-    maintainers = with stdenv.lib.maintainers; [ relrod ];
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ relrod ];
   };
 }

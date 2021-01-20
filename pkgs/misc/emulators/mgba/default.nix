@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, wrapQtAppsHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, wrapQtAppsHook, pkg-config
 , cmake, epoxy, libzip, libelf, libedit, ffmpeg_3, SDL2, imagemagick
 , qtbase, qtmultimedia, qttools, minizip }:
 
@@ -15,17 +15,16 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "mgba";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    sha256 = "0rwlfjdr0rzbq4kaplvwsgyb8xq6nrzxss2c8xrgw9hqw3ymx4s3";
+    sha256 = "0nqj4bnn5c2z1bq4bnbw1wznc0wpmq4sy3w8pipd6n6620b9m4qq";
   };
 
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ wrapQtAppsHook pkgconfig cmake ];
+  nativeBuildInputs = [ wrapQtAppsHook pkg-config cmake ];
 
   buildInputs = [
     epoxy libzip libelf libedit ffmpeg_3 SDL2 imagemagick
@@ -36,7 +35,7 @@ in stdenv.mkDerivation rec {
     cp -r ${desktopItem}/share/applications $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mgba.io";
     description = "A modern GBA emulator with a focus on accuracy";
 

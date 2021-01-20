@@ -1,4 +1,4 @@
-{stdenv, python3Packages, fetchpatch, gettext, qt5, fetchFromGitHub}:
+{lib, stdenv, python3Packages, fetchpatch, gettext, qt5, fetchFromGitHub}:
 
 python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "arsenetar";
     repo = "dupeguru";
-    rev = "${version}";
+    rev = version;
     sha256 = "0ma4f1c6vmpz8gi4sdy43x1ik7wh42wayvk1iq520d3i714kfcpy";
     fetchSubmodules = true;
   };
@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/dupeguru" "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI tool to find duplicate files in a system";
     homepage = "https://github.com/arsenetar/dupeguru";
     license = licenses.bsd3;

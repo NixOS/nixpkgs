@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnome3 }:
+{ lib, stdenv, fetchurl, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "mobile-broadband-provider-info";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mobile broadband service provider database";
     homepage = "https://wiki.gnome.org/Projects/NetworkManager/MobileBroadband/ServiceProviders";
     license = licenses.publicDomain;

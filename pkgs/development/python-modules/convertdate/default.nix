@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pymeeus, pytz }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pymeeus, pytz }:
 
 buildPythonPackage rec {
   pname = "convertdate";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pymeeus pytz ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/fitnr/convertdate";
     description = "Utils for converting between date formats and calculating holidays";
     license = licenses.mit;

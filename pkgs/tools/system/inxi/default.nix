@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper
 , ps, dnsutils # dig is recommended for multiple categories
 , withRecommends ? false # Install (almost) all recommended tools (see --recommends)
-, withRecommendedSystemPrograms ? withRecommends, utillinuxMinimal, dmidecode
+, withRecommendedSystemPrograms ? withRecommends, util-linuxMinimal, dmidecode
 , file, hddtemp, iproute, ipmitool, usbutils, kmod, lm_sensors, smartmontools
-, binutils, tree, upower
+, binutils, tree, upower, pciutils
 , withRecommendedDisplayInformationPrograms ? withRecommends, glxinfo, xorg
 }:
 
 let
   prefixPath = programs:
-    "--prefix PATH ':' '${stdenv.lib.makeBinPath programs}'";
+    "--prefix PATH ':' '${lib.makeBinPath programs}'";
   recommendedSystemPrograms = lib.optionals withRecommendedSystemPrograms [
-    utillinuxMinimal dmidecode file hddtemp iproute ipmitool usbutils kmod
-    lm_sensors smartmontools binutils tree upower
+    util-linuxMinimal dmidecode file hddtemp iproute ipmitool usbutils kmod
+    lm_sensors smartmontools binutils tree upower pciutils
   ];
   recommendedDisplayInformationPrograms = lib.optionals
     withRecommendedDisplayInformationPrograms
@@ -22,13 +22,13 @@ let
     ++ recommendedDisplayInformationPrograms;
 in stdenv.mkDerivation rec {
   pname = "inxi";
-  version = "3.1.07-1";
+  version = "3.2.02-2";
 
   src = fetchFromGitHub {
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    sha256 = "0hs4m2vmfc6srscaz72r6zpkn6n7msgzlps376ks38gj1l103xfn";
+    sha256 = "sha256-WHfW0empveOxC3jvYq46jlvVZDb8JLne5JHPtFE6nTs=";
   };
 
   buildInputs = [ perl makeWrapper ];
@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     cp inxi.1 $out/share/man/man1/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A full featured CLI system information tool";
     longDescription = ''
       inxi is a command line system information script built for console and

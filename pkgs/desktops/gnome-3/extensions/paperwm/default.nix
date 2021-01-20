@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-paperwm";
-  version = "36.0";
+  version = "38.1";
 
   src = fetchFromGitHub {
     owner = "paperwm";
     repo = "PaperWM";
     rev = version;
-    sha256 = "1ssnabwxrns36c61ppspjkr9i3qifv08pf2jpwl7cjv3pvyn4kly";
+    sha256 = "1jq15qrq3khqpjsjbcc17amdr1k53jkvambdacdf56xbqkycvlgs";
   };
 
   uuid = "paperwm@hedning:matrix.org";
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiled scrollable window management for Gnome Shell";
     homepage = "https://github.com/paperwm/PaperWM";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ hedning zowoq ];
+    maintainers = with maintainers; [ hedning ];
   };
 }

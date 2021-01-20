@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xmpppy, pythonIRClib, python, pythonPackages, runtimeShell } :
+{ lib, stdenv, fetchurl, xmpppy, pythonIRClib, python, pythonPackages, runtimeShell } :
 
 stdenv.mkDerivation rec {
   pname = "pyIRCt";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "IRC transport module for XMPP";
     platforms = platforms.unix;
     license = licenses.gpl2;

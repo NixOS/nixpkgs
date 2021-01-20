@@ -1,4 +1,4 @@
-{ stdenv, autoconf, automake, libtool, m4, fetchurl, bash, pkgconfig, sqlite }:
+{ stdenv, autoconf, automake, libtool, m4, fetchurl, bash, pkg-config, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "libcangjie";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "0i5svvcx099fc9hh5dvr3gpb1041v6vn5fnylxy82zjy239114lg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ automake autoconf libtool m4 sqlite ];
 
   configureScript = "./autogen.sh";
-  
+
   preConfigure = ''
     find . -name '*.sh' -exec sed -e 's@#!/bin/bash@${bash}/bin/bash@' -i '{}' ';'
   '';

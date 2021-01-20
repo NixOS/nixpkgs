@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , glib
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     gettext
     intltool
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     cairo
     cinnamon-desktop
     cinnamon-common
-    gnome3.libgnomekbd
+    libgnomekbd
     gnome3.caribou
 
     # things
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     sed "s|/usr/share/locale|/run/current-system/sw/share/locale|g" -i ./src/cinnamon-screensaver-main.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-screensaver";
     description = "The Cinnamon screen locker and screensaver program";
     license = [ licenses.gpl2 licenses.lgpl2 ];

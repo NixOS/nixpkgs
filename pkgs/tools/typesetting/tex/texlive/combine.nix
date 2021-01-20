@@ -2,10 +2,12 @@ params: with params;
 # combine =
 args@{
   pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core")
-, extraName ? "combined", ...
+, extraName ? "combined"
+, extraVersion ? ""
+, ...
 }:
 let
-  pkgSet = removeAttrs args [ "pkgFilter" "extraName" ] // {
+  pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" ] // {
     # include a fake "core" package
     core.pkgs = [
       (bin.core.out // { pname = "core"; tlType = "bin"; })
@@ -31,19 +33,13 @@ let
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
-  # TODO: replace by buitin once it exists
-  fastUnique = comparator: list: with lib;
-    let un_adj = l: if length l < 2 then l
-      else optional (head l != elemAt l 1) (head l) ++ un_adj (tail l);
-    in un_adj (lib.sort comparator list);
-
-  uniqueStrings = fastUnique (a: b: a < b);
+  uniqueStrings = list: lib.sort (a: b: a < b) (lib.unique list);
 
   mkUniqueOutPaths = pkgs: uniqueStrings
     (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
-in buildEnv {
-  name = "texlive-${extraName}-${bin.texliveYear}";
+in (buildEnv {
+  name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
 
   extraPrefix = "/share/texmf";
 
@@ -277,6 +273,6 @@ in buildEnv {
   ''
     + bin.cleanBrokenLinks
   ;
-}
+}).overrideAttrs (_: { allowSubstitutes = true; })
 # TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file
 #       similarly, deal with xe(la)tex font visibility?

@@ -47,7 +47,7 @@ in {
     services.udev.packages = [ pkgs.trezor-udev-rules ];
 
     systemd.services.trezord = {
-      description = "TREZOR Bridge";
+      description = "Trezor Bridge";
       after = [ "systemd-udev-settle.service" "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [];

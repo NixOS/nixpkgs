@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
 # Inputs
 , curl, libmms, libnfs, liburing, samba
 # Archive support
@@ -24,12 +24,10 @@
 , python3Packages # for sphinx-build
 # For tests
 , gtest
-, fetchpatch # used to fetch an upstream patch fixing a failing test
 , zip
 }:
 
 let
-  lib = stdenv.lib;
   concatAttrVals = nameList: set: lib.concatMap (x: set.${x} or []) nameList;
 
   featureDependencies = {
@@ -116,13 +114,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.22";
+      version = "0.22.3";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "1lsi4fgrarabkahfhf5zbmppg7jba7m362gxyqhv54hmqprl1qff";
+        sha256 = "0323zxmgyrkbklnqm8i6napz8pva50cw14mzr9bvmyg64x404jgj";
       };
 
       buildInputs = [
@@ -155,7 +153,8 @@ let
 
       mesonAutoFeatures = "disabled";
 
-      outputs = [ "out" "doc" "man" ];
+      outputs = [ "out" "doc" ]
+        ++ lib.optional (builtins.elem "documentation" features_) "man";
 
       mesonFlags = [
         "-Dtest=true"
@@ -171,7 +170,7 @@ let
 
       passthru.tests.nixos = nixosTests.mpd;
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "A flexible, powerful daemon for playing music";
         homepage    = "https://www.musicpd.org/";
         license     = licenses.gpl2;
@@ -190,7 +189,7 @@ in
   mpd = run { };
   mpd-small = run { features = [
     "webdav" "curl" "mms" "bzip2" "zzip"
-    "audiofile" "faad" "flac" "gme" "mad"
+    "audiofile" "faad" "flac" "gme"
     "mpg123" "opus" "vorbis" "vorbisenc"
     "lame" "libsamplerate" "shout"
     "libmpdclient" "id3tag" "expat" "pcre"

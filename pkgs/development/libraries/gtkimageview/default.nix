@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gtk2 }:
+{ fetchurl, stdenv, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "gtkimageview-1.6.4";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1if3yh5z6nkv5wnkk0qyy9pkk03vn5rqbfk23q87kj39pqscgr37";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 ];
 
   preConfigure = ''

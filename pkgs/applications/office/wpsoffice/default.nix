@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchurl
 , autoPatchelfHook
@@ -12,7 +12,7 @@
 , cups
 , dbus
 , expat
-, ffmpeg_3
+, ffmpeg
 , fontconfig
 , freetype
 , gdk-pixbuf
@@ -38,16 +38,16 @@
 
 stdenv.mkDerivation rec {
   pname = "wpsoffice";
-  version = "11.1.0.9505";
+  version = "11.1.0.9615";
 
   src = fetchurl {
-    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9505/wps-office_11.1.0.9505.XA_amd64.deb";
-    sha256 = "1bvaxwd3npw3kswk7k1p6mcbfg37x0ym4sp6xis6ykz870qivqk5";
+    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9615/wps-office_11.1.0.9615.XA_amd64.deb";
+    sha256 = "0dpd4njpizclllps3qagipycfws935rhj9k5gmdhjfgsk0ns188w";
   };
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
 
-  postUnpack = stdenv.lib.optionalString (version == "11.1.0.9505") ''
+  postUnpack = lib.optionalString (version == "11.1.0.9505") ''
     # distribution is missing libjsapiservice.so, so we should not let
     # autoPatchelfHook fail on the following dead libraries
     rm opt/kingsoft/wps-office/office6/{libjsetapi.so,libjswppapi.so,libjswpsapi.so}
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
     homepage = "http://wps-community.org/";
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    maintainers = with stdenv.lib.maintainers; [ mlatus th0rgal ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ mlatus th0rgal ];
   };
 
   buildInputs = with xorg; [
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     cairo
     dbus.lib
     expat
-    ffmpeg_3
+    ffmpeg
     fontconfig
     freetype
     gdk-pixbuf
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  runtimeLibPath = stdenv.lib.makeLibraryPath [
+  runtimeLibPath = lib.makeLibraryPath [
     cups.lib
   ];
 

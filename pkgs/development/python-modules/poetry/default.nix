@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.1.1";
+  version = "1.1.4";
   format = "pyproject";
   disabled = isPy27;
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    sha256 = "1j3ij8qsd709p7ww5r4759f2xnk2s7g40kzm9vx99l98zw890g05";
+    sha256 = "0lx3qpz5dad0is7ki5a4vxphvc8cm8fnv4bmrx226a6nvvaj6ahs";
   };
 
   postPatch = ''
@@ -86,6 +86,16 @@ buildPythonPackage rec {
     "lock"
     # fs permission errors
     "test_builder_should_execute_build_scripts"
+  ];
+
+  patches = [
+    # The following patch addresses a minor incompatibility with
+    # pytest-mock.  This is addressed upstream in
+    # https://github.com/python-poetry/poetry/pull/3457
+    (fetchpatch {
+      url = "https://github.com/python-poetry/poetry/commit/8ddceb7c52b3b1f35412479707fa790e5d60e691.diff";
+      sha256 = "yHjFb9xJBLFOqkOZaJolKviTdtST9PMFwH9n8ud2Y+U=";
+    })
   ];
 
   meta = with lib; {

@@ -36,6 +36,14 @@ with lib.maintainers; {
     scope = "Maintain Cinnamon desktop environment and applications made by the LinuxMint team.";
   };
 
+  deshaw = {
+    # Verify additions to this team with at least one already existing member of the team.
+    members = [
+      limeytexan
+    ];
+    scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
+  };
+
   freedesktop = {
     members = [ jtojnar worldofpeace ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
@@ -107,5 +115,14 @@ with lib.maintainers; {
       zowoq
     ];
     scope = "Maintain Podman and CRI-O related packages and modules.";
+  };
+
+  sage = {
+    members = [
+      timokau
+      omasanori
+      raskin
+    ];
+    scope = "Maintain SageMath and the dependencies that are likely to break it.";
   };
 }

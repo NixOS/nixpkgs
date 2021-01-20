@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
 , wrapGAppsHook
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The extensible top panel for Pantheon";
     longDescription = ''
       Wingpanel is an empty container that accepts indicators as extensions,

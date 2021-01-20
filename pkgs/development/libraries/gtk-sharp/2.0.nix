@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , mono
 , glib
 , pango
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  nativeBuildInputs = [ pkgconfig autoconf automake libtool which ];
+  nativeBuildInputs = [ pkg-config autoconf automake libtool which ];
 
   buildInputs = [
     mono glib pango gtk2 GConf libglade libgnomecanvas

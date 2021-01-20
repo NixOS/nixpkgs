@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf }:
+{ lib, stdenv, fetchurl, autoconf }:
 
 stdenv.mkDerivation {
   name = "tradcpp-0.5.2";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     ./aarch64.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A traditional (K&R-style) C macro preprocessor";
     platforms = platforms.all;
     license = licenses.bsd2;

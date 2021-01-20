@@ -1,4 +1,4 @@
-# Idris
+# Idris {#idris}
 
 ## Installing Idris
 

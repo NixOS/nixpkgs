@@ -1,5 +1,5 @@
-{ stdenv, callPackage,
-  fetchurl, guile_1_8, qt4, xmodmap, which, makeWrapper, freetype,
+{ lib, mkDerivation, callPackage, fetchFromGitHub,
+  guile_1_8, qtbase, xmodmap, which, freetype,
   libjpeg,
   sqlite,
   tex ? null,
@@ -7,7 +7,7 @@
   git ? null,
   python3 ? null,
   cmake,
-  pkgconfig,
+  pkg-config,
   ghostscriptX ? null,
   extraFonts ? false,
   chineseFonts ? false,
@@ -16,32 +16,25 @@
 
 let
   pname = "TeXmacs";
-  version = "1.99.11";
+  version = "1.99.15";
   common = callPackage ./common.nix {
     inherit tex extraFonts chineseFonts japaneseFonts koreanFonts;
   };
 in
-stdenv.mkDerivation {
+mkDerivation {
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";
-    sha256 = "12bp0f34izzqimz49lfpgf4lyz3h45s9xbmk8v6zsawdjki76alg";
+  src = fetchFromGitHub {
+    owner = "texmacs";
+    repo = "texmacs";
+    rev = "v${version}";
+    sha256 = "04585hdh98fvyhj4wsxf69xal2wvfa6lg76gad8pr6ww9abi5105";
   };
 
-  cmakeFlags = [
-    # Texmacs' cmake build as of writing defaults to Qt5,
-    # but we haven't updated to that yet.
-    "-DTEXMACS_GUI=Qt4"
-  ];
-
-  enableParallelBuilding = true;
-
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     guile_1_8
-    qt4
-    makeWrapper
+    qtbase
     ghostscriptX
     freetype
     libjpeg
@@ -51,18 +44,26 @@ stdenv.mkDerivation {
   ];
   NIX_LDFLAGS = "-lz";
 
-  postInstall = "wrapProgram $out/bin/texmacs --suffix PATH : " +
-        (if ghostscriptX == null then "" else "${ghostscriptX}/bin:") +
-        (if aspell == null then "" else "${aspell}/bin:") +
-        (if tex == null then "" else "${tex}/bin:") +
-        (if git == null then "" else "${git}/bin:") +
-        (if python3 == null then "" else "${python3}/bin:") +
-        "${xmodmap}/bin:${which}/bin";
+  qtWrapperArgs = [
+    "--suffix" "PATH" ":" (lib.makeBinPath [
+      xmodmap
+      which
+      ghostscriptX
+      aspell
+      tex
+      git
+      python3
+    ])
+  ];
+
+  postFixup = ''
+    wrapQtApp $out/bin/texmacs
+  '';
 
   inherit (common) postPatch;
 
   meta = common.meta // {
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    maintainers = [ lib.maintainers.roconnor ];
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
   };
 }

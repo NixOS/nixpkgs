@@ -1,36 +1,48 @@
 {
-  mkDerivation, lib, fetchgit,
-  extra-cmake-modules,
+  lib, mkDerivation, extra-cmake-modules, fetchurl,
 
   kconfig, kdoctools, kguiaddons, ki18n, kinit, kiconthemes, kio,
-  knewstuff, kplotting, kwidgetsaddons, kxmlgui,
+  knewstuff, kplotting, kwidgetsaddons, kxmlgui, knotifyconfig,
 
-  qtx11extras, qtwebsockets,
+
+  qtx11extras, qtwebsockets, qtkeychain, libsecret,
 
   eigen, zlib,
 
-  cfitsio, indilib, xplanet
+  cfitsio, indilib, xplanet, libnova, libraw, gsl, wcslib, stellarsolver
 }:
 
-mkDerivation {
-  name = "kstars";
-  
-  src = fetchgit {
-    url = "https://anongit.kde.org/kstars.git";
-    rev = "7acc527939280edd22823371dc4e22494c6c626a";
-    sha256 = "1n1lgi7p3dj893fdnzjbnrha40p4apl0dy8zppcabxwrb1khb84v";
+mkDerivation rec {
+  pname = "kstars";
+  version = "3.5.1";
+
+  src = fetchurl {
+    url = "mirror://kde/stable/kstars/kstars-${version}.tar.xz";
+    sha256 = "sha256-gf+yaXiYQFuO1/nvdP6OOuD4QrRtPAQTwQZAbYNKxUU=";
   };
-  
+
+  patches = [
+    # Patches ksutils.cpp to use nix store prefixes to find program binaries of
+    # indilib and xplanet dependencies. Without the patch, Ekos is unable to spawn
+    # indi servers for local telescope/camera control.
+    ./fs-fixes.patch
+  ];
+
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kdoctools kguiaddons ki18n kinit kiconthemes kio
-    knewstuff kplotting kwidgetsaddons kxmlgui
+    knewstuff kplotting kwidgetsaddons kxmlgui knotifyconfig
 
-    qtx11extras qtwebsockets
+    qtx11extras qtwebsockets qtkeychain libsecret
 
     eigen zlib
 
-    cfitsio indilib xplanet
+    cfitsio indilib xplanet libnova libraw gsl wcslib stellarsolver
+  ];
+
+  cmakeFlags = [
+    "-DINDI_NIX_ROOT=${indilib}"
+    "-DXPLANET_NIX_ROOT=${xplanet}"
   ];
 
   meta = with lib; {
@@ -43,6 +55,6 @@ mkDerivation {
     '';
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ timput ];
+    maintainers = with maintainers; [ timput hjones2199 ];
   };
 }

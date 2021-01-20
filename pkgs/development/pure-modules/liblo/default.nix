@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, liblo }:
+{ stdenv, fetchurl, pkg-config, pure, liblo }:
 
 stdenv.mkDerivation rec {
   baseName = "liblo";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "c2ba4d6f94489acf8a8fac73982ae03d5ad4113146eb1f7d6558a956c57cb8ee";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure liblo ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;

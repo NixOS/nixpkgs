@@ -146,7 +146,6 @@ let
       ln -s ${ruby}/lib/libruby-*.so $out/hack/libruby.so
     '';
 
-    enableParallelBuilding = true;
   };
 in
 
@@ -157,7 +156,7 @@ buildEnv {
 
   paths = [ dfhack ] ++ lib.optionals enableTWBT [ twbt.lib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";
     homepage = "https://github.com/DFHack/dfhack/";
     license = licenses.zlib;

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, pytest
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, pytest
 , construct }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # no checks from Pypi - https://github.com/happyleavesaoc/python-snapcast/issues/23
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Control Snapcast, a multi-room synchronous audio solution";
     homepage = "https://github.com/happyleavesaoc/python-snapcast/";
     license = licenses.mit;

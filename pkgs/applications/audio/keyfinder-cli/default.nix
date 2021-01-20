@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libav, libkeyfinder }:
+{ lib, stdenv, fetchFromGitHub, libav, libkeyfinder }:
 
 stdenv.mkDerivation rec {
   pname = "keyfinder-cli";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Musical key detection for digital audio (command-line tool)";
     longDescription = ''

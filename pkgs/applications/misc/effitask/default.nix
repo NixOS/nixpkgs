@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -13,8 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "sanpii";
-    repo = "${pname}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "09bffxdp43s8b1rpmsgqr2kyz3i4jbd2yrwbxw21fj3sf3mwb9ig";
   };
 
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical task manager, based on the todo.txt format";
     longDescription = ''
       To use it as todo.sh add-on, create a symlink like this:

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkg-config, dovecot, libtool, xapian, icu64, sqlite }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, dovecot, libtool, xapian, icu64, sqlite }:
 stdenv.mkDerivation {
   pname = "fts-xapian";
   version = "1.3.1";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     "--with-moduledir=$(out)/lib/dovecot"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/grosjo/fts-xapian";
     description = "Dovecot FTS plugin based on Xapian";
     license = licenses.lgpl21;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , postgresql
 , openssl
 , zlib
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp *.control  $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://repmgr.org/";
     description = "Replication manager for PostgreSQL cluster";
     license = licenses.postgresql;

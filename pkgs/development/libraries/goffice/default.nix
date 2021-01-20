@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, intltool, glib, gtk3, lasem
+{ fetchurl, stdenv, pkg-config, intltool, glib, gtk3, lasem
 , libgsf, libxml2, libxslt, cairo, pango, librsvg, gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1z6f3q8fxkd1ysqrwdxdi0844zqa00vjpf07gq8mh3kal8picfd4";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
   propagatedBuildInputs = [
     glib gtk3 libxml2 cairo pango libgsf lasem

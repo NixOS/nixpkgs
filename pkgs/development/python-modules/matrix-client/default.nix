@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , requests
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Matrix Client-Server SDK";
     homepage = "https://github.com/matrix-org/matrix-python-sdk";
     license = licenses.asl20;

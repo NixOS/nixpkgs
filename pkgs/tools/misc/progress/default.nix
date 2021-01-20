@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, which }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, ncurses, which }:
 
 stdenv.mkDerivation rec {
   pname = "progress";
@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "1cnb4ixlhshn139mj5sr42k5m6gjjbyqvkn1324c47niwrgp7dqm";
   };
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkg-config which ];
   buildInputs = [ ncurses ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Xfennec/progress";
     description = "Tool that shows the progress of coreutils programs";
     license = licenses.gpl3;

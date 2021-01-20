@@ -15,7 +15,7 @@ let
 in
 {
   name = "upnp";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ bobvanderlinden ];
   };
 
@@ -90,7 +90,7 @@ in
       client1.succeed("upnpc -a ${internalClient1Address} 9000 9000 TCP")
 
       client1.wait_for_unit("httpd")
-      client2.wait_until_succeeds("curl http://${externalRouterAddress}:9000/")
+      client2.wait_until_succeeds("curl -f http://${externalRouterAddress}:9000/")
     '';
 
 })

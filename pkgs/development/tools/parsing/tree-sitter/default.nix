@@ -1,8 +1,13 @@
 { lib, stdenv
 , fetchgit, fetchFromGitHub, fetchurl
-, writeShellScript, runCommand, which
+, writeShellScript, runCommand, which, formats
 , rustPlatform, jq, nix-prefetch-git, xe, curl, emscripten
+, Security
 , callPackage
+
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.hostPlatform.isStatic
+, webUISupport ? false
 }:
 
 # TODO: move to carnix or https://github.com/kolloch/crate2nix
@@ -11,9 +16,9 @@ let
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.16.9";
-  sha256 = "sha256-e5Ft+jEpExLgBBFmiswW0VFrsKume4gmUiOiF4ODhhQ=";
-  cargoSha256 = "sha256-XbPLQEvf4JX517ddpx18eweiPrztS5E/X2pejkqmlCU=";
+  version = "0.17.3";
+  sha256 = "sha256-uQs80r9cPX8Q46irJYv2FfvuppwonSS5HVClFujaP+U=";
+  cargoSha256 = "sha256-fonlxLNh9KyEwCj7G5vxa7cM/DlcHNFbQpp0SwVQ3j4=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -24,7 +29,7 @@ let
   };
 
   update-all-grammars = import ./update.nix {
-    inherit writeShellScript nix-prefetch-git curl jq xe src;
+    inherit writeShellScript nix-prefetch-git curl jq xe src formats lib;
   };
 
   fetchGrammar = (v: fetchgit {inherit (v) url rev sha256 fetchSubmodules; });
@@ -38,34 +43,53 @@ let
 
   builtGrammars = let
     change = name: grammar:
-      callPackage ./library.nix {
-        language = name; inherit version; source = fetchGrammar grammar;
+      callPackage ./grammar.nix {} {
+        language = name;
+        inherit version;
+        source = fetchGrammar grammar;
       };
   in
-    # typescript doesn't have parser.c in the same place as others
-    lib.mapAttrs change (removeAttrs (import ./grammars) ["typescript"]);
+    lib.mapAttrs change (removeAttrs (import ./grammars) [
+      # TODO these don't have parser.c in the same place as others.
+      # They might require more elaborate builds?
+      #  /nix/…/src/parser.c: No such file or directory
+      "tree-sitter-typescript"
+      #  /nix/…/src/parser.c: No such file or directory
+      "tree-sitter-ocaml"
+      # /nix/…/src/parser.c:1:10: fatal error: tree_sitter/parser.h: No such file or directory
+      "tree-sitter-razor"
+    ]);
 
 in rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version cargoSha256;
 
-  nativeBuildInputs = [ emscripten which ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs =
+    [ which ]
+    ++ lib.optionals webUISupport [ emscripten ];
 
-  postPatch = ''
-    # needed for the tests
-    rm -rf test/fixtures/grammars
-    ln -s ${grammars} test/fixtures/grammars
-
-    # These functions do not appear in the source code
-    sed -i /_ts_query_context/d lib/binding_web/exports.json
-    sed -i /___assert_fail/d lib/binding_web/exports.json
+  postPatch = lib.optionalString (!webUISupport) ''
+    # remove web interface
+    sed -e '/pub mod web_ui/d' \
+        -i cli/src/lib.rs
+    sed -e 's/web_ui,//' \
+        -e 's/web_ui::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
+        -i cli/src/main.rs
   '';
 
   # Compile web assembly with emscripten. The --debug flag prevents us from
   # minifying the JavaScript; passing it allows us to side-step more Node
   # JS dependencies for installation.
-  preBuild = ''
+  preBuild = lib.optionalString webUISupport ''
     bash ./script/build-wasm --debug
+  '';
+
+  postInstall = ''
+    PREFIX=$out make install
+    ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
+    ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
   '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
@@ -77,6 +101,11 @@ in rustPlatform.buildRustPackage {
     };
     inherit grammars;
     inherit builtGrammars;
+
+    tests = {
+      # make sure all grammars build
+      builtGrammars = lib.recurseIntoAttrs builtGrammars;
+    };
   };
 
   meta = {
@@ -95,9 +124,8 @@ in rustPlatform.buildRustPackage {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Profpatsch ];
-    # Darwin needs some more work with default libraries
     # Aarch has test failures with how tree-sitter compiles the generated C files
-    broken = stdenv.isDarwin || stdenv.isAarch64;
+    broken = stdenv.isAarch64;
   };
 
 }

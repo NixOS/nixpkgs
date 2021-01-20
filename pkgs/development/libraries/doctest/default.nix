@@ -2,18 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "doctest";
-  version = "2.4.0";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "onqtam";
     repo = "doctest";
     rev = version;
-    sha256 = "1yi95saqv8qb3ix6w8d7ffvs7qbwvqmq6wblckhxhicxxdxk85cd";
+    hash = "sha256-NqXC5948prTCi4gsaR8bJPBTrmH+rJbHsGvwkJlpjXY=";
   };
 
   nativeBuildInputs = [ cmake ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/onqtam/doctest";
