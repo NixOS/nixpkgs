@@ -9641,6 +9641,21 @@ let
     buildInputs = [ TestNoWarnings ];
   };
 
+  HTTPAcceptLanguage = buildPerlModule {
+    pname = "HTTP-AcceptLanguage";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YA/YAPPO/HTTP-AcceptLanguage-0.02.tar.gz";
+      sha256 = "1bs29r72ibp0kmr3l1ypzszflpcw7z4yxxcgaijspsy99rb5yq1f";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    meta = {
+      homepage = "https://github.com/yappo/p5-HTTP-AcceptLanguage";
+      description = "Accept-Language header parser and find available language";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTTPBody = buildPerlPackage {
     pname = "HTTP-Body";
     version = "1.22";
