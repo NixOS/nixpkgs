@@ -5094,8 +5094,6 @@ in
 
   i2pd = callPackage ../tools/networking/i2pd { };
 
-  i-score = libsForQt514.callPackage ../applications/audio/i-score { };
-
   iasl = callPackage ../development/compilers/iasl { };
 
   iannix = libsForQt5.callPackage ../applications/audio/iannix { };
@@ -12193,8 +12191,6 @@ in
   itstool = callPackage ../development/tools/misc/itstool { };
 
   jam = callPackage ../development/tools/build-managers/jam { };
-
-  jamomacore = callPackage ../development/libraries/audio/jamomacore { };
 
   jbake = callPackage ../development/tools/jbake { };
 
