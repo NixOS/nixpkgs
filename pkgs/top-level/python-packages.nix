@@ -8337,8 +8337,6 @@ in {
     phantomjsSupport = false;
   };
 
-  youtube-dlc = callPackage ../development/python-modules/youtube-dlc { };
-
   yowsup = callPackage ../development/python-modules/yowsup { };
 
   yq = callPackage ../development/python-modules/yq { };
