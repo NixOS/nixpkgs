@@ -14,7 +14,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook ];
-
+  pythonImportsCheck = [ "pytest_instafail" ];
   meta = {
     description = "pytest plugin that shows failures and errors instantly instead of waiting until the end of test session";
     homepage = "https://github.com/pytest-dev/pytest-instafail";
