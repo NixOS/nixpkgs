@@ -1,15 +1,15 @@
 { lib, stdenv, makeDesktopItem, fetchurl, unzip
 , gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome3
-, xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core
+, xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core, libdrm, mesa
 }:
 
 stdenv.mkDerivation rec {
   pname = "avocode";
-  version = "4.10.4";
+  version = "4.11.0";
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "06xf5y2mljk3pd74ap9n90bhhidbzpg5c6wws361ygd4f3x86c46";
+    sha256 = "sha256-50aGechzlVVRQz6WOASHRjT46BKbwyhbt7/0oq2PsOg=";
   };
 
   libPath = lib.makeLibraryPath (with xorg; [
@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     libXtst
     libXScrnSaver
     libuuid
+    libdrm
+    mesa
   ]);
 
   desktopItem = makeDesktopItem {
