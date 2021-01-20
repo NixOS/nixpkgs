@@ -1,12 +1,12 @@
 { fetchurl, stdenv, zlib, openssl, libuuid, pkg-config }:
 
 stdenv.mkDerivation rec {
-  version = "20201129";
+  version = "20201210";
   pname = "libewf";
 
   src = fetchurl {
     url = "https://github.com/libyal/libewf/releases/download/${version}/libewf-experimental-${version}.tar.gz";
-    sha256 = "168k1az9hm0lajh57zlbknsq5m8civ1rzp81zz4sd7v64xilzxdk";
+    sha256 = "sha256-dI1We2bsBRDcyqd6HLC7eBE99dpzSkhHtNgt0ZE4aDc=";
   };
 
   nativeBuildInputs = [ pkg-config ];
