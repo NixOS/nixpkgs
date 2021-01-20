@@ -1,10 +1,10 @@
-{ requireFile, targetPlatform, lib }:
+{ buildPlatform, requireFile, targetPlatform, lib }:
 
 let requireXcode = version: sha256:
   let
     xip = "Xcode_" + version +  ".xip";
     # TODO(alexfmpe): Find out how to validate the .xip signature in Linux
-    unxip = if targetPlatform.isDarwin
+    unxip = if buildPlatform.isDarwin
             then ''
               open -W ${xip}
               rm -rf ${xip}
