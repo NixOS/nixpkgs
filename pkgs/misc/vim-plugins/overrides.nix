@@ -671,6 +671,31 @@ self: super: {
       ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
     '';
   });
+
+  telescope-fzy-native-nvim = super.telescope-fzy-native-nvim.overrideAttrs (old: {
+    preFixup =
+      let
+        fzy-lua-native-path = "deps/fzy-lua-native";
+        fzy-lua-native =
+          stdenv.mkDerivation {
+            name = "fzy-lua-native";
+            src = "${old.src}/${fzy-lua-native-path}";
+            # remove pre-compiled binaries
+            preBuild = "rm -rf static/*";
+            installPhase = ''
+              install -Dm 444 -t $out/static static/*
+              install -Dm 444 -t $out/lua lua/*
+            '';
+          };
+      in
+      ''
+        rm -rf $target/${fzy-lua-native-path}/*
+        ln -s ${fzy-lua-native}/static $target/${fzy-lua-native-path}/static
+        ln -s ${fzy-lua-native}/lua $target/${fzy-lua-native-path}/lua
+      '';
+    meta.platforms = stdenv.lib.platforms.all;
+  });
+
 } // (
   let
     nodePackageNames = [

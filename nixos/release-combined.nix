@@ -60,7 +60,8 @@ in rec {
         (onFullSupported "nixos.tests.boot-stage1")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiCdrom")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiUsb")
-        (onSystems ["x86_64-linux"] "nixos.tests.chromium")
+        # TODO (@primeos): Fix the test failure since https://github.com/NixOS/nixpkgs/pull/110010:
+        #(onSystems ["x86_64-linux"] "nixos.tests.chromium")
         (onFullSupported "nixos.tests.containers-imperative")
         (onFullSupported "nixos.tests.containers-ip")
         (onSystems ["x86_64-linux"] "nixos.tests.docker")

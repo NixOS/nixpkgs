@@ -2207,6 +2207,8 @@ in
 
   fast-cli = nodePackages.fast-cli;
 
+  fast-cpp-csv-parser = callPackage ../development/libraries/fast-cpp-csv-parser { };
+
   faudio = callPackage ../development/libraries/faudio { };
 
   fd = callPackage ../tools/misc/fd { };
@@ -5094,8 +5096,6 @@ in
 
   i2pd = callPackage ../tools/networking/i2pd { };
 
-  i-score = libsForQt514.callPackage ../applications/audio/i-score { };
-
   iasl = callPackage ../development/compilers/iasl { };
 
   iannix = libsForQt5.callPackage ../applications/audio/iannix { };
@@ -6321,6 +6321,8 @@ in
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
   netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
+
+  networking-ts-cxx = callPackage ../development/libraries/networking-ts-cxx { };
 
   nco = callPackage ../development/libraries/nco { };
 
@@ -12193,8 +12195,6 @@ in
   itstool = callPackage ../development/tools/misc/itstool { };
 
   jam = callPackage ../development/tools/build-managers/jam { };
-
-  jamomacore = callPackage ../development/libraries/audio/jamomacore { };
 
   jbake = callPackage ../development/tools/jbake { };
 
@@ -28887,6 +28887,8 @@ in
   py-wmi-client = callPackage ../tools/networking/py-wmi-client { };
 
   rargs = callPackage ../tools/misc/rargs { };
+
+  rauc = callPackage ../tools/misc/rauc { };
 
   redprl = callPackage ../applications/science/logic/redprl { };
 

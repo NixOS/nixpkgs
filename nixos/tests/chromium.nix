@@ -80,7 +80,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
     def close_win():
         def try_close(_):
-            machine.execute(
+            status, _ = machine.execute(
                 ru(
                     "${xdo "close-window" ''
                       search --onlyvisible --name "new tab"
@@ -89,13 +89,14 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
                     ''}"
                 )
             )
-            machine.execute(
-                ru(
-                    "${xdo "close-window" ''
-                      key Ctrl+w
-                    ''}"
+            if status == 0:
+                machine.execute(
+                    ru(
+                        "${xdo "close-window" ''
+                          key Ctrl+w
+                        ''}"
+                    )
                 )
-            )
             for _ in range(1, 20):
                 status, out = machine.execute(
                     ru(

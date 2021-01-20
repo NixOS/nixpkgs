@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "1.0.2";
+  version = "1.0.3";
 
   outputs = [ "out" "dev" "devdoc" "glade" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0b8wvjabv5mg8jbng8rsd5g84lk571nm0qpna20pwp0njh2qvmrs";
+    sha256 = "sha256-VZuzrMLDYkiJF+ty7SW9wYH0riaslNF3Y0zF00yGf3o=";
   };
 
   nativeBuildInputs = [

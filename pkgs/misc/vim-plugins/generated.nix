@@ -3912,6 +3912,19 @@ let
     meta.homepage = "https://github.com/nvim-telescope/telescope-fzf-writer.nvim/";
   };
 
+  telescope-fzy-native-nvim = buildVimPluginFrom2Nix {
+     pname = "telescope-fzy-native-nvim";
+     version = "2021-01-02";
+     src = fetchFromGitHub {
+       owner = "nvim-telescope";
+       repo = "telescope-fzy-native.nvim";
+       rev = "654dffd924b29fb9a9252dcbd63528b1498ac9fb";
+       sha256 = "01x9z3n03qharjw778cxb16gw1dsxzmsxph4xsbfy1avf21c6x9g";
+       fetchSubmodules = true;
+     };
+     meta.homepage = "https://github.com/nvim-telescope/telescope-fzy-native.nvim/";
+   };
+
   telescope-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-nvim";
     version = "2021-01-18";
