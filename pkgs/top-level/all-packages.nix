@@ -24193,6 +24193,8 @@ in
 
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
 
+  pwdsafety = callPackage ../tools/security/pwdsafety { };
+
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
 
   qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
