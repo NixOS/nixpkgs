@@ -57,6 +57,10 @@ mkDerivation rec {
     qtgraphicaleffects
   ] ++ lib.optional stdenv.isDarwin qtmacextras;
 
+  cmakeFlags = [
+    "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
+  ];
+
   meta = with lib; {
     description = "Desktop client for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/nheko";
