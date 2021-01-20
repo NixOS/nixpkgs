@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   #   '';
   # };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://itch.io";
     description =
       "A desktop application that you can download and run games from itch.io with.";
