@@ -28888,6 +28888,8 @@ in
 
   rargs = callPackage ../tools/misc/rargs { };
 
+  rauc = callPackage ../tools/misc/rauc { };
+
   redprl = callPackage ../applications/science/logic/redprl { };
 
   renderizer = pkgs.callPackage ../development/tools/renderizer {};
