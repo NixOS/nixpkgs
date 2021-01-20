@@ -5,13 +5,13 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = "lxcfs";
-  version = "4.0.6";
+  version = "4.0.7";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = "lxcfs-${version}";
-    sha256 = "1fp2q4y3ql4xd2lp4bpcl8s6xryr5xbb56da9d20w2cdr2d0lwyv";
+    sha256 = "sha256-gC1Q+kG/oKfYvuHVKstpRWfL/thsemULrimPrV/eeaI=";
   };
 
   nativeBuildInputs = [ pkg-config help2man autoreconfHook ];
