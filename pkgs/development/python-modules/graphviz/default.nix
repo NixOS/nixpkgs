@@ -6,21 +6,21 @@
 , makeFontsConf
 , freefont_ttf
 , mock
-, pytest
+, pytestCheckHook
 , pytest-mock
 , pytestcov
 }:
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.14.1";
+  version = "0.16";
 
   # patch does not apply to PyPI tarball due to different line endings
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    sha256 = "02bdiac5x93f2mjw5kpgs6kv81hzg07y0mw1nxvhyg8aignzmh3c";
+    sha256 = "147vi60mi57z623lhllwwzczzicv2iwj1yrmllj5xx5788i73j6g";
   };
 
   patches = [
@@ -35,11 +35,7 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [ mock pytest pytest-mock pytestcov ];
-
-  checkPhase = ''
-    pytest
-  '';
+  checkInputs = [ mock pytestCheckHook pytest-mock pytestcov ];
 
   meta = with lib; {
     description = "Simple Python interface for Graphviz";

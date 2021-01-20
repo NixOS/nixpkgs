@@ -1557,6 +1557,18 @@ let
     meta.homepage = "https://github.com/vim-scripts/gitignore.vim/";
   };
 
+  gitsigns-nvim = buildVimPluginFrom2Nix {
+    pname = "gitsigns-nvim";
+    version = "2021-19-01";
+    src = fetchFromGitHub {
+      owner = "lewis6991";
+      repo = "gitsigns.nvim";
+      rev = "4440a0f716b76132f365f5ef5c7f7cdad4b7c98c";
+      sha256 = "19hyqga7xj3dc7p629gih80c72a04z1my8qav37myz0jq3bllg2v";
+    };
+    meta.homepage = "https://github.com/lewis6991/gitsigns.nvim";
+  };
+
   gitv = buildVimPluginFrom2Nix {
     pname = "gitv";
     version = "2019-08-22";
@@ -2878,6 +2890,18 @@ let
     meta.homepage = "https://github.com/neovimhaskell/nvim-hs.vim/";
   };
 
+  nvim-jdtls = buildVimPluginFrom2Nix {
+    pname = "nvim-jdtls";
+    version = "2021-01-19";
+    src = fetchFromGitHub {
+      owner = "mfussenegger";
+      repo = "nvim-jdtls";
+      rev = "357d0b405235e3dfb0b15450f33ad6d10cbf2122";
+      sha256 = "1gd4kjxpb73d6ixxgg4qyzj5alca590whx1i905j3m8j4sjb7vib";
+    };
+    meta.homepage = "https://github.com/mfussenegger/nvim-jdtls/";
+  };
+
   nvim-lspconfig = buildVimPluginFrom2Nix {
     pname = "nvim-lspconfig";
     version = "2021-01-18";
@@ -3887,6 +3911,19 @@ let
     };
     meta.homepage = "https://github.com/nvim-telescope/telescope-fzf-writer.nvim/";
   };
+
+  telescope-fzy-native-nvim = buildVimPluginFrom2Nix {
+     pname = "telescope-fzy-native-nvim";
+     version = "2021-01-02";
+     src = fetchFromGitHub {
+       owner = "nvim-telescope";
+       repo = "telescope-fzy-native.nvim";
+       rev = "654dffd924b29fb9a9252dcbd63528b1498ac9fb";
+       sha256 = "01x9z3n03qharjw778cxb16gw1dsxzmsxph4xsbfy1avf21c6x9g";
+       fetchSubmodules = true;
+     };
+     meta.homepage = "https://github.com/nvim-telescope/telescope-fzy-native.nvim/";
+   };
 
   telescope-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-nvim";

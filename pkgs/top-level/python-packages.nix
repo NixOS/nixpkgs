@@ -1159,6 +1159,8 @@ in {
 
   catalogue = callPackage ../development/python-modules/catalogue { };
 
+  catboost = callPackage ../development/python-modules/catboost { };
+
   cbeams = callPackage ../misc/cbeams { };
 
   cbor2 = callPackage ../development/python-modules/cbor2 { };
@@ -5278,8 +5280,6 @@ in {
 
   pydot = callPackage ../development/python-modules/pydot { inherit (pkgs) graphviz; };
 
-  pydotplus = callPackage ../development/python-modules/pydotplus { };
-
   pydrive = callPackage ../development/python-modules/pydrive { };
 
   pydsdl = callPackage ../development/python-modules/pydsdl { };
@@ -6032,6 +6032,8 @@ in {
   pytest-html = callPackage ../development/python-modules/pytest-html { };
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
+
+  pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
@@ -7931,6 +7933,8 @@ in {
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
   uritools = callPackage ../development/python-modules/uritools { };
+
+  url-normalize = callPackage ../development/python-modules/url-normalize { };
 
   urlgrabber = callPackage ../development/python-modules/urlgrabber { };
 

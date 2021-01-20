@@ -20,6 +20,8 @@ buildGoModule rec {
   # if the versions are not provided via file paths.
   postInstall = "mv $out/bin/${pname}{,_v${version}}";
 
+  passthru.provider-source-address = "registry.terraform.io/scottwinkler/shell";
+
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Terraform provider for executing shell commands and saving output to state file";

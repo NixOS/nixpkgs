@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   buildCommand = ''
     install -Dm755 $script $out/bin/rpmextract
   '';
-    
+
   script = substituteAll {
     src = ./rpmextract.sh;
     isExecutable = true;

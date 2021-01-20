@@ -275,6 +275,7 @@ leanprover/lean.vim
 ledger/vim-ledger
 lepture/vim-jinja
 lervag/vimtex
+lewis6991/gitsigns.nvim
 lfilho/cosco.vim
 lifepillar/vim-mucomplete
 lighttiger2505/deoplete-vim-lsp
@@ -333,6 +334,7 @@ mengelbrecht/lightline-bufferline
 metakirby5/codi.vim
 mfukar/robotframework-vim
 mfussenegger/nvim-dap
+mfussenegger/nvim-jdtls
 mg979/vim-visual-multi
 mhartington/oceanic-next
 mhinz/vim-crates
@@ -405,6 +407,7 @@ nvim-lua/lsp_extensions.nvim
 nvim-lua/plenary.nvim
 nvim-lua/popup.nvim
 nvim-telescope/telescope-fzf-writer.nvim
+nvim-telescope/telescope-fzy-native.nvim
 nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter

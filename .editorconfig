@@ -47,9 +47,10 @@ indent_style = space
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 
-[*.{key,ovpn}]
+[*.{asc,key,ovpn}]
 insert_final_newline = unset
 end_of_line = unset
+trim_trailing_whitespace = unset
 
 [*.lock]
 indent_size = unset
@@ -62,10 +63,7 @@ insert_final_newline = unset
 [eggs.nix]
 trim_trailing_whitespace = unset
 
-[gemset.nix]
-insert_final_newline = unset
-
-[node-{composition,packages,packages-generated}.nix]
+[gemset*.nix]
 insert_final_newline = unset
 
 [nixos/modules/services/networking/ircd-hybrid/*.{conf,in}]
@@ -91,12 +89,6 @@ insert_final_newline = unset
 [pkgs/development/haskell-modules/hackage-packages.nix]
 indent_style = unset
 trim_trailing_whitespace = unset
-
-[pkgs/development/mobile/androidenv/generated/{addons,packages}.nix]
-trim_trailing_whitespace = unset
-
-[pkgs/development/node-packages/composition.nix]
-insert_final_newline = unset
 
 [pkgs/development/{perl-modules,ocaml-modules,tools/ocaml}/**]
 indent_style = unset

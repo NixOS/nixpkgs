@@ -10,7 +10,7 @@ let
     rev = "10b9500b67983f0a9c42d8ce8bf8e8c469f7078c";
     sha256 = "1yy8by15kfklw8lwh17z1swpj067q0skjjih12yawbryraig41m0";
   };
-  
+
   nodePackages = import ./nodepkgs.nix {
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;

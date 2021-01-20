@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "input-utils";
   version = "1.3";
-  
+
   src = fetchurl {
     url = "https://www.kraxel.org/releases/input/input-${version}.tar.gz";
     sha256 = "11w0pp20knx6qpgzmawdbk1nj2z3fzp8yd6nag6s8bcga16w6hli";

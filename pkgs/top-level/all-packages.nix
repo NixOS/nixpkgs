@@ -2207,6 +2207,8 @@ in
 
   fast-cli = nodePackages.fast-cli;
 
+  fast-cpp-csv-parser = callPackage ../development/libraries/fast-cpp-csv-parser { };
+
   faudio = callPackage ../development/libraries/faudio { };
 
   fd = callPackage ../tools/misc/fd { };
@@ -2431,6 +2433,8 @@ in
   kramdown-rfc2629 = callPackage ../tools/text/kramdown-rfc2629 { };
 
   klipper = callPackage ../servers/klipper { };
+
+  klog = qt5.callPackage ../applications/radio/klog { };
 
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
@@ -4427,6 +4431,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  git-hound = callPackage ../tools/security/git-hound { };
+
   git-hub = callPackage ../applications/version-management/git-and-tools/git-hub { };
 
   git-ignore = callPackage ../applications/version-management/git-and-tools/git-ignore { };
@@ -4538,6 +4544,8 @@ in
   gitlab-triage = callPackage ../applications/version-management/gitlab-triage { };
 
   gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
+
+  gitleaks = callPackage ../tools/security/gitleaks { };
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly {
     ruby = ruby_2_7;
@@ -5087,8 +5095,6 @@ in
   };
 
   i2pd = callPackage ../tools/networking/i2pd { };
-
-  i-score = libsForQt514.callPackage ../applications/audio/i-score { };
 
   iasl = callPackage ../development/compilers/iasl { };
 
@@ -6315,6 +6321,8 @@ in
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
   netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
+
+  networking-ts-cxx = callPackage ../development/libraries/networking-ts-cxx { };
 
   nco = callPackage ../development/libraries/nco { };
 
@@ -11618,6 +11626,7 @@ in
   bingrep = callPackage ../development/tools/analysis/bingrep { };
 
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {
+    autoreconfHook = if targetPlatform.isiOS then autoreconfHook269 else autoreconfHook;
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
   };
@@ -12187,8 +12196,6 @@ in
   itstool = callPackage ../development/tools/misc/itstool { };
 
   jam = callPackage ../development/tools/build-managers/jam { };
-
-  jamomacore = callPackage ../development/libraries/audio/jamomacore { };
 
   jbake = callPackage ../development/tools/jbake { };
 
@@ -18225,6 +18232,8 @@ in
 
   sickrage = callPackage ../servers/sickbeard/sickrage.nix { };
 
+  sigurlx = callPackage ../tools/security/sigurlx { };
+
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
   slimserver = callPackage ../servers/slimserver { };
@@ -22428,6 +22437,8 @@ in
 
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
+  hivelytracker = callPackage ../applications/audio/hivelytracker { };
+
   hledger = haskell.lib.justStaticExecutables haskellPackages.hledger;
   hledger-iadd = haskell.lib.justStaticExecutables haskellPackages.hledger-iadd;
   hledger-interest = haskell.lib.justStaticExecutables haskellPackages.hledger-interest;
@@ -24184,6 +24195,8 @@ in
   puredata-with-plugins = plugins: callPackage ../applications/audio/puredata/wrapper.nix { inherit plugins; };
 
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
+
+  pwdsafety = callPackage ../tools/security/pwdsafety { };
 
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
 
@@ -27087,6 +27100,7 @@ in
 
   zeroadPackages = dontRecurseIntoAttrs (callPackage ../games/0ad {
     wxGTK = wxGTK30;
+    stdenv = gcc9Stdenv;
   });
 
   zeroad = zeroadPackages.zeroad;
@@ -28270,6 +28284,8 @@ in
 
   gutenprintBin = callPackage ../misc/drivers/gutenprint/bin.nix { };
 
+  carps-cups = callPackage ../misc/cups/drivers/carps-cups { };
+
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
   cups-brother-hl1110 = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1110 { };
@@ -28876,6 +28892,8 @@ in
 
   rargs = callPackage ../tools/misc/rargs { };
 
+  rauc = callPackage ../tools/misc/rauc { };
+
   redprl = callPackage ../applications/science/logic/redprl { };
 
   renderizer = pkgs.callPackage ../development/tools/renderizer {};
@@ -29432,6 +29450,8 @@ in
   sequelpro = callPackage ../applications/misc/sequelpro {};
 
   snowsql = callPackage ../applications/misc/snowsql {};
+
+  snowmachine = python3Packages.callPackage ../applications/snowmachine {};
 
   sidequest = callPackage ../applications/misc/sidequest {};
 

@@ -24,10 +24,10 @@ mkDerivation rec {
   meta = with lib; {
     description = "TeX and LaTeX editor";
     longDescription=''
-	This editor is a full fledged IDE for TeX and
-	LaTeX editing with completion, structure viewer, preview,
-	spell checking and support of any compilation chain.
-	'';
+      This editor is a full fledged IDE for TeX and
+      LaTeX editing with completion, structure viewer, preview,
+      spell checking and support of any compilation chain.
+    '';
     homepage = "http://www.xm1math.net/texmaker/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

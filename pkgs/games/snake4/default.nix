@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       --replace "-o \$(OWNER) -g \$(GROUP)" "" \
       --replace "4755" "755"
   '';
-  
+
   installFlags = [ "INSTLIBDIR=$(out)/lib"
                    "INSTBINDIR=$(out)/bin"
                    "INSTMANDIR=$(out)/man" ];
