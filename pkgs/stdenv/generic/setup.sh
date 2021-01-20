@@ -710,8 +710,9 @@ substituteStream() {
 }
 
 consumeEntire() {
-    # read returns non-0 on EOF, so we want read to fail
-    if IFS='' read -r -N 2147483647 $1; then
+    # read returns 0 when delimiter \x04 (EOF) is found
+    # if we don’t find it, we haven’t gotten all of the data yet
+    if ! IFS='' read -r -d $'\x04' $1; then
         echo "consumeEntire(): ERROR: Input null bytes, won't process" >&2
         return 1
     fi
