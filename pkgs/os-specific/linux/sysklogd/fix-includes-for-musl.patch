@@ -1,3 +1,5 @@
+# this patch both fixes some include paths as well as removes glibc
+# gates around defines that musl-libc also depends on.
 diff -u sysklogd-1.5.1.orig/klogd.c sysklogd-1.5.1/klogd.c
 --- sysklogd-1.5.1.orig/klogd.c	2014-10-04 15:47:18.000000000 -0400
 +++ sysklogd-1.5.1/klogd.c	2021-01-18 23:09:23.000000000 -0500
