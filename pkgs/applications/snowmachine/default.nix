@@ -13,7 +13,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ click colorama ];
 
   doCheck = false;
-  pythonImportsCheck = [ "click" "colorama" ];
+  pythonImportsCheck = [ "snowmachine" ];
 
   meta = with lib; {
     description = "A python script that will make your terminal snow";
