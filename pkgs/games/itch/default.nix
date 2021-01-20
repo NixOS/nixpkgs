@@ -9,9 +9,8 @@
 }:
 
 stdenv.mkDerivation rec {
-
-  version = "v1.24.0";
-  name = "itch-setup-${version}";
+  pname = "itch-setup";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://github.com/itchio/itch-setup/archive/${version}.tar.gz";
