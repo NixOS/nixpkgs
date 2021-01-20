@@ -208,6 +208,8 @@ in
 
   comedilib = callPackage ../development/libraries/comedilib {  };
 
+  containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
+
   cp437 = callPackage ../tools/misc/cp437 { };
 
   cpu-x = callPackage ../applications/misc/cpu-x { };
