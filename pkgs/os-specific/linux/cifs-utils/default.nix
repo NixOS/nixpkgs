@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, autoreconfHook, docutils, pkg-config
-, kerberos, keyutils, pam, talloc }:
+, kerberos, keyutils, pam, talloc, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "cifs-utils";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook docutils pkg-config ];
 
-  buildInputs = [ kerberos keyutils pam talloc ];
+  buildInputs = [ kerberos keyutils pam talloc python3 ];
 
   configureFlags = [ "ROOTSBINDIR=$(out)/sbin" ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # AC_FUNC_MALLOC is broken on cross builds.
