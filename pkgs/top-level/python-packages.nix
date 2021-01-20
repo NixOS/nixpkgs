@@ -7932,6 +7932,8 @@ in {
 
   uritools = callPackage ../development/python-modules/uritools { };
 
+  url-normalize = callPackage ../development/python-modules/url-normalize { };
+
   urlgrabber = callPackage ../development/python-modules/urlgrabber { };
 
   urllib3 = callPackage ../development/python-modules/urllib3 { };

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       Bcache is a Linux kernel block layer cache. It allows one or more fast
       disk drives such as flash-based solid state drives (SSDs) to act as a
       cache for one or more slower hard disk drives.
-      
+
       This package contains the required user-space tools.
 
       User documentation is in Documentation/bcache.txt in the Linux kernel

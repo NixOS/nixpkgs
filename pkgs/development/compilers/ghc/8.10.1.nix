@@ -194,7 +194,7 @@ stdenv.mkDerivation (rec {
   strictDeps = true;
 
   # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
-	dontAddExtraLibs = true;
+  dontAddExtraLibs = true;
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3 sphinx

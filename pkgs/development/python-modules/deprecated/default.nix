@@ -1,5 +1,5 @@
 { lib, stdenv, fetchPypi, buildPythonPackage,
-	wrapt, pytest, tox }:
+  wrapt, pytest, tox }:
 
 buildPythonPackage rec {
   pname = "Deprecated";

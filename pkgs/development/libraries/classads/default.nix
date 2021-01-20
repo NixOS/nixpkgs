@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   configureFlags = [
     "--enable-namespace" "--enable-flexible-member"
   ];
-  
+
   meta = {
     homepage = "http://www.cs.wisc.edu/condor/classad/";
     description = "The Classified Advertisements library provides a generic means for matching resources";

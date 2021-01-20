@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     "CC=cc"
     "INSTALLDIR=$(out)/bin"
   ];
-  
+
   meta = with lib; {
     description = "Fast, reliable protein-coding gene prediction for prokaryotic genomes";
     homepage = "https://github.com/hyattpd/Prodigal";
