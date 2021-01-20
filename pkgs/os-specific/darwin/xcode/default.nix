@@ -1,10 +1,10 @@
-{ stdenv, requireFile, lib }:
+{ requireFile, targetPlatform, lib }:
 
 let requireXcode = version: sha256:
   let
     xip = "Xcode_" + version +  ".xip";
     # TODO(alexfmpe): Find out how to validate the .xip signature in Linux
-    unxip = if stdenv.isDarwin
+    unxip = if targetPlatform.isDarwin
             then ''
               open -W ${xip}
               rm -rf ${xip}
@@ -31,7 +31,7 @@ let requireXcode = version: sha256:
         rm -rf Xcode.app
       '';
     };
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://developer.apple.com/downloads/";
       description = "Apple's XCode SDK";
       license = licenses.unfree;
@@ -63,5 +63,9 @@ in lib.makeExtensible (self: {
   xcode_11_7 = requireXcode "11.7" "0422rdc4j5qwyk59anbybxyfv0p26x0xryszm0wd8i44g66smlmj";
   xcode_12 = requireXcode "12" "1w3xm268pyn5m04wv22invd5kr2k4jqllgrzapv6n1sxxynxrh8z";
   xcode_12_0_1 = requireXcode "12.0.1" "1p6vd5ai0hh3cq6aflh4h21ar0shxnz8wlkaxwq7liwsdmkwzbl0";
-  xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if (stdenv.targetPlatform ? xcodeVer) then stdenv.targetPlatform.xcodeVer else "12.0.1")}";
+  xcode_12_1 = requireXcode "12.1" "1widy74dk43wx8iqgd7arzf6q4kzdmaz8pfwymzs8chnq9dqr3wp";
+  xcode_12_2 = requireXcode "12.2" "17i0wf4pwrxwfgjw7rpw9mcd59nkmys1k5h2rqsw81snzyxy9j0v";
+  xcode_12_3 = requireXcode "12.3" "0kwf1y4llysf1p0nsbqyzccn7d77my0ldagr5fi3by4k0xy3d189";
+  xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if (targetPlatform ? xcodeVer) then targetPlatform.xcodeVer else "12.3")}";
 })
+
