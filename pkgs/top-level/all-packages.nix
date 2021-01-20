@@ -6320,6 +6320,8 @@ in
 
   netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
 
+  networking-ts-cxx = callPackage ../development/libraries/networking-ts-cxx { };
+
   nco = callPackage ../development/libraries/nco { };
 
   ncftp = callPackage ../tools/networking/ncftp { };
