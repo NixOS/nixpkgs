@@ -1,24 +1,28 @@
-{ lib, stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
+, pytest-cov
 , pytestCheckHook
 , sortedcontainers
 }:
 
 buildPythonPackage rec {
   pname = "sortedcollections";
-  version = "1.2.3";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "python-sortedcollections";
     rev = "v${version}";
-    sha256 = "06ifkbhkj5fpsafibw0fs7b778g7q0gd03crvbjk04k0f3wjxc5z";
+    sha256 = "sha256-GkZO8afUAgDpDjIa3dhO6nxykqrljeKldunKMODSXfg=";
   };
 
   propagatedBuildInputs = [ sortedcontainers ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytest-cov
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "sortedcollections" ];
 
