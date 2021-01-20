@@ -49,15 +49,15 @@ in
         '';
       };
 
-      settingsFiles = mkOption {
-        type = types.listOf (types.oneOf [ types.path types.str ]);
+      extraSettingsPaths = mkOption {
+        type = types.listOf types.path;
         default = [];
         description = ''
           Additional settings files used to configure nomad. These files
           will be watched for changes.
         '';
         example = literalExample ''
-          [ "/etc/awesome.nomad.json" ]
+          [ "/etc/nomad-mutable.json" "/run/keys/nomad-with-secrets.json" ]
         '';
       };
 
