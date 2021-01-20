@@ -38,4 +38,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ berce ];
     platforms = with platforms; unix;
   };
-} 
+}

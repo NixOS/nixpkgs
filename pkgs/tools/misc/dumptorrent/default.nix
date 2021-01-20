@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
     pname = "dumptorrent";
     version = "1.2";
-    
+
     src = fetchurl {
       url = "mirror://sourceforge/dumptorrent/dumptorrent-${version}.tar.gz";
       sha256 = "073h03bmpfdy15qh37lvppayld2747i4acpyk0pm5nf2raiak0zm";

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sed -i -e 's|/lib/modules|${kernel.dev}/lib/modules|' driver/mxconf
     sed -i -e 's|/lib/modules|${kernel.dev}/lib/modules|' driver/Makefile
   '';
-  
+
   installPhase = ''
     install -v -D -m 644 ./driver/mxu11x0.ko "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/usb/serial/mxu11x0.ko"
     install -v -D -m 644 ./driver/mxu11x0.ko "$out/lib/modules/${kernel.modDirVersion}/misc/mxu11x0.ko"

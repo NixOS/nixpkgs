@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libraw1394 ];
 
-  meta = { 
+  meta = {
     description = "Programming interface for the 1394 Trade Association AV/C (Audio/Video Control) Digital Interface Command Set";
     homepage = "https://sourceforge.net/projects/libavc1394/";
     license = stdenv.lib.licenses.lgpl21Plus;

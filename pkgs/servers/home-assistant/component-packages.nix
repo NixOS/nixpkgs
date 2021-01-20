@@ -361,7 +361,7 @@
     "html5" = ps: with ps; [ aiohttp-cors pywebpush ];
     "http" = ps: with ps; [ aiohttp-cors ];
     "htu21d" = ps: with ps; [ smbus-cffi ]; # missing inputs: i2csense
-    "huawei_lte" = ps: with ps; [ getmac stringcase ]; # missing inputs: huawei-lte-api url-normalize
+    "huawei_lte" = ps: with ps; [ getmac stringcase url-normalize ]; # missing inputs: huawei-lte-api
     "huawei_router" = ps: with ps; [ ];
     "hue" = ps: with ps; [ aiohue ];
     "humidifier" = ps: with ps; [ ];
@@ -801,7 +801,7 @@
     "switchbot" = ps: with ps; [ ]; # missing inputs: PySwitchbot
     "switcher_kis" = ps: with ps; [ aioswitcher ];
     "switchmate" = ps: with ps; [ ]; # missing inputs: pySwitchmate
-    "syncthru" = ps: with ps; [ ]; # missing inputs: pysyncthru url-normalize
+    "syncthru" = ps: with ps; [ url-normalize ]; # missing inputs: pysyncthru
     "synology" = ps: with ps; [ ]; # missing inputs: py-synology
     "synology_chat" = ps: with ps; [ ];
     "synology_dsm" = ps: with ps; [ ]; # missing inputs: synologydsm-api

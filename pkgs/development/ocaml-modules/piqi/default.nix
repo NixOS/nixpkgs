@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   version = "0.6.15";
   pname = "piqi";
   name = "ocaml${ocaml.version}-${pname}-${version}";
- 
+
   src = fetchFromGitHub {
     owner = "alavrik";
     repo = pname;

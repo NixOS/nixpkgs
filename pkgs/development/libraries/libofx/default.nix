@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config libtool autoconf automake gengetopt ];
   buildInputs = [ opensp libxml2 curl ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
-  meta = { 
+  meta = {
     description = "Opensource implementation of the Open Financial eXchange specification";
     homepage = "http://libofx.sourceforge.net/";
     license = "LGPL";

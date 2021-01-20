@@ -47,9 +47,10 @@ indent_style = space
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 
-[*.{key,ovpn}]
+[*.{asc,key,ovpn}]
 insert_final_newline = unset
 end_of_line = unset
+trim_trailing_whitespace = unset
 
 [*.lock]
 indent_size = unset

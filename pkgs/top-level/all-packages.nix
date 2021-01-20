@@ -2432,6 +2432,8 @@ in
 
   klipper = callPackage ../servers/klipper { };
 
+  klog = qt5.callPackage ../applications/radio/klog { };
+
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
@@ -4427,6 +4429,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  git-hound = callPackage ../tools/security/git-hound { };
+
   git-hub = callPackage ../applications/version-management/git-and-tools/git-hub { };
 
   git-ignore = callPackage ../applications/version-management/git-and-tools/git-ignore { };
@@ -4538,6 +4542,8 @@ in
   gitlab-triage = callPackage ../applications/version-management/gitlab-triage { };
 
   gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
+
+  gitleaks = callPackage ../tools/security/gitleaks { };
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly {
     ruby = ruby_2_7;

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     [ (fetchurl {
         name = "0007-Fix-ocamlopt-w.r.t.-binutils-2.21.patch";
         url = "http://caml.inria.fr/mantis/file_download.php?file_id=418&type=bug";
-	sha256 = "612a9ac108bbfce2238aa5634123da162f0315dedb219958be705e0d92dcdd8e";
+        sha256 = "612a9ac108bbfce2238aa5634123da162f0315dedb219958be705e0d92dcdd8e";
       })
     ];
 
