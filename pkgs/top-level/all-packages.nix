@@ -22434,6 +22434,8 @@ in
 
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
+  hivelytracker = callPackage ../applications/audio/hivelytracker { };
+
   hledger = haskell.lib.justStaticExecutables haskellPackages.hledger;
   hledger-iadd = haskell.lib.justStaticExecutables haskellPackages.hledger-iadd;
   hledger-interest = haskell.lib.justStaticExecutables haskellPackages.hledger-interest;
