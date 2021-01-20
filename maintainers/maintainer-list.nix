@@ -7197,6 +7197,12 @@
     githubId = 13000278;
     name = "Maksim Bronsky";
   };
+  PlushBeaver = {
+    name = "Dmitry Kozlyuk";
+    email = "dmitry.kozliuk+nixpkgs@gmail.com";
+    github = "PlushBeaver";
+    githubId = 8988269;
+  };
   pmahoney = {
     email = "pat@polycrystal.org";
     github = "pmahoney";
