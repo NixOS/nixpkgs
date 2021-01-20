@@ -26,14 +26,14 @@
 
 mkDerivation rec {
   pname = "neochat";
-  version = "1.0";
+  version = "1.0.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r9n83kvc5v215lzmzh6hyc5q9i3w6znbf508qk0mdwdzxz4zry9";
+    sha256 = "sha256-xGqGFJHyoZXHLv/n3UGr/KVbgs5Gc9kKKWIuKMr9DtQ=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
