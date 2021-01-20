@@ -26,5 +26,12 @@ buildDunePackage rec {
     substituteInPlace src/curly.ml \
       --replace "exe=\"curl\"" "exe=\"${curl}/bin/curl\""
     '';
+
+  meta = with lib; {
+    description = "Curly is a brain dead wrapper around the curl command line utility";
+    homepage = "https://github.com/rgrinberg/curly";
+    license = licenses.isc;
+    maintainers = [ maintainers.sternenseemann ];
+  };
 }
 
