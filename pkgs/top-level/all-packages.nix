@@ -20676,9 +20676,7 @@ in
 
   ttf-tw-moe = callPackage ../data/fonts/ttf-tw-moe { };
 
-  twemoji-color-font = callPackage ../data/fonts/twemoji-color-font {
-    inherit (nodePackages) svgo;
-  };
+  twemoji-color-font = callPackage ../data/fonts/twemoji-color-font { };
 
   twitter-color-emoji = callPackage ../data/fonts/twitter-color-emoji { };
 
