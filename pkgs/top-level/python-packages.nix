@@ -913,6 +913,8 @@ in {
 
   binaryornot = callPackage ../development/python-modules/binaryornot { };
 
+  binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
+
   binwalk = callPackage ../development/python-modules/binwalk {
     pyqtgraph = null;
     matplotlib = null;
