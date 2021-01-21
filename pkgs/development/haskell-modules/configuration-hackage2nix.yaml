@@ -5615,7 +5615,6 @@ broken-packages:
   - GLFW-OGL
   - GLFW-task
   - gli
-  - glicko
   - glider-nlp
   - GLMatrix
   - glob-posix
