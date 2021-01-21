@@ -63,9 +63,6 @@ insert_final_newline = unset
 [eggs.nix]
 trim_trailing_whitespace = unset
 
-[gemset*.nix]
-insert_final_newline = unset
-
 [nixos/modules/services/networking/ircd-hybrid/*.{conf,in}]
 trim_trailing_whitespace = unset
 
