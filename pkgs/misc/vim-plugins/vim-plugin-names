@@ -275,7 +275,7 @@ leanprover/lean.vim
 ledger/vim-ledger
 lepture/vim-jinja
 lervag/vimtex
-lewis6991/gitsigns.nvim
+lewis6991/gitsigns.nvim@main
 lfilho/cosco.vim
 lifepillar/vim-mucomplete
 lighttiger2505/deoplete-vim-lsp
@@ -353,6 +353,7 @@ mopp/sky-color-clock.vim
 morhetz/gruvbox
 motus/pig.vim
 mpickering/hlint-refactor-vim
+ms-jpq/chadtree@chad
 mtikekar/vim-bsv
 nanotech/jellybeans.vim
 natebosch/vim-lsc
@@ -680,6 +681,6 @@ Xuyuanp/nerdtree-git-plugin
 ycm-core/YouCompleteMe
 Yggdroot/indentLine
 Yilin-Yang/vim-markbar
-yuki-ycino/ncm2-dictionary
+yuki-yano/ncm2-dictionary
 zah/nim.vim
 ziglang/zig.vim
