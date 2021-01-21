@@ -7,10 +7,10 @@ then throw "cohttp-lwt is not available for ppx_sexp_conv version ${ppx_sexp_con
 else
 
 buildDunePackage {
-	pname = "cohttp-lwt";
-	inherit (cohttp) version src useDune2 meta;
+  pname = "cohttp-lwt";
+  inherit (cohttp) version src useDune2 meta;
 
-	buildInputs = [ uri ppx_sexp_conv ];
+  buildInputs = [ uri ppx_sexp_conv ];
 
-	propagatedBuildInputs = [ cohttp ocaml_lwt logs ];
+  propagatedBuildInputs = [ cohttp ocaml_lwt logs ];
 }
