@@ -102,7 +102,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       restartTriggers = [ config.environment.etc."nomad.json".source ]
-        ++ cfg.settingsFiles;
+        ++ cfg.extraSettingsPaths;
 
       path = cfg.extraPackages ++ (with pkgs; [
         # Client mode requires at least the following:
@@ -115,7 +115,7 @@ in
         DynamicUser = cfg.dropPrivileges;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
-          concatMapStrings (file: " -config=${file}") cfg.settingsFiles;
+          concatMapStrings (file: " -config=${file}") cfg.extraSettingsPaths;
         KillMode = "process";
         KillSignal = "SIGINT";
         LimitNOFILE = 65536;
