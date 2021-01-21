@@ -6,8 +6,8 @@ stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-extlib-1.7.7";
 
   src = fetchurl {
-    url = "http://ygrek.org.ua/p/release/ocaml-extlib/extlib-1.7.7.tar.gz";
-    sha256 = "1sxmzc1mx3kg62j8kbk0dxkx8mkf1rn70h542cjzrziflznap0s1";
+    url = "https://ygrek.org/p/release/ocaml-extlib/extlib-1.7.8.tar.gz";
+    sha256 = "0npq4hq3zym8nmlyji7l5cqk6drx2rkcx73d60rxqh5g8dla8p4k";
   };
 
   buildInputs = [ ocaml findlib cppo ];
