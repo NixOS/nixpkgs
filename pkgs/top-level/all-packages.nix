@@ -2416,6 +2416,8 @@ in
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
 
+  jfrog-cli = callPackage ../development/tools/misc/jfrog-cli { };
+
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
   jwt-cli = callPackage ../tools/security/jwt-cli {
