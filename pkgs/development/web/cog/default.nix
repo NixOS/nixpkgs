@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cog";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "igalia";
     repo = "cog";
     rev = "v${version}";
-    sha256 = "0a0zpdki1whm5gb6ycbazvwmm1fz094mkfwjfy4a7zz0pk54h1jw";
+    sha256 = "sha256-E6rACj25rdV5dww91PzYEX1r2A9YLNgAVyiYceP1KI8=";
   };
 
   buildInputs = [
