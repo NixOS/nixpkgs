@@ -1,17 +1,17 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "vale";
-  version = "2.6.8";
+  version = "2.8.1";
 
-  subPackages = [ "." ];
+  subPackages = [ "cmd/vale" ];
   outputs = [ "out" "data" ];
 
   src = fetchFromGitHub {
     owner  = "errata-ai";
     repo   = "vale";
     rev    = "v${version}";
-    sha256 = "sha256-evvnIM8sd/eHpI2FYOlgjvGn8awTVc1f5QDIYAvhqmk=";
+    sha256 = "0xvsg5j0nv6p6wskxg4gz79di6p495c78xbwl3xmh0wyk7g78lkx";
   };
 
   vendorSha256 = null;

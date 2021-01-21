@@ -208,6 +208,8 @@ in
 
   comedilib = callPackage ../development/libraries/comedilib {  };
 
+  containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
+
   cp437 = callPackage ../tools/misc/cp437 { };
 
   cpu-x = callPackage ../applications/misc/cpu-x { };
@@ -21439,6 +21441,8 @@ in
   };
 
   docker-distribution = callPackage ../applications/virtualization/docker/distribution.nix { };
+
+  afterburn = callPackage ../tools/admin/afterburn {};
 
   amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 

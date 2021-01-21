@@ -32,6 +32,7 @@
 , itstool
 , libgdata
 , libchamplain
+, libsecret
 , gsettings-desktop-schemas
 , python3
 }:
@@ -40,11 +41,11 @@
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.31.2";
+  version = "0.31.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ywzr6vgcz8yy60v0jp55na9lgqi4dbh2vakfphkcml1gpah0r2l";
+    sha256 = "1wkahbnnfxmi1jc5zmm3h761nrnkdks8lk0rj38bfkwg90h6zqwd";
   };
 
   nativeBuildInputs = [
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
     libgdata
     libchamplain
+    libsecret
   ];
 
   postPatch = ''
