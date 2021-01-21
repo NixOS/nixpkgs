@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://txt2tags.googlecode.com/files/${pname}-${version}.tgz";
-    sha256 = "0p5hql559pk8v5dlzgm75yrcxwvz4z30f1q590yzng0ghvbnf530";
+    url = "https://github.com/txt2tags/old/raw/master/${pname}-${version}.tgz";
+    sha256 = "601467d7860f3cfb3d48050707c6277ff3ceb22fa7be4f5bd968de540ac5b05c";
   };
 
   meta = {
