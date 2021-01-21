@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2,  alsaLib, pulseaudio, rtmidi }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2,  alsaLib, pulseaudio, rtmidi }:
 
 stdenv.mkDerivation rec {
   version = "5.1.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ./configure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of C++ classes that provide a cross platform API for realtime audio input/output";
     homepage =  "http://www.music.mcgill.ca/~gary/rtaudio/";
     license = licenses.mit;

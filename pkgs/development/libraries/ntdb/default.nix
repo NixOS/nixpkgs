@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python2
 , python3
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     "--builtin-libraries=replace,ccan"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The not-so trivial database";
     homepage = "https://tdb.samba.org/";
     license = licenses.lgpl3Plus;

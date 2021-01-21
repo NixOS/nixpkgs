@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, which
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, which
 , gettext, libffi, libiconv, libtasn1
 }:
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "exampledir=${placeholder "out"}/etc/pkcs11"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for loading and sharing PKCS#11 modules";
     longDescription = ''
       Provides a way to load and enumerate PKCS#11 modules.

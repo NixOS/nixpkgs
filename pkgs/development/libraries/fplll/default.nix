@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , gettext
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     mpfr
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lattice algorithms using floating-point arithmetic";
     changelog = [
       # Some release notes are added to the github tags, though they are not

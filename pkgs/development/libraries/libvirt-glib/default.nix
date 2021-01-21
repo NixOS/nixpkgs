@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, gobject-introspection, intltool, vala
+{ lib, stdenv, fetchurl, pkg-config, gobject-introspection, intltool, vala
 , libcap_ng, libvirt, libxml2
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   strictDeps = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for working with virtual machines";
     longDescription = ''
       libvirt-glib wraps libvirt to provide a high-level object-oriented API better

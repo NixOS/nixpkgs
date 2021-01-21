@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , libnice
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     gst-libav
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/Farstream";
     description = "Audio/Video Communications Framework formely known as farsight";
     platforms = platforms.linux;

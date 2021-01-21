@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fastjet }:
+{ lib, stdenv, fetchurl, fastjet }:
 
 stdenv.mkDerivation rec {
   pname = "fastjet-contrib";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     make fragile-shared-install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Third party extensions for FastJet";
     homepage = "http://fastjet.fr/";
     license = licenses.gpl2;

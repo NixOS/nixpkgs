@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, python3 }:
+{ lib, stdenv, fetchurl, fetchpatch, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libevdev";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wrapper library for evdev devices";
     homepage = "http://www.freedesktop.org/software/libevdev/doc/latest/index.html";
     license = licenses.mit;

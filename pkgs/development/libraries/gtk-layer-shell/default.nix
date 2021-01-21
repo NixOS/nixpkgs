@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     "-Ddocs=true"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to create panels and other desktop components for Wayland using the Layer Shell protocol";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ eonpatapon ];

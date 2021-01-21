@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, pkg-config, autoconf, automake, glib, libtool }:
+{lib, stdenv, fetchFromGitHub, pkg-config, autoconf, automake, glib, libtool }:
 
 stdenv.mkDerivation {
   name = "gnet-2.0.8";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   preConfigure = "./autogen.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A network library, written in C, object-oriented, and built upon GLib";
     homepage = "https://developer.gnome.org/gnet/";
     license = licenses.lgpl2;

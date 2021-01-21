@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , gettext
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1rhcs75axga7p7hl37h6jzb2az89jddlcwc7ykrnb2khyhka78rr";
   };
 
@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tracker";
     description = "Desktop-neutral user information store, search tool and indexer";
     maintainers = teams.gnome.members;

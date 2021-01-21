@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./lt_dladdsearchdir.patch
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ ./remove_bsd_base64_decode_flag.patch ];
+  ] ++ lib.optionals stdenv.isDarwin [ ./remove_bsd_base64_decode_flag.patch ];
   postPatch = ''
     substituteAllInPlace src/dl.c
   '';
@@ -76,8 +76,8 @@ stdenv.mkDerivation {
     homepage = "http://www.aleksey.com/xmlsec";
     downloadPage = "https://www.aleksey.com/xmlsec/download.html";
     description = "XML Security Library in C based on libxml2";
-    license = stdenv.lib.licenses.mit;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    platforms = with lib.platforms; linux ++ darwin;
     updateWalker = true;
   };
 }

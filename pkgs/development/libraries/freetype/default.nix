@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , buildPackages
 , pkg-config, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
@@ -10,13 +10,13 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionalString;
+  inherit (lib) optional optionalString;
 
 in stdenv.mkDerivation rec {
   pname = "freetype";
   version = "2.10.4";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A font rendering engine";
     longDescription = ''
       FreeType is a portable and efficient library for rendering fonts. It

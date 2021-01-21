@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkg-config, file, protobufc }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, file, protobufc }:
 
 stdenv.mkDerivation rec {
   pname = "libivykis";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ file protobufc ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://libivykis.sourceforge.net/";
     description = ''
       A thin wrapper over various OS'es implementation of I/O readiness

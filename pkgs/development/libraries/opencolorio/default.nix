@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     mkdir -p $bin/bin; mv $out/bin $bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://opencolorio.org";
     description = "A color management framework for visual effects and animation";
     license = licenses.bsd3;

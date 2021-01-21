@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nixosTests
 , substituteAll
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ jtojnar ];

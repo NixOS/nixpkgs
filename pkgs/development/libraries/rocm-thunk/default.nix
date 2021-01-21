@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cp -r $src/include $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Radeon open compute thunk interface";
     homepage = "https://github.com/RadeonOpenCompute/ROCT-Thunk-Interface";
     license = with licenses; [ bsd2 mit ];

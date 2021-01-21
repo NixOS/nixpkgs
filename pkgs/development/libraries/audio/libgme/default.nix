@@ -1,11 +1,11 @@
-{ stdenv, fetchFromBitbucket, cmake, removeReferencesTo }:
+{ lib, stdenv, fetchFromBitbucket, cmake, removeReferencesTo }:
 let
   version = "0.6.3";
 in stdenv.mkDerivation {
   pname = "libgme";
   inherit version;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collection of video game music chip emulators";
     homepage = "https://bitbucket.org/mpyne/game-music-emu/overview";
     license = licenses.lgpl21;
@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
   # it doesn't.
   disallowedReferences = [ stdenv.cc.cc ];
 
-  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/lib/libgme.so)"
   '';
 }

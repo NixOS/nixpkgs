@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub,
+{ lib, stdenv, fetchFromGitHub,
   libtool, gettext, pkg-config,
   vala, gnome-common, gobject-introspection,
   libgee, json-glib, skk-dicts, libxkbcommon }:
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
       user dictionary, skkserv, and CDB format dictionary.
     '';
     homepage = "https://github.com/ueno/libskk";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ yuriaisaka ];
+    platforms = lib.platforms.linux;
   };
 }

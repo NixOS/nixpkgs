@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkg-config, libzen, zlib }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, zlib }:
 
 stdenv.mkDerivation rec {
   version = "20.09";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     install -vD -m 644 libmediainfo.pc "$out/lib/pkgconfig/libmediainfo.pc"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shared library for mediainfo";
     homepage = "https://mediaarea.net/";
     license = licenses.bsd2;

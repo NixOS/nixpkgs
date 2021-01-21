@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, asciidoc, pkg-config, libsodium
+{ lib, stdenv, fetchFromGitHub, cmake, asciidoc, pkg-config, libsodium
 , enableDrafts ? false }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails all the tests (ctest)
 
-  cmakeFlags = stdenv.lib.optional enableDrafts "-DENABLE_DRAFTS=ON";
+  cmakeFlags = lib.optional enableDrafts "-DENABLE_DRAFTS=ON";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     branch = "4";
     homepage = "http://www.zeromq.org";
     description = "The Intelligent Transport Layer";

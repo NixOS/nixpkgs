@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, boost, zlib, libevent, openssl, python, cmake, pkg-config
+{ lib, stdenv, fetchurl, fetchpatch, boost, zlib, libevent, openssl, python, cmake, pkg-config
 , bison, flex, twisted
 , static ? stdenv.hostPlatform.isStatic
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config bison flex ];
   buildInputs = [ boost zlib libevent openssl ]
-    ++ stdenv.lib.optionals (!static) [ python twisted ];
+    ++ lib.optionals (!static) [ python twisted ];
 
   preConfigure = "export PY_PREFIX=$out";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     # FIXME: Fails to link in static mode with undefined reference to
     # `boost::unit_test::unit_test_main(bool (*)(), int, char**)'
     "-DBUILD_TESTING:BOOL=${if static then "OFF" else "ON"}"
-  ] ++ stdenv.lib.optionals static [
+  ] ++ lib.optionals static [
     "-DWITH_STATIC_LIB:BOOL=ON"
     "-DOPENSSL_USE_STATIC_LIBS=ON"
   ];
@@ -44,13 +44,13 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    ${stdenv.lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/lib ctest -E PythonTestSSLSocket
+    ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/lib ctest -E PythonTestSSLSocket
 
     runHook postCheck
   '';
   enableParallelChecking = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for scalable cross-language services";
     homepage = "http://thrift.apache.org/";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, go, protobuf, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, go, protobuf, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "GameNetworkingSockets";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ protobuf openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # build failure is resolved on master, remove at next release
     broken = stdenv.isDarwin;
     description = "GameNetworkingSockets is a basic transport layer for games";

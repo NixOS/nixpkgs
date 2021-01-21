@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , automake, autoconf, bzip2, libtar, libtool, pkg-config, autoconf-archive
 , libxml2
 , languageMachines
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     sh bootstrap.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Memory Based Tagger";
     homepage    = "https://languagemachines.github.io/mbt/";
     license     = licenses.gpl3;

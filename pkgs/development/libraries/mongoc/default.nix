@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, perl, pkg-config, libbson
+{ lib, stdenv, fetchzip, perl, pkg-config, libbson
 , openssl, which, zlib, snappy
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The official C client library for MongoDB";
     homepage = "https://github.com/mongodb/mongo-c-driver";
     license = licenses.asl20;

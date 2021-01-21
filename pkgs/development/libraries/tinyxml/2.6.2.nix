@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 let
   version = "2.6.2";
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   NIX_CFLAGS_COMPILE =
-    stdenv.lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
+    lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   nativeBuildInputs = [ unzip ];
   buildPhase = ''
@@ -67,14 +67,14 @@ in stdenv.mkDerivation {
     cp -v tinyxml.pc $out/lib/pkgconfig/
 
     cp -v docs/* $out/share/doc/tinyxml/
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     install_name_tool -id $out/lib/libtinyxml.dylib $out/lib/libtinyxml.dylib
   '';
 
   meta = {
     description = "Simple, small, C++ XML parser that can be easily integrating into other programs";
     homepage = "http://www.grinninglizard.com/tinyxml/index.html";
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.free;
+    platforms = lib.platforms.unix;
   };
 }

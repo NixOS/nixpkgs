@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, yasm, perl, cmake, pkg-config, python3 }:
+{ lib, stdenv, fetchgit, yasm, perl, cmake, pkg-config, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libaom";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "bin" "dev" "static" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Alliance for Open Media AV1 codec library";
     longDescription = ''
       Libaom is the reference implementation of the AV1 codec from the Alliance

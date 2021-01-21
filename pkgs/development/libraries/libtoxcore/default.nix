@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libsodium, ncurses, libopus, msgpack
+{ lib, stdenv, fetchFromGitHub, cmake, libsodium, ncurses, libopus, msgpack
 , libvpx, check, libconfig, pkg-config }:
 
 let
@@ -22,7 +22,7 @@ let
 
     buildInputs = [
       libsodium msgpack ncurses libconfig
-    ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [
+    ] ++ lib.optionals (!stdenv.isAarch32) [
       libopus libvpx
     ];
 
@@ -37,7 +37,7 @@ let
         -e "s|^includedir=.*|includedir=$out/include|"
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "P2P FOSS instant messaging application aimed to replace Skype";
       homepage = "https://tox.chat";
       license = licenses.gpl3Plus;

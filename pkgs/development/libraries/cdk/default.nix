@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "cdk";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xBbJh793tPGycD18XkM7qUWMi+Uma/RUy/gBrYfnKTY=";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Curses development kit";
     license = licenses.bsdOriginal ;
     maintainers = [ maintainers.raskin ];

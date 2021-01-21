@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXi, libXtst, pkg-config, xorgproto }:
+{ lib, stdenv, fetchurl, libX11, libXi, libXtst, pkg-config, xorgproto }:
 
 stdenv.mkDerivation rec {
   pname = "libfakekey";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libXi libXtst xorgproto ];
   NIX_LDFLAGS = "-lX11";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "X virtual keyboard library";
     homepage = "https://www.yoctoproject.org/tools-resources/projects/matchbox";
     license = licenses.gpl2;

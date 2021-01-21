@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , autoconf
@@ -196,7 +196,7 @@ stdenv.mkDerivation rec {
   in ''
     patchShebangs buildutil
     patchShebangs tests
-    PATH=${stdenv.lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build variant-schema-compiler/variant-schema-compiler
+    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build variant-schema-compiler/variant-schema-compiler
   '';
 
   preConfigure = ''
@@ -215,7 +215,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux application sandboxing and distribution framework";
     homepage = "https://flatpak.org/";
     license = licenses.lgpl21;

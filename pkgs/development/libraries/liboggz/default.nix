@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libogg, pkg-config }:
+{ lib, stdenv, fetchurl, libogg, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "liboggz-1.1.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://xiph.org/oggz/";
     description = "A C library and tools for manipulating with Ogg files and streams";
     longDescription = ''

@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python2, perl, yacc, flex
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, python2, perl, yacc, flex
 , texinfo, perlPackages
 , openldap, libcap_ng, sqlite, openssl, db, libedit, pam
 , CoreFoundation, Security, SystemConfiguration
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "heimdal";
   version = "7.7.0";

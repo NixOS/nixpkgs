@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     ln -s spice-server $out/include/spice
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Complete open source solution for interaction with virtualized desktop devices";
     longDescription = ''
       The Spice project aims to provide a complete open source solution for interaction

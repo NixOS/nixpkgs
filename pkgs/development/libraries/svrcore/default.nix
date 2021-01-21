@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, nss, nspr }:
+{ lib, stdenv, fetchurl, pkg-config, nss, nspr }:
 
 stdenv.mkDerivation rec {
   pname = "svrcore";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ nss nspr ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Secure PIN handling using NSS crypto";
     license = licenses.mpl11;
     platforms = platforms.all;

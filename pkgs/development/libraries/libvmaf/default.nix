@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, nasm }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, nasm }:
 
 stdenv.mkDerivation rec {
   pname = "libvmaf";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Netflix/vmaf";
     description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
     changelog = "https://github.com/Netflix/vmaf/blob/v${version}/CHANGELOG.md";

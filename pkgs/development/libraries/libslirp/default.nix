@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , meson
 , ninja
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     echo ${version} > .tarball-version
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "General purpose TCP-IP emulator";
     homepage = "https://gitlab.freedesktop.org/slirp/libslirp";
     license = licenses.bsd3;

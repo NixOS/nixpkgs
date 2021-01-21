@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchurl, pkg-config, jansson, zlib }:
+{ lib, stdenv, cmake, fetchurl, pkg-config, jansson, zlib }:
 
 let
   version = "1.9.1";
@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ jansson zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C library which implements parts of the Avro Specification";
     homepage = "https://avro.apache.org/";
     license = licenses.asl20;

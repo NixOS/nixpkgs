@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
   pname = "metal";
   version = "2.1.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Single-header C++11 library designed to make you love template metaprogramming";
     homepage = "https://github.com/brunocodutra/metal";
     license = licenses.mit;

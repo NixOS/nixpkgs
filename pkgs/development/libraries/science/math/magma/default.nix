@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, cmake, gfortran, ninja, cudatoolkit, libpthreadstubs, lapack, blas }:
+{ lib, stdenv, fetchurl, cmake, gfortran, ninja, cudatoolkit, libpthreadstubs, lapack, blas }:
 
-with stdenv.lib;
+with lib;
 
 let version = "2.5.4";
 
@@ -43,7 +43,7 @@ in stdenv.mkDerivation {
         > $out/lib/pkgconfig/magma.pc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures";
     license = licenses.bsd3;
     homepage = "http://icl.cs.utk.edu/magma/index.html";

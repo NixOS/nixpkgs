@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4 }:
+{ lib, stdenv, fetchurl, m4 }:
 
 stdenv.mkDerivation rec {
   pname = "libmilter";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ m4 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sendmail Milter mail filtering API library";
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];

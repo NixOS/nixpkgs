@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGLU, libGL, libX11, libXext }:
+{ lib, stdenv, fetchurl, libGLU, libGL, libX11, libXext }:
 
 stdenv.mkDerivation rec {
   name = "glfw-2.7.9";
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     ln -s libglfw.so.2 $out/lib/libglfw.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
     homepage = "http://glfw.sourceforge.net/";
     license = licenses.zlib;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = platforms.linux;
   };
 }

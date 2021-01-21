@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, ucommon, openssl, libgcrypt }:
+{ lib, stdenv, fetchurl, pkg-config, ucommon, openssl, libgcrypt }:
 
 stdenv.mkDerivation rec {
   name = "ccrtp-2.1.2";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An implementation of the IETF real-time transport protocol (RTP)";
     homepage = "https://www.gnu.org/software/ccrtp/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ marcweber ];
+    platforms = lib.platforms.linux;
   };
 }

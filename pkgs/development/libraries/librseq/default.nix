@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook, linuxHeaders
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Userspace library for the Linux Restartable Sequence API";
     homepage    = "https://github.com/compudj/librseq";
     license     = licenses.lgpl21;

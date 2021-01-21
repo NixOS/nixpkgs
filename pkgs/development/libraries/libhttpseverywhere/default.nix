@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, meson, ninja, makeFontsConf, vala, fetchpatch
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, makeFontsConf, vala, fetchpatch
 , gnome3, glib, json-glib, libarchive, libsoup, gobject-introspection }:
 
 let
@@ -8,7 +8,7 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1jmn6i4vsm89q1axlq4ajqkzqmlmjaml9xhw3h9jnal46db6y00w";
   };
 
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to use HTTPSEverywhere in desktop applications";
     homepage = "https://gitlab.gnome.org/GNOME/libhttpseverywhere";
     license = licenses.lgpl3;

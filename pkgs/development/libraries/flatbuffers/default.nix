@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  preConfigure = stdenv.lib.optional stdenv.buildPlatform.isDarwin ''
+  preConfigure = lib.optional stdenv.buildPlatform.isDarwin ''
     rm BUILD
   '';
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   # doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Memory Efficient Serialization Library";
     longDescription = ''
       FlatBuffers is an efficient cross platform serialization library for

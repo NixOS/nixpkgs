@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , cfitsio
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     fftw
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.indilib.org/";
     description = "Implementation of the INDI protocol for POSIX operating systems";
     license = licenses.lgpl2Plus;

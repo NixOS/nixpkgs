@@ -1,4 +1,4 @@
-{stdenv, fetchurl, boost, pkg-config, cppunit, zlib}:
+{lib, stdenv, fetchurl, boost, pkg-config, cppunit, zlib}:
 let
   s = # Generated upstream information
   rec {
@@ -35,8 +35,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = ''A base library for writing document import filters'';
-    license = stdenv.lib.licenses.mpl20 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mpl20 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

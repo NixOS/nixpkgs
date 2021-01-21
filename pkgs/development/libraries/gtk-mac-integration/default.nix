@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, pkg-config, glib, gtk-doc, gtk, gobject-introspection }:
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, glib, gtk-doc, gtk, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-mac-integration";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     gtkdocize
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides integration for GTK applications into the Mac desktop";
     license = licenses.lgpl21;
     homepage = "https://wiki.gnome.org/Projects/GTK/OSX/Integration";

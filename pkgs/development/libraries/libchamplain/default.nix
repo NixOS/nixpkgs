@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, meson, ninja, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, pkg-config, glib, gtk3, cairo, sqlite, gnome3
+{ fetchurl, lib, stdenv, meson, ninja, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, pkg-config, glib, gtk3, cairo, sqlite, gnome3
 , clutter-gtk, libsoup, gobject-introspection /*, libmemphis */ }:
 
 stdenv.mkDerivation rec {
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.12.20";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0rihpb0npqpihqcdz4w03rq6xl7jdckfqskvv9diq2hkrnzv8ch2";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/libchamplain";
     license = licenses.lgpl2Plus;
 

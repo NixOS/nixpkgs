@@ -1,6 +1,6 @@
 { gtkWidgets ? false # build GTK widgets for libinfinity
 , avahiSupport ? false # build support for Avahi in libinfinity
-, stdenv, fetchurl, pkg-config, glib, libxml2, gnutls, gsasl
+, lib, stdenv, fetchurl, pkg-config, glib, libxml2, gnutls, gsasl
 , gobject-introspection
 , gtk3 ? null, gtk-doc, docbook_xsl, docbook_xml_dtd_412, avahi ? null, libdaemon, libidn, gss
 , libintl }:
@@ -23,8 +23,8 @@ let
 
     nativeBuildInputs = [ pkg-config gtk-doc docbook_xsl docbook_xml_dtd_412 gobject-introspection ];
     buildInputs = [ glib libxml2 gsasl libidn gss libintl libdaemon ]
-      ++ stdenv.lib.optional gtkWidgets gtk3
-      ++ stdenv.lib.optional avahiSupport avahi;
+      ++ lib.optional gtkWidgets gtk3
+      ++ lib.optional avahiSupport avahi;
 
     propagatedBuildInputs = [ gnutls ];
 
@@ -39,15 +39,15 @@ let
     ];
 
     passthru = {
-      infinoted = "${self.bin}/bin/infinoted-${stdenv.lib.versions.majorMinor version}";
+      infinoted = "${self.bin}/bin/infinoted-${lib.versions.majorMinor version}";
     };
 
     meta = {
       homepage = "https://gobby.github.io/";
       description = "An implementation of the Infinote protocol written in GObject-based C";
-      license = stdenv.lib.licenses.lgpl2Plus;
-      maintainers = [ stdenv.lib.maintainers.phreedom ];
-      platforms = with stdenv.lib.platforms; linux ++ darwin;
+      license = lib.licenses.lgpl2Plus;
+      maintainers = [ lib.maintainers.phreedom ];
+      platforms = with lib.platforms; linux ++ darwin;
     };
   };
 in self

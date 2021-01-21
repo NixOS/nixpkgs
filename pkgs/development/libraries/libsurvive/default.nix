@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Source Lighthouse Tracking System";
     homepage = "https://github.com/cntools/libsurvive";
     license = licenses.mit;

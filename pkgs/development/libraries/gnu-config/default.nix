@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   rev = "e78c96e5288993aaea3ec44e5c6ee755c668da79";
@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
     cp ${configSub} $out/config.sub
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Attempt to guess a canonical system name";
     homepage = "https://savannah.gnu.org/projects/config";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, gnome3
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, gnome3
 , gtk-doc, gtk3, libX11, libXext, libXrender, gobject-introspection
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh --prefix="$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for registering global key bindings";
     homepage = "https://github.com/kupferlauncher/keybinder/";
     license = licenses.mit;

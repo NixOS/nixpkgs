@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   version = "0.12.1";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   preCheck = "patchShebangs tests/unit";
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Userspace RCU (read-copy-update) library";
     homepage = "https://lttng.org/urcu";
     license = licenses.lgpl21Plus;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , pkg-config
 , meson
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fprint.freedesktop.org/";
     description = "A library designed to make it easy to add support for consumer fingerprint readers";
     license = licenses.lgpl21;

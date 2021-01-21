@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jdk, unzip}:
+{lib, stdenv, fetchurl, jdk, unzip}:
 
 stdenv.mkDerivation {
   name = "GeoIPJava-1.2.5";
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
     '';
   meta = {
     description = "GeoIP Java API";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.sander ];
+    platforms = lib.platforms.unix;
   };
 }

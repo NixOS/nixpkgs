@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/libical/libical";
     description = "An Open Source implementation of the iCalendar protocols";
     license = licenses.mpl20;

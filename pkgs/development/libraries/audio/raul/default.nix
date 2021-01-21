@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, boost, gtk2, pkg-config, python, wafHook }:
+{ lib, stdenv, fetchgit, boost, gtk2, pkg-config, python, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "raul";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config wafHook ];
   buildInputs = [ boost gtk2 python ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C++ utility library primarily aimed at audio/musical applications";
     homepage = "http://drobilla.net/software/raul";
     license = licenses.gpl3;

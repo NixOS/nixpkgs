@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, re2, openfx, zlib, ilmbase, libGLU, libGL, openexr }:
+{ lib, stdenv, fetchFromGitHub, unzip, re2, openfx, zlib, ilmbase, libGLU, libGL, openexr }:
 
 stdenv.mkDerivation {
   pname = "openexrid-unstable";
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
       mv $out/lib $lib/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenEXR files able to isolate any object of a CG image with a perfect antialiazing";
     homepage = "https://github.com/MercenariesEngineering/openexrid";
     maintainers = [ maintainers.guibou ];

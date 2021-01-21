@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , sphinxbase
 , pkg-config
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Voice recognition library written in C";
     homepage = "http://cmusphinx.sourceforge.net";
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.free;
+    platforms = lib.platforms.linux;
   };
 }
 

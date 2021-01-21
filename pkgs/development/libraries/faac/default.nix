@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, autoreconfHook
+{ lib, stdenv, fetchurl, autoreconfHook
 , mp4v2Support ? true, mp4v2 ? null
 , drmSupport ? false # Digital Radio Mondiale
 }:
 
 assert mp4v2Support -> (mp4v2 != null);
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "faac";
   version = "1.30";

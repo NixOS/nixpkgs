@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "aften";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An audio encoder which generates compressed audio streams based on ATSC A/52 specification";
     homepage = "http://aften.sourceforge.net/";
-    license = stdenv.lib.licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

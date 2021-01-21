@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zeromq }:
+{ lib, stdenv, fetchurl, zeromq }:
 
 stdenv.mkDerivation rec {
   version = "4.2.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # Needs to be propagated for the .pc file to work
   propagatedBuildInputs = [ zeromq ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://czmq.zeromq.org/";
     description = "High-level C Binding for ZeroMQ";
     license = licenses.mpl20;

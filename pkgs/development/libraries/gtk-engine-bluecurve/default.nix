@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, intltool, gtk2 }:
+{ lib, stdenv, fetchurl, pkg-config, intltool, gtk2 }:
 
 stdenv.mkDerivation {
   name = "gtk-engine-bluecurve-1.0";
@@ -14,8 +14,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Original Bluecurve engine from Red Hat's artwork package";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.gnidorah ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.gnidorah ];
   };
 }

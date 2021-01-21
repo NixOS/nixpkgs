@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , systemd
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ettus Research DMA I/O Library";
     homepage = "https://github.com/EttusResearch/liberio";
     license = licenses.gpl2;

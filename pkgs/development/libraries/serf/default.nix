@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apr, sconsPackages, openssl, aprutil, zlib, kerberos
+{ lib, stdenv, fetchurl, apr, sconsPackages, openssl, aprutil, zlib, kerberos
 , pkg-config, libiconv }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config sconsPackages.scons_3_1_2 ];
   buildInputs = [ apr openssl aprutil zlib libiconv ]
-    ++ stdenv.lib.optional (!stdenv.isCygwin) kerberos;
+    ++ lib.optional (!stdenv.isCygwin) kerberos;
 
   patches = [ ./scons.patch ];
 
@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
     sconsFlags+=" CC=$CC"
     sconsFlags+=" OPENSSL=${openssl}"
     sconsFlags+=" ZLIB=${zlib}"
-  '' + stdenv.lib.optionalString (!stdenv.isCygwin) ''
+  '' + lib.optionalString (!stdenv.isCygwin) ''
     sconsFlags+=" GSSAPI=${kerberos.dev}"
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HTTP client library based on APR";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej raskin ];

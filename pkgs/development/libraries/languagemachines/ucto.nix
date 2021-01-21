@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , automake, autoconf, libtool, pkg-config, autoconf-archive
 , libxml2, icu, bzip2, libtar
 , languageMachines
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     done;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A rule-based tokenizer for natural language";
     homepage    = "https://languagemachines.github.io/ucto/";
     license     = licenses.gpl3;

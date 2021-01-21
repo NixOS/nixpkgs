@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, gtk2, glibmm, cairomm, pangomm, atkmm }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, glibmm, cairomm, pangomm, atkmm }:
 
 stdenv.mkDerivation rec {
   name = "gtkmm-${minVer}.5";
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
 
     homepage = "https://gtkmm.org/";
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ raskin vcunat ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with lib.maintainers; [ raskin vcunat ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv,
+{ lib, stdenv,
   fetchFromGitHub,
   autoreconfHook,
   bison,
@@ -10,7 +10,7 @@
   libvirt,
   xenSupport ? true }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "libvmi";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "$oldrpath:${makeLibraryPath [ xen ]}" "$libvmi"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://libvmi.com/";
     description = "A C library for virtual machine introspection";
     longDescription = ''

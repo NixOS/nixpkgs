@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     hidapi
-  ] ++ stdenv.lib.optionals withExamples [
+  ] ++ lib.optionals withExamples [
     SDL2
     glew
     libGL
@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
     "-DOpenGL_GL_PREFERENCE=GLVND"
   ];
 
-  postInstall = stdenv.lib.optionalString withExamples ''
+  postInstall = lib.optionalString withExamples ''
     mkdir -p $out/bin
     install -D examples/simple/simple $out/bin/openhmd-example-simple
     install -D examples/opengl/openglexample $out/bin/openhmd-example-opengl
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.openhmd.net"; # https does not work
     description = "Library API and drivers immersive technology";
     longDescription = ''

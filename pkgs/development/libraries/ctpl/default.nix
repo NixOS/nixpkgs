@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, glib }:
+{ lib, stdenv, fetchurl, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
   pname = "ctpl";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://ctpl.tuxfamily.org/";
     description = "Template engine library written in C";
     platforms = platforms.linux;

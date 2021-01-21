@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libosip, openssl, pkg-config, fetchpatch }:
+{ lib, stdenv, fetchurl, libosip, openssl, pkg-config, fetchpatch }:
 
 stdenv.mkDerivation rec {
  pname = "libexosip2";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2Plus;
     description = "Library that hides the complexity of using the SIP protocol";
     platforms = platforms.linux;

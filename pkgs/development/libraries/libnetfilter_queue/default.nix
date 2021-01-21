@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libmnl, libnfnetlink }:
+{ lib, stdenv, fetchurl, pkg-config, libmnl, libnfnetlink }:
 
 stdenv.mkDerivation rec {
   version = "1.0.5";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libmnl libnfnetlink ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.netfilter.org/projects/libnetfilter_queue/";
     description = "Userspace API to packets queued by the kernel packet filter";
     license = licenses.gpl2;

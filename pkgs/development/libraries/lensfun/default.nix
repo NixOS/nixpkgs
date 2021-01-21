@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, glib, zlib, libpng, cmake }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, zlib, libpng, cmake }:
 
 let
   version = "0.3.95";
@@ -35,10 +35,10 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DINSTALL_HELPER_SCRIPTS=OFF" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ flokli ];
-    license = stdenv.lib.licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     description = "An opensource database of photographic lenses and their characteristics";
     homepage = "https://lensfun.github.io";
   };

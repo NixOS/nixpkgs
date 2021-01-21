@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libestr }:
+{ lib, stdenv, fetchurl, pkg-config, libestr }:
 stdenv.mkDerivation {
   name = "libee-0.4.1";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.libee.org/";
     description = "An Event Expression Library inspired by CEE";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
   };
 }

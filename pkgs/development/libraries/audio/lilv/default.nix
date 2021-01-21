@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, wafHook }:
+{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "lilv";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ serd sord sratom ];
   propagatedBuildInputs = [ lv2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://drobilla.net/software/lilv";
     description = "A C library to make the use of LV2 plugins";
     license = licenses.mit;

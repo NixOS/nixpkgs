@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, perl, which, dns-root-data }:
+{ lib, stdenv, fetchurl, openssl, perl, which, dns-root-data }:
 
 stdenv.mkDerivation rec {
   pname = "ldns";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "--with-drill"
     "--disable-gost"
     "--with-examples"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/ldns-config" "$dev"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library with the aim of simplifying DNS programming in C";
     license = licenses.bsd3;
     homepage = "http://www.nlnetlabs.nl/projects/ldns/";

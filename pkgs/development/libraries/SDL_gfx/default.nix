@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL }:
+{ lib, stdenv, fetchurl, SDL }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_gfx";
@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL ] ;
 
   configureFlags = [ "--disable-mmx" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+    ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SDL graphics drawing primitives and support functions";
 
     longDescription = ''

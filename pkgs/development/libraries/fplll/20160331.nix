@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, autoreconfHook
+{lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, autoreconfHook
 , gmp, mpfr
 }:
 stdenv.mkDerivation rec {
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "Lattice algorithms using floating-point arithmetic";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libsamplerate, libsndfile, fftw
+{ lib, stdenv, fetchurl, pkg-config, libsamplerate, libsndfile, fftw
 , vamp-plugin-sdk, ladspaH }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsamplerate libsndfile fftw vamp-plugin-sdk ladspaH ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High quality software library for audio time-stretching and pitch-shifting";
     homepage = "https://breakfastquay.com/rubberband/";
     # commercial license available as well, see homepage. You'll get some more optimized routines

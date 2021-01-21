@@ -46,7 +46,7 @@ stdenv.mkDerivation {
 
   checkInputs = [ perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fastest Fourier Transform in the West library";
     homepage = "http://www.fftw.org/";
     license = licenses.gpl2Plus;

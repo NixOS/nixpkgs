@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , rocm-cmake
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       --replace "/build/source/build" "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Radeon Open Compute common language runtime";
     homepage = "https://github.com/ROCm-Developer-Tools/ROCclr";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, glib, zlib, gnupg, gpgme, libidn2, libunistring, gobject-introspection
+{ lib, stdenv, fetchurl, pkg-config, glib, zlib, gnupg, gpgme, libidn2, libunistring, gobject-introspection
 , vala }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jstedfast/gmime/";
     description = "A C/C++ library for creating, editing and parsing MIME messages and structures";
     license = licenses.lgpl21Plus;

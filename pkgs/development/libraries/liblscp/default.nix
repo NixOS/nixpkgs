@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkg-config }:
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "liblscp";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.linuxsampler.org";
     description = "LinuxSampler Control Protocol (LSCP) wrapper library";
     license = licenses.gpl2;

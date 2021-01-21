@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Integration testing infrastructure for the GStreamer framework";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;

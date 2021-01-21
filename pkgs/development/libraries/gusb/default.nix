@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkg-config, gettext, gobject-introspection
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext, gobject-introspection
 , gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_44, python3
 , glib, systemd, libusb1, vala, hwdata
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # tests try to access USB
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GLib libusb wrapper";
     homepage = "https://github.com/hughsie/libgusb";
     license = licenses.lgpl21;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "py" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "17ca07hpg7dqxjn0jpqim3xqcmplk2a87wbwrrlq3dd3m8381l38";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GObject to SQLite object mapper";
     homepage = "https://wiki.gnome.org/Projects/Gom";
     license = licenses.lgpl21Plus;

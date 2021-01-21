@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, wafHook, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, python3, wafHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "termbox";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python3 wafHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for writing text-based user interfaces";
     license = licenses.mit;
     homepage = "https://github.com/nsf/termbox#readme";

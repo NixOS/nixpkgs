@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkg-config, zlib, libpng, libjpeg, libungif, libtiff
+{ lib, stdenv, fetchurl, cmake, pkg-config, zlib, libpng, libjpeg, libungif, libtiff
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     cp -r ../doc/. $doc/share/doc/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C-library for generating multi page PostScript documents";
     homepage = "http://pslib.sourceforge.net/";
     changelog =

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libvorbis, speex, flac, pkg-config }:
+{ lib, stdenv, fetchurl, libvorbis, speex, flac, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "libfishsound-1.0.0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://xiph.org/fishsound/";
     description = "A simple programming interface for decoding and encoding audio data using Xiph.org codecs (FLAC, Speex and Vorbis)";
     longDescription = ''libfishsound by itself is designed to handle raw codec streams from a lower level layer such as UDP datagrams. When these codecs are used in files, they are commonly encapsulated in Ogg to produce Ogg FLAC, Speex and Ogg Vorbis files.

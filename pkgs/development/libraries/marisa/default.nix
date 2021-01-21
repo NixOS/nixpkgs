@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "marisa";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://github.com/s-yata/marisa-trie";
     description = "Static and space-efficient trie data structure library";
     license     = licenses.bsd3;

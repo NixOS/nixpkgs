@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libraw1394 }:
+{ lib, stdenv, fetchurl, pkg-config, libraw1394 }:
 
 stdenv.mkDerivation rec {
   version = "1.2.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libraw1394 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.linux1394.org";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

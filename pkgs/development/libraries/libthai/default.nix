@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, installShellFiles, pkg-config, libdatrie }:
+{ lib, stdenv, fetchurl, makeWrapper, installShellFiles, pkg-config, libdatrie }:
 
 stdenv.mkDerivation rec {
   pname = "libthai";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     installManPage man/man3/*.3
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://linux.thai.net/projects/libthai/";
     description = "Set of Thai language support routines";
     license = licenses.lgpl21Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, octave ? null }:
+{ lib, stdenv, fetchFromGitHub, cmake, octave ? null }:
 
 stdenv.mkDerivation rec {
   pname = "nlopt";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "--without-guile"
     "--without-python"
     "--without-matlab"
-  ] ++ stdenv.lib.optionals (octave != null) [
+  ] ++ lib.optionals (octave != null) [
     "--with-octave"
     "M_INSTALL_DIR=$(out)/${octave.sitePath}/m"
     "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct"
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://nlopt.readthedocs.io/en/latest/";
     description = "Free open-source library for nonlinear optimization";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    hydraPlatforms = lib.platforms.linux;
   };
 
 }

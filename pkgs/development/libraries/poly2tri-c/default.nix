@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     "-Wno-error"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for generating, refining and rendering 2-Dimensional Constrained Delaunay Triangulations";
     homepage = "https://code.google.com/archive/p/poly2tri-c/";
     license = licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };
 }

@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkg-config, expat, ncurses, pciutils, numactl
+{ lib, stdenv, fetchurl, pkg-config, expat, ncurses, pciutils, numactl
 , x11Support ? false, libX11 ? null, cairo ? null
 }:
 
 assert x11Support -> libX11 != null && cairo != null;
 
-with stdenv.lib;
+with lib;
 
 let
   version = "2.4.0";
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
 
   # Filter out `null' inputs.  This allows users to `.override' the
   # derivation and set optional dependencies to `null'.
-  buildInputs = stdenv.lib.filter (x: x != null)
+  buildInputs = lib.filter (x: x != null)
    ([ expat ncurses ]
      ++  (optionals x11Support [ cairo libX11 ])
      ++  (optionals stdenv.isLinux [ numactl ]));

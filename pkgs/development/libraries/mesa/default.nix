@@ -26,7 +26,7 @@
   - libOSMesa is in $osmesa (~4 MB)
 */
 
-with stdenv.lib;
+with lib;
 
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
@@ -207,7 +207,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-fno-common";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-common";
 
   passthru = {
     inherit libdrm;

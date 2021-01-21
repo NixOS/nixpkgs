@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoconf, libndctl, pkg-config
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     mv $out/lib     $lib/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Persistent Memory Development Kit";
     homepage    = "https://github.com/pmem/pmdk";
     license     = licenses.lgpl21;

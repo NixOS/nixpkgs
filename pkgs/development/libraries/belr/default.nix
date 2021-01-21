@@ -1,7 +1,7 @@
 { bctoolbox
 , cmake
 , fetchFromGitLab
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Belledonne Communications' language recognition library";
     homepage = "https://gitlab.linphone.org/BC/public/belr";
     license = licenses.gpl3Plus;
