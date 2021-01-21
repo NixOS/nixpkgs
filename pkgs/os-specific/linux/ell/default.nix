@@ -7,20 +7,15 @@
 
 stdenv.mkDerivation rec {
   pname = "ell";
-  version = "0.35";
+  version = "0.36";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/${pname}/${pname}.git";
     rev = version;
-    sha256 = "16z7xwlrpx1bsr2y1rgxxxixzwc84cwn2g557iqxhwsxfzy6q3dk";
+    sha256 = "0w7v2hihwwmnqd56bsmbjsiw8yyadr7zbdssjamqxx0pyl3dnrda";
   };
-
-  patches = [
-    # Sent upstream in https://lists.01.org/hyperkitty/list/ell@lists.01.org/thread/SQEZAIS2LZXSXGTXOW3GTAM5ZPXRLTN4/
-    ./0001-unit-test-dbus-pick-up-dbus-daemon-from-PATH.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
