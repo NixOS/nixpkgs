@@ -3,6 +3,7 @@
 , howard-hinnant-date, cmake
 , traySupport  ? true,  libdbusmenu-gtk3
 , pulseSupport ? true,  libpulseaudio
+, sndioSupport ? true,  sndio
 , nlSupport    ? true,  libnl
 , udevSupport  ? true,  udev
 , swaySupport  ? true,  sway
@@ -11,13 +12,13 @@
 }:
   stdenv.mkDerivation rec {
     pname = "waybar";
-    version = "0.9.4";
+    version = "0.9.5";
 
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
       rev = version;
-      sha256 = "038vnma7y7z81caywp45yr364bc1aq8d01j5vycyiyfv33nm76fy";
+      sha256 = "1kzrgqaclfk6gcwhknxn28xl74gm5swipgn8kk8avacb4nsw1l9q";
     };
 
     nativeBuildInputs = [
@@ -35,6 +36,7 @@
       [ wayland wlroots gtkmm3 libsigcxx jsoncpp fmt spdlog gtk-layer-shell howard-hinnant-date ]
       ++ optional  traySupport  libdbusmenu-gtk3
       ++ optional  pulseSupport libpulseaudio
+      ++ optional  sndioSupport sndio
       ++ optional  nlSupport    libnl
       ++ optional  udevSupport  udev
       ++ optional  swaySupport  sway
@@ -45,6 +47,7 @@
       {
         dbusmenu-gtk = traySupport;
         pulseaudio = pulseSupport;
+        sndio = sndioSupport;
         libnl = nlSupport;
         libudev = udevSupport;
         mpd = mpdSupport;

@@ -6349,6 +6349,8 @@ in {
 
   python-wifi = callPackage ../development/python-modules/python-wifi { };
 
+  python-wink = callPackage ../development/python-modules/python-wink { };
+
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
@@ -8041,6 +8043,8 @@ in {
   vsts = callPackage ../development/python-modules/vsts { };
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
+
+  vsure = callPackage ../development/python-modules/vsure { };
 
   vtk = self.vtk_7;
   vtk_7 = toPythonModule (pkgs.vtk_7.override {
