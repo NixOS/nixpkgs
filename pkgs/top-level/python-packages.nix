@@ -8042,6 +8042,8 @@ in {
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
 
+  vsure = callPackage ../development/python-modules/vsure { };
+
   vtk = self.vtk_7;
   vtk_7 = toPythonModule (pkgs.vtk_7.override {
     pythonInterpreter = python;
