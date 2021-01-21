@@ -13992,6 +13992,8 @@ in
 
   gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
 
+  gzstream = callPackage ../development/libraries/gzstream { };
+
   hamlib = callPackage ../development/libraries/hamlib { };
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
