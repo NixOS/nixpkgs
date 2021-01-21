@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 
+with builtins;
 with lib;
 
 let cfg = config.services.xserver.libinput;
@@ -37,6 +38,7 @@ let cfg = config.services.xserver.libinput;
 
       accelSpeed = mkOption {
         type = types.nullOr types.str;
+        example = "-0.5";
         default = null;
         description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
       };
@@ -44,6 +46,7 @@ let cfg = config.services.xserver.libinput;
       buttonMapping = mkOption {
         type = types.nullOr types.str;
         default = null;
+        example = "1 6 3 4 5 0 7";
         description =
           ''
             Sets the logical button mapping for this device, see XSetPointerMapping(3). The string  must
@@ -68,6 +71,7 @@ let cfg = config.services.xserver.libinput;
       clickMethod = mkOption {
         type = types.nullOr (types.enum [ "none" "buttonareas" "clickfinger" ]);
         default = null;
+        example = "buttonareas";
         description =
           ''
             Enables a click method. Permitted values are <literal>none</literal>,
@@ -85,7 +89,7 @@ let cfg = config.services.xserver.libinput;
 
       middleEmulation = mkOption {
         type = types.bool;
-        default = true;
+        default = getAttr deviceType { mouse = false; touchpad = true; };
         description =
           ''
             Enables middle button emulation. When enabled, pressing the left and right buttons
@@ -111,8 +115,9 @@ let cfg = config.services.xserver.libinput;
       };
 
       scrollMethod = mkOption {
-        type = types.enum [ "twofinger" "edge" "button" "none" ];
-        default = "twofinger";
+        type = types.nullOr (types.enum [ "twofinger" "edge" "button" "none" ]);
+        default = getAttr deviceType { mouse = null; touchpad = "twofinger"; };
+        visible = getAttr deviceType { mouse = false; touchpad = true; };
         example = "edge";
         description =
           ''
@@ -144,8 +149,9 @@ let cfg = config.services.xserver.libinput;
       };
 
       tapping = mkOption {
-        type = types.bool;
-        default = true;
+        type = types.nullOr types.bool;
+        default = getAttr deviceType { mouse = null; touchpad = true; };
+        visible = getAttr deviceType { mouse = false; touchpad = true; };
         description =
           ''
             Enables or disables tap-to-click behavior.
@@ -153,8 +159,9 @@ let cfg = config.services.xserver.libinput;
       };
 
       tappingDragLock = mkOption {
-        type = types.bool;
-        default = true;
+        type = types.nullOr types.bool;
+        default = getAttr deviceType { mouse = null; touchpad = true; };
+        visible = getAttr deviceType { mouse = false; touchpad = true; };
         description =
           ''
             Enables or disables drag lock during tapping behavior. When enabled, a finger up during tap-
@@ -201,11 +208,11 @@ let cfg = config.services.xserver.libinput;
         Option "MiddleEmulation" "${xorgBool cfg.${deviceType}.middleEmulation}"
         Option "NaturalScrolling" "${xorgBool cfg.${deviceType}.naturalScrolling}"
         ${optionalString (cfg.${deviceType}.scrollButton != null) ''Option "ScrollButton" "${toString cfg.${deviceType}.scrollButton}"''}
-        Option "ScrollMethod" "${cfg.${deviceType}.scrollMethod}"
+        ${optionalString (cfg.${deviceType}.scrollMethod != null) ''Option "ScrollMethod" "${cfg.${deviceType}.scrollMethod}"''}
         Option "HorizontalScrolling" "${xorgBool cfg.${deviceType}.horizontalScrolling}"
         Option "SendEventsMode" "${cfg.${deviceType}.sendEventsMode}"
-        Option "Tapping" "${xorgBool cfg.${deviceType}.tapping}"
-        Option "TappingDragLock" "${xorgBool cfg.${deviceType}.tappingDragLock}"
+        ${optionalString (cfg.${deviceType}.tapping != null) ''Option "Tapping" "${xorgBool cfg.${deviceType}.tapping}"''}
+        ${optionalString (cfg.${deviceType}.tappingDragLock != null) ''Option "TappingDragLock" "${xorgBool cfg.${deviceType}.tappingDragLock}"''}
         Option "DisableWhileTyping" "${xorgBool cfg.${deviceType}.disableWhileTyping}"
         ${cfg.${deviceType}.additionalOptions}
   '';
