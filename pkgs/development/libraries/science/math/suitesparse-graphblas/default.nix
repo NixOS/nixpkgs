@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , gnum4
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     gnum4
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graph algorithms in the language of linear algebra";
     homepage = "http://faculty.cse.tamu.edu/davis/GraphBLAS.html";
     license = licenses.asl20;

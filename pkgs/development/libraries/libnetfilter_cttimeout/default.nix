@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libmnl }:
+{ lib, stdenv, fetchurl, pkg-config, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "libnetfilter_cttimeout";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       be attached to traffic flows. This library is used by conntrack-tools.
     '';
     homepage = "https://netfilter.org/projects/libnetfilter_cttimeout/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

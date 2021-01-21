@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, perl, pkg-config, python, openssl }:
+{ lib, stdenv, fetchFromGitHub, zlib, perl, pkg-config, python, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "rdkafka";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "librdkafka - Apache Kafka C/C++ client library";
     homepage = "https://github.com/edenhill/librdkafka";
     license = licenses.bsd2;

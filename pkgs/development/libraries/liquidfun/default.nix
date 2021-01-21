@@ -1,4 +1,4 @@
-{ stdenv, requireFile, cmake, libGLU, libGL, libX11, libXi }:
+{ lib, stdenv, requireFile, cmake, libGLU, libGL, libX11, libXi }:
 
 let
   sourceInfo = rec {
@@ -36,13 +36,13 @@ stdenv.mkDerivation {
 
   meta = {
     description = "2D physics engine based on Box2D";
-    maintainers = with stdenv.lib.maintainers;
+    maintainers = with lib.maintainers;
     [
       qknight
     ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     hydraPlatforms = [];
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://google.github.io/liquidfun/";
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkg-config, gettext
+{ lib, stdenv, fetchurl, cmake, pkg-config, gettext
 , gtk2, libcanberra, libnotify, pcre, sqlite, xorg
 , harfbuzz
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Provides functionality for gaming input devices";
     homepage = "https://sourceforge.net/projects/libgaminggear/";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

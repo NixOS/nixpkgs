@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, doxygen, qt4, qjson }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, doxygen, qt4, qjson }:
 
 stdenv.mkDerivation rec {
   pname = "libechonest";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A C++/Qt wrapper around the Echo Nest API";
     homepage = "https://projects.kde.org/projects/playground/libs/libechonest";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

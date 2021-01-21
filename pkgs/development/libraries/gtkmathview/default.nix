@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkg-config, gtk2, t1lib, glib, libxml2, popt, gmetadom ? null }:
+{lib, stdenv, fetchurl, pkg-config, gtk2, t1lib, glib, libxml2, popt, gmetadom ? null }:
 
 let
   pname = "gtkmathview";
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://helm.cs.unibo.it/mml-widget/";
     description = "C++ rendering engine for MathML documents";
-    license = stdenv.lib.licenses.lgpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.roconnor ];
     broken = true;
   };
 }

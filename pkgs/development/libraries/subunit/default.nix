@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, check, cppunit, perl, pythonPackages }:
+{ lib, stdenv, fetchurl, pkg-config, check, cppunit, perl, pythonPackages }:
 
 # NOTE: for subunit python library see pkgs/top-level/python-packages.nix
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   postFixup = "wrapPythonPrograms";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A streaming protocol for test results";
     homepage = "https://launchpad.net/subunit";
     license = licenses.asl20;

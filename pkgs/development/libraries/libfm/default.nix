@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, glib, intltool, menu-cache, pango, pkg-config, vala
+{ lib, stdenv, fetchurl, glib, intltool, menu-cache, pango, pkg-config, vala
 , extraOnly ? false
 , withGtk3 ? false, gtk2, gtk3 }:
 let
     gtk = if withGtk3 then gtk3 else gtk2;
-    inherit (stdenv.lib) optional;
+    inherit (lib) optional;
 in
 stdenv.mkDerivation rec {
   name = if extraOnly
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://blog.lxde.org/category/pcmanfm/";
     license = licenses.lgpl21Plus;
     description = "A glib-based library for file management";

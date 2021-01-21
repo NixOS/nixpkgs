@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, blas, lapack, superlu, hdf5 }:
+{ lib, stdenv, fetchurl, cmake, blas, lapack, superlu, hdf5 }:
 
 stdenv.mkDerivation rec {
   pname = "armadillo";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./use-unix-config-on-OS-X.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ linear algebra library";
     homepage = "http://arma.sourceforge.net";
     license = licenses.asl20;

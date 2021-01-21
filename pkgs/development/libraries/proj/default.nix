@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, sqlite, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, sqlite, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "proj";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.is64bit;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cartographic Projections Library";
     homepage = "https://proj4.org";
     license = licenses.mit;

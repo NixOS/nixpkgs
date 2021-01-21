@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , automake, autoconf, libtool, pkg-config, autoconf-archive
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     sh bootstrap.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Data for Frog, a Tagger-Lemmatizer-Morphological-Analyzer-Dependency-Parser for Dutch";
     homepage    = "https://languagemachines.github.io/frog";
     license     = licenses.gpl3;

@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, mpir, gmp, mpfr, flint}:
+{lib, stdenv, fetchFromGitHub, mpir, gmp, mpfr, flint}:
 stdenv.mkDerivation rec {
   pname = "arb";
   version = "2.17.0";
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     "--with-flint=${flint}"
   ];
   doCheck = true;
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for arbitrary-precision interval arithmetic";
     homepage = "https://arblib.org/";
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = teams.sage.members;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

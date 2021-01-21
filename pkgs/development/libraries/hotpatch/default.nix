@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   name = "hotpatch-0.2";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     LD_LIBRARY_PATH=$(pwd)/src make test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Hot patching executables on Linux using .so file injection";
     homepage = src.meta.homepage;
     license = licenses.bsd3;

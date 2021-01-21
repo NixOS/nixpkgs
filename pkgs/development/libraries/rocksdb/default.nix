@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ bzip2 lz4 snappy zlib zstd ];
 
-  buildInputs = stdenv.lib.optional enableJemalloc jemalloc;
+  buildInputs = lib.optional enableJemalloc jemalloc;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move";
 
   cmakeFlags = [
     "-DPORTABLE=1"
@@ -47,17 +47,17 @@ stdenv.mkDerivation rec {
     "-DWITH_GFLAGS=0"
     "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
-    (stdenv.lib.optional
+    (lib.optional
         (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.isLinux)
         "-DFORCE_SSE42=1")
-    (stdenv.lib.optional enableLite "-DROCKSDB_LITE=1")
+    (lib.optional enableLite "-DROCKSDB_LITE=1")
     "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}"
-  ] ++ stdenv.lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
+  ] ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
-  hardeningDisable = stdenv.lib.optional stdenv.hostPlatform.isWindows "format";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isWindows "format";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://rocksdb.org";
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
     license = licenses.asl20;

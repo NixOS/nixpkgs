@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , cmake
 , fetchurl
 , fetchpatch
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python
   ]
-    ++ stdenv.lib.optionals (lapackSupport)
+    ++ lib.optionals (lapackSupport)
     # Check that the same index size is used for both libraries
     (assert (blas.isILP64 == lapack.isILP64); [
       gfortran
@@ -46,16 +46,16 @@ stdenv.mkDerivation rec {
   # KLU support is based on Suitesparse.
   # It is tested upstream according to the section 1.1.4 of
   # [INSTALL_GUIDE.pdf](https://raw.githubusercontent.com/LLNL/sundials/master/INSTALL_GUIDE.pdf)
-  ++ stdenv.lib.optionals (kluSupport) [
+  ++ lib.optionals (kluSupport) [
     suitesparse
   ];
 
   cmakeFlags = [
     "-DEXAMPLES_INSTALL_PATH=${placeholder "examples"}/share/examples"
-  ] ++ stdenv.lib.optionals (lapackSupport) [
+  ] ++ lib.optionals (lapackSupport) [
     "-DENABLE_LAPACK=ON"
     "-DLAPACK_LIBRARIES=${lapack}/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}"
-  ] ++ stdenv.lib.optionals (kluSupport) [
+  ] ++ lib.optionals (kluSupport) [
     "-DENABLE_KLU=ON"
     "-DKLU_INCLUDE_DIR=${suitesparse.dev}/include"
     "-DKLU_LIBRARY_DIR=${suitesparse}/lib"
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Suite of nonlinear differential/algebraic equation solvers";
     homepage    = "https://computation.llnl.gov/projects/sundials";
     platforms   = platforms.all;

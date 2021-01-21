@@ -1,4 +1,4 @@
-{ stdenv, requireFile, avahi }:
+{ lib, stdenv, requireFile, avahi }:
 
 stdenv.mkDerivation rec {
   pname = "ndi";
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   # Stripping breaks ndi-record.
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ndi.tv/sdk/";
     description = "NDI Software Developer Kit";
     platforms = ["x86_64-linux"];

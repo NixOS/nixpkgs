@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, pkg-config }:
+{ lib, stdenv, fetchurl, glib, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "libmms-0.6.4";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for downloading (streaming) media files using the mmst and mmsh protocols";
     homepage = "http://libmms.sourceforge.net";
     platforms = platforms.all;

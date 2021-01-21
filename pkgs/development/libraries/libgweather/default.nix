@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkg-config, libxml2, glib, gtk3, gettext, libsoup
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, libxml2, glib, gtk3, gettext, libsoup
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43, gobject-introspection, python3, tzdata, geocode-glib, vala, gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0l74hc02rvzm4p530y539a67jwb080fqdaazdl8j0fr3xvq0j9yy";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to access weather information from online services for numerous locations";
     homepage = "https://wiki.gnome.org/Projects/LibGWeather";
     license = licenses.gpl2Plus;

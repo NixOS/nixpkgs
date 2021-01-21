@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , fetchpatch
 , pkg-config
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   pname = "zeitgeist";
   version = "1.0.2";
 
-  outputs = [ "out" "lib" "dev" "man" ] ++ stdenv.lib.optional pythonSupport "py";
+  outputs = [ "out" "lib" "dev" "man" ] ++ lib.optional pythonSupport "py";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -75,11 +75,11 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 ./autogen.sh
   '';
 
-  postFixup = stdenv.lib.optionalString pythonSupport ''
+  postFixup = lib.optionalString pythonSupport ''
     moveToOutput lib/${python3.libPrefix} "$py"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A service which logs the users’s activities and events";
     homepage = "https://zeitgeist.freedesktop.org/";
     maintainers = with maintainers; [ lethalman worldofpeace ];

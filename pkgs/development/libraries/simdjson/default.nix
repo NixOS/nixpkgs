@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "simdjson";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "-DSIMDJSON_JUST_LIBRARY=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://simdjson.org/";
     description = "Parsing gigabytes of JSON per second";
     license = licenses.asl20;

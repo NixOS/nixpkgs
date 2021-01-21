@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 }:
 
@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Embedded C/C++ web server";
     homepage = "https://github.com/civetweb/civetweb";
-    license = [ stdenv.lib.licenses.mit ];
+    license = [ lib.licenses.mit ];
   };
 }

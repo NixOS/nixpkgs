@@ -32,14 +32,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libGL
-  ] ++ stdenv.lib.optionals (with stdenv.hostPlatform; isUnix && !isDarwin) [
+  ] ++ lib.optionals (with stdenv.hostPlatform; isUnix && !isDarwin) [
     libglvnd
-  ] ++ stdenv.lib.optionals x11Support [
+  ] ++ lib.optionals x11Support [
     libX11
     libxcb
-  ] ++ stdenv.lib.optionals waylandSupport [
+  ] ++ lib.optionals waylandSupport [
     wayland
-  ] ++ stdenv.lib.optionals useGbm [
+  ] ++ lib.optionals useGbm [
     mesa
     libudev
   ];
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/wflinfo \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libGL libglvnd ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL libglvnd ]}
   '';
 
   meta = with lib; {

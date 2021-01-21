@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "dclxvi-2013-01-27";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   patchPhase = ''
     substituteInPlace Makefile \
       --replace "gcc" "cc"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
       --replace "-soname=libdclxvipairing.so" "-install_name,libdclxvipairing.so"
   '';
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     find . -name \*.so -exec cp {} $out/lib \;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/agl/dclxvi";
     description = "Naehrig, Niederhagen and Schwabe's pairings code, massaged into a shared library";
     platforms = platforms.x86_64;

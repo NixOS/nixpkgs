@@ -1,5 +1,5 @@
 { enableX11 ? true
-,  stdenv, fetchurl, pkg-config, xorg }:
+,  lib, stdenv, fetchurl, pkg-config, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "frame";
@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     stdenv pkg-config
-  ] ++ stdenv.lib.optionals enableX11 [xorg.xorgserver xorg.libX11 xorg.libXext xorg.libXi];
+  ] ++ lib.optionals enableX11 [xorg.xorgserver xorg.libX11 xorg.libXext xorg.libXi];
 
-  configureFlags = stdenv.lib.optional enableX11 "--with-x11";
+  configureFlags = lib.optional enableX11 "--with-x11";
 
   meta = {
     homepage = "https://launchpad.net/frame";
     description = "Handles the buildup and synchronization of a set of simultaneous touches";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

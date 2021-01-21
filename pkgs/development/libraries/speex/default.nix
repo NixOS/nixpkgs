@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkg-config, fftw, speexdsp }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, fftw, speexdsp }:
 
 stdenv.mkDerivation rec {
   name = "speex-1.2.0";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "--with-fft=gpl-fftw3"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.speex.org/";
     description = "An Open Source/Free Software patent-free audio compression format designed for speech";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ buildPackages, stdenv, fetchurl, gettext, libgpgerror }:
+{ buildPackages, lib, stdenv, fetchurl, gettext, libgpgerror }:
 
 stdenv.mkDerivation rec {
   name = "libksba-1.5.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     rmdir --ignore-fail-on-non-empty $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnupg.org";
     description = "CMS and X.509 access library";
     platforms = platforms.all;

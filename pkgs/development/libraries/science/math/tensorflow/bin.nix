@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , addOpenGLRunpath
 , cudaSupport ? false, symlinkJoin, cudatoolkit, cudnn, nvidia_x11
 }:
 
-with stdenv.lib;
+with lib;
 let
   broken = !stdenv.isLinux && !stdenv.isDarwin;
 

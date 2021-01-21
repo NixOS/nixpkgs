@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation {
   name = "openslp-2.0.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     ./CVE-2016-4912.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.openslp.org/";
     description = "An open-source implementation of the IETF Service Location Protocol";
     maintainers = with maintainers; [ ttuegel ];

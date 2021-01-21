@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libburn";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xrp9c2sppbds0agqzmdym7rvdwpjrq6v6q2c3718cwvbjmh66c8";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://libburnia-project.org/";
     description = "A library by which preformatted data get onto optical media: CD, DVD, BD (Blu-Ray)";
     license = licenses.gpl2Plus;

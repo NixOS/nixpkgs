@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, cmake, openexr, hdf5-threadsafe }:
+{ lib, stdenv, fetchFromGitHub, unzip, cmake, openexr, hdf5-threadsafe }:
 
 stdenv.mkDerivation rec
 {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec
     mv $out/include $dev/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open framework for storing and sharing scene data";
     homepage = "http://alembic.io/";
     license = licenses.bsd3;

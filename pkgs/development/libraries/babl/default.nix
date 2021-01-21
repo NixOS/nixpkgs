@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://download.gimp.org/pub/babl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-5+OLhEH3f+udyCMctDSoYZCiHy82ksKBRX6Z016cNOo=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     lcms2
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Image pixel format conversion library";
     homepage = "https://gegl.org/babl/";
     license = licenses.lgpl3Plus;

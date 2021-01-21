@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python, validatePkgConfig, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, cmake, python, validatePkgConfig, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "jsoncpp";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     homepage = "https://github.com/open-source-parsers/jsoncpp";
     description = "A C++ library for interacting with JSON";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libGLU, libGL, libX11, libXext, libXfixes
+{ lib, stdenv, fetchurl, pkg-config, libGLU, libGL, libX11, libXext, libXfixes
 , libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib
 , gobject-introspection, gtk3, gnome3, libinput, libgudev, libxkbcommon
 }:
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1rn4cd1an6a9dfda884aqpcwcgq8dgydpqvb19nmagw4b70zlj4b";
   };
 
@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
          specific needs.
       '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     homepage = "http://www.clutter-project.org/";
 
-    maintainers = with stdenv.lib.maintainers; [ lethalman ];
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    maintainers = with lib.maintainers; [ lethalman ];
+    platforms = lib.platforms.mesaPlatforms;
   };
 }

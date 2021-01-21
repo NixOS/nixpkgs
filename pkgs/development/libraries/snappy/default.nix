@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , static ? stdenv.hostPlatform.isStatic
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://google.github.io/snappy/";
     license = licenses.bsd3;
     description = "Compression/decompression library for very high speeds";

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, cmake, pkg-config, polkit, glib, qtbase }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, polkit, glib, qtbase }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   name = "polkit-qt-1-qt5-0.112.0";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A Qt wrapper around PolKit";
-    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    platforms = with lib.platforms; linux;
   };
 }

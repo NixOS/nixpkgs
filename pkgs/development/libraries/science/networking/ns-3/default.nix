@@ -33,8 +33,8 @@
 
 let
   pythonEnv = python.withPackages(ps:
-    stdenv.lib.optional withManual ps.sphinx
-    ++ stdenv.lib.optionals pythonSupport (with ps;[ pybindgen pygccxml ])
+    lib.optional withManual ps.sphinx
+    ++ lib.optionals pythonSupport (with ps;[ pybindgen pygccxml ])
   );
 in
 stdenv.mkDerivation rec {
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     patchShebangs doc/ns3_html_theme/get_version.sh
   '';
 
-  wafConfigureFlags = with stdenv.lib; [
+  wafConfigureFlags = with lib; [
       "--enable-modules=${concatStringsSep "," modules}"
       "--with-python=${pythonEnv.interpreter}"
   ]
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   # to prevent fatal error: 'backward_warning.h' file not found
   CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
 
-  postBuild = with stdenv.lib; let flags = concatStringsSep ";" (
+  postBuild = with lib; let flags = concatStringsSep ";" (
       optional enableDoxygen "./waf doxygen"
       ++ optional withManual "./waf sphinx"
     );
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
   # strictoverflow prevents clang from discovering pyembed when bindings
   hardeningDisable = [ "fortify" "strictoverflow"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.nsnam.org";
     license = licenses.gpl3;
     description = "A discrete time event network simulator";

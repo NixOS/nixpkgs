@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , libpng, libtiff, lcms2, jpylyzer
 , mj2Support ? true # MJ2 executables
 , jpwlLibSupport ? true # JPWL library & executables
@@ -19,7 +19,7 @@ assert jpipServerSupport -> jpipLibSupport && curl != null && fcgi != null;
 assert (openjpegJarSupport || jpipLibSupport) -> jdk != null;
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
   mkFlag = optSet: flag: "-D${flag}=${if optSet then "ON" else "OFF"}";
 in
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     incDir = "openjpeg-${branch}";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source JPEG 2000 codec written in C language";
     homepage = "https://www.openjpeg.org/";
     license = licenses.bsd2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, autoreconfHook,
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook,
   vapoursynth, nasm, fftwFloat
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--libdir=$(out)/lib/vapoursynth" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of filters for motion estimation and compensation";
     homepage = "https://github.com/dubhater/vapoursynth-mvtools";
     license  = licenses.gpl2;

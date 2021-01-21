@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   name = "cminpack-1.3.6";
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://devernay.free.fr/hacks/cminpack/cminpack.html";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
     description = "Software for solving nonlinear equations and nonlinear least squares problems";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 
 }

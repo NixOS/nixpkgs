@@ -13,7 +13,7 @@ mkDerivation rec {
     sha256 = "09ri3jmgp9jjwi1mzv4c3w6rvcmyx6spa2qxpwlcn0f4bmfva6wm";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ryanorendorff/functional-linear-algebra";
     description = ''
       Formalizing linear algebra in Agda by representing matrices as functions

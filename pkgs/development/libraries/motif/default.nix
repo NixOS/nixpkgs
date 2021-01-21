@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libtool
+{ lib, stdenv, fetchurl, pkg-config, libtool
 , xlibsWrapper, xbitmaps, libXrender, libXmu, libXt
 , expat, libjpeg, libpng, libiconv
 , flex
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     rm lib/Xm/Xm.h
-  '' + stdenv.lib.optionalString (!demoSupport) ''
+  '' + lib.optionalString (!demoSupport) ''
     sed '/^SUBDIRS =,^$/s/\<demos\>//' -i Makefile.{am,in}
   '';
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
               ./Add-X.Org-to-bindings-file.patch
             ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://motif.ics.com";
     description = "Unix standard widget-toolkit and window-manager";
     platforms = with platforms; linux ++ darwin;

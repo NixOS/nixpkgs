@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libnfnetlink, libmnl }:
+{ lib, stdenv, fetchurl, pkg-config, libnfnetlink, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "libnetfilter_conntrack";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libnfnetlink ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Userspace library providing an API to the in-kernel connection tracking state table";
     longDescription = ''
       libnetfilter_conntrack is a userspace library providing a programming interface (API) to the

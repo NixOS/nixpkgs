@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, yacc, flex, xkeyboard_config, libxcb, libX11 }:
+{ lib, stdenv, fetchurl, pkg-config, yacc, flex, xkeyboard_config, libxcb, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "libxkbcommon-0.7.2";
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     "--with-x-locale-root=${libX11.out}/share/X11/locale"
   ];
 
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.isDarwin ''
     sed -i 's/,--version-script=.*$//' Makefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to handle keyboard descriptions";
     homepage = "https://xkbcommon.org";
     license = licenses.mit;

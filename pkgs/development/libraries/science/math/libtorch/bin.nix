@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs =
     if stdenv.isDarwin then [ fixDarwinDylibNames ]
     else [ addOpenGLRunpath patchelf ]
-      ++ stdenv.lib.optionals cudaSupport [ addOpenGLRunpath ];
+      ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
 
   buildInputs = [
     stdenv.cc.cc
@@ -57,9 +57,9 @@ in stdenv.mkDerivation {
 
   postFixup = let
     libPaths = [ stdenv.cc.cc.lib ]
-      ++ stdenv.lib.optionals cudaSupport [ nvidia_x11 ];
-    rpath = stdenv.lib.makeLibraryPath libPaths;
-  in stdenv.lib.optionalString stdenv.isLinux ''
+      ++ lib.optionals cudaSupport [ nvidia_x11 ];
+    rpath = lib.makeLibraryPath libPaths;
+  in lib.optionalString stdenv.isLinux ''
     find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       echo "setting rpath for $lib..."
       patchelf --set-rpath "${rpath}:$out/lib" "$lib"
@@ -67,7 +67,7 @@ in stdenv.mkDerivation {
         addOpenGLRunpath "$lib"
       ''}
     done
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     install_name_tool -change @rpath/libshm.dylib $out/lib/libshm.dylib $out/lib/libtorch_python.dylib
     install_name_tool -change @rpath/libc10.dylib $out/lib/libc10.dylib $out/lib/libtorch_python.dylib
     install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libtorch_python.dylib
@@ -110,7 +110,7 @@ in stdenv.mkDerivation {
 
   passthru.tests.cmake = callPackage ./test { };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ API of the PyTorch machine learning framework";
     homepage = "https://pytorch.org/";
     license = licenses.unfree; # Includes CUDA and Intel MKL.

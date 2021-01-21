@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, cairo, pango,
+{ lib, stdenv, fetchFromGitHub, pkg-config, cairo, pango,
   libX11, libXcomposite, autoconf, automake }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     longDescription = ''
       libaosd is an advanced on screen display library.
 

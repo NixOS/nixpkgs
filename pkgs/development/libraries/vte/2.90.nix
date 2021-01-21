@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkg-config, glib, gtk3, ncurses, gobject-introspection }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, glib, gtk3, ncurses, gobject-introspection }:
 
 stdenv.mkDerivation rec {
   versionMajor = "0.36";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/libvte2_90.la --replace "-lncurses" "-L${ncurses.out}/lib -lncurses"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnome.org/";
     description = "A library implementing a terminal emulator widget for GTK";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, unzip, cmake, python }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, unzip, cmake, python }:
 
 stdenv.mkDerivation {
   name = "flann-1.9.1";
@@ -22,9 +22,9 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://people.cs.ubc.ca/~mariusm/flann/";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
     description = "Fast approximate nearest neighbor searches in high dimensional spaces";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

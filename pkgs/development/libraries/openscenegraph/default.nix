@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF" ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A 3D graphics toolkit";
     homepage = "http://www.openscenegraph.org/";
     maintainers = with maintainers; [ aanderse raskin ];

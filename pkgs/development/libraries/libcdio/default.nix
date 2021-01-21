@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcddb, pkg-config, ncurses, help2man, libiconv, Carbon, IOKit }:
+{ lib, stdenv, fetchurl, libcddb, pkg-config, ncurses, help2man, libiconv, Carbon, IOKit }:
 
 stdenv.mkDerivation rec {
   name = "libcdio-2.1.0";
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config help2man ];
   buildInputs = [ libcddb ncurses ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
 
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for OS-independent CD-ROM and CD image access";
     longDescription = ''
       GNU libcdio is a library for OS-independent CD-ROM and

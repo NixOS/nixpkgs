@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
+{ lib, stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
 , openssl, libpng, lua5, pkg-config, libidn, expat, fetchpatch
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     moveToOutput lib "$lib"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://podofo.sourceforge.net";
     description = "A library to work with the PDF file format";
     platforms = platforms.all;

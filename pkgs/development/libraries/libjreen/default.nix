@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4, pkg-config, gsasl }:
+{ lib, stdenv, fetchurl, cmake, qt4, pkg-config, gsasl }:
 
 stdenv.mkDerivation rec {
   pname = "libjreen";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C++ Jabber library using Qt framework";
     homepage = "https://qutim.org/jreen/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

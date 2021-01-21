@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "libimagequant";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./configure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pngquant.org/lib/";
     description = "Image quantization library";
     longDescription = "Small, portable C library for high-quality conversion of RGBA images to 8-bit indexed-color (palette) images.";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , givaro
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-blas-libs=-lblas"
     "--disable-optimization"
-  ] ++ stdenv.lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals stdenv.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
     "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
     "--${if stdenv.hostPlatform.ssse3Support  then "enable" else "disable"}-ssse3"
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     "--${if stdenv.hostPlatform.avx2Support   then "enable" else "disable"}-avx2"
     "--${if stdenv.hostPlatform.fmaSupport    then "enable" else "disable"}-fma"
     "--${if stdenv.hostPlatform.fma4Support   then "enable" else "disable"}-fma4"
-  ] ++ stdenv.lib.optionals withSage [
+  ] ++ lib.optionals withSage [
     "--enable-sage"
   ];
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     description = "C++ library for exact, high-performance linear algebra";
     license = licenses.lgpl21Plus;

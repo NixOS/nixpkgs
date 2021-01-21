@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkg-config, zlib, pcre, expat, sqlite, openssl, unixODBC, libmysqlclient }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, zlib, pcre, expat, sqlite, openssl, unixODBC, libmysqlclient }:
 
 stdenv.mkDerivation rec {
   pname = "poco";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "-DPOCO_UNBUNDLED=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pocoproject.org/";
     description = "Cross-platform C++ libraries with a network/internet focus";
     license = licenses.boost;

@@ -1,4 +1,4 @@
-{  stdenv, fetchFromGitHub, libX11, unzip, cmake, ois, freetype, libuuid,
+{  lib, stdenv, fetchFromGitHub, libX11, unzip, cmake, ois, freetype, libuuid,
    boost, pkg-config, withOgre ? false, ogre ? null, libGL, libGLU ? null } :
 
 let
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   # Tools are disabled due to compilation failures.
   cmakeFlags = [ "-DMYGUI_BUILD_TOOLS=OFF" "-DMYGUI_BUILD_DEMOS=OFF" "-DMYGUI_RENDERSYSTEM=${renderSystem}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://mygui.info/";
     description = "Library for creating GUIs for games and 3D applications";
     license = licenses.lgpl3Plus;

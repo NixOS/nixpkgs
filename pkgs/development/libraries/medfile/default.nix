@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, hdf5 }:
+{ lib, stdenv, fetchurl, cmake, hdf5 }:
 
 stdenv.mkDerivation rec {
   pname = "medfile";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "rm -r $out/bin/testc";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to read and write MED files";
     homepage = "http://salome-platform.org/";
     platforms = platforms.linux;

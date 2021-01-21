@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPackages, perl, coreutils
+{ lib, stdenv, fetchurl, buildPackages, perl, coreutils
 , withCryptodev ? false, cryptodev
 , enableSSL2 ? false
 , enableSSL3 ? false
@@ -10,7 +10,7 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-with stdenv.lib;
+with lib;
 
 let
   common = { version, sha256, patches ? [], withDocs ? false, extraMeta ? {} }:
@@ -46,7 +46,7 @@ let
     separateDebugInfo = !(stdenv.hostPlatform.useLLVM or false) && stdenv.cc.isGNU;
 
     nativeBuildInputs = [ perl ];
-    buildInputs = stdenv.lib.optional withCryptodev cryptodev;
+    buildInputs = lib.optional withCryptodev cryptodev;
 
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];
@@ -78,16 +78,16 @@ let
       "shared" # "shared" builds both shared and static libraries
       "--libdir=lib"
       "--openssldir=etc/ssl"
-    ] ++ stdenv.lib.optionals withCryptodev [
+    ] ++ lib.optionals withCryptodev [
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
-    ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2"
-      ++ stdenv.lib.optional enableSSL3 "enable-ssl3"
-      ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
+    ] ++ lib.optional enableSSL2 "enable-ssl2"
+      ++ lib.optional enableSSL3 "enable-ssl3"
+      ++ lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
-      ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && static) "no-shared";
+      ++ lib.optional (versionAtLeast version "1.1.0" && static) "no-shared";
 
     makeFlags = [
       "MANDIR=$(man)/share/man"
@@ -101,7 +101,7 @@ let
     enableParallelBuilding = true;
 
     postInstall =
-    stdenv.lib.optionalString (!static) ''
+    lib.optionalString (!static) ''
       # If we're building dynamic libraries, then don't install static
       # libraries.
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
@@ -111,7 +111,7 @@ let
     '' +
     ''
       mkdir -p $bin
-    '' + stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
+    '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
     ''
       substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl} ${perl}
     '' +
@@ -127,7 +127,7 @@ let
       rmdir $out/etc/ssl/{certs,private}
     '';
 
-    postFixup = stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+    postFixup = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
       # Check to make sure the main output doesn't depend on perl
       if grep -r '${buildPackages.perl}' $out; then
         echo "Found an erroneous dependency on perl ^^^" >&2
@@ -135,7 +135,7 @@ let
       fi
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://www.openssl.org/";
       description = "A cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;

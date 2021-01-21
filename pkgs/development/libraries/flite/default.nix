@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, alsaLib }:
+{ lib, stdenv, fetchFromGitHub, alsaLib }:
 
 stdenv.mkDerivation rec {
   pname = "flite";
@@ -11,15 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "1n0p81jzndzc1rzgm66kw9ls189ricy5v1ps11y0p2fk1p56kbjf";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ alsaLib ];
+  buildInputs = lib.optionals stdenv.isLinux [ alsaLib ];
 
   configureFlags = [
     "--enable-shared"
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ "--with-audio=alsa" ];
+  ] ++ lib.optionals stdenv.isLinux [ "--with-audio=alsa" ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small, fast run-time speech synthesis engine";
     homepage = "http://www.festvox.org/flite/";
     license = licenses.bsdOriginal;

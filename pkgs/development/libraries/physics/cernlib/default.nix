@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, gnumake, imake, makedepend, motif, xorg }:
+{ lib, stdenv, fetchurl, gfortran, gnumake, imake, makedepend, motif, xorg }:
 
 stdenv.mkDerivation rec {
   version = "2006";
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Legacy collection of libraries and modules for data analysis in high energy physics";
     broken = stdenv.isDarwin;
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
-    license = stdenv.lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ veprbl ];
+    license = lib.licenses.gpl2;
   };
 }

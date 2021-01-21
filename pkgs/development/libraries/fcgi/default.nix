@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "fcgi";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "ln -s . $out/include/fastcgi";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A language independent, scalable, open extension to CG";
     homepage = "http://www.fastcgi.com/";
     license = "FastCGI see LICENSE.TERMS";

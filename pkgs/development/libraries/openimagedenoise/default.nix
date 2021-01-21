@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, cmake, tbb, python, ispc }:
+{ lib, stdenv, fetchzip, cmake, tbb, python, ispc }:
 
 stdenv.mkDerivation rec {
   pname = "openimagedenoise";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python ispc ];
   buildInputs = [ tbb ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://openimagedenoise.github.io";
     description = "High-Performance Denoising Library for Ray Tracing";
     license = licenses.asl20;

@@ -1,5 +1,5 @@
 {
-  fetchFromGitHub, stdenv, pkg-config, autoreconfHook,
+  fetchFromGitHub, lib, stdenv, pkg-config, autoreconfHook,
   acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib, zstd,
 
   # Optional but increases closure only negligibly. Also, while libxml2
@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs =
-    stdenv.lib.optional stdenv.hostPlatform.isUnix sharutils
+    lib.optional stdenv.hostPlatform.isUnix sharutils
     ++ [ zlib bzip2 openssl xz lzo zstd ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
-    ++ stdenv.lib.optional xarSupport libxml2;
+    ++ lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
+    ++ lib.optional xarSupport libxml2;
 
   # Without this, pkg-config-based dependencies are unhappy
-  propagatedBuildInputs = stdenv.lib.optionals stdenv.isLinux [ attr acl ];
+  propagatedBuildInputs = lib.optionals stdenv.isLinux [ attr acl ];
 
-  configureFlags = stdenv.lib.optional (!xarSupport) "--without-xml2";
+  configureFlags = lib.optional (!xarSupport) "--without-xml2";
 
   preBuild = if stdenv.isCygwin then ''
     echo "#include <windows.h>" >> config.h
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://libarchive.org";
     changelog = "https://github.com/libarchive/libarchive/releases/tag/v${version}";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = with stdenv.lib.platforms; all;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    license = lib.licenses.bsd3;
+    platforms = with lib.platforms; all;
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 }

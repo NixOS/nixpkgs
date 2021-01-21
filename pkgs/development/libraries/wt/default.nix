@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, pkg-config, doxygen, qt48Full, libharu
+{ lib, stdenv, fetchFromGitHub, cmake, boost, pkg-config, doxygen, qt48Full, libharu
 , pango, fcgi, firebird, libmysqlclient, postgresql, graphicsmagick, glew, openssl
 , pcre, harfbuzz
 }:
@@ -28,16 +28,16 @@ let
         "-DWT_CPP_11_MODE=-std=c++11"
         "--no-warn-unused-cli"
       ]
-      ++ stdenv.lib.optionals (graphicsmagick != null) [
+      ++ lib.optionals (graphicsmagick != null) [
         "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
         "-DGM_PREFIX=${graphicsmagick}"
       ]
-      ++ stdenv.lib.optional (harfbuzz != null)
+      ++ lib.optional (harfbuzz != null)
         "-DHARFBUZZ_INCLUDE_DIR=${harfbuzz.dev}/include"
-      ++ stdenv.lib.optional (libmysqlclient != null)
+      ++ lib.optional (libmysqlclient != null)
         "-DMYSQL_PREFIX=${libmysqlclient}";
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         homepage = "https://www.webtoolkit.eu/wt";
         description = "C++ library for developing web applications";
         platforms = platforms.linux;

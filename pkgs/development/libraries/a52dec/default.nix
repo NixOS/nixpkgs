@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   pname = "a52dec";
@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   # fails 1 out of 1 tests with "BAD GLOBAL SYMBOLS" on i686
   # which can also be fixed with
-  # hardeningDisable = stdenv.lib.optional stdenv.isi686 "pic";
+  # hardeningDisable = lib.optional stdenv.isi686 "pic";
   # but it's better to disable tests than loose ASLR on i686
   doCheck = !stdenv.isi686;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ATSC A/52 stream decoder";
     homepage = "https://liba52.sourceforge.net/";
     platforms = platforms.unix;

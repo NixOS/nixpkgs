@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ tbb glfw openimageio libjpeg libpng libX11 libpthreadstubs ]
                 ++ lib.optionals stdenv.isDarwin [ glib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High performance ray tracing kernels from Intel";
     homepage = "https://embree.github.io/";
     maintainers = with maintainers; [ hodapp gebner ];

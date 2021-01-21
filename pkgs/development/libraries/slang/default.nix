@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , libiconv
 , libpng
 , ncurses
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     pcre
     readline
     zlib
-  ] ++ stdenv.lib.optionals (stdenv.isDarwin) [ libiconv ];
+  ] ++ lib.optionals (stdenv.isDarwin) [ libiconv ];
 
   propagatedBuildInputs = [ ncurses ];
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     sed '/^Libs:/s/$/ -lncurses/' -i "$dev"/lib/pkgconfig/slang.pc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small, embeddable multi-platform programming library";
     longDescription = ''
       S-Lang is an interpreted language that was designed from the start to be

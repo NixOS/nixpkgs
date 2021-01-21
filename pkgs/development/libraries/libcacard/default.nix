@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, glib, nss }:
+{ lib, stdenv, fetchurl, pkg-config, glib, nss }:
 
 stdenv.mkDerivation rec {
   pname = "libcacard";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib nss ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Smart card emulation library";
     homepage = "https://gitlab.freedesktop.org/spice/libcacard";
     license = licenses.lgpl21;

@@ -1,4 +1,4 @@
-{ pkgs, fetchurl, stdenv, unzip }:
+{ pkgs, fetchurl, lib, stdenv, unzip }:
 stdenv.mkDerivation {
   pname = "inchi";
   version = "1.05";
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       install -m 644 INCHI-1-DOC/*.pdf $doc/share
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.inchi-trust.org/";
     description = "IUPAC International Chemical Identifier library";
     license = licenses.lgpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
   version = "0.38.0";
 
   outputs = [ "out" "lib" "dev" ]
-    ++ stdenv.lib.optional (!isCross) "devdoc";
+    ++ lib.optional (!isCross) "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0n2gqkp6d61h7gnnp2xnxp6w5wcl7w9ay58krrf729qd6d0hzxj5";
   };
 
@@ -38,19 +38,19 @@ stdenv.mkDerivation rec {
     glib
     docbook-xsl-nons
     docbook_xml_dtd_42
-  ] ++ stdenv.lib.optional (!isCross) gtk-doc;
+  ] ++ lib.optional (!isCross) gtk-doc;
 
   buildInputs = [
     glib
     bash-completion
     dbus
-  ] ++ stdenv.lib.optional (!isCross) vala;
+  ] ++ lib.optional (!isCross) vala;
   # Vala cross compilation is broken. For now, build dconf without vapi when cross-compiling.
 
   mesonFlags = [
     "--sysconfdir=/etc"
-    "-Dgtk_doc=${stdenv.lib.boolToString (!isCross)}" # gtk-doc does do some gobject introspection, which doesn't yet cross-compile.
-  ] ++ stdenv.lib.optional isCross "-Dvapi=false";
+    "-Dgtk_doc=${lib.boolToString (!isCross)}" # gtk-doc does do some gobject introspection, which doesn't yet cross-compile.
+  ] ++ lib.optional isCross "-Dvapi=false";
 
   doCheck = !stdenv.isAarch32 && !stdenv.isAarch64 && !stdenv.isDarwin;
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/dconf";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, boost, libgsf,
+{ lib, stdenv, fetchurl, autoreconfHook, boost, libgsf,
   pkg-config, bzip2, xmlto, gettext, imagemagick, doxygen }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.five-ten-sg.com/libpst/";
     description = "A library to read PST (MS Outlook Personal Folders) files";
     license = licenses.gpl2;

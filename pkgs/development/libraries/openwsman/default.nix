@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , curl, libxml2, pam, sblim-sfcc }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-more-warnings" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description  = "Openwsman server implementation and client API with bindings";
     downloadPage = "https://github.com/Openwsman/openwsman/releases";
     homepage     = "https://openwsman.github.io";

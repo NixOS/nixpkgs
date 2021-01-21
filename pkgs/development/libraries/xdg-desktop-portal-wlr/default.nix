@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, pkg-config, wayland-protocols
 , pipewire, wayland, elogind, systemd, libdrm }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config wayland-protocols ];
   buildInputs = [ pipewire wayland elogind systemd libdrm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/emersion/xdg-desktop-portal-wlr";
     description = "xdg-desktop-portal backend for wlroots";
     maintainers = with maintainers; [ minijackson ];

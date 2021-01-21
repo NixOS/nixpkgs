@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, abseil-cpp, gflags, which
+{ lib, stdenv, fetchFromGitHub, cmake, abseil-cpp, gflags, which
 , lsb-release, glog, protobuf, cbc, zlib
 , ensureNewerSourcesForZipFilesHook, python, swig }:
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "python" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/google/or-tools";
     license = licenses.asl20;
     description = ''

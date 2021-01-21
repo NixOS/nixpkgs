@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkg-config, gtk2 }:
+{ fetchurl, lib, stdenv, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "gtkimageview-1.6.4";
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
          interpolation; GIF animation support.
        '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

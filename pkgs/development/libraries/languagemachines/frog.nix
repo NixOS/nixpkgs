@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , automake, autoconf, bzip2, libtar, libtool, pkg-config, autoconf-archive
 , libxml2, icu
 , languageMachines
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     make check
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Tagger-Lemmatizer-Morphological-Analyzer-Dependency-Parser for Dutch";
     homepage    = "https://languagemachines.github.io/frog";
     license     = licenses.gpl3;

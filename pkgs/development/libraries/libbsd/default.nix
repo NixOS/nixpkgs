@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libbsd";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./darwin.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Common functions found on BSD systems";
     homepage = "https://libbsd.freedesktop.org/";
     license = licenses.bsd3;

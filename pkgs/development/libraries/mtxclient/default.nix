@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     olm
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client API library for Matrix, built on top of Boost.Asio";
     homepage = "https://github.com/Nheko-Reborn/mtxclient";
     license = licenses.mit;

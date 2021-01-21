@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , fetchpatch
 , pkg-config
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library that uses DBus to provide objects allowing you to create Model-View-Controller type programs across DBus";
     homepage = "https://launchpad.net/dee";
     license = licenses.lgpl3;

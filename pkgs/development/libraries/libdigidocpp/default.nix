@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libdigidoc, minizip, pcsclite, opensc, openssl
+{ lib, stdenv, fetchurl, cmake, libdigidoc, minizip, pcsclite, opensc, openssl
 , xercesc, xml-security-c, pkg-config, xsd, zlib, xalanc, xxd }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     xml-security-c xsd zlib xalanc
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for creating DigiDoc signature files";
     homepage = "http://www.id.ee/";
     license = licenses.lgpl2;

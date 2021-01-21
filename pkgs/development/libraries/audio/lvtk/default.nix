@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, gtkmm2, lv2, pkg-config, python, wafHook }:
+{ lib, stdenv, fetchurl, boost, gtkmm2, lv2, pkg-config, python, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "lvtk";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "--boost-libs=${boost.out}/lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set C++ wrappers around the LV2 C API";
     homepage = "https://lvtk.org/";
     license = licenses.gpl3;

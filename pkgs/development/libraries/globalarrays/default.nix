@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
+{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
 , blas, gfortran, openssh, openmpi
 } :
 
@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Global Arrays Programming Models";
     homepage = "http://hpc.pnl.gov/globalarrays/";
     maintainers = [ maintainers.markuskowa ];

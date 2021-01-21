@@ -1,4 +1,4 @@
-{stdenv, pkg-config, autoreconfHook, fetchFromGitHub }:
+{lib, stdenv, pkg-config, autoreconfHook, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "libspiro";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library that simplifies the drawing of beautiful curves";
     homepage = "https://github.com/fontforge/libspiro";
     license = licenses.gpl3Plus;

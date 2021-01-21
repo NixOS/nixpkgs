@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, protozero, expat, zlib, bzip2, boost }:
+{ lib, stdenv, fetchFromGitHub, cmake, protozero, expat, zlib, bzip2, boost }:
 
 stdenv.mkDerivation rec {
   pname = "libosmium";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and flexible C++ library for working with OpenStreetMap data";
     homepage = "https://osmcode.org/libosmium/";
     license = licenses.boost;

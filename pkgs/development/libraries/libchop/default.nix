@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, zlib, bzip2, libgcrypt
+{ fetchurl, lib, stdenv, zlib, bzip2, libgcrypt
 , gdbm, gperf, tdb, gnutls, db, libuuid
 , lzo, pkg-config, guile, rpcsvc-proto, libtirpc
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sed -re 's%@GUILE@%&/guile%' -i */Makefile.* Makefile.*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools & library for data backup and distributed storage";
 
     longDescription =

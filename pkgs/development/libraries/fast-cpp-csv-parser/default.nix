@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "fast-cpp-csv-parser";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     substituteAll ${./fast-cpp-csv-parser.pc.in} $out/lib/pkgconfig/fast-cpp-csv-parser.pc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small, easy-to-use and fast header-only library for reading comma separated value (CSV) files";
     homepage = "https://github.com/ben-strasser/fast-cpp-csv-parser";
     license = licenses.bsd3;

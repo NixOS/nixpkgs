@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pcre, zlib, python, openssl }:
+{ lib, stdenv, fetchurl, cmake, pcre, zlib, python, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "cppcms";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     "--no-warn-unused-cli"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://cppcms.com";
     description = "High Performance C++ Web Framework";
     platforms = platforms.linux ;

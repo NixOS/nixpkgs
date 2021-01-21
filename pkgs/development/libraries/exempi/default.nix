@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, expat, zlib, boost, libiconv, darwin }:
+{ lib, stdenv, fetchurl, fetchpatch, expat, zlib, boost, libiconv, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "exempi";
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ expat zlib boost ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
 
   doCheck = stdenv.isLinux;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An implementation of XMP (Adobe's Extensible Metadata Platform)";
     homepage = "https://libopenraw.freedesktop.org/wiki/Exempi/";
     platforms = platforms.linux ++ platforms.darwin;

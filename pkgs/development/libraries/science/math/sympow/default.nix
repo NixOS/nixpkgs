@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , makeWrapper
 , which
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     "$out/bin/sympow" -sp 2p16 -curve "[1,2,3,4,5]" | grep '8.3705'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compute special values of symmetric power elliptic curve L-functions";
     license = {
       shortName = "sympow";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, cairo }:
+{ lib, stdenv, fetchFromGitHub, cmake, cairo }:
 
 stdenv.mkDerivation rec {
   pname = "redkite";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cairo ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.com/iurie-sw/redkite";
     description = "A small GUI toolkit";
     license = licenses.gpl3Plus;

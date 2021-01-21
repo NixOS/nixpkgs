@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, which, pkg-config, mono, gtk-sharp-2_0, gio-sharp }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, which, pkg-config, mono, gtk-sharp-2_0, gio-sharp }:
 
 stdenv.mkDerivation rec {
   pname = "gtk-sharp-beans";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Binds some API from GTK that isn't in GTK# 2.12.x";
     platforms = platforms.linux;
     license = licenses.lgpl21;
