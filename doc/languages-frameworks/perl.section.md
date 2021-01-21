@@ -110,7 +110,7 @@ ClassC3Componentised = buildPerlPackage rec {
 On Darwin, if a script has too many `-Idir` flags in its first line (its “shebang line”), it will not run. This can be worked around by calling the `shortenPerlShebang` function from the `postInstall` phase:
 
 ```nix
-{ stdenv, lib, buildPerlPackage, fetchurl, shortenPerlShebang }:
+{ lib, stdenv, buildPerlPackage, fetchurl, shortenPerlShebang }:
 
 ImageExifTool = buildPerlPackage {
   pname = "Image-ExifTool";

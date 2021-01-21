@@ -42,8 +42,8 @@ It also takes other standard `mkDerivation` attributes, they are added as such, 
 Here is a simple package example. It is a pure Coq library, thus it depends on Coq. It builds on the Mathematical Components library, thus it also takes some `mathcomp` derivations as `extraBuildInputs`.
 
 ```nix
-{ coq, mkCoqDerivation, mathcomp, mathcomp-finmap, mathcomp-bigenough,
-  lib, version ? null }:
+{ lib, mkCoqDerivation, version ? null
+, coq, mathcomp, mathcomp-finmap, mathcomp-bigenough }:
 with lib; mkCoqDerivation {
   /* namePrefix leads to e.g. `name = coq8.11-mathcomp1.11-multinomials-1.5.2` */
   namePrefix = [ "coq" "mathcomp" ];
