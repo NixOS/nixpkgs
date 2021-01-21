@@ -156,6 +156,8 @@ in
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
 
+  breakpad = callPackage ../development/misc/breakpad {};
+
   # Zip file format only allows times after year 1980, which makes e.g. Python wheel building fail with:
   # ValueError: ZIP does not support timestamps before 1980
   ensureNewerSourcesForZipFilesHook = ensureNewerSourcesHook { year = "1980"; };
