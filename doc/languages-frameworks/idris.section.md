@@ -69,11 +69,11 @@ prelude
 As an example of how a Nix expression for an Idris package can be created, here is the one for `idrisPackages.yaml`:
 
 ```nix
-{ build-idris-package
+{ lib
+, build-idris-package
 , fetchFromGitHub
 , contrib
 , lightyear
-, lib
 }:
 build-idris-package  {
   name = "yaml";
@@ -94,11 +94,11 @@ build-idris-package  {
     sha256 = "1g4pi0swmg214kndj85hj50ccmckni7piprsxfdzdfhg87s0avw7";
   };
 
-  meta = {
+  meta = with lib; {
     description = "Idris YAML lib";
     homepage = "https://github.com/Heather/Idris.Yaml";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brainrape ];
+    license = licenses.mit;
+    maintainers = [ maintainers.brainrape ];
   };
 }
 ```

@@ -44,8 +44,7 @@ buildPythonPackage rec {
     sed -i /pyqtwebengine/d setup.py
     substituteInPlace setup.py \
       --replace "pyqt5<5.13" "pyqt5" \
-      --replace "parso==0.7.0" "parso" \
-      --replace "jedi==0.17.1" "jedi"
+      --replace "parso==0.7.0" "parso"
   '';
 
   postInstall = ''

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "00f2wy6f0qng7qzga4iicyzl9j8b7mp6mrpfky5jxj93ms2w2rji";
   };
 
-  patches = [ ./systemd.patch ./union-wait.patch ];
+  patches = [ ./systemd.patch ./union-wait.patch ./fix-includes-for-musl.patch ];
 
   NIX_CFLAGS_COMPILE = "-DSYSV";
 
