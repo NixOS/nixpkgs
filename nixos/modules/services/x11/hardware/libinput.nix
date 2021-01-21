@@ -217,6 +217,7 @@ let cfg = config.services.xserver.libinput;
         ${cfg.${deviceType}.additionalOptions}
   '';
 in {
+  meta.maintainers = with maintainers; [ thiagokokada ];
 
   imports =
     (map (option: mkRenamedOptionModule ([ "services" "xserver" "libinput" option ]) [ "services" "xserver" "libinput" "touchpad" option ]) [
