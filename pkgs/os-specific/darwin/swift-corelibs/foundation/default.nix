@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
 
 let
-  # 10.12 adds a new sysdir.h that our version of CF in the main derivation depends on, but
+  # 10.12 adds a new sysdir.h that our version of CoreFoundation in the main derivation depends on, but
   # isn't available publicly, so instead we grab an older version of the same file that did
   # not use sysdir.h, but provided the same functionality. Luckily it's simple :) hack hack
   sysdir-free-system-directories = fetchurl {

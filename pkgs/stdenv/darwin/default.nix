@@ -344,7 +344,7 @@ in rec {
       darwin = super.darwin // {
         inherit (darwin)
           binutils dyld Libsystem xnu configd ICU libdispatch libclosure
-          launchd CF darwin-stubs;
+          launchd CoreFoundation darwin-stubs;
       };
     };
   in with prevStage; stageFun 2 prevStage {
@@ -353,7 +353,7 @@ in rec {
     '';
 
     extraNativeBuildInputs = [ pkgs.xz ];
-    extraBuildInputs = [ pkgs.darwin.CF ];
+    extraBuildInputs = [ pkgs.darwin.CoreFoundation ];
     libcxx = pkgs.libcxx;
 
     allowedRequisites =
@@ -363,7 +363,7 @@ in rec {
         llvmPackages_7.clang-unwrapped zlib libxml2.out curl.out openssl.out
         libssh2.out nghttp2.lib libkrb5 coreutils gnugrep pcre.out gmp libiconv
       ]) ++
-      (with pkgs.darwin; [ dyld Libsystem CF ICU locale ]);
+      (with pkgs.darwin; [ dyld Libsystem CoreFoundation ICU locale ]);
 
     overrides = persistent;
   };
@@ -400,7 +400,7 @@ in rec {
     # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
     # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
     extraNativeBuildInputs = with pkgs; [ xz ];
-    extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
+    extraBuildInputs = [ pkgs.darwin.CoreFoundation pkgs.bash ];
     libcxx = pkgs.libcxx;
 
     extraPreHook = ''
@@ -449,7 +449,7 @@ in rec {
       darwin = super.darwin // rec {
         inherit (darwin) dyld Libsystem libiconv locale darwin-stubs;
 
-        CF = super.darwin.CF.override {
+        CoreFoundation = super.darwin.CoreFoundation.override {
           inherit libxml2;
           python3 = prevStage.python3;
         };
@@ -458,7 +458,7 @@ in rec {
   in with prevStage; stageFun 4 prevStage {
     shell = "${pkgs.bash}/bin/bash";
     extraNativeBuildInputs = with pkgs; [ xz ];
-    extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
+    extraBuildInputs = [ pkgs.darwin.CoreFoundation pkgs.bash ];
     libcxx = pkgs.libcxx;
 
     extraPreHook = ''
@@ -504,7 +504,7 @@ in rec {
     targetPlatform = localSystem;
 
     preHook = commonPreHook + ''
-      export NIX_COREFOUNDATION_RPATH=${pkgs.darwin.CF}/Library/Frameworks
+      export NIX_COREFOUNDATION_RPATH=${pkgs.darwin.CoreFoundation}/Library/Frameworks
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
@@ -519,7 +519,7 @@ in rec {
     };
 
     extraNativeBuildInputs = [];
-    extraBuildInputs = [ pkgs.darwin.CF ];
+    extraBuildInputs = [ pkgs.darwin.CoreFoundation ];
 
     extraAttrs = {
       libc = pkgs.darwin.Libsystem;
@@ -537,7 +537,7 @@ in rec {
       curl.out openssl.out libssh2.out nghttp2.lib libkrb5
       cc.expand-response-params libxml2.out
     ]) ++ (with pkgs.darwin; [
-      dyld Libsystem CF cctools ICU libiconv locale libtapi
+      dyld Libsystem CoreFoundation cctools ICU libiconv locale libtapi
     ]);
 
     overrides = lib.composeExtensions persistent (self: super: {
@@ -546,7 +546,7 @@ in rec {
       inherit cc;
 
       darwin = super.darwin // {
-        inherit (prevStage.darwin) CF darwin-stubs;
+        inherit (prevStage.darwin) CoreFoundation darwin-stubs;
         xnu = super.darwin.xnu.override { inherit (prevStage) python3; };
       };
     });

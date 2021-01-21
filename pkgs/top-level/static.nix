@@ -21,7 +21,7 @@ self: super: let
   # but more portable than Nix store binaries.
   makeStaticDarwin = stdenv_: let stdenv = stdenv_.override {
     # extraBuildInputs are dropped in cross.nix, but darwin still needs them
-    extraBuildInputs = [ self.buildPackages.darwin.CF ];
+    extraBuildInputs = [ self.buildPackages.darwin.CoreFoundation ];
   }; in stdenv // {
     mkDerivation = args: stdenv.mkDerivation (args // {
       NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")

@@ -431,7 +431,7 @@ self: super: builtins.intersectAttrs super {
       ++ pkgs.lib.optionals pkgs.stdenv.isDarwin
                             (with pkgs.darwin.apple_sdk.frameworks;
                              [ AGL Cocoa OpenGL IOKit Kernel CoreVideo
-                               pkgs.darwin.CF ]);
+                               pkgs.darwin.CoreFoundation ]);
   });
   OpenCL = overrideCabal super.OpenCL (drv: {
     librarySystemDepends =

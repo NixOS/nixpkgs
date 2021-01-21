@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n7xy657ii0sa42zx6944v2m4v9qrh6sqgmw17l3nch3y43sxlyh";
   };
 
-  # avoid retaining reference to CF during stdenv bootstrap
+  # avoid retaining reference to CoreFoundation during stdenv bootstrap
   configureFlags = lib.optionals stdenv.isDarwin [
     "gt_cv_func_CFPreferencesCopyAppValue=no"
     "gt_cv_func_CFLocaleCopyCurrent=no"

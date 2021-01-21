@@ -1,5 +1,5 @@
 { stdenv, appleDerivation, lib
-, Librpcsvc, apple_sdk, pam, CF, openbsm }:
+, Librpcsvc, apple_sdk, pam, CoreFoundation, openbsm }:
 
 appleDerivation {
   # xcbuild fails with:
@@ -7,7 +7,7 @@ appleDerivation {
   # see issue facebook/xcbuild#188
   # buildInputs = [ xcbuild ];
 
-  buildInputs = [ Librpcsvc apple_sdk.frameworks.OpenDirectory pam CF
+  buildInputs = [ Librpcsvc apple_sdk.frameworks.OpenDirectory pam CoreFoundation
                   apple_sdk.frameworks.IOKit openbsm ];
   # NIX_CFLAGS_COMPILE = lib.optionalString hostPlatform.isi686 "-D__i386__"
   #                    + lib.optionalString hostPlatform.isx86_64 "-D__x86_64__"

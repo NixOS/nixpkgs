@@ -172,7 +172,7 @@ let
 
     propagatedBuildInputs = builtins.attrValues deps;
 
-    # don't use pure CF for dylibs that depend on frameworks
+    # don't use pure CoreFoundation for dylibs that depend on frameworks
     setupHook = ./framework-setup-hook.sh;
 
     # Not going to be more specific than this for now

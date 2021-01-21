@@ -6,7 +6,7 @@ appleDerivation {
   installPhase = ''
     mkdir -p $out/include/dispatch $out/include/os
 
-    # Move these headers so CF can find <os/voucher_private.h>
+    # Move these headers so CoreFoundation can find <os/voucher_private.h>
     mv private/voucher*.h  $out/include/os
     cp -r private/*.h  $out/include/dispatch
 
