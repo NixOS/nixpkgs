@@ -17823,6 +17823,7 @@ in
 
   bind = callPackage ../servers/dns/bind { };
   dnsutils = bind.dnsutils;
+  dig = bind.dnsutils;
 
   inherit (callPackages ../servers/bird { })
     bird bird6 bird2;
