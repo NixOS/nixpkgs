@@ -375,6 +375,18 @@ let
     meta.homepage = "https://github.com/tyru/caw.vim/";
   };
 
+  chadtree = buildVimPluginFrom2Nix {
+    pname = "chadtree";
+    version = "2021-01-21";
+    src = fetchFromGitHub {
+      owner = "ms-jpq";
+      repo = "chadtree";
+      rev = "a351625c4029fb15b14eebe46016c9a6b1bc7d26";
+      sha256 = "0jmnsr1k9v7zpxkbd6h9i4cizbkm99vyr4366wdjiikbn29jx6pr";
+    };
+    meta.homepage = "https://github.com/ms-jpq/chadtree/";
+  };
+
   changeColorScheme-vim = buildVimPluginFrom2Nix {
     pname = "changeColorScheme-vim";
     version = "2010-10-18";
