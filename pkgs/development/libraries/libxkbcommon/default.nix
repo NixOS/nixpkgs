@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://xkbcommon.org";
     changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${version}/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ primeos ttuegel ];
     platforms = with platforms; unix;
   };
 }
