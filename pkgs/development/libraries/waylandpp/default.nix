@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kxiqab48p0n97pwg8c2zx56wqq32m3rcq7qd2pjj33ipcanb3qq";
   };
 
-  cmakeFlags = [ 
-    "-DCMAKE_INSTALL_DATADIR=${placeholder "dev"}" 
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_DATADIR=${placeholder "dev"}"
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DWAYLAND_SCANNERPP=${buildPackages.waylandpp}/bin/wayland-scanner++"
   ];
