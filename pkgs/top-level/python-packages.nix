@@ -1507,6 +1507,8 @@ in {
 
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
+  csrmesh  = callPackage ../development/python-modules/csrmesh { };
+
   csscompressor = callPackage ../development/python-modules/csscompressor { };
 
   cssmin = callPackage ../development/python-modules/cssmin { };
