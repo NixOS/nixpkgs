@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "alerta-server";
-  version = "8.2.0";
+  version = "8.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ee06d0f828b679402847989de9013a1271db282af377f5dce776347623dde345";
+    sha256 = "a2713a31c6e326c774a3ee0328f424f944b951935ff1b893a4a66598d61c5a97";
   };
 
   propagatedBuildInputs = [
