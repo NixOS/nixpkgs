@@ -14,6 +14,9 @@
 , extraPackages ? [], extraBuildCommands ? ""
 , buildPackages ? {}
 , useMacosReexportHack ? false
+
+# Darwin code signing support utilities
+, postLinkSignHook ? null, signingUtils ? null
 }:
 
 with lib;
@@ -338,6 +341,24 @@ stdenv.mkDerivation {
         substituteAll ${./add-darwin-ldflags-before.sh} $out/nix-support/add-local-ldflags-before.sh
       ''
     )
+
+    ##
+    ## Code signing on Apple Silicon
+    ##
+    + optionalString (targetPlatform.isDarwin && targetPlatform.isAarch64) ''
+      echo 'source ${postLinkSignHook}' >> $out/nix-support/post-link-hook
+
+      export signingUtils=${signingUtils}
+
+      wrap \
+        ${targetPrefix}install_name_tool \
+        ${./darwin-install_name_tool-wrapper.sh} \
+        "${bintools_bin}/bin/${targetPrefix}install_name_tool"
+
+      wrap \
+        ${targetPrefix}strip ${./darwin-strip-wrapper.sh} \
+        "${bintools_bin}/bin/${targetPrefix}strip"
+    ''
 
     ##
     ## Extra custom steps

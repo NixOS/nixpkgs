@@ -11857,6 +11857,7 @@ in
     noLibc = (self.libc == null);
 
     inherit bintools libc;
+    inherit (darwin) postLinkSignHook signingUtils;
   } // extraArgs; in self);
 
   yaml-language-server = nodePackages.yaml-language-server;
