@@ -90,9 +90,6 @@ insert_final_newline = unset
 indent_style = unset
 trim_trailing_whitespace = unset
 
-[pkgs/development/{perl-modules,ocaml-modules,tools/ocaml}/**]
-indent_style = unset
-
 [pkgs/servers/dict/wordnet_structures.py]
 trim_trailing_whitespace = unset
 
