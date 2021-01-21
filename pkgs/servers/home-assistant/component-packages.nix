@@ -927,7 +927,7 @@
     "whois" = ps: with ps; [ python-whois ];
     "wiffi" = ps: with ps; [ ]; # missing inputs: wiffi
     "wilight" = ps: with ps; [ pywilight ];
-    "wink" = ps: with ps; [ aiohttp-cors pubnubsub-handler ]; # missing inputs: python-wink
+    "wink" = ps: with ps; [ aiohttp-cors pubnubsub-handler python-wink ];
     "wirelesstag" = ps: with ps; [ ]; # missing inputs: wirelesstagpy
     "withings" = ps: with ps; [ aiohttp-cors ]; # missing inputs: withings-api
     "wled" = ps: with ps; [ wled ];
