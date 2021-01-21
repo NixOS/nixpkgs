@@ -7,6 +7,9 @@ let cfg = config.services.xserver.libinput;
 
     xorgBool = v: if v then "on" else "off";
 
+    # toString prints floats with hardcoded high precision
+    floatToString = f: builtins.toJSON f;
+
     mkConfigForDevice = deviceType: {
       dev = mkOption {
         type = types.nullOr types.str;
@@ -25,7 +28,7 @@ let cfg = config.services.xserver.libinput;
         example = "flat";
         description =
           ''
-            Sets  the pointer acceleration profile to the given profile.
+            Sets the pointer acceleration profile to the given profile.
             Permitted values are adaptive, flat.
             Not all devices support this option or all profiles.
             If a profile is unsupported, the default profile for this is used.
@@ -37,8 +40,8 @@ let cfg = config.services.xserver.libinput;
       };
 
       accelSpeed = mkOption {
-        type = types.nullOr types.str;
-        example = "-0.5";
+        type = types.nullOr types.float;
+        example = literalExample "-0.5";
         default = null;
         description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
       };
@@ -200,7 +203,7 @@ let cfg = config.services.xserver.libinput;
         MatchIs${matchIs} "${xorgBool true}"
         ${optionalString (cfg.${deviceType}.dev != null) ''MatchDevicePath "${cfg.${deviceType}.dev}"''}
         Option "AccelProfile" "${cfg.${deviceType}.accelProfile}"
-        ${optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${cfg.${deviceType}.accelSpeed}"''}
+        ${optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${floatToString cfg.${deviceType}.accelSpeed}"''}
         ${optionalString (cfg.${deviceType}.buttonMapping != null) ''Option "ButtonMapping" "${cfg.${deviceType}.buttonMapping}"''}
         ${optionalString (cfg.${deviceType}.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.${deviceType}.calibrationMatrix}"''}
         ${optionalString (cfg.${deviceType}.clickMethod != null) ''Option "ClickMethod" "${cfg.${deviceType}.clickMethod}"''}
