@@ -47,10 +47,6 @@ in
 
   print-reexports = callPackage ../os-specific/darwin/apple-sdk/print-reexports { };
 
-  maloader = callPackage ../os-specific/darwin/maloader {
-    inherit (darwin) opencflite;
-  };
-
   insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
 
   iosSdkPkgs = darwin.callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
@@ -65,8 +61,6 @@ in
   libobjc = apple-source-releases.objc4;
 
   lsusb = callPackage ../os-specific/darwin/lsusb { };
-
-  opencflite = callPackage ../os-specific/darwin/opencflite { };
 
   stubs = callPackages ../os-specific/darwin/stubs { };
 
