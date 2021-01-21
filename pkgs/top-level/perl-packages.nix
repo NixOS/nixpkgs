@@ -15339,6 +15339,14 @@ let
     buildInputs = [ NetSSH StringShellQuote ];
   };
 
+  NetRemctl = buildPerlModule {
+    pname = "NetRemctl";
+    inherit (pkgs.remctl) version meta;
+    src = pkgs.remctl.perlsrc;
+    buildInputs = [ pkgs.remctl ];
+    checkInputs = [ TestPod ];
+  };
+
   NetServer = buildPerlPackage {
     pname = "Net-Server";
     version = "2.009";

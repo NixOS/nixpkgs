@@ -24414,6 +24414,8 @@ in
 
   rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
 
+  remctl = callPackage ../tools/networking/remctl { };
+
   remotebox = callPackage ../applications/virtualization/remotebox { };
 
   # This package is currently broken with libupnp
