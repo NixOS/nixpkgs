@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , glib
@@ -9,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "conmon";
-  version = "2.0.24";
+  version = "2.0.25";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1z6z1bz2rgj15xbqx10kvwn8s64nx5hmn1x52k4z4r20p4f95hkg";
+    sha256 = "sha256-u22irZ9AC1W2AVJ1OD1gLzTH4NOgRkZekZ78rNKXnps=";
   };
 
   nativeBuildInputs = [ pkg-config ];

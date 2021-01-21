@@ -430,6 +430,17 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
       dynamically allocated uid.
     </para>
    </listitem>
+   <listitem>
+     <para>
+      The libinput module has been updated with the ability to configure mouse and touchpad settings separately.
+      The options in <literal>services.xserver.libinput</literal> have been renamed to <literal>services.xserver.libinput.touchpad</literal>,
+      while there is a new <literal>services.xserver.libinput.mouse</literal> for mouse related configuration.
+     </para>
+     <para>
+      Since touchpad options no longer apply to all devices, you may want to replicate your touchpad configuration in
+      mouse section.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 

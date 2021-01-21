@@ -8,12 +8,12 @@ then cohttp-lwt
 else
 
 buildDunePackage {
-	pname = "cohttp-lwt-unix";
-	inherit (cohttp-lwt) version src meta;
+  pname = "cohttp-lwt-unix";
+  inherit (cohttp-lwt) version src meta;
 
-	useDune2 = true;
+  useDune2 = true;
 
-	buildInputs = [ cmdliner ppx_sexp_conv ];
+  buildInputs = [ cmdliner ppx_sexp_conv ];
 
-	propagatedBuildInputs = [ cohttp-lwt conduit-lwt-unix fmt magic-mime ];
+  propagatedBuildInputs = [ cohttp-lwt conduit-lwt-unix fmt magic-mime ];
 }

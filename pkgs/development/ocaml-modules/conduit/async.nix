@@ -5,15 +5,15 @@ then conduit
 else
 
 buildDunePackage {
-	pname = "conduit-async";
-	useDune2 = true;
-	inherit (conduit) version src;
+  pname = "conduit-async";
+  useDune2 = true;
+  inherit (conduit) version src;
 
-	buildInputs = [ ppx_sexp_conv ];
+  buildInputs = [ ppx_sexp_conv ];
 
-	propagatedBuildInputs = [ async async_ssl conduit ];
+  propagatedBuildInputs = [ async async_ssl conduit ];
 
-	meta = conduit.meta // {
-		description = "A network connection establishment library for Async";
-	};
+  meta = conduit.meta // {
+    description = "A network connection establishment library for Async";
+  };
 }

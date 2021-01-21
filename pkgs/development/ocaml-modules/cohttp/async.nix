@@ -2,21 +2,21 @@
 , logs, magic-mime }:
 
 if !lib.versionAtLeast cohttp.version "0.99" then
-	cohttp
+  cohttp
 else if !lib.versionAtLeast async.version "0.13" then
-	throw "cohttp-async needs async-0.13 (hence OCaml >= 4.08)"
+  throw "cohttp-async needs async-0.13 (hence OCaml >= 4.08)"
 else
 
-	buildDunePackage {
-		pname = "cohttp-async";
-		useDune2 = true;
-		inherit (cohttp) version src;
+  buildDunePackage {
+    pname = "cohttp-async";
+    useDune2 = true;
+    inherit (cohttp) version src;
 
-		buildInputs = [ ppx_sexp_conv ];
+    buildInputs = [ ppx_sexp_conv ];
 
-		propagatedBuildInputs = [ async cohttp conduit-async logs magic-mime uri ];
+    propagatedBuildInputs = [ async cohttp conduit-async logs magic-mime uri ];
 
-		meta = cohttp.meta // {
-			description = "CoHTTP implementation for the Async concurrency library";
-		};
-	}
+    meta = cohttp.meta // {
+      description = "CoHTTP implementation for the Async concurrency library";
+    };
+  }
