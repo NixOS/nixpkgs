@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
                                   --replace '-I/usr/X11R6/include' "" \
                                   --replace '/usr/local/' $out/ \
                                   --replace 'sudo' "" \
-				                          --replace '-C surf depend' '-C surf'
+                                  --replace '-C surf depend' '-C surf'
      sed -in '/^# DO NOT DELETE THIS LINE/q;' surf/Makefile
   '';
 
@@ -41,4 +41,3 @@ stdenv.mkDerivation rec {
      maintainers = with maintainers; [ markuskowa ];
   };
 }
-
