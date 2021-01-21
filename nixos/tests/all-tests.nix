@@ -202,6 +202,7 @@ in
   latestKernel.hardened = handleTest ./hardened.nix { latestKernel = true; };
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
+  libinput = handleTest ./libinput.nix {};
   lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
