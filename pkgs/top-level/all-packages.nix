@@ -30703,6 +30703,7 @@ in
 
   pentablet-driver = libsForQt5.callPackage ../misc/drivers/pentablet-driver { };
 
+  qmk_cli = python3Packages.callPackage ../development/misc/qmk/cli.nix { };
   qmk_firmware = callPackage ../development/misc/qmk/firmware.nix {
     avrgcc = pkgsCross.avr.buildPackages.gcc;
     avrbinutils = pkgsCross.avr.buildPackages.binutils;
@@ -30715,7 +30716,7 @@ in
   newlib = callPackage ../development/misc/newlib { };
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
-    };
+  };
 
   omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
 
