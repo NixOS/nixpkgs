@@ -10,9 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ lua openssl zlib ];
 
   makeFlags = [
+    "CC=cc"
     "SBINDIR=$(out)/bin"
     "LIBDIR=$(out)/lib"
     "LUA_LIBDIR=$(out)/lib/lua/${lib.versions.majorMinor lua.version}"
@@ -25,6 +27,17 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-Wno-error=unused-result" ];
 
   enableParallelBuilding = true;
+
+  patchPhase = lib.optionals stdenv.isDarwin ''
+    substituteInPlace libfetch/common.c --replace 'MSG_NOSIGNAL' 'MSG_HAVEMORE'
+    substituteInPlace src/archive.c --replace '#include <sys/sysmacros.h>' ""
+    substituteInPlace src/archive.c --replace 'mknodat' "mknod"
+    substituteInPlace src/common.c --replace 'malloc.h' "stdlib.h"
+    substituteInPlace src/blob.c --replace 'malloc.h' "stdlib.h"
+    substituteInPlace src/blob.c --replace 'memrchr' "memchr"
+    substituteInPlace src/apk_defines.h --replace 'endian.h' "stdlib.h"
+    substituteInPlace libfetch/http.c --replace 'strdupa' 'strdup'
+  '';
 
   meta = with lib; {
     homepage = "https://gitlab.alpinelinux.org/alpine/apk-tools";
