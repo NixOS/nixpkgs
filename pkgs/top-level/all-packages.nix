@@ -12212,6 +12212,10 @@ in
 
   jam = callPackage ../development/tools/build-managers/jam { };
 
+  javacc = callPackage ../development/tools/parsing/javacc {
+    jdk = jdk8;
+  };
+
   jbake = callPackage ../development/tools/jbake { };
 
   jbang = callPackage ../development/tools/jbang { };
