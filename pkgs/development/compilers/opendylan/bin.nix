@@ -22,11 +22,11 @@ stdenv.mkDerivation {
     tar --strip-components=1 -xjf "$src" -C "$out"
 
     interpreter="$(cat "$NIX_CC"/nix-support/dynamic-linker)"
-    for a in "$out"/bin/*; do 
+    for a in "$out"/bin/*; do
       patchelf --set-interpreter "$interpreter" "$a"
       patchelf --set-rpath "$out/lib:${boehmgc.out}/lib" "$a"
     done
-    for a in "$out"/lib/*.so; do 
+    for a in "$out"/lib/*.so; do
       patchelf --set-rpath "$out/lib:${boehmgc.out}/lib" "$a"
     done
     sed -i -e "s|\-lgc|\-L${boehmgc.out}\/lib -lgc|" $out/lib/config.jam

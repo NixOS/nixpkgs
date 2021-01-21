@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   configureFlags = [
-    "--disable-update-xdg-database" 
+    "--disable-update-xdg-database"
   ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ guile gtk2 flex gawk perl ];

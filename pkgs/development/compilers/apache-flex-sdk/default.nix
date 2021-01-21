@@ -38,13 +38,13 @@ in stdenv.mkDerivation rec {
     for i in $out/bin/!(aasdoc|acompc|amxmlc); do
       wrapProgram $i \
         --set FLEX_HOME $t \
-        --set PLAYERGLOBAL_HOME $t/frameworks/libs/player/ 
+        --set PLAYERGLOBAL_HOME $t/frameworks/libs/player/
     done
 
     mkdir -p $t/frameworks/libs/player/${playerglobal_ver}/
     cp ${playerglobal} $t/frameworks/libs/player/${playerglobal_ver}/playerglobal.swc
   '';
-  
+
   fixupPhase = ":";
 
   meta = with stdenv.lib; {
