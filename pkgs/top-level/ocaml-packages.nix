@@ -1398,7 +1398,10 @@ let
 
     omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
 
-    google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
+    google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse {
+      # needs Base64 module
+      ocaml_extlib = ocaml_extlib.override { minimal = false; };
+    };
 
     hol_light = callPackage ../applications/science/logic/hol_light { };
 
