@@ -6349,6 +6349,8 @@ in {
 
   python-wifi = callPackage ../development/python-modules/python-wifi { };
 
+  python-wink = callPackage ../development/python-modules/python-wink { };
+
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
