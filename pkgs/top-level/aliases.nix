@@ -506,6 +506,7 @@ mapAliases ({
   # end
   ppl-address-book = throw "ppl-address-book deprecated on 2019-05-02: abandoned by upstream.";
   processing3 = processing; # added 2019-08-16
+  procmail = throw "procmail has been unmaintained for two decades and is abandoned by upstream."; # added 2021-01-21
   procps-ng = procps; # added 2018-06-08
   pygmentex = texlive.bin.pygmentex; # added 2019-12-15
   pyo3-pack = maturin;

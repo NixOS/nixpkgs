@@ -24167,10 +24167,6 @@ in
     jdk = oraclejdk8;
   };
 
-  # perhaps there are better apps for this task? It's how I had configured my preivous system.
-  # And I don't want to rewrite all rules
-  procmail = callPackage ../applications/misc/procmail { };
-
   profanity = callPackage ../applications/networking/instant-messengers/profanity ({
     python = python3;
   } // (config.profanity or {}));
