@@ -381,8 +381,8 @@ let
     src = fetchFromGitHub {
       owner = "ms-jpq";
       repo = "chadtree";
-      rev = "a351625c4029fb15b14eebe46016c9a6b1bc7d26";
-      sha256 = "0jmnsr1k9v7zpxkbd6h9i4cizbkm99vyr4366wdjiikbn29jx6pr";
+      rev = "4b1d61cc00baf7b5f77efb75d1973d453248153f";
+      sha256 = "1w166j4syxwv1qhm0s813rixgc83j6ba5m4db1n2a8bnqwgcc9i6";
     };
     meta.homepage = "https://github.com/ms-jpq/chadtree/";
   };
@@ -702,12 +702,12 @@ let
 
   Coqtail = buildVimPluginFrom2Nix {
     pname = "Coqtail";
-    version = "2021-01-18";
+    version = "2021-01-21";
     src = fetchFromGitHub {
       owner = "whonore";
       repo = "Coqtail";
-      rev = "c58071ff5ad86baad107f43737c64a18b574cd3a";
-      sha256 = "1pbkvxcwzvyy47bfv1r1ldzcf0qqkbbx2bq4jl93di5bg7kl57qb";
+      rev = "ff42b26f69634ed9fb3001887d80c65a759458e5";
+      sha256 = "0b4pra6f83933kl1ys8k4q9y9mx6a7qc7z757s82b0jk92cs790b";
     };
     meta.homepage = "https://github.com/whonore/Coqtail/";
   };
@@ -1318,12 +1318,12 @@ let
 
   far-vim = buildVimPluginFrom2Nix {
     pname = "far-vim";
-    version = "2020-12-12";
+    version = "2021-01-21";
     src = fetchFromGitHub {
       owner = "brooth";
       repo = "far.vim";
-      rev = "f92a9ef537c195815ddc12ce919dae607f3d887b";
-      sha256 = "1i6mzbfylq3212saipq79s5yb00y9083wsi7dax37bcfb8ryl841";
+      rev = "b3e7b62ef6820ccdcbdc6070f3573b658aafba43";
+      sha256 = "0lf2vlsyk4ymhyscnpla417hvh6qdi8cablammnc5vsk1hmqvc3i";
     };
     meta.homepage = "https://github.com/brooth/far.vim/";
   };
@@ -2220,12 +2220,12 @@ let
 
   lualine-nvim = buildVimPluginFrom2Nix {
     pname = "lualine-nvim";
-    version = "2021-01-20";
+    version = "2021-01-21";
     src = fetchFromGitHub {
       owner = "hoob3rt";
       repo = "lualine.nvim";
-      rev = "09835e2a1a5404b4ee4b80fb8e3fa84ccbddfec4";
-      sha256 = "0n4b8iyk9pk4ji0sw8lf973z2wg2lfb59yh0ry3hkl9g66vg5nkl";
+      rev = "a2a9193296414aea13efa3a02fafb115f0226276";
+      sha256 = "1n3c7zmpqv3xr750b7nbk1q08abhx2frhvbqhpd28vi2lf075bxa";
     };
     meta.homepage = "https://github.com/hoob3rt/lualine.nvim/";
   };
@@ -2980,8 +2980,8 @@ let
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter";
-      rev = "99ecb46592f8e9a3a8b56ff2c4fd18f1eff4a5af";
-      sha256 = "131k1p0qjwvm5d3s1670r9a4s053c7x2yi7n69jlljc6x57b3q9n";
+      rev = "f84c93c484ec3f5fb2a7ca461bf5b93994662fda";
+      sha256 = "0wh2rv1awlvm1d4fgvcgl0cg9sw20x5axmnq2ch0q18qca37v5i5";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
   };
@@ -3204,12 +3204,12 @@ let
 
   playground = buildVimPluginFrom2Nix {
     pname = "playground";
-    version = "2021-01-19";
+    version = "2021-01-21";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "playground";
-      rev = "bcd83b5ce698e9ffdd27e64be16f04f0544ca047";
-      sha256 = "0kmyx172v94m3193i3pmim79d6pk9zffbm50lvzpy7n0bi16608i";
+      rev = "7e373e5706a2df71fd3a96b50d1f7b0c3e7a0b36";
+      sha256 = "1vrfjv22whdmwna4xlvpsajx69fs8dkfwk0ji1jnvbyxmhki8mik";
     };
     meta.homepage = "https://github.com/nvim-treesitter/playground/";
   };
@@ -7207,12 +7207,12 @@ let
 
   vim-snipmate = buildVimPluginFrom2Nix {
     pname = "vim-snipmate";
-    version = "2021-01-13";
+    version = "2021-01-21";
     src = fetchFromGitHub {
       owner = "garbas";
       repo = "vim-snipmate";
-      rev = "a5b5dd46e9c2b796599ff4530e1c8d29fdd77945";
-      sha256 = "05k6irv1p8kglznz9pfdzlb3qplf6y1k4x9qr3zcidv79hldg0b5";
+      rev = "d4554cd646c3c015d85bd44487a0e019f88c959a";
+      sha256 = "1jmyrlbwrljc6jnn44yqz5s090srykn3dp7w08iaq10vpxav987g";
     };
     meta.homepage = "https://github.com/garbas/vim-snipmate/";
   };
