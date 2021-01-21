@@ -22,8 +22,8 @@
 # /lib will link to /lib32
 
 let
-  is64Bit = stdenv.hostPlatform.parsed.cpu.bits == 64;
-  isMultiBuild  = multiPkgs != null && is64Bit;
+  inherit (stdenv.hostPlatform) is64bit isx86_64;
+  isMultiBuild  = isx86_64 && multiPkgs != null;
   isTargetBuild = !isMultiBuild;
 
   # list of packages (usually programs) which are only be installed for the
@@ -32,7 +32,7 @@ let
 
   # list of packages which are installed for both x86 and x86_64 on x86_64
   # systems
-  multiPaths = multiPkgs pkgsi686Linux;
+  multiPaths = lib.optional isx86_64 (multiPkgs pkgsi686Linux);
 
   # base packages of the chroot
   # these match the host's architecture, glibc_multi is used for multilib
@@ -45,9 +45,7 @@ let
       gawk diffutils findutils gnused gnugrep
       gnutar gzip bzip2 xz
     ];
-  baseMultiPkgs = with pkgsi686Linux;
-    [ (toString gcc.cc.lib)
-    ];
+  baseMultiPkgs = lib.optional isx86_64 (toString pkgsi686Linux.gcc.cc.lib);
 
   ldconfig = writeShellScriptBin "ldconfig" ''
     exec ${pkgs.glibc.bin}/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
@@ -106,7 +104,7 @@ let
   setupLibDirsTarget = ''
     # link content of targetPaths
     cp -rsHf ${staticUsrProfileTarget}/lib lib
-    ln -s lib lib${if is64Bit then "64" else "32"}
+    ln -s lib lib${if is64bit then "64" else "32"}
   '';
 
   # setup /lib, /lib32 and /lib64
