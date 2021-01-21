@@ -275,7 +275,7 @@ leanprover/lean.vim
 ledger/vim-ledger
 lepture/vim-jinja
 lervag/vimtex
-lewis6991/gitsigns.nvim
+lewis6991/gitsigns.nvim@main
 lfilho/cosco.vim
 lifepillar/vim-mucomplete
 lighttiger2505/deoplete-vim-lsp
