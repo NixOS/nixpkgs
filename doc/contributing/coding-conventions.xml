@@ -180,6 +180,12 @@ args.stdenv.mkDerivation (args // {
    </listitem>
    <listitem>
     <para>
+     Arguments should be listed in the order they are used, with the
+     exception of <varname>lib</varname>, which always goes first.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Prefer using the top-level <varname>lib</varname> over its alias
      <literal>stdenv.lib</literal>.  <varname>lib</varname> is unrelated to
      <varname>stdenv</varname>, and so <literal>stdenv.lib</literal> should only

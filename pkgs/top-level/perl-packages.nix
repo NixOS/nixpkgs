@@ -19038,6 +19038,7 @@ let
       description = "lib/Safe/Hole.pm";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       homepage = "https://github.com/toddr/Safe-Hole";
+      broken = stdenv.isDarwin;
     };
   };
 

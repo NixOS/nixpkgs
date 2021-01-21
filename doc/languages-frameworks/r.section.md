@@ -32,14 +32,12 @@ However, if you'd like to add a file to your project source to make the
 environment available for other contributors, you can create a `default.nix`
 file like so:
 ```nix
-let
-  pkgs = import <nixpkgs> {};
-  stdenv = pkgs.stdenv;
-in with pkgs; {
+with import <nixpkgs> {};
+{
   myProject = stdenv.mkDerivation {
     name = "myProject";
     version = "1";
-    src = if pkgs.lib.inNixShell then null else nix;
+    src = if lib.inNixShell then null else nix;
 
     buildInputs = with rPackages; [
       R

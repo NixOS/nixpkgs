@@ -11626,6 +11626,7 @@ in
   bingrep = callPackage ../development/tools/analysis/bingrep { };
 
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {
+    autoreconfHook = if targetPlatform.isiOS then autoreconfHook269 else autoreconfHook;
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
   };
@@ -13182,6 +13183,8 @@ in
   CoinMP = callPackage ../development/libraries/CoinMP { };
 
   cointop = callPackage ../applications/misc/cointop { };
+
+  cog = callPackage ../development/web/cog { };
 
   ctl = callPackage ../development/libraries/ctl { };
 
@@ -15454,6 +15457,10 @@ in
   libxsmm = callPackage ../development/libraries/libxsmm { };
 
   libixp_hg = callPackage ../development/libraries/libixp-hg { };
+
+  libwpe = callPackage ../development/libraries/libwpe { };
+
+  libwpe-fdo = callPackage ../development/libraries/libwpe/fdo.nix { };
 
   libyaml = callPackage ../development/libraries/libyaml { };
 
@@ -18230,6 +18237,8 @@ in
   sickgear = callPackage ../servers/sickbeard/sickgear.nix { };
 
   sickrage = callPackage ../servers/sickbeard/sickrage.nix { };
+
+  sigurlx = callPackage ../tools/security/sigurlx { };
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
@@ -27097,6 +27106,7 @@ in
 
   zeroadPackages = dontRecurseIntoAttrs (callPackage ../games/0ad {
     wxGTK = wxGTK30;
+    stdenv = gcc9Stdenv;
   });
 
   zeroad = zeroadPackages.zeroad;
@@ -29510,7 +29520,9 @@ in
 
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {};
 
-  duti = callPackage ../os-specific/darwin/duti {};
+  duti = callPackage ../os-specific/darwin/duti {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   dnstracer = callPackage ../tools/networking/dnstracer {
     inherit (darwin) libresolv;

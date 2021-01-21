@@ -14,6 +14,14 @@ if [[ "$new_version" == "$old_version" ]]; then
   [[ "${1}" != "--force" ]] && exit 0
 fi
 
+# Updating the hash of deb package manually since there seems to be no way to do it automatically
+oldDebPkgUrl="https://github.com/InfinityGhost/OpenTabletDriver/releases/download/v${old_version}/OpenTabletDriver.deb";
+newDebPkgUrl="https://github.com/InfinityGhost/OpenTabletDriver/releases/download/v${new_version}/OpenTabletDriver.deb";
+oldDebSha256=$(nix-prefetch-url "$oldDebPkgUrl")
+newDebSha256=$(nix-prefetch-url "$newDebPkgUrl")
+echo "oldDebSha256: $oldDebSha256 newDebSha256: $newDebSha256"
+sed -i ./default.nix -re "s|\"$oldDebSha256\"|\"$newDebSha256\"|"
+
 cd ../../../..
 update-source-version opentabletdriver "$new_version"
 store_src="$(nix-build . -A opentabletdriver.src --no-out-link)"
