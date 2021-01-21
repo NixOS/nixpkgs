@@ -465,6 +465,7 @@ stdenv.mkDerivation rec {
       build --host_linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt="-Wl,/g')"
       build --host_javabase='@local_jdk//:jdk'
       build --host_java_toolchain='${javaToolchain}'
+      build --verbose_failures
       EOF
 
       # add the same environment vars to compile.sh
@@ -476,6 +477,7 @@ stdenv.mkDerivation rec {
           -e "/\$command \\\\$/a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" \
           -e "/\$command \\\\$/a --host_javabase='@local_jdk//:jdk' \\\\" \
           -e "/\$command \\\\$/a --host_java_toolchain='${javaToolchain}' \\\\" \
+          -e "/\$command \\\\$/a --verbose_failures \\\\" \
           -i scripts/bootstrap/compile.sh
 
       # This is necessary to avoid:
