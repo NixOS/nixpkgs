@@ -1,4 +1,5 @@
-{ lib, fetchurl, buildDunePackage, cstruct, bigarray-compat }:
+{ lib, fetchurl, buildDunePackage, cstruct, bigarray-compat
+, alcotest, crowbar, base64 }:
 
 buildDunePackage rec {
   minimumOCamlVersion = "4.03";
@@ -12,6 +13,8 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [ cstruct bigarray-compat ];
+  checkInputs = [ crowbar alcotest base64 ];
+  doCheck = true;
 
   meta = {
     description = "Constant time equal function to avoid timing attacks in OCaml";
