@@ -3699,6 +3699,12 @@
     githubId = 362833;
     name = "Hongchang Wu";
   };
+  hoverbear = {
+    email = "operator+nix@hoverbear.org";
+    github = "hoverbear";
+    githubId = 130903;
+    name = "Ana Hobden";
+  };
   hrdinka = {
     email = "c.nix@hrdinka.at";
     github = "hrdinka";
