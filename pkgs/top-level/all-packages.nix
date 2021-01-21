@@ -7056,6 +7056,8 @@ in
 
   podiff = callPackage ../tools/text/podiff { };
 
+  toolbox = callPackage ../applications/virtualization/toolbox { };
+
   podman = if stdenv.isDarwin then
     callPackage ../applications/virtualization/podman { }
   else
