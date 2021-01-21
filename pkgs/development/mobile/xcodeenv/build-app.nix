@@ -58,7 +58,7 @@ stdenv.mkDerivation ({
     # Be sure that the Xcode wrapper has priority over everything else.
     # When using buildInputs this does not seem to be the case.
     export PATH=${xcodewrapper}/bin:$PATH
-    
+
     ${stdenv.lib.optionalString release ''
       export HOME=/Users/$(whoami)
       keychainName="$(basename $out)"
@@ -69,7 +69,7 @@ stdenv.mkDerivation ({
       security unlock-keychain -p "" $keychainName
 
       # Import the certificate into the keychain
-      security import ${certificateFile} -k $keychainName -P "${certificatePassword}" -A 
+      security import ${certificateFile} -k $keychainName -P "${certificatePassword}" -A
 
       # Grant the codesign utility permissions to read from the keychain
       security set-key-partition-list -S apple-tool:,apple: -s -k "" $keychainName

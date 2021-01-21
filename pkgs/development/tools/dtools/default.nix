@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
       $makeCmd INSTALL_DIR=$out install
-	'';
+  '';
 
   meta = with stdenv.lib; {
     description = "Ancillary tools for the D programming language compiler";
