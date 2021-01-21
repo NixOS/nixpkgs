@@ -451,7 +451,6 @@ in rec {
 
         CoreFoundation = super.darwin.CoreFoundation.override {
           inherit libxml2;
-          python3 = prevStage.python3;
         };
       };
     };

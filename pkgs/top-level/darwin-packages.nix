@@ -83,7 +83,7 @@ in
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
 
-  CoreFoundation = callPackage ../os-specific/darwin/swift-corelibs/foundation { inherit (darwin) objc4 ICU; };
+  CoreFoundation = callPackage ../os-specific/darwin/swift-corelibs/foundation { inherit (darwin) ICU; };
 
   # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
   # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { inherit (darwin) apple_sdk_sierra xnu; };

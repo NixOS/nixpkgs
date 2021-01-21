@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch, ninja, cmake, curl, libxml2, ICU }:
 
 let
   # 10.12 adds a new sysdir.h that our version of CoreFoundation in the main derivation depends on, but
@@ -10,71 +10,74 @@ let
   };
 in
 
-stdenv.mkDerivation {
-  name = "swift-corefoundation";
+stdenv.mkDerivation rec {
+  pname   = "CoreFoundation";
+  version = "swift-5.3.2"; # not the real version, APPLE refuse to give one. https://github.com/apple/swift-corelibs-foundation/commit/df3ec55fe6c162d590a7653d89ad669c2b9716b1#commitcomment-30442619
 
   src = fetchFromGitHub {
     owner  = "apple";
     repo   = "swift-corelibs-foundation";
-    rev    = "71aaba20e1450a82c516af1342fe23268e15de0a";
-    sha256 = "17kpql0f27xxz4jjw84vpas5f5sn4vdqwv10g151rc3rswbwln1z";
+    rev    = "${version}-RELEASE";
+    sha256 = "1fd0djza84rdh4jw7kw0kgm22r7jmga6zx1drzpymvpqyscxqsdq";
   };
 
-  nativeBuildInputs = [ ninja python3 ];
-  buildInputs = [ curl libxml2 objc4 ICU ];
+  # TODO: patches are in upstream. Check if they can be dropped in next update.
+  patches = [
+    # fix unwanted including objc
+    (fetchpatch {
+      url = "https://github.com/apple/swift-corelibs-foundation/pull/2976/commits/1e92742e04cb73a7d1572245be3a5c31cbe81e14.patch";
+      sha256 = "0hqg8jikdfqzx52lnz3y17cd0rxby1jik78dgfggv3lqx4hfh3dz";
+    })
+    # fix extra symbol __kCFAllocatorTypeID_CONST
+    (fetchpatch {
+      url = "https://github.com/apple/swift-corelibs-foundation/commit/5a022ef99f37f78eb2f758fa47e2d751469151f9.patch";
+      sha256 = "1wyaxzdnzf11p8h28nx426ri8m179pmgz3ljp9y97sc3xajw1rla";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake ninja ];
+  buildInputs = [ curl libxml2 ICU ];
 
   sourceRoot = "source/CoreFoundation";
+  patchFlags = "-p2";
 
-  patchPhase = ''
+  postPatch = ''
     cp ${sysdir-free-system-directories} Base.subproj/CFSystemDirectories.c
-
-    # In order, since I can't comment individual lines:
-    # 1. Disable dispatch support for now
-    # 2. For the linker too
-    # 3. Use the legit CoreFoundation.h, not the one telling you not to use it because of Swift
-    substituteInPlace build.py \
-      --replace "cf.CFLAGS += '-DDEPLOYMENT" '#' \
-      --replace "cf.LDFLAGS += '-ldispatch" '#'
-
-    # Fix sandbox impurities.
-    substituteInPlace ../lib/script.py \
-      --replace '/bin/cp' cp
 
     # Includes xpc for some initialization routine that they don't define anyway, so no harm here
     substituteInPlace PlugIn.subproj/CFBundlePriv.h \
-      --replace '#if (TARGET_OS_MAC' '#if (0'
-
-    # Why do we define __GNU__? Is that normal?
-    substituteInPlace Base.subproj/CFAsmMacros.h \
-      --replace '#if defined(__GNU__) ||' '#if 0 &&'
-
-    # The MIN macro doesn't seem to be defined sensibly for us. Not sure if our stdenv or their bug
-    substituteInPlace Base.subproj/CoreFoundation_Prefix.h \
-      --replace '#if DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX' '#if 1'
+      --replace '#if TARGET_OS_OSX || TARGET_OS_IPHONE' '#if 0'
 
     # Somehow our ICU doesn't have this, probably because it's too old (we'll update it soon when we update the rest of the SDK)
     substituteInPlace Locale.subproj/CFLocale.c \
       --replace '#if U_ICU_VERSION_MAJOR_NUM' '#if 0 //'
   '';
 
-  BUILD_DIR = "./Build";
-  CFLAGS = "-DINCLUDE_OBJC -I${libxml2.dev}/include/libxml2"; # They seem to assume we include objc in some places and not in others, make a PR; also not sure why but libxml2 include path isn't getting picked up from buildInputs
+  # DSTROOT   = "$out";
+  # PREFIX    = "";
+  # BUILD_DIR = "./Build";
 
-  # I'm guessing at the version here. https://github.com/apple/swift-corelibs-foundation/commit/df3ec55fe6c162d590a7653d89ad669c2b9716b1 imported "high sierra"
-  # and this version is a version from there. No idea how accurate it is.
-  LDFLAGS = "-current_version 1454.90.0 -compatibility_version 150.0.0 -init ___CFInitialize";
+  CFLAGS = [
+    # these are defined in ForSwiftFoundationOnly.h but used outside Swift. https://bugs.swift.org/browse/SR-14077
+    "-D_CFAllocatorHintZeroWhenAllocating=1"
+    "-D_CFThreadRef=pthread_t"
+    "-D_CFThreadSpecificKey=pthread_key_t"
 
-  configurePhase = ''
-    ../configure release --sysroot UNUSED
-  '';
+    # A required string but never defined, not even in Apple's build script. https://bugs.swift.org/browse/SR-14078
+    ''-DOS_LOG_SUBSYSTEM_RUNTIME_ISSUES=\"os_log_subsystem_runtime_issues\"''
+  ];
 
-  enableParallelBuilding = true;
+  # See comment beside ${version}. No idea how accurate it is.
+  # LDFLAGS = "-current_version 1454.90.0 -compatibility_version 150.0.0 -init ___CFInitialize";
 
+  enableParallelBuilding = false;
+
+  # FIXME: It seems fixed. Trun true if not, otherwise delete below next update.
   # FIXME: Workaround for intermittent build failures of CFRuntime.c.
   # Based on testing this issue seems to only occur with clang_7, so
   # please remove this when updating the default llvm versions to 8 or
   # later.
-  buildPhase = lib.optionalString true ''
+  buildPhase = lib.optionalString false ''
     for i in {1..512}; do
         if ninja -j $NIX_BUILD_CORES; then
             break
@@ -111,4 +114,12 @@ stdenv.mkDerivation {
       ln -s Versions/Current/$i $base/$i
     done
   '';
+
+  meta = with lib; {
+    description = "CoreFoundation from Apple Swift Foundation framework";
+    # In fact it could build on linux and windows too, but I doubt if anyone wants it.
+    # Maybe move out of os-specific/darwin if other platforms realy needs it.
+    platforms   = platforms.darwin;
+    license     = licenses.apsl20;
+  };
 }
