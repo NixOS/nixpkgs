@@ -21439,6 +21439,8 @@ in
 
   docker-distribution = callPackage ../applications/virtualization/docker/distribution.nix { };
 
+  afterburn = callPackage ../tools/admin/afterburn {};
+
   amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 
   docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
