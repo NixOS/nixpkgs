@@ -2307,6 +2307,8 @@ in
 
   gist = callPackage ../tools/text/gist { };
 
+  gitjacker = callPackage ../tools/security/gitjacker { };
+
   gixy = callPackage ../tools/admin/gixy { };
 
   glpaper = callPackage ../development/tools/glpaper { };
