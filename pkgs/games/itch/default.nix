@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchFromGitHub
 , go
 , nodejs
 , pkg-config
@@ -7,14 +7,18 @@
 , makeDesktopItem
 , glib
 }:
-
+let
+  lib = stdenv.lib;
+in
 stdenv.mkDerivation rec {
   pname = "itch-setup";
   version = "1.24.0";
 
-  src = fetchurl {
-    url = "https://github.com/itchio/itch-setup/archive/${version}.tar.gz";
-    sha256 = "1fwjg5wiyf0rjnwcxabyk05q1k8k6hj53vh1q2xz49y4fwq9sv1i";
+  src = fetchFromGitHub {
+    owner = "itchio";
+    repo = "itch-setup";
+    rev = "v${version}";
+    sha256 = "1bsv6ifmcarzhnl76h0rzvgwyj6gm7ypnqb5qv2dkj50bgrrkwp3";
   };
 
   buildInputs = [
@@ -50,5 +54,7 @@ stdenv.mkDerivation rec {
     description =
       "A desktop application that you can download and run games from itch.io with.";
     license = licenses.mit;
+    platforms = ["x86_64-linux"];
+    maintainers = [];
   };
 }
