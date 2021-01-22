@@ -1,14 +1,14 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, cryptography
 , boto3
+, buildPythonPackage
+, cryptography
 , envs
+, fetchFromGitHub
+, isPy27
+, mock
+, pytestCheckHook
 , python-jose
 , requests
-, pytestCheckHook
-, mock
-, isPy27
 }:
 
 buildPythonPackage rec {
