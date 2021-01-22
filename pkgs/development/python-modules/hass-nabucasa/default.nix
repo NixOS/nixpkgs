@@ -1,6 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, acme, aiohttp, snitun, attrs, pycognito, warrant
-, pytest-aiohttp, asynctest, atomicwrites, pytest }:
+{ lib
+, acme
+, aiohttp
+, asynctest
+, atomicwrites
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, pycognito
+, pytest-aiohttp
+, pytestCheckHook
+, snitun
+, warrant
+}:
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
@@ -15,19 +26,25 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i 's/"acme.*"/"acme"/' setup.py
-    sed -i 's/"attrs.*"/"attrs"/' setup.py
-    sed -i 's/"cryptography.*"/"cryptography"/' setup.py
   '';
 
   propagatedBuildInputs = [
-    acme aiohttp atomicwrites snitun attrs warrant pycognito
+    acme
+    aiohttp
+    atomicwrites
+    attrs
+    pycognito
+    snitun
+    warrant
   ];
 
-  checkInputs = [ pytest pytest-aiohttp asynctest ];
+  checkInputs = [
+    asynctest
+    pytest-aiohttp
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    pytest tests/
-  '';
+  pythonImportsCheck = [ "hass_nabucasa" ];
 
   meta = with lib; {
     homepage = "https://github.com/NabuCasa/hass-nabucasa";
