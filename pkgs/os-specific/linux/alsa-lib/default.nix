@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     ./alsa-plugin-conf-multilib.patch
     (fetchpatch {
       # plucked from upstream master, delete in next release
+      # without this patch alsa 1.2.4 fails to compile against musl-libc
+      # due to an overly conservative ifdef gate in a new feature
       name = "fix-dlo.patch";
       url = "https://github.com/alsa-project/alsa-lib/commit/ad8c8e5503980295dd8e5e54a6285d2d7e32eb1e.patch";
       sha256 = "QQP4C1dSnJP1MNKt2el7Wn3KmtwtYzvyIHWdrHs+Jw4=";
