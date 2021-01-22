@@ -34,6 +34,6 @@ in mkDerivation rec {
     '';
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.cleverca22 ];
+    maintainers = with maintainers; [ cleverca22 starcraft66 ];
   };
 }
