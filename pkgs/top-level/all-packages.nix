@@ -2534,9 +2534,7 @@ in
 
   monetdb = callPackage ../servers/sql/monetdb { };
 
-  monado = callPackage ../applications/graphics/monado {
-    inherit (gst_all_1) gstreamer gst-plugins-base;
-  };
+  monado = gst_all_1.callPackage ../applications/graphics/monado {  };
 
   mons = callPackage ../tools/misc/mons {};
 
@@ -4582,9 +4580,7 @@ in
 
   glxinfo = callPackage ../tools/graphics/glxinfo { };
 
-  gmrender-resurrect = callPackage ../tools/networking/gmrender-resurrect {
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav;
-  };
+  gmrender-resurrect = gst_all_1.callPackage ../tools/networking/gmrender-resurrect { };
 
   gmvault = callPackage ../tools/networking/gmvault { };
 
@@ -12919,9 +12915,7 @@ in
     #      apr with db58 on freebsd (nov 2015), for unknown reasons
   };
 
-  aravis = callPackage ../development/libraries/aravis {
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad;
-  };
+  aravis = gst_all_1.callPackage ../development/libraries/aravis { };
 
   arb = callPackage ../development/libraries/arb {};
 
@@ -13394,10 +13388,7 @@ in
 
   farbfeld = callPackage ../development/libraries/farbfeld { };
 
-  farstream = callPackage ../development/libraries/farstream {
-    inherit (gst_all_1)
-      gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
-      gst-libav;
+  farstream = gst_all_1.callPackage ../development/libraries/farstream {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
@@ -16939,9 +16930,8 @@ in
 
   wcslib = callPackage ../development/libraries/wcslib { };
 
-  webkitgtk = callPackage ../development/libraries/webkitgtk {
+  webkitgtk = gst_all_1.callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
-    inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
   };
 
   websocketpp = callPackage ../development/libraries/websocket++ { };
@@ -22110,9 +22100,7 @@ in
 
   xrdp = callPackage ../applications/networking/remote/xrdp { };
 
-  freerdp = callPackage ../applications/networking/remote/freerdp {
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
-  };
+  freerdp = gst_all_1.callPackage ../applications/networking/remote/freerdp { };
 
   freerdpUnstable = freerdp;
 
@@ -24019,9 +24007,7 @@ in
   pdftk-legacy = lowPrio (callPackage ../tools/typesetting/pdftk/legacy.nix { });
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
-  pdfpc = callPackage ../applications/misc/pdfpc {
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav;
-  };
+  pdfpc = gst_all_1.callPackage ../applications/misc/pdfpc { };
 
   peach = callPackage ../servers/peach { };
 
@@ -25488,9 +25474,8 @@ in
 
   worker = callPackage ../applications/misc/worker { };
 
-  workrave = callPackage ../applications/misc/workrave {
+  workrave = gst_all_1.callPackage ../applications/misc/workrave {
     inherit (python27Packages) cheetah;
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
   };
 
   worldengine-cli = python3Packages.worldengine;
@@ -28408,8 +28393,7 @@ in
 
   fuse-emulator = callPackage ../misc/emulators/fuse-emulator {};
 
-  gajim = callPackage ../applications/networking/instant-messengers/gajim {
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-libav;
+  gajim = gst_all_1.callPackage ../applications/networking/instant-messengers/gajim {
     gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
   };
 
