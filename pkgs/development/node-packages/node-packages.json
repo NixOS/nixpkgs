@@ -88,6 +88,7 @@
 , "flood"
 , "forever"
 , "fx"
+, "ganache-cli"
 , "get-graphql-schema"
 , "git-run"
 , "git-ssb"
