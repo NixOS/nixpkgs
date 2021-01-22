@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, lv2, zita-resampler }:
 
 stdenv.mkDerivation rec {
-  pname = "tamgamp.lv2";
-  version = "unstable-2020-06-14";
+  pname = "tamgamp.lv2-unstable";
+  version = "2020-06-14";
 
   src = fetchFromGitHub {
     owner = "sadko4u";

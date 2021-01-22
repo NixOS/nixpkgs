@@ -10,8 +10,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-hexgl";
-  version = "unstable-2020-07-24";
+  pname = "gnome-hexgl-unstable";
+  version = "2020-07-24";
 
   src = fetchFromGitHub {
     owner = "alexlarsson";

@@ -1,8 +1,8 @@
 { lib, buildGoModule, fetchFromGitHub, makeWrapper, varnish, nixosTests }:
 
 buildGoModule rec {
-  pname = "prometheus_varnish_exporter";
-  version = "unstable-2020-03-26";
+  pname = "prometheus_varnish_exporter-unstable";
+  version = "2020-03-26";
 
   src = fetchFromGitHub {
     owner = "jonnenauha";

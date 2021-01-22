@@ -5,8 +5,8 @@
 }:
 
 buildGoModule {
-  pname = "meme";
-  version = "unstable-2020-05-28";
+  pname = "meme-unstable";
+  version = "2020-05-28";
 
   src = fetchFromGitHub {
     owner = "nomad-software";

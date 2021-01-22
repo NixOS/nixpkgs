@@ -1,8 +1,8 @@
 { lib, stdenv, cmake, fetchgit, pkg-config, libubox }:
 
 stdenv.mkDerivation {
-  pname = "uci";
-  version = "unstable-2020-04-27";
+  pname = "uci-unstable";
+  version = "2020-04-27";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uci.git";

@@ -4,8 +4,8 @@
 # adding this to services.udev.packages on NixOS
 
 stdenv.mkDerivation {
-  pname = "ltunify";
-  version = "unstable-20180330";
+  pname = "ltunify-unstable";
+  version = "2018-03-30";
 
   src = fetchFromGitHub {
     owner  = "Lekensteyn";

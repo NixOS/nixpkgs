@@ -5,8 +5,8 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  pname = "libtgvoip";
-  version = "unstable-2020-03-02";
+  pname = "libtgvoip-unstable";
+  version = "2020-03-02";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";

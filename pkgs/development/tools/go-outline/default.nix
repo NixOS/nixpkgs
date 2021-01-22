@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  pname = "go-outline";
-  version = "unstable-2018-11-22";
+  pname = "go-outline-unstable";
+  version = "2018-11-22";
   rev = "7182a932836a71948db4a81991a494751eccfe77";
 
   goPackagePath = "github.com/ramya-rao-a/go-outline";

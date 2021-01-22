@@ -2,8 +2,8 @@
 , alcotest, angstrom-unix, biocaml, gnuplot, gsl, lacaml, menhir, owl, printbox }:
 
 buildDunePackage rec {
-  pname = "phylogenetics";
-  version = "unstable-2020-11-23";
+  pname = "phylogenetics-unstable";
+  version = "2020-11-23";
 
   useDune2 = true;
 

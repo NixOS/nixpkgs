@@ -7,8 +7,8 @@
 , gnugrep }:
 
 stdenv.mkDerivation {
-  pname = "bash-supergenpass";
-  version = "unstable-2018-04-18";
+  pname = "bash-supergenpass-unstable";
+  version = "2018-04-18";
 
   nativeBuildInputs = [ makeWrapper ];
 

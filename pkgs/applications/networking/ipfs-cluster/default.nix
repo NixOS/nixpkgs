@@ -1,8 +1,8 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  pname = "ipfs-cluster";
-  version = "unstable-2020-10-20";
+  pname = "ipfs-cluster-unstable";
+  version = "2020-10-20";
 
   vendorSha256 = "0abfhl4v4yqy89aqn13ymj4rw5zhr92a9fh1abgpkr19adnyrs3d";
 

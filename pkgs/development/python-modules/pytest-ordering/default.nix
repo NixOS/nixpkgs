@@ -2,8 +2,8 @@
 , pytest }:
 
 buildPythonPackage rec {
-  pname = "pytest-ordering";
-  version = "unstable-2019-06-19";
+  pname = "pytest-ordering-unstable";
+  version = "2019-06-19";
 
   # Pypi lacks tests/
   # Resolves PytestUnknownMarkWarning from pytest

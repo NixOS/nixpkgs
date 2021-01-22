@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "exifprobe";
-  version = "unstable-2018-06-19";
+  pname = "exifprobe-unstable";
+  version = "2018-06-19";
 
   src = fetchFromGitHub {
     owner = "hfiguiere";

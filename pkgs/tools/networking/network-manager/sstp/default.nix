@@ -17,10 +17,10 @@
 , withGnome ? true }:
 
 let
-  pname = "NetworkManager-sstp";
-  version = "unstable-2020-04-20";
+  pname = "NetworkManager-sstp-unstable";
+  version = "2020-04-20";
 in stdenv.mkDerivation {
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  name = "NetworkManager-sstp${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchFromGitHub {
     owner = "enaess";

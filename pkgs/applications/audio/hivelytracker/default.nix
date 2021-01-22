@@ -11,8 +11,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "hivelytracker";
-  version = "unstable-2020-08-19";
+  pname = "hivelytracker-unstable";
+  version = "2020-08-19";
 
   src = fetchFromGitHub {
     owner = "pete-gordon";

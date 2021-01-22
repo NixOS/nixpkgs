@@ -12,8 +12,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "dee";
-  version = "unstable-2017-06-16";
+  pname = "dee-unstable";
+  version = "2017-06-16";
 
   outputs = [ "out" "dev" "py" ];
 

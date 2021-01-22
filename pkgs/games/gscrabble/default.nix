@@ -3,8 +3,8 @@
 , python3Packages, gnome3 }:
 
 buildPythonApplication {
-  pname = "gscrabble";
-  version = "unstable-2019-03-11";
+  pname = "gscrabble-unstable";
+  version = "2019-03-11";
 
   src = fetchFromGitHub {
     owner = "RaaH";

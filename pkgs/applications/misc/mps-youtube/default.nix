@@ -3,8 +3,8 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  pname = "mps-youtube";
-  version = "unstable-2020-01-28";
+  pname = "mps-youtube-unstable";
+  version = "2020-01-28";
 
   src = fetchFromGitHub {
     owner = "mps-youtube";

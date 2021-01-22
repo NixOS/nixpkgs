@@ -1,8 +1,8 @@
 { lib, stdenv, pythonPackages, fetchFromGitHub }:
 
 pythonPackages.buildPythonPackage rec {
-  pname = "poretools";
-  version = "unstable-2016-07-10";
+  pname = "poretools-unstable";
+  version = "2016-07-10";
 
   src = fetchFromGitHub {
     repo = pname;

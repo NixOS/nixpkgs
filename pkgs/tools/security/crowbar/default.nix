@@ -8,8 +8,8 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "crowbar";
-  version = "unstable-2020-04-23";
+  pname = "crowbar-unstable";
+  version = "2020-04-23";
 
   src = fetchFromGitHub {
     owner = "galkan";

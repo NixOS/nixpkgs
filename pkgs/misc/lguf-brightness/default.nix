@@ -1,9 +1,9 @@
 { lib, stdenv, fetchFromGitHub, cmake, libusb1, ncurses5 }:
 
 stdenv.mkDerivation rec {
-  pname = "lguf-brightness";
+  pname = "lguf-brightness-unstable";
 
-  version = "unstable-2018-02-11";
+  version = "2018-02-11";
 
   src = fetchFromGitHub  {
     owner = "periklis";

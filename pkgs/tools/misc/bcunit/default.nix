@@ -4,10 +4,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "bcunit";
+  pname = "bcunit-unstable";
   # Latest release 3.0.2 is missing some functions needed by bctoolbox. See:
   # https://gitlab.linphone.org/BC/public/bcunit/issues/1
-  version = "unstable-2019-11-19";
+  version = "2019-11-19";
 
   nativeBuildInputs = [ cmake ];
   src = fetchFromGitLab {

@@ -9,10 +9,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "msopenh264";
+  pname = "msopenh264-unstable";
   # Using master branch for linphone-desktop caused a chain reaction that many
   # of its dependencies needed to use master branch too.
-  version = "unstable-2020-03-03";
+  version = "2020-03-03";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";

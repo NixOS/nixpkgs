@@ -4,8 +4,8 @@
 }:
 
 buildPythonPackage {
-  pname = "pyfantom";
-  version = "unstable-2013-12-18";
+  pname = "pyfantom-unstable";
+  version = "2013-12-18";
 
   src = fetchgit {
     url = "http://git.ni.fr.eu.org/pyfantom.git";

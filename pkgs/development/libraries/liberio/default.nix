@@ -6,8 +6,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "liberio";
-  version = "unstable-2019-12-11";
+  pname = "liberio-unstable";
+  version = "2019-12-11";
 
   src = fetchFromGitHub {
     owner = "EttusResearch";

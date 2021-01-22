@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, boost, cairo, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
-  pname = "string-machine";
-  version = "unstable-2020-01-20";
+  pname = "string-machine-unstable";
+  version = "2020-01-20";
 
   src = fetchFromGitHub {
     owner = "jpcima";

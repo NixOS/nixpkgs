@@ -3,8 +3,8 @@
 , xorg, pulseaudio, xprintidle-ng }:
 
 stdenv.mkDerivation rec {
-  pname = "surf-display";
-  version = "unstable-2019-04-15";
+  pname = "surf-display-unstable";
+  version = "2019-04-15";
 
   src = fetchgit {
     url = "https://code.it-zukunft-schule.de/cgit/surf-display";

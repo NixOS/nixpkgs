@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "zalgo";
-  version = "unstable-2020-08-26";
+  pname = "zalgo-unstable";
+  version = "2020-08-26";
 
   src = fetchFromGitHub {
     owner = "lunasorcery";

@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, SDL2 }:
 
 stdenv.mkDerivation {
-  pname = "oberon-risc-emu";
-  version = "unstable-2020-08-18";
+  pname = "oberon-risc-emu-unstable";
+  version = "2020-08-18";
 
   src = fetchFromGitHub {
     owner = "pdewacht";

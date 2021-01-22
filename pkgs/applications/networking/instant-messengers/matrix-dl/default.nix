@@ -1,8 +1,8 @@
 { lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "matrix-dl";
-  version = "unstable-2020-07-14";
+  pname = "matrix-dl-unstable";
+  version = "2020-07-14";
 
   src = fetchFromGitHub {
     owner = "rubo77";

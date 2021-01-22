@@ -7,8 +7,8 @@
 }:
 
 llvmPackages.stdenv.mkDerivation rec {
-  version = "unstable-2018-01-11";
-  name = "pbpst-${version}";
+  pname = "pbpst-unstable";
+  version = "2018-01-11";
 
   src = fetchFromGitHub {
     owner = "HalosGhost";

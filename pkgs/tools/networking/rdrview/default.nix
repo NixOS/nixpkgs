@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, libxml2, curl, libseccomp }:
 
 stdenv.mkDerivation {
-  name = "rdrview";
-  version = "unstable-2020-12-22";
+  pname = "rdrview-unstable";
+  version = "2020-12-22";
 
   src = fetchFromGitHub {
     owner = "eafer";

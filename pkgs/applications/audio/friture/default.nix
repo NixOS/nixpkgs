@@ -3,8 +3,8 @@
 let
   py = python3Packages;
 in py.buildPythonApplication rec {
-  pname = "friture";
-  version = "unstable-2020-02-16";
+  pname = "friture-unstable";
+  version = "2020-02-16";
 
   src = fetchFromGitHub {
     owner = "tlecomte";

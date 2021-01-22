@@ -6,8 +6,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "wxFormBuilder";
-  version = "unstable-2020-08-18";
+  pname = "wxFormBuilder-unstable";
+  version = "2020-08-18";
 
   src = fetchFromGitHub {
     owner = "wxFormBuilder";

@@ -2,8 +2,8 @@
   libminc, libjpeg, nifticlib, zlib }:
 
 stdenv.mkDerivation rec {
-  pname   = "minc-tools";
-  version = "unstable-2020-07-25";
+  pname   = "minc-tools-unstable";
+  version = "2020-07-25";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";

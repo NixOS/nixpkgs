@@ -1,8 +1,8 @@
 { pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
 
 gerbil-support.gerbilPackage {
-  pname = "smug-gerbil";
-  version = "unstable-2019-12-24";
+  pname = "smug-gerbil-unstable";
+  version = "2019-12-24";
   git-version = "95d60d4";
   gerbil-package = "drewc/smug";
   gerbil = gerbil-unstable;

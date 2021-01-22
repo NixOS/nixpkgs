@@ -1,8 +1,8 @@
 { mkDerivation, haskellPackages, fetchFromGitHub, lib }:
 
 mkDerivation {
-  pname = "fffuu";
-  version = "unstable-2018-05-26";
+  pname = "fffuu-unstable";
+  version = "2018-05-26";
 
   src = fetchFromGitHub {
     owner = "diekmann";

@@ -9,8 +9,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "smpeg2";
-  version = "unstable-2017-10-18";
+  pname = "smpeg2-unstable";
+  version = "2017-10-18";
 
   src = fetchsvn {
     url = "svn://svn.icculus.org/smpeg/trunk";

@@ -1,12 +1,13 @@
 { lib, fetchFromGitHub }:
 
 let
-  pname = "ir-standard-fonts";
-  version = "unstable-2017-01-21";
-in fetchFromGitHub {
+  pname = "ir-standard-fonts-unstable";
+  version = "2017-01-21";
+in
+fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "morealaz";
-  repo = pname;
+  repo = "ir-standard-fonts";
   rev = "d36727d6c38c23c01b3074565667a2fe231fe18f";
 
   postFetch = ''

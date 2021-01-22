@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, python3, substituteAll }:
 
 stdenv.mkDerivation rec {
-  pname = "libelfin";
-  version = "unstable-2018-08-25";
+  pname = "libelfin-unstable";
+  version = "2018-08-25";
 
   src = fetchFromGitHub {
     owner = "aclements";

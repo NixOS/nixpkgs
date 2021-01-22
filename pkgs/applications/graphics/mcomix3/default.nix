@@ -17,12 +17,12 @@
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "mcomix3";
-  version = "unstable-2020-11-23";
+  pname = "mcomix3-unstable";
+  version = "2020-11-23";
 
   # no official release on pypi/github and no build system
   src = fetchFromGitHub {
-    repo   = "${pname}";
+    repo   = "mcomix3";
     owner  = "multiSnow";
     rev = "cdcb27533dc7ee2ebf7b0a8ab5ba10e61c0b8ff8";
     sha256 = "0q9xgl60ryf7qmy5vgzgfry4rvw5j9rb4d1ilxmpjmvm7dd3fm2k";
@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook preInstall
 
     ${python3.executable} installer.py --srcdir=mcomix --target=$libdir
-    mv $libdir/mcomix/mcomixstarter.py $out/bin/${pname}
+    mv $libdir/mcomix/mcomixstarter.py $out/bin/mcomix3
     mv $libdir/mcomix/comicthumb.py $out/bin/comicthumb
     mv $libdir/mcomix/mcomix/* $libdir/mcomix
 
@@ -57,7 +57,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     rmdir $libdir/mcomix/mcomix
-    mv man/mcomix.1 man/${pname}.1
+    mv man/mcomix.1 man/mcomix3.1
     installManPage man/*
     cp -r mime/icons/* $out/share/icons/hicolor/
     cp mime/*.desktop $out/share/applications/
@@ -66,7 +66,7 @@ python3.pkgs.buildPythonApplication rec {
     for folder in $out/share/icons/hicolor/*; do
         mkdir $folder/{apps,mimetypes}
         mv $folder/*.png $folder/mimetypes
-        cp $libdir/mcomix/images/$(basename $folder)/mcomix.png $folder/apps/${pname}.png
+        cp $libdir/mcomix/images/$(basename $folder)/mcomix.png $folder/apps/mcomix3.png
         cp $folder/mimetypes/application-x-cbt.png $folder/mimetypes/application-x-cbr.png
         cp $folder/mimetypes/application-x-cbt.png $folder/mimetypes/application-x-cbz.png
     done
@@ -84,7 +84,7 @@ python3.pkgs.buildPythonApplication rec {
   # real pytests broken upstream
   checkPhase = ''
     $out/bin/comicthumb --help > /dev/null
-    $out/bin/${pname} --help > /dev/null
+    $out/bin/mcomix3 --help > /dev/null
   '';
 
   meta = with lib; {

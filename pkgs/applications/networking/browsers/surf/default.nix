@@ -6,8 +6,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "surf";
-  version = "unstable-2019-02-08";
+  pname = "surf-unstable";
+  version = "2019-02-08";
 
   src = fetchgit {
     url = "git://git.suckless.org/surf";

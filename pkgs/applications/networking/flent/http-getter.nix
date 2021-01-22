@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, curl, pkg-config }:
 
 stdenv.mkDerivation {
-  pname = "http-getter";
-  version = "unstable-2020-12-08";
+  pname = "http-getter-unstable";
+  version = "2020-12-08";
 
   src = fetchFromGitHub {
     owner = "tohojo";

@@ -1,8 +1,8 @@
 {lib, stdenv, fetchgit, cmake, SDL2, SDL2_image, boost, libpng, SDL2_mixer
 , pkg-config, libGLU, libGL, git, jsoncpp }:
 stdenv.mkDerivation rec {
-  pname = "pingus";
-  version = "unstable-0.7.6.0.20191104";
+  pname = "pingus-unstable";
+  version = "2019-11-04";
 
   nativeBuildInputs = [ cmake pkg-config git ];
   buildInputs = [ SDL2 SDL2_image boost libpng SDL2_mixer libGLU libGL jsoncpp ];

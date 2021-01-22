@@ -6,8 +6,8 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  pname = "blackmagic";
-  version = "unstable-2020-08-05";
+  pname = "blackmagic-unstable";
+  version = "2020-08-05";
   # `git describe --always`
   firmwareVersion = "v1.6.1-539-gdd74ec8";
 

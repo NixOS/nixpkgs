@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub, ocamlPackages, rsync }:
 
 ocamlPackages.buildDunePackage {
-  pname = "beluga";
-  version = "unstable-2020-03-11";
+  pname = "beluga-unstable";
+  version = "2020-03-11";
 
   src = fetchFromGitHub {
     owner  = "Beluga-lang";

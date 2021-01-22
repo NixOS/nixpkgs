@@ -43,11 +43,11 @@
 #
 
 python3Packages.buildPythonApplication rec {
-  pname = "tts";
+  pname = "tts-unstable";
   # until https://github.com/mozilla/TTS/issues/424 is resolved
   # we treat released models as released versions:
   # https://github.com/mozilla/TTS/wiki/Released-Models
-  version = "unstable-2020-06-17";
+  version = "2020-06-17";
 
   src = fetchFromGitHub {
     owner = "mozilla";

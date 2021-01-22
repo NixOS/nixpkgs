@@ -15,8 +15,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "wio";
-  version = "unstable-2020-11-02";
+  pname = "wio-unstable";
+  version = "2020-11-02";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/wio";

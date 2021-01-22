@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, fftwFloat, libjack2, libsigcxx, libxml2, wxGTK }:
 
 stdenv.mkDerivation rec {
-  pname = "freqtweak";
-  version = "unstable-2019-08-03";
+  pname = "freqtweak-unstable";
+  version = "2019-08-03";
 
   src = fetchFromGitHub {
     owner = "essej";

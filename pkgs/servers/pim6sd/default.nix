@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, lib, autoreconfHook, yacc, flex }:
 
 stdenv.mkDerivation rec {
-  pname = "pim6sd";
-  version = "unstable-2019-05-31";
+  pname = "pim6sd-unstable";
+  version = "2019-05-31";
 
   src = fetchFromGitHub {
     owner = "troglobit";

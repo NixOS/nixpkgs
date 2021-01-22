@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, clipper, nlopt, boost, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "2020-10-09-unstable";
-  pname = "libnest2d";
+  version = "2020-10-09";
+  pname = "libnest2d-unstable";
 
   # This revision is waiting to be merged upstream
   # Once it has been merged, this should be switched to it

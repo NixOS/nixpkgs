@@ -1,8 +1,8 @@
 { pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
 
 gerbil-support.gerbilPackage {
-  pname = "gerbil-persist";
-  version = "unstable-2020-08-31";
+  pname = "gerbil-persist-unstable";
+  version = "2020-08-31";
   git-version = "0.0-8-gd211390";
   gerbil-package = "clan/persist";
   gerbil = gerbil-unstable;

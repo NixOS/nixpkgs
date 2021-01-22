@@ -10,8 +10,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "solanum";
-  version = "unstable-2020-12-14";
+  pname = "solanum-unstable";
+  version = "2020-12-14";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";

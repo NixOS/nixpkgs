@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, help2man, curl }:
 
 stdenv.mkDerivation {
-  pname = "libykclient";
-  version = "unstable-2019-03-18";
+  pname = "libykclient-unstable";
+  version = "2019-03-18";
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubico-c-client";

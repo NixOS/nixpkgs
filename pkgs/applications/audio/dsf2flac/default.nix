@@ -2,12 +2,12 @@
 , taglib, zlib }:
 
 stdenv.mkDerivation rec {
-  pname = "dsf2flac";
-  version = "unstable-2018-01-02";
+  pname = "dsf2flac-unstable";
+  version = "2018-01-02";
 
   src = fetchFromGitHub {
     owner = "hank";
-    repo = pname;
+    repo = "dsf2flac";
     rev = "b0cf5aa6ddc60df9bbfeed25548e443c99f5cb16";
     sha256 = "15j5f82v7lgs0fkgyyynl82cb1rsxyr9vw3bpzra63nacbi9g8lc";
   };

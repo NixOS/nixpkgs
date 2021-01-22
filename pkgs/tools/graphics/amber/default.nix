@@ -44,8 +44,8 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "amber";
-  version = "unstable-2020-09-23";
+  pname = "amber-unstable";
+  version = "2020-09-23";
 
   src = fetchFromGitHub {
     owner = "google";

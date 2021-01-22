@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, gettext, libiconv, bison, ncurses, perl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  pname = "lifelines";
-  version = "unstable-2019-05-07";
+  pname = "lifelines-unstable";
+  version = "2019-05-07";
 
   src = fetchFromGitHub {
     owner = pname;

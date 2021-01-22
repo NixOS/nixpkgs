@@ -1,8 +1,8 @@
 { stdenv, fetchgit, dmd, dub }:
 
 stdenv.mkDerivation {
-  pname = "Literate";
-  version = "unstable-2020-09-02";
+  pname = "Literate-unstable";
+  version = "2020-09-02";
 
   src = fetchgit {
     url = "https://github.com/zyedidia/Literate.git";

@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, gcc, gmp, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  pname = "spasm-ng";
+  pname = "spasm-ng-unstable";
 
-  version = "unstable-2020-08-03";
+  version = "2020-08-03";
 
   src = fetchFromGitHub {
     owner = "alberthdev";

@@ -4,8 +4,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libzra";
-  version = "unstable-2020-09-11";
+  pname = "libzra-unstable";
+  version = "2020-09-11";
 
   src = fetchFromGitHub {
     owner = "zraorg";

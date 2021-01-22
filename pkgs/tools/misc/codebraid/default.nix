@@ -1,8 +1,8 @@
 { lib, stdenv, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "codebraid";
-  version = "0.5.0-unstable-2020-08-14";
+  pname = "codebraid-unstable";
+  version = "2020-08-14";
 
   src = fetchFromGitHub {
     owner = "gpoore";

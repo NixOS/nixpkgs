@@ -4,8 +4,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "faustlive";
-  version = "unstable-dev-2020-08-03";
+  pname = "faustlive-unstable";
+  version = "2020-08-03";
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faustlive";

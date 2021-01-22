@@ -4,8 +4,8 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "uq";
-  version = "unstable-2018-05-27";
+  pname = "uq-unstable";
+  version = "2018-05-27";
 
   src = fetchFromGitHub {
     owner = "lostutils";

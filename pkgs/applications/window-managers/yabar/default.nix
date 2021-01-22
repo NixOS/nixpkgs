@@ -2,6 +2,7 @@
 
 let
   overrides = rec {
+    pname = "yabar";
     version = "0.4.0";
 
     rev = version;

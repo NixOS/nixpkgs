@@ -26,8 +26,8 @@
 let
   ghcWithPackages = ghc.withPackages (g: (with g; [old-time regex-compat syb split ]));
 in stdenv.mkDerivation rec {
-  pname = "bluespec";
-  version = "unstable-2020.11.04";
+  pname = "bluespec-unstable";
+  version = "2020-11-04";
 
   src = fetchFromGitHub {
       owner  = "B-Lang-org";

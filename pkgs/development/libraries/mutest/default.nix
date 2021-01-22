@@ -5,8 +5,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "mutest";
-  version = "unstable-2019-08-26";
+  pname = "mutest-unstable";
+  version = "2019-08-26";
 
   outputs = [ "out" "dev" ];
 

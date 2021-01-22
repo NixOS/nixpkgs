@@ -1,6 +1,6 @@
 { pkgs, gccStdenv, lib, coreutils, bash, # makeStaticLibraries,
   openssl, zlib, sqlite, libxml2, libyaml, libmysqlclient, lmdb, leveldb, postgresql,
-  version, git-version,
+  pname, version, git-version,
   gambit-support,
   gambit ? pkgs.gambit, gambit-params ? pkgs.gambit-support.stable-params, src }:
 
@@ -8,7 +8,7 @@
 let stdenv = gccStdenv; in
 
 stdenv.mkDerivation rec {
-  pname = "gerbil";
+  inherit pname;
   inherit version;
   inherit src;
 

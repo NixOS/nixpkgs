@@ -3,8 +3,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "tunefish";
-  version = "unstable-2020-08-13";
+  pname = "tunefish-unstable";
+  version = "2020-08-13";
 
   src = fetchFromGitHub {
     owner = "jpcima";

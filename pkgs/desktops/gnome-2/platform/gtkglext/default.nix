@@ -16,8 +16,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gtkglext";
-  version = "unstable-2019-12-19";
+  pname = "gtkglext-unstable";
+  version = "2019-12-19";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

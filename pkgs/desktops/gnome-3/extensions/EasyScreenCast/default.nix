@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, substituteAll, glib, gnome3, gettext }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-extension-EasyScreenCast";
-  version = "unstable-2020-11-25";
+  pname = "gnome-shell-extension-EasyScreenCast-unstable";
+  version = "2020-11-25";
 
   src = fetchFromGitHub {
     # To make it work with gnome 3.38, using effectively: https://github.com/EasyScreenCast/EasyScreenCast/pull/276

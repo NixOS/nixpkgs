@@ -28,8 +28,8 @@ let
     sha256 = "0y45fjib153za085la3hqpryycx33dkj3cz8kwzn2w31kvldfl1q";
   };
 in mkDerivation rec {
-  pname = "trojita";
-  version = "unstable-2020-07-06";
+  pname = "trojita-unstable";
+  version = "2020-07-06";
 
   src = fetchgit {
     url = "https://anongit.kde.org/trojita.git";

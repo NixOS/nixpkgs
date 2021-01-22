@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
-  pname = "libevdevplus";
-  version = "unstable-2019-10-01";
+  pname = "libevdevplus-unstable";
+  version = "2019-10-01";
 
   src  = fetchFromGitHub {
     owner  = "YukiWorkshop";

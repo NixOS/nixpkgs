@@ -18,8 +18,8 @@ let
   zeroconf = pythonPackages.callPackage ./zeroconf.nix { };
 in
 pythonPackages.buildPythonApplication {
-  pname = "pulseaudio-dlna";
-  version = "unstable-2017-11-01";
+  pname = "pulseaudio-dlna-unstable";
+  version = "2017-11-01";
 
   src = fetchFromGitHub {
     owner = "masmu";

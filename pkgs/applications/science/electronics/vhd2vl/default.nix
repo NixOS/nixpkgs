@@ -7,8 +7,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "vhd2vl";
-  version = "unstable-2018-09-01";
+  pname = "vhd2vl-unstable";
+  version = "2018-09-01";
 
   src = fetchFromGitHub {
     owner = "ldoolitt";

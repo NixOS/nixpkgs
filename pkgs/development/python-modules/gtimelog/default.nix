@@ -5,8 +5,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "gtimelog";
-  version = "unstable-2020-05-16";
+  pname = "gtimelog-unstable";
+  version = "2020-05-16";
 
   src = fetchFromGitHub {
     owner = pname;

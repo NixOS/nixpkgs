@@ -2,8 +2,8 @@
 , pkg-config, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "panopticon";
-  version = "unstable-20171202";
+  pname = "panopticon-unstable";
+  version = "2017-12-02";
 
   src = fetchFromGitHub {
     owner = "das-labor";
@@ -27,11 +27,11 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   postInstall = ''
-    mkdir -p $out/share/${pname} $out/bin
-    cp -R qml $out/share/${pname}
-    mv $out/bin/${pname} $out/share/${pname}
-    chmod +x $out/share/${pname}
-    makeWrapper $out/share/${pname}/${pname} $out/bin/${pname}
+    mkdir -p $out/share/panopticon $out/bin
+    cp -R qml $out/share/panopticon
+    mv $out/bin/panopticon $out/share/panopticon
+    chmod +x $out/share/panopticon
+    makeWrapper $out/share/panopticon/panopticon $out/bin/panopticon
      '';
 
   meta = with stdenv.lib; {

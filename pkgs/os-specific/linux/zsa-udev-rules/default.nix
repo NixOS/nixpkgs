@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  pname = "zsa-udev-rules";
-  version = "unstable-2020-12-16";
+  pname = "zsa-udev-rules-unstable";
+  version = "2020-12-16";
 
   # TODO: use version and source from nixpkgs/pkgs/development/tools/wally-cli/default.nix after next release
   src = fetchFromGitHub {

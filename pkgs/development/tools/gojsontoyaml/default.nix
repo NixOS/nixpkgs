@@ -1,8 +1,8 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  pname = "gojsontoyaml";
-  version = "unstable-2020-06-02";
+  pname = "gojsontoyaml-unstable";
+  version = "2020-06-02";
 
   src = fetchFromGitHub {
     owner = "brancz";

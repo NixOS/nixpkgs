@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, llvm_6, ncurses, readline, zlib }:
 
 stdenv.mkDerivation {
-  name = "hobbes";
-  version = "unstable-2020-05-19";
+  pname = "hobbes-unstable";
+  version = "2020-05-19";
 
   src = fetchFromGitHub {
     owner = "morgan-stanley";

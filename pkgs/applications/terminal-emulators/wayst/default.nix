@@ -33,8 +33,8 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  pname = "wayst";
-  version = "unstable-2020-10-12";
+  pname = "wayst-unstable";
+  version = "2020-10-12";
 
   src = fetchFromGitHub {
     owner = "91861";

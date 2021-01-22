@@ -6,8 +6,8 @@
 }:
 
 if !(pythonOlder "3.3") then null else buildPythonPackage {
-  pname = "backports.shutil_get_terminal_size";
-  version = "unstable-2016-02-21";
+  pname = "backports.shutil_get_terminal_size-unstable";
+  version = "2016-02-21";
 
   # there have been numerous fixes commited since the initial release.
   # Most notably fixing a problem where the backport would always return

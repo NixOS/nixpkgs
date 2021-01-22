@@ -1,6 +1,7 @@
 { callPackage, fetchurl }:
 
 callPackage ./build.nix rec {
+  pname = "gambit";
   version = "4.9.3";
   git-version = version;
   src = fetchurl {

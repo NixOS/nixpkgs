@@ -3,8 +3,8 @@
 , fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "noannoyance";
-  version = "unstable-2021-01-17";
+  pname = "noannoyance-unstable";
+  version = "2021-01-17";
 
   src = fetchFromGitHub {
     owner = "BjoernDaase";

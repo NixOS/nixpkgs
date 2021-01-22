@@ -16,13 +16,13 @@ let
   #       still works.
   srcParams = if (lib.versionAtLeast kernel.version "4.8") then
     { # Use mainline branch
-      version = "unstable-2020-04-16";
+      version = "2020-04-16";
       rev = "82626d4892eeb9eb704538bf0dc49a00725ff451";
       sha256 = "118z6vjvhhcwvs4n3sgwwdagys9w718b8nkh6l9ic93732vv7cqx";
     }
   else
     { # Use master branch (broken on 4.8)
-      version = "unstable-2016-05-02";
+      version = "2016-05-02";
       rev = "5a7083bd98b38ef3bd223f7ee531d58f4fb0fe7c";
       sha256 = "0d455kajvn5xav9iilqy7s1qvsy4yb8vzjjxx7bvcgp7aj9ljvdp";
     }
@@ -30,7 +30,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "facetimehd-${version}-${kernel.version}";
+  name = "facetimehd-unstable-${version}-${kernel.version}";
   version = srcParams.version;
 
   src = fetchFromGitHub {

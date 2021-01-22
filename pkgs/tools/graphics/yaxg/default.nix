@@ -2,8 +2,8 @@
   maim, slop, ffmpeg_3, byzanz, libnotify, xdpyinfo }:
 
 stdenv.mkDerivation rec {
-  pname = "yaxg";
-  version = "unstable-2018-05-03";
+  pname = "yaxg-unstable";
+  version = "2018-05-03";
 
   src = fetchFromGitHub {
     owner = "DanielFGray";

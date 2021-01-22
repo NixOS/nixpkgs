@@ -48,8 +48,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "anbox";
-  version = "unstable-2020-11-29";
+  pname = "anbox-unstable";
+  version = "2020-11-29";
 
   src = fetchFromGitHub {
     owner = pname;

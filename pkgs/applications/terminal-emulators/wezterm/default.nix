@@ -52,12 +52,12 @@ let
     CoreGraphics
     Cocoa
   ];
-  pname = "wezterm";
+  pname = "wezterm-unstable";
 in
 
 rustPlatform.buildRustPackage {
   inherit pname;
-  version = "unstable-2020-11-22";
+  version = "2020-11-22";
 
   src = fetchFromGitHub {
     owner = "wez";

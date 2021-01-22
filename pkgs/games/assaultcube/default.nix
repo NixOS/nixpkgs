@@ -7,8 +7,8 @@ with lib;
 stdenv.mkDerivation rec {
 
   # master branch has legacy (1.2.0.2) protocol 1201 and gcc 6 fix.
-  pname = "assaultcube";
-  version = "unstable-2018-05-20";
+  pname = "assaultcube-unstable";
+  version = "2018-05-20";
 
   src = fetchFromGitHub {
     owner = "assaultcube";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     exec = pname;
   };
 
-  gamedatadir = "/share/games/${pname}";
+  gamedatadir = "/share/games/assaultcube";
 
   installPhase = ''
 
@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
       install -Dpm644 packages/misc/icon.png $out/share/icons/assaultcube.png
       install -Dpm644 packages/misc/icon.png $out/share/pixmaps/assaultcube.png
 
-      makeWrapper $out/bin/ac_client $out/bin/${pname} \
+      makeWrapper $out/bin/ac_client $out/bin/assaultcube \
         --run "cd $out/$gamedatadir" --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"
     fi
 
     if (test -e source/src/ac_server) then
       cp source/src/ac_server $bindir
-      makeWrapper $out/bin/ac_server $out/bin/${pname}-server \
+      makeWrapper $out/bin/ac_server $out/bin/assaultcube-server \
         --run "cd $out/$gamedatadir" --add-flags "-Cconfig/servercmdline.txt"
     fi
     '';

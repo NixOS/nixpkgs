@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "pcimem";
-  version = "unstable-2018-08-29";
+  pname = "pcimem-unstable";
+  version = "2018-08-29";
 
   src = fetchFromGitHub {
     owner = "billfarrow";

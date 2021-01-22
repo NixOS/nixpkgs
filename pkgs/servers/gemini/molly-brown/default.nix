@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchgit, nixosTests }:
 
 buildGoPackage rec {
-  pname = "molly-brown";
-  version = "unstable-2020-08-19";
+  pname = "molly-brown-unstable";
+  version = "2020-08-19";
   rev = "48f9a206c03c0470e1c132b9667c6daa3583dada";
 
   goPackagePath = "tildegit.org/solderpunk/molly-brown";

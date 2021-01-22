@@ -25,8 +25,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "sm64ex";
-  version = "unstable-2020-06-19";
+  pname = "sm64ex-unstable";
+  version = "2020-06-19";
 
   src = fetchFromGitHub {
     owner = "sm64pc";

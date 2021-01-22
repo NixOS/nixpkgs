@@ -1,7 +1,7 @@
 { lib, stdenv, bash, fetchFromGitHub }:
 stdenv.mkDerivation {
-  pname = "vimv";
-  version = "unstable-2019-10-31";
+  pname = "vimv-unstable";
+  version = "2019-10-31";
   src = fetchFromGitHub {
     owner = "thameera";
     repo = "vimv";

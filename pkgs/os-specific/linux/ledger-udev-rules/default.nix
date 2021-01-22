@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  pname = "ledger-udev-rules";
-  version = "unstable-2019-05-30";
+  pname = "ledger-udev-rules-unstable";
+  version = "2019-05-30";
 
   src = fetchFromGitHub {
     owner = "LedgerHQ";

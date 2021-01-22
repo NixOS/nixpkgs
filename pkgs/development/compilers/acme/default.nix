@@ -1,8 +1,8 @@
 { stdenv, fetchsvn }:
 
 stdenv.mkDerivation rec {
-  pname = "acme";
-  version = "unstable-2020-12-27";
+  pname = "acme-unstable";
+  version = "2020-12-27";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/acme-crossass/code-0/trunk";

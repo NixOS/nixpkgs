@@ -5,8 +5,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "simplenes";
-  version = "unstable-2019-03-13";
+  pname = "simplenes-unstable";
+  version = "2019-03-13";
 
   src = fetchFromGitHub {
     owner = "amhndu";

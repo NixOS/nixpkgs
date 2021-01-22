@@ -24,8 +24,8 @@ let
 
 in stdenv.mkDerivation {
 
-  pname = "docbookrx";
-  version = "unstable-2018-05-02";
+  pname = "docbookrx-unstable";
+  version = "2018-05-02";
 
   buildInputs = [ env.wrappedRuby ];
 

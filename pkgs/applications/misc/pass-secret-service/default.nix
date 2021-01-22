@@ -1,11 +1,11 @@
 { lib, stdenv, fetchFromGitHub, python3, dbus, gnupg }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "pass-secret-service";
+  pname = "pass-secret-service-unstable";
   # PyPI has old alpha version. Since then the project has switched from using a
   # seemingly abandoned D-Bus package pydbus and started using maintained
   # dbus-next. So let's use latest from GitHub.
-  version = "unstable-2020-04-12";
+  version = "2020-04-12";
 
   src = fetchFromGitHub {
     owner = "mdellweg";

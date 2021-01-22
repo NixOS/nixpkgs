@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitLab, tetex }:
 
 stdenv.mkDerivation {
-  pname = "mmixware";
-  version = "unstable-2019-02-19";
+  pname = "mmixware-unstable";
+  version = "2019-02-19";
 
   src = fetchFromGitLab {
     domain = "gitlab.lrz.de";

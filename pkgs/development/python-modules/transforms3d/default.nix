@@ -9,8 +9,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "transforms3d";
-  version = "unstable-2019-12-17";
+  pname = "transforms3d-unstable";
+  version = "2019-12-17";
 
   disabled = isPy27;
 

@@ -15,8 +15,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "elementary-notifications";
-  version = "unstable-2020-03-31";
+  pname = "elementary-notifications-unstable";
+  version = "2020-03-31";
 
   repoName = "notifications";
 

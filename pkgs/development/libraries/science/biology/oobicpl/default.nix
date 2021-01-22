@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, libminc, bicpl, arguments, pcre-cpp }:
 
 stdenv.mkDerivation rec {
-  pname = "oobicpl";
-  version = "unstable-2016-03-02";
+  pname = "oobicpl-unstable";
+  version = "2016-03-02";
 
   owner = "BIC-MNI";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
                  "-DOOBICPL_BUILD_SHARED_LIBS=TRUE" ];
 
   meta = with lib; {
-    homepage = "https://github.com/${owner}/${pname}";
+    homepage = "https://github.com/${owner}/oobicpl";
     description = "Brain Imaging Centre object-oriented programming library (and tools)";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
