@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python }:
+{ lib, stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
   name = "geos-3.8.1";
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ python ];
 
   # https://trac.osgeo.org/geos/ticket/993
-  configureFlags = stdenv.lib.optional stdenv.isAarch32 "--disable-inline";
+  configureFlags = lib.optional stdenv.isAarch32 "--disable-inline";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ port of the Java Topology Suite (JTS)";
     homepage = "https://trac.osgeo.org/geos";
     license = licenses.lgpl21;

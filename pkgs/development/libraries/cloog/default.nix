@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gmp, isl }:
+{ fetchurl, lib, stdenv, gmp, isl }:
 
 stdenv.mkDerivation rec {
   name = "cloog-0.18.4";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
     homepage = "http://www.cloog.org/";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     /* Leads to an ICE on Cygwin:
 
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
        make[3]: *** [Box.lo] Error 1
 
     */
-    platforms = stdenv.lib.platforms.unix; # Once had cygwin problems
+    platforms = lib.platforms.unix; # Once had cygwin problems
   };
 }

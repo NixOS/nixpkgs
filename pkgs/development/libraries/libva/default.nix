@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An implementation for VA-API (Video Acceleration API)";
     longDescription = ''
       VA-API is an open-source library and API specification, which provides

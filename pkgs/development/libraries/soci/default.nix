@@ -1,7 +1,7 @@
 { cmake
 , fetchFromGitHub
 , sqlite
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ sqlite ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Database access library for C++";
     homepage = "http://soci.sourceforge.net/";
     license = licenses.boost;

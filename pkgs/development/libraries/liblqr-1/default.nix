@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, glib }:
+{ lib, stdenv, fetchurl, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
   name = "liblqr-1-0.4.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ glib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://liblqr.wikidot.com";
     description = "Seam-carving C/C++ library called Liquid Rescaling";
     platforms = platforms.all;

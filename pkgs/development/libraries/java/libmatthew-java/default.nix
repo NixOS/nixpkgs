@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jdk}:
+{lib, stdenv, fetchurl, jdk}:
 
 stdenv.mkDerivation {
   name = "libmatthew-java-0.8";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   PREFIX=''''${out}'';
   buildInputs = [ jdk ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = [ maintainers.sander ];
     license = licenses.mit;

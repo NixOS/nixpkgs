@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , SDL
 , ffmpeg
@@ -23,7 +23,7 @@
 , mkDerivation
 , which
 }:
-let inherit (stdenv.lib) getDev; in
+let inherit (lib) getDev; in
 mkDerivation rec {
   pname = "mlt";
   version = "6.22.1";
@@ -102,7 +102,7 @@ mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
     homepage = "https://www.mltframework.org/";
     license = licenses.gpl3;

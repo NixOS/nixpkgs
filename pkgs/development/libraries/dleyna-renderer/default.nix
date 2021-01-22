@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       --set DLEYNA_CONNECTOR_PATH "$DLEYNA_CONNECTOR_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to discover and manipulate Digital Media Renderers";
     homepage = "https://01.org/dleyna";
     maintainers = [ maintainers.jtojnar ];

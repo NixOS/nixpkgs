@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "cpp-netlib";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   # Most tests make network GET requests to various websites
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of open-source libraries for high level network programming";
     homepage    = "https://cpp-netlib.org";
     license     = licenses.boost;

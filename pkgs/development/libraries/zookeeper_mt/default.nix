@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoreconfHook
 , jre
@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "zookeeper_mt";
-  version = stdenv.lib.getVersion zookeeper;
+  version = lib.getVersion zookeeper;
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/${zookeeper.pname}-${version}/apache-${zookeeper.pname}-${version}.tar.gz";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     "--without-cppunit"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://zookeeper.apache.org";
     description = "Apache Zookeeper";
     license = licenses.asl20;

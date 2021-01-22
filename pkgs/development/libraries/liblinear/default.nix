@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fixDarwinDylibNames }:
+{ lib, stdenv, fetchFromGitHub, fixDarwinDylibNames }:
 
 let
   soVersion = "4";
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" ];
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   buildFlags = [ "lib" "predict" "train" ];
 
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
     install -Dm444 -t $dev/include linear.h
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for large linear classification";
     homepage = "https://www.csie.ntu.edu.tw/~cjlin/liblinear/";
     license = licenses.bsd3;

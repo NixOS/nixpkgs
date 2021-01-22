@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
+{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
 , ncurses, cpio, gperf, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex, db
 , gmp, readline, file, numactl, libapparmor, jansson
@@ -7,7 +7,7 @@
 , appliance ? null
 , javaSupport ? false, jdk ? null }:
 
-assert appliance == null || stdenv.lib.isDerivation appliance;
+assert appliance == null || lib.isDerivation appliance;
 assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     libtirpc
   ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
     ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt gettext-stub ounit ])
-    ++ stdenv.lib.optional javaSupport jdk;
+    ++ lib.optional javaSupport jdk;
 
   prePatch = ''
     # build-time scripts
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
   configureFlags = [ "--disable-appliance" "--disable-daemon" "--with-distro=NixOS" ]
-    ++ stdenv.lib.optionals (!javaSupport) [ "--disable-java" "--without-java" ];
+    ++ lib.optionals (!javaSupport) [ "--disable-java" "--without-java" ];
   patches = [ ./libguestfs-syms.patch ];
   NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";
   installFlags = [ "REALLY_INSTALL=yes" ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = stdenv.lib.optionalString (appliance != null) ''
+  postFixup = lib.optionalString (appliance != null) ''
     mkdir -p $out/{lib,lib64}
     ln -s ${appliance} $out/lib64/guestfs
     ln -s ${appliance} $out/lib/guestfs
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for accessing and modifying virtual machine disk images";
     license = with licenses; [ gpl2 lgpl21 ];
     homepage = "https://libguestfs.org/";

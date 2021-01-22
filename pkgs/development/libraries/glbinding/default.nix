@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libGLU, xlibsWrapper }:
+{ lib, stdenv, fetchFromGitHub, cmake, libGLU, xlibsWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "glbinding";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libGLU xlibsWrapper ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cginternals/glbinding/";
     description = "A C++ binding for the OpenGL API, generated using the gl.xml specification";
     license = licenses.mit;

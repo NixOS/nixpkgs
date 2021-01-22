@@ -1,4 +1,4 @@
-{ fetchurl,  stdenv, flex }:
+{ fetchurl,  lib, stdenv, flex }:
 
 stdenv.mkDerivation rec {
   version = "7.3.1";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     systems. This is the standard library for this purpose in
     astronomy.'';
 
-    license = stdenv.lib.licenses.lgpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

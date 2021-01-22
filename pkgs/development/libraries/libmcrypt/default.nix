@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, darwin, disablePosixThreads ? false }:
+{ lib, stdenv, fetchurl, darwin, disablePosixThreads ? false }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   name = "libmcrypt-2.5.8";

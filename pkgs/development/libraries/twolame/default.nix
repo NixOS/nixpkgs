@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config
 , libsndfile }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   doCheck = false; # fails with "../build-scripts/test-driver: line 107: -Mstrict: command not found"
 
-  meta = with stdenv.lib;{
+  meta = with lib;{
     description = "A MP2 encoder";
     longDescription = ''
       TwoLAME is an optimised MPEG Audio Layer 2 (MP2) encoder based on

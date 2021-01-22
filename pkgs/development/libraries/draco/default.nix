@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_UNITY_PLUGIN=1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for compressing and decompressing 3D geometric meshes and point clouds";
     homepage = "https://google.github.io/draco/";
     license = licenses.asl20;

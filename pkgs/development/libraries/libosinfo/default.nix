@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , pkg-config
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GObject based library API for managing information about operating systems, hypervisors and the (virtual) hardware devices they can support";
     homepage = "https://libosinfo.org/";
     license = licenses.lgpl2Plus;

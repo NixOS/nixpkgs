@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, cmake, zlib, openssl, libsodium }:
+{ lib, stdenv, fetchurl, pkg-config, cmake, zlib, openssl, libsodium }:
 
 stdenv.mkDerivation rec {
   pname = "libssh";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SSH client library";
     homepage = "https://libssh.org";
     license = licenses.lgpl2Plus;

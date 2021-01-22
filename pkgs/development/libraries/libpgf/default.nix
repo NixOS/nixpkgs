@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, dos2unix }:
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, dos2unix }:
 
-with stdenv.lib;
+with lib;
 
 let
   version = "6.14.12";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://www.libpgf.org/";
     description = "Progressive Graphics Format";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config }:
+{ lib, stdenv, fetchurl, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "libdmtx-0.7.4";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An open source software for reading and writing Data Matrix barcodes";
     homepage = "http://libdmtx.org";
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

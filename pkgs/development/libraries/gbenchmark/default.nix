@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gtest }:
+{ lib, stdenv, fetchFromGitHub, cmake, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "gbenchmark";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A microbenchmark support library";
     homepage = "https://github.com/google/benchmark";
     license = licenses.asl20;

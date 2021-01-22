@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, utilmacros, python3
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, utilmacros, python3
 , libGL, libX11
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "epoxy";

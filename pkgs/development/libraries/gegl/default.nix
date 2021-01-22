@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , babl
@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-docs" ];
 
   buildInputs = [ babl libpng cairo libjpeg librsvg pango gtk2 bzip2 intltool libintl ]
-    ++ stdenv.lib.optional stdenv.isDarwin OpenGL;
+    ++ lib.optional stdenv.isDarwin OpenGL;
 
   nativeBuildInputs = [ pkg-config ];
 
   doCheck = false; # fails 3 out of 19 tests
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graph-based image processing framework";
     homepage = "https://www.gegl.org";
     license = licenses.lgpl3Plus;

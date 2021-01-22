@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , libebml }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=YES"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to parse Matroska files";
     homepage = "https://matroska.org/";
     license = licenses.lgpl21;

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = (stdenv.lib.optional stdenv.isDarwin) ''
+  postPatch = (lib.optional stdenv.isDarwin) ''
     patch -p0 < ${fetchpatch {
       url = "https://raw.githubusercontent.com/macports/macports-ports/master/audio/libcanberra/files/patch-configure.diff";
       sha256 = "1f7h7ifpqvbfhqygn1b7klvwi80zmpv3538vbmq7ql7bkf1q8h31";
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
 
     homepage = "http://0pointer.de/lennart/projects/libcanberra/";
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, cmake, freeglut, libGLU, libGL, zlib, swig, python, doxygen, xorg }:
+{ lib, stdenv, fetchFromGitHub, unzip, cmake, freeglut, libGLU, libGL, zlib, swig, python, doxygen, xorg }:
 
 stdenv.mkDerivation {
   pname = "partio";
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     mv $dev/include/*.h $dev/include/partio
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ (with python bindings) library for easily reading/writing/manipulating common animation particle formats such as PDB, BGEO, PTC";
     homepage = "https://www.disneyanimation.com/technology/partio.html";
     license = licenses.bsd3;

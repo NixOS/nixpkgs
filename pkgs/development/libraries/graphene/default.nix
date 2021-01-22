@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pkg-config
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A thin layer of graphic data types";
     homepage = "https://ebassi.github.com/graphene";
     license = licenses.mit;

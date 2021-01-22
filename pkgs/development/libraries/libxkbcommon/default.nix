@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkg-config, yacc, doxygen
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, yacc, doxygen
 , xkeyboard_config, libxcb, libxml2
 , python3
 , libX11
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     patchShebangs ../test/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to handle keyboard descriptions";
     longDescription = ''
       libxkbcommon is a keyboard keymap compiler and support library which

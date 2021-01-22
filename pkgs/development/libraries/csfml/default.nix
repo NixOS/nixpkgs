@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, sfml }:
+{ lib, stdenv, fetchFromGitHub, cmake, sfml }:
 
 let
   version = "2.5";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   buildInputs = [ sfml ];
   cmakeFlags = [ "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.sfml-dev.org/";
     description = "Simple and fast multimedia library";
     longDescription = ''

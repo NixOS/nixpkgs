@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, python, cmake, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, zlib, python, cmake, pkg-config }:
 
 stdenv.mkDerivation rec
 {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec
     echo v${version} >version
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Per-Face Texture Mapping for Production Rendering";
     homepage = "http://ptex.us/";
     license = licenses.bsd3;

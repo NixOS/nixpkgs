@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, guile, autoconf, flex, fetchpatch }:
+{ lib, stdenv, fetchurl, pkg-config, guile, autoconf, flex, fetchpatch }:
 
 stdenv.mkDerivation rec {
   version = "1.1.11";
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
       symbolic derivatives and output expressions to strings.
     '';
     homepage = "https://www.gnu.org/software/libmatheval/";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.bzizou ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.linux;
   };
 }
 

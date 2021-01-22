@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C simple and elegant implementation of an actor library";
     homepage = "https://github.com/FedeDP/libmodule";
     platforms = platforms.linux;

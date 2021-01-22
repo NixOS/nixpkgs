@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, xlibsWrapper, xorgproto, libXi
+{ lib, stdenv, fetchurl, pkg-config, xlibsWrapper, xorgproto, libXi
 , freeglut, libGL, libGLU, libjpeg, zlib, libXft, libpng
 , libtiff, freetype, Cocoa, AGL, GLUT
 }:
@@ -16,11 +16,11 @@ stdenv.mkDerivation {
     sha256 = "00jp24z1818k9n6nn6lx7qflqf2k13g4kxr0p8v1d37kanhb4ac7";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./nsosv.patch ];
+  patches = lib.optionals stdenv.isDarwin [ ./nsosv.patch ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libGLU libGL libjpeg zlib libpng libXft ]
-    ++ stdenv.lib.optional stdenv.isDarwin [ AGL Cocoa GLUT ];
+    ++ lib.optional stdenv.isDarwin [ AGL Cocoa GLUT ];
 
   propagatedBuildInputs = [ xorgproto ]
     ++ (if stdenv.isDarwin
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C++ cross-platform lightweight GUI library";
     homepage = "https://www.fltk.org";
     platforms = platforms.linux ++ platforms.darwin;

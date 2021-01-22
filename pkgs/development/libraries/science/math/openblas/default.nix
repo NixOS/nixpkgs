@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, which
+{ lib, stdenv, fetchFromGitHub, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -19,7 +19,7 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
-with stdenv.lib;
+with lib;
 
 let blas64_ = blas64; in
 
@@ -160,7 +160,7 @@ stdenv.mkDerivation rec {
     NO_BINARY_MODE = if stdenv.isx86_64
         then toString (stdenv.hostPlatform != stdenv.buildPlatform)
         else stdenv.hostPlatform != stdenv.buildPlatform;
-  } // (stdenv.lib.optionalAttrs singleThreaded {
+  } // (lib.optionalAttrs singleThreaded {
     # As described on https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
     USE_THREAD = false;
     USE_LOCKING = true; # available with openblas >= 0.3.7
@@ -188,14 +188,14 @@ EOF
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";

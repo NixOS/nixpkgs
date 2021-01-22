@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, zlib, openssl_1_0_2, pcsclite }:
+{ lib, stdenv, fetchurl, pkg-config, zlib, openssl_1_0_2, pcsclite }:
 
 stdenv.mkDerivation rec {
   pname = "globalplatform";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib openssl_1_0_2 pcsclite ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/p/globalplatform/wiki/Home/";
     description = "Library for interacting with smart card devices";
     license = licenses.gpl3;

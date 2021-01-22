@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, neon, libdiscid, libxml2, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, cmake, neon, libdiscid, libxml2, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "5.1.0";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeBuildDir=true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://musicbrainz.org/doc/libmusicbrainz";
     description = "MusicBrainz Client Library (5.x version)";
     longDescription = ''

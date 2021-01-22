@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An advanced font engine";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
   };
 }

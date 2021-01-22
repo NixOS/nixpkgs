@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, ispc, tbb, glfw,
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, ispc, tbb, glfw,
 openimageio, libjpeg, libpng, libpthreadstubs, libX11
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ ispc tbb glfw openimageio libjpeg libpng libX11 libpthreadstubs ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High performance ray tracing kernels from Intel";
     homepage = "https://embree.github.io/";
     maintainers = with maintainers; [ hodapp ];

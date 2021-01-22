@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libbsd, openssl, libmilter
+{ lib, stdenv, fetchurl, pkg-config, libbsd, openssl, libmilter
 , autoreconfHook, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${openssl.bin}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library for producing DKIM-aware applications and an open source milter for providing DKIM service";
     homepage = "http://www.opendkim.org/";
     maintainers = with maintainers; [ abbradar ];

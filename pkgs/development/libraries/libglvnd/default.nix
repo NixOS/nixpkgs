@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.cc.isClang "-Wno-error");
 
   # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
-  configureFlags  = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-tls";
+  configureFlags  = lib.optional stdenv.hostPlatform.isMusl "--disable-tls";
 
   outputs = [ "out" "dev" ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit (addOpenGLRunpath) driverLink; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GL Vendor-Neutral Dispatch library";
     homepage = "https://github.com/NVIDIA/libglvnd";
     license = licenses.bsd2;

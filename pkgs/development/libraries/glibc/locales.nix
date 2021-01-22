@@ -6,7 +6,7 @@
    https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED
 */
 
-{ stdenv, buildPackages, callPackage, writeText
+{ lib, stdenv, buildPackages, callPackage, writeText
 , allLocales ? true, locales ? [ "en_US.UTF-8/UTF-8" ]
 }:
 
@@ -31,9 +31,9 @@ callPackage ./common.nix { inherit stdenv; } {
       # Hack to allow building of the locales (needed since glibc-2.12)
       sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef --prefix='$TMPDIR',' ../glibc-2*/localedata/Makefile
     ''
-      + stdenv.lib.optionalString (!allLocales) ''
+      + lib.optionalString (!allLocales) ''
       # Check that all locales to be built are supported
-      echo -n '${stdenv.lib.concatMapStrings (s: s + " \\\n") locales}' \
+      echo -n '${lib.concatMapStrings (s: s + " \\\n") locales}' \
         | sort > locales-to-build.txt
       cat ../glibc-2*/localedata/SUPPORTED | grep ' \\' \
         | sort > locales-supported.txt

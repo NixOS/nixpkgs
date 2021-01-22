@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook
 , gnutls
 , openssl
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ gnutls zlib openssl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A reliable logging library";
     homepage = "https://www.librelp.com/";
     license = licenses.gpl2;

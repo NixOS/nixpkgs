@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, icu, catch2, pandoc }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, icu, catch2, pandoc }:
 
 stdenv.mkDerivation rec {
   pname = "nuspell";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/doc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free and open source C++ spell checking library";
     homepage = "https://nuspell.github.io/";
     platforms = platforms.all;

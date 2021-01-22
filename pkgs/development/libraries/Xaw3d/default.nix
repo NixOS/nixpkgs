@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , imake, gccmakedep, bison, flex, pkg-config
 , xlibsWrapper, libXmu, libXpm, libXp }:
 
@@ -13,9 +13,9 @@ stdenv.mkDerivation {
   buildInputs = [ libXpm libXp ];
   propagatedBuildInputs = [ xlibsWrapper libXmu ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "3D widget set based on the Athena Widget set";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
     license = licenses.mit;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "concurrencykit";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library of safe, high-performance concurrent data structures";
     homepage    = "http://concurrencykit.org";
     license     = licenses.bsd2;

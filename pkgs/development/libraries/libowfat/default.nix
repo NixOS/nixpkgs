@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "libowfat-0.32";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" ];
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GPL reimplementation of libdjb";
     homepage = "https://www.fefe.de/libowfat/";
     license = licenses.gpl2;

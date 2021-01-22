@@ -4,7 +4,7 @@
 , fetchFromGitLab
 , soci
 , sqlite
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "End-to-end encryption library for instant messaging";
     homepage = "http://www.linphone.org/technical-corner/lime";
     license = licenses.gpl3;

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
     homepage = "https://github.com/IntelRealSense/librealsense";
     license = licenses.asl20;

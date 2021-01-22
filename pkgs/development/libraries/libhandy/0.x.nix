@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, meson, ninja, pkg-config, gobject-introspection, vala
+{ lib, stdenv, fetchFromGitLab, meson, ninja, pkg-config, gobject-introspection, vala
 , gtk-doc, docbook_xsl, docbook_xml_dtd_43
 , gtk3, gnome3
 , dbus, xvfb_run, libxml2
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library full of GTK widgets for mobile phones";
     homepage = "https://source.puri.sm/Librem5/libhandy";
     license = licenses.lgpl21Plus;

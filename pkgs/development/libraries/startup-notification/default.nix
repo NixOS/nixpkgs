@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11, libxcb, pkg-config, xcbutil}:
+{lib, stdenv, fetchurl, libX11, libxcb, pkg-config, xcbutil}:
 
 let
   version = "0.12";
@@ -17,6 +17,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.freedesktop.org/software/startup-notification";
     description = "Application startup notification and feedback library";
-    license = stdenv.lib.licenses.lgpl2;
+    license = lib.licenses.lgpl2;
   };
 }

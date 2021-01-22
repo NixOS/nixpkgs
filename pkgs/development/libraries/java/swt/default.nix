@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
     cd out && jar -c * > $out/jars/swt.jar
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.eclipse.org/swt/";
     description = "An widget toolkit for Java to access the user-interface facilities of the operating systems on which it is implemented";
     license = licenses.epl10;

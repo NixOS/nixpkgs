@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoreconfHook
 , fetchbzr
 , pkg-config
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     sed "s|/usr/share/libtimezonemap|$out/share/libtimezonemap|g" -i ./src/tz.h
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://launchpad.net/timezonemap";
     description = "A GTK+3 Timezone Map Widget";
     license = licenses.gpl2;

@@ -2,7 +2,7 @@
 , cmake
 , fetchFromGitLab
 , mbedtls
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     description = "Utilities library for Linphone";
     homepage = "https://gitlab.linphone.org/BC/public/bctoolbox";

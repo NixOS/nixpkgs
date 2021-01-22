@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gperf, pkg-config, librevenge, libxml2, boost, icu
+{ lib, stdenv, fetchurl, gperf, pkg-config, librevenge, libxml2, boost, icu
 , cppunit, zlib, liblangtag
 }:
 
@@ -34,8 +34,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = ''Library for import of reflowable e-book formats'';
-    license = stdenv.lib.licenses.lgpl21Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

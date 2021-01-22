@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , krb5, liburcu , libtirpc, libnsl
 } :
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cp ${libtirpc}/etc/netconfig $out/etc/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Transport-independent RPC (TI-RPC)";
     homepage = "https://github.com/nfs-ganesha/ntirpc";
     maintainers = [ maintainers.markuskowa ];

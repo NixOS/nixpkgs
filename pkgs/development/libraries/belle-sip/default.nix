@@ -4,7 +4,7 @@
 , fetchFromGitLab
 , libantlr3c
 , mbedtls
-, stdenv
+, lib, stdenv
 , zlib
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libantlr3c mbedtls bctoolbox ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://linphone.org/technical-corner/belle-sip";
     description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
     license = licenses.gpl3Plus;

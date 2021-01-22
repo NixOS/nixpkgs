@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, wrapGAppsHook, gtk2, gnome2, gnome3,
+{ lib, stdenv, fetchurl, pkg-config, wrapGAppsHook, gtk2, gnome2, gnome3,
   libstartup_notification, libgtop, perlPackages,
   autoreconfHook, intltool, docbook_xsl, xauth
 }:
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
       programs in an X session.
     '';
     homepage = "https://www.nongnu.org/gksu/";
-    license = stdenv.lib.licenses.lgpl2;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl2;
+    maintainers = [ lib.maintainers.romildo ];
+    platforms = lib.platforms.linux;
   };
 }

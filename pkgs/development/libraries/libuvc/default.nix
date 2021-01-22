@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libusb1 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ken.tossell.net/libuvc/";
     description = "Cross-platform library for USB video devices";
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames, buildPackages }:
+{ lib, stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames, buildPackages }:
 
 let
   nssPEM = fetchurl {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ perl ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ zlib sqlite ];
 
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
   '';
 
@@ -61,16 +61,16 @@ in stdenv.mkDerivation rec {
     "USE_SYSTEM_ZLIB=1"
     "NSS_USE_SYSTEM_SQLITE=1"
     "NATIVE_CC=${buildPackages.stdenv.cc}/bin/cc"
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     # Pass in CPU even if we're not cross compiling, because otherwise it tries to guess with
     # uname, which can be wrong if e.g. we're compiling for aarch32 on aarch64
     "OS_TEST=${cpu}"
     "CPU_ARCH=${cpu}"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=1"
     "NSS_DISABLE_GTESTS=1" # don't want to build tests when cross-compiling
-  ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1"
-    ++ stdenv.lib.optional stdenv.isDarwin "CCC=clang++";
+  ] ++ lib.optional stdenv.is64bit "USE_64=1"
+    ++ lib.optional stdenv.isDarwin "CCC=clang++";
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
@@ -135,7 +135,7 @@ in stdenv.mkDerivation rec {
     rm -f "$out"/lib/*.a
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/NSS";
     description = "A set of libraries for development of security-enabled client and server applications";
     license = licenses.mpl20;

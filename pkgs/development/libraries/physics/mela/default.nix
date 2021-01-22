@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gfortran }:
+{ lib, stdenv, fetchFromGitHub, gfortran }:
 
 stdenv.mkDerivation rec {
   pname = "mela";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "a Mellin Evolution LibrAry";
     license     = licenses.gpl3;
     homepage    = "https://github.com/vbertone/MELA";

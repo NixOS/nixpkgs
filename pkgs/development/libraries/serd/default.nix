@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, python3, wafHook }:
+{ lib, stdenv, fetchurl, pkg-config, python3, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "serd";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config python3 wafHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://drobilla.net/software/serd";
     description = "A lightweight C library for RDF syntax which supports reading and writing Turtle and NTriples";
     license = licenses.mit;

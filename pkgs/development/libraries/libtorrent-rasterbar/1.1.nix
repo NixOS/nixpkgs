@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
     "--with-boost-libdir=${boostPython.out}/lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libtorrent.org/";
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;

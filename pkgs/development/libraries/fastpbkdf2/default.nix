@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation {
   name = "fastpbkdf2-1.0.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     cp fastpbkdf2.h $out/include/fastpbkdf2
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast PBKDF2-HMAC-{SHA1,SHA256,SHA512} implementation in C";
     homepage = "https://github.com/ctz/fastpbkdf2";
     license = licenses.cc0;

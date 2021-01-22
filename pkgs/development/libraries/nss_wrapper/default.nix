@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkg-config }:
+{ lib, stdenv, fetchurl, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   name = "nss_wrapper-1.1.11";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A wrapper for the user, group and hosts NSS API";
     homepage = "https://git.samba.org/?p=nss_wrapper.git;a=summary;";
     license = licenses.bsd3;

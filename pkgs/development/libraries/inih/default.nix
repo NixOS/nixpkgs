@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja }:
 
 stdenv.mkDerivation rec {
   pname = "inih";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "-Dwith_INIReader=true"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple .INI file parser in C, good for embedded systems";
     homepage = "https://github.com/benhoyt/inih";
     changelog = "https://github.com/benhoyt/inih/releases/tag/${version}";

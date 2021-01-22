@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkg-config, libsndfile, ApplicationServices, Carbon, CoreServices }:
+{ lib, stdenv, fetchurl, pkg-config, libsndfile, ApplicationServices, Carbon, CoreServices }:
 
 let
-  inherit (stdenv.lib) optionals optionalString;
+  inherit (lib) optionals optionalString;
 
 in stdenv.mkDerivation rec {
   name = "libsamplerate-0.1.9";
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace examples/Makefile --replace "-fpascal-strings" ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sample Rate Converter for audio";
     homepage    = "http://www.mega-nerd.com/SRC/index.html";
     license     = licenses.bsd2;

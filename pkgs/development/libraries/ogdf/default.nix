@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, doxygen }:
+{ lib, stdenv, fetchFromGitHub, cmake, doxygen }:
 
 stdenv.mkDerivation rec {
   pname = "ogdf";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   #> 766 |      sprintf(messageOut_,format_+2);
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Graph Drawing Framework/Open Graph algorithms and Data structure Framework";
     homepage = "http://www.ogdf.net";
     license = licenses.gpl2;

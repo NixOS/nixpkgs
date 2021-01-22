@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pkg-config, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome3 }:
+{ lib, stdenv, fetchurl, pkg-config, gtk3, glibmm, cairomm, pangomm, atkmm, epoxy, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
   version = "3.24.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1hxdnhavjyvbcpxhd5z17l9fj4182028s66lc0s16qqqrldhjwbd";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ interface to the GTK graphical user interface library";
 
     longDescription = ''

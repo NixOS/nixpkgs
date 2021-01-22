@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, pkg-config
 , xlibsWrapper, libxcb, libXrandr, libXext, wayland, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LunarG Vulkan loader";
     homepage    = "https://www.lunarg.com";
     platforms   = platforms.linux;

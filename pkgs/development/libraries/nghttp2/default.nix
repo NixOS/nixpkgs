@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config
+{ lib, stdenv, fetchurl, pkg-config
 
 # Optional Dependencies
 , openssl ? null, zlib ? null
@@ -23,7 +23,7 @@ assert enableGetAssets -> libxml2 != null;
 assert enableJemalloc -> jemalloc != null;
 assert enablePython -> python != null && cython != null && ncurses != null && setuptools != null;
 
-let inherit (stdenv.lib) optional optionals optionalString; in
+let inherit (lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-spdylay=no"
     "--disable-examples"
-    (stdenv.lib.enableFeature enableApp "app")
+    (lib.enableFeature enableApp "app")
   ] ++ optional enableAsioLib "--enable-asio-lib --with-boost-libdir=${boost}/lib"
     ++ (if enablePython then [
     "--with-cython=${cython}/bin/cython"
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
   #doCheck = true;  # requires CUnit ; currently failing at test_util_localtime_date in util_test.cc
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://nghttp2.org/";
     description = "A C implementation of HTTP/2";
     license = licenses.mit;

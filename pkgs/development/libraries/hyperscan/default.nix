@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ragel, python3
+{ lib, stdenv, fetchFromGitHub, cmake, ragel, python3
 , coreutils, gnused, util-linux
 , boost
 , withStatic ? false # build only shared libs by default, build static+shared if true
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
     "-DFAT_RUNTIME=ON"
     "-DBUILD_AVX512=ON"
   ]
-  ++ stdenv.lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
-  ++ stdenv.lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
+  ++ lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
+  ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
 
   postPatch = ''
     sed -i '/examples/d' CMakeLists.txt
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       --replace "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-performance multiple regex matching library";
     longDescription = ''
       Hyperscan is a high-performance multiple regex matching library.

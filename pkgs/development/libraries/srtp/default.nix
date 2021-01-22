@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, pkg-config
+{ lib, stdenv, fetchFromGitHub, pkg-config
 , openssl ? null, libpcap ? null
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "libsrtp";
   version = "2.3.0";

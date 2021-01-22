@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, help2man, python3,
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, help2man, python3,
   alsaLib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     "localstatedir=$TMPDIR"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allows to receive and send infrared signals";
     homepage = "https://www.lirc.org/";
     license = licenses.gpl2;

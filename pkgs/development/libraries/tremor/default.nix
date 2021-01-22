@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, pkg-config, libogg }:
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, libogg }:
 
 stdenv.mkDerivation {
   name = "tremor-unstable-2018-03-16";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://xiph.org/tremor/";
     description = "Fixed-point version of the Ogg Vorbis decoder";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

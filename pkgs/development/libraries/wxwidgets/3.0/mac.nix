@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, expat, libiconv, libjpeg, libpng, libtiff, zlib
+{ lib, stdenv, fetchzip, expat, libiconv, libjpeg, libpng, libtiff, zlib
 # darwin only attributes
 , derez, rez, setfile
 , AGL, Cocoa, Kernel, WebKit
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.darwin;
     license = licenses.wxWindows;
     maintainers = [ maintainers.lnl7 ];

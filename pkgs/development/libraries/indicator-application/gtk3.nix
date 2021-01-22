@@ -1,4 +1,4 @@
-{ stdenv, fetchbzr
+{ lib, stdenv, fetchbzr
 , pkg-config, systemd, autoreconfHook
 , glib, dbus-glib, json-glib
 , gtk3, libindicator-gtk3, libdbusmenu-gtk3, libappindicator-gtk3 }:
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/upstart
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Indicator to take menus from applications and place them in the panel";
     homepage = "https://launchpad.net/indicator-application";
     license = licenses.gpl3;

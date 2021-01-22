@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchurl, SDL, autoreconfHook, pango, pkg-config }:
+{ lib, stdenv, fetchpatch, fetchurl, SDL, autoreconfHook, pango, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_Pango";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ SDL pango ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Connects the Pango rendering engine to SDL";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;

@@ -1,9 +1,9 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pkg-config, autoreconfHook
 , readline, texinfo
 , gdbm, gmp, libffi }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "librep";

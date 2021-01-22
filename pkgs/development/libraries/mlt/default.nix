@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate, libexif
 , libvorbis, libxml2, movit, pkg-config, sox, fftw, opencv4, SDL2
 , gtk2, genericUpdater, common-updater-scripts, libebur128
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
     homepage = "https://www.mltframework.org";
     license = licenses.gpl3;

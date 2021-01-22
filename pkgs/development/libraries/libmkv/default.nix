@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libtool, autoconf, automake }:
+{ lib, stdenv, fetchFromGitHub, libtool, autoconf, automake }:
 
 stdenv.mkDerivation rec {
   pname = "libmkv";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
       It is written in plain C, and intended to be very portable.
     '';
     homepage = "https://github.com/saintdev/libmkv";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.wmertens ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.wmertens ];
+    platforms = lib.platforms.unix;
   };
 }

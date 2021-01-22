@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kerberos }:
+{ lib, stdenv, fetchurl, kerberos }:
 
 stdenv.mkDerivation rec {
   name = "libgssglue-0.4";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.citi.umich.edu/projects/nfsv4/linux/";
     description = "Exports a gssapi interface which calls other random gssapi libraries";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "0.4.5";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/local" "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C library for property-based testing";
     homepage    = "https://github.com/silentbicycle/theft/";
     platforms   = platforms.unix;

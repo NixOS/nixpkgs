@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, directfb, libsigcxx, libxml2, fontconfig }:
+{ lib, stdenv, fetchurl, pkg-config, directfb, libsigcxx, libxml2, fontconfig }:
 
 # TODO: optional deps: baresip, FusionDale, FusionSound, SaWMan, doxygen,
 # Reflex, Wnn, NLS
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "--with-examples"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight C++ GUI toolkit for embedded Linux systems";
     homepage = "https://github.com/ilixi/ilixi";
     license = licenses.lgpl3;

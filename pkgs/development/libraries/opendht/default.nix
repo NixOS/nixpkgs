@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkg-config
 , asio, nettle, gnutls, msgpack, readline, libargon2
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C++11 Kademlia distributed hash table implementation";
     homepage    = "https://github.com/savoirfairelinux/opendht";
     license     = licenses.gpl3Plus;

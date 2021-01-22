@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, neon, libdiscid }:
+{ lib, stdenv, fetchurl, cmake, neon, libdiscid }:
 
 stdenv.mkDerivation rec {
   name = "libmusicbrainz-3.0.3";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i9qly13bwwmgj68vma766hgvsd1m75236haqsp9zgh5znlmkm3z";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://musicbrainz.org/doc/libmusicbrainz";
     description = "MusicBrainz Client Library (3.x version)";
     longDescription = ''

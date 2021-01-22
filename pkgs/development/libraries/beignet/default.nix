@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cgit.freedesktop.org/beignet/";
     description = "OpenCL Library for Intel Ivy Bridge and newer GPUs";
     longDescription = ''

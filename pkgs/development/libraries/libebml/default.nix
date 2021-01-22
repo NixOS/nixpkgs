@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libebml";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=YES"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extensible Binary Meta Language library";
     homepage = "https://dl.matroska.org/downloads/libebml/";
     license = licenses.lgpl21;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, boxfort, cmake, libcsptr, pkg-config, gettext
+{ lib, stdenv, fetchFromGitHub, boxfort, cmake, libcsptr, pkg-config, gettext
 , dyncall , nanomsg, python37Packages }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform C and C++ unit testing framework for the 21th century";
     homepage = "https://github.com/Snaipe/Criterion";
     license = licenses.mit;

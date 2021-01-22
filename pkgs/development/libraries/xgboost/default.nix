@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     install -Dm755 ../xgboost $out/bin/xgboost
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
     homepage = "https://github.com/dmlc/xgboost";
     license = licenses.asl20;

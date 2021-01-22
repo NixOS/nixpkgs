@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkg-config, openssl, protobuf
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkg-config, openssl, protobuf
 , gflags, abseil-cpp, libnsl
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ zlib c-ares c-ares.cmake-config openssl protobuf gflags abseil-cpp ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libnsl ];
+    ++ lib.optionals stdenv.isLinux [ libnsl ];
 
   cmakeFlags =
     [ "-DgRPC_ZLIB_PROVIDER=package"
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
 
   enableParallelBuilds = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The C based gRPC (C++, Python, Ruby, Objective-C, PHP, C#)";
     license = licenses.asl20;
     maintainers = [ maintainers.lnl7 maintainers.marsam ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , meson
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gupnp/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0911lv1bivsyv9wwdxm0i1w4r89j0vyyqp200gsfdnzk6v1a4x7x";
   };
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.gupnp.org/";
     description = "An implementation of the UPnP specification";
     license = licenses.lgpl2Plus;

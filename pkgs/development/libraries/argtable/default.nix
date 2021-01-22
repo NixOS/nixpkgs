@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     patchShebangs tools/build
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://argtable.org";
     description = "A single-file, ANSI C command-line parsing library";
     longDescription = ''

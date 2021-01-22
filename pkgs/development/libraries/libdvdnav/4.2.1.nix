@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkg-config, libdvdread}:
+{lib, stdenv, fetchurl, pkg-config, libdvdread}:
 
 stdenv.mkDerivation {
   name = "libdvdnav-4.2.1";
@@ -20,9 +20,9 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://dvdnav.mplayerhq.hu/";
     description = "A library that implements DVD navigation features such as DVD menus";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.wmertens ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.wmertens ];
+    platforms = lib.platforms.linux;
   };
 
   passthru = { inherit libdvdread; };

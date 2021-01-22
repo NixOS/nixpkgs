@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, curl, hdf5, netcdf
+{ lib, stdenv, fetchurl, curl, hdf5, netcdf
 , # build, install and link to a CDI library [default=no]
   enable_cdi_lib ? false
 , # build a completely statically linked CDO binary
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
  # Configure phase
  configureFlags = [
    "--with-netcdf=${netcdf}" "--with-hdf5=${hdf5}"]
-   ++ stdenv.lib.optional (enable_cdi_lib) "--enable-cdi-lib"
-   ++ stdenv.lib.optional (enable_all_static) "--enable-all-static"
-   ++ stdenv.lib.optional (enable_cxx) "--enable-cxx";
+   ++ lib.optional (enable_cdi_lib) "--enable-cdi-lib"
+   ++ lib.optional (enable_all_static) "--enable-all-static"
+   ++ lib.optional (enable_cxx) "--enable-cxx";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of command line Operators to manipulate and analyse Climate and NWP model Data";
     longDescription = ''
       Supported data formats are GRIB 1/2, netCDF 3/4, SERVICE, EXTRA and IEG.
