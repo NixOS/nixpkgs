@@ -19291,7 +19291,7 @@ in
     buildPhase = ''
       set -x
       make \
-        ARCH=${stdenv.hostPlatform.linuxArch} \
+        ARCH=${stdenv.hostPlatform.kernelArch} \
         HOSTCC=${buildPackages.stdenv.cc.targetPrefix}gcc \
         ${makeTarget}
     '';

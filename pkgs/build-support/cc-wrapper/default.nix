@@ -403,31 +403,31 @@ stdenv.mkDerivation {
     # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
     # that case.
     + optionalString ((targetPlatform ? platform.gcc.arch) &&
-                      isGccArchSupported targetPlatform.gcc.arch) ''
-      echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
+                      isGccArchSupported targetPlatform.platform.gcc.arch) ''
+      echo "-march=${targetPlatform.platform.gcc.arch}" >> $out/nix-support/cc-cflags-before
     ''
 
     # -mcpu is not very useful. You should use mtune and march
     # instead. It’s provided here for backwards compatibility.
     + optionalString (targetPlatform ? platform.gcc.cpu) ''
-      echo "-mcpu=${targetPlatform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
+      echo "-mcpu=${targetPlatform.platform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
     ''
 
     # -mfloat-abi only matters on arm32 but we set it here
     # unconditionally just in case. If the abi specifically sets hard
     # vs. soft floats we use it here.
     + optionalString (targetPlatform ? platform.gcc.float-abi) ''
-      echo "-mfloat-abi=${targetPlatform.gcc.float-abi}" >> $out/nix-support/cc-cflags-before
+      echo "-mfloat-abi=${targetPlatform.platform.gcc.float-abi}" >> $out/nix-support/cc-cflags-before
     ''
     + optionalString (targetPlatform ? platform.gcc.fpu) ''
-      echo "-mfpu=${targetPlatform.gcc.fpu}" >> $out/nix-support/cc-cflags-before
+      echo "-mfpu=${targetPlatform.platform.gcc.fpu}" >> $out/nix-support/cc-cflags-before
     ''
     + optionalString (targetPlatform ? platform.gcc.mode) ''
-      echo "-mmode=${targetPlatform.gcc.mode}" >> $out/nix-support/cc-cflags-before
+      echo "-mmode=${targetPlatform.platform.gcc.mode}" >> $out/nix-support/cc-cflags-before
     ''
     + optionalString (targetPlatform ? platform.gcc.tune &&
-                      isGccArchSupported targetPlatform.gcc.tune) ''
-      echo "-mtune=${targetPlatform.gcc.tune}" >> $out/nix-support/cc-cflags-before
+                      isGccArchSupported targetPlatform.platform.gcc.tune) ''
+      echo "-mtune=${targetPlatform.platform.gcc.tune}" >> $out/nix-support/cc-cflags-before
     ''
 
     # TODO: categorize these and figure out a better place for them

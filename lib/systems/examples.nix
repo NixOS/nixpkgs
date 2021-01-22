@@ -7,6 +7,7 @@ let
 
   riscv = bits: {
     config = "riscv${bits}-unknown-linux-gnu";
+    platform = platforms.riscv-multiplatform;
   };
 in
 
@@ -16,68 +17,84 @@ rec {
   #
   powernv = {
     config = "powerpc64le-unknown-linux-gnu";
+    platform = platforms.powernv;
   };
   musl-power = {
     config = "powerpc64le-unknown-linux-musl";
+    platform = platforms.powernv;
   };
 
   sheevaplug = {
     config = "armv5tel-unknown-linux-gnueabi";
-  } // platforms.sheevaplug;
+    platform = platforms.sheevaplug;
+  };
 
   raspberryPi = {
     config = "armv6l-unknown-linux-gnueabihf";
-  } // platforms.raspberrypi;
+    platform = platforms.raspberrypi;
+  };
 
   remarkable1 = {
     config = "armv7l-unknown-linux-gnueabihf";
-  } // platforms.zero-gravitas;
+    platform = platforms.zero-gravitas;
+  };
 
   remarkable2 = {
     config = "armv7l-unknown-linux-gnueabihf";
-  } // platforms.zero-sugar;
+    platform = platforms.zero-sugar;
+  };
 
   armv7l-hf-multiplatform = {
     config = "armv7l-unknown-linux-gnueabihf";
+    platform = platforms.armv7l-hf-multiplatform;
   };
 
   aarch64-multiplatform = {
     config = "aarch64-unknown-linux-gnu";
+    platform = platforms.aarch64-multiplatform;
   };
 
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
     sdkVer = "29";
     ndkVer = "21";
+    platform = platforms.armv7a-android;
     useAndroidPrebuilt = true;
-  } // platforms.armv7a-android;
+  };
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
     sdkVer = "29";
     ndkVer = "21";
+    platform = platforms.aarch64-multiplatform;
     useAndroidPrebuilt = true;
   };
 
-  scaleway-c1 = armv7l-hf-multiplatform // platforms.scaleway-c1;
+  scaleway-c1 = armv7l-hf-multiplatform // rec {
+    platform = platforms.scaleway-c1;
+    inherit (platform.gcc) fpu;
+  };
 
   pogoplug4 = {
     config = "armv5tel-unknown-linux-gnueabi";
-  } // platforms.pogoplug4;
+    platform = platforms.pogoplug4;
+  };
 
   ben-nanonote = {
     config = "mipsel-unknown-linux-uclibc";
-  } // platforms.ben_nanonote;
+    platform = platforms.ben_nanonote;
+  };
 
   fuloongminipc = {
     config = "mipsel-unknown-linux-gnu";
-  } // platforms.fuloong2f_n32;
+    platform = platforms.fuloong2f_n32;
+  };
 
   muslpi = raspberryPi // {
     config = "armv6l-unknown-linux-musleabihf";
   };
 
-  aarch64-multiplatform-musl = {
+  aarch64-multiplatform-musl = aarch64-multiplatform // {
     config = "aarch64-unknown-linux-musl";
   };
 
@@ -93,11 +110,13 @@ rec {
   riscv64-embedded = {
     config = "riscv64-none-elf";
     libc = "newlib";
+    platform = platforms.riscv-multiplatform;
   };
 
   riscv32-embedded = {
     config = "riscv32-none-elf";
     libc = "newlib";
+    platform = platforms.riscv-multiplatform;
   };
 
   mmix = {
@@ -117,11 +136,13 @@ rec {
   vc4 = {
     config = "vc4-elf";
     libc = "newlib";
+    platform = {};
   };
 
   or1k = {
     config = "or1k-elf";
     libc = "newlib";
+    platform = {};
   };
 
   arm-embedded = {
@@ -183,6 +204,7 @@ rec {
     xcodeVer = "11.3.1";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
+    platform = {};
   };
 
   iphone32 = {
@@ -192,6 +214,7 @@ rec {
     xcodeVer = "11.3.1";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
+    platform = {};
   };
 
   iphone64-simulator = {
@@ -201,6 +224,7 @@ rec {
     xcodeVer = "11.3.1";
     xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
+    platform = {};
   };
 
   iphone32-simulator = {
@@ -210,6 +234,7 @@ rec {
     xcodeVer = "11.3.1";
     xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
+    platform = {};
   };
 
   #
@@ -220,6 +245,7 @@ rec {
   mingw32 = {
     config = "i686-w64-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
+    platform = {};
   };
 
   # 64 bit mingw-w64
@@ -227,6 +253,7 @@ rec {
     # That's the triplet they use in the mingw-w64 docs.
     config = "x86_64-w64-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
+    platform = {};
   };
 
   # BSDs
@@ -248,5 +275,6 @@ rec {
   # Ghcjs
   ghcjs = {
     config = "js-unknown-ghcjs";
+    platform = {};
   };
 }

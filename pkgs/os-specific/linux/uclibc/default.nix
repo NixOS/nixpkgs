@@ -68,7 +68,7 @@ stdenv.mkDerivation {
     cat << EOF | parseconfig
     ${nixConfig}
     ${extraConfig}
-    ${stdenv.hostPlatform.uclibc.extraConfig or ""}
+    ${stdenv.hostPlatform.platform.uclibc.extraConfig or ""}
     EOF
     ( set +o pipefail; yes "" | make oldconfig )
   '';

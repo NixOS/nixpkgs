@@ -64,10 +64,10 @@ let
 
   commonMakeFlags = [
     "O=$(buildRoot)"
-  ] ++ lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags)
-    stdenv.hostPlatform.linux-kernel.makeFlags;
+  ] ++ lib.optionals (stdenv.hostPlatform.platform ? kernelMakeFlags)
+    stdenv.hostPlatform.platform.kernelMakeFlags;
 
-  drvAttrs = config_: kernelConf: kernelPatches: configfile:
+  drvAttrs = config_: platform: kernelPatches: configfile:
     let
       config = let attrName = attr: "CONFIG_" + attr; in {
         isSet = attr: hasAttr (attrName attr) config;
@@ -171,7 +171,7 @@ let
 
       buildFlags = [
         "KBUILD_BUILD_VERSION=1-NixOS"
-        kernelConf.target
+        platform.kernelTarget
         "vmlinux"  # for "perf" and things like that
       ] ++ optional isModular "modules";
 
@@ -186,16 +186,16 @@ let
       '';
 
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
-      installTargets = [
-        (kernelConf.installTarget or (
-          /**/ if kernelConf.target == "uImage" then "uinstall"
-          else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" then "zinstall"
-          else "install"))
-      ];
+      installTargets = [ (
+        if platform ? kernelInstallTarget then platform.kernelInstallTarget
+        else if platform.kernelTarget == "uImage" then "uinstall"
+        else if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall"
+        else "install"
+      ) ];
 
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
-      '') + (if (kernelConf.DTB or false) then ''
+      '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
         make $makeFlags "''${makeFlagsArray[@]}" dtbs dtbs_install INSTALL_DTBS_PATH=$out/dtbs
       '' else "") + (if isModular then ''
         mkdir -p $dev
@@ -300,7 +300,7 @@ in
 assert (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") -> libelf != null;
 assert lib.versionAtLeast version "5.8" -> elfutils != null;
 
-stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPatches configfile) // {
+stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches configfile) // {
   pname = "linux";
   inherit version;
 
@@ -308,7 +308,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk zstd ]
-      ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
+      ++ optional  (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
       ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
@@ -322,10 +322,10 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   makeFlags = commonMakeFlags ++ [
     "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "HOSTCC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
+    "ARCH=${stdenv.hostPlatform.platform.kernelArch}"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
-  karch = stdenv.hostPlatform.linuxArch;
+  karch = stdenv.hostPlatform.platform.kernelArch;
 })

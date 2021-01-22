@@ -1,7 +1,7 @@
 { lib, targetPlatform }:
 
 let
-  p =  targetPlatform.gcc or {}
+  p =  targetPlatform.platform.gcc or {}
     // targetPlatform.parsed.abi;
 in lib.concatLists [
   (lib.optional (!targetPlatform.isx86_64 && p ? arch) "--with-arch=${p.arch}") # --with-arch= is unknown flag on x86_64

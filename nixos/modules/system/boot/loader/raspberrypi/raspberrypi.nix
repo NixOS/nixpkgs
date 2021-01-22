@@ -103,6 +103,6 @@ in
 
     system.build.installBootLoader = builder;
     system.boot.loader.id = "raspberrypi";
-    system.boot.loader.kernelFile = linux-kernel.target;
+    system.boot.loader.kernelFile = platform.kernelTarget;
   };
 }
