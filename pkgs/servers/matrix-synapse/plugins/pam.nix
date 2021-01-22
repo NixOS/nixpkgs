@@ -12,4 +12,11 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ twisted python-pam ];
+
+  meta = with lib; {
+    homepage = "https://github.com/14mRh4X0r/matrix-synapse-pam";
+    description = "Allows Synapse to use UNIX accounts through PAM";
+    maintainers = teams.matrix.members;
+    license = licenses.eupl11;
+  };
 }

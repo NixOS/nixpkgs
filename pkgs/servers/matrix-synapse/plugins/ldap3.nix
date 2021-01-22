@@ -14,4 +14,11 @@ buildPythonPackage rec {
   # ldaptor is not ready for py3 yet
   doCheck = !isPy3k;
   checkInputs = [ ldaptor mock ];
+
+  meta = with lib; {
+    homepage = "https://github.com/matrix-org/matrix-synapse-ldap3";
+    description = "Allows synapse to use LDAP as a password provider";
+    maintainers = teams.matrix.members;
+    license = licenses.asl20;
+  };
 }
