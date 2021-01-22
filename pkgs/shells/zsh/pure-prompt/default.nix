@@ -4,13 +4,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "pure-prompt";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "sindresorhus";
     repo = "pure";
     rev = "v${version}";
-    sha256 = "0r4y8bglwdq85dwlxh9sm23ppzy1z7i8kmjny5mx9css0likj8qv";
+    sha256 = "sha256-fnk4lLRASX7FFAovAiRd9sm4jNlnFIJ78UCzdsXYVfM=";
   };
 
   installPhase = ''
