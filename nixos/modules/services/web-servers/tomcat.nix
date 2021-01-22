@@ -74,6 +74,7 @@ in
 
       extraGroups = mkOption {
         default = [];
+        type = types.listOf types.str;
         example = [ "users" ];
         description = "Defines extra groups to which the tomcat user belongs.";
       };
