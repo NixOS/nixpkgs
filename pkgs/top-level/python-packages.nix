@@ -7365,6 +7365,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
+  starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
+
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
   statistics = callPackage ../development/python-modules/statistics { };
