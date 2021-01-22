@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, installShellFiles
+, git
+}:
 
 buildGoModule rec {
   pname = "gh";
@@ -30,8 +35,10 @@ buildGoModule rec {
     done
   '';
 
-  # fails with `unable to find git executable in PATH`
-  doCheck = false;
+  checkInputs = [ git ];
+  checkPhase = ''
+    make test
+  '';
 
   meta = with lib; {
     description = "GitHub CLI tool";
