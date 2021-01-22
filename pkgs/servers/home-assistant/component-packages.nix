@@ -99,7 +99,7 @@
     "brottsplatskartan" = ps: with ps; [ ]; # missing inputs: brottsplatskartan
     "browser" = ps: with ps; [ ];
     "brunt" = ps: with ps; [ ]; # missing inputs: brunt
-    "bsblan" = ps: with ps; [ ]; # missing inputs: bsblan
+    "bsblan" = ps: with ps; [ bsblan ];
     "bt_home_hub_5" = ps: with ps; [ ]; # missing inputs: bthomehub5-devicelist
     "bt_smarthub" = ps: with ps; [ ]; # missing inputs: btsmarthub_devicelist
     "buienradar" = ps: with ps; [ ]; # missing inputs: buienradar
@@ -709,7 +709,7 @@
     "scsgate" = ps: with ps; [ ]; # missing inputs: scsgate
     "search" = ps: with ps; [ aiohttp-cors ];
     "season" = ps: with ps; [ ephem ];
-    "sendgrid" = ps: with ps; [ ]; # missing inputs: sendgrid
+    "sendgrid" = ps: with ps; [ sendgrid ];
     "sense" = ps: with ps; [ ]; # missing inputs: sense_energy
     "sensehat" = ps: with ps; [ ]; # missing inputs: sense-hat
     "sensibo" = ps: with ps; [ ]; # missing inputs: pysensibo

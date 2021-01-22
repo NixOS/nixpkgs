@@ -1048,6 +1048,8 @@ in {
 
   bsdiff4 = callPackage ../development/python-modules/bsdiff4 { };
 
+  bsblan = callPackage ../development/python-modules/bsblan { };
+
   btchip = callPackage ../development/python-modules/btchip { };
 
   bt_proximity = callPackage ../development/python-modules/bt-proximity { };
@@ -1162,6 +1164,8 @@ in {
   catalogue = callPackage ../development/python-modules/catalogue { };
 
   catboost = callPackage ../development/python-modules/catboost { };
+
+  cattrs = callPackage ../development/python-modules/cattrs { };
 
   cbeams = callPackage ../misc/cbeams { };
 
@@ -6199,6 +6203,8 @@ in {
 
   python-hpilo = callPackage ../development/python-modules/python-hpilo { };
 
+  python-http-client = callPackage ../development/python-modules/python-http-client { };
+
   python-igraph = callPackage ../development/python-modules/python-igraph {
     pkg-config = pkgs.pkg-config;
     igraph = pkgs.igraph;
@@ -6981,6 +6987,8 @@ in {
 
   send2trash = callPackage ../development/python-modules/send2trash { };
 
+  sendgrid = callPackage ../development/python-modules/sendgrid { };
+
   sentencepiece = callPackage ../development/python-modules/sentencepiece { inherit (pkgs) sentencepiece pkg-config; };
 
   sentinel = callPackage ../development/python-modules/sentinel { };
@@ -7366,6 +7374,8 @@ in {
   starlette = callPackage ../development/python-modules/starlette {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
   };
+
+  starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 

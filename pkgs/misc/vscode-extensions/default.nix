@@ -165,6 +165,18 @@ let
         };
       };
 
+      eamodio.gitlens = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gitlens";
+          publisher = "eamodio";
+          version = "11.1.3";
+          sha256 = "sha256-hqJg3jP4bbXU4qSJOjeKfjkPx61yPDMsQdSUVZObK/U=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       esbenp.prettier-vscode = buildVscodeMarketplaceExtension {
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -330,6 +342,18 @@ let
           publisher = "jnoortheen";
           version = "0.1.7";
           sha256 = "1bw4wyq9abimxbhl7q9g8grvj2ax9qqq6mmqbiqlbsi2arvk0wrm";
+        };
+      };
+
+      jpoissonnier.vscode-styled-components = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-styled-components";
+          publisher = "jpoissonnier";
+          version = "1.4.1";
+          sha256 = "sha256-ojbeuYBCS+DjF5R0aLuBImzoSOb8mXw1s0Uh0CzggzE=";
+        };
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
