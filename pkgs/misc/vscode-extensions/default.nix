@@ -345,6 +345,18 @@ let
         };
       };
 
+      jpoissonnier.vscode-styled-components = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-styled-components";
+          publisher = "jpoissonnier";
+          version = "1.4.1";
+          sha256 = "sha256-ojbeuYBCS+DjF5R0aLuBImzoSOb8mXw1s0Uh0CzggzE=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       justusadam.language-haskell = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "language-haskell";
