@@ -1046,6 +1046,8 @@ in {
 
   bsdiff4 = callPackage ../development/python-modules/bsdiff4 { };
 
+  bsblan = callPackage ../development/python-modules/bsblan { };
+
   btchip = callPackage ../development/python-modules/btchip { };
 
   bt_proximity = callPackage ../development/python-modules/bt-proximity { };
