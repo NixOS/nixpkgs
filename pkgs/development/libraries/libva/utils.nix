@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkg-config
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config
 , libdrm, libva, libX11, libXext, libXfixes, wayland
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libdrm libva libX11 libXext libXfixes wayland ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collection of utilities and examples for VA-API";
     longDescription = ''
       libva-utils is a collection of utilities and examples to exercise VA-API

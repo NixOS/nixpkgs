@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, lcms2, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, lcms2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libraw";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for reading RAW files obtained from digital photo cameras (CRW/CR2, NEF, RAF, DNG, and others)";
     homepage = "https://www.libraw.org/";
     license = licenses.gpl2Plus;

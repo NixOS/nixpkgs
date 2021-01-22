@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake,
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake,
   qtbase, cfitsio, gsl, wcslib, withTester ? false }:
 
 mkDerivation rec {
@@ -20,7 +20,7 @@ mkDerivation rec {
     "-DBUILD_TESTER=${if withTester then "on" else "off"}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/rlancaste/stellarsolver";
     description = "Astrometric plate solving library";
     license = licenses.gpl3Plus;

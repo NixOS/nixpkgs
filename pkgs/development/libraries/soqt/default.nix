@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, coin3d, qtbase, cmake, pkg-config }:
+{ fetchFromGitHub, lib, stdenv, coin3d, qtbase, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "soqt";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/coin3d/soqt";
     license = licenses.bsd3;
     description = "Glue between Coin high-level 3D visualization library and Qt";

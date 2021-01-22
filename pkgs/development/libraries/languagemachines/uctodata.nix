@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , automake, autoconf, libtool, pkg-config, autoconf-archive
  }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [ automake autoconf libtool autoconf-archive ];
   preConfigure = "sh bootstrap.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A rule-based tokenizer for natural language";
     homepage    = "https://languagemachines.github.io/ucto/";
     license     = licenses.gpl3;

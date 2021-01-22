@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
 , fetchFromGitHub
 , fetchpatch
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     echo "$out ${python3.pkgs.pygobject3} ${python3.pkgs.six}" > "$py/nix-support/propagated-build-inputs"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C Library for manipulating module metadata files";
     homepage = "https://github.com/fedora-modularity/libmodulemd";
     license = licenses.mit;

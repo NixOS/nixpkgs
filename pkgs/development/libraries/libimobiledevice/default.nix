@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, pkg-config, gnutls
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, pkg-config, gnutls
 , libgcrypt, libtasn1, glib, libplist, libusbmuxd }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "--without-cython"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/libimobiledevice/libimobiledevice";
     description = "A software library that talks the protocols to support iPhone®, iPod Touch® and iPad® devices on Linux";
     longDescription = ''

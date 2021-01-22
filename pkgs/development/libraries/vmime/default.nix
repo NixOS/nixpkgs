@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub
+{lib, stdenv, fetchFromGitHub
 , gsasl, gnutls, pkg-config, cmake, zlib, libtasn1, libgcrypt, gtk3
 # this will not work on non-nixos systems
 , sendmailPath ? "/run/wrappers/bin/sendmail"
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.vmime.org/";
     description = "Free mail library for C++";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

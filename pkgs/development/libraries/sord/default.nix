@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, python3, serd, pcre, wafHook }:
+{ lib, stdenv, fetchurl, pkg-config, python3, serd, pcre, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "sord";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pcre ];
   propagatedBuildInputs = [ serd ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://drobilla.net/software/sord";
     description = "A lightweight C library for storing RDF data in memory";
     license = licenses.mit;

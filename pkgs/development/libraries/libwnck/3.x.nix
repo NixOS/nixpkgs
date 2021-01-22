@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , meson
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0pwjdhca9lz2n1gf9b60xf0m6ipf9snp8rqf9csj4pgdnd882l5w";
   };
 
@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "${pname}${stdenv.lib.versions.major version}";
+      attrPath = "${pname}${lib.versions.major version}";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

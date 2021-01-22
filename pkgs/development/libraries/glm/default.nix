@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, cmake }:
+{ lib, stdenv, fetchurl, fetchzip, cmake }:
 
 stdenv.mkDerivation rec {
   version = "0.9.8.5";
@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
     cp ${gcc7PlatformPatch} glm/simd/platform.h
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-DGLM_COMPILER=0";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DGLM_COMPILER=0";
 
   postInstall = ''
     mkdir -p $doc/share/doc/glm
     cp -rv $NIX_BUILD_TOP/$sourceRoot/doc/* $doc/share/doc/glm
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenGL Mathematics library for C++";
     longDescription = ''
       OpenGL Mathematics (GLM) is a header only C++ mathematics library for
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "http://glm.g-truc.net/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
 

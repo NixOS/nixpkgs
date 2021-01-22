@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, autoreconfHook, makeWrapper
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, makeWrapper
 , zimg, libass, python3, libiconv
 , ApplicationServices
 , ocrSupport ?  false, tesseract ? null
@@ -8,7 +8,7 @@
 assert ocrSupport   -> tesseract != null;
 assert imwriSupport -> imagemagick7 != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
         --prefix PYTHONPATH : $out/${python3.sitePackages}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A video processing framework with the future in mind";
     homepage    = "http://www.vapoursynth.com/";
     license     = licenses.lgpl21;

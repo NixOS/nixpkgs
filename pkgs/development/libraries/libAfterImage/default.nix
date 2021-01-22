@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation {
   pname = "libAfterImage";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.afterstep.org/afterimage/";
     description = "A generic image manipulation library";
     platforms = platforms.unix;

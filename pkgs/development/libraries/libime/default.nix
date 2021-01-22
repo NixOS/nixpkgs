@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchFromGitHub
 , cmake
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     fcitx5
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to support generic input method implementation";
     homepage = "https://github.com/fcitx/libime";
     license = licenses.lgpl21Plus;

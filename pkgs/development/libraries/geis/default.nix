@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pkg-config
 , python3Packages
 , wrapGAppsHook
@@ -18,7 +18,7 @@
 , xorgserver
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "geis";

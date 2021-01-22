@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, cmake, libtiff, expat, zlib, libpng, libjpeg }:
+{ lib, stdenv, fetchFromGitHub, unzip, cmake, libtiff, expat, zlib, libpng, libjpeg }:
 stdenv.mkDerivation {
   name = "vxl-1.17.0-nix1";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     # BUILD_BRL fails to find open()
     "-DBUILD_BRL=OFF"
     "-DBUILD_CONTRIB=OFF"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+  ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
     "-DCMAKE_CXX_FLAGS=-fPIC"
     "-DCMAKE_C_FLAGS=-fPIC"
   ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     description = "C++ Libraries for Computer Vision Research and Implementation";
     homepage = "http://vxl.sourceforge.net/";
     license = "VXL License";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

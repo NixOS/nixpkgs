@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, sqlite, expat, zlib, proj, geos, libspatialite, readosm }:
+{ lib, stdenv, fetchurl, pkg-config, sqlite, expat, zlib, proj, geos, libspatialite, readosm }:
 
 stdenv.mkDerivation rec {
   name = "spatialite-tools-4.1.1";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A complete sqlite3-compatible CLI front-end for libspatialite";
     homepage = "https://www.gaia-gis.it/fossil/spatialite-tools";
-    license = with stdenv.lib.licenses; [ mpl11 gpl2Plus lgpl21Plus ];
-    platforms = stdenv.lib.platforms.linux;
+    license = with lib.licenses; [ mpl11 gpl2Plus lgpl21Plus ];
+    platforms = lib.platforms.linux;
   };
 }

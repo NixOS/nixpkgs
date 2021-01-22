@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
   cmakeDir = "../drivers/xgl";
 
   # LTO is disabled in gcc for i686 as of #66528
-  cmakeFlags = stdenv.lib.optionals stdenv.is32bit ["-DXGL_ENABLE_LTO=OFF"];
+  cmakeFlags = lib.optionals stdenv.is32bit ["-DXGL_ENABLE_LTO=OFF"];
 
   installPhase = ''
     install -Dm755 -t $out/lib icd/amdvlk${suffix}.so
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
   # Keep the rpath, otherwise vulkaninfo and vkcube segfault
   dontPatchELF = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "AMD Open Source Driver For Vulkan";
     homepage = "https://github.com/GPUOpen-Drivers/AMDVLK";
     changelog = "https://github.com/GPUOpen-Drivers/AMDVLK/releases/tag/v-${version}";

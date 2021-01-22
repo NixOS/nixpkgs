@@ -1,6 +1,6 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "1.3.1";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromBitbucket, autoreconfHook, gtk-doc, gettext
+{ lib, stdenv, fetchurl, fetchFromBitbucket, autoreconfHook, gtk-doc, gettext
 , pkg-config, glib, libxml2, gobject-introspection, gnome-common, unzip
 }:
 
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = "An interface library to access tags for identifying languages";
-    license = stdenv.lib.licenses.mpl20;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mpl20;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     # There are links to a homepage that are broken by a BitBucket change
     homepage = "https://bitbucket.org/tagoh/liblangtag/overview";
   };

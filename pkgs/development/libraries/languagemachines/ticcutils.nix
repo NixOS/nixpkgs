@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , automake, autoconf, libtool, pkg-config, autoconf-archive
 , libxml2, zlib, bzip2, libtar }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
                 ];
   preConfigure = "sh bootstrap.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "This module contains useful functions for general use in the TiCC software stack and beyond.";
     homepage    = "https://github.com/LanguageMachines/ticcutils";
     license     = licenses.gpl3;

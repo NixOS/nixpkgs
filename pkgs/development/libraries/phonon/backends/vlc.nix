@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "phonon-backend-vlc";
   version = "0.11.1";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://phonon.kde.org/";
     description = "GStreamer backend for Phonon";
     platforms = platforms.linux;

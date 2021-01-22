@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libuv }:
 
 stdenv.mkDerivation rec {
   pname = "raft-canonical";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Fully asynchronous C implementation of the Raft consensus protocol
     '';

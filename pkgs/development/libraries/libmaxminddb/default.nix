@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libmaxminddb";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-fFbnkf8qZVIV5+04ZLH/3X00o4g1d57+1WpC8Fa9WKo=";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library for working with MaxMind geolocation DB files";
     homepage = "https://github.com/maxmind/libmaxminddb";
     license = licenses.asl20;

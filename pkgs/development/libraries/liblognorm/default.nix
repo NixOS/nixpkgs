@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libestr, json_c, pcre, fastJson }:
+{ lib, stdenv, fetchurl, pkg-config, libestr, json_c, pcre, fastJson }:
 
 stdenv.mkDerivation rec {
   name = "liblognorm-2.0.6";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-regexp" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.liblognorm.com/";
     description = "Help to make sense out of syslog data, or, actually, any event data that is present in text form";
     license = licenses.lgpl21;

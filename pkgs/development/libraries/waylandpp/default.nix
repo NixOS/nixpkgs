@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -13,7 +13,7 @@
 
 assert docSupport -> doxygen != null;
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "waylandpp";
   version = "0.2.8";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_DATADIR=${placeholder "dev"}"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DWAYLAND_SCANNERPP=${buildPackages.waylandpp}/bin/wayland-scanner++"
   ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "lib" "out" ] ++ optionals docSupport [ "doc" "devman" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wayland C++ binding";
     homepage = "https://github.com/NilsBrause/waylandpp/";
     license = with licenses; [ bsd2 hpnd ];

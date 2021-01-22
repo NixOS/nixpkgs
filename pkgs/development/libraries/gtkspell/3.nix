@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk3, aspell, pkg-config, enchant, isocodes, intltool, gobject-introspection, vala}:
+{lib, stdenv, fetchurl, gtk3, aspell, pkg-config, enchant, isocodes, intltool, gobject-introspection, vala}:
 
 stdenv.mkDerivation rec {
   pname = "gtkspell";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "--enable-vala"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://gtkspell.sourceforge.net/";
     description = "Word-processor-style highlighting GtkTextView widget";
     license = licenses.gpl2Plus;

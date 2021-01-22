@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "PREFIX=$(out)" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
+    ++ lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
 
   nativeBuildInputs = [ libtool pkg-config ];
   buildInputs = [ ncurses unibilium ];

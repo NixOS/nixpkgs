@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.4.1";
 
   src = fetchurl {
-    url = "https://github.com/openbabel/openbabel/archive/openbabel-${stdenv.lib.replaceStrings ["."] ["-"] version}.tar.gz";
+    url = "https://github.com/openbabel/openbabel/archive/openbabel-${lib.replaceStrings ["."] ["-"] version}.tar.gz";
     sha256 = "0xm7y859ivq2cp0q08mwshfxm0jq31xkyr4x8s0j6l7khf57yk2r";
   };
 

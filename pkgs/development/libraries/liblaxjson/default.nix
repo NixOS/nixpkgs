@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   version = "1.0.5";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for parsing JSON config files";
     homepage = "https://github.com/andrewrk/liblaxjson";
     license = licenses.mit;

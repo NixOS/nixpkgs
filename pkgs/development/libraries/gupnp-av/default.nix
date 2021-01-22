@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , gobject-introspection
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1p3grslwqm9bc8rmpn4l48d7v9s84nina4r9xbd932dbj8acz7b8";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://gupnp.org/";
     description = "A collection of helpers for building AV (audio/video) applications using GUPnP";
     license = licenses.lgpl2Plus;

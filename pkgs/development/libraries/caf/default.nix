@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "actor-framework";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source implementation of the actor model in C++";
     homepage = "http://actor-framework.org/";
     license = licenses.bsd3;

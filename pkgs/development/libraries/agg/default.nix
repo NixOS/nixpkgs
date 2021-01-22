@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkg-config
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkg-config
 , freetype, SDL, libX11 }:
 
 stdenv.mkDerivation rec {
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
       of course, AGG can do much more than that.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://www.antigrain.com/";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

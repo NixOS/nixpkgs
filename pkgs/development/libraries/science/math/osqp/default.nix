@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A quadratic programming solver using operator splitting";
     homepage = "https://osqp.org";
     license = licenses.asl20;

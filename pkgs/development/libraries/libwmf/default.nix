@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config
+{ lib, stdenv, fetchFromGitHub, pkg-config
 , freetype, glib, imagemagick, libjpeg, libpng, libxml2, zlib
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib imagemagick libpng glib freetype libjpeg libxml2 ];
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WMF library from wvWare";
     homepage = "http://wvware.sourceforge.net/libwmf.html";
     downloadPage = "https://github.com/caolanm/libwmf/releases";

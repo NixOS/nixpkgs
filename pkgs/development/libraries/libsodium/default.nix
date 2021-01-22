@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "libsodium-1.0.18";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern and easy-to-use crypto library";
     homepage = "http://doc.libsodium.org/";
     license = licenses.isc;

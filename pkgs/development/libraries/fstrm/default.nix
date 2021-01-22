@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libevent, openssl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libevent, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "fstrm";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Frame Streams implementation in C";
     homepage = "https://github.com/farsightsec/fstrm";
     license = licenses.asl20;

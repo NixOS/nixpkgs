@@ -24,7 +24,7 @@ let
       inherit envvar;
       setupHook = ./datasets-hook.sh;
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Data files for the Geant4 toolkit";
         homepage = "https://geant4.web.cern.ch/support/download";
         license = licenses.g4sl;

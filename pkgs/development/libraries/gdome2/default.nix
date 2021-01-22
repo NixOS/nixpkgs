@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkg-config, glib, libxml2, gtk-doc}:
+{lib, stdenv, fetchurl, pkg-config, glib, libxml2, gtk-doc}:
 
 let
   pname = "gdome2";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [glib libxml2];
   patches = [ ./xml-document.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://gdome2.cs.unibo.it/";
     description = "DOM C library developed for the Gnome project";
     license = licenses.lgpl21Plus;

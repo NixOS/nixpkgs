@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fastjet, fastjet-contrib, ghostscript, gsl, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
+{ lib, stdenv, fetchurl, fastjet, fastjet-contrib, ghostscript, gsl, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rivet";
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-fastjet=${fastjet}"
     "--with-yoda=${yoda}"
-  ] ++ (if stdenv.lib.versions.major hepmc.version == "3" then [
+  ] ++ (if lib.versions.major hepmc.version == "3" then [
     "--with-hepmc3=${hepmc}"
   ] else [
     "--with-hepmc=${hepmc}"
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
     license     = licenses.gpl3;
     homepage    = "https://rivet.hepforge.org";

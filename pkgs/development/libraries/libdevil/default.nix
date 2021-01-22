@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjpeg, libpng, libmng, lcms1, libtiff, openexr, libGL
+{ lib, stdenv, fetchurl, libjpeg, libpng, libmng, lcms1, libtiff, openexr, libGL
 , libX11, pkg-config, OpenGL
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr libGL libX11 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ OpenGL ];
+    ++ lib.optionals stdenv.isDarwin [ OpenGL ];
   nativeBuildInputs = [ pkg-config ];
 
   configureFlags = [ "--enable-ILU" "--enable-ILUT" ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's, -std=gnu99,,g' configure
     sed -i 's,malloc.h,stdlib.h,g' src-ILU/ilur/ilur.c
-  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
+  '' + lib.optionalString stdenv.cc.isClang ''
     sed -i 's/libIL_la_CXXFLAGS = $(AM_CFLAGS)/libIL_la_CXXFLAGS =/g' lib/Makefile.in
   '';
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://openil.sourceforge.net/";
     description = "An image library which can can load, save, convert, manipulate, filter and display a wide variety of image formats";
     license = licenses.lgpl2;

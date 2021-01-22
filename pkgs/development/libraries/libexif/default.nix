@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, gettext }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "libexif";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook gettext ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libexif.github.io/";
     description = "A library to read and manipulate EXIF data in digital photographs";
     license = licenses.lgpl21;

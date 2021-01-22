@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "DATATYPE=double"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A mixed-radix Fast Fourier Transform based up on the KISS principle";
     homepage = "https://github.com/mborgerding/kissfft";
     license = licenses.bsd3;

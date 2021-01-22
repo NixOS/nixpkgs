@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , aspell
 , pkg-config
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     "--enable-relocatable" # needed for tests
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generic spell checking library";
     homepage = "https://abiword.github.io/enchant/";
     license = licenses.lgpl21Plus; # with extra provision for non-free checkers

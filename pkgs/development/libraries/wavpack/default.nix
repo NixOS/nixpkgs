@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   src = fetchFromGitHub {
     owner = "dbry";

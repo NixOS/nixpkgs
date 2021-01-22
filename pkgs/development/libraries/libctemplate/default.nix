@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, autoconf, automake, libtool }:
+{ lib, stdenv, fetchFromGitHub, python3, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "ctemplate";
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
       embed application logic in this template language.
     '';
     homepage = "https://github.com/OlafvdSpek/ctemplate";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, glib, pkg-config }:
+{ lib, stdenv, fetchurl, autoreconfHook, glib, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "1.3";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ glib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C library for reading and writing Standard MIDI Files";
     homepage = "https://github.com/stump/libsmf";
     license = licenses.bsd2;

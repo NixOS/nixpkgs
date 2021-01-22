@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pkg-config, autoreconfHook
 , libtirpc, rpcsvc-proto, avahi, libxml2
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libtirpc avahi libxml2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for communicating with LXI compatible instruments";
     longDescription = ''
       liblxi is an open source software library which offers a simple

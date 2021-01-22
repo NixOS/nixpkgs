@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/libmp4v2-c++11.patch?id=203f5a72bc97ffe089b424c47b07dd9eaea35713";
       sha256 = "0sbn0il7lmk77yrjyb4f0a3z3h8gsmdkscvz5n9hmrrrhrwf672w";
     })
-  ] ++ stdenv.lib.optionals stdenv.cc.isClang [
+  ] ++ lib.optionals stdenv.cc.isClang [
     # unbreak build with Clang≥6 (C++14 by default). Based on https://reviews.freebsd.org/rP458678
     ./fix-build-clang.patch
   ];

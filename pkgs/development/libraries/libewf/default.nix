@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, zlib, openssl, libuuid, pkg-config }:
+{ fetchurl, lib, stdenv, zlib, openssl, libuuid, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "20201129";
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library for support of the Expert Witness Compression Format";
     homepage = "https://sourceforge.net/projects/libewf/";
-    license = stdenv.lib.licenses.lgpl3;
-    maintainers = [ stdenv.lib.maintainers.raskin ] ;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl3;
+    maintainers = [ lib.maintainers.raskin ] ;
+    platforms = lib.platforms.unix;
     inherit version;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, sqlite, libmysqlclient, postgresql, unixODBC }:
+{ lib, stdenv, fetchurl, cmake, sqlite, libmysqlclient, postgresql, unixODBC }:
 
 stdenv.mkDerivation rec {
   pname = "cppdb";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "--no-warn-unused-cli" ];
   NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://cppcms.com/sql/cppdb/";
     description = "C++ Connectivity library that supports MySQL, PostgreSQL, Sqlite3 databases and generic ODBC drivers";
     platforms = platforms.linux ;

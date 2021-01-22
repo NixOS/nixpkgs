@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , cmake
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight multi-platform CPU emulator library";
     homepage = "http://www.unicorn-engine.org";
     license = licenses.gpl2Only;

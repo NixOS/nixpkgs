@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libjpeg, zlib, perl }:
+{ lib, stdenv, fetchFromGitHub, libjpeg, zlib, perl }:
 
 stdenv.mkDerivation rec {
   pname = "qpdf";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://qpdf.sourceforge.net/";
     description = "A C++ library and set of programs that inspect and manipulate the structure of PDF files";
     license = licenses.asl20; # as of 7.0.0, people may stay at artistic2

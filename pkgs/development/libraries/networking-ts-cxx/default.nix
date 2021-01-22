@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "networking-ts-cxx";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     substituteAll ${./networking_ts.pc.in} $out/lib/pkgconfig/networking_ts.pc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Experimental implementation of the C++ Networking Technical Specification";
     homepage = "https://github.com/chriskohlhoff/networking-ts-impl";
     license = licenses.boost;

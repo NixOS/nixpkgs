@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , fetchpatch
 , meson
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # We need to install Polkit & AccountsService data files in `out`
     # but `buildEnv` only uses `bin` when both `bin` and `out` are present.
     outputsToInstall = [ "bin" "out" "man" ];

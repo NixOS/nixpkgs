@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , fetchpatch
 , meson
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     "-Dvulkan-registry=${vulkan-headers}/share/vulkan/registry/vk.xml"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reusable library for GPU-accelerated video/image rendering primitives";
     longDescription = ''
       Reusable library for GPU-accelerated image/view processing primitives and

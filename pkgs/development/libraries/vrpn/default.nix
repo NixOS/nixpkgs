@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, cmake, libGLU, libGL }:
+{ lib, stdenv, fetchFromGitHub, unzip, cmake, libGLU, libGL }:
 
 stdenv.mkDerivation rec {
   name    = "${pname}-${date}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # FIXME: test failure
   checkTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual Reality Peripheral Network";
     longDescription = ''
       The Virtual-Reality Peripheral Network (VRPN) is a set of classes

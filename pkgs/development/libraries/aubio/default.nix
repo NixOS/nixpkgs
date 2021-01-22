@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, fftw, libjack2, libsamplerate
+{ lib, stdenv, fetchurl, alsaLib, fftw, libjack2, libsamplerate
 , libsndfile, pkg-config, python, wafHook
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config python wafHook ];
   buildInputs = [ alsaLib fftw libjack2 libsamplerate libsndfile ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for audio labelling";
     homepage = "https://aubio.org/";
     license = licenses.gpl2;

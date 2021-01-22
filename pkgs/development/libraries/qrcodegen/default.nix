@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   pname = "qrcodegen";
   version = "1.6.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp qrcodegen.h $out/include/qrcodegen/
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
     {
       description = "qrcode generator library in multiple languages";
 

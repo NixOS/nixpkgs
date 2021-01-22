@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, boost, python2}:
+{ lib, stdenv, fetchurl, cmake, boost, python2}:
 
 let version = "1.8.2"; in
 
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A C++ library which implements parts of the Avro Specification";
     homepage = "https://avro.apache.org/";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ rasendubi ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rasendubi ];
+    platforms = lib.platforms.all;
   };
 }

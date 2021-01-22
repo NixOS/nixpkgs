@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, zlib, buildPackages }:
+{ lib, stdenv, fetchurl, perl, zlib, buildPackages }:
 
 stdenv.mkDerivation rec {
   name = "${passthru.pname}-${passthru.version}";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl zlib ];
 #  buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Hebrew spell checker";
     homepage = "http://hspell.ivrix.org.il/";
     platforms = platforms.all;

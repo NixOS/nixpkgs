@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, pkg-config, mono, dotnetPackages }:
+{ lib, stdenv, fetchsvn, pkg-config, mono, dotnetPackages }:
 
 let
   newtonsoft-json = dotnetPackages.NewtonsoftJson;
@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://code.google.com/archive/p/google-gdata/";
 
     description = "The Google Data APIs";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , automake, autoconf, libtool, pkg-config, autoconf-archive
 , libxml2, bzip2, libtar
 , languageMachines
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
                 ];
   preConfigure = "sh bootstrap.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TiMBL implements several memory-based learning algorithms";
     homepage    = "https://github.com/LanguageMachines/timbl/";
     license     = licenses.gpl3;

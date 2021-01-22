@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit
+{ lib, stdenv, fetchurl, fetchgit
 , makeWrapper, autoreconfHook, fetchpatch
 , coreutils, libxml2, gnutls, perl, python2, attr, glib, docutils
 , iproute, readline, lvm2, util-linux, systemd, libpciaccess, gettext
@@ -11,7 +11,7 @@
 , enableCeph ? false, ceph
 }:
 
-with stdenv.lib;
+with lib;
 
 # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
 let
@@ -72,14 +72,14 @@ in stdenv.mkDerivation rec {
       sed -i meson.build -e "s|conf.set_quoted('${var}',.*|conf.set_quoted('${var}','${value}')|"
     '';
   in ''
-    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables-nftables-compat lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
+    PATH=${lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables-nftables-compat lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
     patchShebangs . # fixes /usr/bin/python references
   ''
-  + (stdenv.lib.concatStringsSep "\n" (stdenv.lib.mapAttrsToList patchBuilder overrides));
+  + (lib.concatStringsSep "\n" (stdenv.lib.mapAttrsToList patchBuilder overrides));
 
   mesonAutoFeatures = "auto";
 

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , gobject-introspection
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0spzd2saax7w776p5laixdam6d7smyynr9qszhbmq7f14y13cghj";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GUPnP/";
     description = "Library to ease DLNA-related bits for applications using GUPnP";
     license = licenses.lgpl2Plus;

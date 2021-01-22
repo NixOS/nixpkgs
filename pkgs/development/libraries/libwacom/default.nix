@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, glib, pkg-config, udev, libgudev, doxygen }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, glib, pkg-config, udev, libgudev, doxygen }:
 
 stdenv.mkDerivation rec {
   pname = "libwacom";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib udev libgudev ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     homepage = "https://linuxwacom.github.io/";
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";

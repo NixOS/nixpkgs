@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, gettext
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, gettext
 , xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
 , libstemmer, glib, xapian, libxml2, libyaml, gobject-introspection
 , pcre, itstool, gperf, vala, lmdb, libsoup
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     "-Dvapi=true"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Software metadata handling library";
     homepage    = "https://www.freedesktop.org/wiki/Distributions/AppStream/";
     longDescription = ''

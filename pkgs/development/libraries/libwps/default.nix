@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, pkg-config, librevenge, zlib }:
+{ lib, stdenv, fetchurl, boost, pkg-config, librevenge, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libwps";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://libwps.sourceforge.net/";
     description = "Microsoft Works document format import filter library";
     platforms = platforms.unix;

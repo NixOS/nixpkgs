@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub }:
+{ lib, stdenv, cmake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "rapidcheck";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     rm $out/extras/**/CMakeLists.txt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C++ framework for property based testing inspired by QuickCheck";
     inherit (src.meta) homepage;
     maintainers = with maintainers; [ jb55 ];

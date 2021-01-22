@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gupnp
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library of utility functions that are used by the higher level dLeyna";
     homepage = "https://01.org/dleyna";
     maintainers = [ maintainers.jtojnar ];

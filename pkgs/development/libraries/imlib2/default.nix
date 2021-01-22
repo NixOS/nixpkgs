@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 # Image file formats
 , libjpeg, libtiff, giflib, libpng, libwebp
 # imlib2 can load images from ID3 tags.
@@ -8,7 +8,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional;
+  inherit (lib) optional;
 in
 stdenv.mkDerivation rec {
   pname = "imlib2";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/imlib2-config "$dev"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Image manipulation library";
 
     longDescription = ''

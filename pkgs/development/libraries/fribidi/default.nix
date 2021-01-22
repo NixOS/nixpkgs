@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPackages
 , fetchurl
 , meson
@@ -25,14 +25,14 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ meson ninja pkg-config ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   doCheck = true;
   checkInputs = [ python3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/fribidi/fribidi";
     description = "GNU implementation of the Unicode Bidirectional Algorithm (bidi)";
     license = licenses.lgpl21;

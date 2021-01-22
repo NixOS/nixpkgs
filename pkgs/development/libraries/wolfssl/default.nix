@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
      mkdir -p "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
     homepage    = "https://www.wolfssl.com/";
     platforms   = platforms.all;
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = with maintainers; [ mcmtroffaes ];
   };
 }

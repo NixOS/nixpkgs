@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-VZuzrMLDYkiJF+ty7SW9wYH0riaslNF3Y0zF00yGf3o=";
   };
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     changelog = "https://gitlab.gnome.org/GNOME/libhandy/-/tags/${version}";
     description = "Building blocks for modern adaptive GNOME apps";
     homepage = "https://gitlab.gnome.org/GNOME/libhandy";

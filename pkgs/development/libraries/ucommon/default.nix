@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config
+{ lib, stdenv, fetchurl, pkg-config
 , openssl ? null, zlib ? null, gnutls ? null
 }:
 
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C++ library to facilitate using C++ design patterns";
     homepage = "https://www.gnu.org/software/commoncpp/";
-    license = stdenv.lib.licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, autoreconfHook, pkg-config, libxml2, gd, glib, getopt, libxslt, nix }:
+{ fetchFromGitHub, lib, stdenv, autoreconfHook, pkg-config, libxml2, gd, glib, getopt, libxslt, nix }:
 
 stdenv.mkDerivation {
   name = "libnixxml";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     ./bootstrap
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "XML-based Nix-friendly data integration library";
     homepage = https://github.com/svanderburg/libnixxml;
     license = licenses.mit;

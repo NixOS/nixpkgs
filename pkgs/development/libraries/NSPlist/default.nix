@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation {
   name = "NSPlist-713decf";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ matthewbauer ];
     description = "Parses .plist files";
     license = licenses.mit;

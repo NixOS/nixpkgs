@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , libxslt
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   # dbus[2345]: Failed to start message bus: Failed to open "/etc/dbus-1/session.conf": No such file or directory
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DBus proxy for Flatpak and others";
     homepage = "https://github.com/flatpak/xdg-dbus-proxy";
     license = licenses.lgpl21Plus;

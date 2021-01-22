@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gtk3
 , pkg-config
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "5.2.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0y3hmmflw4i0y0yb9a8rlihbv3cbwnvdcf1n5jycwzpq9jxla1c2";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gnome3.updateScript { packageName = pname; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Amtk";
     description = "Actions, Menus and Toolbars Kit for GTK applications";
     maintainers = [ maintainers.manveru ];

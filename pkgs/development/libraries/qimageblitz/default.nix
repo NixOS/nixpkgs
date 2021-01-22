@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, qt4}:
+{lib, stdenv, fetchurl, cmake, qt4}:
 
 let
   pn = "qimageblitz";
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Graphical effect and filter library for KDE4";
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "http://${pn}.sourceforge.net";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

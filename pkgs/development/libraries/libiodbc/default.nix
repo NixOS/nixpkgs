@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, pkg-config, gtk2, Carbon
+{ config, lib, stdenv, fetchurl, pkg-config, gtk2, Carbon
 , useGTK ? config.libiodbc.gtk or false }:
 
 stdenv.mkDerivation rec {
@@ -10,15 +10,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = stdenv.lib.optionals useGTK [ gtk2 ]
-                ++ stdenv.lib.optional stdenv.isDarwin Carbon;
+  buildInputs = lib.optionals useGTK [ gtk2 ]
+                ++ lib.optional stdenv.isDarwin Carbon;
 
   preBuild =
     ''
       export NIX_LDFLAGS_BEFORE="-rpath $out/lib"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "iODBC driver manager";
     homepage = "http://www.iodbc.org";
     platforms = platforms.unix;

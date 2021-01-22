@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libidn, kerberos }:
+{ fetchurl, lib, stdenv, libidn, kerberos }:
 
 stdenv.mkDerivation rec {
   name = "gsasl-1.8.0";
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
        '';
 
     homepage = "https://www.gnu.org/software/gsasl/";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ shlevy ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with lib.maintainers; [ shlevy ];
+    platforms = lib.platforms.all;
   };
 }

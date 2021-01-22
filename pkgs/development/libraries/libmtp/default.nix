@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, gettext, libtool, pkg-config
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, gettext, libtool, pkg-config
 , libusb1
 , libiconv
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   # tried to install files to /lib/udev, hopefully OK
   configureFlags = [ "--with-udev=$$bin/lib/udev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://libmtp.sourceforge.net";
     description = "An implementation of Microsoft's Media Transfer Protocol";
     longDescription = ''

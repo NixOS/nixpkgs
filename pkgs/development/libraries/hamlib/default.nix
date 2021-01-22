@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, python2, swig, gd, libxml2, tcl, libusb-compat-0_1, pkg-config,
+{lib, stdenv, fetchurl, perl, python2, swig, gd, libxml2, tcl, libusb-compat-0_1, pkg-config,
  boost, libtool, perlPackages }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     which lets one control a radio transceiver or receiver, either from
     command line interface or in a text-oriented interactive interface.
     '';
-    license = with stdenv.lib.licenses; [ gpl2Plus lgpl2Plus ];
+    license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
     homepage = "http://hamlib.sourceforge.net";
-    maintainers = with stdenv.lib.maintainers; [ relrod ];
-    platforms = with stdenv.lib.platforms; unix;
+    maintainers = with lib.maintainers; [ relrod ];
+    platforms = with lib.platforms; unix;
   };
 }

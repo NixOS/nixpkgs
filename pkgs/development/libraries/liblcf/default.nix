@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, expat, icu }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, expat, icu }:
 
 stdenv.mkDerivation rec {
   pname = "liblcf";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   propagatedBuildInputs = [ expat icu ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to handle RPG Maker 2000/2003 and EasyRPG projects";
     homepage = "https://github.com/EasyRPG/liblcf";
     license = licenses.mit;

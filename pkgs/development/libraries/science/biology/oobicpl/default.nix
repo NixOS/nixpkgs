@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libminc, bicpl, arguments, pcre-cpp }:
+{ lib, stdenv, fetchFromGitHub, cmake, libminc, bicpl, arguments, pcre-cpp }:
 
 stdenv.mkDerivation rec {
   pname = "oobicpl";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
                  "-DARGUMENTS_DIR=${arguments}/lib"
                  "-DOOBICPL_BUILD_SHARED_LIBS=TRUE" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/${owner}/${pname}";
     description = "Brain Imaging Centre object-oriented programming library (and tools)";
     maintainers = with maintainers; [ bcdarwin ];

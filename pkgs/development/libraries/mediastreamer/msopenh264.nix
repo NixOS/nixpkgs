@@ -5,7 +5,7 @@
 , mediastreamer
 , openh264
 , pkg-config
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     cp src/libmsopenh264.so $out/lib/mediastreamer/plugins/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "H.264 encoder/decoder plugin for mediastreamer2";
     homepage = "https://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl2;

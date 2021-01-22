@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, cmake, libGLU, libGL, freeglut, libX11, xorgproto
+{ lib, stdenv, fetchurl, unzip, cmake, libGLU, libGL, freeglut, libX11, xorgproto
 , libXi, pkg-config }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace 'b2_maxPolygonVertices	8' 'b2_maxPolygonVertices	15'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "2D physics engine";
     homepage = "https://box2d.org/";
     maintainers = [ maintainers.raskin ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL2, eigen, epoxy, fftw, gtest, pkg-config }:
+{ lib, stdenv, fetchurl, SDL2, eigen, epoxy, fftw, gtest, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "movit";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-performance, high-quality video filters for the GPU";
     homepage = "https://movit.sesse.net";
     license = licenses.gpl2Plus;

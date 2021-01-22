@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , udev
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0drf39qhsdz35kwb18hnfj2ig4yfxhfks66m783zlhnvy2narbhv";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library that provides GObject bindings for libudev";
     homepage = "https://wiki.gnome.org/Projects/libgudev";
     maintainers = [ maintainers.eelco ] ++ teams.gnome.members;

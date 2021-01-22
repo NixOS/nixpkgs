@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pkg-config, autoreconfHook
+{ lib, stdenv, fetchFromGitLab, pkg-config, autoreconfHook
 , mono, gtk-sharp-3_0, dbus-sharp-1_0, dbus-sharp-glib-1_0 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sed -i 's#^[ \t]*DOCDIR=.*$#DOCDIR=$out/lib/monodoc#' ./configure.ac
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "D-Bus for .NET";
     platforms = platforms.linux;
     license = licenses.mit;

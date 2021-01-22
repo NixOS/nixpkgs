@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4, clucene_core, librdf_redland, libiodbc
+{ lib, stdenv, fetchurl, cmake, qt4, clucene_core, librdf_redland, libiodbc
 , pkg-config }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     homepage = "http://soprano.sourceforge.net/";
     description = "An object-oriented C++/Qt4 framework for RDF data";
     license = "LGPL";
-    maintainers = with stdenv.lib.maintainers; [ sander ];
+    maintainers = with lib.maintainers; [ sander ];
     inherit (qt4.meta) platforms;
   };
 }

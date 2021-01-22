@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, openssh
+{ lib, stdenv, fetchFromGitHub, cmake, openssh
 , gfortran, mpi, blas, lapack
 } :
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}`pwd`/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.netlib.org/scalapack/";
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";
     license = licenses.bsd3;

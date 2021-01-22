@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, atk, cairo, glib, gtk3, pango, fribidi, vala
+{ lib, stdenv, fetchurl, pkg-config, atk, cairo, glib, gtk3, pango, fribidi, vala
 , libxml2, perl, gettext, gnome3, gobject-introspection, dbus, xvfb_run, shared-mime-info
 , meson, ninja }:
 
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "4.8.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "06jfbfbi73j9i3qsr7sxg3yl3643bn3aydbzx6xg3v8ca0hr3880";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl21;

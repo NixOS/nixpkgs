@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libco-canonical
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, file, libco-canonical
 , libuv, raft-canonical, sqlite-replication }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       Expose a SQLite database over the network and replicate it across a
       cluster of peers

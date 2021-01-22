@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, perl, zlib }:
+{ lib, stdenv, fetchurl, cmake, perl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libzip";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     patchShebangs regress
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nih.at/libzip";
     description = "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;

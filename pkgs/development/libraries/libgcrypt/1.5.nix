@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ydy7bgra5jbq9mxl5x031nif3m6y3balc6ndw2ngj11wnsjc61h";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     (fetchpatch {
       name = "fix-x86_64-apple-darwin.patch";
       sha256 = "138sfwl1avpy19320dbd63mskspc1khlc93j1f1zmylxx3w19csi";
@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
   postInstall = ''
     sed -i 's,#include <gpg-error.h>,#include "${libgpgerror.dev}/include/gpg-error.h",g' $out/include/gcrypt.h
-  '' + stdenv.lib.optionalString enableCapabilities ''
+  '' + lib.optionalString enableCapabilities ''
     sed -i 's,\(-lcap\),-L${libcap.lib}/lib \1,' $out/lib/libgcrypt.la
   '';
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/libgcrypt/";
     description = "General-pupose cryptographic library";
     license = licenses.lgpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libpng, glib /*just passthru*/ }:
+{ lib, stdenv, fetchurl, pkg-config, libpng, glib /*just passthru*/ }:
 
 stdenv.mkDerivation rec {
   pname = "pixman";
@@ -13,13 +13,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng ];
 
-  configureFlags = stdenv.lib.optional stdenv.isAarch32 "--disable-arm-iwmmxt";
+  configureFlags = lib.optional stdenv.isAarch32 "--disable-arm-iwmmxt";
 
   doCheck = true;
 
   postInstall = glib.flattenInclude;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pixman.org";
     description = "A low-level library for pixel manipulation";
     license = licenses.mit;

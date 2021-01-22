@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0x2s0ks575b57jdqnp9r9miz40pm705n2dlj2k8bfj1hyl22kgf6";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gnome3.updateScript { packageName = pname; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tepl";
     description = "Text editor product line";
     maintainers = teams.gnome.members ++ [ maintainers.manveru ];

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , extra-cmake-modules
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     xcbutilkeysyms
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "input method development support for xcb";
     homepage = "https://github.com/fcitx/xcb-imdkit";
     license = licenses.lgpl21Plus;

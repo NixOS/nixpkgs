@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, gmpxx, perl, gnum4 }:
+{ fetchurl, fetchpatch, lib, stdenv, gmpxx, perl, gnum4 }:
 
 let version = "1.2"; in
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ gmpxx ];
 
   configureFlags = [ "--disable-watchdog" ] ++
-    stdenv.lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.isDarwin [
       "CPPFLAGS=-fexceptions"
       "--disable-ppl_lcdd" "--disable-ppl_lpsol" "--disable-ppl_pips"
     ];
@@ -53,9 +53,9 @@ stdenv.mkDerivation {
 
     homepage = "http://bugseng.com/products/ppl/";
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

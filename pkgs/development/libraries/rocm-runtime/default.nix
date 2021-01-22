@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , addOpenGLRunpath
 , clang-unwrapped
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/hsa
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Platform runtime for ROCm";
     homepage = "https://github.com/RadeonOpenCompute/ROCR-Runtime";
     license = with licenses; [ ncsa ];

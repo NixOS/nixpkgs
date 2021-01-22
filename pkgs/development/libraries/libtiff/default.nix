@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 
 , pkg-config
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = "http://download.osgeo.org/libtiff";
     license = licenses.libtiff;

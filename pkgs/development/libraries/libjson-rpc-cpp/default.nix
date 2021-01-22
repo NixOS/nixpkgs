@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , pkg-config
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      q="$p:${stdenv.lib.makeLibraryPath [ jsoncpp argtable libmicrohttpd curl ]}:$out/lib"
+      q="$p:${lib.makeLibraryPath [ jsoncpp argtable libmicrohttpd curl ]}:$out/lib"
       patchelf --set-rpath $q $1
     }
 
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ framework for json-rpc (json remote procedure call)";
     homepage = "https://github.com/cinemast/libjson-rpc-cpp";
     license = licenses.mit;

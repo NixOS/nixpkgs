@@ -1,4 +1,4 @@
-{stdenv, fetchurl, freeglut, libX11, libXt, libXmu, libXi, libXext, libGL, libGLU}:
+{lib, stdenv, fetchurl, freeglut, libX11, libXt, libXmu, libXi, libXext, libGL, libGLU}:
 stdenv.mkDerivation {
   name = "gle-3.1.0";
   buildInputs = [libGLU libGL freeglut libX11 libXt libXmu libXi libXext];
@@ -11,8 +11,8 @@ stdenv.mkDerivation {
   };
   meta = {
     description = "Tubing and extrusion library";
-    license = stdenv.lib.licenses.gpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, protobuf }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtbase, protobuf }:
 
 stdenv.mkDerivation rec {
   pname = "qtpbfimageplugin";
@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
     # Fix plugin dir
     substituteInPlace pbfplugin.pro \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # Fix darwin build
     substituteInPlace pbfplugin.pro \
       --replace '$$PROTOBUF/lib/libprotobuf-lite.a' '${protobuf}/lib/libprotobuf-lite.dylib'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt image plugin for displaying Mapbox vector tiles";
     longDescription = ''
       QtPBFImagePlugin is a Qt image plugin that enables applications capable of

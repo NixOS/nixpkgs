@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, speexdsp, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, cmake, speexdsp, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "1.2.4";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ speexdsp ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Implementation of the EBU R128 loudness standard";
     homepage = "https://github.com/jiixyj/libebur128";
     license = licenses.mit;

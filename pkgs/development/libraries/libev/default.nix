@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , # Note: -static hasn’t work on darwin
   static ? with stdenv.hostPlatform; isStatic && !isDarwin
 }:
@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
     sha256 = "1sjs4324is7fp21an4aas2z4dwsvs6z4xwrmp72vwpq1s6wbfzjh";
   };
 
-  configureFlags = stdenv.lib.optional (static) "LDFLAGS=-static";
+  configureFlags = lib.optional (static) "LDFLAGS=-static";
 
   meta = {
     description = "A high-performance event loop/event model with lots of features";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.bsd2; # or GPL2+
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd2; # or GPL2+
   };
 }

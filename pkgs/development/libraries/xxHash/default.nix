@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "xxHash";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   # Upstream Makefile does not anticipate that user may not want to
   # build .so library.
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isStatic ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
     sed -i 's/lib: libxxhash.a libxxhash/lib: libxxhash.a/' Makefile
     sed -i '/LIBXXH) $(DESTDIR/ d' Makefile
   '';
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(dev)" "EXEC_PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extremely fast hash algorithm";
     longDescription = ''
       xxHash is an Extremely fast Hash algorithm, running at RAM speed limits.
