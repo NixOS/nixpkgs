@@ -709,7 +709,7 @@
     "scsgate" = ps: with ps; [ ]; # missing inputs: scsgate
     "search" = ps: with ps; [ aiohttp-cors ];
     "season" = ps: with ps; [ ephem ];
-    "sendgrid" = ps: with ps; [ ]; # missing inputs: sendgrid
+    "sendgrid" = ps: with ps; [ sendgrid ];
     "sense" = ps: with ps; [ ]; # missing inputs: sense_energy
     "sensehat" = ps: with ps; [ ]; # missing inputs: sense-hat
     "sensibo" = ps: with ps; [ ]; # missing inputs: pysensibo
