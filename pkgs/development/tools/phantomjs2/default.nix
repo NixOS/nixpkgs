@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
     cp -a ChangeLog examples LICENSE.BSD README.md third-party.txt $out/share/doc/phantomjs
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     install_name_tool -change \
-        ${darwin.CF}/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation \
+        ${darwin.CoreFoundation}/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation \
         /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation \
       -change \
         ${darwin.configd}/Library/Frameworks/SystemConfiguration.framework/SystemConfiguration \

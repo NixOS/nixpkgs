@@ -98,7 +98,7 @@ let
       setup = setupScript;
 
       # We pretty much never need rpaths on Darwin, since all library path references
-      # are absolute unless we go out of our way to make them relative (like with CF)
+      # are absolute unless we go out of our way to make them relative (like with CoreFoundation)
       # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
       # there (yet?) so it goes here until then.
       preHook = preHook+ lib.optionalString buildPlatform.isDarwin ''

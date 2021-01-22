@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation {
   name = "darwin-usr-include";
-  buildInputs = [ darwin.CF stdenv.libc ];
+  buildInputs = [ darwin.CoreFoundation stdenv.libc ];
   buildCommand = ''
     mkdir -p $out
     cd $out
     ln -sf ${stdenv.libc}/include/* .
     mkdir CoreFoundation
-    ln -sf ${darwin.CF}/Library/Frameworks/CoreFoundation.framework/Headers/* CoreFoundation
+    ln -sf ${darwin.CoreFoundation}/Library/Frameworks/CoreFoundation.framework/Headers/* CoreFoundation
   '';
 
   meta.platforms = lib.platforms.darwin;

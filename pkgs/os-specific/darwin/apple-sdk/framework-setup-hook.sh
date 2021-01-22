@@ -1,10 +1,10 @@
 # On macOS, frameworks are linked to the system CoreFoundation but
-# dynamic libraries built with nix use a pure version of CF this
+# dynamic libraries built with nix use a pure version of CoreFoundation this
 # causes segfaults for binaries that depend on it at runtime.  This
 # can be solved in two ways.
-# 1. Rewrite references to the pure CF using this setup hook, this
+# 1. Rewrite references to the pure CoreFoundation using this setup hook, this
 # works for the simple case but this can still cause problems if other
-# dependencies (eg. python) use the pure CF.
+# dependencies (eg. python) use the pure CoreFoundation.
 # 2. Create a wrapper for the binary that sets DYLD_FRAMEWORK_PATH to
 # /System/Library/Frameworks.  This will make everything load the
 # system's CoreFoundation framework while still keeping the
