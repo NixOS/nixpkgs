@@ -26973,6 +26973,8 @@ in
     ffmpeg = ffmpeg_2;
   };
 
+  unciv = callPackage ../games/unciv { };
+
   unnethack = callPackage ../games/unnethack { };
 
   uqm = callPackage ../games/uqm { };
