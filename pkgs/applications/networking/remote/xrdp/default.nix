@@ -38,9 +38,9 @@ let
     pname = "xrdp";
 
     src = fetchFromGitHub {
-      owner = "volth";
+      owner = "neutrinolabs";
       repo = "xrdp";
-      rev = "refs/tags/runtime-cfg-path-${version}";  # Fixes https://github.com/neutrinolabs/xrdp/issues/609; not a patch on top of the official repo because "xorgxrdp.configureFlags" above includes "xrdp.src" which must be patched already
+      rev = "c2f9c44d08264e5374a0db5390dd36b9290885bd";  # Fixes https://github.com/neutrinolabs/xrdp/issues/609; not a patch on top of the official repo because "xorgxrdp.configureFlags" above includes "xrdp.src" which must be patched already
       fetchSubmodules = true;
       sha256 = "0ynj6pml4f38y8571ryhifza57wfqg4frdrjcwzw3fmryiznfm1z";
     };
