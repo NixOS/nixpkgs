@@ -6981,6 +6981,8 @@ in {
 
   send2trash = callPackage ../development/python-modules/send2trash { };
 
+  sendgrid = callPackage ../development/python-modules/sendgrid { };
+
   sentencepiece = callPackage ../development/python-modules/sentencepiece { inherit (pkgs) sentencepiece pkg-config; };
 
   sentinel = callPackage ../development/python-modules/sentinel { };
