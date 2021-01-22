@@ -226,6 +226,7 @@ in {
       "horizontalScrolling"
       "sendEventsMode"
       "tapping"
+      "tappingDragLock"
       "disableWhileTyping"
       "additionalOptions"
     ]);
