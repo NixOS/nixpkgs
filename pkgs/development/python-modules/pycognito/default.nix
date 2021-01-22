@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "pycognito";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "pvizeli";
     repo = "pycognito";
     rev = version;
-    sha256 = "HLzPrRon+ipcUZlD1l4nYSwSbdDLwOALy4ejGunjK0w=";
+    sha256 = "sha256-RJeHPCTuaLN+zB0N0FGt4qrTI6++1ks5iBn64Cx0Psc=";
   };
 
   postPatch = ''
