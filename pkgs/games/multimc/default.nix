@@ -33,7 +33,16 @@ in mkDerivation rec {
       Allows you to have multiple, separate instances of Minecraft (each with their own mods, texture packs, saves, etc) and helps you manage them and their associated options with a simple interface.
     '';
     platforms = platforms.linux;
-    license = licenses.lgpl21Plus;
+    license = with licenses; [
+      # Per COPYING.md in the MultiMC source tree
+      asl20
+      lgpl21Plus
+      lgpl3Plus
+      bsd3
+      isc
+      mit
+      ofl
+    ];
     maintainers = with maintainers; [ cleverca22 starcraft66 ];
   };
 }
