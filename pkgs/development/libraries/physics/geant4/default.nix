@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     data = import ./datasets.nix {
-          inherit stdenv fetchurl;
+          inherit lib stdenv fetchurl;
           geant_version = version;
       };
 

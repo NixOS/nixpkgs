@@ -7662,6 +7662,8 @@ in
 
   sewer = callPackage ../tools/admin/sewer { };
 
+  sfeed = callPackage ../tools/misc/sfeed { };
+
   sftpman = callPackage ../tools/filesystems/sftpman { };
 
   screenfetch = callPackage ../tools/misc/screenfetch { };
@@ -10491,7 +10493,8 @@ in
   inherit (callPackage ../development/tools/ocaml/ocamlformat { })
     ocamlformat # latest version
     ocamlformat_0_11_0 ocamlformat_0_12 ocamlformat_0_13_0 ocamlformat_0_14_0
-    ocamlformat_0_14_1 ocamlformat_0_14_2 ocamlformat_0_14_3 ocamlformat_0_15_0;
+    ocamlformat_0_14_1 ocamlformat_0_14_2 ocamlformat_0_14_3 ocamlformat_0_15_0
+    ocamlformat_0_15_1 ocamlformat_0_16_0;
 
   orc = callPackage ../development/compilers/orc { };
 
@@ -21443,6 +21446,8 @@ in
 
   afterburn = callPackage ../tools/admin/afterburn {};
 
+  docker-buildx = callPackage ../applications/virtualization/docker/buildx.nix { };
+
   amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 
   docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
@@ -26967,6 +26972,8 @@ in
   ultrastardx = callPackage ../games/ultrastardx {
     ffmpeg = ffmpeg_2;
   };
+
+  unciv = callPackage ../games/unciv { };
 
   unnethack = callPackage ../games/unnethack { };
 

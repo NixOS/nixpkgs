@@ -492,6 +492,8 @@ in {
 
   asysocks = callPackage ../development/python-modules/asysocks { };
 
+  atenpdu = callPackage ../development/python-modules/atenpdu { };
+
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
 
   atom = callPackage ../development/python-modules/atom { };

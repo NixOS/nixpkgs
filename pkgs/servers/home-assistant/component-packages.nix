@@ -53,7 +53,7 @@
     "asterisk_mbox" = ps: with ps; [ ]; # missing inputs: asterisk_mbox
     "asuswrt" = ps: with ps; [ ]; # missing inputs: aioasuswrt
     "atag" = ps: with ps; [ ]; # missing inputs: pyatag
-    "aten_pe" = ps: with ps; [ ]; # missing inputs: atenpdu
+    "aten_pe" = ps: with ps; [ atenpdu ];
     "atome" = ps: with ps; [ ]; # missing inputs: pyatome
     "august" = ps: with ps; [ ]; # missing inputs: py-august
     "aurora" = ps: with ps; [ ]; # missing inputs: auroranoaa
