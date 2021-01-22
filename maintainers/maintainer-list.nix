@@ -248,6 +248,12 @@
     githubId = 10677343;
     name = "Eugene";
   };
+  afix-space = {
+    email = "ohm@afix.space";
+    github = "afix-space";
+    githubId = 18408666;
+    name = "Laurent Barattero";
+  };
   aflatter = {
     email = "flatter@fastmail.fm";
     github = "aflatter";
