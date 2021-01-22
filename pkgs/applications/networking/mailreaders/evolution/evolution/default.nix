@@ -12,8 +12,6 @@
 , libnotify
 , gspell
 , evolution-data-server
-, adwaita-icon-theme
-, gnome-desktop
 , libgdata
 , libgweather
 , glib-networking
@@ -61,7 +59,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    adwaita-icon-theme
+    gnome3.adwaita-icon-theme
     bogofilter
     db
     evolution-data-server
@@ -69,7 +67,7 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     glib-networking
-    gnome-desktop
+    gnome3.gnome-desktop
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
@@ -114,6 +112,10 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  patches = [
+    ./moduledir_from_env.patch
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
