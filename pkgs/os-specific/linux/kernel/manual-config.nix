@@ -55,6 +55,8 @@ let
   # Dependencies that are required to build kernel modules
   moduleBuildDependencies = optional (lib.versionAtLeast version "4.14") libelf;
 
+  buildDTBs = stdenv.platform.kernelDTB or false;
+
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
     mkdir -p $4
@@ -173,13 +175,15 @@ let
         "KBUILD_BUILD_VERSION=1-NixOS"
         platform.kernelTarget
         "vmlinux"  # for "perf" and things like that
-      ] ++ optional isModular "modules";
+      ] ++ optional isModular "modules"
+        ++ optional buildDTBs "dtbs";
 
       installFlags = [
         "INSTALLKERNEL=${installkernel}"
         "INSTALL_PATH=$(out)"
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
-      ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
+      ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware"
+      ++ optionals buildDTBs ["dtbs_install" "INSTALL_DTBS_PATH=$(out)/dtbs"];
 
       preInstall = ''
         installFlagsArray+=("-j$NIX_BUILD_CORES")
@@ -195,9 +199,7 @@ let
 
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
-      '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
-        make $makeFlags "''${makeFlagsArray[@]}" dtbs dtbs_install INSTALL_DTBS_PATH=$out/dtbs
-      '' else "") + (if isModular then ''
+      '') + (if isModular then ''
         mkdir -p $dev
         cp vmlinux $dev/
         if [ -z "''${dontStrip-}" ]; then
