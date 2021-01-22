@@ -15,8 +15,7 @@ gccStdenv.mkDerivation rec {
     # These object files were committed into the git repo, perhaps accidentally
     # They are also not built by the included Makefile, so we're manually 
     # regenerating them here.
-    rm -f aiger.o
-    rm -f aiger.o_32
+    rm aiger.o aiger.o_32
     gcc -g -O3 -c aiger.c
   '';
 
@@ -31,7 +30,7 @@ gccStdenv.mkDerivation rec {
     sha256 = "11j34qia9pb9jqfqggzpypi7y6bq7pdhx9pvl845n9cysc8zsdfj";
   };
 
-  meta = with gccStdenv.lib; {
+  meta = with lib; {
     description = "A solver for temporal logic, in particular a PLTL-prover based on labelled superposition with partial model guidance. Based off of minisat";
     homepage = "https://github.com/quickbeam123/ls4";
     license = licenses.mit;
