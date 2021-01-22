@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     homepage = "https://sourceforge.net/projects/lprof";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    broken = true; # Broken since 2020-07-28 (https://hydra.nixos.org/build/135234622)
   };
 }
