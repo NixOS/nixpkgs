@@ -2916,6 +2916,8 @@ in
     version = "unstable";
   };
 
+  bee-clef = callPackage ../applications/networking/bee/bee-clef.nix { };
+
   beets = callPackage ../tools/audio/beets {
     pythonPackages = python3Packages;
   };
