@@ -165,6 +165,18 @@ let
         };
       };
 
+      eamodio.gitlens = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gitlens";
+          publisher = "eamodio";
+          version = "11.1.3";
+          sha256 = "sha256-hqJg3jP4bbXU4qSJOjeKfjkPx61yPDMsQdSUVZObK/U=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       esbenp.prettier-vscode = buildVscodeMarketplaceExtension {
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
