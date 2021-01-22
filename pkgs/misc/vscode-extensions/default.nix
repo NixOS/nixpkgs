@@ -570,6 +570,15 @@ let
 
       ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare {};
 
+      ms-vsliveshare.vsliveshare-pack = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vsliveshare-pack";
+          publisher = "ms-vsliveshare";
+          version = "0.4.0";
+          sha256 = "sha256-xTdfOqdypAaWpmtYIM0H7gwCy1jXNl5+HarvVW/3AiY=";
+        };
+      };
+
       vscodevim.vim = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vim";
