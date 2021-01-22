@@ -28574,6 +28574,7 @@ in
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
       boehmgc = boehmgc.override { enableLargeConfig = true; };
+      inherit (darwin.apple_sdk.frameworks) Security;
       })
     nix
     nixStable

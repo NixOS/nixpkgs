@@ -3,6 +3,7 @@
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
 , boehmgc
+, Security
 }:
 
 let
@@ -52,6 +53,7 @@ common =
         [ curl openssl sqlite xz bzip2 nlohmann_json
           brotli boost editline
         ]
+        ++ lib.optionals stdenv.isDarwin [ Security ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
         ++ lib.optionals is24 [ libarchive gmock ]
         ++ lib.optional withLibseccomp libseccomp
