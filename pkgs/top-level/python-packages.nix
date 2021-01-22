@@ -6197,6 +6197,8 @@ in {
 
   python-hpilo = callPackage ../development/python-modules/python-hpilo { };
 
+  python-http-client = callPackage ../development/python-modules/python-http-client { };
+
   python-igraph = callPackage ../development/python-modules/python-igraph {
     pkg-config = pkgs.pkg-config;
     igraph = pkgs.igraph;
