@@ -3,12 +3,33 @@
 with lib;
 
 let
+  # generators
+  genSettingsFile = name: settings: pkgs.writeText "mautrix-${name}-settings.json" (builtins.toJSON settings);
+
   cfg = config.services.mautrix;
-  serviceSubmodule = types.submodule ({ name, config, ... }: {
+  # TODO(eyJhb) removed config
+  serviceSubmodule = let
+    globalCfg = config;
+  in types.submodule ({ name, config, ... }: {
     options = {
       name = mkOption {
         type = types.str;
         default = name;
+      };
+
+      package = mkOption {
+        type = types.package;
+      };
+
+      datadir = mkOption {
+        type = types.str;
+        default = "/var/lib/mautrix-${name}";
+      };
+
+      envPrefix = mkOption {
+        type = types.str;
+        default = "MAUTRIX_${toUpper name}_";
+        description = "Prefix to use when setting as_token and hs_token";
       };
 
       settings = mkOption rec {
@@ -17,7 +38,7 @@ let
         apply = recursiveUpdate default;
         default = {
           appservice = rec {
-            database = "sqlite:///${dataDir}/mautrix-facebook.db";
+            database = "sqlite:///${config.datadir}/mautrix-facebook.db";
             database_opts = { };
             hostname = "0.0.0.0";
             port = 8080;
@@ -101,7 +122,7 @@ let
 
       serviceDependencies = mkOption {
         type = with types; listOf str;
-        default = optional config.services.matrix-synapse.enable
+        default = optional globalCfg.services.matrix-synapse.enable
           "matrix-synapse.service";
         description = ''
           List of Systemd services to require and wait for when starting the application service.
@@ -116,30 +137,33 @@ in {
         type = types.attrsOf serviceSubmodule;
         default = {};
       };
+
+      registrationDir = mkOption {
+        type = types.str;
+        default = "/var/lib/mautrix-registration";
+        description = "";
+      };
+
+      registrationUser = mkOption {
+        type = types.str;
+        default = "matrix-synapse";
+      };
+      registrationGroup = mkOption {
+        type = types.str;
+        default = "matrix-synapse";
+      };
     };
   };
 
   config = {
     systemd.services = (mapAttrs' (name: value: nameValuePair ("mautrix-${name}") ({
-      description = "Mautrix service - ${$name}";
+      description = "Mautrix service - ${name}";
 
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ] ++ value.serviceDependencies;
       after = [ "network-online.target" ] ++ value.serviceDependencies;
 
-      preStart = ''
-        # generate the appservice's registration file if absent
-        if [ ! -f '${registrationFile}' ]; then
-          ${pkgs.mautrix-facebook}/bin/mautrix-facebook \
-            --generate-registration \
-            --base-config='${pkgs.mautrix-facebook}/${pkgs.mautrix-facebook.pythonModule.sitePackages}/mautrix_facebook/example-config.yaml' \
-            --config='${settingsFile}' \
-            --registration='${registrationFile}'
-        fi
-
-        # run automatic database init and migration scripts
-        ${pkgs.mautrix-facebook.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
-      '';
+      path = [ pkgs.diffutils ];
 
       serviceConfig = {
         Type = "simple";
@@ -151,17 +175,48 @@ in {
         ProtectKernelModules = true;
         ProtectControlGroups = true;
 
-        # DynamicUser = true;
+        DynamicUser = true;
         PrivateTmp = true;
         WorkingDirectory = pkgs.mautrix-facebook; # necessary for the database migration scripts to be found
-        StateDirectory = baseNameOf dataDir;
+        StateDirectory = baseNameOf value.datadir;
         UMask = 27;
         EnvironmentFile = value.environmentFile;
 
+        ExecStartPre = "+"+(let 
+            registrationOutFile = "${cfg.registrationDir}/${name}.yml";
+            registrationFile = "${value.datadir}/registration.yml";
+          in pkgs.writeShellScript "mautrix-${name}-execstartpre" ''
+          # generate the appservice's registration file if absent
+          if [ ! -f '${registrationFile}' ]; then
+            ${value.package}/bin/${value.package.pname} \
+              --generate-registration \
+              --base-config='${value.package}/${value.package.pythonModule.sitePackages}/mautrix_facebook/example-config.yaml' \
+              --config='${genSettingsFile name value.settings}' \
+              --no-update \
+              --registration='${registrationFile}'
+          fi
+
+          # if the file does not exists, or the files do not match, copy it over and chown it
+          if [ ! -f '${registrationOutFile}' ] || ! (cmp --silent '${registrationFile}' '${registrationOutFile}'); then
+            # ensure that dir exists
+            if [ ! -d '${cfg.registrationDir}' ]; then
+              mkdir -p '${cfg.registrationDir}'
+              chown ${cfg.registrationUser}:${cfg.registrationGroup} '${cfg.registrationDir}'
+            fi
+
+            # copy it to the registrationdir and chown to correct user
+            cp '${registrationFile}' '${registrationOutFile}'
+            chown ${cfg.registrationUser}:${cfg.registrationGroup} '${registrationOutFile}'
+          fi
+              
+          # run automatic database init and migration scripts
+          ${value.package.alembic}/bin/alembic -x config='${genSettingsFile name value.settings}' upgrade head
+        '');
+
         ExecStart = ''
-          ${pkgs.mautrix-facebook}/bin/mautrix-facebook \
+          ${value.package}/bin/${value.package.pname} \
             --no-update \
-            --config='${settingsFile}'
+            --config='${genSettingsFile name value.settings}'
         '';
       };
     })) cfg.services );
@@ -169,3 +224,4 @@ in {
 
   meta.maintainers = with maintainers; [ eyJhb ];
 }
+
