@@ -343,7 +343,7 @@ let
         meta = {
           license = lib.licenses.mit;
         };
-      }
+      };
 
       justusadam.language-haskell = buildVscodeMarketplaceExtension {
         mktplcRef = {
