@@ -27,7 +27,7 @@ buildGoModule rec {
   # Add to RUNPATH so it can be found.
   postFixup = ''
     patchelf \
-      --set-rpath "${lib.makeLibraryPath [ (lib.getDev systemd) ]}:$(patchelf --print-rpath $out/bin/agent)" \
+      --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/agent)" \
       $out/bin/agent
   '';
 
