@@ -99,7 +99,7 @@
     "brottsplatskartan" = ps: with ps; [ ]; # missing inputs: brottsplatskartan
     "browser" = ps: with ps; [ ];
     "brunt" = ps: with ps; [ ]; # missing inputs: brunt
-    "bsblan" = ps: with ps; [ ]; # missing inputs: bsblan
+    "bsblan" = ps: with ps; [ bsblan ];
     "bt_home_hub_5" = ps: with ps; [ ]; # missing inputs: bthomehub5-devicelist
     "bt_smarthub" = ps: with ps; [ ]; # missing inputs: btsmarthub_devicelist
     "buienradar" = ps: with ps; [ ]; # missing inputs: buienradar
