@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, geant_version }:
+{ lib, stdenv, fetchurl, geant_version }:
 
 let
   mkDataset = { name, version, sha256, envvar }:
