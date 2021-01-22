@@ -292,6 +292,18 @@ let
         };
       };
 
+      hashicorp.terraform = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "terraform";
+          publisher = "hashicorp";
+          version = "2.3.0";
+          sha256 = "sha256-GJv6zSEwv6aAgyz8h8JHKdMjOV77lyQQwGVNky3CJhk=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       haskell.haskell = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "haskell";
