@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , cmake
 , pkg-config
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
            '';
   nativeBuildInputs = [ pkg-config cmake ];
 
-  buildInputs = [ libffi boehmgc openssl zlib ] ++ stdenv.lib.optional odbcSupport libiodbc;
+  buildInputs = [ libffi boehmgc openssl zlib ] ++ lib.optional odbcSupport libiodbc;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An R6RS/R7RS Scheme system";
     longDescription = ''
       Sagittarius Scheme is a free Scheme implementation supporting

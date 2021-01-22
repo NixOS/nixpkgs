@@ -1,9 +1,9 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pkg-config
 , bison, flex
 , makeWrapper }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "intercal";

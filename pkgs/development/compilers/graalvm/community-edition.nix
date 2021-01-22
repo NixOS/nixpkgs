@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, unzip, glibc, zlib, setJavaClassPath }:
+{ lib, stdenv, fetchurl, perl, unzip, glibc, zlib, setJavaClassPath }:
 
 let
   common = javaVersion:
@@ -111,7 +111,7 @@ let
                       "11" = "$out/lib/jli:$out/lib/server:$out/lib";
                     }.${javaVersion}
                  }:${
-            stdenv.lib.makeLibraryPath [
+            lib.makeLibraryPath [
               stdenv.cc.cc.lib # libstdc++.so.6
               zlib             # libz.so.1
             ]}"
@@ -128,7 +128,7 @@ let
 
         doInstallCheck = true;
         installCheckPhase = ''
-          echo ${stdenv.lib.escapeShellArg ''
+          echo ${lib.escapeShellArg ''
                    public class HelloWorld {
                      public static void main(String[] args) {
                        System.out.println("Hello World");
@@ -151,7 +151,7 @@ let
 
         passthru.home = graalvmXXX-ce;
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           homepage = "https://www.graalvm.org/";
           description = "High-Performance Polyglot VM";
           license = with licenses; [ upl gpl2Classpath bsd3 ];

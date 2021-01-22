@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -19,7 +19,7 @@ let
   };
   inherit (llvmPkgs) llvm;
   inherit (if buildWithPatches then opencl-clang else llvmPkgs) clang clang-unwrapped spirv-llvm-translator;
-  inherit (stdenv.lib) getVersion optional optionals versionOlder versions;
+  inherit (lib) getVersion optional optionals versionOlder versions;
 in
 
 stdenv.mkDerivation rec {
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     "-DIGC_PREFERRED_LLVM_VERSION=${getVersion llvm}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://github.com/intel/intel-graphics-compiler";
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";
     license     = licenses.mit;

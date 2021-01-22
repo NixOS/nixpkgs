@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetch
 , fetchpatch
 , cmake
@@ -17,7 +17,7 @@
 
 let
   # Used when creating a versioned symlinks of libLLVM.dylib
-  versionSuffixes = with stdenv.lib;
+  versionSuffixes = with lib;
     let parts = splitVersion release_version; in
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 in
@@ -35,10 +35,10 @@ stdenv.mkDerivation ({
   '';
 
   outputs = [ "out" "python" ]
-    ++ stdenv.lib.optional enableSharedLibraries "lib";
+    ++ lib.optional enableSharedLibraries "lib";
 
   nativeBuildInputs = [ cmake python3 ]
-    ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx;
+    ++ lib.optional enableManpages python3.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ];
 
@@ -58,13 +58,13 @@ stdenv.mkDerivation ({
     #  stripLen = 1;
     #})
   ];
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
       --replace 'set(_install_rpath "@loader_path/../lib" ''${extra_libdir})' ""
   ''
   # Patch llvm-config to return correct library path based on --link-{shared,static}.
-  + stdenv.lib.optionalString (enableSharedLibraries) ''
+  + lib.optionalString (enableSharedLibraries) ''
     substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
     patch -p1 < ./llvm-outputs.patch
   '' + ''
@@ -72,9 +72,9 @@ stdenv.mkDerivation ({
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "Path.cpp" ""
     rm unittests/Support/Path.cpp
-  '' + stdenv.lib.optionalString stdenv.isAarch64 ''
+  '' + lib.optionalString stdenv.isAarch64 ''
     patch -p0 < ${../aarch64.patch}
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -i ${../TLI-musl.patch}
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
@@ -98,18 +98,18 @@ stdenv.mkDerivation ({
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
   ]
-  ++ stdenv.lib.optional enableSharedLibraries
+  ++ lib.optional enableSharedLibraries
     "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ++ stdenv.lib.optionals enableManpages [
+  ++ lib.optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
   ]
-  ++ stdenv.lib.optional (!isDarwin)
+  ++ lib.optional (!isDarwin)
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ++ stdenv.lib.optionals (isDarwin) [
+  ++ lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ];
@@ -126,18 +126,18 @@ stdenv.mkDerivation ({
     mkdir -p $python/share
     mv $out/share/opt-viewer $python/share/opt-viewer
   ''
-  + stdenv.lib.optionalString enableSharedLibraries ''
+  + lib.optionalString enableSharedLibraries ''
     moveToOutput "lib/libLLVM-*" "$lib"
     moveToOutput "lib/libLLVM${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
     moveToOutput "lib/libLTO${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM-" "$lib/lib/libLLVM-"
   ''
-  + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
+  + lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLTO.dylib" "$lib/lib/libLTO.dylib"
-    ${stdenv.lib.concatMapStringsSep "\n" (v: ''
+    ${lib.concatMapStringsSep "\n" (v: ''
       ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
     '') versionSuffixes}
   '';
@@ -150,11 +150,11 @@ stdenv.mkDerivation ({
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = "https://llvm.org/";
-    license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.ncsa;
+    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill ];
+    platforms   = lib.platforms.all;
   };
-} // stdenv.lib.optionalAttrs enableManpages {
+} // lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
 
   buildPhase = ''

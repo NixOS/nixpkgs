@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetch, libcxx, libunwind, llvm, version
+{ lib, stdenv, cmake, fetch, libcxx, libunwind, llvm, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -9,15 +9,15 @@ stdenv.mkDerivation {
   src = fetch "libcxxabi" "0yqs722y76cwvmfsq0lb917r9m3fci7bf5z3yzl71yz9n88ghzm9";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
+  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
 
-  cmakeFlags = stdenv.lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+  cmakeFlags = lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
-  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isWasm [
+  ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DLIBCXXABI_ENABLE_THREADS=OFF"
     "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
-  ] ++ stdenv.lib.optionals (!enableShared) [
+  ] ++ lib.optionals (!enableShared) [
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation {
     unpackFile ${libcxx.src}
     unpackFile ${llvm.src}
     cmakeFlags+=" -DLLVM_PATH=$PWD/$(ls -d llvm-*) -DLIBCXXABI_LIBCXX_PATH=$PWD/$(ls -d libcxx-*)"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -d $(ls -d libcxx-*) -i ${../libcxx-0001-musl-hacks.patch}
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isWasm ''
+  '' + lib.optionalString stdenv.hostPlatform.isWasm ''
     patch -p1 -d $(ls -d llvm-*) -i ${./libcxxabi-wasm.patch}
   '';
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
       install -d -m 755 $out/include $out/lib
       install -m 644 lib/libc++abi.a $out/lib
       install -m 644 ../include/cxxabi.h $out/include
-    '' + stdenv.lib.optionalString enableShared ''
+    '' + lib.optionalString enableShared ''
       install -m 644 lib/libc++abi.so.1.0 $out/lib
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
@@ -61,8 +61,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://libcxxabi.llvm.org/";
     description = "A new implementation of low level support for a standard C++ library";
-    license = with stdenv.lib.licenses; [ ncsa mit ];
-    maintainers = with stdenv.lib.maintainers; [ vlstill ];
-    platforms = stdenv.lib.platforms.all;
+    license = with lib.licenses; [ ncsa mit ];
+    maintainers = with lib.maintainers; [ vlstill ];
+    platforms = lib.platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
+{ fetchFromGitHub, lib, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
 
 stdenv.mkDerivation rec {
   pname = "z88dk";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "libs" "install" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.z88dk.org";
     description = "z80 Development Kit";
     license = licenses.clArtistic;

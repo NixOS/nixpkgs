@@ -1,9 +1,8 @@
-{ stdenv, fetchurl, gcc, makeWrapper
+{ lib, stdenv, fetchurl, gcc, makeWrapper
 , db, gmp, ncurses }:
 
 let
   version = "2.2";
-  lib = stdenv.lib;
 in
 stdenv.mkDerivation rec {
   pname = "gnu-cobol";
@@ -18,19 +17,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ db gmp ncurses ];
 
-  cflags  = stdenv.lib.concatMapStringsSep " " (p: "-L" + (lib.getLib p) + "/lib ") buildInputs;
-  ldflags = stdenv.lib.concatMapStringsSep " " (p: "-I" + (lib.getDev p) + "/include ") buildInputs;
+  cflags  = lib.concatMapStringsSep " " (p: "-L" + (lib.getLib p) + "/lib ") buildInputs;
+  ldflags = lib.concatMapStringsSep " " (p: "-I" + (lib.getDev p) + "/include ") buildInputs;
 
   cobolCCFlags = "-I$out/include ${ldflags} -L$out/lib ${cflags}";
 
-  postInstall = with stdenv.lib; ''
+  postInstall = with lib; ''
     wrapProgram "$out/bin/cobc" \
       --set COB_CC "${gcc}/bin/gcc" \
       --prefix COB_LDFLAGS " " "${cobolCCFlags}" \
       --prefix COB_CFLAGS " " "${cobolCCFlags}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source COBOL compiler";
     homepage = "https://sourceforge.net/projects/open-cobol/";
     license = licenses.gpl3;

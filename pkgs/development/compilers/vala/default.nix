@@ -92,7 +92,7 @@ let
     #  };
     # };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Compiler for GObject type system";
       homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;

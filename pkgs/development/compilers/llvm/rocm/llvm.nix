@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , python3
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   pname = "rocm-llvm";
 
   outputs = [ "out" "python" ]
-    ++ stdenv.lib.optional enableSharedLibraries "lib";
+    ++ lib.optional enableSharedLibraries "lib";
 
   nativeBuildInputs = [ cmake python3 ];
 
@@ -44,10 +44,10 @@ in stdenv.mkDerivation rec {
     "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
   ]
   ++
-  stdenv.lib.optional
+  lib.optional
     enableSharedLibraries
     "-DLLVM_LINK_LLVM_DYLIB=ON"
-  ++ stdenv.lib.optionals enableManpages [
+  ++ lib.optionals enableManpages [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"
@@ -78,7 +78,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput share/opt-viewer "$python"
   ''
-  + stdenv.lib.optionalString enableSharedLibraries ''
+  + lib.optionalString enableSharedLibraries ''
     moveToOutput "lib/libLLVM-*" "$lib"
     moveToOutput "lib/libLLVM${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
@@ -87,7 +87,7 @@ in stdenv.mkDerivation rec {
 
   passthru.src = src;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ROCm fork of the LLVM compiler infrastructure";
     homepage = "https://github.com/RadeonOpenCompute/llvm-project";
     license = with licenses; [ ncsa ];

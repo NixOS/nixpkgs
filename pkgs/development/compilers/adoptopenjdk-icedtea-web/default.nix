@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cargo, rustc, autoreconfHook, jdk, glib, xulrunner, zip, pkg-config, npapi_sdk, bash, bc }:
+{ lib, stdenv, fetchFromGitHub, cargo, rustc, autoreconfHook, jdk, glib, xulrunner, zip, pkg-config, npapi_sdk, bash, bc }:
 
 stdenv.mkDerivation rec {
   pname = "adoptopenjdk-icedtea-web";
@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
       based on the NetX project.
     '';
     homepage = "https://github.com/adoptopenjdk/icedtea-web";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
