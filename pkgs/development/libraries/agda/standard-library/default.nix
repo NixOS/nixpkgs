@@ -14,6 +14,9 @@ mkDerivation rec {
   nativeBuildInputs = [ (ghcWithPackages (self : [ self.filemanip ])) ];
   preConfigure = ''
     runhaskell GenerateEverything.hs
+    # We will only build/consider Everything.agda, in particular we don't want Everything*.agda
+    # do be copied to the store.
+    rm EverythingSafe.agda EverythingSafeGuardedness.agda EverythingSafeSizedTypes.agda
   '';
 
   meta = with lib; {
