@@ -6199,6 +6199,8 @@ in {
 
   python-hpilo = callPackage ../development/python-modules/python-hpilo { };
 
+  python-http-client = callPackage ../development/python-modules/python-http-client { };
+
   python-igraph = callPackage ../development/python-modules/python-igraph {
     pkg-config = pkgs.pkg-config;
     igraph = pkgs.igraph;
@@ -6981,6 +6983,8 @@ in {
 
   send2trash = callPackage ../development/python-modules/send2trash { };
 
+  sendgrid = callPackage ../development/python-modules/sendgrid { };
+
   sentencepiece = callPackage ../development/python-modules/sentencepiece { inherit (pkgs) sentencepiece pkg-config; };
 
   sentinel = callPackage ../development/python-modules/sentinel { };
@@ -7366,6 +7370,8 @@ in {
   starlette = callPackage ../development/python-modules/starlette {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
   };
+
+  starkbank-ecdsa = callPackage ../development/python-modules/starkbank-ecdsa { };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
