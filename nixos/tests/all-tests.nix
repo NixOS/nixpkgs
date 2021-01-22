@@ -265,6 +265,7 @@ in
   nghttpx = handleTest ./nghttpx.nix {};
   nginx = handleTest ./nginx.nix {};
   nginx-auth = handleTest ./nginx-auth.nix {};
+  nginx-cgit= handleTest ./nginx-cgit.nix {};
   nginx-etag = handleTest ./nginx-etag.nix {};
   nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};
   nginx-sandbox = handleTestOn ["x86_64-linux"] ./nginx-sandbox.nix {};
