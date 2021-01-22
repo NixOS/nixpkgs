@@ -6794,6 +6794,10 @@ in {
   else
     callPackage ../development/python-modules/rsa/4_0.nix { };
 
+  rstcheck = callPackage ../development/python-modules/rstcheck {
+    inherit (pkgs) docutils;
+  };
+
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python { };
 
   Rtree = callPackage ../development/python-modules/Rtree { inherit (pkgs) libspatialindex; };
