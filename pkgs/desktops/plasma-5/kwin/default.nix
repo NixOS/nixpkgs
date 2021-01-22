@@ -12,7 +12,7 @@
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
   kscreenlocker, kservice, kwayland, kwayland-server, kwidgetsaddons, kwindowsystem, kxmlgui,
-  plasma-framework, libcap, libdrm, mesa
+  plasma-framework, libcap, libdrm, mesa, pipewire
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
@@ -31,7 +31,7 @@ mkDerivation {
     kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
     kidletime kinit kio knewstuff knotifications kpackage kscreenlocker kservice
     kwayland kwayland-server kwidgetsaddons kwindowsystem kxmlgui plasma-framework
-    libcap libdrm mesa
+    libcap libdrm mesa pipewire
   ];
   outputs = [ "dev" "out" ];
   patches = [
