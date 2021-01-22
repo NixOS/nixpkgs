@@ -36,6 +36,10 @@ in
         "cp ${hello-world} HelloWorld.agda"
     )
     machine.succeed("agda -l standard-library -i . -c HelloWorld.agda")
+    # Check execution
+    assert "Hello World!" in machine.succeed(
+        "./HelloWorld"
+    ), "HelloWorld does not run properly"
   '';
 }
 )
