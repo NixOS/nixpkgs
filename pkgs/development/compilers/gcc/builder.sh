@@ -147,9 +147,9 @@ if test "$noSysDirs" = "1"; then
     fi
 fi
 
-if test -n "${targetConfig-}"; then
-    # The host strip will destroy some important details of the objects
-    dontStrip=1
+if [ -n "${targetConfig-}" ]; then
+    # if stripping gcc, include target directory too
+    stripDebugList="${stripDebugList-lib lib32 lib64 libexec bin sbin} $targetConfig"
 fi
 
 eval "$oldOpts"
