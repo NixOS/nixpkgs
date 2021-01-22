@@ -62,17 +62,17 @@ let
   # this requires kernel package
   dtbsWithSymbols = pkgs.stdenv.mkDerivation {
     name = "dtbs-with-symbols";
-    inherit (cfg.kernelPackage) src nativeBuildInputs depsBuildBuild;
+    inherit (cfg.kernelPackage) src nativeBuildInputs depsBuildBuild makeFlags;
     patches = map (patch: patch.patch) cfg.kernelPackage.kernelPatches;
     buildPhase = ''
       patchShebangs scripts/*
       substituteInPlace scripts/Makefile.lib \
         --replace 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget))' 'DTC_FLAGS += $(DTC_FLAGS_$(basetarget)) -@'
-      make ${pkgs.stdenv.hostPlatform.platform.kernelBaseConfig} ARCH="${pkgs.stdenv.hostPlatform.platform.kernelArch}"
-      make dtbs ARCH="${pkgs.stdenv.hostPlatform.platform.kernelArch}"
+      make $makeFlags "''${makeFlagsArray[@]}" ${pkgs.stdenv.hostPlatform.platform.kernelBaseConfig}
+      make $makeFlags "''${makeFlagsArray[@]}" dtbs
     '';
     installPhase = ''
-      make dtbs_install INSTALL_DTBS_PATH=$out/dtbs  ARCH="${pkgs.stdenv.hostPlatform.platform.kernelArch}"
+      make $makeFlags "''${makeFlagsArray[@]}" dtbs_install INSTALL_DTBS_PATH=$out/dtbs
     '';
   };
 
