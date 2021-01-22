@@ -12,8 +12,10 @@ buildPythonPackage rec {
   buildInputs = [ fuse ];
   nativeBuildInputs = [ pkg-config ];
 
-  # no tests in the Pypi archive
+  # no tests implemented
   doCheck = false;
+
+  pythonImportsCheck = [ "fuse" ];
 
   meta = with lib; {
     description = "Python bindings for FUSE";
