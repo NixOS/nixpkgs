@@ -3776,6 +3776,8 @@ in {
 
   lockfile = callPackage ../development/python-modules/lockfile { };
 
+  log-symbols = callPackage ../development/python-modules/log-symbols { };
+
   Logbook = callPackage ../development/python-modules/Logbook { };
 
   logfury = callPackage ../development/python-modules/logfury { };
