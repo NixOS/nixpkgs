@@ -30,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     description = "A basic http server for hosting a folder fast and simply";
     homepage = "https://github.com/thecoshman/http";
     license = licenses.mit;
-    maintainers = with maintainers; [ bbigras ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,11 +1,12 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, setuptools
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, pythonAtLeast, setuptools
 , transitions, websockets, passlib, docopt, pyyaml, nose }:
 
 buildPythonPackage rec {
   pname = "hbmqtt";
   version = "0.9.6";
 
-  disabled = !isPy3k;
+  # https://github.com/beerfactory/hbmqtt/issues/223
+  disabled = !isPy3k || pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
