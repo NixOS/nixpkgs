@@ -44,8 +44,7 @@ python3Packages.buildPythonPackage rec {
   doCheck = false;
   dontUseSetuptoolsBuild = true;
   dontUsePipInstall = true;
-
-  buildPhase = ":";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/bin
