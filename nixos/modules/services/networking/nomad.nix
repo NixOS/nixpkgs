@@ -142,7 +142,9 @@ in
         (mkIf cfg.enableDocker {
           SupplementaryGroups = "docker"; # space-separated string
         })
-        (mkIf (cfg.settings.data_dir == "/var/lib/nomad") { StateDirectory = "nomad"; })
+        (mkIf (cfg.settings.data_dir == "/var/lib/nomad") {
+          StateDirectory = "nomad";
+        })
       ];
 
       unitConfig = {
