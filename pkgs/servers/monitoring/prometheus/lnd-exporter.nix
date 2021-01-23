@@ -1,8 +1,8 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
-  pname = "lndmon";
-  version = "unstable-2020-12-04";
+  pname = "lndmon-unstable";
+  version = "2020-12-04";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";

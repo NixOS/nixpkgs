@@ -6,8 +6,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "icon-lang";
-  version = "unstable-2020-02-05";
+  pname = "icon-lang-unstable";
+  version = "2020-02-05";
   src = fetchFromGitHub {
     owner = "gtownsend";
     repo = "icon";

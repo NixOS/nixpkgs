@@ -13,8 +13,8 @@
 stdenv.mkDerivation rec {
   # this is what upstream calls the package, see:
   # https://github.com/ryukau/LV2Plugins#uhhyou-plugins-lv2
-  pname = "uhhyou.lv2";
-  version = "unstable-2020-07-31";
+  pname = "uhhyou.lv2-unstable";
+  version = "2020-07-31";
 
   src = fetchFromGitHub {
     owner = "ryukau";

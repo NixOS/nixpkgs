@@ -126,13 +126,13 @@ let
   };
 
 in pythonPackages.buildPythonApplication rec {
-  pname = "beets";
+  pname = "beets-unstable";
   # While there is a stable version, 1.4.9, it is more than 1000 commits behind
   # master and lacks many bug fixes and improvements[1]. Also important,
   # unstable does not require bs1770gain[2].
   # [1]: https://discourse.beets.io/t/forming-a-beets-core-team/639
   # [2]: https://github.com/NixOS/nixpkgs/pull/90504
-  version = "unstable-2020-12-22";
+  version = "2020-12-22";
 
   src = fetchFromGitHub {
     owner = "beetbox";

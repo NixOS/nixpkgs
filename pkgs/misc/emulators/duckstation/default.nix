@@ -1,8 +1,8 @@
 { lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, SDL2, qtbase
 , wrapQtAppsHook, qttools, ninja, gtk3 }:
 mkDerivation rec {
-  pname = "duckstation";
-  version = "unstable-2020-12-29";
+  pname = "duckstation-unstable";
+  version = "2020-12-29";
 
   src = fetchFromGitHub {
     owner = "stenzek";

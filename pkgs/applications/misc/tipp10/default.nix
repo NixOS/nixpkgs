@@ -2,8 +2,8 @@
   qtmultimedia, qttools, ... }:
 
 mkDerivation rec {
-  pname = "tipp10";
-  version = "unstable-20200616";
+  pname = "tipp10-unstable";
+  version = "2020-06-16";
 
   src = fetchFromGitLab {
     owner = "tipp10";

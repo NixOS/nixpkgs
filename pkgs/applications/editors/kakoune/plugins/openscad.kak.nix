@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  pname = "openscad.kak";
-  version = "unstable-2019-11-08";
+  pname = "openscad.kak-unstable";
+  version = "2019-11-08";
 
   src = fetchFromGitHub {
     owner = "mayjs";

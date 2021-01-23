@@ -7,8 +7,8 @@
 }:
 
 buildGoModule {
-  pname = "vgo2nix";
-  version = "unstable-2020-11-07";
+  pname = "vgo2nix-unstable";
+  version = "2020-11-07";
 
   src = fetchFromGitHub {
     owner = "nix-community";

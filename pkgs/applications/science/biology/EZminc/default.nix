@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, libminc, bicpl, itk4, fftwFloat, gsl }:
 
 stdenv.mkDerivation rec {
-  pname = "EZminc";
-  version = "unstable-2019-03-12";
+  pname = "EZminc-unstable";
+  version = "2019-03-12";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
                  "-DEZMINC_BUILD_DD=TRUE" ];
 
   meta = with lib; {
-    homepage = "https://github.com/BIC-MNI/${pname}";
+    homepage = "https://github.com/BIC-MNI/EZminc";
     description = "Collection of Perl and shell scripts for processing MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;

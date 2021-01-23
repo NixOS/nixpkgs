@@ -11,8 +11,8 @@ let
     fi
   '';
 in stdenv.mkDerivation rec {
-  pname = "utsushi";
-  version = "unstable-2021-01-01";
+  pname = "utsushi-unstable";
+  version = "2021-01-01";
 
   src = fetchFromGitLab {
     owner = pname;

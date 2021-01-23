@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, libusb1 }:
 
 stdenv.mkDerivation {
-  pname = "rpiboot";
-  version = "unstable-2020-10-20";
+  pname = "rpiboot-unstable";
+  version = "2020-10-20";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";

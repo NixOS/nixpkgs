@@ -12,8 +12,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "csxcad";
-  version = "unstable-2020-02-08";
+  pname = "csxcad-unstable";
+  version = "2020-02-08";
 
   src = fetchFromGitHub {
     owner = "thliebig";

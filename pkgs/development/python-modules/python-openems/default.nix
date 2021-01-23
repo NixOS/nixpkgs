@@ -11,8 +11,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-openems";
-  version = "unstable-2020-02-15";
+  pname = "python-openems-unstable";
+  version = "2020-02-15";
 
   src = fetchFromGitHub {
     owner = "thliebig";

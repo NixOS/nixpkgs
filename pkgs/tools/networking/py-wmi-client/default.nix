@@ -1,8 +1,8 @@
 { lib, pythonPackages, fetchFromGitHub }:
 
 pythonPackages.buildPythonApplication rec {
-  pname = "py-wmi-client";
-  version = "unstable-20160601";
+  pname = "py-wmi-client-unstable";
+  version = "2016-06-01";
 
   src = fetchFromGitHub {
     owner = "dlundgren";

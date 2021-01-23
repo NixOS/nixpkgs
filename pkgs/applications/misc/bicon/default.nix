@@ -9,8 +9,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "bicon";
-  version = "unstable-2018-09-10";
+  pname = "bicon-unstable";
+  version = "2018-09-10";
 
   src = fetchFromGitHub {
     owner = "behdad";

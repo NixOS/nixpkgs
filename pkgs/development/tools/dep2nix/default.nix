@@ -2,8 +2,8 @@
 , makeWrapper, nix-prefetch-scripts }:
 
 buildGoPackage rec {
-  pname = "dep2nix";
-  version = "unstable-2019-04-02";
+  pname = "dep2nix-unstable";
+  version = "2019-04-02";
 
   goPackagePath = "github.com/nixcloud/dep2nix";
 

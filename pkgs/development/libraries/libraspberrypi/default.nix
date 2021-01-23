@@ -6,8 +6,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libraspberrypi";
-  version = "unstable-2020-11-30";
+  pname = "libraspberrypi-unstable";
+  version = "2020-11-30";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";

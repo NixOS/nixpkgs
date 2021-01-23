@@ -4,8 +4,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "qbe";
-  version = "unstable-2019-07-11";
+  pname = "qbe-unstable";
+  version = "2019-07-11";
 
   src = fetchgit {
     url = "git://c9x.me/qbe.git";

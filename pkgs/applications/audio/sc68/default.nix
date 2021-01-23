@@ -12,8 +12,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "sc68";
-  version = "unstable-2020-05-18";
+  pname = "sc68-unstable";
+  version = "2020-05-18";
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/sc68/code/";

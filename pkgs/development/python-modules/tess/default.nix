@@ -7,8 +7,8 @@
 }:
 
 buildPythonPackage {
-  pname = "tess";
-  version = "unstable-2019-05-07";
+  pname = "tess-unstable";
+  version = "2019-05-07";
 
   src = fetchFromGitHub {
     owner = "wackywendell";

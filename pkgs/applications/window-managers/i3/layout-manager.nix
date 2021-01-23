@@ -5,8 +5,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "i3-layout-manager";
-  version = "unstable-2020-05-04";
+  pname = "i3-layout-manager-unstable";
+  version = "2020-05-04";
 
   src = fetchFromGitHub {
     owner = "klaxalk";

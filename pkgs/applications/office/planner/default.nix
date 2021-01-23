@@ -10,10 +10,10 @@
 , python2
 }:
 
-let version = "unstable-2019-02-13";
+let version = "2019-02-13";
 
 in stdenv.mkDerivation {
-  pname = "planner";
+  pname = "planner-unstable";
   inherit version;
 
   src = fetchFromGitLab {

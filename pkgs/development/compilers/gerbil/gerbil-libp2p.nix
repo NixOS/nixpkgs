@@ -1,8 +1,8 @@
 { pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
 
 gerbil-support.gerbilPackage {
-  pname = "gerbil-libp2p";
-  version = "unstable-2018-12-27";
+  pname = "gerbil-libp2p-unstable";
+  version = "2018-12-27";
   git-version = "2376b3f";
   gerbil-package = "vyzo";
   gerbil = gerbil-unstable;

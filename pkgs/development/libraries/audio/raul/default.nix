@@ -1,9 +1,8 @@
 { lib, stdenv, fetchgit, boost, gtk2, pkg-config, python, wafHook }:
 
 stdenv.mkDerivation rec {
-  pname = "raul";
-  version = "unstable-2019-12-09";
-  name = "${pname}-${version}";
+  pname = "raul-unstable";
+  version = "2019-12-09";
 
   src = fetchgit {
     url = "https://gitlab.com/drobilla/raul.git";

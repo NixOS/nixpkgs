@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fltk, alsaLib, freetype, libXrandr, libXinerama, libXcursor, lv2, libjack2, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
-  pname = "ensemble-chorus";
-  version = "unstable-15-02-2019";
+  pname = "ensemble-chorus-unstable";
+  version = "15-02-2019";
 
   src = fetchFromGitHub {
     owner = "jpcima";

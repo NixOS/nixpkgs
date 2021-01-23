@@ -11,8 +11,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gdk-pixbuf-xlib";
-  version = "2020-06-11-unstable";
+  pname = "gdk-pixbuf-xlib-unstable";
+  version = "2020-06-11";
 
   outputs = [ "out" "dev" "devdoc" ];
 

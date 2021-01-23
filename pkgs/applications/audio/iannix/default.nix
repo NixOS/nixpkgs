@@ -2,8 +2,8 @@
 }:
 
 mkDerivation rec {
-  pname = "iannix";
-  version = "unstable-2020-12-09";
+  pname = "iannix-unstable";
+  version = "2020-12-09";
 
   src = fetchFromGitHub {
     owner = "iannix";

@@ -17,8 +17,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "glasgow";
-  version = "unstable-2020-06-29";
+  pname = "glasgow-unstable";
+  version = "2020-06-29";
   # python software/setup.py --version
   realVersion = "0.1.dev1352+g${lib.substring 0 7 src.rev}";
 

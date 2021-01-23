@@ -12,7 +12,8 @@ let
 in
 
   rr.overrideAttrs (old: {
-    version = "unstable-2020-10-04";
+    pname = "rr-unstable";
+    version = "2020-10-04";
 
     src = fetchFromGitHub {
       owner = "mozilla";

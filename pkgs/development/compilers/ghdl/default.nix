@@ -4,10 +4,10 @@
 assert backend == "mcode" || backend == "llvm";
 
 stdenv.mkDerivation rec {
-  pname = "ghdl-${backend}";
+  pname = "ghdl-${backend}-unstable";
   # NOTE(aseipp): move to 0.38 when it comes out, since it should support a stable
   # version of the yosys plugin
-  version = "unstable-2021.01.14";
+  version = "2021-01-14";
 
   src = fetchFromGitHub {
     owner  = "ghdl";

@@ -5,8 +5,8 @@
 
 let
   base = stdenv.mkDerivation rec {
-    pname = "soldat-base";
-    version = "unstable-2020-11-26";
+    pname = "soldat-base-unstable";
+    version = "2020-11-26";
 
     src = fetchFromGitHub {
       name = "base";

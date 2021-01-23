@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  pname = "mooSpace";
-  version = "unstable-2020-06-10";
+  pname = "mooSpace-unstable";
+  version = "2020-06-10";
 
   src = fetchFromGitHub {
     owner = "modularev";
@@ -12,18 +12,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
-  patchPhase = "mv ${pname}_faust.dsp ${pname}.dsp";
+  patchPhase = "mv mooSpace_faust.dsp mooSpace.dsp";
 
   buildPhase = ''
-    faust2jaqt -time -vec -t 0 ${pname}.dsp
-    faust2lv2  -time -vec -t 0 -gui ${pname}.dsp
+    faust2jaqt -time -vec -t 0 mooSpace.dsp
+    faust2lv2  -time -vec -t 0 -gui mooSpace.dsp
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ${pname} $out/bin/
+    cp mooSpace $out/bin/
       mkdir -p $out/lib/lv2
-      cp -r ${pname}.lv2 $out/lib/lv2
+      cp -r mooSpace.lv2 $out/lib/lv2
   '';
 
   meta = {

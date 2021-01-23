@@ -1,6 +1,7 @@
 { callPackage, fetchFromGitHub }:
 
 callPackage ./build.nix rec {
+  pname = "gerbil";
   version = "0.16";
   git-version = version;
   src = fetchFromGitHub {

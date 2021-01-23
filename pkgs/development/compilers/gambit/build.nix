@@ -1,5 +1,5 @@
 { gccStdenv, lib, git, openssl, autoconf, pkgs, makeStaticLibraries, gcc, coreutils, gnused, gnugrep,
-  src, version, git-version,
+  src, pname, version, git-version,
   gambit-support, optimizationSetting ? "-O1", gambit-params ? pkgs.gambit-support.stable-params }:
 
 # Note that according to a benchmark run by Marc Feeley on May 2018,
@@ -20,9 +20,7 @@
 # so I stick with -O1 (in the defaults above), which is also the default for Gambit.
 
 gccStdenv.mkDerivation rec {
-
-  pname = "gambit";
-  inherit src version git-version;
+  inherit src pname version git-version;
   bootstrap = gambit-support.gambit-bootstrap;
 
   # TODO: if/when we can get all the library packages we depend on to have static versions,

@@ -3,8 +3,8 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  pname = "linkchecker";
-  version = "unstable-2020-08-15";
+  pname = "linkchecker-unstable";
+  version = "2020-08-15";
 
   src = fetchFromGitHub {
     owner = pname;

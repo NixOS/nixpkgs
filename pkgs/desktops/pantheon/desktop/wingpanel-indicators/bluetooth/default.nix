@@ -17,8 +17,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "wingpanel-indicator-bluetooth";
-  version = "unstable-2020-10-01";
+  pname = "wingpanel-indicator-bluetooth-unstable";
+  version = "2020-10-01";
 
   src = fetchFromGitHub {
     owner = "elementary";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
+      attrPath = "pantheon.wingpanel-indicator-bluetooth";
     };
   };
 

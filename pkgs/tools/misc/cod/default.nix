@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
-  pname = "cod";
-  version = "unstable-2020-09-10";
+  pname = "cod-unstable";
+  version = "2020-09-10";
 
   src = fetchFromGitHub {
     owner = "dim-an";

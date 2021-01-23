@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  pname = "zfsbackup";
-  version = "unstable-2020-09-30";
+  pname = "zfsbackup-unstable";
+  version = "2020-09-30";
   rev = "092f80846b23e02f99d2aa72d9d889eabfdcb053";
 
   goPackagePath = "github.com/someone1/zfsbackup-go";

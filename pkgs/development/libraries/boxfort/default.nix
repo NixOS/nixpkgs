@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, python37Packages }:
 
 stdenv.mkDerivation rec {
-  version = "unstable-2019-10-09";
-  pname = "boxfort";
+  version = "2019-10-09";
+  pname = "boxfort-unstable";
 
   src = fetchFromGitHub {
     owner = "Snaipe";

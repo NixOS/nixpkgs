@@ -14,9 +14,10 @@ let
     genericName = "frogatto";
     categories = "Game;ArcadeGame;";
   };
-  version = "unstable-2020-12-04";
+  pname = "frogatto-unstable";
+  version = "2020-12-04";
 in buildEnv {
-  name = "frogatto-${version}";
+  name = "${pname}-${version}"; # i don't know why this is needed
 
   buildInputs = [ makeWrapper ];
   paths = [ engine data desktopItem ];

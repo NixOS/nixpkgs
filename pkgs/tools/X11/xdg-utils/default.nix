@@ -21,11 +21,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "xdg-utils";
-  version = "unstable-2020-10-21";
+  pname = "xdg-utils-unstable";
+  version = "2020-10-21";
 
   src = fetchgit {
-    url = "https://gitlab.freedesktop.org/xdg/${pname}.git";
+    url = "https://gitlab.freedesktop.org/xdg/xdg-utils.git";
     rev = "d11b33ec7f24cfb1546f6b459611d440013bdc72";
     sha256 = "sha256-8PtXfI8hRneEpnUvIV3M+6ACjlkx0w/NEiJFdGbbHnQ=";
   };

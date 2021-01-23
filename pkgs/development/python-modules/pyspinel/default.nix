@@ -3,8 +3,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyspinel";
-  version = "unstable-2020-06-19";  # no versioned release since 2018
+  pname = "pyspinel-unstable";
+  version = "2020-06-19";  # no versioned release since 2018
   disabled = isPy27;
 
   src = fetchFromGitHub {

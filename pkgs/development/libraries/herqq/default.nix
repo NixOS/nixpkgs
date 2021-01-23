@@ -1,8 +1,8 @@
 { lib, mkDerivation, unzip, fetchFromGitHub, qmake, qtmultimedia, qtbase }:
 
 mkDerivation rec {
-  version = "unstable-20-06-26";
-  pname = "herqq";
+  version = "20-06-26";
+  pname = "herqq-unstable";
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase unzip qtmultimedia ];

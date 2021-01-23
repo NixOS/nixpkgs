@@ -13,8 +13,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "traittypes";
-  version = "unstable-2019-06-23";
+  pname = "traittypes-unstable";
+  version = "2019-06-23";
 
   disabled = isPy27;
 

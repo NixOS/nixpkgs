@@ -168,8 +168,8 @@ in
   };
 
   gimplensfun = pluginDerivation rec {
-    version = "unstable-2018-10-21";
-    name = "gimplensfun-${version}";
+    pname = "gimplensfun-unstable";
+    version = "2018-10-21";
 
     src = fetchFromGitHub {
       owner = "seebk";

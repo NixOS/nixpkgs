@@ -3,8 +3,8 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  pname = "bonfire";
-  version = "unstable-2017-01-19";
+  pname = "bonfire-unstable";
+  version = "2017-01-19";
 
   # use latest git version with --endpoint flag
   # https://github.com/blue-yonder/bonfire/pull/18

@@ -15,8 +15,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "wingpanel-indicator-session";
-  version = "unstable-2020-09-13";
+  pname = "wingpanel-indicator-session-unstable";
+  version = "2020-09-13";
 
   src = fetchFromGitHub {
     owner = "elementary";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
+      attrPath = "pantheon.wingpanel-indicator-session";
     };
   };
 

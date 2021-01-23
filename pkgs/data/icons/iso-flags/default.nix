@@ -9,8 +9,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "iso-flags";
-  version = "unstable-18012020";
+  pname = "iso-flags-unstable";
+  version = "18012020";
 
   src = fetchFromGitHub {
     owner = "joielechong";

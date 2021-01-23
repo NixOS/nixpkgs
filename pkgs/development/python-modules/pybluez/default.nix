@@ -5,8 +5,8 @@
 }:
 
 buildPythonPackage rec {
-  version = "unstable-20160819";
-  pname = "pybluez";
+  version = "2016-08-19";
+  pname = "pybluez-unstable";
 
   propagatedBuildInputs = [ pkgs.bluez ];
 

@@ -10,8 +10,8 @@
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
   # https://github.com/enkore/i3pystatus/issues/584
-  version = "unstable-2020-06-12";
-  pname = "i3pystatus";
+  version = "2020-06-12";
+  pname = "i3pystatus-unstable";
 
   src = fetchFromGitHub {
     owner = "enkore";
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/${pname}-python-interpreter \
+    makeWrapper ${python3Packages.python.interpreter} $out/bin/i3pystatus-python-interpreter \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       ''${makeWrapperArgs[@]}
   '';

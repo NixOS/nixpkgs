@@ -1,9 +1,9 @@
 { lib, stdenv, fetchFromGitHub, cmake, gtest, c-ares, curl, libev }:
 
 stdenv.mkDerivation rec {
-  pname = "https-dns-proxy";
+  pname = "https-dns-proxy-unstable";
   # there are no stable releases (yet?)
-  version = "unstable-20200419";
+  version = "2020-04-19";
 
   src = fetchFromGitHub {
     owner = "aarond10";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm555 -t $out/bin https_dns_proxy
-    install -Dm444 -t $out/share/doc/${pname} ../{LICENSE,README}.*
+    install -Dm444 -t $out/share/doc/https-dns-proxy ../{LICENSE,README}.*
   '';
 
   # upstream wants to add tests and the gtest framework is in place, so be ready

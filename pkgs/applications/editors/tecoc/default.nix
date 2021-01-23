@@ -5,8 +5,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "tecoc";
-  version = "unstable-2020-11-03";
+  pname = "tecoc-unstable";
+  version = "2020-11-03";
 
   src = fetchFromGitHub {
     owner = "blakemcbride";
@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc}/bin/cc" "-C src/" ];
 
   preInstall = ''
-    install -d $out/bin $out/share/doc/${pname}-${version} $out/lib/teco/macros
+    install -d $out/bin $out/share/doc/tecoc-${version} $out/lib/teco/macros
   '';
 
   installPhase = ''
     runHook preInstall
     install -m755 src/tecoc $out/bin
-    install -m644 src/aaout.txt doc/* $out/share/doc/${pname}-${version}
+    install -m644 src/aaout.txt doc/* $out/share/doc/tecoc-${version}
     install -m644 lib/* lib2/* $out/lib/teco/macros
     runHook postInstall
   '';

@@ -6,8 +6,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "nbmerge";
-  version = "unstable-2017-10-23";
+  pname = "nbmerge-unstable";
+  version = "2017-10-23";
 
   src = fetchFromGitHub {
     owner = "jbn";

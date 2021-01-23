@@ -1,8 +1,8 @@
 { lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage {
-  pname = "mdctags";
-  version = "unstable-2020-06-11"; # v0.1.0 does not build with our rust version
+  pname = "mdctags-unstable";
+  version = "2020-06-11"; # v0.1.0 does not build with our rust version
 
   src = fetchFromGitHub {
     owner = "wsdjeg";

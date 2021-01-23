@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, imlib2, libX11 }:
 
 stdenv.mkDerivation {
-  pname = "ssocr";
-  version = "unstable-2018-08-11";
+  pname = "ssocr-unstable";
+  version = "2018-08-11";
 
   src = fetchFromGitHub {
     owner = "auerswal";

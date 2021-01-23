@@ -2,9 +2,9 @@
 , python, glibmm, libpulseaudio, libao }:
 
 let
-  version = "unstable-2018-02-10";
+  version = "2018-02-10";
 in stdenv.mkDerivation {
-  pname = "rhvoice";
+  pname = "rhvoice-unstable";
   inherit version;
 
   src = fetchFromGitHub {

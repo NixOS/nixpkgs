@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "git-vanity-hash";
-  version = "2020-02-26-unstable";
+  pname = "git-vanity-hash-unstable";
+  version = "2020-02-26";
 
   src = fetchFromGitHub {
     owner = "prasmussen";

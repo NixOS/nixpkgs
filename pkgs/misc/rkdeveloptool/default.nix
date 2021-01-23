@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libusb1 }:
 
 stdenv.mkDerivation {
-  pname = "rkdeveloptool";
-  version = "unstable-2019-07-01";
+  pname = "rkdeveloptool-unstable";
+  version = "2019-07-01";
 
   src = fetchFromGitHub {
     owner = "rockchip-linux";

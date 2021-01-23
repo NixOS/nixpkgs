@@ -9,8 +9,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "oauthlib";
-  version = "unstable-2020-05-08";
+  pname = "oauthlib-unstable";
+  version = "2020-05-08";
 
   # master supports pyjwt==1.7.1
   src = fetchFromGitHub {

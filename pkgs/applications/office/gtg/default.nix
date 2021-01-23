@@ -15,8 +15,8 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "gtg";
-  version = "unstable-2020-10-22";
+  pname = "gtg-unstable";
+  version = "2020-10-22";
 
   src = fetchFromGitHub {
     owner = "getting-things-gnome";

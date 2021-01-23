@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, udev, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "g933-utils";
-  version = "unstable-2019-08-04";
+  pname = "g933-utils-unstable";
+  version = "2019-08-04";
 
   src = fetchFromGitHub {
     owner = "ashkitten";

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, kernel, bc }:
 stdenv.mkDerivation rec {
-  name = "rtl8821cu-${kernel.version}-${version}";
-  version = "unstable-2020-12-21";
+  pname = "rtl8821cu-${kernel.version}-unstable";
+  version = "2020-12-21";
 
   src = fetchFromGitHub {
     owner = "brektrou";

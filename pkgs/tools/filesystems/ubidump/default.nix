@@ -2,8 +2,8 @@
 
 python3.pkgs.buildPythonApplication rec {
 
-  pname = "ubidump";
-  version = "unstable-2019-09-11";
+  pname = "ubidump-unstable";
+  version = "2019-09-11";
 
   src = fetchFromGitHub {
     owner = "nlitsme";

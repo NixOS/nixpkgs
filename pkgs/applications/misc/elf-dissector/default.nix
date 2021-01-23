@@ -2,8 +2,8 @@
 , libiberty, libelf, libdwarf, libopcodes }:
 
 mkDerivation rec {
-  pname = "elf-dissector";
-  version = "unstable-2020-11-14";
+  pname = "elf-dissector-unstable";
+  version = "2020-11-14";
 
   src = fetchgit {
     url = "https://invent.kde.org/sdk/elf-dissector.git";

@@ -5,8 +5,8 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "catfs";
-  version = "unstable-2020-03-21";
+  pname = "catfs-unstable";
+  version = "2020-03-21";
 
   src = fetchFromGitHub {
     owner = "kahing";

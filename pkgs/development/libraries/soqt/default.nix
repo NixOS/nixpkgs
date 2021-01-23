@@ -1,8 +1,8 @@
 { fetchFromGitHub, lib, stdenv, coin3d, qtbase, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
-  pname = "soqt";
-  version = "2020-12-05-unstable";
+  pname = "soqt-unstable";
+  version = "2020-12-05";
 
   src = fetchFromGitHub {
     owner = "coin3d";

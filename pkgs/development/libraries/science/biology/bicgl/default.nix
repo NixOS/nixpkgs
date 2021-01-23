@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, libminc, bicpl, freeglut, mesa_glu }:
 
 stdenv.mkDerivation rec {
-  pname = "bicgl";
-  version = "unstable-2018-04-06";
+  pname = "bicgl-unstable";
+  version = "2018-04-06";
 
   owner = "BIC-MNI";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/${owner}/${pname}";
+    homepage = "https://github.com/${owner}/bicgl";
     description = "Brain Imaging Centre graphics library";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;

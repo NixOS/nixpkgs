@@ -11,8 +11,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "scikit-fuzzy";
-  version = "unstable-2020-10-03";
+  pname = "scikit-fuzzy-unstable";
+  version = "2020-10-03";
   disabled = isPy27;
 
   src = fetchFromGitHub {

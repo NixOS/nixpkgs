@@ -1,9 +1,10 @@
 { lib, fetchFromGitHub }:
 
 let
-  version = "unstable-2018-08-12";
+  pname = "gelasio-unstable";
+  version = "2018-08-12";
 in fetchFromGitHub {
-  name = "gelasio-${version}";
+  name = "${pname}-${version}"; # this should probably not be needed
   owner = "SorkinType";
   repo = "Gelasio";
   rev = "5bced461d54bcf8e900bb3ba69455af35b0d2ff1";
@@ -28,4 +29,3 @@ in fetchFromGitHub {
     maintainers = with maintainers; [ colemickens ];
   };
 }
-

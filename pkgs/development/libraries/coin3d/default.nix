@@ -1,8 +1,8 @@
 { fetchFromGitHub, lib, stdenv, boost, cmake, libX11, libGL, libGLU }:
 
 stdenv.mkDerivation rec {
-  pname = "coin";
-  version = "2020-12-07-unstable";
+  pname = "coin-unstable";
+  version = "2020-12-07";
 
   src = fetchFromGitHub {
     owner = "coin3d";

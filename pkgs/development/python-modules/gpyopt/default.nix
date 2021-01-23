@@ -2,8 +2,8 @@
 , numpy, scipy, gpy, emcee, nose }:
 
 buildPythonPackage rec {
-  pname = "GPyOpt";
-  version = "unstable-2019-09-25";
+  pname = "GPyOpt-unstable";
+  version = "2019-09-25";
 
   src = fetchFromGitHub {
     repo   = pname;

@@ -1,8 +1,8 @@
 { buildGoPackage, fetchFromGitHub, lib, stdenv, openssh, makeWrapper }:
 
 buildGoPackage rec {
-  pname = "diskrsync";
-  version = "unstable-2019-01-02";
+  pname = "diskrsync-unstable";
+  version = "2019-01-02";
 
   src = fetchFromGitHub {
     owner = "dop251";

@@ -3,8 +3,8 @@
   libminc, EBTKS }:
 
 stdenv.mkDerivation rec {
-  pname = "N3";
-  version = "unstable-2018-08-09";
+  pname = "N3-unstable";
+  version = "2018-08-09";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";

@@ -1,8 +1,8 @@
 { lib, stdenv, fetchhg }:
 
 stdenv.mkDerivation {
-  pname = "u9fs";
-  version = "unstable-2020-11-21";
+  pname = "u9fs-unstable";
+  version = "2020-11-21";
 
   src = fetchhg {
     url = "https://code.9front.org/hg/plan9front";

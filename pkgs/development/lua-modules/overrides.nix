@@ -88,7 +88,8 @@ with super;
   });
 
   ljsyscall = super.ljsyscall.override(rec {
-    version = "unstable-20180515";
+    pname = "ljsyscall-unstable";
+    version = "2018-05-15";
     # package hasn't seen any release for a long time
     src = pkgs.fetchFromGitHub {
       owner = "justincormack";

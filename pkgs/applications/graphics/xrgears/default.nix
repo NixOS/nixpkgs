@@ -12,8 +12,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "xrgears";
-  version = "unstable-2020-04-15";
+  pname = "xrgears-unstable";
+  version = "2020-04-15";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";

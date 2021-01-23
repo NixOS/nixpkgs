@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  pname = "realTimeConfigQuickScan";
-  version = "unstable-2020-07-23";
+  pname = "realTimeConfigQuickScan-unstable";
+  version = "2020-07-23";
 
   src = fetchFromGitHub {
     owner  = "raboof";
@@ -18,16 +18,16 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    mkdir -p $out/share/$pname
-    mkdir -p $out/share/doc/$pname
+    mkdir -p $out/share/realTimeConfigQuickScan
+    mkdir -p $out/share/doc/realTimeConfigQuickScan
     # Install Script Files:
     # *.pm files
     for i in *.pm; do
-    install -Dm 755 "$i" "$out/share/$pname/$i"
+    install -Dm 755 "$i" "$out/share/realTimeConfigQuickScan/$i"
     done
     # Install doc files:
-    install -D COPYING  "$out/share/doc/$pname/COPYING"
-    install -D README.md  "$out/share/doc/$pname/README.md"
+    install -D COPYING  "$out/share/doc/realTimeConfigQuickScan/COPYING"
+    install -D README.md  "$out/share/doc/realTimeConfigQuickScan/README.md"
     # Install Executable scripts:
     install -Dm 755 realTimeConfigQuickScan.pl "$out/bin/realTimeConfigQuickScan"
     install -Dm 755 QuickScan.pl "$out/bin/QuickScan"
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/realTimeConfigQuickScan \
-      --set PERL5LIB "$out/share/$pname"
+      --set PERL5LIB "$out/share/realTimeConfigQuickScan"
     wrapProgram $out/bin/QuickScan \
-      --set PERL5LIB "$out/share/$pname:${with perlPackages; makePerlPath [ Tk ]}"
+      --set PERL5LIB "$out/share/realTimeConfigQuickScan:${with perlPackages; makePerlPath [ Tk ]}"
   '';
 
   meta = with lib; {

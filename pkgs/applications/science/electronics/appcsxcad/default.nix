@@ -15,8 +15,8 @@
 }:
 
 mkDerivation {
-  pname = "appcsxcad";
-  version = "unstable-2020-01-04";
+  pname = "appcsxcad-unstable";
+  version = "2020-01-04";
 
   src = fetchFromGitHub {
     owner = "thliebig";

@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, dbus-glib, autoreconfHook, xorg }:
 
 stdenv.mkDerivation {
-  pname = "kbdd";
-  version = "unstable-2017-01-29";
+  pname = "kbdd-unstable";
+  version = "2017-01-29";
 
   src = fetchFromGitHub {
     owner = "qnikst";

@@ -19,8 +19,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "piglit";
-  version = "unstable-2020-10-23";
+  pname = "piglit-unstable";
+  version = "2020-10-23";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";

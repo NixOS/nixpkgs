@@ -4,8 +4,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pytricia";
-  version = "unstable-2019-01-16";
+  pname = "pytricia-unstable";
+  version = "2019-01-16";
 
   src = fetchFromGitHub {
     owner = "jsommers";

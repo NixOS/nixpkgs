@@ -6,13 +6,14 @@
 , libxml2
 , exiv2
 , imagemagick
+, pname
 , version
 , sha256
 , rev }:
 
 stdenv.mkDerivation {
   inherit version;
-  pname = "cataract";
+  inherit pname;
 
   src = fetchgit {
     url = "git://git.bzatek.net/cataract";
@@ -39,5 +40,3 @@ stdenv.mkDerivation {
     platforms = with platforms; linux ++ darwin;
   };
 }
-
-

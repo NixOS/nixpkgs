@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, boost165 }:
 
 stdenv.mkDerivation rec {
-  pname = "starspace";
-  version = "unstable-2021-01-17";
+  pname = "starspace-unstable";
+  version = "2021-01-17";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";

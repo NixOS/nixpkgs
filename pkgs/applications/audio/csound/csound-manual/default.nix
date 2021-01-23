@@ -5,8 +5,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "csound-manual";
-  version = "unstable-2019-02-22";
+  pname = "csound-manual-unstable";
+  version = "2019-02-22";
 
   src = fetchFromGitHub {
     owner = "csound";

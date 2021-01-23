@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  pname = "viw";
-  version = "unstable-20171029";
+  pname = "viw-unstable";
+  version = "20171029";
 
   src = fetchFromGitHub {
     owner = "lpan";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm 755 -t $out/bin viw
-    install -Dm 644 -t $out/share/doc/${pname} README.md
+    install -Dm 644 -t $out/share/doc/viw README.md
   '';
 
   meta = with lib; {

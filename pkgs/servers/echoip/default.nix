@@ -1,8 +1,8 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule {
-  pname = "echoip";
-  version = "unstable-2019-07-12";
+  pname = "echoip-unstable";
+  version = "2019-07-12";
 
   src = fetchFromGitHub {
     owner = "mpolden";

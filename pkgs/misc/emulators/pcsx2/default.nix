@@ -27,8 +27,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "pcsx2";
-  version = "unstable-2020-11-13";
+  pname = "pcsx2-unstable";
+  version = "2020-11-13";
 
   src = fetchFromGitHub {
     owner = "PCSX2";

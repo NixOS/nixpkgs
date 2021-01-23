@@ -6,8 +6,8 @@
 }:
 
 buildPythonApplication rec {
-  pname = "tuijam";
-  version = "unstable-2020-06-05";
+  pname = "tuijam-unstable";
+  version = "2020-06-05";
 
   src = fetchFromGitHub {
     owner = "cfangmeier";

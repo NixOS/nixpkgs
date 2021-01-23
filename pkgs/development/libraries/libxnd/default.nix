@@ -5,8 +5,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "libxnd";
-  version = "unstable-2019-08-01";
+  pname = "libxnd-unstable";
+  version = "2019-08-01";
 
   src = fetchFromGitHub {
     owner = "xnd-project";

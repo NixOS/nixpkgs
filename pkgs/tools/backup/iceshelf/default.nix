@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub, git, awscli, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "iceshelf";
-  version = "unstable-2019-07-03";
+  pname = "iceshelf-unstable";
+  version = "2019-07-03";
 
   format = "other";
 
@@ -20,9 +20,9 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/doc/${pname} $out/${python3.sitePackages}
+    mkdir -p $out/bin $out/share/doc/iceshelf $out/${python3.sitePackages}
     cp -v iceshelf iceshelf-restore $out/bin
-    cp -v iceshelf.sample.conf $out/share/doc/${pname}/
+    cp -v iceshelf.sample.conf $out/share/doc/iceshelf/
     cp -rv modules $out/${python3.sitePackages}
   '';
 

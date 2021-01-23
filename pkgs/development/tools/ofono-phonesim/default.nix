@@ -7,8 +7,8 @@
 }:
 
 mkDerivation {
-  pname = "ofono-phonesim";
-  version = "unstable-2019-11-18";
+  pname = "ofono-phonesim-unstable";
+  version = "2019-11-18";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/network/ofono/phonesim.git";

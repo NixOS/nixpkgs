@@ -6,8 +6,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libuvc";
-  version = "unstable-2020-11-29";
+  pname = "libuvc-unstable";
+  version = "2020-11-29";
 
   src = fetchFromGitHub {
     owner = pname;

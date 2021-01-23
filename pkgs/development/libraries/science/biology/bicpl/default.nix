@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, libminc, netpbm }:
 
 stdenv.mkDerivation rec {
-  pname = "bicpl";
-  version = "unstable-2017-09-10";
+  pname = "bicpl-unstable";
+  version = "2017-09-10";
 
   owner = "BIC-MNI";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # internal_volume_io.h: No such file or directory
 
   meta = with lib; {
-    homepage = "https://github.com/${owner}/${pname}";
+    homepage = "https://github.com/${owner}/bicpl";
     description = "Brain Imaging Centre programming library";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
