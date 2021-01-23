@@ -10,7 +10,7 @@ let
   };
 in
 nodePackages."${packageName}".override {
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ pkgs.makeWrapper pkgs.nodePackages.node-gyp-build ];
 
   postInstall = ''
     # Patch shebangs in node_modules, otherwise the webpack build fails with interpreter problems
