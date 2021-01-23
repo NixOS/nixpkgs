@@ -11,8 +11,8 @@ stdenv.mkDerivation {
     sha256 = "1x3gdcz1gqhi060ngqi0ghryf69v8bn50yrbzfad8bhblvhzzdlf";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cmake pcre zlib sqlite ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ pcre zlib sqlite ];
 
   meta = with lib; {
     description = "Programming language with macros and syntax at once";
