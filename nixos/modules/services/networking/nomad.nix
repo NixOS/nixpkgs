@@ -53,8 +53,7 @@ in
         type = types.listOf types.path;
         default = [];
         description = ''
-          Additional settings files used to configure nomad. These files
-          will be watched for changes.
+          Additional settings files used to configure nomad.
         '';
         example = literalExample ''
           [ "/etc/nomad-mutable.json" "/run/keys/nomad-with-secrets.json" ]
