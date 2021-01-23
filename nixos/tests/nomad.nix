@@ -28,7 +28,7 @@ import ./make-test-python.nix (
             };
           };
 
-          extraSettingsPaths = [ config.environment.etc."nomad.custom.json".source ];
+          extraSettingsPaths = [ "/etc/nomad.custom.json" ];
           enableDocker = false;
         };
       };
