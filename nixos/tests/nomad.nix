@@ -8,11 +8,6 @@ import ./make-test-python.nix (
             address = "192.168.1.1";
             prefixLength = 16;
           }];
-
-          firewall = {
-            allowedTCPPorts = [ 4646 4647 4648 ];
-            allowedUDPPorts = [ 4646 4647 4648 ];
-          };
         };
 
         environment.etc."nomad.custom.json".source =
