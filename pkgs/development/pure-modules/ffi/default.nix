@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, libffi }:
+{ lib, stdenv, fetchurl, pkg-config, pure, libffi }:
 
 stdenv.mkDerivation rec {
   baseName = "ffi";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Provides an interface to libffi which enables you to call C functions from Pure and vice versa";
     homepage = "http://puredocs.bitbucket.org/pure-ffi.html";
-    license = stdenv.lib.licenses.lgpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

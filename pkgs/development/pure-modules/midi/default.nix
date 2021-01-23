@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, portmidi }:
+{ lib, stdenv, fetchurl, pkg-config, pure, portmidi }:
 
 stdenv.mkDerivation rec {
   baseName = "midi";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A MIDI interface for the Pure programming language";
     homepage = "http://puredocs.bitbucket.org/pure-midi.html";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, python3Packages }:
+{ lib, stdenv, fetchurl, makeWrapper, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "bashdb";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Bash script debugger";
     homepage = "http://bashdb.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

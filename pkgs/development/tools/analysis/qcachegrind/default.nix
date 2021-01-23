@@ -1,7 +1,7 @@
-{ stdenv, qmake, qtbase, perl, python, php, kcachegrind }:
+{ lib, stdenv, qmake, qtbase, perl, python, php, kcachegrind }:
 
 let
-  name = stdenv.lib.replaceStrings ["kcachegrind"] ["qcachegrind"] kcachegrind.name;
+  name = lib.replaceStrings ["kcachegrind"] ["qcachegrind"] kcachegrind.name;
 
 in stdenv.mkDerivation {
   inherit name;
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
     install -Dm644 kcachegrind/48-apps-kcachegrind.png "$out/share/icons/hicolor/48x48/apps/kcachegrind.png"
   '');
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Qt GUI to visualize profiling data";
     license = licenses.gpl2;
     platforms = platforms.unix;

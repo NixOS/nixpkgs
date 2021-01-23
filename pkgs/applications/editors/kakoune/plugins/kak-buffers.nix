@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, lib }:
 stdenv.mkDerivation {
   name = "kak-buffers";
   version = "2019-04-03";

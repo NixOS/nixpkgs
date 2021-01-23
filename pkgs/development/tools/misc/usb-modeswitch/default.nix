@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libusb1 tcl ];
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A mode switching tool for controlling 'multi-mode' USB devices";
     license = licenses.gpl2;
     maintainers = with maintainers; [ marcweber peterhoeg ];

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.25.1";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    sha256 = "0i1cvwzwmcb07ynz1nk2svprfhsgcqmagvj5jfzayvcb1a2ww23b";
+    sha256 = "0g0icmhppb6f5amf5r2ksfylrlipz2cd8gd85pmd05k463nrmwqi";
   };
 
   # Patch hard-coded paths and remove force library builds
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
   fontsPath = lib.optionalString tileMode dejavu_fonts;
 
   makeFlags = [ "prefix=${placeholder "out"}" "FORCE_CC=cc" "FORCE_CXX=c++" "HOSTCXX=c++"
+                "FORCE_PKGCONFIG=y"
                 "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}"
                 "DATADIR=${placeholder "out"}"
               ] ++ lib.optional tileMode "TILES=y"

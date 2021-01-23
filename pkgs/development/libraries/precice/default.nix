@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, openmpi, python3, petsc }:
+{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, mpi, python3, petsc }:
 
 stdenv.mkDerivation rec {
   pname = "precice";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin [ "-D_GNU_SOURCE" ];
 
   nativeBuildInputs = [ cmake gcc ];
-  buildInputs = [ boost eigen libxml2 openmpi python3 python3.pkgs.numpy ];
+  buildInputs = [ boost eigen libxml2 mpi python3 python3.pkgs.numpy ];
 
   meta = {
     description = "preCICE stands for Precise Code Interaction Coupling Environment";

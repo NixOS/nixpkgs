@@ -1,5 +1,5 @@
-{ stdenv, makeWrapper, requireFile, gcc, unzip }:
-with stdenv.lib;
+{ lib, stdenv, makeWrapper, requireFile, gcc, unzip }:
+with lib;
 
 # v2.1: last version with NHM/WSM arch support
 stdenv.mkDerivation {

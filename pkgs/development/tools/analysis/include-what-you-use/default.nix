@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, llvmPackages, python2 }:
+{ lib, stdenv, fetchurl, cmake, llvmPackages, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "include-what-you-use";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       --replace "'include-what-you-use'" "'$out/bin/include-what-you-use'"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Analyze #includes in C/C++ source files with clang";
     longDescription = ''
       For every symbol (type, function variable, or macro) that you use in

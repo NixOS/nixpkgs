@@ -1,4 +1,4 @@
-{ stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
+{ lib, stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
 
 let
   version = "20.2.0.175.1842";
@@ -65,7 +65,7 @@ in
       --run "cd $out/libexec/sqldeveloper/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Oracle's Oracle DB GUI client";
     longDescription = ''
       Oracle SQL Developer is a free integrated development environment that

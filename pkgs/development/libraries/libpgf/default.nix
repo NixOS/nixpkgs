@@ -1,24 +1,20 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, dos2unix }:
+{ lib, stdenv, fetchzip, autoreconfHook }:
 
-with lib;
-
-let
-  version = "6.14.12";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libpgf";
-  inherit version;
+  version = "7.21.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libpgf/libpgf-src-${version}.tar.gz";
-    sha256 = "1ssqjbh6l5jc04f67n47m9bqcigl46c6lgyabyi6cabnh1frk9dx";
+  src = fetchzip {
+    url = "mirror://sourceforge/${pname}/${pname}/${version}/${pname}.zip";
+    sha256 = "0l1j5b1d02jn27miggihlppx656i0pc70cn6x89j1rpj33zn0g9r";
   };
 
-  buildInputs = [ autoconf automake libtool dos2unix ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  preConfigure = "dos2unix configure.ac; sh autogen.sh";
-
-# configureFlags = optional static "--enable-static --disable-shared";
+  autoreconfPhase = ''
+    mv README.txt README
+    sh autogen.sh
+  '';
 
   meta = {
     homepage = "https://www.libpgf.org/";

@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, ocaml, perl }:
+{ lib, stdenv, fetchzip, ocaml, perl }:
 
-if stdenv.lib.versionOlder ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 then throw "camlp5 is not available for OCaml ${ocaml.version}"
 else
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Preprocessor-pretty-printer for OCaml";
     longDescription = ''
       Camlp5 is a preprocessor and pretty-printer for OCaml programs.

@@ -190,7 +190,7 @@ stdenv.mkDerivation {
       else if targetPlatform.isRiscV then "lriscv"
       else throw "unknown emulation for platform: ${targetPlatform.config}";
     in if targetPlatform.useLLVM or false then ""
-       else targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
+       else targetPlatform.bfdEmulation or (fmt + sep + arch);
 
   strictDeps = true;
   depsTargetTargetPropagated = extraPackages;

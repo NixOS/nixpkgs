@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform
+{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform
 , openssl, cmake, perl, pkg-config, zlib, curl, libgit2, libssh2
 }:
 
@@ -43,7 +43,7 @@ buildRustPackage rec {
     install -D "$src/git-series.1" "$out/man/man1/git-series.1"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to help with formatting git patches for review on mailing lists";
     longDescription = ''
           git series tracks changes to a patch series over time. git

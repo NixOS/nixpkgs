@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, usb-modeswitch }:
+{ lib, stdenv, fetchurl, tcl, usb-modeswitch }:
 
 stdenv.mkDerivation rec {
   pname = "usb-modeswitch-data";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # the usb_modeswitch.d directory
   nativeBuildInputs = [ tcl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Device database and the rules file for 'multi-mode' USB devices";
     inherit (usb-modeswitch.meta) license maintainers platforms;
   };

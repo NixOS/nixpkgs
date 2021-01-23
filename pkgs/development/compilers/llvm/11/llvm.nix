@@ -122,7 +122,7 @@ in stdenv.mkDerivation (rec {
     "-DCAN_TARGET_i386=false"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
-    "-DLLVM_TABLEGEN=${buildPackages.llvm_10}/bin/llvm-tblgen"
+    "-DLLVM_TABLEGEN=${buildPackages.llvm_11}/bin/llvm-tblgen"
   ];
 
   postBuild = ''

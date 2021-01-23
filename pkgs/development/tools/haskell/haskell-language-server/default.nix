@@ -7,7 +7,7 @@
 , hls-tactics-plugin, hslogger, hspec, hspec-core
 , hspec-expectations, lens, lsp-test, mtl, optparse-applicative
 , optparse-simple, ormolu, process, regex-tdfa, safe-exceptions
-, shake, stdenv, stm, stylish-haskell, tasty, tasty-ant-xml
+, shake, lib, stdenv, stm, stylish-haskell, tasty, tasty-ant-xml
 , tasty-expected-failure, tasty-golden, tasty-hunit, tasty-rerun
 , temporary, text, transformers, unordered-containers, with-utf8
 , yaml
@@ -49,5 +49,5 @@ mkDerivation {
   testToolDepends = [ ghcide ];
   homepage = "https://github.com/haskell/haskell-language-server#readme";
   description = "LSP server for GHC";
-  license = stdenv.lib.licenses.asl20;
+  license = lib.licenses.asl20;
 }

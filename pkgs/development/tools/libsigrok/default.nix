@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libzip, glib, libusb1, libftdi1, check
+{ lib, stdenv, fetchurl, pkg-config, libzip, glib, libusb1, libftdi1, check
 , libserialport, librevisa, doxygen, glibmm, python
 , version ? "0.5.1", sha256 ? "171b553dir5gn6w4f7n37waqk62nq2kf1jykx4ifjacdz5xdw3z4"
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     tar --strip-components=1 -xvf "${firmware}" -C "$out/share/sigrok-firmware/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Core library of the sigrok signal analysis software suite";
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;

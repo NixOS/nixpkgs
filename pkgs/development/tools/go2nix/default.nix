@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, go-bindata, gotools, nix-prefetch-git, git, makeWrapper,
+{ lib, stdenv, buildGoPackage, go-bindata, gotools, nix-prefetch-git, git, makeWrapper,
   fetchFromGitHub }:
 
 buildGoPackage rec {
@@ -36,7 +36,7 @@ buildGoPackage rec {
 
   doCheck = false; # tries to access the net
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Go apps packaging for Nix";
     homepage = "https://github.com/kamilchm/go2nix";
     license = licenses.mit;

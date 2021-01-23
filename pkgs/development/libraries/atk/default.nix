@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
 
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 
 }

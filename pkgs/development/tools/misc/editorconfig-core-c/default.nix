@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pcre, doxygen }:
+{ lib, stdenv, fetchgit, cmake, pcre, doxygen }:
 
 stdenv.mkDerivation rec {
   name = "editorconfig-core-c-${meta.version}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # parallel: https://bugzilla.gnome.org/show_bug.cgi?id=791153
   enableParallelBuilding = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://editorconfig.org/";
     description = "EditorConfig core library written in C";
     longDescription = ''

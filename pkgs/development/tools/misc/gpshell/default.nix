@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, globalplatform, pcsclite, gppcscconnectionplugin
+{ lib, stdenv, fetchurl, pkg-config, globalplatform, pcsclite, gppcscconnectionplugin
 , makeWrapper
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/gpshell" --prefix LD_LIBRARY_PATH : "${gppcscconnectionplugin}/lib"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sourceforge.net/p/globalplatform/wiki/Home/";
     description = "Smartcard management application";
     license = licenses.gpl3;

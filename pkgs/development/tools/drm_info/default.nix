@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , libdrm, json_c, pciutils
 , meson, ninja, pkg-config
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ libdrm json_c pciutils ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small utility to dump info about DRM devices";
     homepage = "https://github.com/ascent12/drm_info";
     license = licenses.mit;

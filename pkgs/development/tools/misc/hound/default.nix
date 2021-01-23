@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoPackage
 , fetchFromGitHub
 , makeWrapper
@@ -32,8 +32,8 @@ buildGoPackage rec {
     inherit (src.meta) homepage;
 
     description = "Lightning fast code searching made easy";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ grahamc ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ grahamc ];
+    platforms = lib.platforms.unix;
   };
 }

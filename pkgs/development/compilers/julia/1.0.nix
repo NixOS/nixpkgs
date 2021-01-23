@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
     let
       arch = lib.head (lib.splitString "-" stdenv.system);
       march = {
-        x86_64 = stdenv.hostPlatform.platform.gcc.arch or "x86-64";
+        x86_64 = stdenv.hostPlatform.gcc.arch or "x86-64";
         i686 = "pentium4";
         aarch64 = "armv8-a";
       }.${arch}

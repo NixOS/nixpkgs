@@ -291,5 +291,40 @@ stdenv.mkDerivation {
 }
 </programlisting>
    </section>
+   <section xml:id="sec-overlays-alternatives-mpi">
+     <title>Switching the MPI implementation</title>
+     <para>
+       All programs that are built with
+       <link xlink:href="https://en.wikipedia.org/wiki/Message_Passing_Interface">MPI</link>
+       support use the generic attribute <varname>mpi</varname>
+       as an input. At the moment Nixpkgs natively provides two different
+       MPI implementations:
+       <itemizedlist>
+         <listitem>
+           <para>
+             <link xlink:href="https://www.open-mpi.org/">Open MPI</link>
+             (default), attribute name <varname>openmpi</varname>
+           </para>
+         </listitem>
+         <listitem>
+           <para>
+             <link xlink:href="https://www.mpich.org/">MPICH</link>,
+             attribute name <varname>mpich</varname>
+           </para>
+         </listitem>
+       </itemizedlist>
+     </para>
+     <para>
+       To provide MPI enabled applications that use <literal>MPICH</literal>, instead
+       of the default <literal>Open MPI</literal>, simply use the following overlay:
+     </para>
+     <programlisting>
+self: super:
+
+{
+  mpi = self.mpich;
+}
+     </programlisting>
+   </section>
  </section>
 </chapter>

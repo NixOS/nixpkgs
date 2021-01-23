@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, libtool, pkg-config, gettext, mandoc, ed }:
+{ lib, stdenv, fetchurl, perl, libtool, pkg-config, gettext, mandoc, ed }:
 
 stdenv.mkDerivation rec {
   pname = "bsdbuild";
@@ -62,7 +62,7 @@ EOF
       directory, BSDBuild will produce the required Makefiles in place).
     '';
 
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

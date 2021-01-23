@@ -19,8 +19,8 @@ let
       outputs = [ "out" "dev" "doc" ];
 
       nativeBuildInputs = [ cmake ninja pkg-config ];
-      buildInputs = stdenv.lib.optional stdenv.isLinux libuuid
-        ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreFoundation;
+      buildInputs = lib.optional stdenv.isLinux libuuid
+        ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreFoundation;
 
       postUnpack = ''
         export sourceRoot=$sourceRoot/runtime/Cpp

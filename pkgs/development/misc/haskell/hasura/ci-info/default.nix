@@ -1,5 +1,5 @@
 { mkDerivation, aeson, aeson-casing, base, fetchgit, hashable
-, hpack, stdenv, template-haskell, text, th-lift-instances
+, hpack, lib, stdenv, template-haskell, text, th-lift-instances
 , unordered-containers
 }:
 mkDerivation {
@@ -18,5 +18,5 @@ mkDerivation {
   libraryToolDepends = [ hpack ];
   prePatch = "hpack";
   homepage = "https://github.com/hasura/ci-info-hs#readme";
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }

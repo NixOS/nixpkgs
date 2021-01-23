@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python, ncurses, ocamlPackages, pkg-config }:
+{ fetchurl, lib, stdenv, python, ncurses, ocamlPackages, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "coccinelle";
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "http://coccinelle.lip6.fr/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

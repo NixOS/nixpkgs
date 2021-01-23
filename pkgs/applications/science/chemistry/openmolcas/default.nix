@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitLab, cmake, gfortran, perl
 , openblas, hdf5-cpp, python3, texlive
-, armadillo, openmpi, globalarrays, openssh
+, armadillo, mpi, globalarrays, openssh
 , makeWrapper, fetchpatch
 } :
 
@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
     hdf5-cpp
     python
     armadillo
-    openmpi
+    mpi
     globalarrays
     openssh
   ];

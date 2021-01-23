@@ -27,9 +27,9 @@ let
 
     meta = {
       description = "WebDriver implementation in Erlang";
-      license = stdenv.lib.licenses.mit;
+      license = lib.licenses.mit;
       homepage = "https://github.com/Quviq/webdrv";
-      maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
+      maintainers = with lib.maintainers; [ ericbmerritt ];
     };
 
     passthru = {
@@ -37,4 +37,4 @@ let
     };
 
 };
-in stdenv.lib.fix pkg
+in lib.fix pkg

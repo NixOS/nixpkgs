@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   # Skip "choose" when running "cargo test", since this test case needs "fzf".
   checkFlags = [ "--skip=choose" "--skip=edit" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A handy way to save and run project-specific commands";
     homepage = "https://github.com/casey/just";
     license = licenses.cc0;

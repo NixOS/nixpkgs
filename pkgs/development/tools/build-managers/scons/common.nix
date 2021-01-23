@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     mv "$out/"*.1 "$out/share/man/man1/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An improved, cross-platform substitute for Make";
     longDescription = ''
       SCons is an Open Source software construction tool. Think of

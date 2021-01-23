@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, libarchive, openssl }:
+{ lib, stdenv, fetchFromGitHub, zlib, libarchive, openssl }:
 
 stdenv.mkDerivation rec {
   version = "1.0";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "089dkbh5705ppyi920rd0ksjc0143xmvnhm8qrx93rsgwc1ggi1y";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ivan-tkatchev/makerpm/";
     description = "A clean, simple RPM packager reimplemented completely from scratch";
     license = licenses.free;

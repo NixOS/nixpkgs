@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libdrm, libpciaccess, cairo, xorgproto, udev
+{ lib, stdenv, fetchurl, pkg-config, libdrm, libpciaccess, cairo, xorgproto, udev
 , libX11, libXext, libXv, libXrandr, glib, bison, libunwind, python3, kmod
 , procps, utilmacros, gtk-doc, openssl, peg, elfutils
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://01.org/linuxgraphics/";
     description = "Tools for development and testing of the Intel DRM driver";
     license = licenses.mit;

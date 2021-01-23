@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages, pkg-config, SDL2
+{ lib, stdenv, fetchurl, python2Packages, pkg-config, SDL2
 , libpng, ffmpeg_3, freetype, glew, libGL, libGLU, fribidi, zlib
 , glib
 }:
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "renpy";
   version = "7.3.5";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ren'Py Visual Novel Engine";
     homepage = "https://renpy.org/";
     license = licenses.mit;
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   pythonPath = [ pygame_sdl2 tkinter ];
 
-  RENPY_DEPS_INSTALL = stdenv.lib.concatStringsSep "::" (map (path: path) [
+  RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (map (path: path) [
     SDL2 SDL2.dev libpng ffmpeg_3 ffmpeg_3.out freetype glew.dev glew.out libGLU libGL fribidi zlib
   ]);
 

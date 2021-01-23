@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , makeWrapper
 , coreutils
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     let
-      path = stdenv.lib.makeBinPath [
+      path = lib.makeBinPath [
         coreutils
         gawk
         git
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/git-quick-stats --suffix PATH : ${path}
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/arzzen/git-quick-stats";
     description = "A simple and efficient way to access various statistics in git repository";
     platforms = platforms.all;

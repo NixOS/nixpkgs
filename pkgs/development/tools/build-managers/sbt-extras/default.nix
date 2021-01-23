@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk, writeScript
+{ lib, stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk, writeScript
 , common-updater-scripts, cacert, git, nixfmt, nix, jq, coreutils, gnused
 , nixosTests }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     install bin/sbt $out/bin
 
     wrapProgram $out/bin/sbt --prefix PATH : ${
-      stdenv.lib.makeBinPath [ which curl ]
+      lib.makeBinPath [ which curl ]
     }
   '';
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       #!${stdenv.shell}
       set -xo errexit
       PATH=${
-        stdenv.lib.makeBinPath [
+        lib.makeBinPath [
           common-updater-scripts
           curl
           cacert
@@ -70,8 +70,8 @@ stdenv.mkDerivation rec {
     description =
       "A more featureful runner for sbt, the simple/scala/standard build tool";
     homepage = "https://github.com/paulp/sbt-extras";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ nequissimus puffnfresh ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nequissimus puffnfresh ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, nix, git }: let
+{ lib, stdenv, fetchurl, pkg-config, nix, git }: let
   version = "4.1.6";
 in stdenv.mkDerivation {
   pname = "nix-exec";
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "Run programs defined in nix expressions";
     homepage = "https://github.com/shlevy/nix-exec";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     platforms = nix.meta.platforms;
     broken = true;
   };

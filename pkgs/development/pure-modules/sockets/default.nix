@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure }:
+{ lib, stdenv, fetchurl, pkg-config, pure }:
 
 stdenv.mkDerivation rec {
   baseName = "sockets";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A Pure interface to the Berkeley socket functions";
     homepage = "http://puredocs.bitbucket.org/pure-sockets.html";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

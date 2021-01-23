@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lua5_3, python }:
+{ lib, stdenv, fetchFromGitHub, lua5_3, python }:
 
 stdenv.mkDerivation rec {
   pname = "bam";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp bam "$out/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yet another build manager";
     maintainers = with maintainers;
     [

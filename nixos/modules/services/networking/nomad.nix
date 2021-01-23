@@ -49,12 +49,20 @@ in
         '';
       };
 
+      extraSettingsPaths = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        description = ''
+          Additional settings paths used to configure nomad. These can be files or directories.
+        '';
+        example = literalExample ''
+          [ "/etc/nomad-mutable.json" "/run/keys/nomad-with-secrets.json" "/etc/nomad/config.d" ]
+        '';
+      };
+
       settings = mkOption {
         type = format.type;
-        default = {
-          # Agrees with `StateDirectory = "nomad"` set below.
-          data_dir = "/var/lib/nomad";
-        };
+        default = {};
         description = ''
           Configuration for Nomad. See the <link xlink:href="https://www.nomadproject.io/docs/configuration">documentation</link>
           for supported values.
@@ -77,6 +85,11 @@ in
 
   ##### implementation
   config = mkIf cfg.enable {
+    services.nomad.settings = {
+      # Agrees with `StateDirectory = "nomad"` set below.
+      data_dir = mkDefault "/var/lib/nomad";
+    };
+
     environment = {
       etc."nomad.json".source = format.generate "nomad.json" cfg.settings;
       systemPackages = [ cfg.package ];
@@ -99,7 +112,8 @@ in
       serviceConfig = {
         DynamicUser = cfg.dropPrivileges;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json";
+        ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
+          concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths;
         KillMode = "process";
         KillSignal = "SIGINT";
         LimitNOFILE = 65536;
@@ -114,6 +128,7 @@ in
       } // (optionalAttrs cfg.enableDocker {
         SupplementaryGroups = "docker"; # space-separated string
       });
+
       unitConfig = {
         StartLimitIntervalSec = 10;
         StartLimitBurst = 3;

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation ({
   version = "3.8";
@@ -22,8 +22,8 @@ stdenv.mkDerivation ({
   meta = {
     description = "The Test Environment Toolkit is used in test applications like The Open Group's UNIX Certification program and the Free Standards Group's LSB Certification program";
     homepage = "http://tetworks.opengroup.org/Products/tet.htm";
-    license = stdenv.lib.licenses.artistic1;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.artistic1;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 })

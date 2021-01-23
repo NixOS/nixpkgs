@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeTextFile, jre, makeWrapper, fontsConf, licenseAccepted ? false }:
+{ lib, stdenv, fetchurl, writeTextFile, jre, makeWrapper, fontsConf, licenseAccepted ? false }:
 
 # If you happen to use this software on the XMonad window manager, you will have issues with
 # grey windows, no resizing, menus not showing and other glitches.
@@ -87,9 +87,9 @@ in stdenv.mkDerivation {
     homepage = "https://www.neotys.com/product/overview-neoload.html";
 
     # https://www.neotys.com/documents/legal/eula/neoload/eula_en.html
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
 
-    maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
+    maintainers = [ lib.maintainers.bluescreen303 ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
