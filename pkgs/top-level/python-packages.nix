@@ -2753,7 +2753,7 @@ in {
 
   gpyopt = callPackage ../development/python-modules/gpyopt { };
 
-  gradient_sdk = callPackage ../development/python-modules/gradient_sdk { };
+  gradient-utils = callPackage ../development/python-modules/gradient-utils { };
 
   gradient_statsd = callPackage ../development/python-modules/gradient_statsd { };
 

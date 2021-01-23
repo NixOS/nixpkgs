@@ -1,7 +1,7 @@
 { lib, fetchPypi, buildPythonPackage
 , boto3, requests, gradient_statsd, terminaltables
 , click-completion , click-didyoumean, click-help-colors
-, colorama, requests_toolbelt, gradient_sdk, progressbar2
+, colorama, requests_toolbelt, gradient-utils, progressbar2
 }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ boto3 requests gradient_statsd terminaltables
     click-completion click-didyoumean click-help-colors requests_toolbelt
-    colorama gradient_sdk progressbar2
+    colorama gradient-utils progressbar2
   ];
 
   # tries to use /homeless-shelter to mimic container usage, etc
