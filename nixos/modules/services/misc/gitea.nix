@@ -432,7 +432,7 @@ in
         else if cfg.cache.memcached.enable then {
           ENABLE = true;
           ADAPTER = "memcache";
-          HOST = concatStringSep ";" (foreach cfg.memcached.caches (c: "${c.host}:${c.port}"));
+          HOST = builtins.concatStringsSep ";" (lists.forEach cfg.cache.memcached.caches (c: "${c.host}:${toString c.port}"));
         } else {
           ENABLE = true;
           ADAPTER = "memory";
