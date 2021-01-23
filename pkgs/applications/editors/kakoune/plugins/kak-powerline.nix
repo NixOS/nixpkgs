@@ -1,4 +1,4 @@
-{ stdenv, git, fetchFromGitHub }:
+{ stdenv, git, fetchFromGitHub, lib }:
 stdenv.mkDerivation {
   name = "kak-powerline";
   version = "2020-08-22";
