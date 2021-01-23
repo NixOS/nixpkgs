@@ -138,7 +138,6 @@ stdenv.mkDerivation rec {
     "-Dv4l2-gudev=disabled" # Linux-only
     "-Dv4l2=disabled" # Linux-only
     "-Dximagesrc=disabled" # Linux-only
-    "-Dpulse=disabled" # TODO check if we can keep this enabled
   ] ++ optionals (!raspiCameraSupport) [
     "-Drpicamsrc=disabled"
   ];
