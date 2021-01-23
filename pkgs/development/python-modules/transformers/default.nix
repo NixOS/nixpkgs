@@ -41,8 +41,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "tokenizers == 0.9.4" "tokenizers"
+    sed -ri 's/tokenizers==[0-9.]+/tokenizers/g' setup.py
   '';
 
   pythonImportsCheck = [ "transformers" ];
