@@ -223,7 +223,7 @@ self: super: {
     # https://github.com/haskell-nix/hnix-store/issues/104
     # Until unpin, which may hold off in time due to Stackage maintenence bottleneck
     # the 0_4_0_0 is used
-    hnix-store-core = self.hnix-store-core_0_4_0_0; # at least 1.7
+    hnix-store-core = self.hnix-store-core_0_4_1_0; # at least 1.7
 
   });
 
@@ -232,9 +232,11 @@ self: super: {
   # Until unpin, which may hold off in time due to Stackage maintenence bottleneck
   # the 0_4_0_0 is used
   hnix-store-remote = (super.hnix-store-remote.override {
-    hnix-store-core = self.hnix-store-core_0_4_0_0; # at least 1.7
+    hnix-store-core = self.hnix-store-core_0_4_1_0; # at least 1.7
   });
 
+  # https://github.com/haskell-nix/hnix-store/issues/127
+  hnix-store-core_0_4_1_0 = addTestToolDepend super.hnix-store-core_0_4_1_0 self.tasty-discover;
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -1375,6 +1377,11 @@ self: super: {
   # jailbreaking pandoc-citeproc because it has not bumped upper bound on pandoc
   pandoc-citeproc = doJailbreak super.pandoc-citeproc;
 
+  # 2021-01-17: Tests are broken because of a version mismatch.
+  # See here: https://github.com/jgm/pandoc/issues/7035
+  # This problem is fixed on master. Remove override when this assert fails.
+  pandoc = assert super.pandoc.version == "2.11.3.2"; dontCheck super.pandoc;
+
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
 
@@ -1413,6 +1420,10 @@ self: super: {
     lsp-test = dontCheck self.lsp-test_0_11_0_7;
     fourmolu = self.fourmolu_0_3_0_0;
   });
+  # 2021-01-20
+  # apply-refact 0.9.0.0 get's a build error with hls-hlint-plugin 0.8.0
+  # https://github.com/haskell/haskell-language-server/issues/1240
+  apply-refact = super.apply-refact_0_8_2_1;
 
   fourmolu = dontCheck super.fourmolu;
   # 1. test requires internet
