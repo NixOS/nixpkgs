@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitHub, erlang, makeWrapper,
+{ pkgs, lib, stdenv, fetchFromGitHub, erlang, makeWrapper,
   coreutils, curl, bash, debugInfo ? false }:
 
 { baseName ? "elixir"
@@ -10,7 +10,7 @@
 } @ args:
 
 let
-  inherit (stdenv.lib) getVersion versionAtLeast optional;
+  inherit (lib) getVersion versionAtLeast optional;
 
 in
   assert versionAtLeast (getVersion erlang) minimumOTPVersion;
@@ -46,7 +46,7 @@ in
        b=$(basename $f)
         if [ "$b" = mix ]; then continue; fi
         wrapProgram $f \
-          --prefix PATH ":" "${stdenv.lib.makeBinPath [ erlang coreutils curl bash ]}" \
+          --prefix PATH ":" "${lib.makeBinPath [ erlang coreutils curl bash ]}" \
           --set CURL_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
       done
 
@@ -55,7 +55,7 @@ in
     '';
 
     pos = builtins.unsafeGetAttrPos "sha256" args;
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://elixir-lang.org/";
       description = "A functional, meta-programming aware language built on top of the Erlang VM";
 

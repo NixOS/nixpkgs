@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "scheme48-1.9.2";
@@ -6,8 +6,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://s48.org/";
     description = "Scheme 48";
-    platforms = with stdenv.lib.platforms; unix;
-    license = stdenv.lib.licenses.bsd3;
+    platforms = with lib.platforms; unix;
+    license = lib.licenses.bsd3;
   };
 
   src = fetchurl {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , bzip2
 , expat
 , libffi
@@ -36,7 +36,7 @@ assert x11Support -> tcl != null
                   && xlibsWrapper != null
                   && libX11 != null;
 
-with stdenv.lib;
+with lib;
 
 let
   buildPackages = pkgsBuildHost;
@@ -215,7 +215,7 @@ let
   };
 
   # Python 2.7 needs this
-  crossCompileEnv = stdenv.lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform)
+  crossCompileEnv = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform)
                       { _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config; };
 
   # Build the basic Python interpreter without modules that have
@@ -227,7 +227,7 @@ in with passthru; stdenv.mkDerivation ({
 
     inherit src patches buildInputs nativeBuildInputs preConfigure configureFlags;
 
-    LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+    LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2"
@@ -298,9 +298,9 @@ in with passthru; stdenv.mkDerivation ({
         hierarchical packages; exception-based error handling; and very
         high level dynamic data types.
       '';
-      license = stdenv.lib.licenses.psfl;
-      platforms = stdenv.lib.platforms.all;
-      maintainers = with stdenv.lib.maintainers; [ fridh ];
+      license = lib.licenses.psfl;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers; [ fridh ];
       # Higher priority than Python 3.x so that `/bin/python` points to `/bin/python2`
       # in case both 2 and 3 are installed.
       priority = -100;
