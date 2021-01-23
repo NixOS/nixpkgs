@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison }:
+{ stdenv, lib, fetchurl, fetchpatch, bison, gcc }:
 
 stdenv.mkDerivation {
 
@@ -11,17 +11,41 @@ stdenv.mkDerivation {
 
   patches =
     [ (fetchurl {
-        url = "https://aur.archlinux.org/cgit/aur.git/plain/hsbase_inline.patch?h=hugs";
-        name = "hsbase_inline.patch";
-        sha256 = "1h0sp16d17hlm6gj7zdbgwrjwi2l4q02m8p0wd60dp4gn9i9js0v";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/hsbase_inline.patch?h=hugs";
+      name = "hsbase_inline.patch";
+      sha256 = "1h0sp16d17hlm6gj7zdbgwrjwi2l4q02m8p0wd60dp4gn9i9js0v";
+    }) ] ++ lib.optionals stdenv.isDarwin [
+      (fetchpatch {
+        url = "https://github.com/FranklinChen/hugs98-plus-Sep2006/commit/f1294cc412caf495bf38c9f7ffc84a57f0650855.patch";
+        sha256 = "0c9h8vbjk9bkmrxaz0lfg2fmxiixlm00ywybgamj6x1npyg4kqf5";
+      })
+      (fetchpatch {
+        url = "https://github.com/FranklinChen/hugs98-plus-Sep2006/commit/b47454720f6a7fa3b63ca3cb9093ee395f1c4fb4.patch";
+        sha256 = "05bs7b610nbmszy4lpscmwwz65640jrzybbr1mdm49rcflnd099z";
+      })
+      (fetchpatch {
+        url = "https://github.com/FranklinChen/hugs98-plus-Sep2006/commit/8ed41c5f9d086c0bf53637df011a4504ee168ca1.patch";
+        sha256 = "1ni7ab91vlznrkxp4mwln0affh3q5nw3jn6102hn35hjdb2a2xvk";
+      })
+      (fetchpatch {
+        url = "https://github.com/FranklinChen/hugs98-plus-Sep2006/commit/5c4a0d18f2a941839947fc0c2126374e95164802.patch";
+        sha256 = "190siizla95famlp80rsqhmyqy5al9mz6qg5zix04hqxkv3c6wr2";
+      })
+      (fetchpatch {
+        url = "https://github.com/FranklinChen/hugs98-plus-Sep2006/commit/4f323b9ab1fd6c53fe48d72aad4e7fba2ce8850c.patch";
+        sha256 = "1azzylllbbwvfrdfljk9wvkj8gcqxj3nmxya65xbffkrw1gp3kh2";
       })
     ];
+
+  buildInputs = [ gcc ];
 
   nativeBuildInputs = [ bison ];
 
   postUnpack = "find -type f -exec sed -i 's@/bin/cp@cp@' {} +";
 
   preConfigure = "unset STRIP";
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--enable-char-encoding=utf8"       # require that the UTF-8 encoding is always used
