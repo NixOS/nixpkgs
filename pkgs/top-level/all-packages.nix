@@ -9527,7 +9527,9 @@ in
 
   elm2nix = haskell.lib.justStaticExecutables haskellPackages.elm2nix;
 
-  elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
+  elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  });
 
   apache-flex-sdk = callPackage ../development/compilers/apache-flex-sdk { };
 
