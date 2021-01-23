@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace src/cmd_connect.c \
       --replace CS_TDS_80 CS_TDS_73
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace "libct.so" "libct.dylib"
   '';
 

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, installShellFiles }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, fetchurl, installShellFiles }:
 
 buildGoPackage rec {
   pname = "cloudfoundry-cli";
@@ -45,7 +45,7 @@ buildGoPackage rec {
     installShellCompletion --bash $bashCompletionScript
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The official command line client for Cloud Foundry";
     homepage = "https://github.com/cloudfoundry/cli";
     maintainers = with maintainers; [ ris ];

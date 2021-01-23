@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pkg-config, libftdi1
 , python3, pypy3
 
@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
       creating bitstream files.
     '';
     homepage    = "http://www.clifford.at/icestorm/";
-    license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice emily ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ shell thoughtpolice emily ];
+    platforms   = lib.platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, requireFile, makeDesktopItem, libicns, imagemagick, jre, fetchzip }:
+{ lib, stdenv, requireFile, makeDesktopItem, libicns, imagemagick, jre, fetchzip }:
 
 let
   version = "6.0.1";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A graphical tool for configuring STM32 microcontrollers and microprocessors";
     longDescription = ''
       A graphical tool that allows a very easy configuration of STM32

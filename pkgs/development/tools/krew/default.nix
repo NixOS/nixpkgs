@@ -19,7 +19,7 @@ buildGoModule rec {
     description = "Package manager for kubectl plugins";
     homepage = "https://github.com/kubernetes-sigs/krew";
     maintainers = with maintainers; [ vdemeester ];
-    license = stdenv.lib.licenses.asl20;
+    license = lib.licenses.asl20;
     platforms = platforms.unix;
   };
 }

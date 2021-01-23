@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, perl, makeWrapper }:
+{ fetchurl, lib, stdenv, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "sloccount-2.26";
@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
       the Perl CPAN library using this tool suite.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     homepage = "https://www.dwheeler.com/sloccount/";
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

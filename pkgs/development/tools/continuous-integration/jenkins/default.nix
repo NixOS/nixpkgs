@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused, nix, nixfmt
+{ lib, stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused, nix, nixfmt
 , writeScript, nixosTests, jq, cacert, curl }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       #!${stdenv.shell}
       set -o errexit
       PATH=${
-        stdenv.lib.makeBinPath [
+        lib.makeBinPath [
           cacert
           common-updater-scripts
           coreutils
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An extendable open source continuous integration server";
     homepage = "https://jenkins-ci.org";
     license = licenses.mit;

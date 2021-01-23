@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, autoreconfHook, pkg-config, makeWrapper
+{ lib, stdenv, fetchFromGitHub, python, autoreconfHook, pkg-config, makeWrapper
 , flex
 , gettext, libedit, glib, imagemagick, libxml2, boost, gnuplot, graphviz
 , tesseract, gts, libXtst
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     export PYTHONPATH="$PYTHONPATH:$out/lib/python${python.pythonVersion}/site-packages"
     export PATH="$PATH:$out/bin"
-    export LD_LIBRARY_PATH="${stdenv.lib.makeLibraryPath [libXtst]}"
+    export LD_LIBRARY_PATH="${lib.makeLibraryPath [libXtst]}"
   '';
 
   postInstall = ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free Model-Based Testing tool";
     homepage = "https://github.com/intel/fMBT";
     license = licenses.lgpl21;

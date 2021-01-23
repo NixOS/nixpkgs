@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "dep";
@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   buildFlagsArray = ("-ldflags=-s -w -X main.commitHash=${rev} -X main.version=${version}");
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/golang/dep";
     description = "Go dependency management tool";
     license = licenses.bsd3;

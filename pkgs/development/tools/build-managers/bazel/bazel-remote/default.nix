@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , git
 , go
-, stdenv
+, lib, stdenv
 }:
 
 buildBazelPackage rec {
@@ -80,7 +80,7 @@ buildBazelPackage rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/buchgr/bazel-remote";
     description = "A remote HTTP/1.1 cache for Bazel";
     license = licenses.asl20;

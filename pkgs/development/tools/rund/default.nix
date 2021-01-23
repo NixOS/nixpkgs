@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dragon-lang/rund";
     license = lib.licenses.boost;
     maintainers = with maintainers; [ jonathanmarler ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

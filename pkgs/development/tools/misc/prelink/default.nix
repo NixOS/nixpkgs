@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libelf }:
+{ lib, stdenv, fetchurl, libelf }:
 
 let
   version = "20130503";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   inherit version;
 
   buildInputs = [
-    libelf stdenv.cc.libc (stdenv.lib.getOutput "static" stdenv.cc.libc)
+    libelf stdenv.cc.libc (lib.getOutput "static" stdenv.cc.libc)
   ];
 
   src = fetchurl {
@@ -20,6 +20,6 @@ stdenv.mkDerivation {
     homepage = "https://people.redhat.com/jakub/prelink/";
     license = "GPL";
     description = "ELF prelinking utility to speed up dynamic linking";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

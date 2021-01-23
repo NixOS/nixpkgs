@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, removeReferencesTo }:
+{ lib, stdenv, fetchurl, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   pname = "pkgconf";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     mv ${placeholder "dev"}/share ${placeholder "out"}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Package compiler and linker metadata toolkit";
     homepage = "https://git.dereferenced.org/pkgconf/pkgconf";
     platforms = platforms.all;

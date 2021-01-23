@@ -18,7 +18,7 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/out-of-tree \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ qemu docker which ]}"
+      --prefix PATH : "${lib.makeBinPath [ qemu docker which ]}"
   '';
 
   meta = with lib; {

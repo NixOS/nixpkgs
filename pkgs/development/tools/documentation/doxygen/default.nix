@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchFromGitHub, python3, flex, bison, qt5, CoreServices, libiconv }:
+{ lib, stdenv, cmake, fetchFromGitHub, python3, flex, bison, qt5, CoreServices, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "doxygen";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
-    rev = "Release_${stdenv.lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "17chvi3i80rj4750smpizf562xjzd2xcv5rfyh997pyvc1zbq5rh";
   };
 
@@ -19,21 +19,21 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-       stdenv.lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
-    ++ stdenv.lib.optional stdenv.isSunOS libiconv
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
+       lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
+    ++ lib.optional stdenv.isSunOS libiconv
+    ++ lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
   cmakeFlags =
     [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ] ++
-    stdenv.lib.optional (qt5 != null) "-Dbuild_wizard=YES";
+    lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
   NIX_CFLAGS_COMPILE =
-    stdenv.lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
+    lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   enableParallelBuilding = false;
 
   meta = {
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://doxygen.nl/";
     description = "Source code documentation generator tool";
 
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
       manual (in LaTeX) from a set of documented source files.
     '';
 
-    platforms = if qt5 != null then stdenv.lib.platforms.linux else stdenv.lib.platforms.unix;
+    platforms = if qt5 != null then lib.platforms.linux else lib.platforms.unix;
   };
 }

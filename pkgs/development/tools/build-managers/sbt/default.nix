@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, autoPatchelfHook, zlib, writeScript
+{ lib, stdenv, fetchurl, jre, autoPatchelfHook, zlib, writeScript
 , common-updater-scripts, git, nixfmt, nix, coreutils, gnused, nixosTests }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     echo -java-home ${jre.home} >>conf/sbtopts
   '';
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ zlib ];
+  buildInputs = lib.optionals stdenv.isLinux [ zlib ];
 
   installPhase = ''
     mkdir -p $out/share/sbt $out/bin
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     } $out/bin/sbtn
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.scala-sbt.org/";
     license = licenses.bsd3;
     description = "A build tool for Scala, Java and more";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       #!${stdenv.shell}
       set -o errexit
       PATH=${
-        stdenv.lib.makeBinPath [
+        lib.makeBinPath [
           common-updater-scripts
           git
           nixfmt

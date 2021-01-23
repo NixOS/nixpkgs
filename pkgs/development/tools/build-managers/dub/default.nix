@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, curl, dmd, libevent, rsync }:
+{ lib, stdenv, fetchFromGitHub, curl, dmd, libevent, rsync }:
 
 stdenv.mkDerivation rec {
   pname = "dub";
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     cp bin/dub $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Package and build manager for D applications and libraries";
     homepage = "https://code.dlang.org/";
     license = licenses.mit;

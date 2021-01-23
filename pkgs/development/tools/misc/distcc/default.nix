@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, popt, avahi, pkg-config, python, gtk2, runCommand
+{ lib, stdenv, fetchFromGitHub, popt, avahi, pkg-config, python, gtk2, runCommand
 , gcc, autoconf, automake, which, procps, libiberty_static
 , runtimeShell
 , sysconfDir ? ""   # set this parameter to override the default value $out/etc
@@ -76,8 +76,8 @@ let
       homepage = "http://distcc.org";
       license = "GPL";
 
-      platforms = stdenv.lib.platforms.linux;
-      maintainers = with stdenv.lib.maintainers; [ anderspapitto ];
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ anderspapitto ];
     };
   };
 in

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";
 
   # error: linker `arm-linux-gnueabihf-gcc` not found
-  preConfigure = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     export RUSTFLAGS="-Clinker=$CC"
   '';
 

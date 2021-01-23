@@ -2,7 +2,7 @@
 , directory, extra, fetchgit, filepath, fingertree, generic-lens
 , ghc, ghc-boot-th, ghc-exactprint, ghc-source-gen, ghcide
 , haskell-lsp, hie-bios, hls-plugin-api, hspec, hspec-discover
-, lens, mtl, QuickCheck, refinery, retrie, shake, stdenv, syb, text
+, lens, mtl, QuickCheck, refinery, retrie, shake, lib, stdenv, syb, text
 , transformers
 }:
 mkDerivation {
@@ -28,5 +28,5 @@ mkDerivation {
   testToolDepends = [ hspec-discover ];
   description = "Tactics plugin for Haskell Language Server";
   license = "unknown";
-  hydraPlatforms = stdenv.lib.platforms.none;
+  hydraPlatforms = lib.platforms.none;
 }

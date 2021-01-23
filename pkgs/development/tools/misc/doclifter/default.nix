@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python}:
+{lib, stdenv, fetchurl, python}:
 
 stdenv.mkDerivation {
   name = "doclifter-2.19";
@@ -21,6 +21,6 @@ stdenv.mkDerivation {
     description = "Lift documents in nroff markups to XML-DocBook";
     homepage = "http://www.catb.org/esr/doclifter";
     license = "BSD";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "delve";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "10zvla2jqxqibxdk3zbnsxg63i0zcwcn9npvw3bbicwd2z4vvskk";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "debugger for the Go programming language";
     homepage = "https://github.com/derekparker/delve";
     maintainers = with maintainers; [ vdemeester ];

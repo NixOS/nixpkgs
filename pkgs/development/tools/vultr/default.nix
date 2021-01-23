@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "vultr";
@@ -15,7 +15,7 @@ buildGoPackage rec {
   meta = {
     description = "A command line tool for Vultr services, a provider for cloud virtual private servers";
     homepage = "https://github.com/JamesClonk/vultr";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.zauberpony ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.zauberpony ];
   };
 }

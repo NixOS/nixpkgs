@@ -14,7 +14,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ pyyaml setuptools ];
 
-  makeWrapperArgs = ["--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ git breezy subversion ])];
+  makeWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [ git breezy subversion ])];
 
   doCheck = false; # requires network
 

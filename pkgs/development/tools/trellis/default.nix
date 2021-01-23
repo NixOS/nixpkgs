@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "2021.01.02";
 
   # git describe --tags
-  realVersion = with stdenv.lib; with builtins;
+  realVersion = with lib; with builtins;
     "1.0-482-g${substring 0 7 (elemAt srcs 0).rev}";
 
   srcs = [
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
       open Verilog to bitstream toolchain for these devices.
     '';
     homepage    = "https://github.com/SymbiFlow/prjtrellis";
-    license     = stdenv.lib.licenses.isc;
+    license     = lib.licenses.isc;
     maintainers = with maintainers; [ q3k thoughtpolice emily ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms   = lib.platforms.all;
   };
 }

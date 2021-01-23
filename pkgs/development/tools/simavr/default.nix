@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ which pkg-config avrgcc ];
   buildInputs = [ libelf freeglut libGLU libGL ]
-    ++ stdenv.lib.optional stdenv.isDarwin GLUT;
+    ++ lib.optional stdenv.isDarwin GLUT;
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';

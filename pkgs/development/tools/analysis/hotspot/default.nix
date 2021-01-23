@@ -1,4 +1,4 @@
-{ stdenv,
+{ lib, stdenv,
   mkDerivation,
   cmake,
   elfutils,
@@ -58,8 +58,8 @@ mkDerivation rec {
       then displays the result in a graphical way.
     '';
     homepage = "https://github.com/KDAB/hotspot";
-    license = with stdenv.lib.licenses; [ gpl2 gpl3 ];
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ nh2 ];
+    license = with lib.licenses; [ gpl2 gpl3 ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nh2 ];
   };
 }

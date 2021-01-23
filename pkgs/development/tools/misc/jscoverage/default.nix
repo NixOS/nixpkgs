@@ -1,4 +1,4 @@
-{ autoconf, fetchurl, makedepend, perl, python, stdenv, unzip, zip }:
+{ autoconf, fetchurl, makedepend, perl, python, lib, stdenv, unzip, zip }:
 
 stdenv.mkDerivation rec {
   name = "jscoverage-0.5.1";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "http://siliconforks.com/jscoverage/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

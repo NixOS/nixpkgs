@@ -1,6 +1,6 @@
-{ stdenv, pythonPackages }:
+{ lib, stdenv, pythonPackages }:
 
-with stdenv.lib;
+with lib;
 with pythonPackages;
 
 buildPythonApplication rec {

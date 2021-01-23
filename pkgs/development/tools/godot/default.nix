@@ -61,8 +61,8 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage    = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
-    license     = stdenv.lib.licenses.mit;
+    license     = lib.licenses.mit;
     platforms   = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.twey ];
+    maintainers = [ lib.maintainers.twey ];
   };
 }

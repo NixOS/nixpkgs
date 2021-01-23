@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "k6";
@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   subPackages = [ "./" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern load testing tool, using Go and JavaScript";
     homepage = "https://k6.io/";
     changelog = "https://github.com/loadimpact/k6/releases/tag/v${version}";

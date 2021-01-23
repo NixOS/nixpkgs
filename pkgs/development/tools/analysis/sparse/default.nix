@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkg-config, libxml2, llvm }:
+{ fetchurl, lib, stdenv, pkg-config, libxml2, llvm }:
 
 stdenv.mkDerivation rec {
   name = "sparse-0.5.0";
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Semantic parser for C";
     homepage    = "https://git.kernel.org/cgit/devel/sparse/sparse.git/";
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.linux;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

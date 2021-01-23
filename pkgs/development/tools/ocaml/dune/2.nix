@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, ocaml, findlib }:
+{ lib, stdenv, fetchurl, ocaml, findlib }:
 
-if stdenv.lib.versionOlder ocaml.version "4.08"
+if lib.versionOlder ocaml.version "4.08"
 then throw "dune is not available for OCaml ${ocaml.version}"
 else
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
     homepage = "https://dune.build/";
     description = "A composable build system";
     changelog = "https://github.com/ocaml/dune/blob/${version}/CHANGES.md";
-    maintainers = [ stdenv.lib.maintainers.vbgl stdenv.lib.maintainers.marsam ];
-    license = stdenv.lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl lib.maintainers.marsam ];
+    license = lib.licenses.mit;
     inherit (ocaml.meta) platforms;
   };
 }

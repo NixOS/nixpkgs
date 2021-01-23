@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , mono5
 , makeWrapper
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     --add-flags "$out/src/OmniSharp.exe"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OmniSharp based on roslyn workspaces";
     homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
     platforms = platforms.linux;
