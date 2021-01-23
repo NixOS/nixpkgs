@@ -422,7 +422,7 @@ in
           (if (network == "unix") then {
             HOST = "network=unix,addr=${redis.unixSocket},db=${database},pool_size=${toString poolSize},idle_timeout=${idleTimeout}";
           } else if (network == "tcp") then {
-            HOST = "redis://:${if (user != null) then "${user}@" else ""}${host}:${toString port}/${database}?pool_size=${poolSize}&idle_timeout=${idleTimeout}";
+            HOST = "redis://:${if (user != null) then "${user}@" else ""}${host}:${toString port}/${toString database}?pool_size=${toString poolSize}&idle_timeout=${idleTimeout}";
           } else {
             # See allowed values in cfg.cache.redis.network
           })

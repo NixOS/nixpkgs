@@ -115,6 +115,9 @@ in
     ++ [
       # Test with local redis over TCP
       (makeGiteaTest "redis-tcp" "sqlite3" {
-        redis.network = "tcp";
+        redis = {
+          enable = true;
+          network = "tcp";
+        };
       })
     ])
