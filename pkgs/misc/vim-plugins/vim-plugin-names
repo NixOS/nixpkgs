@@ -667,6 +667,7 @@ VundleVim/Vundle.vim
 w0ng/vim-hybrid
 wakatime/vim-wakatime
 wannesm/wmgraphviz.vim
+wbthomason/packer.nvim
 weirongxu/coc-explorer
 wellle/targets.vim
 wellle/tmux-complete.vim

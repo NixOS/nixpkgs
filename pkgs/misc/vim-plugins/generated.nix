@@ -3130,6 +3130,18 @@ let
     meta.homepage = "https://github.com/tyru/open-browser.vim/";
   };
 
+  packer-nvim = buildVimPluginFrom2Nix {
+    pname = "packer-nvim";
+    version = "2021-01-22";
+    src = fetchFromGitHub {
+      owner = "wbthomason";
+      repo = "packer.nvim";
+      rev = "3567ab93c60540407df7ce4faced7c454f89b941";
+      sha256 = "14k6iajrari85cl3bi8vn193khhchxn62mq0j2f49gn47pl47f4k";
+    };
+    meta.homepage = "https://github.com/wbthomason/packer.nvim/";
+  };
+
   palenight-vim = buildVimPluginFrom2Nix {
     pname = "palenight-vim";
     version = "2020-10-20";
