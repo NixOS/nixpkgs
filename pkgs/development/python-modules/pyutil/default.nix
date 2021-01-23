@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , setuptoolsDarcs
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     grep -rl 'utf-8-with-signature-unix' ./ | xargs sed -i -e "s|utf-8-with-signature-unix|utf-8|g"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pyutil, a collection of mature utilities for Python programmers";
 
     longDescription = ''

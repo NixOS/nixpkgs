@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, doxygen
+{ lib, stdenv, fetchurl, cmake, doxygen, darwin
 , zlib }:
 
 let
@@ -14,9 +14,8 @@ let
 
     nativeBuildInputs = [ cmake doxygen ];
 
-    buildInputs = [ zlib ];
-
-    enableParallelBuilding = true;
+    buildInputs = [ zlib ]
+      ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
     patchPhase = ''
       sed s,-Werror,, -i CMakeLists.txt
@@ -28,11 +27,11 @@ let
       ./test_physfs --version
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://icculus.org/physfs/";
       description = "Library to provide abstract access to various archives";
       license = licenses.free;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
   };
 

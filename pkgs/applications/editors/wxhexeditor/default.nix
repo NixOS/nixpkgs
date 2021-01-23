@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, wxGTK, autoconf, automake, libtool, python, gettext }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, wxGTK, autoconf, automake, libtool, python, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "wxHexEditor";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       wxHexEditor could edit HDD/SDD disk devices or partitions in raw up to exabyte sizes.
     '';
     homepage = "http://www.wxhexeditor.org/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

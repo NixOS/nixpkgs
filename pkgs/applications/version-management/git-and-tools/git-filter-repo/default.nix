@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ lib, stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
   pname = "git-filter-repo";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/man/man1 Documentation/man1/git-filter-repo.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/newren/git-filter-repo";
     description = "Quickly rewrite git repository history (filter-branch replacement)";
     license = licenses.mit;

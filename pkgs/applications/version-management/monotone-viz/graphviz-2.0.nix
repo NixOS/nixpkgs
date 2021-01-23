@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xlibsWrapper, libpng, libjpeg, expat, libXaw
+{ lib, stdenv, fetchurl, pkg-config, xlibsWrapper, libpng, libjpeg, expat, libXaw
 , yacc, libtool, fontconfig, pango, gd, libwebp
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "39b8e1f2ba4cc1f5bdc8e39c7be35e5f831253008e4ee2c176984f080416676c";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xlibsWrapper libpng libjpeg expat libXaw yacc
     libtool fontconfig pango gd libwebp
@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
       "--with-ltdl-include=${libtool}/include"
       "--with-ltdl-lib=${libtool.lib}/lib"
     ]
-    ++ stdenv.lib.optional (xlibsWrapper == null) "--without-x";
+    ++ lib.optional (xlibsWrapper == null) "--without-x";
 
   meta = {
     description = "A program for visualising graphs";
     homepage = "http://www.graphviz.org/";
     branch = "2.0";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

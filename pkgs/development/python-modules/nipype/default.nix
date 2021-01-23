@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -106,7 +106,7 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "nipype" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://nipy.org/nipype/";
     description = "Neuroimaging in Python: Pipelines and Interfaces";
     license = licenses.bsd3;

@@ -1,8 +1,8 @@
 { fetchurl
 , fetchpatch
 , substituteAll
-, stdenv
-, pkgconfig
+, lib, stdenv
+, pkg-config
 , gnome3
 , pantheon
 , gettext
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/mutter/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-I73ofTO4mBNYgxzsiRW7X/Hq+cHedMkM0WYLG5WINSY=";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    # required for pkgconfig to detect mutter-clutter
+    # required for pkg-config to detect mutter-clutter
     json-glib
     libXtst
     libcap_ng
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
     xorgserver # for cvt command
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A window manager for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
     license = licenses.gpl2;

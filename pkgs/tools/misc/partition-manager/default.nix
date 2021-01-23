@@ -15,8 +15,6 @@ in mkDerivation rec {
     sha256 = "0jhggb4xksb0k0mj752n6pz0xmccnbzlp984xydqbz3hkigra1si";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook wrapQtAppsHook ];
 
   # refer to kpmcore for the use of eject

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , python
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover -s tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sphinx blockdiag extension";
     homepage = "https://github.com/blockdiag/sphinxcontrib-blockdiag";
     maintainers = with maintainers; [ nand0p ];

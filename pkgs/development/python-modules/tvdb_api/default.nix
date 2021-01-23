@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , requests-cache
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # requires network access
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple to use TVDB (thetvdb.com) API in Python";
     homepage = "https://github.com/dbr/tvdb_api";
     license = licenses.unlicense;

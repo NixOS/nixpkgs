@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, yacc }:
+{ lib, stdenv, fetchFromGitHub, yacc }:
 
 stdenv.mkDerivation rec {
   pname = "nawk";
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
        (Addison-Wesley, 1988, ISBN 0-201-07981-X).
     '';
     homepage = "https://www.cs.princeton.edu/~bwk/btl.mirror/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.konimex ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.konimex ];
+    platforms = lib.platforms.linux;
   };
 }

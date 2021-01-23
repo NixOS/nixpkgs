@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkgconfig, file, networkmanager, libsecret
+{ lib, stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkg-config, file, networkmanager, libsecret
 , gtk3, withGnome ? true, gnome3, kmod, libnma }:
 
 let
@@ -8,7 +8,7 @@ in stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "062kh4zj7jfbwy4zzcwpq2m457bzbpm3l18s0ysnw3mgia3siz8f";
   };
 
@@ -20,9 +20,9 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [ openvpn networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret libnma ];
+    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
-  nativeBuildInputs = [ intltool pkgconfig file libxml2 ];
+  nativeBuildInputs = [ intltool pkg-config file libxml2 ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NetworkManager's OpenVPN plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;

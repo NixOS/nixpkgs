@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "man-pages";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
   outputDocdev = "out";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux development manual pages";
     homepage = "https://www.kernel.org/doc/man-pages/";
     repositories.git = "http://git.kernel.org/pub/scm/docs/man-pages/man-pages";

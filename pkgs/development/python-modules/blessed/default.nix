@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, six
+{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, six
 , wcwidth, pytest, mock, glibcLocales
 }:
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ wcwidth six ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jquast/blessed";
     description = "A thin, practical wrapper around terminal capabilities in Python.";
     maintainers = with maintainers; [ eqyiel ];

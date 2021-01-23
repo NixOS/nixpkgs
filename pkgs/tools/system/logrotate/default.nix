@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
 , mailutils ? null
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's,[a-z/]\+gzip,${gzip}/bin/gzip,' \
            -e 's,[a-z/]\+gunzip,${gzip}/bin/gunzip,' configure.ac
 
-    ${stdenv.lib.optionalString (mailutils != null) ''
+    ${lib.optionalString (mailutils != null) ''
     sed -i -e 's,[a-z/]\+mail,${mailutils}/bin/mail,' configure.ac
     ''}
   '';
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://fedorahosted.org/releases/l/o/logrotate/";
     description = "Rotates and compresses system logs";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.viric ];
+    platforms = lib.platforms.all;
   };
 }

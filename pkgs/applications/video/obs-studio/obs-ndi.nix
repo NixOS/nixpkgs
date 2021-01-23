@@ -5,7 +5,7 @@
 # mkdir -p ~/.config/obs-studio/plugins/bin
 # ln -s ~/.nix-profile/lib/obs-plugins/obs-ndi.so ~/.config/obs-studio/plugins/bin/
 
-{ stdenv, fetchFromGitHub, obs-studio, cmake, qtbase, ndi }:
+{ lib, stdenv, fetchFromGitHub, obs-studio, cmake, qtbase, ndi }:
 
 stdenv.mkDerivation rec {
   pname = "obs-ndi";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_FLAGS=-I${obs-studio.src}/UI/obs-frontend-api"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network A/V plugin for OBS Studio";
     homepage = "https://github.com/Palakis/obs-ndi";
     maintainers = with maintainers; [ peti jshcmpbll ];

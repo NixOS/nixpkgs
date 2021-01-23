@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkgs
 , mpi ? false
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1jqjzhch0rips0vp04prvb8vmc20c5pdmsqn8knadcf91yy859fh";
   };
 
-  buildInputs = if mpi then [ pkgs.openmpi ] else [];
+  buildInputs = lib.optionals mpi [ pkgs.openmpi ];
 
   # TODO darwin, AVX and AVX2 makefile targets
   buildPhase = if mpi then ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin && cp raxmlHPC-PTHREADS-SSE3 $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for Phylogenetic Analysis and Post-Analysis of Large Phylogenies";
     license = licenses.gpl3;
     homepage = "https://sco.h-its.org/exelixis/web/software/raxml/";

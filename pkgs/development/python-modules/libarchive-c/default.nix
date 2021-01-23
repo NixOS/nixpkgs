@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     py.test tests -k 'not test_check_archiveentry_with_unicode_entries_and_name_zip and not test_check_archiveentry_using_python_testtar'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Changaco/python-libarchive-c";
     description = "Python interface to libarchive";
     license = licenses.cc0;

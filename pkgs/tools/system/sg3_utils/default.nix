@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "sg3_utils-1.45";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qasc3qm4i8swjfaywiwpgz76gdxqvm47qycxgmprbsjmxqwk1qb";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://sg.danny.cz/sg/";
     description = "Utilities that send SCSI commands to devices";
     platforms = platforms.linux;

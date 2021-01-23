@@ -8,7 +8,7 @@
 }:
 
 mkDerivation {
-  name = "dragon";
+  pname = "dragon";
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];
     description = "A simple media player for KDE";

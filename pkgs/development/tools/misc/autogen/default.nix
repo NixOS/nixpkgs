@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, autoreconfHook, which, pkgconfig, perl, guile, libxml2 }:
+{ stdenv, buildPackages, fetchurl, autoreconfHook, which, pkg-config, perl, guile, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "autogen";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "lib" "out" "man" "info" ];
 
   nativeBuildInputs = [
-    which pkgconfig perl autoreconfHook/*patches applied*/
+    which pkg-config perl autoreconfHook/*patches applied*/
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # autogen needs a build autogen when cross-compiling
     buildPackages.buildPackages.autogen buildPackages.texinfo

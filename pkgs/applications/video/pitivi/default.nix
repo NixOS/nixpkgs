@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchurl
 , pkg-config
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pitivi/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/pitivi/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0hzvv4wia4rk0kvq16y27imq2qd4q5lg3vx99hdcjdb1x3zqqfg0";
   };
 
@@ -96,7 +96,7 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Non-Linear video editor utilizing the power of GStreamer";
     homepage = "http://pitivi.org/";
     longDescription = ''

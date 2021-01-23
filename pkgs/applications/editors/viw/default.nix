@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "viw";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     install -Dm 644 -t $out/share/doc/${pname} README.md
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VI Worsened, a fun and light clone of VI";
     homepage = "https://github.com/lpan/viw";
     license = licenses.gpl3Only;

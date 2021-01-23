@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, jdk, pkgconfig, gtk2
+{ stdenv, lib, fetchurl, unzip, jdk, pkg-config, gtk2
 , libXt, libXtst, libXi, libGLU, libGL, webkitgtk, libsoup, xorg
 , pango, gdk-pixbuf, glib
 }:
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ unzip pkgconfig ];
+  nativeBuildInputs = [ unzip pkg-config ];
   buildInputs = [ jdk gtk2 libXt libXtst libXi libGLU libGL webkitgtk libsoup ];
 
   NIX_LFLAGS = toString (map (x: "-L${lib.getLib x}/lib") [ xorg.libX11 pango gdk-pixbuf glib ]) +
@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
     cd out && jar -c * > $out/jars/swt.jar
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.eclipse.org/swt/";
     description = "An widget toolkit for Java to access the user-interface facilities of the operating systems on which it is implemented";
     license = licenses.epl10;

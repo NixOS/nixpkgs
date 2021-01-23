@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, cffi, nose }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, six, cffi, nose }:
 
 buildPythonPackage rec {
   pname = "cld2-cffi";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   checkPhase = "nosetests -v";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CFFI bindings around Google Chromium's embedded compact language detection library (CLD2)";
     homepage = "https://github.com/GregBowyer/cld2-cffi";
     license = licenses.asl20;

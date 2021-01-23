@@ -1,4 +1,4 @@
-{ stdenv, lib, darwin, fetchFromGitHub, tbb, gtk3, glfw, pkgconfig, freetype, Carbon, AppKit, capstone }:
+{ stdenv, lib, darwin, fetchFromGitHub, tbb, gtk3, glfw, pkg-config, freetype, Carbon, AppKit, capstone }:
 
 stdenv.mkDerivation rec {
   pname = "tracy";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s39kimpc03x48kh7lyhblfs8y4mdzcz3g7f806h90x7zndsmfxj";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ glfw capstone ]
     ++ lib.optionals stdenv.isDarwin [ Carbon AppKit freetype ]
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $out/bin/Tracy
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A real time, nanosecond resolution, remote telemetry frame profiler for games and other applications";
     homepage = "https://github.com/wolfpld/tracy";
     platforms = platforms.linux ++ platforms.darwin;

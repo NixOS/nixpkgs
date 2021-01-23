@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, orc, pkgconfig, fetchpatch, autoreconfHook }:
+{ lib, stdenv, fetchurl, orc, pkg-config, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation {
   name = "schroedinger-1.0.11";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ orc ];
 
   doCheck = (!stdenv.isDarwin);
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An implementation of the Dirac video codec in ANSI C";
     homepage = "https://sourceforge.net/projects/schrodinger/";
     maintainers = [ maintainers.spwhitt ];

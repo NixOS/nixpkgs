@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, zlib, sqlite, gmp, libffi, cairo,
   ncurses, freetype, libGLU, libGL, libpng, libtiff, libjpeg, readline, libsndfile,
   libxml2, freeglut, libsamplerate, pcre, libevent, libedit, yajl,
-  python3, openssl, glfw, pkgconfig, libpthreadstubs, libXdmcp, libmemcached
+  python3, openssl, glfw, pkg-config, libpthreadstubs, libXdmcp, libmemcached
 }:
 
 stdenv.mkDerivation {
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     zlib sqlite gmp libffi cairo ncurses freetype
     libGLU libGL libpng libtiff libjpeg readline libsndfile libxml2
     freeglut libsamplerate pcre libevent libedit yajl
-    pkgconfig glfw openssl libpthreadstubs libXdmcp
+    pkg-config glfw openssl libpthreadstubs libXdmcp
     libmemcached python3
   ];
 

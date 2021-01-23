@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildPythonApplication, fuse
+{ lib, stdenv, fetchFromGitHub, buildPythonApplication, fuse
 , appdirs, colorama, dateutil, requests, requests_toolbelt
 , fusepy, sqlalchemy }:
 
@@ -30,7 +30,7 @@ buildPythonApplication rec {
     lnOverBin acd_cli.py acdcli
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line interface and FUSE filesystem for Amazon Cloud Drive";
     homepage = "https://github.com/yadayada/acd_cli";
     license = licenses.gpl2;

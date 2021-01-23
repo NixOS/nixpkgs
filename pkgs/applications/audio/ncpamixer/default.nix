@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ncurses, libpulseaudio, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, cmake, ncurses, libpulseaudio, pkg-config }:
 
 stdenv.mkDerivation rec {
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses libpulseaudio ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   configurePhase = ''
     make PREFIX=$out build/Makefile
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     make build
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An ncurses mixer for PulseAudio inspired by pavucontrol";
     homepage = "https://github.com/fulhax/ncpamixer";
     license = licenses.mit;

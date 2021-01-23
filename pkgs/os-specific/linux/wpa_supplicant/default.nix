@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, openssl, pkgconfig, libnl
+{ lib, stdenv, fetchurl, openssl, pkg-config, libnl
 , dbus, readline ? null, pcsclite ? null
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   version = "2.9";
 
@@ -81,13 +81,13 @@ stdenv.mkDerivation rec {
     cat -n .config
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE \
-      -I$(echo "${stdenv.lib.getDev libnl}"/include/libnl*/) \
-      -I${stdenv.lib.getDev pcsclite}/include/PCSC/"
+      -I$(echo "${lib.getDev libnl}"/include/libnl*/) \
+      -I${lib.getDev pcsclite}/include/PCSC/"
   '';
 
   buildInputs = [ openssl libnl dbus readline pcsclite ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     install -Dm444 wpa_supplicant.conf $out/share/doc/wpa_supplicant/wpa_supplicant.conf.example
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://hostap.epitest.fi/wpa_supplicant/";
     description = "A tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;

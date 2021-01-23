@@ -1,4 +1,4 @@
-{ stdenv, fetchFromRepoOrCz, autoreconfHook, makeWrapper, libdvdcss, libdvdread, perl, perlPackages, asciidoc, xmlto, sourceHighlight, docbook_xsl, docbook_xml_dtd_45 }:
+{ lib, stdenv, fetchFromRepoOrCz, autoreconfHook, makeWrapper, libdvdcss, libdvdread, perl, perlPackages, asciidoc, xmlto, sourceHighlight, docbook_xsl, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation {
   pname = "cdimgtools";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   installTargets = [ "install" "install-doc" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://repo.or.cz/cdimgtools.git/blob_plain/refs/heads/release:/README.html";
     description = "Tools to inspect and manipulate CD/DVD optical disc images";
     license = licenses.gpl2;

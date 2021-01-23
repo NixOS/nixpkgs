@@ -14,16 +14,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "0.2.4";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     rev = "v${version}";
-    sha256 = "0vdg1ybzfj7xg8nmrb8q9vr8bpwcs52730v9v0413wjyxb7hcll2";
+    sha256 = "1dfq6ickx24cq8zhhm0a8x5ycd0iygw065qd2blcgl0fim350zw9";
   };
 
-  cargoSha256 = "0afaxx8dv7jn48934ba0r8kd1h8l3k00sl83v07a1xqmfcmil2qf";
+  cargoSha256 = "0z4af575rx6ggjxsw1q18kwsb4cvyy1kzfkp32v9n74krmy0fk8p";
 
   cargoBuildFlags = [ "--no-default-features" "--features" "${lib.concatStringsSep "," features}" ];
 

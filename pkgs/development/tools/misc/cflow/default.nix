@@ -45,13 +45,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ maintainers.vrthra ];
 
-    /* On Darwin, build fails with:
-
-       Undefined symbols:
-         "_argp_program_version", referenced from:
-             _argp_program_version$non_lazy_ptr in libcflow.a(argp-parse.o)
-       ld: symbol(s) not found
-     */
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl }:
+{ lib, stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl }:
 
 let
   pname = "jadx";
@@ -90,7 +90,7 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dex to Java decompiler";
     longDescription = ''
       Command line and GUI tools for produce Java source code from Android Dex

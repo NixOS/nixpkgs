@@ -9,7 +9,7 @@
 , libxml2
 , ninja
 , perl
-, pkgconfig
+, pkg-config
 , libical
 , python3
 , tzdata
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     perl
-    pkgconfig
+    pkg-config
     # Docs building fails:
     # https://github.com/NixOS/nixpkgs/pull/67204
     # previously with https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/libical/libical";
     description = "An Open Source implementation of the iCalendar protocols";
     license = licenses.mpl20;

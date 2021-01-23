@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchFromGitHub, qmake, qttools, qtbase }:
+{ mkDerivation, lib, stdenv, fetchFromGitHub, qmake, qttools, qtbase }:
 
 mkDerivation rec {
   pname = "calaos_installer";
@@ -24,7 +24,7 @@ mkDerivation rec {
     cp -a calaos_installer $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calaos Installer, a tool to create calaos configuration";
     homepage = "https://www.calaos.fr/";
     license = licenses.gpl3Plus;

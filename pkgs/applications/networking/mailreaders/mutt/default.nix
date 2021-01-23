@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, ncurses, which, perl
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, which, perl
 , gdbm ? null
 , openssl ? null
 , cyrus_sasl ? null
@@ -23,15 +23,15 @@ assert smimeSupport -> openssl    != null;
 assert gpgSupport   -> gnupg      != null;
 assert gpgmeSupport -> gpgme      != null && openssl != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.0.3";
+  version = "2.0.5";
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    sha256 = "1vf1ab3mnx7p4s4n4pssajj211s3zr4730bwgsjx9gxcnyppqclw";
+    sha256 = "0k80s27sf7djb7zxj81ihksr8jkr71mfaa8976fzh41i1pn5l7g2";
   };
 
   patches = optional smimeSupport (fetchpatch {

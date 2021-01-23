@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, wrapQtAppsHook }:
+{ lib, stdenv, fetchFromGitHub, python3, wrapQtAppsHook }:
 
 let
   inherit (python3.pkgs) wrapPython pyqt5;
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     makeQtWrapper $out/share/convertall/convertall.py $out/bin/convertall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://convertall.bellz.org/";
     description = "Graphical unit converter";
     license = licenses.gpl2Plus;

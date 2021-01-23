@@ -1,5 +1,5 @@
-{ fetchurl, fetchgit, stdenv
-, pkgconfig, gnupg
+{ fetchurl, fetchgit, lib, stdenv
+, pkg-config, gnupg
 , xapian, gmime, talloc, zlib
 , doxygen, perl, texinfo
 , pythonPackages
@@ -9,10 +9,10 @@
 , withEmacs ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  version = "0.31";
+  version = "0.31.3";
   pname = "notmuch";
 
   passthru = {
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.notmuchmail.org/git/notmuch";
-    sha256 = "0f9d9k9avb46yh2r8fvijvw7bryqwckvyzc68f9phax2g4c99x4x";
+    sha256 = "1wm1myzacz1dcg7vdfd3akia3xan7ssfspf1fflrwm18hdalss5v";
     rev = version;
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     doxygen                   # (optional) api docs
     pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
     texinfo                   # (optional) documentation -> doc/INSTALL
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "V=1" ];
 
 
-  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional withEmacs "emacs";
+  outputs = [ "out" "man" "info" ] ++ lib.optional withEmacs "emacs";
 
   preCheck = let
     test-database = fetchurl {
@@ -86,9 +86,15 @@ stdenv.mkDerivation rec {
     gdb man emacs
   ];
 
+  # Expects there to always be a thread with ID
+  # thread:0000000000000009, but notmuch new is non-deterministic so
+  # this isn't always the case.  Upstream bug report:
+  # https://nmbug.notmuchmail.org/nmweb/show/871reno6g7.fsf%40alyssa.is
+  NOTMUCH_SKIP_TESTS = "lib-thread";
+
   installTargets = [ "install" "install-man" "install-info" ];
 
-  postInstall = stdenv.lib.optionalString withEmacs ''
+  postInstall = lib.optionalString withEmacs ''
     moveToOutput bin/notmuch-emacs-mua $emacs
   '';
 

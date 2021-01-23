@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, readline }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, readline }:
 
 stdenv.mkDerivation rec {
   pname   = "mrsh";
@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "08gak5261d4sd6b2w2kscmdwa4gwcp5drgfyb3swyrj9cl0nlcbn";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ readline ];
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A minimal POSIX shell";
     homepage = "https://mrsh.sh";
     license = licenses.mit;

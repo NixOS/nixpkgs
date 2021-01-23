@@ -1,4 +1,9 @@
-{ stdenv, buildPackages, fetchurl, attr, perl, pam }:
+{ stdenv, lib, buildPackages, fetchurl, attr, perl
+, usePam ? !isStatic, pam ? null
+, isStatic ? stdenv.hostPlatform.isStatic
+}:
+
+assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
@@ -9,18 +14,21 @@ stdenv.mkDerivation rec {
     sha256 = "1qf80lifygbnxwvqjf8jz5j24n6fqqx4ixnkbf76xs2vrmcq664j";
   };
 
-  outputs = [ "out" "dev" "lib" "man" "doc" "pam" ];
+  patches = lib.optional isStatic ./no-shared-lib.patch;
+
+  outputs = [ "out" "dev" "lib" "man" "doc" ]
+    ++ lib.optional usePam "pam";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ pam ];
+  buildInputs = lib.optional usePam pam;
 
   propagatedBuildInputs = [ attr ];
 
   makeFlags = [
     "lib=lib"
-    "PAM_CAP=yes"
+    "PAM_CAP=${if usePam then "yes" else "no"}"
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
   ];
@@ -44,10 +52,10 @@ stdenv.mkDerivation rec {
   installFlags = [ "RAISE_SETFCAP=no" ];
 
   postInstall = ''
-    rm "$lib"/lib/*.a
+    ${lib.optionalString (!isStatic) ''rm "$lib"/lib/*.a''}
     mkdir -p "$doc/share/doc/${pname}-${version}"
     cp License "$doc/share/doc/${pname}-${version}/"
-  '' + stdenv.lib.optionalString (pam != null) ''
+  '' + lib.optionalString usePam ''
     mkdir -p "$pam/lib/security"
     mv "$lib"/lib/security "$pam/lib"
   '';
@@ -55,7 +63,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library for working with POSIX capabilities";
     homepage = "https://sites.google.com/site/fullycapable";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
 }

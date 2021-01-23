@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake
+{ lib, stdenv, fetchurl, cmake
 , libGL, libGLU, libX11, libXv, libXtst, libjpeg_turbo, fltk
 , xorg
 , opencl-headers, opencl-clhpp, ocl-icd
@@ -31,9 +31,7 @@ stdenv.mkDerivation rec {
       --replace "LD_PRELOAD=libgefaker" "LD_PRELOAD=$out/lib/libgefaker"
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.virtualgl.org/";
     description = "X11 GL rendering in a remote computer with full 3D hw acceleration";
     license = licenses.wxWindows;

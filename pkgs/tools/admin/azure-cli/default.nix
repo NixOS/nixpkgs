@@ -1,12 +1,14 @@
 { stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.15.1";
+  version = "2.17.1";
+  srcName = "azure-cli-${version}-src";
   src = fetchFromGitHub {
+    name = srcName;
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "05vwaafb6yzvrhig0gjkb4803yj6qr00gqh41rws9520899f2m9d";
+    sha256 = "sha256-RTYCsdoZx1YQa9a8ZyvwQ9yTLEB6r7/mMgfecc/vGvM=";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -19,7 +21,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   pname = "azure-cli";
   inherit version src;
 
-  sourceRoot = "source/src/azure-cli";
+  sourceRoot = "${srcName}/src/azure-cli";
 
   prePatch = ''
     substituteInPlace setup.py \
@@ -67,6 +69,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-mgmt-containerregistry
     azure-mgmt-containerservice
     azure-mgmt-cosmosdb
+    azure-mgmt-databoxedge
     azure-mgmt-datalake-analytics
     azure-mgmt-datalake-store
     azure-mgmt-datamigration

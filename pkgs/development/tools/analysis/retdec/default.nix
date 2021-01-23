@@ -9,7 +9,7 @@
 , autoconf
 , automake
 , libtool
-, pkgconfig
+, pkg-config
 , bison
 , flex
 , groff
@@ -145,7 +145,7 @@ in stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
     bison
     flex
     groff
@@ -215,8 +215,6 @@ in stdenv.mkDerivation rec {
     substituteInPlace scripts/retdec-config.py --replace /usr/bin/time ${time}/bin/time
     substituteInPlace scripts/retdec-unpacker.py --replace "'upx'" "'${upx}/bin/upx'"
   '';
-
-  enableParallelBuilding = true;
 
   doInstallCheck = true;
   installCheckPhase = ''

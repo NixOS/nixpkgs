@@ -1,5 +1,5 @@
 { stdenv, buildPackages
-, fetchurl, pkgconfig
+, fetchurl, pkg-config
 , libbfd, popt, zlib, linuxHeaders, libiberty_static
 , withGUI ? false, qt4 ? null
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --replace "/bin/cp" "${buildPackages.coreutils}/bin/cp"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libbfd zlib popt linuxHeaders libiberty_static ]
     ++ stdenv.lib.optionals withGUI [ qt4 ];
 

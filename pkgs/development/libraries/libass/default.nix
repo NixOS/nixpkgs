@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, yasm
+{ lib, stdenv, fetchurl, pkg-config, yasm
 , freetype, fribidi, harfbuzz
 , encaSupport ? true, enca ? null # enca support
 , fontconfigSupport ? true, fontconfig ? null # fontconfig support
@@ -14,7 +14,7 @@ let
   mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
 in
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "libass";
   version = "0.15.0";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     (mkFlag largeTilesSupport "large-tiles")
   ];
 
-  nativeBuildInputs = [ pkgconfig yasm ];
+  nativeBuildInputs = [ pkg-config yasm ];
 
   buildInputs = [ freetype fribidi harfbuzz ]
     ++ optional encaSupport enca

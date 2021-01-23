@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , requests
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     ${python.interpreter} test/test.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Requests auth module for HTTP Signature";
     homepage = "https://github.com/kislyuk/requests-http-signature";
     license = licenses.asl20;

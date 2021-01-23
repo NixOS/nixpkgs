@@ -1,24 +1,42 @@
 { lib, fetchFromGitHub, buildDunePackage, ocaml
-, legacy ? false
+, version ? if lib.versionAtLeast ocaml.version "4.07" then "0.15.0" else "0.13.0"
 , ocaml-compiler-libs, ocaml-migrate-parsetree, ppx_derivers, stdio
+, stdlib-shims, ocaml-migrate-parsetree-2-1
 }:
 
-let param =
-  if legacy then {
-    version = "0.8.1";
+let param = {
+  "0.8.1" = {
     sha256 = "0vm0jajmg8135scbg0x60ivyy5gzv4abwnl7zls2mrw23ac6kml6";
-  } else {
-    version = "0.12.0";
-    sha256 = "1cg0is23c05k1rc94zcdz452p9zn11dpqxm1pnifwx5iygz3w0a1";
-  }; in
+    max_version = "4.10";
+    useDune2 = false;
+    useOMP2 = false;
+  };
+  "0.13.0" = {
+    sha256 = "0c54g22pm6lhfh3f7s5wbah8y48lr5lj3cqsbvgi99bly1b5vqvl";
+    useDune2 = false;
+    useOMP2 = false;
+  };
+  "0.15.0" = {
+    sha256 = "1p037kqj5858xrhh0dps6vbf4fnijla6z9fjz5zigvnqp4i2xkrn";
+    min_version = "4.07";
+    useOMP2 = false;
+  };
+  "0.18.0" = {
+    sha256 = "1ciy6va2gjrpjs02kha83pzh0x1gkmfsfsdgabbs1v14a8qgfibm";
+    min_version = "4.07";
+  };
+}."${version}"; in
 
-if lib.versionAtLeast ocaml.version "4.10" && legacy
-then throw "ppxlib-${param.version} is not available for OCaml ${ocaml.version}"
+if param ? max_version && lib.versionAtLeast ocaml.version param.max_version
+|| param ? min_version && !lib.versionAtLeast ocaml.version param.min_version
+then throw "ppxlib-${version} is not available for OCaml ${ocaml.version}"
 else
 
 buildDunePackage rec {
   pname = "ppxlib";
-  inherit (param) version;
+  inherit version;
+
+  useDune2 = param.useDune2 or true;
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
@@ -28,7 +46,13 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [
-    ocaml-compiler-libs ocaml-migrate-parsetree ppx_derivers stdio
+    ocaml-compiler-libs
+    (if param.useOMP2 or true
+     then ocaml-migrate-parsetree-2-1
+     else ocaml-migrate-parsetree)
+    ppx_derivers
+    stdio
+    stdlib-shims
   ];
 
   meta = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , libpng, gzip, fftw, blas, lapack
 , mpi ? null
 }:
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ fftw libpng blas lapack gzip ]
-    ++ (stdenv.lib.optionals withMPI [ mpi ]);
+    ++ (lib.optionals withMPI [ mpi ]);
 
   configurePhase = ''
     cd src
-    for pack in ${stdenv.lib.concatStringsSep " " packages}; do make "yes-$pack" SHELL=$SHELL; done
+    for pack in ${lib.concatStringsSep " " packages}; do make "yes-$pack" SHELL=$SHELL; done
   '';
 
   # Must do manual build due to LAMMPS requiring a seperate build for
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     cp -v liblammps* $out/lib/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Classical Molecular Dynamics simulation code";
     longDescription = ''
       LAMMPS is a classical molecular dynamics simulation code designed to

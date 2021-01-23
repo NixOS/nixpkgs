@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "sbagen-1.4.4";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Binaural sound generator";
     homepage = "http://uazu.net/sbagen";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = [ "i686-linux" ];
   };
 }

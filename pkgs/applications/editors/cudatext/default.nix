@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.115.0";
+  version = "1.118.2";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    sha256 = "0q7gfpzc97fvyvabjdb9a4d3c2qhm4zf5bqgnsj73vkly80kgww8";
+    sha256 = "0d6f4qfs7vifz7qkw2vkdjgd5w717wfpnxbc4qa4hs4g6y86ywmm";
   };
 
   patches = [
@@ -106,6 +106,7 @@ stdenv.mkDerivation rec {
       Search and replace with RegEx. Extendable by Python plugins and themes.
     '';
     homepage = "http://www.uvviewsoft.com/cudatext/";
+    changelog = "http://uvviewsoft.com/cudatext/history.txt";
     license = licenses.mpl20;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;

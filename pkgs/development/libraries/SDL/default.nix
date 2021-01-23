@@ -1,5 +1,5 @@
-{ stdenv, config, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+{ lib, stdenv, config, fetchurl, fetchpatch, pkg-config, audiofile, libcap, libiconv
+, libGLSupported ? lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL, libGLU
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
@@ -11,7 +11,7 @@
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
-with stdenv.lib;
+with lib;
 
 let
   extraPropagatedBuildInputs = [ ]
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ optional stdenv.isLinux libcap;
 
   propagatedBuildInputs = [ libiconv ] ++ extraPropagatedBuildInputs;
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform multimedia library";
     homepage    = "http://www.libsdl.org/";
     maintainers = with maintainers; [ lovek323 ];

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, boost, cmake, libX11, libGL, libGLU }:
+{ fetchFromGitHub, lib, stdenv, boost, cmake, libX11, libGL, libGLU }:
 
 stdenv.mkDerivation rec {
   pname = "coin";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost libX11 libGL libGLU ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/coin3d/coin";
     license = licenses.bsd3;
     description = "High-level, retained-mode toolkit for effective 3D graphics development";

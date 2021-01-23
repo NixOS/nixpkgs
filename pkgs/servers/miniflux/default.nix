@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
 
 let
   pname = "miniflux";
@@ -31,7 +31,7 @@ in buildGoModule {
 
   passthru.tests = nixosTests.miniflux;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minimalist and opinionated feed reader";
     homepage = "https://miniflux.app/";
     license = licenses.asl20;

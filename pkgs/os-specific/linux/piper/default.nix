@@ -1,4 +1,4 @@
-{ stdenv, meson, ninja, pkgconfig, gettext, fetchFromGitHub, python3
+{ lib, stdenv, meson, ninja, pkg-config, gettext, fetchFromGitHub, python3
 , wrapGAppsHook, gtk3, glib, desktop-file-utils, appstream-glib, gnome3
 , gobject-introspection }:
 
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1nfjnsiwg2rs6gkjsxzhr2708i6di149dgwq3cf6l12rxqpb8arj";
   };
 
-  nativeBuildInputs = [ meson ninja gettext pkgconfig wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
+  nativeBuildInputs = [ meson ninja gettext pkg-config wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
   buildInputs = [
     gtk3 glib gnome3.adwaita-icon-theme python3
   ];
@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     patchShebangs meson_install.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GTK frontend for ratbagd mouse config daemon";
     homepage    = "https://github.com/libratbag/piper";
     license     = licenses.gpl2;

@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   name = "915resolution-0.5.3";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   patchPhase = "rm *.o";
   installPhase = "mkdir -p $out/sbin; cp 915resolution $out/sbin/";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://915resolution.mango-lang.org/";
     description = "A tool to modify Intel 800/900 video BIOS";
     platforms = [ "i686-linux" "x86_64-linux" ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, autoconf, automake, flex, yacc
+{ lib, stdenv, fetchurl, which, autoconf, automake, flex, yacc
 , kernel, glibc, perl, libtool_2, kerberos, fetchpatch }:
 
 with (import ./srcs.nix {
@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
     xz -f ${modDestDir}/libafs.ko
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open AFS client kernel module";
     homepage = "https://www.openafs.org";
     license = licenses.ipl10;

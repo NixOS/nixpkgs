@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, xmlm }:
+{ lib, fetchFromGitHub, buildDunePackage, xmlm }:
 
 buildDunePackage rec {
   pname = "ezxmlm";
@@ -13,7 +13,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ xmlm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Combinators to use with xmlm for parsing and selection";
     longDescription = ''
       An "easy" interface on top of the xmlm library. This version provides

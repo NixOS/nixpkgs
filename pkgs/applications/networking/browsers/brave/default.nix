@@ -70,7 +70,6 @@ rpath = lib.makeLibraryPath [
   libXext
   libXfixes
   libXi
-  libxkbcommon
   libXrandr
   libXrender
   libXtst
@@ -89,16 +88,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.17.73";
+  version = "1.19.86";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "18bd6kgzfza5r0y2ggfy82pdpnfr2hzgjcfy9vxqq658z7q3jpqy";
+    sha256 = "fnkxfhuYTDKPrXSNlG0SlgDls4jnV146wrhxg1crR9c=";
   };
 
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
+  doInstallCheck = true;
 
   nativeBuildInputs = [ dpkg wrapGAppsHook ];
 
@@ -148,7 +148,14 @@ stdenv.mkDerivation rec {
       ln -sf ${xdg_utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
   '';
 
-  meta = with stdenv.lib; {
+  installCheckPhase = ''
+    # Bypass upstream wrapper which suppresses errors
+    $out/opt/brave.com/brave/brave --version
+  '';
+
+  passthru.updateScript = ./update.sh;
+
+  meta = with lib; {
     homepage = "https://brave.com/";
     description = "Privacy-oriented browser for Desktop and Laptop computers";
     changelog = "https://github.com/brave/brave-browser/blob/v${version}/CHANGELOG.md";

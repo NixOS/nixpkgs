@@ -10,15 +10,15 @@ stdenv.mkDerivation rec {
   };
 
   sourceRoot = "ncbi-blast-${version}+-src/c++";
-  
-  configureFlags = [ 
+
+  configureFlags = [
     # With flat Makefile we can use all_projects in order not to build extra.
     # These extra cause clang to hang on Darwin.
     "--with-flat-makefile"
-    "--without-makefile-auto-update" 
+    "--without-makefile-auto-update"
     "--with-dll"  # build dynamic libraries (static are default)
     ];
-  
+
   makeFlags = [ "all_projects=app/" ];
 
   preConfigure = ''
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   # Many tests require either network access or locally available databases
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''Basic Local Alignment Search Tool (BLAST) finds regions of
     similarity between biological sequences'';
     homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, funcsigs, pytest, numpy }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, funcsigs, pytest, numpy }:
 
 buildPythonPackage rec {
   version = "1.2.2";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Spying framework";
     homepage = "https://github.com/kaste/mockito-python";
     license = licenses.mit;

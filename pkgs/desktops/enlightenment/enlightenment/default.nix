@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
     xkeyboard_config
     udisks2 # for removable storage mounting/unmounting
   ]
-  ++ stdenv.lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
-  ++ stdenv.lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
+  ++ lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
+  ++ lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
   ;
 
   patches = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   passthru.providedSessions = [ "enlightenment" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Compositing Window Manager and Desktop Shell";
     homepage = "https://www.enlightenment.org";
     license = licenses.bsd2;

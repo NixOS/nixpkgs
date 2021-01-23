@@ -61,7 +61,7 @@ buildPythonApplication rec {
     youtube-dl
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Persepolis Download Manager is a GUI for aria2";
     homepage = "https://persepolisdm.github.io/";
     license = licenses.gpl3;

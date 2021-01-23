@@ -1,5 +1,5 @@
 { mkDerivation, fetchpatch
-, base, containers, gomp, hspec, QuickCheck, stdenv
+, base, containers, gomp, hspec, QuickCheck, lib, stdenv
 , transformers, z3
 }:
 mkDerivation {
@@ -13,7 +13,7 @@ mkDerivation {
   testHaskellDepends = [ base hspec QuickCheck ];
   homepage = "https://github.com/IagoAbal/haskell-z3";
   description = "Bindings for the Z3 Theorem Prover";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
   doCheck = false;
   patches = [
     (fetchpatch {

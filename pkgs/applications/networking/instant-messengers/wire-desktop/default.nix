@@ -31,7 +31,7 @@ let
     x86_64-linux = "033804nkz1fdmq3p8iplrlx708x1fjlr09bmrpy36lqg5h7m3yd6";
   }.${system} or throwSystem;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern, secure messenger for everyone";
     longDescription = ''
       Wire Personal is a secure, privacy-friendly messenger. It combines useful

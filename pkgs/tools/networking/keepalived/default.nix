@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, nixosTests
+{ lib, stdenv, fetchFromGitHub, nixosTests
 , libnfnetlink, libnl, net-snmp, openssl
-, pkgconfig, autoreconfHook }:
+, pkg-config, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "keepalived";
@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
 
   passthru.tests.keepalived = nixosTests.keepalived;
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   configureFlags = [
     "--enable-sha1"
     "--enable-snmp"
  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://keepalived.org";
     description = "Routing software written in C";
     license = licenses.gpl2;

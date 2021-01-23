@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, topkg
+{ stdenv, lib, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, topkg
 , cpuid, ocb-stubblr, sexplib
 , cstruct, zarith, ppx_sexp_conv, ppx_deriving, writeScriptBin
 , cstruct-lwt ? null
 }:
 
-with stdenv.lib;
+with lib;
 let
   withLwt = cstruct-lwt != null;
   # the build system will call 'cc' with no way to override
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/mirleft/ocaml-nocrypto";
     description = "Simplest possible crypto to support TLS";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

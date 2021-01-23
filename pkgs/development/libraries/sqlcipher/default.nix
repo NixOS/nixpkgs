@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     installManPage sqlcipher.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.zetetic.net/sqlcipher/";
     description = "SQLite extension that provides 256 bit AES encryption of database files";
     platforms = platforms.unix;

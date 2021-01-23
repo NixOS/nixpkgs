@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 
 # for update script
 , writeShellScript, curl, nix-update
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The official runtime used by Steam";
     homepage = "https://github.com/ValveSoftware/steam-runtime";
     license = licenses.unfreeRedistributable; # Includes NVIDIA CG toolkit

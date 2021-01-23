@@ -11,7 +11,7 @@ in
 with lib;
 {
   name = "miniflux";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ bricewge ];
+  meta.maintainers = with pkgs.lib.maintainers; [ bricewge ];
 
   nodes = {
     default =

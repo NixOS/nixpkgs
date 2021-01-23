@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , bison, flex
 , pam
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''rmdir $out/dev'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "grsecurity RBAC administration and policy analysis utility";
     homepage    = "https://grsecurity.net";
     license     = licenses.gpl2;

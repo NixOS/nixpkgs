@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kcharselect";
+  pname = "kcharselect";
   meta = {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.schmittlauch ];

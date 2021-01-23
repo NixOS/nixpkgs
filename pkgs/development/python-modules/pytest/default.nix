@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
+{ lib, stdenv, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
 , atomicwrites
 , attrs
 , funcsigs
@@ -58,6 +58,12 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths" --ignore=testing/test_junitxml.py
+
+    # tests leave behind unreproducible pytest binaries in the output directory, remove:
+    find $out/lib -name "*-pytest-${version}.pyc" -delete
+    # specifically testing/test_assertion.py and testing/test_assertrewrite.py leave behind those:
+    find $out/lib -name "*opt-2.pyc" -delete
+
     runHook postCheck
   '';
 
@@ -73,7 +79,7 @@ buildPythonPackage rec {
     "pytest"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://docs.pytest.org";
     description = "Framework for writing tests";
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];

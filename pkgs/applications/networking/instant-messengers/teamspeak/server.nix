@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, postgresql, autoPatchelfHook, writeScript }:
+{ lib, stdenv, fetchurl, postgresql, autoPatchelfHook, writeScript }:
 
 let
   arch = if stdenv.is64bit then "amd64" else "x86";
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     update-source-version teamspeak_server "$version" --system=x86_64-linux
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TeamSpeak voice communication server";
     homepage = "https://teamspeak.com/";
     license = licenses.unfreeRedistributable;

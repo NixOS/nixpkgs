@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bash, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, bash, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "rbenv";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     installShellCompletion completions/rbenv.{bash,zsh}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Groom your app’s Ruby environment";
     longDescription = ''
       Use rbenv to pick a Ruby version for your application and guarantee that your development environment matches production.

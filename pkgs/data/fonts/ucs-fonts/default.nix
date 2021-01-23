@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bdftopcf
+{ lib, stdenv, fetchurl, bdftopcf
 , libfaketime, fonttosfnt, mkfontscale
 }:
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "bdf" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html";
     description = "Unicode bitmap fonts";
     license = licenses.publicDomain;

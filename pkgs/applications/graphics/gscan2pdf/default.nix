@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, wrapGAppsHook,
+{ lib, stdenv, fetchurl, perlPackages, wrapGAppsHook,
   # libs
   librsvg, sane-backends, sane-frontends,
   # runtime dependencies
@@ -6,7 +6,7 @@
   # test dependencies
   xvfb_run, liberation_ttf, file, tesseract }:
 
-with stdenv.lib;
+with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";

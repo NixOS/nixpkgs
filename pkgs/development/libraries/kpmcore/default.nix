@@ -24,9 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with lib.maintainers; [ peterhoeg ];
     # The build requires at least Qt 5.14:
     broken = lib.versionOlder qtbase.version "5.14";

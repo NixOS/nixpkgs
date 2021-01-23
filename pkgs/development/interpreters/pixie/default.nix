@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, python2, makeWrapper, pkgconfig, gcc,
+{ stdenv, fetchgit, fetchurl, python2, makeWrapper, pkg-config, gcc,
   pypy, libffi, libedit, libuv, boost, zlib,
   variant ? "jit", buildWithPypy ? false }:
 
@@ -32,7 +32,7 @@ let
   build = {flags, target}: stdenv.mkDerivation rec {
     pname = "pixie";
     version = "0-r${commit-count}-${variant}";
-    nativeBuildInputs = [ makeWrapper pkgconfig ];
+    nativeBuildInputs = [ makeWrapper pkg-config ];
     buildInputs = libs;
     PYTHON = if buildWithPypy
       then "${pypy}/pypy-c/pypy-c"

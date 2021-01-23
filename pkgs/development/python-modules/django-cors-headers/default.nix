@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "django-cors-headers";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "db82b2840f667d47872ae3e4a4e0a0d72fbecb42779b8aa233fa8bb965f7836a";
+    sha256 = "5665fc1b1aabf1b678885cf6f8f8bd7da36ef0a978375e767d491b48d3055d8f";
   };
 
   propagatedBuildInputs = [ django ];

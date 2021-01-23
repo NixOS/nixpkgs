@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libX11 }:
+{ lib, stdenv, fetchgit, libX11 }:
 
 stdenv.mkDerivation {
   name = "disk-indicator-2014-05-19";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
       Small program for Linux that will turn your Scroll, Caps or Num Lock LED
       or LED on your ThinkPad laptop into a hard disk activity indicator.
     '';
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

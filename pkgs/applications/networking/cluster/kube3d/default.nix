@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 let
-  k3sVersion = "1.19.4-k3s1";
+  k3sVersion = "1.20.0-k3s2";
 in
 buildGoModule rec {
   pname = "kube3d";

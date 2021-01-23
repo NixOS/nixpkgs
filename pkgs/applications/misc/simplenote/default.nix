@@ -23,7 +23,7 @@ let
     x86_64-linux = "123b0fh14068s2z3k6s5mmh46xwlz02qfnpmj838zlm5hckjmifv";
   }.${system} or throwSystem;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The simplest way to keep notes";
     homepage = "https://github.com/Automattic/simplenote-electron";
     license = licenses.gpl2;
@@ -88,7 +88,7 @@ let
 
     postFixup = ''
       makeWrapper $out/opt/Simplenote/simplenote $out/bin/simplenote \
-        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ] }" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }" \
         "''${gappsWrapperArgs[@]}"
     '';
   };

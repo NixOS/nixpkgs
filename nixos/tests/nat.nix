@@ -23,7 +23,7 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ?
   {
     name = "nat" + (if withFirewall then "WithFirewall" else "Standalone")
                  + (lib.optionalString withConntrackHelpers "withConntrackHelpers");
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ eelco rob ];
     };
 

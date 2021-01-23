@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "dcw-gmt";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     cp -rv ./* $out/share/dcw-gmt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.soest.hawaii.edu/pwessel/dcw/";
     description = "Vector basemap of the world, for use with GMT";
     longDescription = ''

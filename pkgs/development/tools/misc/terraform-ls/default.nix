@@ -1,17 +1,19 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "terraform-ls";
-  version = "0.7.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1afdd1zs242nh1cync5ip1fbah34wc3gbsx3hwwiisc8yziwiq18";
+    sha256 = "w9PLKLFjKehtub1LbVX9TbvKkj/S1t0MwZIZurF2x18=";
   };
+  vendorSha256 = "J8ovcUeQsb58Bq/EM9mvYqtuDY1bXTEVCC9/AH+UttU=";
 
-  goPackagePath = "github.com/hashicorp/terraform-ls";
+  # tests fail in sandbox mode because of trying to download stuff from releases.hashicorp.com
+  doCheck = false;
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 

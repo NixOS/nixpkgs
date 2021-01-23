@@ -63,8 +63,6 @@ stdenv.mkDerivation {
       -o $out/share/openEMS/matlab/h5readatt_octave.oct
   '';
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
     description = "Open Source Electromagnetic Field Solver";
     homepage = "http://openems.de/index.php/Main_Page.html";

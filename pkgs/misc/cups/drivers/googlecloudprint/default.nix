@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Cloud Print driver for CUPS, allows printing to printers hosted on Google Cloud Print";
     homepage    = "http://ccp.niftiestsoftware.com";
     platforms   = platforms.linux;

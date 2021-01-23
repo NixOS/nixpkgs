@@ -1,8 +1,8 @@
-{ stdenv, buildPackages
+{ lib, stdenv, buildPackages
 , newScope, overrideCC, crossLibcStdenv, libcCross
 }:
 
-stdenv.lib.makeScope newScope (self: with self; {
+lib.makeScope newScope (self: with self; {
 
   cygwinSetup = callPackage ./cygwin-setup { };
 

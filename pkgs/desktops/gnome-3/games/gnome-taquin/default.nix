@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, wrapGAppsHook
 , librsvg, gsound, gettext, itstool, libxml2
 , meson, ninja, vala, python3, desktop-file-utils
 }:
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-taquin/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-taquin/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0kw131q0ad0rbsp6qifjc8fjlhvjxyihil8a76kj8ya9mn7kvnwn";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig wrapGAppsHook meson ninja python3
+    pkg-config wrapGAppsHook meson ninja python3
     gettext itstool libxml2 vala desktop-file-utils
   ];
   buildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Taquin";
     description = "Move tiles so that they reach their places";
     maintainers = teams.gnome.members;

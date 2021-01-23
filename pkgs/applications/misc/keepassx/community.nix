@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -36,31 +36,26 @@
 , withKeePassFDOSecrets ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    sha256 = "032dzywvwpclhsl3n1pq2m9gyxqpg0gkci6axbvbs7bn82wznc4h";
+    sha256 = "1jd2mvafyn095crfs2hnfprqiy8yqsvfybwbjq8n0agapnz4bl5h";
   };
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang [
     "-Wno-old-style-cast"
     "-Wno-error"
     "-D__BIG_ENDIAN__=${if stdenv.isBigEndian then "1" else "0"}"
   ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace CMakeLists.txt \
-      --replace "/usr/local/bin" "../bin" \
-      --replace "/usr/local/share/man" "../share/man"
-  '';
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
 
   patches = [
     ./darwin.patch
@@ -83,14 +78,18 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     export LC_ALL="en_US.UTF-8"
     export QT_QPA_PLATFORM=offscreen
     export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
     # testcli and testgui are flaky - skip them both
     make test ARGS+="-E 'testcli|testgui' --output-on-failure"
+
+    runHook postCheck
   '';
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook qttools ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook qttools pkg-config ];
 
   buildInputs = [
     asciidoctor
@@ -103,7 +102,6 @@ stdenv.mkDerivation rec {
     libgpgerror
     libsodium
     libyubikey
-    pkg-config
     qrencode
     qtbase
     qtsvg
@@ -111,9 +109,9 @@ stdenv.mkDerivation rec {
     yubikey-personalization
     zlib
   ]
-  ++ stdenv.lib.optional withKeePassKeeShareSecure quazip
-  ++ stdenv.lib.optional stdenv.isDarwin qtmacextras
-  ++ stdenv.lib.optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication;
+  ++ lib.optional withKeePassKeeShareSecure quazip
+  ++ lib.optional stdenv.isDarwin qtmacextras
+  ++ lib.optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication;
 
   preFixup = optionalString stdenv.isDarwin ''
     # Make it work without Qt in PATH.
@@ -124,7 +122,7 @@ stdenv.mkDerivation rec {
     description = "Password manager to store your passwords safely and auto-type them into your everyday websites and applications";
     longDescription = "A community fork of KeePassX, which is itself a port of KeePass Password Safe. The goal is to extend and improve KeePassX with new features and bugfixes to provide a feature-rich, fully cross-platform and modern open-source password manager. Accessible via native cross-platform GUI, CLI, and browser integration with the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser).";
     homepage = "https://keepassxc.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jonafato turion ];
     platforms = platforms.linux ++ platforms.darwin;
   };

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitLab, getopt, lua, boost, pkgconfig, swig, perl, gcc }:
+{ lib, stdenv, fetchFromGitLab, getopt, lua, boost, pkg-config, swig, perl, gcc }:
 
-with stdenv.lib;
+with lib;
 
 let
   self = stdenv.mkDerivation rec {
@@ -16,11 +16,11 @@ let
 
     enableParallelBuilding = true;
 
-    nativeBuildInputs = [ pkgconfig swig perl ] ++ optional stdenv.isDarwin gcc;
+    nativeBuildInputs = [ pkg-config swig perl ] ++ optional stdenv.isDarwin gcc;
 
     buildInputs = [ getopt lua boost ];
 
-    prePatch = stdenv.lib.optionalString stdenv.cc.isClang ''
+    prePatch = lib.optionalString stdenv.cc.isClang ''
       substituteInPlace src/makefile \
           --replace 'CXX=g++' 'CXX=clang++'
     '';
@@ -45,7 +45,7 @@ let
       make -C extras/swig clean # Clean up intermediate files.
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Source code highlighting tool";
       homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
       platforms = platforms.unix;

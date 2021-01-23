@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , glib
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-autoar/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-autoar/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0yk56ch46n3wfy633mq31kif9n7v06rlij4vqbsbn6l4z1vw6d0a";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
     license = licenses.lgpl21;

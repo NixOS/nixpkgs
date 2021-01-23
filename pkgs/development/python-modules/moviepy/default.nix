@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonAtLeast
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     opencv3 scikitimage scikitlearn scipy matplotlib youtube-dl
   ]);
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Video editing with Python";
     homepage = "https://zulko.github.io/moviepy/";
     license = licenses.mit;

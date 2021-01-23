@@ -2,7 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , qtbase
 , qttools
 , qtx11extras
@@ -16,18 +16,18 @@
 
 mkDerivation rec {
   pname = "lximage-qt";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1pz0ird5vyrz1xycfn2vqh628f2mzwrx0psnp4hqdmj1xk9bjkbp";
+    sha256 = "1z2lvfrw9shpvwxva0vf0rk74nj3mmjgxznsgq8r65645fnj5imb";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt-build-tools
   ];
 

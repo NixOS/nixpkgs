@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchpatch
 , zlib, xz, libintl, python, gettext, ncurses, findXMLCatalogs
-, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
+, pythonSupport ? enableShared && stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt"
 , enableStatic ? !enableShared,

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , robotframework
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ robotframework paramiko scp ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SSHLibrary is a Robot Framework test library for SSH and SFTP";
     homepage = "https://github.com/robotframework/SSHLibrary";
     license = licenses.asl20;

@@ -1,5 +1,5 @@
-{ stdenv, fetchbzr, intltool
-, gtk2, wrapGAppsHook, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchbzr, intltool
+, gtk2, wrapGAppsHook, autoreconfHook, pkg-config
 , libmikmod, librsvg, libcanberra-gtk2, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ wrapGAppsHook intltool autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ wrapGAppsHook intltool autoreconfHook pkg-config ];
 
   buildInputs = [ gtk2 libmikmod librsvg hicolor-icon-theme libcanberra-gtk2 ];
 
   configureFlags = [ "--disable-setgid" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bejeweled clone game";
     homepage = "https://gweled.org";
     license = licenses.gpl2;

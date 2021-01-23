@@ -1,0 +1,45 @@
+From 3d0ce353cf62efea11aa88f814aa23bf8c04acc9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Milan=20P=C3=A4ssler?= <milan@petabyte.dev>
+Date: Mon, 11 Jan 2021 15:13:10 +0100
+Subject: [PATCH] configs/rpi: allow for bigger kernels
+
+---
+ include/configs/rpi.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/include/configs/rpi.h b/include/configs/rpi.h
+index 834f1cd..10ab1e7 100644
+--- a/include/configs/rpi.h
++++ b/include/configs/rpi.h
+@@ -153,20 +153,20 @@
+  * more than ~700M away from the start of the kernel image but this number can
+  * be larger OR smaller depending on e.g. the 'vmalloc=xxxM' command line
+  * parameter given to the kernel. So reserving memory from low to high
+- * satisfies this constraint again. Reserving 1M at 0x02600000-0x02700000 for
+- * the DTB leaves rest of the free RAM to the initrd starting at 0x02700000.
++ * satisfies this constraint again. Reserving 1M at 0x02e00000-0x02f00000 for
++ * the DTB leaves rest of the free RAM to the initrd starting at 0x02f00000.
+  * Even with the smallest possible CPU-GPU memory split of the CPU getting
+- * only 64M, the remaining 25M starting at 0x02700000 should allow quite
+- * large initrds before they start colliding with U-Boot.
++ * only 64M, the remaining 17M starting at 0x02f00000 should allow reasonably
++ * sized initrds before they start colliding with U-Boot.
+  */
+ #define ENV_MEM_LAYOUT_SETTINGS \
+ 	"fdt_high=" FDT_HIGH "\0" \
+ 	"initrd_high=" INITRD_HIGH "\0" \
+ 	"kernel_addr_r=0x00080000\0" \
+-	"scriptaddr=0x02400000\0" \
+-	"pxefile_addr_r=0x02500000\0" \
+-	"fdt_addr_r=0x02600000\0" \
+-	"ramdisk_addr_r=0x02700000\0"
++	"scriptaddr=0x02c00000\0" \
++	"pxefile_addr_r=0x02d00000\0" \
++	"fdt_addr_r=0x02e00000\0" \
++	"ramdisk_addr_r=0x02f00000\0"
+ 
+ #if CONFIG_IS_ENABLED(CMD_MMC)
+ 	#define BOOT_TARGET_MMC(func) \
+-- 
+2.29.2
+

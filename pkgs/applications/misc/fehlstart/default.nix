@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, gtk2, keybinder, fetchFromGitLab }:
+{ lib, stdenv, pkg-config, gtk2, keybinder, fetchFromGitLab }:
 
 stdenv.mkDerivation {
   name = "fehlstart-9f4342d7";
@@ -11,14 +11,14 @@ stdenv.mkDerivation {
   };
 
   patches = [ ./use-nix-profiles.patch ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 keybinder ];
 
   preConfigure = ''
     export PREFIX=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small desktop application launcher with reasonable memory footprint";
     homepage = "https://gitlab.com/fehlstart/fehlstart";
     license = licenses.gpl3;

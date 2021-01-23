@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     install -Dm755 convfont $out/bin/convfont
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Converts font for use with FontLibC";
     homepage = "https://github.com/drdnar/convfont";
     license = licenses.wtfpl;

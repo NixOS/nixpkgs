@@ -1,8 +1,11 @@
-{ lib, fetchFromGitHub, python3 }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theHarvester";
-  version = "3.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "laramies";
@@ -11,9 +14,27 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "0lxzxfa9wbzim50d2jmd27i57szd0grm1dfayhnym86jn01qpvn3";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ 
-    aiodns beautifulsoup4 dns grequests netaddr
-    plotly pyyaml requests retrying shodan texttable
+  propagatedBuildInputs = with python3.pkgs; [
+    aiodns
+    aiohttp
+    aiomultiprocess
+    aiosqlite
+    beautifulsoup4
+    censys
+    certifi
+    dns
+    gevent
+    grequests
+    lxml
+    netaddr
+    plotly
+    pyppeteer
+    pyyaml
+    requests
+    retrying
+    shodan
+    texttable
+    uvloop
   ];
 
   checkInputs = [ python3.pkgs.pytest ];
@@ -31,6 +52,6 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/laramies/theHarvester";
     maintainers = with maintainers; [ c0bw3b treemo ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

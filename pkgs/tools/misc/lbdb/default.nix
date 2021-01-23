@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, perl, perlPackages, finger_bsd, makeWrapper
+{ lib, stdenv, fetchurl, fetchpatch, perl, perlPackages, finger_bsd, makeWrapper
 , abook ? null
 , gnupg ? null
 , goobook ? null
@@ -9,7 +9,7 @@
 let
   version = "0.48.1";
 in
-with stdenv.lib;
+with lib;
 with perlPackages;
 stdenv.mkDerivation {
   pname = "lbdb";

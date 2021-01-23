@@ -1,8 +1,8 @@
 {
-  mkDerivation,
+  mkDerivation, lib,
   extra-cmake-modules, kdoctools,
   kconfigwidgets, kcoreaddons, kdeclarative, kglobalaccel, ki18n, kwindowsystem, plasma-framework,
-  qtdeclarative,
+  qtbase, qtdeclarative,
   gconf, glib, libcanberra-gtk3, libpulseaudio, sound-theme-freedesktop
 }:
 
@@ -15,6 +15,7 @@ mkDerivation {
     kconfigwidgets kcoreaddons kdeclarative kglobalaccel ki18n plasma-framework
     kwindowsystem
 
-    qtdeclarative
+    qtbase qtdeclarative
   ];
+  meta.broken = lib.versionOlder qtbase.version "5.15.0";
 }

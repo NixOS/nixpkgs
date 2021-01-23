@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib }:
+{ lib, stdenv, fetchFromGitHub, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "star";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Spliced Transcripts Alignment to a Reference";
     homepage = "https://github.com/alexdobin/STAR";
     license = licenses.gpl3Plus;

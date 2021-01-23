@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mkDerivation
+{ lib, stdenv, fetchurl, mkDerivation
 , qmake, qtbase, qtquickcontrols2, qtgraphicaleffects
 , python3, pyotherside
 , pcsclite, yubikey-personalization
@@ -39,7 +39,7 @@ mkDerivation rec {
       --prefix PYTHONPATH : "$program_PYTHONPATH" \
       --prefix QML2_IMPORT_PATH : "${pyotherside}/${qtbase.qtQmlPrefix}" \
       --prefix LD_PRELOAD : "${yubikey-personalization}/lib/libykpers-1.so" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.getLib pcsclite}/lib:${yubikey-personalization}/lib"
 
       mkdir -p $out/share/applications
       cp resources/com.yubico.yubioath.desktop \
@@ -51,7 +51,7 @@ mkDerivation rec {
         --replace 'Icon=yubioath' "Icon=$out/share/yubioath/icons/com.yubico.yubioath.png"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yubico Authenticator";
     longDescription = ''
       Application for generating Open Authentication (OATH) time-based TOTP and
@@ -63,7 +63,7 @@ mkDerivation rec {
     downloadPage = "https://developers.yubico.com/yubioath-desktop/Releases/";
     changelog = "https://developers.yubico.com/yubioath-desktop/Release_Notes.html";
 
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = with maintainers; [ mic92 risson ];
   };
 }

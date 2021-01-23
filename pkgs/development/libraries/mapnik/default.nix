@@ -1,4 +1,4 @@
-{ stdenv, fetchzip
+{ lib, stdenv, fetchzip
 , boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
 , libwebp, libxml2, proj, python, sqlite, zlib
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     "XML2_LIBS=${libxml2.out}/lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source toolkit for developing mapping applications";
     homepage = "https://mapnik.org";
     maintainers = with maintainers; [ hrdinka ];

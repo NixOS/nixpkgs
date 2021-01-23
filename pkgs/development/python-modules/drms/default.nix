@@ -4,13 +4,15 @@
 , numpy
 , pandas
 , six
-, pytest
-, python
+, astropy
+, pytestCheckHook
+, pytest-doctestplus
 }:
 
 buildPythonPackage rec {
   pname = "drms";
   version = "0.6.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,12 +26,10 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    astropy
+    pytestCheckHook
+    pytest-doctestplus
   ];
-
-  checkPhase = ''
-    ${python.interpreter} -m drms.tests
-  '';
 
   meta = with lib; {
     description = "Access HMI, AIA and MDI data with Python";

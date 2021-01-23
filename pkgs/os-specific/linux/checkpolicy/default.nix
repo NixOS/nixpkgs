@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, flex, libsepol }:
+{ lib, stdenv, fetchurl, bison, flex, libsepol }:
 
 stdenv.mkDerivation rec {
   pname = "checkpolicy";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+    "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
 
   meta = removeAttrs libsepol.meta ["outputsToInstall"] // {

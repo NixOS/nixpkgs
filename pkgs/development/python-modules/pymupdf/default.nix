@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, mupdf, swig }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, mupdf, swig }:
 buildPythonPackage rec {
   pname = "pymupdf";
   version = "1.18.0";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for MuPDF's rendering library.";
     homepage = "https://github.com/pymupdf/PyMuPDF";
     maintainers = with maintainers; [ teto ];

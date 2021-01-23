@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, buildEnv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, substituteAll, buildEnv, fetchFromGitHub, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "wee-slack";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     install -D -m 0444 weemoji.json $out/share/wee-slack/weemoji.json
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/wee-slack/wee-slack";
     license = licenses.mit;
     maintainers = with maintainers; [ willibutz ];

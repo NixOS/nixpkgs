@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , async-timeout
 , asynctest
 , buildPythonPackage
@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "zha-ng";
     repo = "zigpy-znp";
     rev = "v${version}";
-    sha256 = "a98RYPvcYE1NPERmPo1jPwMf86N+0297u4pOKuaB6u4=";
+    sha256 = "18dav2n5fqdigf8dl7gcqa9z8l6p2ig6l5q78gqg2wj7wjpncwyj";
   };
 
   propagatedBuildInputs = [
@@ -45,7 +45,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # zigpy-znp was too slow to sync up with the zigpy 0.29 release and has API breakage, remove >0.3.0
+    "test_force_remove"
+  ];
+
+  meta = with lib; {
     description = "A library for zigpy which communicates with TI ZNP radios";
     homepage = "https://github.com/zha-ng/zigpy-znp";
     license = licenses.gpl3Plus;

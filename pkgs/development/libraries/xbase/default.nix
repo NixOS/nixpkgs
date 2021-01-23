@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "xbase-3.1.2";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://linux.techass.com/projects/xdb/";
     description = "C++ class library formerly known as XDB";
     platforms = platforms.linux;

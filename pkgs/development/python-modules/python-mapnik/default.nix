@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , isPyPy
 , python
@@ -57,7 +57,7 @@ in buildPythonPackage rec {
   ]);
   propagatedBuildInputs = [ pillow pycairo ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for Mapnik";
     homepage = "https://mapnik.org";
     license  = licenses.lgpl21;

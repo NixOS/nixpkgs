@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , nix-update-script
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , qtbase
@@ -33,7 +33,7 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
   ];
 

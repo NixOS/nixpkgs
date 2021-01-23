@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, chromaprint, makeWrapper }:
+{ lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, chromaprint, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "lidarr";
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${mono}/bin/mono" $out/bin/Lidarr \
       --add-flags "$out/bin/Lidarr.exe" \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ chromaprint ]} \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [
+      --prefix PATH : ${lib.makeBinPath [ chromaprint ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
           curl sqlite libmediainfo ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Usenet/BitTorrent music downloader";
     homepage = "https://lidarr.audio/";
     license = licenses.gpl3;

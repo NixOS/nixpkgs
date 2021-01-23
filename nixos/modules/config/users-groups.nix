@@ -153,7 +153,7 @@ let
       };
 
       shell = mkOption {
-        type = types.either types.shellPackage types.path;
+        type = types.nullOr (types.either types.shellPackage types.path);
         default = pkgs.shadow;
         defaultText = "pkgs.shadow";
         example = literalExample "pkgs.bashInteractive";
@@ -198,10 +198,8 @@ let
         type = types.bool;
         default = false;
         description = ''
-          If true, the home directory will be created automatically. If this
-          option is true and the home directory already exists but is not
-          owned by the user, directory owner and group will be changed to
-          match the user.
+          Whether to create the home directory and ensure ownership as well as
+          permissions to match the user.
         '';
       };
 

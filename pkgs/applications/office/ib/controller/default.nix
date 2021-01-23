@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk, ib-tws, xpra }:
+{ lib, stdenv, fetchurl, unzip, jdk, ib-tws, xpra }:
 
 stdenv.mkDerivation rec {
   version = "2.14.0";
@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
     '';
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automation Controller for the Trader Work Station of Interactive Brokers";
     homepage = "https://github.com/ib-controller/ib-controller";
     license = licenses.gpl3;

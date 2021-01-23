@@ -1,4 +1,4 @@
-{ fetchurl, stdenv
+{ fetchurl, lib, stdenv
 , IOKit ? null }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" "INSTALL=install" ];
 
   buildInputs = []
-    ++ stdenv.lib.optional stdenv.isDarwin IOKit;
+    ++ lib.optional stdenv.isDarwin IOKit;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://linukz.org/cd-discid.shtml";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rycee ];

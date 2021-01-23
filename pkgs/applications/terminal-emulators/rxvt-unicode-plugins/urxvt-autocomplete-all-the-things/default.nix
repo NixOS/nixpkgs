@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "urxvt-autocomplete-all-the-things";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp autocomplete-ALL-the-things $out/lib/urxvt/perl
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "urxvt plugin allowing user to easily complete arbitrary text";
     homepage = "https://github.com/Vifon/autocomplete-ALL-the-things";
     license = licenses.gpl3;

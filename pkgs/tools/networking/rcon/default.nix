@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, glib, libbsd, check, pcre }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, glib, libbsd, check, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "rcon";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     pcre
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/n0la/rcon";
     description = "Source RCON client for command line";
     maintainers = with maintainers; [ f4814n ];

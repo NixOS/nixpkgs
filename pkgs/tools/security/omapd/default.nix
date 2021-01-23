@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, gdb, zlib }:
+{ lib, stdenv, fetchurl, qt4, gdb, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "omapd";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     ln -s $out/usr/lib/omapd/plugins $out/bin/plugins
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://code.google.com/archive/p/omapd/";
     description = "IF-MAP Server that implements the IF-MAP v1.1 and v2.0 specifications published by the Trusted Computing Group (TCG)";
     license = licenses.gpl3;

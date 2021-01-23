@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , curl
 , boost
 , liboauth
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3xFlFokqdD1Nstu7TSUCaHUxvSodIb12QNVjmNgn9gs=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig help2man ];
+  nativeBuildInputs = [ cmake pkg-config help2man ];
 
   buildInputs = [ boost curl htmlcxx jsoncpp liboauth rhash tinyxml-2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unofficial downloader to GOG.com for Linux users. It uses the same API as the official GOGDownloader";
     homepage = "https://github.com/Sude-/lgogdownloader";
     license = licenses.wtfpl;

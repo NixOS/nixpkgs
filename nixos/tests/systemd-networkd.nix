@@ -61,7 +61,7 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
     };
 in import ./make-test-python.nix ({pkgs, ... }: {
   name = "networkd";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ ninjatrappeur ];
   };
   nodes = {

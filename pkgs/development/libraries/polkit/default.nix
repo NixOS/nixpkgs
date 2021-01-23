@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, glib, expat, pam, perl, fetchpatch
+{ lib, stdenv, fetchurl, pkg-config, glib, expat, pam, perl, fetchpatch
 , intltool, spidermonkey_78, gobject-introspection, libxslt, docbook_xsl, dbus
 , docbook_xml_dtd_412, gtk-doc, coreutils
 , useSystemd ? (stdenv.isLinux && !stdenv.hostPlatform.isMusl), systemd, elogind
-, withIntrospection ? true
+# needed until gobject-introspection does cross-compile (https://github.com/NixOS/nixpkgs/pull/88222)
+, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
 # Not yet investigated; it may be due to the "Make netgroup support optional"
 # patch not updating the tests correctly yet, or doing something wrong,
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/polkit/polkit/commit/5dd4e22efd05d55833c4634b56e473812b5acbf2.patch";
       sha256 = "17lv7xj5ksa27iv4zpm4zwd4iy8zbwjj4ximslfq3sasiz9kxhlp";
     })
-  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Make netgroup support optional (musl does not have it)
     # Upstream MR: https://gitlab.freedesktop.org/polkit/polkit/merge_requests/10
     # We use the version of the patch that Alpine uses successfully.
@@ -44,20 +45,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     sed -i -e "s/-Wl,--as-needed//" configure.ac
   '';
 
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   nativeBuildInputs =
-    [ glib gtk-doc pkgconfig intltool perl ]
+    [ glib gtk-doc pkg-config intltool perl ]
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
     [ expat pam spidermonkey_78 ]
     # On Linux, fall back to elogind when systemd support is off.
-    ++ stdenv.lib.optional stdenv.isLinux (if useSystemd then systemd else elogind)
-    ++ stdenv.lib.optional withIntrospection gobject-introspection;
+    ++ lib.optional stdenv.isLinux (if useSystemd then systemd else elogind)
+    ++ lib.optional withIntrospection gobject-introspection;
 
   propagatedBuildInputs = [
     glib # in .pc Requires
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
       --replace   /bin/true ${coreutils}/bin/true \
       --replace   /bin/false ${coreutils}/bin/false
 
-  '' + stdenv.lib.optionalString useSystemd /* bogus chroot detection */ ''
+  '' + lib.optionalString useSystemd /* bogus chroot detection */ ''
     sed '/libsystemd autoconfigured/s/.*/:/' -i configure
   '';
 
@@ -87,7 +88,7 @@ stdenv.mkDerivation rec {
     "--with-polkitd-user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
     "--with-os-type=NixOS" # not recognized but prevents impurities on non-NixOS
     (if withIntrospection then "--enable-introspection" else "--disable-introspection")
-  ] ++ stdenv.lib.optional (!doCheck) "--disable-test";
+  ] ++ lib.optional (!doCheck) "--disable-test";
 
   makeFlags = [
     "INTROSPECTION_GIRDIR=${placeholder "out"}/share/gir-1.0"
@@ -110,7 +111,7 @@ stdenv.mkDerivation rec {
     dbus-run-session --config-file=${./system_bus.conf} -- sh -c 'DBUS_SYSTEM_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS make check'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.freedesktop.org/wiki/Software/polkit";
     description = "A toolkit for defining and handling the policy that allows unprivileged processes to speak to privileged processes";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , makeWrapper
@@ -17,7 +17,7 @@
 assert useSystemd -> (systemd != null);
 assert pkcs11Support -> (pkcs11helper != null);
 
-with stdenv.lib;
+with lib;
 let
   # Check if the script needs to have other binaries wrapped when changing this.
   update-resolved = fetchurl {
@@ -68,7 +68,7 @@ let
 
         enableParallelBuilding = true;
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "A robust and highly flexible tunneling application";
           downloadPage = "https://openvpn.net/community-downloads/";
           homepage = "https://openvpn.net/";

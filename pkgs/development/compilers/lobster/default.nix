@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , unstableGitUpdater
 , cmake
@@ -45,14 +45,13 @@ stdenv.mkDerivation rec {
     ];
 
   preConfigure = "cd dev";
-  enableParallelBuilding = true;
 
   passthru = {
     tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://strlen.com/lobster";
     description = "The Lobster programming language";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, coreutils }:
+{ lib, stdenv, fetchurl, gettext, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "sharutils-4.15.2";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for remote synchronization and `shell archives'";
     longDescription =
       '' GNU shar makes so-called shell archives out of many files, preparing

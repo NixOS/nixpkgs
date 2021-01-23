@@ -1,5 +1,6 @@
 {
   appindicator-sharp,
+  bash,
   coreutils,
   fetchFromGitHub,
   git,
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
         --set PATH ${symlinkJoin {
           name = "mono-path";
           paths = [
+            bash
             coreutils
             git
             git-lfs

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , appimageTools
 , makeWrapper
@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "0.9.6";
+  version = "0.9.9-3";
 
   src = fetchurl {
     url = "https://onepassword.s3.amazonaws.com/linux/appimage/${pname}-${version}.AppImage";
-    sha256 = "0464a5d39g20hif3dz3qr78dqb0cmxbazy0q48j9gkawhxm30c1h";
+    hash = "sha256-REuES0yTjTsBHapmj1YLCTIq2cIVtr7Z8ZiEgMCrwrs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
     # Wrap the application with Electron.
     makeWrapper "${electron_11}/bin/electron" "$out/bin/${pname}" \
       --add-flags "$out/share/${pname}/resources/app.asar" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath runtimeLibs}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
   '';
 
   passthru.updateScript = ./update.sh;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-platform password manager";
     longDescription = ''
       1Password is a multi-platform package manager.

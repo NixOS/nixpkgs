@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , openssl, readline, ncurses, zlib
 , dataDir ? "/var/lib/softether" }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
           Makefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An Open-Source Free Cross-platform Multi-protocol VPN Program";
     homepage = "https://www.softether.org/";
     license = licenses.asl20;

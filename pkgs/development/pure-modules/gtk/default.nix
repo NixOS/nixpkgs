@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, pure-ffi, gtk2 }:
+{ stdenv, fetchurl, pkg-config, pure, pure-ffi, gtk2 }:
 
 stdenv.mkDerivation rec {
   baseName = "gtk";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "e659ff1bc5809ce35b810f8ac3fb7e8cadaaef13996537d8632e2f86ed76d203";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure pure-ffi gtk2 ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;

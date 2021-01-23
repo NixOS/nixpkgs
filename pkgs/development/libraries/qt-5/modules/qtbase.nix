@@ -2,7 +2,7 @@
   stdenv, lib,
   src, patches, version, qtCompatVersion,
 
-  coreutils, bison, flex, gdb, gperf, lndir, perl, pkgconfig, python3,
+  coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3,
   which,
   # darwin support
   darwin, libiconv,
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
-    [ bison flex gperf lndir perl pkgconfig which ];
+    [ bison flex gperf lndir perl pkg-config which ];
 
   propagatedNativeBuildInputs = [ lndir ];
 
@@ -355,8 +355,6 @@ stdenv.mkDerivation {
           "-I" "${libmysqlclient}/include"
         ]
     );
-
-  enableParallelBuilding = true;
 
   postInstall =
     # Move selected outputs.

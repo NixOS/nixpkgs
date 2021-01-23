@@ -76,8 +76,7 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ perl xz.bin ]
-    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
-    ++ optionals stdenv.hostPlatform.isMusl [ autoreconfHook bison ];   # due to patch
+    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ];  # due to patch
   configureFlags = [ "--with-packager=https://NixOS.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
@@ -155,6 +154,6 @@ stdenv.mkDerivation (rec {
 } // optionalAttrs stdenv.hostPlatform.isMusl {
   # Work around a bogus warning in conjunction with musl.
   NIX_CFLAGS_COMPILE = "-Wno-error";
-} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isAndroid {
+} // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
   NIX_CFLAGS_COMPILE = "-D__USE_FORTIFY_LEVEL=0";
 })

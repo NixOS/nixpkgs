@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 }:
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1x5bvvq33380k2qhs1bwz3f9zl5q1sl7iic47pxfkzv24bpjnypb";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A text editor in ≤1024 lines of code, written in Rust";
     homepage = "https://github.com/ilai-deutel/kibi";
     license = licenses.mit;

@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "krdc";
+  pname = "krdc";
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
   buildInputs = [
     kcmutils kcompletion kconfig kdnssd knotifyconfig kwallet kwidgetsaddons

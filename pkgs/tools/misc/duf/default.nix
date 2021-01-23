@@ -21,7 +21,7 @@ buildGoModule rec {
     homepage = "https://github.com/muesli/duf/";
     description = "Disk Usage/Free Utility";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ petabyteboy penguwin ];
   };
 }

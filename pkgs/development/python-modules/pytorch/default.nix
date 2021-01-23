@@ -112,7 +112,7 @@ let
 in buildPythonPackage rec {
   pname = "pytorch";
   # Don't forget to update pytorch-bin to the same version.
-  version = "1.7.0";
+  version = "1.7.1";
 
   disabled = !isPy3k;
 
@@ -127,7 +127,7 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0hb11m5kvs4nsi5bc9ijnv6k07593p9dw40rcn33s9vspinrcjd4";
+    sha256 = "sha256-udpbSL8xnzf20A1pYYNlYjdp8ME8AVaAkMMiw53K6CU=";
   };
 
   patches = lib.optionals stdenv.isDarwin [

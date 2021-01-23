@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, pkgconfig, libseccomp }:
+{ lib, stdenv, fetchurl, pkg-config, libseccomp }:
 
 let version = "0.6.7";
 in stdenv.mkDerivation {
   pname = "solo5";
   inherit version;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux) libseccomp;
 
   src = fetchurl {

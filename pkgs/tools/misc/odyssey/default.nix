@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "odyssey";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin sources/odyssey
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scalable PostgreSQL connection pooler";
     homepage = "https://github.com/yandex/odyssey";
     license = licenses.bsd3;

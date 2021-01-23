@@ -3,20 +3,20 @@
 , gobject-introspection
 , meson
 , ninja
-, pkgconfig
-, stdenv
+, pkg-config
+, lib, stdenv
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-menus";
-  version = "4.8.1";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1fsiq8q8b65skxbg1bsishygnw2zg8kr0d09rassqjdimd4yfi1y";
+    sha256 = "1qdaql4mknhzvl2qi1pyw4c820lqb7lg07gblh0wzfk4f7h8hddx";
   };
 
   buildInputs = [
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
     wrapGAppsHook
-    pkgconfig
+    pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-menus";
     description = "A menu system for the Cinnamon project";
     license = [ licenses.gpl2 licenses.lgpl2 ];

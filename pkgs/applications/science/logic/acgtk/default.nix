@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dune, ocamlPackages }:
+{ lib, stdenv, fetchurl, dune, ocamlPackages }:
 
 stdenv.mkDerivation {
 
@@ -16,9 +16,11 @@ stdenv.mkDerivation {
 
   buildPhase = "dune build";
 
-  inherit (dune) installPhase;
+  installPhase = ''
+    dune install --prefix $out --libdir $OCAMLFIND_DESTDIR
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://acg.loria.fr/";
     description = "A toolkit for developing ACG signatures and lexicon";
     license = licenses.cecill20;

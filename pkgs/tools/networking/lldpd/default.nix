@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, removeReferencesTo
+{ stdenv, lib, fetchurl, pkg-config, removeReferencesTo
 , libevent, readline, net-snmp, openssl
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=\${out}/lib/systemd/system"
   ];
 
-  nativeBuildInputs = [ pkgconfig removeReferencesTo ];
+  nativeBuildInputs = [ pkg-config removeReferencesTo ];
   buildInputs = [ libevent readline net-snmp openssl ];
 
   enableParallelBuilding = true;

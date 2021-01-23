@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , boost
@@ -53,10 +53,10 @@ stdenv.mkDerivation rec {
     "-DUSE_PYTHON=OFF"
     "-DUSE_QT=OFF"
     # GNUInstallDirs
-    "-DCMAKE_INSTALL_LIBDIR=lib" # needs relative path for pkgconfig
+    "-DCMAKE_INSTALL_LIBDIR=lib" # needs relative path for pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.openimageio.org";
     description = "A library and tools for reading and writing images";
     license = licenses.bsd3;

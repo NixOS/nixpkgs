@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, spidermonkey_68, glib
+{ lib, stdenv, fetchurl, meson, ninja, gettext, pkg-config, spidermonkey_68, glib
 , gnome3, gnome-menus, substituteAll }:
 
 stdenv.mkDerivation rec {
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell-extensions/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0hzn975v49rv3nsqp8m0mzv8gcm7nyvn54gj3zsml8ahlxwl592p";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   # https://gitlab.gnome.org/GNOME/gnome-shell-extensions/blob/3.34.0/meson.build#L23
   checkInputs = [ spidermonkey_68 ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext glib ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext glib ];
 
   mesonFlags = [ "-Dextension_set=all" ];
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GnomeShell/Extensions";
     description = "Modify and extend GNOME Shell functionality and behavior";
     maintainers = teams.gnome.members;

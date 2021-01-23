@@ -38,7 +38,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
   in
   {
     name = "unbound";
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ andir ];
     };
 

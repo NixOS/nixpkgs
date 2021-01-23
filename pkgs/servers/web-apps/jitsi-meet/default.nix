@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchurl, nixosTests }:
+{ pkgs, lib, stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     single-host-smoke-test = nixosTests.jitsi-meet;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Secure, Simple and Scalable Video Conferences";
     longDescription = ''
       Jitsi Meet is an open-source (Apache) WebRTC JavaScript application that uses Jitsi Videobridge

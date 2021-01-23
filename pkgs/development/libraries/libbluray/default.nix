@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fontconfig, autoreconfHook, DiskArbitration
+{ lib, stdenv, fetchurl, pkg-config, fontconfig, autoreconfHook, DiskArbitration
 , withJava ? false, jdk ? null, ant ? null
 , withAACS ? false, libaacs ? null
 , withBDplus ? false, libbdplus ? null
@@ -6,7 +6,7 @@
 , withFonts ? true, freetype ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert withJava -> jdk != null && ant != null;
 assert withAACS -> libaacs != null;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   patches = optional withJava ./BDJ-JARFILE-path.patch;
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ]
+  nativeBuildInputs = [ pkg-config autoreconfHook ]
                       ++ optionals withJava [ ant ]
                       ;
 
@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
     ${optionalString withJava ''export JDK_HOME="${jdk.home}"''}
   '';
 
-  configureFlags =  with stdenv.lib;
+  configureFlags =  with lib;
                     optional (! withJava) "--disable-bdjava-jar"
                  ++ optional (! withMetadata) "--without-libxml2"
                  ++ optional (! withFonts) "--without-freetype"
                  ;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.videolan.org/developers/libbluray.html";
     description = "Library to access Blu-Ray disks for video playback";
     license = licenses.lgpl21;

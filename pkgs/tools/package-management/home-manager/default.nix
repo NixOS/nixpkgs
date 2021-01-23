@@ -1,18 +1,18 @@
 #Adapted from
 #https://github.com/rycee/home-manager/blob/2c07829be2bcae55e04997b19719ff902a44016d/home-manager/default.nix
 
-{ bash, coreutils, findutils, gnused, less, stdenv, makeWrapper, fetchFromGitHub }:
+{ bash, coreutils, findutils, gnused, less, lib, stdenv, makeWrapper, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
 
   pname = "home-manager";
-  version = "2020-09-06";
+  version = "2021-01-16";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "home-manager";
-    rev = "249650a07ee2d949fa599f3177a8c234adbd1bee";
-    sha256 = "0x858b7i15kx74aqwgi2n5ls7zjhcky95z9vbxfdlawmaz371dma";
+    rev = "8127799f79ee96129b295d78294f40a54078131f";
+    sha256 = "0iji8nxa66s409pvjwi370ycsw4m74w6b3ywnjpfkl2filpapjns";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       "$out/share/bash-completion/completions/home-manager"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A user environment configurator";
     homepage = "https://rycee.gitlab.io/home-manager/";
     platforms = platforms.unix;

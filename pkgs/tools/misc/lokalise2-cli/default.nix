@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "lokalise2-cli";
@@ -19,7 +19,7 @@ buildGoModule rec {
     mv $out/bin/lokalise-cli-2-go $out/bin/lokalise2
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Translation platform for developers. Upload language files, translate, integrate via API";
     homepage = "https://lokalise.com";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jdk, jre, swt, makeWrapper, xorg, dpkg }:
+{ lib, stdenv, fetchurl, jdk, jre, swt, makeWrapper, xorg, dpkg }:
 
 stdenv.mkDerivation rec {
   pname = "ipscan";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cp usr/lib/ipscan/ipscan-any-${version}.jar $out/share/${pname}-${version}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/ipscan \
-      --prefix LD_LIBRARY_PATH : "$out/lib/:${stdenv.lib.makeLibraryPath [ swt xorg.libXtst ]}" \
+      --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt xorg.libXtst ]}" \
       --add-flags "-Xmx256m -cp $out/share/${pname}-${version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
 
     mkdir -p $out/share/applications
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp usr/share/pixmaps/ipscan.png $out/share/pixmaps/ipscan.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and friendly network scanner";
     homepage = "https://angryip.org";
     license = licenses.gpl2;

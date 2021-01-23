@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, util-linux, which
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, util-linux, which
 , procps, libcap_ng, openssl, python3 , perl
 , kernel ? null }:
 
-with stdenv.lib;
+with lib;
 
 let
   _kernel = kernel;
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ makeWrapper util-linux openssl libcap_ng pythonEnv
                   perl procps which ];
 
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = false; # bash-completion test fails with "compgen: command not found"
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     description = "A multilayer virtual switch";
     longDescription =

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl
-, automake, autoconf, libtool, pkgconfig, autoconf-archive
+{ lib, stdenv, fetchurl
+, automake, autoconf, libtool, pkg-config, autoconf-archive
 , libxml2, icu, bzip2, libtar
 , languageMachines
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "ucto-${release.version}.tar.gz"; };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ automake autoconf bzip2 libtool autoconf-archive
                   icu libtar libxml2
                   languageMachines.ticcutils
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     done;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A rule-based tokenizer for natural language";
     homepage    = "https://languagemachines.github.io/ucto/";
     license     = licenses.gpl3;

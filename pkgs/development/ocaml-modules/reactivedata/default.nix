@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, react, opaline }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, react, opaline }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.04"
+if !lib.versionAtLeast ocaml.version "4.04"
 then throw "reactiveData is not available for OCaml ${ocaml.version}"
 else
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   installPhase = "opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An OCaml module for functional reactive programming (FRP) based on React";
     homepage = "https://github.com/ocsigen/reactiveData";
     license = licenses.lgpl21;

@@ -2,23 +2,25 @@
 , buildPythonPackage
 , fetchPypi
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 , msrestazure
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-cognitiveservices";
-  version = "6.3.0";
+  version = "11.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1d029d5140152a36cc32f340e09f2b185ede2f54e577a44f3821878efb823415";
+    sha256 = "71414e3cd7445e44fc18f217f2d22df05c36877e1233328b2297d07ddf27e82a";
   };
 
   propagatedBuildInputs = [
     msrestazure
     azure-common
+    azure-mgmt-core
     azure-mgmt-nspkg
   ];
 

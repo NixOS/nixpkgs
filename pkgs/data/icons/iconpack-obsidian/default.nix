@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, mint-x-icons, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, mint-x-icons, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "iconpack-obsidian";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gnome icon pack based upon Faenza";
     homepage = "https://github.com/madmaxms/iconpack-obsidian";
     license = licenses.lgpl3;

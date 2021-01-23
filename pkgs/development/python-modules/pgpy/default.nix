@@ -1,7 +1,6 @@
 { lib, isPy3k, fetchFromGitHub, buildPythonPackage
 , six, enum34, pyasn1, cryptography, singledispatch
-, fetchPypi
-, gpgme, flake8, pytest, pytestcov, pep8-naming, pytest-ordering }:
+, fetchPypi, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "pgpy";
@@ -22,17 +21,10 @@ buildPythonPackage rec {
   ] ++ lib.optional (!isPy3k) enum34;
 
   checkInputs = [
-    gpgme
-    flake8
-    pytest
-    pytestcov
-    pep8-naming
-    pytest-ordering
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  disabledTests = [ "test_sign_string" "test_verify_string" ];
 
   meta = with lib; {
     homepage = "https://github.com/SecurityInnovation/PGPy";

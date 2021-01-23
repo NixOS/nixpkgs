@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule
+{ lib, stdenv, fetchFromGitHub, buildGoModule
 , pkg-config, ffmpeg, gnutls
 }:
 
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   buildInputs = [ ffmpeg gnutls ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Official Go implementation of the Livepeer protocol";
     homepage = "https://livepeer.org";
     license = licenses.mit;

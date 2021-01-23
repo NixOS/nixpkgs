@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, gnome-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "iconpack-jade";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Icon pack based upon Faenza and Mint-X";
     homepage = "https://github.com/madmaxms/iconpack-jade";
     license = licenses.lgpl3;

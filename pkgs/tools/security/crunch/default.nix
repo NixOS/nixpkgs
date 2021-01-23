@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which }:
+{ lib, stdenv, fetchurl, which }:
 
 stdenv.mkDerivation  rec {
   pname = "crunch";
@@ -20,7 +20,7 @@ stdenv.mkDerivation  rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wordlist generator";
     homepage = "https://sourceforge.net/projects/crunch-wordlist/";
     platforms = platforms.unix;

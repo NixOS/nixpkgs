@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , gettext
 , fetchurl
 , evolution-data-server
 , fetchpatch
-, pkgconfig
+, pkg-config
 , libxslt
 , docbook_xsl
 , docbook_xml_dtd_42
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-contacts/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0hsq0dwxjahcaxnm1m4r1lync9k2fkwzybfmkchrmn95vqcwwvf9";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     gettext
     libxslt
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Contacts";
     description = "GNOME’s integrated address book";
     maintainers = teams.gnome.members;

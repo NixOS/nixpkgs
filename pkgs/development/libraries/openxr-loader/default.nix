@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python3, libX11, libXxf86vm, libXrandr, vulkan-headers, libGL }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, libX11, libXxf86vm, libXrandr, vulkan-headers, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "openxr-loader";
@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ libX11 libXxf86vm libXrandr vulkan-headers libGL ];
-  enableParallelBuilding = true;
 
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
 
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
     mv "$out/lib/libXrApiLayer"* "$layers/lib"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Khronos OpenXR loader";
     homepage    = "https://www.khronos.org/openxr";
     platforms   = platforms.linux;

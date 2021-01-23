@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub }:
 stdenv.mkDerivation rec {
   pname = "simple-mpv-ui";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
   passthru.scriptName = "webui.lua";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A web based user interface with controls for the mpv mediaplayer";
     homepage = "https://github.com/open-dynaMIX/simple-mpv-webui";
     maintainers = [ maintainers.cript0nauta ];

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, glibc, augeas, dnsutils, c-ares, curl,
+{ lib, stdenv, fetchurl, fetchpatch, glibc, augeas, dnsutils, c-ares, curl,
   cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
-  python, python3, pam, popt, talloc, tdb, tevent, pkgconfig, ldb, openldap,
+  python, python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
   pcre, kerberos, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
   libuuid, ldap, systemd, nspr, check, cmocka, uid_wrapper,
   nss_wrapper, ncurses, Po4a, http-parser, jansson,
@@ -55,14 +55,14 @@ stdenv.mkDerivation rec {
       --with-ldb-lib-dir=$out/modules/ldb
       --with-nscd=${glibc.bin}/sbin/nscd
     )
-  '' + stdenv.lib.optionalString withSudo ''
+  '' + lib.optionalString withSudo ''
     configureFlagsArray+=("--with-sudo")
   '';
 
   enableParallelBuilding = true;
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
                   samba nfs-utils doxygen python python3 popt
-                  talloc tdb tevent pkgconfig ldb pam openldap pcre kerberos
+                  talloc tdb tevent pkg-config ldb pam openldap pcre kerberos
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
                   libuuid ldap systemd nspr check cmocka uid_wrapper
                   nss_wrapper ncurses Po4a http-parser jansson ];
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     find "$out" -depth -type d -exec rmdir --ignore-fail-on-non-empty {} \;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "System Security Services Daemon";
     homepage = "https://fedorahosted.org/sssd/";
     license = licenses.gpl3;

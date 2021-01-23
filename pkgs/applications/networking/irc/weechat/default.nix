@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib
 , ncurses, openssl, aspell, gnutls, gettext
-, zlib, curl, pkgconfig, libgcrypt
+, zlib, curl, pkg-config, libgcrypt
 , cmake, makeWrapper, libobjc, libresolv, libiconv
 , asciidoctor # manpages
 , guileSupport ? true, guile
@@ -37,8 +37,7 @@ let
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
 
-      enableParallelBuilding = true;
-      cmakeFlags = with stdenv.lib; [
+      cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
         "-DENABLE_JAVASCRIPT=OFF"  # Requires v8 <= 3.24.3, https://github.com/weechat/weechat/issues/360
@@ -48,19 +47,19 @@ let
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
 
-      buildInputs = with stdenv.lib; [
-          ncurses openssl aspell gnutls gettext zlib curl pkgconfig
-          libgcrypt makeWrapper cmake asciidoctor
-          ]
+      nativeBuildInputs = [ cmake pkg-config makeWrapper asciidoctor ];
+      buildInputs = with lib; [
+          ncurses openssl aspell gnutls gettext zlib curl
+          libgcrypt ]
         ++ optionals stdenv.isDarwin [ libobjc libresolv ]
         ++ concatMap (p: p.buildInputs) enabledPlugins
         ++ extraBuildInputs;
 
       NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
         # Fix '_res_9_init: undefined symbol' error
-        + (stdenv.lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
+        + (lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
 
-      postInstall = with stdenv.lib; ''
+      postInstall = with lib; ''
         for p in ${concatMapStringsSep " " (p: p.name) enabledPlugins}; do
           from=$out/lib/weechat/plugins/$p.so
           to=''${!p}/lib/weechat/plugins/$p.so
@@ -77,8 +76,8 @@ let
           (eg. adding python modules for scripts that would require them, etc.)
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
-        license = stdenv.lib.licenses.gpl3;
-        maintainers = with stdenv.lib.maintainers; [ lovek323 lheckemann ];
-        platforms = stdenv.lib.platforms.unix;
+        license = lib.licenses.gpl3;
+        maintainers = with lib.maintainers; [ lovek323 lheckemann ];
+        platforms = lib.platforms.unix;
       };
     }

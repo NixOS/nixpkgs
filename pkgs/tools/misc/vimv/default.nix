@@ -1,4 +1,4 @@
-{ stdenv, bash, fetchFromGitHub }:
+{ lib, stdenv, bash, fetchFromGitHub }:
 stdenv.mkDerivation {
   pname = "vimv";
   version = "unstable-2019-10-31";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     install $src/vimv $out/bin/vimv
     patchShebangs $out/bin/vimv
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/thameera/vimv";
     description = "Batch-rename files using Vim";
     license = licenses.mit;

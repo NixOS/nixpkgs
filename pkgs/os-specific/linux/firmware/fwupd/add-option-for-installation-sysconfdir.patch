@@ -122,32 +122,6 @@ index ed4eee70..76dbdb1d 100644
 -  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
-diff --git a/plugins/msr/meson.build b/plugins/msr/meson.build
-index d829e153..e2917bbe 100644
---- a/plugins/msr/meson.build
-+++ b/plugins/msr/meson.build
-@@ -5,7 +5,7 @@ install_data(['msr.quirk'],
- )
- 
- install_data(['fwupd-msr.conf'],
--  install_dir: join_paths(sysconfdir, 'modules-load.d')
-+  install_dir: join_paths(sysconfdir_install, 'modules-load.d')
- )
- 
- shared_module('fu_plugin_msr',
-diff --git a/plugins/platform-integrity/meson.build b/plugins/platform-integrity/meson.build
-index 6f1c4bc5..c5d043fc 100644
---- a/plugins/platform-integrity/meson.build
-+++ b/plugins/platform-integrity/meson.build
-@@ -7,7 +7,7 @@ install_data([
- )
- 
- install_data(['fwupd-platform-integrity.conf'],
--  install_dir: join_paths(sysconfdir, 'modules-load.d')
-+  install_dir: join_paths(sysconfdir_install, 'modules-load.d')
- )
- 
- shared_module('fu_plugin_platform_integrity',
 diff --git a/plugins/redfish/meson.build b/plugins/redfish/meson.build
 index 92762791..08bb37ea 100644
 --- a/plugins/redfish/meson.build

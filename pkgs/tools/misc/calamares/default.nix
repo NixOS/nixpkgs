@@ -6,16 +6,17 @@
 
 mkDerivation rec {
   pname = "calamares";
-  version = "3.2.17.1";
+  version = "3.2.35.1";
 
   # release including submodule
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "156zpjyw8w4y23aa60mvg3d3mr0kzfq5jkl7ixgahq33zpc17ms8";
+    sha256 = "s2wnwcdrcJLG5NhugSkntBCYfPuv3T/9+PclbmK0BJ4=";
   };
 
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
-    boost cmake extra-cmake-modules kparts.dev kpmcore.out kservice.dev
+    boost kparts.dev kpmcore.out kservice.dev
     libatasmart libxcb libyamlcpp parted polkit-qt python qtbase
     qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
   ];
@@ -32,17 +33,13 @@ mkDerivation rec {
 
   POLKITQT-1_POLICY_FILES_INSTALL_DIR = "$(out)/share/polkit-1/actions";
 
-  patchPhase = ''
+  postPatch = ''
     sed -e "s,/usr/bin/calamares,$out/bin/calamares," \
         -i calamares.desktop \
         -i com.github.calamares.calamares.policy
 
     sed -e 's,/usr/share/zoneinfo,${tzdata}/share/zoneinfo,' \
-        -i src/modules/locale/timezonewidget/localeconst.h \
         -i src/modules/locale/SetTimezoneJob.cpp
-
-    sed -e 's,/usr/share/i18n/locales,${glibc.out}/share/i18n/locales,' \
-        -i src/modules/locale/timezonewidget/localeconst.h
 
     sed -e 's,/usr/share/X11/xkb/rules/base.lst,${xkeyboard_config}/share/X11/xkb/rules/base.lst,' \
         -i src/modules/keyboard/keyboardwidget/keyboardglobal.h
@@ -56,8 +53,8 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Distribution-independent installer framework";
-    license = licenses.gpl3;
-    maintainers = with lib.maintainers; [ manveru ];
+    license = with licenses; [ gpl3Plus bsd2 ];
+    maintainers = with maintainers; [ manveru ];
     platforms = platforms.linux;
   };
 }

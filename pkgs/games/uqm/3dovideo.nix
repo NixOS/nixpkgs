@@ -1,6 +1,6 @@
 { stdenv, requireFile, writeText, fetchurl, haskellPackages }:
 
-with stdenv.lib;
+with lib;
 
 let
   makeSpin = num: let
@@ -30,7 +30,7 @@ let
     buildDepends = [ base binary bytestring filepath tar ];
 
     description = "Extract video files from a Star Control II 3DO image";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 
 in stdenv.mkDerivation {

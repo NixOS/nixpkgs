@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , freetype
 , fontconfig
 , libGL
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     fontconfig

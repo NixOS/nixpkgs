@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildGoModule
 , fetchFromGitHub
 , go-md2man
@@ -45,7 +45,7 @@ buildGoModule rec {
     installManPage docs/*.[1-9]
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/containers/oci-seccomp-bpf-hook";
     description = ''
       OCI hook to trace syscalls and generate a seccomp profile

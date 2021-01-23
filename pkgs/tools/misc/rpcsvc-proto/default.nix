@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --replace '$(top_builddir)/rpcgen/rpcgen' '${buildPackages.rpcsvc-proto}/bin/rpcgen'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/thkukuk/rpcsvc-proto";
     description = "This package contains rpcsvc proto.x files from glibc, which are missing in libtirpc";
     longDescription = ''

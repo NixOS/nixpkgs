@@ -1,4 +1,4 @@
-{ stdenv, python3, glibcLocales }:
+{ lib, stdenv, python3, glibcLocales }:
 let
 
   localPython = python3.override {
@@ -87,7 +87,7 @@ in with localPython.pkgs; buildPythonApplication rec {
     mv $out/bin/eb_completion.bash $out/share/bash-completion/completions/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     description = "A command line interface for Elastic Beanstalk";
     maintainers = with maintainers; [ eqyiel ];

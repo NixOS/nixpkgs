@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
+{ lib, stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
 , libxml2, kerberos, kmod, openldap, sssd, cyrus_sasl, openssl, rpcsvc-proto }:
 
 let
@@ -44,8 +44,8 @@ in stdenv.mkDerivation {
   meta = {
     description = "Kernel-based automounter";
     homepage = "https://www.kernel.org/pub/linux/daemons/autofs/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     executables = [ "automount" ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

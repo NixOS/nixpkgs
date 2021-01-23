@@ -1,13 +1,17 @@
-{ stdenv, fetchzip, ocaml, findlib, dune, cppo, easy-format, biniou }:
+{ lib, stdenv, fetchzip, ocaml, findlib, dune, cppo, easy-format, biniou }:
 let
   pname = "yojson";
   param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02" then rec {
+  if lib.versionAtLeast ocaml.version "4.02" then rec {
     version = "1.7.0";
     url = "https://github.com/ocaml-community/yojson/releases/download/${version}/yojson-${version}.tbz";
     sha256 = "08llz96if8bcgnaishf18si76cv11zbkni0aldb54k3cn7ipiqvd";
     nativeBuildInputs = [ dune ];
-    extra = { inherit (dune) installPhase; };
+    extra = {
+      installPhase = ''
+        dune install --prefix $out --libdir $OCAMLFIND_DESTDIR ${pname}
+      '';
+    };
   } else rec {
     version = "1.2.3";
     url = "https://github.com/ocaml-community/yojson/archive/v${version}.tar.gz";
@@ -34,7 +38,7 @@ stdenv.mkDerivation ({
   propagatedBuildInputs = [ easy-format biniou ];
   configurePlatforms = [];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An optimized parsing and printing library for the JSON format";
     homepage = "https://github.com/ocaml-community/${pname}";
     license = licenses.bsd3;

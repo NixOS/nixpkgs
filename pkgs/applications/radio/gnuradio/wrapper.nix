@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , unwrapped
 , makeWrapper
 # For lndir
@@ -28,7 +29,7 @@ let
   pythonPkgs = extraPythonPackages
     # Add the extraPackages as python modules as well
     ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
-    ++ stdenv.lib.flatten (stdenv.lib.mapAttrsToList (
+    ++ lib.flatten (lib.mapAttrsToList (
       feat: info: (
         if unwrapped.hasFeature feat unwrapped.features then
           (if builtins.hasAttr "pythonRuntime" info then info.pythonRuntime else [])
@@ -36,18 +37,18 @@ let
           []
       )
       ) unwrapped.featuresInfo)
-    ++ stdenv.lib.optionals (unwrapped.hasFeature "python-support" unwrapped.features) [
+    ++ lib.optionals (unwrapped.hasFeature "python-support" unwrapped.features) [
       # Add unwrapped itself as a python module
       (unwrapped.python.pkgs.toPythonModule unwrapped)
     ]
   ;
   python3Env = unwrapped.python.withPackages(ps: pythonPkgs);
 
-  name = (stdenv.lib.appendToName "wrapped" unwrapped).name;
+  name = (lib.appendToName "wrapped" unwrapped).name;
   makeWrapperArgs = builtins.concatStringsSep " " ([
   ]
     # Emulating wrapGAppsHook & wrapQtAppsHook working together
-    ++ stdenv.lib.optionals (
+    ++ lib.optionals (
       (unwrapped.hasFeature "gnuradio-companion" unwrapped.features)
       || (unwrapped.hasFeature "gr-qtgui" unwrapped.features)
       ) [
@@ -57,14 +58,14 @@ let
       "--prefix" "XDG_DATA_DIRS" ":" "${hicolor-icon-theme}/share"
       # Needs to run `gsettings` on startup, see:
       # https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1764890.html
-      "--prefix" "PATH" ":" "${stdenv.lib.getBin glib}/bin"
+      "--prefix" "PATH" ":" "${lib.getBin glib}/bin"
     ]
-    ++ stdenv.lib.optionals (unwrapped.hasFeature "gnuradio-companion" unwrapped.features) [
+    ++ lib.optionals (unwrapped.hasFeature "gnuradio-companion" unwrapped.features) [
       "--set" "GDK_PIXBUF_MODULE_FILE" "${librsvg}/${gdk-pixbuf.moduleDir}.cache"
-      "--prefix" "GIO_EXTRA_MODULES" ":" "${stdenv.lib.getLib dconf}/lib/gio/modules"
+      "--prefix" "GIO_EXTRA_MODULES" ":" "${lib.getLib dconf}/lib/gio/modules"
       "--prefix" "XDG_DATA_DIRS" ":" "${unwrapped.gtk}/share"
       "--prefix" "XDG_DATA_DIRS" ":" "${unwrapped.gtk}/share/gsettings-schemas/${unwrapped.gtk.name}"
-      "--prefix" "GI_TYPELIB_PATH" ":" "${stdenv.lib.makeSearchPath "lib/girepository-1.0" [
+      "--prefix" "GI_TYPELIB_PATH" ":" "${lib.makeSearchPath "lib/girepository-1.0" [
         unwrapped.gtk
         gsettings-desktop-schemas
         atk
@@ -79,17 +80,17 @@ let
         at-spi2-core
       ]}"
     ]
-    ++ stdenv.lib.optionals (extraPackages != []) [
-      "--prefix" "GRC_BLOCKS_PATH" ":" "${stdenv.lib.makeSearchPath "share/gnuradio/grc/blocks" extraPackages}"
+    ++ lib.optionals (extraPackages != []) [
+      "--prefix" "GRC_BLOCKS_PATH" ":" "${lib.makeSearchPath "share/gnuradio/grc/blocks" extraPackages}"
     ]
-    ++ stdenv.lib.optionals (unwrapped.hasFeature "gr-qtgui" unwrapped.features)
+    ++ lib.optionals (unwrapped.hasFeature "gr-qtgui" unwrapped.features)
       # 3.7 builds with qt4
       (if unwrapped.versionAttr.major == "3.8" then
         [
           "--prefix" "QT_PLUGIN_PATH" ":"
-          "${stdenv.lib.getBin unwrapped.qt.qtbase}/${unwrapped.qt.qtbase.qtPluginPrefix}"
+          "${lib.getBin unwrapped.qt.qtbase}/${unwrapped.qt.qtbase.qtPluginPrefix}"
           "--prefix" "QML2_IMPORT_PATH" ":"
-          "${stdenv.lib.getBin unwrapped.qt.qtbase}/${unwrapped.qt.qtbase.qtQmlPrefix}"
+          "${lib.getBin unwrapped.qt.qtbase}/${unwrapped.qt.qtbase.qtQmlPrefix}"
         ]
       else
         # TODO: Add here qt4 related environment for 3.7?

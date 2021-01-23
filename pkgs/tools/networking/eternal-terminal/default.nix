@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , gflags
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ gflags libsodium protobuf ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Remote shell that automatically reconnects without interrupting the session";
     license = licenses.asl20;
     homepage = "https://mistertea.github.io/EternalTerminal/";

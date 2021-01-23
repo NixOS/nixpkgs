@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   version = "1.8.1";
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   # Requires python-qt4 (feel free to get it working).
   preFixup = ''rm "$out/bin/apt-offline-gui"'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Offline APT package manager";
     license = licenses.gpl3;
     maintainers = [ ];

@@ -1,4 +1,4 @@
-{ stdenv, cmake, pkgconfig, fetchFromGitHub, makeDesktopItem, alsaLib, speex
+{ lib, stdenv, cmake, pkg-config, fetchFromGitHub, makeDesktopItem, alsaLib, speex
 , libopus, curl, gsm, libgcrypt, libsigcxx, popt, qtbase, qttools
 , wrapQtAppsHook, rtl-sdr, tcl, doxygen, groff }:
 
@@ -29,10 +29,9 @@ in stdenv.mkDerivation rec {
     "-DRTLSDR_INCLUDE_DIRS=${rtl-sdr}/include"
     "../src"
   ];
-  enableParallelBuilding = true;
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [ cmake pkgconfig doxygen groff wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config doxygen groff wrapQtAppsHook ];
 
   buildInputs = [
     alsaLib
@@ -57,7 +56,7 @@ in stdenv.mkDerivation rec {
     wrapQtApp $out/bin/qtel
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Advanced repeater controller and EchoLink software";
     longDescription = ''
       Advanced repeater controller and EchoLink software for Linux including a

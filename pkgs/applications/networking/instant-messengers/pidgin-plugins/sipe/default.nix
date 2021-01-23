@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pidgin, intltool, libxml2, gmime, nss }:
+{ lib, stdenv, fetchurl, pidgin, intltool, libxml2, gmime, nss }:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-sipe";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postInstall = "ln -s \$out/lib/purple-2 \$out/share/pidgin-sipe";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SIPE plugin for Pidgin IM";
     homepage = "http://sipe.sourceforge.net/";
     license = licenses.gpl2;

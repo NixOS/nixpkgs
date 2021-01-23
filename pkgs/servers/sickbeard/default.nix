@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python2, makeWrapper }:
 
 let
   pythonEnv = python2.withPackages(ps: with ps; [ cheetah ]);
@@ -26,10 +26,10 @@ in stdenv.mkDerivation {
     makeWrapper $out/SickBeard.py $out/bin/sickbeard
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PVR & episode guide that downloads and manages all your TV shows";
     license     = licenses.gpl3;
     homepage    = "https://github.com/midgetspy/Sick-Beard";
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

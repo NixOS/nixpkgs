@@ -1,4 +1,4 @@
-{ stdenv, fetchurl } :
+{ lib, stdenv, fetchurl } :
 
 stdenv.mkDerivation rec {
   name = "pv-1.6.6";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.ivarch.com/programs/pv";
     description = "Tool for monitoring the progress of data through a pipeline";
-    license = stdenv.lib.licenses.artistic2;
-    maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = with stdenv.lib.platforms; all;
+    license = lib.licenses.artistic2;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; all;
   };
 }

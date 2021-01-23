@@ -1,4 +1,4 @@
-{ stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook, zlib, libxkbfile }:
+{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook, zlib, libxkbfile }:
 
 let
   description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
@@ -11,12 +11,12 @@ let
     categories = "Office";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit description;
     homepage = "https://github.com/zadam/trilium";
     license = licenses.agpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ emmanuelrosa dtzWill kampka ];
+    maintainers = with maintainers; [ emmanuelrosa dtzWill ];
   };
 
   version = "0.43.3";

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, openmpi, perl, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, openmpi, perl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "ior";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = pname;
     rev = version;
-    sha256 = "036cg75c5vq6kijfv8f918vpm9sf1h7lyg6xr9fba7n0dwbbmycv";
+    sha256 = "sha256-pSjptDfiPlaToXe1yHyk9MQMC9PqcVSjqAmWLD11iOM=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://ior.readthedocs.io/en/latest/";
     description = "Parallel file system I/O performance test";
     license = licenses.gpl2;

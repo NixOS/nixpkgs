@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python, robotframework, selenium, mockito, robotstatuschecker, approvaltests }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python, robotframework, selenium, mockito, robotstatuschecker, approvaltests }:
 
 buildPythonPackage rec {
   version = "3.3.1";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     ${python.interpreter} utest/run.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web testing library for Robot Framework";
     homepage = "https://github.com/robotframework/SeleniumLibrary";
     license = licenses.asl20;

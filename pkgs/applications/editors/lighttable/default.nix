@@ -4,7 +4,7 @@
 }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
       stdenv.cc.cc zlib glib dbus gtk2 atk pango freetype libgnome-keyring3 nss
       fontconfig gdk-pixbuf cairo cups expat libgpgerror alsaLib nspr gnome2.GConf
       xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     cp "${desktopItem}/share/applications/LightTable.desktop" "$out"/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The next generation code editor";
     homepage = "http://www.lighttable.com/";
     license = licenses.gpl3;

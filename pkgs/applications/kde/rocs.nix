@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "rocs";
+  pname = "rocs";
 
   meta = with lib; {
     homepage = "https://edu.kde.org/rocs/";

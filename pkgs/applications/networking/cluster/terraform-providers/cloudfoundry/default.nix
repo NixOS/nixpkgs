@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "terraform-provider-cloudfoundry";
@@ -20,7 +20,7 @@ buildGoModule rec {
 
   passthru = { provider-source-address = "registry.terraform.io/cloudfoundry-community/cloudfoundry"; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/cloudfoundry-community/terraform-provider-cloudfoundry";
     description = "Terraform provider for cloudfoundry";
     license = licenses.mpl20;

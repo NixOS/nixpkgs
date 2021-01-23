@@ -143,7 +143,7 @@ in
       nix-ssh = 104;
       dictd = 105;
       couchdb = 106;
-      searx = 107;
+      #searx = 107; # dynamically allocated as of 2020-10-27
       kippo = 108;
       jenkins = 109;
       systemd-journal-gateway = 110;
@@ -457,7 +457,7 @@ in
       #nix-ssh = 104; # unused
       dictd = 105;
       couchdb = 106;
-      searx = 107;
+      #searx = 107; # dynamically allocated as of 2020-10-27
       kippo = 108;
       jenkins = 109;
       systemd-journal-gateway = 110;

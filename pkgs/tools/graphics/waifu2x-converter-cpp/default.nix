@@ -1,4 +1,4 @@
-{ cmake, fetchFromGitHub, makeWrapper, opencv3, stdenv, ocl-icd, opencl-headers
+{ cmake, fetchFromGitHub, makeWrapper, opencv3, lib, stdenv, ocl-icd, opencl-headers
 , cudaSupport ? false, cudatoolkit ? null
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ocl-icd opencv3 opencl-headers
-  ] ++ stdenv.lib.optional cudaSupport cudatoolkit;
+  ] ++ lib.optional cudaSupport cudatoolkit;
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Improved fork of Waifu2X C++ using OpenCL and OpenCV";
     homepage = "https://github.com/DeadSix27/waifu2x-converter-cpp";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.xzfc ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.xzfc ];
+    platforms = lib.platforms.linux;
   };
 }

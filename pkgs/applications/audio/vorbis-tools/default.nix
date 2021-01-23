@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, libogg, libvorbis, libao, pkgconfig, curl
+{ lib, stdenv, fetchurl, fetchzip, libogg, libvorbis, libao, pkg-config, curl
 , speex, flac }:
 
 let
@@ -20,10 +20,10 @@ stdenv.mkDerivation {
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libogg libvorbis libao curl speex flac ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extra tools for Ogg-Vorbis audio codec";
     longDescription = ''
       A set of command-line tools to manipulate Ogg Vorbis audio

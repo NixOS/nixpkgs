@@ -4,8 +4,6 @@ buildGoModule rec {
   name = "buildkite-agent-${version}";
   version = "3.26.0";
 
-  goPackagePath = "github.com/buildkite/agent";
-
   src = fetchFromGitHub {
     owner = "buildkite";
     repo = "agent";

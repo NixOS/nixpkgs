@@ -7,12 +7,13 @@ let
   generic =
     { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
     , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
-    , pkgconfig, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
+    , pkg-config, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
     , systemd, system-sendmail, valgrind, xcbuild
 
     , version
     , sha256
     , extraPatches ? []
+    , packageOverrides ? (final: prev: {})
 
     # Sapi flags
     , cgiSupport ? true
@@ -49,8 +50,8 @@ let
               php = generic filteredArgs;
 
               php-packages = (callPackage ../../../top-level/php-packages.nix {
-                php = phpWithExtensions;
-              });
+                phpPackage = phpWithExtensions;
+              }).overrideScope' packageOverrides;
 
               allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
               enabledExtensions =
@@ -112,7 +113,8 @@ let
                   phpIni = "${phpWithExtensions}/lib/php.ini";
                   unwrapped = php;
                   tests = nixosTests.php;
-                  inherit (php-packages) packages extensions buildPecl;
+                  inherit (php-packages) extensions buildPecl;
+                  packages = php-packages.tools;
                   meta = php.meta // {
                     outputsToInstall = [ "out" ];
                   };
@@ -147,7 +149,7 @@ let
 
           enableParallelBuilding = true;
 
-          nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ]
+          nativeBuildInputs = [ autoconf automake bison flex libtool pkg-config re2c ]
             ++ lib.optional stdenv.isDarwin xcbuild;
 
           buildInputs =

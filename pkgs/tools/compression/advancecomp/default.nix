@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     echo "${version}" >.version
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''A set of tools to optimize deflate-compressed files'';
     license = licenses.gpl3 ;
     maintainers = [ maintainers.raskin ];

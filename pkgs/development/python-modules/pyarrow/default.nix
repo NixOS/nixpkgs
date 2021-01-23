@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, futures, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkgconfig, setuptools_scm, six }:
+{ lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, futures, hypothesis, numpy, pandas, pytestCheckHook, pytest-lazy-fixture, pkg-config, setuptools_scm, six }:
 
 let
   _arrow-cpp = arrow-cpp.override { python3 = python; };
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   sourceRoot = "apache-arrow-${version}/python";
 
-  nativeBuildInputs = [ cmake cython pkgconfig setuptools_scm ];
+  nativeBuildInputs = [ cmake cython pkg-config setuptools_scm ];
   propagatedBuildInputs = [ numpy six ];
   checkInputs = [ hypothesis pandas pytestCheckHook pytest-lazy-fixture ];
 

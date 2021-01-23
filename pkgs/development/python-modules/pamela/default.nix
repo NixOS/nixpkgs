@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PAM interface using ctypes";
     homepage = "https://github.com/minrk/pamela";
     license = licenses.mit;

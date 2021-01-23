@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
@@ -13,9 +13,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "13wfz0ig9dsl0h085rzlrx0dg9la957c50xyzjfxq1ybw2qr266b";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern replacement for ps written in Rust";
     homepage = "https://github.com/dalance/procs";
     license = licenses.mit;

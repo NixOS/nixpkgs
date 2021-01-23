@@ -36,8 +36,20 @@ update `upstream-info.json`. After updates it is important to test at least
 `nixosTests.chromium` (or basic manual testing) and `google-chrome` (which
 reuses `upstream-info.json`).
 
-After updating, please also update pkgs/development/tools/selenium/chromedriver/default.nix
-to a matching version.
+To run all automated NixOS VM tests for Chromium, ungoogled-chromium,
+and Google Chrome (not recommended, currently 6x tests!):
+```
+nix-build nixos/tests/chromium.nix
+```
+
+A single test can be selected, e.g. to test `ungoogled-chromium` (see
+`channelMap` in `nixos/tests/chromium.nix` for all available options):
+```
+nix-build nixos/tests/chromium.nix -A ungoogled
+```
+(Note: Testing Google Chrome requires `export NIXPKGS_ALLOW_UNFREE=1`.)
+
+For custom builds it's possible to "override" `channelMap`.
 
 ## Backports
 

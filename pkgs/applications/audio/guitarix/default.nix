@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , avahi
 , bluez
@@ -23,7 +23,7 @@
 , lilv
 , lrdf
 , lv2
-, pkgconfig
+, pkg-config
 , python2
 , sassc
 , serd
@@ -37,7 +37,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional;
+  inherit (lib) optional;
 in
 
 stdenv.mkDerivation rec {
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     gettext
     hicolor-icon-theme
     intltool
-    pkgconfig
+    pkg-config
     python2
     wafHook
     wrapGAppsHook
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     "--install-roboto-font"
   ] ++ optional optimizationSupport "--optimization";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A virtual guitar amplifier for Linux running with JACK";
     longDescription = ''
         guitarix is a virtual guitar amplifier for Linux running with

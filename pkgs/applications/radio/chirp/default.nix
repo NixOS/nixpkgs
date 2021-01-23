@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , python2
 }:
@@ -15,7 +15,7 @@ python2.pkgs.buildPythonApplication rec {
     pygtk pyserial libxml2 future
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, open-source tool for programming your amateur radio";
     homepage = "https://chirp.danplanet.com/";
     license = licenses.gpl3;

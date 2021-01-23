@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27
 , requests, six
 , backports_unittest-mock, pytestCheckHook, pytestrunner }:
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # tries to open connection to wikipedia
   disabledTests = [ "event_stream" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client library for reading Server Sent Event streams";
     homepage = "https://github.com/btubbs/sseclient";
     license = licenses.mit;

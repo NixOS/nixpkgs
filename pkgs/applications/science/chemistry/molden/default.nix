@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, gfortran, libGLU, xorg } :
+{ lib, stdenv, fetchurl, which, gfortran, libGLU, xorg } :
 
 stdenv.mkDerivation rec {
   version = "6.3";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
                                   --replace '-I/usr/X11R6/include' "" \
                                   --replace '/usr/local/' $out/ \
                                   --replace 'sudo' "" \
-				                          --replace '-C surf depend' '-C surf'
+                                  --replace '-C surf depend' '-C surf'
      sed -in '/^# DO NOT DELETE THIS LINE/q;' surf/Makefile
   '';
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
      description = "Display and manipulate molecular structures";
      homepage = "http://www.cmbi.ru.nl/molden/";
      license = {
@@ -41,4 +41,3 @@ stdenv.mkDerivation rec {
      maintainers = with maintainers; [ markuskowa ];
   };
 }
-

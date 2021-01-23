@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, cmake, openssl, zlib, libuv }:
+{ fetchFromGitHub, lib, stdenv, cmake, openssl, zlib, libuv }:
 
 let
   generic = { version, sha256 }: stdenv.mkDerivation rec {
@@ -22,9 +22,9 @@ let
       "-DLWS_WITH_SOCKS5=ON"
     ];
 
-    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Light, portable C library for websockets";
       longDescription = ''
         Libwebsockets is a lightweight pure C library built to

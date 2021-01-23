@@ -1,4 +1,4 @@
-{ stdenv, fetchbzr, autoreconfHook, texinfo, help2man, imagemagick, pkg-config
+{ lib, stdenv, fetchbzr, autoreconfHook, texinfo, help2man, imagemagick, pkg-config
 , curl, gnome2, gpsd, gtk2, wrapGAppsHook
 , intltool, libexif, python3Packages, sqlite }:
 
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
   intltoolize --automake --copy --force
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GPS/GIS application optimized for small screens";
     longDescription = ''
       An easy to use, free & open-source GPS/GIS application that works well on

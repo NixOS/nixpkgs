@@ -158,5 +158,5 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed('pgrep -a -f "^kcanary$"')
   '';
 
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ aszlig ];
+  meta.maintainers = with pkgs.lib.maintainers; [ aszlig ];
 })

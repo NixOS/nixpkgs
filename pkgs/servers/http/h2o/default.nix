@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, cmake, ninja
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, cmake, ninja
 , openssl, libuv, zlib
 }:
 
@@ -16,11 +16,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "dev" "lib" ];
 
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig cmake ninja ];
+  nativeBuildInputs = [ pkg-config cmake ninja ];
   buildInputs = [ openssl libuv zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Optimized HTTP/1 and HTTP/2 server";
     homepage    = "https://h2o.examp1e.net";
     license     = licenses.mit;

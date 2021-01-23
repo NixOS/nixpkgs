@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, xmlm, topkg }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, xmlm, topkg }:
 
 let
   pname = "uucd";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ xmlm ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An OCaml module to decode the data of the Unicode character database from its XML representation";
     homepage = webpage;
     platforms = ocaml.meta.platforms or [];

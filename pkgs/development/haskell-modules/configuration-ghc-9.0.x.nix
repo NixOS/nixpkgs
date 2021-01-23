@@ -59,6 +59,7 @@ self: super: {
   # Jailbreaks & Version Updates
   async = doJailbreak super.async;
   ChasingBottoms = markBrokenVersion "1.3.1.9" super.ChasingBottoms;
+  data-fix = doJailbreak super.data-fix;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   hashable = overrideCabal (doJailbreak (dontCheck super.hashable)) (drv: { postPatch = "sed -i -e 's,integer-gmp .*<1.1,integer-gmp < 2,' hashable.cabal"; });
@@ -66,14 +67,16 @@ self: super: {
   integer-logarithms = overrideCabal (doJailbreak super.integer-logarithms) (drv: { postPatch = "sed -i -e 's,integer-gmp <1.1,integer-gmp < 2,' integer-logarithms.cabal"; });
   lukko = doJailbreak super.lukko;
   parallel = doJailbreak super.parallel;
+  primitive = doJailbreak (dontCheck super.primitive);
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
   split = doJailbreak super.split;
-  splitmix = self.splitmix_0_1_0_3;
   tar = doJailbreak super.tar;
   time-compat = doJailbreak super.time-compat;
   vector = doJailbreak (dontCheck super.vector);
+  vector-binary-instances = doJailbreak super.vector-binary-instances;
+  vector-th-unbox = doJailbreak super.vector-th-unbox;
   zlib = doJailbreak super.zlib;
 
   # Apply patches from head.hackage.
@@ -93,7 +96,6 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/language-haskell-extract-0.2.4.patch";
     sha256 = "0rgzrq0513nlc1vw7nw4km4bcwn4ivxcgi33jly4a7n3c1r32v1f";
   });
-  QuickCheck = super.QuickCheck_2_14_2;
   regex-base = appendPatch (doJailbreak super.regex-base) (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/regex-base-0.94.0.0.patch";
     sha256 = "0k5fglbl7nnhn8400c4cpnflxcbj9p3xi5prl9jfmszr31jwdy5d";

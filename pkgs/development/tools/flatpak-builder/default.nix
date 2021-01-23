@@ -11,7 +11,7 @@
 , gettext
 , libxml2
 , libxslt
-, pkgconfig
+, pkg-config
 , xmlto
 
 , acl
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     gettext
     libxml2
     libxslt
-    pkgconfig
+    pkg-config
     xmlto
   ];
 

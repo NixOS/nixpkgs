@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, sassc, pkg-config, glib, ninja,
+{ lib, stdenv, fetchFromGitHub, meson, sassc, pkg-config, glib, ninja,
   python3, gtk3, gnome3, gtk-engine-murrine, humanity-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs .";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ubuntu community theme 'yaru' - default Ubuntu theme since 18.10";
     homepage = "https://github.com/ubuntu/yaru";
     license = with licenses; [ cc-by-sa-40 gpl3 ];

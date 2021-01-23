@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Mixed Integer Linear Programming (MILP) solver";
     homepage    = "http://lpsolve.sourceforge.net";
     license     = licenses.gpl2Plus;

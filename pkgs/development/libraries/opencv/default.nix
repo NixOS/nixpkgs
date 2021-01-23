@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, unzip
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, unzip
 , zlib
 , enablePython ? false, pythonPackages
 , enableGtk2 ? false, gtk2
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
-  nativeBuildInputs = [ cmake pkgconfig unzip ];
+  nativeBuildInputs = [ cmake pkg-config unzip ];
 
   NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
@@ -69,11 +69,9 @@ stdenv.mkDerivation rec {
     (opencvFlag "GSTREAMER" enableGStreamer)
   ];
 
-  enableParallelBuilding = true;
-
   hardeningDisable = [ "bindnow" "relro" ];
 
-  # Fix pkgconfig file that gets broken with multiple outputs
+  # Fix pkg-config file that gets broken with multiple outputs
   postFixup = ''
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_old=.*|includedir_old=$dev/include/opencv|"
     sed -i $dev/lib/pkgconfig/opencv.pc -e "s|includedir_new=.*|includedir_new=$dev/include|"
@@ -81,7 +79,7 @@ stdenv.mkDerivation rec {
 
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = "https://opencv.org/";
     license = licenses.bsd3;

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pure Unix shell script implementing ACME client protocol";
     homepage = "https://acme.sh/";
     license = licenses.gpl3;

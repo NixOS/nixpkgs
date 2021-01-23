@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , itstool
 , python3
 , libxml2
@@ -45,19 +45,19 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "4.8.3";
+  version = "4.8.4";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "0k5p5y3im7xnf0ikaghh56nfhirkdwf95c8fr17wasgdpw2m86i2";
+    sha256 = "19sndxvszafbd1l2033g2irpx2jrwi5bpbx8r35047wi0z7djiag";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     libxml2
     itstool
     python3
@@ -94,17 +94,17 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --set LV2_PATH "${stdenv.lib.makeSearchPath "lib/lv2" lv2Plugins}"
-      --set LADSPA_PATH "${stdenv.lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
+      --set LV2_PATH "${lib.makeSearchPath "lib/lv2" lv2Plugins}"
+      --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
     )
   '';
 
   # Meson is no longer able to pick up Boost automatically.
   # https://github.com/NixOS/nixpkgs/issues/86131
-  BOOST_INCLUDEDIR = "${stdenv.lib.getDev boost}/include";
-  BOOST_LIBRARYDIR = "${stdenv.lib.getLib boost}/lib";
+  BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
+  BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
     homepage = "https://github.com/wwmm/pulseeffects";
     license = licenses.gpl3;

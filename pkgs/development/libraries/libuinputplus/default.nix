@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libuinputplus";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0jy5i7bmjad7hw1qcyjl4swqribp2027s9g3609zwj7lj8z5x0bg";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Easy-to-use uinput library in C++";
     license = licenses.mit;

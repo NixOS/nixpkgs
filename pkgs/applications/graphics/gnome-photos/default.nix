@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , at-spi2-core
@@ -27,7 +27,7 @@
 , meson
 , ninja
 , nixosTests
-, pkgconfig
+, pkg-config
 , python3
 , tracker
 , tracker-miners
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1i64w69kk3sdf9vn7npnwrhy8qjwn0vizq200x3pgmbrfm3kjzv6";
   };
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     (python3.withPackages (pkgs: with pkgs; [
       dogtail
       pygobject3
@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Access, organize and share your photos";
     homepage = "https://wiki.gnome.org/Apps/Photos";
     license = licenses.gpl3Plus;

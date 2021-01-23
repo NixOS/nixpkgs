@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, ncurses
+{ stdenv, fetchurl
+, ncurses
 , withLibrary ? false, libtool
 , unicodeSupport ? true
 , enableShared ? !stdenv.isDarwin
@@ -9,14 +10,14 @@ assert unicodeSupport -> ncurses.unicode && ncurses != null;
 
 stdenv.mkDerivation rec {
   pname = "dialog";
-  version = "1.3-20190211";
+  version = "1.3-20201126";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/dialog/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/dialog/${pname}-${version}.tgz"
     ];
-    sha256 = "1lx0bvradzx1zl7znlrsnyljcs596r7wamkhyq37ikbxsy4y5h29";
+    sha256 = "sha256-ySM6bI6jOlniN45RRq4r0TtRl0TP22R690IK2sWtOGY=";
   };
 
   buildInputs = [ ncurses ];
@@ -30,11 +31,11 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install${stdenv.lib.optionalString withLibrary "-full"}" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://invisible-island.net/dialog/dialog.html";
     description = "Display dialog boxes from shell";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [ stdenv.lib.maintainers.spacefrogg ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ AndersonTorres spacefrogg ];
+    platforms = ncurses.meta.platforms;
   };
 }

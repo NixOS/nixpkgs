@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchurl
 , cffi
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   # There are no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "http://pyspotify.mopidy.com";
     description = "A Python interface to Spotify’s online music streaming service";
     license     = licenses.unfree;

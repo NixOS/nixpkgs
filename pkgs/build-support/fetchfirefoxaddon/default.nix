@@ -1,15 +1,20 @@
 {stdenv, lib, coreutils, unzip, jq, zip, fetchurl,writeScript,  ...}:
-{ name
+
+{
+  name
 , url
 , md5 ? ""
 , sha1 ? ""
 , sha256 ? ""
 , sha512 ? ""
+, fixedExtid ? null
+, hash ? ""
 }:
+
 stdenv.mkDerivation rec {
 
   inherit name;
-  extid = "${src.outputHash}@${name}";
+  extid = if fixedExtid == null then "nixos@${name}" else fixedExtid;
   passthru = {
     exitd=extid;
   };
@@ -30,8 +35,7 @@ stdenv.mkDerivation rec {
   '';
   src = fetchurl {
     url = url;
-    inherit md5 sha1 sha256 sha512;
+    inherit md5 sha1 sha256 sha512 hash;
   };
   nativeBuildInputs = [ coreutils unzip zip jq  ];
 }
-

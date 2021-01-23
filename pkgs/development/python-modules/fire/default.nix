@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, six, hypothesis, mock
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, six, hypothesis, mock
 , python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     py.test -k 'not testInitRequiresFlag'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for automatically generating command line interfaces";
     longDescription = ''
       Python Fire is a library for automatically generating command line

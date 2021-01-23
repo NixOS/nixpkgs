@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gnome3
 , glib
 , gtk3
@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/hitori/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/hitori/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0gjbbh4gym8wwa4jjg7wwifjh2h7bf6m0x23c5jjxvrf3vln9gfq";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     itstool
     desktop-file-utils
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Hitori";
     description = "GTK application to generate and let you play games of Hitori";
     maintainers = teams.gnome.members;

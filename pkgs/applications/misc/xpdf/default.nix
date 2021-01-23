@@ -1,7 +1,7 @@
 { enableGUI ? true
 , enablePDFtoPPM ? true
 , enablePrinting ? true
-, stdenv, fetchzip, cmake, makeDesktopItem
+, lib, stdenv, fetchzip, cmake, makeDesktopItem
 , zlib, libpng, cups ? null, freetype ? null
 , qtbase ? null, qtsvg ? null, wrapQtAppsHook
 }:
@@ -22,19 +22,19 @@ stdenv.mkDerivation rec {
   # Fix "No known features for CXX compiler", see
   # https://cmake.org/pipermail/cmake/2016-December/064733.html and the note at
   # https://cmake.org/cmake/help/v3.10/command/cmake_minimum_required.html
-  patches = stdenv.lib.optional stdenv.isDarwin  ./cmake_version.patch;
+  patches = lib.optional stdenv.isDarwin  ./cmake_version.patch;
 
   nativeBuildInputs =
     [ cmake ]
-    ++ stdenv.lib.optional enableGUI wrapQtAppsHook;
+    ++ lib.optional enableGUI wrapQtAppsHook;
 
   cmakeFlags = ["-DSYSTEM_XPDFRC=/etc/xpdfrc" "-DA4_PAPER=ON" "-DOPI_SUPPORT=ON"]
-    ++ stdenv.lib.optional (!enablePrinting) "-DXPDFWIDGET_PRINTING=OFF";
+    ++ lib.optional (!enablePrinting) "-DXPDFWIDGET_PRINTING=OFF";
 
   buildInputs = [ zlib libpng ] ++
-    stdenv.lib.optional enableGUI qtbase ++
-    stdenv.lib.optional enablePrinting cups ++
-    stdenv.lib.optional enablePDFtoPPM freetype;
+    lib.optional enableGUI qtbase ++
+    lib.optional enablePrinting cups ++
+    lib.optional enablePDFtoPPM freetype;
 
   hardeningDisable = [ "format" ];
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.xpdfreader.com";
     description = "Viewer for Portable Document Format (PDF) files";
     longDescription = ''

@@ -1,11 +1,12 @@
-{ callPackage
+{ stdenv
+, callPackage
 , stdenvNoCC
 , fetchurl
 , rpmextract
 , undmg
 , darwin
 , validatePkgConfig
-, enableStatic ? false
+, enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
 /*

@@ -1,6 +1,6 @@
 { elk7Version
 , enableUnfree ? true
-, stdenv
+, lib, stdenv
 , fetchurl
 , makeWrapper
 , jre_headless
@@ -9,7 +9,7 @@
 , zlib
 }:
 
-with stdenv.lib;
+with lib;
 let
   info = splitString "-" stdenv.hostPlatform.system;
   arch = elemAt info 0;

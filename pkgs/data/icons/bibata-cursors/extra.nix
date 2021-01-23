@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen, python3 }:
+{ lib, stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen, python3 }:
 
 let
   py = python3.withPackages(ps: [ ps.pillow ]);
@@ -41,7 +41,7 @@ in stdenvNoCC.mkDerivation rec {
     done
   '';
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "Cursors Based on Bibata";
     homepage = "https://github.com/KaizIqbal/Bibata_Extra_Cursor";
     license = licenses.gpl3;

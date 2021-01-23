@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/madzak/python-json-logger";
     description = "A python library adding a json log formatter";
     license = licenses.bsdOriginal;

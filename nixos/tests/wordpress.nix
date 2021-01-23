@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "wordpress";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [
       flokli
       grahamc # under duress!

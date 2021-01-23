@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
@@ -11,7 +11,7 @@
 , vala
 , sqlite
 , webkitgtk
-, pkgconfig
+, pkg-config
 , gnome3
 , gst_all_1
 , libgudev
@@ -32,6 +32,7 @@
 , itstool
 , libgdata
 , libchamplain
+, libsecret
 , gsettings-desktop-schemas
 , python3
 }:
@@ -40,18 +41,18 @@
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.31.2";
+  version = "0.31.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ywzr6vgcz8yy60v0jp55na9lgqi4dbh2vakfphkcml1gpah0r2l";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1wkahbnnfxmi1jc5zmm3h761nrnkdks8lk0rj38bfkwg90h6zqwd";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     itstool
     gettext
     desktop-file-utils
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
     libgdata
     libchamplain
+    libsecret
   ];
 
   postPatch = ''
@@ -100,7 +102,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Popular photo organizer for the GNOME desktop";
     homepage = "https://wiki.gnome.org/Apps/Shotwell";
     license = licenses.lgpl21Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, makeWrapper, file, libpng, libjpeg }:
+{ lib, stdenv, fetchgit, makeWrapper, file, libpng, libjpeg }:
 
 stdenv.mkDerivation rec {
   pname = "farbfeld";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/2ff" --prefix PATH : "${file}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Suckless image format with conversion tools";
     license = licenses.isc;
     platforms = platforms.linux;

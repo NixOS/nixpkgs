@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c
+{ stdenv, lib, pkgs, fetchgit, phpPackage, autoconf, pkg-config, re2c
 , gettext, bzip2, curl, libxml2, openssl, gmp, icu64, oniguruma, libsodium
 , html-tidy, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl
 , uwimap, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng
@@ -6,7 +6,7 @@
 , readline, rsync, fetchpatch, valgrind
 }:
 
-let
+lib.makeScope pkgs.newScope (self: with self; {
   buildPecl = import ../build-support/build-pecl.nix {
     php = php.unwrapped;
     inherit lib;
@@ -21,15 +21,10 @@ let
 
   pcre' = if (lib.versionAtLeast php.version "7.3") then pcre2 else pcre;
 
-  callPackage = pkgs.newScope {
-    inherit mkDerivation php buildPecl pcre';
-  };
-in
-{
-  inherit buildPecl;
+  php = phpPackage;
 
   # This is a set of interactive tools based on PHP.
-  packages = {
+  tools = {
     box = callPackage ../development/php-packages/box { };
 
     composer = callPackage ../development/php-packages/composer { };
@@ -83,7 +78,15 @@ in
 
     mongodb = callPackage ../development/php-packages/mongodb { };
 
-    oci8 = callPackage ../development/php-packages/oci8 { };
+    oci8 = callPackage ../development/php-packages/oci8 ({
+      version = "2.2.0";
+      sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
+    } // lib.optionalAttrs (lib.versionAtLeast php.version "8.0") {
+      version = "3.0.1";
+      sha256 = "108ds92620dih5768z19hi0jxfa7wfg5hdvyyvpapir87c0ap914";
+    });
+
+    pdlib = callPackage ../development/php-packages/pdlib { };
 
     pcov = callPackage ../development/php-packages/pcov { };
 
@@ -173,7 +176,7 @@ in
         "--with-zmq=${pkgs.zeromq}"
       ];
 
-      nativeBuildInputs = [ pkgs.pkgconfig ];
+      nativeBuildInputs = [ pkgs.pkg-config ];
 
       meta.maintainers = lib.teams.php.members;
       meta.broken = lib.versionAtLeast php.version "7.3";
@@ -203,7 +206,7 @@ in
       sourceRoot = "php-${php.version}/ext/${name}";
 
       enableParallelBuilding = true;
-      nativeBuildInputs = [ php.unwrapped autoconf pkgconfig re2c ];
+      nativeBuildInputs = [ php.unwrapped autoconf pkg-config re2c ];
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
 
@@ -307,7 +310,7 @@ in
           })
         ];
         postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
-        configureFlags = "--with-gettext=${gettext}"; }
+        configureFlags = [ "--with-gettext=${gettext}" ]; }
       { name = "gmp";
         buildInputs = [ gmp ];
         configureFlags = [ "--with-gmp=${gmp.dev}" ]; }
@@ -393,10 +396,7 @@ in
         buildInputs = [ pcre' ] ++ lib.optionals (lib.versionAtLeast php.version "8.0") [
           valgrind.dev
         ];
-        # HAVE_OPCACHE_FILE_CACHE is defined in config.h, which is
-        # included from ZendAccelerator.h, but ZendAccelerator.h is
-        # included after the ifdef...
-        patches = [] ++ lib.optional (lib.versionAtLeast php.version "8.0") [ ../development/interpreters/php/fix-opcache-configure.patch ] ++lib.optional (lib.versionOlder php.version "7.4") [
+        patches = [] ++ lib.optional (lib.versionOlder php.version "7.4") [
           (pkgs.writeText "zend_file_cache_config.patch" ''
             --- a/ext/opcache/zend_file_cache.c
             +++ b/ext/opcache/zend_file_cache.c
@@ -550,4 +550,4 @@ in
 
     # Produce the final attribute set of all extensions defined.
   in builtins.listToAttrs namedExtensions);
-}
+})

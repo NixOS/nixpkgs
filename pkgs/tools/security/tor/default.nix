@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
+{ lib, stdenv, fetchurl, pkg-config, libevent, openssl, zlib, torsocks
 , libseccomp, systemd, libcap, lzma, zstd, scrypt, nixosTests
+, writeShellScript
 
 # for update.nix
 , writeScript
@@ -12,7 +13,21 @@
 , gnused
 , nix
 }:
+let
+  tor-client-auth-gen = writeShellScript "tor-client-auth-gen" ''
+    PATH="${lib.makeBinPath [coreutils gnugrep openssl]}"
+    pem="$(openssl genpkey -algorithm x25519)"
 
+    printf private_key=descriptor:x25519:
+    echo "$pem" | grep -v " PRIVATE KEY" |
+    base64 -d | tail --bytes=32 | base32 | tr -d =
+
+    printf public_key=descriptor:x25519:
+    echo "$pem" | openssl pkey -in /dev/stdin -pubout |
+    grep -v " PUBLIC KEY" |
+    base64 -d | tail --bytes=32 | base32 | tr -d =
+  '';
+in
 stdenv.mkDerivation rec {
   pname = "tor";
   version = "0.4.4.6";
@@ -24,17 +39,17 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "geoip" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
-    stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
+    lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
   # cross compiles correctly but needs the following
-  configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     "--disable-tool-name-check";
 
-  NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
+  NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \
@@ -52,6 +67,7 @@ stdenv.mkDerivation rec {
     mkdir -p $geoip/share/tor
     mv $out/share/tor/geoip{,6} $geoip/share/tor
     rm -rf $out/share/tor
+    ln -s ${tor-client-auth-gen} $out/bin/tor-client-auth-gen
   '';
 
   passthru = {
@@ -72,7 +88,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.torproject.org/";
     repositories.git = "https://git.torproject.org/git/tor";
     description = "Anonymizing overlay network";

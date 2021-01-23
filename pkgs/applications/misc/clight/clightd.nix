@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, dbus, cmake, pkgconfig
+, dbus, cmake, pkg-config
 , glib, udev, polkit, libmodule
 , pcre, libXdmcp, util-linux, libpthreadstubs
 , enableDdc ? true, ddcutil
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     dbus
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = with lib; [

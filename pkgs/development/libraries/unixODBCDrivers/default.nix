@@ -19,7 +19,7 @@
       driver = "lib/psqlodbcw.so";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Official PostgreSQL ODBC Driver";
       homepage =  "https://odbc.postgresql.org/";
       license = licenses.lgpl2;
@@ -60,7 +60,7 @@
       driver = if stdenv.isDarwin then "lib/libmaodbc.dylib" else "lib/libmaodbc.so";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "MariaDB ODBC database driver";
       homepage =  "https://downloads.mariadb.org/connector-odbc/";
       license = licenses.gpl2;
@@ -88,7 +88,7 @@
       driver = "lib/libmyodbc3-3.51.12.so";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "MariaDB ODBC database driver";
       homepage = "https://dev.mysql.com/downloads/connector/odbc/";
       license = licenses.gpl2;
@@ -123,7 +123,7 @@
       driver = "lib/libsqlite3odbc.so";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "ODBC driver for SQLite";
       homepage = "http://www.ch-werner.de/sqliteodbc";
       license = licenses.bsd2;
@@ -166,7 +166,7 @@
       driver = "lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "ODBC Driver 17 for SQL Server";
       homepage = "https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017";
       license = licenses.unfree;

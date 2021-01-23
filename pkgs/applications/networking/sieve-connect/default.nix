@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "sieve-connect";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
         TermReadKey TermReadLineGnu ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client for the MANAGESIEVE Protocol";
     longDescription = ''
       This is sieve-connect. A client for the ManageSieve protocol,

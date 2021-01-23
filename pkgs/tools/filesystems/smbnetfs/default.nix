@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fuse, samba, pkgconfig, glib, autoconf, attr, libsecret }:
+{ lib, stdenv, fetchurl, fuse, samba, pkg-config, glib, autoconf, attr, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "smbnetfs";
@@ -8,14 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "19x9978k90w9a65lrpsphk7swsq8zkws9jc27q4zbndrm0r2snr0";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf ];
+  nativeBuildInputs = [ pkg-config autoconf ];
   buildInputs = [ fuse samba glib attr libsecret ];
 
   postPatch = ''
     substituteInPlace src/function.c --replace "attr/xattr.h" "sys/xattr.h"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A FUSE FS for mounting Samba shares";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

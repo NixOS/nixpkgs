@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , meson
 , ninja
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "gnome-session-ctl extracted from gnome-session for nixpkgs";
     homepage = "https://github.com/nix-community/gnome-session-ctl";
     license = licenses.gpl2Plus;

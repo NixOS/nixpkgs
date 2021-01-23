@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 
-, pkgconfig
+, pkg-config
 
 , zlib
 , libjpeg
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ zlib libjpeg xz ]; #TODO: opengl support (bogus configure detection)
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true; # not cross;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";
     homepage = "http://download.osgeo.org/libtiff";
     license = licenses.libtiff;

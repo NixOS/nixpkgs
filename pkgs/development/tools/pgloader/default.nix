@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, sbcl, sqlite, freetds, libzip, curl, git, cacert, openssl }:
+{ lib, stdenv, fetchurl, makeWrapper, sbcl, sqlite, freetds, libzip, curl, git, cacert, openssl }:
 stdenv.mkDerivation rec {
   pname = "pgloader";
   version = "3.6.2";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/pgloader --prefix LD_LIBRARY_PATH : "${LD_LIBRARY_PATH}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pgloader.io/";
     description = "Loads data into PostgreSQL and allows you to implement Continuous Migration from your current database to PostgreSQL";
     maintainers = with maintainers; [ mguentner ];

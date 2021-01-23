@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, perl }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, perl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tickrs";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Realtime ticker data in your terminal";
     homepage = "https://github.com/tarkah/tickrs";
     license = licenses.mit;

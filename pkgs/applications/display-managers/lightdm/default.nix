@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , substituteAll
 , plymouth
 , pam
-, pkgconfig
+, pkg-config
 , autoconf
 , automake
 , libtool
@@ -31,7 +31,7 @@
 , yelp-tools
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "lightdm";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     intltool
     itstool
     libtool
-    pkgconfig
+    pkg-config
     vala
   ];
 

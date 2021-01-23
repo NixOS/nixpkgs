@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "libcredis-0.2.3";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     cp -v *.h "$out/include/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C client library for Redis (key-value database)";
     homepage = "https://code.google.com/archive/p/credis/";
     license = licenses.bsd3; # from homepage

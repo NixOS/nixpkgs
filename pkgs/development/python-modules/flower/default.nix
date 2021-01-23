@@ -22,6 +22,7 @@ buildPythonPackage rec {
     # rely on using example programs (flowers/examples/tasks.py) which
     # are not part of the distribution
     rm tests/load.py
+    substituteInPlace  requirements/default.txt --replace "prometheus_client==0.8.0" "prometheus_client>=0.8.0"
   '';
 
   propagatedBuildInputs = [
@@ -39,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mher/flower";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.arnoldfarkas ];
+    broken = (celery.version == "5.0.2"); # currently broken with celery>=5.0 by https://github.com/mher/flower/pull/1021
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, boost, cmake, ilmbase, libjpeg, libpng, libtiff
+{ lib, stdenv, fetchFromGitHub, boost, cmake, ilmbase, libjpeg, libpng, libtiff
 , opencolorio, openexr, unzip
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "dist_dir="
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.openimageio.org";
     description = "A library and tools for reading and writing images";
     license = licenses.bsd3;

@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
 , gettext
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , itstool
 , desktop-file-utils
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-clocks/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-clocks/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0f24g76ax59qnms1rjfyf1i0sa84nadgbr0r6m26p90w1w2wnmnr";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     vala
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     itstool
     wrapGAppsHook
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Clocks";
     description = "Clock application designed for GNOME 3";
     maintainers = teams.gnome.members;

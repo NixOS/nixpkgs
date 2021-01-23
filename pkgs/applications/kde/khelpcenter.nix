@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "khelpcenter";
+  pname = "khelpcenter";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     grantlee kcmutils kconfig kcoreaddons kdbusaddons kdelibs4support khtml

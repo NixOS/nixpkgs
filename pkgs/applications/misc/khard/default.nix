@@ -1,4 +1,4 @@
-{ stdenv, glibcLocales, python3 }:
+{ lib, stdenv, glibcLocales, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   version = "0.17.0";
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/scheibler/khard";
     description = "Console carddav client";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

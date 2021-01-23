@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchzip
 , pkg-config
 , autoPatchelfHook
@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "computecpp";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchzip {
     url = "https://computecpp.codeplay.com/downloads/computecpp-ce/${version}/x86_64-linux-gnu.tar.gz";
-    hash = "sha256-niXNWbkXjd35col6dS66HdxFurXfJw/Xb2c5njukxcg=";
+    hash = "sha256-AUHSls4BOX20PVKzDAp3RqpeRDwgbgYzz6CRvRN+kdk=";
     stripRoot = true;
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     isClang = true;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Accelerate Complex C++ Applications on Heterogeneous Compute Systems using Open Standards";
     homepage = "https://www.codeplay.com/products/computesuite/computecpp";

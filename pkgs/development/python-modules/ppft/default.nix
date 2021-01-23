@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , python
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m ppft.tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Distributed and parallel python";
     homepage = "https://github.com/uqfoundation";
     license = licenses.bsd3;

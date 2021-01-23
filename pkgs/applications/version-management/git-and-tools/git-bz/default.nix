@@ -1,4 +1,4 @@
-{ stdenv, fetchgit
+{ lib, stdenv, fetchgit
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, makeWrapper, xmlto
 , pythonPackages }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pysqlite}")"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bugzilla integration for git";
     longDescription = ''
       git-bz is a tool for integrating the Git command line with the

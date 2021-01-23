@@ -1,19 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, perl }:
+{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, perl, fetchpatch }:
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.24.4";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "17k32wr70sp7ag69xww2q9mrgnzakgkjw6la04n3jlhfa5z37dzj";
+    sha256 = "1j5bfxl4w8w3n89p051y8dhxg0py9l98v7r2gkr63bg4lj32faz8";
   };
 
   vendorSha256 = "0dd0qm1fxp3jnlrhfaas8fw87cj7rygaac35a9nk3xh2xsk7q35p";
 
   outputs = [ "out" "man" ];
+
+  patches = [
+    # Fix test failure on go 1.15
+    (fetchpatch {
+      url = "https://github.com/junegunn/fzf/commit/82791f7efccde5b30da0b4d44f10d214ae5c0c0d.patch";
+      sha256 = "1nybsz09h8cnvxjnkmx9c52g8z0x6pvrn230hw1va5a3pvmg01z1";
+    })
+  ];
 
   fishHook = writeText "load-fzf-keybindings.fish" "fzf_key_bindings";
 
@@ -24,7 +32,7 @@ buildGoModule rec {
   ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
-  patchPhase = ''
+  postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/fzf.vim
 
     if ! grep -q $out plugin/fzf.vim; then

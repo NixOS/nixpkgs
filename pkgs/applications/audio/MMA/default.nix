@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, python3, alsaUtils, timidity }:
+{ lib, stdenv, fetchurl, makeWrapper, python3, alsaUtils, timidity }:
 
   stdenv.mkDerivation rec {
-  version = "20.02";
+  version = "20.12";
   pname = "mma";
 
   src = fetchurl {
     url = "https://www.mellowood.ca/mma/mma-bin-${version}.tar.gz";
-    sha256 = "0i9c3f14j7wy2c86ky83f2vgmg5bihnnwsmpkq13fgqjsaf0qwnv";
+    sha256 = "18k0hwlqky5x4y461fxmw77gvz7z8jyrvxicrqphsgvwwinzy732";
   };
 
   buildInputs = [ makeWrapper python3 alsaUtils timidity ];
@@ -19,7 +19,7 @@
     sed -i 's@/usr/bin/timidity@/${timidity}/bin/timidity@g' mma-splitrec
     sed -i 's@/usr/bin/timidity@/${timidity}/bin/timidity@g' util/mma-splitrec.py
     find . -type f | xargs sed -i 's@/usr/bin/env python@${python3.interpreter}@g'
-    find . -type f | xargs sed -i 's@/usr/bin/python@${python3.interpreter}@g'
+    find . -type f | xargs sed -i 's@/usr/bin/python3@${python3.interpreter}@g'
   '';
 
   installPhase = ''
@@ -62,8 +62,8 @@
   meta = {
     description = "Creates MIDI tracks for a soloist to perform over from a user supplied file containing chords";
     homepage =  "https://www.mellowood.ca/mma/index.html";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

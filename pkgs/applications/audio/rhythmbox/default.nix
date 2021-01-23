@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , python3
 , perl
 , perlPackages
@@ -22,12 +22,12 @@ in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "142xcvw4l19jyr5i72nbnrihs953pvrrzcbijjn9dxmxszbv03pf";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool perl perlPackages.XMLParser
     itstool
     wrapGAppsHook
@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Rhythmbox";
     description = "A music playing application for GNOME";
     license = licenses.gpl2;

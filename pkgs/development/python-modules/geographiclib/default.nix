@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0cn6ap5fkh3mkfa57l5b44z3gvz7j6lpmc9rl4g2jny2gvp4dg8j";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://geographiclib.sourceforge.io";
     description = "Algorithms for geodesics (Karney, 2013) for solving the direct and inverse problems for an ellipsoid of revolution";
     license = licenses.mit;

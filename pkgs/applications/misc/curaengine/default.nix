@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libarcus, stb, protobuf }:
+{ lib, stdenv, fetchFromGitHub, cmake, libarcus, stb, protobuf }:
 
 stdenv.mkDerivation rec {
   pname = "curaengine";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCURA_ENGINE_VERSION=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A powerful, fast and robust engine for processing 3D models into 3D printing instruction";
     homepage = "https://github.com/Ultimaker/CuraEngine";
     license = licenses.agpl3;

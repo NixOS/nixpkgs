@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchurl, qmake, qtsvg, makeWrapper, xdg_utils }:
+{ lib, stdenv, mkDerivation, fetchurl, qmake, qtsvg, makeWrapper, xdg_utils }:
 
 let
   version = "1.44.55";
@@ -29,7 +29,7 @@ in mkDerivation {
       --prefix PATH : ${xdg_utils}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Smart manager for information collecting";
     homepage = "https://webhamster.ru/site/page/index/articles/projectcode/138";
     license = licenses.gpl3;

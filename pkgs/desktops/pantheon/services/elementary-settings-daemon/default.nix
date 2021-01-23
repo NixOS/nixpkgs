@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
 , fetchurl
 , fetchgit
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gnome3
 , perl
 , gettext
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     perl
     gettext
     libxml2
@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2Plus;
     maintainers = pantheon.maintainers;
     platforms = platforms.linux;

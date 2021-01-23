@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk-engine-murrine }:
+{ lib, stdenv, fetchurl, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "theme-jade1";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Based on Linux Mint theme with dark menus and more intensive green";
     homepage = "https://github.com/madmaxms/theme-jade-1";
     license = with licenses; [ gpl3Only ];

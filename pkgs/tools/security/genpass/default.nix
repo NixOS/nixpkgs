@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , rustPlatform
 , CoreFoundation
@@ -17,9 +17,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1cwxpc3xkw673wiamr4v7clrzwxl8ma1vdr6bw0hixm37gxdxz7x";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple yet robust commandline random password generator";
     homepage = "https://sr.ht/~cyplo/genpass/";
     license = licenses.agpl3;

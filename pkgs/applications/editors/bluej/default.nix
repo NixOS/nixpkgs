@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jdk }:
+{ lib, stdenv, fetchurl, makeWrapper, jdk }:
 
 stdenv.mkDerivation rec {
   pname = "bluej";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --add-flags "-Djavafx.embed.singleThread=true -Dawt.useSystemAAFontSettings=on -Xmx512M -cp \"$out/share/bluej/bluej.jar\" bluej.Boot"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple integrated development environment for Java";
     homepage = "https://www.bluej.org/";
     license = licenses.gpl2ClasspathPlus;

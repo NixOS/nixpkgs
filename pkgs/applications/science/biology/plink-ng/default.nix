@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, blas, lapack, darwin}:
+{ lib, stdenv, fetchFromGitHub, zlib, blas, lapack, darwin}:
 
 stdenv.mkDerivation rec {
   pname = "plink-ng";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A comprehensive update to the PLINK association analysis toolset";
     homepage = "https://www.cog-genomics.org/plink2";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

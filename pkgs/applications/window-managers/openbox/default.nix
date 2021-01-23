@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, python3
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, python3
 , libxml2, libXinerama, libXcursor, libXau, libXrandr, libICE, libSM
 , imlib2, pango, libstartup_notification, makeWrapper }:
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     makeWrapper
     python3.pkgs.wrapPython
   ];
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "X window manager for non-desktop embedded systems";
     homepage = "http://openbox.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

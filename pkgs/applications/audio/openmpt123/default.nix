@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, zlib, pkgconfig, mpg123, libogg, libvorbis, portaudio, libsndfile, flac
+{ config, lib, stdenv, fetchurl, zlib, pkg-config, mpg123, libogg, libvorbis, portaudio, libsndfile, flac
 , usePulseAudio ? config.pulseaudio or false, libpulseaudio }:
 
 let
@@ -15,13 +15,13 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib mpg123 libogg libvorbis portaudio libsndfile flac ]
-  ++ stdenv.lib.optional usePulseAudio libpulseaudio;
+  ++ lib.optional usePulseAudio libpulseaudio;
 
-  configureFlags = stdenv.lib.optional (!usePulseAudio) "--without-pulseaudio";
+  configureFlags = lib.optional (!usePulseAudio) "--without-pulseaudio";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform command-line based module file player";
     homepage = "https://lib.openmpt.org/libopenmpt/";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, boost, cmake, curl, ruby }:
+{ lib, stdenv, fetchFromGitHub, boost, cmake, curl, ruby }:
 
 stdenv.mkDerivation rec {
   pname = "leatherman";
@@ -16,9 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost curl ruby ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/puppetlabs/leatherman/";
     description = "A collection of C++ and CMake utility libraries";
     license = licenses.asl20;

@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , gnome3
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , exiv2
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   version = "3.10.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0gm7q6n9lnjsdqpx5b0cqjayhzwnplqb6p5pshzhbfp2zqd2g9ss";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     itstool
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Gthumb";
     description = "Image browser and viewer for GNOME";
     platforms = platforms.linux;

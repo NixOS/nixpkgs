@@ -1,7 +1,7 @@
 { stdenv, runCommand, fetchurl
 , fetchpatch
 , ensureNewerSourcesHook
-, cmake, pkgconfig
+, cmake, pkg-config
 , which, git
 , boost, python3Packages
 , libxml2, zlib, lz4
@@ -36,7 +36,7 @@
 # We must have one crypto library
 assert cryptopp != null || (nss != null && nspr != null);
 
-with stdenv; with stdenv.lib;
+with stdenv; with lib;
 let
   shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
@@ -81,7 +81,7 @@ let
      inherit description;
      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
      maintainers = with maintainers; [ adev ak johanot krav ];
-     platforms = [ "x86_64-linux" ];
+     platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
 
   ceph-common = python3Packages.buildPythonPackage rec{
@@ -122,10 +122,10 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "15.2.7";
+  version = "15.2.8";
   src = fetchurl {
     url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "082lpx1rsifjh636zypxy6ccs6nfkcm9azxp5ghvr5mvx9chmyrj";
+    sha256 = "1nmrras3g2zapcd06qr5m7y4zkymnr0r53jkpicjw2g4q7wfmib4";
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -139,7 +139,7 @@ in rec {
 
     nativeBuildInputs = [
       cmake
-      pkgconfig which git python3Packages.wrapPython makeWrapper
+      pkg-config which git python3Packages.wrapPython makeWrapper
       python3Packages.python # for the toPythonPath function
       (ensureNewerSourcesHook { year = "1980"; })
     ];
@@ -194,8 +194,6 @@ in rec {
       # silently drop it with misconfigurations.
       test -f $out/bin/ceph-volume
     '';
-
-    enableParallelBuilding = true;
 
     outputs = [ "out" "lib" "dev" "doc" "man" ];
 

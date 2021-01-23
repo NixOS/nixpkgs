@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, libxslt, docbook_xsl
+{ stdenv, fetchurl, autoreconfHook, pkg-config, libxslt, docbook_xsl
 , gtk3, udev, systemd, lib
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig libxslt docbook_xsl
+    autoreconfHook pkg-config libxslt docbook_xsl
   ];
 
   buildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "plymouthd_confdir=$(out)/etc/plymouth"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.freedesktop.org/wiki/Software/Plymouth";
     description = "A graphical boot animation";
     license = licenses.gpl2;

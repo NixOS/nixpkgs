@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
       "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An implementation of time.monotonic() for Python 2 & < 3.3";
     homepage = "https://github.com/atdt/monotonic";
     license = licenses.asl20;

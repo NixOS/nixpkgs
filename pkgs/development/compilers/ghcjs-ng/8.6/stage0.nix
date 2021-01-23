@@ -55,7 +55,7 @@
         websockets yaml
       ];
       description = "Haskell to JavaScript compiler";
-      license = stdenv.lib.licenses.mit;
+      license = lib.licenses.mit;
     }) {};
 
   ghc-api-ghcjs = callPackage
@@ -76,7 +76,7 @@
       libraryToolDepends = [ alex happy ];
       homepage = "http://www.haskell.org/ghc/";
       description = "The GHC API (customized for GHCJS)";
-      license = stdenv.lib.licenses.bsd3;
+      license = lib.licenses.bsd3;
     }) {};
 
   ghci-ghcjs = callPackage
@@ -93,7 +93,7 @@
         ghc-boot-th ghc-heap template-haskell-ghcjs transformers unix
       ];
       description = "The library supporting GHC's interactive interpreter (customized for GHCJS)";
-      license = stdenv.lib.licenses.bsd3;
+      license = lib.licenses.bsd3;
     }) {};
 
   ghcjs-th = callPackage
@@ -109,7 +109,7 @@
         template-haskell-ghcjs
       ];
       homepage = "http://github.com/ghcjs";
-      license = stdenv.lib.licenses.mit;
+      license = lib.licenses.mit;
     }) {};
 
   haddock-api-ghcjs = callPackage
@@ -136,7 +136,7 @@
       testToolDepends = [ hspec-discover ];
       homepage = "http://www.haskell.org/haddock/";
       description = "A documentation-generation tool for Haskell libraries";
-      license = stdenv.lib.licenses.bsd3;
+      license = lib.licenses.bsd3;
     }) {};
 
   haddock-library-ghcjs = callPackage
@@ -160,7 +160,7 @@
       testToolDepends = [ hspec-discover ];
       homepage = "http://www.haskell.org/haddock/";
       description = "Library exposing some functionality of Haddock";
-      license = stdenv.lib.licenses.bsd3;
+      license = lib.licenses.bsd3;
     }) {};
 
   template-haskell-ghcjs = callPackage
@@ -171,7 +171,7 @@
       src = configuredSrc + /lib/template-haskell-ghcjs;
       libraryHaskellDepends = [ base ghc-boot-th pretty ];
       description = "Support library for Template Haskell (customized for GHCJS)";
-      license = stdenv.lib.licenses.bsd3;
+      license = lib.licenses.bsd3;
     }) {};
 
 }

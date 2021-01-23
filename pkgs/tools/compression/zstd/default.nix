@@ -1,42 +1,38 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, bash, gnugrep
+{ lib, stdenv, fetchFromGitHub, cmake, bash, gnugrep
 , fixDarwinDylibNames
 , file
 , legacySupport ? false
-, static ? false
+, static ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
   pname = "zstd";
-  version = "1.4.5";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
     rev = "v${version}";
-    sha256 = "0ay3qlk4sffnmcl3b34q4zd7mkcmjds023icmib1mdli97qcp38l";
+    sha256 = "018zgigp5xlrb4mgshgrvns0cfbhhcg89cifbjj4rv6s3n9riphw";
   };
 
   nativeBuildInputs = [ cmake ]
-   ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
-  buildInputs = stdenv.lib.optional stdenv.hostPlatform.isUnix bash;
+   ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  buildInputs = lib.optional stdenv.hostPlatform.isUnix bash;
 
   patches = [
     ./playtests-darwin.patch
-    (fetchpatch {
-      url = "https://github.com/facebook/zstd/pull/2163.patch";
-      sha256 = "07mfjc5f9wy0w2xlj36hyf7g5ax9r2rf6ixhkffhnwc6rwy0q54p";
-    })
   ] # This I didn't upstream because if you use posix threads with MinGW it will
     # work fine, and I'm not sure how to write the condition.
-    ++ stdenv.lib.optional stdenv.hostPlatform.isWindows ./mcfgthreads-no-pthread.patch;
+    ++ lib.optional stdenv.hostPlatform.isWindows ./mcfgthreads-no-pthread.patch;
 
-  postPatch = stdenv.lib.optionalString (!static) ''
+  postPatch = lib.optionalString (!static) ''
     substituteInPlace build/cmake/CMakeLists.txt \
       --replace 'message(SEND_ERROR "You need to build static library to build tests")' ""
     substituteInPlace build/cmake/tests/CMakeLists.txt \
       --replace 'libzstd_static' 'libzstd_shared'
     sed -i \
-      "1aexport ${stdenv.lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib" \
+      "1aexport ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib" \
       tests/playTests.sh
   '';
 
@@ -73,10 +69,10 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "bin" "dev" ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isUnix "man"
+    ++ lib.optional stdenv.hostPlatform.isUnix "man"
     ++ [ "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Zstandard real-time compression algorithm";
     longDescription = ''
       Zstd, short for Zstandard, is a fast lossless compression algorithm,
@@ -88,6 +84,7 @@ stdenv.mkDerivation rec {
       property shared by most LZ compression algorithms, such as zlib.
     '';
     homepage = "https://facebook.github.io/zstd/";
+    changelog = "https://github.com/facebook/zstd/blob/v${version}/CHANGELOG";
     license = with licenses; [ bsd3 ]; # Or, at your opinion, GPL-2.0-only.
 
     platforms = platforms.all;

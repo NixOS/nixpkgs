@@ -1,30 +1,34 @@
-{ fetchFromGitHub, python2Packages, stdenv, git, graphviz }:
+{ fetchFromGitHub, python3Packages, lib, stdenv, git, graphviz }:
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "git-big-picture";
-  version = "0.10.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "esc";
+    owner = "git-big-picture";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0b0zdq7d7k7f6p3wwc799347fraphbr20rxd1ysnc4xi1cj4wpmi";
+    sha256 = "14yf71iwgk78nw8w0bpijsnnl4vg3bvxsw3vvypxmbrc1nh0bdha";
   };
 
   buildInputs = [ git graphviz ];
 
-  checkInputs = [ git ];
+  # NOTE: Tests are disabled due to unpackaged test dependency "Scruf".
+  #       When bumping to 1.1.0, please re-enable and use:
+  #checkInputs = [ cram git pytest ];
+  #checkPhase = "pytest test.py";
+  doCheck = false;
 
   postFixup = ''
     wrapProgram $out/bin/git-big-picture \
-      --prefix PATH ":" ${ stdenv.lib.makeBinPath buildInputs  }
+      --prefix PATH ":" ${ lib.makeBinPath buildInputs  }
     '';
 
   meta = {
     description = "Tool for visualization of Git repositories";
-    homepage = "https://github.com/esc/git-big-picture";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.nthorne ];
+    homepage = "https://github.com/git-big-picture/git-big-picture";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.nthorne ];
   };
 }

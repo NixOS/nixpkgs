@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchgit, qemu, docker, which, makeWrapper }:
+{ lib, stdenv, buildGoModule, fetchgit, qemu, docker, which, makeWrapper }:
 
 buildGoModule rec {
   pname = "out-of-tree";
@@ -21,7 +21,7 @@ buildGoModule rec {
       --prefix PATH : "${stdenv.lib.makeBinPath [ qemu docker which ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "kernel {module, exploit} development tool";
     homepage = "https://out-of-tree.io";
     maintainers = [ maintainers.dump_stack ];

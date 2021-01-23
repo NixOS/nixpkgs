@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, pkgconfig, udev, dbus, pcsclite
+{ stdenv, lib, fetchurl, makeWrapper, pkg-config, udev, dbus, pcsclite
 , wget, coreutils, perlPackages
 }:
 
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ udev dbus perlPackages.perl pcsclite ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   postInstall = ''
     wrapProgram $out/bin/scriptor \

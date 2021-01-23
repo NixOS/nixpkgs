@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, gobject-introspection, glib, python3, libgudev, libmbim }:
+{ lib, stdenv, fetchurl, pkg-config, gobject-introspection, glib, python3, libgudev, libmbim }:
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/libqmi/";
     description = "Modem protocol helper library";
     platforms = platforms.linux;

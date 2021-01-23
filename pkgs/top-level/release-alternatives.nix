@@ -9,7 +9,7 @@ let
   blasUsers = [
     # "julia_07" "julia_10" "julia_11" "julia_13" "octave" "octaveFull"
     "fflas-ffpack" "linbox" "R" "ipopt" "hpl" "rspamd" "octopus"
-    "sundials" "sundials_2" "superlu" "suitesparse_5_3" "suitesparse_4_4"
+    "sundials" "superlu" "suitesparse_5_3" "suitesparse_4_4"
     "suitesparse_4_2" "scs" "scalapack" "petsc" "cholmod-extra"
     "arpack" "qrupdate" "libcint" "iml" "globalarrays" "arrayfire" "armadillo"
     "xfitter" "lammps" "plink-ng" "quantum-espresso" "siesta"

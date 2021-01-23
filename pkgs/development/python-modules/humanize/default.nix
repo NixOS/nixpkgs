@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python humanize utilities";
     homepage = "https://github.com/jmoiron/humanize";
     license = licenses.mit;

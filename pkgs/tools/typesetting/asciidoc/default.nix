@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python2
+{ fetchurl, lib, stdenv, python2
 
 , enableStandardFeatures ? false
 , sourceHighlight ? null
@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python2 unzip ];
 
   # install filters early, so their shebangs are patched too
-  patchPhase = with stdenv.lib; ''
+  patchPhase = with lib; ''
     mkdir -p "$out/etc/asciidoc/filters"
     mkdir -p "$out/etc/asciidoc/backends"
   '' + optionalString _enableDitaaFilter ''
@@ -239,7 +239,7 @@ stdenv.mkDerivation rec {
     # cannot find their neighbours (e.g. pdflatex doesn't find mktextfm).
     # We can remove PATH= when those impurities are fixed.
     # TODO: Is this still necessary when using texlive?
-    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${stdenv.lib.makeBinPath [ texlive coreutils gnused ]}')|" \
+    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xsl_ns}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${lib.makeBinPath [ texlive coreutils gnused ]}')|" \
         -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
         -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
         -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
@@ -259,9 +259,9 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = "mkdir -p $out/etc/vim";
-  makeFlags = stdenv.lib.optional stdenv.isCygwin "DESTDIR=/.";
+  makeFlags = lib.optional stdenv.isCygwin "DESTDIR=/.";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Text-based document generation system";
     longDescription = ''
       AsciiDoc is a text document format for writing notes, documentation,

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       $out/bin/${baseName}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit homepage;
     description = "Editor for the ${brand} ${type} digital mixer";
     license = licenses.unfree;

@@ -1,11 +1,19 @@
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
+
+with import ../lib/testing-python.nix { inherit system pkgs; };
+
 let
+  lib = pkgs.lib;
+
   # Makes a test for a PostgreSQL package, given by name and looked up from `pkgs`.
   makePostgresqlWalReceiverTest = postgresqlPackage:
   {
     name = postgresqlPackage;
     value =
-      import ./make-test-python.nix ({ pkgs, lib, ... }: let
-
+      let
         pkg = pkgs."${postgresqlPackage}";
         postgresqlDataDir = "/var/lib/postgresql/${pkg.psqlSchema}";
         replicationUser = "wal_receiver_user";
@@ -19,7 +27,7 @@ let
             then pkgs.writeTextDir "recovery.signal" ""
             else pkgs.writeTextDir "recovery.conf" "restore_command = 'cp ${walBackupDir}/%f %p'";
 
-      in {
+      in makeTest {
         name = "postgresql-wal-receiver-${postgresqlPackage}";
         meta.maintainers = with lib.maintainers; [ pacien ];
 
@@ -104,7 +112,7 @@ let
               "test $(sudo -u postgres psql --pset='pager=off' --tuples-only --command='select count(distinct val) from dummy;') -eq 100"
           )
         '';
-      });
+      };
     };
 
 # Maps the generic function over all attributes of PostgreSQL packages

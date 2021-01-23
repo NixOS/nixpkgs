@@ -39,7 +39,7 @@ let
     export NEXTCLOUD_CONFIG_DIR="${cfg.home}/config"
     $sudo \
       ${phpPackage}/bin/php \
-      occ $*
+      occ "$@"
   '';
 
   inherit (config.system) stateVersion;
@@ -391,7 +391,9 @@ in {
                 $file = "${c.dbpassFile}";
                 if (!file_exists($file)) {
                   throw new \RuntimeException(sprintf(
-                    "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't exist!",
+                    "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't seem to "
+                    . "exist! Please make sure that the file exists and has appropriate "
+                    . "permissions for user & group 'nextcloud'!",
                     $file
                   ));
                 }

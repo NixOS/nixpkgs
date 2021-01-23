@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, perl }:
+{ fetchurl, lib, stdenv, perl }:
 
 stdenv.mkDerivation rec {
   name = "namazu-2.0.21";
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
       but also as a personal search system for email or other files.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://namazu.org/";
 
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
     maintainers = [ ];
     broken = true; # File-MMagic is not compatible with our Perl version
   };

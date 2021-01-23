@@ -10,8 +10,6 @@ buildGoModule rec {
     sha256 = "0v9wp15aj4r7wif8i897zwj3c6bg41b95kk7vi3a3bzin814qn6l";
   };
 
-  goPackagePath = "github.com/vmware-tanzu/carvel-ytt";
-
   vendorSha256 = null;
 
   subPackages = [ "cmd/ytt" ];

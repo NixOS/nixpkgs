@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , gmp, mpfr
 }:
 
@@ -33,9 +33,9 @@ stdenv.mkDerivation {
       '';
 
     homepage = "http://mpc.multiprecision.org/";
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl
-, autoreconfHook, pkgconfig, libxkbcommon, pango, which, git
+, autoreconfHook, pkg-config, libxkbcommon, pango, which, git
 , cairo, libxcb, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification
 , bison, flex, librsvg, check
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libxkbcommon pango cairo git bison flex librsvg check
     libstartup_notification libxcb xcbutil xcbutilwm xcbutilxrm which
   ];

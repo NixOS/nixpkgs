@@ -104,7 +104,7 @@ in
     '';
 
   # Some more help text.
-  services.mingetty.helpLine =
+  services.getty.helpLine =
     ''
 
       Log in as "root" with an empty password.  ${

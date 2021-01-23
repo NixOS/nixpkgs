@@ -28,17 +28,7 @@ let
     ];
   };
 
-  nixos-rebuild =
-    let fallback = import ./nix-fallback-paths.nix; in
-    makeProg {
-      name = "nixos-rebuild";
-      src = ./nixos-rebuild.sh;
-      inherit (pkgs) runtimeShell;
-      nix = config.nix.package.out;
-      nix_x86_64_linux = fallback.x86_64-linux;
-      nix_i686_linux = fallback.i686-linux;
-      path = makeBinPath [ pkgs.jq ];
-    };
+  nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package.out; };
 
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";

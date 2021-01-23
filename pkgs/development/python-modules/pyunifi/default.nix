@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , requests }:
 
 buildPythonPackage rec {
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "API towards Ubiquity Networks UniFi controller";
     homepage = "https://github.com/finish06/unifi-api";
     license = licenses.mit;

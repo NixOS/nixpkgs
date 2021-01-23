@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "cutter-1.04";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     install -D -m 0755 cutter $out/bin/tcp-cutter
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "TCP/IP Connection cutting on Linux Firewalls and Routers";
     homepage = "http://www.digitage.co.uk/digitage/software/linux-security/cutter";
     license = licenses.gpl2;

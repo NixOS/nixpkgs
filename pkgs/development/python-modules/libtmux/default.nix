@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
   pname = "libtmux";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scripting library for tmux";
     homepage = "https://libtmux.readthedocs.io/";
     license = licenses.bsd3;

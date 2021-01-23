@@ -1,9 +1,9 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "libxmp-4.4.1";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extended module player library";
     homepage    = "http://xmp.sourceforge.net/";
     longDescription = ''

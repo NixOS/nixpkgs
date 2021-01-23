@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lvm2 }:
+{ lib, stdenv, fetchurl, lvm2 }:
 
 stdenv.mkDerivation rec {
   name = "dmraid-1.0.0.rc15";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ lvm2 ];
 
-  meta = {
+  meta = with lib; {
     description = "Old-style RAID configuration utility";
     longDescription = ''
       Old RAID configuration utility (still under development, though).
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       its volumes. May be needed for rescuing an older system or nuking
       the metadata when reformatting.
     '';
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
   };
 }

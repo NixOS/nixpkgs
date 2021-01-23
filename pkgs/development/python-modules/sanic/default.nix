@@ -36,6 +36,8 @@ buildPythonPackage rec {
     "test_zero_downtime" # No "examples.delayed_response.app" module in pypi distribution.
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "A microframework based on uvloop, httptools, and learnings of flask";
     homepage = "http://github.com/channelcat/sanic/";

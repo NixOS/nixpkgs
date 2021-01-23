@@ -5,6 +5,7 @@
 , appdirs
 , attrs
 , click
+, dataclasses
 , mypy-extensions
 , pathspec
 , regex
@@ -59,7 +60,7 @@ buildPythonPackage rec {
     toml
     typed-ast
     typing-extensions
-  ];
+  ] ++ lib.optional (pythonOlder "3.7") dataclasses;
 
   meta = with lib; {
     description = "The uncompromising Python code formatter";

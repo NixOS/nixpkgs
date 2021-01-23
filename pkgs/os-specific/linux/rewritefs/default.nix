@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, fuse, pcre }: 
+{ lib, stdenv, fetchFromGitHub, pkg-config, fuse, pcre }:
 
 stdenv.mkDerivation {
   pname = "rewritefs";
@@ -10,8 +10,8 @@ stdenv.mkDerivation {
     rev    = "33fb844d8e8ff441a3fc80d2715e8c64f8563d81";
     sha256 = "15bcxprkxf0xqxljsqhb0jpi7p1vwqcb00sjs7nzrj7vh2p7mqla";
   };
- 
-  nativeBuildInputs = [ pkgconfig ];
+
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse pcre ];
 
   prePatch = ''
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   preConfigure = "substituteInPlace Makefile --replace /usr/local $out";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''A FUSE filesystem intended to be used
       like Apache mod_rewrite'';
     homepage    = "https://github.com/sloonz/rewritefs";

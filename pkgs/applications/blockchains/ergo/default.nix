@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   pname = "ergo";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/ergo --add-flags "-jar $src"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open protocol that implements modern scientific ideas in the blockchain area";
     homepage = "https://ergoplatform.org/en/";
     license = licenses.cc0;

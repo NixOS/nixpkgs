@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     broken = true;
     description = "A cross-platform SSH client with cloud data sync and more";
     homepage = "https://termius.com/";

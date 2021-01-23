@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetch
 , cmake
 , python3
@@ -17,10 +17,10 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (lib) optional optionals optionalString;
 
   # Used when creating a versioned symlinks of libLLVM.dylib
-  versionSuffixes = with stdenv.lib;
+  versionSuffixes = with lib;
     let parts = splitVersion release_version; in
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 in
@@ -136,7 +136,7 @@ stdenv.mkDerivation ({
   + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
-    ${stdenv.lib.concatMapStringsSep "\n" (v: ''
+    ${lib.concatMapStringsSep "\n" (v: ''
       ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
     '') versionSuffixes}
   '';
@@ -145,17 +145,15 @@ stdenv.mkDerivation ({
 
   checkTarget = "check-all";
 
-  enableParallelBuilding = true;
-
   requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = "https://llvm.org/";
-    license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.ncsa;
+    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill ];
+    platforms   = lib.platforms.all;
   };
-} // stdenv.lib.optionalAttrs enableManpages {
+} // lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
 
   buildPhase = ''

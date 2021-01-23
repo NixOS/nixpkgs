@@ -5,13 +5,15 @@
 , pkgsStatic
 , openssl
 , invoke
-, pytest
 , tls-parser
 , cacert
+, pytestCheckHook
 }:
 
 let
-  zlibStatic = pkgsStatic.zlib;
+  zlibStatic = pkgsStatic.zlib.override {
+    splitStaticOutput = false;
+  };
   nasslOpensslArgs = {
     static = true;
     enableSSL2 = true;
@@ -34,17 +36,16 @@ let
   opensslStatic = (openssl.override nasslOpensslArgs).overrideAttrs (
     oldAttrs: rec {
       name = "openssl-${version}";
-      version = "1.1.1";
+      version = "1.1.1h";
       src = fetchurl {
         url = "https://www.openssl.org/source/${name}.tar.gz";
-        sha256 = "0gbab2fjgms1kx5xjvqx8bxhr98k4r8l2fa8vw7kvh491xd8fdi8";
+        sha256 = "1ncmcnh5bmxkwrvm0m1q4kdcjjfpwvlyjspjhibkxc6p9dvsi72w";
       };
       configureFlags = oldAttrs.configureFlags ++ nasslOpensslFlagsCommon ++ [
         "enable-weak-ssl-ciphers"
         "enable-tls1_3"
         "no-async"
       ];
-      patches = [ ./nix-ssl-cert-file.patch ];
       buildInputs = oldAttrs.buildInputs ++ [ zlibStatic cacert ];
     }
   );
@@ -66,32 +67,36 @@ let
 in
 buildPythonPackage rec {
   pname = "nassl";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "nabla-c0d3";
     repo = pname;
     rev = version;
-    sha256 = "1dhgkpldadq9hg5isb6mrab7z80sy5bvzad2fb54pihnknfwhp8z";
+    sha256 = "1x1v0fpb6gcc2r0k2rsy0mc3v25s3qbva78apvi46n08c2l309ci";
   };
 
-  postPatch = ''
-    mkdir -p deps/openssl-OpenSSL_1_0_2e/
+  postPatch = let
+    legacyOpenSSLVersion = lib.replaceStrings ["."] ["_"] opensslLegacyStatic.version;
+    modernOpenSSLVersion = lib.replaceStrings ["."] ["_"] opensslStatic.version;
+    zlibVersion = zlibStatic.version;
+  in ''
+    mkdir -p deps/openssl-OpenSSL_${legacyOpenSSLVersion}/
     cp ${opensslLegacyStatic.out}/lib/libssl.a \
       ${opensslLegacyStatic.out}/lib/libcrypto.a \
-      deps/openssl-OpenSSL_1_0_2e/
-    ln -s ${opensslLegacyStatic.out.dev}/include deps/openssl-OpenSSL_1_0_2e/include
-    ln -s ${opensslLegacyStatic.bin}/bin deps/openssl-OpenSSL_1_0_2e/apps
+      deps/openssl-OpenSSL_${legacyOpenSSLVersion}/
+    ln -s ${opensslLegacyStatic.out.dev}/include deps/openssl-OpenSSL_${legacyOpenSSLVersion}/include
+    ln -s ${opensslLegacyStatic.bin}/bin deps/openssl-OpenSSL_${legacyOpenSSLVersion}/apps
 
-    mkdir -p deps/openssl-OpenSSL_1_1_1/
+    mkdir -p deps/openssl-OpenSSL_${modernOpenSSLVersion}/
     cp ${opensslStatic.out}/lib/libssl.a \
       ${opensslStatic.out}/lib/libcrypto.a \
-      deps/openssl-OpenSSL_1_1_1/
-    ln -s ${opensslStatic.out.dev}/include deps/openssl-OpenSSL_1_1_1/include
-    ln -s ${opensslStatic.bin}/bin deps/openssl-OpenSSL_1_1_1/apps
+      deps/openssl-OpenSSL_${modernOpenSSLVersion}/
+    ln -s ${opensslStatic.out.dev}/include deps/openssl-OpenSSL_${modernOpenSSLVersion}/include
+    ln -s ${opensslStatic.bin}/bin deps/openssl-OpenSSL_${modernOpenSSLVersion}/apps
 
-    mkdir -p deps/zlib-1.2.11/
-    cp ${zlibStatic.out}/lib/libz.a deps/zlib-1.2.11/
+    mkdir -p deps/zlib-${zlibVersion}/
+    cp ${zlibStatic.out}/lib/libz.a deps/zlib-${zlibVersion}/
   '';
 
   propagatedBuildInputs = [ tls-parser ];
@@ -103,7 +108,7 @@ buildPythonPackage rec {
     invoke package.wheel
   '';
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   checkPhase = ''
     # Skip online tests

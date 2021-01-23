@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, perl, zlib }:
+{ lib, stdenv, fetchurl, cmake, perl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libzip";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "120xgf7cgjmz9d3yp10lks6lhkgxqb4skbmbiiwf46gx868qxsq6";
   };
 
-  # Fix pkgconfig file paths
+  # Fix pkg-config file paths
   postPatch = ''
     sed -i CMakeLists.txt \
       -e 's#\\''${exec_prefix}/''${CMAKE_INSTALL_LIBDIR}#''${CMAKE_INSTALL_FULL_LIBDIR}#' \
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     patchShebangs regress
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.nih.at/libzip";
     description = "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;

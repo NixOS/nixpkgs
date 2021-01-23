@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, hidapi, pyscard, ecdsa }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, hidapi, pyscard, ecdsa }:
 
 buildPythonPackage rec {
   pname = "btchip-python";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # tests requires hardware
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python communication library for Ledger Hardware Wallet products";
     homepage = "https://github.com/LedgerHQ/btchip-python";
     license = licenses.asl20;

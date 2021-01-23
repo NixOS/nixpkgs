@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, soupsieve, pytest, python }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, soupsieve, pytest, python }:
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ soupsieve ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
     description = "HTML and XML parser";
     license = licenses.mit;

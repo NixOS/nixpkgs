@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "-DWITH_WEBSOCKETS=ON"
   ] ++ lib.optional withSystemd "-DWITH_SYSTEMD=ON";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source MQTT v3.1/3.1.1 broker";
     homepage = "https://mosquitto.org/";
     license = licenses.epl10;

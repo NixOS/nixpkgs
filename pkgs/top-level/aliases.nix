@@ -44,13 +44,24 @@ mapAliases ({
   aleth = throw "aleth (previously packaged as cpp_ethereum) has been removed; abandoned upstream."; # added 2020-11-30
   amazon-glacier-cmd-interface = throw "amazon-glacier-cmd-interface has been removed due to it being unmaintained."; # added 2020-10-30
   ammonite-repl = ammonite; # added 2017-05-02
+  amsn = throw "amsn has been removed due to being unmaintained."; # added 2020-12-09
   antimicro = throw "antimicro has been removed as it was broken, see antimicroX instead."; # added 2020-08-06
+  apacheKafka_0_9 = throw "kafka 0.9 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
+  apacheKafka_0_10 = throw "kafka 0.10 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
+  apacheKafka_0_11 = throw "kafka 0.11 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
+  apacheKafka_1_0 = throw "kafka 1.0 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
+  apacheKafka_1_1 = throw "kafka 1.1 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
+  apacheKafka_2_0 = throw "kafka 2.0 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
+  apacheKafka_2_1 = throw "kafka 2.1 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
+  apacheKafka_2_2 = throw "kafka 2.2 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
+  apacheKafka_2_3 = throw "kafka 2.3 is no longer supported. Please upgrade to a newer version."; # added 2020-12-21
   arduino_core = arduino-core;  # added 2015-02-04
   arora = throw "arora has been removed."; # added 2020-09-09
   asciidocFull = asciidoc-full;  # added 2014-06-22
   asterisk_15 = throw "asterisk_15: Asterisk 15 is end of life and has been removed."; # added 2020-10-07
   at_spi2_atk = at-spi2-atk; # added 2018-02-25
   at_spi2_core = at-spi2-core; # added 2018-02-25
+  aucdtect = throw "aucdtect: Upstream no longer provides download urls."; # added 2020-12-26
   avldrums-lv2 = x42-avldrums; # added 2020-03-29
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
@@ -62,10 +73,12 @@ mapAliases ({
   bridge_utils = bridge-utils;  # added 2015-02-20
   bro = zeek; # added 2019-09-29
   bootchart = throw "bootchart has been removed from nixpkgs, as it is without a maintainer"; # added 2019-12-10
+  bomi = throw "bomi has been removed from nixpkgs since it was broken and abandoned upstream"; # added 2020-12-10
   btrfsProgs = btrfs-progs; # added 2016-01-03
   bittorrentSync = throw "bittorrentSync has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync14 = throw "bittorrentSync14 has been deprecated by resilio-sync."; # added 2019-06-03
   bittorrentSync20 = throw "bittorrentSync20 has been deprecated by resilio-sync."; # added 2019-06-03
+  bs1770gain = throw "bs1770gain has been removed from nixpkgs, as it had no maintainer or reverse dependencies."; # added 2021-01-02
   btc1 = throw "btc1 has been removed, it was abandoned by upstream"; # added 2020-11-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   buildGo112Package = throw "buildGo112Package has been removed"; # added 2020-04-26
@@ -86,6 +99,7 @@ mapAliases ({
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   clawsMail = claws-mail; # added 2016-04-29
   clutter_gtk = clutter-gtk; # added 2018-02-25
+  codimd = hedgedoc; # added 2020-11-29
   compton = picom; # added 2019-12-02
   compton-git = compton; # added 2019-05-20
   conntrack_tools = conntrack-tools; # added 2018-05
@@ -125,10 +139,17 @@ mapAliases ({
   draftsight = throw "draftsight has been removed, no longer available as freeware"; # added 2020-08-14
   dvb_apps = throw "dvb_apps has been removed."; # added 2020-11-03
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
+  elasticmq = throw "elasticmq has been removed in favour of elasticmq-server-bin"; # added 2021-01-17
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgFor = emacsPackagesFor; # added 2019-08-07
-  emacsPackagesNg = emacsPackages; # added 2019-08-07
+  emacsPackagesNg = emacs.pkgs; # added 2019-08-07
+  emacs26Packages = emacs26.pkgs; # added 2020-12-18
+  emacs27Packages = emacs27.pkgs; # added 2020-12-18
+  emacs26WithPackages = emacs26.pkgs.withPackages; # added 2020-12-18
+  emacs27WithPackages = emacs27.pkgs.withPackages; # added 2020-12-18
+  emacsWithPackages = emacs.pkgs.withPackages; # added 2020-12-18
+  emacsPackages = emacs.pkgs; # added 2020-12-18
   emby = throw "The Emby derivation has been removed, see jellyfin instead for a free software fork."; # added 2019-05-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
   evolution_data_server = evolution-data-server; # added 2018-02-25
@@ -144,6 +165,7 @@ mapAliases ({
   firefoxWrapper = firefox;           # 2015-09
 
   firestr = throw "firestr has been removed."; # added 2019-12-08
+  fish-foreign-env = throw "fish-foreign-env has been replaced with fishPlugins.foreign-env"; # added 2020-12-29, modified 2021-01-10
   flameGraph = flamegraph; # added 2018-04-25
   flvtool2 = throw "flvtool2 has been removed."; # added 2020-11-03
   foldingathome = fahclient; # added 2020-09-03
@@ -173,7 +195,15 @@ mapAliases ({
   gdb-multitarget = gdb; # added 2017-11-13
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
   gettextWithExpat = gettext; # 2016-02-19
-  git-hub = gitAndTools.git-hub; # added 2016-04-29
+  gitAndTools = self // { # added 2021-01-14
+    darcsToGit = darcs-to-git;
+    gitAnnex = git-annex;
+    gitBrunch = git-brunch;
+    gitFastExport = git-fast-export;
+    gitRemoteGcrypt = git-remote-gcrypt;
+    svn_all_fast_export = svn-all-fast-export;
+    topGit = top-git;
+  };
   glib_networking = glib-networking; # added 2018-02-25
   gmailieer = lieer; # added 2020-04-19
   gnome-mpv = celluloid; # added 2019-08-22
@@ -195,6 +225,7 @@ mapAliases ({
   };
   gnustep-make = gnustep.make; # added 2016-7-6
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
+  gnuvd = throw "gnuvd was removed because the backend service is missing"; # added 2020-01-14
   go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
@@ -224,8 +255,11 @@ mapAliases ({
   icedtea8_web = adoptopenjdk-icedtea-web; # added 2019-08-21
   icedtea_web = adoptopenjdk-icedtea-web; # added 2019-08-21
   idea = jetbrains; # added 2017-04-03
+  inboxer = throw "inboxer has been removed as it is no longer maintained and no longer works as Google shut down the inbox service this package wrapped.";
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
+  i-score = throw "i-score has been removed: abandoned upstream."; # added 2020-11-21
+  jamomacore = throw "jamomacore has been removed: abandoned upstream."; # added 2020-11-21
   jasper = throw "jasper has been removed: abandoned upstream with many vulnerabilities";
   jbuilder = dune; # added 2018-09-09
   jikes = throw "jikes was deprecated on 2019-10-07: abandoned by upstream";
@@ -235,7 +269,7 @@ mapAliases ({
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
   julia_07 = throw "julia_07 is deprecated in favor of julia_10 LTS"; # added 2020-09-15
   julia_11 = throw "julia_11 is deprecated in favor of latest Julia version"; # added 2020-09-15
-  kdeconnect = kdeApplications.kdeconnect-kde; # added 2020-10-28
+  kdeconnect = plasma5Packages.kdeconnect-kde; # added 2020-10-28
   kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepass-keefox = keepass-keepassrpc; # backwards compatibility alias, added 2018-02
   keepassx-community = keepassxc; # added 2017-11
@@ -268,7 +302,7 @@ mapAliases ({
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
   libGL_driver = mesa.drivers; # added 2019-05-28
-  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
+  libintlOrEmpty = lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjpeg_drop = libjpeg_original; # added 2020-06-05
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   liblapackWithoutAtlas = lapack-reference; # added 2018-11-05
@@ -287,6 +321,7 @@ mapAliases ({
   libstdcxxHook = throw "libstdcxx hook has been removed because cc-wrapper is now directly aware of the c++ standard library intended to be used."; # 2020-06-22
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
   links = links2; # added 2016-01-31
+  linux_mptcp_5_9 = linux_5_9; # added 2020-01-07
   linux_rpi0 = linux_rpi1;
   linuxPackages_rpi0 = linuxPackages_rpi1;
 
@@ -438,6 +473,8 @@ mapAliases ({
   pidginsipe = pidgin-sipe; # added 2018-01-08
   pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
   piwik = matomo; # added 2018-01-16
+  pkgconfig = pkg-config; # added 2018-02-02, moved to aliases.nix 2021-01-18
+  pkgconfigUpstream = pkg-configUpstream; # added 2018-02-02
   pltScheme = racket; # just to be sure
   plexpy = tautulli; # plexpy got renamed to tautulli, added 2019-02-22
   pmtools = acpica-tools; # added 2018-11-01
@@ -480,12 +517,14 @@ mapAliases ({
   pynagsystemd = throw "pynagsystemd was removed as it was unmaintained and incompatible with recent systemd versions. Instead use its fork check_systemd."; # added 2020-10-24
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qcsxcad = libsForQt5.qcsxcad;  # added 2020-11-05
+  qr-filetransfer = throw ''"qr-filetransfer" has been renamed to "qrcp"''; # added 2020-12-02
   quake3game = ioquake3; # added 2016-01-14
   qvim = throw "qvim has been removed."; # added 2020-08-31
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
   qtcurve = libsForQt5.qtcurve;  # added 2020-11-07
   qtpfsgui = throw "qtpfsgui is now luminanceHDR"; # added 2019-06-26
   quaternion-git = throw "quaternion-git has been removed in favor of the stable version 'quaternion'"; # added 2020-04-09
+  raspberrypi-tools = throw "raspberrypi-tools has been removed in favor of identical 'libraspberrypi'"; # added 2020-12-24
   rdf4store = throw "rdf4store has been removed from nixpkgs."; # added 2019-12-21
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
@@ -557,6 +596,7 @@ mapAliases ({
   smugline = throw "smugline has been removed from nixpkgs, as it's unmaintained and depends on deprecated libraries."; # added 2020-11-04
   slim = throw "slim has been removed. Please use a different display-manager"; # added 2019-11-11
   slimThemes = throw "slimThemes has been removed because slim has been also"; # added 2019-11-11
+  spectral = neochat; # added 2020-12-27
   sundials_3 = throw "sundials_3 was removed in 2020-02. outdated and no longer needed";
 
   # added 2020-02-10
@@ -604,6 +644,7 @@ mapAliases ({
   systool = sysfsutils; # added 2018-04-25
   tahoelafs = tahoe-lafs; # added 2018-03-26
   tangogps = foxtrotgps; # added 2020-01-26
+  tdm = throw "tdm has been removed because nobody can figure out how to fix OpenAL integration. Use precompiled binary and `steam-run` instead.";
   telepathy_farstream = telepathy-farstream; # added 2018-02-25
   telepathy_gabble = telepathy-gabble; # added 2018-02-25
   telepathy_glib = telepathy-glib; # added 2018-02-25
@@ -646,8 +687,10 @@ mapAliases ({
   uberwriter = apostrophe; # added 2020-04-23
   ubootBeagleboneBlack = ubootAmx335xEVM; # added 2020-01-21
   ucsFonts = ucs-fonts; # added 2016-07-15
+  ufraw = throw "ufraw is unmaintained and has been removed from nixpkgs. Its successor, nufraw, doesn't seem to be stable enough. Consider using Darktable for now."; # 2020-01-11
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   unicorn-emu = unicorn; # added 2020-10-29
+  unifiStable = unifi6; # added 2020-12-28
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
   usbguard-nox = usbguard; # added 2019-09-04
   utillinux = util-linux; # added 2020-11-24
@@ -696,6 +739,10 @@ mapAliases ({
   gnome_user_docs = gnome-user-docs; # added 2019-11-20
   # spidermonkey is not ABI upwards-ompatible, so only allow this for nix-shell
   spidermonkey = spidermonkey_78; # added 2020-10-09
+  libtorrentRasterbar = libtorrent-rasterbar; # added 2020-12-20
+  libtorrentRasterbar-2_0_x = libtorrent-rasterbar-2_0_x; # added 2020-12-20
+  libtorrentRasterbar-1_2_x = libtorrent-rasterbar-1_2_x; # added 2020-12-20
+  libtorrentRasterbar-1_1_x = libtorrent-rasterbar-1_1_x; # added 2020-12-20
 
   # TODO(ekleog): add ‘wasm’ alias to ‘ocamlPackages.wasm’ after 19.03
   # branch-off
@@ -769,18 +816,23 @@ mapAliases ({
 
   gcc-snapshot = throw "gcc-snapshot: Marked as broken for >2 years, additionally this 'snapshot' pointed to a fairly old one from gcc7.";
 
+  todolist = throw "todolist is now ultralist."; # added 2020-12-27
+
   /* Cleanup before 21.03 */
   riot-desktop = throw "riot-desktop is now element-desktop!";
   riot-web = throw "riot-web is now element-web";
 
   ant-dracula-theme = throw "ant-dracula-theme is now dracula-theme, and theme name is Dracula instead of Ant-Dracula.";
 
+  /* Added 2021-01-02 */
+  ttyrec = ovh-ttyrec;
+
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */
 
-  inherit (kdeFrameworks) breeze-icons oxygen-icons5;
-  inherit (kdeApplications)
+  inherit (plasma5Packages) breeze-icons oxygen-icons5;
+  inherit (plasma5Packages)
     akonadi akregator ark
     bomber bovo
     dolphin dragon
@@ -812,16 +864,16 @@ mapAliases ({
     spectacle
     yakuake
   ;
-  inherit (plasma5)
+  inherit (plasma5Packages)
     bluedevil breeze-gtk breeze-qt5 breeze-grub breeze-plymouth discover
     kactivitymanagerd kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5
     kinfocenter kmenuedit kscreen kscreenlocker ksshaskpass ksysguard
     kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-browser-integration
     plasma-desktop plasma-integration plasma-nm plasma-pa plasma-vault plasma-workspace
     plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
-    systemsettings user-manager xdg-desktop-portal-kde
+    systemsettings xdg-desktop-portal-kde
   ;
-  inherit (plasma5.thirdParty)
+  inherit (plasma5Packages.thirdParty)
     plasma-applet-caffeine-plus
     kwin-dynamic-workspaces
     kwin-tiling

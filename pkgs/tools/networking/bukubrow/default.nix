@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, sqlite }: let
+{ lib, stdenv, rustPlatform, fetchFromGitHub, sqlite }: let
 
 manifest = {
   description = "Bukubrow extension host application";
@@ -38,7 +38,7 @@ in rustPlatform.buildRustPackage rec {
     install -Dm0644 chrome.json $out/etc/chromium/native-messaging-hosts/com.samhh.bukubrow.json
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A WebExtension for Buku, a command-line bookmark manager";
     homepage = "https://github.com/SamHH/bukubrow-host";
     license = licenses.gpl3;

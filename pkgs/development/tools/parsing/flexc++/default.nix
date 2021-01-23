@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bobcat, icmake, yodl }:
+{ lib, stdenv, fetchFromGitHub, bobcat, icmake, yodl }:
 
 stdenv.mkDerivation rec {
   pname = "flexc++";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ./build install x
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ tool for generating lexical scanners";
     longDescription = ''
       Flexc++ was designed after `flex'. Flexc++ offers a cleaner class design

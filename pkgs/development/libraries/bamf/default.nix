@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , pantheon
 , autoconf
 , automake
@@ -10,7 +10,7 @@
 , libwnck3
 , glib
 , vala
-, pkgconfig
+, pkg-config
 , libstartup_notification
 , gobject-introspection
 , gtk-doc
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     gtk-doc
     libtool
-    pkgconfig
+    pkg-config
     vala
     which
     wrapGAppsHook
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application matching framework";
     longDescription = ''
       Removes the headache of applications matching

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , pkg-config, autoreconfHook
 , gtk3, gobject-introspection, gtk-doc, vala
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ayatana Display Indicator Objects";
     homepage = "https://github.com/AyatanaIndicators/ayatana-ido";
     changelog = "https://github.com/AyatanaIndicators/ayatana-ido/blob/${version}/ChangeLog";

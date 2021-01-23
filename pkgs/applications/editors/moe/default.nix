@@ -1,16 +1,16 @@
-{ stdenv, fetchurl
-, lzip, ncurses
+{ lib, stdenv
+, fetchurl
+, ncurses
+, lzip
 }:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
-
   pname = "moe";
-  version = "1.10";
+  version = "1.11";
 
   src = fetchurl {
     url = "mirror://gnu/moe/${pname}-${version}.tar.lz";
-    sha256 = "0fymywdiy9xqppcmvgs7mf7d3gfrky3jp5jkxs2l3v93asml9zcc";
+    sha256 = "sha256-DvvLz1pKjZZlQcbLCZugq2QWeANm286C2f+ZWoWl4vk=";
   };
 
   prePatch = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ lzip ];
   buildInputs = [ ncurses ];
 
-  meta = {
+  meta = with lib; {
     description = "A small, 8-bit clean editor";
     longDescription = ''
       GNU moe is a powerful, 8-bit clean, console text editor for ISO-8859 and

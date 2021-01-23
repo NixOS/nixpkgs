@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, libmhash, zlib, acl, attr, libselinux, pcre }:
+{ lib, stdenv, fetchurl, flex, bison, libmhash, zlib, acl, attr, libselinux, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "aide";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "--with-xattr"
     ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://aide.github.io/";
     description = "A file and directory integrity checker";
     license = licenses.gpl2Plus;

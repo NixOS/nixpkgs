@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel, kmod }:
+{ lib, stdenv, fetchFromGitHub, kernel, kmod }:
 
 stdenv.mkDerivation rec {
   name = "v4l2loopback-${version}-${kernel.version}";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A kernel module to create V4L2 loopback devices";
     homepage = "https://github.com/umlaeute/v4l2loopback";
     license = licenses.gpl2;

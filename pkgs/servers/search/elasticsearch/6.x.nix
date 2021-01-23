@@ -1,6 +1,6 @@
 { elk6Version
 , enableUnfree ? true
-, stdenv
+, lib, stdenv
 , fetchurl
 , makeWrapper
 , jre_headless
@@ -9,7 +9,7 @@
 , zlib
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation (rec {
   version = elk6Version;

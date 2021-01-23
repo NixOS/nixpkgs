@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apacheAnt, jdk, unzip }:
+{ lib, stdenv, fetchurl, apacheAnt, jdk, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "axis2";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Web Services / SOAP / WSDL engine, the successor to the widely used Apache Axis SOAP stack";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
 }

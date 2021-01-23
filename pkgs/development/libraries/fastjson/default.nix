@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libtool, autoconf, automake }:
+{ lib, stdenv, fetchFromGitHub, libtool, autoconf, automake }:
 
 stdenv.mkDerivation rec {
   version = "0.99.8";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sh autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast json library for C";
     homepage = "https://github.com/rsyslog/libfastjson";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libevent, openssl, nixosTests
+{ lib, stdenv, fetchurl, libevent, openssl, nixosTests
 , bind8Stats       ? false
 , checking         ? false
 , ipv6             ? true
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) nsd;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.nlnetlabs.nl";
     description = "Authoritative only, high performance, simple and open source name server";
     license = licenses.bsd3;

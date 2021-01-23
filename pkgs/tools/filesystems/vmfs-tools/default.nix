@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , asciidoc
 , docbook_xsl
 , fuse
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "14y412ww5hxk336ils62s3fwykfh6mx1j0iiaa5cwc615pi6qvi4";
   };
 
-  nativeBuildInputs = [ asciidoc docbook_xsl libxslt pkgconfig ];
+  nativeBuildInputs = [ asciidoc docbook_xsl libxslt pkg-config ];
 
   buildInputs = [ fuse libuuid ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     install -Dm444 -t $out/share/doc/${pname} AUTHORS LICENSE README TODO
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FUSE-based VMFS (vmware) file system tools";
     maintainers = with maintainers; [ peterhoeg ];
     license = licenses.gpl2;

@@ -126,7 +126,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false;
-  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://caffe2.ai/";
@@ -137,8 +136,8 @@ stdenv.mkDerivation rec {
       algorithms. You can bring your creations to scale using the power of GPUs in the
       cloud or to the masses on mobile with Caffe2's cross-platform libraries.
     '';
-    platforms = with stdenv.lib.platforms; linux;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
+    platforms = with lib.platforms; linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yuriaisaka ];
   };
 }

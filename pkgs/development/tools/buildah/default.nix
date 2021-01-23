@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildGoModule
 , fetchFromGitHub
 , go-md2man
@@ -14,13 +14,13 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.18.0";
+  version = "1.19.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    sha256 = "0kn31y5g7269mjaw5ddfsiaan93s62i8zzxg4xl01dg3dkkadwc4";
+    sha256 = "1gak5m4n4bfji1hcv8y5lj1m8a39rars8igqxdr89d2i45dkpbx0";
   };
 
   outputs = [ "out" "man" ];
@@ -52,7 +52,7 @@ buildGoModule rec {
     make -C docs install PREFIX="$man"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool which facilitates building OCI images";
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";

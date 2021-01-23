@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, glib, intltool, menu-cache, pango, pkgconfig, vala
+{ lib, stdenv, fetchurl, glib, intltool, menu-cache, pango, pkg-config, vala
 , extraOnly ? false
 , withGtk3 ? false, gtk2, gtk3 }:
 let
     gtk = if withGtk3 then gtk3 else gtk2;
-    inherit (stdenv.lib) optional;
+    inherit (lib) optional;
 in
 stdenv.mkDerivation rec {
   name = if extraOnly
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r6gl49xrykldwz8y4h2s7gjarxigg3bbkrj0gphxjj1vr5j9ccn";
   };
 
-  nativeBuildInputs = [ vala pkgconfig intltool ];
+  nativeBuildInputs = [ vala pkg-config intltool ];
   buildInputs = [ glib gtk pango ] ++ optional (!extraOnly) menu-cache;
 
   configureFlags = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://blog.lxde.org/category/pcmanfm/";
     license = licenses.lgpl21Plus;
     description = "A glib-based library for file management";

@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, withTwitter ? false}:
+{ lib, stdenv, python3Packages, withTwitter ? false}:
 
 python3Packages.buildPythonApplication rec {
   pname = "mailman-rss";
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   # No tests in Pypi Tarball
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mailman archive -> rss converter";
     homepage = "https://github.com/kyamagu/mailman-rss";
     license = licenses.mit;

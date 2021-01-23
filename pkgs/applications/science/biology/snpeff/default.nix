@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jre, unzip, makeWrapper}:
+{lib, stdenv, fetchurl, jre, unzip, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "snpeff";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/snpsift --add-flags "-jar $out/libexec/snpeff/SnpSift.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Genetic variant annotation and effect prediction toolbox";
     license = licenses.lgpl3;
     homepage = "http://snpeff.sourceforge.net/";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python3
 , keybinder3
@@ -61,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terminal emulator with support for tiling and tabs";
     longDescription = ''
       The goal of this project is to produce a useful tool for arranging

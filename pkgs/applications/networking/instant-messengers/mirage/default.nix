@@ -1,7 +1,7 @@
-{ lib, mkDerivation, fetchFromGitHub
-, qmake, pkgconfig, olm, wrapQtAppsHook
+{ lib, stdenv, mkDerivation, fetchFromGitHub
+, qmake, pkg-config, olm, wrapQtAppsHook
 , qtbase, qtquickcontrols2, qtkeychain, qtmultimedia, qttools, qtgraphicaleffects
-, python3Packages, pyotherside
+, python3Packages, pyotherside, libXScrnSaver
 }:
 
 let
@@ -13,30 +13,31 @@ let
 in
 mkDerivation rec {
   pname = "mirage";
-  version = "0.5.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "mirukana";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0i891fafdncdz1xg6nji80jb86agsrbdvai9nwf1yy126q7piryv";
+    sha256 = "15x0x2rf4fzsd0zr84fq3j3ddzkgc5il8s54jpxk8wl4ah03g4nv";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig qmake wrapQtAppsHook python3Packages.wrapPython ];
+  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook python3Packages.wrapPython ];
 
   buildInputs = [
     qtbase qtmultimedia
     qtquickcontrols2
     qtkeychain qtgraphicaleffects
     olm pyotherside
+    libXScrnSaver
   ];
 
   propagatedBuildInputs = pypkgs;
 
   pythonPath = pypkgs;
 
-  qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
+  qmakeFlags = [ "PREFIX=${placeholder "out"}" "CONFIG+=qtquickcompiler" ];
 
   dontWrapQtApps = true;
   postInstall = ''
@@ -51,6 +52,7 @@ mkDerivation rec {
     homepage = "https://github.com/mirukana/mirage";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ colemickens ];
+    broken = stdenv.isDarwin;
     inherit (qtbase.meta) platforms;
     inherit version;
   };

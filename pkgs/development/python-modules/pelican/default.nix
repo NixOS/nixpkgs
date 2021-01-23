@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy27
 , glibcLocales, git
 , mock, nose, markdown, lxml, typogrify
 , jinja2, pygments, docutils, pytz, unidecode, six, dateutil, feedgenerator
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     patchShebangs $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to generate a static blog from reStructuredText or Markdown input files";
     homepage = "http://getpelican.com/";
     license = licenses.agpl3;

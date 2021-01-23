@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchpatch
-, pkgconfig
+, pkg-config
 , cmake
 , bluez
 , ffmpeg_3
@@ -69,10 +69,8 @@ stdenv.mkDerivation rec {
     "-DENABLE_LTO=True"
   ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
   ];
 

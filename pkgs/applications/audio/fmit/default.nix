@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
+{ lib, stdenv, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
 , alsaSupport ? true, alsaLib ? null
 , jackSupport ? false, libjack2 ? null
 , portaudioSupport ? false, portaudio ? null }:
@@ -7,7 +7,7 @@ assert alsaSupport -> alsaLib != null;
 assert jackSupport -> libjack2 != null;
 assert portaudioSupport -> portaudio != null;
 
-with stdenv.lib;
+with lib;
 
 mkDerivation rec {
   pname = "fmit";

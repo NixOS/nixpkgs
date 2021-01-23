@@ -209,10 +209,11 @@ foreach my $u (@{$spec->{users}}) {
         }
     }
 
-    # Create a home directory.
+    # Ensure home directory incl. ownership and permissions.
     if ($u->{createHome}) {
         make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
         chown $u->{uid}, $u->{gid}, $u->{home};
+        chmod 0700, $u->{home};
     }
 
     if (defined $u->{passwordFile}) {
@@ -224,6 +225,15 @@ foreach my $u (@{$spec->{users}}) {
         }
     } elsif (defined $u->{password}) {
         $u->{hashedPassword} = hashPassword($u->{password});
+    }
+
+    if (!defined $u->{shell}) {
+        if (defined $existing) {
+            $u->{shell} = $existing->{shell};
+        } else {
+            warn "warning: no declarative or previous shell for ‘$name’, setting shell to nologin\n";
+            $u->{shell} = "/run/current-system/sw/bin/nologin";
+        }
     }
 
     $u->{fakePassword} = $existing->{fakePassword} // "x";

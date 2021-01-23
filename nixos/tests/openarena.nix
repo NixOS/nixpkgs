@@ -11,7 +11,7 @@ let
 
 in {
   name = "openarena";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ fpletz ];
   };
 

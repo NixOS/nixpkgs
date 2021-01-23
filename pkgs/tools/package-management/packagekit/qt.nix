@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkg-config
 , qttools, packagekit }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ packagekit ];
 
-  nativeBuildInputs = [ cmake pkgconfig qttools ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake pkg-config qttools ];
 
   meta = packagekit.meta // {
     description = "System to facilitate installing and updating packages - Qt";

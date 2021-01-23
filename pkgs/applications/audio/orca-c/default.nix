@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, portmidi }:
+{ lib, stdenv, fetchFromGitHub, ncurses, portmidi }:
 stdenv.mkDerivation {
   pname = "orca-c";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     install build/orca $out/bin/orca
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An esoteric programming language designed to quickly create procedural sequencers";
     homepage = "https://github.com/hundredrabbits/Orca-c";
     license = licenses.mit;

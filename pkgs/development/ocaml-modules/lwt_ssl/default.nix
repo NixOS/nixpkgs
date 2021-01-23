@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, buildDunePackage, ssl, lwt }:
+{ lib, fetchzip, buildDunePackage, ssl, lwt }:
 
 buildDunePackage rec {
   pname = "lwt_ssl";
@@ -16,7 +16,7 @@ buildDunePackage rec {
   meta = {
     homepage = "https://github.com/aantron/lwt_ssl";
     description = "OpenSSL binding with concurrent I/O";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

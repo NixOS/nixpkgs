@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, libtool, lldClang, ninja
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, libtool, lldClang, ninja
 , boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
 , icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
 , poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://clickhouse.tech/";
     description = "Column-oriented database management system";
     license = licenses.asl20;

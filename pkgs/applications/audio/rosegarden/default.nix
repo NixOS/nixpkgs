@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, makedepend, perl, pkgconfig, qttools, wrapQtAppsHook
+{ lib, stdenv, fetchurl, cmake, makedepend, perl, pkg-config, qttools, wrapQtAppsHook
 , dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2, alsaLib
 , liblo, libsamplerate, libsndfile, lirc ? null, lrdf, qtbase }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation (rec {
   '';
 
   nativeBuildInputs =
-    [ cmake makedepend perl pkgconfig qttools wrapQtAppsHook ];
+    [ cmake makedepend perl pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
     dssi
@@ -33,9 +33,7 @@ stdenv.mkDerivation (rec {
     alsaLib
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.rosegardenmusic.com/";
     description = "Music composition and editing environment";
     longDescription = ''

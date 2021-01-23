@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl
+{ lib, stdenv, fetchurl, pkg-config, perl
 , buildsystem
 , libparserutils
 , libwapcaplet
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0tzhbpM5Lo1qcglCDUfC1Wo4EXAaDoGnJPxUHGPTxtw=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     perl
     libparserutils
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE= "-Wno-error=implicit-fallthrough";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "Cascading Style Sheets library for netsurf browser";
     longDescription = ''

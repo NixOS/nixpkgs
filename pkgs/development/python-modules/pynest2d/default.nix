@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python3, cmake
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python3, cmake
 , pythonOlder, libnest2d, sip, clipper }:
 
 buildPythonPackage rec {
@@ -22,7 +22,7 @@ buildPythonPackage rec {
      sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' cmake/SIPMacros.cmake
    '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python bindings for libnest2d";
     homepage = "https://github.com/Ultimaker/pynest2d";
     license = licenses.lgpl3;

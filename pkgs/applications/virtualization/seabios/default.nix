@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, iasl, python }:
+{ lib, stdenv, fetchurl, iasl, python }:
 
 stdenv.mkDerivation rec {
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     cp out/Csm16.bin $out/Csm16.bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source implementation of a 16bit X86 BIOS";
     longDescription = ''
       SeaBIOS is an open source implementation of a 16bit X86 BIOS.

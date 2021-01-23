@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libtiff, fpc }:
+{ lib, stdenv, fetchFromGitHub, libtiff, fpc }:
 
 stdenv.mkDerivation rec {
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin Bin/*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line tool for deskewing scanned text documents";
     homepage = "https://bitbucket.org/galfar/app-deskew/overview";
     license = licenses.mit;

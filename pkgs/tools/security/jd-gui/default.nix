@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre, jdk, gradle_5, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, jre, jdk, gradle_5, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell }:
 
 let
   pname = "jd-gui";
@@ -99,7 +99,7 @@ in stdenv.mkDerivation rec {
 
   desktopItems = [ desktopItem ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast Java Decompiler with powerful GUI";
     homepage    = "https://java-decompiler.github.io/";
     license     = licenses.gpl3;

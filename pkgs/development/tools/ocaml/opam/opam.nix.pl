@@ -120,7 +120,7 @@ print <<'EOF';
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package manager for OCaml";
     homepage = "https://opam.ocaml.org/";
     maintainers = [ maintainers.henrytill maintainers.marsam ];

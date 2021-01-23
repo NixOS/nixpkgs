@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pkg-config
 , cairo
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/brummer10/Mamba";
     description = "Virtual MIDI keyboard for Jack Audio Connection Kit";
     license = licenses.bsd0;

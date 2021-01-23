@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "samblaster";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp samblaster $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for marking duplicates and extracting discordant/split reads from SAM/BAM files";
     maintainers = with maintainers; [ jbedo ];
     license = licenses.mit;

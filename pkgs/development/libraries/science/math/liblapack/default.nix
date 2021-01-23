@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib, stdenv,
   fetchFromGitHub,
   gfortran,
   cmake,
@@ -7,7 +7,7 @@
   shared ? true
 }:
 let
-  inherit (stdenv.lib) optional;
+  inherit (lib) optional;
   version = "3.9.0";
 in
 
@@ -33,9 +33,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";

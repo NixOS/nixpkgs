@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, sassc, glib, gdk-pixbuf, inkscape, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, python3, sassc, glib, gdk-pixbuf, inkscape, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   version = "20200910";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Solarized versions of Numix GTK2 and GTK3 theme";
     longDescription = ''
       This is a fork of the Numix GTK theme that replaces the colors of the theme

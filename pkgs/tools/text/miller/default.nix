@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, flex, libtool }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, flex, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "miller";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook flex libtool ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Like awk, sed, cut, join, and sort for name-indexed data such as CSV, TSV, and tabular JSON";
     homepage    = "http://johnkerl.org/miller/";
     license     = licenses.bsd2;

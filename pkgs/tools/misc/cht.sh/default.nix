@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , unstableGitUpdater
 , makeWrapper
@@ -33,12 +33,12 @@ stdenv.mkDerivation {
     cp share/zsh.txt $out/share/zsh/site-functions/_cht
 
     wrapProgram "$out/bin/cht.sh" \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ curl rlwrap ncurses xsel ]}"
+      --prefix PATH : "${lib.makeBinPath [ curl rlwrap ncurses xsel ]}"
   '';
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CLI client for cheat.sh, a community driven cheat sheet";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz evanjs ];

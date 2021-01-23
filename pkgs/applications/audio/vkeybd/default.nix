@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, libX11, makeWrapper, tcl, tk }:
+{ lib, stdenv, fetchurl, alsaLib, libX11, makeWrapper, tcl, tk }:
 
 stdenv.mkDerivation  rec {
   pname = "vkeybd";
@@ -22,7 +22,7 @@ stdenv.mkDerivation  rec {
     wrapProgram $out/bin/vkeybd --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual MIDI keyboard";
     homepage = "https://www.alsa-project.org/~tiwai/alsa.html";
     license = licenses.gpl2Plus;

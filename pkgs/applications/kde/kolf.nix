@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "kolf";
+  pname = "kolf";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ libkdegames kio ktextwidgets ];
   meta = {

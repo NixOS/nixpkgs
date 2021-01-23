@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, enableShared ? true }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 let
   generic = { version, sha256, patches ? [ ] }:
@@ -26,7 +28,7 @@ let
 
       doCheck = true;
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Small, safe and fast formatting library";
         longDescription = ''
           fmt (formerly cppformat) is an open-source formatting library. It can be

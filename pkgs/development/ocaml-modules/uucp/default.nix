@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, uunf }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, uunf }:
 
 let
   pname = "uucp";
@@ -6,7 +6,7 @@ let
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01";
+assert lib.versionAtLeast ocaml.version "4.01";
 
 stdenv.mkDerivation {
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   inherit (topkg) installPhase;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An OCaml library providing efficient access to a selection of character properties of the Unicode character database";
     homepage = webpage;
     platforms = ocaml.meta.platforms or [];

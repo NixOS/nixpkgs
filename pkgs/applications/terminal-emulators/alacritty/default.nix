@@ -8,7 +8,7 @@
 , installShellFiles
 , makeWrapper
 , ncurses
-, pkgconfig
+, pkg-config
 , python3
 
 , expat
@@ -52,16 +52,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "v${version}";
-    sha256 = "vQdNwNiUvoJWRT1foPRadirI2zWjnzU3sGnIxeHKlj8=";
+    sha256 = "8alCFtr+3aJsqQ2Ra8u5/SRHfDvMq2kRvRCKo/zwMK0=";
   };
 
-  cargoSha256 = "1PQSg6EmwVMZj2ALw6qsbtPMCtALVHx5TR05FjGD/QE=";
+  cargoSha256 = "kqRlxieChnhWtYYf67gi+2bncIzO56xpnv2uLjcINVM=";
 
   nativeBuildInputs = [
     cmake
@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
     makeWrapper
     ncurses
-    pkgconfig
+    pkg-config
     python3
   ];
 

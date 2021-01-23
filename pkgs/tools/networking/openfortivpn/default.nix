@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
 , openssl, ppp
 , systemd ? null }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --replace '$(DESTDIR)$(confdir)' /tmp
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     openssl ppp
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client for PPP+SSL VPN tunnel services";
     homepage = "https://github.com/adrienverge/openfortivpn";
     license = licenses.gpl3;

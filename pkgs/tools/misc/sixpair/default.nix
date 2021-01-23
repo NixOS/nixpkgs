@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libusb-compat-0_1 }:
+{ lib, stdenv, fetchurl, libusb-compat-0_1 }:
 stdenv.mkDerivation {
   name = "sixpair-2007-04-18";
 
@@ -31,8 +31,8 @@ stdenv.mkDerivation {
       This command-line utility searches USB buses for SIXAXIS controllers and tells them to connect to a new Bluetooth master.
     '';
     homepage = "http://www.pabr.org/sixlinux/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.tomsmeets ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.tomsmeets ];
+    platforms = lib.platforms.linux;
   };
 }

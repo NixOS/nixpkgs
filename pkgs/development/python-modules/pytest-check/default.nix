@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pytest ];
   checkInputs = [ pytestCheckHook ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "pytest plugin allowing multiple failures per test";
     homepage = "https://github.com/okken/pytest-check";
     license = licenses.mit;

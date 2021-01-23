@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, jre }:
+{ lib, stdenv, fetchurl, bash, jre }:
 let
   mcVersion = "1.16.4";
   buildNum = "296";
@@ -29,8 +29,8 @@ in stdenv.mkDerivation {
   meta = {
     description = "High-performance Minecraft Server";
     homepage    = "https://papermc.io/";
-    license     = stdenv.lib.licenses.gpl3Only;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ aaronjanse ];
+    license     = lib.licenses.gpl3Only;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ aaronjanse ];
   };
 }

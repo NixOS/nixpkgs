@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "minio-client";
@@ -23,7 +23,7 @@ buildGoModule rec {
     sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/minio/mc";
     description = "A replacement for ls, cp, mkdir, diff and rsync commands for filesystems and object storage";
     maintainers = with maintainers; [ eelco bachp ];

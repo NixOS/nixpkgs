@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , glib
 , gtk3
 , libgee
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "1.8.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1pdk9hc30xdlv0ba24f7pvcr2d5370zykrmpws7hgmjgl4wfbpdb";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small library intended for internal use by GNOME Games, but it may be used by others";
     homepage = "https://wiki.gnome.org/Apps/Games";
     license = licenses.lgpl3;

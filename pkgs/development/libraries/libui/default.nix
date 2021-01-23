@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gtk3, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, Cocoa }:
 
 let
   shortName = "libui";
@@ -15,21 +15,21 @@ stdenv.mkDerivation {
     sha256 = "0bm6xvqk4drg2kw6d304x6mlfal7gh8mbl5a9f0509smmdzgdkwm";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux gtk3
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  propagatedBuildInputs = lib.optional stdenv.isLinux gtk3
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     sed -i 's/set(CMAKE_OSX_DEPLOYMENT_TARGET "10.8")//' ./CMakeLists.txt
   '';
 
   installPhase = ''
     mkdir -p $out/{include,lib}
     mkdir -p $out/lib/pkgconfig
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     mv ./out/${shortName}.so.0 $out/lib/
     ln -s $out/lib/${shortName}.so.0 $out/lib/${shortName}.so
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     mv ./out/${shortName}.A.dylib $out/lib/
     ln -s $out/lib/${shortName}.A.dylib $out/lib/${shortName}.dylib
   '' + ''
@@ -41,11 +41,11 @@ stdenv.mkDerivation {
       --subst-var-by out $out \
       --subst-var-by version "${version}"
   '';
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     install_name_tool -id $out/lib/${shortName}.A.dylib $out/lib/${shortName}.A.dylib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://github.com/andlabs/libui";
     description = "Simple and portable (but not inflexible) GUI library in C that uses the native GUI technologies of each platform it supports";
     license     = licenses.mit;

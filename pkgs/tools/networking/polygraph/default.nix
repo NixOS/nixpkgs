@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, ncurses }:
+{ lib, stdenv, fetchurl, openssl, zlib, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "polygraph-4.13.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl zlib ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.web-polygraph.org";
     description = "Performance testing tool for caching proxies, origin server accelerators, L4/7 switches, content filters, and other Web intermediaries";
     platforms = platforms.linux;

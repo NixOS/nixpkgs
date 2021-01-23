@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, libressl, libxml2, cmake, z3, substituteAll,
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, libressl, libxml2, cmake, z3, substituteAll,
   cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
 
 stdenv.mkDerivation (rec {
@@ -29,7 +29,8 @@ stdenv.mkDerivation (rec {
     name = "v1.5.0.tar.gz";
   };
 
-  buildInputs = [ makeWrapper which libxml2 cmake z3 ];
+  nativeBuildInputs = [ cmake makeWrapper which ];
+  buildInputs = [ libxml2 z3 ];
   propagatedBuildInputs = [ cc ];
 
   # Sandbox disallows network access, so disabling problematic networking tests
@@ -79,10 +80,8 @@ stdenv.mkDerivation (rec {
     "PONYC_VERSION=${version}"
     "prefix=${placeholder "out"}"
   ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "bits=64" ]
-    ++ stdenv.lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
-
-  enableParallelBuilding = true;
+    ++ lib.optionals stdenv.isDarwin [ "bits=64" ]
+    ++ lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
 
   doCheck = true;
 
@@ -90,20 +89,20 @@ stdenv.mkDerivation (rec {
 
   installPhase = ''
     make config=release prefix=$out ''
-    + stdenv.lib.optionalString stdenv.isDarwin '' bits=64 ''
-    + stdenv.lib.optionalString (stdenv.isDarwin && (!lto)) '' lto=no ''
+    + lib.optionalString stdenv.isDarwin '' bits=64 ''
+    + lib.optionalString (stdenv.isDarwin && (!lto)) '' lto=no ''
     + '' install
 
     wrapProgram $out/bin/ponyc \
       --prefix PATH ":" "${stdenv.cc}/bin" \
       --set-default CC "$CC" \
-      --prefix PONYPATH : "${stdenv.lib.makeLibraryPath [ pcre2 libressl (placeholder "out") ]}"
+      --prefix PONYPATH : "${lib.makeLibraryPath [ pcre2 libressl (placeholder "out") ]}"
   '';
 
   # Stripping breaks linking for ponyc
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
     homepage = "https://www.ponylang.org";
     license = licenses.bsd2;

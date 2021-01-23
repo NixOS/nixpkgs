@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, docutils, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, docutils, installShellFiles }:
 
 stdenv.mkDerivation {
   pname = "netevent";
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     cp doc/netevent.rst $doc/share/doc/netevent/netevent.rst
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Share linux event devices with other machines";
     homepage = "https://github.com/Blub/netevent";
     license = licenses.gpl2Only;

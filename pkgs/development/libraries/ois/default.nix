@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ] ++ lib.optionals stdenv.isDarwin [ Cocoa IOKit Kernel ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Object-oriented C++ input system";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.unix;

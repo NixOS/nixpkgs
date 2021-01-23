@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, libxkbcommon, wayland, wayland-protocols }:
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, libxkbcommon, wayland, wayland-protocols }:
 
 stdenv.mkDerivation rec {
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1g05r9j6srwz1krqvzckx80jn8fm48rkb4xp68953gy9yp2skg3k";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxkbcommon wayland wayland-protocols ];
 
   dontConfigure = true;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     install -D -m 644 README.md -t $out/share/doc/${pname}-${version}/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A minimal terminal emulator for Wayland";
     homepage = "https://github.com/ii8/havoc";
     license = with licenses; [ mit publicDomain ];

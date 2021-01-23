@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
 , geos, pytest, cython
 , numpy
 }:
@@ -29,8 +29,7 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./library-paths.patch;
       libgeos_c = GEOS_LIBRARY_PATH;
-      libc = "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}"
-               + stdenv.lib.optionalString (!stdenv.isDarwin) ".6";
+      libc = stdenv.lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
     })
   ];
 
@@ -40,7 +39,7 @@ buildPythonPackage rec {
     py.test tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Geometric objects, predicates, and operations";
     maintainers = with maintainers; [ knedlsepp ];
     homepage = "https://pypi.python.org/pypi/Shapely/";

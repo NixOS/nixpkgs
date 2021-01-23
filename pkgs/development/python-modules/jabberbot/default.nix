@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchPypi, xmpppy }:
+{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, xmpppy }:
 
 buildPythonPackage rec {
   pname = "jabberbot";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   doCheck = false; # lol, it does not even specify dependencies properly
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A framework for writing Jabber/XMPP bots and services";
     homepage = "http://thp.io/2007/python-jabberbot/";
     license = licenses.gpl3;

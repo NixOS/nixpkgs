@@ -32,8 +32,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ systemd ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
+    ++ lib.optionals stdenv.isLinux [ systemd ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.Security ];
 
   cargoBuildFlags = [ "--features final" ];
 
@@ -45,6 +45,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "http://parity.io/ethereum";
     license = licenses.gpl3;
     maintainers = with maintainers; [ akru xrelkd ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

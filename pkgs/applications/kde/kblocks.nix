@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames }:
 
 mkDerivation {
-  name = "kblocks";
+  pname = "kblocks";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.kblocks";
     description = "Classic falling blocks game";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitiles
 , isPy3k
@@ -19,7 +19,7 @@ buildPythonPackage {
     ./no-xcode.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to generate native build files";
     homepage = "https://chromium.googlesource.com/external/gyp/+/master/README.md";
     license = licenses.bsd3;

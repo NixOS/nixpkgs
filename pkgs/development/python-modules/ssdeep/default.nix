@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   # tests repository does not include required files
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/DinoTools/python-ssdeep";
     description = "Python wrapper for the ssdeep library";
     license = licenses.lgpl3;

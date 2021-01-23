@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , cmake
@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "lightgbm";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d0abcb1035a7f50226412a78993d61830621e16fd6fa685bbf178c97b0d6e82";
+    sha256 = "babece2e3613e97748a67ed45387bb0e984bdb1f4126e39f010fbfe7503c7b20";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   # `make check`.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
     homepage = "https://github.com/Microsoft/LightGBM";
     license = licenses.mit;

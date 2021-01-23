@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, Security }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "martin";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Blazing fast and lightweight PostGIS vector tiles server";
     homepage = "https://martin.urbica.co/";
     license = licenses.mit;

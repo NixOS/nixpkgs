@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, asciidoc }:
+{ lib, stdenv, fetchFromGitHub, cmake, asciidoc }:
 
 stdenv.mkDerivation rec {
   pname = "genkfs";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://knightos.org/";
     description = "Utility to write a KFS filesystem into a ROM file";
     license     = licenses.mit;

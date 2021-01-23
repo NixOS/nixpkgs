@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , gnome3
 , gtk3
 , libxml2
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     libxml2
     intltool
     itstool
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Nemiver";
     description = "Easy to use standalone C/C++ debugger";
     license = licenses.gpl2;

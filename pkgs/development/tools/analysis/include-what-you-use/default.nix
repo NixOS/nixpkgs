@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}" ];
 
-  enableParallelBuilding = true;
-
   postInstall = ''
     substituteInPlace $out/bin/iwyu_tool.py \
       --replace "'include-what-you-use'" "'$out/bin/include-what-you-use'"

@@ -37,13 +37,14 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ] ++ lib.optional stdenv.isLinux "--with-randomdev=/dev/random"
-    ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
+    ++ lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
 
   NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=pointer-compare"
     "-Wno-error=format-truncation"
     "-Wno-error=stringop-truncation"
     "-Wno-error=format-overflow"
+    "-Wno-error=stringop-overflow=8"
   ];
 
   installFlags = [ "DESTDIR=\${out}" ];
@@ -67,12 +68,12 @@ stdenv.mkDerivation rec {
     ''
       substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
       sed -i "includes/dhcpd.h" \
-	-"es|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
+          -e "s|^ *#define \+_PATH_DHCLIENT_SCRIPT.*$|#define _PATH_DHCLIENT_SCRIPT \"$out/sbin/dhclient-script\"|g"
 
       export AR='${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar'
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Dynamic Host Configuration Protocol (DHCP) tools";
 
     longDescription = ''

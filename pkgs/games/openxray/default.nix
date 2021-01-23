@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, glew, freeimage,  liblockfile
+{ lib, stdenv, fetchFromGitHub, cmake, glew, freeimage,  liblockfile
 , openal, libtheora, SDL2, lzo, libjpeg, libogg, tbb
 , pcre, makeWrapper, fetchpatch }:
 
@@ -27,7 +27,7 @@ let
 
     doCheck = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Crypto++, a free C++ class library of cryptographic schemes";
       homepage = "https://cryptopp.com/";
       license = with licenses; [ boost publicDomain ];
@@ -65,8 +65,8 @@ in stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
-  meta = with stdenv.lib; {
-    description = "X-Ray Engine 1.6 expansion. Original version was used in S.T.A.L.K.E.R.: Call of Pripyat";
+  meta = with lib; {
+    description = "Improved version of the X-Ray Engine, the game engine used in the world-famous S.T.A.L.K.E.R. game series by GSC Game World";
     homepage = src.meta.homepage;
     license = licenses.unfree // {
       url = "https://github.com/OpenXRay/xray-16/blob/xd_dev/License.txt";

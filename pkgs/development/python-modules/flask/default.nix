@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , itsdangerous, click, werkzeug, jinja2, pytest }:
 
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # Tests require extra dependencies
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://flask.pocoo.org/";
     description = "A microframework based on Werkzeug, Jinja 2, and good intentions";
     license = licenses.bsd3;

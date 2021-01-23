@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   name = "rtl88xxau-aircrack-${kernel.version}-${version}";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Aircrack-ng kernel module for Realtek 88XXau network cards\n(8811au, 8812au, 8814au and 8821au chipsets) with monitor mode and injection support.";
     homepage = "https://github.com/aircrack-ng/rtl8812au";
     license = licenses.gpl2;

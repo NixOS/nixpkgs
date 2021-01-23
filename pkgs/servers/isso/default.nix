@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ lib, stdenv, python3Packages, fetchFromGitHub }:
 
 with python3Packages; buildPythonApplication rec {
 
@@ -35,7 +35,7 @@ with python3Packages; buildPythonApplication rec {
     ${python.interpreter} setup.py nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A commenting server similar to Disqus";
     homepage = "https://posativ.org/isso/";
     license = licenses.mit;

@@ -10,13 +10,13 @@ let
   };
 
   self = common.overrideAttrs (common: rec {
-    version = "0.E-2";
+    version = "0.E-3";
 
     src = fetchFromGitHub {
       owner = "CleverRaven";
       repo = "Cataclysm-DDA";
       rev = version;
-      sha256 = "15l6w6lxays7qmsv0ci2ry53asb9an9dh7l7fc13256k085qcg68";
+      sha256 = "qhHtsm5cM0ct/7qXev0SiLInO2jqs2odxhWndLfRDIE=";
     };
 
     passthru = common.passthru // {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lv2, pkgconfig, python3, serd, sord, wafHook }:
+{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "sratom";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0vh0biy3ngpzzgdml309c2mqz8xq9q0hlblczb4c6alhp0a8yv0l";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook python3 ];
+  nativeBuildInputs = [ pkg-config wafHook python3 ];
   buildInputs = [ lv2 serd sord ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://drobilla.net/software/sratom";
     description = "A library for serialising LV2 atoms to/from RDF";
     license = licenses.mit;

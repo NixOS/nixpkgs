@@ -1,4 +1,4 @@
-{ config, lib, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+{ config, lib, stdenv, zlib, lzo, libtasn1, nettle, pkg-config, lzip
 , perl, gmp, autogen, libidn, p11-kit, unbound, libiconv
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? true, trousers, nettools, gperftools, gperf, gettext, automake
@@ -62,12 +62,12 @@ stdenv.mkDerivation {
     ++ [ unbound ]
     ++ lib.optional guileBindings guile;
 
-  nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
+  nativeBuildInputs = [ perl pkg-config ] ++ nativeBuildInputs;
 
   #inherit doCheck;
   doCheck = false;
 
-  # Fixup broken libtool and pkgconfig files
+  # Fixup broken libtool and pkg-config files
   preFixup = lib.optionalString (!stdenv.isDarwin) ''
     sed ${lib.optionalString tpmSupport "-e 's,-ltspi,-L${trousers}/lib -ltspi,'"} \
         -e 's,-lz,-L${zlib.out}/lib -lz,' \

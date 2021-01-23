@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 let
   version = "1.13.0";
@@ -26,7 +26,7 @@ in
       makeWrapper "${jre}/bin/java" $out/bin/bfg --add-flags "-cp $out/share/java/$jarName com.madgag.git.bfg.cli.Main"
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://rtyley.github.io/bfg-repo-cleaner/";
       # Descriptions taken with minor modification from the homepage of bfg-repo-cleaner
       description = "Removes large or troublesome blobs in a git repository like git-filter-branch does, but faster";

@@ -42,7 +42,6 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    cmake
     exempi
     extra-cmake-modules
     karchive

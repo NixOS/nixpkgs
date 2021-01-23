@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, cmake, fftw, fftwSinglePrec, hdf5, ilmbase
+{ lib, stdenv, fetchurl, boost, cmake, fftw, fftwSinglePrec, hdf5, ilmbase
 , libjpeg, libpng, libtiff, openexr, python2Packages }:
 
 let
@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
   version = "1.11.1";
 
   src = fetchurl {
-    url = "https://github.com/ukoethe/vigra/archive/Version-${stdenv.lib.replaceChars ["."] ["-"] version}.tar.gz";
+    url = "https://github.com/ukoethe/vigra/archive/Version-${lib.replaceChars ["."] ["-"] version}.tar.gz";
     sha256 = "03i5wfscv83jb8vnwwhfmm8yfiniwkvk13myzhr1kbwbs9884wdj";
   };
 
@@ -21,21 +21,20 @@ in stdenv.mkDerivation rec {
                                 sha256 = "1i1w6smijgb5z8bg9jaq84ccy00k2sxm87s37lgjpyix901gjlgi"; };
     in [ clangPatch ];
 
-  buildInputs = [ boost cmake fftw fftwSinglePrec hdf5 ilmbase libjpeg libpng
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost fftw fftwSinglePrec hdf5 ilmbase libjpeg libpng
                   libtiff numpy openexr python ];
 
   preConfigure = "cmakeFlags+=\" -DVIGRANUMPY_INSTALL_DIR=$out/lib/${python.libPrefix}/site-packages\"";
 
   cmakeFlags = [ "-DWITH_OPENEXR=1" ]
-            ++ stdenv.lib.optionals (stdenv.hostPlatform.system == "x86_64-linux")
+            ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux")
                   [ "-DCMAKE_CXX_FLAGS=-fPIC" "-DCMAKE_C_FLAGS=-fPIC" ];
-
-  enableParallelBuilding = true;
 
   # fails with "./test_watersheds3d: error while loading shared libraries: libvigraimpex.so.11: cannot open shared object file: No such file or directory"
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";
     homepage = "https://hci.iwr.uni-heidelberg.de/vigra";
     license = licenses.mit;

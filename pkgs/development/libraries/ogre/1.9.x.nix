@@ -2,7 +2,7 @@
 , cmake, libGLU, libGL
 , freetype, freeimage, zziplib, xorgproto, libXrandr
 , libXaw, freeglut, libXt, libpng, boost, ois
-, libX11, libXmu, libSM, pkgconfig
+, libX11, libXmu, libSM, pkg-config
 , libXxf86vm, libICE
 , libXrender
 , withNvidiaCg ? false, nvidia_cg_toolkit
@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
            ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
     ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
 
-  enableParallelBuilding = true;
 
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs =
-   [ cmake libGLU libGL
+   [ libGLU libGL
      freetype freeimage zziplib xorgproto libXrandr
      libXaw freeglut libXt libpng boost ois
-     libX11 libXmu libSM pkgconfig
+     libX11 libXmu libSM
      libXxf86vm libICE
      libXrender
    ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A 3D engine";
     homepage = "https://www.ogre3d.org/";
-    maintainers = [ stdenv.lib.maintainers.raskin ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.mit;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

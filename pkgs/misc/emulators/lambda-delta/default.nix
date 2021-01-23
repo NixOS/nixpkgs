@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, SDL2 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, SDL2 }:
 
 stdenv.mkDerivation rec {
   pname = "lambda-delta";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--without-SDL1" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LMI (Lambda Lisp Machine) emulator";
     homepage = "https://github.com/dseagrav/ld";
     license = licenses.gpl2;

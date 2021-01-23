@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , python3
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/share/tridactyl"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tridactyl native messaging host application";
     homepage = "https://github.com/tridactyl/tridactyl";
     license = licenses.asl20;

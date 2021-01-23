@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, perl, go }:
+{ lib, stdenv, fetchgit, cmake, perl, go }:
 
 # reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
 stdenv.mkDerivation {
@@ -12,7 +12,6 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake perl go ];
-  enableParallelBuilding = true;
 
   makeFlags = [ "GOCACHE=$(TMPDIR)/go-cache" ];
 
@@ -30,7 +29,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "bin" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free TLS/SSL implementation";
     homepage    = "https://boringssl.googlesource.com";
     platforms   = platforms.all;

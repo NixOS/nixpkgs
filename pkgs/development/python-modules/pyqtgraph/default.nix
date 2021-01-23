@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyqtgraph" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scientific Graphics and GUI Library for Python";
     homepage = "http://www.pyqtgraph.org/";
     changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, tk }:
+{ lib, stdenv, fetchurl, tcl, tk }:
 
 stdenv.mkDerivation rec {
   name = "uudeview-0.5.20";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The Nice and Friendly Decoder";
     homepage = "http://www.fpx.de/fp/Software/UUDeview/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ woffs ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ woffs ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/hogliux/bomutils";
     description = "Open source tools to create bill-of-materials files used in macOS installers";
     platforms = platforms.all;

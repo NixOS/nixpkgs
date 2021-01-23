@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp CL/* $out/include/CL
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Khronos OpenCL headers version ${version}";
     homepage = "https://www.khronos.org/registry/cl/";
     license = licenses.mit;

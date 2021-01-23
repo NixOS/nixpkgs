@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.23.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0rbg0jchg59x0g4h0xahdm9qah8l8g4i2s8lkaqzdkm4yv29gqx4";
+    sha256 = "0wsl57i3cd9whqvgjdnbz05230mkn2174gqld7mzn9iiym1rkcm4";
   };
 
-  cargoSha256 = "1sbgn68n0rqh1m98dm3r2a3pqqqx4v7axw5djw8qlx4gv7xw1ql0";
+  cargoSha256 = "1ifvfwmrl97skjwp1qwrj863npsxcgfqm4a81cvw9bqhbylbjc77";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];

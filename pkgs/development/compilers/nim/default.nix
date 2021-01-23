@@ -255,6 +255,11 @@ let
         ln -s $out/bin/${targetPlatform.config}-nim $out/bin/nim
 
         makeWrapper \
+          ${nim'}/bin/testament $out/bin/${targetPlatform.config}-testament \
+          $wrapperArgs
+        ln -s $out/bin/${targetPlatform.config}-testament $out/bin/testament
+
+        makeWrapper \
           ${nimble'}/bin/nimble $out/bin/${targetPlatform.config}-nimble \
           --suffix PATH : $out/bin
         ln -s $out/bin/${targetPlatform.config}-nimble $out/bin/nimble

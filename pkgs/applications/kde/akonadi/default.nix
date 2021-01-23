@@ -1,12 +1,13 @@
 {
   mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, shared-mime-info, qtbase,
-  boost, kcompletion, kconfigwidgets, kcrash, kdbusaddons, kdesignerplugin,
-  ki18n, kiconthemes, kio, kitemmodels, kwindowsystem, mysql, qttools,
+  extra-cmake-modules, shared-mime-info, qtbase, accounts-qt,
+  boost, kaccounts-integration, kcompletion, kconfigwidgets, kcrash, kdbusaddons,
+  kdesignerplugin, ki18n, kiconthemes, kio, kitemmodels, kwindowsystem, mysql, qttools,
+  signond,
 }:
 
 mkDerivation {
-  name = "akonadi";
+  pname = "akonadi";
   meta = {
     license = [ lib.licenses.lgpl21 ];
     maintainers = kdepimTeam;
@@ -19,8 +20,8 @@ mkDerivation {
   ];
   nativeBuildInputs = [ extra-cmake-modules shared-mime-info ];
   buildInputs = [
-    kcompletion kconfigwidgets kcrash kdbusaddons kdesignerplugin ki18n
-    kiconthemes kio kwindowsystem qttools
+    kaccounts-integration kcompletion kconfigwidgets kcrash kdbusaddons kdesignerplugin
+    ki18n kiconthemes kio kwindowsystem accounts-qt qttools signond
   ];
   propagatedBuildInputs = [ boost kitemmodels ];
   outputs = [ "out" "dev" ];

@@ -3,10 +3,10 @@
 { fetchurl, stdenv }:
 let
   defaultRepos = [
-    "http://repo1.maven.org/maven2"
-    "http://oss.sonatype.org/content/repositories/releases"
-    "http://oss.sonatype.org/content/repositories/public"
-    "http://repo.typesafe.com/typesafe/releases"
+    "https://repo1.maven.org/maven2"
+    "https://oss.sonatype.org/content/repositories/releases"
+    "https://oss.sonatype.org/content/repositories/public"
+    "https://repo.typesafe.com/typesafe/releases"
   ];
 in
 
@@ -50,7 +50,7 @@ let
       (replaceChars ["."] ["/"] groupId)
       artifactId
       version
-      "${artifactId}-${version}-${optionalString (!isNull classifier) "-${classifier}"}.jar"
+      "${artifactId}-${version}${optionalString (!isNull classifier) "-${classifier}"}.jar"
     ];
   urls_ =
     if url != "" then [url]

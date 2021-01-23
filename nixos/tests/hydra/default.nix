@@ -16,7 +16,7 @@ let
 
   makeHydraTest = with pkgs.lib; name: package: makeTest {
     name = "hydra-${name}";
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ pstn lewo ma27 ];
     };
 

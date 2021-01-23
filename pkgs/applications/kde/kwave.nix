@@ -3,7 +3,7 @@
 , libogg, libmad, libopus, libvorbis, fftw, librsvg, qtbase }:
 
 mkDerivation {
-  name = "kwave";
+  pname = "kwave";
 
   meta = with lib; {
     homepage = "https://kde.org/applications/en/multimedia/org.kde.kwave";

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder
 , isPy27, isPyPy, python, pycares, typing, trollius }:
 
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # 'Could not contact DNS servers'
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/saghul/aiodns";
     license = licenses.mit;
     description = "Simple DNS resolver for asyncio";

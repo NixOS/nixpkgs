@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, bison, libtool, pkgconfig, which
+{ lib, stdenv, fetchurl, autoconf, automake, bison, libtool, pkg-config, which
 , alsaLib, asio, libjack2, libgig, libsndfile, lv2 }:
 
 stdenv.mkDerivation rec {
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
     make -f Makefile.svn
   '';
 
-  nativeBuildInputs = [ autoconf automake bison libtool pkgconfig which ];
+  nativeBuildInputs = [ autoconf automake bison libtool pkg-config which ];
 
   buildInputs = [ alsaLib asio libjack2 libgig libsndfile lv2 ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.linuxsampler.org";
     description = "Sampler backend";
     longDescription = ''

@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , pantheon
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , substituteAll
 , vala
 , libgee
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Networking Plug";
     homepage = "https://github.com/elementary/switchboard-plug-network";
     license = licenses.lgpl21Plus;

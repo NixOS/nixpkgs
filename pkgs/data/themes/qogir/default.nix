@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gdk-pixbuf, librsvg, gtk-engine-murrine }:
+{ lib, stdenv, fetchFromGitHub, gdk-pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "qogir-theme";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     rm $out/share/themes/*/{AUTHORS,COPYING}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flat Design theme for GTK based desktop environments";
     homepage = "https://vinceliuice.github.io/Qogir-theme";
     license = licenses.gpl3;

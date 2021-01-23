@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib }:
+{ lib, stdenv, fetchzip, ocaml, findlib }:
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-twt-0.94.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://people.csail.mit.edu/mikelin/ocaml+twt/";
     description = "“The Whitespace Thing” for OCaml";
     license = licenses.mit;

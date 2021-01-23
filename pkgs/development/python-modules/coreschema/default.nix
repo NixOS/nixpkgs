@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib, stdenv,
   fetchFromGitHub,
   buildPythonPackage,
   jinja2,
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python client library for Core Schema";
     homepage = "https://github.com/ivegotasthma/python-coreschema";
     license = licenses.bsd3;

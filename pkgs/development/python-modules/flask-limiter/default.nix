@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, flask, limits }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, flask, limits }:
 
 buildPythonPackage rec {
   pname = "Flask-Limiter";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask limits ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, curl, postgresql, yajl }:
+{ lib, stdenv, fetchFromGitHub, openssl, curl, postgresql, yajl }:
 
 stdenv.mkDerivation rec {
   pname = "kore";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An easy to use web application framework for C";
     homepage = "https://kore.io";
     license = licenses.isc;

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, nasm, which }:
+{ lib, stdenv, fetchFromGitHub, nasm, which }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "crypto++";
   version = "8.2.0";

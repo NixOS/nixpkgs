@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3, gobject-introspection, vala, libgee
-, overrideCC, gcc6
+{ lib, stdenv, fetchurl, pkg-config, intltool, itstool, libxml2, gtk3, openssl, gnome3, gobject-introspection, vala, libgee
+, overrideCC, gcc6, fetchpatch, autoreconfHook, gtk-doc, autoconf-archive, yelp-tools
 , mysqlSupport ? false, libmysqlclient ? null
 , postgresSupport ? false, postgresql ? null
 }:
@@ -12,11 +12,19 @@ assert postgresSupport -> postgresql != null;
   version = "5.2.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1j1l4dwjgw6w4d1v4bl5a4kwyj7bcih8mj700ywm7xakh1xxyv3g";
   };
-  configureFlags = with stdenv.lib; [
-    "--enable-gi-system-install=no"
+
+  patches = [
+    # fix compile error with mysql
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/libgda/-/commit/9859479884fad5f39e6c37e8995e57c28b11b1b9.diff";
+      sha256 = "158sncc5bg9lkri1wb0i1ri1nhx4c34rzi47gbfkwphlp7qd4qqv";
+    })
+  ];
+
+  configureFlags = with lib; [
     "--with-mysql=${if mysqlSupport then "yes" else "no"}"
     "--with-postgres=${if postgresSupport then "yes" else "no"}"
 
@@ -32,8 +40,8 @@ assert postgresSupport -> postgresql != null;
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig intltool itstool libxml2 gobject-introspection vala ];
-  buildInputs = with stdenv.lib; [ gtk3 openssl libgee ]
+  nativeBuildInputs = [ pkg-config intltool itstool libxml2 gobject-introspection vala autoreconfHook gtk-doc autoconf-archive yelp-tools ];
+  buildInputs = with lib; [ gtk3 openssl libgee ]
     ++ optional (mysqlSupport) libmysqlclient
     ++ optional (postgresSupport) postgresql;
 
@@ -43,7 +51,7 @@ assert postgresSupport -> postgresql != null;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Database access library";
     homepage = "https://www.gnome-db.org/";
     license = [ licenses.lgpl2 licenses.gpl2 ];

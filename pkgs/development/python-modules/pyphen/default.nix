@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "Pyphen";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "719b21dfb4b04fbc11cc0f6112418535fe35474021120cccfffc43a25fe63128";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pure Python module to hyphenate text";
     homepage = "https://github.com/Kozea/Pyphen";
     license = with licenses; [gpl2 lgpl21 mpl20];

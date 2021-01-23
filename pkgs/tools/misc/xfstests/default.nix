@@ -100,7 +100,7 @@ stdenv.mkDerivation {
     exec ./check "$@"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Torture test suite for filesystems";
     homepage = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/";
     license = licenses.gpl2;

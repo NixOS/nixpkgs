@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pdfminer, chardet, pytest }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pdfminer, chardet, pytest }:
 
 buildPythonPackage rec {
   pname = "pdfx";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Extract references (pdf, url, doi, arxiv) and metadata from a PDF";
     license = licenses.asl20;

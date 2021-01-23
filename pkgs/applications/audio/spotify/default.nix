@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
+{ fetchurl, lib, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa
@@ -135,7 +135,7 @@ stdenv.mkDerivation {
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath $rpath $out/share/spotify/spotify
 
-      librarypath="${stdenv.lib.makeLibraryPath deps}:$libdir"
+      librarypath="${lib.makeLibraryPath deps}:$libdir"
       wrapProgram $out/share/spotify/spotify \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
         --prefix PATH : "${gnome3.zenity}/bin"
@@ -158,7 +158,7 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.spotify.com/";
     description = "Play music from the Spotify music service";
     license = licenses.unfree;

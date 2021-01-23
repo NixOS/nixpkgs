@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssh}:
+{lib, stdenv, fetchurl, openssh}:
 
 stdenv.mkDerivation rec {
   name = "autossh-1.4g";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       install -D -m644 autossh.1    $out/man/man1/autossh.1                   || return 1
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.harding.motd.ca/autossh/";
     description = "Automatically restart SSH sessions and tunnels";
     platforms = platforms.unix;

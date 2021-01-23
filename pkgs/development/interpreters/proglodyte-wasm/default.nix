@@ -14,7 +14,8 @@ let
       # set this to nonempty string to disable default cmake configure
     '';
 
-    buildInputs = [ cmake clang python ];
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ clang python ];
 
     buildPhase = "make clang-debug-no-tests";
 

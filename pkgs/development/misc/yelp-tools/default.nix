@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, libxslt, itstool, gnome3, pkgconfig }:
+{ lib, stdenv, fetchurl, libxml2, libxslt, itstool, gnome3, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "yelp-tools";
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxml2 libxslt itstool gnome3.yelp-xsl ];
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Yelp/Tools";
     description = "Small programs that help you create, edit, manage, and publish your Mallard or DocBook documentation";
     maintainers = with maintainers; [ domenkozar ];

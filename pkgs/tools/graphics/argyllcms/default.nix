@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     mv $out/ref $out/share/argyllcms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.argyllcms.com";
     description = "Color management system (compatible with ICC)";
     license = licenses.gpl3;

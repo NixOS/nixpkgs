@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, writeText, conf ? null }:
+{ lib, stdenv, fetchFromGitHub, writeText, conf ? null }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   name = "abduco-2018-05-16";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
   preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
 
-  CFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
+  CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
 
   meta = {
     homepage = "http://brain-dump.org/projects/abduco";

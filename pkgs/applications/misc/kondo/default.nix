@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kondo";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1ax81a2828z3yla1psg5xi8ild65m6zcsvx48ncz902mpzqlj92b";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Save disk space by cleaning unneeded files from software projects";
     homepage = "https://github.com/tbillington/kondo";
     license = licenses.mit;

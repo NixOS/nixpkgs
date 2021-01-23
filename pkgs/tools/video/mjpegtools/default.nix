@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, gtk2, libdv, libjpeg, libpng, libX11, pkgconfig, SDL, SDL_gfx
+{ stdenv, lib, fetchurl, gtk2, libdv, libjpeg, libpng, libX11, pkg-config, SDL, SDL_gfx
 , withMinimal ? true
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libdv libjpeg libpng ]
               ++ lib.optionals (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A suite of programs for processing MPEG or MJPEG video";
     homepage = "http://mjpeg.sourceforge.net/";
     license = licenses.gpl2;

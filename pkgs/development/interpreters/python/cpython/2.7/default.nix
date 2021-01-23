@@ -114,6 +114,9 @@ let
       # libuuid, slowing down program startup a lot).
       ./no-ldconfig.patch
 
+      # Fix ctypes.util.find_library with gcc10.
+      ./find_library-gcc10.patch
+
     ] ++ optionals stdenv.hostPlatform.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
       ./2.5.2-tkinter-x11.patch

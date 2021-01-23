@@ -2,10 +2,12 @@ params: with params;
 # combine =
 args@{
   pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core")
-, extraName ? "combined", ...
+, extraName ? "combined"
+, extraVersion ? ""
+, ...
 }:
 let
-  pkgSet = removeAttrs args [ "pkgFilter" "extraName" ] // {
+  pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" ] // {
     # include a fake "core" package
     core.pkgs = [
       (bin.core.out // { pname = "core"; tlType = "bin"; })
@@ -36,8 +38,8 @@ let
   mkUniqueOutPaths = pkgs: uniqueStrings
     (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
-in buildEnv {
-  name = "texlive-${extraName}-${bin.texliveYear}";
+in (buildEnv {
+  name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
 
   extraPrefix = "/share/texmf";
 
@@ -271,6 +273,6 @@ in buildEnv {
   ''
     + bin.cleanBrokenLinks
   ;
-}
+}).overrideAttrs (_: { allowSubstitutes = true; })
 # TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file
 #       similarly, deal with xe(la)tex font visibility?

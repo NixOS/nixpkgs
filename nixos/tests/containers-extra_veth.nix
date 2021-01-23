@@ -2,7 +2,7 @@
 
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "containers-extra_veth";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ kampfschlaefer ];
   };
 

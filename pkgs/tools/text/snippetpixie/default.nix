@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
 , meson
 , ninja
 , vala
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , appstream
 , desktop-file-utils
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     appstream
     desktop-file-utils
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Your little expandable text snippet helper";
     longDescription = ''
       Your little expandable text snippet helper.

@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA";
     homepage = "http://uncrustify.sourceforge.net/";

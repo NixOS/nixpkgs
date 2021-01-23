@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, topkg, ocamlbuild }:
+{ lib, stdenv, fetchurl, ocaml, findlib, topkg, ocamlbuild }:
 
 stdenv.mkDerivation {
   name = "ocaml-react-1.2.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://erratique.ch/software/react";
     description = "Applicative events and signals for OCaml";
     license = licenses.bsd3;

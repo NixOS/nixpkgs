@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , makeWrapper
 , opencl-headers
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/hashcat --prefix LD_LIBRARY_PATH : ${ocl-icd}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast password cracker";
     homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;

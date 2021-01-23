@@ -3,7 +3,7 @@
 , fetchurl
 , fetchpatch
 , meson
-, pkgconfig
+, pkg-config
 , substituteAll
 , ninja
 , libffi
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [
-    pkgconfig
+    pkg-config
   ];
 
   nativeBuildInputs = [
     meson
-    pkgconfig
+    pkg-config
     ninja
   ] ++ lib.optionals isCross [
     wayland # For wayland-scanner during the build

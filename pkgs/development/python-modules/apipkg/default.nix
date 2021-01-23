@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, stdenv, buildPythonPackage, fetchPypi
 , pytest, setuptools_scm, isPy3k }:
 
 buildPythonPackage rec {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     py.test ${testExpression}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Namespace control and lazy-import mechanism";
     homepage = "https://github.com/pytest-dev/apipkg";
     license = licenses.mit;

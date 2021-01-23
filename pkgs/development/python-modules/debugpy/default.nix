@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , substituteAll
 , gdb
-, colorama
 , flask
 , psutil
 , pytest-timeout
@@ -18,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r5w5ngipj5fgjylrmlw3jrh5y2n67n68l91sj9329549x4ww8dh";
+    sha256 = "1dgjbbhy228w2zbfq5pf0hkai7742zw8mmybnzjdc9l6pw7360rq";
   };
 
   patches = [
@@ -65,7 +64,6 @@ buildPythonPackage rec {
   )'';
 
   checkInputs = [
-    colorama
     flask
     psutil
     pytest-timeout

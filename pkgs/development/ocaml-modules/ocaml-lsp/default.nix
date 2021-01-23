@@ -2,6 +2,8 @@
 , stdlib-shims
 , ppx_yojson_conv_lib
 , ocaml-syntax-shims
+, yojson
+, result
 , omd
 , octavius
 , dune-build-info
@@ -12,10 +14,10 @@
 , lib
 }:
 let
-  version = "1.1.0";
+  version = "1.4.0";
   src = fetchzip {
-    url = "https://github.com/ocaml/ocaml-lsp/releases/download/${version}/ocaml-lsp-server-${version}.tbz";
-    sha256 = "0al89waw43jl80k9z06kh44byhjhwb5hmzx07sddwi1kr1vc6jrb";
+    url = "https://github.com/ocaml/ocaml-lsp/releases/download/${version}/jsonrpc-${version}.tbz";
+    sha256 = "16vvwq3d9xmr91r6yv5i2gyqcdliji7asyq4g6iygi617233fa33";
   };
 
   # unvendor some (not all) dependencies.
@@ -23,7 +25,7 @@ let
   # ocaml-lsp without messing with your opam switch, but nix should prevent
   # this type of problems without resorting to vendoring.
   preBuild = ''
-    rm -r vendor/{octavius,uutf,ocaml-syntax-shims,omd,cmdliner}
+    rm -r ocaml-lsp-server/vendor/{octavius,uutf,ocaml-syntax-shims,omd,cmdliner}
   '';
 
   buildInputs = [
@@ -36,6 +38,7 @@ let
     dune-build-info
     omd
     cmdliner
+    jsonrpc
   ];
 
   lsp = buildDunePackage {
@@ -45,6 +48,15 @@ let
     minimumOCamlVersion = "4.06";
 
     inherit buildInputs preBuild;
+  };
+
+  jsonrpc = buildDunePackage {
+    pname = "jsonrpc";
+    inherit version src;
+    useDune2 = true;
+    minimumOCamlVersion = "4.06";
+
+    buildInputs = [ yojson stdlib-shims ocaml-syntax-shims ppx_yojson_conv_lib result ];
   };
 
 in

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , alsaLib
 , aubio
@@ -52,13 +52,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "6.3";
+  version = "6.5";
 
   # don't fetch releases from the GitHub mirror, they are broken
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    sha256 = "050p1adgyirr790a3xp878pq3axqwzcmrk3drgm9z6v753h0xhcd";
+    sha256 = "0sd38hchyr16biq9hcxha4ljy3pf0yhcgn90i5zfqcznnc57ildx";
   };
 
   patches = [
@@ -162,7 +162,7 @@ stdenv.mkDerivation rec {
 
   LINKFLAGS = "-lpthread";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-track hard disk recording software";
     longDescription = ''
       Ardour is a digital audio workstation (DAW), You can use it to

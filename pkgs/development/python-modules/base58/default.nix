@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy27, pytest, pyhamcrest }:
+{ lib, stdenv, fetchPypi, buildPythonPackage, isPy27, pytest, pyhamcrest }:
 
 buildPythonPackage rec {
   pname = "base58";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Base58 and Base58Check implementation";
     homepage = "https://github.com/keis/base58";
     license = licenses.mit;

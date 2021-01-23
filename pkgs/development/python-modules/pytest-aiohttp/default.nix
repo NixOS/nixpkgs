@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, aiohttp }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, aiohttp }:
 
 buildPythonPackage rec {
   pname = "pytest-aiohttp";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # There are no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/aio-libs/pytest-aiohttp/";
     description = "Pytest plugin for aiohttp support";
     license = licenses.asl20;

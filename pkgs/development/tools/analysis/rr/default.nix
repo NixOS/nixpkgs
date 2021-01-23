@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkgconfig, python3Packages, which, procps, gdb, capnproto }:
+{ stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto }:
 
 stdenv.mkDerivation rec {
   version = "5.4.0";
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   # see https://github.com/mozilla/rr/issues/2269
   preConfigure = ''substituteInPlace CMakeLists.txt --replace "std=c++11" "std=c++14"'';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config which ];
   buildInputs = [
-    cmake libpfm zlib python3Packages.python python3Packages.pexpect which procps gdb capnproto
+    libpfm zlib python3Packages.python python3Packages.pexpect procps gdb capnproto
   ];
   propagatedBuildInputs = [ gdb ]; # needs GDB to replay programs at runtime
   cmakeFlags = [
@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   hardeningDisable = [ "fortify" ];
-
-  enableParallelBuilding = true;
 
   # FIXME
   #doCheck = true;

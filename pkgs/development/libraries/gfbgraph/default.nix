@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, librest, gnome-online-accounts
+{ lib, stdenv, fetchurl, pkg-config, glib, librest, gnome-online-accounts
 , gnome3, libsoup, json-glib, gobject-introspection
 , gtk-doc, pkgs, docbook-xsl-nons, autoconf, automake, libtool }:
 
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0yck7dwvjk16a52nafjpi0a39rxwmg0w833brj45acz76lgkjrb0";
   };
 
   nativeBuildInputs = [
-    pkgconfig gobject-introspection gtk-doc
+    pkg-config gobject-introspection gtk-doc
     docbook-xsl-nons autoconf automake libtool
   ];
   buildInputs = [ glib gnome-online-accounts ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/GFBGraph";
     description = "GLib/GObject wrapper for the Facebook Graph API";
     maintainers = teams.gnome.members;

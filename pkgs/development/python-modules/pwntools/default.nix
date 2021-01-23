@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , debugger
 , fetchPypi
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     makeWrapper "${debugger}/bin/${stdenv.lib.strings.getName debugger}" "$out/bin/pwntools-gdb"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pwntools.com";
     description = "CTF framework and exploit development library";
     license = licenses.mit;

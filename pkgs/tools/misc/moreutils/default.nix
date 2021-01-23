@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perlPackages, makeWrapper, darwin }:
+{ lib, stdenv, fetchgit, libxml2, libxslt, docbook-xsl, docbook_xml_dtd_44, perlPackages, makeWrapper, darwin }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "moreutils";
   version = "0.63";

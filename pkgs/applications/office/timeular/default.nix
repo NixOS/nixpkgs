@@ -1,5 +1,5 @@
 {
-  stdenv,
+  lib, stdenv,
   fetchurl,
   appimageTools,
   libsecret
@@ -30,7 +30,7 @@ in appimageTools.wrapType2 rec {
     substituteInPlace $out/share/applications/timeular.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Timetracking by flipping 8-sided dice";
     longDescription = ''
       The Timeular Tracker is an 8-sided dice that sits on your desk.

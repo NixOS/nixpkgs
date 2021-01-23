@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
+{ lib, stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
 , pyperclip, six, pyparsing, vim, wcwidth, colorama, attrs
 , contextlib2 ? null, typing ? null, setuptools_scm
 , pytest, mock ? null, pytest-mock
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     py.test -k 'not test_path_completion_user_expansion'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enhancements for standard library's cmd module";
     homepage = "https://github.com/python-cmd2/cmd2";
     maintainers = with maintainers; [ teto ];

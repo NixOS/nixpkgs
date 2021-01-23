@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   version = "2.5.1";
@@ -11,6 +11,6 @@ in stdenv.mkDerivation rec {
   };
 
   meta = {
-    platforms = stdenv.lib.platforms.windows;
+    platforms = lib.platforms.windows;
   };
 }

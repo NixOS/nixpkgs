@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , aiohttp
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API";
     homepage = "https://github.com/slackapi/python-slackclient";
     license = licenses.mit;

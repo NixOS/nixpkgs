@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , isPy3k
@@ -24,7 +24,7 @@ buildPythonPackage {
     ${python.interpreter} -m unittest slob
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/itkach/slob/";
     description = "Reference implementation of the slob (sorted list of blobs) format";
     license = licenses.gpl3;

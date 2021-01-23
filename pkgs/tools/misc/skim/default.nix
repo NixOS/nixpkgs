@@ -1,4 +1,4 @@
-{ stdenv, fetchCrate, rustPlatform }:
+{ lib, stdenv, fetchCrate, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "skim";
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     chmod +x $out/bin/sk-share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line fuzzy finder written in Rust";
     homepage = "https://github.com/lotabout/skim";
     license = licenses.mit;

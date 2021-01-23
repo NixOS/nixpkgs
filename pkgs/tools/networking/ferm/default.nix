@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, makeWrapper, perl, ebtables, ipset, iptables, nixosTests }:
+{ lib, stdenv, fetchurl, makeWrapper, perl, ebtables, ipset, iptables, nixosTests }:
 
 let
-  inherit (stdenv.lib.versions) majorMinor;
+  inherit (lib.versions) majorMinor;
 in stdenv.mkDerivation rec {
   version = "2.5.1";
   pname = "ferm";
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     rm -r $out/lib/systemd
     for i in "$out/sbin/"*; do
-      wrapProgram "$i" --prefix PATH : "${stdenv.lib.makeBinPath [ iptables ipset ebtables ]}"
+      wrapProgram "$i" --prefix PATH : "${lib.makeBinPath [ iptables ipset ebtables ]}"
     done
   '';
 
@@ -39,8 +39,8 @@ in stdenv.mkDerivation rec {
       command. The firewall configuration resembles structured programming-like
       language, which can contain levels and lists.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [mic92];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [mic92];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,20 +1,27 @@
-{ callPackage, runCommandLocal, writeShellScriptBin, stdenv, coreutils, bubblewrap }:
-
-let buildFHSEnv = callPackage ./env.nix { }; in
+{ lib, callPackage, runCommandLocal, writeShellScriptBin, stdenv, coreutils, bubblewrap }:
 
 args @ {
-  name,
-  runScript ? "bash",
-  extraInstallCommands ? "",
-  meta ? {},
-  passthru ? {},
-  ...
+  name
+, runScript ? "bash"
+, extraInstallCommands ? ""
+, meta ? {}
+, passthru ? {}
+, unshareUser ? true
+, unshareIpc ? true
+, unsharePid ? true
+, unshareNet ? false
+, unshareUts ? true
+, unshareCgroup ? true
+, ...
 }:
 
 with builtins;
 let
+  buildFHSEnv = callPackage ./env.nix { };
+
   env = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru"
+    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
   ]);
 
   chrootenv = callPackage ./chrootenv {};
@@ -92,8 +99,12 @@ let
       --dev-bind /dev /dev
       --proc /proc
       --chdir "$(pwd)"
-      --unshare-all
-      --share-net
+      ${lib.optionalString unshareUser "--unshare-user"}
+      ${lib.optionalString unshareIpc "--unshare-ipc"}
+      ${lib.optionalString unsharePid "--unshare-pid"}
+      ${lib.optionalString unshareNet "--unshare-net"}
+      ${lib.optionalString unshareUts "--unshare-uts"}
+      ${lib.optionalString unshareCgroup "--unshare-cgroup"}
       --die-with-parent
       --ro-bind /nix /nix
       ${etcBindFlags}

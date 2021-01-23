@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , fuse
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "--disable-static-unrar"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FUSE file system for reading RAR archives";
     homepage = "https://hasse69.github.io/rar2fs/";
     license = licenses.gpl3Plus;

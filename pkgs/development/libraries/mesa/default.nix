@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, buildPackages
-, pkgconfig, intltool, ninja, meson
+, pkg-config, intltool, ninja, meson
 , file, flex, bison, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, python3Packages
@@ -26,12 +26,12 @@
   - libOSMesa is in $osmesa (~4 MB)
 */
 
-with stdenv.lib;
+with lib;
 
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.2.3";
+  version = "20.3.2";
   branch  = versions.major version;
 in
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "0axqrqg1fas91fx30qjwhcp4yasdvk919hjds4lga7ak247286xf";
+    sha256 = "0gakhsj5qgm4wran7nlnz7kzgg3aj0a8f4q4dfbznfnjhnv03q6c";
   };
 
   prePatch = "patchShebangs .";
@@ -58,38 +58,20 @@ stdenv.mkDerivation {
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
     ./opencl-install-dir.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-  ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-      # Fix `-Werror=int-conversion` pthread warnings on musl.
-      # TODO: Remove when https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6121 is merged and available
-      (fetchpatch {
-        name = "nine_debug-Make-tid-more-type-correct";
-        # Patch adjusted for version `20.1`, before the big mesa dirs change
-        # `gallium: rename 'state tracker' to 'frontend'`.
-        # Patch for versions after that change is at
-        #     https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e3b4745ef16d0e833300ad67044.patch
-        url = "https://gitlab.freedesktop.org/nh2/mesa/commit/3385c49684375f1153a52ed7ccda3f5135268a41.patch";
-        sha256 = "1ci694sqjll44c9g2md4krhk6qlvq51r7ad5rnnfdnf3l8ys0i50";
-      })
-    ]
-    # do not prefix user provided dri-drivers-path
-    ++ lib.optional (lib.versionOlder version "19.0.0") (fetchpatch {
-      url = "https://gitlab.freedesktop.org/mesa/mesa/commit/f6556ec7d126b31da37c08d7cb657250505e01a0.patch";
-      sha256 = "0z6phi8hbrbb32kkp1js7ggzviq7faz1ria36wi4jbc4in2392d9";
+    # Fix `-Werror=int-conversion` pthread warnings on musl.
+    # TODO: Remove when https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6121 is merged and available
+    (fetchpatch {
+      name = "nine_debug-Make-tid-more-type-correct";
+      url = "https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e.patch";
+      sha256 = "17248hyzg43d73c86p077m4lv1pkncaycr3l27hwv9k4ija9zl8q";
     })
-    ++ lib.optionals (lib.versionOlder version "19.1.0") [
-      # do not prefix user provided d3d-drivers-path
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/mesa/mesa/commit/dcc48664197c7e44684ccfb970a4ae083974d145.patch";
-        sha256 = "1nhs0xpx3hiy8zfb5gx1zd7j7xha6h0hr7yingm93130a5902lkb";
-      })
-
-      # don't build libGLES*.so with GLVND
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/mesa/mesa/commit/b01524fff05eef66e8cd24f1c5aacefed4209f03.patch";
-        sha256 = "1pszr6acx2xw469zq89n156p3bf3xf84qpbjw5fr1sj642lbyh7c";
-      })
-    ];
+    # Fix for pre macOS SDK 10.13:
+    (fetchpatch { # util: Disable memstream for Apple builds
+      # MR: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/8269
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/f4403f70fe5bf2ec41af5546122f0d78caffa984.patch";
+      sha256 = "03j2aj255m7ms848nkb41vj3s3yb72zb5rz3w3fzp5l9wzzargw5";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace meson.build --replace \
@@ -101,6 +83,10 @@ stdenv.mkDerivation {
       'DATADIR "/drirc.d"' '"${placeholder "out"}/drirc.d"'
     substituteInPlace src/util/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}'"
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    substituteInPlace meson.build --replace \
+      "find_program('nm')" \
+      "find_program('${stdenv.cc.targetPrefix}nm')"
   '';
 
   outputs = [ "out" "dev" "drivers" ] ++ lib.optional enableOSMesa "osmesa";
@@ -143,10 +129,10 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optional withValgrind valgrind-light;
 
-  depsBuildBuild = [ pkgconfig ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
-    pkgconfig meson ninja
+    pkg-config meson ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [
@@ -221,7 +207,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-fno-common";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-common";
 
   passthru = {
     inherit libdrm;

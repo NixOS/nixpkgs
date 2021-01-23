@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libmikmod, ncurses }:
+{ lib, stdenv, fetchurl, libmikmod, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "mikmod-3.2.8";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tracker music player for the terminal";
     homepage = "http://mikmod.shlomifish.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = with lib.platforms; linux;
   };
 }

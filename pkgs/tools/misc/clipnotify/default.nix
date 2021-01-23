@@ -1,4 +1,4 @@
-{ libX11, libXfixes, stdenv, fetchFromGitHub }:
+{ libX11, libXfixes, lib, stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   pname = "clipnotify";
   version = "git-2018-02-20";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp clipnotify $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Notify on new X clipboard events";
     inherit (src.meta) homepage;
     maintainers = with maintainers; [ jb55 ];

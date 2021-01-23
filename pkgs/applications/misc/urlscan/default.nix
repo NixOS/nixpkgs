@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ lib, stdenv, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonApplication rec {
   pname = "urlscan";
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false; # No tests available
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mutt and terminal url selector (similar to urlview)";
     homepage = "https://github.com/firecat53/urlscan";
     license = licenses.gpl2;

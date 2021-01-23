@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetch
 , cmake
 , zlib
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake python3 which swig ];
   buildInputs = [ ncurses zlib libedit libxml2 llvm ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa ];
+    ++ lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa ];
 
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];
@@ -40,8 +40,6 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
   ];
-
-  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/share/man/man1
@@ -52,7 +50,7 @@ stdenv.mkDerivation {
     ln -s $out/bin/lldb-vscode $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A next-generation high-performance debugger";
     homepage    = "https://llvm.org/";
     license     = licenses.ncsa;

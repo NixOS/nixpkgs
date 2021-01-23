@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glib, gettext }:
+{ lib, stdenv, fetchFromGitHub, glib, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-emoji-selector";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "GNOME Shell extension providing a searchable popup menu displaying most emojis";
     license = licenses.gpl3Plus;

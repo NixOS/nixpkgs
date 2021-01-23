@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libsodium, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, libsodium, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage rec {
   SODIUM_USE_PKG_CONFIG = 1;
 
   buildInputs = [ openssl libsodium ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
-  nativeBuildInputs = [ pkgconfig ];
+    ++ lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [ pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/shadowsocks/shadowsocks-rust";
     description = "A Rust port of shadowsocks";
     license = licenses.mit;

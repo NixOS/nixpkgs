@@ -1,8 +1,9 @@
 { stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, rpiVersion, ... } @ args:
 
 let
-  modDirVersion = "4.19.118";
-  tag = "1.20200601";
+  # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
+  modDirVersion = "5.4.79";
+  tag = "1.20201201";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -12,7 +13,7 @@ lib.overrideDerivation (buildLinux (args // {
     owner = "raspberrypi";
     repo = "linux";
     rev = "raspberrypi-kernel_${tag}-1";
-    sha256 = "11jzsmnd1qry2ir9vmsv0nfdzjpgkn5yab5ylxcz406plc073anp";
+    sha256 = "093p5kh5f27djkhbcw371w079lhhihvg3s4by3wzsd40di4fcgn9";
   };
 
   defconfig = {
@@ -21,6 +22,11 @@ lib.overrideDerivation (buildLinux (args // {
     "3" = if stdenv.hostPlatform.isAarch64 then "bcmrpi3_defconfig" else "bcm2709_defconfig";
     "4" = "bcm2711_defconfig";
   }.${toString rpiVersion};
+
+  extraConfig = ''
+    # ../drivers/pci/controller/pcie-altera.c:679:8: error: too few arguments to function 'devm_of_pci_get_host_bridge_resources'
+    PCIE_ALTERA n
+  '';
 
   features = {
     efiBootStub = false;

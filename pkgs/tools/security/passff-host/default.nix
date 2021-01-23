@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, pass }:
+{ lib, stdenv, fetchFromGitHub, python3, pass }:
 
 stdenv.mkDerivation rec {
   pname = "passff-host";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Host app for the WebExtension PassFF";
     homepage = "https://github.com/passff/passff-host";
     license = licenses.gpl2;

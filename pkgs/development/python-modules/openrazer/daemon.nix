@@ -1,4 +1,5 @@
-{ buildPythonApplication
+{ lib
+, buildPythonApplication
 , isPy3k
 , daemonize
 , dbus-python
@@ -15,7 +16,7 @@
 }:
 
 let
-  common = import ./common.nix { inherit stdenv fetchFromGitHub; };
+  common = import ./common.nix { inherit stdenv lib fetchFromGitHub; };
 in
 buildPythonApplication (common // rec {
   pname = "openrazer_daemon";

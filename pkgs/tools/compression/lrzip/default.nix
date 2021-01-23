@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, lzo, bzip2, nasm, perl}:
+{lib, stdenv, fetchurl, zlib, lzo, bzip2, nasm, perl}:
 
 stdenv.mkDerivation rec {
   version = "0.631";
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://ck.kolivas.org/apps/lrzip/";
     description = "The CK LRZIP compression program (LZMA + RZIP)";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     inherit version;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

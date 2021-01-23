@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
-  version = "2020.11";
+  version = "2020.12";
 
   src = fetchurl {
     url    = "https://www.rakudo.org/dl/rakudo/rakudo-${version}.tar.gz";
-    sha256 = "107sskgf0p6npm3vjpv5wrqgfa007af6bxxiv1wgiyzx7maqdw5n";
+    sha256 = "1g3ciwhlac85d6l2kqslw8pm4bjjd1z79m1c5ll0fxmr6awgpk67";
   };
 
   buildInputs = [ icu zlib gmp perl ];

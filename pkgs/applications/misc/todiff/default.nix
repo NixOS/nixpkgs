@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "todiff";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   checkPhase = "cargo test --features=integration_tests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Human-readable diff for todo.txt files";
     homepage = "https://github.com/Ekleog/todiff";
     maintainers = with maintainers; [ ekleog ];

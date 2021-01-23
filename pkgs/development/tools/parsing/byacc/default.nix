@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "byacc";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/byacc $out/bin/yacc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Berkeley YACC";
     homepage = "https://invisible-island.net/byacc/byacc.html";
     license = licenses.publicDomain;

@@ -21,7 +21,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     in ''
       client.wait_for_x()
       client.execute("su - alice -c minecraft-launcher &")
-      client.wait_for_text("CONTINUE WITHOUT LOGIN")
+      client.wait_for_text("Create a new Microsoft account")
       client.sleep(10)
       client.screenshot("launcher")
     '';

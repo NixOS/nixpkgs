@@ -2,8 +2,6 @@
 , python3Packages
 , gtk3
 , cairo
-, aspellDicts
-, buildEnv
 , gnome3
 , librsvg
 , xvfb_run
@@ -40,16 +38,19 @@ python3Packages.buildPythonApplication rec {
     make l10n_compile
   '';
 
-  ASPELL_CONF = "dict-dir ${buildEnv {
-    name = "aspell-all-dicts";
-    paths = lib.collect lib.isDerivation aspellDicts;
-  }}/lib/aspell";
-
   postInstall = ''
     # paperwork-shell needs to be re-wrapped with access to paperwork
     cp ${python3Packages.paperwork-shell}/bin/.paperwork-cli-wrapped $out/bin/paperwork-cli
     # install desktop files and icons
     XDG_DATA_HOME=$out/share $out/bin/paperwork-gtk install --user
+
+    # fixes [WARNING] [openpaperwork_core.resources.setuptools] Failed to find
+    # resource file paperwork_gtk.icon.out/paperwork_128.png, tried at path
+    # /nix/store/3n5lz6y8k9yks76f0nar3smc8djan3xr-paperwork-2.0.2/lib/python3.8/site-packages/paperwork_gtk/icon/out/paperwork_128.png.
+    site=$out/lib/${python3Packages.python.libPrefix}/site-packages/paperwork_gtk
+    for i in $site/data/paperwork_*.png; do
+      ln -s $i $site/icon/out;
+    done
   '';
 
   checkInputs = [ xvfb_run dbus.daemon ];

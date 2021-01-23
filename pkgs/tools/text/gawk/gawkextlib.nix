@@ -1,10 +1,10 @@
-{ stdenv, recurseIntoAttrs, fetchgit, writeText, pkgconfig, autoreconfHook
+{ lib, stdenv, recurseIntoAttrs, fetchgit, writeText, pkg-config, autoreconfHook
 , autoconf, automake, libiconv, libtool, texinfo, gettext, gawk, rapidjson, gd
 , shapelib, libharu, lmdb, gmp, glibcLocales, mpfr, more, postgresql, hiredis
 , expat, tre, makeWrapper }:
 
 let
-  buildExtension = stdenv.lib.makeOverridable
+  buildExtension = lib.makeOverridable
     ({ name, gawkextlib, extraBuildInputs ? [ ], doCheck ? true }:
       let is_extension = !isNull gawkextlib;
       in stdenv.mkDerivation rec {
@@ -26,13 +26,13 @@ let
           automake
           libtool
           autoreconfHook
-          pkgconfig
+          pkg-config
           texinfo
           gettext
         ];
 
         buildInputs = [ gawk ] ++ extraBuildInputs;
-        propagatedBuildInputs = stdenv.lib.optional is_extension gawkextlib;
+        propagatedBuildInputs = lib.optional is_extension gawkextlib;
 
         setupHook = if is_extension then ./setup-hook.sh else null;
         inherit gawk;
@@ -40,7 +40,7 @@ let
         inherit doCheck;
         checkInputs = [ more ];
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           homepage = "https://sourceforge.net/projects/gawkextlib/";
           description = "Dynamically loaded extension libraries for GNU AWK";
           longDescription = ''

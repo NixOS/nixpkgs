@@ -1,17 +1,17 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "turbo-geth";
-  version = "2020.12.01";
+  version = "2021.01.01";
 
   src = fetchFromGitHub {
     owner = "ledgerwatch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0l1qj10vhfkrk66zihz8m24pnyj8jbb65a7amvphp07r199swy2a";
+    sha256 = "0a570570cmyngbz645728jdd0d2xmnyrnln2gbxnngiv4v62dxls";
   };
 
-  vendorSha256 = "16vawkky612zf45d8dhipjmhrprmi28z9wdcnjy07x3bxdyfbhfr";
+  vendorSha256 = "1x3mhfc16slaamp51rbscfwll25qj6ama1xkysidy7rscmmsj392";
   runVend = true;
 
   subPackages = [
@@ -20,7 +20,7 @@ buildGoModule rec {
     "cmd/rpcdaemon"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ledgerwatch/turbo-geth/";
     description = "Ethereum node and geth fork focused on scalability and modularity";
     license = with licenses; [ lgpl3 gpl3 ];

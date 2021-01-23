@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python3, pkgconfig, libX11, libXext, xorgproto, addOpenGLRunpath }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python3, pkg-config, libX11, libXext, xorgproto, addOpenGLRunpath }:
 
 stdenv.mkDerivation rec {
   pname = "libglvnd";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "10x7fgb114r4gikdg6flszl3kwzcb9y5qa7sj9936mk0zxhjaylz";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python3 addOpenGLRunpath ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 addOpenGLRunpath ];
   buildInputs = [ libX11 libXext xorgproto ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.cc.isClang "-Wno-error");
 
   # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
-  configureFlags  = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-tls";
+  configureFlags  = lib.optional stdenv.hostPlatform.isMusl "--disable-tls";
 
   outputs = [ "out" "dev" ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit (addOpenGLRunpath) driverLink; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GL Vendor-Neutral Dispatch library";
     homepage = "https://github.com/NVIDIA/libglvnd";
     license = licenses.bsd2;

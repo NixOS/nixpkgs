@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "gojsontoyaml";
@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simply tool to convert json to yaml written in Go";
     homepage = "https://github.com/brancz/gojsontoyaml";
     license = licenses.mit;

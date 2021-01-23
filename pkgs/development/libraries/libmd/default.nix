@@ -1,24 +1,20 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libmd";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchurl {
     url = "https://archive.hadrons.org/software/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0waclg2d5qin3r26gy5jvy4584ik60njc8pqbzwk0lzq3j9ynkp1";
+    sha256 = "0jmga8y94h857ilra3qjaiax3wd5pd6mx1h120zhl9fcjmzhj0js";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  # Writing the version to a .dist-version file is required for the get-version
-  # shell script because fetchgit removes the .git directory.
-  prePatch = ''
-    echo '${version}' > .dist-version;
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.hadrons.org/software/${pname}/";
+    changelog = "https://archive.hadrons.org/software/libmd/libmd-${version}.announce";
+    # Git: https://git.hadrons.org/cgit/libmd.git
     description = "Message Digest functions from BSD systems";
     license = with licenses; [ bsd3 bsd2 isc beerware publicDomain ];
     maintainers = with maintainers; [ primeos ];

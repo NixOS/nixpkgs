@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, nix, git }: let
+{ stdenv, fetchurl, pkg-config, nix, git }: let
   version = "4.1.6";
 in stdenv.mkDerivation {
   pname = "nix-exec";
@@ -9,7 +9,7 @@ in stdenv.mkDerivation {
     sha256 = "0slpsnzzzdkf5d9za7j4kr15jr4mn1k9klfsxibzy47b2bx1vkar";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ nix git ];
 
   NIX_CFLAGS_COMPILE = "-std=c++1y";

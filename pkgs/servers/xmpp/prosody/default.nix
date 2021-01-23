@@ -11,7 +11,7 @@
 assert withLibevent -> luaevent != null;
 assert withDBI -> luadbi != null;
 
-with stdenv.lib;
+with lib;
 
 
 stdenv.mkDerivation rec {

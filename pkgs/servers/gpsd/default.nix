@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn $out/bin "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GPS service daemon";
     longDescription = ''
       gpsd is a service daemon that monitors one or more GPSes or AIS

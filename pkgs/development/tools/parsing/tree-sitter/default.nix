@@ -1,11 +1,13 @@
 { lib, stdenv
 , fetchgit, fetchFromGitHub, fetchurl
-, writeShellScript, runCommand, which
+, writeShellScript, runCommand, which, formats
 , rustPlatform, jq, nix-prefetch-git, xe, curl, emscripten
-, callPackage
-, enableShared ? true
-, enableStatic ? false
 , Security
+, callPackage
+
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.hostPlatform.isStatic
+, webUISupport ? false
 }:
 
 # TODO: move to carnix or https://github.com/kolloch/crate2nix
@@ -27,7 +29,7 @@ let
   };
 
   update-all-grammars = import ./update.nix {
-    inherit writeShellScript nix-prefetch-git curl jq xe src;
+    inherit writeShellScript nix-prefetch-git curl jq xe src formats lib;
   };
 
   fetchGrammar = (v: fetchgit {inherit (v) url rev sha256 fetchSubmodules; });
@@ -41,35 +43,46 @@ let
 
   builtGrammars = let
     change = name: grammar:
-      callPackage ./library.nix {
-        language = name; inherit version; source = fetchGrammar grammar;
+      callPackage ./grammar.nix {} {
+        language = name;
+        inherit version;
+        source = fetchGrammar grammar;
       };
   in
-    # typescript doesn't have parser.c in the same place as others
-    lib.mapAttrs change (removeAttrs (import ./grammars) ["typescript"]);
+    lib.mapAttrs change (removeAttrs (import ./grammars) [
+      # TODO these don't have parser.c in the same place as others.
+      # They might require more elaborate builds?
+      #  /nix/…/src/parser.c: No such file or directory
+      "tree-sitter-typescript"
+      #  /nix/…/src/parser.c: No such file or directory
+      "tree-sitter-ocaml"
+      # /nix/…/src/parser.c:1:10: fatal error: tree_sitter/parser.h: No such file or directory
+      "tree-sitter-razor"
+    ]);
 
 in rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version cargoSha256;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs =
+    [ which ]
+    ++ lib.optionals webUISupport [ emscripten ];
 
-  nativeBuildInputs = [ emscripten which ];
-
-  postPatch = ''
-    # needed for the tests
-    rm -rf test/fixtures/grammars
-    ln -s ${grammars} test/fixtures/grammars
-
-    # These functions do not appear in the source code
-    sed -i /_ts_query_context/d lib/binding_web/exports.json
-    sed -i /___assert_fail/d lib/binding_web/exports.json
+  postPatch = lib.optionalString (!webUISupport) ''
+    # remove web interface
+    sed -e '/pub mod web_ui/d' \
+        -i cli/src/lib.rs
+    sed -e 's/web_ui,//' \
+        -e 's/web_ui::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
+        -i cli/src/main.rs
   '';
 
   # Compile web assembly with emscripten. The --debug flag prevents us from
   # minifying the JavaScript; passing it allows us to side-step more Node
   # JS dependencies for installation.
-  preBuild = ''
+  preBuild = lib.optionalString webUISupport ''
     bash ./script/build-wasm --debug
   '';
 
@@ -88,6 +101,11 @@ in rustPlatform.buildRustPackage {
     };
     inherit grammars;
     inherit builtGrammars;
+
+    tests = {
+      # make sure all grammars build
+      builtGrammars = lib.recurseIntoAttrs builtGrammars;
+    };
   };
 
   meta = {

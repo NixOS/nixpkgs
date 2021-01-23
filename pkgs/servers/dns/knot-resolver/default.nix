@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 # native deps.
-, runCommand, pkgconfig, meson, ninja, makeWrapper
+, runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
 , knot-dns, luajitPackages, libuv, gnutls, lmdb
 , systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
@@ -12,7 +12,7 @@ let # un-indented, over the whole file
 
 result = if extraFeatures then wrapped-full else unwrapped;
 
-inherit (stdenv.lib) optional optionals optionalString;
+inherit (lib) optional optionals optionalString;
 lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
@@ -50,7 +50,7 @@ unwrapped = stdenv.mkDerivation rec {
     patchShebangs scripts/
   '';
 
-  nativeBuildInputs = [ pkgconfig meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
@@ -84,7 +84,7 @@ unwrapped = stdenv.mkDerivation rec {
     meson test --print-errorlogs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Caching validating DNS resolver, from .cz domain registry";
     homepage = "https://knot-resolver.cz";
     license = licenses.gpl3Plus;

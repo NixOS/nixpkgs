@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   name = "libva-${lib.optionalString minimal "minimal-"}${version}";
-  version = "2.9.1"; # Also update the hash for libva-utils!
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = version;
-    sha256 = "1c9rwrz30q2p47spzb9gsakwci9c5mw6i309z7p7hr2d8233ay4x";
+    sha256 = "1xyxnxmq04s3s6135v6av1rl5z809j9vxvg7af9wvyh3dgsxrlds";
   };
 
   outputs = [ "dev" "out" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An implementation for VA-API (Video Acceleration API)";
     longDescription = ''
       VA-API is an open-source library and API specification, which provides

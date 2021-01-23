@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # Pypi does not contain tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wrapper around the DogStatsd client";
     homepage    = "https://paperspace.com";
     license     = licenses.mit;

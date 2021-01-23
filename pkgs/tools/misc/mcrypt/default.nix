@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libmcrypt, libmhash }:
+{ lib, stdenv, fetchurl, libmcrypt, libmhash }:
 
 stdenv.mkDerivation rec {
   version = "2.6.8";
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     ./overflow_CVE-2012-4409.patch
     ./segv.patch
     ./sprintf_CVE-2012-4527.patch
+    ./malloc_to_stdlib.patch
   ];
 
   buildInputs = [ libmcrypt libmhash ];
@@ -26,8 +27,8 @@ stdenv.mkDerivation rec {
       ever-wider range of algorithms and modes.
     '';
     homepage = "http://mcrypt.sourceforge.net";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.qknight ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.qknight ];
   };
 }

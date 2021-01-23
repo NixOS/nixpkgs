@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , meson, pkg-config, wayland, ninja
 , cairo, libinput, pango, wayland-protocols, libxkbcommon
 }:
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson pkg-config wayland ninja ];
   buildInputs = [ cairo libinput pango wayland-protocols libxkbcommon ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Displays keys being pressed on a Wayland session";
     longDescription = ''
       Displays keypresses on screen on supported Wayland compositors (requires

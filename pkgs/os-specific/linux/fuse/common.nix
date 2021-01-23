@@ -1,6 +1,6 @@
 { version, sha256Hash }:
 
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, util-linux, gettext
 , meson, ninja, pkg-config
 , autoreconfHook
@@ -8,7 +8,7 @@
 }:
 
 let
-  isFuse3 = stdenv.lib.hasPrefix "3" version;
+  isFuse3 = lib.hasPrefix "3" version;
 in stdenv.mkDerivation rec {
   pname = "fuse";
   inherit version;
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   preAutoreconf = "touch config.rpath";
 
   patches =
-    stdenv.lib.optional
+    lib.optional
       (!isFuse3 && stdenv.isAarch64)
       (fetchpatch {
         url = "https://github.com/libfuse/libfuse/commit/914871b20a901e3e1e981c92bc42b1c93b7ab81b.patch";
@@ -37,9 +37,9 @@ in stdenv.mkDerivation rec {
     then [ meson ninja pkg-config ]
     else [ autoreconfHook gettext ];
 
-  outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";
+  outputs = [ "out" ] ++ lib.optional isFuse3 "common";
 
-  mesonFlags = stdenv.lib.optionals isFuse3 [
+  mesonFlags = lib.optionals isFuse3 [
     "-Dudevrulesdir=/udev/rules.d"
     "-Duseroot=false"
   ];
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library that allows filesystems to be implemented in user space";
     longDescription = ''
       FUSE (Filesystem in Userspace) is an interface for userspace programs to

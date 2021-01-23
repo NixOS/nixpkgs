@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, pharo, unzip, makeDesktopItem }:
+{ lib, stdenv, fetchurl, bash, pharo, unzip, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   version = "2017.02.28";
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
      test "$?" == 124 && echo "ok")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Launcher for Pharo distributions";
     homepage = "https://pharo.org";
     longDescription = ''

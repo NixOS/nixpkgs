@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, gettext, pkgconfig, glib, gtk2, libX11, libSM, libICE, which
+{ lib, fetchurl, stdenv, gettext, pkg-config, glib, gtk2, libX11, libSM, libICE, which
 , IOKit ? null }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   name = "gkrellm-2.3.11";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "01lccz4fga40isv09j8rjgr0qy10rff9vj042n6gi6gdv4z69q0y";
   };
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkg-config which ];
   buildInputs = [gettext glib gtk2 libX11 libSM libICE]
     ++ optionals stdenv.isDarwin [ IOKit ];
 

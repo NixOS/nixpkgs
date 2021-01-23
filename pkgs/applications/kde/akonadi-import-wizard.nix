@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "akonadi-import-wizard";
+  pname = "akonadi-import-wizard";
   meta = {
     license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12 ];
     maintainers = kdepimTeam;

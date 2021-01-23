@@ -109,8 +109,6 @@ mkDerivation rec {
       popd
     '';
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" "-DQT_QMAKE_EXECUTABLE=$NIX_QT5_TMP/bin/qmake" ];
 
   desktopItem = makeDesktopItem {

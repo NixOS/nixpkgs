@@ -11,9 +11,13 @@
 , # package-set used for non-haskell dependencies (all of nixpkgs)
   pkgs
 
-, # stdenv to use for building haskell packages
+, # stdenv provides our build and host platforms
   stdenv
 
+, # this module provides the list of known licenses and maintainers
+  lib
+
+  # needed for overrideCabal & packageSourceOverrides
 , haskellLib
 
 , # hashes for downloading Hackage packages
@@ -22,7 +26,7 @@
 , # compiler to use
   ghc
 
-, # A function that takes `{ pkgs, stdenv, callPackage }` as the first arg and
+, # A function that takes `{ pkgs, lib, callPackage }` as the first arg and
   # `self` as second, and returns a set of haskell packages
   package-set
 
@@ -169,7 +173,7 @@ let
       };
     });
 
-in package-set { inherit pkgs stdenv callPackage; } self // {
+in package-set { inherit pkgs lib callPackage; } self // {
 
     inherit mkDerivation callPackage haskellSrc2nix hackage2nix buildHaskellPackages;
 

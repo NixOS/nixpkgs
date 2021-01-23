@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig
+{ lib, stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkg-config
 , appstream-glib, desktop-file-utils, python3
 , gtk, girara, gettext, libxml2, check
 , sqlite, glib, texlive, libintl, libseccomp
@@ -6,7 +6,7 @@
 , gtk-mac-integration
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "zathura";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ] ++ optional (!stdenv.isLinux) "-Dseccomp=disabled";
 
   nativeBuildInputs = [
-    meson ninja pkgconfig desktop-file-utils python3.pkgs.sphinx
+    meson ninja pkg-config desktop-file-utils python3.pkgs.sphinx
     gettext wrapGAppsHook libxml2 check appstream-glib
   ];
 

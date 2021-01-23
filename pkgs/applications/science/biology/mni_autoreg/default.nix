@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, perlPackages, libminc }:
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, perlPackages, libminc }:
 
 stdenv.mkDerivation rec {
   pname = "mni_autoreg";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/BIC-MNI/mni_autoreg";
     description = "Tools for automated registration using the MINC image format";
     maintainers = with maintainers; [ bcdarwin ];

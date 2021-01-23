@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # contains python3 specific code
   doCheck = !isPy27;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "FreezeGun: Let your Python tests travel through time";
     homepage = "https://github.com/spulec/freezegun";
     license = licenses.asl20;

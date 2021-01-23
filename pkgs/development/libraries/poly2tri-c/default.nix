@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , glib
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" "dev" ];
 
   src = fetchFromGitHub {
-    owner = "Paul-Browne";
+    owner = "Mattey40";
     repo = "poly2tri-c";
     rev = "p2tc-${version}";
     sha256 = "158vm3wqfxs22b74kqc4prlvjny38qqm3kz5wrgasmx0qciwh0g8";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     "-Wno-error"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for generating, refining and rendering 2-Dimensional Constrained Delaunay Triangulations";
     homepage = "https://code.google.com/archive/p/poly2tri-c/";
     license = licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };
 }

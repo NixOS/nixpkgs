@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames, kconfig, knotifyconfig }:
 
 mkDerivation {
-  name = "kdiamond";
+  pname = "kdiamond";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.kdiamond";
     description = "A single player puzzle game";

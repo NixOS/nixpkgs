@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
+{ lib, stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
 , python, ruby, jre, nettools, bc
 }:
 
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Networked resource monitoring tool";
     longDescription = ''
       Munin is a monitoring tool that surveys all your computers and remembers

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2, alsaLib, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, libjack2, alsaLib, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "4.0.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake libtool libjack2 alsaLib ];
 
   preConfigure = ''
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A set of C++ classes that provide a cross platform API for realtime MIDI input/output";
     homepage =  "http://www.music.mcgill.ca/~gary/rtmidi/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

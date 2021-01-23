@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "service-runner";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ roberth ];
   };
 

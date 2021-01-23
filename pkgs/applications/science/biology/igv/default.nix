@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, jdk11 }:
+{ lib, stdenv, fetchzip, jdk11 }:
 
 stdenv.mkDerivation rec {
   pname = "igv";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/igvtools
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.broadinstitute.org/igv/";
     description = "A visualization tool for interactive exploration of genomic datasets";
     license = licenses.mit;

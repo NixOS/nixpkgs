@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, which
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, which
 , gettext, libffi, libiconv, libtasn1
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # at the same time, libtasn1 in buildInputs provides the libasn1 library
   # to link against for the target platform.
   # hence, libtasn1 is required in both native and build inputs.
-  nativeBuildInputs = [ autoreconfHook pkgconfig which libtasn1 ];
+  nativeBuildInputs = [ autoreconfHook pkg-config which libtasn1 ];
   buildInputs = [ gettext libffi libiconv libtasn1 ];
 
   autoreconfPhase = ''
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "exampledir=${placeholder "out"}/etc/pkcs11"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for loading and sharing PKCS#11 modules";
     longDescription = ''
       Provides a way to load and enumerate PKCS#11 modules.

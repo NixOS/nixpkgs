@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, geant_version }:
+{ lib, stdenv, fetchurl, geant_version }:
 
 let
   mkDataset = { name, version, sha256, envvar }:
@@ -24,7 +24,7 @@ let
       inherit envvar;
       setupHook = ./datasets-hook.sh;
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Data files for the Geant4 toolkit";
         homepage = "https://geant4.web.cern.ch/support/download";
         license = licenses.g4sl;
@@ -42,22 +42,22 @@ in
 
     {
       name = "G4EMLOW";
-      version = "7.9.1";
-      sha256 = "1jrw0izw732bywq1k1srs3x2z0m3y2h377kcvwbwcr0wa1p10342";
+      version = "7.13";
+      sha256 = "0scczd4ismvd4g3vfshbvwv92bzkdjz0ma7y21n6qxxy96v9cj1p";
       envvar = "LE";
     }
 
     {
       name = "G4PhotonEvaporation";
-      version = "5.5";
-      sha256 = "1mvnbs7yvkii41blks6bkqr8qhxgnj3xxvv1i3vdg2y14shxv5ar";
+      version = "5.7";
+      sha256 = "1rg7fygfxx06h98ywlci6b0b9ih74q8diygr76c3vppxdzjl47kn";
       envvar = "LEVELGAMMA";
     }
 
     {
       name = "G4RadioactiveDecay";
-      version = "5.4";
-      sha256 = "0qaark6mqzxr3lqawv6ai8z5211qihlp5x2hn86vzx8kgpd7j1r4";
+      version = "5.6";
+      sha256 = "1w8d9zzc4ss7sh1f8cxv5pmrx2b74p1y26377rw9hnlfkiy0g1iq";
       envvar = "RADIOACTIVE";
     }
 
@@ -70,8 +70,8 @@ in
 
     {
       name = "G4PARTICLEXS";
-      version = "2.1";
-      sha256 = "0h8ba8jk197npbd9lzq2qlfiklbjgqwk45m1cc6piy5vf8ri0k89";
+      version = "3.1";
+      sha256 = "1kg9y0kqn4lma7b0yjpgj7s9n317yqi54ydvq365qphnmm7ahka0";
       envvar = "PARTICLEXS";
     }
 
@@ -98,15 +98,15 @@ in
 
     {
       name = "G4ENSDFSTATE";
-      version = "2.2";
-      sha256 = "19p0sq0rmyg48j9hddqy24dn99md7ddiyq09lyj381q7cbpjfznx";
+      version = "2.3";
+      sha256 = "00wjir59rrrlk0a12vi8rsnhyya71rdi1kmark9sp487hbhcai4l";
       envvar = "ENSDFSTATE";
     }
 
     {
       name = "G4RealSurface";
-      version = "2.1.1";
-      sha256 = "0l3gs0nlp10cjlwiln3f72zfch0av2g1r8m2ny9afgvwgbwiyj4h";
+      version = "2.2";
+      sha256 = "08382y1258ifs7nap6zaaazvabg72blr0dkqgwk32lrg07hdwm4r";
       envvar = "REALSURFACE";
     }
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, makeWrapper, autoreconfHook }:
+{ lib, stdenv, fetchurl, tcl, makeWrapper, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "5.45.4";
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
       wrapProgram $i \
         --prefix PATH : "${tcl}/bin" \
         --prefix TCLLIBPATH ' ' $out/lib/* \
-        ${stdenv.lib.optionalString stdenv.isDarwin "--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version}"}
+        ${lib.optionalString stdenv.isDarwin "--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version}"}
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for automating interactive applications";
     homepage = "http://expect.sourceforge.net/";
     license = "Expect";

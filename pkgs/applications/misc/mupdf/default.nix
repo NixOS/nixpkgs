@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, freetype, harfbuzz, openjpeg
+{ stdenv, lib, fetchurl, fetchpatch, pkg-config, freetype, harfbuzz, openjpeg
 , jbig2dec, libjpeg , darwin
 , gumbo
 , enableX11 ? true, libX11, libXext, libXi, libXrandr
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   };
 
   patches =
-    stdenv.lib.optional stdenv.isDarwin ./darwin.patch ++ [
+    lib.optional stdenv.isDarwin ./darwin.patch ++ [
     (fetchpatch {
         name = "pdfocr.patch";
         url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=a507b139adf37d2c742e039815601cdc2aa00a84";
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
   buildFlags = [ "shared" ];
 
   makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU gumbo ]
                 ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
                 ++ lib.optionals enableCurl [ curl openssl ]
@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://mupdf.com";
     repositories.git = "git://git.ghostscript.com/mupdf.git";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , glibcLocales, gobject-introspection, gtk3, libsoup, libsecret
 , buildPythonPackage, python
 , pygobject3, freezegun, mock
@@ -37,7 +37,7 @@ buildPythonPackage rec {
       --prefix LD_LIBRARY_PATH ":" "${gtk3.out}/lib" \
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A time tracking app";
     longDescription = ''
       GTimeLog is a small time tracking application for GNOME.

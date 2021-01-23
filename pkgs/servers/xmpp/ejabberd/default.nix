@@ -107,10 +107,10 @@ in stdenv.mkDerivation rec {
       -e 's,\(^ *JOT=\).*,\1,' \
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl
-    wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
+    wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source XMPP application server written in Erlang";
     license = licenses.gpl2;
     homepage = "https://www.ejabberd.im";

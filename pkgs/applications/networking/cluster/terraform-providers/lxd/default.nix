@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "terraform-provider-lxd";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   postBuild = "mv ../go/bin/terraform-provider-lxd{,_v${version}}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/sl1pm4t/terraform-provider-lxd";
     description = "Terraform provider for lxd";
     platforms = platforms.linux;

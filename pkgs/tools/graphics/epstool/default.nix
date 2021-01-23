@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "3.08";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc43.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility to create or extract preview images in EPS files, fix bounding boxes and convert to bitmaps";
     homepage = "http://pages.cs.wisc.edu/~ghost/gsview/epstool.htm";
     license = licenses.gpl2;

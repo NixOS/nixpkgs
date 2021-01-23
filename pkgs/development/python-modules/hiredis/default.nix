@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , redis
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "hiredis" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wraps protocol parsing code in hiredis, speeds up parsing of multi bulk replies";
     homepage = "https://github.com/redis/hiredis-py";
     license = licenses.bsd3;

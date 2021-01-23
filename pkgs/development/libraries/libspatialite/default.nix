@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, libxml2, sqlite, zlib, proj, geos, libiconv }:
+{ stdenv, lib, fetchurl, pkg-config, libxml2, sqlite, zlib, proj, geos, libiconv }:
 
 with lib;
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "16d4lpl7xrm9zy4gphy6nwanpjp8wn9g4wq2i2kh8abnlhq01448";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libxml2 sqlite zlib proj geos libiconv ];
 

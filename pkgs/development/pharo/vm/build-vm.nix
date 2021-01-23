@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , bash
 , unzip
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
     ln -s ${libgit2}/lib/libgit2.so* "$out/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Clean and innovative Smalltalk-inspired environment";
     homepage = "https://pharo.org";
     longDescription = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, qttools, which
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, qttools, which
 , alsaLib, libjack2, liblo, qtbase
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ahlstromcj/seq66";
     description = "Loop based midi sequencer with Qt GUI derived from seq24 and sequencer64";
     license = licenses.gpl2Plus;

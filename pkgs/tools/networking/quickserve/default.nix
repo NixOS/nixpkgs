@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchzip, python3, python3Packages }:
+{ lib, stdenv, makeWrapper, fetchzip, python3, python3Packages }:
 let
   threaded_servers = python3Packages.buildPythonPackage {
     name = "threaded_servers";
@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple HTTP server for quickly sharing files";
     homepage = "https://xyne.archlinux.ca/projects/quickserve/";
     license = licenses.gpl2;

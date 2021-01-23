@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     joblib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library of Python tools and extensions for data science";
     homepage = "https://github.com/rasbt/mlxtend";
     license= licenses.bsd3;

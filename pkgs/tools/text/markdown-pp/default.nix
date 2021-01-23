@@ -1,4 +1,4 @@
-{ fetchFromGitHub, pythonPackages, stdenv }:
+{ fetchFromGitHub, pythonPackages, lib, stdenv }:
 
 with pythonPackages;
 buildPythonApplication rec {
@@ -15,7 +15,7 @@ buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "180i5wn9z6vdk2k2bh8345z3g80hj7zf5s2pq0h7k9vaxqpp7avc";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Preprocessor for Markdown files to generate a table of contents and other documentation needs";
     license = licenses.mit;
     homepage = "https://github.com/jreese/markdown-pp";

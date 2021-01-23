@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytest }:
+{ lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytest }:
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
@@ -37,7 +37,7 @@ if isPyPy then null else buildPythonPackage rec {
     py.test -k "not test_char_pointer_conversion"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ domenkozar lnl7 ];
     homepage = "https://cffi.readthedocs.org/";
     license = with licenses; [ mit ];

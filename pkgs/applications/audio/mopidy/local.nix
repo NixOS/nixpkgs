@@ -1,15 +1,16 @@
 { lib
 , mopidy
 , python3Packages
+, fetchpatch
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Local";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "13m0iz14lyplnpm96gfpisqvv4n89ls30kmkg21z7v238lm0h19j";
+    sha256 = "14f78sb3wkg83dg3xcqlq77dh059zzcwry5l9ilyhnmvmyrkhqx0";
   };
 
   propagatedBuildInputs = [
@@ -19,6 +20,14 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = [
     python3Packages.pytestCheckHook
+  ];
+
+  patches = [
+    # Fix tests for Mopidy≥3.1.0. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/mopidy/mopidy-local/commit/f1d7598d3a9587f0823acb97ecb615f4f4817fd2.patch";
+      sha256 = "193kd5zwsr0qpp2y8icdy13vqpglmjdm7x1rw5hliwyq18a34vjp";
+    })
   ];
 
   meta = with lib; {

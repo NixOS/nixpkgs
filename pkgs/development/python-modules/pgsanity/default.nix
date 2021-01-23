@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python
 , fetchPypi
 , buildPythonPackage
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   checkInputs = [ postgresql ];
   propagatedBuildInputs = [ postgresql ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/markdrago/pgsanity";
     description = "Checks the syntax of Postgresql SQL files";
     longDescription = ''

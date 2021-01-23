@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python, isPy27
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python, isPy27
 , mpv
 }:
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # tests impure, will error if it can't load libmpv.so
   checkPhase = "${python.interpreter} -c 'import mpv'";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A python interface to the mpv media player";
     homepage = "https://github.com/jaseg/python-mpv";
     license = licenses.agpl3;

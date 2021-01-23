@@ -20,7 +20,7 @@ python3Packages.buildPythonPackage rec {
     pytest
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/eyeseast/python-frontmatter";
     description = "Parse and manage posts with YAML (or other) frontmatter";
     license = licenses.mit;

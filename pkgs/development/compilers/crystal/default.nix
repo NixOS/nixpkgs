@@ -18,7 +18,7 @@
 , makeWrapper
 , openssl
 , pcre
-, pkgconfig
+, pkg-config
 , readline
 , tzdata
 , which
@@ -63,7 +63,7 @@ let
   commonBuildInputs = extraBuildInputs: [
     boehmgc libatomic_ops pcre libevent libyaml zlib libxml2 openssl
   ] ++ extraBuildInputs
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   generic = (
     { version
@@ -134,7 +134,7 @@ let
 
         buildInputs = commonBuildInputs extraBuildInputs;
 
-        nativeBuildInputs = [ binary makeWrapper which pkgconfig llvmPackages.llvm ];
+        nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm ];
 
         makeFlags = [
           "CRYSTAL_CONFIG_VERSION=${version}"
@@ -158,7 +158,7 @@ let
 
           install -Dm755 .build/crystal $bin/bin/crystal
           wrapProgram $bin/bin/crystal \
-            --suffix PATH : ${lib.makeBinPath [ pkgconfig llvmPackages.clang which ]} \
+            --suffix PATH : ${lib.makeBinPath [ pkg-config llvmPackages.clang which ]} \
             --suffix CRYSTAL_PATH : lib:$lib/crystal \
             --suffix CRYSTAL_LIBRARY_PATH : ${
               lib.makeLibraryPath (commonBuildInputs extraBuildInputs)

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "202011";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     cp pcm*.x $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Processor counter monitor";
     homepage = "https://www.intel.com/software/pcm";
     license = licenses.bsd3;

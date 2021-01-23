@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, buildGoModule, go-bindata, nixosTests }:
+{ lib, stdenv, fetchzip, buildGoModule, go-bindata, nixosTests }:
 
 buildGoModule rec {
   pname = "traefik";
@@ -30,7 +30,7 @@ buildGoModule rec {
       -X github.com/traefik/traefik/v2/pkg/version.Codename=$CODENAME")
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://traefik.io";
     description = "A modern reverse proxy";
     license = licenses.mit;

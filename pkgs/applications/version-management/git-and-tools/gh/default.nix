@@ -1,17 +1,22 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, installShellFiles
+, git
+}:
 
 buildGoModule rec {
   pname = "gh";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "1j1nyx4ly87g0hk3hfw3qbykb64hrg3vg4r52z1w146v6ln7lm7h";
+    sha256 = "1f23b8bn867b4zihz8m91xmkclcw1jnqkwi06klhm5576akahigq";
   };
 
-  vendorSha256 = "19gv7ggbry46h40d9sc5cqba95vjfknzdd1cn3xa5409qaczg9lg";
+  vendorSha256 = "00adc0xjrkjrjh0gxk55vhpgxb5x0j5ialzrdvhlrvhpnb44qrcq";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,8 +35,10 @@ buildGoModule rec {
     done
   '';
 
-  # fails with `unable to find git executable in PATH`
-  doCheck = false;
+  checkInputs = [ git ];
+  checkPhase = ''
+    make test
+  '';
 
   meta = with lib; {
     description = "GitHub CLI tool";

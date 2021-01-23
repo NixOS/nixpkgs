@@ -9,7 +9,7 @@
 }:
 
 mkDerivation {
-  name = "dolphin";
+  pname = "dolphin";
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];
     maintainers = [ lib.maintainers.ttuegel ];

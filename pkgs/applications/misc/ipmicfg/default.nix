@@ -1,13 +1,13 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
   pname = "ipmicfg";
-  version = "1.30.0";
-  buildVersion = "190710";
+  version = "1.32.0";
+  buildVersion = "200910";
 
   src = fetchzip {
     url = "https://www.supermicro.com/wftp/utility/IPMICFG/IPMICFG_${version}_build.${buildVersion}.zip";
-    sha256 = "0srkzivxa4qlf3x9zdkri7xfq7kjj4fsmn978vzmzsvbxkqswd5a";
+    sha256 = "1mncinwgx5d8jkvnvhccqlj2xp0xa5xjsab4r5mblmcnvm609rr3";
   };
 
   installPhase = ''
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
     patchelf \
        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-       --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}" \
+       --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc ]}" \
        "$out/opt/ipmicfg/IPMICFG-Linux.x86_64"
 
     ln -s "$out/opt/ipmicfg/IPMICFG-Linux.x86_64" "$out/bin/ipmicfg"
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
    dontPatchShebangs = true; # There are no scripts and it complains about null bytes.
 
-   meta = with stdenv.lib; {
+   meta = with lib; {
      description = "Supermicro IPMI configuration tool";
      homepage = "http://www.supermicro.com/products/nfo/ipmi.cfm";
      license = licenses.unfree;

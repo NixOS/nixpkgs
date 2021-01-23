@@ -20,7 +20,7 @@ let
 in
 
 mkDerivation {
-  name = "ark";
+  pname = "ark";
   meta = {
     description = "Graphical file compression/decompression utility";
     license = with lib.licenses;

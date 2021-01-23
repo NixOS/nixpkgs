@@ -1,7 +1,7 @@
 { mkDerivation, lib, extra-cmake-modules, kdoctools, kcompletion, kxmlgui }:
 
 mkDerivation {
-  name = "kfloppy";
+  pname = "kfloppy";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/utilities/org.kde.kfloppy";
     description = "Utility to format 3.5\" and 5.25\" floppy disks";

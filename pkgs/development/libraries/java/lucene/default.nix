@@ -1,4 +1,4 @@
-{stdenv, fetchurl} :
+{lib, stdenv, fetchurl} :
 
 stdenv.mkDerivation rec {
   pname = "lucene";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mxaxg65f7v8n60irjwm24v7hcisbl0srmpvcy1l4scs6rjj1awh";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Java full-text search engine";
     platforms = platforms.unix;
     license = licenses.asl20;

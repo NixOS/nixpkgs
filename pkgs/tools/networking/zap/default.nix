@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk8, ant, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, jdk8, ant, runtimeShell }:
 
 let jdk = jdk8; in
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     chmod +x "$out/bin/zap"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.owasp.org/index.php/ZAP";
     description = "Java application for web penetration testing";
     maintainers = with maintainers; [ mog ];

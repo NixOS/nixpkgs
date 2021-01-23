@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, meson, ninja, libpthreadstubs, libpciaccess
+{ stdenv, lib, fetchurl, pkg-config, meson, ninja, libpthreadstubs, libpciaccess
 , withValgrind ? valgrind-light.meta.available, valgrind-light, fetchpatch
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "bin" ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [ libpthreadstubs libpciaccess ]
     ++ lib.optional withValgrind valgrind-light;
 

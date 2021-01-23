@@ -73,7 +73,7 @@ let
   flags = [
     "-nostdinc"
     "-nostdinc++"
-    "-isystem" "${glibc.dev}/include"
+    "-isystem" "${stdenv.lib.getDev stdenv.cc.libc}/include"
     "-I" "${unwrapped}/include"
     "-I" "${unwrapped}/lib/clang/5.0.2/include"
   ];

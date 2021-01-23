@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, tzdata, iana-etc, libcCross
-, pkgconfig
+, pkg-config
 , pcre
 , Security }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zdyf883awaqdzm4r3fs76nbpiqx3iswl2p4qxclw2sl5vvynas5";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcre ];
   depsTargetTargetPropagated = lib.optional stdenv.isDarwin Security;
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
            else if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
            else if stdenv.isAarch32 then "arm"
            else throw "Unsupported system";
-  GOARM = stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "5";
+  GOARM = lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 0;
 
@@ -83,8 +83,7 @@ stdenv.mkDerivation rec {
     ./all.bash
   '';
 
-  meta = with stdenv.lib; {
-    branch = "1.4";
+  meta = with lib; {
     homepage = "http://golang.org/";
     description = "The Go Programming language";
     license = licenses.bsd3;

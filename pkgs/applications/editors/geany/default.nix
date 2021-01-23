@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gtk3
 , which
-, pkgconfig
+, pkg-config
 , intltool
 , file
 , libintl
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
     libintl
     which
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small and lightweight IDE";
     longDescription = ''
       Geany is a small and lightweight Integrated Development Environment.

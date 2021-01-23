@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , xorgproto, motif, libX11, libXt, libXpm, bison
 , flex, automake, autoconf, libtool, runtimeShell
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/alliance-uninstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Complete set of free CAD tools and portable libraries for VLSI design";
     homepage = "http://www-asim.lip6.fr/recherche/alliance/";
     license = with licenses; gpl2Plus;

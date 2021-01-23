@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, xcbuildHook }:
+{ lib, stdenv, fetchFromGitHub, xcbuildHook }:
 
 stdenv.mkDerivation
   { name = "insert_dylib-2016.08.28";
@@ -14,5 +14,5 @@ stdenv.mkDerivation
         mkdir -p $out/bin
         install -m755 Products/Release/insert_dylib $out/bin
       '';
-    meta.platforms = stdenv.lib.platforms.darwin;
+    meta.platforms = lib.platforms.darwin;
   }

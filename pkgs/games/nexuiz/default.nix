@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , # required for both
   unzip, zlib, curl, libjpeg, libpng, libvorbis, libtheora
 , libogg, libmodplug
@@ -11,7 +11,7 @@
 let
   version = "2.5.2";
 
-  version_short = stdenv.lib.replaceChars [ "." ] [ "" ] version;
+  version_short = lib.replaceChars [ "." ] [ "" ] version;
 in stdenv.mkDerivation {
   pname = "nexuiz";
   inherit version;
@@ -71,7 +71,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "A free fast-paced first-person shooter";
     homepage = "http://www.alientrap.org/games/nexuiz";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPyPy
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   checkInputs = [ mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Draws Python object reference graphs with graphviz";
     homepage = "https://mg.pov.lt/objgraph/";
     license = licenses.mit;

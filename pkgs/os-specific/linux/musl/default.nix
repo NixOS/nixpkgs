@@ -35,11 +35,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "musl";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url    = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1s6lix02k1ijm4nmhzpmwzk5w6xfkhn70nvvk8zjs51r24cpppn6";
+    sha256 = "0jz8fzwgvfyjgxjbpw35ixdglp2apqjvp8m386f6yr4zacc6xbv8";
   };
 
   enableParallelBuilding = true;

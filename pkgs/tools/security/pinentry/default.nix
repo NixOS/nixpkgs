@@ -1,11 +1,11 @@
-{ fetchurl, mkDerivation, fetchpatch, stdenv, lib, pkgconfig, autoreconfHook, wrapGAppsHook
+{ fetchurl, mkDerivation, fetchpatch, stdenv, lib, pkg-config, autoreconfHook, wrapGAppsHook
 , libgpgerror, libassuan, qtbase, wrapQtAppsHook
 , ncurses, gtk2, gcr
 , libcap ? null, libsecret ? null
 , enabledFlavors ? [ "curses" "tty" "gtk2" "qt" "emacs" ] ++ lib.optionals stdenv.isLinux [ "gnome3" ]
 }:
 
-with stdenv.lib;
+with lib;
 
 assert isList enabledFlavors && enabledFlavors != [];
 
@@ -48,7 +48,7 @@ pinentryMkDerivation rec {
     sha256 = "0w35ypl960pczg5kp6km3dyr000m1hf0vpwwlh72jjkjza36c1v8";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ]
+  nativeBuildInputs = [ pkg-config autoreconfHook ]
     ++ concatMap(f: flavorInfo.${f}.nativeBuildInputs or []) enabledFlavors;
   buildInputs = [ libgpgerror libassuan libcap libsecret ]
     ++ concatMap(f: flavorInfo.${f}.buildInputs or []) enabledFlavors;
@@ -89,7 +89,7 @@ pinentryMkDerivation rec {
 
   passthru = { flavors = enabledFlavors; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://gnupg.org/aegypten2/";
     description = "GnuPG’s interface to passphrase input";
     license = licenses.gpl2Plus;

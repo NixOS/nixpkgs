@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cups, busybox }:
+{ lib, stdenv, fetchurl, cups, busybox }:
 
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     # To find new versions, visit
     # http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX and search for
     # some printer like for instance "WF-7210" to get to the most recent
-    # version.  
+    # version.
     # NOTE: Don't forget to update the webarchive link too!
     urls = [
       "https://download3.ebz.epson.net/dsc/f/03/00/12/09/63/b7d2bb6a97c9ad99a96ebc68f8abcb1254888e94/epson-inkjet-printer-escpr2-1.1.24-1lsb3.2.src.rpm"
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     cd ${pname}-${version}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
     description = "ESC/P-R 2 Driver (generic driver)";
     longDescription = ''

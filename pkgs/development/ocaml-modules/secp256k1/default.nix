@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, base, stdio, dune-configurator, secp256k1 }:
+{ lib, fetchFromGitHub, buildDunePackage, base, stdio, dune-configurator, secp256k1 }:
 
 buildDunePackage rec {
   pname = "secp256k1";
@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   buildInputs = [ base stdio dune-configurator secp256k1 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dakk/secp256k1-ml";
     description = "Elliptic curve library secp256k1 wrapper for Ocaml";
     license = licenses.mit;

@@ -1,28 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, pythonOlder
 , click
 , click-default-group
+, sqlite-fts4
 , tabulate
 , pytestCheckHook
 , pytestrunner
 , black
+, hypothesis
+, sqlite
 }:
 
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.0";
-  disabled = !isPy3k;
+  version = "3.3";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a158265fde85a6757b7f09b568b1f7d6eaf75eaae208be27336f09dc048e5bcf";
+    sha256 = "1linla3za1gb3w0n0k6h3q8in62qhipizff259p14gzmyr95rjjv";
   };
 
   propagatedBuildInputs = [
     click
     click-default-group
+    sqlite-fts4
     tabulate
   ];
 
@@ -30,13 +34,14 @@ buildPythonPackage rec {
     pytestCheckHook
     pytestrunner
     black
+    hypothesis
   ];
 
   meta = with lib; {
     description = "Python CLI utility and library for manipulating SQLite databases";
     homepage = "https://github.com/simonw/sqlite-utils";
     license = licenses.asl20;
-    maintainers = [ maintainers.meatcar ];
+    maintainers = with maintainers; [ meatcar ];
   };
 
 }

@@ -75,7 +75,7 @@ in stdenv.mkDerivation {
     '';
     # http://lamport.azurewebsites.net/tla/license.html
     license = with lib.licenses; [ mit ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

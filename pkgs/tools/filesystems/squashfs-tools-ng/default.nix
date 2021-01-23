@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, doxygen, graphviz, perl, pkgconfig
+{ stdenv, lib, fetchurl, doxygen, graphviz, perl, pkg-config
 , lz4, lzo, xz, zlib, zstd
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "120x2hlbhpm90bzxz70z764552ffrjpidmp1y6gafx70zp0hrks4";
   };
 
-  nativeBuildInputs = [ doxygen graphviz pkgconfig perl ];
+  nativeBuildInputs = [ doxygen graphviz pkg-config perl ];
   buildInputs = [ zlib xz lz4 lzo zstd ];
 
   meta = with lib; {

@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
 , fetchurl
 , fetchFromGitHub
 , autoreconfHook
 , gettext
 , makeWrapper
-, pkgconfig
+, pkg-config
 , vala
 , wrapGAppsHook
 , dbus
@@ -36,7 +36,7 @@
 
 assert withWayland -> wayland != null && libxkbcommon != null;
 
-with stdenv.lib;
+with lib;
 
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     gettext
     makeWrapper
-    pkgconfig
+    pkg-config
     python3BuildEnv
     vala
     wrapGAppsHook

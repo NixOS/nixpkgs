@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, zlib, rdkafka, yajl }:
+{ stdenv, fetchFromGitHub, pkg-config, zlib, rdkafka, yajl }:
 
 stdenv.mkDerivation rec {
   pname = "kafkacat";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0z3bw00s269myfd1xqksjyznmgp74xfs09xqlq347adsgby3cmfs";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ zlib rdkafka yajl ];
 

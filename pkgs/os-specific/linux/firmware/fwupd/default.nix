@@ -1,8 +1,7 @@
 # Updating? Keep $out/etc synchronized with passthru keys
 
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , substituteAll
 , gtk-doc
@@ -15,8 +14,7 @@
 , gusb
 , sqlite
 , libarchive
-, glib-networking
-, libsoup
+, curl
 , help2man
 , libjcat
 , libxslt
@@ -89,7 +87,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.5.1";
+    version = "1.5.3";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -98,7 +96,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "0fpxcl6bighiipyl4qspjhi0lwisrgq8jdahm68mk34rmrx50sgf";
+      sha256 = "005y5wicmm6f2v8i9m3axx7ivgj3z8mbqps4v9m71bsqmq298j86";
     };
 
     patches = [
@@ -118,12 +116,6 @@ let
         src = ./installed-tests-path.patch;
         # Needs a different set of modules than po/make-images.
         inherit installedTestsPython;
-      })
-
-      # Skip tests requiring network.
-      (fetchpatch {
-        url = "https://github.com/fwupd/fwupd/commit/db15442c7c217610954786bd40779c14ed0e034b.patch";
-        sha256 = "/jzpGMJcqLisjecKpSUfA8ZCU53n7BOPR6tMgEX/qL8=";
       })
     ];
 
@@ -152,14 +144,13 @@ let
       gusb
       sqlite
       libarchive
-      libsoup
+      curl
       elfutils
       gnu-efi
       libgudev
       colord
       libjcat
       libuuid
-      glib-networking
       json-glib
       umockdev
       bash-completion
@@ -169,13 +160,18 @@ let
       pango
       tpm2-tss
       efivar
-    ] ++ stdenv.lib.optionals haveDell [
+    ] ++ lib.optionals haveDell [
       libsmbios
     ];
 
     mesonFlags = [
       "-Dgtkdoc=true"
       "-Dplugin_dummy=true"
+      # We are building the official releases.
+      "-Dsupported_build=true"
+      # Would dlopen libsoup to preserve compatibility with clients linking against older fwupd.
+      # https://github.com/fwupd/fwupd/commit/173d389fa59d8db152a5b9da7cc1171586639c97
+      "-Dsoup_session_compat=false"
       "-Dudevdir=lib/udev"
       "-Dsystemd_root_prefix=${placeholder "out"}"
       "-Dinstalled_test_prefix=${placeholder "installedTests"}"
@@ -191,12 +187,12 @@ let
       # Our builder only adds $lib/lib to rpath but some things link
       # against libfwupdplugin which is in $out/lib.
       "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
-    ] ++ stdenv.lib.optionals (!haveDell) [
+    ] ++ lib.optionals (!haveDell) [
       "-Dplugin_dell=false"
       "-Dplugin_synaptics=false"
-    ] ++ stdenv.lib.optionals (!haveRedfish) [
+    ] ++ lib.optionals (!haveRedfish) [
       "-Dplugin_redfish=false"
-    ] ++ stdenv.lib.optionals haveFlashrom [
+    ] ++ lib.optionals haveFlashrom [
       "-Dplugin_flashrom=true"
     ];
 
@@ -254,12 +250,12 @@ let
         efibootmgr
         bubblewrap
         tpm2-tools
-      ] ++ stdenv.lib.optional haveFlashrom flashrom;
+      ] ++ lib.optional haveFlashrom flashrom;
     in ''
       gappsWrapperArgs+=(
         --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
         # See programs reached with fu_common_find_program_in_path in source
-        --prefix PATH : "${stdenv.lib.makeBinPath binPath}"
+        --prefix PATH : "${lib.makeBinPath binPath}"
       )
     '';
 
@@ -295,7 +291,7 @@ let
         "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
         "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
         "pki/fwupd-metadata/LVFS-CA.pem"
-      ] ++ stdenv.lib.optionals haveDell [
+      ] ++ lib.optionals haveDell [
         "fwupd/remotes.d/dell-esrt.conf"
       ];
 
@@ -306,7 +302,7 @@ let
       ];
 
       tests = let
-        listToPy = list: "[${stdenv.lib.concatMapStringsSep ", " (f: "'${f}'") list}]";
+        listToPy = list: "[${lib.concatMapStringsSep ", " (f: "'${f}'") list}]";
       in {
         installedTests = nixosTests.installed-tests.fwupd;
 
@@ -333,7 +329,7 @@ let
       };
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://fwupd.org/";
       maintainers = with maintainers; [ jtojnar ];
       license = licenses.lgpl21Plus;

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, hamlib, fltk14, libjpeg, libpng, portaudio, libsndfile,
-  libsamplerate, libpulseaudio, libXinerama, gettext, pkgconfig, alsaLib }:
+{ lib, stdenv, fetchurl, hamlib, fltk14, libjpeg, libpng, portaudio, libsndfile,
+  libsamplerate, libpulseaudio, libXinerama, gettext, pkg-config, alsaLib }:
 
 stdenv.mkDerivation rec {
   version = "4.1.17";
@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libXinerama gettext hamlib fltk14 libjpeg libpng portaudio
-                  libsndfile libsamplerate libpulseaudio pkgconfig alsaLib ];
+                  libsndfile libsamplerate libpulseaudio pkg-config alsaLib ];
 
   meta = {
     description = "Digital modem program";
     homepage = "https://sourceforge.net/projects/fldigi/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ relrod ftrvxmtrx ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ relrod ftrvxmtrx ];
+    platforms = lib.platforms.linux;
   };
 }

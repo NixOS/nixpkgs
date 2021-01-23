@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "openlibm";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "High quality system independent, portable, open source libm implementation";
     homepage = "https://openlibm.org/";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ttuegel ];
+    platforms = lib.platforms.all;
   };
 }

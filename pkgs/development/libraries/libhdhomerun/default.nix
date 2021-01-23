@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 # libhdhomerun requires UDP port 65001 to be open in order to detect and communicate with tuners.
 # If your firewall is enabled, make sure to have something like:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v80jk056ii2iv2w7sq24i3prjrbhxql5vqhafs7vq54qmwvgbnb";
   };
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  patchPhase = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile --replace "gcc" "cc"
     substituteInPlace Makefile --replace "-arch i386" ""
   '';
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     cp *.h $out/include/hdhomerun
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Implements the libhdhomerun protocol for use with Silicondust HDHomeRun TV tuners";
     homepage = "https://www.silicondust.com/support/linux";
     license = licenses.lgpl21Only;

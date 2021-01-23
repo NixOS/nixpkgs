@@ -8,7 +8,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 1. Update the URL in `pkgs/development/libraries/qt-5/$VERSION/fetch.sh`.
 2. From the top of the Nixpkgs tree, run
-   `./maintainers/scripts/fetch-kde-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
+   `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$VERSION`.
 3. Check that the new packages build correctly.
 4. Commit the changes and open a pull request.
 
@@ -75,6 +75,7 @@ let
         ./qtbase.patch.d/0011-fix-header_module.patch
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
+    qtlocation = [ ./qtlocation-gcc-9.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qtwebengine = [
@@ -83,6 +84,22 @@ let
         name = "qtwebengine-bison-3.7-build.patch";
         url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=1a53f599";
         sha256 = "1nqpyn5fq37q7i9nasag6i14lnz0d7sld5ikqhlm8qwq9d7gbmjy";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/";
+      })
+      # Fix build with GCC 10 (part 1): https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=fad3e27b
+      (fetchpatch {
+        name = "qtwebengine-gcc10-part1.patch";
+        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=fad3e27bfb50d1e23a07577f087a826b5e00bb1d";
+        sha256 = "0c55j9zww8jyif6wl7jy1qqidgw9fdhiyfjgzhzi85r716m4pwwd";
+        stripLen = 1;
+        extraPrefix = "src/3rdparty/";
+      })
+      # Fix build with GCC 10 (part 2): https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=193c5bed
+      (fetchpatch {
+        name = "qtwebengine-gcc10-part2.patch";
+        url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=193c5bed1cff123e21b7e6d12f464d6709ace2e3";
+        sha256 = "1jb6s32ara6l4rbn4h3gg95mzv8sd8dl1zpjaqwywf1w7p8ymk86";
         stripLen = 1;
         extraPrefix = "src/3rdparty/";
       })

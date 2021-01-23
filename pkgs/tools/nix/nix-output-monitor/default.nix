@@ -1,5 +1,5 @@
 { mkDerivation, ansi-terminal, async, attoparsec, base, containers
-, directory, HUnit, mtl, nix-derivation, process, relude, stdenv
+, directory, HUnit, mtl, nix-derivation, process, relude, lib, stdenv
 , stm, text, time, unix, fetchFromGitHub
 }:
 mkDerivation {
@@ -27,6 +27,6 @@ mkDerivation {
   ];
   homepage = "https://github.com/maralorn/nix-output-monitor";
   description = "Parses output of nix-build to show additional information";
-  license = stdenv.lib.licenses.agpl3Plus;
-  maintainers = [ stdenv.lib.maintainers.maralorn ];
+  license = lib.licenses.agpl3Plus;
+  maintainers = [ lib.maintainers.maralorn ];
 }

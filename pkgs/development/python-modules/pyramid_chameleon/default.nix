@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , chameleon
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ chameleon pyramid zope_interface setuptools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Chameleon template compiler for pyramid";
     homepage = "https://github.com/Pylons/pyramid_chameleon";
     license = licenses.bsd0;

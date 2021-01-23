@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
 
 stdenv.mkDerivation rec {
   pname = "vkquake";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Vulkan Quake port based on QuakeSpasm";
     homepage = src.meta.homepage;
     longDescription = ''

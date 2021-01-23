@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , runCommandCC
 , fetchPypi
 , buildPythonPackage
@@ -85,7 +85,7 @@ in buildPythonPackage rec {
 
   pythonImportsCheck = [ "theano" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://deeplearning.net/software/theano/";
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;

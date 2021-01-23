@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
@@ -22,11 +22,11 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "3.2.1"; # Also update the hash in vectors.nix
+  version = "3.3.1"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qxz02kfsrihq1h4afyqwcsv9nh3s9mmrr6y9lhi4angw05y3mfk";
+    sha256 = "1ribd1vxq9wwz564mg60dzcy699gng54admihjjkgs9dx95pw5vy";
   };
 
   outputs = [ "out" "dev" ];
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   # can do until nix 1.11's release
   __impureHostDeps = [ "/usr/lib" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to

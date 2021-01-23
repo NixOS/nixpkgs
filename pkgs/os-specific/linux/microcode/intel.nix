@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libarchive, iucode-tool }:
+{ lib, stdenv, fetchFromGitHub, libarchive, iucode-tool }:
 
 stdenv.mkDerivation rec {
   pname = "microcode-intel";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.intel.com/";
     description = "Microcode for Intel processors";
     license = licenses.unfreeRedistributableFirmware;

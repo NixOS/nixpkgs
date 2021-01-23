@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , glib
 , libX11
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     rm $out/lib64/dcvviewer/gio/modules/libdconfsettings.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-performance remote display protocol";
     homepage = "https://aws.amazon.com/hpc/dcv/";
     license = licenses.unfree;

@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, autoreconfHook, util-linux, nukeReferences, coreutils
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, autoreconfHook269, util-linux, nukeReferences, coreutils
 , perl, buildPackages
 , configFile ? "all"
 
@@ -9,14 +9,14 @@
 , nfs-utils
 , gawk, gnugrep, gnused, systemd
 , smartmontools, sysstat, sudo
-, pkgconfig
+, pkg-config
 
 # Kernel dependencies
 , kernel ? null
 , enablePython ? true
 }:
 
-with stdenv.lib;
+with lib;
 let
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
   buildUser = any (n: n == configFile) [ "user" "all" ];
@@ -27,14 +27,8 @@ let
     , rev ? "zfs-${version}"
     , isUnstable ? false
     , incompatibleKernelVersion ? null }:
-    if buildKernel &&
-      (incompatibleKernelVersion != null) &&
-        versionAtLeast kernel.version incompatibleKernelVersion then
-       throw ''
-         Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
-         ${stdenv.lib.optionalString (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
-       ''
-    else stdenv.mkDerivation {
+
+    stdenv.mkDerivation {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
       src = fetchFromGitHub {
@@ -89,9 +83,9 @@ let
           "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
       '';
 
-      nativeBuildInputs = [ autoreconfHook nukeReferences ]
+      nativeBuildInputs = [ autoreconfHook269 nukeReferences ]
         ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ])
-        ++ optional buildUser pkgconfig;
+        ++ optional buildUser pkg-config;
       buildInputs = optionals buildUser [ zlib libuuid attr libtirpc ]
         ++ optional buildUser openssl
         ++ optional (buildUser && enablePython) python3;
@@ -174,6 +168,13 @@ let
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin mic92 ];
+        broken = if
+          buildKernel && (incompatibleKernelVersion != null) && versionAtLeast kernel.version incompatibleKernelVersion
+          then builtins.trace ''
+            Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
+            ${lib.optionalString (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
+          '' true
+          else false;
       };
     };
 in {
@@ -185,9 +186,11 @@ in {
     # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "2.0.0";
+    version = "2.0.1";
 
-    sha256 = "1kriz6pg8wj98izvjc60wp23lgcp4k3mzhpkgj74np73rzgy6v8r";
+    sha256 = "0wmw823ildwm9rcfyk22pvzg100yhps3y9hfjlrpspfd1hhkbp0d";
+
+    extraPatches = [ ];
   };
 
   zfsUnstable = common {
@@ -195,8 +198,10 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.0.0";
+    version = "2.0.1";
 
-    sha256 = "1kriz6pg8wj98izvjc60wp23lgcp4k3mzhpkgj74np73rzgy6v8r";
+    sha256 = "0wmw823ildwm9rcfyk22pvzg100yhps3y9hfjlrpspfd1hhkbp0d";
+
+    extraPatches = [ ];
   };
 }

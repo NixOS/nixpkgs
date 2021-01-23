@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libuuid
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libuuid
 , sane-backends, podofo, libjpeg, djvulibre, libxmlxx3, libzip, tesseract
 , intltool, poppler, json-glib
 , ninja
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake ninja
     intltool
-    pkgconfig
+    pkg-config
     pythonEnv
 
     # Gtk specific
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   # interface type can be where <type> is either gtk, qt5, qt4
   cmakeFlags = [ "-DINTERFACE_TYPE=${variant}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple Gtk/Qt front-end to tesseract-ocr";
     homepage = "https://github.com/manisandro/gImageReader";
     license = licenses.gpl3Plus;

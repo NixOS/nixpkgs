@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, django-picklefield, arrow
+{ lib, stdenv, buildPythonPackage, fetchPypi, django-picklefield, arrow
 , blessed, django, future }:
 
 buildPythonPackage rec {
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multiprocessing distributed task queue for Django";
     homepage = "https://django-q.readthedocs.org";
     license = licenses.mit;

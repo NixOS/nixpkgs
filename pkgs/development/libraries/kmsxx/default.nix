@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libdrm
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libdrm
 , withPython ? false, python }:
 
 stdenv.mkDerivation {
@@ -13,14 +13,12 @@ stdenv.mkDerivation {
     sha256 = "0xz4m9bk0naawxwpx5cy1j3cm6c8c9m5y551csk88y88x1g0z0xh";
   };
 
-  enableParallelBuilding = true;
+  cmakeFlags = lib.optional (!withPython) "-DKMSXX_ENABLE_PYTHON=OFF";
 
-  cmakeFlags = stdenv.lib.optional (!withPython) "-DKMSXX_ENABLE_PYTHON=OFF";
-
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libdrm python ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++11 library, utilities and python bindings for Linux kernel mode setting";
     homepage = "https://github.com/tomba/kmsxx";
     license = licenses.mpl20;

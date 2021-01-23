@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pkuseg" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Toolkit for multi-domain Chinese word segmentation";
     homepage = "https://github.com/lancopku/pkuseg-python";
     license = licenses.unfree;

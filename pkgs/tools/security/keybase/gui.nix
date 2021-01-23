@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
       --replace run_keybase $out/bin/keybase-gui
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.keybase.io/";
     description = "The Keybase official GUI";
     platforms = [ "x86_64-linux" ];

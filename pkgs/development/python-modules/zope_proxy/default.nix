@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , zope_interface
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   # circular deps
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.proxy";
     description = "Generic Transparent Proxies";
     license = licenses.zpl20;

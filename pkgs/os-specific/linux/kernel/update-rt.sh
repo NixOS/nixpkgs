@@ -58,7 +58,7 @@ update-if-needed() {
         msg="$nixattr: $cur -> $new"
     else
         msg="$nixattr: init at $new"
-        prev=$(ls "$(dirname "$0")"/linux-rt-*.nix | tail -1)
+        prev=$(ls -v "$(dirname "$0")"/linux-rt-*.nix | tail -1)
         cp "$prev" "$file"
         cur=$(file-version "$file")
     fi

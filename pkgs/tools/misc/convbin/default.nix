@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     install -Dm755 bin/convbin $out/bin/convbin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Converts files to other formats";
     longDescription = ''
       This program is used to convert files to other formats,

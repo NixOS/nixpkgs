@@ -1,4 +1,4 @@
-{ stdenv, kernel, fetchFromGitHub }:
+{ lib, stdenv, kernel, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "anbox-modules";
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Anbox ashmem and binder drivers.";
     homepage = "https://github.com/anbox/anbox-modules";
     license = licenses.gpl2;

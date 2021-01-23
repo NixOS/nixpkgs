@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitLab, pkgconfig, openssl }:
+{ lib, rustPlatform, fetchFromGitLab, pkg-config, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "scaff";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1v6580mj70d7cqbjw32slz65lg6c8ficq5mdkfbivs63hqkv4hgx";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
   meta = with lib; {

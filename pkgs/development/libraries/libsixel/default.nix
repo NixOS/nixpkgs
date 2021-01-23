@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub}:
+{lib, stdenv, fetchFromGitHub}:
 stdenv.mkDerivation rec {
   version = "1.8.6";
   pname = "libsixel";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The SIXEL library for console graphics, and converter programs";
     homepage = "http://saitoha.github.com/libsixel";
     maintainers = with maintainers; [ vrthra ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, flex, tk, ncurses, readline }:
+{ lib, stdenv, fetchurl, unzip, flex, tk, ncurses, readline }:
 
 stdenv.mkDerivation {
   pname = "lc3tools";
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     mv -t $out/bin $out/lc3*
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Toolchain and emulator for the LC-3 architecture";
     license = licenses.gpl2;
     maintainers = with maintainers; [ anna328p ];

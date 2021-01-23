@@ -146,7 +146,7 @@ in
 
     services.logrotate = {
       enable = true;
-      config = ''
+      extraConfig = ''
         /var/log/waagent.log {
             compress
             monthly

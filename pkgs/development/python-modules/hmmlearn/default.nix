@@ -14,7 +14,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   checkPhase = ''
-    pytest --doctest-modules --pyargs hmmlearn
+    pytest --pyargs hmmlearn
   '';
 
   meta = with lib; {

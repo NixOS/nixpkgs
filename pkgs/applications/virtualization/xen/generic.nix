@@ -1,5 +1,5 @@
 config:
-{ stdenv, cmake, pkgconfig, which
+{ lib, stdenv, cmake, pkg-config, which
 
 # Xen
 , bison, bzip2, checkpolicy, dev86, figlet, flex, gettext, glib
@@ -24,7 +24,7 @@ config:
 
 , ...} @ args:
 
-with stdenv.lib;
+with lib;
 
 let
   #TODO: fix paths instead
@@ -66,7 +66,7 @@ stdenv.mkDerivation (rec {
 
   hardeningDisable = [ "stackprotector" "fortify" "pic" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cmake which
 
@@ -252,7 +252,7 @@ stdenv.mkDerivation (rec {
                     + "\nIncludes:\n"
                     + withXenfiles (name: x: ''* ${name}: ${x.meta.description or "(No description)"}.'');
     platforms = [ "x86_64-linux" ];
-    maintainers = with stdenv.lib.maintainers; [ eelco tstrobel oxij ];
-    license = stdenv.lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ eelco tstrobel oxij ];
+    license = lib.licenses.gpl2;
   } // (config.meta or {});
 } // removeAttrs config [ "xenfiles" "buildInputs" "patches" "postPatch" "meta" ])

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, inkscape, imagemagick, potrace, svgo, scfbuild }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, inkscape, imagemagick, potrace, svgo, scfbuild }:
 
 stdenv.mkDerivation rec {
   pname = "twemoji-color-font";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     install -Dm644 linux/fontconfig/56-twemoji-color.conf $out/etc/fonts/conf.d/56-twemoji-color.conf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Color emoji SVGinOT font using Twitter Unicode 10 emoji with diversity and country flags";
     longDescription = ''
       A color and B&W emoji SVGinOT font built from the Twitter Emoji for

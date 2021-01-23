@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
+{ lib, stdenv, fetchFromGitHub, sqlite, pkg-config, autoreconfHook, pmccabe
 , xapian, glib, gmime3, texinfo , emacs, guile
 , gtk3, webkitgtk, libsoup, icu
 , withMug ? false
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "03cp2ppj07xpb0c43d3cr8m9jps07mfm8clmlk03sjbxg1widsh0";
   };
 
-  postPatch = stdenv.lib.optionalString (batchSize != null) ''
+  postPatch = lib.optionalString (batchSize != null) ''
     sed -i lib/mu-store.cc --regexp-extended \
       -e 's@(constexpr auto BatchSize).*@\1 = ${toString batchSize};@'
   '';
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     sqlite xapian glib gmime3 texinfo emacs libsoup icu
   ]
     # Workaround for https://github.com/djcb/mu/issues/1641
-    ++ stdenv.lib.optional (!stdenv.isDarwin) guile
-    ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk ];
+    ++ lib.optional (!stdenv.isDarwin) guile
+    ++ lib.optionals withMug [ gtk3 webkitgtk ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook pmccabe ];
+  nativeBuildInputs = [ pkg-config autoreconfHook pmccabe ];
 
   enableParallelBuilding = true;
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Install mug
-  postInstall = stdenv.lib.optionalString withMug ''
+  postInstall = lib.optionalString withMug ''
     for f in mug ; do
       install -m755 toys/$f/$f $out/bin/$f
     done
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collection of utilties for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";

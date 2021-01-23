@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
 , gst_all_1, glib-networking, gobject-introspection
 }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy";
-  version = "3.0.2";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
     rev = "v${version}";
-    sha256 = "1n9lpgq0p112cjgsrc1cd6mnffk56y36g2c5skk9cqzw27qrkd15";
+    sha256 = "14m80z9spi2vhfs2bbff7ky80mr6bksl4550y17hwd7zpkid60za";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -32,17 +32,13 @@ pythonPackages.buildPythonApplication rec {
       requests
       setuptools
       tornado
-    ] ++ stdenv.lib.optional (!stdenv.isDarwin) dbus-python
+    ] ++ lib.optional (!stdenv.isDarwin) dbus-python
   );
 
   # There are no tests
   doCheck = false;
 
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH")
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mopidy.com/";
     description = ''
       An extensible music server that plays music from local disk, Spotify,

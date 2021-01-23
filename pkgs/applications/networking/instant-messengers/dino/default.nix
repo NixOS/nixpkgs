@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
+, vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
 , gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     vala
     cmake
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     gettext
   ];
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
     homepage = "https://github.com/dino/dino";
     license = licenses.gpl3;

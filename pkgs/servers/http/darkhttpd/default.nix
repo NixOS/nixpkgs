@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "darkhttpd";
@@ -12,19 +12,16 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase = ''
-    # install darkhttpd
-    install -Dm755 "darkhttpd" "$out/bin/darkhttpd"
-
-    # install license
-    install -d "$out/share/licenses/darkhttpd"
-    head -n 18 darkhttpd.c > "$out/share/licenses/darkhttpd/LICENSE"
+    install -Dm555 -t $out/bin darkhttpd
+    install -Dm444 -t $out/share/doc/${pname} README
+    head -n 18 darkhttpd.c > $out/share/doc/${pname}/LICENSE
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small and secure static webserver";
-    homepage    = "https://unix4lyfe.org/darkhttpd/";
-    license     = licenses.bsd3;
+    homepage = "https://unix4lyfe.org/darkhttpd/";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ bobvanderlinden ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

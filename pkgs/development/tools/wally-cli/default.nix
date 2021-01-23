@@ -4,7 +4,6 @@ buildGoModule rec {
   pname = "wally-cli";
   version = "2.0.0";
 
-  goPackagePath = "github.com/zsa/wally-cli";
   subPackages = [ "." ];
 
   nativeBuildInputs = [ pkg-config ];

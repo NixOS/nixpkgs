@@ -3,7 +3,7 @@
 , lib
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , alsaLib
 , boost
 , chromaprint
@@ -35,13 +35,13 @@
 
 mkDerivation rec {
   pname = "strawberry";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "145djlfvbkx2b1wqipk51mz82dhm27vmh9x00lkn24q1xz1y6h5n";
+    sha256 = "sha256-+ZQ80J94Teqt4Gy6fw/pS7FwILK/TPehtJDy72Bdy1E=";
   };
 
   buildInputs = [
@@ -77,7 +77,7 @@ mkDerivation rec {
   ])
   ++ lib.optional withVlc libvlc;
 
-  nativeBuildInputs = [ cmake ninja pkgconfig qttools ];
+  nativeBuildInputs = [ cmake ninja pkg-config qttools ];
 
   cmakeFlags = [
     "-DUSE_SYSTEM_TAGLIB=ON"

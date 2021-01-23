@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, python3 }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3 }:
 
 stdenv.mkDerivation {
   pname = "monoid";
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     install -m444 -Dt $out/share/doc            Readme.md
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://larsenwork.com/monoid";
     description = "Customisable coding font with alternates, ligatures and contextual positioning";
     license = [ licenses.ofl licenses.mit ];

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, lablgtk, findlib, libGLU, libGL, freeglut, camlp4 } :
+{lib, stdenv, fetchurl, ocaml, lablgtk, findlib, libGLU, libGL, freeglut, camlp4 } :
 
 let
   pname = "lablgl";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "1.05";
 
-  src = fetchurl { 
+  src = fetchurl {
     url = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/dist/lablgl-${version}.tar.gz";
     sha256 = "0qabydd219i4ak7hxgc67496qnnscpnydya2m4ijn3cpbgih7zyq";
   };
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     cp ./META $out/lib/ocaml/${ocaml.version}/site-lib/lablgl
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html";
     description = "OpenGL bindings for ocaml";
     license = licenses.gpl2;

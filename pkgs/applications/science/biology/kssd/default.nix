@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, automake, autoconf, libtool }:
+{ lib, stdenv, fetchurl, zlib, automake, autoconf, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "kssd";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       install -vD kssd $out/bin/kssd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "K-mer substring space decomposition";
     license     = licenses.asl20;
     homepage    = "https://github.com/yhg926/public_kssd";

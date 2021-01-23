@@ -2,7 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , pcre
 , qtbase
 , glib
@@ -11,18 +11,18 @@
 
 mkDerivation rec {
   pname = "lxqt-build-tools";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "18l1w9lyf3nyj05wjhaj4lclak6qydlhw9bqi6kxgr1bv8k709lf";
+    sha256 = "1wf6mhcfgk64isy7bk018szlm18xa3hjjnmhpcy2whnnjfq0jal6";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     setupHook
   ];
 

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "stripe-cli";
@@ -17,7 +17,7 @@ buildGoModule rec {
     "cmd/stripe"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://stripe.com/docs/stripe-cli";
     description = "A command-line tool for Stripe";
     license = with licenses; [ asl20 ];

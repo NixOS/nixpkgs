@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
 , jdk, perl, python
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     mkdir -pv $out/bin
     cp -a netbeans $out
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ jdk which ]} \
+      --prefix PATH : ${lib.makeBinPath [ jdk which ]} \
       --prefix JAVA_HOME : ${jdk.home} \
       --add-flags "--jdkhome ${jdk.home}"
 
@@ -61,8 +61,8 @@ stdenv.mkDerivation {
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";
     homepage = "https://netbeans.apache.org/";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ sander rszibele asbachb ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sander rszibele asbachb ];
+    platforms = lib.platforms.unix;
   };
 }

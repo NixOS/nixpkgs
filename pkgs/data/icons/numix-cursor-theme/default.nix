@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, inkscape, xcursorgen }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, inkscape, xcursorgen }:
 
 stdenv.mkDerivation rec {
   version = "1.1";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     cp -dr --no-preserve='ownership' Numix-Cursor{,-Light} $out/share/icons/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Numix cursor theme";
     homepage = "https://numixproject.github.io";
     license = licenses.gpl3;

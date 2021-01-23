@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
 , setuptools_scm
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pypi.python.org/pypi/ujson";
     description = "Ultra fast JSON encoder and decoder for Python";
     license = licenses.bsd3;

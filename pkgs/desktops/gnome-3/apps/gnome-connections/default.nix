@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gnome3
 , meson
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/connections/${stdenv.lib.versions.majorMinor version}/connections-${version}.tar.xz";
+    url = "mirror://gnome/sources/connections/${lib.versions.majorMinor version}/connections-${version}.tar.xz";
     hash = "sha256-5c7uBFkh9Vsw6bWWUDjNTMDrrFqI5JEgYlsWpfyuTpA=";
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/connections";
     description = "A remote desktop client for the GNOME desktop environment";
     maintainers = teams.gnome.members;

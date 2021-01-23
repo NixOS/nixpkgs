@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , rocm-cmake
@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocclr";
-  version = "3.10.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "ROCclr";
     rev = "rocm-${version}";
-    hash = "sha256-P36JKFgXSZagWzHB6WB2WlDu7jkVvfYVo1BaV0b8iEk=";
+    hash = "sha256-B27ff1b9JRhxFUsBt7CGuYaR87hvKbVSCERWD45d8tM=";
   };
 
   nativeBuildInputs = [ cmake rocm-cmake ];
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       --replace "/build/source/build" "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Radeon Open Compute common language runtime";
     homepage = "https://github.com/ROCm-Developer-Tools/ROCclr";
     license = licenses.mit;

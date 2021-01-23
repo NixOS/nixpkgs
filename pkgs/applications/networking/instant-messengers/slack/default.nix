@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , dpkg
 , undmg
@@ -41,11 +41,11 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.11.1";
-  x86_64-darwin-sha256 = "0a5rq8zhgdckwxnyjv6nrgpnj682j1rd9yc4nwvsbvpzv15kmd35";
+  x86_64-darwin-version = "4.12.2";
+  x86_64-darwin-sha256 = "0qflv2glfy7d77zjgqi7qcjr53c9dni26gmqkg9vk2xijmmd3xy7";
 
-  x86_64-linux-version = "4.11.1";
-  x86_64-linux-sha256 = "1r43g3xnla5aq38l3mpba8jb1gx9m2b6pr84prsclz27nr0rfm6g";
+  x86_64-linux-version = "4.12.2";
+  x86_64-linux-sha256 = "sha256-G5uQI078N7AbhEJs6a/17Hoi5DSdwvYLM1T/ttrEw4s=";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -65,7 +65,7 @@ let
     };
   }.${system} or throwSystem;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop client for Slack";
     homepage = "https://slack.com";
     license = licenses.unfree;
@@ -78,7 +78,7 @@ let
 
     passthru.updateScript = ./update.sh;
 
-    rpath = stdenv.lib.makeLibraryPath [
+    rpath = lib.makeLibraryPath [
       alsaLib
       at-spi2-atk
       at-spi2-core

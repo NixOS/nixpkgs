@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, libGLU, libGL, libX11, SDL, openal, runtimeShell }:
+{ lib, stdenv, fetchurl, unzip, libGLU, libGL, libX11, SDL, openal, runtimeShell }:
 stdenv.mkDerivation rec {
   pname = "tremulous";
   version = "1.1.0";
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     done
   '';
   dontPatchELF = true;
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A game that blends a team based FPS with elements of an RTS";
     longDescription = ''
       Tremulous is a free, open source game that blends a team based FPS with

@@ -6,7 +6,7 @@ buildPecl {
   version = "1.9.0";
   sha256 = "16mbw3p80qxsj86nmjbfch8wv6jaq8wbz4rlpmixvhj9nwbp37hs";
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   buildInputs = with pkgs; [
     cyrus_sasl
     icu64

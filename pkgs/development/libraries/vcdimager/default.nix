@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, libcdio, libxml2, popt
+{ stdenv, lib, fetchurl, pkg-config, libcdio, libxml2, popt
 , libiconv, darwin }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ypnb1vp49nmzp5571ynlz6n1gh90f23w3z4x95hb7c2p7pmylb7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libxml2 popt libiconv ]
              ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ IOKit DiskArbitration ]);

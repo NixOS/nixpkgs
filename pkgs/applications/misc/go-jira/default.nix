@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "go-jira";
@@ -15,7 +15,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple command line client for Atlassian's Jira service written in Go";
     homepage = "https://github.com/go-jira/jira";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , gettext
 , fetchurl
 , python3
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Glade";
     description = "User interface designer for GTK applications";
     maintainers = teams.gnome.members;

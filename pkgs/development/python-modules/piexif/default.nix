@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pillow }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pillow }:
 
 buildPythonPackage rec {
   pname = "piexif";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "06sz58q4mrw472p8fbnq7wsj8zpi5js5r8phm2hiwfmz0v33bjw3";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simplify Exif manipulations with Python";
     homepage = "https://github.com/hMatoba/Piexif";
     license = licenses.mit;

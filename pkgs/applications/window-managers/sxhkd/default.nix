@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, asciidoc, libxcb, xcbutil, xcbutilkeysyms
+{ lib, stdenv, fetchFromGitHub, asciidoc, libxcb, xcbutil, xcbutilkeysyms
 , xcbutilwm
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple X hotkey daemon";
     homepage = "https://github.com/baskerville/sxhkd";
     license = licenses.bsd2;

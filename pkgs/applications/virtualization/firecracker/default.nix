@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 let
   version = "0.23.0";
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     install -D jailer      $out/bin/jailer
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Secure, fast, minimal micro-container virtualization";
     homepage    = "http://firecracker-microvm.io";
     license     = licenses.asl20;
