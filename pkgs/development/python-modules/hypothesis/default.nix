@@ -10,7 +10,7 @@ buildPythonPackage rec {
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  version = "5.30.0";
+  version = "6.0.2";
   pname = "hypothesis";
 
   # Use github tarballs that includes tests
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis-python";
     rev = "hypothesis-python-${version}";
-    sha256 = "0fmc4jfaksr285fjhp18ibj2rr8cxmbd0pwx370r5wf8jnhm6jb3";
+    sha256 = "1iy3v03jfafm7w5r6hp6izzg7lw3i144nvvq113ais52rm6xhn96";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   inherit doCheck;
 
   checkPhase = ''
+    HOME=$TMPDIR
     rm tox.ini # This file changes how py.test runs and breaks it
     py.test tests/cover
   '';
