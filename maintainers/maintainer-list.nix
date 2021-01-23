@@ -6705,6 +6705,12 @@
     githubId = 7677321;
     name = "Paul Trehiou";
   };
+  nyanotech = {
+    name = "nyanotech";
+    email = "nyanotechnology@gmail.com";
+    github = "nyanotech";
+    githubId = 33802077;
+  };
   nyarly = {
     email = "nyarly@gmail.com";
     github = "nyarly";
