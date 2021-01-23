@@ -17,9 +17,13 @@ stdenv.mkDerivation {
     substituteInPlace Makefile  --replace "SED_INPLACE=sed -i '''" "SED_INPLACE=sed -i"
   '';
 
+  buildFlags = lib.optionals stdenv.hostPlatform.isStatic [ "static" ];
+
   preCheck = "patchShebangs runtests";
   doCheck = true;
   checkTarget = "test";
+
+  installTargets = lib.optionals stdenv.hostPlatform.isStatic [ "static-install" ];
 
   doInstallCheck = true;
   installCheckTarget = "testinstall";
