@@ -1,6 +1,5 @@
-{ stdenv
+{ lib
 , buildGoPackage
-, lib
 , fetchFromGitHub
 , buildGoModule
 , sqlite
