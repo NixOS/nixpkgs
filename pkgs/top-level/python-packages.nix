@@ -5125,6 +5125,8 @@ in {
 
   pyaftership = callPackage ../development/python-modules/pyaftership { };
 
+  pyahocorasick = callPackage ../development/python-modules/pyahocorasick { };
+
   pyairvisual = callPackage ../development/python-modules/pyairvisual { };
 
   pyalgotrade = callPackage ../development/python-modules/pyalgotrade { };
