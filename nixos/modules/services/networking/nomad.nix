@@ -114,6 +114,7 @@ in
       } // (optionalAttrs cfg.enableDocker {
         SupplementaryGroups = "docker"; # space-separated string
       });
+
       unitConfig = {
         StartLimitIntervalSec = 10;
         StartLimitBurst = 3;
