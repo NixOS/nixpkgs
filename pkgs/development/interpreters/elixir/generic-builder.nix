@@ -69,6 +69,6 @@ in
 
       license = licenses.epl10;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ havvy couchemar ankhers Br1ght0ne ];
+      maintainers = teams.beam.members;
     };
   })
