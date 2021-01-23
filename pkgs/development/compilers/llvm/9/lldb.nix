@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetch
 , cmake
 , zlib
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libxml2
     llvm
   ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin [
     darwin.libobjc
     darwin.apple_sdk.libs.xpc
     darwin.apple_sdk.frameworks.Foundation
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/lldb-vscode $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A next-generation high-performance debugger";
     homepage = "https://llvm.org/";
     license = licenses.ncsa;

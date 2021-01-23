@@ -63,7 +63,7 @@ let
   commonBuildInputs = extraBuildInputs: [
     boehmgc libatomic_ops pcre libevent libyaml zlib libxml2 openssl
   ] ++ extraBuildInputs
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   generic = (
     { version

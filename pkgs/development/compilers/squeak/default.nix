@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, coreutils, dbus, freetype, glib, gnused
+{ lib, stdenv, fetchurl, cmake, coreutils, dbus, freetype, glib, gnused
 , libpthreadstubs, pango, pkg-config, libpulseaudio, which }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for i in squeak.in squeak.sh.in; do
       substituteInPlace unix/cmake/$i --replace "PATH=" \
-        "PATH=${stdenv.lib.makeBinPath [ coreutils gnused which ]} #"
+        "PATH=${lib.makeBinPath [ coreutils gnused which ]} #"
     done
   '';
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Smalltalk programming language and environment";
     longDescription = ''
       Squeak is a full-featured implementation of the Smalltalk programming

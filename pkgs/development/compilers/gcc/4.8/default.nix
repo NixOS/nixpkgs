@@ -1,4 +1,4 @@
-{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
+{ lib, stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
@@ -58,7 +58,7 @@ assert langGo -> langCC;
 # threadsCross is just for MinGW
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
-with stdenv.lib;
+with lib;
 with builtins;
 
 let majorVersion = "4";
@@ -190,17 +190,18 @@ stdenv.mkDerivation ({
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
 
   preConfigure = import ../common/pre-configure.nix {
-    inherit (stdenv) lib;
+    inherit lib;
     inherit version hostPlatform langJava langGo;
   };
 
   dontDisableStatic = true;
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" ] ++ lib.optional (targetPlatform != hostPlatform) "target";
 
   configureFlags = import ../common/configure-flags.nix {
     inherit
+      lib
       stdenv
       targetPackages
       crossStageStatic libcCross
@@ -289,7 +290,7 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = "https://gcc.gnu.org/";
-    license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
+    license = lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}"
       + (if stripped then "" else " (with debugging info)");
 
@@ -302,13 +303,13 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ peti veprbl ];
+    maintainers = with lib.maintainers; [ peti veprbl ];
 
     platforms =
-      stdenv.lib.platforms.linux ++
-      stdenv.lib.platforms.freebsd ++
-      stdenv.lib.platforms.illumos ++
-      stdenv.lib.platforms.darwin;
+      lib.platforms.linux ++
+      lib.platforms.freebsd ++
+      lib.platforms.illumos ++
+      lib.platforms.darwin;
     badPlatforms = [ "x86_64-darwin" ];
   };
 }

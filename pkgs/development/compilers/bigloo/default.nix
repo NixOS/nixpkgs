@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, autoconf, automake, libtool, gmp
+{ fetchurl, lib, stdenv, autoconf, automake, libtool, gmp
 , darwin
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool ];
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin
+  buildInputs = lib.optional stdenv.isDarwin
     darwin.apple_sdk.frameworks.ApplicationServices
   ;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     # For libuv on darwin
-    stdenv.lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.isDarwin ''
       export LIBTOOLIZE=libtoolize
     '' +
     # Help libgc's configure.
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Efficient Scheme compiler";
     homepage    = "http://www-sop.inria.fr/indes/fp/Bigloo/";
-    license     = stdenv.lib.licenses.gpl2Plus;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
+    license     = lib.licenses.gpl2Plus;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

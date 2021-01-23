@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   checkTarget = "tests";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lisp-flavoured C";
     longDescription = ''
       Dale is a system (no GC) programming language that uses

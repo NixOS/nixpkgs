@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
+{ lib, stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
 , libarchive, db, pcre, libedit, libossp_uuid, libXpm
 , libSM, libXt, freetype, pkg-config, fontconfig
 , cmake, libyaml, Security
@@ -31,9 +31,9 @@ stdenv.mkDerivation {
   buildInputs = [ gmp readline openssl
     libarchive libyaml db pcre libedit libossp_uuid
     zlib ]
-  ++ stdenv.lib.optionals (withGui && !stdenv.isDarwin) [ libXpm libX11 libXext libXft libXinerama libjpeg ]
+  ++ lib.optionals (withGui && !stdenv.isDarwin) [ libXpm libX11 libXext libXft libXinerama libjpeg ]
   ++ extraLibraries
-  ++ stdenv.lib.optional stdenv.isDarwin Security;
+  ++ lib.optional stdenv.isDarwin Security;
 
   hardeningDisable = [ "format" ];
 
@@ -46,9 +46,9 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://www.swi-prolog.org";
     description = "A Prolog compiler and interpreter";
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
 
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.optionals (!withGui) stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.meditans ];
+    platforms = lib.platforms.linux ++ lib.optionals (!withGui) lib.platforms.darwin;
+    maintainers = [ lib.maintainers.meditans ];
   };
 }

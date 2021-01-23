@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     patchShebangs quotehostinfo
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compiler for Miranda -- a pure, non-strict, polymorphic, higher order functional programming language";
     homepage = "https://www.cs.kent.ac.uk/people/staff/dat/miranda/";
     license = licenses.bsd2;

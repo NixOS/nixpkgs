@@ -1,4 +1,4 @@
-{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
+{ lib, stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
@@ -48,7 +48,7 @@ assert langAda -> gnatboot != null;
 # threadsCross is just for MinGW
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
-with stdenv.lib;
+with lib;
 with builtins;
 
 let majorVersion = "10";
@@ -90,7 +90,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional (!langJit) "lib";
+  outputs = [ "out" "man" "info" ] ++ lib.optional (!langJit) "lib";
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation ({
 
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
-  prePatch = stdenv.lib.optionalString hostPlatform.isDarwin ''
+  prePatch = lib.optionalString hostPlatform.isDarwin ''
     substituteInPlace gcc/config/darwin-c.c \
       --replace 'if (stdinc)' 'if (0)'
 
@@ -134,13 +134,13 @@ stdenv.mkDerivation ({
                  -e 's|define[[:blank:]]*MUSL_DYNAMIC_LINKER\([0-9]*\)[[:blank:]]"\([^\"]\+\)"$|define MUSL_DYNAMIC_LINKER\1 "${libc.out}\2"|g'
            done
         ''
-        + stdenv.lib.optionalString (targetPlatform.libc == "musl")
+        + lib.optionalString (targetPlatform.libc == "musl")
         ''
             sed -i gcc/config/linux.h -e '1i#undef LOCAL_INCLUDE_DIR'
         ''
         )
     else "")
-      + stdenv.lib.optionalString targetPlatform.isAvr ''
+      + lib.optionalString targetPlatform.isAvr ''
             makeFlagsArray+=(
                'LIMITS_H_TEST=false'
             )
@@ -177,20 +177,21 @@ stdenv.mkDerivation ({
 
   depsTargetTarget = optional (!crossStageStatic && threadsCross != null) threadsCross;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
+  NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
   preConfigure = import ../common/pre-configure.nix {
-    inherit (stdenv) lib;
+    inherit lib;
     inherit version hostPlatform gnatboot langAda langGo;
   };
 
   dontDisableStatic = true;
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" ] ++ lib.optional (targetPlatform != hostPlatform) "target";
 
   configureFlags = import ../common/configure-flags.nix {
     inherit
+      lib
       stdenv
       targetPackages
       crossStageStatic libcCross
@@ -262,7 +263,7 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = "https://gcc.gnu.org/";
-    license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
+    license = lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+
     description = "GNU Compiler Collection, version ${version}"
       + (if stripped then "" else " (with debugging info)");
 
@@ -275,13 +276,13 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ synthetica ];
+    maintainers = with lib.maintainers; [ synthetica ];
 
     platforms =
-      stdenv.lib.platforms.linux ++
-      stdenv.lib.platforms.freebsd ++
-      stdenv.lib.platforms.illumos ++
-      stdenv.lib.platforms.darwin;
+      lib.platforms.linux ++
+      lib.platforms.freebsd ++
+      lib.platforms.illumos ++
+      lib.platforms.darwin;
   };
 }
 

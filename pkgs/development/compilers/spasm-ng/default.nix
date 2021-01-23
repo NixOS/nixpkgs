@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gcc, gmp, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, gcc, gmp, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "spasm-ng";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     install -Dm755 spasm -t $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = "https://github.com/alberthdev/spasm-ng";
     description = "Z80 assembler with extra features to support development for TI calculators";
     license     = licenses.gpl2Plus;

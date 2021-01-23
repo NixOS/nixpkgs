@@ -1,13 +1,12 @@
-{ gccStdenv, fetchzip, boost, cmake, ncurses, python3, coreutils
+{ lib, gccStdenv, fetchzip, boost, cmake, ncurses, python3, coreutils
 , z3Support ? true, z3 ? null, cvc4Support ? true, cvc4 ? null
 , cln ? null, gmp ? null
 }:
 
 # compiling source/libsmtutil/CVC4Interface.cpp breaks on clang on Darwin,
 # general commandline tests fail at abiencoderv2_no_warning/ on clang on NixOS
-let stdenv = gccStdenv; in
 
-assert z3Support -> z3 != null && stdenv.lib.versionAtLeast z3.version "4.6.0";
+assert z3Support -> z3 != null && lib.versionAtLeast z3.version "4.6.0";
 assert cvc4Support -> cvc4 != null && cln != null && gmp != null;
 
 let
@@ -18,7 +17,7 @@ let
     sha256 = "0qnx5y6c90fphl9mj9d20j2dfgy6s5yr5l0xnzid0vh71zrp6jwv";
   };
 in
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation rec {
 
   pname = "solc";
   version = "0.7.4";
@@ -36,20 +35,20 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBoost_USE_STATIC_LIBS=OFF"
-  ] ++ stdenv.lib.optionals (!z3Support) [
+  ] ++ lib.optionals (!z3Support) [
     "-DUSE_Z3=OFF"
-  ] ++ stdenv.lib.optionals (!cvc4Support) [
+  ] ++ lib.optionals (!cvc4Support) [
     "-DUSE_CVC4=OFF"
   ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ]
-    ++ stdenv.lib.optionals z3Support [ z3 ]
-    ++ stdenv.lib.optionals cvc4Support [ cvc4 cln gmp ];
+    ++ lib.optionals z3Support [ z3 ]
+    ++ lib.optionals cvc4Support [ cvc4 cln gmp ];
   checkInputs = [ ncurses python3 ];
 
   # Test fails on darwin for unclear reason
-  doCheck = stdenv.hostPlatform.isLinux;
+  doCheck = gccStdenv.hostPlatform.isLinux;
 
   checkPhase = ''
     while IFS= read -r -d ''' dir
@@ -68,7 +67,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compiler for Ethereum smart contract language Solidity";
     homepage = "https://github.com/ethereum/solidity";
     license = licenses.gpl3;
