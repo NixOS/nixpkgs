@@ -1,0 +1,25 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,7 +1,4 @@
+-m4_define([jq_version],
+-          m4_esyscmd_s([(git rev-parse --verify -q jq-1.0 > /dev/null &&
+-                        (git describe --tags --dirty --match 'jq-*'|sed 's/^jq-//')) ||
+-                        echo `git rev-parse --abbrev-ref HEAD`-`git describe --always --dirty`])))
++m4_define([jq_version], [@version@])
+ 
+ AC_INIT([jq], [jq_version], [https://github.com/stedolan/jq/issues],
+              [jq], [https://stedolan.github.io/jq])
+--- a/scripts/version
++++ b/scripts/version
+@@ -1,10 +1,2 @@
+ #!/bin/sh
+-set -e
+-cd `dirname "$0"`
+-if git rev-parse --verify -q jq-1.0 > /dev/null 2>&1; then
+-    git describe --tags --match 'jq-*' --dirty | sed 's/^jq-//'
+-else
+-    b=`git rev-parse --abbrev-ref HEAD`
+-    c=`git describe --always --dirty`
+-    echo "${b}-${c}"
+-fi
++echo "@version@"
