@@ -50,12 +50,18 @@
 , withNgspice
 , withScripting
 , debug
+, sanitizeAddress
+, sanitizeThreads
 , withI18n
 }:
 
 assert lib.asserts.assertMsg (!(withOCE && stdenv.isAarch64)) "OCE fails a test on Aarch64";
 assert lib.asserts.assertMsg (!(withOCC && withOCE))
   "Only one of OCC and OCE may be enabled";
+assert lib.assertMsg (!(stable && (sanitizeAddress || sanitizeThreads)))
+  "Only kicad-unstable(-small) supports address/thread sanitation";
+assert lib.assertMsg (!(sanitizeAddress && sanitizeThreads))
+  "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
 let
   inherit (lib) optional optionals;
 in
@@ -98,6 +104,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Debug"
     "-DKICAD_STDLIB_DEBUG=ON"
     "-DKICAD_USE_VALGRIND=ON"
+  ]
+  ++ optionals (sanitizeAddress) [
+    "-DKICAD_SANITIZE_ADDRESS=ON"
+  ]
+  ++ optionals (sanitizeThreads) [
+    "-DKICAD_SANITIZE_THREADS=ON"
   ];
 
   nativeBuildInputs = [

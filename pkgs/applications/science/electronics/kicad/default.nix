@@ -25,6 +25,8 @@
 , withScripting ? true
 , python3
 , debug ? false
+, sanitizeAddress ? false
+, sanitizeThreads ? false
 , with3d ? true
 , withI18n ? true
 , srcs ? { }
@@ -162,7 +164,8 @@ stdenv.mkDerivation rec {
     inherit kicadSrc kicadVersion;
     inherit (passthru) i18n;
     inherit wxGTK python wxPython;
-    inherit debug withI18n withOCC withOCE withNgspice withScripting;
+    inherit withI18n withOCC withOCE withNgspice withScripting;
+    inherit debug sanitizeAddress sanitizeThreads;
   };
 
   inherit pname;
