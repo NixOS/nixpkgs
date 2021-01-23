@@ -8,9 +8,9 @@ with pkgs.lib;
 
 let
   supportedDbTypes = [ "mysql" "postgres" "sqlite3" ];
-  supportedCacheTypes = [ "memory" "redis" "memcache" ];
-  makeGiteaTest = type: cache: nameValuePair "${type}${if (cache != null) then "-${cache}" else ""} " (makeTest {
-    name = "gitea-${type}";
+  supportedCacheTypes = [ "redis" "memcached" "memory" ];
+  makeGiteaTest = name: db: cacheOptions: nameValuePair name (makeTest {
+    name = "gitea-${name}";
     meta.maintainers = with maintainers; [ aanderse kolaente ma27 ];
 
     nodes = {
@@ -18,9 +18,9 @@ let
         virtualisation.memorySize = 2048;
         services.gitea = {
           enable = true;
-          database = { inherit type; };
+          database.type = db;
           disableRegistration = true;
-          cache = { ${cache}.enable = true; };
+          cache = cacheOptions;
         };
         environment.systemPackages = [ pkgs.gitea pkgs.jq ];
         services.openssh.enable = true;
@@ -108,4 +108,16 @@ let
     '';
   });
 in
-  listToAttrs ((map (db: makeGiteaTest db null) supportedDbTypes) ++ (map (cache: makeGiteaTest "sqlite3" cache) supportedCacheTypes))
+  listToAttrs (
+    (map (db: makeGiteaTest "${db}" db { }) supportedDbTypes)
+    ++
+    (map (cache: makeGiteaTest "${cache}" "sqlite3" { "${cache}".enable = true; }) supportedCacheTypes)
+    ++ [
+      # Test with local redis over TCP
+      (makeGiteaTest "redis-tcp" "sqlite3" {
+        redis = {
+          network = "tcp";
+          host = "127.0.0.1";
+        };
+      })
+    ])
