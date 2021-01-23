@@ -39,12 +39,6 @@ let
         (if (versionOlder version "5.31.1") then ./no-sys-dirs-5.29.patch
          else ./no-sys-dirs-5.31.patch)
       ]
-      ++ optional (versionOlder version "5.29.6")
-        # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
-        (fetchurl {
-          url = "https://rt.perl.org/Public/Ticket/Attachment/1502646/807252/0001-Fix-missing-build-dependency-for-pods.patch";
-          sha256 = "1bb4mldfp8kq1scv480wm64n2jdsqa3ar46cjp1mjpby8h5dr2r0";
-        })
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
       ++ optional crossCompiling ./MakeMaker-cross.patch;
@@ -174,11 +168,11 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "b4447944a0aeff9590dc023d64f8ddf3de7669fb"; # Dec 22, 2020
+    crossVersion = "4c55233ae95a6aef4d93291fe8ad12709b11e575"; # Jan 21, 2021
 
     perl-cross-src = fetchurl {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "1cignplkb29kcvkfwshakyij71w8srlfqbnb9pla98vya6r82rnb";
+      sha256 = "04bxn43ir7b4c2bb1z1l71l93hrysjv00h879nm70m99q6vxq2hc";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -214,7 +208,7 @@ in {
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.33.5";
-    sha256 = "04iprc8qz6vpbgzqgwja5rc3csvmgq1rnnnl382l39hy69fsdqpr";
+    version = "5.33.6";
+    sha256 = "1fx6b2q7wzd0xwy7qkmkvd5bdm09d3zfnynrb6afl9ghd8ww56fv";
   };
 }
