@@ -5906,8 +5906,6 @@ in {
 
   pyspotify = callPackage ../development/python-modules/pyspotify { };
 
-  pyspread = callPackage ../development/python-modules/pyspread { };
-
   pysptk = callPackage ../development/python-modules/pysptk { };
 
   pysqlcipher3 = callPackage ../development/python-modules/pysqlcipher3 {
