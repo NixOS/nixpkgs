@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "jwasm";
   version = "2.13";

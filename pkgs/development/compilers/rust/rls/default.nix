@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchFromGitHub, rustPlatform
+{ lib, stdenv, makeWrapper, fetchFromGitHub, rustPlatform
 , openssh, openssl, pkg-config, cmake, zlib, curl, libiconv
 , CoreFoundation, Security }:
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ openssh openssl curl zlib libiconv makeWrapper rustPlatform.rust.rustc.llvm ]
-    ++ (stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security ]);
+    ++ (lib.optionals stdenv.isDarwin [ CoreFoundation Security ]);
 
   doCheck = true;
 
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage {
     wrapProgram $out/bin/rls --set-default RUST_SRC_PATH ${rustPlatform.rustLibSrc}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rust Language Server - provides information about Rust programs to IDEs and other tools";
     homepage = "https://github.com/rust-lang/rls/";
     license = with licenses; [ asl20 /* or */ mit ];

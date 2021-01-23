@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "closure-compiler";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/share/java/closure-compiler-v${version}.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for making JavaScript download and run faster";
     homepage = "https://developers.google.com/closure/compiler/";
     license = licenses.asl20;

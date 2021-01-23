@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, which, zlib, libGL, glib, xorg, libxkbcommon
+{ stdenv, lib, fetchurl, makeWrapper, which, zlib, libGL, glib, xorg, libxkbcommon
 , xdg_utils
 # For glewinfo
 , libXmu, libXi, libXext }:
@@ -7,7 +7,7 @@ let
   packages = [
     stdenv.cc.cc zlib glib xorg.libX11 libxkbcommon libXmu libXi libXext libGL
   ];
-  libPath = stdenv.lib.makeLibraryPath packages;
+  libPath = lib.makeLibraryPath packages;
 in
 stdenv.mkDerivation rec {
   pname = "genymotion";
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     rm $out/libexec/genymotion/libxkbcommon*
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Fast and easy Android emulation";
     longDescription = ''
       Genymotion is a relatively fast Android emulator which comes with
@@ -74,8 +74,8 @@ stdenv.mkDerivation rec {
       suitable for application testing.
      '';
     homepage = "https://www.genymotion.com/";
-    license = stdenv.lib.licenses.unfree;
+    license = licenses.unfree;
     platforms = ["x86_64-linux"];
-    maintainers = [ stdenv.lib.maintainers.puffnfresh ];
+    maintainers = [ maintainers.puffnfresh ];
   };
 }

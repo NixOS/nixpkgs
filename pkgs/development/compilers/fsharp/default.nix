@@ -1,6 +1,6 @@
 # Temporarily avoid dependency on dotnetbuildhelpers to avoid rebuilding many times while working on it
 
-{ stdenv, fetchurl, mono, pkg-config, dotnetbuildhelpers, autoconf, automake, which }:
+{ lib, stdenv, fetchurl, mono, pkg-config, dotnetbuildhelpers, autoconf, automake, which }:
 
 stdenv.mkDerivation rec {
   pname = "fsharp";
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A functional CLI language";
     homepage = "https://fsharp.org/";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin ];
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thoughtpolice raskin ];
+    platforms = with lib.platforms; unix;
   };
 }

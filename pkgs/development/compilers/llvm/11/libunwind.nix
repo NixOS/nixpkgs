@@ -1,4 +1,4 @@
-{ stdenv, version, fetch, cmake, fetchpatch
+{ lib, stdenv, version, fetch, cmake, fetchpatch
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -10,5 +10,5 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = stdenv.lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF";
+  cmakeFlags = lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF";
 }

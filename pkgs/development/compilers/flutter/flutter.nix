@@ -13,7 +13,7 @@
 , coreutils
 , git
 , runCommand
-, stdenv
+, lib, stdenv
 , fetchurl
 , alsaLib
 , dbus
@@ -137,7 +137,7 @@ runCommand drvName
   preferLocalBuild = true;
   allowSubstitutes = false;
   passthru = { unwrapped = flutter; };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flutter is Google's SDK for building mobile, web and desktop with Dart";
     longDescription = ''
       Flutter is Google’s UI toolkit for building beautiful,

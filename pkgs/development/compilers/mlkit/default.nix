@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, mlton }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, mlton }:
 
 stdenv.mkDerivation rec {
   pname = "mlkit";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildFlags = ["mlkit" "mlkit_libs"];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Standard ML Compiler and Toolkit";
     homepage = "https://elsman.com/mlkit/";
     license = licenses.gpl2Plus;

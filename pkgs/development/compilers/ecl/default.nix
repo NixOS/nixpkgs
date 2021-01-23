@@ -1,4 +1,4 @@
-{stdenv, fetchurl
+{lib, stdenv, fetchurl
 , libtool, autoconf, automake
 , texinfo
 , gmp, mpfr, libffi, makeWrapper
@@ -22,7 +22,7 @@ let
   propagatedBuildInputs = [
     libffi gmp mpfr gcc
     # replaces ecl's own gc which other packages can depend on, thus propagated
-  ] ++ stdenv.lib.optionals useBoehmgc [
+  ] ++ lib.optionals useBoehmgc [
     # replaces ecl's own gc which other packages can depend on, thus propagated
     boehmgc
   ];
@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     "--with-libffi-prefix=${libffi.dev}"
     ]
     ++
-    (stdenv.lib.optional (! noUnicode)
+    (lib.optional (! noUnicode)
       "--enable-unicode")
     ;
 
@@ -94,8 +94,8 @@ stdenv.mkDerivation {
     inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
-    license = stdenv.lib.licenses.mit ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

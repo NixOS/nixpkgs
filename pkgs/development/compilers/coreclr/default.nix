@@ -1,4 +1,4 @@
-{ config, stdenv
+{ config, lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , which
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/dotnet/core/";
     description = ".NET is a general purpose development platform";
     platforms = [ "x86_64-linux" ];

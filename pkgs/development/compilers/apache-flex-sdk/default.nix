@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 let
   playerglobal_ver = "27.0";
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
 
   fixupPhase = ":";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flex SDK for Adobe Flash / ActionScript";
     homepage = "https://flex.apache.org/";
     license = with licenses; [ asl20 ];

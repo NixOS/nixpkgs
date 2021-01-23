@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchzip
 , pkg-config
 , autoPatchelfHook
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     isClang = true;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "Accelerate Complex C++ Applications on Heterogeneous Compute Systems using Open Standards";
     homepage = "https://www.codeplay.com/products/computesuite/computecpp";

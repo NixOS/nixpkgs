@@ -140,7 +140,7 @@ let
 
     disallowedReferences = [ openjdk11 ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "http://openjdk.java.net/";
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";

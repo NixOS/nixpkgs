@@ -4,7 +4,7 @@
 }:
 
 assert builtins.elem type [ "aspnetcore" "netcore" "sdk"];
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , libunwind
 , openssl
@@ -41,7 +41,7 @@ let
 in stdenv.mkDerivation rec {
   inherit pname version;
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     curl
     icu
     libunwind
@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/dotnet
     patchelf --set-rpath "${rpath}" $out/dotnet
     find $out -type f -name "*.so" -exec patchelf --set-rpath '$ORIGIN:${rpath}' {} \;
@@ -82,7 +82,7 @@ in stdenv.mkDerivation rec {
     $out/bin/dotnet --info
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://dotnet.github.io/";
     description = builtins.getAttr type descriptions;
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];

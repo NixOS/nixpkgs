@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
+{ lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
 , jre, binaryen
 , llvmPackages_11
 , symlinkJoin, makeWrapper
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/emscripten-core/emscripten";
     description = "An LLVM-to-JavaScript Compiler";
     platforms = platforms.all;
