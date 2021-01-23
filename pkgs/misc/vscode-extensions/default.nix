@@ -128,6 +128,18 @@ let
         };
       };
 
+      davidanson.vscode-markdownlint = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-markdownlint";
+          publisher = "DavidAnson";
+          version = "0.38.0";
+          sha256 = "0d6hbsjrx1j8wrmfnvdwsa7sci1brplgxwkmy6sp74va7zxfjnqv";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       dhall.dhall-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dhall-lang";
