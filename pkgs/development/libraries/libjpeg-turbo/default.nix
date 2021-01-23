@@ -15,11 +15,16 @@ stdenv.mkDerivation rec {
     sha256 = "0njdxfmyk8smj8bbd6fs3lxjaq3lybivwgg16gpnbiyl984dpi9b";
   };
 
-  patches =
-    lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
+  # This is needed by freeimage
+  patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ]
+    ++ lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
       ./mingw-boolean.patch;
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
+
+  postFixup = ''
+    moveToOutput include/transupp.h $dev_private
+  '';
 
   nativeBuildInputs = [ cmake nasm ];
 

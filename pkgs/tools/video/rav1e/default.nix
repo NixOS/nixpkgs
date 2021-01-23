@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.4.0-alpha";
+  version = "0.4.0";
 
   src = stdenv.mkDerivation rec {
     name = "${pname}-${version}-source";
@@ -11,12 +11,12 @@ rustPlatform.buildRustPackage rec {
       owner = "xiph";
       repo = "rav1e";
       rev = "v${version}";
-      sha256 = "1fw1gxi8330kfhl9hfzpn0lcmyn5604lc74d6g6iadzz2hmv4mb9";
+      sha256 = "09w4476x6bdmh9pv4lchrzvfvbjvxxraa9f4dlbwgli89lcg9fcf";
     };
 
     cargoLock = fetchurl {
-      url = "https://github.com/xiph/rav1e/releases/download/v0.4.0-alpha/Cargo.lock";
-      sha256 = "002s2wlzpifn5p2ahdrjdkjl48c1wr6fslg0if4gf9qpl8qj05fl";
+      url = "https://github.com/xiph/rav1e/releases/download/v${version}/Cargo.lock";
+      sha256 = "0rkyi010z6qmwdpvzlzyrrhs8na929g11lszhbqx5y0gh3y5nyik";
     };
 
     installPhase = ''
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "1i5ldqb77rrhfxxf9krp7f6yj3h6rsqak6hf23fd2znhgmi7psb1";
+  cargoSha256 = "1iza2cws28hd4a3q90mc90l8ql4bsgapdznfr6bl65cjam43i5sg";
   nativeBuildInputs = [ nasm cargo-c ];
 
   postBuild = ''
