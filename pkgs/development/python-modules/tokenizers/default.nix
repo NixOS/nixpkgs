@@ -7,6 +7,7 @@
 , wheel
 , numpy
 , python
+, datasets
 , pytestCheckHook
 , requests
 }:
@@ -50,16 +51,16 @@ let
   };
 in rustPlatform.buildRustPackage rec {
   pname = "tokenizers";
-  version = "0.9.4";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "python-v${version}";
-    hash = "sha256-JXoH9yfhMIFg5qDY5zrF6iWb7XKugjMfk1NxSizfaWg=";
+    hash = "sha256-rQ2hRV52naEf6PvRsWVCTN7B1oXAQGmnpJw4iIdhamw=";
   };
 
-  cargoSha256 = "sha256-u9qitrOxJSABs0VjwHUZgmw7VTQXNbp6l8fKKE/RQ7M=";
+  cargoSha256 = "sha256-BoHIN/519Top1NUBjpB/oEMqi86Omt3zTQcXFWqrek0=";
 
   sourceRoot = "source/bindings/python";
 
@@ -75,6 +76,7 @@ in rustPlatform.buildRustPackage rec {
   ];
 
   installCheckInputs = [
+    datasets
     pytestCheckHook
     requests
   ];
@@ -104,6 +106,15 @@ in rustPlatform.buildRustPackage rec {
   installPhase = ''
     pipInstallPhase
   '';
+
+  preCheck = ''
+    HOME=$TMPDIR
+  '';
+
+  disabledTests = [
+    # Downloads data using the datasets module.
+    "TestTrainFromIterators"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/huggingface/tokenizers";
