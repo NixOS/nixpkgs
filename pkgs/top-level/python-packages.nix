@@ -5077,6 +5077,8 @@ in {
 
   pulsectl = callPackage ../development/python-modules/pulsectl { };
 
+  puremagic = callPackage ../development/python-modules/puremagic { };
+
   pure-eval = callPackage ../development/python-modules/pure-eval { };
 
   pure-pcapy3 = callPackage ../development/python-modules/pure-pcapy3 { };
