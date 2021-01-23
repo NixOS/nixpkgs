@@ -77,7 +77,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
     def create_new_win():
         with machine.nested("Creating a new Chromium window"):
-            machine.execute(
+            status, _ = machine.execute(
                 ru(
                     "${xdo "new-window" ''
                       search --onlyvisible --name "startup done"
@@ -86,13 +86,14 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
                     ''}"
                 )
             )
-            machine.execute(
-                ru(
-                    "${xdo "new-window" ''
-                      key Ctrl+n
-                    ''}"
+            if status == 0:
+                machine.execute(
+                    ru(
+                        "${xdo "new-window" ''
+                          key Ctrl+n
+                        ''}"
+                    )
                 )
-            )
 
 
     def close_win():
@@ -115,7 +116,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
                     )
                 )
             for _ in range(1, 20):
-                status, out = machine.execute(
+                status, _ = machine.execute(
                     ru(
                         "${xdo "wait-for-close" ''
                           search --onlyvisible --name "new tab"
@@ -134,7 +135,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
         ret = False
         with machine.nested("Waiting for new Chromium window to appear"):
             for _ in range(1, 20):
-                status, out = machine.execute(
+                status, _ = machine.execute(
                     ru(
                         "${xdo "wait-for-window" ''
                           search --onlyvisible --name "new tab"
