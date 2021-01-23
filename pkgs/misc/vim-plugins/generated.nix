@@ -3744,6 +3744,18 @@ let
     meta.homepage = "https://github.com/AndrewRadev/splitjoin.vim/";
   };
 
+  sql-nvim = buildVimPluginFrom2Nix {
+    pname = "sql-nvim";
+    version = "2021-01-22";
+    src = fetchFromGitHub {
+      owner = "tami5";
+      repo = "sql.nvim";
+      rev = "af875daf178fe38c2186b14d55a6bbdb6fbb2e15";
+      sha256 = "00qa9m6bij9y39xyf73a3gz0xx0l0mqc1byrk6xl3kdbcngig5il";
+    };
+    meta.homepage = "https://github.com/tami5/sql.nvim/";
+  };
+
   srcery-vim = buildVimPluginFrom2Nix {
     pname = "srcery-vim";
     version = "2020-12-22";
