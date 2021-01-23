@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     done
     ln -s "${font-droid}/share/fonts/opentype/NerdFonts/Droid Sans Mono Nerd Font Complete Mono.otf" $out/lib/koreader/fonts/droid/DroidSansMono.ttf
     wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : ${
-      stdenv.lib.makeLibraryPath [ gtk3-x11 SDL2 glib ]
+      lib.makeLibraryPath [ gtk3-x11 SDL2 glib ]
     }
   '';
 

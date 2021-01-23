@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, autoconf, automake, libtool, libpcap
+{ lib, stdenv, fetchFromGitHub, which, autoconf, automake, libtool, libpcap
 , pkg-config }:
 
 let version = "3.4"; in
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for deep-packet inspection";
     longDescription = ''
       nDPI is a library for deep-packet inspection based on OpenDPI.

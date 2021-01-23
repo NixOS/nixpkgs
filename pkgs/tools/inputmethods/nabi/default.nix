@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, libhangul }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, libhangul }:
 
 stdenv.mkDerivation {
   name = "nabi-1.0.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "0craa24pw7b70sh253arv9bg9sy4q3mhsjwfss3bnv5nf0xwnncw";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 libhangul ];
 
   meta = with lib; {

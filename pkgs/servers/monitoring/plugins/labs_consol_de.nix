@@ -22,7 +22,7 @@ let
 
     nativeBuildInputs = [ autoreconfHook makeWrapper ];
 
-    prePatch = with stdenv.lib; ''
+    prePatch = with lib; ''
       rm -rf GLPlugin
       ln -s ${glplugin} GLPlugin
       substituteInPlace plugins-scripts/Makefile.am \

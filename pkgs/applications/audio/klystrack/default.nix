@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , SDL2, SDL2_image
-, pkgconfig
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2 SDL2_image
   ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   patches = [
     (fetchpatch {

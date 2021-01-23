@@ -18,7 +18,7 @@ let
     feedparser
     sabyenc3
   ]);
-  path = stdenv.lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
+  path = lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
   version = "3.1.1";
   pname = "sabnzbd";
@@ -46,6 +46,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://sabnzbd.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }

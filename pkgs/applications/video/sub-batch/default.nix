@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , rustPlatform
 }:
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-l+BTF9PGb8bG8QHhNCoBsrsVX8nlRjPlaea1ESFfMW0=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Match and rename subtitle files to video files and perform other batch operations on subtitle files";
     homepage = "https://github.com/kl/sub-batch";
     license = licenses.mit;

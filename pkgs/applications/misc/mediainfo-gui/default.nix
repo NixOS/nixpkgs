@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, libzen, libmediainfo, wxGTK30-gtk3
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, libmediainfo, wxGTK30-gtk3
 , desktop-file-utils, libSM, imagemagick }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rqg9z7s5bk7vlvjrs4gackzg7ib05a0dffi2ihsjf5a7kw7wcir";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libzen libmediainfo wxGTK30-gtk3 desktop-file-utils libSM
                   imagemagick ];
 

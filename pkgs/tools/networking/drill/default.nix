@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1nbfbmm9v1yp7380zdzz7qrc7x6krwlvgn5x5yzb8yn1rc99jzx4";
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
   buildInputs = [ ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     description = "HTTP load testing application inspired by Ansible syntax";

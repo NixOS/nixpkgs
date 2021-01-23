@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python
 , qt
 , gtk
@@ -14,9 +14,7 @@
 , fetchSubmodules
 }:
 
-let
-  lib = stdenv.lib;
-in rec {
+rec {
   version = builtins.concatStringsSep "." (
     lib.attrVals [ "major" "minor" "patch" ] versionAttr
   );

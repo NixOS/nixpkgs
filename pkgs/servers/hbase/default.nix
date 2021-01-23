@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     description = "A distributed, scalable, big data store";
     homepage = "https://hbase.apache.org";
     license = licenses.asl20;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

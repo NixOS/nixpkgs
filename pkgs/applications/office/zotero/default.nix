@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       atk
       cairo
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       nspr
       nss
       pango
-    ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
+    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
 
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils ]}
+      --prefix PATH : ${lib.makeBinPath [ coreutils ]}
     )
   '';
 

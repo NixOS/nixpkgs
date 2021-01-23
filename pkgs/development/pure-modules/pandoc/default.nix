@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, pandoc, gawk, getopt }:
+{ stdenv, fetchurl, pkg-config, pure, pandoc, gawk, getopt }:
 
 stdenv.mkDerivation rec {
   baseName = "pandoc";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0f23a17549048ca3a8f4936ea9e931feb05997390b486850936b746996350cda";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pure ];
   propagatedBuildInputs = [ pandoc gawk getopt ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];

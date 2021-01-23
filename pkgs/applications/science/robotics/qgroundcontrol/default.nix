@@ -1,7 +1,7 @@
 { lib, mkDerivation, fetchFromGitHub, SDL2
 , qtbase, qtcharts, qtlocation, qtserialport, qtsvg, qtquickcontrols2
 , qtgraphicaleffects, qtspeech, qtx11extras, qmake, qttools
-, gst_all_1, wayland, pkgconfig
+, gst_all_1, wayland, pkg-config
 }:
 
 mkDerivation rec {
@@ -19,7 +19,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
   buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
-  nativeBuildInputs = [ pkgconfig qmake qttools ];
+  nativeBuildInputs = [ pkg-config qmake qttools ];
 
   preConfigure = ''
     mkdir build

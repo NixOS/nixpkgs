@@ -21,7 +21,7 @@
 
 with lib;
 let
-  pVersion = "1.10.0.20200225";
+  pVersion = "1.11.0.20201202";
   pVersionTriple = splitVersion pVersion;
   majorVersion = elemAt pVersionTriple 0;
   minorVersion = elemAt pVersionTriple 1;
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
-    sha256 = "11cg01gjjvlm6lr6z6rwqs1r31xx5pxddnz55ca0s33lrnywf9fx";
+    sha256 = "sha256-HtIKcGfdjb2wovGGSxv16ud7y1cPQFBn77pkhiekAkI=";
   };
 
   desktopItem = makeDesktopItem {

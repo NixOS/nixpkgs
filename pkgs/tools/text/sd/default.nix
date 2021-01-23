@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1mksmdp1wnsjd8gw1g3l16a24fk05xa9mxygc0qklr41bqf8kw8b";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Intuitive find & replace CLI (sed alternative)";

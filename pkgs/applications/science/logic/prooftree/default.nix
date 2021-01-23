@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, ncurses, ocamlPackages }:
+{ lib, stdenv, fetchurl, pkg-config, ncurses, ocamlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "prooftree";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0z1z4wqbqwgppkh2bm89fgy07a0y2m6g4lvcyzs09sm1ysklk2dh";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ] ++ (with ocamlPackages; [
     ocaml findlib camlp5 lablgtk ]);
 

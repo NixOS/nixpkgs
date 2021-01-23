@@ -17,7 +17,7 @@
 assert useSystemd -> (systemd != null);
 assert pkcs11Support -> (pkcs11helper != null);
 
-with stdenv.lib;
+with lib;
 let
   # Check if the script needs to have other binaries wrapped when changing this.
   update-resolved = fetchurl {

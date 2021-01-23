@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "tsocks";
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
       -e "/SAVE/d" Makefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Transparent SOCKS v4 proxying library";
     homepage = "http://tsocks.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = with maintainers; [ edwtjo phreedom ];
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;

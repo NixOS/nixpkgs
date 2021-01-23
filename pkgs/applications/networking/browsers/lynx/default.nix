@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages
-, fetchurl, pkgconfig, ncurses, gzip
+, fetchurl, pkg-config, ncurses, gzip
 , sslSupport ? true, openssl ? null
 , nukeReferences
 }:
@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
     "--enable-default-colors"
     "--enable-widec"
     "--enable-ipv6"
-  ] ++ stdenv.lib.optional sslSupport "--with-ssl";
+  ] ++ lib.optional sslSupport "--with-ssl";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ nukeReferences ]
-    ++ stdenv.lib.optional sslSupport pkgconfig;
+    ++ lib.optional sslSupport pkg-config;
 
-  buildInputs = [ ncurses gzip ] ++ stdenv.lib.optional sslSupport openssl.dev;
+  buildInputs = [ ncurses gzip ] ++ lib.optional sslSupport openssl.dev;
 
   # cfg_defs.h captures lots of references to build-only dependencies, derived
   # from config.cache.

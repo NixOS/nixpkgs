@@ -17,22 +17,22 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ]
-   ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
-  buildInputs = stdenv.lib.optional stdenv.hostPlatform.isUnix bash;
+   ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  buildInputs = lib.optional stdenv.hostPlatform.isUnix bash;
 
   patches = [
     ./playtests-darwin.patch
   ] # This I didn't upstream because if you use posix threads with MinGW it will
     # work fine, and I'm not sure how to write the condition.
-    ++ stdenv.lib.optional stdenv.hostPlatform.isWindows ./mcfgthreads-no-pthread.patch;
+    ++ lib.optional stdenv.hostPlatform.isWindows ./mcfgthreads-no-pthread.patch;
 
-  postPatch = stdenv.lib.optionalString (!static) ''
+  postPatch = lib.optionalString (!static) ''
     substituteInPlace build/cmake/CMakeLists.txt \
       --replace 'message(SEND_ERROR "You need to build static library to build tests")' ""
     substituteInPlace build/cmake/tests/CMakeLists.txt \
       --replace 'libzstd_static' 'libzstd_shared'
     sed -i \
-      "1aexport ${stdenv.lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib" \
+      "1aexport ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/build_/lib" \
       tests/playTests.sh
   '';
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   '';
 
   outputs = [ "bin" "dev" ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isUnix "man"
+    ++ lib.optional stdenv.hostPlatform.isUnix "man"
     ++ [ "out" ];
 
   meta = with lib; {

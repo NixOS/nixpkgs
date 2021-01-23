@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, which, libtool, pkgconfig
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, which, libtool, pkg-config
 , ronn
 , pcaudiolibSupport ? true, pcaudiolib
 , sonicSupport ? true, sonic }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jkqhf2h94vbqq7mg7mmm23bq372fa7mdk941my18c3vkldcir1b";
   };
 
-  nativeBuildInputs = [ autoconf automake which libtool pkgconfig ronn ];
+  nativeBuildInputs = [ autoconf automake which libtool pkg-config ronn ];
 
   buildInputs = lib.optional pcaudiolibSupport pcaudiolib
              ++ lib.optional sonicSupport sonic;

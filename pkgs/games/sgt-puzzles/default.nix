@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, desktop-file-utils
 , gtk3, libX11
-, makeWrapper, pkgconfig, perl, autoreconfHook, wrapGAppsHook
+, makeWrapper, pkg-config, perl, autoreconfHook, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook desktop-file-utils makeWrapper
-    pkgconfig perl wrapGAppsHook ];
+    pkg-config perl wrapGAppsHook ];
 
   buildInputs = [ gtk3 libX11 ];
 

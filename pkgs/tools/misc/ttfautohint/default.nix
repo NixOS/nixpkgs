@@ -1,5 +1,5 @@
 {
-  stdenv, lib, fetchurl, pkgconfig, autoreconfHook
+  stdenv, lib, fetchurl, pkg-config, autoreconfHook
 , freetype, harfbuzz, libiconv, qtbase
 , enableGUI ? true
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace "macx-g++" "macx-clang"
   '';
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [ freetype harfbuzz libiconv ] ++ lib.optional enableGUI qtbase;
 

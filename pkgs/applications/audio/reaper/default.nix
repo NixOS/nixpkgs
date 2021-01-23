@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "6.12c";
+  version = "6.20";
 
   src = fetchurl {
-    url = "https://www.reaper.fm/files/${stdenv.lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_x86_64.tar.xz";
-    sha256 = "1xnd4qvgwsz1dmgb656i611776dqcb84m1gh30i8jhpwcr9ym46w";
+    url = "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_x86_64.tar.xz";
+    sha256 = "194xglhk74ks534r3d00v84s26s4yybxkhb4h8k5rqp76g0jv635";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     rm $out/opt/REAPER/uninstall-reaper.sh
 
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libpulseaudio libjack2 ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpulseaudio libjack2 ]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.reaper.fm/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ jfrankenau ilian ];
   };
 }

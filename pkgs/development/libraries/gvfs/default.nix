@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , dbus
 , glib
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   version = "1.46.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "00r56kp8dhdn1ypyap66klymlwlh646n4f1ri797w2x6p70sc7k2";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3
-    pkgconfig
+    pkg-config
     gettext
     wrapGAppsHook
     libxml2
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     openssh
     gsettings-desktop-schemas
     # TODO: a ligther version of libsoup to have FTP/HTTP support?
-  ] ++ stdenv.lib.optionals gnomeSupport [
+  ] ++ lib.optionals gnomeSupport [
     gnome3.libsoup
     gcr
     glib-networking # TLS support
@@ -102,13 +102,13 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "-Dtmpfilesdir=no"
-  ] ++ stdenv.lib.optionals (!gnomeSupport) [
+  ] ++ lib.optionals (!gnomeSupport) [
     "-Dgcr=false"
     "-Dgoa=false"
     "-Dkeyring=false"
     "-Dhttp=false"
     "-Dgoogle=false"
-  ] ++ stdenv.lib.optionals (samba == null) [
+  ] ++ lib.optionals (samba == null) [
     # Xfce don't want samba
     "-Dsmb=false"
   ];
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;

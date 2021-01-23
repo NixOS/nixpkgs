@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ which python27 nodejs ] ++
     # for flock
-    stdenv.lib.optional stdenv.isLinux util-linux;
+    lib.optional stdenv.isLinux util-linux;
 
   CFLAGS = "-O2 -Wno-error=stringop-truncation";
   buildPhase =
-    stdenv.lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
+    lib.optionalString stdenv.isAarch32 "Seccomp_NO=1 "
     + "bash do";
   installPhase = ''
     install -Dt "$out/bin/" cjdroute makekeys privatetopublic publictoip6

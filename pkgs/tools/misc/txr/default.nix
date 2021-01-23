@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     description = "Programming language for convenient data munging";
     license = licenses.bsd2;
     homepage = "http://nongnu.org/txr";
-    maintainers = with stdenv.lib.maintainers; [ dtzWill ];
+    maintainers = with lib.maintainers; [ dtzWill ];
     platforms = platforms.linux; # Darwin fails although it should work AFAIK
   };
 }

@@ -1,4 +1,4 @@
-{fetchurl, stdenv, flex, db}:
+{fetchurl, lib, stdenv, flex, db}:
 
 stdenv.mkDerivation rec {
   name = "bogofilter-1.2.4";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       classifications and corrections.  It is based on a Bayesian
       filter.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, lua, pkgconfig, rsync,
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, lua, pkg-config, rsync,
   asciidoc, libxml2, docbook_xml_dtd_45, docbook_xsl, libxslt }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     rsync
-    cmake lua pkgconfig
+    cmake lua pkg-config
     asciidoc libxml2 docbook_xml_dtd_45 docbook_xsl libxslt
   ];
 

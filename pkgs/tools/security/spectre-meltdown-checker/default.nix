@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = with stdenv.lib; ''
+  installPhase = with lib; ''
     runHook preInstall
 
     install -Dm755 spectre-meltdown-checker.sh $out/bin/spectre-meltdown-checker

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, autoconf, libtool, automake, pkgconfig, git
+{ lib, stdenv, fetchgit, autoconf, libtool, automake, pkg-config, git
 , bison, flex, postgresql }:
 
 let
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     leaveDotGit = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake libtool git ];
 
   propagatedBuildInputs = [ bison flex postgresql ];

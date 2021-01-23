@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, jam, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, jam, pkg-config
 , zlib, libxml2, libxslt, xorgproto, libX11, libGLU, libGL, SDL
 , SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, physfs
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [
-    autoreconfHook jam pkgconfig
+    autoreconfHook jam pkg-config
   ];
 
   buildInputs = [

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext, autoconf, automake, jansson
+{ lib, stdenv, fetchurl, ncurses, pkg-config, texinfo, libxml2, gnutls, gettext, autoconf, automake, jansson
 , AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig autoconf automake ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
 
   buildInputs = [ ncurses libxml2 gnutls texinfo gettext jansson
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit

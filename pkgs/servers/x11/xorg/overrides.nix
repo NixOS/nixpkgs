@@ -4,7 +4,7 @@
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkgconfig, llvm_6, libxslt,
+  mcpp, epoxy, openssl, pkg-config, llvm_6, libxslt,
   ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
@@ -12,7 +12,7 @@ let
   inherit (stdenv) lib isDarwin;
   inherit (lib) overrideDerivation;
 
-  malloc0ReturnsNullCrossFlag = stdenv.lib.optional
+  malloc0ReturnsNullCrossFlag = lib.optional
     (stdenv.hostPlatform != stdenv.buildPlatform)
     "--enable-malloc0returnsnull";
 in
@@ -20,11 +20,6 @@ self: super:
 {
   bdftopcf = super.bdftopcf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ self.xorgproto ];
-  });
-
-  fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
-    # https://gitlab.freedesktop.org/xorg/app/fonttosfnt/merge_requests/6
-    patches = [ ./fix-uninitialised-memory.patch ];
   });
 
   bitmap = super.bitmap.overrideAttrs (attrs: {
@@ -75,7 +70,7 @@ self: super:
 
   libxcb = super.libxcb.overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ]
-      ++ stdenv.lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
+      ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
     outputs = [ "out" "dev" "man" "doc" ];
   });
 
@@ -85,7 +80,7 @@ self: super:
       ++ malloc0ReturnsNullCrossFlag;
     depsBuildBuild = [
       buildPackages.stdenv.cc
-    ] ++ stdenv.lib.optionals stdenv.hostPlatform.isStatic [
+    ] ++ lib.optionals stdenv.hostPlatform.isStatic [
       (self.buildPackages.stdenv.cc.libc.static or null)
     ];
     preConfigure = ''
@@ -95,7 +90,7 @@ self: super:
       # Remove useless DocBook XML files.
       rm -rf $out/share/doc
     '';
-    CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
+    CPP = lib.optionalString stdenv.isDarwin "clang -E -";
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.xorgproto ];
   });
 
@@ -144,7 +139,7 @@ self: super:
       ++ malloc0ReturnsNullCrossFlag;
     preConfigure = attrs.preConfigure or ""
     # missing transitive dependencies
-    + stdenv.lib.optionalString stdenv.hostPlatform.isStatic ''
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
       export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lXau -lXdmcp"
     '';
   });
@@ -232,9 +227,9 @@ self: super:
   libXi = super.libXi.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" "doc" ];
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.libXfixes ];
-    configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "xorg_cv_malloc0_returns_null=no"
-    ] ++ stdenv.lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
+    ] ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
   });
 
   libXinerama = super.libXinerama.overrideAttrs (attrs: {
@@ -320,7 +315,7 @@ self: super:
   });
 
   libpciaccess = super.libpciaccess.overrideAttrs (attrs: {
-    meta = attrs.meta // { platforms = stdenv.lib.platforms.linux; };
+    meta = attrs.meta // { platforms = lib.platforms.linux; };
   });
 
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
@@ -346,7 +341,7 @@ self: super:
 
   xcbutilcursor = super.xcbutilcursor.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
-    meta = attrs.meta // { maintainers = [ stdenv.lib.maintainers.lovek323 ]; };
+    meta = attrs.meta // { maintainers = [ lib.maintainers.lovek323 ]; };
   });
 
   xcbutilimage = super.xcbutilimage.overrideAttrs (attrs: {
@@ -472,7 +467,7 @@ self: super:
     configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
 
     # 1: compatibility for X11/xkb location
-    # 2: I think pkgconfig/ is supposed to be in /lib/
+    # 2: I think pkg-config/ is supposed to be in /lib/
     postInstall = ''
       ln -s share "$out/etc"
       mkdir -p "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
@@ -594,9 +589,9 @@ self: super:
             url = "mirror://xorg/individual/xserver/xorg-server-1.17.4.tar.bz2";
             sha256 = "0mv4ilpqi5hpg182mzqn766frhi6rw48aba3xfbaj4m82v0lajqc";
           };
-          nativeBuildInputs = [ pkgconfig ];
+          nativeBuildInputs = [ pkg-config ];
           buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
-          meta.platforms = stdenv.lib.platforms.unix;
+          meta.platforms = lib.platforms.unix;
         } else if (abiCompat == "1.18") then {
             name = "xorg-server-1.18.4";
             builder = ./builder.sh;
@@ -604,10 +599,10 @@ self: super:
               url = "mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2";
               sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
             };
-            nativeBuildInputs = [ pkgconfig ];
+            nativeBuildInputs = [ pkg-config ];
             buildInputs = [ xorgproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
-            postPatch = stdenv.lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
-            meta.platforms = stdenv.lib.platforms.unix;
+            postPatch = lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
+            meta.platforms = lib.platforms.unix;
         } else throw "unsupported xorg abiCompat ${abiCompat} for ${attrs_passed.name}";
 
     in attrs //
@@ -646,7 +641,7 @@ self: super:
         propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
-        prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+        prePatch = lib.optionalString stdenv.hostPlatform.isMusl ''
           export CFLAGS+=" -D__uid_t=uid_t -D__gid_t=gid_t"
         '';
         configureFlags = [
@@ -757,7 +752,7 @@ self: super:
     doCheck = false; # fails
     preConfigure = attrs.preConfigure or ""
     # missing transitive dependencies
-    + stdenv.lib.optionalString stdenv.hostPlatform.isStatic ''
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
       export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lxcb -lXau -lXdmcp"
     '';
   });
@@ -821,7 +816,7 @@ self: super:
   });
 
   xorgcffiles = super.xorgcffiles.overrideAttrs (attrs: {
-    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.isDarwin ''
       substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
     '';
   });

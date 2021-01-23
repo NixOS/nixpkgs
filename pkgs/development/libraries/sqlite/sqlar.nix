@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fuse, zlib }:
+{ lib, stdenv, fetchurl, fuse, zlib }:
 
 stdenv.mkDerivation {
   pname = "sqlar";
@@ -11,13 +11,13 @@ stdenv.mkDerivation {
 
   buildInputs = [ fuse zlib ];
 
-  buildFlags = [ "sqlar" "sqlarfs" ];
+  buildFlags = [ "sqlar" "sqlarfs" "CFLAGS=-Wno-error" ];
 
   installPhase = ''
     install -D -t $out/bin sqlar sqlarfs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://sqlite.org/sqlar";
     description = "SQLite Archive utilities";
     license = licenses.bsd2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, faust, libtool }:
+{ stdenv, fetchurl, pkg-config, pure, faust, libtool }:
 
 stdenv.mkDerivation rec {
   baseName = "faust";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "51278a3b0807c4770163dc2ce423507dcf0ffec9cd1c1fbc08426d07294f6ae0";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure faust libtool ];
   makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;

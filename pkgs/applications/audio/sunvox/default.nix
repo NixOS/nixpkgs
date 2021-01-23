@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, unzip, alsaLib, libX11, libXi, SDL2 }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc alsaLib libX11 libXi SDL2 ];
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc alsaLib libX11 libXi SDL2 ];
   arch =
     if stdenv.isAarch64
     then "arm64"

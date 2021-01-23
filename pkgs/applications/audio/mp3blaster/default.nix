@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libvorbis
-  ] ++ stdenv.lib.optional stdenv.isDarwin SDL;
+  ] ++ lib.optional stdenv.isDarwin SDL;
 
   NIX_CFLAGS_COMPILE = toString ([
     "-Wno-narrowing"
-  ] ++ stdenv.lib.optionals stdenv.cc.isClang [
+  ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-reserved-user-defined-literal"
   ]);
 

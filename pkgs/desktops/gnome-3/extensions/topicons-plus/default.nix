@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ eperuffo ];
     homepage = "https://github.com/phocean/TopIcons-plus";
     # Unmaintained and no longer working with GNOME Shell 3.34+
-    broken = stdenv.lib.versionAtLeast gnome3.gnome-shell.version "3.32";
+    broken = lib.versionAtLeast gnome3.gnome-shell.version "3.32";
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL2, SDL2_image, libGLU, libGL, cmake, physfs, boost, zip, zlib, pkg-config }:
+{ lib, stdenv, fetchurl, SDL2, SDL2_image, libGLU, libGL, cmake, physfs, boost, zip, zlib, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "blobby-volley";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     chmod a+x "$out/bin/blobby"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''A blobby volleyball game'';
     license = licenses.bsd3;
     platforms = platforms.linux;

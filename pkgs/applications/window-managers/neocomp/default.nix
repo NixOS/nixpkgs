@@ -17,7 +17,7 @@
 , libXrandr
 , libXrender
 , pcre
-, pkgconfig
+, pkg-config
 }:
 let
   rev   = "v0.6-17-g271e784";
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     libXrandr
     libXrender
     pcre
-    pkgconfig
+    pkg-config
   ];
 
   makeFlags = [

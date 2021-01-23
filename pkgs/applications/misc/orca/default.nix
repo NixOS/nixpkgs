@@ -1,5 +1,5 @@
 { lib, stdenv
-, pkgconfig
+, pkg-config
 , fetchurl
 , buildPythonApplication
 , autoreconfHook
@@ -40,7 +40,7 @@ buildPythonApplication rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "UAX/LhHdH3E/WswZA6JwEZvFjDD9uMn4K8rHFJfGwjw=";
   };
 
@@ -57,7 +57,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     autoreconfHook
     wrapGAppsHook
-    pkgconfig
+    pkg-config
     libxmlxx3
     gettext
     yelp-tools

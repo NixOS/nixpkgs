@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    ${stdenv.lib.optionalString enablePlayer ''
+    ${lib.optionalString enablePlayer ''
       substituteInPlace "./TriblerGUI/vlc.py" --replace "ctypes.CDLL(p)" "ctypes.CDLL('${libvlc}/lib/libvlc.so')"
       substituteInPlace "./TriblerGUI/widgets/videoplayerpage.py" \
         --replace "if vlc and vlc.plugin_path" "if vlc" \
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
         --set NO_AT_BRIDGE 1 \
         --run 'cd $_TRIBLERPATH' \
         --add-flags "-O $out/run_tribler.py" \
-        ${stdenv.lib.optionalString enablePlayer ''
+        ${lib.optionalString enablePlayer ''
           --prefix LD_LIBRARY_PATH : ${libvlc}/lib
         ''}
 

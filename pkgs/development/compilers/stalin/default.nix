@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncompress, libX11 }:
+{ fetchurl, lib, stdenv, ncompress, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "stalin-0.11";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.ece.purdue.edu/~qobi/software.html";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "An optimizing Scheme compiler";
 
     maintainers = [ ];

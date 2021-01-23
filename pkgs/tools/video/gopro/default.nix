@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
     install -Dm755 gopro -t $out/bin
     wrapProgram $out/bin/gopro \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ ffmpeg_3 imagemagick mplayer ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg_3 imagemagick mplayer ]}"
 
     runHook postInstall
   '';

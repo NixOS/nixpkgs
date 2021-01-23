@@ -1,5 +1,5 @@
 { lib, stdenv
-, pkgconfig
+, pkg-config
 , glib
 , libxml2
 , expat
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     gtk-doc
     gobject-introspection
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     python27
     libpng
     expat
-  ] ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
+  ] ++ lib.optional stdenv.isDarwin ApplicationServices;
 
   # Required by .pc file
   propagatedBuildInputs = [

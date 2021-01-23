@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc/orangefs"
     "--enable-shared"
     "--enable-fast"
-    "--with-ssl=${stdenv.lib.getDev openssl}"
+    "--with-ssl=${lib.getDev openssl}"
   ];
 
 

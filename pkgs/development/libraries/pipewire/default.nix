@@ -6,7 +6,7 @@
 , meson
 , ninja
 , systemd
-, pkgconfig
+, pkg-config
 , doxygen
 , graphviz
 , valgrind
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     graphviz
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Server and user space API to deal with multimedia pipelines";
     homepage = "https://pipewire.org/";
     license = licenses.mit;

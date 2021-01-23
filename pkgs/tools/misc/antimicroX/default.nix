@@ -2,7 +2,7 @@
 , lib
 , cmake
 , extra-cmake-modules
-, pkgconfig
+, pkg-config
 , SDL2
 , qtbase
 , qttools
@@ -23,7 +23,7 @@ mkDerivation rec {
     sha256 = "05asxlkgb4cgvpcyksw1cx8cz8nzi8hmw8b91lw92892j7a2r7wj";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig itstool ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config itstool ];
   buildInputs = [
     SDL2
     qtbase

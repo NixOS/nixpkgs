@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, xorg, xorgproto, cairo, lv2, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, xorg, xorgproto, cairo, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "GxMatchEQ.lv2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0azdmgzqwjn26nx38iw13666a1i4y2bv39wk89pf6ihdi46klf72";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorg.libX11 xorgproto cairo lv2
   ];

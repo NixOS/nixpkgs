@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, gcc, gcc-unwrapped }:
+{ lib, stdenv, fetchurl, cmake, gcc, gcc-unwrapped }:
 
 stdenv.mkDerivation rec {
   version = "3.2.1";
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   meta = {
      description = "An evolutionary simulation framework";
      homepage = "https://messerlab.org/slim/";
-     license = with stdenv.lib.licenses; [ gpl3 ];
-     maintainers = with stdenv.lib.maintainers; [ bzizou ];
-     platforms = stdenv.lib.platforms.all;
+     license = with lib.licenses; [ gpl3 ];
+     maintainers = with lib.maintainers; [ bzizou ];
+     platforms = lib.platforms.all;
   };
 }

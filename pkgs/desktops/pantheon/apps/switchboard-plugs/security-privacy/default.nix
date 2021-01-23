@@ -5,7 +5,7 @@
 , meson
 , python3
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , granite
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, pkgconfig, libftdi1
+, pkg-config, libftdi1
 , python3, pypy3
 
 # PyPy yields large improvements in build time and runtime performance, and
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vxhqs2fampglg3xlfwb35229iv96kvlwp1gyxrdrmlpznhkqdrk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ passthru.pythonPkg libftdi1 ];
   makeFlags = [ "PREFIX=$(out)" ];
 

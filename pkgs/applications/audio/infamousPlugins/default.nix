@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, cairomm, cmake, lv2, libpthreadstubs, libXdmcp, libXft, ntk, pcre, fftwFloat, zita-resampler }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, cairomm, cmake, lv2, libpthreadstubs, libXdmcp, libXft, ntk, pcre, fftwFloat, zita-resampler }:
 
 stdenv.mkDerivation rec {
   pname = "infamousPlugins";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       sha256 = "08xwh6px13y1gykaw103nhvjms7vgbgkcm0avh9f5d2d7aadq0l2";
     })
   ];
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ cairomm lv2 libpthreadstubs libXdmcp libXft ntk pcre fftwFloat zita-resampler ];
 
   meta = with lib; {

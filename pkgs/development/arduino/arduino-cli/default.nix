@@ -21,7 +21,7 @@ let
 
     buildFlagsArray = [
       "-ldflags=-s -w -X github.com/arduino/arduino-cli/version.versionString=${version} -X github.com/arduino/arduino-cli/version.commit=unknown"
-    ] ++ stdenv.lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];
+    ] ++ lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];
 
     meta = with lib; {
       inherit (src.meta) homepage;

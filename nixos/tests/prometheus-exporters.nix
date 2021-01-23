@@ -423,7 +423,7 @@ let
       exporterConfig = {
         enable = true;
         passwordFile = "/var/nextcloud-pwfile";
-        url = "http://localhost/negative-space.xml";
+        url = "http://localhost";
       };
       metricProvider = {
         systemd.services.nc-pwfile = let
@@ -441,6 +441,7 @@ let
             basicAuth.nextcloud-exporter = "snakeoilpw";
             locations."/" = {
               root = "${pkgs.prometheus-nextcloud-exporter.src}/serverinfo/testdata";
+              tryFiles = "/negative-space.xml =404";
             };
           };
         };

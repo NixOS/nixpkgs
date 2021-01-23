@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
   in ''
     mkdir -p $out/bin
     makeWrapper ${env}/bin/gollum $out/bin/gollum \
-      --prefix PATH ":" ${stdenv.lib.makeBinPath [ git ]}
+      --prefix PATH ":" ${lib.makeBinPath [ git ]}
     makeWrapper ${env}/bin/gollum-migrate-tags $out/bin/gollum-migrate-tags \
-      --prefix PATH ":" ${stdenv.lib.makeBinPath [ git ]}
+      --prefix PATH ":" ${lib.makeBinPath [ git ]}
   '';
 
   passthru.updateScript = bundlerUpdateScript "gollum";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, postgresql, libgcrypt, pam }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, postgresql, libgcrypt, pam }:
 
 stdenv.mkDerivation rec {
   pname = "pam_pgsql";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a68krq5m07zspdxwl1wmkr5j98zr9bdg4776kvplrsdcg97h4jk";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libgcrypt pam postgresql ];
 
   meta = with lib; {

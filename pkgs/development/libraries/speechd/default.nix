@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
-, pkgconfig
+, pkg-config
 , fetchurl
 , python3Packages
 , gettext
@@ -24,7 +24,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
   inherit (python3Packages) python pyxdg wrapPython;
 
   # speechd hard-codes espeak, even when built without support for it.
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     gettext
     libtool
@@ -110,7 +110,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Common interface to speech synthesis";
     homepage = "https://devel.freebsoft.org/speechd";
     license = licenses.gpl2Plus;

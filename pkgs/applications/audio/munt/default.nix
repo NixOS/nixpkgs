@@ -15,7 +15,7 @@ in mkDerivation rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = with stdenv.lib.versions; "libmt32emu_${major version}_${minor version}_${patch version}";
+    rev = with lib.versions; "libmt32emu_${major version}_${minor version}_${patch version}";
     sha256 = "0bszhkbz24hhx32f973l6h5lkyn4lxhqrckiwmv765d1sba8n5bk";
   };
 

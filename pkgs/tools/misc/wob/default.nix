@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland ];
   buildInputs = [ wayland-protocols ]
-    ++ stdenv.lib.optional stdenv.isLinux libseccomp;
+    ++ lib.optional stdenv.isLinux libseccomp;
 
-  mesonFlags = stdenv.lib.optional stdenv.isLinux "-Dseccomp=enabled";
+  mesonFlags = lib.optional stdenv.isLinux "-Dseccomp=enabled";
 
   meta = with lib; {
     description = "A lightweight overlay bar for Wayland";

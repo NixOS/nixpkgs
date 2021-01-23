@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, gmp, gnum4
+{ lib, stdenv, buildPackages, gmp, gnum4
 
 # Version specific args
 , version, src
@@ -22,10 +22,10 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
-  patches = stdenv.lib.optional (stdenv.hostPlatform.system == "i686-cygwin")
+  patches = lib.optional (stdenv.hostPlatform.system == "i686-cygwin")
               ./cygwin.patch;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cryptographic library";
 
     longDescription = ''
@@ -61,7 +61,7 @@ stdenv.mkDerivation ({
 
 //
 
-stdenv.lib.optionalAttrs stdenv.isSunOS {
+lib.optionalAttrs stdenv.isSunOS {
   # Make sure the right <gmp.h> is found, and not the incompatible
   # /usr/include/mp.h from OpenSolaris.  See
   # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>

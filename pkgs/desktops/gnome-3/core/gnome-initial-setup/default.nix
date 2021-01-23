@@ -4,7 +4,7 @@
 , gettext
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , gnome3
 , accountsservice
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-qliJJ0+LC23moFErR3Qrgqw0ANrsgt1O/+LuonRko7g=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     systemd
     wrapGAppsHook
   ];

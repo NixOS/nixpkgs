@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib, stdenv, sip, qtbase, pyqt5, poppler, pkgconfig, fetchpatch
+{ buildPythonPackage, fetchPypi, lib, stdenv, sip, qtbase, pyqt5, poppler, pkg-config, fetchpatch
 , substituteAll
 }:
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [ qtbase.dev poppler ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ sip pyqt5.dev ];
 
   # no tests, just bindings for `poppler_qt5`

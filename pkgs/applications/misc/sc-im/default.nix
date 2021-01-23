@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, yacc, ncurses, libxml2, libzip, libxls, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, yacc, ncurses, libxml2, libzip, libxls, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "0.7.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xi0n9qzby012y2j7hg4fgcwyly698sfi4i9gkvy0q682jihprbk";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ yacc ncurses libxml2 libzip libxls ];
 
   buildPhase = ''

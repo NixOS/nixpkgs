@@ -21,7 +21,7 @@ nodePackages."${packageName}".override {
 
   meta = with lib; {
     description = "Version controlled multi-cluster deployment manager for kubernetes";
-    maintainers = with maintainers; [ kampka ];
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
   };
 }

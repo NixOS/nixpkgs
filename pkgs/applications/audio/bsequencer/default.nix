@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, xorg, cairo, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "BSEQuencer";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hagnn104ybzdp13r95idw20fhmzif8p3kmiypnr20m6c64rdd29";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorg.libX11 cairo lv2
   ];

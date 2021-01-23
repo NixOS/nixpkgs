@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     # grub-install isn't smart enough.
     ./symlink.patch
   ]
-  ++ (stdenv.lib.optional buggyBiosCDSupport ./buggybios.patch)
+  ++ (lib.optional buggyBiosCDSupport ./buggybios.patch)
   ++ map fetchurl (import ./grub1.patches.nix)
   ;
 

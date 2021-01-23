@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl, cmake, pkgconfig
+{ mkDerivation, lib, stdenv, fetchurl, cmake, pkg-config
 , alsaLib, fftw, flac, lame, libjack2, libmad, libpulseaudio
 , libsamplerate, libsndfile, libvorbis, portaudio, qtbase, wavpack
 }:
@@ -11,7 +11,7 @@ mkDerivation {
     sha256 = "12f7x8kw4fw1j0xkwjrp54cy4cv1ql0zwz2ba5arclk4pf6bhl7q";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ alsaLib fftw flac.dev libjack2 lame
                   libmad libpulseaudio libsamplerate.dev libsndfile.dev libvorbis
                   portaudio qtbase wavpack ];

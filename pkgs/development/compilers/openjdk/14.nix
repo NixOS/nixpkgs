@@ -55,6 +55,7 @@ let
 
     configureFlags = [
       "--with-boot-jdk=${openjdk14-bootstrap.home}"
+      "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
@@ -140,7 +141,7 @@ let
 
     disallowedReferences = [ openjdk14-bootstrap ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://openjdk.java.net/";
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";

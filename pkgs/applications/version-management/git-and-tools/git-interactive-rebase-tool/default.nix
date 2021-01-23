@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0jc6mhszxmwsdjk73wkfi0jjp9vkzzl9kk0dbnry6w7dyr5if8cc";
 
-  buildInputs = [ ncurses5 ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [ ncurses5 ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   cargoParallelTestThreads = false;
 

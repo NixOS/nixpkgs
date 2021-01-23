@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, gtk3, wrapGAppsHook
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gnome3, gtk3, wrapGAppsHook
 , librsvg, libgnome-games-support, gettext, itstool, libxml2, python3, vala }:
 
 stdenv.mkDerivation rec {
@@ -6,12 +6,12 @@ stdenv.mkDerivation rec {
   version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/five-or-more/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/five-or-more/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "19pf8wzbf3ciqf2k4bj9sddvyhckfd62x86pnqr6s8h4vn9jc6ii";
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool libxml2 python3 wrapGAppsHook
+    meson ninja pkg-config gettext itstool libxml2 python3 wrapGAppsHook
     vala
   ];
   buildInputs = [

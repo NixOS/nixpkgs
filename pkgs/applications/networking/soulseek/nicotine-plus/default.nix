@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, python27Packages, geoip }:
+{ lib, stdenv, fetchFromGitHub, python27Packages, geoip }:
 
-with stdenv.lib;
+with lib;
 
 python27Packages.buildPythonApplication {
   pname = "nicotine-plus";

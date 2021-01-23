@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, boost, gnuradio
 , pythonSupport ? true, python, swig, limesuite, log4cpp
 } :
 
@@ -20,12 +20,12 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
-  ] ++ stdenv.lib.optionals pythonSupport [ swig ];
+    pkg-config
+  ] ++ lib.optionals pythonSupport [ swig ];
 
   buildInputs = [
     boost gnuradio limesuite log4cpp
-  ] ++ stdenv.lib.optionals pythonSupport [ python ];
+  ] ++ lib.optionals pythonSupport [ python ];
 
 
   meta = with lib; {

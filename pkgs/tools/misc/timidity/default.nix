@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, libjack2, ncurses, pkgconfig }:
+{ lib, stdenv, fetchurl, alsaLib, libjack2, ncurses, pkg-config }:
 
 stdenv.mkDerivation {
   name = "timidity-2.15.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   patches = [ ./timidity-iA-Oj.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsaLib libjack2 ncurses ];
 
   configureFlags = [ "--enable-audio=oss,alsa,jack" "--enable-alsaseq" "--with-default-output=alsa" "--enable-ncurses" ];

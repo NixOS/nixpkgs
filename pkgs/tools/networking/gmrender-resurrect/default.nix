@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, makeWrapper, gstreamer
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, makeWrapper, gstreamer
 , gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav, libupnp }:
 
 let
@@ -28,7 +28,7 @@ in
     ];
 
     buildInputs = [ gstreamer libupnp ];
-    nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
+    nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
 
     postInstall = ''
       for prog in "$out/bin/"*; do

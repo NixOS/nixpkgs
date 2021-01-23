@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, libsodium, libseccomp, sqlite, pkgconfig
+{ lib, fetchFromGitHub, rustPlatform, libsodium, libseccomp, sqlite, pkg-config
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1jvaavhjyalnh10vfhrdyqg1jnl8b4a3gnp8a31bgi3mb0v466k3";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libsodium libseccomp sqlite ];
 

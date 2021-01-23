@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, jre, makeWrapper
-, mysqlSupport ? true, mysql_jdbc ? null }:
+{ lib, stdenv, fetchurl, jre, makeWrapper
+, mysqlSupport ? true, mysql_jdbc
+, postgresqlSupport ? true, postgresql_jdbc }:
 
-assert mysqlSupport -> mysql_jdbc != null;
-
-with stdenv.lib;
 let
-  extraJars = optional mysqlSupport mysql_jdbc;
+  extraJars =
+    lib.optional mysqlSupport mysql_jdbc
+    ++ lib.optional postgresqlSupport postgresql_jdbc;
 in
 
 stdenv.mkDerivation rec {
@@ -47,15 +47,15 @@ stdenv.mkDerivation rec {
       # taken from the executable script in the source
       CP="$out/liquibase.jar"
       ${addJars "$out/lib"}
-      ${concatStringsSep "\n" (map (p: addJars "${p}/share/java") extraJars)}
+      ${lib.concatStringsSep "\n" (map (p: addJars "${p}/share/java") extraJars)}
 
-      ${getBin jre}/bin/java -cp "\$CP" \$JAVA_OPTS \
+      ${lib.getBin jre}/bin/java -cp "\$CP" \$JAVA_OPTS \
         liquibase.integration.commandline.Main \''${1+"\$@"}
       EOF
       chmod +x $out/bin/liquibase
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Version Control for your database";
     homepage = "https://www.liquibase.org/";
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${version}/changelog.txt";

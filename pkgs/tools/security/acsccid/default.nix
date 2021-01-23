@@ -6,7 +6,7 @@
 , gettext
 , flex
 , perl
-, pkgconfig
+, pkg-config
 , pcsclite
 , libusb1
 , libiconv
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoconf
     automake
     libtool
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pcsclite
     libusb1
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
   ];
 

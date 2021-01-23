@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
+{ lib, stdenv, fetchurl, pkg-config, libevent, openssl, zlib, torsocks
 , libseccomp, systemd, libcap, lzma, zstd, scrypt, nixosTests
 , writeShellScript
 
@@ -15,7 +15,7 @@
 }:
 let
   tor-client-auth-gen = writeShellScript "tor-client-auth-gen" ''
-    PATH="${stdenv.lib.makeBinPath [coreutils gnugrep openssl]}"
+    PATH="${lib.makeBinPath [coreutils gnugrep openssl]}"
     pem="$(openssl genpkey -algorithm x25519)"
 
     printf private_key=descriptor:x25519:
@@ -39,17 +39,17 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "geoip" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
-    stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
+    lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
   # cross compiles correctly but needs the following
-  configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
     "--disable-tool-name-check";
 
-  NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
+  NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \

@@ -2,10 +2,10 @@
 , coreutils
 , fetchurl
 , makeWrapper
-, pkgconfig
+, pkg-config
 }:
 
-with stdenv.lib.strings;
+with lib.strings;
 
 let
 
@@ -159,7 +159,7 @@ let
 
     stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ pkg-config ];
       buildInputs = [ makeWrapper ];
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;

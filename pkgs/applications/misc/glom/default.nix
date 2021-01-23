@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , autoconf
 , automake
 , libtool
@@ -54,12 +54,12 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "doc" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1wcd4kd3crwqjv0jfp73jkyyf5ws8mvykg37kqxmcb58piz21gsk";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoconf
     automake
     libtool
@@ -101,7 +101,7 @@ in stdenv.mkDerivation rec {
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
-    "--with-boost-python=boost_python${stdenv.lib.versions.major python3.version}${stdenv.lib.versions.minor python3.version}"
+    "--with-boost-python=boost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}"
   ];
 
   makeFlags = [

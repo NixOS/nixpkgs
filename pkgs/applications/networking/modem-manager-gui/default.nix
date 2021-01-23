@@ -1,5 +1,5 @@
 { lib, stdenv
-, pkgconfig
+, pkg-config
 , python3
 , fetchFromGitLab
 , gtk3
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python3
     perlPackages.Po4a
     itstool

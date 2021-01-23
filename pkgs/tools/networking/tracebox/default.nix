@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.tracebox.org/";
     description = "A middlebox detection tool";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ maintainers.lethalman ];
     platforms = platforms.linux;
   };

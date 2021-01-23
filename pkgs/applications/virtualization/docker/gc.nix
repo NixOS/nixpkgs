@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp docker-gc $out/bin
     chmod +x $out/bin/docker-gc
     wrapProgram $out/bin/docker-gc \
-        --prefix PATH : "${stdenv.lib.makeBinPath [ docker coreutils procps gnused findutils gnugrep ]}"
+        --prefix PATH : "${lib.makeBinPath [ docker coreutils procps gnused findutils gnugrep ]}"
   '';
 
   meta = {

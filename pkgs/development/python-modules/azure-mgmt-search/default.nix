@@ -4,28 +4,31 @@
 , msrest
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-search";
-  version = "3.0.0";
+  version = "8.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "d4c78b14b48edd2e27e2068c9a448acfc84a18595be77fe483afe7bb447e1eb6";
+    sha256 = "a96d50c88507233a293e757202deead980c67808f432b8e897c4df1ca088da7e";
   };
 
   propagatedBuildInputs = [
+    azure-common
+    azure-mgmt-core
+    azure-mgmt-nspkg
     msrest
     msrestazure
-    azure-common
-    azure-mgmt-nspkg
   ];
 
   # has no tests
   doCheck = false;
+  pythonImportsCheck = [ "azure.mgmt.search" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Search Management Client Library";

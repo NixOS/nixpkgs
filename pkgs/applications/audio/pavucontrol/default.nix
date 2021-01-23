@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, lib, stdenv, pkgconfig, intltool, libpulseaudio,
+{ fetchurl, fetchpatch, lib, stdenv, pkg-config, intltool, libpulseaudio,
 gtkmm3 , libcanberra-gtk3, gnome3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpulseaudio gtkmm3 libcanberra-gtk3
                   gnome3.adwaita-icon-theme ];
 
-  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
 
   configureFlags = [ "--disable-lynx" ];
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
     homepage = "http://freedesktop.org/software/pulseaudio/pavucontrol/";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = with maintainers; [ abbradar globin ];
     platforms = platforms.linux;

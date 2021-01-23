@@ -1,7 +1,7 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
 xercesc, ode, eigen, qtbase, qttools, qtwebengine, qtxmlpatterns, wrapQtAppsHook,
 opencascade-occt, gts, hdf5, vtk, medfile, zlib, python3Packages, swig,
-gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkgconfig, mpi ? null }:
+gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkg-config, mpi ? null }:
 
 assert mpi != null;
 
@@ -21,7 +21,7 @@ in mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
-    pkgconfig
+    pkg-config
     pythonPackages.pyside2-tools
     wrapQtAppsHook
   ];
@@ -33,6 +33,7 @@ in mkDerivation rec {
   ] ++ (with pythonPackages; [
     matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
     GitPython # for addon manager
+    scipy pyyaml # (at least for) PyrateWorkbench
   ]);
 
   cmakeFlags = [

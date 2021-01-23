@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, boost, pkgconfig, scons, util-linux, fuse, libevent, openssl, zlib }:
+{ lib, stdenv, fetchurl, boost, pkg-config, scons, util-linux, fuse, libevent, openssl, zlib }:
 
 stdenv.mkDerivation {
   version = "0.8.1";
@@ -9,8 +9,8 @@ stdenv.mkDerivation {
     sha256 = "8ce1a3dfbb6d1538885e993616bdfe71be44711d48f7f6798ff6bc0a39b3deca";
   };
 
-  buildInputs = [ 
-    boost pkgconfig scons util-linux fuse libevent openssl zlib
+  buildInputs = [
+    boost pkg-config scons util-linux fuse libevent openssl zlib
   ];
 
   buildPhase = ''

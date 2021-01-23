@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, which, zlib, openssl, libarchive }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, which, zlib, openssl, libarchive }:
 
 stdenv.mkDerivation rec {
   pname = "xbps";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pab3xf97y4wqlyrb92zxd3cfsrbnlx6pssbw4brgwcxccw9jrhy";
   };
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkg-config which ];
 
   buildInputs = [ zlib openssl libarchive ];
 

@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, lib, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+{ fetchurl, fetchpatch, lib, stdenv, pkg-config, libgcrypt, libassuan, libksba
 , libgpgerror, libiconv, npth, gettext, texinfo, buildPackages
 
 # Each of the dependencies below are optional.
@@ -9,7 +9,7 @@
 null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert guiSupport -> pinentry != null && enableMinimal == false;
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig texinfo ];
+  nativeBuildInputs = [ pkg-config texinfo ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext
     readline libusb1 gnutls adns openldap zlib bzip2 sqlite
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
     # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
-  '' + stdenv.lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
-    sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+  '' + lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
+    sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";

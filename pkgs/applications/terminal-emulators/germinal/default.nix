@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
     runHook preFixup
     wrapProgram $out/bin/germinal \
-     --prefix PATH ":" "${stdenv.lib.makeBinPath [ tmux ]}" \
+     --prefix PATH ":" "${lib.makeBinPath [ tmux ]}" \
       "''${gappsWrapperArgs[@]}"
     runHook postFixup
   '';

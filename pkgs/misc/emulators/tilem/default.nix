@@ -3,7 +3,7 @@
 , lib
 , libarchive
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , glib
 , libusb1
 , darwin
@@ -20,7 +20,7 @@ let
       url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
       sha256 = "0y080v12bm81wgjm6fnw7q0yg7scphm8hhrls9njcszj7fkscv9i";
     };
-    nativeBuildInputs = [ autoreconfHook pkgconfig ];
+    nativeBuildInputs = [ autoreconfHook pkg-config ];
     buildInputs = [ glib ];
     configureFlags = [ "--enable-iconv" ];
   };
@@ -31,7 +31,7 @@ let
       url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
       sha256 = "08j5di0cgix9vcpdv7b8xhxdjkk9zz7fqfnv3l4apk3jdr8vcvqc";
     };
-    nativeBuildInputs = [ autoreconfHook pkgconfig ];
+    nativeBuildInputs = [ autoreconfHook pkg-config ];
     buildInputs = [ glib libusb1 ];
     configureFlags = [ "--enable-libusb10" ];
   };
@@ -42,7 +42,7 @@ let
       url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
       sha256 = "08c9wgrdnyqcs45mx1bjb8riqq81bzfkhgaijxzn96rhpj40fy3n";
     };
-    nativeBuildInputs = [ autoreconfHook pkgconfig ];
+    nativeBuildInputs = [ autoreconfHook pkg-config ];
     buildInputs = [ glib libticables2 libticonv libtifiles2 lzma bzip2 ]
       ++ lib.optionals stdenv.isLinux [ acl ]
       ++ lib.optionals stdenv.isDarwin [ darwin.libobjc ];
@@ -54,7 +54,7 @@ let
       url = "mirror://sourceforge/tilp/${pname}-${version}.tar.bz2";
       sha256 = "10n9mhlabmaw3ha5ckllxfy6fygs2pmlmj5v6w5v62bvx54kpils";
     };
-    nativeBuildInputs = [ autoreconfHook pkgconfig ];
+    nativeBuildInputs = [ autoreconfHook pkg-config ];
     buildInputs = [ glib libticonv libarchive lzma bzip2 ];
   };
 in
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "1ba38xzhp3yf21ip3cgql6jzy49jc34sfnjsl4syxyrd81d269zw";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib gnome2.gtk libticonv libtifiles2 libticables2 libticalcs2 ];
   NIX_CFLAGS_COMPILE = [ "-lm" ];
   meta = with lib; {

@@ -18,6 +18,6 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/jessek/hashdeep";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
-    maintainers = [ stdenv.lib.maintainers.karantan ];
+    maintainers = [ lib.maintainers.karantan ];
   };
 }

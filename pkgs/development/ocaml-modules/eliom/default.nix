@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, which, ocsigen_server, ocaml,
+{ stdenv, lib, fetchzip, which, ocsigen_server, ocaml,
   lwt_react,
   opaline, ppx_deriving, findlib
 , ppx_tools_versioned
@@ -8,7 +8,7 @@
 , lwt_ppx
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.07"
+if !lib.versionAtLeast ocaml.version "4.07"
 then throw "eliom is not available for OCaml ${ocaml.version}"
 else
 
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec
     distinguish both parts and the client side is compiled to JS using
     Ocsigen Js_of_ocaml.'';
 
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
 
-    maintainers = [ stdenv.lib.maintainers.gal_bolle ];
+    maintainers = [ lib.maintainers.gal_bolle ];
   };
 }

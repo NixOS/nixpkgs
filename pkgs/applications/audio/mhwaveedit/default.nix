@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, SDL, alsaLib, autoreconfHook, gtk2, libjack2, ladspaH
-, ladspaPlugins, libsamplerate, libsndfile, pkgconfig, libpulseaudio, lame
+, ladspaPlugins, libsamplerate, libsndfile, pkg-config, libpulseaudio, lame
 , vorbis-tools }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "037pbq23kh8hsih994x2sv483imglwcrqrx6m8visq9c46fi0j1y";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
 
   preAutoreconf = "(cd docgen && sh gendocs.sh)";
 

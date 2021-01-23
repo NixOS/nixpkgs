@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl libassuan libgcrypt ]
-    ++ stdenv.lib.optional doCheck
+    ++ lib.optional doCheck
       ([ gnupg opensshUnsafe which socat cpio hexdump procps lockfileProgs ] ++
       (with perlPackages; [ CryptOpenSSLRSA CryptOpenSSLBignum ]));
 
@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
   # but they aren't enabled by default because they "drain" entropy (GnuPG
   # still uses /dev/random).
   doCheck = false;
-  preCheck = stdenv.lib.optionalString doCheck ''
+  preCheck = lib.optionalString doCheck ''
     patchShebangs tests/
     patchShebangs src/
     sed -i \
@@ -64,12 +64,12 @@ in stdenv.mkDerivation rec {
               CryptOpenSSLRSA
               CryptOpenSSLBignum
             ])
-          + stdenv.lib.optionalString
+          + lib.optionalString
               (builtins.length runtimeDeps > 0)
-              " --prefix PATH : ${stdenv.lib.makeBinPath runtimeDeps}";
+              " --prefix PATH : ${lib.makeBinPath runtimeDeps}";
         wrapMonkeysphere = runtimeDeps: program:
           "wrapProgram $out/bin/${program} ${wrapperArgs runtimeDeps}\n";
-        wrapPrograms = runtimeDeps: programs: stdenv.lib.concatMapStrings
+        wrapPrograms = runtimeDeps: programs: lib.concatMapStrings
           (wrapMonkeysphere runtimeDeps)
           programs;
     in wrapPrograms [ gnupg ] [ "monkeysphere-authentication" "monkeysphere-host" ]

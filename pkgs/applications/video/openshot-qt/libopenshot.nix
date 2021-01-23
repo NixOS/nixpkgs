@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, pkgconfig, cmake, doxygen
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, pkg-config, cmake, doxygen
 , libopenshot-audio, imagemagick, ffmpeg_3
 , swig, python3
 , unittest-cpp, cppzmq, zeromq
@@ -7,7 +7,7 @@
 , llvmPackages
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "libopenshot";
   version = "0.2.5";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     export _REL_PYTHON_MODULE_PATH=$(toPythonPath $out)
   '';
 
-  nativeBuildInputs = [ pkgconfig cmake doxygen ];
+  nativeBuildInputs = [ pkg-config cmake doxygen ];
 
   buildInputs =
   [ imagemagick ffmpeg_3 swig python3 unittest-cpp

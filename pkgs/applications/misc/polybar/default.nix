@@ -1,4 +1,4 @@
-{ cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
+{ cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkg-config
 , python3, lib, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
 , xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
 , removeReferencesTo
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     '' else "";
 
     nativeBuildInputs = [
-      cmake pkgconfig removeReferencesTo
+      cmake pkg-config removeReferencesTo
     ];
 
     postFixup = ''

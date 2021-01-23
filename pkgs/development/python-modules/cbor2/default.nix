@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytestcov, setuptools_scm }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pytest-cov
+, setuptools_scm
+}:
 
 buildPythonPackage rec {
   pname = "cbor2";
@@ -10,12 +16,16 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ setuptools_scm ];
-  checkInputs = [ pytest pytestcov ];
 
-  checkPhase = "pytest";
+  checkInputs = [
+    pytest-cov
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "cbor2" ];
 
   meta = with lib; {
-    description = "Pure Python CBOR (de)serializer with extensive tag support";
+    description = "Python CBOR (de)serializer with extensive tag support";
     homepage = "https://github.com/agronholm/cbor2";
     license = licenses.mit;
     maintainers = with maintainers; [ taneb ];

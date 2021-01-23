@@ -1,4 +1,4 @@
-{lib, stdenv, substituteAll, fetchFromGitHub, pkgconfig, gettext, glib, gtk3, gmtk, dbus, dbus-glib
+{lib, stdenv, substituteAll, fetchFromGitHub, pkg-config, gettext, glib, gtk3, gmtk, dbus, dbus-glib
 , libnotify, libpulseaudio, mplayer, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qvy9fllvg1mad6y1j79iaqa6khs0q2cb0z62yfg4srbr07fi8xr";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config gettext wrapGAppsHook ];
   buildInputs = [ glib gtk3 gmtk dbus dbus-glib libnotify libpulseaudio ];
 
   patches = [

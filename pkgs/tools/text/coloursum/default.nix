@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1w0q5w0bf1682jvzcml8cgmr9mrgi4if0p63wzchyjav330dp6pk";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "Colourise your checksum output";

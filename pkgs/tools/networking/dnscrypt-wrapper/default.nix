@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libsodium, libevent }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libsodium, libevent }:
 
 stdenv.mkDerivation rec {
   pname = "dnscrypt-wrapper";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ libsodium libevent ];
 
   meta = with lib; {

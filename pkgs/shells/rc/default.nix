@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ncurses ]
-    ++ stdenv.lib.optionals (readline != null) [ readline ];
+    ++ lib.optionals (readline != null) [ readline ];
 
   configureFlags = [
     "--enable-def-interp=${stdenv.shell}" #183
-    ] ++ stdenv.lib.optionals historySupport [ "--with-history" ]
-    ++ stdenv.lib.optionals (readline != null) [ "--with-edit=readline" ];
+    ] ++ lib.optionals historySupport [ "--with-history" ]
+    ++ lib.optionals (readline != null) [ "--with-edit=readline" ];
 
   prePatch = ''
     substituteInPlace configure.ac \

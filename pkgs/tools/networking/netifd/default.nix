@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE \
-      -I$(echo "${stdenv.lib.getDev libnl}"/include/libnl*/)"
+      -I$(echo "${lib.getDev libnl}"/include/libnl*/)"
   '';
 
   meta = with lib; {

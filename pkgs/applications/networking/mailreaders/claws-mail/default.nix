@@ -1,7 +1,7 @@
-{ config, fetchurl, stdenv, wrapGAppsHook, autoreconfHook
+{ lib, config, fetchurl, stdenv, wrapGAppsHook, autoreconfHook
 , curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme, gumbo
 , libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
-, openldap, perl, pkgconfig, poppler, python, shared-mime-info
+, openldap, perl, pkg-config, poppler, python, shared-mime-info
 , glib-networking, gsettings-desktop-schemas, libSM, libytnef, libical
 # Build options
 # TODO: A flag to build the manual.
@@ -27,7 +27,7 @@
 , enableSpellcheck ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "claws-mail";
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook python.pkgs.wrapPython ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook python.pkgs.wrapPython ];
   propagatedBuildInputs = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
 
   buildInputs =

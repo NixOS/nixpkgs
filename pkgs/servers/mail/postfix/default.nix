@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     ./relative-symlinks.patch
   ];
 
-  postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -e 's!bin/postconf!${buildPackages.postfix}/bin/postconf!' -i postfix-install
   '' + ''
     sed -e '/^PATH=/d' -i postfix-install

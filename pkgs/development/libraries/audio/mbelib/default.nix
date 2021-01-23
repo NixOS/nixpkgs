@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "mbelib";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "P25 Phase 1 and ProVoice vocoder";
     homepage = https://github.com/szechyjs/mbelib;
     license = licenses.isc;

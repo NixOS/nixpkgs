@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, alsaLib, boost, bzip2, fftw, fftwFloat, libfishsound
 , libid3tag, liblo, libmad, liboggz, libpulseaudio, libsamplerate
 , libsndfile, lrdf, opusfile, portaudio, rubberband, serd, sord, capnproto
-, wrapQtAppsHook, pkgconfig
+, wrapQtAppsHook, pkg-config
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       portaudio rubberband serd sord capnproto
     ];
 
-  nativeBuildInputs = [ pkgconfig wrapQtAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapQtAppsHook ];
 
   enableParallelBuilding = true;
 

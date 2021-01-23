@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, pidgin } :
+{ lib, stdenv, fetchgit, pkg-config, pidgin } :
 
 let
   version = "54b2992";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "1adq57g11kw7bfpivyvfk3nlpjkc8raiw4bzn3gn4nx3m0wl99vw";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pidgin ];
 
   postPatch = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/dreadatour/pidgin-mra";
     description = "Mail.ru Agent plugin for Pidgin / libpurple";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

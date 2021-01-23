@@ -8,11 +8,11 @@
 #
 # See also <nixos/modules/profiles/hardened.nix>
 
-{ stdenv, version }:
+{ lib, stdenv, version }:
 
-with stdenv.lib;
-with stdenv.lib.kernel;
-with (stdenv.lib.kernel.whenHelpers version);
+with lib;
+with lib.kernel;
+with (lib.kernel.whenHelpers version);
 
 assert (versionAtLeast version "4.9");
 

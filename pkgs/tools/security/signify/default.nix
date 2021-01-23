@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, libbsd, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, libbsd, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "signify";
-  version = "25";
+  version = "30";
 
   src = fetchFromGitHub {
     owner = "aperezdc";
     repo = "signify";
     rev = "v${version}";
-    sha256 = "0zg0rffxwj2a71s1bllhrn491xsmirg9sshpq8f3vl25lv4c2cnq";
+    sha256 = "02xh6x6rszkvk3rf6zai7n3ivchmw0d8mwllpinjxc7k6sd415c3";
   };
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libbsd ];
 
   preInstall = ''

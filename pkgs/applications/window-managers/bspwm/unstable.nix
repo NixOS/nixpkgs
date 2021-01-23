@@ -24,8 +24,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A tiling window manager based on binary space partitioning (git version)";
     homepage = "https://github.com/baskerville/bspwm";
-    maintainers = [ stdenv.lib.maintainers.meisternu stdenv.lib.maintainers.epitrochoid ];
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.meisternu lib.maintainers.epitrochoid ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
   };
 }

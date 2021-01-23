@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf ]
-    ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
+    ++ lib.optional stdenv.isDarwin Cocoa;
 
   meta = with lib; {
     description = "Free/Libre Action Roleplaying Engine";

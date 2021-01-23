@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, meson, ninja, pkgconfig, gettext, libxslt, docbook_xsl_ns
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, meson, ninja, pkg-config, gettext, libxslt, docbook_xsl_ns
 , libcap, libidn2
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   version = "20200821";
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     # Disable idn usage w/musl (https://github.com/iputils/iputils/pull/111):
     ++ optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext libxslt.bin docbook_xsl_ns ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext libxslt.bin docbook_xsl_ns ];
   buildInputs = [ libcap ]
     ++ optional (!stdenv.hostPlatform.isMusl) libidn2;
 

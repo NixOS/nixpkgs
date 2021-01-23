@@ -5,7 +5,7 @@
 , meson
 , ninja
 , vala
-, pkgconfig
+, pkg-config
 , libgee
 , pantheon
 , gtk3
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

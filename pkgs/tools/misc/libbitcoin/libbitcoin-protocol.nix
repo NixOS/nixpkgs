@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , boost, libbitcoin, secp256k1, zeromq }:
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
     sha256 = "1ln9r04hlnc7qmv17rakyhrnzw1a541pg5jc1sw3ccn90a5x6cfv";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libbitcoin secp256k1 ];
   propagatedBuildInputs = [ zeromq ];
 

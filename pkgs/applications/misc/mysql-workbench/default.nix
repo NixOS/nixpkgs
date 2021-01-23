@@ -3,7 +3,7 @@
 , substituteAll
 , cmake
 , ninja
-, pkgconfig
+, pkg-config
 , glibc
 , gtk3
 , gtkmm3
@@ -86,7 +86,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
-    pkgconfig
+    pkg-config
     jre
     swig
     wrapGAppsHook

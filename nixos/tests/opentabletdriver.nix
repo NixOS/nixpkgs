@@ -1,4 +1,6 @@
-import ./make-test-python.nix ( { pkgs, ... }: {
+import ./make-test-python.nix ( { pkgs, ... }: let
+  testUser = "alice";
+in {
   name = "opentabletdriver";
   meta = {
     maintainers = with pkgs.lib.maintainers; [ thiagokokada ];
@@ -10,7 +12,7 @@ import ./make-test-python.nix ( { pkgs, ... }: {
         ./common/user-account.nix
         ./common/x11.nix
       ];
-      test-support.displayManager.auto.user = "alice";
+      test-support.displayManager.auto.user = testUser;
       hardware.opentabletdriver.enable = true;
     };
 
@@ -18,10 +20,11 @@ import ./make-test-python.nix ( { pkgs, ... }: {
     ''
       machine.start()
       machine.wait_for_x()
-      machine.wait_for_unit("opentabletdriver.service", "alice")
+      machine.wait_for_unit("opentabletdriver.service", "${testUser}")
 
-      machine.succeed("cat /etc/udev/rules.d/30-opentabletdriver.rules")
+      machine.succeed("cat /etc/udev/rules.d/99-opentabletdriver.rules")
       # Will fail if service is not running
-      machine.succeed("otd detect")
+      # Needs to run as the same user that started the service
+      machine.succeed("su - ${testUser} -c 'otd detect'")
     '';
 })

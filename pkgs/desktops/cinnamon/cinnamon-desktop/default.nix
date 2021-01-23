@@ -5,7 +5,7 @@
 , intltool
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pulseaudio
 , python3
 , lib, stdenv
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook
     intltool
-    pkgconfig
+    pkg-config
   ];
 
   postPatch = ''

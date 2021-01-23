@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig
+{ stdenv, lib, fetchurl, pkg-config
 , curl, apacheHttpd, pcre, apr, aprutil, libxml2
 , luaSupport ? false, lua5
 }:
@@ -6,7 +6,7 @@
 with lib;
 
 let luaValue = if luaSupport then lua5 else "no";
-    optional = stdenv.lib.optional;
+    optional = lib.optional;
 in
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0611nskd2y6yagrciqafxdn4rxbdk2v4swf45kc1sgwx2sfh34j1";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [  curl apacheHttpd pcre apr aprutil libxml2 ] ++
     optional luaSupport lua5;
 
@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     homepage = "https://www.modsecurity.org/";
     maintainers = with maintainers; [offline];
-    platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms   = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

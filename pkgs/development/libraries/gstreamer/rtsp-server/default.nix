@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gettext
 , gobject-introspection
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     gobject-introspection
-    pkgconfig
+    pkg-config
     python3
 
     # documentation
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       scripts/extract-release-date-from-doap-file.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GStreamer RTSP server";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''

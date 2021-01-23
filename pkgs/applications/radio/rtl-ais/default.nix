@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, libusb1, rtl-sdr }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libusb1, rtl-sdr }:
 
 stdenv.mkDerivation {
   name = "rtl-ais";
   version = "0.8.1";
-  buildInputs = [ pkgconfig rtl-sdr libusb1 ];
+  buildInputs = [ pkg-config rtl-sdr libusb1 ];
 
   src = fetchFromGitHub {
     owner = "dgiardini";

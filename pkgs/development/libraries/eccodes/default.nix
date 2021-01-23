@@ -1,9 +1,9 @@
-{ fetchurl, stdenv
+{ fetchurl, lib, stdenv
 , cmake, netcdf, openjpeg, libpng, gfortran
 , enablePython ? false, pythonPackages
 , enablePosixThreads ? false
 , enableOpenMPThreads ? false}:
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "eccodes";
   version = "2.12.5";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Only do tests that don't require downloading 120MB of testdata
-  checkPhase = stdenv.lib.optionalString (stdenv.isDarwin) ''
+  checkPhase = lib.optionalString (stdenv.isDarwin) ''
     substituteInPlace "tests/include.sh" --replace "set -ea" "set -ea; export DYLD_LIBRARY_PATH=$(pwd)/lib"
   '' + ''
     ctest -R "eccodes_t_(definitions|calendar|unit_tests|md5|uerra|grib_2nd_order_numValues|julian)" -VV

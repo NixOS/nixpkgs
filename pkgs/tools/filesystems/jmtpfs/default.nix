@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, file, fuse, libmtp }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, file, fuse, libmtp }:
 
 let version = "0.5"; in
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "JasonFerrara";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ file fuse libmtp ];
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, openssl, check, pcsclite, PCSC
+{ lib, stdenv, fetchurl, pkg-config, openssl, check, pcsclite, PCSC
 , withApplePCSC ? stdenv.isDarwin
 }:
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "124lhlim05gw32ydjh1yawqbnx6wdllz1ir9j00j09wji3m11rfs";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl check ]
     ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 

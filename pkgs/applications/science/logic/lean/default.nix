@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs .";
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     substituteInPlace $out/bin/leanpkg \
       --replace "greadlink" "${coreutils}/bin/readlink"
   '';

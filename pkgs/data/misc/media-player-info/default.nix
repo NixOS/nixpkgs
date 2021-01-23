@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, python3, udev, systemd }:
+{ lib, stdenv, fetchurl, pkg-config, python3, udev, systemd }:
 
 let
   name = "media-player-info-24";
@@ -13,7 +13,7 @@ in
     };
 
     buildInputs = [ udev systemd ];
-    nativeBuildInputs = [ pkgconfig python3 ];
+    nativeBuildInputs = [ pkg-config python3 ];
 
     postPatch = ''
       patchShebangs ./tools

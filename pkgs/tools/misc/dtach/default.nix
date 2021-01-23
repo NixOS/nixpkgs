@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "dtach";
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
       themselves.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

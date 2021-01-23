@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ glib.dev coreutils ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ glib.dev coreutils ]}")
   '';
 
   postFixup = ''

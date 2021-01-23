@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bison, cmake, pkgconfig
+{ lib, stdenv, fetchurl, bison, cmake, pkg-config
 , boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib, zstd
 , numactl, perl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto
 }:
@@ -17,7 +17,7 @@ self = stdenv.mkDerivation rec {
     ./abi-check.patch
   ];
 
-  nativeBuildInputs = [ bison cmake pkgconfig rpcsvc-proto ];
+  nativeBuildInputs = [ bison cmake pkg-config rpcsvc-proto ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
   postPatch = ''

@@ -1,8 +1,8 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, openssl, db53, boost
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config, cmake, openssl, db53, boost
 , zlib, miniupnpc, qtbase ? null , qttools ? null, util-linux, protobuf, qrencode, libevent
 , withGui, python3, jemalloc, zeromq4 }:
 
-with stdenv.lib;
+with lib;
 
 mkDerivation rec {
 
@@ -18,7 +18,7 @@ mkDerivation rec {
 
   patches = [ ./fix-bitcoin-qt-build.patch ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ openssl db53 boost zlib python3 jemalloc zeromq4
                   miniupnpc util-linux protobuf libevent ]
                   ++ optionals withGui [ qtbase qttools qrencode ];

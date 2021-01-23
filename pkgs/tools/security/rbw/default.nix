@@ -4,7 +4,7 @@
 , fetchCrate
 , pinentry
 , openssl
-, pkgconfig
+, pkg-config
 , makeWrapper
 , Security
 
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "19gznam64s17kha3accgjks5rmd9kpqqgxg3dfrk7fg5v4431007";
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     makeWrapper
   ];
 

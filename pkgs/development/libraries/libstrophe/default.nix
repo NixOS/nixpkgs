@@ -1,11 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, pkg-config
-, automake
-, autoconf
+, autoreconfHook
 , libtool
 , openssl
 , expat
+, pkg-config
 , check
 }:
 
@@ -17,19 +16,17 @@ stdenv.mkDerivation rec {
     owner = "strophe";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6byg7hE0DN/cbf9NHpK/2DhXZyuelYAp+SA7vVUgo4U=";
+    sha256 = "11d341avsfr0z4lq15cy5dkmff6qpy91wkgzdpfdy31l27pa1g79";
   };
 
-  nativeBuildInputs = [ automake autoconf pkg-config libtool check ];
-  buildInputs = [ openssl expat ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [ openssl expat libtool check ];
 
   dontDisableStatic = true;
 
-  preConfigure = "mkdir m4 && sh bootstrap.sh";
-
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, lightweight C library for writing XMPP clients";
     longDescription = ''
       libstrophe is a lightweight XMPP client library written in C. It has
@@ -37,8 +34,10 @@ stdenv.mkDerivation rec {
       runs well on both Linux, Unix, and Windows based platforms.
     '';
     homepage = "https://strophe.im/libstrophe/";
-    license = with licenses; [ gpl3 mit ];
+    license = with licenses; [ gpl3Only mit ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ devhell flosse ];
   };
 }
+

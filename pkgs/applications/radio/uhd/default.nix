@@ -2,7 +2,7 @@
 , fetchurl
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 # See https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html for dependencies explanations
 , boost
 , enableLibuhd_C_api ? true
@@ -33,7 +33,7 @@
 
 let
   onOffBool = b: if b then "ON" else "OFF";
-  inherit (stdenv.lib) optionals;
+  inherit (lib) optionals;
 in
 
 stdenv.mkDerivation rec {
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     # TODO: Check if this still needed
     # ABI differences GCC 7.1
     # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
-    ++ [ (stdenv.lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
+    ++ [ (lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
   ;
 
   # Python + Mako are always required for the build itself but not necessary for runtime.
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ]
     # If both enableLibuhd_Python_api and enableUtils are off, we don't need
     # pythonEnv in buildInputs as it's a 'build' dependency and not a runtime

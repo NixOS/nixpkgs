@@ -1,4 +1,4 @@
-{stdenv, fetchgit, fetchsvn, bash } :
+{ lib, stdenv, fetchgit, fetchsvn, bash }:
 
 let
   mkscript = path : text : ''
@@ -11,9 +11,9 @@ let
     sed -i "s@%out@$out@g" ${path}
     chmod +x ${path}
   '';
-  
+
   hashname = r: let
-    rpl = stdenv.lib.replaceChars [":" "/"] ["_" "_"];
+    rpl = lib.replaceChars [":" "/"] ["_" "_"];
   in
     (rpl r.url) + "-" + (rpl r.rev);
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   buildCommand = ''
     mkdir -pv $out/repos
-    ${stdenv.lib.concatMapStrings
+    ${lib.concatMapStrings
        (r : ''
         cp -r ${fetchgit r} $out/repos/${hashname r}
        ''
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
       chmod u+w -R $DEST
     ''}
 
-    ${stdenv.lib.concatMapStrings
+    ${lib.concatMapStrings
        (r : ''
         cp -r ${fetchsvn r} $out/repos/${hashname r}
        ''

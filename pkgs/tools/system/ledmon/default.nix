@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "Enclosure LED Utilities";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 ];
-    maintainers = with stdenv.lib.maintainers; [ sorki ];
+    maintainers = with lib.maintainers; [ sorki ];
   };
 }

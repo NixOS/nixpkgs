@@ -1,7 +1,7 @@
 { lib, stdenv, afl}:
 
 stdenv.mkDerivation {
-  version = stdenv.lib.getVersion afl;
+  version = lib.getVersion afl;
   pname = "libdislocator";
 
   src = afl.src;
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       the odds of bumping into heap-related security bugs in
       several ways.
     '';
-    license = stdenv.lib.licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = with maintainers; [ ris ];
   };
 }

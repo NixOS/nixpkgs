@@ -16,7 +16,7 @@
 , libzen
 , lsb-release
 , mkDerivation
-, pkgconfig
+, pkg-config
 , qtbase
 , qttools
 , qtx11extras
@@ -39,7 +39,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ autoconf automake doxygen lsb-release pkgconfig qttools swig ];
+    [ autoconf automake doxygen lsb-release pkg-config qttools swig ];
   buildInputs = [
     c-ares
     cryptopp

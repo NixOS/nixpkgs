@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "xmpp-client";
-  version = "20160916-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "20160916-${lib.strings.substring 0 7 rev}";
   rev = "abbf9020393e8caae3e8996a16ce48446e31cf0e";
 
   goPackagePath = "github.com/agl/xmpp-client";

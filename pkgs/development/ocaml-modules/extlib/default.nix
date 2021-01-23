@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, ocaml, findlib, cppo, minimal ? true }:
+{ stdenv, lib, fetchurl, ocaml, findlib, cppo, minimal ? true }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.11";
+assert lib.versionAtLeast (lib.getVersion ocaml) "3.11";
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-extlib-1.7.7";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/ygrek/ocaml-extlib";
     description = "Enhancements to the OCaml Standard Library modules";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
   };
 }

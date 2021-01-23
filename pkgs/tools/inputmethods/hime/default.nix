@@ -1,5 +1,5 @@
 {
-stdenv, fetchFromGitHub, pkgconfig, which, gtk2, gtk3, qt4, qt5, libXtst, lib,
+stdenv, fetchFromGitHub, pkg-config, which, gtk2, gtk3, qt4, qt5, libXtst, lib,
 }:
 
 # chewing and anthy do not work well
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     sha256 = "024w67q0clzxigsrvqbxpiy8firjvrqi7wbkkcapzzhzapv3nm8x";
   };
 
-  nativeBuildInputs = [ which pkgconfig ];
+  nativeBuildInputs = [ which pkg-config ];
   buildInputs = [ libXtst gtk2 gtk3 qt4 qt5.qtbase ];
 
   preConfigure = "patchShebangs configure";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, installShellFiles, rustPlatform, ronn, pkg-config, libsodium }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, rustPlatform, ronn, pkg-config, libsodium }:
 rustPlatform.buildRustPackage rec {
   pname = "bupstash";
   version = "0.6.4";
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     installManPage doc/man/*.[1-9]
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Easy and efficient encrypted backups";
     homepage = "https://bupstash.io";
     license = licenses.mit;

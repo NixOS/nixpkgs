@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cairo, gdk-pixbuf, libconfig, pango, pkgconfig
+{ stdenv, fetchFromGitHub, cairo, gdk-pixbuf, libconfig, pango, pkg-config
 , xcbutilwm, alsaLib, wirelesstools, asciidoc, libxslt, makeWrapper, docbook_xsl
 , configFile ? null, lib
 , rev, sha256, version, patches ? []
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cairo gdk-pixbuf libconfig pango xcbutilwm docbook_xsl
     alsaLib wirelesstools asciidoc libxslt makeWrapper

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, pkgconfig, autoconf, automake, libiconv, drake
+{ lib, stdenv, fetchFromGitLab, pkg-config, autoconf, automake, libiconv, drake
 , ruby, docbook_xsl, file, xdg_utils, gettext, expat, boost, libebml, zlib
 , fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark, pcre2
 , withGUI ? true
@@ -9,7 +9,7 @@
 
 assert withGUI -> qtbase != null && qtmultimedia != null && wrapQtAppsHook != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig autoconf automake gettext
+    pkg-config autoconf automake gettext
     drake ruby docbook_xsl libxslt
   ];
 

@@ -108,7 +108,7 @@ with super;
 
   lgi = super.lgi.override({
     nativeBuildInputs = [
-      pkgs.pkgconfig
+      pkgs.pkg-config
     ];
     buildInputs = [
       pkgs.glib

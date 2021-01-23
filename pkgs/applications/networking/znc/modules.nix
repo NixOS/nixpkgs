@@ -11,7 +11,7 @@ let
 
     buildInputs = znc.buildInputs;
 
-    meta = a.meta // { platforms = stdenv.lib.platforms.unix; };
+    meta = a.meta // { platforms = lib.platforms.unix; };
     passthru.module_name = module_name;
   });
 
@@ -93,7 +93,7 @@ in {
     meta = {
       description = "ZNC FiSH module";
       homepage = "https://github.com/dctrwatson/znc-fish";
-      maintainers = [ stdenv.lib.maintainers.offline ];
+      maintainers = [ lib.maintainers.offline ];
     };
   };
 
@@ -119,21 +119,21 @@ in {
 
   palaver = zncDerivation rec {
     name = "znc-palaver-${version}";
-    version = "2018-09-18";
+    version = "2020-07-18";
     module_name = "palaver";
 
     src = fetchFromGitHub {
       owner = "cocodelabs";
       repo = "znc-palaver";
-      rev = "c70e8112686f917d39197d582db36c3ea37a4cb6";
-      sha256 = "1gjr8yqgpkpcc18rf0zfgil3rcd1ihqk0q9f8rwbfvs5381h3c58";
+      rev = "825cb6814d64006ca0f85fec23fa0a8a3a2d14ca";
+      sha256 = "zXWPIxhO5Z2L6f+Hf3vIpEh6V4kjUONWAaKexKLECc8=";
     };
 
     meta = with lib; {
       description = "Palaver ZNC module";
       homepage = "https://github.com/cocodelabs/znc-palaver";
       license = licenses.mit;
-      maintainers = with maintainers; [ kiwi ];
+      maintainers = with maintainers; [ kiwi szlend ];
     };
   };
 
@@ -190,8 +190,8 @@ in {
     meta = {
       description = "Push notification service module for ZNC";
       homepage = "https://github.com/jreese/znc-push";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ offline schneefux ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ offline schneefux ];
     };
   };
 

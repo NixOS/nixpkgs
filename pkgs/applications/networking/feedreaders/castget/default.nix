@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , glib
 , ronn
 , curl
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     # See comment on locale above
     glibcLocales
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   meta = with lib; {

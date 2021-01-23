@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, imagemagick, libdvdread, libxml2, freetype, fribidi, libpng, zlib, pkgconfig
+{ lib, stdenv, fetchurl, imagemagick, libdvdread, libxml2, freetype, fribidi, libpng, zlib, pkg-config
 , flex, bison }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libpng freetype libdvdread libxml2 zlib fribidi imagemagick flex bison];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   patches = [
     ./dvdauthor-0.7.1-automake-1.13.patch

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform
-, darwin, fontconfig, harfbuzz, openssl, pkgconfig }:
+, darwin, fontconfig, harfbuzz, openssl, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
@@ -14,12 +14,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0jzngl1iwrq20cx3l0mwdrrddvyw977rwb75nz1k4hkxjnicc1ga";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ fontconfig harfbuzz openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
-  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     install -D dist/appimage/tectonic.desktop -t $out/share/applications/
     install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
   '';

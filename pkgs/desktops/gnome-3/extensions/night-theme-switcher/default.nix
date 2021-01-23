@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-night-theme-switcher";
-  version = "36";
+  version = "40";
 
   src = fetchFromGitLab {
     owner = "rmnvgr";
     repo = "nightthemeswitcher-gnome-shell-extension";
     rev = "v${version}";
-    sha256 = "1c88979qprwb5lj0v7va017w7rdr89a648anhw4k5q135jwyskpz";
+    sha256 = "0z11y18bgdc0y41hrrzzgi4lagm2cg06x12jgdnary1ycng7xja0";
   };
 
   buildInputs = [ glib gnome3.gnome-shell unzip ];

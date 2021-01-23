@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , glib
 , gobject-introspection
 , meson
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0rwcg9sd5rv7gjwapcd1jjk6l16w0p3j7wkicq1rdch4c0kch12p";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     glib
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
   ];
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Collection of GSettings schemas for settings shared by various components of a desktop";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, wxGTK, gtk2, sfml, fluidsynth, curl, freeimage, ftgl, glew, zip }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, wxGTK, gtk2, sfml, fluidsynth, curl, freeimage, ftgl, glew, zip }:
 
 stdenv.mkDerivation {
   name = "slade-git-3.1.2.2018.01.29";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   cmakeFlags = ["-DNO_WEBVIEW=1"];
-  nativeBuildInputs = [ cmake pkgconfig zip ];
+  nativeBuildInputs = [ cmake pkg-config zip ];
   buildInputs = [ wxGTK gtk2 sfml fluidsynth curl freeimage ftgl glew ];
 
   meta = with lib; {

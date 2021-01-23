@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin/
     mv yaxg $out/bin/
     chmod +x $out/bin/yaxg
-    wrapProgram $out/bin/yaxg --prefix PATH : ${ stdenv.lib.makeBinPath [ maim slop ffmpeg_3 byzanz libnotify xdpyinfo ]}
+    wrapProgram $out/bin/yaxg --prefix PATH : ${ lib.makeBinPath [ maim slop ffmpeg_3 byzanz libnotify xdpyinfo ]}
   '';
 
   meta = with lib; {

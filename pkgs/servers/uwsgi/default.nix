@@ -1,4 +1,4 @@
-{ stdenv, nixosTests, lib, fetchurl, pkgconfig, jansson, pcre
+{ stdenv, nixosTests, lib, fetchurl, pkg-config, jansson, pcre
 # plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins ? []
 , pam, withPAM ? stdenv.isLinux
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
         ./additional-php-ldflags.patch
   ];
 
-  nativeBuildInputs = [ python3 pkgconfig ];
+  nativeBuildInputs = [ python3 pkg-config ];
 
   buildInputs =  [ jansson pcre ]
               ++ lib.optional withPAM pam

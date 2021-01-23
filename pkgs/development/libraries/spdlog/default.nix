@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, fmt }:
+{ lib, stdenv, fetchFromGitHub, cmake, fmt }:
 
 let
   generic = { version, sha256 }:
@@ -34,7 +34,7 @@ let
       doCheck = true;
       preCheck = "export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH";
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description    = "Very fast, header only, C++ logging library";
         homepage       = "https://github.com/gabime/spdlog";
         license        = licenses.mit;

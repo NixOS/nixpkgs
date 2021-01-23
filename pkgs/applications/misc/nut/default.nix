@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, neon, libusb-compat-0_1, openssl, udev, avahi, freeipmi
+{ lib, stdenv, fetchurl, pkg-config, neon, libusb-compat-0_1, openssl, udev, avahi, freeipmi
 , libtool, makeWrapper, autoreconfHook, fetchpatch
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ neon libusb-compat-0_1 openssl udev avahi freeipmi ];
 
-  nativeBuildInputs = [ autoreconfHook libtool pkgconfig makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook libtool pkg-config makeWrapper ];
 
   configureFlags =
     [ "--with-all"

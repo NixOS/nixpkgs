@@ -4,7 +4,7 @@
 stdenv.mkDerivation rec {
   name = "qxmledit-${version}" ;
   version = "0.9.15" ;
-  src = fetchFromGitHub ( stdenv.lib.importJSON ./qxmledit.json ) ;
+  src = fetchFromGitHub ( lib.importJSON ./qxmledit.json ) ;
   nativeBuildInputs = [ qmake ] ;
   buildInputs = [ qtbase qtxmlpatterns qtsvg qtscxml qtquick1 libGLU ] ;
   qmakeFlags = [ "CONFIG+=release" ] ;

@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , libbladeRF
 , libusb1
 , ncurses
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zacsqaqsiapljhzw31dwc4nld2rp98jm3ivkyznrhzk9n156p42";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libbladeRF

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub,  libjack2, gtk2, lv2, faust, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub,  libjack2, gtk2, lv2, faust, pkg-config }:
 
 stdenv.mkDerivation {
   version = "git-2015-05-21";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0i8261n95n4xic766h70xkrpbvw3sag96n1883ahmg6h7yb94avq";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjack2 gtk2 lv2 faust ];
 
   makeFlags = [ "PREFIX=$(out)" ];

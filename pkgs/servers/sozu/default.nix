@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "5WOigCiQZQ5DaTd15vV8pUh8Xl3UIe9yLG1ptUtY+iA=";
 
   buildInputs =
-    stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+    lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   meta = with lib; {
     description =

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, zlib }:
+{ lib, stdenv, fetchurl, perl, zlib, buildPackages }:
 
 stdenv.mkDerivation rec {
   name = "${passthru.pname}-${passthru.version}";
@@ -16,9 +16,20 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''patchShebangs .'';
-  buildInputs = [ perl zlib ];
+  preBuild = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    make CC=${buildPackages.stdenv.cc}/bin/cc find_sizes
+    mv find_sizes find_sizes_build
+    make clean
 
-  meta = with stdenv.lib; {
+    substituteInPlace Makefile --replace "./find_sizes" "./find_sizes_build"
+    substituteInPlace Makefile --replace "ar cr" "${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar cr"
+    substituteInPlace Makefile --replace "ranlib" "${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
+    substituteInPlace Makefile --replace "STRIP=strip" "STRIP=${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
+  '';
+  nativeBuildInputs = [ perl zlib ];
+#  buildInputs = [ zlib ];
+
+  meta = with lib; {
     description = "Hebrew spell checker";
     homepage = "http://hspell.ivrix.org.il/";
     platforms = platforms.all;

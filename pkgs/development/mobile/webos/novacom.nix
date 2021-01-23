@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, webos, cmake, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, webos, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "novacom";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "12s6g7l20kakyjlhqpli496miv2kfsdp17lcwhdrzdxvxl6hnf4n";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig webos.cmake-modules ];
+  nativeBuildInputs = [ cmake pkg-config webos.cmake-modules ];
 
   postInstall = ''
     install -Dm755 -t $out/bin ../scripts/novaterm

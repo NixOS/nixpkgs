@@ -1,5 +1,5 @@
-{ pkgs, stdenv, fetchurl, fetchgit, tzdata, iana-etc, runCommand
-, perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
+{ pkgs, lib, stdenv, fetchurl, fetchgit, tzdata, iana-etc, runCommand
+, perl, which, pkg-config, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
 , buildPackages
 , pkgsBuildTarget
@@ -8,7 +8,7 @@
 
 let
 
-  inherit (stdenv.lib) optionals optionalString;
+  inherit (lib) optionals optionalString;
 
   goBootstrap = runCommand "go-bootstrap" {} ''
     mkdir $out
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkgconfig patch procps ];
+  nativeBuildInputs = [ perl which pkg-config patch procps ];
   buildInputs = [ cacert pcre ]
     ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
@@ -184,7 +184,7 @@ stdenv.mkDerivation rec {
     else
       null;
 
-  GOARM = toString (stdenv.lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+  GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   # Hopefully avoids test timeouts on Hydra
@@ -251,7 +251,7 @@ stdenv.mkDerivation rec {
 
   disallowedReferences = [ goBootstrap ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://golang.org/";
     description = "The Go Programming language";
     license = licenses.bsd3;

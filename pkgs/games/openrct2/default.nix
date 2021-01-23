@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , SDL2, cmake, curl, duktape, fontconfig, freetype, icu, jansson, libGLU
-, libiconv, libpng, libpthreadstubs, libzip, nlohmann_json, openssl, pkgconfig
+, libiconv, libpng, libpthreadstubs, libzip, nlohmann_json, openssl, pkg-config
 , speexdsp, zlib
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

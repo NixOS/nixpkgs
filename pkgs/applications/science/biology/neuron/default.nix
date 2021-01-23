@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , automake
 , autoconf
 , libtool
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   pname = "neuron";
   version = "7.5";
 
-  nativeBuildInputs = [ which pkgconfig automake autoconf libtool ];
+  nativeBuildInputs = [ which pkg-config automake autoconf libtool ];
   buildInputs = [ ncurses readline python mpi iv ];
 
   src = fetchurl {
@@ -24,16 +24,16 @@ stdenv.mkDerivation rec {
     sha256 = "0f26v3qvzblcdjg7isq0m9j2q8q7x3vhmkfllv8lsr3gyj44lljf";
   };
 
-  patches = (stdenv.lib.optional (stdenv.isDarwin) [ ./neuron-carbon-disable.patch ]);
+  patches = (lib.optional (stdenv.isDarwin) [ ./neuron-carbon-disable.patch ]);
 
   # With LLVM 3.8 and above, clang (really libc++) gets upset if you attempt to redefine these...
-  postPatch = stdenv.lib.optionalString stdenv.cc.isClang ''
+  postPatch = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace src/gnu/neuron_gnu_builtin.h \
       --replace 'double abs(double arg);' "" \
       --replace 'float abs(float arg);' "" \
       --replace 'short abs(short arg);' "" \
       --replace 'long abs(long arg);' ""
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # we are darwin, but we don't have all the quirks the source wants to compensate for
     substituteInPlace src/nrnpython/setup.py.in --replace 'readline="edit"' 'readline="readline"'
     for f in src/nrnpython/*.[ch] ; do
@@ -51,14 +51,14 @@ stdenv.mkDerivation rec {
     export prefix="''${prefix} --exec-prefix=''${out}"
   '';
 
-  configureFlags = with stdenv.lib;
+  configureFlags = with lib;
                     [ "--with-readline=${readline}" "--with-iv=${iv}" ]
                     ++  optionals (python != null)  [ "--with-nrnpython=${python.interpreter}" ]
                     ++ (if mpi != null then ["--with-mpi" "--with-paranrn"]
                         else ["--without-mpi"]);
 
 
-  postInstall = stdenv.lib.optionals (python != null) [ ''
+  postInstall = lib.optionals (python != null) [ ''
     ## standardise python neuron install dir if any
     if [[ -d $out/lib/python ]]; then
         mkdir -p ''${out}/${python.sitePackages}

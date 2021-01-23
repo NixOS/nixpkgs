@@ -1,4 +1,4 @@
-{lib, stdenv, buildOcaml, fetchurl, type_conv, pa_ounit}:
+{lib, buildOcaml, fetchurl, type_conv, pa_ounit}:
 
 buildOcaml rec {
   name = "pa_bench";
@@ -17,7 +17,7 @@ buildOcaml rec {
   meta = with lib; {
     homepage = "https://github.com/janestreet/pa_bench";
     description = "Syntax extension for inline benchmarks";
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];
   };
 }

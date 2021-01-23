@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchgit
-, pkgconfig, makeWrapper, libtool, autoconf, automake, fetchpatch
+{ lib, stdenv, fetchurl, fetchgit
+, pkg-config, makeWrapper, libtool, autoconf, automake, fetchpatch
 , coreutils, libxml2, gnutls, perl, python2, attr
 , iproute, iptables, readline, lvm2, util-linux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
@@ -10,7 +10,7 @@
 , enableCeph ? false, ceph
 }:
 
-with stdenv.lib;
+with lib;
 
 # if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> and SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
 let
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
         fetchSubmodules = true;
       };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig rpcsvc-proto ];
+  nativeBuildInputs = [ makeWrapper pkg-config rpcsvc-proto ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     ${ optionalString (!buildFromTarball) "./bootstrap --no-git --gnulib-srcdir=$(pwd)/.gnulib" }
-    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
+    PATH=${lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \

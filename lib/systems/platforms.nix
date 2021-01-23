@@ -47,7 +47,6 @@ rec {
       arch = "armv5te";
     };
 
-    kernelMajor = "2.6";
     kernelBaseConfig = "multi_v5_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -70,7 +69,6 @@ rec {
 
   sheevaplug = {
     name = "sheevaplug";
-    kernelMajor = "2.6";
     kernelBaseConfig = "multi_v5_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -182,7 +180,6 @@ rec {
 
   raspberrypi = {
     name = "raspberrypi";
-    kernelMajor = "2.6";
     kernelBaseConfig = "bcm2835_defconfig";
     kernelDTB = true;
     kernelArch = "arm";
@@ -241,7 +238,6 @@ rec {
 
   utilite = {
     name = "utilite";
-    kernelMajor = "2.6";
     kernelBaseConfig = "multi_v7_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -294,7 +290,6 @@ rec {
 
   armv7l-hf-multiplatform = {
     name = "armv7l-hf-multiplatform";
-    kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
     kernelBaseConfig = "multi_v7_defconfig";
     kernelArch = "arm";
     kernelDTB = true;
@@ -342,7 +337,6 @@ rec {
 
   aarch64-multiplatform = {
     name = "aarch64-multiplatform";
-    kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
     kernelBaseConfig = "defconfig";
     kernelArch = "arm64";
     kernelDTB = true;
@@ -381,7 +375,6 @@ rec {
 
   ben_nanonote = {
     name = "ben_nanonote";
-    kernelMajor = "2.6";
     kernelArch = "mips";
     gcc = {
       arch = "mips32";
@@ -391,7 +384,6 @@ rec {
 
   fuloong2f_n32 = {
     name = "fuloong2f_n32";
-    kernelMajor = "2.6";
     kernelBaseConfig = "lemote2f_defconfig";
     kernelArch = "mips";
     kernelAutoModules = false;

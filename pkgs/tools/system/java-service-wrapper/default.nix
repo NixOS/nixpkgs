@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "java-service-wrapper";
-  version = "3.5.43";
+  version = "3.5.45";
 
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "19cx3854rk7b2056z8pvxnf4simsg5js7czsy2bys7jl6vh2x02b";
+    sha256 = "sha256-rnlloa0DicWT1RlP2szDvBINvT5/RZ17GOarUzvX1AI=";
   };
 
   buildInputs = [ jdk ];

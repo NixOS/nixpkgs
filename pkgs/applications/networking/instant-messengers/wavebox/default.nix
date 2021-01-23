@@ -3,7 +3,7 @@
 , xorg
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   bits = "x86_64";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , flex, bison, gettext
 , xineUI, wxSVG
 , fontconfig
@@ -10,7 +10,7 @@
 , dbusSupport ? true, dbus ? null
 , makeWrapper }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "dvdstyler";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-  [ pkgconfig ];
+  [ pkg-config ];
 
   packagesToBinPath =
   [ cdrtools dvdauthor dvdplusrwtools ];

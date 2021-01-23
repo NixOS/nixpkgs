@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "re2";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/google/re2";
     description = "An efficient, principled regular expression library";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = with stdenv.lib.platforms; all;
+    license = lib.licenses.bsd3;
+    platforms = with lib.platforms; all;
   };
 }

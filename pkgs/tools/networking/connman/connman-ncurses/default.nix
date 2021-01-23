@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, pkgconfig, dbus, json_c, ncurses, connman }:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, pkg-config, dbus, json_c, ncurses, connman }:
 
 stdenv.mkDerivation {
   pname = "connman-ncurses";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ dbus ncurses json_c connman ];
 

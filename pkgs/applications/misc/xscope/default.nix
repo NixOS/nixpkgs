@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libXt }:
+{ lib, stdenv, fetchurl, pkg-config, libXt }:
 
 stdenv.mkDerivation rec {
   pname = "xscope";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "08zl3zghvbcqy0r5dn54dim84lp52s0ygrr87jr3a942a6ypz01k";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libXt ];
 
   meta = with lib; {

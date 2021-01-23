@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk2, lua, perl, python3
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, gtk2, lua, perl, python3
 , pciutils, dbus-glib, libcanberra-gtk2, libproxy
 , enchant2, libnotify, openssl, isocodes
 , desktop-file-utils
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "08kvp0dcn3bvmlqcfp9312075bwkqkpa8m7zybr88pfp210gfl85";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
   buildInputs = [
     gtk2 lua perl python3 pciutils dbus-glib libcanberra-gtk2 libproxy

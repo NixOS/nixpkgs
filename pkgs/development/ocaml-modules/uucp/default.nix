@@ -6,7 +6,7 @@ let
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01";
+assert lib.versionAtLeast ocaml.version "4.01";
 
 stdenv.mkDerivation {
 

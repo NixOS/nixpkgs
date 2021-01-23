@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, alsaLib, libjack2, portaudio, libogg, flac, libvorbis, rtmidi, qtsvg }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pkg-config, alsaLib, libjack2, portaudio, libogg, flac, libvorbis, rtmidi, qtsvg }:
 
 mkDerivation rec {
   version = "2.2.0";
@@ -22,7 +22,7 @@ mkDerivation rec {
     qtsvg
   ];
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkg-config ];
 
   preConfigure = ''
     cd ./sources/

@@ -11,7 +11,7 @@
 }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     curl
     dotnet-netcore
     fontconfig.lib

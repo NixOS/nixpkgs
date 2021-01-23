@@ -5,7 +5,7 @@
 # - The exact version can be specified through the `version` argument to
 #   the derivation; it defaults to the latest stable version.
 
-{ lib, stdenv, fetchzip, writeText, pkgconfig, gnumake42
+{ lib, stdenv, fetchzip, writeText, pkg-config, gnumake42
 , customOCamlPackages ? null
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ncurses
 , buildIde ? !(stdenv.isDarwin && lib.versionAtLeast version "8.10")
@@ -49,7 +49,7 @@ let
     args.version;
   version = fetched.version;
   coq-version = args.coq-version or (if version != "dev" then versions.majorMinor version else "dev");
-  versionAtLeast = v: (coq-version == "dev") || (stdenv.lib.versionAtLeast coq-version v);
+  versionAtLeast = v: (coq-version == "dev") || (lib.versionAtLeast coq-version v);
   ideFlags = optionalString (buildIde && !versionAtLeast "8.10")
     "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
   csdpPatch = if csdp != null then ''
@@ -121,7 +121,7 @@ self = stdenv.mkDerivation {
     '';
   };
 
-  nativeBuildInputs = [ pkgconfig ] ++ optional (!versionAtLeast "8.6") gnumake42;
+  nativeBuildInputs = [ pkg-config ] ++ optional (!versionAtLeast "8.6") gnumake42;
   buildInputs = [ ncurses ] ++ ocamlBuildInputs
     ++ optionals buildIde
       (if versionAtLeast "8.10"

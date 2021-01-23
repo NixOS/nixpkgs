@@ -34,7 +34,7 @@ buildGoPackage {
   postInstall = ''
     installShellCompletion --bash ${aptlyCompletionSrc}/aptly
     wrapProgram "$out/bin/aptly" \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg bzip2 xz graphviz ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ gnupg bzip2 xz graphviz ]}"
   '';
 
   meta = with lib; {

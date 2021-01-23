@@ -1,7 +1,7 @@
 { lib, stdenv
 , buildGoPackage
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , libgit2_0_27
 }:
 
@@ -20,7 +20,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libgit2_0_27 ];
 
   meta = with lib; {

@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pantheon
-, pkgconfig
+, pkg-config
 , vala
 , gettext
 , wrapGAppsHook
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];

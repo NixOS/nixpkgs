@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pkg-config }:
+{ lib, stdenv, fetchurl, ncurses, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "6.5.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  makeFlags = stdenv.lib.optionals stdenv.isDarwin [ "-f" "makefile.macosx" ];
+  makeFlags = lib.optionals stdenv.isDarwin [ "-f" "makefile.macosx" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.vanheusden.com/multitail/";
     description = "tail on Steroids";
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
   };
 }

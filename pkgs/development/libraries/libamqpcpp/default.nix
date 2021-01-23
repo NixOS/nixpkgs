@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "libamqpcpp";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for communicating with a RabbitMQ server";
     homepage = "https://github.com/CopernicaMarketingSoftware/AMQP-CPP";
     license = licenses.asl20;

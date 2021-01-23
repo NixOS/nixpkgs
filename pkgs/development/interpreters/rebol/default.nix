@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = ''Relative expression based object language, a language where code is data'';
+    description = "Relative expression based object language, a language where code is data";
     maintainers = with maintainers; [ vrthra ];
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, cmake, gtk2, wxGTK30, libpulseaudio, curl,
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gtk2, wxGTK30, libpulseaudio, curl,
   gettext, glib, portaudio }:
 
 stdenv.mkDerivation rec {
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A concise ChartPlotter/Navigator";
-    maintainers = [ stdenv.lib.maintainers.kragniz ];
+    maintainers = [ lib.maintainers.kragniz ];
     platforms = [ "x86_64-linux" ];
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://opencpn.org/";
   };
 }

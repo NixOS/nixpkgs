@@ -4,7 +4,7 @@
 , meson
 , ninja
 , vala
-, pkgconfig
+, pkg-config
 , pantheon
 , python3
 , glib
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala_0_40
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];

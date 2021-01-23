@@ -17,7 +17,7 @@ let
   };
   common = pname: { version, sha256, beta ? null }:
     let
-      fullVersion = version + stdenv.lib.optionalString (beta != null) "-${toString beta}";
+      fullVersion = version + lib.optionalString (beta != null) "-${toString beta}";
       name = "${pname}-${fullVersion}";
     in
 
@@ -106,4 +106,4 @@ let
         };
       };
 in
-stdenv.lib.mapAttrs common versions
+lib.mapAttrs common versions

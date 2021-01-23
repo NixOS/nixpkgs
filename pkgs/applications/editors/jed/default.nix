@@ -1,4 +1,4 @@
-{ stdenv, fetchzip
+{ lib, stdenv, fetchzip
 , pkg-config
 , gpm
 , libXext
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     install -D src/objs/rgrep $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A programmable text editor written around S-Lang";
     longDescription = ''
       JED is a freely available text editor for Unix, VMS, MSDOS, OS/2, BeOS,

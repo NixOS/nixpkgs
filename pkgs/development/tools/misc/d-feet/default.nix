@@ -1,5 +1,5 @@
 { stdenv
-, pkgconfig
+, pkg-config
 , fetchurl
 , meson
 , ninja
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     itstool
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];

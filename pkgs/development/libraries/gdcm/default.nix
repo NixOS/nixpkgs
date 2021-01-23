@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, vtk_7, darwin
+{ lib, stdenv, fetchurl, cmake, vtk_7, darwin
 , enablePython ? false, python ? null,  swig ? null}:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "-DGDCM_BUILD_SHARED_LIBS=ON"
     "-DGDCM_USE_VTK=ON"
   ]
-  ++ stdenv.lib.optional enablePython [
+  ++ lib.optional enablePython [
     "-DGDCM_WRAP_PYTHON:BOOL=ON"
     "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}"
   ];
@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ vtk_7 ]
-    ++ stdenv.lib.optional stdenv.isDarwin [
+    ++ lib.optional stdenv.isDarwin [
       darwin.apple_sdk.frameworks.ApplicationServices
       darwin.apple_sdk.frameworks.Cocoa
-    ] ++ stdenv.lib.optional enablePython [ swig python ];
+    ] ++ lib.optional enablePython [ swig python ];
   propagatedBuildInputs = [ ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The grassroots cross-platform DICOM implementation";
     longDescription = ''
       Grassroots DICOM (GDCM) is an implementation of the DICOM standard designed to be open source so that researchers may access clinical data directly.

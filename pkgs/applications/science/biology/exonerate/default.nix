@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glib, pkgconfig }:
+{ lib, stdenv, fetchurl, glib, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "2.4.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "Generic tool for sequence alignment";

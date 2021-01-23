@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ blas lapack gfortran ]
-    ++ (stdenv.lib.optionals (mpi != null) [ mpi scalapack ]);
+    ++ (lib.optionals (mpi != null) [ mpi scalapack ]);
 
   enableParallelBuilding = true;
 

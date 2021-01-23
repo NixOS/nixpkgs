@@ -38,9 +38,9 @@ let
       aims to become the best possible open-source FPS of its kind.
     '';
     homepage = "https://www.xonotic.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ astsmtl zalakain petabyteboy ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ astsmtl zalakain petabyteboy ];
+    platforms = lib.platforms.linux;
   };
 
   desktopItem = makeDesktopItem {

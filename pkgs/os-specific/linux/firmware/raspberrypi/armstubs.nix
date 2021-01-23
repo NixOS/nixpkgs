@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config }:
 
 let
-  inherit (stdenv.lib) optionals;
+  inherit (lib) optionals;
 in
 stdenv.mkDerivation {
   pname = "raspberrypi-armstubs";

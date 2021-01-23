@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , libxslt
 , docbook_xsl
 , udev
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     gettext
     gobject-introspection
     libxslt
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     udev
     systemd
   ]
-  ++ stdenv.lib.optional useIMobileDevice libimobiledevice
+  ++ lib.optional useIMobileDevice libimobiledevice
   ;
 
   propagatedBuildInputs = [

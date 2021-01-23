@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , zstd
@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
     zstd
     curl
-  ] ++ stdenv.lib.optional stdenv.isDarwin argp-standalone;
+  ] ++ lib.optional stdenv.isDarwin argp-standalone;
 
   # Darwin needs a patch for argp-standalone usage and differing endian.h location on macOS
   # https://github.com/zchunk/zchunk/pull/35
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   })
 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "File format designed for highly efficient deltas while maintaining good compression";
     homepage = "https://github.com/zchunk/zchunk";
     license = licenses.bsd2;

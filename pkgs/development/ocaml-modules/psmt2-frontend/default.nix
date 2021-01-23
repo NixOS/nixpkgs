@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ocaml, findlib, menhir }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, ocaml, findlib, menhir }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+if !lib.versionAtLeast ocaml.version "4.03"
 then throw "psmt2-frontend is not available for OCaml ${ocaml.version}"
 else
 
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A simple parser and type-checker for polomorphic extension of the SMT-LIB 2 language";
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
     inherit (ocaml.meta) platforms;
   };

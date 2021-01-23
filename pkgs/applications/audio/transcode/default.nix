@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, flac, lame, zlib, libjpeg, libvorbis, libtheora, libxml2
-, lzo, libdvdread, pkgconfig, x264, libmpeg2, xvidcore }:
+, lzo, libdvdread, pkg-config, x264, libmpeg2, xvidcore }:
 
 stdenv.mkDerivation rec {
   name = "transcode-1.1.7";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ flac lame zlib libjpeg libvorbis libtheora libxml2 lzo
-                  libdvdread pkgconfig x264 libmpeg2 xvidcore ];
+                  libdvdread pkg-config x264 libmpeg2 xvidcore ];
   configureFlags = [
     "--disable-ffmpeg" "--disable-libavcodec" "--disable-libavformat"
     "--enable-lzo" "--enable-ogg" "--enable-vorbis" "--enable-theora" "--enable-libxml2"

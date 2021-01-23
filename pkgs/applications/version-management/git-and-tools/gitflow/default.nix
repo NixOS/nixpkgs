@@ -4,13 +4,13 @@ with pkgs.lib;
 
 stdenv.mkDerivation rec {
   pname = "gitflow";
-  version = "1.12.2";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner = "petervanderdoes";
     repo = pname;
     rev = version;
-    sha256 = "0smwlc1wa4ndvspc9x6f4jwnzr58achysrhhip402j98d7di8hw5";
+    sha256 = "sha256-kHirHG/bfsU6tKyQ0khNSTyChhzHfzib+HyA3LOtBI8=";
   };
 
   buildInputs = [ pkgs.makeWrapper ];

@@ -4,7 +4,7 @@
 , leveldb, postgresql, hiredis, libiconv, OpenGL, OpenAL ? openal, Carbon, Cocoa
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   boolToCMake = b: if b then "ON" else "OFF";

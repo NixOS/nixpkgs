@@ -34,7 +34,7 @@ let
     zlib
     fontconfig
     freetype
-  ] ++ stdenv.lib.optionals (stdenv.isLinux) [
+  ] ++ lib.optionals (stdenv.isLinux) [
     libX11
     xcbutil
     libxcb
@@ -47,7 +47,7 @@ let
     wayland
     libGLU
     libGL
-  ] ++ stdenv.lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.isDarwin) [
     Foundation
     CoreGraphics
     Cocoa
@@ -78,12 +78,12 @@ rustPlatform.buildRustPackage {
   buildInputs = runtimeDeps;
 
   installPhase = ''
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     for artifact in wezterm wezterm-gui wezterm-mux-server strip-ansi-escapes; do
       patchelf --set-rpath "${lib.makeLibraryPath runtimeDeps}" $releaseDir/$artifact
       install -D $releaseDir/$artifact -t $out/bin
     done
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
   mkdir -p "$out/Applications"
   OUT_APP="$out/Applications/WezTerm.app"
   cp -r assets/macos/WezTerm.app "$OUT_APP"

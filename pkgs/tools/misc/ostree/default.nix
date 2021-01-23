@@ -119,7 +119,7 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = let
-    typelibPath = stdenv.lib.makeSearchPath "/lib/girepository-1.0" [
+    typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
       (placeholder "out")
       gobject-introspection
     ];

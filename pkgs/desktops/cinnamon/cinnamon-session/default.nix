@@ -12,7 +12,7 @@
 , makeWrapper
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , lib, stdenv
 , systemd
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     docbook_xsl
     docbook_xml_dtd_412
     python3
-    pkgconfig
+    pkg-config
     libxslt
     xmlto
   ];

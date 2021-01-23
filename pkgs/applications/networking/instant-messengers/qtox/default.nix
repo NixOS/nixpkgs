@@ -22,10 +22,10 @@ mkDerivation rec {
     qtbase qtsvg qttranslations
     ffmpeg_3 filter-audio libexif libopus libsodium
     libvpx openal pcre qrencode sqlcipher
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ AVFoundation] ;
+  ] ++ lib.optionals stdenv.isDarwin [ AVFoundation] ;
 
   nativeBuildInputs = [ cmake pkg-config qttools ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ perl ];
+    ++ lib.optionals stdenv.isDarwin [ perl ];
 
   cmakeFlags = [
     "-DGIT_DESCRIBE=v${version}"

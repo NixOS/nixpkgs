@@ -127,62 +127,62 @@ in stdenv.mkDerivation rec {
         TextTemplate MIMETools MailTools TimeDate NetIDNEncode ]
         ++ GnuPGInterfaceRuntimeDependencies)} \
       --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ nettools gnupg ]}"
+      "${lib.makeBinPath [ nettools gnupg ]}"
 
     wrapProgram $out/bin/gpg-key2latex --set PERL5LIB \
       ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ gnupg libpaper ]}"
+      "${lib.makeBinPath [ gnupg libpaper ]}"
 
     wrapProgram $out/bin/gpg-key2ps --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ which gnupg libpaper ]}"
+      "${lib.makeBinPath [ which gnupg libpaper ]}"
 
     wrapProgram $out/bin/gpg-mailkeys --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ gnupg qprint ]}"
+      "${lib.makeBinPath [ gnupg qprint ]}"
 
     wrapProgram $out/bin/gpgdir --set PERL5LIB \
       ${with perlPackages; makePerlPath ([
         TermReadKey ]
         ++ GnuPGInterfaceRuntimeDependencies)} \
       --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ gnupg ]}"
+      "${lib.makeBinPath [ gnupg ]}"
 
     wrapProgram $out/bin/gpglist --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ gnupg ]}"
+      "${lib.makeBinPath [ gnupg ]}"
 
     wrapProgram $out/bin/gpgparticipants --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ getopt gnupg ]}"
+      "${lib.makeBinPath [ getopt gnupg ]}"
 
 #    wrapProgram $out/bin/gpgparticipants-prefill
 
     wrapProgram $out/bin/gpgparticipants-filter --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ gnupg ]}"
+      "${lib.makeBinPath [ gnupg ]}"
 
     wrapProgram $out/bin/gpgsigs --set PERL5LIB \
       ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ gnupg ]}"
+      "${lib.makeBinPath [ gnupg ]}"
 
     wrapProgram $out/bin/gpgwrap --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ gnupg ]}"
+      "${lib.makeBinPath [ gnupg ]}"
 
 #    wrapProgram $out/bin/keyanalyze --set PERL5LIB \
 
     wrapProgram $out/bin/keyart --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ gnupg ]}"
+      "${lib.makeBinPath [ gnupg ]}"
 
     wrapProgram $out/bin/keylookup --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ gnupg ]}"
+      "${lib.makeBinPath [ gnupg ]}"
 
     wrapProgram $out/bin/pgp-clean --set PERL5LIB \
       ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ gnupg ]}"
+      "${lib.makeBinPath [ gnupg ]}"
 
     wrapProgram $out/bin/pgp-fixkey --set PERL5LIB \
       ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ gnupg ]}"
+      "${lib.makeBinPath [ gnupg ]}"
 
 #    wrapProgram $out/bin/pgpring
 

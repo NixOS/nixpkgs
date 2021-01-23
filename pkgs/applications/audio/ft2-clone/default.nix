@@ -13,24 +13,24 @@
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
-  version = "1.42";
+  version = "1.43";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    sha256 = "0w3c1rgm8qlqi50gavrcjz40xb0nkis4i9mvpwmvzmdv9nipxry9";
+    sha256 = "sha256-OIQk7ngg1wsB6DFcxhrviPGlhzdaAWBi9C2roSNg1eI=";
   };
 
   # Adapt the linux-only CMakeLists to darwin (more reliable than make-macos.sh)
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     sed -i -e 's@__LINUX_ALSA__@__MACOSX_CORE__@' -e 's@asound@@' CMakeLists.txt
   '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ]
-    ++ stdenv.lib.optional stdenv.isLinux alsaLib
-    ++ stdenv.lib.optionals stdenv.isDarwin [
+    ++ lib.optional stdenv.isLinux alsaLib
+    ++ lib.optionals stdenv.isDarwin [
          libiconv
          CoreAudio
          CoreMIDI
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
          Cocoa
        ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin [
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin [
     "-framework CoreAudio"
     "-framework CoreMIDI"
     "-framework CoreServices"

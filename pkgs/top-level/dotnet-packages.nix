@@ -6,7 +6,7 @@
 , fetchFromGitHub
 , fetchNuGet
 , glib
-, pkgconfig
+, pkg-config
 , mono
 , fsharp
 , unzip
@@ -860,7 +860,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     buildInputs = [
       mono
-      pkgconfig
+      pkg-config
     ];
 
     postInstall = ''

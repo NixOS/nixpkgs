@@ -7,7 +7,7 @@
 , proj
 , gdal
 , json_c
-, pkgconfig
+, pkg-config
 , file
 , protobufc
 , libiconv
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
-                ++ stdenv.lib.optional stdenv.isDarwin libiconv;
-  nativeBuildInputs = [ perl pkgconfig ];
+                ++ lib.optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = [ perl pkg-config ];
   dontDisableStatic = true;
 
   # postgis config directory assumes /include /lib from the same root for json-c library
-  NIX_LDFLAGS = "-L${stdenv.lib.getLib json_c}/lib";
+  NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";
 
   preConfigure = ''
     sed -i 's@/usr/bin/file@${file}/bin/file@' configure

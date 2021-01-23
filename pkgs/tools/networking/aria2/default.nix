@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, autoreconfHook
 , openssl, c-ares, libxml2, sqlite, zlib, libssh2
 , cppunit, sphinx
 , Security
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "195r3711ly3drf9jkygwdc2m7q99hiqlfrig3ip1127b837gzsf9";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook sphinx ];
+  nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];
 
   buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
-    stdenv.lib.optional stdenv.isDarwin Security;
+    lib.optional stdenv.isDarwin Security;
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 

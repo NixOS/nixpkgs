@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, libpcap, glib, pkgconfig, libnet }:
+{ lib, stdenv, fetchzip, libpcap, glib, pkg-config, libnet }:
 stdenv.mkDerivation {
   pname = "libnids";
   version = "1.24";
@@ -6,7 +6,7 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/libnids/libnids-1.24.tar.gz";
     sha256 = "1cblklfdfxcmy0an6xyyzx4l877xdawhjd28daqfsvrh81mb07k1";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpcap glib libnet ];
 
   /*

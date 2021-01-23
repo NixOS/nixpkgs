@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, ocaml, camlp4, findlib, lablgtk-extras }:
+{ stdenv, lib, fetchurl, ocaml, camlp4, findlib, lablgtk-extras }:
 
 let pname = "gtktop-2.0"; in
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "${pname} is not available for OCaml ${ocaml.version}"
 else
 
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://zoggy.github.io/gtktop/";
     description = "A small OCaml library to ease the creation of graphical toplevels";
-    license = stdenv.lib.licenses.lgpl3;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ vbgl ];
     platforms = ocaml.meta.platforms or [];
   };
 }

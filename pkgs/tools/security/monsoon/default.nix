@@ -1,6 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -19,7 +19,7 @@ buildGoModule rec {
   # tests fails on darwin
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast HTTP enumerator";
     longDescription = ''
       A fast HTTP enumerator that allows you to execute a large number of HTTP

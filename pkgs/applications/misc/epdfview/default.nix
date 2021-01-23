@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, gtk2, poppler }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, gtk2, poppler }:
 
 stdenv.mkDerivation rec {
   pname = "epdfview";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ibyb60a0b4n34bsjgvhdw8yf24463ky0hpmf6a2jjqsbm5g4v64";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 poppler ];
 
   hardeningDisable = [ "format" ];

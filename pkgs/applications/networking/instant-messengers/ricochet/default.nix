@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl, pkgconfig, makeDesktopItem
+{ mkDerivation, lib, stdenv, fetchurl, pkg-config, makeDesktopItem
 , qtbase, qttools, qtmultimedia, qtquick1, qtquickcontrols
 , openssl, protobuf, qmake
 }:
@@ -27,7 +27,7 @@ mkDerivation rec {
     openssl protobuf
   ];
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags openssl)"

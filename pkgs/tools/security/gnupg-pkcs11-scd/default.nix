@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, libgpgerror, libassuan, libgcrypt, pkcs11helper,
-  pkgconfig, openssl }:
+  pkg-config, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "gnupg-pkcs11-scd";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mfh9zjbahjd788rq1mzx009pd7p1sq62sbz586rd7szif7pkpgx";
   };
 
-  buildInputs = [ pkcs11helper pkgconfig openssl ];
+  buildInputs = [ pkcs11helper pkg-config openssl ];
 
   configureFlags = [
     "--with-libgpg-error-prefix=${libgpgerror.dev}"

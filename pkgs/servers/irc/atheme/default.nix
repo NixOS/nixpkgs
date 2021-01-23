@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, libmowgli, pkgconfig, git, gettext, pcre, libidn, cracklib, openssl }:
+{ lib, stdenv, fetchgit, libmowgli, pkg-config, git, gettext, pcre, libidn, cracklib, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "atheme";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     leaveDotGit = true;
   };
 
-  nativeBuildInputs = [ pkgconfig git gettext ];
+  nativeBuildInputs = [ pkg-config git gettext ];
   buildInputs = [ libmowgli pcre libidn cracklib openssl ];
 
   configureFlags = [

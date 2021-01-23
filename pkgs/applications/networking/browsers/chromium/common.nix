@@ -7,7 +7,7 @@
 , xdg_utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2
 
-, python2Packages, perl, pkgconfig
+, python2Packages, perl, pkg-config
 , nspr, systemd, kerberos
 , util-linux, alsaLib
 , bison, gperf
@@ -39,7 +39,7 @@
 
 buildFun:
 
-with stdenv.lib;
+with lib;
 
 let
   jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -117,7 +117,7 @@ let
   base = rec {
     name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) version;
-    inherit channel packageName buildType buildPath;
+    inherit packageName buildType buildPath;
 
     src = fetchurl {
       url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
@@ -126,7 +126,7 @@ let
 
     nativeBuildInputs = [
       llvmPackages.lldClang.bintools
-      ninja which python2Packages.python perl pkgconfig
+      ninja which python2Packages.python perl pkg-config
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar python2Packages.setuptools
     ];

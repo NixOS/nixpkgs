@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage rec {
     description = "xargs + awk with pattern matching support";
     homepage    = "https://github.com/lolabout/rargs";
     license     = with licenses; [ mit ];
-    maintainers = with maintainers; [ pblkt ]; 
+    maintainers = with maintainers; [ pblkt ];
   };
 }

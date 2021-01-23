@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ python zlib ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) libaio;
+    ++ lib.optional (!stdenv.isDarwin) libaio;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
     substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
   '';
 
-  postInstall = stdenv.lib.optionalString withGnuplot ''
+  postInstall = lib.optionalString withGnuplot ''
     wrapProgram $out/bin/fio2gnuplot \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ gnuplot ]}
+      --prefix PATH : ${lib.makeBinPath [ gnuplot ]}
   '';
 
   meta = with lib; {

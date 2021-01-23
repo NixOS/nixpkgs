@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
     license = licenses.bsd3;
     homepage = "http://www.unbound.net";
     maintainers = with maintainers; [ leenaars ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
     broken = true;
   };
 }

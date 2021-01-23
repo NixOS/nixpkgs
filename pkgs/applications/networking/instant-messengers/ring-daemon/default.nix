@@ -2,7 +2,7 @@
 , fetchgit
 , which
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , automake
 , libtool
 , pjsip
@@ -62,7 +62,7 @@ let
     ];
   };
 
-  pjsip' = stdenv.lib.overrideDerivation pjsip (old: {
+  pjsip' = lib.overrideDerivation pjsip (old: {
     patches = [
       "${patchdir}/pjproject/gnutls.patch"
       ./notestsapps.patch # this one had to be modified
@@ -89,7 +89,7 @@ stdenv.mkDerivation {
     autoreconfHook
     automake
     libtool
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

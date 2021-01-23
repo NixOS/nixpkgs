@@ -49,7 +49,7 @@ let
 
       meta = {
         description = "Aspell dictionary for ${fullName}";
-        platforms = stdenv.lib.platforms.all;
+        platforms = lib.platforms.all;
       } // (args.meta or {});
     } // removeAttrs args [ "meta" ]);
 

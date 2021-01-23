@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   installPhase =
     let
       PATH =
-        stdenv.lib.makeBinPath
+        lib.makeBinPath
         [imagemagick i3lock-color xdpyinfo xrandr bc feh procps xrdb];
     in ''
       mkdir -p $out/bin

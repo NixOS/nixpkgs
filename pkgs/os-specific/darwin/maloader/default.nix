@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, opencflite, clang, libcxx }:
+{ lib, stdenv, fetchgit, opencflite, clang, libcxx }:
 
 stdenv.mkDerivation {
   name = "maloader-0git";
@@ -31,8 +31,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Mach-O loader for Linux";
     homepage = "https://github.com/shinh/maloader";
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
     broken = true; # 2018-09-08, no succesful build since 2017-08-21
   };
 }

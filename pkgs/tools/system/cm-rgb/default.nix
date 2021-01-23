@@ -38,7 +38,7 @@ buildPythonApplication rec {
 
   postInstall = ''
     # Remove this line when/if this PR gets merged:
-    # https://github.com/gfduszynski/cm-rgb/pull/43 
+    # https://github.com/gfduszynski/cm-rgb/pull/43
     install -m0755 scripts/cm-rgb-gui $out/bin/cm-rgb-gui
 
     mkdir -p $out/etc/udev/rules.d

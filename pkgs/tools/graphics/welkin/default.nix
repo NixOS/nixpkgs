@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, jre, makeWrapper }:
+{ lib, stdenv, fetchsvn, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "welkin";
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An RDF visualizer";
-    maintainers = with stdenv.lib.maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
     ];
     hydraPlatforms = [];
-    license = stdenv.lib.licenses.free;
-    platforms = with stdenv.lib.platforms; unix;
+    license = lib.licenses.free;
+    platforms = with lib.platforms; unix;
   };
 }

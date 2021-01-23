@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, deadbeef, glib }:
+{ lib, stdenv, fetchurl, pkg-config, deadbeef, glib }:
 
 stdenv.mkDerivation rec {
   pname = "deadbeef-mpris2-plugin";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s3y4ka4qf38cypc0xspy79q0g5y1kqx6ldad7yr6a45nw6j95jh";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ deadbeef glib ];
 

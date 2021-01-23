@@ -8,7 +8,7 @@
 , installShellFiles
 , makeWrapper
 , ncurses
-, pkgconfig
+, pkg-config
 , python3
 
 , expat
@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
     makeWrapper
     ncurses
-    pkgconfig
+    pkg-config
     python3
   ];
 

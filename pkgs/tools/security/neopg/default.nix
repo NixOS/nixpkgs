@@ -6,7 +6,7 @@
 , boost
 , curl
 , gettext
-, pkgconfig
+, pkg-config
 , libusb1
 , gnutls }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [  cmake gettext pkgconfig ];
+  nativeBuildInputs = [  cmake gettext pkg-config ];
 
   buildInputs = [ sqlite botan2 boost curl libusb1 gnutls ];
 

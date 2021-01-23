@@ -39,11 +39,11 @@ in stdenv.mkDerivation rec {
     freetype fontconfig libXrender libuuid expat glib nss nspr
     libxml2 pango cairo gnome2.GConf
     libdrm mesa
-  ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
+  ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
-  libPath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.is64bit)
-      (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs)
+  libPath = lib.makeLibraryPath buildInputs
+    + lib.optionalString (stdenv.is64bit)
+      (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs)
     + ":$out/opt/${vivaldiName}/lib";
 
   buildPhase = ''
@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" \
       opt/${vivaldiName}/vivaldi-bin
-  '' + stdenv.lib.optionalString proprietaryCodecs ''
+  '' + lib.optionalString proprietaryCodecs ''
     ln -s ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so opt/${vivaldiName}/libffmpeg.so.''${version%\.*\.*}
   '' + ''
     echo "Finished patching Vivaldi binaries"
@@ -81,8 +81,8 @@ in stdenv.mkDerivation rec {
     done
     wrapProgram "$out/bin/vivaldi" \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
-      ${stdenv.lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
-  '' + stdenv.lib.optionalString enableWidevine ''
+      ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
+  '' + lib.optionalString enableWidevine ''
     ln -sf ${vivaldi-widevine}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm
   '';
 

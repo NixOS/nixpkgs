@@ -1,8 +1,8 @@
-{ lib, stdenv, pkgconfig, buildGoPackage, fetchFromGitHub
+{ lib, stdenv, pkg-config, buildGoPackage, fetchFromGitHub
 , makeWrapper, coreutils, gnupg, gnutar, squashfsTools, debootstrap
 }:
 
-let binPath = stdenv.lib.makeBinPath [
+let binPath = lib.makeBinPath [
   coreutils gnupg gnutar squashfsTools debootstrap
 ];
 in
@@ -25,7 +25,7 @@ buildGoPackage rec {
   postInstall = ''
     wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${binPath}
   '';
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   meta = with lib; {
     description = "System container image builder for LXC and LXD";

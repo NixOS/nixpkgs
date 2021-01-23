@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, fetchurl, pkg-config
 , SDL, libGLU, libGL, openal, lua
 , libdevil, freetype, physfs
 , libmodplug, mpg123, libvorbis, libogg
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # see discussion on arch linux user repository (https://aur.archlinux.org/packages/love07/?setlang=cs#comment-684696)
   patches = [ ./0.7-gl-prototypes.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     SDL libGLU libGL openal lua
     libdevil freetype physfs libmodplug mpg123 libvorbis libogg libmng

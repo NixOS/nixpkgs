@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, curl, expat
 , jansson, libpng, libjpeg, libGLU, libGL, libXxf86vm, pcre
-, pkgconfig, SDL2, vim, speex }:
+, pkg-config, SDL2, vim, speex }:
 
 stdenv.mkDerivation rec {
   pname = "ezquake";
@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "1rfp816gnp7jfd27cg1la5n1q6z2wgd9qljnlmnx7v2jixql8brf";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     expat curl jansson libpng libjpeg libGLU libGL libXxf86vm pcre SDL2 vim speex
   ];
 
-  installPhase = with stdenv.lib; let
+  installPhase = with lib; let
     sys = last (splitString "-" stdenv.hostPlatform.system);
     arch = head (splitString "-" stdenv.hostPlatform.system);
   in ''

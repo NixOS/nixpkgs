@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchFromGitHub, fetchpatch
-, addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
+, addOpenGLRunpath, docutils, perl, pkg-config, python3, wafHook, which
 , ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null
 , CoreFoundation, Cocoa, CoreAudio, MediaPlayer
@@ -56,7 +56,7 @@
 , zimgSupport        ? true,           zimg          ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   available = x: x != null;
@@ -149,10 +149,10 @@ in stdenv.mkDerivation rec {
     (enableFeature waylandSupport  "wayland")
     (enableFeature stdenv.isLinux  "dvbin")
   ] # Disable whilst Swift isn't supported
-    ++ stdenv.lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
+    ++ lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
 
   nativeBuildInputs = [
-    addOpenGLRunpath docutils perl pkgconfig python3 wafHook which
+    addOpenGLRunpath docutils perl pkg-config python3 wafHook which
   ]
     ++ optional swiftSupport swift;
 

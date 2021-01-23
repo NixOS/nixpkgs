@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , qtbase, qtdeclarative, qmake, which
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = "rm -rf lib";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform IRC framework written with Qt";
     homepage = "https://communi.github.io";
     license = licenses.bsd3;

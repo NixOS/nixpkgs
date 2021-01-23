@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, boost, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "assimp";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library to import various 3D model formats";
     homepage = "http://assimp.sourceforge.net/";
     license = licenses.bsd3;

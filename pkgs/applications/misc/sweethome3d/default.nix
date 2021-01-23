@@ -17,7 +17,7 @@ let
 
   stdenv.mkDerivation rec {
     inherit pname version src description;
-    exec = stdenv.lib.toLower module;
+    exec = lib.toLower module;
     sweethome3dItem = makeDesktopItem {
       inherit exec desktopName;
       name = pname;
@@ -67,21 +67,21 @@ let
       homepage = "http://www.sweethome3d.com/index.jsp";
       inherit description;
       inherit license;
-      maintainers = [ stdenv.lib.maintainers.edwtjo ];
-      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ lib.maintainers.edwtjo ];
+      platforms = lib.platforms.linux;
     };
   };
 
-  d2u = stdenv.lib.replaceChars ["."] ["_"];
+  d2u = lib.replaceChars ["."] ["_"];
 
 in {
 
   application = mkSweetHome3D rec {
-    pname = stdenv.lib.toLower module + "-application";
+    pname = lib.toLower module + "-application";
     version = "6.4.2";
     module = "SweetHome3D";
     description = "Design and visualize your future home";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     src = fetchsvn {
       url = "https://svn.code.sf.net/p/sweethome3d/code/tags/V_" + d2u version + "/SweetHome3D/";
       sha256 = "13rczayakwb5246hqnp8lnw61p0p7ywr2294bnlp4zwsrz1in9z4";

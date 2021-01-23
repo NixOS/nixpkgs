@@ -7,7 +7,7 @@
 , optipng
 , cairo
 , python3
-, pkgconfig
+, pkg-config
 , pngquant
 , which
 , imagemagick
@@ -131,7 +131,7 @@ in
       zopfli
       pngquant
       which
-      pkgconfig
+      pkg-config
       emojiPythonEnv
     ];
 

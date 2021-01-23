@@ -39,6 +39,9 @@ mkDerivation rec {
     xorg.libXScrnSaver
   ];
 
+  # convert name of wrapped binary, e.g. .lxqt-whatever-wrapped to the original name, e.g. lxqt-whatever so binaries can find their resources
+  patches = [ ./fix-application-path.patch ];
+
   postPatch = ''
     sed -i "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" CMakeLists.txt
   '';

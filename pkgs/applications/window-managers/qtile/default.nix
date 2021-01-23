@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python37Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor }:
+{ lib, stdenv, fetchFromGitHub, python37Packages, glib, cairo, pango, pkg-config, libxcb, xcbutilcursor }:
 
 let cairocffi-xcffib = python37Packages.cairocffi.override {
     withXcffib = true;
@@ -31,7 +31,7 @@ python37Packages.buildPythonApplication rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libxcb cairo pango python37Packages.xcffib ];
 
   pythonPath = with python37Packages; [

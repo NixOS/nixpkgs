@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libelf, which, pkgconfig, freeglut
+{ lib, stdenv, fetchFromGitHub, libelf, which, pkg-config, freeglut
 , avrgcc, avrlibc
 , libGLU, libGL
 , GLUT }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
 
-  nativeBuildInputs = [ which pkgconfig avrgcc ];
+  nativeBuildInputs = [ which pkg-config avrgcc ];
   buildInputs = [ libelf freeglut libGLU libGL ]
     ++ stdenv.lib.optional stdenv.isDarwin GLUT;
 

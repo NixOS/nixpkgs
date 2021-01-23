@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeDesktopItem, wrapQtAppsHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, makeDesktopItem, wrapQtAppsHook, pkg-config
 , cmake, epoxy, libzip, libelf, libedit, ffmpeg_3, SDL2, imagemagick
 , qtbase, qtmultimedia, qttools, minizip }:
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0nqj4bnn5c2z1bq4bnbw1wznc0wpmq4sy3w8pipd6n6620b9m4qq";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook pkgconfig cmake ];
+  nativeBuildInputs = [ wrapQtAppsHook pkg-config cmake ];
 
   buildInputs = [
     epoxy libzip libelf libedit ffmpeg_3 SDL2 imagemagick

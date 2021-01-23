@@ -3,7 +3,7 @@
 , fetchpatch
 , vala
 , gettext
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , json-glib
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   version = "3.32.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0npg4kqpwl992fgjd2cn3fh84aiwpdp9kd8z7rw2xaj2iazsm914";
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

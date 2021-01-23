@@ -9,7 +9,7 @@ let
 
   inherit (data) version url sha256;
 
-  rpath = stdenv.lib.makeLibraryPath
+  rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
       libXinerama stdenv.cc.cc.lib libnotify glib gtk3 libappindicator-gtk3
       curl libXfixes libXScrnSaver ];

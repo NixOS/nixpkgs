@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config
 , libxml2, nettle
 , withGTK3 ? true, gtk3 }:
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     autoconf
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     autoconf automake libtool
     libxml2 nettle
-  ] ++ stdenv.lib.optional withGTK3 gtk3;
+  ] ++ lib.optional withGTK3 gtk3;
 
   meta = with lib; {
     description = "Software Token for Linux/UNIX";

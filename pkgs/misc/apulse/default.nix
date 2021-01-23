@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, alsaLib, cmake, pkgconfig, glib
+{ lib, stdenv, fetchFromGitHub, alsaLib, cmake, pkg-config, glib
 , tracingSupport ? true, logToStderr ? true }:
 
 let oz = x: if x then "1" else "0"; in
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p6fh6ah5v3qz7dxhcsixx38bxg44ypbim4m03bxk3ls5i9xslmn";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ alsaLib glib ];
 

@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , bash-completion
 , gst-plugins-base
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     gobject-introspection
     gst-devtools
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       scripts/extract-release-date-from-doap-file.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for creation of audio/video non-linear editors";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;

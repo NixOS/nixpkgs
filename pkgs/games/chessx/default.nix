@@ -1,6 +1,6 @@
 { mkDerivation
 , lib, stdenv
-, pkgconfig
+, pkg-config
 , zlib
 , qtbase
 , qtsvg
@@ -20,7 +20,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
   ];
 

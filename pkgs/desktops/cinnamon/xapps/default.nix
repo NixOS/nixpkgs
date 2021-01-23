@@ -9,7 +9,7 @@
 , xorg
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , lib, stdenv
 , vala
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

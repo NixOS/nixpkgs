@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boehmgc, zlib, sqlite, pcre, cmake, pkgconfig
+{ lib, stdenv, fetchurl, boehmgc, zlib, sqlite, pcre, cmake, pkg-config
 , git, apacheHttpd, apr, aprutil, libmysqlclient, mbedtls, openssl, pkgs, gtk2, libpthreadstubs
 }:
 
@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "1qv47zaa0vzhjlq5wb71627n7dbsxpc1gqpg0hsngjxnbnh1q46g";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig git ];
+  nativeBuildInputs = [ cmake pkg-config git ];
   buildInputs =
     [ boehmgc zlib sqlite pcre apacheHttpd apr aprutil
       libmysqlclient mbedtls openssl libpthreadstubs ]
-      ++ stdenv.lib.optional stdenv.isLinux gtk2
-      ++ stdenv.lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
+      ++ lib.optional stdenv.isLinux gtk2
+      ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
                                                 pkgs.darwin.apple_sdk.frameworks.Carbon];
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high-level dynamically typed programming language";
     homepage = "https://nekovm.org";
     license = licenses.lgpl21;

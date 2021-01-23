@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [ pygobject3 pyxdg pycairo dbus-python ];
- 
+
   # workaround https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 

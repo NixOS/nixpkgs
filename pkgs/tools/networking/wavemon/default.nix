@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/uoaerg/wavemon";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin fpletz ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

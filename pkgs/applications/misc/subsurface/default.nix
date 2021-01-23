@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkgconfig, qmake
+{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkg-config, qmake
 , curl, grantlee, libgit2, libusb-compat-0_1, libssh2, libxml2, libxslt, libzip, zlib
 , qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
 }:
@@ -84,7 +84,7 @@ in stdenv.mkDerivation {
     qtbase qtconnectivity qtsvg qttools qtwebkit
   ];
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook pkgconfig ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook pkg-config ];
 
   cmakeFlags = [
     "-DLIBDC_FROM_PKGCONFIG=ON"

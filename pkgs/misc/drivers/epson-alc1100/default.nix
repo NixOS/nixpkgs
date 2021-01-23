@@ -33,12 +33,12 @@ in
 
     postFixup = ''
       patchelf --set-interpreter ${pkgsi686Linux.glibc}/lib/ld-linux.so.2 \
-        --set-rpath "${stdenv.lib.makeLibraryPath [
+        --set-rpath "${lib.makeLibraryPath [
           pkgsi686Linux.glibc
           "$out"
         ]}" $out/bin/alc1100
 
-      patchelf --set-rpath "${stdenv.lib.makeLibraryPath [
+      patchelf --set-rpath "${lib.makeLibraryPath [
           pkgsi686Linux.glibc
         ]}" $out/lib/libstdc++.so.5.0.7
 

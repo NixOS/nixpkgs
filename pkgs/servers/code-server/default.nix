@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper, runCommand
-, moreutils, jq, git, zip, rsync, pkgconfig, yarn, python2
+, moreutils, jq, git, zip, rsync, pkg-config, yarn, python2
 , nodejs-12_x, libsecret, xorg, ripgrep, nettools }:
 
 let
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    nodejs yarn' python pkgconfig zip makeWrapper git rsync jq moreutils
+    nodejs yarn' python pkg-config zip makeWrapper git rsync jq moreutils
   ];
   buildInputs = [ libsecret xorg.libX11 xorg.libxkbfile ];
 
@@ -130,7 +130,7 @@ in stdenv.mkDerivation rec {
 
   configurePhase = ''
     # set default yarn opts
-    ${stdenv.lib.concatMapStrings (option: ''
+    ${lib.concatMapStrings (option: ''
       yarn --offline config set ${option}
     '') defaultYarnOpts}
 
@@ -206,8 +206,8 @@ in stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    prefetchYarnCache = stdenv.lib.overrideDerivation yarnCache (d: {
-      outputHash = stdenv.lib.fakeSha256;
+    prefetchYarnCache = lib.overrideDerivation yarnCache (d: {
+      outputHash = lib.fakeSha256;
     });
   };
 

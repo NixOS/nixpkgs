@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
+{ stdenv, lib, fetchurl, perl, pkg-config, systemd, openssl
 , bzip2, zlib, lz4, inotify-tools, pam, libcap
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "dovecot";
   version = "2.3.13";
 
-  nativeBuildInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
     [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus_sasl.dev ]
     ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
@@ -84,8 +84,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with stdenv.lib.maintainers; [ peti fpletz globin ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with lib.maintainers; [ peti fpletz globin ];
+    platforms = lib.platforms.unix;
   };
   passthru.tests = {
     opensmtpd-interaction = nixosTests.opensmtpd;

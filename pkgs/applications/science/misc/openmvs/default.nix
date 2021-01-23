@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake
 , eigen, opencv, ceres-solver, cgal, boost, vcg
 , gmp, mpfr, glog, gflags, libjpeg_turbo }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ eigen opencv ceres-solver cgal boost vcg gmp mpfr glog gflags libjpeg_turbo ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   preConfigure = ''
     cmakeFlagsArray=(

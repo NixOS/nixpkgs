@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, glib, libsndfile }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, glib, libsndfile }:
 
 stdenv.mkDerivation rec {
   pname = "libinstpatch";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "-DLIB_SUFFIX=" # Install in $out/lib.
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.swamiproject.org/";
     description = "MIDI instrument patch files support library";
     license = licenses.lgpl21;

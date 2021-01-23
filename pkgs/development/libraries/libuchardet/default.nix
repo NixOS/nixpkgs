@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "uchardet";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla's Universal Charset Detector C/C++ API";
     homepage = "https://www.freedesktop.org/wiki/Software/uchardet/";
     license = licenses.mpl11;

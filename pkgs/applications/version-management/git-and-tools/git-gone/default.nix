@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkgconfig, makeWrapper, openssl, git, libiconv, Security, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, makeWrapper, openssl, git, libiconv, Security, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-gone";
@@ -13,17 +13,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1g2jijx8y34lid9qwa26v4svab5v9ki6gn9vcfiy61dqa964c3l9";
 
-  nativeBuildInputs = [ pkgconfig makeWrapper installShellFiles ];
+  nativeBuildInputs = [ pkg-config makeWrapper installShellFiles ];
 
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   postInstall = ''
     installManPage git-gone.1
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/git-gone --prefix PATH : "${stdenv.lib.makeBinPath [ git ]}"
+    wrapProgram $out/bin/git-gone --prefix PATH : "${lib.makeBinPath [ git ]}"
   '';
 
   meta = with lib; {

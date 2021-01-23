@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , openssl
 , boost
 , libevent
 , autoreconfHook
 , db4
-, pkgconfig
+, pkg-config
 , protobuf
 , hexdump
 , zeromq
@@ -16,7 +16,7 @@
 , wrapQtAppsHook ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     hexdump
   ] ++ optionals withGui [
     wrapQtAppsHook

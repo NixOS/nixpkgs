@@ -15,7 +15,7 @@
 , libxml2
 , makeWrapper
 , perl
-, pkgconfig
+, pkg-config
 , portaudio
 , SDL2
 , soundtouch
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
       --set __GL_THREADED_OPTIMIZATIONS 1
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper perl pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ cmake makeWrapper perl pkg-config wrapGAppsHook ];
 
   buildInputs = [
     alsaLib

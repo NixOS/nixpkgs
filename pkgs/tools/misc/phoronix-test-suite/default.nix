@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "phoronix-test-suite";
-  version = "10.0.1";
+  version = "10.2.0";
 
   src = fetchurl {
     url = "https://phoronix-test-suite.com/releases/${pname}-${version}.tar.gz";
-    sha256 = "09wrrcxfvh7pwv0jqpyzjsr0rd7askfr0s2xr1wv9v40znxmsmzz";
+    sha256 = "sha256-eoKHgbSyOEkwzki5wWuZlOAmZljxOMXcztA/g8TtutQ=";
   };
 
   buildInputs = [ php ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ./install-sh $out
     wrapProgram $out/bin/phoronix-test-suite \
     --set PHP_BIN ${php}/bin/php \
-    --prefix PATH : ${stdenv.lib.makeBinPath [ gnumake gcc ]}
+    --prefix PATH : ${lib.makeBinPath [ gnumake gcc ]}
   '';
 
   passthru.tests = {

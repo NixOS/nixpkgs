@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = let
-    libPath = stdenv.lib.makeLibraryPath [
+    libPath = lib.makeLibraryPath [
       stdenv.cc.cc.lib
       alsaLib
       glib
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       libGLU libGL
       xorg.libX11
     ];
-  in stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  in lib.optionalString (!stdenv.isDarwin) ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" \

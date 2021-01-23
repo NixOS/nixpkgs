@@ -7,7 +7,7 @@ let
   i3lock = writeShellScriptBin "i3lock" ''
     ${i3lock-color}/bin/i3lock-color "$@"
   '';
-  binPath = stdenv.lib.makeBinPath [
+  binPath = lib.makeBinPath [
     imagemagick i3lock
     xdpyinfo xrandr xset
     bc feh procps xrdb

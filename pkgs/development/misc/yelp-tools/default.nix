@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libxml2, libxslt, itstool, gnome3, pkgconfig }:
+{ lib, stdenv, fetchurl, libxml2, libxslt, itstool, gnome3, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "yelp-tools";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxml2 libxslt itstool gnome3.yelp-xsl ];
 
   doCheck = true;

@@ -8,7 +8,7 @@
 , libgee
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , pantheon
 , python3
 , wrapGAppsHook
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     python3
     wrapGAppsHook

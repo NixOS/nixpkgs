@@ -38,7 +38,7 @@ in
       for cmd in abcde cddb-tool abcde-musicbrainz-tool; do
         wrapProgram "$out/bin/$cmd" \
           --prefix PERL5LIB : "$PERL5LIB" \
-          --prefix PATH ":" ${stdenv.lib.makeBinPath [
+          --prefix PATH ":" ${lib.makeBinPath [
             "$out" which libcdio-paranoia cddiscid wget
             vorbis-tools id3v2 eyeD3 lame flac glyr
           ]}

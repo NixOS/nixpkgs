@@ -6,7 +6,7 @@
 , ninja
 , nixos-artwork
 , glib
-, pkgconfig
+, pkg-config
 , dbus
 , polkit
 , accountsservice
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     glib # polkit requires
     meson
     ninja
-    pkgconfig
+    pkg-config
     polkit
     python3
   ];

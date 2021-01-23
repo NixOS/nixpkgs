@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub,
-  meson, ninja, pkgconfig, scdoc,
+  meson, ninja, pkg-config, scdoc,
   wayland, wayland-protocols, libxkbcommon,
   cairo, gdk-pixbuf, pam
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sed -iE "s/version: '1\.3',/version: '${version}',/" meson.build
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
   buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
 
   mesonFlags = [

@@ -6,7 +6,7 @@
 , gettext
 , desktop-file-utils
 , appstream-glib
-, pkgconfig
+, pkg-config
 , txt2man
 , gzip
 , vala
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     libxml2
-    pkgconfig
+    pkg-config
     txt2man
     python3
     vala
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : ${stdenv.lib.makeBinPath [ which ffmpeg_3 gifski ]})
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ which ffmpeg_3 gifski ]})
   '';
 
   passthru = {

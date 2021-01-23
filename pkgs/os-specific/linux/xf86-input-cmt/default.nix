@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, xorgserver, xorgproto,
+{ lib, stdenv, fetchFromGitHub, pkg-config, xorgserver, xorgproto,
   utilmacros, libgestures, libevdevc }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ./apply_patches.sh
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorgserver xorgproto utilmacros
     libgestures libevdevc

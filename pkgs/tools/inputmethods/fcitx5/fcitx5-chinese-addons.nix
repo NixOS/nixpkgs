@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchurl
 , fetchFromGitHub
@@ -31,13 +31,13 @@ in
 
 mkDerivation rec {
   pname = "fcitx5-chinese-addons";
-  version = "5.0.2";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-chinese-addons";
     rev = version;
-    sha256 = "11UIMrwzZqO8nrQx5oubeoQN8hspL1mvHw5Dc9sVOqQ=";
+    sha256 = "sha256-kCihpRUtUXrqqf7FPQp8ZRexiygOuDVOdQwVx7tSn+c=";
   };
 
   cmakeFlags = [
@@ -64,9 +64,9 @@ mkDerivation rec {
     opencc
     qtwebengine
     fmt
-  ] ++ stdenv.lib.optional luaSupport fcitx5-lua;
+  ] ++ lib.optional luaSupport fcitx5-lua;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Addons related to Chinese, including IME previous bundled inside fcitx4";
     homepage = "https://github.com/fcitx/fcitx5-chinese-addons";
     license = with licenses; [ gpl2Plus lgpl21Plus ];

@@ -1,4 +1,4 @@
-{ fetchzip, stdenv, jdk8, runtimeShell }:
+{ fetchzip, lib, stdenv, jdk8, runtimeShell }:
 
 stdenv.mkDerivation rec {
   version = "5.4.4";
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open source GUI replacement for the Java command-line utilities keytool and jarsigner";
-    license = stdenv.lib.licenses.gpl3Only;
-    maintainers = [ stdenv.lib.maintainers.numinit ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.numinit ];
+    platforms = lib.platforms.unix;
   };
 }

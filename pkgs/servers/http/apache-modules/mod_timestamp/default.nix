@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
+{ lib, stdenv, fetchurl, pkg-config, mod_ca, apr, aprutil }:
 
 stdenv.mkDerivation rec {
   pname = "mod_timestamp";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p18mgxx2ainfrc2wm27rl3lh6yl0ihx6snib60jnp694587bfwg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ mod_ca apr aprutil ];
   inherit (mod_ca) configureFlags installFlags;
 

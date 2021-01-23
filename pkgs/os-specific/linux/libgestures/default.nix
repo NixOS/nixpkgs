@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, glib, jsoncpp }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, jsoncpp }:
 
 stdenv.mkDerivation rec {
   name = "libgestures-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace '$(DESTDIR)/usr/include' '$(DESTDIR)/include'
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib jsoncpp ];
 
 

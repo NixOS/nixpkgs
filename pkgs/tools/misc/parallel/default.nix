@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/parallel \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ procps perl ]}"
+      --prefix PATH : "${lib.makeBinPath [ procps perl ]}"
   '';
 
   doCheck = true;

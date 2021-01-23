@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchgit
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , glib
 , dbus
 , ell
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -45,6 +45,14 @@ stdenv.mkDerivation rec {
     "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
     "--enable-external-ell"
   ];
+
+  postInstall = ''
+    rm -r $out/etc/ofono
+    ln -s /etc/ofono $out/etc/ofono
+  '';
+
+  enableParallelBuilding = true;
+  enableParallelChecking = false;
 
   doCheck = true;
 

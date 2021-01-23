@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
-, bundlerEnv, pkgconfig
+, bundlerEnv, pkg-config
 # libgit2 + dependencies
 , libgit2, openssl, zlib, pcre, http-parser }:
 
@@ -50,7 +50,7 @@ in buildGoModule rec {
   };
 
   buildFlags = [ "-tags=static,system_libgit2" ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ rubyEnv.wrappedRuby libgit openssl zlib pcre http-parser ];
   doCheck = false;
 

@@ -9,8 +9,8 @@
 }:
 
 let
-  concatStringsSep = stdenv.lib.concatStringsSep;
-  optional = stdenv.lib.optional;
+  concatStringsSep = lib.concatStringsSep;
+  optional = lib.optional;
   opts = [ "-DLINKALL" ]
     ++ optional dsdSupport "-DDSD"
     ++ optional (!faad2Support) "-DNO_FAAD"

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , boost, libbitcoin-client, libbitcoin-network }:
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
     sha256 = "033nrdzrha4kypxk4biixjsbjd16r4m2mjvpid4gdj5hzbbj1p93";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libbitcoin-client libbitcoin-network ];
 
   enableParallelBuilding = true;

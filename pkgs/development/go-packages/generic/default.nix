@@ -83,7 +83,7 @@ let
     GO111MODULE = "off";
     GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
 
-    GOARM = toString (stdenv.lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+    GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure

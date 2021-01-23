@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, ncurses, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "tty-clock";
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "16v3pmva13skpfjja96zacjpxrwzs1nb1iqmrp2qzvdbcm9061pp";
   };
-  
-  nativeBuildInputs = [ pkgconfig ];
+
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ];
 
   makeFlags = [ "PREFIX=$(out)" ];

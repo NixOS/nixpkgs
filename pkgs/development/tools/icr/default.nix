@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, crystal, shards, makeWrapper, pkgconfig, which
+{ stdenv, lib, fetchFromGitHub, crystal, shards, makeWrapper, pkg-config, which
 , openssl, readline, libyaml, zlib }:
 
 crystal.buildCrystalPackage rec {
@@ -16,7 +16,7 @@ crystal.buildCrystalPackage rec {
 
   buildInputs = [ libyaml openssl readline zlib ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig which ];
+  nativeBuildInputs = [ makeWrapper pkg-config which ];
 
   # tests are failing due to our sandbox
   doCheck = false;

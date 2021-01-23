@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, pkgconfig
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, pkg-config
 
 # `ps` with systemd support is able to properly report different
 # attributes like unit name, so we want to have it on linux.
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ]
     ++ lib.optional withSystemd systemd;
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   makeFlags = [ "usrbin_execdir=$(out)/bin" ]
     ++ lib.optionals watchOnly [ "watch" "PKG_LDFLAGS="];

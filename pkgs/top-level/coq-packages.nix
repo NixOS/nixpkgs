@@ -50,6 +50,7 @@ let
       mathcomp-solvable  = self.mathcomp.solvable;
       mathcomp-field     = self.mathcomp.field;
       mathcomp-character = self.mathcomp.character;
+      mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel {};
       mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis {};
       mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap {};
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};

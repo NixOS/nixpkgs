@@ -1,4 +1,4 @@
-{ stdenv, lib, darwin, fetchFromGitHub, tbb, gtk3, glfw, pkgconfig, freetype, Carbon, AppKit, capstone }:
+{ stdenv, lib, darwin, fetchFromGitHub, tbb, gtk3, glfw, pkg-config, freetype, Carbon, AppKit, capstone }:
 
 stdenv.mkDerivation rec {
   pname = "tracy";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0s39kimpc03x48kh7lyhblfs8y4mdzcz3g7f806h90x7zndsmfxj";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ glfw capstone ]
     ++ lib.optionals stdenv.isDarwin [ Carbon AppKit freetype ]

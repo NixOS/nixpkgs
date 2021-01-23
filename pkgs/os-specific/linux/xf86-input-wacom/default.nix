@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , xorgproto, libX11, libXext, libXi, libXrandr, libXrender
-, ncurses, pkgconfig, xorgserver, udev, libXinerama, pixman }:
+, ncurses, pkg-config, xorgserver, udev, libXinerama, pixman }:
 
 stdenv.mkDerivation rec {
   name = "xf86-input-wacom-0.36.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ xorgproto libX11 libXext libXi libXrandr libXrender
-    ncurses pkgconfig xorgserver udev libXinerama pixman ];
+    ncurses pkg-config xorgserver udev libXinerama pixman ];
 
   preConfigure = ''
     mkdir -p $out/share/X11/xorg.conf.d

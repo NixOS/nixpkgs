@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchPypi, docutils, pybtex, six }:
 
 buildPythonPackage rec {
-  version = "0.2.2";
+  version = "1.0.0";
   pname = "pybtex-docutils";
 
   doCheck = false;
@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea90935da188a0f4de2fe6b32930e185c33a0e306154322ccc12e519ebb5fa7d";
+    sha256 = "cead6554b4af99c287dd29f38b1fa152c9542f56a51cb6cbc3997c95b2725b2e";
   };
 
   meta = {

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, mpfr}:
+{lib, stdenv, fetchurl, mpfr}:
 stdenv.mkDerivation rec {
   pname = "mpfi";
   version = "1.5.3";
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
     inherit version;
     description = ''A multiple precision interval arithmetic library based on MPFR'';
     homepage = "https://gforge.inria.fr/projects/mpfi/";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

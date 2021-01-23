@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , libjpeg, libtiff, libpng, freetype
 , fltk, gtk
 , libX11, libXext, libICE
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjpeg libtiff libpng freetype fltk gtk libX11 libXext libICE dbus dbus ];
 
-  # A strange type of bug: dbus is not immediately found by pkgconfig
+  # A strange type of bug: dbus is not immediately found by pkg-config
   preConfigure = ''
      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';

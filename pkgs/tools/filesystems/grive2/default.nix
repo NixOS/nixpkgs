@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, yajl, cmake, libgcrypt, curl, expat, boost, libiberty }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, yajl, cmake, libgcrypt, curl, expat, boost, libiberty }:
 
 stdenv.mkDerivation rec {
   version = "0.5.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kv34ys8qarjsxpb1kd8dp7b3b4ycyiwjzd6mg97d3jk7405g6nm";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ libgcrypt yajl curl expat stdenv boost libiberty ];
 

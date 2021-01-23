@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, fuse, glib, zlib }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, fuse, glib, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "fuseiso";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ fuse glib zlib ];
 

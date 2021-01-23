@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , rofi-unwrapped
 , libqalculate
 , glib
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     gobject-introspection
     wrapGAppsHook
   ];

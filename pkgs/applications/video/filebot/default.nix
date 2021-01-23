@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       --replace 'APP_DATA="$FILEBOT_HOME/data/$(id -u)"' 'APP_DATA=''${XDG_DATA_HOME:-$HOME/.local/share}/filebot/data' \
       --replace '$FILEBOT_HOME/data/.license' '$APP_DATA/.license'
     wrapProgram $out/opt/filebot.sh \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ openjdk11 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
     # Expose the binary in bin to make runnable.
     ln -s $out/opt/filebot.sh $out/bin/filebot
   '';

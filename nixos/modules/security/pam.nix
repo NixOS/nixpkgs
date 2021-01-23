@@ -430,8 +430,8 @@ let
               ${optionalString cfg.pamMount
                 "auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
               ${optionalString cfg.enableKwallet
-                ("auth optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
-                 " kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5")}
+                ("auth optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so" +
+                 " kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5")}
               ${optionalString cfg.enableGnomeKeyring
                 "auth optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so"}
               ${optionalString cfg.gnupg.enable
@@ -509,8 +509,8 @@ let
           ${optionalString (cfg.enableAppArmor && config.security.apparmor.enable)
               "session optional ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so order=user,group,default debug"}
           ${optionalString (cfg.enableKwallet)
-              ("session optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
-               " kwalletd=${pkgs.kdeFrameworks.kwallet.bin}/bin/kwalletd5")}
+              ("session optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so" +
+               " kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5")}
           ${optionalString (cfg.enableGnomeKeyring)
               "session optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start"}
           ${optionalString cfg.gnupg.enable

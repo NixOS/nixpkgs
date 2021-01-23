@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, bison, flex, libtool, pkgconfig, which
+{ lib, stdenv, fetchFromGitHub, autoconf, bison, flex, libtool, pkg-config, which
 , libnl, protobuf, protobufc, shadow
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256          = "1w6x8xcrs0i1y3q41gyq8z3cq9x24qablklc4jiydf855lhqn4dh";
   };
 
-  nativeBuildInputs = [ autoconf bison flex libtool pkgconfig which ];
+  nativeBuildInputs = [ autoconf bison flex libtool pkg-config which ];
   buildInputs = [ libnl protobuf protobufc ];
   enableParallelBuilding = true;
 

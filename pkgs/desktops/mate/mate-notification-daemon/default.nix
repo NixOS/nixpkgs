@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, glib, libcanberra-gtk3,
+{ lib, stdenv, fetchurl, pkg-config, gettext, glib, libcanberra-gtk3,
   libnotify, libwnck3, gtk3, libxml2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -6,12 +6,12 @@ stdenv.mkDerivation rec {
   version = "1.24.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1ybzr8mni5pgrspf8hqnisd0r0hwdlgk7n5mzsh7xisbkgivpw2b";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     libxml2 # for xmllint
     wrapGAppsHook

@@ -37,7 +37,7 @@
 , nss
 , pango
 , perl
-, pkgconfig
+, pkg-config
 , python2
 , python3
 , runtimeShell
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     nasm
     nodejs
     perl
-    pkgconfig
+    pkg-config
     python2
     python3
     rust-cbindgen

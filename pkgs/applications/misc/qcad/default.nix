@@ -3,7 +3,7 @@
 , libGLU
 , mkDerivationWith
 , muparser
-, pkgconfig
+, pkg-config
 , qtbase
 , qmake
 , qtscript
@@ -85,7 +85,7 @@ mkDerivationWith stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
     qttools
   ];

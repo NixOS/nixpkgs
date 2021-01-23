@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "pngcheck-2.3.0";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://pmt.sourceforge.net/pngcrush";
     description = "Verifies the integrity of PNG, JNG and MNG files";
-    license = stdenv.lib.licenses.free;
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.free;
+    platforms = with lib.platforms; linux;
   };
 }

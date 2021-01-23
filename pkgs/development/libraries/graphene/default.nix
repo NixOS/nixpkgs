@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , python3
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     meson
     ninja
-    pkgconfig
+    pkg-config
     gobject-introspection
     python3
   ];
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A thin layer of graphic data types";
     homepage = "https://ebassi.github.com/graphene";
     license = licenses.mit;

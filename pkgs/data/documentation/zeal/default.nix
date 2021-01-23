@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config
 , qtbase, qtimageformats, qtwebengine, qtx11extras, mkDerivation
 , libarchive, libXdmcp, libpthreadstubs, xcbutilkeysyms  }:
 
@@ -22,7 +22,7 @@ mkDerivation rec {
       -e 's@^project.*@project(Zeal VERSION ${version})@'
   '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
 
   buildInputs = [
     qtbase qtimageformats qtwebengine qtx11extras

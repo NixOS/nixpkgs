@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ncurses htslib ];
 
   configureFlags = [ "--with-htslib=${htslib}" ]
-    ++ stdenv.lib.optional (ncurses == null) "--without-curses";
+    ++ lib.optional (ncurses == null) "--without-curses";
 
   preCheck = ''
     patchShebangs test/

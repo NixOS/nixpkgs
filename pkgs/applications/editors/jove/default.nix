@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , groff
 , ncurses
 , makeWrapper
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "$out/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Jonathan's Own Version or Emacs";
     homepage = "https://github.com/jonmacs/jove";
     license = licenses.bsd2;

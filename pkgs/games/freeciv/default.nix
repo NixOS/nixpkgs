@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkgconfig, python3
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkg-config, python3
 , zlib, bzip2, curl, lzma, gettext, libiconv
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
 , gtkClient ? false, gtk3
@@ -8,7 +8,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 
 in stdenv.mkDerivation rec {
   pname = "freeciv";
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ lua5_3 zlib bzip2 curl lzma gettext libiconv ]
     ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype fluidsynth ]

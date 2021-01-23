@@ -82,6 +82,7 @@ cl-utilities
 cl-vectors
 cl-webkit2
 cl-who
+clfswm
 clx
 collectors
 command-line-arguments

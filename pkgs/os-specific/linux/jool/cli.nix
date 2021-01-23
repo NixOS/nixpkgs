@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libnl, iptables }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libnl, iptables }:
 
 let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = sourceAttrs.src;
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libnl iptables ];
 
   makeFlags = [ "-C" "src/usr" ];

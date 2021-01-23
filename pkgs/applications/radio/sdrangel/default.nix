@@ -19,7 +19,7 @@ libbladeRF,
 mkDerivation,
 ocl-icd,
 opencv3,
-pkgconfig,
+pkg-config,
 qtbase,
 qtmultimedia,
 qtserialport,
@@ -42,7 +42,7 @@ mkDerivation rec {
     fetchSubmodules = false;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     glew opencv3 libusb1 boost libopus limesuite libav libiio libpulseaudio
     qtbase qtwebsockets qtmultimedia rtl-sdr airspy hackrf

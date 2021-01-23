@@ -16,7 +16,9 @@ stdenv.mkDerivation {
 
   buildPhase = "dune build";
 
-  inherit (dune) installPhase;
+  installPhase = ''
+    dune install --prefix $out --libdir $OCAMLFIND_DESTDIR
+  '';
 
   meta = with lib; {
     homepage = "https://acg.loria.fr/";

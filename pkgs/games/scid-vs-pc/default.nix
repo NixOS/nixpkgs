@@ -74,9 +74,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Chess database with play and training functionality";
     homepage = "http://scidvspc.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ maintainers.paraseba ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
 

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, rustPlatform
-, openssl, cmake, perl, pkgconfig, zlib, curl, libgit2, libssh2
+, openssl, cmake, perl, pkg-config, zlib, curl, libgit2, libssh2
 }:
 
 with rustPlatform;
@@ -36,7 +36,7 @@ buildRustPackage rec {
 
   LIBGIT2_SYS_USE_PKG_CONFIG = true;
   LIBSSH2_SYS_USE_PKG_CONFIG = true;
-  nativeBuildInputs = [ cmake pkgconfig perl ];
+  nativeBuildInputs = [ cmake pkg-config perl ];
   buildInputs = [ openssl zlib curl libgit2 libssh2 ];
 
   postBuild = ''

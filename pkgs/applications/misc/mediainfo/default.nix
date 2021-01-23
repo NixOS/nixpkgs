@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig, libzen, libmediainfo, zlib }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, libmediainfo, zlib }:
 
 stdenv.mkDerivation rec {
   version = "20.09";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rqg9z7s5bk7vlvjrs4gackzg7ib05a0dffi2ihsjf5a7kw7wcir";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libzen libmediainfo zlib ];
 
   sourceRoot = "./MediaInfo/Project/GNU/CLI/";

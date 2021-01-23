@@ -1,6 +1,6 @@
 { fetchFromGitHub, lib, mkDerivation
 # nativeBuildInputs
-, qmake, pkgconfig
+, qmake, pkg-config
 # Qt
 , qtbase, qtsvg, qtwebengine
 # buildInputs
@@ -30,12 +30,12 @@ mkDerivation rec {
       --replace "include(lib_radare2.pri)" ""
   '';
 
-  nativeBuildInputs = [ qmake pkgconfig python3 wrapQtAppsHook ];
+  nativeBuildInputs = [ qmake pkg-config python3 wrapQtAppsHook ];
   propagatedBuildInputs = [ python3.pkgs.pyside2 ];
   buildInputs = [ qtbase qtsvg qtwebengine r2-for-cutter python3 ];
 
   qmakeFlags = with python3.pkgs; [
-    "CONFIG+=link_pkgconfig"
+    "CONFIG+=link_pkg-config"
     "PKGCONFIG+=r_core"
     # Leaving this enabled doesn't break build but generates errors
     # at runtime (to console) about being unable to load needed bits.

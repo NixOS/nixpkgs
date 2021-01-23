@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf
+{ lib, stdenv, fetchurl, pkg-config, gtk3, gnome3, gdk-pixbuf
 , librsvg, libgnome-games-support, gettext, itstool, libxml2, wrapGAppsHook
 , meson, ninja, python3, desktop-file-utils
 }:
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/tali/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/tali/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "196f6hiap61sdqr7kvywk74yl0m2j7fvqml37p6cgfm7gfrhrvi9";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja python3 desktop-file-utils
-    pkgconfig gnome3.adwaita-icon-theme
+    pkg-config gnome3.adwaita-icon-theme
     libxml2 itstool gettext wrapGAppsHook
   ];
   buildInputs = [ gtk3 gdk-pixbuf librsvg libgnome-games-support ];

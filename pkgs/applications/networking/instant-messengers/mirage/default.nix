@@ -1,5 +1,5 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub
-, qmake, pkgconfig, olm, wrapQtAppsHook
+, qmake, pkg-config, olm, wrapQtAppsHook
 , qtbase, qtquickcontrols2, qtkeychain, qtmultimedia, qttools, qtgraphicaleffects
 , python3Packages, pyotherside, libXScrnSaver
 }:
@@ -23,7 +23,7 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig qmake wrapQtAppsHook python3Packages.wrapPython ];
+  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook python3Packages.wrapPython ];
 
   buildInputs = [
     qtbase qtmultimedia

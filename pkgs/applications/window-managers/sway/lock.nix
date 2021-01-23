@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, scdoc
+, meson, ninja, pkg-config, scdoc
 , wayland, wayland-protocols, libxkbcommon, cairo, gdk-pixbuf, pam
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace "version: '1.4'" "version: '${version}'"
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
   buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
 
   mesonFlags = [

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, which, sqlite, lua5_1, perl, python3, zlib, pkgconfig, ncurses
+{ stdenv, lib, fetchFromGitHub, fetchpatch, which, sqlite, lua5_1, perl, python3, zlib, pkg-config, ncurses
 , dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU, libGL, freetype, pngcrush, advancecomp
 , tileMode ? false, enableSound ? tileMode
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # Patch hard-coded paths and remove force library builds
   patches = [ ./crawl_purify.patch ];
 
-  nativeBuildInputs = [ pkgconfig which perl pngcrush advancecomp ];
+  nativeBuildInputs = [ pkg-config which perl pngcrush advancecomp ];
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]

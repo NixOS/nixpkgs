@@ -1,10 +1,10 @@
-{ stdenv, buildGoModule, fetchFromGitHub, makeWrapper
+{ lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper
 , git, bash, gzip, openssh, pam
 , sqliteSupport ? true
 , pamSupport ? true
 }:
 
-with stdenv.lib;
+with lib;
 
 buildGoModule rec {
   pname = "gogs";

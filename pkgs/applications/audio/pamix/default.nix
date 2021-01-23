@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, pkgconfig, cmake
+, pkg-config, cmake
 , libpulseaudio, ncurses }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace "/etc" "$out/etc/xdg"
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libpulseaudio ncurses ];
 
   meta = with lib; {

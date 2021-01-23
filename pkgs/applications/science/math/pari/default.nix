@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     # Versions with current majorMinor values are at http://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz
-    url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-v8iPxPc1L0hA5uNSxy8DacvqikVAOxg0piafNwmXCxw=";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libX11
     tex
     perl
-  ] ++ stdenv.lib.optionals withThread [
+  ] ++ lib.optionals withThread [
     libpthreadstubs
   ];
 
@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-gmp=${gmp.dev}"
     "--with-readline=${readline.dev}"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--host=x86_64-darwin"
-  ++ stdenv.lib.optional withThread "--mt=pthread";
+  ] ++ lib.optional stdenv.isDarwin "--host=x86_64-darwin"
+  ++ lib.optional withThread "--mt=pthread";
 
   preConfigure = ''
     export LD=$CC
   '';
 
-  postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  postConfigure = lib.optionalString stdenv.isDarwin ''
     echo 'echo x86_64-darwin' > config/arch-osname
   '';
 

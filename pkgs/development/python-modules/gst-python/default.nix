@@ -3,7 +3,7 @@
 , meson
 , ninja
 , stdenv
-, pkgconfig
+, pkg-config
 , python3
 , pygobject3
 , gobject-introspection
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     gobject-introspection
     gst-plugins-base

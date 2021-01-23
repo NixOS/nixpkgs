@@ -1,6 +1,6 @@
 { lib, stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
-, freetype, libpng, pkgconfig, mock, pytz, pygobject3, gobject-introspection
+, freetype, libpng, pkg-config, mock, pytz, pygobject3, gobject-introspection
 , certifi, pillow
 , enableGhostscript ? true, ghostscript ? null, gtk3
 , enableGtk3 ? false, cairo
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   XDG_RUNTIME_DIR = "/tmp";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ which sphinx ]
     ++ stdenv.lib.optional enableGhostscript ghostscript

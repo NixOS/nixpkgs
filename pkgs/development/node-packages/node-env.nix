@@ -388,10 +388,11 @@ let
     , dontStrip ? true
     , unpackPhase ? "true"
     , buildPhase ? "true"
+    , meta ? {}
     , ... }@args:
 
     let
-      extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" "dontStrip" "dontNpmInstall" "preRebuild" "unpackPhase" "buildPhase" ];
+      extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" "dontStrip" "dontNpmInstall" "preRebuild" "unpackPhase" "buildPhase" "meta" ];
     in
     stdenv.mkDerivation ({
       name = "node_${name}-${version}";
@@ -443,6 +444,11 @@ let
         # Run post install hook, if provided
         runHook postInstall
       '';
+
+      meta = {
+        # default to Node.js' platforms
+        platforms = nodejs.meta.platforms;
+      } // meta;
     } // extraArgs);
 
   # Builds a development shell

@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ sndio ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin && !stdenv.targetPlatform.isBSD)
+    ++ lib.optional (!stdenv.isDarwin && !stdenv.targetPlatform.isBSD)
     libbsd;
 
   outputs = [ "out" "man" ];
 
   preBuild = ''
     makeFlagsArray+=("PREFIX=$out")
-  '' + stdenv.lib.optionalString
+  '' + lib.optionalString
     (!stdenv.isDarwin && !stdenv.targetPlatform.isBSD) ''
       makeFlagsArray+=(LDADD="-lsndio -lbsd")
 

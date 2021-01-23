@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
     systemd libGL libX11
   ];
 
-  mesonFlags = [ "-Dxwayland=${stdenv.lib.boolToString (xwayland != null)}" ];
+  mesonFlags = [ "-Dxwayland=${lib.boolToString (xwayland != null)}" ];
 
-  postFixup = stdenv.lib.optionalString (xwayland != null) ''
+  postFixup = lib.optionalString (xwayland != null) ''
     wrapProgram $out/bin/cage --prefix PATH : "${xwayland}/bin"
   '';
 

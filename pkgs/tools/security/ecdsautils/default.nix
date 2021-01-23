@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "18sr8x3qiw8s9l5pfi7r9i3ayplz4jqdml75ga9y933vj7vs0k4d";
   };
 
-  nativeBuildInputs = with pkgs; [ cmake pkgconfig doxygen ];
+  nativeBuildInputs = with pkgs; [ cmake pkg-config doxygen ];
   buildInputs = with pkgs; [ libuecc  ];
 
   meta = with lib; {

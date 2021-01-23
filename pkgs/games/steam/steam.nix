@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
 
   postInstall = ''
     rm $out/bin/steamdeps
-    ${stdenv.lib.optionalString traceDeps ''
+    ${lib.optionalString traceDeps ''
       cat > $out/bin/steamdeps <<EOF
       #!${runtimeShell}
       echo \$1 >> ${traceLog}

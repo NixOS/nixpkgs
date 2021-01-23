@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , ninja
 , meson
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , appstream-glib
 , desktop-file-utils
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig
+    meson ninja pkg-config
     wrapGAppsHook
     appstream-glib
     desktop-file-utils

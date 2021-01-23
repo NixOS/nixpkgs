@@ -2,7 +2,7 @@
 , fetchgit
 , autoreconfHook
 , glib
-, pkgconfig
+, pkg-config
 , libxml2
 , exiv2
 , imagemagick
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     inherit sha256 rev;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ glib libxml2 exiv2 imagemagick ];
 
   prePatch = ''

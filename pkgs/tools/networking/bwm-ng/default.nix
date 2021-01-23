@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
 
   # This code uses inline in the gnu89 sense: see http://clang.llvm.org/compatibility.html#inline
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-std=gnu89";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-std=gnu89";
 
   meta = with lib; {
     description = "A small and simple console-based live network and disk io bandwidth monitor";

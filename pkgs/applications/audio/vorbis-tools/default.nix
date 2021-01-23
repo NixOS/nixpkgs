@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchzip, libogg, libvorbis, libao, pkgconfig, curl
+{ lib, stdenv, fetchurl, fetchzip, libogg, libvorbis, libao, pkg-config, curl
 , speex, flac }:
 
 let
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libogg libvorbis libao curl speex flac ];
 
   meta = with lib; {

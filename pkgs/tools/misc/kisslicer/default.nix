@@ -7,7 +7,7 @@
 
 let
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     libGLU libGL
     stdenv.cc.cc
     libX11

@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , sqlite
@@ -26,7 +27,7 @@ buildGoModule rec {
     "-ldflags=-s -w -X github.com/manojkarthick/expenses/cmd.Version=${version}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
    description = "An interactive command line expense logger";
    license = licenses.mit;
    maintainers = [ maintainers.manojkarthick ];

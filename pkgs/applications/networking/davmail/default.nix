@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp -vR ./* $out/share/davmail
     makeWrapper $out/share/davmail/davmail $out/bin/davmail \
       --prefix PATH : ${jre}/bin \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ glib gtk2 libXtst ]}
   '';
 
   meta = with lib; {

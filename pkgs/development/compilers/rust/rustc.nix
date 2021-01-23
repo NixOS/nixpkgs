@@ -1,8 +1,8 @@
-{ stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
+{ lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget
 , fetchurl, file, python3
 , darwin, cmake, rust, rustPlatform
-, pkgconfig, openssl
+, pkg-config, openssl
 , which, libffi
 , withBundledLLVM ? false
 , enableRustcDev ? true
@@ -12,7 +12,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optionals optional optionalString concatStringsSep;
+  inherit (lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
 in stdenv.mkDerivation rec {
   pname = "rustc";
@@ -133,7 +133,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     file python3 rustPlatform.rust.rustc cmake
-    which libffi removeReferencesTo pkgconfig
+    which libffi removeReferencesTo pkg-config
   ];
 
   buildInputs = [ openssl ]
@@ -143,7 +143,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
-  postInstall = stdenv.lib.optionalString enableRustcDev ''
+  postInstall = lib.optionalString enableRustcDev ''
     # install rustc-dev components. Necessary to build rls, clippy...
     python x.py dist rustc-dev
     tar xf build/dist/rustc-dev*tar.gz
@@ -172,7 +172,7 @@ in stdenv.mkDerivation rec {
 
   passthru.llvm = llvmShared;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.rust-lang.org/";
     description = "A safe, concurrent, practical language";
     maintainers = with maintainers; [ madjar cstrahan globin havvy ];

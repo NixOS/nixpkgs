@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, lv2, meson, ninja }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, lv2, meson, ninja }:
 
 let
   speech-denoiser-src = fetchFromGitHub {
@@ -24,7 +24,7 @@ stdenv.mkDerivation  {
 
   src = speech-denoiser-src;
 
-  nativeBuildInputs = [ pkgconfig meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [ lv2 rnnoise-nu ];
 
   mesonFlags = ("--prefix=${placeholder "out"}/lib/lv2");

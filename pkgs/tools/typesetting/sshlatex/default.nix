@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   installPhase = let
-    binPath = stdenv.lib.makeBinPath [ openssh perl gnutar bash inotify-tools ];
+    binPath = lib.makeBinPath [ openssh perl gnutar bash inotify-tools ];
   in ''
     mkdir -p $out/bin
     cp sshlatex $out/bin
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
       purely local setting.
     '';
     homepage = "https://github.com/iblech/sshlatex";
-    license = stdenv.lib.licenses.gpl3Plus;  # actually dual-licensed gpl3Plus | lppl13cplus
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl3Plus;  # actually dual-licensed gpl3Plus | lppl13cplus
+    platforms = lib.platforms.all;
     maintainers = [ maintainers.iblech ];
   };
 }

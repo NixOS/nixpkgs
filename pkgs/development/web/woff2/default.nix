@@ -1,4 +1,4 @@
-{ brotli, cmake, pkgconfig, fetchFromGitHub, lib, stdenv
+{ brotli, cmake, pkg-config, fetchFromGitHub, lib, stdenv
 , static ? stdenv.hostPlatform.isStatic
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # Need to explicitly link to brotlicommon
   patches = stdenv.lib.optional static ./brotli-static.patch;
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [
     "-DCANONICAL_PREFIXES=ON"

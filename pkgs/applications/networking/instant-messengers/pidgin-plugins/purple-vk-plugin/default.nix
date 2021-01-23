@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, pidgin, cmake, libxml2 } :
+{ lib, stdenv, fetchhg, pidgin, cmake, libxml2 } :
 
 let
   version = "40ddb6d";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://bitbucket.org/olegoandreev/purple-vk-plugin";
     description = "Vk (russian social network) plugin for Pidgin / libpurple";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

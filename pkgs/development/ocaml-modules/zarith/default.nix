@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl
-, ocaml, findlib, pkgconfig, perl
+, ocaml, findlib, pkg-config, perl
 , gmp
 }:
 
 let source =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02"
+  if lib.versionAtLeast ocaml.version "4.02"
   then {
     version = "1.11";
     url = "https://github.com/ocaml/Zarith/archive/release-1.11.tar.gz";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   inherit (source) version;
   src = fetchurl { inherit (source) url sha256; };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ocaml findlib perl ];
   propagatedBuildInputs = [ gmp ];
 

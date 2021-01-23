@@ -1,4 +1,4 @@
-{ ripgrep, gitAndTools, fzf, makeWrapper, vim_configurable, vimPlugins, fetchFromGitHub, writeTextDir
+{ ripgrep, git, fzf, makeWrapper, vim_configurable, vimPlugins, fetchFromGitHub, writeTextDir
 , lib, stdenv, runCommandNoCC, remarshal, formats, spacevim_config ? import ./init.nix }:
 with stdenv;
 let
@@ -39,7 +39,7 @@ in mkDerivation rec {
     # trailing slash very important for SPACEVIMDIR
     makeWrapper "${vim-customized}/bin/vim" "$out/bin/spacevim" \
         --add-flags "-u $out/SpaceVim/vimrc" --set SPACEVIMDIR "${spacevimdir}/" \
-        --prefix PATH : ${lib.makeBinPath [ fzf gitAndTools.git ripgrep]}
+        --prefix PATH : ${lib.makeBinPath [ fzf git ripgrep]}
   '';
 
   meta = with lib; {

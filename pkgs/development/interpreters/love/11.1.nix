@@ -1,4 +1,4 @@
-{ stdenv, fetchFromBitbucket, pkgconfig, SDL2, libGLU, libGL, openal, luajit,
+{ stdenv, fetchFromBitbucket, pkg-config, SDL2, libGLU, libGL, openal, luajit,
   libdevil, freetype, physfs, libmodplug, mpg123, libvorbis, libogg,
   libtheora, which, autoconf, automake, libtool
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     sha256 = "18gfp65ngb8k8g7hgbw2bhrwk2i7m56m21d39pk4484q9z8p4vm7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     SDL2 libGLU libGL openal luajit libdevil freetype physfs libmodplug mpg123
     libvorbis libogg libtheora autoconf which libtool automake

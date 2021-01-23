@@ -28,7 +28,6 @@
 }:
 
 let
-  lib = stdenv.lib;
   concatAttrVals = nameList: set: lib.concatMap (x: set.${x} or []) nameList;
 
   featureDependencies = {

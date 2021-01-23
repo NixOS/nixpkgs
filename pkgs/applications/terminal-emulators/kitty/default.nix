@@ -1,5 +1,5 @@
 { lib, stdenv, substituteAll, fetchFromGitHub, python3Packages, libunistring,
-  harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
+  harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel,
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
   lcms2,
@@ -35,7 +35,7 @@ buildPythonApplication rec {
     harfbuzz
     ncurses
     lcms2
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     CoreGraphics
     Foundation
@@ -45,21 +45,21 @@ buildPythonApplication rec {
     libpng
     python3
     zlib
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
     wayland-protocols wayland dbus
   ];
 
   nativeBuildInputs = [
-    pkgconfig sphinx ncurses
+    pkg-config sphinx ncurses
     installShellFiles
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
   ];
 
-  propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux libGL;
+  propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
 
   outputs = [ "out" "terminfo" ];
 
@@ -68,7 +68,7 @@ buildPythonApplication rec {
   ];
 
   # Causes build failure due to warning
-  hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "strictoverflow";
+  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
   dontConfigure = true;
 
@@ -80,7 +80,7 @@ buildPythonApplication rec {
   '' else ''
     ${python.interpreter} setup.py linux-package \
     --update-check-interval=0 \
-    --egl-library='${stdenv.lib.getLib libGL}/lib/libEGL.so.1' \
+    --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
     --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
     --canberra-library='${libcanberra}/lib/libcanberra.so'
   '';
@@ -110,7 +110,7 @@ buildPythonApplication rec {
     '' else ''
     cp -r linux-package/{bin,share,lib} $out
     ''}
-    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick xsel ncurses.dev ]}"
+    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick xsel ncurses.dev ]}"
     runHook postInstall
 
     installShellCompletion --cmd kitty \

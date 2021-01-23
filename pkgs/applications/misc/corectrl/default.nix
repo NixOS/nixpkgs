@@ -51,7 +51,7 @@ stdenv.mkDerivation rec{
   ];
 
   runtimeDeps = [ mesa-demos vulkan-tools ];
-  binPath = stdenv.lib.makeBinPath runtimeDeps;
+  binPath = lib.makeBinPath runtimeDeps;
 
   dontWrapQtApps = true;
 

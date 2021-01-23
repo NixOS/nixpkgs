@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoreconfHook
 , elfutils
 , libxml2
-, pkgconfig
+, pkg-config
 , strace
 , python3
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     strace
   ];
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ABI Generic Analysis and Instrumentation Library";
     homepage = "https://sourceware.org/libabigail/";
     license = licenses.lgpl3Plus;

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, callPackage, libpng12, imagemagick
-, autoreconfHook, glib, pstoedit, pkgconfig, gettext, gd, darwin
+, autoreconfHook, glib, pstoedit, pkg-config, gettext, gd, darwin
 , runtimeShell }:
 
 # TODO: Figure out why the resultant binary is somehow linked against
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
   #'';
 
   autofig = callPackage ./autofig.nix {};
-  nativeBuildInputs = [ autoreconfHook glib autofig pkgconfig gettext ];
+  nativeBuildInputs = [ autoreconfHook glib autofig pkg-config gettext ];
   buildInputs = [ libpng12 imagemagick pstoedit ]
-    ++ stdenv.lib.optionals stdenv.isDarwin
+    ++ lib.optionals stdenv.isDarwin
        (with darwin.apple_sdk.frameworks; [ gd ApplicationServices ]);
 
   postUnpack = ''

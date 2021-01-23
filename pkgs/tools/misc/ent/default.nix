@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ unzip ];
 
-  buildFlags = stdenv.lib.optional stdenv.cc.isClang "CC=clang";
+  buildFlags = lib.optional stdenv.cc.isClang "CC=clang";
 
   installPhase = ''
     mkdir -p $out/bin

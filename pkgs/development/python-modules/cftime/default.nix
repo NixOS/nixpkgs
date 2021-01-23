@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "cftime";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8d6a1144f43b9d7a180d7ceb3aa8015b7133c615fbac231bed184a91129f0207";
+    sha256 = "77fd86e69b234d41fa8634d627e9e9ee0501c2a8a95268c2b524d38e0a33f090";
   };
 
   checkInputs = [

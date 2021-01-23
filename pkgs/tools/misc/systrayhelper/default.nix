@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgconfig, libappindicator-gtk3, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, pkg-config, libappindicator-gtk3, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "systrayhelper";
@@ -24,7 +24,7 @@ buildGoPackage rec {
     -w
   '' ];
 
-  nativeBuildInputs = [ pkgconfig libappindicator-gtk3 ];
+  nativeBuildInputs = [ pkg-config libappindicator-gtk3 ];
   buildInputs = [ libappindicator-gtk3 ];
 
   meta = with lib; {

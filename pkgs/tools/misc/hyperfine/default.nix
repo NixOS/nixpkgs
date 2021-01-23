@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "12qdllhydd29xh20l5gir6qpj4a1nkzp8ics344rcwj8wsj7g5zw";
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   postInstall = ''
     installManPage doc/hyperfine.1

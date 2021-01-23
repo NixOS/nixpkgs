@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, cmake, fetchFromGitHub, pkgconfig
+{ lib, stdenv, mkDerivation, cmake, fetchFromGitHub, pkg-config
 , boost, exiv2, fftwFloat, gsl
 , ilmbase, lcms2, libraw, libtiff, openexr
 , qtbase, qtdeclarative, qttools, qtwebengine, eigen
@@ -22,7 +22,7 @@ mkDerivation rec {
     boost exiv2 fftwFloat gsl ilmbase lcms2 libraw libtiff openexr
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
     homepage = "http://qtpfsgui.sourceforge.net/";

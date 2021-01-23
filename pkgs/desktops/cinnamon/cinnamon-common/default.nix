@@ -22,7 +22,7 @@
 , libXtst
 , muffin
 , networkmanager
-, pkgconfig
+, pkg-config
 , polkit
 , lib, stdenv
 , wrapGAppsHook
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     libXtst
     muffin
     networkmanager
-    pkgconfig
+    pkg-config
     polkit
     libxml2
     libgnomekbd

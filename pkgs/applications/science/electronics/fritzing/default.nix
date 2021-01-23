@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, fetchpatch, fetchFromGitHub, qmake, pkgconfig
+{ mkDerivation, lib, stdenv, fetchpatch, fetchFromGitHub, qmake, pkg-config
 , qtbase, qtsvg, qttools, qtserialport, boost, libgit2
 }:
 
@@ -32,7 +32,7 @@ mkDerivation rec {
 
   buildInputs = [ qtbase qtsvg qtserialport boost libgit2 ];
 
-  nativeBuildInputs = [ qmake pkgconfig qttools ];
+  nativeBuildInputs = [ qmake pkg-config qttools ];
 
   patches = [(fetchpatch {
     name = "fix-libgit2-version.patch";
@@ -79,8 +79,8 @@ mkDerivation rec {
   meta = {
     description = "An open source prototyping tool for Arduino-based projects";
     homepage = "https://fritzing.org/";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.robberer ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.robberer ];
+    platforms = lib.platforms.linux;
   };
 }

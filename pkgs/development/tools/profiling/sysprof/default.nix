@@ -10,7 +10,7 @@
 , libxml2
 , meson, ninja
 , pango
-, pkgconfig
+, pkg-config
 , polkit
 , shared-mime-info
 , systemd
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     shared-mime-info
     wrapGAppsHook
     gnome3.adwaita-icon-theme

@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , nasm
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , gst-plugins-base
 , orc
@@ -47,7 +47,7 @@ assert gtkSupport -> gtk3 != null;
 assert raspiCameraSupport -> ((libraspberrypi != null) && stdenv.isLinux && stdenv.isAarch64);
 
 let
-  inherit (stdenv.lib) optionals;
+  inherit (lib) optionals;
 in
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python3
     meson
     ninja
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GStreamer Good Plugins";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''

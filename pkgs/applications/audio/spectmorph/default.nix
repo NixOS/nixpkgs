@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libjack2, lv2, glib, qt5, libao, cairo, libsndfile, fftwFloat }:
+{ lib, stdenv, fetchurl, pkg-config, libjack2, lv2, glib, qt5, libao, cairo, libsndfile, fftwFloat }:
 
 stdenv.mkDerivation rec {
   pname = "spectmorph";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [  libjack2 lv2 glib qt5.qtbase libao cairo libsndfile fftwFloat ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "Allows to analyze samples of musical instruments, and to combine them (morphing) to construct hybrid sounds";

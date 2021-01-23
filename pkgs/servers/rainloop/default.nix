@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, unzip, pkgs, dataPath ? "/var/lib/rainloop" }: let
   common = { edition, sha256 }:
     stdenv.mkDerivation (rec {
-      pname = "rainloop${stdenv.lib.optionalString (edition != "") "-${edition}"}";
+      pname = "rainloop${lib.optionalString (edition != "") "-${edition}"}";
       version = "1.14.0";
 
       buildInputs = [ unzip ];
@@ -12,7 +12,7 @@
       '';
 
       src = fetchurl {
-        url = "https://github.com/RainLoop/rainloop-webmail/releases/download/v${version}/rainloop-${edition}${stdenv.lib.optionalString (edition != "") "-"}${version}.zip";
+        url = "https://github.com/RainLoop/rainloop-webmail/releases/download/v${version}/rainloop-${edition}${lib.optionalString (edition != "") "-"}${version}.zip";
         sha256 = sha256;
       };
 

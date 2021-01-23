@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   pname = "sudolikeaboss-unstable";
-  version = "20161127-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "20161127-${lib.strings.substring 0 7 rev}";
   rev = "2d9afe19f872c9f433d476e57ee86169781b164c";
 
   goPackagePath = "github.com/ravenac95/sudolikeaboss";

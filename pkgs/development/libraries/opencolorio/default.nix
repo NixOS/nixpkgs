@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, boost, pkgconfig, lcms2, tinyxml, git }:
+{ stdenv, lib, fetchFromGitHub, cmake, boost, pkg-config, lcms2, tinyxml, git }:
 
 with lib;
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" "dev" ];
 
   # TODO: Investigate whether git can be dropped: It's only used to apply patches
-  nativeBuildInputs = [ cmake pkgconfig git ];
+  nativeBuildInputs = [ cmake pkg-config git ];
 
   buildInputs = [ lcms2 tinyxml ] ++ optional stdenv.isDarwin boost;
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     mkdir -p $bin/bin; mv $out/bin $bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://opencolorio.org";
     description = "A color management framework for visual effects and animation";
     license = licenses.bsd3;

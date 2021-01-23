@@ -13,7 +13,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rncbc";
     repo = "qjackctl";
-    rev = "${pname}_${stdenv.lib.replaceChars ["."] ["_"] version}";
+    rev = "${pname}_${lib.replaceChars ["."] ["_"] version}";
     sha256 = "044kgwk7pfywad4myza0s2kvfkl21zkqq5wgny7n3c43qlcgs3zr";
   };
 

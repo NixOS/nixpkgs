@@ -1,4 +1,4 @@
-{lib, stdenv, buildOcamlJane,
+{lib, buildOcamlJane,
  ppx_assert,
  ppx_bench, ppx_bin_prot, ppx_compare, ppx_custom_printf, ppx_driver,
  ppx_enumerate, ppx_expect, ppx_fail, ppx_fields_conv, ppx_here,

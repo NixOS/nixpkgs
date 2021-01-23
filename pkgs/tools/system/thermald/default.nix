@@ -11,7 +11,7 @@
 , libtool
 , libxml2
 , lzma
-, pkgconfig
+, pkg-config
 , lib, stdenv
 , upower
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_412
     gtk-doc
     libtool
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

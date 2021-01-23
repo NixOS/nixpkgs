@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, libxml2, deadbeef, glib, gtk3 }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, libxml2, deadbeef, glib, gtk3 }:
 
 stdenv.mkDerivation rec {
   pname = "deadbeef-headerbar-gtk3-plugin";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v1schvnps7ypjqgcbqi74a45w8r2gbhrawz7filym22h1qr9wn0";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig libxml2 ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config libxml2 ];
   buildInputs = [ deadbeef glib gtk3 ];
 
   # Choose correct installation path

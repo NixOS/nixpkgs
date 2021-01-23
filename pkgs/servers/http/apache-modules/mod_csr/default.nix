@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
+{ lib, stdenv, fetchurl, pkg-config, mod_ca, apr, aprutil }:
 
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p4jc0q40453wpvwqgnr1n007b4jxpkizzy3r4jygsxxgg4x9w7x";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ mod_ca apr aprutil ];
   inherit (mod_ca) configureFlags installFlags;
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, curl, gpgme, libarchive, bzip2, lzma, attr, acl, libxml2
+{ lib, stdenv, fetchurl, pkg-config, curl, gpgme, libarchive, bzip2, lzma, attr, acl, libxml2
 , autoreconfHook }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "06278gmb26b9nl8l328cc2c2mhfi0dhac65syws17kf09f2m596x";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ curl gpgme libarchive bzip2 lzma attr acl libxml2 ];
 
   meta = with lib; {

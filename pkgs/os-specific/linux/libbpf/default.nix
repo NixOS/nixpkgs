@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkg-config
 , libelf, zlib
 , fetchpatch
 }:
@@ -31,14 +31,14 @@ stdenv.mkDerivation rec {
       --replace '/bin/rm' 'rm'
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libelf zlib ];
 
   sourceRoot = "source/src";
   enableParallelBuilding = true;
   makeFlags = [ "PREFIX=$(out)" ];
 
-  # FIXME: Multi-output requires some fixes to the way the pkgconfig file is
+  # FIXME: Multi-output requires some fixes to the way the pkg-config file is
   # constructed (it gets put in $out instead of $dev for some reason, with
   # improper paths embedded). Don't enable it for now.
 

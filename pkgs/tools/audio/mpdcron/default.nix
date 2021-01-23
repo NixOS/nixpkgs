@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, glib, libdaemon
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, glib, libdaemon
 , mpd_clientlib, curl, sqlite, bundlerEnv, libnotify, pandoc }:
 
 let
@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ autoconf automake libtool pkgconfig glib libdaemon pandoc
+    [ autoconf automake libtool pkg-config glib libdaemon pandoc
       mpd_clientlib curl sqlite gemEnv.wrappedRuby libnotify ];
 
   preConfigure = ''

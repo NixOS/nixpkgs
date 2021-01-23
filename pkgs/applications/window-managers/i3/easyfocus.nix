@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, xorgproto, libxcb, xcbutilkeysyms
+{ lib, stdenv, fetchFromGitHub, pkg-config, xorgproto, libxcb, xcbutilkeysyms
 , xorg , i3ipc-glib , glib
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "1db23vzzmp0hnfss1fkd80za6d2pajx7hdwikw50pk95jq0w8wfm";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxcb xcbutilkeysyms xorgproto xorg.libX11.dev i3ipc-glib glib.dev ];
 
   # Makefile has no rule for 'install'

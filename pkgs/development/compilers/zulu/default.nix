@@ -59,13 +59,13 @@ in stdenv.mkDerivation {
     EOF
   '';
 
-  rpath = stdenv.lib.strings.makeLibraryPath libraries;
+  rpath = lib.strings.makeLibraryPath libraries;
 
   passthru = {
     home = zulu;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.azul.com/products/zulu/";
     license = licenses.gpl2;
     description = "Certified builds of OpenJDK";

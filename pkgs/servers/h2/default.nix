@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "The Java SQL database";
     homepage = "http://www.h2database.com/html/main.html";
     license = licenses.mpl20;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = with maintainers; [ mahe ];
   };
 }

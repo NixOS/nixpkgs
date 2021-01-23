@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, gtk3, gupnp, mate, imagemagick, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, gupnp, mate, imagemagick, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "caja-extensions";
   version = "1.24.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "13jkynanqj8snys0if8lv6yx1y0jrm778s2152n4x65hsghc6cw5";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     wrapGAppsHook
   ];

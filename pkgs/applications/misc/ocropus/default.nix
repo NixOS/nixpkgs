@@ -33,7 +33,7 @@ pythonPackages.buildPythonApplication rec {
 
   enableParallelBuilding = true;
 
-  preConfigure = with stdenv.lib; ''
+  preConfigure = with lib; ''
     ${concatStrings (map (x: "cp -R ${x.src} models/`basename ${x.name}`;")
       models)}
 

@@ -3,7 +3,7 @@
 , gobject-introspection
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , lib, stdenv
 , wrapGAppsHook
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     wrapGAppsHook
-    pkgconfig
+    pkg-config
   ];
 
   meta = with lib; {

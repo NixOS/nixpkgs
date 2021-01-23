@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, gdk-pixbuf, gtk2 }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gdk-pixbuf, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "trayer-1.1.8";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gdk-pixbuf gtk2 ];
 
   src = fetchFromGitHub {

@@ -27,7 +27,7 @@
 let
   version = "4.4";
 
-  binpath = stdenv.lib.makeBinPath [
+  binpath = lib.makeBinPath [
     cabextract
     python
     gettext
@@ -52,7 +52,7 @@ let
     else if stdenv.hostPlatform.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
     else throw "Unsupported platform for PlayOnLinux: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
-  libs = pkgs: stdenv.lib.makeLibraryPath [ xorg.libX11 libGL ];
+  libs = pkgs: lib.makeLibraryPath [ xorg.libX11 libGL ];
 
   python = python2.withPackages(ps: with ps; [
     wxPython

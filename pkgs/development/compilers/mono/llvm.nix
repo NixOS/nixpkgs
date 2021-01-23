@@ -39,13 +39,13 @@ stdenv.mkDerivation {
   cmakeFlags = with stdenv; [
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ] ++ stdenv.lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
+  ] ++ lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies - Mono build";
     homepage    = "http://llvm.org/";
-    license     = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms   = lib.platforms.all;
   };
 }

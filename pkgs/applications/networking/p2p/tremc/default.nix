@@ -5,7 +5,7 @@
 , useGeoIP ? false # Require /var/lib/geoip-databases/GeoIP.dat
 }:
 let
-  wrapperPath = with stdenv.lib; makeBinPath (
+  wrapperPath = with lib; makeBinPath (
     optional x11Support xclip ++
     optional stdenv.isDarwin pbcopy
   );
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     ipy
     pyperclip
   ] ++
-  stdenv.lib.optional useGeoIP GeoIP;
+  lib.optional useGeoIP GeoIP;
 
   phases = [ "unpackPhase" "installPhase" ];
 

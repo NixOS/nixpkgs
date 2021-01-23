@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake flex bison file ];
   buildInputs = [ openssl libpcap zlib curl libmaxminddb gperftools python swig ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ gettext ];
+    ++ lib.optionals stdenv.isDarwin [ gettext ];
 
   #see issue https://github.com/zeek/zeek/issues/804 to modify hardlinking duplicate files.
   inherit preConfigure;
 
-  patches = stdenv.lib.optionals stdenv.cc.isClang [
+  patches = lib.optionals stdenv.cc.isClang [
     # Fix pybind c++17 build with Clang. See: https://github.com/pybind/pybind11/issues/1604
     (fetchpatch {
       url = "https://github.com/pybind/pybind11/commit/759221f5c56939f59d8f342a41f8e2d2cacbc8cf.patch";

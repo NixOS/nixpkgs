@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , python
-, pkgconfig
+, pkg-config
 , bison
 , flex
 , perl
@@ -40,7 +40,7 @@
 , enablePam ? (!stdenv.isDarwin), pam
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     bison
     flex
     perl

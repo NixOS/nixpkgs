@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, libxml2, flex, bison, vips, gnome2,
+{ lib, stdenv, fetchurl, pkg-config, glib, libxml2, flex, bison, vips, gnome2,
 fftw, gsl, goffice, libgsf }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-  [ pkgconfig glib libxml2 flex bison vips
+  [ pkg-config glib libxml2 flex bison vips
     gnome2.gtk fftw gsl goffice libgsf
   ];
 

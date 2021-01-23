@@ -24,15 +24,15 @@ stdenv.mkDerivation rec {
 
   patchesSrc = base.upstreamPatchTarball;
 
-  srcs = [mainSrc] ++ stdenv.lib.optional enableCopyDevicesPatch patchesSrc;
-  patches = stdenv.lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";
+  srcs = [mainSrc] ++ lib.optional enableCopyDevicesPatch patchesSrc;
+  patches = lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";
 
   buildInputs = [libiconv zlib popt]
-                ++ stdenv.lib.optional enableACLs acl
-                ++ stdenv.lib.optional enableZstd zstd
-                ++ stdenv.lib.optional enableLZ4 lz4
-                ++ stdenv.lib.optional enableOpenSSL openssl
-                ++ stdenv.lib.optional enableXXHash xxHash;
+                ++ lib.optional enableACLs acl
+                ++ lib.optional enableZstd zstd
+                ++ lib.optional enableLZ4 lz4
+                ++ lib.optional enableOpenSSL openssl
+                ++ lib.optional enableXXHash xxHash;
   nativeBuildInputs = [perl];
 
   configureFlags = [
@@ -48,13 +48,13 @@ stdenv.mkDerivation rec {
     # The following PR should fix the cross-compilation issue.
     # Test using `nix-build -A pkgsCross.aarch64-multiplatform.rsync`.
     # https://github.com/WayneD/rsync/commit/b7fab6f285ff0ff3816b109a8c3131b6ded0b484
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--enable-simd=no"
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--enable-simd=no"
   ;
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
 
   meta = base.meta // {
     description = "A fast incremental file transfer utility";
-    maintainers = with stdenv.lib.maintainers; [ peti ehmry kampfschlaefer ];
+    maintainers = with lib.maintainers; [ peti ehmry kampfschlaefer ];
   };
 }

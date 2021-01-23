@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, gtk2, gtk2-x11
+{ stdenv, fetchurl, makeWrapper, pkg-config, gtk2, gtk2-x11
 , gtkspell2, aspell
 , gst_all_1, startupnotification, gettext
 , perlPackages, libxml2, nss, nspr, farstream
@@ -44,7 +44,7 @@ let unwrapped = stdenv.mkDerivation rec {
   ++ (lib.optional (stdenv.isDarwin) gtk2-x11);
 
 
-  propagatedBuildInputs = [ pkgconfig gettext ]
+  propagatedBuildInputs = [ pkg-config gettext ]
     ++ (with perlPackages; [ perl XMLParser ])
     ++ (lib.optional (stdenv.isLinux) gtk2)
     ++ (lib.optional (stdenv.isDarwin) gtk2-x11);

@@ -4,7 +4,7 @@
 , fetchgit
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gnome3
 , perl
 , gettext
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     perl
     gettext
     libxml2

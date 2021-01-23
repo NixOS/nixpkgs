@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "3.38.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/iagno/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/iagno/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "097dw1l92l73xah9l56ka5mi3dvx48ffpiv33ni5i5rqw0ng7fc4";
   };
 

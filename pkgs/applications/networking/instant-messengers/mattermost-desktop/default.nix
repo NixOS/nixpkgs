@@ -5,7 +5,7 @@ libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev, wrapGAppsHook,
 hicolor-icon-theme, libuuid, at-spi2-core, at-spi2-atk }:
 
 let
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     alsaLib
     at-spi2-atk
     at-spi2-core

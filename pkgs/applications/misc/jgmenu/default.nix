@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , python3Packages
 , pango
 , librsvg
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     makeWrapper
     python3Packages.wrapPython
   ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     xorg.libXinerama
     xorg.libXrandr
     python3Packages.python
-  ] ++ stdenv.lib.optionals enableXfcePanelApplet [
+  ] ++ lib.optionals enableXfcePanelApplet [
     gtk3
     xfce.libxfce4util
     xfce.xfce4-panel
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
   ]
-  ++ stdenv.lib.optionals enableXfcePanelApplet [
+  ++ lib.optionals enableXfcePanelApplet [
     "--with-xfce4-panel-applet"
   ];
 

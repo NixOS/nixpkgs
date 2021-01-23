@@ -7,7 +7,7 @@ let
 
   version = "1.10.45";
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     alsaLib
     atk
     cairo

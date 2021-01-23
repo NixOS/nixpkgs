@@ -1,7 +1,7 @@
 { lib, stdenv
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , fetchFromGitLab
 , fetchpatch
 , python3
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
-  ] ++ stdenv.lib.optional (!doCheck) python3;
+    pkg-config
+  ] ++ lib.optional (!doCheck) python3;
 
   buildInputs = [
     glib

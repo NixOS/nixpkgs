@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchFromGitHub, fetchpatch, perl, buildLinux, ... } @ args:
+{ lib, stdenv, buildPackages, fetchFromGitHub, fetchpatch, perl, buildLinux, ... } @ args:
 
 buildLinux (args // {
   version = "5.9.0-2020.11.20";
@@ -16,7 +16,7 @@ buildLinux (args // {
   extraMeta = {
     branch = "master";
     hydraPlatforms = []; # Should the testing kernels ever be built on Hydra?
-    maintainers = with stdenv.lib.maintainers; [ davidak chiiruno ];
+    maintainers = with lib.maintainers; [ davidak chiiruno ];
     platforms = [ "x86_64-linux" ];
   };
 

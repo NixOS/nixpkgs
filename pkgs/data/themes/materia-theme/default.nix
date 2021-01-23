@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   mesonFlags = [
-    "-Dgnome_shell_version=${stdenv.lib.versions.majorMinor gnome3.gnome-shell.version}"
+    "-Dgnome_shell_version=${lib.versions.majorMinor gnome3.gnome-shell.version}"
   ];
 
   postInstall = ''

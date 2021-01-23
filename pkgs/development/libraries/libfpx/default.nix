@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "libfpx-1.3.1-7";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   # Darwin gets misdetected as Windows without this
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-D__unix";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D__unix";
 
   patches = [
     (fetchpatch {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     substituteInPlace jpeg/ejpeg.h --replace "int No_JPEG_Header_Flag" ""
   '' else null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.imagemagick.org";
     description = "A library for manipulating FlashPIX images";
     license = "Flashpix";

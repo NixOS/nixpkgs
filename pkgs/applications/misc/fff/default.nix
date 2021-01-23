@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "14ymdw6l6phnil0xf1frd5kgznaiwppcic0v4hb61s1zpf4wrshg";
   };
 
-  pathAdd = stdenv.lib.makeSearchPath "bin" ([ xdg_utils file coreutils w3m xdotool ]);
+  pathAdd = lib.makeSearchPath "bin" ([ xdg_utils file coreutils w3m xdotool ]);
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bashInteractive ];

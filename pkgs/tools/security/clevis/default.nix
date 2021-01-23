@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, asciidoc
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, asciidoc
 , jansson, jose, cryptsetup, curl, libpwquality, luksmeta
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wfgd2v1r47ckh5qp60b903191fx0fa27zyadxlsb8riqszhmwvz";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig asciidoc ];
+  nativeBuildInputs = [ meson ninja pkg-config asciidoc ];
   buildInputs = [ jansson jose cryptsetup curl libpwquality luksmeta ];
 
   outputs = [ "out" "man" ];

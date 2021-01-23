@@ -25,5 +25,5 @@ mkDerivation {
   ];
   homepage = "https://github.com/ghcjs/ghcjs-base";
   description = "base library for GHCJS";
-  license = stdenv.lib.licenses.mit;
+  license = lib.licenses.mit;
 }

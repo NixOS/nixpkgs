@@ -125,9 +125,15 @@ let
         if parsed.cpu.significantByte.name == "littleEndian" then "arm" else "armeb"
       else if isx86_32 then "i386"
       else parsed.cpu.name;
+    pythonAbiName =
+      # python's build doesn't differentiate between musl and glibc in its
+      # abi detection, our wrapper should match.
+      if stdenv.hostPlatform.isMusl then
+        replaceStrings [ "musl" ] [ "gnu" ] parsed.abi.name
+        else parsed.abi.name;
     multiarch =
       if isDarwin then "darwin"
-      else "${multiarchCpu}-${parsed.kernel.name}-${parsed.abi.name}";
+      else "${multiarchCpu}-${parsed.kernel.name}-${pythonAbiName}";
 
     abiFlags = optionalString (isPy36 || isPy37) "m";
 
@@ -216,7 +222,7 @@ in with passthru; stdenv.mkDerivation {
       else
         ./3.7/fix-finding-headers-when-cross-compiling.patch
     )
-  ] ++ optionals (isPy37 || isPy38) [
+  ] ++ optionals (isPy36 || isPy37) [
     # Backport a fix for ctypes.util.find_library.
     ./3.7/find_library.patch
   ];

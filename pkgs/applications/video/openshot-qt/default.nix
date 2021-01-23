@@ -32,8 +32,8 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/openshot-qt \
   ''
   # Fix toolbar icons on Darwin
-  + stdenv.lib.optionalString stdenv.isDarwin ''
-      --suffix QT_PLUGIN_PATH : "${stdenv.lib.getBin qtsvg}/lib/qt-5.12.7/plugins" \
+  + lib.optionalString stdenv.isDarwin ''
+      --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/lib/qt-5.12.7/plugins" \
   ''
   + ''
       "''${gappsWrapperArgs[@]}" \

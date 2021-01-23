@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, glfw, pkgconfig, libXrandr, libXdamage
+{ stdenv, fetchFromGitHub, glfw, pkg-config, libXrandr, libXdamage
 , libXext, libXrender, libXinerama, libXcursor, libXxf86vm, libXi
 , libX11, libGLU, python3Packages, ensureNewerSourcesForZipFilesHook
 , Cocoa
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0v7x93b61ama0gmzlx1zc56jgi7bvzsfvbkfl82xzwf2h5g1zni7";
   };
 
-  nativeBuildInputs = [ pkgconfig ensureNewerSourcesForZipFilesHook python3Packages.six ];
+  nativeBuildInputs = [ pkg-config ensureNewerSourcesForZipFilesHook python3Packages.six ];
   buildInputs = [
     glfw libGLU glfw libXrandr libXdamage
     libXext libXrender libXinerama libXcursor libXxf86vm

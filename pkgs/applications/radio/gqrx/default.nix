@@ -9,19 +9,19 @@ assert pulseaudioSupport -> libpulseaudio != null;
 
 mkDerivation rec {
   pname = "gqrx";
-  version = "2.14.3";
+  version = "2.14.4";
 
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "10pmd2jqmw77gybjfzrch6qi8jil1g6nsjzabbd6gnbsq7320axj";
+    sha256 = "sha256-mMaxu0jq2GaNLWjLsJQXx+zCxtyiCAZQJJZ8GJtnllQ=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     qtbase qtsvg gnuradio boost gr-osmosdr rtl-sdr hackrf
-  ] ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ];
+  ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   postInstall = ''
     install -vD $src/gqrx.desktop -t "$out/share/applications/"

@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchFromGitHub
-, autoconf, automake, which, libtool, pkgconfig
+, autoconf, automake, which, libtool, pkg-config
 , portaudio, alsaLib
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0c55hlqqh0m7bcb3nlgv1s4a22s5bgczr1cakjh3767rjb10khi0";
   };
 
-  nativeBuildInputs = [ autoconf automake which libtool pkgconfig ];
+  nativeBuildInputs = [ autoconf automake which libtool pkg-config ];
 
   buildInputs = [ portaudio ]
     ++ lib.optionals stdenv.isLinux [ alsaLib ]
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides a C API to different audio devices";
     homepage = "https://github.com/espeak-ng/pcaudiolib";
     license = licenses.gpl3;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, bison, boost, cmake, makeWrapper, pkgconfig
+{ lib, stdenv, fetchFromGitHub, bison, boost, cmake, makeWrapper, pkg-config
 , curl, cyrus_sasl, libaio, libedit, libev, libevent, libgcrypt, libgpgerror, lz4
 , ncurses, numactl, openssl, protobuf, valgrind, xxd, zlib
 , perlPackages
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ bison boost cmake makeWrapper pkgconfig ];
+  nativeBuildInputs = [ bison boost cmake makeWrapper pkg-config ];
 
   buildInputs = [
     curl cyrus_sasl libaio libedit libev libevent libgcrypt libgpgerror lz4

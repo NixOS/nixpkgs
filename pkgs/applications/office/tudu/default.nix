@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  preConfigure = stdenv.lib.optionalString stdenv.cc.isClang ''
+  preConfigure = lib.optionalString stdenv.cc.isClang ''
     substituteInPlace configure \
       --replace 'echo "main()' 'echo "int main()'
   '';

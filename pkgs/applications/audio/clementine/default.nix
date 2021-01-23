@@ -2,7 +2,7 @@
 , qtbase, qtx11extras
 , taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
 , libpulseaudio, gvfs, libcdio, libechonest, libspotify, pcre, projectm, protobuf
-, qca2, pkgconfig, sparsehash, config, makeWrapper, gst_plugins }:
+, qca2, pkg-config, sparsehash, config, makeWrapper, gst_plugins }:
 
 let
   withIpod = config.clementine.ipod or false;
@@ -24,7 +24,7 @@ let
     ./clementine-spotify-blob.patch
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     boost
@@ -48,10 +48,10 @@ let
     sqlite
     taglib
   ]
-  ++ stdenv.lib.optionals (withIpod) [libgpod libplist usbmuxd]
-  ++ stdenv.lib.optionals (withMTP) [libmtp]
-  ++ stdenv.lib.optionals (withCD) [libcdio]
-  ++ stdenv.lib.optionals (withCloud) [sparsehash];
+  ++ lib.optionals (withIpod) [libgpod libplist usbmuxd]
+  ++ lib.optionals (withMTP) [libmtp]
+  ++ lib.optionals (withCD) [libcdio]
+  ++ lib.optionals (withCloud) [sparsehash];
 
   postPatch = ''
     sed -i src/CMakeLists.txt \

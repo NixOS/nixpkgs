@@ -1,42 +1,31 @@
 { stdenv
 , gcc8Stdenv
-, lib
-, libzip
 , boost
 , cmake
-, makeWrapper
+, cudatoolkit
+, cudnn
+, eigen
 , fetchFromGitHub
 , fetchpatch
-, cudnn ? null
-, cudatoolkit ? null
-, mesa ? null
-, opencl-headers ? null
-, ocl-icd ? null
-, gperftools ? null
-, eigen ? null
+, gperftools
+, lib
+, libzip
+, makeWrapper
+, mesa
+, ocl-icd
+, opencl-headers
+, openssl
+, writeShellScriptBin
 , enableAVX2 ? stdenv.hostPlatform.avx2Support
 , enableBigBoards ? false
 , enableCuda ? false
+, enableContrib ? false
 , enableGPU ? true
 , enableTcmalloc ? true
 }:
 
 assert !enableGPU -> (
-  eigen != null &&
   !enableCuda);
-
-assert enableCuda -> (
-  mesa != null &&
-  cudatoolkit != null &&
-  cudnn != null);
-
-assert !enableCuda -> (
-  !enableGPU || (
-    opencl-headers != null &&
-    ocl-icd != null));
-
-assert enableTcmalloc -> (
-  gperftools != null);
 
 let
   env = if enableCuda
@@ -45,14 +34,17 @@ let
 
 in env.mkDerivation rec {
   pname = "katago";
-  version = "1.6.1";
+  version = "1.8.0";
+  githash = "8ffda1fe05c69c67342365013b11225d443445e8";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "030ff9prnvpadgcb4x4hx6b6ggg10bwqcj8vd8nwrdz9sjq67yf7";
+    sha256 = "18r75xjj6vv2gbl92k9aa5bd0cxf09zl1vxlji148y0xbvgv6p8c";
   };
+
+  fakegit = writeShellScriptBin "git" "echo ${githash}";
 
   nativeBuildInputs = [
     cmake
@@ -70,6 +62,8 @@ in env.mkDerivation rec {
   ] ++ lib.optionals (enableGPU && !enableCuda) [
     opencl-headers
     ocl-icd
+  ] ++ lib.optionals enableContrib [
+    openssl
   ] ++ lib.optionals enableTcmalloc [
     gperftools
   ];
@@ -84,6 +78,10 @@ in env.mkDerivation rec {
     "-DUSE_BACKEND=CUDA"
   ] ++ lib.optionals (enableGPU && !enableCuda) [
     "-DUSE_BACKEND=OPENCL"
+  ] ++ lib.optionals enableContrib [
+    "-DBUILD_DISTRIBUTED=1"
+    "-DNO_GIT_REVISION=OFF"
+    "-DGIT_EXECUTABLE=${fakegit}/bin/git"
   ] ++ lib.optionals enableTcmalloc [
     "-DUSE_TCMALLOC=ON"
   ] ++ lib.optionals enableBigBoards [

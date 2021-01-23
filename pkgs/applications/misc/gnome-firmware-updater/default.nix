@@ -11,7 +11,7 @@
 , libxmlb
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , systemd
 , help2man
 , wrapGAppsHook
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     help2man
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

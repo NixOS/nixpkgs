@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "go-chromecast";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "vishen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0frvj1van1qn7hi96m0l7pzm4jf0v49xl4r4fi2lh1yqzgsgzy9f";
+    sha256 = "sha256-OCykgy49RZL2aAE0OeHxj8zkFnr32sIYjtoFMwESqLg=";
   };
 
-  vendorSha256 = "0vgbmgk07kqmhhmcssy1ibr2hzk07hf32kkdyj2b9jqj9sb49p49";
+  vendorSha256 = "sha256-idxElk4Sy7SE9G1OMRw8YH4o8orBa80qhBXPA+ar620=";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev} -X main.date=unknown" ];
 

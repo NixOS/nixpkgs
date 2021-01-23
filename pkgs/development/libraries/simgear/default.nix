@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, plib, freeglut, xorgproto, libX11, libXext, libXi
+{ lib, stdenv, fetchurl, plib, freeglut, xorgproto, libX11, libXext, libXi
 , libICE, libSM, libXt, libXmu, libGLU, libGL, boost, zlib, libjpeg, freealut
 , openscenegraph, openal, expat, cmake, apr
 , curl
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
                   libICE libSM libXt libXmu libGLU libGL boost zlib libjpeg freealut
                   openscenegraph openal expat apr curl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simulation construction toolkit";
     homepage = "https://gitorious.org/fg/simgear";
     maintainers = with maintainers; [ raskin ];

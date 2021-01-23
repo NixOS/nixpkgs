@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub }:
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation {
   name = "rtl8192su-unstable-2016-10-05";
 

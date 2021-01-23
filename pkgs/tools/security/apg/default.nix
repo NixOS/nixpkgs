@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl }:
 stdenv.mkDerivation rec {
   name = "apg-2.3.0b";
   src = fetchurl {
@@ -8,14 +8,14 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     substituteInPlace Makefile --replace /usr/local "$out"
   '';
-  makeFlags = stdenv.lib.optionals stdenv.isDarwin ["CC=cc"];
+  makeFlags = lib.optionals stdenv.isDarwin ["CC=cc"];
 
   patches = [
     ./apg.patch
     ./phony-install-target.patch
   ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     sed -i -e 's|APG_CLIBS += -lcrypt|APG_CLIBS += -L${openssl.out}/lib -lcrypto|' Makefile
   '';
 
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
          password generation
     '';
     homepage = "http://www.adel.nursat.kz/apg/";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ astsmtl ];
+    platforms = lib.platforms.unix;
   };
 }

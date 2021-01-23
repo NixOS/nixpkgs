@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$lib/libexec/mission-control-5" \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 

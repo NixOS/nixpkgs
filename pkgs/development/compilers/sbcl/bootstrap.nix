@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper }:
+{ lib, stdenv, fetchurl, makeWrapper }:
 
 let
   options = rec {
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
       --add-flags "--core $out/share/sbcl/sbcl.core"
   '';
 
-  postFixup = stdenv.lib.optionalString (!stdenv.isAarch32 && stdenv.isLinux) ''
+  postFixup = lib.optionalString (!stdenv.isAarch32 && stdenv.isLinux) ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/share/sbcl/sbcl
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lisp compiler";
     homepage = "http://www.sbcl.org";
     license = licenses.publicDomain; # and FreeBSD

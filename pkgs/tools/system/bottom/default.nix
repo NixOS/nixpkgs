@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
   cargoSha256 = "sha256-qnh4Tl6JRgxBJbu+t9IJX/XChIR15rTRLvsl+/ZvPxY=";
 

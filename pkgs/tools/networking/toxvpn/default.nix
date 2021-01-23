@@ -2,7 +2,7 @@
   libtoxcore, libsodium, libcap, zeromq,
   systemd ? null }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   name = "toxvpn-2019-09-09";

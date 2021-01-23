@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "kapowbang";
-  version = "0.5.4";
+  version = "0.6.0";
 
   subPackages = [ "." ];
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner = "BBVA";
     repo = "kapow";
     rev = "v${version}";
-    sha256 = "09qr631vzlgibz6q64f35lqzz9h1g3gxqfbapkrci5i0n3h04yr4";
+    sha256 = "sha256-+GZarnG+SlxynoXYTvI1f9eki3DobiDt7vUdWlC0ECk=";
   };
 
-  vendorSha256 = "159s46rhg67mgglaxgddx3k8kssl0cqiq8yjdqgjhhxppf16r7dy";
+  vendorSha256 = "sha256-vXu64o/MTmw9oZL4MIHB+PEfYLcKVh5A5iGZ1RW1Xd4=";
 
   doCheck = false;
 

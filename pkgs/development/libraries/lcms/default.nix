@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   pname = "lcms";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Color management engine";
     homepage = "http://www.littlecms.com/";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

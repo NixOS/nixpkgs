@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, qt4 }:
+{ lib, stdenv, fetchFromGitHub, cmake, qt4 }:
 
 stdenv.mkDerivation rec {
   version = "0.9.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qt4 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight data-interchange format";
     homepage = "http://qjson.sourceforge.net/";
     license = licenses.lgpl21;

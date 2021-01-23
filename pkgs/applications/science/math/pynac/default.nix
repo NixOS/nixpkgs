@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , fetchurl
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , flint
 , gmp
 , python3
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
   patches = [

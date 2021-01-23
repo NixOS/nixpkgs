@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform
-, pkgconfig, curl, libgit2, openssl, Security }:
+, pkg-config, curl, libgit2, openssl, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-raze";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1z20xc508a3slc1ii3hy09swvlyib14zwf9akxc0h24d5m48as1c";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ curl libgit2 openssl ]
     ++ stdenv.lib.optional stdenv.isDarwin Security;
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, meson, ninja, pkgconfig
+{ stdenv, lib, fetchurl, meson, ninja, pkg-config
 , dpdk, libbsd, libpcap, lua5_3, numactl, util-linux
 , gtk2, which, withGtk ? false
 }:
@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "1clfviz1qa4hysslcg6i29vsxwl9f6j1y7zf9wwx9br3yq08x956";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
   buildInputs =
     [ dpdk libbsd libpcap lua5_3 numactl which ]
-    ++ stdenv.lib.optionals withGtk [gtk2];
+    ++ lib.optionals withGtk [gtk2];
 
   RTE_SDK = dpdk;
-  GUI = stdenv.lib.optionalString withGtk "true";
+  GUI = lib.optionalString withGtk "true";
 
   NIX_CFLAGS_COMPILE = "-msse3";
 

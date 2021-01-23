@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, pkgconfig, qmake, qtscript, qtsvg }:
+{ lib, stdenv, mkDerivation, fetchurl, pkg-config, qmake, qtscript, qtsvg }:
 
 mkDerivation rec {
   pname = "vym";
@@ -32,7 +32,7 @@ mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [ qtscript qtsvg ];
 
   postInstall = ''

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchsvn
 # jdk8 is needed for building, but the game runs on newer jres as well
 , jdk8
@@ -76,7 +76,7 @@ in stdenv.mkDerivation {
     install -Dm644 build/game/resources/icon.png $out/share/pixmaps/domination.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://domination.sourceforge.net/";
     downloadPage = "http://domination.sourceforge.net/download.shtml";
     description = "A game that is a bit like the board game Risk or RisiKo";

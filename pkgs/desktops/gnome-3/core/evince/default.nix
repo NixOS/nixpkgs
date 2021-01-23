@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , libxml2
 , appstream
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evince/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/evince/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0j0ry0y9qi1mlm7dcjwrmrw45s1225ri8sv0s9vb8ibm85x8kpr6";
   };
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     itstool
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
     yelp-tools
@@ -94,8 +94,8 @@ stdenv.mkDerivation rec {
     poppler
     t1lib
     texlive.bin.core # kpathsea for DVI support
-  ] ++ stdenv.lib.optional supportXPS libgxps
-    ++ stdenv.lib.optionals supportMultimedia (with gst_all_1; [
+  ] ++ lib.optional supportXPS libgxps
+    ++ lib.optionals supportMultimedia (with gst_all_1; [
       gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
 
   mesonFlags = [
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
       on the GNOME Desktop with a single simple application.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.gnome.members;
   };

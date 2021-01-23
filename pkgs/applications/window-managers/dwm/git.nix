@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   inherit patches;
 
   # Allow users to override the entire config file AFTER appying the patches
-  postPatch = stdenv.lib.optionalString (conf!=null) ''
+  postPatch = lib.optionalString (conf!=null) ''
     echo -n '${conf}' > config.def.h
   '';
 

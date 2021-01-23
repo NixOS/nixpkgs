@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, gtk2, libgnomeui, libXv, libraw1394, libdc1394
+{ lib, stdenv, fetchurl, pkg-config, glib, gtk2, libgnomeui, libXv, libraw1394, libdc1394
 , SDL, automake, GConf }:
 
 stdenv.mkDerivation {
@@ -13,14 +13,14 @@ stdenv.mkDerivation {
     cp ${automake}/share/automake-*/mkinstalldirs .
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib gtk2 libgnomeui libXv libraw1394 libdc1394 SDL GConf ];
-  
+
   meta = {
     homepage = "https://damien.douxchamps.net/ieee1394/coriander/";
     description = "GUI for controlling a Digital Camera through the IEEE1394 bus";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

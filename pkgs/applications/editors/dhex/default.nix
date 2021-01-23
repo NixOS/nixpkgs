@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "dhex";
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A themeable hex editor with diff mode";
     homepage = "http://www.dettus.net/dhex/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [qknight];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [qknight];
+    platforms = with lib.platforms; linux;
   };
 }

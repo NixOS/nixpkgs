@@ -3,7 +3,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "containers-tmpfs";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ kampka ];
+    maintainers = [ ];
   };
 
   machine =

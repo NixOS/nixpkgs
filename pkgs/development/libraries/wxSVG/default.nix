@@ -1,5 +1,5 @@
-{ stdenv, fetchurl
-, pkgconfig, wxGTK
+{ lib, stdenv, fetchurl
+, pkg-config, wxGTK
 , ffmpeg_3, libexif
 , cairo, pango }:
 
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "0agmmwg0zlsw1idygvqjpj1nk41akzlbdha0hsdk1k8ckz6niq8d";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ wxGTK ffmpeg_3 libexif ];
 
   buildInputs = [ cairo pango ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A SVG manipulation library built with wxWidgets";
     longDescription = ''
     wxSVG is C++ library to create, manipulate and render

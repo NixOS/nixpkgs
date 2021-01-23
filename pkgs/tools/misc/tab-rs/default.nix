@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tab-rs";
-  version = "0.5.5";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "austinjones";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06nip7g5y7jslqj8anvn2z7w1c8yr0gl32bpnzv26xschan4gc2h";
+    sha256 = "1gyl2dxyhh4d2lpxg9s5cx734sfs1kys5z5hjqfgbiny28hp9sw6";
   };
 
-  cargoSha256 = "1clpl9fi07lms0din8f9m4y6br5jg8k5xsklsqmvgdwf83wyn321";
+  cargoSha256 = "1apjzn164kakb2snrq1wfl7grm72hkddi3am6d01h5kkngkp68qm";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 
   # many tests are failing
   doCheck = false;

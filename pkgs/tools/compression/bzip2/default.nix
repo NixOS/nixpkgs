@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   configureFlags =
-    stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ];
+    lib.optionals linkStatic [ "--enable-static" "--disable-shared" ];
 
   enableParallelBuilding = true;
 

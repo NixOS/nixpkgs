@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-  ] ++ stdenv.lib.optional buildDocs scdoc;
+  ] ++ lib.optional buildDocs scdoc;
 
   buildInputs = [
     cairo
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
-  mesonFlags = stdenv.lib.optional buildDocs "-Dman-pages=enabled";
+  mesonFlags = lib.optional buildDocs "-Dman-pages=enabled";
 
   meta = with lib; {
     description = "Select a region in a Wayland compositor";

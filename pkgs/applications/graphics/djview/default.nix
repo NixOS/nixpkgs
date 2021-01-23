@@ -1,7 +1,7 @@
 { lib, stdenv
 , mkDerivation
 , fetchurl
-, pkgconfig
+, pkg-config
 , djvulibre
 , qtbase
 , qttools
@@ -20,7 +20,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qttools
   ];
 
@@ -29,7 +29,7 @@ mkDerivation rec {
     qtbase
     xorg.libXt
     libtiff
-  ] ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AGL;
+  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AGL;
 
   configureFlags = [
     "--disable-silent-rules"
@@ -37,7 +37,7 @@ mkDerivation rec {
     "--with-x"
     "--with-tiff"
     # NOTE: 2019-09-19: experimental "--enable-npdjvu" fails
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--enable-mac";
+  ] ++ lib.optional stdenv.isDarwin "--enable-mac";
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";

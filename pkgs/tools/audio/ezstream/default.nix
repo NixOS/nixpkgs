@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libiconv, libshout, taglib, libxml2, pkgconfig }:
+{ lib, stdenv, fetchurl, libiconv, libshout, taglib, libxml2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "ezstream";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libiconv libshout taglib libxml2 ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   doCheck = true;
 

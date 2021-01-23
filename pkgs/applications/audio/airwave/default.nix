@@ -22,7 +22,7 @@ let
     };
     nativeBuildInputs = [ unzip ];
     installPhase = "cp -r . $out";
-    meta.license = stdenv.lib.licenses.unfree;
+    meta.license = lib.licenses.unfree;
   };
 
   wine-wow64 = wine.override {

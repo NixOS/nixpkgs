@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, zlib, shadow
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, zlib, shadow
 , ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
 stdenv.mkDerivation rec {
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "usrsbin_execdir=${placeholder "bin"}/sbin"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [ zlib pam ]
     ++ lib.filter (p: p != null) [ ncurses systemd perl ];

@@ -9,7 +9,7 @@
 
 let
   prefixPath = programs:
-    "--prefix PATH ':' '${stdenv.lib.makeBinPath programs}'";
+    "--prefix PATH ':' '${lib.makeBinPath programs}'";
   recommendedSystemPrograms = lib.optionals withRecommendedSystemPrograms [
     util-linuxMinimal dmidecode file hddtemp iproute ipmitool usbutils kmod
     lm_sensors smartmontools binutils tree upower pciutils
@@ -22,13 +22,13 @@ let
     ++ recommendedDisplayInformationPrograms;
 in stdenv.mkDerivation rec {
   pname = "inxi";
-  version = "3.2.02-1";
+  version = "3.2.02-2";
 
   src = fetchFromGitHub {
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    hash = "sha256-+6EURaeN1kJ4X+xdhN8ojuCbcBtxqNksGFEqPhIwCc4=";
+    sha256 = "sha256-WHfW0empveOxC3jvYq46jlvVZDb8JLne5JHPtFE6nTs=";
   };
 
   buildInputs = [ perl makeWrapper ];

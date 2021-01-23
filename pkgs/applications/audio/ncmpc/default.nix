@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, ncurses
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, ncurses
 , mpd_clientlib, gettext, boost
 , pcreSupport ? false
 , pcre ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert pcreSupport -> pcre != null;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib ncurses mpd_clientlib boost ]
     ++ optional pcreSupport pcre;
-  nativeBuildInputs = [ meson ninja pkgconfig gettext ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext ];
 
   mesonFlags = [
     "-Dlirc=disabled"

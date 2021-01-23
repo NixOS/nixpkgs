@@ -13,22 +13,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pijul";
-  version = "1.0.0-alpha.31";
+  version = "1.0.0-alpha.37";
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "sha256-dSwQlALN0E87o86sasuNFPTZN6SRCuxP6pI7wi4uRf4";
+    sha256 = "02hdnfpy0hlgwhahrd5ddjmq8r05pyny0r91q3avirli1i7rkvs6";
   };
 
-  cargoSha256 = "sha256-Xwk5bX9o41M/1BmkOpAscGQHikhzV+9qAwVz0qI7FRA";
+  cargoSha256 = "16v9nqrfdmrmll72yj6a6wl4rv28n838myjyw2n68kjmijakvnk4";
 
-  cargoBuildFlags = stdenv.lib.optional gitImportSupport "--features=git";
+  cargoBuildFlags = lib.optional gitImportSupport "--features=git";
 
   doCheck = false;
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl libsodium xxHash zstd ]
-    ++ (stdenv.lib.optionals gitImportSupport [ libgit2 ])
-    ++ (stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ++ (lib.optionals gitImportSupport [ libgit2 ])
+    ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreServices Security SystemConfiguration
     ]));
 

@@ -3,7 +3,7 @@
 }:
 
 let
-  depsPath = stdenv.lib.makeBinPath [
+  depsPath = lib.makeBinPath [
     coreutils
     grim
     gawk

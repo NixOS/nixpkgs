@@ -8,7 +8,7 @@
 , clutter-gst
 , python3Packages
 , shared-mime-info
-, pkgconfig
+, pkg-config
 , gtk3
 , glib
 , gobject-introspection
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/totem/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0bs33ijvxbr2prb9yj4dxglsszslsn9k258n311sld84masz4ad8";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    pkgconfig
+    pkg-config
     gettext
     python3Packages.python
     itstool

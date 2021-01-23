@@ -3,7 +3,7 @@
 , meson
 , ninja
 , wrapGAppsHook
-, pkgconfig
+, pkg-config
 , gettext
 , itstool
 , libvirt-glib
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   version = "3.38.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1zjvng0izbws3506998l3dwsxjbm7wnhqipb8nmqzvi096czvajl";
   };
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     itstool
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ mtools cdrkit libcdio ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ mtools cdrkit libcdio ]}")
   '';
 
   postPatch = ''

@@ -6,7 +6,7 @@ let
   date = "20160316";
 in
 stdenv.mkDerivation {
-  name = "cpuminer-multi-${date}-${stdenv.lib.strings.substring 0 7 rev}";
+  name = "cpuminer-multi-${date}-${lib.strings.substring 0 7 rev}";
 
   src = fetchFromGitHub {
     owner = "hyc";

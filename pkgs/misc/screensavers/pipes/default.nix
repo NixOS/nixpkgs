@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     make PREFIX=$out/ install
 
     wrapProgram $out/bin/pipes.sh \
-      --set PATH "${stdenv.lib.makeBinPath [ coreutils ncurses ]}"
+      --set PATH "${lib.makeBinPath [ coreutils ncurses ]}"
   '';
 
   meta = with lib; {

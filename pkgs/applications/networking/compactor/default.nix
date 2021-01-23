@@ -1,5 +1,5 @@
 { autoconf, automake, boost, cbor-diag, cddl, fetchFromGitHub, file, libctemplate, libmaxminddb
-, libpcap, libtins, libtool, lzma, openssl, pkgconfig, lib, stdenv, tcpdump, wireshark-cli
+, libpcap, libtins, libtool, lzma, openssl, pkg-config, lib, stdenv, tcpdump, wireshark-cli
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   # cbor-diag, cddl and wireshark-cli are only used for tests.
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig cbor-diag cddl wireshark-cli ];
+  nativeBuildInputs = [ autoconf automake libtool pkg-config cbor-diag cddl wireshark-cli ];
   buildInputs = [
     boost
     libpcap
@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     changelog   = "https://github.com/dns-stats/${pname}/raw/${version}/ChangeLog.txt";
     license     = [ licenses.boost licenses.mpl20 licenses.openssl ];
     maintainers = with maintainers; [ fdns ];
-    platforms   = stdenv.lib.platforms.unix;
+    platforms   = lib.platforms.unix;
   };
 }

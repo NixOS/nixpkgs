@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , gtk3
 , thunar
 , cmake
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
     ninja
   ];

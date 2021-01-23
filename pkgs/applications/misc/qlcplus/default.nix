@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, udev
+{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pkg-config, udev
 , qtmultimedia, qtscript, alsaLib, ola, libftdi1, libusb-compat-0_1
 , libsndfile, libmad
 }:
@@ -14,7 +14,7 @@ mkDerivation rec {
     sha256 = "PB1Y8N1TrJMcS7A2e1nKjsUlAxOYjdJqBhbyuDCAbGs=";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkg-config ];
   buildInputs = [
     udev qtmultimedia qtscript alsaLib ola libftdi1 libusb-compat-0_1 libsndfile libmad
   ];

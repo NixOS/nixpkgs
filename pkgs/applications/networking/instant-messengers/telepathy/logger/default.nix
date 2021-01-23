@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dbus-glib, libxml2, sqlite, telepathy-glib, pkgconfig
+{ lib, stdenv, fetchurl, dbus-glib, libxml2, sqlite, telepathy-glib, pkg-config
 , dconf, makeWrapper, intltool, libxslt, gobject-introspection, dbus }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    makeWrapper pkgconfig intltool libxslt gobject-introspection
+    makeWrapper pkg-config intltool libxslt gobject-introspection
   ];
   buildInputs = [
     dbus-glib libxml2 sqlite telepathy-glib
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/libexec/telepathy-logger" \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 

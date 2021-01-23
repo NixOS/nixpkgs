@@ -4,7 +4,7 @@
 , python2Packages, expat, glib, nspr, nss, openssl
 , libssh, libarchive, lzma, bzip2, lz4, lzo }:
 
-with stdenv.lib;
+with lib;
 
 let self = rec {
 

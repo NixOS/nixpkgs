@@ -6,7 +6,7 @@
 , liblo
 , gst_all_1
 , qmake
-, pkgconfig
+, pkg-config
 , wrapQtAppsHook
 }:
 
@@ -26,7 +26,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
-    pkgconfig
+    pkg-config
     wrapQtAppsHook
   ];
 

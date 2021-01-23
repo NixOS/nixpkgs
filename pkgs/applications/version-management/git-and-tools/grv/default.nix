@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, curl, ncurses, pkgconfig, readline
+{ lib, stdenv, buildGoPackage, fetchFromGitHub, curl, ncurses, pkg-config, readline
 , cmake }:
 let
   version = "0.3.2";
@@ -8,7 +8,7 @@ buildGoPackage {
   inherit version;
 
   buildInputs = [ ncurses readline curl ];
-  nativeBuildInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   goPackagePath = "github.com/rgburke/grv";
 

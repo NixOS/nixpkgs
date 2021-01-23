@@ -65,6 +65,7 @@ let
     && libcxx == null
     && !(stdenv.targetPlatform.useLLVM or false)
     && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
+    && !(stdenv.targetPlatform.isiOS or false)
     && gccForLibs != null;
 
   # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu

@@ -1,6 +1,6 @@
-{ stdenv, wrapQtAppsHook, makeDesktopItem
+{ lib, stdenv, wrapQtAppsHook, makeDesktopItem
 , fetchFromGitHub
-, cmake, qttools, pkgconfig
+, cmake, qttools, pkg-config
 , qtbase, qtdeclarative, qtgraphicaleffects
 , qtmultimedia, qtxmlpatterns
 , qtquickcontrols, qtquickcontrols2
@@ -15,7 +15,7 @@
 ,   python3  ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig wrapQtAppsHook
+    cmake pkg-config wrapQtAppsHook
     (getDev qttools)
   ];
 

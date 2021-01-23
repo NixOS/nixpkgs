@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, perl, pkgconfig
+, cmake, perl, pkg-config
 , openssl, curl, libusb1, protobufc
 , enableUnsafe ? false }:
 
@@ -14,10 +14,10 @@ stdenv.mkDerivation {
     sha256 = "07nd4dbkchxy8js1h1f6pzn63pls2afww97wyiiw6zid43mpqyg4";
   };
 
-  nativeBuildInputs = [ cmake perl pkgconfig ];
+  nativeBuildInputs = [ cmake perl pkg-config ];
   buildInputs = [ openssl curl libusb1 protobufc ];
 
-  cmakeFlags = stdenv.lib.optional enableUnsafe [ "-Dunsafe=on" ];
+  cmakeFlags = lib.optional enableUnsafe [ "-Dunsafe=on" ];
 
   preFixup = ''
     chmod +x $out/bin/ttbin2mysports

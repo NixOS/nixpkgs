@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, gtk-doc, pkgconfig, libuuid,
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, gtk-doc, pkg-config, libuuid,
   libtool, readline, gobject-introspection, json-glib, lvm2, libxslt, docbook_xsl
 , fetchpatch }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   configureScript = "sh autogen.sh";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake gtk-doc lvm2 libxslt.bin
     libtool readline gobject-introspection json-glib libuuid
   ];

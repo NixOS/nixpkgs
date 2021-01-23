@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, cmake, pkgconfig, libftdi1, popt}:
+{ lib, stdenv, fetchgit, cmake, pkg-config, libftdi1, popt}:
 
 stdenv.mkDerivation rec {
   pname = "sd-mux-ctrl-unstable";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fxl8m1zkkyxkc2zi8930m0njfgnd04a22acny6vljnzag2shjvg";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ libftdi1 popt ];
 

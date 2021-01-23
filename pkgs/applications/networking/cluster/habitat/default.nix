@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkgconfig
+{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config
 , libsodium, libarchive, openssl, zeromq }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "08sncz0jgsr2s821j3s4bk7d54xqwmnld7m57avavym1xqvsnbmy";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsodium libarchive openssl zeromq ];
 
   cargoBuildFlags = ["--package hab"];

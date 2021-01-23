@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, mkDerivation
+{ lib, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config, mkDerivation
 , gtk2Support ? true, gtk2
 , qtbase, qtsvg, qtx11extras # Toolkit dependencies
 , karchive, kconfig, kconfigwidgets, kio, frameworkintegration
@@ -30,7 +30,7 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
 
   buildInputs = [
     qtbase qtsvg qtx11extras

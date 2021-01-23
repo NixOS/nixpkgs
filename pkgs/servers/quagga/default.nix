@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, libcap, libnl, readline, net-snmp, less, perl, texinfo,
-  pkgconfig, c-ares }:
+  pkg-config, c-ares }:
 
 stdenv.mkDerivation rec {
   pname = "quagga";
@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ readline net-snmp c-ares ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libcap libnl ];
+    ++ lib.optionals stdenv.isLinux [ libcap libnl ];
 
-  nativeBuildInputs = [ pkgconfig perl texinfo ];
+  nativeBuildInputs = [ pkg-config perl texinfo ];
 
   configureFlags = [
     "--sysconfdir=/etc/quagga"

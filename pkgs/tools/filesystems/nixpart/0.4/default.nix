@@ -10,47 +10,47 @@
 
 let
   blivet = import ./blivet.nix {
-    inherit stdenv fetchurl buildPythonApplication;
+    inherit lib fetchurl buildPythonApplication;
     inherit pykickstart pyparted pyblock cryptsetup libselinux multipath_tools;
     inherit useNixUdev;
     inherit (pkgs) lsof util-linux systemd;
   };
 
   cryptsetup = import ./cryptsetup.nix {
-    inherit stdenv fetchurl python;
-    inherit (pkgs) fetchpatch pkgconfig libgcrypt libuuid popt lvm2;
+    inherit lib stdenv fetchurl python;
+    inherit (pkgs) fetchpatch pkg-config libgcrypt libuuid popt lvm2;
   };
 
   dmraid = import ./dmraid.nix {
-    inherit stdenv fetchurl lvm2;
+    inherit lib stdenv fetchurl lvm2;
   };
 
   lvm2 = import ./lvm2.nix {
-    inherit stdenv fetchurl;
-    inherit (pkgs) fetchpatch pkgconfig util-linux systemd coreutils;
+    inherit lib stdenv fetchurl;
+    inherit (pkgs) fetchpatch pkg-config util-linux systemd coreutils;
   };
 
   multipath_tools = import ./multipath-tools.nix {
-    inherit stdenv fetchurl lvm2;
+    inherit lib stdenv fetchurl lvm2;
     inherit (pkgs) fetchpatch readline systemd libaio gzip;
   };
 
   parted = import ./parted.nix {
-    inherit stdenv fetchurl;
+    inherit lib stdenv fetchurl;
     inherit (pkgs) fetchpatch util-linux readline libuuid gettext check lvm2;
   };
 
   pyblock = import ./pyblock.nix {
-    inherit stdenv fetchurl python lvm2 dmraid;
+    inherit lib stdenv fetchurl python lvm2 dmraid;
   };
 
   pykickstart = import ./pykickstart.nix {
-    inherit stdenv fetchurl python buildPythonApplication urlgrabber;
+    inherit lib fetchurl python buildPythonApplication urlgrabber;
   };
 
   pyparted = import ./pyparted.nix {
-    inherit stdenv fetchurl python buildPythonApplication parted;
-    inherit (pkgs) pkgconfig e2fsprogs;
+    inherit lib stdenv fetchurl python buildPythonApplication parted;
+    inherit (pkgs) pkg-config e2fsprogs;
   };
 
 in buildPythonApplication rec {

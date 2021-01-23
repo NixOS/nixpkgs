@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , cmake
 , python
-, pkgconfig
+, pkg-config
 , libxml2
 , glib
 , openssl
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  cmakeFlags = [ "-DPYTHON_DESIRED=${stdenv.lib.substring 0 1 python.pythonVersion}" ];
+  cmakeFlags = [ "-DPYTHON_DESIRED=${lib.substring 0 1 python.pythonVersion}" ];
 
   postFixup = ''
     moveToOutput "lib/${python.libPrefix}" "$py"

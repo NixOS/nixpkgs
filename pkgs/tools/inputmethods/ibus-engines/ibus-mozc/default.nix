@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, which, ninja, python, pkgconfig, protobuf
+{ lib, stdenv, fetchFromGitHub, which, ninja, python, pkg-config, protobuf
 , ibus, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese, python3Packages }:
 
 let
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ which ninja python3Packages.python python3Packages.six
-                        python3Packages.gyp pkgconfig qt5.wrapQtAppsHook ];
+                        python3Packages.gyp pkg-config qt5.wrapQtAppsHook ];
   buildInputs = [ protobuf ibus gtk2 zinnia qt5.qtbase libxcb ];
 
   src = fetchFromGitHub {
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   postUnpack = ''
     rm -rf $sourceRoot/src/third_party/japanese_usage_dictionary/
     ln -s ${japanese_usage_dictionary} $sourceRoot/src/third_party/japanese_usage_dictionary
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.isLinux ''
     sed -i 's/-lc++/-lstdc++/g' $sourceRoot/src/gyp/common.gypi
   '';
 

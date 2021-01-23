@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , glib
@@ -9,18 +10,18 @@
 
 stdenv.mkDerivation rec {
   pname = "conmon";
-  version = "2.0.22";
+  version = "2.0.25";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07wd3pns6x25dcnc1r84cwmrzg8xgzsfmidkclcpcagf97ad7jmc";
+    sha256 = "sha256-u22irZ9AC1W2AVJ1OD1gLzTH4NOgRkZekZ78rNKXnps=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib systemd ]
-  ++ stdenv.lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
+  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
 
   # manpage requires building the vendored go-md2man
   makeFlags = [ "bin/conmon" ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, xorg, pcre, gst_all_1, glib
+{ lib, stdenv, fetchurl, pkg-config, intltool, xorg, pcre, gst_all_1, glib
 , xosd, libnotify, enchant, wrapGAppsHook, gdk-pixbuf }:
 
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    pkgconfig intltool wrapGAppsHook
+    pkg-config intltool wrapGAppsHook
   ];
 
   buildInputs = [

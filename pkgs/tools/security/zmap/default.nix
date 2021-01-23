@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, libjson, json_c, gengetopt, flex, byacc, gmp
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libjson, json_c, gengetopt, flex, byacc, gmp
 , libpcap
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DRESPECT_INSTALL_PREFIX_CONFIG=ON" ];
   dontUseCmakeBuildDir = true;
 
-  nativeBuildInputs = [ cmake pkgconfig gengetopt flex byacc ];
+  nativeBuildInputs = [ cmake pkg-config gengetopt flex byacc ];
   buildInputs = [ libjson json_c gmp libpcap ];
 
   outputs = [ "out" "man" ];

@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , gettext
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , anthy
 , ibus
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gettext
     gobject-introspection
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

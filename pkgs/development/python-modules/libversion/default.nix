@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pkgconfig, libversion, pythonOlder }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, pkg-config, libversion, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "libversion";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1h8x9hglrqi03f461lhw3wwz23zs84dgw7hx4laxcmyrgvyzvcq1";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libversion ];
 
   disabled = pythonOlder "3.6";

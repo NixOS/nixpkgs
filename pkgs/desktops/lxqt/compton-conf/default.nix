@@ -2,7 +2,7 @@
 , mkDerivation
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , qtbase
 , qttools
 , lxqt
@@ -22,7 +22,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     lxqt.lxqt-build-tools
   ];
 

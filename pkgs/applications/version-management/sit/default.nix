@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libzip gnupg ]
-    ++ (stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreFoundation Security ]);
+    ++ (lib.optionals stdenv.isDarwin [ libiconv CoreFoundation Security ]);
 
   preCheck = ''
     export HOME=$(mktemp -d)

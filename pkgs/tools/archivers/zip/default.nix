@@ -27,8 +27,8 @@ stdenv.mkDerivation {
 
   patches = if (enableNLS && !stdenv.isCygwin) then [ ./natspec-gentoo.patch.bz2 ] else [];
 
-  buildInputs = stdenv.lib.optional enableNLS libnatspec
-    ++ stdenv.lib.optional stdenv.isCygwin libiconv;
+  buildInputs = lib.optional enableNLS libnatspec
+    ++ lib.optional stdenv.isCygwin libiconv;
 
   meta = with lib; {
     description = "Compressor/archiver for creating and modifying zipfiles";

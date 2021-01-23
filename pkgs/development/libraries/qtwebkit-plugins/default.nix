@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake, qtwebkit, hunspell }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtwebkit, hunspell }:
 
 stdenv.mkDerivation {
   name = "qtwebkit-plugins-2017-01-25";
@@ -15,11 +15,11 @@ stdenv.mkDerivation {
   buildInputs = [ qtwebkit hunspell ];
 
   postPatch = ''
-    sed -i "s,-lhunspell,-lhunspell-${stdenv.lib.versions.majorMinor hunspell.version}," src/spellcheck/spellcheck.pri
+    sed -i "s,-lhunspell,-lhunspell-${lib.versions.majorMinor hunspell.version}," src/spellcheck/spellcheck.pri
     sed -i "s,\$\$\[QT_INSTALL_PLUGINS\],$out/$qtPluginPrefix," src/src.pro
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Spell checking plugin using Hunspell and HTML5 Notifications plugin for QtWebKit";
     homepage = "https://github.com/QupZilla/qtwebkit-plugins";
     license = licenses.gpl3;

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, pkgconfig
+, cmake, pkg-config
 # Transport
 , curl
 # Libraries
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v2nsz7s0jj0wmqabzk6akcf1353rachm1lfq77hxbq9z5pw8pgb";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook makeWrapper ];
 
   buildInputs = [
     curl
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isAarch64; # single failure that I can't explain
 
   preFixup = ''
-    gappsWrapperArgs+=(--suffix PATH : ${stdenv.lib.makeBinPath [ dbus ]})
+    gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ dbus ]})
     wrapProgram $out/bin/rt2rtng --prefix PYTHONPATH : $PYTHONPATH
   '';
 

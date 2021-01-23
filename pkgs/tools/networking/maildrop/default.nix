@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, pkgconfig, pcre, perl }:
+{ fetchurl, lib, stdenv, pkg-config, pcre, perl }:
 
 stdenv.mkDerivation {
   name = "maildrop-2.6.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1a94p2b41iy334cwfwmzi19557dn5j61abh0cp2rfc9dkc8ibhdg";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcre perl ];
 
   patches = [ ./maildrop.configure.hack.patch ]; # for building in chroot

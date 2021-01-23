@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkg-config
 , python3
 , gsettings-desktop-schemas
 , desktop-file-utils
@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
 
     meson
     ninja

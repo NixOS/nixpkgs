@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , cmake
 , extra-cmake-modules
 , gettext
@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
-  version = "5.0.2";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-rime";
     rev = version;
-    sha256 = "cVCTsD1Iw6OtyYFpxff3ix2CubRTnDaBevAYA4I9Ai8=";
+    sha256 = "sha256-mPNZ/B5bpxua+E1T+oz9v2QKAzGraA2cfT8oJacC35U=";
   };
 
   cmakeFlags = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    pkgconfig
+    pkg-config
     gettext
   ];
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     librime
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RIME support for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-rime";
     license = licenses.lgpl21Plus;

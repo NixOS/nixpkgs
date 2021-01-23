@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, substituteAll, autoreconfHook, iodine, intltool, pkgconfig, networkmanager, libsecret, gtk3
+{ lib, stdenv, fetchFromGitLab, substituteAll, autoreconfHook, iodine, intltool, pkg-config, networkmanager, libsecret, gtk3
 , withGnome ? true, gnome3, fetchpatch, libnma, glib }:
 
 let
@@ -28,9 +28,9 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [ iodine networkmanager glib ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret libnma ];
+    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
-  nativeBuildInputs = [ intltool autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ intltool autoreconfHook pkg-config ];
 
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";

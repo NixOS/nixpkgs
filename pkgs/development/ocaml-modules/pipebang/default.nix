@@ -1,4 +1,4 @@
-{lib, stdenv, buildOcaml, fetchurl}:
+{lib, buildOcaml, fetchurl}:
 
 buildOcaml rec {
   name = "pipebang";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fltk, alsaLib, freetype, libXrandr, libXinerama, libXcursor, lv2, libjack2, cmake, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, fltk, alsaLib, freetype, libXrandr, libXinerama, libXcursor, lv2, libjack2, cmake, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "ensemble-chorus";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     fltk alsaLib freetype libXrandr libXinerama libXcursor lv2 libjack2

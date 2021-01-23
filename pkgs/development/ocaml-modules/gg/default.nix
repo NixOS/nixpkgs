@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, opaline }:
 
 let
-  inherit (stdenv.lib) getVersion versionAtLeast;
+  inherit (lib) getVersion versionAtLeast;
 
   pname = "gg";
   version = "0.9.1";

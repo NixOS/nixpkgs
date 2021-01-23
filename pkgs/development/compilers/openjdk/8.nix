@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, lndir, bash, cpio, file, which, unzip, zip
+{ stdenv, lib, fetchurl, pkg-config, lndir, bash, cpio, file, which, unzip, zip
 , cups, freetype, alsaLib, cacert, perl, liberation_ttf, fontconfig, zlib
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
@@ -83,7 +83,7 @@ let
 
     outputs = [ "out" "jre" ];
 
-    nativeBuildInputs = [ pkgconfig lndir ];
+    nativeBuildInputs = [ pkg-config lndir ];
     buildInputs = [
       cpio file which unzip zip perl openjdk8-bootstrap zlib cups freetype alsaLib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst

@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack json_c check
-  ] ++ stdenv.lib.optional stdenv.isLinux systemd
-    ++ stdenv.lib.optional stdenv.isDarwin Foundation;
+  ] ++ lib.optional stdenv.isLinux systemd
+    ++ lib.optional stdenv.isDarwin Foundation;
 
   configureFlags = [
     "--libdir=$(out)/lib"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     "--enable-milter"
     "--disable-unrar" # disable unrar because it's non-free and requires some extra patching to work properly
     "--enable-check"
-  ] ++ stdenv.lib.optional stdenv.isLinux
+  ] ++ lib.optional stdenv.isLinux
     "--with-systemdsystemunitdir=$(out)/lib/systemd";
 
   postInstall = ''

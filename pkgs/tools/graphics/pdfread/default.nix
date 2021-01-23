@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     cp -R *.py pylrs $PYDIR
 
     wrapProgram $out/bin/pdfread.py --prefix PYTHONPATH : $PYTHONPATH:${pillow}/$LIBSUFFIX/PIL:$PYDIR \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ ghostscript pngnq djvulibre unrar optipng ]}
+      --prefix PATH : ${lib.makeBinPath [ ghostscript pngnq djvulibre unrar optipng ]}
   '';
 
   meta = with lib; {

@@ -18,7 +18,7 @@ buildDunePackage rec {
 
   buildInputs = [ autoconf ];
 
-  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
+  hardeningDisable = lib.optional stdenv.isDarwin "strictoverflow";
 
   meta = with lib; {
     inherit (src.meta) homepage;

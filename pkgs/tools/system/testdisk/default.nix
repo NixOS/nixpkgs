@@ -3,7 +3,7 @@
 , fetchurl
 , ncurses
 , libuuid
-, pkgconfig
+, pkg-config
 , libjpeg
 , zlib
 , libewf
@@ -35,11 +35,11 @@ assert enableQt -> qwt != null;
     zlib
     libewf
   ]
-  ++ stdenv.lib.optional enableNtfs ntfs3g
-  ++ stdenv.lib.optional enableExtFs e2fsprogs
-  ++ stdenv.lib.optionals enableQt [ qtbase qttools qwt ];
+  ++ lib.optional enableNtfs ntfs3g
+  ++ lib.optional enableExtFs e2fsprogs
+  ++ lib.optionals enableQt [ qtbase qttools qwt ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   NIX_CFLAGS_COMPILE="-Wno-unused";
 
@@ -61,8 +61,8 @@ assert enableQt -> qwt != null;
       it will still work even if your media's file system has been severely
       damaged or reformatted.
     '';
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     maintainers = with maintainers; [ fgaz eelco ];
   };
 }

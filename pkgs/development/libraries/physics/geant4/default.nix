@@ -9,7 +9,7 @@
 , enableRaytracerX11   ? false
 
 # Standard build environment with cmake.
-, stdenv, fetchurl, fetchpatch, cmake
+, lib, stdenv, fetchurl, fetchpatch, cmake
 
 # Optional system packages, otherwise internal GEANT4 packages are used.
 , clhep ? null # not packaged currently
@@ -80,9 +80,9 @@ stdenv.mkDerivation rec {
     "-DGEANT4_USE_SYSTEM_EXPAT=${if expat != null then "ON" else "OFF"}"
     "-DGEANT4_USE_SYSTEM_ZLIB=${if zlib != null then "ON" else "OFF"}"
     "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
-  ] ++ stdenv.lib.optionals (enableMultiThreading && enablePython) [
+  ] ++ lib.optionals (enableMultiThreading && enablePython) [
     "-DGEANT4_BUILD_TLS_MODEL=global-dynamic"
-  ] ++ stdenv.lib.optionals enableInventor [
+  ] ++ lib.optionals enableInventor [
     "-DINVENTOR_INCLUDE_DIR=${coin3d}/include"
     "-DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so"
   ];
@@ -90,13 +90,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =  [ cmake ];
 
   buildInputs = [ libGLU xlibsWrapper libXmu ]
-    ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt motif ]
-    ++ stdenv.lib.optionals enablePython [ boost_python python3 ];
+    ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
+    ++ lib.optionals enablePython [ boost_python python3 ];
 
   propagatedBuildInputs = [ clhep expat zlib libGL ]
-    ++ stdenv.lib.optionals enableGDML [ xercesc ]
-    ++ stdenv.lib.optionals enableXM [ motif ]
-    ++ stdenv.lib.optionals enableQT [ qtbase ];
+    ++ lib.optionals enableGDML [ xercesc ]
+    ++ lib.optionals enableXM [ motif ]
+    ++ lib.optionals enableQT [ qtbase ];
 
   postFixup = ''
     # Don't try to export invalid environment variables.
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     data = import ./datasets.nix {
-          inherit stdenv fetchurl;
+          inherit lib stdenv fetchurl;
           geant_version = version;
       };
 
@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
     source $out/nix-support/setup-hook
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A toolkit for the simulation of the passage of particles through matter";
     longDescription = ''
       Geant4 is a toolkit for the simulation of the passage of particles through matter.

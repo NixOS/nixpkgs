@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, which, docutils, freetype, pango }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, which, docutils, freetype, pango }:
 
 stdenv.mkDerivation rec {
   pname = "abcm2ps";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc}/bin/cc"
   ];
 
-  nativeBuildInputs = [ which pkgconfig docutils ];
+  nativeBuildInputs = [ which pkg-config docutils ];
 
   buildInputs = [ freetype pango ];
 

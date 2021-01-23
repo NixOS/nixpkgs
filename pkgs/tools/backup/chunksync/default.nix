@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, perl }:
+{ lib, stdenv, fetchurl, openssl, perl }:
 
 stdenv.mkDerivation rec {
   version = "0.4";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Space-efficient incremental backups of large files or block devices";
     homepage = "http://chunksync.florz.de/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux;
   };
 }

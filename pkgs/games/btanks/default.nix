@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, sconsPackages, pkgconfig, SDL, libGL, zlib, smpeg
+{ lib, stdenv, fetchurl, fetchpatch, sconsPackages, pkg-config, SDL, libGL, zlib, smpeg
 , SDL_image, libvorbis, expat, zip, lua }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ha35kxc8xlbg74wsrbapfgxvcrwy6psjkqi7c6adxs55dmcxliz";
   };
 
-  nativeBuildInputs = [ sconsPackages.scons_3_0_1 pkgconfig ];
+  nativeBuildInputs = [ sconsPackages.scons_3_0_1 pkg-config ];
 
   buildInputs = [ SDL libGL zlib smpeg SDL_image libvorbis expat zip lua ];
 

@@ -32,7 +32,7 @@ python2Packages.buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/mailpile \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnupg1orig openssl ]}" \
+      --prefix PATH ":" "${lib.makeBinPath [ gnupg1orig openssl ]}" \
       --set-default MAILPILE_SHARED "$out/share/mailpile"
   '';
 

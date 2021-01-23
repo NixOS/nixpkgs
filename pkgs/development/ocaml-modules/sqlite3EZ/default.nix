@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, twt, ocaml_sqlite3 }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
+assert lib.versionAtLeast (lib.getVersion ocaml) "3.12";
 
-if stdenv.lib.versionAtLeast ocaml.version "4.06"
+if lib.versionAtLeast ocaml.version "4.06"
 then throw "sqlite3EZ is not available for OCaml ${ocaml.version}"
 else
 

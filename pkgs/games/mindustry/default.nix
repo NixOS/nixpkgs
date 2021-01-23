@@ -102,10 +102,6 @@ let
     popd
   '';
 
-  preBuild = ''
-    export GRADLE_USER_HOME=$(mktemp -d)
-  '';
-
   # The default one still uses jdk8 (#89731)
   gradle_6 = (gradleGen.override (old: { java = jdk; })).gradle_6_7;
 
@@ -119,8 +115,9 @@ let
     # Here we download dependencies for both the server and the client so
     # we only have to specify one hash for 'deps'. Deps can be garbage
     # collected after the build, so this is not really an issue.
-    buildPhase = preBuild + ''
+    buildPhase = ''
       pushd Mindustry
+      export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon resolveDependencies
       popd
     '';
@@ -136,7 +133,7 @@ let
   };
 
 in
-assert stdenv.lib.assertMsg (enableClient || enableServer)
+assert lib.assertMsg (enableClient || enableServer)
   "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
 stdenv.mkDerivation rec {
   inherit pname version unpackPhase patches;
@@ -147,7 +144,7 @@ stdenv.mkDerivation rec {
     rm Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so
   '' + cleanupMindustrySrc;
 
-  buildInputs = [
+  buildInputs = lib.optionals enableClient [
     SDL2
     glew
     alsaLib
@@ -157,13 +154,16 @@ stdenv.mkDerivation rec {
     gradle_6
     makeWrapper
     jdk
+  ] ++ lib.optionals enableClient [
     ant
     copyDesktopItems
   ];
 
-  desktopItems = [ desktopItem ];
+  desktopItems = lib.optional enableClient desktopItem;
 
-  buildPhase = with stdenv.lib; preBuild + ''
+  buildPhase = with lib; ''
+    export GRADLE_USER_HOME=$(mktemp -d)
+
     # point to offline repo
     sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" Mindustry/build.gradle
     sed -ie "s#mavenCentral()#mavenCentral(); maven { url '${deps}' }#g" Arc/build.gradle
@@ -180,7 +180,9 @@ stdenv.mkDerivation rec {
     gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
   '';
 
-  installPhase = with stdenv.lib; optionalString enableClient ''
+  installPhase = with lib; ''
+    runHook preInstall
+  '' + optionalString enableClient ''
     install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
     mkdir -p $out/bin
     makeWrapper ${jdk}/bin/java $out/bin/mindustry \
@@ -191,6 +193,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     makeWrapper ${jdk}/bin/java $out/bin/mindustry-server \
       --add-flags "-jar $out/share/mindustry-server.jar"
+  '' + ''
+    runHook postInstall
   '';
 
   meta = with lib; {

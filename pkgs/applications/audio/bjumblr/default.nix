@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libX11, cairo, lv2, pkgconfig, libsndfile }:
+{ lib, stdenv, fetchFromGitHub, libX11, cairo, lv2, pkg-config, libsndfile }:
 
 stdenv.mkDerivation rec {
   pname = "BJumblr";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kl6hrxmqrdf0195bfnzsa2h1073fgiqrfhg2276fm1954sm994v";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libX11 cairo lv2 libsndfile
   ];

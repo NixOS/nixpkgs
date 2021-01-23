@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   mesonFlags = [
-    "-D gnome_version=${stdenv.lib.versions.majorMinor gnome3.gnome-shell.version}"
+    "-D gnome_version=${lib.versions.majorMinor gnome3.gnome-shell.version}"
   ];
 
   postFixup = ''

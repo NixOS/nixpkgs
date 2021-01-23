@@ -22,6 +22,7 @@ with lib; mkCoqDerivation {
 
   meta = {
     description = "Analysis library compatible with Mathematical Components";
+    maintainers = [ maintainers.cohencyril ];
     license = licenses.cecill-c;
   };
 }

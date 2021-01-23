@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, glib, pkgconfig, libgsf, libuuid, gcab, bzip2, gnome3 }:
+{ stdenv, fetchurl, intltool, glib, pkg-config, libgsf, libuuid, gcab, bzip2, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "msitools";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "19wb3n3nwkpc6bjr0q3f1znaxsfaqgjbdxxnbx8ic8bb5b49hwac";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkg-config ];
   buildInputs = [ glib libgsf libuuid gcab bzip2 ];
 
   passthru = {

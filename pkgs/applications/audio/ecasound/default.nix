@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , pkg-config
 , alsaLib
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Software package designed for multitrack audio processing";
-    license = with stdenv.lib.licenses;  [ gpl2 lgpl21 ];
+    license = with lib.licenses;  [ gpl2 lgpl21 ];
     homepage = "http://nosignal.fi/ecasound/";
   };
 }

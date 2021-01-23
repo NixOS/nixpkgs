@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, buildEnv, roundcube, roundcubePlugins }:
+{ fetchurl, lib, stdenv, buildEnv, roundcube, roundcubePlugins }:
 
 stdenv.mkDerivation rec {
   pname = "roundcube";
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open Source Webmail Software";
-    maintainers = with stdenv.lib.maintainers; [ vskilet globin ma27 ];
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with lib.maintainers; [ vskilet globin ma27 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
   };
 }

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fftwFloat, gtk2, ladspaPlugins, libjack2, liblo, libxml2
-, makeWrapper, pkgconfig, perlPackages
+, makeWrapper, pkg-config, perlPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g5v74cm0q3p3pzl6xmnp4rqayaymfli7c6z8s78h9rgd24fwbvn";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fftwFloat gtk2 ladspaPlugins libjack2 liblo libxml2 makeWrapper ]
     ++ (with perlPackages; [ perl XMLParser ]);
 

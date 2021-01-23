@@ -6,7 +6,7 @@ let
   version = "1.1.1";
   rev = "af12e2e4da586275ba931eae8f40a2201251bf59";
 
-  baseUrl = "https://emux.cc/versions/${stdenv.lib.substring 0 8 rev}/CCEmuX";
+  baseUrl = "https://emux.cc/versions/${lib.substring 0 8 rev}/CCEmuX";
   jar =
     if useCCTweaked
     then fetchurl {

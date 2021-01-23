@@ -736,7 +736,7 @@ in {
       environment = gitlabEnv;
       path = with pkgs; [
         postgresqlPackage
-        gitAndTools.git
+        git
         ruby
         openssh
         nodejs
@@ -764,7 +764,7 @@ in {
       path = with pkgs; [
         openssh
         procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
-        gitAndTools.git
+        git
         cfg.packages.gitaly.rubyEnv
         cfg.packages.gitaly.rubyEnv.wrappedRuby
         gzip
@@ -806,7 +806,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
         exiftool
-        gitAndTools.git
+        git
         gnutar
         gzip
         openssh
@@ -854,7 +854,7 @@ in {
       environment = gitlabEnv;
       path = with pkgs; [
         postgresqlPackage
-        gitAndTools.git
+        git
         openssh
         nodejs
         procps

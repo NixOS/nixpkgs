@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, gettext, makeWrapper
+{ lib, stdenv, fetchFromGitHub, pkg-config, gettext, makeWrapper
 , ncurses, libdrm, libpciaccess, libxcb }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses libdrm libpciaccess libxcb ];
-  nativeBuildInputs = [ pkgconfig gettext makeWrapper ];
+  nativeBuildInputs = [ pkg-config gettext makeWrapper ];
 
   enableParallelBuilding = true;
 

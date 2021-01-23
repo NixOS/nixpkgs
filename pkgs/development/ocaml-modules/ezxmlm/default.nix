@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildDunePackage, xmlm }:
+{ lib, fetchFromGitHub, buildDunePackage, xmlm }:
 
 buildDunePackage rec {
   pname = "ezxmlm";

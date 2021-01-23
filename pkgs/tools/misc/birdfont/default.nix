@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, python3, xmlbird,
+{ lib, stdenv, fetchurl, pkg-config, python3, xmlbird,
 cairo, gdk-pixbuf, libgee, glib, gtk3, webkitgtk, libnotify, sqlite, vala_0_44,
 gobject-introspection, gsettings-desktop-schemas, wrapGAppsHook }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0620bppcbm9pb8l0d4sc56gfwkr97gw4zjirjz5ikk5lj0m801yi";
   };
 
-  nativeBuildInputs = [ python3 pkgconfig vala_0_44 gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ python3 pkg-config vala_0_44 gobject-introspection wrapGAppsHook ];
   buildInputs = [ xmlbird libgee cairo gdk-pixbuf glib gtk3 webkitgtk libnotify sqlite gsettings-desktop-schemas ];
 
   postPatch = ''

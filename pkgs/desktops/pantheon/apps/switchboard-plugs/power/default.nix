@@ -5,7 +5,7 @@
 , substituteAll
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , elementary-dpms-helper
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 

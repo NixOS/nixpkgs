@@ -1,11 +1,11 @@
-{ stdenv
+{ lib, stdenv
 , pkgs
 , fetchurl
 , fetchpatch
 , zlib
 , openssl
 , libedit
-, pkgconfig
+, pkg-config
 , pam
 , autoreconfHook
 , etcDir ? null
@@ -30,7 +30,7 @@ let
   };
 
 in
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "openssh";
   inherit version;
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ optional (hpnSupport || withGssapiPatches) autoreconfHook
     ++ optional withKerberos pkgs.kerberos.dev;
   buildInputs = [ zlib openssl libedit pam ]
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   # Upstream build system does not support static build, so we fall back
   # on fragile patching of configure script.
   #
-  # libedit is found by pkgconfig, but without --static flag, required
+  # libedit is found by pkg-config, but without --static flag, required
   # to get also transitive dependencies for static linkage, hence sed
   # expression.
   #
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
     description = "An implementation of the SSH protocol";
     homepage = "https://www.openssh.com/";
     changelog = "https://www.openssh.com/releasenotes.html";
-    license = stdenv.lib.licenses.bsd2;
+    license = lib.licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;
     maintainers = with maintainers; [ eelco aneeshusa ];
   };

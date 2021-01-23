@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, tk, Cocoa, xlibsWrapper, makeWrapper }:
+{ lib, stdenv, fetchurl, tcl, tk, Cocoa, xlibsWrapper, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "3.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ tcl tk xlibsWrapper makeWrapper ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   hardeningDisable = [ "format" ];
 
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
       url = "https://wordnet.princeton.edu/license-and-commercial-use";
     };
     maintainers = [ ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

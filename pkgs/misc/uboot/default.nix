@@ -18,10 +18,10 @@
 }:
 
 let
-  defaultVersion = "2020.10";
+  defaultVersion = "2021.01";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "08m6f1bh4pdcqbxf983qdb66ccd5vak5cbzc114yf3jwq2yinj0d";
+    sha256 = "0m04glv9kn3bhs62sn675w60wkrl4m3a4hnbnnw67s3l198y21xl";
   };
   buildUBoot = {
     version ? null
@@ -55,7 +55,10 @@ let
       dtc
       flex
       openssl
-      (buildPackages.python3.withPackages (p: [ p.libfdt ]))
+      (buildPackages.python3.withPackages (p: [
+        p.libfdt
+        p.setuptools # for pkg_resources
+      ]))
       swig
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];

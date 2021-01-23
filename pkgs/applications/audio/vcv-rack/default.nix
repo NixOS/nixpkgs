@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, fetchzip, fetchFromGitHub, pkgconfig
+{ lib, stdenv, makeWrapper, fetchzip, fetchFromGitHub, pkg-config
 , alsaLib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
 , libzip, rtaudio, rtmidi, speex, libsamplerate }:
 
@@ -36,7 +36,7 @@ let
     sha256 = "17kd0lh2x3x12bxkyhq6z8sg6vxln8m9qirf0basvcsmylr6rb64";
   };
 in
-with stdenv.lib; stdenv.mkDerivation rec {
+with lib; stdenv.mkDerivation rec {
   pname = "VCV-Rack";
   version = "1.1.6";
 
@@ -74,7 +74,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ alsaLib curl glew glfw gtk2-x11 jansson libjack2 libsamplerate libzip rtaudio rtmidi speex ];
 
   buildFlags = [ "Rack" ];

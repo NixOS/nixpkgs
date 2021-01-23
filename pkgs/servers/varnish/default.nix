@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkgconfig, readline, libedit
+{ lib, stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkg-config, readline, libedit
 , python3, makeWrapper }:
 
 let
@@ -14,7 +14,7 @@ let
 
       passthru.python = python3;
 
-      nativeBuildInputs = with python3.pkgs; [ pkgconfig docutils sphinx ];
+      nativeBuildInputs = with python3.pkgs; [ pkg-config docutils sphinx ];
       buildInputs = [
         pcre libxslt groff ncurses readline libedit makeWrapper python3
       ];
@@ -22,11 +22,11 @@ let
       buildFlags = [ "localstatedir=/var/spool" ];
 
       postInstall = ''
-        wrapProgram "$out/sbin/varnishd" --prefix PATH : "${stdenv.lib.makeBinPath [ stdenv.cc ]}"
+        wrapProgram "$out/sbin/varnishd" --prefix PATH : "${lib.makeBinPath [ stdenv.cc ]}"
       '';
 
       # https://github.com/varnishcache/varnish-cache/issues/1875
-      NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isi686 "-fexcess-precision=standard";
+      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-fexcess-precision=standard";
 
       outputs = [ "out" "dev" "man" ];
 

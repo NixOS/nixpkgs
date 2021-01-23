@@ -1,5 +1,5 @@
 { lib, stdenv, linkFarm, lightdm-tiny-greeter, fetchFromGitHub
-, pkgconfig, lightdm, gtk3, glib, wrapGAppsHook, conf ? "" }:
+, pkg-config, lightdm, gtk3, glib, wrapGAppsHook, conf ? "" }:
 
 stdenv.mkDerivation rec {
   pname = "lightdm-tiny-greeter";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "08azpj7b5qgac9bgi1xvd6qy6x2nb7iapa0v40ggr3d1fabyhrg6";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = [ lightdm gtk3 glib ];
 
   postUnpack = if conf != "" then ''

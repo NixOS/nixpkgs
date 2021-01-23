@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, asciidoc, cmake, docbook_xsl, pkgconfig
+{ stdenv, lib, fetchFromGitHub, asciidoc, cmake, docbook_xsl, pkg-config
 , bash-completion, openssl, curl, libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "168jg8kjbylfgalhicn0llbykd7kdc9id2989gg0nxlgmnvzl58a";
   };
 
-  nativeBuildInputs = [ asciidoc cmake docbook_xsl pkgconfig ];
+  nativeBuildInputs = [ asciidoc cmake docbook_xsl pkg-config ];
 
   buildInputs = [
     bash-completion curl openssl libxml2 libxslt

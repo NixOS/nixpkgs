@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, cairo, poppler, wxGTK ? null, wxmac ? null, darwin ? null }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config, cairo, poppler, wxGTK ? null, wxmac ? null, darwin ? null }:
 
 let
   wxInputs =
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "1y5ji4c4m69vzs0z051fkhfdrjnyxb6kzac5flhdkfb2hgp1jnxl";
   };
 
-  nativeBuildInputs = [ autoconf automake pkgconfig ];
+  nativeBuildInputs = [ autoconf automake pkg-config ];
   buildInputs = [ cairo poppler ] ++ wxInputs;
 
   preConfigure = "./bootstrap";

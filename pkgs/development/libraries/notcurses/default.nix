@@ -1,4 +1,4 @@
-{ stdenv, cmake, pkgconfig, pandoc, libunistring, ncurses, ffmpeg,
+{ stdenv, cmake, pkg-config, pandoc, libunistring, ncurses, ffmpeg,
   fetchFromGitHub, lib,
   multimediaSupport ? true
 }:
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake pkgconfig pandoc ];
+  nativeBuildInputs = [ cmake pkg-config pandoc ];
 
   buildInputs = [ libunistring ncurses ]
     ++ lib.optional multimediaSupport ffmpeg;

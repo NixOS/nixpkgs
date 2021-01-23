@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
 , rtl-sdr, soapysdr
 } :
 
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     sha256 = "15j0s7apbg9cjr6rcbr058kl0r3szwzf00ixcbykxb77fh7c6r9w";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ rtl-sdr soapysdr ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];

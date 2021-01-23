@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, cmake
+{ lib, stdenv, fetchurl, cmake
 , curl, openssl, zlib
 , libiconv
 , version, sha256, ...
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
   pname = "mariadb-connector-c";

@@ -98,7 +98,7 @@ python36Packages.buildPythonApplication rec {
       --prefix "PYTHONPATH" ":" "$out/lib/${python36Packages.python.libPrefix}/site-packages"
 
       # Add some runtime dependencies
-      --prefix "PATH" ":" "${stdenv.lib.makeBinPath runTimeDeps}"
+      --prefix "PATH" ":" "${lib.makeBinPath runTimeDeps}"
 
       # Finally, move to directory that contains data
       --run "cd $out/share/${pname}"

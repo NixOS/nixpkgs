@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gnome3, gtk3, gjs, flex, bison, libxml2, intltool,
+{ lib, stdenv, fetchurl, pkg-config, gnome3, gtk3, gjs, flex, bison, libxml2, intltool,
   gdl, libgda, gtksourceview, gsettings-desktop-schemas,
   itstool, python3, ncurses, makeWrapper }:
 
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/anjuta/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/anjuta/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "13ql7axw6zz387s7pa1m7wmh7qps3x7fk53h9832vq1yxlq33aa2";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkgconfig intltool itstool python3 makeWrapper
+    pkg-config intltool itstool python3 makeWrapper
     # Required by python3
     ncurses
   ];

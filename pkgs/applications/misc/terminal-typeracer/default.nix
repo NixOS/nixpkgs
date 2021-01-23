@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "VSwku0rtQECirCHx2CXe72gCA+p3DdPC4YYwEYu8WfM=";
 
-  buildInputs = [ openssl sqlite ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [ openssl sqlite ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {

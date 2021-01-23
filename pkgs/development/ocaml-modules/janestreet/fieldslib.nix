@@ -1,4 +1,4 @@
-{ lib, stdenv, type_conv, buildOcamlJane }:
+{ lib, type_conv, buildOcamlJane }:
 
 buildOcamlJane {
   name = "fieldslib";

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     install -m444 -Dt $out/share/man/man1 git-test.1
 
     wrapProgram $out/bin/git-test \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ git ]}"
+      --prefix PATH : "${lib.makeBinPath [ git ]}"
   '';
 
   meta = with lib; {

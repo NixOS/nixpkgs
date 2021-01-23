@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, itstool, glib, libwnck3, librsvg, libxml2, dconf, gtk3, mate, hicolor-icon-theme, gobject-introspection, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, libwnck3, librsvg, libxml2, dconf, gtk3, mate, hicolor-icon-theme, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
   version = "1.24.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0xblqrhfazd01h0jdmx4hvavkb7f9anbd4rjsk5r6wxhp027l64l";
   };
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     gettext
     itstool
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

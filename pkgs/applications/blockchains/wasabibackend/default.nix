@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     cp -r ${projectName}/bin/${projectConfiguration}/netcoreapp3.1/${projectRuntime}/publish $out/lib
     mkdir -p $out/bin
     makeWrapper $out/lib/WalletWasabi.Backend $out/bin/${pname} \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ openssl zlib ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl zlib ]} \
       --run "cd $out/lib"
   '';
 

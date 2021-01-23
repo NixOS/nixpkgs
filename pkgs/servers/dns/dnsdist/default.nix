@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, systemd
+{ lib, stdenv, fetchurl, pkg-config, systemd
 , boost, libsodium, libedit, re2
 , net-snmp, lua, protobuf, openssl, zlib, h2o
 }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wgv19b6y4fp5x1z54psaaialji2rckl5vdh156kyw47k9r5krya";
   };
 
-  nativeBuildInputs = [ pkgconfig protobuf ];
+  nativeBuildInputs = [ pkg-config protobuf ];
   buildInputs = [ systemd boost libsodium libedit re2 net-snmp lua openssl zlib h2o ];
 
   configureFlags = [

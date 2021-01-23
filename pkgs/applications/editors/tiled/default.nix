@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config, qmake
 , python, qtbase, qttools }:
 
 mkDerivation rec {
@@ -12,7 +12,7 @@ mkDerivation rec {
     sha256 = "0n8p7bp5pqq72c65av3v7wbazwphh78pw27nqvpiyp9y8k5w4pg0";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [ python qtbase qttools ];
 
   enableParallelBuilding = true;

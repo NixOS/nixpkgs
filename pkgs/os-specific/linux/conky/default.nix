@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchFromGitHub, pkgconfig, cmake
+{ config, lib, stdenv, fetchFromGitHub, pkg-config, cmake
 
 # dependencies
 , glib, libXinerama
@@ -64,7 +64,7 @@ assert weatherMetarSupport -> curlSupport;
 assert weatherXoapSupport  -> curlSupport && libxml2 != null;
 assert journalSupport      -> systemd != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "conky";
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lgcc_s";
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glib libXinerama ]
     ++ optionals docsSupport        [ docbook2x docbook_xsl docbook_xml_dtd_44 libxslt man less ]
     ++ optional  ncursesSupport     ncurses

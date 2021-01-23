@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, bluez, fuse, obexftp }:
+{ lib, stdenv, fetchurl, pkg-config, bluez, fuse, obexftp }:
 
 stdenv.mkDerivation rec {
   name = "obexfs-0.12";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1g3krpygk6swa47vbmp9j9s8ahqqcl9ra8r25ybgzv2d9pmjm9kj";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse obexftp bluez ];
 
   meta = with lib; {

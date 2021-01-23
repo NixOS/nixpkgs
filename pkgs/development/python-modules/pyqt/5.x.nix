@@ -1,4 +1,4 @@
-{ lib, pythonPackages, pkgconfig
+{ lib, pythonPackages, pkg-config
 , dbus
 , qmake, lndir
 , qtbase
@@ -41,7 +41,7 @@ in buildPythonPackage rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qmake
     lndir
     sip

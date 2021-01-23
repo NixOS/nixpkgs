@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "emplace";
-  version = "0.3.9";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "tversteeg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "173nj6fx2l15shy7s4dngnfqsa10m7qwhi2ia2rr421l7b24ixqq";
+    sha256 = "sha256-74jv5GvBSErU5qjd4QmAK4JZhqFoqBf3cNxOGLIqt9U=";
   };
 
-  cargoSha256 = "0bjw3fvc430b1jxla25clr75c94p2ms7d94j72d8mirxsiklgsp9";
+  cargoSha256 = "sha256-SPHXkvtUL6hdYOE1fUIQLEqWzn68RVBiu6zJQJ/3BxQ=";
 
   meta = with lib; {
     description = "Mirror installed software on multiple machines";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, pkgconfig, gtk2, pygobject2, pycairo, pango
+{ lib, stdenv, fetchurl, fetchpatch, python, pkg-config, gtk2, pygobject2, pycairo, pango
 , buildPythonPackage, libglade ? null, isPy3k }:
 
 buildPythonPackage rec {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     pango
   ] ++ stdenv.lib.optional (libglade != null) libglade;

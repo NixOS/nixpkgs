@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonPackage, pkgconfig, glib, isPy3k, pythonAtLeast }:
+{ stdenv, fetchurl, python, buildPythonPackage, pkg-config, glib, isPy3k, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "pygobject";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   configureFlags = [ "--disable-introspection" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib ];
 
   # in a "normal" setup, pygobject and pygtk are installed into the

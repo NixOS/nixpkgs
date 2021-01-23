@@ -11,7 +11,7 @@
 , runc
 , kmod
 , libseccomp
-, pkgconfig
+, pkg-config
 , ethtool
 , util-linux
 , ipset
@@ -128,7 +128,7 @@ let
 
     patches = [ ./patches/0001-Use-rm-from-path-in-go-generate.patch ./patches/0002-Add-nixpkgs-patches.patch ];
 
-    nativeBuildInputs = [ git pkgconfig ];
+    nativeBuildInputs = [ git pkg-config ];
     buildInputs = [ libseccomp ];
 
     buildPhase = ''
@@ -168,7 +168,7 @@ let
 
     patches = [ ./patches/0001-Use-rm-from-path-in-go-generate.patch ./patches/0002-Add-nixpkgs-patches.patch ];
 
-    nativeBuildInputs = [ git pkgconfig ];
+    nativeBuildInputs = [ git pkg-config ];
     # These dependencies are embedded as compressed files in k3s at runtime.
     # Propagate them to avoid broken runtime references to libraries.
     propagatedBuildInputs = [ k3sPlugins k3sBuildStage1 runc ];

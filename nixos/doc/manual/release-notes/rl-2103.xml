@@ -258,6 +258,22 @@
    </listitem>
    <listitem>
     <para>
+     MariaDB has been updated to 10.5.
+     Before you upgrade, it would be best to take a backup of your database and read
+     <link xlink:href="https://mariadb.com/kb/en/upgrading-from-mariadb-104-to-mariadb-105/#incompatible-changes-between-104-and-105">
+     Incompatible Changes Between 10.4 and 10.5</link>.
+     After the upgrade you will need to run <literal>mysql_upgrade</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The TokuDB storage engine dropped in <package>mariadb</package> 10.5 and removed in <package>mariadb</package> 10.6.
+     It is recommended to switch to RocksDB. See also <link xlink:href="https://mariadb.com/kb/en/tokudb/">TokuDB</link> and
+     <link xlink:href="https://jira.mariadb.org/browse/MDEV-19780">MDEV-19780: Remove the TokuDB storage engine</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       The <literal>openldap</literal> module now has support for OLC-style
       configuration, users of the <literal>configDir</literal> option may wish
       to migrate. If you continue to use <literal>configDir</literal>, ensure that
@@ -413,6 +429,17 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
       since they were not necessary: the service is now running with a
       dynamically allocated uid.
     </para>
+   </listitem>
+   <listitem>
+     <para>
+      The libinput module has been updated with the ability to configure mouse and touchpad settings separately.
+      The options in <literal>services.xserver.libinput</literal> have been renamed to <literal>services.xserver.libinput.touchpad</literal>,
+      while there is a new <literal>services.xserver.libinput.mouse</literal> for mouse related configuration.
+     </para>
+     <para>
+      Since touchpad options no longer apply to all devices, you may want to replicate your touchpad configuration in
+      mouse section.
+     </para>
    </listitem>
   </itemizedlist>
  </section>

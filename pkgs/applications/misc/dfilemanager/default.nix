@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, file, qtbase, qttools, solid }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, file, qtbase, qttools, solid }:
 
 mkDerivation {
   pname = "dfilemanager";
@@ -19,7 +19,7 @@ mkDerivation {
   meta = {
     homepage = "http://dfilemanager.sourceforge.net/";
     description = "File manager written in Qt/C++";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

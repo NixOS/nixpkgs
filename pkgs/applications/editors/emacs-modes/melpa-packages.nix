@@ -6,8 +6,8 @@ To update the list of packages from MELPA,
 
 1. Run ./update-melpa
 2. Check for evaluation errors:
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackages.melpaStablePackages
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackages.melpaPackages
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacs.pkgs..melpaStablePackages
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacs.pkgs..melpaPackages
 3. `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
 
 ## Update from overlay
@@ -144,7 +144,7 @@ let
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
         pdf-tools = super.pdf-tools.overrideAttrs (old: {
-          nativeBuildInputs = [ external.pkgconfig ];
+          nativeBuildInputs = [ external.pkg-config ];
           buildInputs = with external; old.buildInputs ++ [ autoconf automake libpng zlib poppler ];
           preBuild = "make server/epdfinfo";
           recipe = pkgs.writeText "recipe" ''
@@ -341,6 +341,7 @@ let
         # Telega has a server portion for it's network protocol
         telega = super.telega.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
+          nativeBuildInputs = [ external.pkg-config ];
 
           postBuild = ''
             cd source/server
@@ -373,7 +374,7 @@ let
           nativeBuildInputs = [
             external.autoconf
             external.automake
-            external.pkgconfig
+            external.pkg-config
             external.libtool
             (external.zeromq.override { enableDrafts = true; })
           ];

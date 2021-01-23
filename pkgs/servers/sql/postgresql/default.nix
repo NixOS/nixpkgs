@@ -4,7 +4,7 @@ let
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper
       , glibc, zlib, readline, openssl, icu, systemd, libossp_uuid
-      , pkgconfig, libxml2, tzdata
+      , pkg-config, libxml2, tzdata
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
@@ -40,7 +40,7 @@ let
       ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
-    nativeBuildInputs = lib.optionals icuEnabled [ pkgconfig ];
+    nativeBuildInputs = lib.optionals icuEnabled [ pkg-config ];
 
     enableParallelBuilding = !stdenv.isDarwin;
 

@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
     substituteInPlace bin/9c \
       --replace 'which uniq' '${which}/bin/which uniq'
-  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.isDarwin) ''
     #add missing ctrl+c\z\x\v keybind for non-Darwin
     substituteInPlace src/cmd/acme/text.c \
       --replace "case Kcmd+'c':" "case 0x03: case Kcmd+'c':" \
@@ -48,10 +48,10 @@ stdenv.mkDerivation {
 
   buildInputs = [
     perl
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     xorgproto libX11 libXext libXt fontconfig
     freetype # fontsrv wants ft2build.h provides system fonts for acme and sam.
-  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Carbon Cocoa IOKit Metal QuartzCore
   ]);
 

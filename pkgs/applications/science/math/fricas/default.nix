@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, sbcl, libX11, libXpm, libICE, libSM, libXt, libXau, libXdmcp }:
+{ lib, stdenv, fetchurl, sbcl, libX11, libXpm, libICE, libSM, libXt, libXau, libXdmcp }:
 
 let
   version = "1.3.4";
@@ -19,9 +19,9 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://fricas.sourceforge.net/";
     description = "An advanced computer algebra system";
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.sprock ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sprock ];
   };
 }

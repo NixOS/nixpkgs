@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, texinfo
+{ stdenv, lib, fetchurl, autoreconfHook, pkg-config, texinfo
 , netcat-gnu, gnutls, gsasl, libidn2, Security
 , withKeyring ? true, libsecret ? null
 , systemd ? null }:
@@ -21,13 +21,13 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ gnutls gsasl libidn2 ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security
-    ++ stdenv.lib.optional withKeyring libsecret;
+    ++ lib.optional stdenv.isDarwin Security
+    ++ lib.optional withKeyring libsecret;
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig texinfo ];
+  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
 
   configureFlags =
-    [ "--sysconfdir=/etc" ] ++ stdenv.lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
+    [ "--sysconfdir=/etc" ] ++ lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
 
   postInstall = ''
     install -d $out/share/doc/${pname}/scripts

@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath "${stdenv.lib.makeLibraryPath buildInputs}" \
+      --set-rpath "${lib.makeLibraryPath buildInputs}" \
       $out/bin/anydesk
 
     # pangox is not actually necessary (it was only added as a part of gtkglext)
@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
       $out/bin/anydesk
 
     wrapProgram $out/bin/anydesk \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ lsb-release ]}
+      --prefix PATH : ${lib.makeBinPath [ lsb-release ]}
 
     substituteInPlace $out/share/applications/*.desktop \
       --subst-var out

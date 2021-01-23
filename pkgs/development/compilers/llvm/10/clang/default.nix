@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3, lld
+{ lib, stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3, lld
 , fixDarwinDylibNames
 , enableManpages ? false
 }:
@@ -19,8 +19,8 @@ let
     '';
 
     nativeBuildInputs = [ cmake python3 lld ]
-      ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx
-      ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+      ++ lib.optional enableManpages python3.pkgs.sphinx
+      ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
     buildInputs = [ libxml2 llvm ];
 
@@ -28,7 +28,7 @@ let
       "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
-    ] ++ stdenv.lib.optionals enableManpages [
+    ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
       "-DSPHINX_OUTPUT_MAN=ON"
@@ -49,9 +49,9 @@ let
 
       # Patch for standalone doc building
       sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
-    '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    '' + lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
-    '' + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace tools/extra/clangd/CMakeLists.txt \
         --replace "NOT HAVE_CXX_ATOMICS64_WITHOUT_LIB" FALSE
     '';
@@ -90,10 +90,10 @@ let
     meta = {
       description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
       homepage    = "https://llvm.org/";
-      license     = stdenv.lib.licenses.ncsa;
-      platforms   = stdenv.lib.platforms.all;
+      license     = lib.licenses.ncsa;
+      platforms   = lib.platforms.all;
     };
-  } // stdenv.lib.optionalAttrs enableManpages {
+  } // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";
 
     buildPhase = ''

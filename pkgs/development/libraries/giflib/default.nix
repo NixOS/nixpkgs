@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412, docbook_xsl, libxml2, fixDarwinDylibNames }:
+{ lib, stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412, docbook_xsl, libxml2, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   name = "giflib-5.2.1";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gbrg03z1b6rlrvjyc6d41bc8j1bsr7rm8206gb1apscyii5bnii";
   };
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isDarwin
+  patches = lib.optional stdenv.hostPlatform.isDarwin
     (fetchpatch {
       # https://sourceforge.net/p/giflib/bugs/133/
       name = "darwin-soname.patch";
@@ -21,15 +21,15 @@ stdenv.mkDerivation rec {
       --replace 'PREFIX = /usr/local' 'PREFIX = ${builtins.placeholder "out"}'
   '';
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   buildInputs = [ xmlto docbook_xml_dtd_412 docbook_xsl libxml2 ];
 
   meta = {
     description = "A library for reading and writing gif images";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
     branch = "5.2";
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, pkgconfig, gtk2, gtk3, fltk13 }:
+{ lib, stdenv, fetchurl, alsaLib, pkg-config, gtk2, gtk3, fltk13 }:
 # Comes from upstream as as bundle of several tools,
 # some use gtk2, some gtk3 (and some even fltk13).
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jbkjmq038zapj66a7nkppdf644v2mwj581xbmh6k4i8w6mcglxz";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsaLib gtk2 gtk3 fltk13 ];
 
   patchPhase = ''

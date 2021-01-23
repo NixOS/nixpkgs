@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -m755 -D urserver $out/bin/urserver
-    wrapProgram $out/bin/urserver --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath buildInputs}"
+    wrapProgram $out/bin/urserver --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}"
     cp -r remotes $out/bin/remotes
     cp -r manager $out/bin/manager
   '';

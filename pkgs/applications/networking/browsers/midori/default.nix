@@ -2,7 +2,7 @@
 , fetchurl
 , cmake
 , ninja
-, pkgconfig
+, pkg-config
 , intltool
 , vala
 , wrapGAppsHook
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     cmake
     intltool
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];

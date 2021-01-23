@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , cmake
-, pkgconfig
+, pkg-config
 , wrapQtAppsHook
 , dnsutils
 , nmap
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-q3XfwJ4TGK4E58haN0Q0xRH4GDpKD8VZzyxHe/VwBqY=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
   buildInputs = [ qtbase qtscript qtwebengine ];
 

@@ -41,8 +41,8 @@ in stdenv.mkDerivation {
     gsettings-desktop-schemas glib gtk3
     # needed for XDG_ICON_DIRS
     gnome3.adwaita-icon-theme
-    (stdenv.lib.getLib dconf)
-  ] ++ stdenv.lib.optionals withOpenCL [ opencl-headers ocl-icd opencl-clhpp rocm-opencl-runtime ];
+    (lib.getLib dconf)
+  ] ++ lib.optionals withOpenCL [ opencl-headers ocl-icd opencl-clhpp rocm-opencl-runtime ];
 
   cmakeFlags = [
     "-DOpenEXR_Iex_INCLUDE_DIR=${openexr.dev}/include/OpenEXR"
@@ -54,7 +54,7 @@ in stdenv.mkDerivation {
     "-DEMBREE_INCLUDE_PATH=${embree2}/include"
     "-DEMBREE_LIBRARY=${embree2}/lib/libembree.so"
     "-DBoost_PYTHON_LIBRARY_RELEASE=${boost_static}/lib/libboost_python3-mt.so"
-  ] ++ stdenv.lib.optional withOpenCL
+  ] ++ lib.optional withOpenCL
     "-DOPENCL_INCLUDE_DIR=${opencl-headers}/include";
 
   preConfigure = ''
@@ -73,7 +73,7 @@ in stdenv.mkDerivation {
     wrapProgram "$out/bin/luxcoreui" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share' \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
+      --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 
   meta = with lib; {

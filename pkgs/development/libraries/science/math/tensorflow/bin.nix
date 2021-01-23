@@ -1,30 +1,25 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , addOpenGLRunpath
 , cudaSupport ? false, symlinkJoin, cudatoolkit, cudnn, nvidia_x11
 }:
 
-with stdenv.lib;
+with lib;
 let
-  unavailable = throw "libtensorflow is not available for this platform!";
+  broken = !stdenv.isLinux && !stdenv.isDarwin;
 
   tfType = if cudaSupport then "gpu" else "cpu";
 
-  system = 
-    if      stdenv.isLinux  then "linux"
-    else if stdenv.isDarwin then "darwin"
-    else unavailable;
+  system =
+    if stdenv.isLinux then "linux"
+    else "darwin";
 
-  platform =
-    if stdenv.isx86_64 then "x86_64"
-    else unavailable;
+  platform =  "x86_64";
 
-  rpath = makeLibraryPath ([stdenv.cc.libc stdenv.cc.cc.lib] ++
-            optionals cudaSupport [ cudatoolkit.out cudatoolkit.lib cudnn nvidia_x11 ]);
+  rpath = makeLibraryPath ([stdenv.cc.libc stdenv.cc.cc.lib]
+                           ++ optionals cudaSupport [ cudatoolkit.out cudatoolkit.lib cudnn nvidia_x11 ]);
 
   packages = import ./binary-hashes.nix;
-  packageName = "${tfType}-${system}-${platform}";
-  url = packages.${packageName} or unavailable;
 
   patchLibs =
     if stdenv.isDarwin
@@ -44,7 +39,7 @@ in stdenv.mkDerivation rec {
   pname = "libtensorflow";
   inherit (packages) version;
 
-  src = fetchurl url;
+  src = fetchurl packages."${tfType}-${system}-${platform}";
 
   nativeBuildInputs = optional cudaSupport addOpenGLRunpath;
 
@@ -55,7 +50,7 @@ in stdenv.mkDerivation rec {
     chmod -R +w $out
     ${patchLibs}
 
-    # Write pkgconfig file.
+    # Write pkg-config file.
     mkdir $out/lib/pkgconfig
     cat > $out/lib/pkgconfig/tensorflow.pc << EOF
     Name: TensorFlow
@@ -72,6 +67,5 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.tensorflow.org/install/lang_c";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ basvandijk ];
   };
 }

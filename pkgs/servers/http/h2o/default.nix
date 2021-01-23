@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, pkgconfig, cmake, ninja
+, pkg-config, cmake, ninja
 , openssl, libuv, zlib
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "dev" "lib" ];
 
-  nativeBuildInputs = [ pkgconfig cmake ninja ];
+  nativeBuildInputs = [ pkg-config cmake ninja ];
   buildInputs = [ openssl libuv zlib ];
 
   meta = with lib; {

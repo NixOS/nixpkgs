@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libSM libX11 SDL libICE alsaLib gcc-unwrapped libXext ];
 
   postFixup = ''
-    patchelf --set-rpath ${stdenv.lib.makeLibraryPath buildInputs} "$out/bin/atari++"
+    patchelf --set-rpath ${lib.makeLibraryPath buildInputs} "$out/bin/atari++"
   '';
 
   meta = with lib; {
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ maintainers.AndersonTorres ];
     license = licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

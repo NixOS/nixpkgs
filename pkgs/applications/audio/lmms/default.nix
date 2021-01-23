@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, alsaLib ? null, fftwFloat, fltk13
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, alsaLib ? null, fftwFloat, fltk13
 , fluidsynth_1 ? null, lame ? null, libgig ? null, libjack2 ? null, libpulseaudio ? null
 , libsamplerate, libsoundio ? null, libsndfile, libvorbis ? null, portaudio ? null
 , qtbase, qtx11extras, qttools, SDL ? null, mkDerivation }:
@@ -15,7 +15,7 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake qttools pkgconfig ];
+  nativeBuildInputs = [ cmake qttools pkg-config ];
 
   buildInputs = [
     alsaLib

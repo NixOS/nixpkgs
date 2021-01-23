@@ -15,6 +15,22 @@ let
         };
       });
 
+      aws-sam-translator = super.aws-sam-translator.overridePythonAttrs (oldAttrs: rec {
+        version = "1.27.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "sha256-MlgSL0zWcbo9wUE4LdBBLBI9ufExe+2LJucin2NjRFQ=";
+        };
+      });
+
+      dateparser = super.dateparser.overridePythonAttrs (oldAttrs: rec {
+        version = "0.7.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "sha256-lAgoGDyTe87FMHUyEbcPZzwKmquDHkMnNImzEFON/4Y=";
+        };
+      });
+
       cookiecutter = super.cookiecutter.overridePythonAttrs (oldAttrs: rec {
         version = "1.6.0";
         src = oldAttrs.src.override {
@@ -68,7 +84,7 @@ buildPythonApplication rec {
   postPatch = ''
     substituteInPlace requirements/base.txt \
       --replace "boto3~=1.14.0, >=1.14.23" "boto3~=1.14" \
-      --replace "docker~=4.2.0" "docker~=4.3.1" \
+      --replace "docker~=4.2.0" "docker~=4.3" \
       --replace "jmespath~=0.9.5" "jmespath~=0.10.0" \
       --replace "python-dateutil~=2.6, <2.8.1" "python-dateutil~=2.6" \
       --replace "requests==2.23.0" "requests~=2.24" \

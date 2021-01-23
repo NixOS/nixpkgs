@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt4 ? null
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qt4 ? null
 , withQt5 ? false, qtbase ? null, qttools ? null
 , darwin ? null
 , libsecret
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ];
 
   nativeBuildInputs = [ cmake ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pkgconfig ] # for finding libsecret
+    ++ lib.optionals (!stdenv.isDarwin) [ pkg-config ] # for finding libsecret
   ;
 
-  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ libsecret ]
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ])
-    ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreFoundation Security
     ])
   ;
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Platform-independent Qt API for storing passwords securely";
     homepage = "https://github.com/frankosterfeld/qtkeychain";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }

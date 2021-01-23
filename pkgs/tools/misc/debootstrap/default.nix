@@ -2,7 +2,7 @@
 , gnugrep, gnutar, gnused, gzip, makeWrapper }:
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
 # There is also cdebootstrap now. Is that easier to maintain?
-let binPath = stdenv.lib.makeBinPath [
+let binPath = lib.makeBinPath [
     coreutils
     dpkg
     gawk

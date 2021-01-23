@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, makeWrapper, gtk3, json_c, taskwarrior }:
+{ lib, stdenv, fetchurl, pkg-config, makeWrapper, gtk3, json_c, taskwarrior }:
 
 stdenv.mkDerivation rec {
   name = "ptask-1.0.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 json_c ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   patches = [ ./tw-version.patch ./json_c_is_error.patch ];
 

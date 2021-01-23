@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkgconfig
+, cmake, pkg-config
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
 , randomx, rapidjson
@@ -10,7 +10,7 @@
 ,   python3  ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert stdenv.isDarwin -> IOKit != null;
 assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     cp -r . $source
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     boost miniupnpc openssl unbound

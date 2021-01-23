@@ -1,4 +1,4 @@
-{lib, stdenv, buildOcaml, fetchurl}:
+{lib, buildOcaml, fetchurl}:
 
 buildOcaml rec {
   version = "112.35.00";
@@ -14,7 +14,7 @@ buildOcaml rec {
   meta = with lib; {
     homepage = "https://github.com/janestreet/herelib";
     description = "Syntax extension for inserting the current location";
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];
   };
 }

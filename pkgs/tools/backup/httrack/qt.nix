@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl, cmake, pkgconfig, makeWrapper
+{ mkDerivation, lib, stdenv, fetchurl, cmake, pkg-config, makeWrapper
 , httrack, qtbase, qtmultimedia }:
 
 mkDerivation rec {
@@ -12,7 +12,7 @@ mkDerivation rec {
 
   buildInputs = [ httrack qtbase qtmultimedia ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
 
   prePatch = ''
     substituteInPlace cmake/HTTRAQTFindHttrack.cmake \

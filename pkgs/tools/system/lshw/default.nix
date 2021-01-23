@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch
-, withGUI ? false, gtk2, pkgconfig, sqlite # compile GUI
+, withGUI ? false, gtk2, pkg-config, sqlite # compile GUI
 }:
 
 let numVersion = "02.18"; # :(
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals withGUI [ gtk2 sqlite ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, libuuid
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libuuid
 , sane-backends, podofo, libjpeg, djvulibre, libxmlxx3, libzip, tesseract
 , intltool, poppler, json-glib
 , ninja
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake ninja
     intltool
-    pkgconfig
+    pkg-config
     pythonEnv
 
     # Gtk specific

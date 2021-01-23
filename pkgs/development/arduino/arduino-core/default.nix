@@ -47,7 +47,7 @@ let
   ;
   # abiVersion 6 is default, but we need 5 for `avrdude_bin` executable
   ncurses5 = ncurses.override { abiVersion = "5"; };
-  teensy_libpath = stdenv.lib.makeLibraryPath [
+  teensy_libpath = lib.makeLibraryPath [
     atk
     cairo
     expat
@@ -76,7 +76,7 @@ let
                         else throw "${stdenv.hostPlatform.system} is not supported in teensy";
 
   flavor = (if withTeensyduino then "teensyduino" else "arduino")
-             + stdenv.lib.optionalString (!withGui) "-core";
+             + lib.optionalString (!withGui) "-core";
 in
 stdenv.mkDerivation rec {
   version = "1.8.13";
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     zlib
     ncurses5
     readline
-  ] ++ stdenv.lib.optionals withTeensyduino [ upx ];
+  ] ++ lib.optionals withTeensyduino [ upx ];
   downloadSrcList = builtins.attrValues externalDownloads;
   downloadDstList = builtins.attrNames externalDownloads;
 
@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
     cp -r ./build/linux/work/* "$out/share/arduino/"
     echo -n ${version} > $out/share/arduino/lib/version.txt
 
-    ${stdenv.lib.optionalString withGui ''
+    ${lib.optionalString withGui ''
       mkdir -p $out/bin
       substituteInPlace $out/share/arduino/arduino \
         --replace "JAVA=java" "JAVA=$javaPath/java" \
@@ -180,7 +180,7 @@ stdenv.mkDerivation rec {
         --replace '<ICON_NAME>' "$out/share/arduino/icons/128x128/apps/arduino.png"
     ''}
 
-    ${stdenv.lib.optionalString withTeensyduino ''
+    ${lib.optionalString withTeensyduino ''
       # Back up the original jars
       mv $out/share/arduino/lib/arduino-core.jar $out/share/arduino/lib/arduino-core.jar.bak
       mv $out/share/arduino/lib/pde.jar $out/share/arduino/lib/pde.jar.bak
@@ -235,7 +235,7 @@ stdenv.mkDerivation rec {
     mkdir $out/lib/
     ln -s ${lib.makeLibraryPath [ ncurses5 ]}/libtinfo.so.5 $out/lib/libtinfo.so.5
 
-    ${stdenv.lib.optionalString withTeensyduino ''
+    ${lib.optionalString withTeensyduino ''
       # Patch the Teensy loader binary
       patchelf --debug \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \

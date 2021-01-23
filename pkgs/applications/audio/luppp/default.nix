@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , jack2
 , cairo
 , liblo
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

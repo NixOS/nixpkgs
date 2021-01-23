@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchurl
 , buildPythonPackage
-, pkgconfig
+, pkg-config
 , python
 , dbus-python
 , enlightenment
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "0bk161xwlz4dlv56r68xwkm8snzfifaxd1j7w2wcyyk4fgvnvq4r";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ enlightenment.efl ];
 

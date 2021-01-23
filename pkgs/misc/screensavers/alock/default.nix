@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchgit, pkg-config, autoreconfHook
 , libX11, pam, libgcrypt, libXrender, imlib2 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "--enable-imlib2"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     autoreconfHook libX11
     pam libgcrypt libXrender imlib2

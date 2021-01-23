@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
-, curl, ed, pkgconfig, freetype, zlib, libX11
+, curl, ed, pkg-config, freetype, zlib, libX11
 , SDL2, SDL2_image, SDL2_mixer
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    curl ed pkgconfig
+    curl ed pkg-config
   ];
 
   makeFlags = [ "-C" "src/" "prefix=$(out)" ];

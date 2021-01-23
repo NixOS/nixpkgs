@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, pkgconfig, flex, bison
+, cmake, pkg-config, flex, bison
 , llvmPackages, kernel, elfutils
 , libelf, libbfd, libbpf, libopcodes, bcc
 }:
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
       libbpf libbfd libopcodes
     ];
 
-  nativeBuildInputs = [ cmake pkgconfig flex bison ]
+  nativeBuildInputs = [ cmake pkg-config flex bison ]
     # libelf is incompatible with elfutils-libelf
-    ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+    ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
 
   # patch the source, *then* substitute on @NIX_KERNEL_SRC@ in the result. we could
   # also in theory make this an environment variable around bpftrace, but this works

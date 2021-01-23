@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, pythonPackages }:
+{ lib, stdenv, fetchFromGitLab, pythonPackages }:
 
 stdenv.mkDerivation {
   pname = "phwmon";
@@ -33,8 +33,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://gitlab.com/o9000/phwmon";
     description = "Hardware monitor (CPU, memory, network and disk I/O) for the system tray";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

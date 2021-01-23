@@ -2,27 +2,27 @@
 , buildPythonPackage
 , internetarchive
 , fetchPypi
-, youtube-dlc
+, youtube-dl
 , docopt
 , isPy27
 }:
 
 buildPythonPackage rec {
   pname = "tubeup";
-  version = "0.0.20";
+  version = "0.0.21";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8bf4004629b8427173c8259e1a09065db99135d6cc390b70a8a67b52a34a3f67";
+    sha256 = "326a499be032bee7f7ed921d85abff4b3b4dcd2c3d6ad694f08ef98dbcef19b6";
   };
 
   postPatch = ''
     substituteInPlace setup.py --replace "docopt==0.6.2" "docopt"
   '';
 
-  propagatedBuildInputs = [ internetarchive docopt youtube-dlc ];
+  propagatedBuildInputs = [ internetarchive docopt youtube-dl ];
 
   pythonImportsCheck = [ "tubeup" ];
 

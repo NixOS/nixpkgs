@@ -1,4 +1,4 @@
-{stdenv, fetchurl} :
+{lib, stdenv, fetchurl} :
 
 # This package requires a locale ru_RU.cp1251 locale entry.
 # Waiting for a better idea, I created it modifying a store file using:
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://multitran.sourceforge.net/";
     description = "Multitran data english-russian";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

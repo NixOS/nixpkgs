@@ -1,6 +1,6 @@
 { stdenv, lib, runCommand, patchelf
 , fetchFromGitHub, rustPlatform, makeWrapper
-, pkgconfig, curl, zlib, Security, CoreServices }:
+, pkg-config, curl, zlib, Security, CoreServices }:
 
 let
   libPath = lib.makeLibraryPath [
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1zkrrg5m0j9rk65g51v2zh404529p9z84qqb7bfyjmgiqlnh48ig";
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [
     curl zlib

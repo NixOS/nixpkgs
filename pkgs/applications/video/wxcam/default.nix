@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, pkgconfig
+, pkg-config
 , intltool
 , libX11, libXv, libSM
 , gtk, libglade
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "1765bvc65fpzn9ycnnj5hais9xkx9v0sm6a878d35x54bpanr859";
   };
 
-  buildInputs = with stdenv.lib;
-  [ pkgconfig intltool libX11 libXv libSM gtk libglade wxGTK perlPackages.XMLParser xvidcore mjpegtools alsaLib libv4l cimg ];
+  buildInputs = with lib;
+  [ pkg-config intltool libX11 libXv libSM gtk libglade wxGTK perlPackages.XMLParser xvidcore mjpegtools alsaLib libv4l cimg ];
 
   NIX_CFLAGS_COMPILE="-I ${cimg}/include/cimg";
 

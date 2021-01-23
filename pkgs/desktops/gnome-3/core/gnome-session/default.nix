@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, glib, gtk3, gsettings-desktop-schemas
+{ fetchurl, lib, stdenv, substituteAll, meson, ninja, pkg-config, gnome3, glib, gtk3, gsettings-desktop-schemas
 , gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412, python3
 , libxslt, gettext, makeWrapper, systemd, xorg, epoxy, gnugrep, bash, gnome-session-ctl }:
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   outputs = ["out" "sessions"];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-session/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-session/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0rrxjk3vbqy3cdgnl7rw71dvcyrvhwq3m6s53dnkyjxsrnr0xk3v";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dsystemd=true" "-Dsystemd_session=default" ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext makeWrapper
+    meson ninja pkg-config gettext makeWrapper
     xmlto libxslt docbook_xsl docbook_xml_dtd_412 python3
     dbus # for DTD
   ];

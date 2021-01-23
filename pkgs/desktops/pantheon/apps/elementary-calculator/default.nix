@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
-  version = "1.5.5";
+  version = "1.6.0";
 
   repoName = "calculator";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-ctKUtaBU0qvDYquGCPL7tiTwQ7IcqvT7SXRjxETWXbM=";
+    sha256 = "sha256-kDqUwTi3XnFGUwAjnWcaKqDylUFqpus9WurLoqbV1xk=";
   };
 
   passthru = {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook

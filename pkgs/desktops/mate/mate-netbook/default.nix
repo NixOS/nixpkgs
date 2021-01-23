@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, gtk3, libwnck3, libfakekey, libXtst, mate, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libwnck3, libfakekey, libXtst, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-netbook";
   version = "1.24.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1bmk9gq5gcqkvfppa7i1hqfph8sajc3xs189s4ha97g0ifwd98a8";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     wrapGAppsHook
   ];

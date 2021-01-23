@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, cmake, perl, python3, boost, valgrind
+{ lib, stdenv, fetchFromGitLab, cmake, perl, python3, boost, valgrind
 # Optional requirements
 # Lua 5.3 needed and not available now
 #, luaSupport ? false, lua5
@@ -10,7 +10,7 @@
 , moreTests ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   optionOnOff = option: if option then "on" else "off";

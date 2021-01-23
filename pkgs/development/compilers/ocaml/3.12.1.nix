@@ -3,7 +3,7 @@
 let
    useX11 = !stdenv.isAarch32 && !stdenv.isMips;
    useNativeCompilers = !stdenv.isMips;
-   inherit (stdenv.lib) optionals optionalString;
+   inherit (lib) optionals optionalString;
 in
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     nativeCompilers = useNativeCompilers;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://caml.inria.fr/ocaml";
     branch = "3.12";
     license = with licenses; [

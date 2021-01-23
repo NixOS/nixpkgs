@@ -3,7 +3,7 @@
 , meson
 , ninja
 , gettext
-, pkgconfig
+, pkg-config
 , pulseaudioFull
 , glibmm
 , gtkmm3
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gettext
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

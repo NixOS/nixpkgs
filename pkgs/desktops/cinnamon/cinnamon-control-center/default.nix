@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , autoreconfHook
 , glib
 , gettext
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     wrapGAppsHook
     gettext

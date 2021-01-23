@@ -14,7 +14,7 @@
 , libxml2
 , mkDerivation
 , pixman
-, pkgconfig
+, pkg-config
 , podofo
 , poppler
 , poppler_data
@@ -45,7 +45,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

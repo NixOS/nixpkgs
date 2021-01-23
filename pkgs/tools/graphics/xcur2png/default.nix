@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, libpng, xorg }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, libpng, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "xcur2png";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [

@@ -3,7 +3,7 @@
 , substituteAll
 , appstream-glib
 , gettext
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , gtk3
 , ibus
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream-glib
     gettext
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

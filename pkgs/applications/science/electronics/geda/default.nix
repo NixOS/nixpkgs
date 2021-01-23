@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, guile, gtk2, flex, gawk, perl }:
+{ lib, stdenv, fetchurl, pkg-config, guile, gtk2, flex, gawk, perl }:
 
 stdenv.mkDerivation {
   pname = "geda";
@@ -10,9 +10,9 @@ stdenv.mkDerivation {
   };
 
   configureFlags = [
-    "--disable-update-xdg-database" 
+    "--disable-update-xdg-database"
   ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ guile gtk2 flex gawk perl ];
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, glib, gettext, readline }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, glib, gettext, readline }:
 
 stdenv.mkDerivation rec {
   pname = "sdcv";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   hardeningDisable = [ "format" ];
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glib gettext readline ];
 
   preInstall = ''

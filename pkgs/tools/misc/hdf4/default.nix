@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -52,16 +52,16 @@ stdenv.mkDerivation rec {
     libjpeg
     szip
     zlib
-  ] ++ stdenv.lib.optionals uselibtirpc [
+  ] ++ lib.optionals uselibtirpc [
     libtirpc
   ];
 
-  preConfigure = stdenv.lib.optionalString uselibtirpc ''
+  preConfigure = lib.optionalString uselibtirpc ''
     # Make tirpc discovery work with CMAKE_PREFIX_PATH
     substituteInPlace config/cmake/FindXDR.cmake \
       --replace 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
                 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATH_SUFFIXES include/tirpc)'
-  '' + stdenv.lib.optionalString (szip != null) ''
+  '' + lib.optionalString (szip != null) ''
     export SZIP_INSTALL=${szip}
   '';
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     "-DHDF4_ENABLE_Z_LIB_SUPPORT=ON"
     "-DHDF4_BUILD_FORTRAN=OFF"
     "-DJPEG_DIR=${libjpeg}"
-  ] ++ stdenv.lib.optionals (szip != null) [
+  ] ++ lib.optionals (szip != null) [
     "-DHDF4_ENABLE_SZIP_ENCODING=ON"
     "-DHDF4_ENABLE_SZIP_SUPPORT=ON"
   ];
@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
 
   preCheck = ''
     export LD_LIBRARY_PATH=$(pwd)/bin
-  '' + stdenv.lib.optionalString (stdenv.isDarwin) ''
+  '' + lib.optionalString (stdenv.isDarwin) ''
     export DYLD_LIBRARY_PATH=$(pwd)/bin
   '';
 
-  excludedTests = stdenv.lib.optionals stdenv.isDarwin [
+  excludedTests = lib.optionals stdenv.isDarwin [
     "MFHDF_TEST-hdftest"
     "MFHDF_TEST-hdftest-shared"
     "HDP-dumpsds-18"
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   ];
 
   checkPhase = let excludedTestsRegex = if (excludedTests != [])
-    then "(" + (stdenv.lib.concatStringsSep "|" excludedTests) + ")"
+    then "(" + (lib.concatStringsSep "|" excludedTests) + ")"
     else ""; in ''
     runHook preCheck
     ctest -E "${excludedTestsRegex}" --output-on-failure

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjpeg, libGLU, libGL, freeglut, zlib, cmake, libX11, libxml2, libpng,
+{ lib, stdenv, fetchurl, libjpeg, libGLU, libGL, freeglut, zlib, cmake, libX11, libxml2, libpng,
   libXxf86vm }:
 
 stdenv.mkDerivation {
@@ -30,6 +30,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Open source panorama viewer using GL";
     homepage = "http://freepv.sourceforge.net/";
-    license = [ stdenv.lib.licenses.lgpl21 ];
+    license = [ lib.licenses.lgpl21 ];
   };
 }

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
-, mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkgconfig }:
+, mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkg-config }:
 
 mkDerivation {
   pname = "x2goclient";
@@ -12,7 +12,7 @@ mkDerivation {
   };
 
   buildInputs = [ cups libssh libXpm nx-libs openldap openssh
-                  qtbase qtsvg qtx11extras qttools phonon pkgconfig ];
+                  qtbase qtsvg qtx11extras qttools phonon pkg-config ];
 
   postPatch = ''
      substituteInPlace Makefile \

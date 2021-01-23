@@ -22,8 +22,8 @@ let
     };
 
     "2.12" = {
-      version = "2.12.12";
-      sha256 = "NSDNHzye//YrrudfMuUtHl3BIL4szzQGSeRw5I9Sfis=";
+      version = "2.12.13";
+      sha256 = "17548sx7liskkadqiqaajmwp2w7bh9m2d8hp2mwyg8yslmjx4pcc";
       tests = [ nixosTests.scala.scala_2_12 ];
       pname = "scala_2_12";
     };
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       #!${stdenv.shell}
       set -o errexit
       PATH=${
-        stdenv.lib.makeBinPath [
+        lib.makeBinPath [
           common-updater-scripts
           coreutils
           git

@@ -4,7 +4,7 @@
 , srt
 , ffmpeg_3_4
 , bc
-, pkgconfig
+, pkg-config
 , perl
 , openssl
 , zlib
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   makeFlags = "release CONFIG_LIBRARY_PATHS= CONFIG_PKG_PATHS= GLOBAL_CC=$(CC) GLOBAL_CXX=$(CXX) GLOBAL_LD=$(CXX) SHELL=${stdenv.shell}";
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ bc pkgconfig perl ];
+  nativeBuildInputs = [ bc pkg-config perl ];
   buildInputs = [ openssl srt zlib ffmpeg libvpx libopus srtp jemalloc pcre2 ];
 
   preBuild = ''

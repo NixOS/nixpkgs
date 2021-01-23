@@ -35,8 +35,9 @@ buildPythonPackage rec {
     "TestQCOW2"
     "TestRAW"
     "TestVMDKConversion"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_serial_fixup_invalid_host"
   ];
-
 
   # argparse is part of the standardlib
   prePatch = ''

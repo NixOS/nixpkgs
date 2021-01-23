@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, perl, systemd }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, perl, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "triggerhappy";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gb1qhrxwq7i5abd408d01a2dpf28nr1fph1fg7w7n0i5i1nnk90";
   };
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkg-config perl ];
   buildInputs = [ systemd ];
 
   makeFlags = [ "PREFIX=$(out)" "BINDIR=$(out)/bin" ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gnome3, cmake, gettext, intltool, pkg-config, evolution-data-server
+{ lib, stdenv, fetchurl, gnome3, cmake, gettext, intltool, pkg-config, evolution-data-server, evolution
 , sqlite, gtk3, webkitgtk, libgdata, libmspack }:
 
 stdenv.mkDerivation rec {
@@ -6,14 +6,14 @@ stdenv.mkDerivation rec {
   version = "3.36.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0h1wz4hxsasihdvvsaxnmzka4afjw7603gn0qcw8rxpw114ib1bl";
   };
 
   nativeBuildInputs = [ cmake gettext intltool pkg-config ];
 
   buildInputs = [
-    evolution-data-server gnome3.evolution
+    evolution-data-server evolution
     sqlite libgdata
     gtk3 webkitgtk
     libmspack

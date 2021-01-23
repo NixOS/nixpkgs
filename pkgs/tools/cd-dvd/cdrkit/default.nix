@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl}:
+{lib, stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl}:
 
 stdenv.mkDerivation rec {
   name = "cdrkit-1.1.11";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "http://cdrkit.org/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

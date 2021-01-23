@@ -95,7 +95,7 @@ let
     ];
   };
 in stdenv.mkDerivation {
-  name = "xquartz-${stdenv.lib.getVersion xorg.xorgserver}";
+  name = "xquartz-${lib.getVersion xorg.xorgserver}";
 
   nativeBuildInputs = [ ruby makeWrapper ];
 
@@ -135,7 +135,7 @@ in stdenv.mkDerivation {
     defaultStartX="$out/bin/startx -- $out/bin/Xquartz"
 
     ruby ${./patch_plist.rb} \
-      ${stdenv.lib.escapeShellArg (builtins.toXML {
+      ${lib.escapeShellArg (builtins.toXML {
         XQUARTZ_DEFAULT_CLIENT = "${xterm}/bin/xterm";
         XQUARTZ_DEFAULT_SHELL  = shell;
         XQUARTZ_DEFAULT_STARTX = "@STARTX@";

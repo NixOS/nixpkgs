@@ -6,7 +6,7 @@
 }:
 
   let
-    rpath = stdenv.lib.makeLibraryPath ([
+    rpath = lib.makeLibraryPath ([
     alsaLib
     atk
     at-spi2-core

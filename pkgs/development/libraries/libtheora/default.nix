@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libogg, libvorbis, pkgconfig}:
+{lib, stdenv, fetchurl, libogg, libvorbis, pkg-config}:
 
 stdenv.mkDerivation rec {
   name = "libtheora-1.1.1";
@@ -11,16 +11,16 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
   outputDoc = "devdoc";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libogg libvorbis ];
 
   # GCC's -fforce-addr flag is not supported by clang
   # It's just an optimization, so it's safe to simply remove it
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace "-fforce-addr" ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.theora.org/";
     description = "Library for Theora, a free and open video compression format";
     license = licenses.bsd3;

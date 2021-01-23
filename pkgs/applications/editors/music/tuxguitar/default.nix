@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/tuxguitar \
       --set JAVA "${jdk}/bin/java" \
-      --prefix LD_LIBRARY_PATH : "$out/lib/:${stdenv.lib.makeLibraryPath [ swt alsaLib jack2 fluidsynth libpulseaudio ]}" \
+      --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt alsaLib jack2 fluidsynth libpulseaudio ]}" \
       --prefix CLASSPATH : "${swt}/jars/swt.jar:$out/lib/tuxguitar.jar:$out/lib/itext.jar"
   '';
 

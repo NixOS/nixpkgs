@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, docutils, removeReferencesTo }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, varnish, docutils, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   version = "0.15.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docutils
-    pkgconfig
+    pkg-config
     removeReferencesTo
     varnish.python  # use same python version as varnish server
   ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake, gdk-pixbuf, libGL, mesa }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gdk-pixbuf, libGL, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "blur-effect";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
   ];
 

@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
 
 stdenv.mkDerivation {
   pname = "jwm-settings-manager";
   version = "2018-10-19";
-  
+
   src = fetchFromGitHub {
     owner = "Israel-D";
     repo = "jwm-settings-manager";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     gettext
   ];
 

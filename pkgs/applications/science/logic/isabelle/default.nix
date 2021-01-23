@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     };
 
   buildInputs = [ perl polyml z3 ]
-             ++ stdenv.lib.optionals (!stdenv.isDarwin) [ nettools java ];
+             ++ lib.optionals (!stdenv.isDarwin) [ nettools java ];
 
   sourceRoot = dirname;
 

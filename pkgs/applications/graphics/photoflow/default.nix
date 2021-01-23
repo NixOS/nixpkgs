@@ -20,7 +20,7 @@
 , ninja
 , openexr
 , pcre
-, pkgconfig
+, pkg-config
 , pugixml
 , lib, stdenv
 , swig
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     libxml2
     ninja
-    pkgconfig
+    pkg-config
     swig
   ];
 

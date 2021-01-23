@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintl
+{ stdenv, lib, fetchurl, cmake, ninja, pkg-config, libiconv, libintl
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg, fetchpatch
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
     ++ optional qt5Support qtbase
     ++ optional introspectionSupport gobject-introspection;
 
-  nativeBuildInputs = [ cmake ninja pkgconfig ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
   # Not sure when and how to pass it.  It seems an upstream bug anyway.
-  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   cmakeFlags = [
     (mkFlag true "XPDF_HEADERS")

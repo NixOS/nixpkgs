@@ -1,9 +1,9 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , nixosTests
 , substituteAll
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , libxml2
 , glib
 , pipewire
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     libxml2
     wrapGAppsHook
   ];
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ jtojnar ];

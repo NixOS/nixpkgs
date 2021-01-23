@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkgconfig
+, autoreconfHook, pkg-config
 , fuse, curl, expat }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "archiecobbs";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fuse curl expat ];
 
   autoreconfPhase = ''

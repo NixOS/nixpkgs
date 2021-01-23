@@ -102,6 +102,31 @@ def get_latest_ungoogled_chromium_build():
     }
 
 
+def channel_name_to_attr_name(channel_name):
+    """Maps a channel name to the corresponding main Nixpkgs attribute name."""
+    if channel_name == 'stable':
+        return 'chromium'
+    if channel_name == 'beta':
+        return 'chromiumBeta'
+    if channel_name == 'dev':
+        return 'chromiumDev'
+    if channel_name == 'ungoogled-chromium':
+        return 'ungoogled-chromium'
+    print(f'Error: Unexpected channel: {channel_name}', file=sys.stderr)
+    sys.exit(1)
+
+
+def print_updates(channels_old, channels_new):
+    """Print a summary of the updates."""
+    print('Updates:')
+    for channel_name in channels_old:
+        version_old = channels_old[channel_name]["version"]
+        version_new = channels_new[channel_name]["version"]
+        if version_old < version_new:
+            attr_name = channel_name_to_attr_name(channel_name)
+            print(f'- {attr_name}: {version_old} -> {version_new}')
+
+
 channels = {}
 last_channels = load_json(JSON_PATH)
 
@@ -174,3 +199,4 @@ with open(JSON_PATH, 'w') as out:
     sorted_channels = OrderedDict(sorted(channels.items(), key=get_channel_key))
     json.dump(sorted_channels, out, indent=2)
     out.write('\n')
+    print_updates(last_channels, sorted_channels)

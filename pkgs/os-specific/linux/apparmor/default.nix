@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook
-, pkgconfig, which
+, pkg-config, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gawk
@@ -17,7 +17,7 @@ let
   apparmor-patchver = "6";
   apparmor-version = apparmor-series + "." + apparmor-patchver;
 
-  apparmor-meta = component: with stdenv.lib; {
+  apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
     description = "A mandatory access control system - ${component}";
     license = licenses.gpl2;
@@ -39,7 +39,7 @@ let
     substituteInPlace ./common/Make.rules --replace "/usr/share/man" "share/man"
   '';
 
-  patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/testing/apparmor/0003-Added-missing-typedef-definitions-on-parser.patch?id=74b8427cc21f04e32030d047ae92caa618105b53";
       name = "0003-Added-missing-typedef-definitions-on-parser.patch";
@@ -67,7 +67,7 @@ let
       autoreconfHook
       bison
       flex
-      pkgconfig
+      pkg-config
       swig
       ncurses
       which
@@ -75,8 +75,8 @@ let
     ];
 
     buildInputs = []
-      ++ stdenv.lib.optional withPerl perl
-      ++ stdenv.lib.optional withPython python;
+      ++ lib.optional withPerl perl
+      ++ lib.optional withPython python;
 
     # required to build apparmor-parser
     dontDisableStatic = true;
@@ -84,21 +84,21 @@ let
     prePatch = prePatchCommon + ''
       substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.am --replace install_vendor install_site
       substituteInPlace ./libraries/libapparmor/swig/perl/Makefile.in --replace install_vendor install_site
-      substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${stdenv.lib.getDev stdenv.cc.libc}/include/netinet/in.h"
-      substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${stdenv.lib.getDev stdenv.cc.libc}/include/netinet/in.h"
+      substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${lib.getDev stdenv.cc.libc}/include/netinet/in.h"
+      substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${lib.getDev stdenv.cc.libc}/include/netinet/in.h"
     '';
     inherit patches;
 
     postPatch = "cd ./libraries/libapparmor";
     # https://gitlab.com/apparmor/apparmor/issues/1
     configureFlags = [
-      (stdenv.lib.withFeature withPerl "perl")
-      (stdenv.lib.withFeature withPython "python")
+      (lib.withFeature withPerl "perl")
+      (lib.withFeature withPython "python")
     ];
 
-    outputs = [ "out" ] ++ stdenv.lib.optional withPython "python";
+    outputs = [ "out" ] ++ lib.optional withPython "python";
 
-    postInstall = stdenv.lib.optionalString withPython ''
+    postInstall = lib.optionalString withPython ''
       mkdir -p $python/lib
       mv $out/lib/python* $python/lib/
     '';
@@ -154,7 +154,7 @@ let
     src = apparmor-sources;
 
     nativeBuildInputs = [
-      pkgconfig
+      pkg-config
       libapparmor
       gawk
       which
@@ -206,7 +206,7 @@ let
     name = "apparmor-pam-${apparmor-version}";
     src = apparmor-sources;
 
-    nativeBuildInputs = [ pkgconfig which ];
+    nativeBuildInputs = [ pkg-config which ];
 
     buildInputs = [ libapparmor pam ];
 

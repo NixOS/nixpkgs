@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, pcsclite, qtsvg, qttools, qtwebsockets
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, pcsclite, qtsvg, qttools, qtwebsockets
 , qtquickcontrols2, qtgraphicaleffects }:
 
 mkDerivation rec {
@@ -12,7 +12,7 @@ mkDerivation rec {
     sha256 = "00isb8xcbm419nvxx2ri0n8x5d403733h2whjqjcd3hmpx3x4q1h";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ qtsvg qttools qtwebsockets qtquickcontrols2 qtgraphicaleffects pcsclite ];
 

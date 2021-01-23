@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, numactl, ncurses, check }:
+{ lib, stdenv, fetchurl, pkg-config, numactl, ncurses, check }:
 
 stdenv.mkDerivation rec {
   pname = "numatop";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1s7psq1xyswj0lpx10zg5lnppav2xy9safkfx3rssrs9c2fp5d76";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ numactl ncurses ];
   checkInputs = [ check ];
 

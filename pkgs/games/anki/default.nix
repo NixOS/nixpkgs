@@ -4,8 +4,9 @@
 , python
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , lame
-, mplayer
+, mpv-unwrapped
 , libpulseaudio
 , pyqtwebengine
 , decorator
@@ -105,11 +106,16 @@ buildPythonApplication rec {
   checkInputs = [ pytest glibcLocales nose ];
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
-  buildInputs = [ lame mplayer libpulseaudio ];
+  buildInputs = [ lame mpv-unwrapped libpulseaudio ];
 
   patches = [
     # Disable updated version check.
     ./no-version-check.patch
+    (fetchpatch {
+      name = "fix-mpv-args.patch";
+      url = "https://sources.debian.org/data/main/a/anki/2.1.15+dfsg-3/debian/patches/fix-mpv-args.patch";
+      sha256 = "1dimnnawk64m5bbdbjrxw5k08q95l728n94cgkrrwxwavmmywaj2";
+    })
   ];
 
   # Anki does not use setup.py
@@ -173,7 +179,7 @@ buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${qtWrapperArgs[@]}"
-      --prefix PATH ':' "${lame}/bin:${mplayer}/bin"
+      --prefix PATH ':' "${lame}/bin:${mpv-unwrapped}/bin"
     )
   '';
 
@@ -197,7 +203,6 @@ buildPythonApplication rec {
       or even practicing guitar chords!
     '';
     license = licenses.agpl3Plus;
-    broken = stdenv.hostPlatform.isAarch64;
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ oxij Profpatsch ];
   };

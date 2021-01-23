@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkgconfig, pythonPackages
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, pythonPackages
 , libevdev
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1m38fxwy2s82vb2qm9aqxinws12akmqqq7q66is931lc3awqkbah";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [ pythonPackages.python pythonPackages.evdev libevdev ];
 

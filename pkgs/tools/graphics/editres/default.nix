@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libXt, libXaw, libXres, utilmacros }:
+{ lib, stdenv, fetchurl, pkg-config, libXt, libXaw, libXres, utilmacros }:
 
 stdenv.mkDerivation rec {
   name = "editres-1.0.7";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "10mbgijb6ac6wqb2grpy9mrazzw68jxjkxr9cbdf1111pa64yj19";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libXt libXaw libXres utilmacros ];
 
   configureFlags = [ "--with-appdefaultdir=$(out)/share/X11/app-defaults/editres" ];

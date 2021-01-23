@@ -1,9 +1,9 @@
-{ stdenv, fetchurl
-, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchurl
+, pkg-config, autoreconfHook
 , readline, texinfo
 , gdbm, gmp, libffi }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "librep";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bmcjl1x1rdh514q9z3hzyjmjmwwwkziipjpjsl301bwmiwrd8a8";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ readline texinfo ];
   propagatedBuildInputs = [ gdbm gmp libffi ];
 

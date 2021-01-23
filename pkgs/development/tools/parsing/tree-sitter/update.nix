@@ -63,6 +63,10 @@ let
   # If you need a grammar that already exists in the official orga,
   # make sure to give it a different name.
   otherGrammars = {
+    "tree-sitter-nix" = {
+      orga = "cstrahan";
+      repo = "tree-sitter-nix";
+    };
     "tree-sitter-lua" = {
       orga = "nvim-treesitter";
       repo = "tree-sitter-lua";

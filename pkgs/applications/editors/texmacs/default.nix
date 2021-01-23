@@ -7,7 +7,7 @@
   git ? null,
   python3 ? null,
   cmake,
-  pkgconfig,
+  pkg-config,
   ghostscriptX ? null,
   extraFonts ? false,
   chineseFonts ? false,
@@ -31,7 +31,7 @@ mkDerivation {
     sha256 = "04585hdh98fvyhj4wsxf69xal2wvfa6lg76gad8pr6ww9abi5105";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     guile_1_8
     qtbase

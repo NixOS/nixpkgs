@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, pkgconfig, boost, lua }:
+{ fetchurl, lib, stdenv, pkg-config, boost, lua }:
 
 stdenv.mkDerivation rec {
   pname = "ansifilter";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0by4rhy30l7jgxvq6mwf8p43s1472q96l3g7n2skq2lnkjrvx1ar";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ boost lua ];
 
   postPatch = ''

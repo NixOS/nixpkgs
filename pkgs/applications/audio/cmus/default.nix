@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkgconfig
+{ config, lib, stdenv, fetchFromGitHub, runCommand, ncurses, pkg-config
 , libiconv, CoreAudio
 
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
@@ -39,7 +39,7 @@
 #, vtxSupport ? true, libayemu ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert samplerateSupport -> jackSupport;
 
@@ -102,13 +102,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cmus";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner  = "cmus";
     repo   = "cmus";
     rev    = "v${version}";
-    sha256 = "1ydnvq13ay8b8mfmmgwi5qsgyf220yi1d01acbnxqn775dghmwar";
+    sha256 = "sha256-eSKF3xacJptAYdm0Qf1AEWLa+lKUWz6C8nKyTHAl5QI=";
   };
 
   patches = [ ./option-debugging.patch ];
@@ -118,10 +118,10 @@ stdenv.mkDerivation rec {
     "CONFIG_WAV=y"
   ] ++ concatMap (a: a.flags) opts);
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]
-    ++ stdenv.lib.optional stdenv.cc.isClang clangGCC
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
+    ++ lib.optional stdenv.cc.isClang clangGCC
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
     ++ flatten (concatMap (a: a.deps) opts);
 
   makeFlags = [ "LD=$(CC)" ];

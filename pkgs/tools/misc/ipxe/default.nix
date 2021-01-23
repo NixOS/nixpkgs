@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Network boot firmware";
       homepage = "https://ipxe.org/";
       license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+{ config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
 , perl, gmp, autoconf, autogen, automake, libidn, p11-kit, libiconv
 , unbound, dns-root-data, gettext, cacert, util-linux
 , guileBindings ? config.gnutls.guile or false, guile
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.hostPlatform.isAarch32 ./fix-gnulib-tests-arm.patch;
 
   # Skip some tests:
-  #  - pkgconfig: building against the result won't work before installing (3.5.11)
+  #  - pkg-config: building against the result won't work before installing (3.5.11)
   #  - fastopen: no idea; it broke between 3.6.2 and 3.6.3 (3437fdde6 in particular)
   #  - trust-store: default trust store path (/etc/ssl/...) is missing in sandbox (3.5.11)
   #  - psk-file: no idea; it broke between 3.6.3 and 3.6.4
@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ lib.optional guileBindings guile;
 
-  nativeBuildInputs = [ perl pkgconfig ]
+  nativeBuildInputs = [ perl pkg-config ]
     ++ lib.optionals (isDarwin && !withSecurity) [ autoconf automake ]
     ++ lib.optionals doCheck [ which nettools util-linux ];
 
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
   #   Error setting the x509 trust file: Error while reading file.
   checkInputs = [ cacert ];
 
-  # Fixup broken libtool and pkgconfig files
+  # Fixup broken libtool and pkg-config files
   preFixup = lib.optionalString (!isDarwin) ''
     sed ${lib.optionalString tpmSupport "-e 's,-ltspi,-L${trousers}/lib -ltspi,'"} \
         -e 's,-lz,-L${zlib.out}/lib -lz,' \

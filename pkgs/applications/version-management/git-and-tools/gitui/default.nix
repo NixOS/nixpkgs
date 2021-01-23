@@ -14,8 +14,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ python3 perl ];
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optional stdenv.isLinux xclip
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security AppKit ];
+    ++ lib.optional stdenv.isLinux xclip
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security AppKit ];
 
   meta = with lib; {
     description = "Blazing fast terminal-ui for git written in rust";

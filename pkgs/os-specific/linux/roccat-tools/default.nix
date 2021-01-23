@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gettext
+{ lib, stdenv, fetchurl, cmake, pkg-config, gettext
 , dbus, dbus-glib, libgaminggear, libgudev, lua
 , harfbuzz
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     }' libroccat/roccat_helper.c
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig gettext ];
+  nativeBuildInputs = [ cmake pkg-config gettext ];
   buildInputs = [ dbus dbus-glib libgaminggear libgudev lua ];
 
   cmakeFlags = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tools to configure ROCCAT devices";
     homepage = "http://roccat.sourceforge.net/";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

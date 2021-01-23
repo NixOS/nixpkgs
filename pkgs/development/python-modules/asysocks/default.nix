@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "asysocks";
-  version = "0.0.10";
+  version = "0.0.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h9awwnn4dr3ppdlnjb4abhyw873n1iddipw6wkwjpw7nnaqqr6i";
+    sha256 = "11ygrhkqm524i4qp2myjvpsmg1lsn32nsqxqla96sbj84qfnhv0q";
   };
 
   # Upstream hasn't release the tests yet

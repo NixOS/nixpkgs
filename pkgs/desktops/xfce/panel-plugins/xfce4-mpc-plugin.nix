@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel,
+{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel,
   libxfce4ui, gtk3, exo, xfce }:
 
 let
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
   version = "0.5.2";
 
   src = fetchurl {
-    url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "0q3pysdp85b3c7g3b59y3c69g4nw6bvbf518lnri4lxrnsvpizpf";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     intltool
   ];
 

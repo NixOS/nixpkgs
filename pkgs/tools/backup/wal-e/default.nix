@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, lzop, postgresql, pv }:
+{ lib, stdenv, fetchurl, python3Packages, lzop, postgresql, pv }:
 
 python3Packages.buildPythonApplication rec {
   pname = "wal-e";
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     description = "A Postgres WAL-shipping disaster recovery and replication toolkit";
     homepage = "https://github.com/wal-e/wal-e";
     maintainers = [];
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
 }

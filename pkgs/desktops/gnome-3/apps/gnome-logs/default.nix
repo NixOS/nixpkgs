@@ -3,7 +3,7 @@
 , fetchpatch
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gnome3
 , glib
 , gtk3
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-logs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-logs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0w1nfdxbv3f0wnhmdy21ydvr4swfc108hypda561p7l9lrhnnxj4";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     python3
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     gettext
     itstool

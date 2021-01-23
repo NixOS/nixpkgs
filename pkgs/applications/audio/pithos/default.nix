@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig, appstream-glib
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, appstream-glib
 , wrapGAppsHook, pythonPackages, gtk3, gnome3, gobject-introspection
 , libnotify, libsecret, gst_all_1 }:
 
@@ -20,7 +20,7 @@ pythonPackages.buildPythonApplication rec {
     patchShebangs meson_post_install.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig appstream-glib wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config appstream-glib wrapGAppsHook ];
 
   propagatedBuildInputs =
     [ gtk3 gobject-introspection libnotify libsecret gnome3.adwaita-icon-theme ] ++

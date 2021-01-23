@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11 }:
+{ lib, stdenv, fetchurl, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "wmname-0.1";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Prints or set the window manager name property of the root window";
     homepage = "https://tools.suckless.org/wmname";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, elixir, python, libxml2, libxslt, xmlto
+{ lib, stdenv, fetchurl, erlang, elixir, python, libxml2, libxslt, xmlto
 , docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync, getconf, socat
 , procps, coreutils, gnused, systemd, glibcLocales
 , AppKit, Carbon, Cocoa
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ erlang elixir python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip rsync glibcLocales ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
+    ++ lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
   outputs = [ "out" "man" "doc" ];
 
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     export LANG=C.UTF-8 # fix elixir locale warning
   '';
 
-  runtimePath = stdenv.lib.makeBinPath ([
+  runtimePath = lib.makeBinPath ([
     erlang
     getconf # for getting memory limits
     socat procps
     gnused coreutils # used by helper scripts
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
+  ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
   postInstall = ''
     # rabbitmq-env calls to sed/coreutils, so provide everything early
     sed -i $out/sbin/rabbitmq-env -e '2s|^|PATH=${runtimePath}\''${PATH:+:}\$PATH/\n|'
@@ -62,9 +62,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.rabbitmq.com/";
     description = "An implementation of the AMQP messaging protocol";
-    license = stdenv.lib.licenses.mpl20;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ Profpatsch ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ Profpatsch ];
   };
 
   passthru.tests = {

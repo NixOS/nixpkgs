@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "ctpp2";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A high performance templating engine";
     homepage = "http://ctpp.havoc.ru";
     maintainers = [ maintainers.robbinch ];

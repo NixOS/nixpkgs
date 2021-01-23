@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gsettings-desktop-schemas ] ++ systemLibs;
 
   systemLibs = [ gtk3 zlib libX11 libXext libXi libXrender libXtst libGL alsaLib libav cairo freetype pango gdk-pixbuf glib ];
-  systemLibPaths = stdenv.lib.makeLibraryPath systemLibs;
+  systemLibPaths = lib.makeLibraryPath systemLibs;
 
   installPhase = ''
     mkdir -p $out/share/java $out/share/icons
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     for f in $out/lib/runtime/bin/j*; do
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${ stdenv.lib.makeLibraryPath [ zlib ]}:$out/lib/runtime/lib:$out/lib/runtime/lib/server" $f
+        --set-rpath "${ lib.makeLibraryPath [ zlib ]}:$out/lib/runtime/lib:$out/lib/runtime/lib/server" $f
     done
 
     for f in $out/lib/runtime/lib/*.so; do

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel }:
+{ lib, stdenv, fetchurl, kernel }:
 
 let
   version = "6.30.223.271";
@@ -7,8 +7,8 @@ let
     x86_64-linux = "1gj485qqr190idilacpxwgqyw21il03zph2rddizgj7fbd6pfyaz";
   };
 
-  arch = stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "_64";
-  tarballVersion = stdenv.lib.replaceStrings ["."] ["_"] version;
+  arch = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "_64";
+  tarballVersion = lib.replaceStrings ["."] ["_"] version;
   tarball = "hybrid-v35${arch}-nodebug-pcoem-${tarballVersion}.tar.gz";
 in
 stdenv.mkDerivation {
@@ -62,8 +62,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Kernel module driver for some Broadcom's wireless cards";
     homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    maintainers = with stdenv.lib.maintainers; [ phreedom ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ phreedom ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -44,6 +44,12 @@ let
 
     atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
+    awa = callPackage ../development/ocaml-modules/awa { };
+
+    awa-lwt = callPackage ../development/ocaml-modules/awa/lwt.nix { };
+
+    awa-mirage = callPackage ../development/ocaml-modules/awa/mirage.nix { };
+
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bap = callPackage ../development/ocaml-modules/bap {
@@ -279,6 +285,8 @@ let
 
     encore = callPackage ../development/ocaml-modules/encore { };
 
+    emile = callPackage ../development/ocaml-modules/emile { };
+
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
     eqaf = callPackage ../development/ocaml-modules/eqaf { };
@@ -354,6 +362,8 @@ let
     hkdf = callPackage ../development/ocaml-modules/hkdf { };
 
     hmap = callPackage ../development/ocaml-modules/hmap { };
+
+    hxd = callPackage ../development/ocaml-modules/hxd { };
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
@@ -573,6 +583,8 @@ let
     mew_vi = callPackage ../development/ocaml-modules/mew_vi { };
 
     mezzo = callPackage ../development/compilers/mezzo { };
+
+    mimic = callPackage ../development/ocaml-modules/mimic { };
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
 
@@ -837,6 +849,8 @@ let
 
     pcap-format = callPackage ../development/ocaml-modules/pcap-format { };
 
+    pecu = callPackage ../development/ocaml-modules/pecu { };
+
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
     phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
@@ -1066,6 +1080,12 @@ let
     webbrowser = callPackage ../development/ocaml-modules/webbrowser { };
 
     webmachine = callPackage ../development/ocaml-modules/webmachine { };
+
+    wodan = callPackage ../development/ocaml-modules/wodan { };
+
+    wodan-irmin = callPackage ../development/ocaml-modules/wodan/irmin.nix { };
+
+    wodan-unix = callPackage ../development/ocaml-modules/wodan/unix.nix { };
 
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 

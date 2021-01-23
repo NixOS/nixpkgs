@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, ncurses, pkgconfig, glib, loudmouth, libotr
+{ lib, stdenv, fetchurl, openssl, ncurses, pkg-config, glib, loudmouth, libotr
 , gpgme
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q1i5acyghsmzas88qswvki8kkk2nfpr8zapgnxbcd3lwcxl38f4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ncurses glib loudmouth libotr gpgme ];
 
   configureFlags = [

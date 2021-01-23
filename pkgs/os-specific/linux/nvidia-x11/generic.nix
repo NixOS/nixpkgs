@@ -27,7 +27,7 @@
   disable32Bit ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 assert !libsOnly -> kernel != null;
 assert versionOlder version "391" -> sha256_32bit != null;

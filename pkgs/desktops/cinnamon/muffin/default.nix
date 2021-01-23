@@ -13,7 +13,7 @@
 , libstartup_notification
 , libXtst
 , libxkbcommon
-, pkgconfig
+, pkg-config
 , lib, stdenv
 , udev
 , xorg
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     gettext
     libtool
     wrapGAppsHook
-    pkgconfig
+    pkg-config
     intltool
 
     gnome-doc-utils

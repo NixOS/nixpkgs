@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchzip
 , nixosTests
 , iptables ? null
@@ -9,7 +9,7 @@
 , wireguard-go ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "wireguard-tools";

@@ -33,7 +33,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs
     gpgme
     libapparmor
@@ -51,7 +51,7 @@ buildGoModule rec {
     make docs
   '';
 
-  installPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.isDarwin ''
     mv bin/{podman-remote,podman}
   '' + ''
     install -Dm555 bin/podman $out/bin/podman

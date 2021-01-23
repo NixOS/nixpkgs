@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , autoconf
 , automake
 , darwin
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake makeWrapper pkg-config ];
 
   buildInputs = [ SDL2 ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
+    ++ lib.optional stdenv.isDarwin darwin.libobjc;
 
   preConfigure = ''
     sh autogen.sh
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://icculus.org/smpeg/";
     description = "SDL2 MPEG Player Library";
     license = licenses.lgpl2;

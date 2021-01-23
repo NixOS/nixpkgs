@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, afl, python2, zlib, pkgconfig, glib, perl
+{ lib, stdenv, fetchurl, afl, python2, zlib, pkg-config, glib, perl
 , texinfo, libuuid, flex, bison, pixman, autoconf
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   qemuName = "qemu-2.10.0";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [
-    python2 perl pkgconfig flex bison autoconf texinfo
+    python2 perl pkg-config flex bison autoconf texinfo
   ];
 
   buildInputs = [

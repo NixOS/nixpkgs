@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libjack2, libGL, pkgconfig, xorg }:
+{ lib, stdenv, fetchFromGitHub, libjack2, libGL, pkg-config, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "dragonfly-reverb";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     patchShebangs dpf/utils/generate-ttl.sh
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libjack2 xorg.libX11 libGL
   ];

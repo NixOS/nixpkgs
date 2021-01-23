@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, mkDerivation, cmake, protobuf
+{ lib, stdenv, fetchFromGitHub, mkDerivation, cmake, protobuf
 , qtbase, qtmultimedia, qttools, qtwebsockets, wrapQtAppsHook
 }:
 
@@ -22,8 +22,8 @@ mkDerivation rec {
   meta = {
     homepage = "https://github.com/Cockatrice/Cockatrice";
     description = "A cross-platform virtual tabletop for multiplayer card games";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ evanjs ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ evanjs ];
+    platforms = with lib.platforms; linux;
   };
 }

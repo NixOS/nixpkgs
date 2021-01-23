@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, udev, buildPackages }:
+{ lib, stdenv, fetchurl, pkg-config, udev, buildPackages }:
 
 stdenv.mkDerivation rec {
   name = "libatasmart-0.19";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libfido2, pam, openssl }:
+{ lib, stdenv, fetchurl, pkg-config, libfido2, pam, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "pam_u2f";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "01fwbrfnjkv93vvqm54jywdcxa1p7d4r32azicwnx75nxfbbzhqd";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libfido2 pam openssl ];
 
   preConfigure = ''

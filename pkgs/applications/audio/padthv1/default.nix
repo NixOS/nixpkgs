@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libjack2, alsaLib, libsndfile, liblo, lv2, qt5, fftwFloat, mkDerivation }:
+{ lib, stdenv, fetchurl, pkg-config, libjack2, alsaLib, libsndfile, liblo, lv2, qt5, fftwFloat, mkDerivation }:
 
 mkDerivation rec {
   pname = "padthv1";
@@ -11,7 +11,7 @@ mkDerivation rec {
 
   buildInputs = [ libjack2 alsaLib libsndfile liblo lv2 qt5.qtbase qt5.qttools fftwFloat ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "polyphonic additive synthesizer";

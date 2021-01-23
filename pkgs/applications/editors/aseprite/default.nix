@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchFromGitHub, fetchpatch, cmake, ninja, pkgconfig
+{ stdenv, lib, callPackage, fetchFromGitHub, fetchpatch, cmake, ninja, pkg-config
 , curl, freetype, giflib, libjpeg, libpng, libwebp, pixman, tinyxml, zlib
 , harfbuzzFull, glib, fontconfig, pcre
 , libX11, libXext, libXcursor, libXxf86vm, libGL
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig
+    cmake pkg-config
   ] ++ lib.optionals unfree [ ninja ];
 
   buildInputs = [

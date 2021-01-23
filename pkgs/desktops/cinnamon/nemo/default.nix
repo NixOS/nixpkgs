@@ -4,7 +4,7 @@
 , gobject-introspection
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , lib, stdenv
 , wrapGAppsHook
 , libxml2
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson
-    pkgconfig
+    pkg-config
     ninja
     wrapGAppsHook
     intltool

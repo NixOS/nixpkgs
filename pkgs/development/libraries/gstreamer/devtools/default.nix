@@ -1,8 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gstreamer
 , gst-plugins-base
 , python3
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gobject-introspection
 
     # documentation
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Integration testing infrastructure for the GStreamer framework";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;

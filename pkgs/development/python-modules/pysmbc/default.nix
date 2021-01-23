@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, fetchPypi
-, samba, pkgconfig
+, samba, pkg-config
 , setuptools }:
 
 buildPythonPackage rec {
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "14b75f358ical7zzqh3g1qkh2dxwxn2gz7sah5f5svndqkd3z8jy";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ setuptools samba ];
 
   meta = with lib; {

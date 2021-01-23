@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages }:
 
 let
   # mbuild is a custom build system used only to build xed
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
   dontInstall = true; # already installed during buildPhase
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Intel X86 Encoder Decoder (Intel XED)";
     homepage    = "https://intelxed.github.io/";
     license     = licenses.apsl20;

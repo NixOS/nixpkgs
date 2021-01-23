@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "http://userspace.selinuxproject.org";
     platforms = platforms.linux;
     maintainers = [ maintainers.phreedom ];
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 }

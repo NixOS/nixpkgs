@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , gettext
-, pkgconfig
+, pkg-config
 , wrapGAppsHook
 , sqlite
 , libpinyin
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     gettext
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages, pkgconfig, SDL2
+{ stdenv, fetchurl, python2Packages, pkg-config, SDL2
 , libpng, ffmpeg_3, freetype, glew, libGL, libGLU, fribidi, zlib
 , glib
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     substituteInPlace launcher/game/choose_directory.rpy --replace /usr/bin/python ${python.interpreter}
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     python cython wrapPython tkinter
     SDL2 libpng ffmpeg_3 freetype glew libGLU libGL fribidi zlib pygame_sdl2 glib

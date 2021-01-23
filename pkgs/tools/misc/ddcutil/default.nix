@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , glib, i2c-tools, udev, libgudev, libusb1, libdrm, xorg }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ppiddnrvkbb9iir28kl9hzpww0hpgb05jfxzf07xsqkdfb4qv71";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [
     i2c-tools udev libgudev
     glib libusb1 libdrm xorg.libXrandr

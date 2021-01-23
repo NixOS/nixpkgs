@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, flac, fuse, lame, libid3tag, pkgconfig }:
+{ lib, stdenv, fetchurl, flac, fuse, lame, libid3tag, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "mp3fs";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [ ./fix-statfs-operation.patch ];
 
   buildInputs = [ flac fuse lame libid3tag ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   enableParallelBuilding = true;
 

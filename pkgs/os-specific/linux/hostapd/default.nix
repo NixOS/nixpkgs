@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
+{ lib, stdenv, fetchurl, pkg-config, libnl, openssl, sqlite ? null }:
 
 stdenv.mkDerivation rec {
   pname = "hostapd";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mrbvg4v7vm7mknf0n29mf88k3s4a4qj6r4d51wq8hmjj1m7s7c8";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnl openssl sqlite ];
 
   patches = [
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     CONFIG_HS20=y
     CONFIG_ACS=y
     CONFIG_GETRANDOM=y
-  '' + stdenv.lib.optionalString (sqlite != null) ''
+  '' + lib.optionalString (sqlite != null) ''
     CONFIG_SQLITE=y
   '';
 

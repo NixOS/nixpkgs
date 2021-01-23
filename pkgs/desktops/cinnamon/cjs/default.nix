@@ -1,7 +1,7 @@
 { dbus-glib
 , fetchFromGitHub
 , gobject-introspection
-, pkgconfig
+, pkg-config
 , lib, stdenv
 , wrapGAppsHook
 , python3
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson # ADDING cmake breaks the build, ignore meson warning
     ninja
-    pkgconfig
+    pkg-config
     makeWrapper
     which # for locale detection
     libxml2 # for xml-stripblanks

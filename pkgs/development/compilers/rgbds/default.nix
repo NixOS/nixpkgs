@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, bison, flex, pkg-config, libpng}:
+{lib, stdenv, fetchFromGitHub, bison, flex, pkg-config, libpng}:
 
 # TODO: byacc is the recommended parser generator but due to https://github.com/rednex/rgbds/issues/333
 # it does not work for the moment. We should switch back to byacc as soon as the fix is integrated
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex pkg-config libpng ];
   installFlags = [ "PREFIX=\${out}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://rednex.github.io/rgbds/";
     description = "A free assembler/linker package for the Game Boy and Game Boy Color";
     license = licenses.mit;

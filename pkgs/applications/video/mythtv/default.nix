@@ -1,6 +1,6 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
 , libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsaLib, freetype
-, perl, pkgconfig , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
+, perl, pkg-config , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
 , libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders
 }:
 
@@ -27,9 +27,9 @@ mkDerivation rec {
     perl libsamplerate libbluray lzo alsaLib libpulseaudio fftwSinglePrec libX11 libXv libXrandr libXvMC
     libXmu libXinerama libXxf86vm libXmu libuuid taglib exiv2
   ];
-  nativeBuildInputs = [ pkgconfig which yasm libtool autoconf automake file ];
+  nativeBuildInputs = [ pkg-config which yasm libtool autoconf automake file ];
 
-  configureFlags = 
+  configureFlags =
     [ "--dvb-path=${linuxHeaders}/include" ];
 
   meta = with lib; {

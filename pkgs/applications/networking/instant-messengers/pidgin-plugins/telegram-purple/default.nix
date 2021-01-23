@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, pkgconfig, pidgin, libwebp, libgcrypt, gettext } :
+{ lib, stdenv, fetchgit, pkg-config, pidgin, libwebp, libgcrypt, gettext } :
 
 let
   version = "1.3.1";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pidgin libwebp libgcrypt gettext ];
 
   preConfigure = ''

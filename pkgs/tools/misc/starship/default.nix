@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1p37cfkcpqv74gp7g099alkqxanfc002kaq1cim6zkinx50gxjxw";
   };
 
-  nativeBuildInputs = [ installShellFiles ] ++ stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   postInstall = ''
     for shell in bash fish zsh; do

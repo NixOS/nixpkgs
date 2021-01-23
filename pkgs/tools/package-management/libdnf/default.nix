@@ -12,7 +12,7 @@ gcc9Stdenv.mkDerivation rec {
     sha256 = "0hiydwfa90nsrqk5ffa6ks1g73wnsgjgq7z7gwq9jj76a7gpfbfq";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin.patch ];
+  patches = lib.optionals stdenv.isDarwin [ ./darwin.patch ];
 
   nativeBuildInputs = [
     cmake

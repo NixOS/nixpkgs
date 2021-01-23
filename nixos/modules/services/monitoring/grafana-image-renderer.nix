@@ -122,7 +122,7 @@ in {
         timezone = config.time.timeZone;
       };
 
-      services = {
+      service = {
         logging.level = mkIf cfg.verbose (mkDefault "debug");
         metrics.enabled = mkDefault false;
       };

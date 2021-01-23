@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, pkgconfig, cryptopp
+{ lib, stdenv, fetchurl, pkg-config, cryptopp
 , libusb1, qtbase, qttools, makeWrapper
 , qmake, withEspeak ? false, espeak ? null
 , qt5 }:
 
-let inherit (stdenv.lib) getDev; in
+let inherit (lib) getDev; in
 
 stdenv.mkDerivation  rec {
   pname = "rockbox-utility";
@@ -15,8 +15,8 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [ cryptopp libusb1 qtbase qttools ]
-    ++ stdenv.lib.optional withEspeak espeak;
-  nativeBuildInputs = [ makeWrapper pkgconfig qmake qt5.wrapQtAppsHook ];
+    ++ lib.optional withEspeak espeak;
+  nativeBuildInputs = [ makeWrapper pkg-config qmake qt5.wrapQtAppsHook ];
 
   postPatch = ''
     sed -i rbutil/rbutilqt/rbutilqt.pro \
@@ -34,7 +34,7 @@ stdenv.mkDerivation  rec {
     install -Dm755 RockboxUtility $out/bin/rockboxutility
     ln -s $out/bin/rockboxutility $out/bin/RockboxUtility
     wrapProgram $out/bin/rockboxutility \
-    ${stdenv.lib.optionalString withEspeak ''
+    ${lib.optionalString withEspeak ''
       --prefix PATH : ${espeak}/bin
     ''}
 

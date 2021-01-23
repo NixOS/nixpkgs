@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , enableUdev ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
 , udev ? null
 , libobjc
@@ -24,20 +24,20 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   propagatedBuildInputs =
-    stdenv.lib.optional enableUdev udev ++
-    stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+    lib.optional enableUdev udev ++
+    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   dontDisableStatic = withStatic;
 
-  configureFlags = stdenv.lib.optional (!enableUdev) "--disable-udev";
+  configureFlags = lib.optional (!enableUdev) "--disable-udev";
 
-  preFixup = stdenv.lib.optionalString enableUdev ''
-    sed 's,-ludev,-L${stdenv.lib.getLib udev}/lib -ludev,' -i $out/lib/libusb-1.0.la
+  preFixup = lib.optionalString enableUdev ''
+    sed 's,-ludev,-L${lib.getLib udev}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libusb.info/";
     repositories.git = "https://github.com/libusb/libusb";
     description = "cross-platform user-mode USB device library";

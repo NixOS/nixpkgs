@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkgconfig, kmod
+{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkg-config, kmod
 , enable-tools ? true
 , enablePython ? false, python3, ncurses }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ kmod ] ++ lib.optionals enablePython [ python3 ncurses ];
   nativeBuildInputs = [
     autoconf-archive
-    pkgconfig
+    pkg-config
     autoreconfHook
   ];
 

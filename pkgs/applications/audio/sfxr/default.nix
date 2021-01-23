@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , desktop-file-utils
 , SDL
 , gtk3
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     desktop-file-utils
   ];
 

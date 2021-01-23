@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl }:
 
 let
   version = "6.4.14";
@@ -28,8 +28,8 @@ stdenv.mkDerivation {
       IPSEC.
     '';
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.peti ];
-    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.peti ];
+    license = lib.licenses.gpl2Plus;
   };
 }

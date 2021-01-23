@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libjack2, libsndfile, pkgconfig }:
+{ lib, stdenv, fetchurl, libjack2, libsndfile, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "jack_capture";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pji0zdwm3kxjrkbzj7fnxhr8ncrc8pyqnwyrh47fhypgqjv1br1";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjack2 libsndfile ];
 
   buildPhase = "PREFIX=$out make jack_capture";
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "http://archive.notam02.no/arkiv/src";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

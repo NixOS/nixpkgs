@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, pkgconfig }:
+{ lib, stdenv, fetchurl, openssl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "trousers";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
   patches = [ ./allow-non-tss-config-file-owner.patch ];

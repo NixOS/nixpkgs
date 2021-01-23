@@ -1,6 +1,6 @@
-{ stdenv, mkChromiumDerivation, channel, enableWideVine, ungoogled }:
+{ lib, stdenv, mkChromiumDerivation, channel, enableWideVine, ungoogled }:
 
-with stdenv.lib;
+with lib;
 
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";

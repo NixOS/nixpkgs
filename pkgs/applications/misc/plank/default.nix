@@ -13,7 +13,7 @@
 , libXi
 , pango
 , gettext
-, pkgconfig
+, pkg-config
 , libxml2
 , bamf
 , gdk-pixbuf
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     gettext
     gnome3.gnome-common
     libxml2 # xmllint
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];

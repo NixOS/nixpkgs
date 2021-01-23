@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , meson
 , gettext
 , gobject-introspection
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
   version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/sushi/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/sushi/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0vlqqk916dymv4asbyvalp1m096a5hh99nx23i4xavzvgygh4h2h";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gettext

@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "06pabnjc4r2vv3dzfm6q97g6jbp2k5bhmcdwv2cf25ka8y5ir7sk";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./UNUSED-darwin.patch;
+  patches = lib.optional stdenv.isDarwin ./UNUSED-darwin.patch;
 
   # fails to find X on darwin
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--without-x";
+  configureFlags = lib.optional stdenv.isDarwin "--without-x";
 
   doCheck = true;
 

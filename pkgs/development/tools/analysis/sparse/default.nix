@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libxml2, llvm }:
+{ fetchurl, stdenv, pkg-config, libxml2, llvm }:
 
 stdenv.mkDerivation rec {
   name = "sparse-0.5.0";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sed -i Makefile -e "s|^PREFIX=.*$|PREFIX=$out|g"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxml2 llvm ];
   doCheck = true;
 

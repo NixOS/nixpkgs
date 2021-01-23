@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , openssl, libpcap, odp-dpdk, dpdk
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "05902593fycgkwzk5g7wzgk0k40nrrgybplkdka3rqnlj6aydhqf";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl libpcap odp-dpdk dpdk ];
 
   dontDisableStatic = true;

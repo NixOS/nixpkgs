@@ -1,6 +1,6 @@
 # FIXME: unify with pkgs/os-specific/linux/multipath-tools/default.nix.
 
-{ stdenv, fetchurl, fetchpatch, lvm2, libaio, gzip, readline, systemd }:
+{ lib, stdenv, fetchurl, fetchpatch, lvm2, libaio, gzip, readline, systemd }:
 
 stdenv.mkDerivation rec {
   name = "multipath-tools-0.4.9";
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       substituteInPlace kpartx/kpartx.rules --replace /sbin/kpartx $out/sbin/kpartx
       substituteInPlace kpartx/kpartx_id --replace /sbin/dmsetup ${lvm2}/sbin/dmsetup
 
-      substituteInPlace libmultipath/defaults.h --replace /lib/udev/scsi_id ${stdenv.lib.getLib systemd}/lib/udev/scsi_id
-      substituteInPlace libmultipath/hwtable.c --replace /lib/udev/scsi_id ${stdenv.lib.getLib systemd}/lib/udev/scsi_id
+      substituteInPlace libmultipath/defaults.h --replace /lib/udev/scsi_id ${lib.getLib systemd}/lib/udev/scsi_id
+      substituteInPlace libmultipath/hwtable.c --replace /lib/udev/scsi_id ${lib.getLib systemd}/lib/udev/scsi_id
 
       sed -i -re '
          s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
 
     '';
 
-  meta = {
+  meta = with lib; {
     description = "Tools for the Linux multipathing driver";
     homepage = "http://christophe.varoqui.free.fr/";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

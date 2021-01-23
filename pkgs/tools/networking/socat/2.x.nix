@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  patches = stdenv.lib.singleton ./libressl-fixes.patch ;
+  patches = lib.singleton ./libressl-fixes.patch ;
 
   meta = with lib; {
     description = "A utility for bidirectional data transfer between two independent data channels";

@@ -1,6 +1,9 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, conf ? null }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, ncurses, readline
+, conf ? null, withIcons ? false, withNerdIcons ? false }:
 
-with stdenv.lib;
+# Mutually exclusive options
+assert withIcons -> withNerdIcons == false;
+assert withNerdIcons -> withIcons == false;
 
 stdenv.mkDerivation rec {
   pname = "nnn";
@@ -13,13 +16,17 @@ stdenv.mkDerivation rec {
     sha256 = "1fa7cmwrzn6kx87kms8i98p9azdlwyh2gnif29l340syl9hkr5qy";
   };
 
-  configFile = optionalString (conf != null) (builtins.toFile "nnn.h" conf);
-  preBuild = optionalString (conf != null) "cp ${configFile} src/nnn.h";
+  configFile = lib.optionalString (conf != null) (builtins.toFile "nnn.h" conf);
+  preBuild = lib.optionalString (conf != null) "cp ${configFile} src/nnn.h";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ readline ncurses ];
 
-  makeFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
+  makeFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "PREFIX="
+  ] ++ lib.optional withIcons [ "O_ICONS=1" ]
+    ++ lib.optional withNerdIcons [ "O_NERD=1" ];
 
   # shell completions
   postInstall = ''
@@ -28,7 +35,7 @@ stdenv.mkDerivation rec {
     install -Dm555 misc/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Small ncurses-based file browser forked from noice";
     homepage = "https://github.com/jarun/nnn";
     license = licenses.bsd2;

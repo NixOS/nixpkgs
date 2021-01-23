@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, pkgconfig, libsoup, meson, ninja }:
+, pkg-config, libsoup, meson, ninja }:
 
 let
   version = "2.5";
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     "-Dudev=disabled"
   ];
 
-  nativeBuildInputs = [ libsoup pkgconfig meson ninja ];
+  nativeBuildInputs = [ libsoup pkg-config meson ninja ];
 
   outputs = [ "out" "dev" "lib" ];
 

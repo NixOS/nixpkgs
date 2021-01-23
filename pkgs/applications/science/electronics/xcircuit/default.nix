@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, autoreconfHook, automake, pkgconfig
+{ lib, stdenv, fetchurl, autoreconfHook, automake, pkg-config
 , cairo, ghostscript, ngspice, tcl, tk, xorg, zlib }:
 
 let
   version = "3.10.12";
   name = "xcircuit-${version}";
-  inherit (stdenv.lib) getBin;
+  inherit (lib) getBin;
 
 in stdenv.mkDerivation {
   inherit name version;
@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
     sha256 = "1h1ywc3mr7plvwnhdii2zgnnv5ih2nhyl4qbdjpi83dq0aq1s2mn";
   };
 
-  nativeBuildInputs = [ autoreconfHook automake pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook automake pkg-config ];
   hardeningDisable = [ "format" ];
 
   configureFlags = [

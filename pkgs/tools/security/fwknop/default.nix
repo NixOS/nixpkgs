@@ -19,17 +19,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libpcap texinfo ]
-    ++ stdenv.lib.optionals gnupgSupport [ gnupg gpgme.dev ]
-    ++ stdenv.lib.optionals wgetSupport [ wget ];
+    ++ lib.optionals gnupgSupport [ gnupg gpgme.dev ]
+    ++ lib.optionals wgetSupport [ wget ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/run"
     "--with-iptables=${iptables}/sbin/iptables"
-    (stdenv.lib.enableFeature buildServer "server")
-    (stdenv.lib.enableFeature buildClient "client")
-    (stdenv.lib.withFeatureAs wgetSupport "wget" "${wget}/bin/wget")
-  ] ++ stdenv.lib.optionalString gnupgSupport [
+    (lib.enableFeature buildServer "server")
+    (lib.enableFeature buildClient "client")
+    (lib.withFeatureAs wgetSupport "wget" "${wget}/bin/wget")
+  ] ++ lib.optionalString gnupgSupport [
     "--with-gpgme"
     "--with-gpgme-prefix=${gpgme.dev}"
     "--with-gpg=${gnupg}"

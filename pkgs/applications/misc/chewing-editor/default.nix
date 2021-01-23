@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, libchewing, qtbase
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, libchewing, qtbase
 , qttools }:
 
 mkDerivation rec {
@@ -14,7 +14,7 @@ mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libchewing qtbase qttools ];
 
   meta = with lib; {

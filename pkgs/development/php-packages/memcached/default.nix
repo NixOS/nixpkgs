@@ -23,7 +23,7 @@ buildPecl {
     "--with-libmemcached-dir=${pkgs.libmemcached}"
   ];
 
-  nativeBuildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgs.pkg-config ];
   buildInputs = with pkgs; [ cyrus_sasl zlib ];
 
   meta.maintainers = lib.teams.php.members;

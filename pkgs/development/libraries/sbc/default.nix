@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libsndfile }:
+{ lib, stdenv, fetchurl, pkg-config, libsndfile }:
 
 stdenv.mkDerivation rec {
   name = "sbc-1.4";
@@ -8,10 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1jal98pnrjkzxlkiqy0ykh4qmgnydz9bmsp1jn581p5kddpg92si";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SubBand Codec Library";
     homepage = "http://www.bluez.org/";
     license = licenses.gpl2;

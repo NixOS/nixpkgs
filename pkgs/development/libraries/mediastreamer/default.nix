@@ -23,12 +23,12 @@
 , libv4l
 , libvpx
 , ortp
-, pkgconfig
+, pkg-config
 , python
 , SDL
 , speex
 , srtp
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     cmake
     doxygen
     intltool
-    pkgconfig
+    pkg-config
     python
   ];
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   ];
   NIX_LDFLAGS = "-lXext";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A powerful and lightweight streaming engine specialized for voice/video telephony applications";
     homepage = "http://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl3;

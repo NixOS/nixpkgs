@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin IOKit;
+  buildInputs = lib.optional stdenv.isDarwin IOKit;
 
   installPhase = ''
     install -Dm555 -t $out/bin picocom

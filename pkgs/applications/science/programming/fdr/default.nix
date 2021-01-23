@@ -6,7 +6,7 @@ stdenv.mkDerivation {
     sha256 = "0n2yqichym5xdawlgk3r7yha88k7ycnx6585jfrcm7043sls1i88";
   };
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     stdenv.cc.cc
     python27Packages.python
     qtbase

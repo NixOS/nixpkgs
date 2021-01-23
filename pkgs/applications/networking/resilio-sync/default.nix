@@ -6,7 +6,7 @@ let
     i686-linux = "i386";
     aarch64-linux = "arm64";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
+  libPath = lib.makeLibraryPath [ stdenv.cc.libc ];
 
 in stdenv.mkDerivation rec {
   pname = "resilio-sync";

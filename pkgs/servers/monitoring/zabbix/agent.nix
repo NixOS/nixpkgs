@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libiconv, openssl, pcre }:
+{ lib, stdenv, fetchurl, pkg-config, libiconv, openssl, pcre }:
 
 import ./versions.nix ({ version, sha256 }:
   stdenv.mkDerivation {
@@ -6,11 +6,11 @@ import ./versions.nix ({ version, sha256 }:
     inherit version;
 
     src = fetchurl {
-      url = "https://cdn.zabbix.com/zabbix/sources/stable/${stdenv.lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
+      url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
       inherit sha256;
     };
 
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkg-config ];
     buildInputs = [
       libiconv
       openssl

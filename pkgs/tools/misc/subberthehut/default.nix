@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, xmlrpc_c, glib, zlib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, xmlrpc_c, glib, zlib }:
 stdenv.mkDerivation rec {
   pname = "subberthehut";
   version = "20";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "19prdqbk19h0wak318g2jn1mnfm7l7f83a633bh0rhskysmqrsj1";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ xmlrpc_c glib zlib ];
 
   installPhase = ''

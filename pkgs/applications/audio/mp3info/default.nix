@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, ncurses, pkgconfig, gtk2 }:
+{ fetchurl, lib, stdenv, ncurses, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "mp3info-0.8.5a";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "042f1czcs9n2sbqvg4rsvfwlqib2gk976mfa2kxlfjghx5laqf04";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses gtk2 ];
 
   hardeningDisable = [ "format" ];
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
 
     homepage = "http://www.ibiblio.org/mp3info/";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

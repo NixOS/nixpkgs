@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, icon-slicer, xcursorgen }:
+{ lib, stdenv, fetchFromGitHub, icon-slicer, xcursorgen }:
 stdenv.mkDerivation rec {
   pname = "openzone-cursors";
   version = "1.2.9";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Clean and sharp X11/Wayland cursor theme";
     homepage = "https://www.gnome-look.org/p/999999/";
     license = licenses.mit;

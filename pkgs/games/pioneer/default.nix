@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, cmake, pkgconfig, curl, libsigcxx, SDL2
+{ fetchFromGitHub, lib, stdenv, cmake, pkg-config, curl, libsigcxx, SDL2
 , SDL2_image, freetype, libvorbis, libpng, assimp, libGLU, libGL
 , glew
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1011xsi94jhw98mhm8kryq8ajig0qfbrdx5xdasi92bd4nk7lcp8";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     curl libsigcxx SDL2 SDL2_image freetype libvorbis libpng

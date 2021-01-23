@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ./lxappearance-0.6.3-xdg.system.data.dirs.patch
   ];
 
-  configureFlags = stdenv.lib.optional withGtk3 "--enable-gtk3";
+  configureFlags = lib.optional withGtk3 "--enable-gtk3";
 
   meta = with lib; {
     description = "Lightweight program for configuring the theme and fonts of gtk applications";

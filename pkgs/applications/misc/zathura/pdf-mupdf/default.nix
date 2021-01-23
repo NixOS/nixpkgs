@@ -7,7 +7,7 @@
 , libjpeg
 , mupdf
 , openjpeg_2
-, pkgconfig
+, pkg-config
 , zathura_core
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r3v37k9fl2rxipvacgxr36llywvy7n20a25h3ajlyk70697sa66";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
   buildInputs = [
     cairo

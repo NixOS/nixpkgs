@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, apacheHttpd, apr, avahi }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, apacheHttpd, apr, avahi }:
 
 stdenv.mkDerivation rec {
   name = "mod_dnssd-0.6";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-lynx" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ apacheHttpd avahi apr ];
 
   patches = [ (fetchpatch {

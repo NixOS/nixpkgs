@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, rustPlatform, pkgconfig, openssl }:
+{ lib, stdenv, fetchgit, rustPlatform, pkg-config, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "eidolon";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1i8qfphynwi42pkhhgllxq42dnw9f0dd6f829z94a3g91czyqvsw";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
   meta = with lib; {

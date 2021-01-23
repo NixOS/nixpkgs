@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Personal media streamer";
     homepage = "https://airsonic.github.io";
-    license = stdenv.lib.licenses.gpl3;
+    license = lib.licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ disassembler ];
   };

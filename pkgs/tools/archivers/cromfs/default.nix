@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, fuse, perl }:
+{ lib, stdenv, fetchurl, pkg-config, fuse, perl }:
 
 stdenv.mkDerivation rec {
   name = "cromfs-1.5.10.2";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     install util/unmkcromfs $out/bin
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse perl ];
 
   meta = with lib; {

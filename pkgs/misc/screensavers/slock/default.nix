@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, writeText
+{ lib, stdenv, fetchurl, writeText
 , xorgproto, libX11, libXext, libXrandr
 # default header can be obtained from
 # https://git.suckless.org/slock/tree/config.def.h
 , conf ? null }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   name = "slock-1.4";
 

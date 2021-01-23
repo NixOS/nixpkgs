@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ cmake installShellFiles pkg-config ronn ];
 
   buildInputs = [ libgit2 libssh2 openssl zlib ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ curl Security ];
+    ++ lib.optionals stdenv.isDarwin [ curl Security ];
 
   postBuild = ''
     # Man pages contain non-ASCII, so explicitly set encoding to UTF-8.

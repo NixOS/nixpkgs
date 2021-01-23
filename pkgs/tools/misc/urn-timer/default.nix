@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , unstableGitUpdater
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
     url = "https://github.com/3snowp7im/urn.git";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/3snowp7im/urn";
     description = "Split tracker / timer for speedrunning with GTK+ frontend";
     license = licenses.gpl3Plus;

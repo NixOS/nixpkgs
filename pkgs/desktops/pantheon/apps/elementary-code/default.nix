@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , nix-update-script
 , pantheon
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , vala
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   # ctags needed in path by outline plugin
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${stdenv.lib.makeBinPath [ ctags ]}"
+      --prefix PATH : "${lib.makeBinPath [ ctags ]}"
     )
   '';
 

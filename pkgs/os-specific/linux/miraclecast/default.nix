@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkgconfig
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config
 , glib, readline, pcre, systemd, udev }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "05afqi33rv7k6pbkkw4mynj6p97vkzhhh13y5nh0yxkyhcgf45pm";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
   buildInputs = [ glib pcre readline systemd udev ];
 

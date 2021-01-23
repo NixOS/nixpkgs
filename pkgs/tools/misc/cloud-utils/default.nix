@@ -37,11 +37,11 @@ in stdenv.mkDerivation rec {
     moveToOutput bin/vcs-run $guest
 
     for i in $out/bin/*; do
-      wrapProgram $i --prefix PATH : "${stdenv.lib.makeBinPath binDeps}:$out/bin"
+      wrapProgram $i --prefix PATH : "${lib.makeBinPath binDeps}:$out/bin"
     done
 
     for i in $guest/bin/*; do
-      wrapProgram $i --prefix PATH : "${stdenv.lib.makeBinPath guestDeps}:$guest/bin"
+      wrapProgram $i --prefix PATH : "${lib.makeBinPath guestDeps}:$guest/bin"
       ln -s $i $out/bin
     done
   '';

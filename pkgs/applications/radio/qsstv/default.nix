@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl, qtbase, qmake, openjpeg, pkgconfig, fftw,
+{ mkDerivation, lib, stdenv, fetchurl, qtbase, qmake, openjpeg, pkg-config, fftw,
   libpulseaudio, alsaLib, hamlib, libv4l, fftwFloat }:
 
 mkDerivation rec {
@@ -14,7 +14,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     qmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [ qtbase openjpeg fftw libpulseaudio alsaLib hamlib libv4l
@@ -29,8 +29,8 @@ mkDerivation rec {
     description = "Qt-based slow-scan TV and fax";
     homepage = "http://users.telenet.be/on4qz/";
     platforms = platforms.linux;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ hax404 ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ hax404 ];
   };
 }
 

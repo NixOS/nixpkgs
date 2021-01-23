@@ -1,26 +1,21 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
-, six, nose, mock, dill, pycodestyle }:
+{ lib, buildPythonPackage, fetchFromGitHub
+, six, pytestCheckHook, mock, dill, pycodestyle }:
 
 buildPythonPackage rec {
   pname = "transitions";
-  version = "0.8.5";
+  version = "0.8.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e441c66a0c753d56c01c3e5e547f21dbe4a5569c939f12477475c5e81d79769b";
+  # test_codestyle.py fails in PyPI sdist
+  src = fetchFromGitHub {
+    owner = "pytransitions";
+    repo = "transitions";
+    rev = version;
+    sha256 = "1d913hzzyqhdhhbkbvjw65dqkajrw50a4sxhyxk0jlg8pcs7bs7v";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py --replace "dill<0.2.7" dill
-  '';
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ nose mock dill pycodestyle ];
-
-  checkPhase = ''
-    nosetests
-  '';
+  checkInputs = [ pytestCheckHook mock dill pycodestyle ];
 
   meta = with lib; {
     homepage = "https://github.com/pytransitions/transitions";

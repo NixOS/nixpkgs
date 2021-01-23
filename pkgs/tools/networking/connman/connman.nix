@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , file
 , glib
 # always required runtime dependencies
@@ -48,10 +48,10 @@
 , enableTist ? false
 }:
 
-assert stdenv.lib.asserts.assertOneOf "firewallType" firewallType [ "iptables" "nftables" ];
-assert stdenv.lib.asserts.assertOneOf "dnsType" dnsType [ "internal" "systemd-resolved" ];
+assert lib.asserts.assertOneOf "firewallType" firewallType [ "iptables" "nftables" ];
+assert lib.asserts.assertOneOf "dnsType" dnsType [ "internal" "systemd-resolved" ];
 
-let inherit (stdenv.lib) optionals; in
+let inherit (lib) optionals; in
 
 stdenv.mkDerivation rec {
   pname = "connman";
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     file
   ]
     ++ optionals (enablePolkit) [ polkit ]

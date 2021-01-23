@@ -1,4 +1,4 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, autoreconfHook, libtool, intltool, pkgconfig
+{ lib, stdenv, substituteAll, fetchFromGitHub, autoreconfHook, libtool, intltool, pkg-config
 , file, findutils
 , gtk3, networkmanager, ppp, xl2tpd, strongswan, libsecret
 , withGnome ? true, libnma }:
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ networkmanager ppp ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret libnma ];
+    ++ lib.optionals withGnome [ gtk3 libsecret libnma ];
 
-  nativeBuildInputs = [ autoreconfHook libtool intltool pkgconfig file findutils ];
+  nativeBuildInputs = [ autoreconfHook libtool intltool pkg-config file findutils ];
 
   preConfigure = ''
     intltoolize -f

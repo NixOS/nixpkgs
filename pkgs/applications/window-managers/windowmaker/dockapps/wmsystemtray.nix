@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libX11, libXpm, libXext, libXfixes, libXmu }:
+{ lib, stdenv, fetchurl, pkg-config, libX11, libXpm, libXext, libXfixes, libXmu }:
 
 stdenv.mkDerivation rec {
   pname = "wmsystemtray";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
      sha256 = "sha256-jt70NpHp//BxAA4pFmx8GtQgwJVukGgVEGHogcisl+k=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 libXpm libXext libXfixes libXmu ];
 
   meta = with lib; {

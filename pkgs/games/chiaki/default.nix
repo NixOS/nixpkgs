@@ -43,10 +43,10 @@ mkDerivation rec {
     qtsvg
     protobuf
     SDL2
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     libevdev
     udev
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     qtmacextras
   ];
 

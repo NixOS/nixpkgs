@@ -140,8 +140,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Adobe Flash Player browser plugin";
     homepage = "http://www.adobe.com/products/flashplayer/";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ taku0 ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ taku0 ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

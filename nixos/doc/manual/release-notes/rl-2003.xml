@@ -45,6 +45,15 @@
    </listitem>
    <listitem>
     <para>
+     Grub is updated to 2.04, adding support for booting from F2FS filesystems and
+     Btrfs volumes using zstd compression. Note that some users have been unable
+to boot after upgrading to 2.04 - for more information, please see <link
+xlink:href="https://github.com/NixOS/nixpkgs/issues/61718#issuecomment-617618503">this
+     discussion</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Postgresql for NixOS service now defaults to v11.
     </para>
    </listitem>

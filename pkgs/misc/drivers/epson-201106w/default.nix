@@ -13,7 +13,7 @@ in
       # NOTE: Don't forget to update the webarchive link too!
       urls = [
         "https://download.ebz.epson.net/dsc/op/stable/SRPMS/epson-inkjet-printer-201106w-${version}-1lsb3.2.src.rpm"
-        "https://web.archive.org/web/https://download.ebz.epson.net/dsc/op/stable/SRPMS/epson-inkjet-printer-201106w-${version}-1lsb3.2.src.rpm"     
+        "https://web.archive.org/web/https://download.ebz.epson.net/dsc/op/stable/SRPMS/epson-inkjet-printer-201106w-${version}-1lsb3.2.src.rpm"
       ];
 
       sha256 = "1yig1xrh1ikblbp7sx706n5nnc237wy4mbch23ymy6akbgqg4aig";

@@ -9,7 +9,7 @@
 , assimp
 , gym
 , bullet-roboschool
-, pkgconfig
+, pkg-config
 , which
 }:
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     qtbase # needs the `moc` tool
     which
   ];

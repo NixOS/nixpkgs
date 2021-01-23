@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   _name   = "liblockfile";
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Shared library with NFS-safe locking functions";
     homepage = "http://packages.debian.org/unstable/libs/liblockfile1";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.bluescreen303 ];
+    platforms = lib.platforms.all;
   };
 }

@@ -7,7 +7,7 @@
 , meson
 , ninja
 , python3
-, pkgconfig
+, pkg-config
 , vala
 , granite
 , libgee
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
   ];

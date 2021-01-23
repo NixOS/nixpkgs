@@ -5,7 +5,7 @@
 let
   version = "1.23.0";
 
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     alsaLib
     at-spi2-atk
     at-spi2-core

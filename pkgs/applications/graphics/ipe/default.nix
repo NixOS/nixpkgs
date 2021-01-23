@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, zlib, freetype, cairo, lua5, texlive, ghostscript
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, zlib, freetype, cairo, lua5, texlive, ghostscript
 , libjpeg, libpng, qtbase, mkDerivation
 }:
 
@@ -20,7 +20,7 @@ mkDerivation rec {
     libjpeg libpng zlib qtbase freetype cairo lua5 texlive ghostscript
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   qtWrapperArgs = [ ''--prefix PATH : ${texlive}/bin''  ];
 
@@ -31,13 +31,13 @@ mkDerivation rec {
   meta = {
     description = "An editor for drawing figures";
     homepage = "http://ipe.otfried.org";
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       Ipe is an extensible drawing editor for creating figures in PDF and Postscript format.
       It supports making small figures for inclusion into LaTeX-documents
       as well as presentations in PDF.
     '';
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ lib.maintainers.ttuegel ];
+    platforms = lib.platforms.linux;
   };
 }

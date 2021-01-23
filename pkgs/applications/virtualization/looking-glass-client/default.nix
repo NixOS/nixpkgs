@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, SDL2, SDL2_ttf, spice-protocol
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_ttf, spice-protocol
 , fontconfig, libX11, freefont_ttf, nettle, libpthreadstubs, libXau, libXdmcp
 , libXi, libXext, wayland, libffi, libGLU, expat, libbfd
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     SDL2 SDL2_ttf spice-protocol fontconfig libX11 freefont_ttf nettle

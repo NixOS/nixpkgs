@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
       --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath ([ glib gtk3 libXtst ])} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst ])} \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 
     # Create desktop item.

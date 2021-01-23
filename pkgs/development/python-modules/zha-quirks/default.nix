@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , aiohttp
 , zigpy
-, conftest
 , asynctest
 , pytestCheckHook
 }:
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ aiohttp zigpy ];
-  checkInputs = [ pytestCheckHook conftest asynctest ];
+  checkInputs = [ pytestCheckHook asynctest ];
 
   meta = with lib; {
     description = "ZHA Device Handlers are custom quirks implementations for Zigpy";

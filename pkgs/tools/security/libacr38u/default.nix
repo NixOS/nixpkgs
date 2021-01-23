@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, pcsclite , libusb-compat-0_1 }:
+{ lib, stdenv, fetchurl, pkg-config, pcsclite , libusb-compat-0_1 }:
 
 stdenv.mkDerivation {
   version = "1.7.11";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcsclite libusb-compat-0_1 ];
 
   preBuild = ''
@@ -38,4 +38,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ berce ];
     platforms = with platforms; unix;
   };
-} 
+}

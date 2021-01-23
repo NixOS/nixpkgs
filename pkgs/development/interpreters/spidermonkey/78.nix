@@ -2,7 +2,7 @@
 , fetchurl
 , fetchpatch
 , autoconf213
-, pkgconfig
+, pkg-config
 , perl
 , python3
 , zip
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     cargo
     llvmPackages.llvm # for llvm-objdump
     perl
-    pkgconfig
+    pkg-config
     python3
     rust-cbindgen
     rustc

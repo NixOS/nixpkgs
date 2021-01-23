@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libyamlcpp, pkgconfig
+{ lib, stdenv, fetchFromGitHub, cmake, libyamlcpp, pkg-config
 , smartSupport ? false, libatasmart }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_INSTALL_DOCDIR=share/doc/${pname}"
     "-DUSE_NVML=OFF"
-  ] ++ stdenv.lib.optional smartSupport "-DUSE_ATASMART=ON";
+  ] ++ lib.optional smartSupport "-DUSE_ATASMART=ON";
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libyamlcpp ] ++ stdenv.lib.optional smartSupport libatasmart;
+  buildInputs = [ libyamlcpp ] ++ lib.optional smartSupport libatasmart;
 
   installPhase = ''
     runHook preInstall

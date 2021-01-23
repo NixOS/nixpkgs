@@ -1,7 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , rustPlatform
-, pkgconfig
+, pkg-config
 , asciidoctor
 , openssl
 , Security
@@ -20,8 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-i36MYTMkbSuWxxlWUDsyYMay/4Mg7M5jEFhHM60UrkM=";
   };
 
-  nativeBuildInputs = [ pkgconfig asciidoctor installShellFiles ];
-  buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
+  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 
   cargoSha256 = "sha256-mnDUIJhEGNoh3eq2Vhww1T/tpZh9RP+RxbRsBNrpOzw=";
 

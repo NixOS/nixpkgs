@@ -1,4 +1,4 @@
-{ rustPlatform, lib, fetchFromGitHub, lzma, pkgconfig, openssl, dbus, efibootmgr, makeWrapper }:
+{ rustPlatform, lib, fetchFromGitHub, lzma, pkg-config, openssl, dbus, efibootmgr, makeWrapper }:
 rustPlatform.buildRustPackage rec {
   pname = "system76-firmware";
   # Check Makefile when updating, make sure postInstall matches make install
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0yjv3a8r01ks91gc33rdwqmw52cqqwhq9f3rvw2xv3h8cqa5hfz0";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ lzma openssl dbus ];
 

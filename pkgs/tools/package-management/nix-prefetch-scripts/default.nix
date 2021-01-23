@@ -13,7 +13,7 @@ let mkPrefetchScript = tool: src: deps:
     installPhase = ''
       install -vD ${src} $out/bin/$name;
       wrapProgram $out/bin/$name \
-        --prefix PATH : ${stdenv.lib.makeBinPath (deps ++ [ gnused nix ])} \
+        --prefix PATH : ${lib.makeBinPath (deps ++ [ gnused nix ])} \
         --set HOME /homeless-shelter
     '';
 
@@ -22,7 +22,7 @@ let mkPrefetchScript = tool: src: deps:
     meta = with lib; {
       description = "Script used to obtain source hashes for fetch${tool}";
       maintainers = with maintainers; [ bennofs ];
-      platforms = stdenv.lib.platforms.unix;
+      platforms = lib.platforms.unix;
     };
   };
 in rec {
@@ -40,7 +40,7 @@ in rec {
     meta = with lib; {
       description = "Collection of all the nix-prefetch-* scripts which may be used to obtain source hashes";
       maintainers = with maintainers; [ bennofs ];
-      platforms = stdenv.lib.platforms.unix;
+      platforms = lib.platforms.unix;
     };
   };
 }

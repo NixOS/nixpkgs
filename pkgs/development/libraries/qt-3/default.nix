@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , xftSupport ? true, libXft ? null
 , xrenderSupport ? true, libXrender ? null
 , xrandrSupport ? true, libXrandr ? null
@@ -6,8 +6,8 @@
 , cursorSupport ? true, libXcursor ? null
 , threadSupport ? true
 , mysqlSupport ? false, libmysqlclient ? null
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, openglSupport ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, libGLSupported ? lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, openglSupport ? lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , libGL ? null, libGLU ? null, libXmu ? null
 , xlibsWrapper, xorgproto, zlib, libjpeg, libpng, which
 }:
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   configureFlags = let
-    mk = cond: name: "-${stdenv.lib.optionalString (!cond) "no-"}${name}";
+    mk = cond: name: "-${lib.optionalString (!cond) "no-"}${name}";
   in [
     "-v"
     "-system-zlib" "-system-libpng" "-system-libjpeg"
@@ -49,21 +49,21 @@ stdenv.mkDerivation {
     (mk xineramaSupport "xinerama")
     (mk xrandrSupport "xrandr")
     (mk xftSupport "xft")
-  ] ++ stdenv.lib.optionals openglSupport [
+  ] ++ lib.optionals openglSupport [
     "-dlopen-opengl"
     "-L${libGL}/lib" "-I${libGLU}/include"
     "-L${libXmu.out}/lib" "-I${libXmu.dev}/include"
-  ] ++ stdenv.lib.optionals xrenderSupport [
+  ] ++ lib.optionals xrenderSupport [
     "-L${libXrender.out}/lib" "-I${libXrender.dev}/include"
-  ] ++ stdenv.lib.optionals xrandrSupport [
+  ] ++ lib.optionals xrandrSupport [
     "-L${libXrandr.out}/lib" "-I${libXrandr.dev}/include"
-  ] ++ stdenv.lib.optionals xineramaSupport [
+  ] ++ lib.optionals xineramaSupport [
     "-L${libXinerama.out}/lib" "-I${libXinerama.dev}/include"
-  ] ++ stdenv.lib.optionals cursorSupport [
+  ] ++ lib.optionals cursorSupport [
     "-L${libXcursor.out}/lib -I${libXcursor.dev}/include"
-  ] ++ stdenv.lib.optionals mysqlSupport [
+  ] ++ lib.optionals mysqlSupport [
     "-qt-sql-mysql" "-L${libmysqlclient}/lib/mysql" "-I${libmysqlclient}/include/mysql"
-  ] ++ stdenv.lib.optionals xftSupport [
+  ] ++ lib.optionals xftSupport [
     "-L${libXft.out}/lib" "-I${libXft.dev}/include"
     "-L${libXft.freetype.out}/lib" "-I${libXft.freetype.dev}/include"
     "-L${libXft.fontconfig.lib}/lib" "-I${libXft.fontconfig.dev}/include"
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
 
   passthru = {inherit mysqlSupport;};
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = with licenses; [ gpl2 qpl ];
     platforms = platforms.linux;
   };

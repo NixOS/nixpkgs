@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     makeWrapper $pslibs/pwsh $out/bin/pwsh \
-      --prefix ${platformLdLibraryPath} : "${stdenv.lib.makeLibraryPath libraries}" \
+      --prefix ${platformLdLibraryPath} : "${lib.makeLibraryPath libraries}" \
       --set TERM xterm --set POWERSHELL_TELEMETRY_OPTOUT 1 --set DOTNET_CLI_TELEMETRY_OPTOUT 1
   '';
 

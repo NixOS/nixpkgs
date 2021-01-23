@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, autoconf, automake, pkgconfig, shared-mime-info, intltool
+, autoconf, automake, pkg-config, shared-mime-info, intltool
 , glib, mono, gtk-sharp-2_0, gnome2, gnome-sharp, unzip
 , dotnetPackages
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p2" ];
   patches = [ ./git-revert-12d610fb3f6dce121df538e36f21d8c2eeb0a6e3.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     autoconf automake shared-mime-info intltool
     mono gtk-sharp-2_0 gnome-sharp unzip
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     2a3,5
     > export MONO_GAC_PREFIX=${gnome-sharp}:${gtk-sharp-2_0}:\$MONO_GAC_PREFIX
     > export PATH=${mono}/bin:\$PATH
-    > export LD_LIBRARY_PATH=${stdenv.lib.makeLibraryPath [ glib gnome2.libgnomeui gnome2.gnome_vfs gnome-sharp gtk-sharp-2_0 gtk-sharp-2_0.gtk ]}:\$LD_LIBRARY_PATH
+    > export LD_LIBRARY_PATH=${lib.makeLibraryPath [ glib gnome2.libgnomeui gnome2.gnome_vfs gnome-sharp gtk-sharp-2_0 gtk-sharp-2_0.gtk ]}:\$LD_LIBRARY_PATH
     >
     EOF
     done

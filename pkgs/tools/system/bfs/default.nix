@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1iricyigm0rsc8fr91vk3krvyafbnp0y3ww1rjv94l6jbdl7rrlb";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ libcap acl ];
+  buildInputs = lib.optionals stdenv.isLinux [ libcap acl ];
 
   # Disable LTO on darwin. See https://github.com/NixOS/nixpkgs/issues/19098
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile --replace "-flto -DNDEBUG" "-DNDEBUG"
   '';
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qt4, libX11, coreutils, bluez, perl }:
+{ lib, stdenv, fetchFromGitHub, qt4, libX11, coreutils, bluez, perl }:
 # possible additional dependencies: pulseaudio udev networkmanager immerson qmf
 
 stdenv.mkDerivation rec {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 libX11 bluez perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt Mobility";
     homepage = "http://qt.nokia.com/products/qt-addons/mobility";
     maintainers = [ maintainers.qknight ];

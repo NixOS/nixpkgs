@@ -15,7 +15,7 @@ buildGoModule rec {
 
   # we have no bash at the moment for windows
   BASH_PATH =
-    stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
+    lib.optionalString (!stdenv.hostPlatform.isWindows)
     "${bash}/bin/bash";
 
   # replace the build phase to use the GNUMakefile instead

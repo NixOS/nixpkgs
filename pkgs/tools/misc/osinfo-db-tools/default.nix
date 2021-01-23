@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, meson, ninja, gettext, glib, libxml2, perl, python3
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, gettext, glib, libxml2, perl, python3
 , libxslt, libarchive, bzip2, lzma, json-glib, libsoup
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "038q3gzdbkfkhpicj0755mw1q4gbvn57pslpw8n2dp3lds9im0g9";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext perl python3 ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext perl python3 ];
   buildInputs = [ glib json-glib libxml2 libxslt libarchive bzip2 lzma libsoup ];
 
   meta = with lib; {

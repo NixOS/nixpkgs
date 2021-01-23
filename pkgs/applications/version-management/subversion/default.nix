@@ -31,10 +31,10 @@ let
 
     buildInputs = [ zlib apr aprutil sqlite openssl ]
       ++ extraBuildInputs
-      ++ stdenv.lib.optional httpSupport serf
-      ++ stdenv.lib.optional pythonBindings python
-      ++ stdenv.lib.optional perlBindings perl
-      ++ stdenv.lib.optional saslSupport sasl;
+      ++ lib.optional httpSupport serf
+      ++ lib.optional pythonBindings python
+      ++ lib.optional perlBindings perl
+      ++ lib.optional saslSupport sasl;
 
     patches = [ ./apr-1.patch ];
 
@@ -44,15 +44,15 @@ let
     CPPFLAGS = [ "-P" ];
 
     configureFlags = [
-      (stdenv.lib.withFeature bdbSupport "berkeley-db")
-      (stdenv.lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
-      (stdenv.lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
-      (stdenv.lib.withFeatureAs saslSupport "sasl" sasl)
-      (stdenv.lib.withFeatureAs httpSupport "serf" serf)
+      (lib.withFeature bdbSupport "berkeley-db")
+      (lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
+      (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
+      (lib.withFeatureAs saslSupport "sasl" sasl)
+      (lib.withFeatureAs httpSupport "serf" serf)
       "--disable-keychain"
       "--with-zlib=${zlib.dev}"
       "--with-sqlite=${sqlite.dev}"
-    ] ++ stdenv.lib.optionals javahlBindings [
+    ] ++ lib.optionals javahlBindings [
       "--enable-javahl"
       "--with-jdk=${jdk}"
     ];
@@ -103,7 +103,7 @@ let
       platforms = platforms.linux ++ platforms.darwin;
     };
 
-  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+  } // lib.optionalAttrs stdenv.isDarwin {
     CXX = "clang++";
     CC = "clang";
     CPP = "clang -E";

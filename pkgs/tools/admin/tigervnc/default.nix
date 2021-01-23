@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , xorg, xkeyboard_config, zlib
 , libjpeg_turbo, pixman, fltk
 , fontDirectories
@@ -9,7 +9,7 @@
 , makeWrapper
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "1.11.0";
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     rm -f $out/lib/xorg/protocol.txt
 
     wrapProgram $out/bin/vncserver \
-      --prefix PATH : ${stdenv.lib.makeBinPath (with xorg; [ xterm twm xsetroot xauth ]) }
+      --prefix PATH : ${lib.makeBinPath (with xorg; [ xterm twm xsetroot xauth ]) }
   '';
 
   buildInputs = with xorg; [
@@ -100,10 +100,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://tigervnc.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Fork of tightVNC, made in cooperation with VirtualGL";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
     # Prevent a store collision.
     priority = 4;
   };

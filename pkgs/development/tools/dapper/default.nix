@@ -5,7 +5,7 @@
 
 buildGoPackage rec {
   pname = "dapper";
-  version = "0.5.3";
+  version = "0.5.4";
 
   goPackagePath = "github.com/rancher/dapper";
 
@@ -13,7 +13,7 @@ buildGoPackage rec {
     owner = "rancher";
     repo = "dapper";
     rev = "v${version}";
-    sha256 = "1h62jahrxpmqx6r3mlakzap8gisrymgkp5syyarpab05qm1inngd";
+    sha256 = "sha256-2KyDFiCxqoQt/m12vyHH8/L88+dOQGGsnI3l1G82NxQ=";
   };
    patchPhase = ''
      substituteInPlace main.go --replace 0.0.0 ${version}

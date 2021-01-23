@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     let
-      path = stdenv.lib.makeBinPath [
+      path = lib.makeBinPath [
         coreutils
         file
         libcaca.bin

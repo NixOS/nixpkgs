@@ -34,6 +34,7 @@ with lib;
       {
         what = "tmpfs";
         where = "/tmp";
+        type = "tmpfs";
         mountConfig.Options = [ "mode=1777" "strictatime" "rw" "nosuid" "nodev" "size=50%" ];
       }
     ];

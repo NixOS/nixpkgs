@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin openmp;
+  buildInputs = lib.optional stdenv.isDarwin openmp;
 
   prePatch = ''
     substituteInPlace makefile \

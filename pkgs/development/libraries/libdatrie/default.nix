@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , autoreconfHook, autoconf-archive
 , installShellFiles, libiconv }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     installShellFiles
   ];
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   preAutoreconf = let
     reports = "https://github.com/tlwg/libdatrie/issues";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     installManPage man/trietool.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://linux.thai.net/~thep/datrie/datrie.html";
     description = "This is an implementation of double-array structure for representing trie";
     license = licenses.lgpl21Plus;

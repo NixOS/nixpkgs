@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoconf, automake, intltool, libtool, pkgconfig, encfs
+{ lib, stdenv, fetchurl, autoconf, automake, intltool, libtool, pkg-config, encfs
 , glib , gnome3, gtk3, libgnome-keyring, vala, wrapGAppsHook, xorg, gobject-introspection
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h6x8dyp1fvxvr8fwki98ppf4sa20qf7g59jc9797b2vrgm60h1i";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ autoconf automake intltool libtool vala glib encfs
     gtk3 libgnome-keyring gnome3.libgee xorg.libSM xorg.libICE
     wrapGAppsHook gobject-introspection  ];

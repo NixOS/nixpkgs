@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config
 , dpdk, libconfig, libpcap, numactl, openssl, zlib, libbsd, libelf, jansson
 }: let
   dpdk_18_11 = dpdk.overrideAttrs (old: rec {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
   buildInputs = [
     dpdk_18_11

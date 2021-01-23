@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchpatch
-, pkgconfig
+, pkg-config
 , cmake
 , bluez
 , ffmpeg_3
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
   ];
 

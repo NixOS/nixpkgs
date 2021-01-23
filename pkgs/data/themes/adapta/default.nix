@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, parallel, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine, gnome3 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, parallel, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "adapta-gtk-theme";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     parallel
     sassc
     inkscape

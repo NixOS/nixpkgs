@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , unstableGitUpdater
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://c9x.me/compile/";
     description = "A small compiler backend written in C";
     maintainers = with maintainers; [ fgaz ];

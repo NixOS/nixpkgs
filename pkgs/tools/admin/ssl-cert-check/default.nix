@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp $pname $out/bin/$pname
     wrapProgram $out/bin/$pname \
-      --set PATH "${stdenv.lib.makeBinPath buildInputs}"
+      --set PATH "${lib.makeBinPath buildInputs}"
   '';
 
   meta = with lib; {

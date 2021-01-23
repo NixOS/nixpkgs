@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, installShellFiles, cmake }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "doctest";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/onqtam/doctest";
     description = "The fastest feature-rich C++11/14/17/20 single-header testing framework";
     platforms = platforms.linux;

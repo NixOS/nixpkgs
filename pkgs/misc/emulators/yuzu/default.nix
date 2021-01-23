@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, pkgconfig, wrapQtAppsHook
+, cmake, pkg-config, wrapQtAppsHook
 , boost173, catch2, fmt, lz4, nlohmann_json, rapidjson, zlib, zstd, SDL2
 , udev, libusb1, libzip, qtbase, qtwebengine, qttools, ffmpeg
 , libpulseaudio, libjack2, alsaLib, sndio, ecasound
@@ -18,17 +18,17 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [ qtbase qtwebengine qttools boost173 catch2 fmt lz4 nlohmann_json rapidjson zlib zstd SDL2 udev libusb1 libpulseaudio alsaLib sndio ecasound libjack2 libzip ffmpeg ]
-    ++ stdenv.lib.optionals useVulkan [ vulkan-loader vulkan-headers ];
+    ++ lib.optionals useVulkan [ vulkan-loader vulkan-headers ];
   cmakeFlags = [ "-DENABLE_QT_TRANSLATION=ON" "-DYUZU_USE_QT_WEB_ENGINE=ON" "-DUSE_DISCORD_PRESENCE=ON" ]
-    ++ stdenv.lib.optionals (!useVulkan) [ "-DENABLE_VULKAN=No" ];
+    ++ lib.optionals (!useVulkan) [ "-DENABLE_VULKAN=No" ];
 
   # Trick the configure system. This prevents a check for submodule directories.
   preConfigure = "rm .gitmodules";
 
   # Fix vulkan detection
-  postFixup = stdenv.lib.optionals useVulkan ''
+  postFixup = lib.optionals useVulkan ''
     wrapProgram $out/bin/yuzu --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
     wrapProgram $out/bin/yuzu-cmd --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , libmysqlclient, libaio
 }:
 
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   pname = "sysbench";
   version = "1.0.20";
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libmysqlclient libaio ];
 
   src = fetchFromGitHub {

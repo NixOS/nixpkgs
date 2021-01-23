@@ -5,7 +5,7 @@
 
 let
 
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ zlib freetype fontconfig openssl libXrender libXrandr libXcursor libX11
       libXext libXi libxcb cups
     ];

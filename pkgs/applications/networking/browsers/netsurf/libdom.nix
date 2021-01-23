@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, expat
+{ lib, stdenv, fetchurl, pkg-config, expat
 , buildsystem
 , libparserutils
 , libwapcaplet
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mO4HJHHlXiCMmHjlFcQQrUYso2+HtK/L7K0CPzos70o=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     expat
     libhubbub

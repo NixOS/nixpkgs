@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
 , openssl, ppp
 , systemd ? null }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --replace '$(DESTDIR)$(confdir)' /tmp
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     openssl ppp

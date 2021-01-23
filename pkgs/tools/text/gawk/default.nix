@@ -16,7 +16,7 @@
 assert (doCheck && stdenv.isLinux) -> glibcLocales != null;
 
 let
-  inherit (stdenv.lib) optional;
+  inherit (lib) optional;
 in
 stdenv.mkDerivation rec {
   name = "gawk-5.1.0";

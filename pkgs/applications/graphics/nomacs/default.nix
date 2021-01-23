@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
-, pkgconfig
+, pkg-config
 
 , qtbase
 , qttools
@@ -32,7 +32,7 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [cmake
-                       pkgconfig];
+                       pkg-config];
 
   buildInputs = [qtbase
                  qttools
@@ -53,7 +53,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://nomacs.org";
     description = "Qt-based image viewer";
-    maintainers = with stdenv.lib.maintainers; [ mindavi ];
+    maintainers = with lib.maintainers; [ mindavi ];
     license = licenses.gpl3Plus;
     repositories.git = "https://github.com/nomacs/nomacs.git";
     inherit (qtbase.meta) platforms;

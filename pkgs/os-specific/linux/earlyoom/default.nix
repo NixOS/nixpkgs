@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "16iyn51xlrsbshc7p5xl2338yyfzknaqc538sa7mamgccqwgyvvq";
   };
 
-  nativeBuildInputs = stdenv.lib.optionals withManpage [ pandoc installShellFiles ];
+  nativeBuildInputs = lib.optionals withManpage [ pandoc installShellFiles ];
 
   patches = [ ./fix-dbus-path.patch ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D earlyoom $out/bin/earlyoom
-  '' + stdenv.lib.optionalString withManpage ''
+  '' + lib.optionalString withManpage ''
     installManPage earlyoom.1
   '';
 

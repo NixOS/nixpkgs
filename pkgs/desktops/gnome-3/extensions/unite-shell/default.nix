@@ -1,4 +1,4 @@
-{ stdenv, gnome3, fetchFromGitHub, xprop, glib, coreutils }:
+{ lib, stdenv, gnome3, fetchFromGitHub, xprop, glib, coreutils }:
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-unite-shell";
   version = "44";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Unite is a GNOME Shell extension which makes a few layout tweaks to the top panel and removes window decorations to make it look like Ubuntu Unity Shell";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ rhoriguchi ];

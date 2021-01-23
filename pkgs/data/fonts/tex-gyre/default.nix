@@ -32,7 +32,7 @@ let
       platforms = platforms.all;
     };
   };
-in stdenv.lib.mapAttrs mkVariant {
+in lib.mapAttrs mkVariant {
   adventor = {
     version = "2_501";
     sha256 = "0qjg3x0adfppyx3x33cm07ww9i9sl88xaq07m7wfip8rmyp567fn";

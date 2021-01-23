@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coreutils, gawk }:
+{ lib, stdenv, fetchurl, coreutils, gawk }:
 
 stdenv.mkDerivation rec {
   pname = "txt2man";
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Convert flat ASCII text to man page format";
     homepage = "http://mvertes.free.fr/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ bjornfor ];
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

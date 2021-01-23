@@ -11,7 +11,7 @@
 , hicolor-icon-theme
 , mypaint-brushes
 , gdk-pixbuf
-, pkgconfig
+, pkg-config
 , python3
 , swig
 , wrapGAppsHook
@@ -33,7 +33,7 @@ in buildPythonApplication rec {
 
   nativeBuildInputs = [
     gettext
-    pkgconfig
+    pkg-config
     swig
     wrapGAppsHook
     gobject-introspection # for setup hook

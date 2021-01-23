@@ -17,7 +17,7 @@ let
         inherit sage-src env-locations pynac singular;
         ecl = maxima-ecl.ecl;
         linbox = pkgs.linbox.override { withSage = true; };
-        pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
+        pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
       };
     };
   };
@@ -56,7 +56,7 @@ let
     inherit env-locations;
     inherit python3 singular palp flint pynac pythonEnv maxima-ecl;
     ecl = maxima-ecl.ecl;
-    pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
+    pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
   };
 
   # The documentation for sage, building it takes a lot of ram.
@@ -70,7 +70,7 @@ let
     inherit python3 pythonEnv;
     inherit sage-env;
     inherit pynac singular maxima-ecl;
-    pkg-config = pkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
+    pkg-config = pkgs.pkg-config; # not to confuse with pythonPackages.pkg-config
     three = nodePackages.three;
   };
 

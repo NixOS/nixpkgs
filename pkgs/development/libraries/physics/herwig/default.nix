@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
+{ lib, stdenv, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "herwig";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multi-purpose particle physics event generator";
     homepage = "https://herwig.hepforge.org/";
     license = licenses.gpl3;

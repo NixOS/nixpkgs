@@ -4,7 +4,7 @@
               "load_average" "memory" "volume" "wifi" ]
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   perlscripts = [ "battery" "cpu_usage" "openvpn" "temperature" ];

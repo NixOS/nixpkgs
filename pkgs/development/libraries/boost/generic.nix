@@ -1,4 +1,4 @@
-{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+{ lib, stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
 , fetchpatch
 , which
 , buildPackages
@@ -30,9 +30,9 @@ assert enablePython -> stdenv.hostPlatform == stdenv.buildPlatform;
 assert enableNumpy -> enablePython;
 
 # Boost <1.69 can't be build with clang >8, because pth was removed
-assert with stdenv.lib; ((toolset == "clang" && !(versionOlder stdenv.cc.version "8.0.0")) -> !(versionOlder version "1.69"));
+assert with lib; ((toolset == "clang" && !(versionOlder stdenv.cc.version "8.0.0")) -> !(versionOlder version "1.69"));
 
-with stdenv.lib;
+with lib;
 let
 
   variant = concatStringsSep ","
@@ -150,7 +150,7 @@ stdenv.mkDerivation {
     EOF
   '';
 
-  NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.isDarwin
+  NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
                       "-headerpad_max_install_names";
 
   enableParallelBuilding = true;

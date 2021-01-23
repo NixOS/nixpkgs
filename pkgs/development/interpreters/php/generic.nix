@@ -7,7 +7,7 @@ let
   generic =
     { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
     , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
-    , pkgconfig, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
+    , pkg-config, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
     , systemd, system-sendmail, valgrind, xcbuild
 
     , version
@@ -149,7 +149,7 @@ let
 
           enableParallelBuilding = true;
 
-          nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ]
+          nativeBuildInputs = [ autoconf automake bison flex libtool pkg-config re2c ]
             ++ lib.optional stdenv.isDarwin xcbuild;
 
           buildInputs =

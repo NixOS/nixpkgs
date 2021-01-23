@@ -5,7 +5,7 @@ let
 
   inherit (xorg) libXext libX11;
 
-  lpath = "${stdenv.cc.cc.lib}/lib64:" + stdenv.lib.makeLibraryPath [
+  lpath = "${stdenv.cc.cc.lib}/lib64:" + lib.makeLibraryPath [
       zlib libmad libpng12 libcaca libXext libX11 libGLU libGL alsaLib libpulseaudio];
 
 in

@@ -8,20 +8,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "monolith";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "Y2Z";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16k5mp64a5l063rdj65hbpx414xv0bqdvhvz49k8018f2a2jj5xl";
+    sha256 = "sha256-kCyfVeGTXBzdwmTTDJM1eaR6ANoIXAydj1ePmrZehqE=";
   };
 
-  cargoSha256 = "0s5mv8mymycz4ga4zh9kbrhwmhgl4j01pw1sdzxy49l9waryk9p3";
+  cargoSha256 = "sha256-juxaL/zjfqzFMqZe9tpevdjjVU7fPK8zalksAARWHC8=";
 
-  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   checkFlagsArray = [ "--skip=tests::cli" ];
 

@@ -1,4 +1,4 @@
-{ rustPlatform, fetchFromGitHub, lib, openssl, pkgconfig, stdenv, curl, Security
+{ rustPlatform, fetchFromGitHub, lib, openssl, pkg-config, stdenv, curl, Security
 , runCommand
 }:
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     '';
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   cargoSha256 = "1wrfly7c3an1mjqm7v13mlvx57hwlcxfjijkimicck04q6qdhbp6";
   cargoBuildFlags = [ "-p" pname ];

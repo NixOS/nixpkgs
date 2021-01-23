@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool
+{ lib, stdenv, fetchurl, pkg-config, intltool
 , gtk3, glib, curl, goocanvas2, gpsd
 , hamlib, wrapGAppsHook
 }:
@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
     sha256 = "0hwf97kng1zy8rxyglw04x89p0bg07zq30hgghm20yxiw2xc8ng7";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config intltool wrapGAppsHook ];
   buildInputs = [ curl glib gtk3 goocanvas2 gpsd hamlib ];
 
   meta = with lib; {

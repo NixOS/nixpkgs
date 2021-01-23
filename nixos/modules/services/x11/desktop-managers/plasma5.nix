@@ -7,8 +7,8 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications kdeFrameworks plasma5;
-  inherit (pkgs) qt5 libsForQt5;
+  libsForQt5 = pkgs.plasma5Packages;
+  inherit (libsForQt5) kdeApplications kdeFrameworks plasma5;
   inherit (pkgs) writeText;
 
   pulseaudio = config.hardware.pulseaudio;
@@ -198,8 +198,8 @@ in
       };
 
       security.wrappers = {
-        kcheckpass.source = "${lib.getBin plasma5.kscreenlocker}/libexec/kcheckpass";
-        start_kdeinit.source = "${lib.getBin pkgs.kdeFrameworks.kinit}/libexec/kf5/start_kdeinit";
+        kcheckpass.source = "${lib.getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
+        start_kdeinit.source = "${lib.getBin libsForQt5.kinit}/libexec/kf5/start_kdeinit";
         kwin_wayland = {
           source = "${lib.getBin plasma5.kwin}/bin/kwin_wayland";
           capabilities = "cap_sys_nice+ep";
@@ -213,7 +213,7 @@ in
       '';
 
       environment.systemPackages =
-        with qt5; with libsForQt5;
+        with libsForQt5;
         with plasma5; with kdeApplications; with kdeFrameworks;
         [
           frameworkintegration

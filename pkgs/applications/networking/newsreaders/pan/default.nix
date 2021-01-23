@@ -1,5 +1,5 @@
 { spellChecking ? true
-, lib, stdenv, fetchurl, pkgconfig, gtk3, gtkspell3 ? null
+, lib, stdenv, fetchurl, pkg-config, gtk3, gtkspell3 ? null
 , gmime2, gettext, intltool, itstool, libxml2, libnotify, gnutls
 , makeWrapper, gnupg
 , gnomeSupport ? true, libsecret, gcr
@@ -18,18 +18,18 @@ stdenv.mkDerivation {
     sha256 = "17agd27sn4a7nahvkpg0w39kv74njgdrrygs74bbvpaj8rk2hb55";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext intltool itstool libxml2 makeWrapper ];
+  nativeBuildInputs = [ pkg-config gettext intltool itstool libxml2 makeWrapper ];
   buildInputs = [ gtk3 gmime2 libnotify gnutls ]
-    ++ stdenv.lib.optional spellChecking gtkspell3
-    ++ stdenv.lib.optionals gnomeSupport [ libsecret gcr ];
+    ++ lib.optional spellChecking gtkspell3
+    ++ lib.optionals gnomeSupport [ libsecret gcr ];
 
   configureFlags = [
     "--with-dbus"
     "--with-gtk3"
     "--with-gnutls"
     "--enable-libnotify"
-  ] ++ stdenv.lib.optional spellChecking "--with-gtkspell"
-    ++ stdenv.lib.optional gnomeSupport "--enable-gkr";
+  ] ++ lib.optional spellChecking "--with-gtkspell"
+    ++ lib.optional gnomeSupport "--enable-gkr";
 
   postInstall = ''
     wrapProgram $out/bin/pan --suffix PATH : ${gnupg}/bin

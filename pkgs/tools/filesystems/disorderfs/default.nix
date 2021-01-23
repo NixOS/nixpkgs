@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, fuse, attr, asciidoc }:
+{ lib, stdenv, fetchurl, pkg-config, fuse, attr, asciidoc }:
 
 stdenv.mkDerivation rec {
   pname = "disorderfs";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xlsl6cw1p0d92crknrcf4iabgig0185dzp80qxh9iyjy42d27gk";
   };
 
-  nativeBuildInputs = [ pkgconfig asciidoc ];
+  nativeBuildInputs = [ pkg-config asciidoc ];
 
   buildInputs = [ fuse attr ];
 

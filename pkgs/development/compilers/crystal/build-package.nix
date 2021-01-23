@@ -1,4 +1,4 @@
-{ stdenv, lib, crystal, shards, git, pkgconfig, which, linkFarm, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, crystal, shards, git, pkg-config, which, linkFarm, fetchFromGitHub, installShellFiles }:
 
 {
   # Some projects do not include a lock file, so you can pass one
@@ -61,7 +61,7 @@ stdenv.mkDerivation (mkDerivationArgs // {
   buildInputs = args.buildInputs or [ ] ++ [ crystal ]
     ++ lib.optional (format != "crystal") shards;
 
-  nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ git installShellFiles pkgconfig which ];
+  nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ git installShellFiles pkg-config which ];
 
   buildPhase = args.buildPhase or (lib.concatStringsSep "\n" ([
     "runHook preBuild"

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, fftw, hackrf, libusb1 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, fftw, hackrf, libusb1 }:
 
 stdenv.mkDerivation {
   name = "kalibrate-hackrf-unstable-20160827";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1jvn1qx7csgycxpx1k804sm9gk5a0c65z9gh8ybp9awq3pziv0nx";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ fftw hackrf libusb1 ];
 

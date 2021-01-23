@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, intltool, pkgconfig, networkmanager, strongswanNM
+{ lib, stdenv, fetchurl, intltool, pkg-config, networkmanager, strongswanNM
 , gtk3, gnome3, libsecret, libnma }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ networkmanager strongswanNM libsecret gtk3 libnma ];
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkg-config ];
 
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";

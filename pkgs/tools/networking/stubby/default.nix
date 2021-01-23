@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake libyaml ];
 
   buildInputs = [ doxygen getdns systemd ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
+    ++ lib.optionals stdenv.isDarwin [ darwin.Security ];
 
   meta = with lib; {
     description = "A local DNS Privacy stub resolver (using DNS-over-TLS)";

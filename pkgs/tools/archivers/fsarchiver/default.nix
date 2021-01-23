@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , zlib, bzip2, lzma, lzo, lz4, zstd, xz
 , libgcrypt, e2fsprogs, util-linux, libgpgerror }:
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig
+    autoreconfHook pkg-config
   ];
 
   buildInputs = [

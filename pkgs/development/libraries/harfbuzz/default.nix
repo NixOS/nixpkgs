@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, freetype, cairo, libintl
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, freetype, cairo, libintl
 , meson, ninja
 , gobject-introspection
 , icu, graphite2, harfbuzz # The icu variant uses and propagates the non-icu one.
@@ -12,7 +12,7 @@
 
 let
   version = "2.7.2";
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
 in
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   postPatch = ''
     patchShebangs src/*.py
     patchShebangs test
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # ApplicationServices.framework headers have cast-align warnings.
     substituteInPlace src/hb.hh \
       --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     ninja
     gobject-introspection
     libintl
-    pkgconfig
+    pkg-config
     python3
     gtk-doc
     docbook-xsl-nons
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [ glib freetype cairo ] # recommended by upstream
-    ++ stdenv.lib.optionals withCoreText [ ApplicationServices CoreText ];
+    ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
 
   propagatedBuildInputs = []
     ++ optional withGraphite2 graphite2
@@ -77,7 +77,7 @@ stdenv.mkDerivation {
     ''}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An OpenType text shaping engine";
     homepage = "https://harfbuzz.github.io/";
     maintainers = [ maintainers.eelco ];

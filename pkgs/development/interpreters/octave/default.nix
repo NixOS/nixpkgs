@@ -1,4 +1,5 @@
 { stdenv
+, lib
 # Note: either stdenv.mkDerivation or, for octaveFull, the qt-5 mkDerivation
 # with wrapQtAppsHook (comes from libsForQt5.callPackage)
 , mkDerivation
@@ -14,7 +15,7 @@
 , libX11
 , graphicsmagick
 , pcre
-, pkgconfig
+, pkg-config
 , libGL
 , libGLU
 , fltk
@@ -124,37 +125,37 @@ in mkDerivation rec {
     libwebp
     gl2ps
   ]
-  ++ stdenv.lib.optionals enableQt [
+  ++ lib.optionals enableQt [
     qtbase
     qtsvg
     qscintilla
   ]
-  ++ stdenv.lib.optionals (ghostscript != null) [ ghostscript ]
-  ++ stdenv.lib.optionals (hdf5 != null) [ hdf5 ]
-  ++ stdenv.lib.optionals (glpk != null) [ glpk ]
-  ++ stdenv.lib.optionals (suitesparse != null) [ suitesparse' ]
-  ++ stdenv.lib.optionals (enableJava) [ jdk ]
-  ++ stdenv.lib.optionals (sundials != null) [ sundials ]
-  ++ stdenv.lib.optionals (gnuplot != null) [ gnuplot ]
-  ++ stdenv.lib.optionals (python != null) [ python ]
-  ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [
+  ++ lib.optionals (ghostscript != null) [ ghostscript ]
+  ++ lib.optionals (hdf5 != null) [ hdf5 ]
+  ++ lib.optionals (glpk != null) [ glpk ]
+  ++ lib.optionals (suitesparse != null) [ suitesparse' ]
+  ++ lib.optionals (enableJava) [ jdk ]
+  ++ lib.optionals (sundials != null) [ sundials ]
+  ++ lib.optionals (gnuplot != null) [ gnuplot ]
+  ++ lib.optionals (python != null) [ python ]
+  ++ lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ]
+  ++ lib.optionals stdenv.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.Accelerate
     darwin.apple_sdk.frameworks.Cocoa
   ]
   ;
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gfortran
     # Listed here as well because it's outputs are split
     fftw
     fftwSinglePrec
     texinfo
   ]
-  ++ stdenv.lib.optionals (sundials != null) [ sundials ]
-  ++ stdenv.lib.optionals enableJIT [ llvm ]
-  ++ stdenv.lib.optionals enableQt [
+  ++ lib.optionals (sundials != null) [ sundials ]
+  ++ lib.optionals enableJIT [ llvm ]
+  ++ lib.optionals enableQt [
     qtscript
     qttools
   ]
@@ -172,11 +173,11 @@ in mkDerivation rec {
     "--with-lapack=lapack"
     (if use64BitIdx then "--enable-64" else "--disable-64")
   ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "--enable-link-all-dependencies" ]
-    ++ stdenv.lib.optionals enableReadline [ "--enable-readline" ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "--with-x=no" ]
-    ++ stdenv.lib.optionals enableQt [ "--with-qt=5" ]
-    ++ stdenv.lib.optionals enableJIT [ "--enable-jit" ]
+    ++ lib.optionals stdenv.isDarwin [ "--enable-link-all-dependencies" ]
+    ++ lib.optionals enableReadline [ "--enable-readline" ]
+    ++ lib.optionals stdenv.isDarwin [ "--with-x=no" ]
+    ++ lib.optionals enableQt [ "--with-qt=5" ]
+    ++ lib.optionals enableJIT [ "--enable-jit" ]
   ;
 
   # Keep a copy of the octave tests detailed results in the output
@@ -198,13 +199,13 @@ in mkDerivation rec {
 
   meta = {
     homepage = "https://www.gnu.org/software/octave/";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ raskin doronbehar ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ raskin doronbehar ];
     description = "Scientific Pragramming Language";
     # https://savannah.gnu.org/bugs/?func=detailitem&item_id=56425 is the best attempt to fix JIT
     broken = enableJIT;
     platforms = if overridePlatforms == null then
-      (with stdenv.lib; platforms.linux ++ platforms.darwin)
+      (lib.platforms.linux ++ lib.platforms.darwin)
     else overridePlatforms;
   };
 }

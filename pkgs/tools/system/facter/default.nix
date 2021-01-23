@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isGNU "-fpermissive -Wno-error=catch-value";
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lblkid";
+  CXXFLAGS = lib.optionalString stdenv.cc.isGNU "-fpermissive -Wno-error=catch-value";
+  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lblkid";
 
   cmakeFlags = [
     "-DFACTER_RUBY=${ruby}/lib/libruby${stdenv.hostPlatform.extensions.sharedLibrary}"

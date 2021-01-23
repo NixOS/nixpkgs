@@ -4,7 +4,7 @@ let
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if !lib.versionAtLeast ocaml.version "4.02"
 then throw "xmlm is not available for OCaml ${ocaml.version}"
 else
 

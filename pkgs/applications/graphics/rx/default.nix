@@ -1,9 +1,9 @@
-{ stdenv, rustPlatform, fetchFromGitHub, makeWrapper
+{ lib, stdenv, rustPlatform, fetchFromGitHub, makeWrapper
 , cmake, pkg-config
 , xorg ? null
 , libGL ? null }:
 
-with stdenv.lib;
+with lib;
 
 rustPlatform.buildRustPackage rec {
   pname = "rx";

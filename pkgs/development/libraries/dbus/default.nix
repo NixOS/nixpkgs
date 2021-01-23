@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, pkgconfig
+, pkg-config
 , expat
 , enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
 , systemd
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "lib" "doc" "man" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     docbook_xml_dtd_44
     docbook-xsl-nons
     xmlto
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     daemon = dbus.out;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple interprocess messaging system";
     homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
     license = licenses.gpl2Plus; # most is also under AFL-2.1

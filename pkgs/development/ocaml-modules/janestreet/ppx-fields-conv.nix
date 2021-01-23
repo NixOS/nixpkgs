@@ -1,4 +1,4 @@
-{lib, stdenv, buildOcamlJane,
+{lib, buildOcamlJane,
  ppx_core, ppx_tools, ppx_type_conv}:
 
 buildOcamlJane {

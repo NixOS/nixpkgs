@@ -1,8 +1,8 @@
-{ buildGoPackage, fetchFromGitHub, libusb1, pkgconfig, lib, stdenv, libiconv }:
+{ buildGoPackage, fetchFromGitHub, libusb1, pkg-config, lib, stdenv, libiconv }:
 
 buildGoPackage rec {
   pname = "aws-okta";
-  version = "1.0.8";
+  version = "1.0.11";
 
   goPackagePath = "github.com/segmentio/aws-okta";
 
@@ -10,14 +10,14 @@ buildGoPackage rec {
     owner = "segmentio";
     repo = "aws-okta";
     rev = "v${version}";
-    sha256 = "14bg9rdfxkpw00phc8faz4ghiyb0j7a9qai74lidrzplzl139bzf";
+    sha256 = "sha256-1cprKpIFgM3+lUEHNvda34nJTH4Ch3LtTRq/Dp6QBQ8=";
   };
 
   buildFlags = [ "--tags" "release" ];
 
   buildFlagsArray = [ "-ldflags=-X main.Version=${version}" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1  libiconv ];
 
   meta = with lib; {

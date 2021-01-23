@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, makeWrapper, pkgconfig
+{ mkDerivation, lib, fetchFromGitHub, makeWrapper, pkg-config
 , boost, libtorrent-rasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false
 , guiSupport ? true, dbus ? null # GUI (disable to run headless)
@@ -22,7 +22,7 @@ mkDerivation rec {
   };
 
   # NOTE: 2018-05-31: CMake is working but it is not officially supported
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
 
   buildInputs = [ boost libtorrent-rasterbar qtbase qttools qtsvg ]
     ++ optional guiSupport dbus # D(esktop)-Bus depends on GUI support

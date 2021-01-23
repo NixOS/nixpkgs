@@ -6,7 +6,7 @@
 , withDocs ? false, texinfo ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert interactive -> readline70 != null;
 assert withDocs -> texinfo != null;

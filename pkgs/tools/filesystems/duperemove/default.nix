@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, libgcrypt
-, pkgconfig, glib, linuxHeaders ? stdenv.cc.libc.linuxHeaders, sqlite }:
+, pkg-config, glib, linuxHeaders ? stdenv.cc.libc.linuxHeaders, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "duperemove";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1a87mka2sfzhbch2jip6wlvvs0glxq9lqwmyrp359d1rmwwmqiw9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libgcrypt glib linuxHeaders sqlite ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

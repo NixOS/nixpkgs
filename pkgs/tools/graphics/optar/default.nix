@@ -18,7 +18,7 @@ stdenv.mkDerivation {
       --replace /usr/local $out
 
     substituteInPlace pgm2ps \
-      --replace 'convert ' "${stdenv.lib.getBin imagemagick}/bin/convert "
+      --replace 'convert ' "${lib.getBin imagemagick}/bin/convert "
   '';
 
   preInstall = ''

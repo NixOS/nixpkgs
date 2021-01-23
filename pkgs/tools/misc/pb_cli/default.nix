@@ -18,16 +18,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
-  liveDeps = [ jq curl ] ++ stdenv.lib.optional screenshots maim
-                         ++ stdenv.lib.optional video capture
-                         ++ stdenv.lib.optional clipboard xclip;
+  liveDeps = [ jq curl ] ++ lib.optional screenshots maim
+                         ++ lib.optional video capture
+                         ++ lib.optional clipboard xclip;
 
   installPhase = ''
     install -Dm755 src/pb.sh $out/bin/pb
 
     patchShebangs $out/bin/pb
     wrapProgram $out/bin/pb \
-      --prefix PATH : '${stdenv.lib.makeBinPath liveDeps}'
+      --prefix PATH : '${lib.makeBinPath liveDeps}'
   '';
 
   meta = with lib; {

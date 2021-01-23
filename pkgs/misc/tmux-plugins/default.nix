@@ -88,9 +88,9 @@ in rec {
         computer or server restarts, if the machine is on, tmux will be there how
         you left it off the last time it was used.
       '';
-      license = stdenv.lib.licenses.mit;
-      platforms = stdenv.lib.platforms.unix;
-      maintainers = with stdenv.lib.maintainers; [ ronanmacf ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ronanmacf ];
     };
   };
 
@@ -325,6 +325,18 @@ in rec {
     '';
   };
 
+  power-theme = mkDerivation {
+    pluginName = "power";
+    rtpFilePath = "tmux-power.tmux";
+    version = "unstable-2020-11-18";
+    src = pkgs.fetchFromGitHub {
+      owner = "wfxr";
+      repo = "tmux-power";
+      rev = "aec44aa5e00cc39eb71c668b1d73823270058e7d";
+      sha256 = "11nm8cylx10d565g17acy0bj12n6dcbxp71zca2bmg0j1dq859cm";
+    };
+  };
+
   prefix-highlight = mkDerivation {
     pluginName = "prefix-highlight";
     version = "unstable-2020-03-26";
@@ -367,9 +379,9 @@ in rec {
           * restoring vim and neovim sessions
           * restoring pane contents
       '';
-      license = stdenv.lib.licenses.mit;
-      platforms = stdenv.lib.platforms.unix;
-      maintainers = with stdenv.lib.maintainers; [ ronanmacf ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ronanmacf ];
     };
   };
 
@@ -452,11 +464,12 @@ in rec {
 
   tmux-fzf = mkDerivation {
     pluginName = "tmux-fzf";
-    version = "unstable-2020-11-23";
+    rtpFilePath = "main.tmux";
+    version = "unstable-2020-12-07";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
-      rev = "312685b2a7747b61f1f4a96bd807819f1450479d";
+      rev = "5efeb91086040a3becf5372fb38258acd0579954";
       sha256 = "1z0zmsf8asxs9wbwvkiyd81h93wb2ikl8nxxc26sdpi6l333q5s9";
     };
     postInstall = ''
@@ -479,9 +492,9 @@ in rec {
         * User menu.
         * Popup window support.
       '';
-      license = stdenv.lib.licenses.mit;
-      platforms = stdenv.lib.platforms.unix;
-      maintainers = with stdenv.lib.maintainers; [ kyleondy ];
+      license = lib.licenses.mit;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ kyleondy ];
     };
   };
 

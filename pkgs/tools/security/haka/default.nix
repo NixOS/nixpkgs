@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, swig, wireshark, check, rsync, libpcap, gawk, libedit, pcre }:
+{ lib, stdenv, fetchurl, cmake, swig, wireshark, check, rsync, libpcap, gawk, libedit, pcre }:
 
 let version = "0.3.0"; in
 
@@ -27,8 +27,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A collection of tools that allows capturing TCP/IP packets and filtering them based on Lua policy files";
     homepage = "http://www.haka-security.org/";
-    license = stdenv.lib.licenses.mpl20;
-    maintainers = [ stdenv.lib.maintainers.tvestelind ];
+    license = lib.licenses.mpl20;
+    maintainers = [ lib.maintainers.tvestelind ];
     platforms = [ "x86_64-linux" "i686-linux" ]; # fails on aarch64
   };
 }

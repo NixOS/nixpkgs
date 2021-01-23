@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, perl
+{ stdenv, lib, fetchurl, pkg-config, perl
 , http2Support ? true, nghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkg-config perl ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
-  propagatedBuildInputs = with stdenv.lib;
+  propagatedBuildInputs = with lib;
     optional http2Support nghttp2 ++
     optional idnSupport libidn ++
     optional ldapSupport openldap ++
@@ -90,13 +90,13 @@ stdenv.mkDerivation rec {
       ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
       ( if brotliSupport then "--with-brotli" else "--without-brotli" )
     ]
-    ++ stdenv.lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
-    ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${libkrb5.dev}"
+    ++ lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
+    ++ lib.optional c-aresSupport "--enable-ares=${c-ares}"
+    ++ lib.optional gssSupport "--with-gssapi=${libkrb5.dev}"
        # For the 'urandom', maybe it should be a cross-system option
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "--with-random=/dev/urandom"
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isWindows [
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--disable-shared"
       "--enable-static"
     ];
@@ -111,9 +111,9 @@ stdenv.mkDerivation rec {
 
     # Install completions
     make -C scripts install
-  '' + stdenv.lib.optionalString scpSupport ''
+  '' + lib.optionalString scpSupport ''
     sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
-  '' + stdenv.lib.optionalString gnutlsSupport ''
+  '' + lib.optionalString gnutlsSupport ''
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4.4.0

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libGLU, libGL, glew, pkgconfig, openalSoft, freealut, wxGTK, libogg
+{ lib, stdenv, fetchurl, libGLU, libGL, glew, pkg-config, openalSoft, freealut, wxGTK, libogg
 , freetype, libvorbis, fftwSinglePrec, SDL, SDL_net, expat, libjpeg, libpng }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
       SDL SDL_net expat libjpeg libpng fftwSinglePrec
     ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   patches = [
     ./file-existence.patch

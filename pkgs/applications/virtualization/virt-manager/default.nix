@@ -7,7 +7,7 @@
 , cpio, e2fsprogs, findutils, gzip
 }:
 
-with stdenv.lib;
+with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "virt-manager";

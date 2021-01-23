@@ -4,10 +4,10 @@ let
   pname = "cmdliner";
 in
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01.0";
+assert lib.versionAtLeast ocaml.version "4.01.0";
 
 let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.03" then {
+  if lib.versionAtLeast ocaml.version "4.03" then {
     version = "1.0.4";
     sha256 = "1h04q0zkasd0mw64ggh4y58lgzkhg6yhzy60lab8k8zq9ba96ajw";
   } else {

@@ -8,7 +8,7 @@
 , grpc
 , protobuf
 , openssl
-, pkgconfig
+, pkg-config
 , c-ares
 , abseil-cpp
 , libGL
@@ -51,7 +51,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     clang
-    pkgconfig
+    pkg-config
     qmake
     qttools
   ];

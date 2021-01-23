@@ -1,5 +1,5 @@
-{ stdenv, fetchurl
-, imake, gccmakedep, bison, flex, pkgconfig
+{ lib, stdenv, fetchurl
+, imake, gccmakedep, bison, flex, pkg-config
 , xlibsWrapper, libXmu, libXpm, libXp }:
 
 stdenv.mkDerivation {
@@ -9,13 +9,13 @@ stdenv.mkDerivation {
     sha256 = "0i653s8g25cc0mimkwid9366bqkbyhdyjhckx7bw77j20hzrkfid";
   };
   dontUseImakeConfigure = true;
-  nativeBuildInputs = [ pkgconfig bison flex imake gccmakedep ];
+  nativeBuildInputs = [ pkg-config bison flex imake gccmakedep ];
   buildInputs = [ libXpm libXp ];
   propagatedBuildInputs = [ xlibsWrapper libXmu ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "3D widget set based on the Athena Widget set";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
     license = licenses.mit;
   };
 }

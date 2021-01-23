@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, curl, libzip, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, curl, libzip, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "tldr";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ curl libzip ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   makeFlags = ["CC=cc" "LD=cc" "CFLAGS="];
 

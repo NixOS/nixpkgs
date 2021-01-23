@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, pkg-config, wrapGAppsHook
 , help2man, luafilesystem, luajit, sqlite
 , webkitgtk, gtk3, gst_all_1, glib-networking
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig help2man wrapGAppsHook
+    pkg-config help2man wrapGAppsHook
   ];
 
   buildInputs = [

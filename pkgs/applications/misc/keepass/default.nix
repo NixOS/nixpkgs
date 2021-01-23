@@ -69,7 +69,7 @@ with builtins; buildDotnetPackage rec {
     desktopName = "Keepass";
     genericName = "Password manager";
     categories = "Utility;";
-    mimeType = stdenv.lib.concatStringsSep ";" [
+    mimeType = lib.concatStringsSep ";" [
       "application/x-keepass2"
       ""
     ];
@@ -85,7 +85,7 @@ with builtins; buildDotnetPackage rec {
   # is found and does not pollute output path.
   binPaths = lib.concatStrings (lib.intersperse ":" (map (x: x + "/bin") plugins));
 
-  dynlibPath = stdenv.lib.makeLibraryPath [ gtk2 ];
+  dynlibPath = lib.makeLibraryPath [ gtk2 ];
 
   postInstall =
   let
@@ -111,8 +111,8 @@ with builtins; buildDotnetPackage rec {
   meta = {
     description = "GUI password manager with strong cryptography";
     homepage = "http://www.keepass.info/";
-    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz jraygauthier ];
-    platforms = with stdenv.lib.platforms; all;
-    license = stdenv.lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ amorsillo obadz jraygauthier ];
+    platforms = with lib.platforms; all;
+    license = lib.licenses.gpl2;
   };
 }

@@ -1,5 +1,5 @@
 { lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, substituteAll, graphviz
-, pkgconfig, doctest-ignore-unicode, mock, nose }:
+, pkg-config, doctest-ignore-unicode, mock, nose }:
 
 buildPythonPackage rec {
   pname = "pygraphviz";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ graphviz ];
   checkInputs = [ doctest-ignore-unicode mock nose ];
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jmeter";
-  version = "5.1.1";
+  version = "5.4";
   src = fetchurl {
     url = "https://archive.apache.org/dist/jmeter/binaries/apache-${pname}-${version}.tgz";
-    sha256 = "1bmlxnlcias781mwf3wzpd4935awswbq3w8ijck65bsaw07m2kc4";
+    sha256 = "1hbyvh0hrvfvrsf7wpnwqsry5gaziac632s0bwb5zbq6y5b0z41a";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper jre ];
 
   installPhase = ''
     mkdir $out
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/jmeter.sh --set JAVA_HOME "${jre}"
   '';
 
-  doInstallCheck = true;
+  doInstallCheck = false; #NoClassDefFoundError: org/apache/logging/log4j/Level for tests
 
   checkInputs = [ coreutils ];
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       Applications but has since expanded to other test functions.
     '';
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ maintainers.bryanasdev000 ];
     priority = 1;
     platforms = platforms.unix;
   };

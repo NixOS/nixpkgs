@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub , alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk, pcre
-, libjack2, libsndfile, libXdmcp, readline, lv2, libGLU, libGL, minixml, pkgconfig, zlib, xorg
+, libjack2, libsndfile, libXdmcp, readline, lv2, libGLU, libGL, minixml, pkg-config, zlib, xorg
 }:
 
 assert stdenv ? glibc;
@@ -20,7 +20,7 @@ stdenv.mkDerivation  rec {
     minixml zlib xorg.libpthreadstubs pcre
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   patchPhase = ''
     substituteInPlace src/Misc/Config.cpp --replace /usr $out

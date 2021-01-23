@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bash, autoconf, automake, libtool, pkgconfig, libcangjie
+{ lib, stdenv, fetchurl, bash, autoconf, automake, libtool, pkg-config, libcangjie
 , sqlite, buildPythonPackage, cython
 }:
 
@@ -14,7 +14,7 @@ in buildPythonPackage {
     sha256 = "12yi09nyffmn4va7lzk4irw349qzlbxgsnb89dh15cnw0xmrin05";
   };
 
-  nativeBuildInputs = [ pkgconfig libtool autoconf automake cython ];
+  nativeBuildInputs = [ pkg-config libtool autoconf automake cython ];
   buildInputs = [ libcangjie sqlite ];
 
   preConfigure = ''

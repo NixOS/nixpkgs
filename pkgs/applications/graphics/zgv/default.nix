@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, SDL, SDL_image, libjpeg, libpng, libtiff }:
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, SDL, SDL_image, libjpeg, libpng, libtiff }:
 
 stdenv.mkDerivation rec {
   pname = "zgv";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fk4i9x0cpnpn3llam0zy2pkmhlr2hy3iaxhxg07v9sizd4dircj";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL SDL_image libjpeg libpng libtiff ];
 
   hardeningDisable = [ "format" ];

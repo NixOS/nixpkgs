@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "ytalk";
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage    = "http://ytalk.ourproject.org";
     description = "A terminal based talk client";
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ taeer ];
-    license     = stdenv.lib.licenses.gpl2Plus;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ taeer ];
+    license     = lib.licenses.gpl2Plus;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, fluidsynth, libjack2, autoconf, pkgconfig
+{ lib, stdenv, fetchurl, alsaLib, fluidsynth, libjack2, autoconf, pkg-config
 , mkDerivation, qtbase, qttools, qtx11extras
 }:
 
@@ -11,7 +11,7 @@ mkDerivation  rec {
     sha256 = "0xiqmpzpxjvh32vivfj6h33w0ahmyfjzjb41b6fnf92bbg9k6mqv";
   };
 
-  nativeBuildInputs = [ autoconf pkgconfig ];
+  nativeBuildInputs = [ autoconf pkg-config ];
 
   buildInputs = [ alsaLib fluidsynth libjack2 qtbase qttools qtx11extras ];
 

@@ -15,7 +15,7 @@ let
   };
 
   common = pname: {version, sha256, beta ? null}:
-      let fullVersion = version + stdenv.lib.optionalString (beta != null) "-beta${toString beta}";
+      let fullVersion = version + lib.optionalString (beta != null) "-beta${toString beta}";
       name = "${pname}-${fullVersion}";
   in stdenv.mkDerivation {
     inherit name;
@@ -89,4 +89,4 @@ let
       platforms = platforms.x86_64;
     };
   };
-in stdenv.lib.mapAttrs common versions
+in lib.mapAttrs common versions

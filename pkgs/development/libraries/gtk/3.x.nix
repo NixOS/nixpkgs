@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , gettext
 , docbook_xsl
 , docbook_xml_dtd_43
@@ -48,7 +48,7 @@
 
 assert cupsSupport -> cups != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
     sha256 = "12ipk1d376bai9v820qzhxba93kkh5abi6mhyqr4hwjvqmkl77fc";
   };
 
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     sassc
   ] ++ setupHooks ++ optionals withGtkDoc [

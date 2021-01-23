@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, pkgconfig, cmake
+{ lib, mkDerivation, fetchFromGitHub, pkg-config, cmake
 , libzip, boost, fftw, qtbase, libusb1, libsigrok4dsl
 , libsigrokdecode4dsl, python3, fetchpatch
 }:
@@ -27,7 +27,7 @@ mkDerivation rec {
     ./qt515.patch
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     boost fftw qtbase libusb1 libzip libsigrokdecode4dsl libsigrok4dsl

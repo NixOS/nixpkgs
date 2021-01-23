@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, libcap, readline, texinfo, nss, nspr
+{ lib, stdenv, fetchurl, pkg-config, libcap, readline, texinfo, nss, nspr
 , libseccomp, pps-tools, gnutls }:
 
 assert stdenv.isLinux -> libcap != null;
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ readline texinfo nss nspr gnutls ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libcap libseccomp pps-tools ];
-  nativeBuildInputs = [ pkgconfig ];
+    ++ lib.optionals stdenv.isLinux [ libcap libseccomp pps-tools ];
+  nativeBuildInputs = [ pkg-config ];
 
   hardeningEnable = [ "pie" ];
 
   configureFlags = [ "--chronyvardir=$(out)/var/lib/chrony" ]
-    ++ stdenv.lib.optional stdenv.isLinux "--enable-scfilter";
+    ++ lib.optional stdenv.isLinux "--enable-scfilter";
 
   meta = with lib; {
     description = "Sets your computer's clock from time servers on the Net";

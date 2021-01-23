@@ -5,7 +5,7 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{ fetchurl, stdenv, lua, unzip, pkgconfig
+{ fetchurl, stdenv, lua, unzip, pkg-config
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
 , autoreconfHook, gnum4
 , mysql, postgresql, cyrus_sasl
@@ -108,7 +108,7 @@ with self; {
       sha256 = "1hvwslc25q7k82rxk461zr1a2041nxg7sn3sw3w0y5jxf0giz2pz";
     };
 
-    nativeBuildInputs = [ which pkgconfig ];
+    nativeBuildInputs = [ which pkg-config ];
 
     postPatch = ''
       patchShebangs .

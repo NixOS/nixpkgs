@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "ASOUND_STATE_DIR=$(TMPDIR)/dummy" ];
 
   postFixup = ''
-    wrapProgram $out/bin/alsa-info.sh --prefix PATH : "${stdenv.lib.makeBinPath [ which pciutils ]}"
+    wrapProgram $out/bin/alsa-info.sh --prefix PATH : "${lib.makeBinPath [ which pciutils ]}"
   '';
 
   meta = with lib; {

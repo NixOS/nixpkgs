@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gusb
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gtk-doc
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://fprint.freedesktop.org/";
     description = "A library designed to make it easy to add support for consumer fingerprint readers";
     license = licenses.lgpl21;

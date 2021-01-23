@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, meson, ninja, pkgconfig, python3
+{ lib, stdenv, fetchurl, cmake, meson, ninja, pkg-config, python3
 , libGLU, epoxy, libX11, libdrm, mesa
 }:
 
@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libGLU epoxy libX11 libdrm mesa ];
 
-  nativeBuildInputs = [ cmake meson ninja pkgconfig python3 ];
+  nativeBuildInputs = [ cmake meson ninja pkg-config python3 ];
 
   dontUseCmakeConfigure = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A virtual 3D GPU library that allows a qemu guest to use the host GPU for accelerated 3D rendering";
     homepage = "https://virgil3d.github.io/";
     license = licenses.mit;

@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
 , libxml2
 , glib
 , gtk3
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1pdb4gbjrs8mk6r0ipw5vxyvzav1wvkjq46kiq53r3nyznfpdfyw";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     vala
     gobject-introspection
     libxml2
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    # required for pkgconfig
+    # required for pkg-config
     enchant2
   ];
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A spell-checking library for GTK applications";
     homepage = "https://wiki.gnome.org/Projects/gspell";
     license = licenses.lgpl21Plus;

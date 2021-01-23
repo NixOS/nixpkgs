@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
       --replace 'Command::new("nmap")' 'Command::new("${nmap}/bin/nmap")'
   '';
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   checkFlags = [
     "--skip=infer_ulimit_lowering_no_panic"

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , mkDerivation
 , fetchurl
 , autoPatchelfHook
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
 
-  postUnpack = stdenv.lib.optionalString (version == "11.1.0.9505") ''
+  postUnpack = lib.optionalString (version == "11.1.0.9505") ''
     # distribution is missing libjsapiservice.so, so we should not let
     # autoPatchelfHook fail on the following dead libraries
     rm opt/kingsoft/wps-office/office6/{libjsetapi.so,libjswppapi.so,libjswpsapi.so}
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
     homepage = "http://wps-community.org/";
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    maintainers = with stdenv.lib.maintainers; [ mlatus th0rgal ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ mlatus th0rgal ];
   };
 
   buildInputs = with xorg; [
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  runtimeLibPath = stdenv.lib.makeLibraryPath [
+  runtimeLibPath = lib.makeLibraryPath [
     cups.lib
   ];
 

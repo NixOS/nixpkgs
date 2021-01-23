@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nix-update-script, pantheon, pkgconfig, meson, ninja, python3, vala
+{ lib, stdenv, fetchFromGitHub, nix-update-script, pantheon, pkg-config, meson, ninja, python3, vala
 , gtk3, libgee, libsoup, libsecret, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     wrapGAppsHook
   ];

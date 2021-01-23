@@ -6,7 +6,7 @@
 , pango, systemd }:
 
 let gitterDirectorySuffix = "opt/gitter";
-   libPath = stdenv.lib.makeLibraryPath [
+   libPath = lib.makeLibraryPath [
      alsaLib
      atk
      at-spi2-core

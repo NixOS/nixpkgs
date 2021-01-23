@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, intltool, pkgconfig, dbus-glib
+{ lib, stdenv, fetchurl, intltool, pkg-config, dbus-glib
 , udev, libnl, libuuid, gnutls, dhcp
 , libgcrypt, perl, libgudev, avahi, ppp, kmod }:
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ dbus-glib ];
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkg-config ];
 
   patches =
     [ ./libnl-3.2.25.patch

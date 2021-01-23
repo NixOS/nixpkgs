@@ -158,9 +158,9 @@ in stdenv.mkDerivation {
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
-    libPath = stdenv.lib.makeLibraryPath [ libva pipewire_0_2 ];
+    libPath = lib.makeLibraryPath [ libva pipewire_0_2 ];
 
-  in with stdenv.lib; ''
+  in with lib; ''
     mkdir -p "$out/bin"
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \

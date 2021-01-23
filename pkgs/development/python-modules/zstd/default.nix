@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgconfig, fetchPypi, buildPythonPackage
+{ lib, stdenv, pkg-config, fetchPypi, buildPythonPackage
 , buildPackages
 , zstd, pytest }:
 
@@ -13,10 +13,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "/usr/bin/pkg-config" "${buildPackages.pkgconfig}/bin/${buildPackages.pkgconfig.targetPrefix}pkg-config"
+      --replace "/usr/bin/pkg-config" "${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zstd ];
 
   setupPyBuildFlags = [

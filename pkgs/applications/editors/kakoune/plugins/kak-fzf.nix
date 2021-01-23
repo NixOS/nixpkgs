@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fzf }:
+{ lib, stdenv, fetchFromGitHub, fzf }:
 
-assert stdenv.lib.asserts.assertOneOf "fzf" fzf.pname [ "fzf" "skim" ];
+assert lib.asserts.assertOneOf "fzf" fzf.pname [ "fzf" "skim" ];
 
 stdenv.mkDerivation {
   name = "kak-fzf";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     cp -r rc $out/share/kak/autoload/plugins/fzf
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
   { description = "Kakoune plugin that brings integration with fzf";
     homepage = "https://github.com/andreyorst/fzf.kak";
     license = licenses.mit;

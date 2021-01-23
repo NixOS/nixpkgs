@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, makeWrapper, wrapGAppsHook
 
 # Buildtime dependencies.
-, check, pkgconfig, xxd
+, check, pkg-config, xxd
 
 # Runtime dependencies.
 , curl, expat, libXcursor, libXrandr, libidn, libjpeg, libpng, libwebp, libxml2
@@ -22,7 +22,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 in
 stdenv.mkDerivation rec {
   pname = "netsurf";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     perl
     perlPackages.HTMLParser
-    pkgconfig
+    pkg-config
     xxd
   ]
   ++ optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook

@@ -6,7 +6,7 @@ in stdenv.mkDerivation rec {
   pname = "gurobi";
   version = "${majorVersion}.0";
 
-  src = with stdenv.lib; fetchurl {
+  src = with lib; fetchurl {
     url = "http://packages.gurobi.com/${versions.majorMinor version}/gurobi${version}_linux64.tar.gz";
     sha256 = "1yjqbzqnq4jjkjm616d36bgd3rmqr0a1ii17n0prpdjzmdlq63dz";
   };

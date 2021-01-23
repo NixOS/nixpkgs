@@ -1,4 +1,4 @@
-{ fetchurl, stdenv
+{ fetchurl, lib, stdenv
 
 # Optional dependencies
 , bzip2 ? null }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./darwin-rpath-universal.patch ];
 
-  configureFlags = stdenv.lib.optional (bzip2 != null) "--with-bzip2=${bzip2.out}";
+  configureFlags = lib.optional (bzip2 != null) "--with-bzip2=${bzip2.out}";
 
   hardeningDisable = [ "format" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   postPatch = '' sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
    '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://heasarc.gsfc.nasa.gov/fitsio/";
     description = "Library for reading and writing FITS data files";
     longDescription =

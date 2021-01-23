@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkgconfig, fuse, libuuid, lz4 }:
+{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, fuse, libuuid, lz4 }:
 
 stdenv.mkDerivation rec {
   pname = "erofs-utils";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "07hvijq2hsn3gg1kb8abrfk23n83j57yx8kyv4wqgwhhvd30myjc";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig fuse libuuid lz4 ];
+  buildInputs = [ autoreconfHook pkg-config fuse libuuid lz4 ];
 
   configureFlags = [ "--enable-fuse" ];
 

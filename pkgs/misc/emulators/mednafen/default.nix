@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, freeglut, libGLU, libGL, libcdio, libjack2
+{ lib, stdenv, fetchurl, pkg-config, freeglut, libGLU, libGL, libcdio, libjack2
 , libsamplerate, libsndfile, libX11, SDL2, SDL2_net, zlib, alsaLib }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1x7xhxjhwsdbak8l0iyb497f043xkhibk73w96xck4j2bk10fac4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     freeglut

@@ -4,7 +4,7 @@
 , isPy27
 , numpy
 , ffmpeg
-, pkgconfig
+, pkg-config
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   checkInputs = [ numpy ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ffmpeg ];
 
   # Tests require downloading files from internet

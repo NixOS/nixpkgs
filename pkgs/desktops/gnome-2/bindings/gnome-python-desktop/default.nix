@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gnome_python, librsvg, libwnck, libgtop, pkgconfig, python2, gtk2 }:
+{ lib, stdenv, fetchurl, gnome_python, librsvg, libwnck, libgtop, pkg-config, python2, gtk2 }:
 
 let
   inherit (python2.pkgs) python pygtk;
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1s8f9rns9v7qlwjv9qh9lr8crp88dpzfm45hj47zc3ivpy0dbnq9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 librsvg libwnck libgtop python ];
   propagatedBuildInputs = [ gnome_python pygtk ];
 

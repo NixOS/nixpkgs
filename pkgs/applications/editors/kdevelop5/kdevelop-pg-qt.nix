@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, pkgconfig, extra-cmake-modules, qtbase }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, extra-cmake-modules, qtbase }:
 
 let
   pname = "kdevelop-pg-qt";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ay6m6j6zgrbcm48f14bass83bk4w5qnx76xihc05p69i9w32ff1";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig extra-cmake-modules ];
+  nativeBuildInputs = [ cmake pkg-config extra-cmake-modules ];
 
   buildInputs = [ qtbase ];
 
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
       It is used for some KDevelop-languagesupport-plugins (Ruby, PHP, CSS...).
     '';
     homepage = "https://www.kdevelop.org";
-    license = with stdenv.lib.licenses; [ lgpl2Plus ];
+    license = with lib.licenses; [ lgpl2Plus ];
   };
 }

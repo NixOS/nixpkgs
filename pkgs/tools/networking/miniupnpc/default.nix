@@ -11,9 +11,9 @@ let
         inherit sha256;
       };
 
-      nativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ which cctools ];
+      nativeBuildInputs = lib.optionals stdenv.isDarwin [ which cctools ];
 
-      patches = stdenv.lib.optional stdenv.isFreeBSD ./freebsd.patch;
+      patches = lib.optional stdenv.isFreeBSD ./freebsd.patch;
 
       doCheck = !stdenv.isFreeBSD;
 

@@ -4,7 +4,7 @@
 , bash-completion
 , glib
 , polkit
-, pkgconfig
+, pkg-config
 , gettext
 , gusb
 , lcms2
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     shared-mime-info
     vala
     wrapGAppsHook

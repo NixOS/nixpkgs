@@ -1,9 +1,9 @@
-{ stdenv, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
+{ lib, stdenv, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
 , gtk3, gsettings-desktop-schemas, sweethome3dApp }:
 
 let
 
-  sweetExec = with stdenv.lib;
+  sweetExec = with lib;
     m: "sweethome3d-"
     + removeSuffix "libraryeditor" (toLower m)
     + "-editor";
@@ -50,13 +50,13 @@ let
       homepage = "http://www.sweethome3d.com/index.jsp";
       inherit description;
       inherit license;
-      maintainers = [ stdenv.lib.maintainers.edwtjo ];
-      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ lib.maintainers.edwtjo ];
+      platforms = lib.platforms.linux;
     };
 
   };
 
-  d2u = stdenv.lib.replaceChars ["."] ["_"];
+  d2u = lib.replaceChars ["."] ["_"];
 
 in {
 
@@ -65,7 +65,7 @@ in {
     module = "TexturesLibraryEditor";
     pname = module;
     description = "Easily create SH3T files and edit the properties of the texture images it contain";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     src = fetchcvs {
       cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
       sha256 = "15wxdns3hc8yq362x0rj53bcxran2iynxznfcb9js85psd94zq7h";
@@ -80,7 +80,7 @@ in {
     module = "FurnitureLibraryEditor";
     pname = module;
     description = "Quickly create SH3F files and edit the properties of the 3D models it contain";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     src = fetchcvs {
       cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
       sha256 = "0rr4nqil1mngak3ds5vz7f1whrgcgzpk6fb0qcr5ljms0jx0ylvs";

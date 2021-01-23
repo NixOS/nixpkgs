@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ncurses, zlib, bzip2, sqlite, pkgconfig, glib, gnutls }:
+{ lib, stdenv, fetchurl, ncurses, zlib, bzip2, sqlite, pkg-config, glib, gnutls }:
 
 stdenv.mkDerivation rec {
   pname = "ncdc";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bdgqd07f026qk6vpbxqsin536znd33931m3b4z44prlm9wd6pyi";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses zlib bzip2 sqlite glib gnutls ];
 
   meta = with lib; {

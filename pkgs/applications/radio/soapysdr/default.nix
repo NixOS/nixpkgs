@@ -1,6 +1,6 @@
 { stdenv, lib, lndir, makeWrapper
 , fetchFromGitHub, cmake
-, libusb-compat-0_1, pkgconfig
+, libusb-compat-0_1, pkg-config
 , usePython ? false
 , python, ncurses, swig2
 , extraPackages ? []
@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
     sha256 = "102wnpjxrwba20pzdh1vvx0yg1h8vqd8z914idxflg9p14r6v5am";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
   buildInputs = [ libusb-compat-0_1 ncurses ]
     ++ lib.optionals usePython [ python swig2 ];
 

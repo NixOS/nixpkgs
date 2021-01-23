@@ -1,7 +1,7 @@
 {lib, stdenv, fetchurl, ocaml, findlib, camlp4}:
 
-if !stdenv.lib.versionAtLeast ocaml.version "3.12"
-|| stdenv.lib.versionAtLeast ocaml.version "4.03"
+if !lib.versionAtLeast ocaml.version "3.12"
+|| lib.versionAtLeast ocaml.version "4.03"
 then throw "type_conv-108.08.00 is not available for OCaml ${ocaml.version}" else
 
 stdenv.mkDerivation {

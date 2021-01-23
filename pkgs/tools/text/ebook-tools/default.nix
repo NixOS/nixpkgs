@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkg-config, libxml2, libzip }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, libxml2, libzip }:
 
 stdenv.mkDerivation rec {
   name = "ebook-tools-0.2.2";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libzip)"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://ebook-tools.sourceforge.net";
     description = "Tools and library for dealing with various ebook file formats";
     maintainers = [ ];

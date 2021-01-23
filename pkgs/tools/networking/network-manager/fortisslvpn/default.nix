@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1sw66cxgs4in4cjp1cm95c5ijsk8xbbmq4ykg2jwqwgz6cf2lr3s";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     networkmanager
     ppp
     glib
-  ] ++ stdenv.lib.optionals withGnome [
+  ] ++ lib.optionals withGnome [
     gtk3
     libsecret
     libnma

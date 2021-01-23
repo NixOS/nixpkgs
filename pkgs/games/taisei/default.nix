@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 # Build depends
-, docutils, meson, ninja, pkgconfig, python3
+, docutils, meson, ninja, pkg-config, python3
 # Runtime depends
 , glfw, SDL2, SDL2_mixer
 , freetype, libpng, libwebp, libzip, zlib
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    docutils meson ninja pkgconfig python3
+    docutils meson ninja pkg-config python3
   ];
 
   buildInputs = [

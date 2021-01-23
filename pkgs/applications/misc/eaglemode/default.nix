@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, libX11, libXinerama, libjpeg, libpng, libtiff, pkgconfig,
+{ lib, stdenv, fetchurl, perl, libX11, libXinerama, libjpeg, libpng, libtiff, pkg-config,
 librsvg, glib, gtk2, libXext, libXxf86vm, poppler, xineLib, ghostscript, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "10zxih7gmyhq0az1mnsw2x563l4bbwcns794s4png8rf4d6hjszm";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ perl libX11 libXinerama libjpeg libpng libtiff
     librsvg glib gtk2 libXxf86vm libXext poppler xineLib ghostscript makeWrapper ];
 

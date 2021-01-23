@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, beautifulsoup4, vcrpy, mock
+{ lib, stdenv, buildPythonPackage, fetchPypi, beautifulsoup4, vcrpy, mock
 , django-mailman3, mailmanclient, readme_renderer
 }:
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://www.gnu.org/software/mailman/";
     description = "Web-based user interface for managing GNU Mailman";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ globin peti ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ globin peti ];
   };
 }

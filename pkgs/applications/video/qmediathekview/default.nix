@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchFromGitHub, qtbase, qttools, xz, boost, qmake, pkgconfig }:
+{ mkDerivation, lib, stdenv, fetchFromGitHub, qtbase, qttools, xz, boost, qmake, pkg-config }:
 
 mkDerivation rec {
   pname = "QMediathekView";
@@ -18,7 +18,7 @@ mkDerivation rec {
 
   buildInputs = [ qtbase qttools xz boost ];
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkg-config ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 

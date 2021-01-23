@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "1.05";
 
-  src = fetchurl { 
+  src = fetchurl {
     url = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/dist/lablgl-${version}.tar.gz";
     sha256 = "0qabydd219i4ak7hxgc67496qnnscpnydya2m4ijn3cpbgih7zyq";
   };

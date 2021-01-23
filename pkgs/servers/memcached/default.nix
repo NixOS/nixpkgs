@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   hardeningEnable = [ "pie" ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-Wno-error";
+    ++ lib.optional stdenv.isDarwin "-Wno-error";
 
   meta = with lib; {
     description = "A distributed memory object caching system";

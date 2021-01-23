@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableNativeMidi " --enable-music-native-midi-gpl"
     ++ lib.optionals stdenv.isDarwin [ "--disable-sdltest" "--disable-smpegtest" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SDL multi-channel audio mixer library";
     homepage    = "http://www.libsdl.org/projects/SDL_mixer/";
     maintainers = with maintainers; [ lovek323 ];

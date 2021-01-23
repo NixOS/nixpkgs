@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , zlib, boost, openssl, python, ncurses, SystemConfiguration
 }:
 
@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ boostPython openssl zlib python ncurses ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
   postInstall = ''
     moveToOutput "include" "$dev"
@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
     "-Dpython-bindings=on"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libtorrent.org/";
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;

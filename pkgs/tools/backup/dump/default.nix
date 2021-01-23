@@ -1,7 +1,7 @@
 # Tested with simple dump and restore -i, but complains that
 # /nix/store/.../etc/dumpdates doesn't exist.
 
-{ lib, stdenv, fetchurl, pkgconfig,
+{ lib, stdenv, fetchurl, pkg-config,
   e2fsprogs, ncurses, readline }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "15rg5y15ak0ppqlhcih78layvg7cwp6hc16p3c58xs8svlkxjqc0";
   };
 
-  buildInputs = [ e2fsprogs pkgconfig ncurses readline ];
+  buildInputs = [ e2fsprogs pkg-config ncurses readline ];
 
   meta = with lib; {
     homepage = "https://dump.sourceforge.io/";

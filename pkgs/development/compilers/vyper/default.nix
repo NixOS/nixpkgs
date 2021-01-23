@@ -45,7 +45,7 @@ buildPythonPackage rec {
     $out/bin/vyper "${sample-contract}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pythonic Smart Contract Language for the EVM";
     homepage = "https://github.com/vyperlang/vyper";
     license = licenses.asl20;

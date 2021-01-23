@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , lib
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gettext
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     gettext
     orc

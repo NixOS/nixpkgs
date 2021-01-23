@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/wio \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ alacritty cage ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ alacritty cage ]}"
   '';
 
   meta = with lib; {

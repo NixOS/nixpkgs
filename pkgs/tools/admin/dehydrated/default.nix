@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp -a dehydrated $out/bin
-    wrapProgram "$out/bin/dehydrated" --prefix PATH : "${stdenv.lib.makeBinPath [ openssl coreutils gnused gnugrep diffutils curl gawk ]}"
+    wrapProgram "$out/bin/dehydrated" --prefix PATH : "${lib.makeBinPath [ openssl coreutils gnused gnugrep diffutils curl gawk ]}"
     '';
 
   meta = with lib; {

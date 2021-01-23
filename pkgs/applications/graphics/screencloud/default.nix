@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, qt4, quazip, qt-mobility, qxt, pythonPackages }:
+{ lib, stdenv, fetchFromGitHub, cmake, qt4, quazip, qt-mobility, qxt, pythonPackages }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "screencloud";
   version = "1.2.0";
@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://screencloud.net/";
     description = "Client for Screencloud, an easy to use screenshot sharing tool";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ forkk ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ forkk ];
+    platforms = with lib.platforms; linux;
   };
 }

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ fftw blas lapack gfortran ]
-    ++ (stdenv.lib.optionals (mpi != null) [ mpi ]);
+    ++ (lib.optionals (mpi != null) [ mpi ]);
 
 configureFlags = if (mpi != null) then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${gfortran}/bin/gfortran" ];
 

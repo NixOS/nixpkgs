@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gettext, xtrans, dbus-glib, systemd,
+{ lib, stdenv, fetchurl, pkg-config, gettext, xtrans, dbus-glib, systemd,
   libSM, libXtst, gtk3, epoxy, polkit, hicolor-icon-theme, mate,
   wrapGAppsHook, fetchpatch
 }:
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "1.24.1";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1zwq8symyp3ijs28pyrknsdi9byf4dpp9wp93ndwdhi0vaip5i51";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gettext
     xtrans
     wrapGAppsHook

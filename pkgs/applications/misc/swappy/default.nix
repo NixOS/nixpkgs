@@ -5,7 +5,7 @@
 , cairo
 , pango
 , gtk
-, pkgconfig
+, pkg-config
 , cmake
 , scdoc
 , libnotify
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "14ac2jmnak7avcz0jhqjm30vk7pv3gq5aq5rdyh84k8c613kkicf";
   };
 
-  nativeBuildInputs = [ glib meson ninja pkgconfig cmake scdoc ];
+  nativeBuildInputs = [ glib meson ninja pkg-config cmake scdoc ];
 
   buildInputs = [ cairo pango gtk libnotify wayland glib ];
 

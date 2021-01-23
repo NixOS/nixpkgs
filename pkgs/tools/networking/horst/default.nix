@@ -1,4 +1,4 @@
-{lib, stdenv, fetchFromGitHub, pkgconfig, ncurses, libnl }:
+{lib, stdenv, fetchFromGitHub, pkg-config, ncurses, libnl }:
 
 stdenv.mkDerivation rec {
   pname = "horst";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "140pyv6rlsh4c745w4b59pz3hrarr39qq3mz9z1lsd3avc12nx1a";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses libnl ];
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];

@@ -87,7 +87,7 @@ in buildBazelPackage rec {
 
       # Needed for the 'runsc do' subcomand
       wrapProgram $out/bin/runsc \
-        --prefix PATH : ${stdenv.lib.makeBinPath [ iproute iptables procps ]}
+        --prefix PATH : ${lib.makeBinPath [ iproute iptables procps ]}
     '';
   };
 

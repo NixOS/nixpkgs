@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
+{ lib, stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
 , AGL, OpenGL
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   name = "glew-1.10.0";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "SYSTEM=${if stdenv.hostPlatform.isMinGW then "mingw" else stdenv.hostPlatform.parsed.kernel.name}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An OpenGL extension loading library for C(++)";
     homepage = "http://glew.sourceforge.net/";
     license = licenses.free; # different files under different licenses

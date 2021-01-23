@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitLab, meson, ninja, cmake
-, wrapGAppsHook, pkgconfig, desktop-file-utils
+, wrapGAppsHook, pkg-config, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
 , gtk3, webkitgtk, glib-networking, gnome3, gspell, texlive
 , shared-mime-info, haskellPackages}:
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     sha256 = "06bl1hc69ixk2vcb2ig74mwid14sl5zq6rfna7lx9na6j3l04879";
   };
 
-  nativeBuildInputs = [ meson ninja cmake pkgconfig desktop-file-utils
+  nativeBuildInputs = [ meson ninja cmake pkg-config desktop-file-utils
     appstream-glib wrapGAppsHook ];
 
   buildInputs = [ glib pythonEnv gobject-introspection gtk3

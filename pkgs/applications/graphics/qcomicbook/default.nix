@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools, qtx11extras, poppler }:
+{ mkDerivation, lib, stdenv, fetchFromGitHub, pkg-config, cmake, qtbase, qttools, qtx11extras, poppler }:
 
 mkDerivation rec {
   pname = "qcomicbook";
@@ -12,7 +12,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig
+    cmake pkg-config
   ];
 
   buildInputs = [

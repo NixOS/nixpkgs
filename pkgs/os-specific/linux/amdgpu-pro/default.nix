@@ -7,7 +7,7 @@
 
 assert (!libsOnly) -> kernel != null;
 
-with stdenv.lib;
+with lib;
 
 let
 

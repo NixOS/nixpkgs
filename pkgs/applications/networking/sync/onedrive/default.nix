@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, ldc, installShellFiles, pkgconfig
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, ldc, installShellFiles, pkg-config
 , curl, sqlite, libnotify
 , withSystemd ? stdenv.isLinux, systemd ? null }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "12g2z6c4f65y8cc7vyhk9nlg1mpbsmlsj7ghlny452qhr13m7qpn";
   };
 
-  nativeBuildInputs = [ autoreconfHook ldc installShellFiles pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook ldc installShellFiles pkg-config ];
 
   buildInputs = [
     curl sqlite libnotify

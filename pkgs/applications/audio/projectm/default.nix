@@ -3,7 +3,7 @@
 , lib
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , SDL2
 , qtdeclarative
 , libpulseaudio
@@ -23,7 +23,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     which
   ];

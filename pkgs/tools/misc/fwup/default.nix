@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper, pkgconfig
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, makeWrapper, pkg-config
 , zlib, lzma, bzip2, mtools, dosfstools, zip, unzip, libconfuse, libsodium
 , libarchive, darwin, coreutils }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   patches = lib.optional stdenv.isDarwin [ ./fix-testrunner-darwin.patch ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook makeWrapper ];
+  nativeBuildInputs = [ pkg-config autoreconfHook makeWrapper ];
   buildInputs = [ zlib lzma bzip2 libconfuse libsodium libarchive ]
     ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.DiskArbitration

@@ -18,7 +18,7 @@ in {
     buildInputs = oldAttr.buildInputs ++ [ ncurses ];
   });
 
-  inherit (stdenv.lib.genAttrs [
+  inherit (lib.genAttrs [
     "epgtableid0" "hello" "osddemo" "pictures" "servicedemo" "status" "svdrpdemo"
   ] mkPlugin);
 

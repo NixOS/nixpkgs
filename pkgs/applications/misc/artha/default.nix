@@ -1,4 +1,4 @@
-{ lib, stdenv, autoreconfHook, fetchurl, dbus-glib, gtk2, pkgconfig, wordnet }:
+{ lib, stdenv, autoreconfHook, fetchurl, dbus-glib, gtk2, pkg-config, wordnet }:
 
 stdenv.mkDerivation {
   pname = "artha";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0qr4ihl7ma3cq82xi1fpzvf74mm9vsg0j035xvmcp3r6rmw2fycx";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ dbus-glib gtk2 wordnet ];
 
   patches = [

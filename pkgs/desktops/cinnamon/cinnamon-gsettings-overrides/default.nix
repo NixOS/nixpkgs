@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , runCommand
 , nixos-artwork
 , glib
@@ -36,7 +36,7 @@ let
 
 in
 
-with stdenv.lib;
+with lib;
 
 # TODO: Having https://github.com/NixOS/nixpkgs/issues/54150 would supersede this
 runCommand "cinnamon-gsettings-overrides" {}

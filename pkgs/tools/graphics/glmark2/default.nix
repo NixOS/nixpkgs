@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, libGL, libdrm,
+{ lib, stdenv, fetchFromGitHub, pkg-config, libjpeg, libpng, xorg, libX11, libGL, libdrm,
   python27, wayland, udev, mesa, wafHook }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "076l75rfl6pnp1wgiwlaihy1vg2advg1z8bi0x84kk259kldgvwn";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
+  nativeBuildInputs = [ pkg-config wafHook ];
   buildInputs = [
     libjpeg libpng xorg.libxcb libX11 libGL libdrm python27 wayland udev mesa
   ];

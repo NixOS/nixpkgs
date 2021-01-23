@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ lib, stdenv, fetchurl, fetchFromGitHub
 , llvmPackages, ncurses, lua
 }:
 
@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
       --replace '-lcurses' '-lncurses'
 
     substituteInPlace src/terralib.lua \
-      --subst-var-by NIX_LIBC_INCLUDE ${stdenv.lib.getDev stdenv.cc.libc}/include
+      --subst-var-by NIX_LIBC_INCLUDE ${lib.getDev stdenv.cc.libc}/include
   '';
 
   preBuild = ''
     cat >Makefile.inc<<EOF
-    CLANG = ${stdenv.lib.getBin llvmPackages.clang-unwrapped}/bin/clang
-    LLVM_CONFIG = ${stdenv.lib.getBin llvmPackages.llvm}/bin/llvm-config
+    CLANG = ${lib.getBin llvmPackages.clang-unwrapped}/bin/clang
+    LLVM_CONFIG = ${lib.getBin llvmPackages.llvm}/bin/llvm-config
     EOF
 
     mkdir -p build
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     cp -rv release/include/terra $dev/include
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A low-level counterpart to Lua";
     homepage    = "http://terralang.org/";
     platforms   = platforms.x86_64;

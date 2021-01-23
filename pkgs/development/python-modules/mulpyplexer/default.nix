@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "mulpyplexer";
-  version = "0.08";
+  version = "0.09";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zn5d1vyhfjp8x9z5mr9gv8m8gmi3s3jv3kqb790xzi1kqi0p4ya";
+    sha256 = "0c5xzci1djy1yi9hxxh8g67l6ms8r7ad7ja20pv8hfbdysdrwkhl";
   };
 
   # Project has no tests

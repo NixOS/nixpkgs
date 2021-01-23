@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ audiofile SDL2 hexdump ];
 
   makeFlags = [ "VERSION=${region}" ] ++ compileFlags
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "OSX_BUILD=1" ];
+    ++ lib.optionals stdenv.isDarwin [ "OSX_BUILD=1" ];
 
   inherit baseRom;
 

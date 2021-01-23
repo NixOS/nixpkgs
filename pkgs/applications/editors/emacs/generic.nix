@@ -7,10 +7,11 @@
   , patches ? [ ]
 }:
 { stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
-, Xaw3d, libXcursor,  pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
+, Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , jansson, harfbuzz
+, dontRecurseIntoAttrs ,emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
 , systemd ? null
 , withX ? !stdenv.isDarwin
@@ -40,9 +41,7 @@ assert withGTK3 -> !withGTK2 && gtk3-x11 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 
-let
-
-in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
+let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
   NATIVE_FULL_AOT = "1";
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
 } // lib.optionalAttrs stdenv.isDarwin {
@@ -93,7 +92,7 @@ in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     ""
   ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ]
+  nativeBuildInputs = [ pkg-config makeWrapper ]
     ++ lib.optionals srcRepo [ autoreconfHook texinfo ]
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
@@ -175,6 +174,7 @@ in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
 
   passthru = {
     inherit nativeComp;
+    pkgs = dontRecurseIntoAttrs (emacsPackagesFor emacs);
   };
 
   meta = with lib; {
@@ -201,4 +201,5 @@ in stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       separately.
     '';
   };
-})
+});
+in emacs

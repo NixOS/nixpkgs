@@ -7,7 +7,7 @@ let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
   inherit (buildPackages)
     fetchurl removeReferencesTo
-    pkgconfig coreutils gnugrep gnused glibcLocales;
+    pkg-config coreutils gnugrep gnused glibcLocales;
 in
 
 { pname
@@ -54,7 +54,7 @@ in
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
 , passthru ? {}
-, pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
+, pkg-configDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
 , benchmarkDepends ? [], benchmarkHaskellDepends ? [], benchmarkSystemDepends ? [], benchmarkFrameworkDepends ? []
 , testTarget ? ""
@@ -234,7 +234,7 @@ let
 
   isHaskellPkg = x: x ? isHaskellLibrary;
 
-  allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
+  allPkgconfigDepends = pkg-configDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
   depsBuildBuild = [ nativeGhc ];
@@ -243,7 +243,7 @@ let
     optionals doCheck testToolDepends ++
     optionals doBenchmark benchmarkToolDepends;
   nativeBuildInputs =
-    [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
+    [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkg-config ++
     setupHaskellDepends ++ collectedToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputsHaskell =
@@ -285,7 +285,7 @@ let
   '';
 in stdenv.lib.fix (drv:
 
-assert allPkgconfigDepends != [] -> pkgconfig != null;
+assert allPkgconfigDepends != [] -> pkg-config != null;
 
 stdenv.mkDerivation ({
   name = "${pname}-${version}";
@@ -532,7 +532,7 @@ stdenv.mkDerivation ({
         libraryPkgconfigDepends
         librarySystemDepends
         libraryToolDepends
-        pkgconfigDepends
+        pkg-configDepends
         setupHaskellDepends
         ;
     } // stdenv.lib.optionalAttrs doCheck {
@@ -616,7 +616,7 @@ stdenv.mkDerivation ({
 
         depsBuildBuild = stdenv.lib.optional isCross ghcEnvForBuild;
         nativeBuildInputs =
-          [ ghcEnv ] ++ optional (allPkgconfigDepends != []) pkgconfig ++
+          [ ghcEnv ] ++ optional (allPkgconfigDepends != []) pkg-config ++
           collectedToolDepends;
         buildInputs =
           otherBuildInputsSystem;

@@ -8,7 +8,7 @@
 
 with (import ./srcs.nix { inherit fetchurl; });
 let
-  inherit (stdenv.lib) optional optionalString optionals;
+  inherit (lib) optional optionalString optionals;
 
 in stdenv.mkDerivation {
   pname = "openafs";

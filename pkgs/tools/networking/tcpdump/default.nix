@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, perl, fetchpatch }:
+{ lib, stdenv, fetchurl, libpcap, perl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "tcpdump";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap ];
 
-  configureFlags = stdenv.lib.optional
+  configureFlags = lib.optional
     (stdenv.hostPlatform != stdenv.buildPlatform)
     "ac_cv_linux_vers=2";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Network sniffer";
     homepage = "http://www.tcpdump.org/";
     license = "BSD-style";
-    maintainers = with stdenv.lib.maintainers; [ globin ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with lib.maintainers; [ globin ];
+    platforms = lib.platforms.unix;
   };
 }

@@ -5,7 +5,7 @@
 , ninja
 , python3
 , gettext
-, pkgconfig
+, pkg-config
 , desktop-file-utils
 , wrapGAppsHook
 , appstream-glib
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     python3
     appstream-glib
     gettext
-    pkgconfig
+    pkg-config
     desktop-file-utils
     wrapGAppsHook
   ];

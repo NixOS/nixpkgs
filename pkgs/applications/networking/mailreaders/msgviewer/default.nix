@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
     rmdir $dir/${uname}
     cat <<_EOF > $out/bin/msgviewer
     #!${runtimeShell} -eu
-    exec ${stdenv.lib.getBin jre}/bin/java -jar $dir/MSGViewer.jar "\$@"
+    exec ${lib.getBin jre}/bin/java -jar $dir/MSGViewer.jar "\$@"
     _EOF
     chmod 755 $out/bin/msgviewer
   '';

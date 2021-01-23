@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, mecab, kytea, libedit, pkgconfig
+{ lib, stdenv, fetchurl, mecab, kytea, libedit, pkg-config
 , suggestSupport ? false, zeromq, libevent, msgpack
 , lz4Support  ? false, lz4
 , zlibSupport ? false, zlib
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "191saqanv8k6ijl96mw4jdhh9pkpdn651f1bg4kfb34p7vy8ld9k";
   };
 
-  buildInputs = with stdenv.lib;
-     [ pkgconfig mecab kytea libedit ]
+  buildInputs = with lib;
+     [ pkg-config mecab kytea libedit ]
     ++ optional lz4Support lz4
     ++ optional zlibSupport zlib
     ++ optionals suggestSupport [ zeromq libevent msgpack ];
 
-  configureFlags = with stdenv.lib;
+  configureFlags = with lib;
        optional zlibSupport "--with-zlib"
     ++ optional lz4Support  "--with-lz4";
 

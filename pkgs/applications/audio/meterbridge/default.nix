@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, SDL, SDL_image, libjack2
+{ lib, stdenv, fetchurl, pkg-config, SDL, SDL_image, libjack2
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   patches = [ ./buf_rect.patch ./fix_build_with_gcc-5.patch];
 
   buildInputs =
-    [ pkgconfig SDL SDL_image libjack2
+    [ pkg-config SDL SDL_image libjack2
     ];
 
   meta = with lib; {

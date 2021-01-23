@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     description = "A minimal unprivileged process supervisor making use of modern Linux features";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ catern ];
+    maintainers = with lib.maintainers; [ catern ];
   };
 }

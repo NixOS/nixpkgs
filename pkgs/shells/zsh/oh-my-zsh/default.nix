@@ -1,19 +1,19 @@
 # This script was inspired by the ArchLinux User Repository package:
 #
 #   https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=oh-my-zsh-git
-{ lib, stdenv, fetchFromGitHub, nixosTests, writeScript, common-updater-scripts, git
-, nix, nixfmt, jq, coreutils, gnused, curl, cacert }:
+{ lib, stdenv, fetchFromGitHub, nixosTests, writeScript, common-updater-scripts
+, git, nix, nixfmt, jq, coreutils, gnused, curl, cacert }:
 
 stdenv.mkDerivation rec {
-  version = "2021-01-07";
+  version = "2021-01-20";
   pname = "oh-my-zsh";
-  rev = "c9bf8b4a84d4ae392cf1bdd6a4a7c7c4f7710b92";
+  rev = "cd4918c2cdb6613cf77ea8f6f29e1930bd7f4bf5";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    sha256 = "13i4r2bhffdjcln5cml29m9gzw9m39yxcln49h3shpp7s1gl3z4a";
+    sha256 = "1b8zipghawa2rl3l6vylmhbwcwz9yq52xmbfpkz0bxhifisq74kn";
   };
 
   installPhase = ''
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       #!${stdenv.shell}
       set -o errexit
       PATH=${
-        stdenv.lib.makeBinPath [
+        lib.makeBinPath [
           common-updater-scripts
           curl
           cacert

@@ -73,9 +73,9 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw $out/lib/cups/filter/brother_lpdwrapper_mfcj6510dw
 
     wrapProgram $out/opt/brother/Printers/mfcj6510dw/lpd/psconvertij2 \
-      --prefix PATH ":" ${ stdenv.lib.makeBinPath [ coreutils gnused gawk ] }
+      --prefix PATH ":" ${ lib.makeBinPath [ coreutils gnused gawk ] }
     wrapProgram $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw \
-      --prefix PATH ":" ${ stdenv.lib.makeBinPath [ coreutils gnused file ghostscript a2ps ] }
+      --prefix PATH ":" ${ lib.makeBinPath [ coreutils gnused file ghostscript a2ps ] }
     '';
 
   meta = with lib; {
