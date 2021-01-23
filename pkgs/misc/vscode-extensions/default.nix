@@ -612,6 +612,18 @@ let
         };
       };
 
+      spywhere.guides = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "guides";
+          publisher = "spywhere";
+          version = "0.9.3";
+          sha256 = "1kvsj085w1xax6fg0kvsj1cizqh86i0pkzpwi0sbfvmcq21i6ghn";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       streetsidesoftware.code-spell-checker = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "code-spell-checker";
