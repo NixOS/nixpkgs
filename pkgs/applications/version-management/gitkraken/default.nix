@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   ];
 
   desktopItem = makeDesktopItem {
-    name = "gitkraken";
+    name = pname;
     exec = "gitkraken";
     icon = "gitkraken";
     desktopName = "GitKraken";
@@ -88,10 +88,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
 
     mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications/
-
-    substituteInPlace $out/share/applications/gitkraken.desktop \
-      --replace $out/usr/share/gitkraken $out/bin
+    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     mkdir -p $out/share/pixmaps
     cp gitkraken.png $out/share/pixmaps/gitkraken.png
