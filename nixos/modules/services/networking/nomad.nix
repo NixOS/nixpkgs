@@ -113,7 +113,7 @@ in
         DynamicUser = cfg.dropPrivileges;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
-          concatMapStrings (file: " -config=${file}") cfg.extraSettingsPaths;
+          concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths;
         KillMode = "process";
         KillSignal = "SIGINT";
         LimitNOFILE = 65536;
