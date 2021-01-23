@@ -6,7 +6,7 @@
 , http-conduit, http-types, lens-family-core, megaparsec, mtl
 , network-uri, open-browser, optparse-applicative, prettyprinter
 , process, QuickCheck, retry, rio, rio-orphans, safe, semver-range
-, stdenv, stm, stringsearch, tar, template-haskell, temporary, text
+, lib, stdenv, stm, stringsearch, tar, template-haskell, temporary, text
 , time, transformers, turtle, unliftio, unordered-containers
 , utf8-string, vector, versions, with-utf8, zlib
 }:
@@ -41,5 +41,5 @@ mkDerivation {
   testToolDepends = [ hspec-discover ];
   prePatch = "hpack";
   homepage = "https://github.com/purescript/spago#readme";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
 }

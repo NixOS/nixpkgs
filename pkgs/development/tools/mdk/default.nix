@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkg-config, glib }:
+{ lib, stdenv, fetchurl, intltool, pkg-config, glib }:
 
 stdenv.mkDerivation {
   name = "gnu-mdk-1.3.0";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   meta = {
     description = "GNU MIX Development Kit (MDK)";
     homepage = "https://www.gnu.org/software/mdk/";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
   };
 }

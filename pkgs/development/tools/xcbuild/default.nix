@@ -36,11 +36,11 @@ in stdenv.mkDerivation {
     cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
   '';
 
-  postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.isDarwin) ''
     # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
     sed 1i'#include <sys/sysmacros.h>' \
       -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # Apple Open Sourced LZFSE, but not libcompression, and it isn't
     # part of an impure framework we can add
     substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
@@ -59,7 +59,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ zlib libxml2 libpng ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices CoreGraphics ImageIO ];
+    ++ lib.optionals stdenv.isDarwin [ CoreServices CoreGraphics ImageIO ];
 
   meta = with lib; {
     description = "Xcode-compatible build tool";

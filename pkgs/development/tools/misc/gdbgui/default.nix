@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonApplication
 , fetchPypi
 , gdb
@@ -41,13 +41,13 @@ buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/gdbgui \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ gdb ]}
+      --prefix PATH : ${lib.makeBinPath [ gdb ]}
   '';
 
   # tests do not work without stdout/stdin
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A browser-based frontend for GDB";
     homepage = "https://www.gdbgui.com/";
     license = licenses.gpl3;

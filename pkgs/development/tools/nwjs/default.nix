@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   installPhase =
-    let ccPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
+    let ccPath = lib.makeLibraryPath [ stdenv.cc.cc ];
     in ''
       mkdir -p $out/share/nwjs
       cp -R * $out/share/nwjs
@@ -85,7 +85,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An app runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = ["i686-linux" "x86_64-linux"];

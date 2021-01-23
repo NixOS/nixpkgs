@@ -1,6 +1,6 @@
 { mkDerivation, aeson, base, containers, fetchgit, ghc
 , ghc-exactprint, ghcide, haskell-lsp, hls-plugin-api, lens, shake
-, stdenv, text, transformers, unordered-containers
+, lib, stdenv, text, transformers, unordered-containers
 }:
 mkDerivation {
   pname = "hls-class-plugin";
@@ -17,5 +17,5 @@ mkDerivation {
     hls-plugin-api lens shake text transformers unordered-containers
   ];
   description = "Explicit imports plugin for Haskell Language Server";
-  license = stdenv.lib.licenses.asl20;
+  license = lib.licenses.asl20;
 }

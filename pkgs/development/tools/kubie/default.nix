@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   postInstall = ''
     installShellCompletion completion/kubie.bash

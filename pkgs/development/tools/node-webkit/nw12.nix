@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
 
     ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
 
-    patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}:$out/share/nwjs" $out/share/nwjs/nw
+    patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ]}:$out/share/nwjs" $out/share/nwjs/nw
     patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:$out/share/nwjs" $out/share/nwjs/nwjc
 
     mkdir -p $out/bin
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An app runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = ["i686-linux" "x86_64-linux"];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, pkg-config, libintl }:
+{ lib, stdenv, fetchurl, gtk2, pkg-config, libintl }:
 
 stdenv.mkDerivation {
   name = "gtkperf-0.40.0";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   # https://openbenchmarking.org/innhold/7e9780c11550d09aa67bdba71248facbe2d781db
   patches = [ ./bench.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Application designed to test GTK performance";
     homepage = "http://gtkperf.sourceforge.net/";
     license = with licenses; [ gpl2 ];

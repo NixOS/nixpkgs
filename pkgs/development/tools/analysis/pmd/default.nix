@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper, openjdk }:
+{ lib, stdenv, fetchurl, unzip, makeWrapper, openjdk }:
 
 stdenv.mkDerivation rec {
   pname = "pmd";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An extensible cross-language static code analyzer";
     homepage = "https://pmd.github.io/";
     changelog = "https://pmd.github.io/pmd-${version}/pmd_release_notes.html";

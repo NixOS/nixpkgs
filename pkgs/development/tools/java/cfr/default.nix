@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchurl, jre }:
+{ lib, stdenv, makeWrapper, fetchurl, jre }:
 
 stdenv.mkDerivation rec {
   pname = "cfr";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${jre}/bin/java $out/bin/cfr --add-flags "-jar $jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Another java decompiler";
     longDescription = ''
       CFR will decompile modern Java features - Java 8 lambdas (pre and post

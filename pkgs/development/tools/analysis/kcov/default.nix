@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, cmake, pkg-config, zlib, curl, elfutils, python, libiberty, libopcodes}:
+{lib, stdenv, fetchFromGitHub, cmake, pkg-config, zlib, curl, elfutils, python, libiberty, libopcodes}:
 
 stdenv.mkDerivation rec {
   pname = "kcov";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib curl elfutils python libiberty libopcodes ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Code coverage tester for compiled programs, Python scripts and shell scripts";
 
     longDescription = ''

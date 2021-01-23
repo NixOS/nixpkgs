@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang }:
+{ lib, stdenv, fetchurl, erlang }:
 
 
 let
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
       variety of locations (git, hg, etc).
       '';
 
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
 }

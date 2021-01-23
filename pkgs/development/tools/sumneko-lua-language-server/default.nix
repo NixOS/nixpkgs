@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ninja, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       --metapath='~/.cache/sumneko_lua/meta'"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lua Language Server coded by Lua ";
     homepage = "https://github.com/sumneko/lua-language-server";
     license = licenses.mit;

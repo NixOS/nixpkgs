@@ -128,7 +128,7 @@ in stdenv.mkDerivation rec {
 
   passthru = { inherit perlDeps migration tests; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Nix-based continuous build system";
     license = licenses.gpl3;
     platforms = platforms.linux;

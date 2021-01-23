@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "echo ${version} > .tarball-version";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Freescale/NXP I.MX chip image deploy tools";
     longDescription = ''
       UUU (Universal Update Utility) is a command line tool, evolved out of

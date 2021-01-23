@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     patchShebangs tests
-  '' + stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     substituteInPlace Makefile.in --replace "tests" " ";
   '';
 
@@ -18,12 +18,12 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ m4 ];
 
-  preConfigure = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  preConfigure = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
-  postConfigure = stdenv.lib.optionalString (stdenv.isDarwin || stdenv.isCygwin) ''
+  postConfigure = lib.optionalString (stdenv.isDarwin || stdenv.isCygwin) ''
     sed -i Makefile -e 's/-no-undefined//;'
   '';
 

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, yacc, flex, readline, ncurses, gnused}:
+{lib, stdenv, fetchurl, yacc, flex, readline, ncurses, gnused}:
 
 stdenv.mkDerivation {
   name = "cdecl-2.5";
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Translator English -- C/C++ declarations";
-    license = stdenv.lib.licenses.publicDomain;
-    maintainers = with stdenv.lib.maintainers; [joelteon];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [joelteon];
+    platforms = lib.platforms.unix;
   };
 }

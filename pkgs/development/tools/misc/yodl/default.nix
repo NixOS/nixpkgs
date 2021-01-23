@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, perl, icmake, util-linux }:
+{ lib, stdenv, fetchFromGitLab, perl, icmake, util-linux }:
 
 stdenv.mkDerivation rec {
   pname = "yodl";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ./build install man
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A package that implements a pre-document language and tools to process it";
     homepage = "https://fbb-git.gitlab.io/yodl/";
     license = licenses.gpl3;

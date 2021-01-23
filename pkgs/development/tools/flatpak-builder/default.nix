@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , nixosTests
@@ -145,7 +145,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to build flatpaks from source";
     homepage = "https://github.com/flatpak/flatpak-builder";
     license = licenses.lgpl21Plus;

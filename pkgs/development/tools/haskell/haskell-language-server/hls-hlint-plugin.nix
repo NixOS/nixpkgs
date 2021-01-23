@@ -2,7 +2,7 @@
 , containers, data-default, deepseq, Diff, directory, extra
 , fetchgit, filepath, ghc, ghc-lib, ghc-lib-parser-ex, ghcide
 , hashable, haskell-lsp, hlint, hls-plugin-api, hslogger, lens
-, regex-tdfa, shake, stdenv, temporary, text, transformers
+, regex-tdfa, shake, lib, stdenv, temporary, text, transformers
 , unordered-containers
 }:
 mkDerivation {
@@ -22,5 +22,5 @@ mkDerivation {
     regex-tdfa shake temporary text transformers unordered-containers
   ];
   description = "Hlint integration plugin with Haskell Language Server";
-  license = stdenv.lib.licenses.asl20;
+  license = lib.licenses.asl20;
 }

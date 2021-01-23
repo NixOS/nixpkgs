@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchgit
 , wrapLisp
 , sbcl
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # fixupPhase results in fatal error in SBCL, `Can't find sbcl.core`
   dontFixup = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Common Lisp Package Manager";
     homepage = "https://www.clpm.dev/";
     license = licenses.bsd2;

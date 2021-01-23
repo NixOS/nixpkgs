@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, makeWrapper, jre
+{ lib, stdenv, fetchurl, makeWrapper, jre
 , htmlunit-driver, chromedriver, chromeSupport ? true }:
 
-with stdenv.lib;
+with lib;
 
 let
   minorVersion = "3.141";

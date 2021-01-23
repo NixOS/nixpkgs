@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, gtk2, gtk3, pkg-config
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, gtk2, gtk3, pkg-config
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Widget Factory";
     longDescription = ''
       A widget factory is a theme preview application for gtk2 and

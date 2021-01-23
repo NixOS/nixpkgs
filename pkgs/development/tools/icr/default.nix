@@ -26,7 +26,7 @@ crystal.buildCrystalPackage rec {
       --prefix PATH : ${lib.makeBinPath [ crystal shards makeWrapper which ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interactive console for the Crystal programming language";
     homepage = "https://github.com/crystal-community/icr";
     license = licenses.mit;

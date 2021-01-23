@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison }:
+{ lib, stdenv, fetchurl, flex, bison }:
 
 stdenv.mkDerivation rec {
   pname = "cproto";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     [ "$("$out/bin/cproto" -V 2>&1)" = '${version}' ]
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to generate C function prototypes from C source code";
     homepage = "https://invisible-island.net/cproto/";
     license = licenses.publicDomain;

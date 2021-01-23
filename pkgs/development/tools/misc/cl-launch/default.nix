@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 let
   s = # Generated upstream information
   rec {
@@ -31,8 +31,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = ''Common Lisp launcher script'';
-    license = stdenv.lib.licenses.llgpl21 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.llgpl21 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

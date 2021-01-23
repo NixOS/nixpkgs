@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/share/java/${pname}.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Language Server Protocol (LSP) for Clojure";
     homepage = "https://github.com/snoe/clojure-lsp";
     license = licenses.mit;

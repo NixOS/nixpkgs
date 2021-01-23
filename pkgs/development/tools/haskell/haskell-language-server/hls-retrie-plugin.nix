@@ -1,6 +1,6 @@
 { mkDerivation, aeson, base, containers, deepseq, directory, extra
 , fetchgit, ghc, ghcide, hashable, haskell-lsp, haskell-lsp-types
-, hls-plugin-api, retrie, safe-exceptions, shake, stdenv, text
+, hls-plugin-api, retrie, safe-exceptions, shake, lib, stdenv, text
 , transformers, unordered-containers
 }:
 mkDerivation {
@@ -19,5 +19,5 @@ mkDerivation {
     shake text transformers unordered-containers
   ];
   description = "Retrie integration plugin for Haskell Language Server";
-  license = stdenv.lib.licenses.asl20;
+  license = lib.licenses.asl20;
 }

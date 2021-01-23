@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchgit }:
+{ lib, stdenv, buildGoModule, fetchgit }:
 
 buildGoModule rec {
   pname = "gotools-unstable";
@@ -40,7 +40,7 @@ buildGoModule rec {
   '';
 
   excludedPackages = "\\("
-    + stdenv.lib.concatStringsSep "\\|" ([ "testdata" "vet" "cover" ])
+    + lib.concatStringsSep "\\|" ([ "testdata" "vet" "cover" ])
     + "\\)";
 
   # Set GOTOOLDIR for derivations adding this to buildInputs

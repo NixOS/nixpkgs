@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub,
+{ lib, stdenv, fetchFromGitHub,
   fetchHex, erlang,
   tree }:
 
@@ -135,8 +135,8 @@ stdenv.mkDerivation rec {
       variety of locations (hex.pm, git, hg, and so on).
       '';
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ gleber tazjin ];
-    license = stdenv.lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ gleber tazjin ];
+    license = lib.licenses.asl20;
   };
 }

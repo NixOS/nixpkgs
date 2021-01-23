@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre_headless, makeWrapper }:
+{ lib, stdenv, fetchurl, jre_headless, makeWrapper }:
   let
     version = "7.3.1";
   in
@@ -22,7 +22,7 @@
           --add-flags "org.flywaydb.commandline.Main" \
           --add-flags "-jarDirs='$out/share/flyway/jars'"
       '';
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Evolve your Database Schema easily and reliably across all your instances";
         longDescription = ''
           The Flyway command-line tool is a standalone Flyway distribution.

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv ];
 
   # Requires network access
   doCheck = false;

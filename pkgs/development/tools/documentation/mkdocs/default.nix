@@ -35,7 +35,7 @@ buildPythonApplication rec {
     backports_tempfile
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Project documentation with Markdown / static website generator";
     longDescription = ''
       MkDocs is a fast, simple and downright gorgeous static site generator that's

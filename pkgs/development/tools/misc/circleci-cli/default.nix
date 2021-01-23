@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, stdenv, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "circleci-cli";
@@ -26,7 +26,7 @@ buildGoModule rec {
     install -Dm644 -t $out/share/circleci-cli _data/data.yml
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # Box blurb edited from the AUR package circleci-cli
     description = ''
       Command to enable you to reproduce the CircleCI environment locally and

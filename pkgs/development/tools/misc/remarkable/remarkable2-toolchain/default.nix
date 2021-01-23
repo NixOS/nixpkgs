@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libarchive, python3, file }:
+{ lib, stdenv, fetchurl, libarchive, python3, file }:
 
 stdenv.mkDerivation rec {
   pname = "remarkable2-toolchain";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ./install-toolchain.sh -D -y -d $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A toolchain for cross-compiling to reMarkable 2 tablets";
     homepage = "https://remarkable.engineering/";
     license = licenses.gpl2Plus;

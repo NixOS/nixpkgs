@@ -24,8 +24,8 @@ perlPackages.buildPerlPackage rec {
       --replace "'INSTALLDIRS'  => \$INSTALLDIRS," "'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB' => 'bin/lib', 'INSTALLVENDORBIN' => 'bin', 'INSTALLVENDORSCRIPT' => 'bin', 'INSTALLVENDORMAN1DIR' => 'share/man/man1', 'INSTALLVENDORMAN3DIR' => 'share/man/man3',"
   '';
 
-  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+  postInstall = lib.optionalString stdenv.isDarwin ''
     shortenPerlShebang $out/bin/pg_format
   '';
 

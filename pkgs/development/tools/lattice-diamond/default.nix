@@ -1,4 +1,4 @@
-{ stdenv, rpmextract, patchelf, makeWrapper, file, requireFile, glib, zlib, 
+{ lib, stdenv, rpmextract, patchelf, makeWrapper, file, requireFile, glib, zlib, 
     freetype, fontconfig, xorg, libusb-compat-0_1 }:
 
 stdenv.mkDerivation {
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     glib zlib freetype fontconfig
     xorg.libSM xorg.libICE xorg.libXrender xorg.libXext xorg.libX11 xorg.libXt
     libusb-compat-0_1
@@ -109,8 +109,8 @@ stdenv.mkDerivation {
       next-generation replacement for ispLEVER.
     '';
     homepage = "http://www.latticesemi.com/latticediamond";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ q3k ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ q3k ];
     platforms = [ "x86_64-linux" ];
   };
 }

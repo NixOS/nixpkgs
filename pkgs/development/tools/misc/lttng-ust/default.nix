@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, liburcu, python3 }:
+{ lib, stdenv, fetchurl, liburcu, python3 }:
 
 # NOTE:
 #   ./configure ...
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ liburcu ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LTTng Userspace Tracer libraries";
     homepage = "https://lttng.org/";
     license = licenses.lgpl21Plus;

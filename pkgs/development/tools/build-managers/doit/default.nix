@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages }:
+{ lib, stdenv, fetchurl, python3Packages }:
 
 let
 
@@ -16,15 +16,15 @@ in python3Packages.buildPythonApplication {
   buildInputs = with python3Packages; [ mock pytest ];
 
   propagatedBuildInputs = with python3Packages; [ cloudpickle ]
-    ++ stdenv.lib.optional stdenv.isLinux pyinotify
-    ++ stdenv.lib.optional stdenv.isDarwin macfsevents;
+    ++ lib.optional stdenv.isLinux pyinotify
+    ++ lib.optional stdenv.isDarwin macfsevents;
 
   # Tests fail due to mysterious gdbm.open() resource temporarily
   # unavailable errors.
   doCheck = false;
   checkPhase = "py.test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://pydoit.org/";
     description = "A task management & automation tool";
     license = licenses.mit;

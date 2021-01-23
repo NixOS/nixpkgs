@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gettext, perlPackages, buildPackages }:
+{ lib, stdenv, fetchurl, fetchpatch, gettext, perlPackages, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "intltool";
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = with perlPackages; [ perl XMLParser ];
   propagatedBuildInputs = [ gettext ] ++ (with perlPackages; [ perl XMLParser ]);
 
-  postInstall = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     for f in $out/bin/*; do
       substituteInPlace $f --replace "${buildPackages.perl}" "${perlPackages.perl}"
     done
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Translation helper tool";
     homepage = "https://launchpad.net/intltool/";
     license = licenses.gpl2Plus;

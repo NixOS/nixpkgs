@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     imagemagick
     javaIndexer # the resulting jar file is copied by our install script
-  ] ++ stdenv.lib.optionals doCheck testBinPath;
+  ] ++ lib.optionals doCheck testBinPath;
   buildInputs = [
     boost pythonIndexer shared-mime-info
   ] ++ (with qt5; [ qtbase qtsvg ])
@@ -86,9 +86,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = let
-    major = stdenv.lib.versions.major version;
-    minor = stdenv.lib.versions.minor version;
-    patch = stdenv.lib.versions.patch version;
+    major = lib.versions.major version;
+    minor = lib.versions.minor version;
+    patch = lib.versions.patch version;
   in ''
     # Upstream script obtains it's version from git:
     # https://github.com/CoatiSoftware/Sourcetrail/blob/master/cmake/version.cmake
@@ -176,7 +176,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     makeQtWrapper $out/opt/sourcetrail/bin/sourcetrail $out/bin/sourcetrail \
-      --prefix PATH : ${stdenv.lib.makeBinPath binPath}
+      --prefix PATH : ${lib.makeBinPath binPath}
   '';
 
   checkPhase = ''
@@ -188,7 +188,7 @@ stdenv.mkDerivation rec {
     # shorten PATH to prevent build failures
     wrapQtApp ./Sourcetrail_test \
       --set PATH "" \
-      --prefix PATH : ${stdenv.lib.makeBinPath testBinPath} \
+      --prefix PATH : ${lib.makeBinPath testBinPath} \
       --set MAVEN_OPTS "-Dmaven.repo.local=$TMPDIR/m2repo"
     ./Sourcetrail_test
     popd

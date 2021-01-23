@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.antlr.org/";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.farlion ];
+    maintainers = [ lib.maintainers.farlion ];
   };
 }

@@ -1,6 +1,6 @@
-{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-with stdenv.lib;
+with lib;
 
 buildGoModule rec {
   pname = "kind";
@@ -31,7 +31,7 @@ buildGoModule rec {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
     homepage    = "https://github.com/kubernetes-sigs/kind";
     maintainers = with maintainers; [ offline rawkode ];
-    license     = stdenv.lib.licenses.asl20;
+    license     = lib.licenses.asl20;
     platforms   = platforms.unix;
   };
 }

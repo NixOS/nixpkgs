@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, coreutils, makeWrapper }:
+{ fetchurl, lib, stdenv, coreutils, makeWrapper }:
 
 let version = "1.10.9"; in
 
@@ -105,8 +105,8 @@ stdenv.mkDerivation {
       by an object that implements a particular Task interface.
     '';
 
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.all;
   };
 }

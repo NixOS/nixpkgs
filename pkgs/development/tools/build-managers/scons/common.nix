@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   # The release tarballs don't contain any tests (runtest.py and test/*):
   doCheck = lib.versionOlder version "4.0.0";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An improved, cross-platform substitute for Make";
     longDescription = ''
       SCons is an Open Source software construction tool. Think of
