@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper
-, alsaLib, xorg, libjack2
-, gtk3, pango, gdk-pixbuf, cairo, glib, freetype
-, libpulseaudio, xdg_utils
+{ config, lib, stdenv
+, fetchurl
+, autoPatchelfHook
+, makeWrapper
+
+, alsaLib
+, gtk3
+, lame
+, ffmpeg
+, vlc
+
+, jackSupport ? true, libjack2
+, pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {
@@ -17,22 +26,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     alsaLib
-
-    xorg.libX11
-    xorg.libXi
-
-    gdk-pixbuf
-    pango
-    cairo
-    glib
-    freetype
-
-    xdg_utils
+    stdenv.cc.cc.lib # reaper and libSwell need libstdc++.so.6
+    gtk3
   ];
 
   runtimeDependencies = [
-    gtk3
-  ];
+    gtk3 # libSwell needs libgdk-3.so.0
+  ]
+  ++ lib.optional jackSupport libjack2
+  ++ lib.optional pulseaudioSupport libpulseaudio;
 
   dontBuild = true;
 
@@ -42,8 +44,15 @@ stdenv.mkDerivation rec {
       --integrate-user-desktop
     rm $out/opt/REAPER/uninstall-reaper.sh
 
+    # Dynamic loading of plugin dependencies does not adhere to rpath of
+    # reaper executable that gets modified with runtimeDependencies.
+    # Patching each plugin with DT_NEEDED is cumbersome and requires
+    # hardcoding of API versions of each dependency.
+    # Setting the rpath of the plugin shared object files does not
+    # seem to have an effect for some plugins.
+    # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpulseaudio libjack2 ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ lame ffmpeg vlc ]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
