@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Not Quite Perl -- a lightweight Raku-like environment for virtual machines";
     homepage    = "https://github.com/perl6/nqp";
     license     = licenses.artistic2;

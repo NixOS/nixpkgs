@@ -7184,6 +7184,10 @@ in
 
   pympress = callPackage ../applications/office/pympress { };
 
+  pyspread = python3Packages.callPackage ../applications/office/pyspread {
+    inherit (qt5) qtsvg wrapQtAppsHook;
+  };
+
   pythonIRClib = pythonPackages.pythonIRClib;
 
   pyditz = callPackage ../applications/misc/pyditz {
@@ -7541,6 +7545,8 @@ in
   s3gof3r = callPackage ../tools/networking/s3gof3r { };
 
   s6-dns = skawarePackages.s6-dns;
+
+  s6-linux-init = skawarePackages.s6-linux-init;
 
   s6-linux-utils = skawarePackages.s6-linux-utils;
 
@@ -16463,6 +16469,7 @@ in
 
     s6 = callPackage ../tools/system/s6 { };
     s6-dns = callPackage ../tools/networking/s6-dns { };
+    s6-linux-init = callPackage ../os-specific/linux/s6-linux-init { };
     s6-linux-utils = callPackage ../os-specific/linux/s6-linux-utils { };
     s6-networking = callPackage ../tools/networking/s6-networking { };
     s6-portable-utils = callPackage ../tools/misc/s6-portable-utils { };

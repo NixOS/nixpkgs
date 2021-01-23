@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, callPackage, fetchurl, makeWrapper, jre }:
 
 let
 # The version number here is whatever is reported by the RUBY_VERSION string
@@ -50,7 +50,7 @@ jruby = stdenv.mkDerivation rec {
     libPath = "lib/${rubyEngine}/${rubyVersion.libDir}";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ruby interpreter written in Java";
     homepage = "http://jruby.org/";
     license = with licenses; [ cpl10 gpl2 lgpl21 ];

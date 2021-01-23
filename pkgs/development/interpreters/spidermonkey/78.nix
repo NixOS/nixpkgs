@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , autoconf213
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     # https://src.fedoraproject.org/rpms/mozjs38/c/761399aba092bcb1299bb4fccfd60f370ab4216e
     "--enable-optimize"
     "--enable-release"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Spidermonkey seems to use different host/build terminology for cross
     # compilation here.
     "--host=${stdenv.buildPlatform.config}"
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     license = licenses.gpl2; # TODO: MPL/GPL/LGPL tri-license.

@@ -27,7 +27,7 @@
     "amazon_polly" = ps: with ps; [ boto3 ];
     "ambiclimate" = ps: with ps; [ aiohttp-cors ambiclimate ];
     "ambient_station" = ps: with ps; [ ]; # missing inputs: aioambient
-    "amcrest" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: amcrest
+    "amcrest" = ps: with ps; [ amcrest ha-ffmpeg ];
     "ampio" = ps: with ps; [ ]; # missing inputs: asmog
     "android_ip_webcam" = ps: with ps; [ ]; # missing inputs: pydroid-ipcam
     "androidtv" = ps: with ps; [ adb-shell androidtv pure-python-adb ];
@@ -194,7 +194,7 @@
     "dweet" = ps: with ps; [ ]; # missing inputs: dweepy
     "dynalite" = ps: with ps; [ ]; # missing inputs: dynalite_devices
     "dyson" = ps: with ps; [ aiohttp-cors zeroconf ]; # missing inputs: libpurecool
-    "eafm" = ps: with ps; [ ]; # missing inputs: aioeafm
+    "eafm" = ps: with ps; [ aioeafm ];
     "ebox" = ps: with ps; [ ]; # missing inputs: pyebox
     "ebusd" = ps: with ps; [ ]; # missing inputs: ebusdpy
     "ecoal_boiler" = ps: with ps; [ ]; # missing inputs: ecoaliface

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{lib, stdenv, fetchurl, unzip}:
 let
   s = # Generated upstream information
   rec {
@@ -29,9 +29,9 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Light-weight scripting library";
-    license = stdenv.lib.licenses.zlib ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.zlib ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     downloadPage = "http://www.angelcode.com/angelscript/downloads.html";
     homepage="http://www.angelcode.com/angelscript/";
   };

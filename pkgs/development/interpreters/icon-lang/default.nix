@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , libX11
 , libXt
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lj2f13pbaajcy4v3744bz46rghhw5sv4dwwfnzhsllbj5gnjsv2";
   };
 
-  buildInputs = stdenv.lib.optionals withGraphics [ libX11 libXt ];
+  buildInputs = lib.optionals withGraphics [ libX11 libXt ];
 
   configurePhase =
     let
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     mv $out/doc $out/share/doc/icon
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A very high level general-purpose programming language";
     maintainers = with maintainers; [ vrthra yurrriq ];
     platforms = with platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd ++ cygwin ++ illumos;

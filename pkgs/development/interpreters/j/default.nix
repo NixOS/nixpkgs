@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, readline, libedit, bc
+{ lib, stdenv, fetchFromGitHub, readline, libedit, bc
 , avxSupport ? stdenv.hostPlatform.avxSupport
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Causes build failure due to warning
-  hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "strictoverflow";
+  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
   buildPhase = ''
     export SOURCE_DIR=$(pwd)
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     cp -r $JLIB/bin "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "J programming language, an ASCII-based APL successor";
     maintainers = with maintainers; [ raskin synthetica ];
     platforms = with platforms; linux ++ darwin;

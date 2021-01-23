@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
+{ pkgs, lib, stdenv, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
 , libxml2, libxslt, ncurses, openssl, perl, autoconf
 # TODO: use jdk https://github.com/NixOS/nixpkgs/pull/89731
 , openjdk8 ? null # javacSupport
@@ -41,7 +41,7 @@ assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk8 != null;
 
 let
-  inherit (stdenv.lib) optional optionals optionalAttrs optionalString;
+  inherit (lib) optional optionals optionalAttrs optionalString;
   wxPackages2 = if stdenv.isDarwin then [ wxmac ] else wxPackages;
 
 in stdenv.mkDerivation ({
@@ -106,12 +106,12 @@ in stdenv.mkDerivation ({
   # Some erlang bin/ scripts run sed and awk
   postFixup = ''
     wrapProgram $out/lib/erlang/bin/erl --prefix PATH ":" "${gnused}/bin/"
-    wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${stdenv.lib.makeBinPath [ gnused gawk ]}"
+    wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${lib.makeBinPath [ gnused gawk ]}"
   '';
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; ({
+  meta = with lib; ({
     homepage = "https://www.erlang.org/";
     downloadPage = "https://www.erlang.org/download.html";
     description = "Programming language used for massively scalable soft real-time systems";

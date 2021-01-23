@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, clang, python, v8, coreutils }:
+{ lib, stdenv, fetchFromGitHub, cmake, clang, python, v8, coreutils }:
 
 let
   sexpr_wasm_prototype = stdenv.mkDerivation {
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     make install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "wasm runs WebAssembly from the command line";
     maintainers = with maintainers; [ proglodyte ];
     platforms = platforms.linux;

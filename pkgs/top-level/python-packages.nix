@@ -206,6 +206,8 @@ in {
 
   aiodns = callPackage ../development/python-modules/aiodns { };
 
+  aioeafm = callPackage ../development/python-modules/aioeafm { };
+
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
   aioeventlet = callPackage ../development/python-modules/aioeventlet { };
@@ -317,6 +319,8 @@ in {
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
 
   ambiclimate = callPackage ../development/python-modules/ambiclimate { };
+
+  amcrest = callPackage ../development/python-modules/amcrest { };
 
   amply = callPackage ../development/python-modules/amply { };
 
