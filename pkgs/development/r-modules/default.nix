@@ -237,7 +237,7 @@ let
     BayesSAE = [ pkgs.gsl_1 ];
     BayesVarSel = [ pkgs.gsl_1 ];
     BayesXsrc = [ pkgs.readline.dev pkgs.ncurses ];
-    bigGP = [ pkgs.openmpi ];
+    bigGP = [ pkgs.mpi ];
     bio3d = [ pkgs.zlib ];
     BiocCheck = [ pkgs.which ];
     Biostrings = [ pkgs.zlib ];
@@ -284,8 +284,8 @@ let
     n1qn1 = [ pkgs.gfortran ];
     odbc = [ pkgs.unixODBC ];
     pander = [ pkgs.pandoc pkgs.which ];
-    pbdMPI = [ pkgs.openmpi ];
-    pbdPROF = [ pkgs.openmpi ];
+    pbdMPI = [ pkgs.mpi ];
+    pbdPROF = [ pkgs.mpi ];
     pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
     pdftools = [ pkgs.poppler.dev ];
     phytools = [ pkgs.which ];
@@ -309,14 +309,14 @@ let
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
     Rhdf5lib = [ pkgs.zlib ];
-    Rhpc = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.openmpi pkgs.pcre.dev ];
+    Rhpc = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.mpi pkgs.pcre.dev ];
     Rhtslib = [ pkgs.zlib.dev pkgs.automake pkgs.autoconf pkgs.bzip2.dev pkgs.lzma.dev pkgs.curl.dev ];
     rjags = [ pkgs.jags ];
     rJava = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.pcre.dev pkgs.jdk pkgs.libzip ];
     Rlibeemd = [ pkgs.gsl_1 ];
     rmatio = [ pkgs.zlib.dev ];
     Rmpfr = [ pkgs.gmp pkgs.mpfr.dev ];
-    Rmpi = [ pkgs.openmpi ];
+    Rmpi = [ pkgs.mpi ];
     RMySQL = [ pkgs.zlib pkgs.libmysqlclient pkgs.openssl.dev ];
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
     RODBC = [ pkgs.libiodbc ];

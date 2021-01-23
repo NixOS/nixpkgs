@@ -2188,7 +2188,6 @@ in {
 
   fenics = callPackage ../development/libraries/science/math/fenics {
     inherit (pkgs) pkg-config;
-    mpi = pkgs.openmpi;
     pytest = self.pytest_4;
   };
 
@@ -3490,7 +3489,7 @@ in {
 
   labelbox = callPackage ../development/python-modules/labelbox { };
 
-  lammps-cython = callPackage ../development/python-modules/lammps-cython { mpi = pkgs.openmpi; };
+  lammps-cython = callPackage ../development/python-modules/lammps-cython { mpi = pkgs.mpi; };
 
   langcodes = callPackage ../development/python-modules/langcodes { };
 
@@ -4124,7 +4123,7 @@ in {
 
   mpd = callPackage ../development/python-modules/mpd { };
 
-  mpi4py = callPackage ../development/python-modules/mpi4py { mpi = pkgs.openmpi; };
+  mpi4py = callPackage ../development/python-modules/mpi4py { mpi = pkgs.mpi; };
 
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
 

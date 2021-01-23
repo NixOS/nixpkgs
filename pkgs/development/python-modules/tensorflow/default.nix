@@ -11,7 +11,7 @@
 # Common deps
 , git, pybind11, which, binutils, glibcLocales, cython, perl
 # Common libraries
-, jemalloc, openmpi, gast, grpc, sqlite, boringssl, jsoncpp
+, jemalloc, mpi, gast, grpc, sqlite, boringssl, jsoncpp
 , curl, snappy, flatbuffers-core, lmdb-core, icu, double-conversion, libpng, libjpeg_turbo, giflib
 # Upsteam by default includes cuda support since tensorflow 1.15. We could do
 # that in nix as well. It would make some things easier and less confusing, but
@@ -129,7 +129,7 @@ let
 
     buildInputs = [
       jemalloc
-      openmpi
+      mpi
       glibcLocales
       git
 

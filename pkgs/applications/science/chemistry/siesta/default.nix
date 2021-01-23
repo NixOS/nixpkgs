@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl
-, gfortran, blas, lapack
-, mpi ? null, scalapack
+, gfortran, blas, lapack, scalapack
+, useMpi ? false
+, mpi
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ blas lapack gfortran ]
-    ++ (lib.optionals (mpi != null) [ mpi scalapack ]);
+    ++ lib.optionals useMpi [ mpi scalapack ];
 
   enableParallelBuilding = true;
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation {
     cp gfortran.make arch.make
   '';
 
-  preBuild = if (mpi != null) then ''
+  preBuild = if useMpi then ''
     makeFlagsArray=(
         CC="mpicc" FC="mpifort"
         FPPFLAGS="-DMPI" MPI_INTERFACE="libmpi_f90.a" MPI_INCLUDE="."
