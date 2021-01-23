@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, runtimeShell }:
+{ lib, stdenv, fetchurl, python, runtimeShell }:
 
 stdenv.mkDerivation {
   name = "cmdstan-2.17.1";
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
       likelihood estimation with Optimization (L-BFGS).
     '';
     homepage = "https://mc-stan.org/interfaces/cmdstan.html";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 }

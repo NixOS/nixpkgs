@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, vim, makeWrapper }:
+{ lib, stdenv, fetchzip, vim, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "microscheme";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     make install PREFIX=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://microscheme.org";
     description = "A Scheme subset for Atmel microcontrollers";
     longDescription = ''

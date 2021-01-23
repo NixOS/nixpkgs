@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , unstableGitUpdater
 , cmake
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://strlen.com/lobster";
     description = "The Lobster programming language";
     longDescription = ''

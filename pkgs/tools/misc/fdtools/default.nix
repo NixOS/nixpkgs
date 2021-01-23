@@ -13,6 +13,7 @@ in stdenv.mkDerivation {
     inherit sha256;
   };
 
+  patches = [ ./new-skalibs.patch ];
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 
   buildInputs = [ skawarePackages.skalibs ];

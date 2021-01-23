@@ -3,7 +3,7 @@
 let
    useX11 = stdenv.isi686 || stdenv.isx86_64;
    useNativeCompilers = stdenv.isi686 || stdenv.isx86_64 || stdenv.isMips;
-   inherit (stdenv.lib) optionals optionalString;
+   inherit (lib) optionals optionalString;
 in
 
 stdenv.mkDerivation rec {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ln -sv $out/lib/ocaml/caml $out/include/caml
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://caml.inria.fr/ocaml";
     license = with licenses; [
       qpl /* compiler */

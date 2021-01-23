@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
   name = "gwt-java-2.4.0";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.gwtproject.org/";
     description = "A development toolkit for building and optimizing complex browser-based applications";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
 }

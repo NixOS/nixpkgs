@@ -1,6 +1,6 @@
 # Binaries provided by Open Dylan to be used to bootstrap from source.
 # The binaries can also be used as is.
-{stdenv, fetchurl, patchelf, boehmgc, gnused, gcc, makeWrapper}:
+{lib, stdenv, fetchurl, patchelf, boehmgc, gnused, gcc, makeWrapper}:
 
 stdenv.mkDerivation {
   name = "opendylan-2013.2";
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://opendylan.org";
     description = "A multi-paradigm functional and object-oriented programming language";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

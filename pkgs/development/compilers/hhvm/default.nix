@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkg-config, boost, libunwind, libmemcached
+{ lib, stdenv, fetchgit, cmake, pkg-config, boost, libunwind, libmemcached
 , pcre, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://hhvm.com";
     license     = "PHP/Zend";
     platforms   = [ "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = [ lib.maintainers.thoughtpolice ];
     broken = true; # Since 2018-04-21, see https://hydra.nixos.org/build/73059373
   };
 }

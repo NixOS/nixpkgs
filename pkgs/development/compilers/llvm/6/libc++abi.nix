@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetch, libcxx, libunwind, llvm, version }:
+{ lib, stdenv, cmake, fetch, libcxx, libunwind, llvm, version }:
 
 stdenv.mkDerivation {
   pname = "libc++abi";
@@ -7,15 +7,15 @@ stdenv.mkDerivation {
   src = fetch "libcxxabi" "0prqvdj317qrc8nddaq1hh2ag9algkd9wbkj3y4mr5588k12x7r0";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = stdenv.lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
+  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
 
   postUnpack = ''
     unpackFile ${libcxx.src}
     unpackFile ${llvm.src}
     export cmakeFlags="-DLLVM_PATH=$PWD/$(ls -d llvm-*) -DLIBCXXABI_LIBCXX_PATH=$PWD/$(ls -d libcxx-*)"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -d $(ls -d libcxx-*) -i ${../libcxx-0001-musl-hacks.patch}
   '';
 
@@ -44,8 +44,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://libcxxabi.llvm.org/";
     description = "A new implementation of low level support for a standard C++ library";
-    license = with stdenv.lib.licenses; [ ncsa mit ];
-    maintainers = with stdenv.lib.maintainers; [ vlstill ];
-    platforms = stdenv.lib.platforms.unix;
+    license = with lib.licenses; [ ncsa mit ];
+    maintainers = with lib.maintainers; [ vlstill ];
+    platforms = lib.platforms.unix;
   };
 }

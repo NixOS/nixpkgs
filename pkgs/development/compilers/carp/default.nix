@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, clang, haskellPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, clang, haskellPackages }:
 
 haskellPackages.mkDerivation rec {
 
@@ -39,10 +39,10 @@ haskellPackages.mkDerivation rec {
 
   description = "A statically typed lisp, without a GC, for real-time applications";
   homepage    = "https://github.com/carp-lang/Carp";
-  license     = stdenv.lib.licenses.asl20;
-  maintainers = with stdenv.lib.maintainers; [ jluttine ];
+  license     = lib.licenses.asl20;
+  maintainers = with lib.maintainers; [ jluttine ];
 
   # Windows not (yet) supported.
-  platforms   = with stdenv.lib.platforms; unix ++ darwin;
+  platforms   = with lib.platforms; unix ++ darwin;
 
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, coreutils, which }:
+{ lib, stdenv, fetchFromGitLab, coreutils, which }:
 
 stdenv.mkDerivation rec {
   pname = "owl-lisp";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # tests are run as part of the compilation process
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A functional Scheme for world domination";
     homepage    = "https://gitlab.com/owl-lisp/owl";
     license     = licenses.mit;

@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
            else if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
            else if stdenv.isAarch32 then "arm"
            else throw "Unsupported system";
-  GOARM = stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "5";
+  GOARM = lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 0;
 
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     ./all.bash
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://golang.org/";
     description = "The Go Programming language";
     license = licenses.bsd3;
