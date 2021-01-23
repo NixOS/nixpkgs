@@ -14,9 +14,9 @@ let
     sha256Hash = "1f9bclvyvm3sg9an7wxlfwd8jwnb9cl726dvggmysa6r7shc7xw9";
   };
   betaVersion = {
-    version = "4.2.0.18"; # "Android Studio 4.2 Beta 2"
-    build = "202.7008469";
-    sha256Hash = "0323i4mcib84z7bsy801640gadd2k8ps7vr9jbdpb6i9gma6klmh";
+    version = "4.2.0.19"; # "Android Studio 4.2 Beta 3"
+    build = "202.7033425";
+    sha256Hash = "037r99hn16y0fy6z6k90qf6yx5a4vvx6bl9rdyagdm16ry4bpiw4";
   };
   latestVersion = { # canary & dev
     version = "2020.3.1.3"; # "Android Studio Arctic Fox Canary 3"
