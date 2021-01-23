@@ -6,14 +6,12 @@
 , lib }:
 
 buildPythonPackage rec {
-  pname = "log-symbols";
+  pname = "log_symbols";
   version = "0.0.14";
   disabled = isPy27;
 
   src = fetchPypi {
-    # the package is named log-symbols but PyPI files are named log_symbols
-    pname = "log_symbols";
-    inherit version;
+    inherit pname version;
     sha256 = "0mh5d0igw33libfmbsr1ri1p1y644p36nwaa2w6kzrd8w5pvq2yg";
   };
 

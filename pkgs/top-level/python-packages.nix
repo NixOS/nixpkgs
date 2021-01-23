@@ -2753,6 +2753,8 @@ in {
 
   gpyopt = callPackage ../development/python-modules/gpyopt { };
 
+  gradient = callPackage ../development/python-modules/gradient { };
+
   gradient-utils = callPackage ../development/python-modules/gradient-utils { };
 
   gradient_statsd = callPackage ../development/python-modules/gradient_statsd { };
@@ -4643,8 +4645,6 @@ in {
   panel = callPackage ../development/python-modules/panel { };
 
   papermill = callPackage ../development/python-modules/papermill { };
-
-  paperspace = callPackage ../development/python-modules/paperspace { };
 
   openpaperwork-core = callPackage ../applications/office/paperwork/openpaperwork-core.nix { };
   openpaperwork-gtk = callPackage ../applications/office/paperwork/openpaperwork-gtk.nix { };
