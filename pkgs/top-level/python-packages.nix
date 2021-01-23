@@ -7294,6 +7294,8 @@ in {
 
   sphfile = callPackage ../development/python-modules/sphfile { };
 
+  spinners = callPackage ../development/python-modules/spinners { };
+
   sphinxcontrib-applehelp = callPackage ../development/python-modules/sphinxcontrib-applehelp { };
 
   sphinxcontrib-autoapi = callPackage ../development/python-modules/sphinxcontrib-autoapi { };
