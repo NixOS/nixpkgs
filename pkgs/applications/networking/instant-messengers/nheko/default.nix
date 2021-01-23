@@ -23,6 +23,9 @@
 , olm
 , pkg-config
 , nlohmann_json
+, voipSupport ? true
+, gst_all_1
+, libnice
 }:
 
 mkDerivation rec {
@@ -59,11 +62,23 @@ mkDerivation rec {
     qtquickcontrols2
     qtgraphicaleffects
     qtkeychain
-  ] ++ lib.optional stdenv.isDarwin qtmacextras;
+  ] ++ lib.optional stdenv.isDarwin qtmacextras
+    ++ lib.optionals voipSupport (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      (gst-plugins-good.override { qt5Support = true; })
+      gst-plugins-bad
+      libnice
+    ]);
 
   cmakeFlags = [
     "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
   ];
+
+  preFixup = lib.optionalString voipSupport ''
+    # add gstreamer plugins path to the wrapper
+    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  '';
 
   meta = with lib; {
     description = "Desktop client for the Matrix protocol";
