@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , installShellFiles
+, nixosTests
 , asciidoc
 , pkg-config
 , libxslt
@@ -72,6 +73,8 @@ stdenv.mkDerivation rec {
     installShellCompletion --bash --name usbguard.bash scripts/bash_completion/usbguard
     installShellCompletion --zsh --name _usbguard scripts/usbguard-zsh-completion
   '';
+
+  passthru.tests = nixosTests.usbguard;
 
   meta = with lib; {
     description = "The USBGuard software framework helps to protect your computer against BadUSB";
