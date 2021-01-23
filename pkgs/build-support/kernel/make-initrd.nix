@@ -56,13 +56,13 @@ in
 , prepend ? []
 
 # Whether to wrap the initramfs in a u-boot image.
-, makeUInitrd ? stdenvNoCC.hostPlatform.platform.kernelTarget == "uImage"
+, makeUInitrd ? stdenvNoCC.hostPlatform.linux-kernel.target == "uImage"
 
 # If generating a u-boot image, the architecture to use. The default
 # guess may not align with u-boot's nomenclature correctly, so it can
 # be overridden.
 # See https://gitlab.denx.de/u-boot/u-boot/-/blob/9bfb567e5f1bfe7de8eb41f8c6d00f49d2b9a426/common/image.c#L81-106 for a list.
-, uInitrdArch ? stdenvNoCC.hostPlatform.kernelArch
+, uInitrdArch ? stdenvNoCC.hostPlatform.linuxArch
 
 # The name of the compression, as recognised by u-boot.
 # See https://gitlab.denx.de/u-boot/u-boot/-/blob/9bfb567e5f1bfe7de8eb41f8c6d00f49d2b9a426/common/image.c#L195-204 for a list.
