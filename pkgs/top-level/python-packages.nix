@@ -318,6 +318,8 @@ in {
 
   ambiclimate = callPackage ../development/python-modules/ambiclimate { };
 
+  amcrest = callPackage ../development/python-modules/amcrest { };
+
   amply = callPackage ../development/python-modules/amply { };
 
   amqp = callPackage ../development/python-modules/amqp { };
