@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, liblo }:
+{ lib, stdenv, fetchurl, pkg-config, pure, liblo }:
 
 stdenv.mkDerivation rec {
   baseName = "liblo";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A quick and dirty Pure wrapper for the liblo library, which implements Berkeley’s Open Sound Control (OSC) protocol";
     homepage = "http://puredocs.bitbucket.org/pure-liblo.html";
-    license = stdenv.lib.licenses.lgpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

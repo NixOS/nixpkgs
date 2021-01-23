@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "boost-build";
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
     ./b2 install --prefix=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.boost.org/boost-build2/";
-    license = stdenv.lib.licenses.boost;
+    license = lib.licenses.boost;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ivan-tkatchev ];
   };

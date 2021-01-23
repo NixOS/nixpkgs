@@ -1,4 +1,4 @@
-{ gccStdenv, fetchurl, zlib, openmpi }:
+{ gccStdenv, fetchurl, zlib, mpi }:
 
 gccStdenv.mkDerivation rec {
   version = "3.7.2";
@@ -9,7 +9,7 @@ gccStdenv.mkDerivation rec {
     sha256 = "1p2364ffjc56i82snzvjpy6pkf6wvqwvlvlqxliscx2c303fxs8v";
   };
 
-  buildInputs = [ zlib openmpi ];
+  buildInputs = [ zlib mpi ];
   setSourceRoot = ''sourceRoot=$(echo */src)'';
   buildFlags = [ "thread" "mpis" ];
   preInstall = "mkdir -p $out/man/man1";

@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, jshon, electron_3
+{ lib, stdenv, fetchFromGitHub, jshon, electron_3
 , runtimeShell, hyper-haskell-server, extra-packages ? [] }:
 
 let
-  binPath = stdenv.lib.makeBinPath ([ hyper-haskell-server ] ++ extra-packages);
+  binPath = lib.makeBinPath ([ hyper-haskell-server ] ++ extra-packages);
   electron = electron_3;
 in stdenv.mkDerivation rec {
   pname = "hyper-haskell";
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     chmod 755 $out/bin/hyper-haskell
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The strongly hyped graphical interpreter for the Haskell programming language";
     homepage = "https://github.com/HeinrichApfelmus/hyper-haskell";
     license = licenses.bsd3;

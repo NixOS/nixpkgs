@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
     rm -r $out/lib # it contains only systemd unit file
   '');
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight and modular continuous integration service";
     homepage = "https://laminar.ohwg.net";
     license = licenses.gpl3;

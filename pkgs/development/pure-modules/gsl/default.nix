@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pure, pkg-config, gsl }:
+{ lib, stdenv, fetchurl, pure, pkg-config, gsl }:
 
 stdenv.mkDerivation rec {
   baseName = "gsl";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GNU Scientific Library interface for Pure";
     homepage = "http://puredocs.bitbucket.org/pure-gsl.html";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

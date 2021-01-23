@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, bison, flex, gperf, ncurses, pythonPackages }:
+{ lib, stdenv, fetchurl, pkg-config, bison, flex, gperf, ncurses, pythonPackages }:
 
 stdenv.mkDerivation rec {
   basename = "kconfig-frontends";
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Out of Linux tree packaging of the kconfig infrastructure";
     longDescription = ''
       Configuration language and system for the Linux kernel and other

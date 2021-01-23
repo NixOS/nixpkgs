@@ -1,4 +1,4 @@
- {stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper }:
+ {lib, stdenv, fetchFromGitHub, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "lcov";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/genpng --set PERL5LIB ${perlPackages.makeFullPerlPath [ perlPackages.GD ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Code coverage tool that enhances GNU gcov";
 
     longDescription =
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = "http://ltp.sourceforge.net/coverage/lcov.php";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.all;

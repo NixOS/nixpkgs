@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre, writeScript, common-updater-scripts
+{ lib, stdenv, fetchurl, makeWrapper, jre, writeScript, common-updater-scripts
 , coreutils, git, gnused, nix, nixfmt }:
 
 let
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     #!${stdenv.shell}
     set -o errexit
     PATH=${
-      stdenv.lib.makeBinPath [
+      lib.makeBinPath [
         common-updater-scripts
         coreutils
         git
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://get-coursier.io/";
     description =
       "A Scala library to fetch dependencies from Maven / Ivy repositories";

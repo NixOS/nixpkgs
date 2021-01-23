@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python27Packages
 , fetchFromGitHub
 , makeWrapper
@@ -106,12 +106,12 @@ rec {
     _NIX_SHELL_LIBCMARK = "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";
 
     # See earlier note on glibcLocales
-    LOCALE_ARCHIVE = stdenv.lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
+    LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
 
     meta = {
       description = "A new unix shell";
       homepage = "https://www.oilshell.org/";
-      license = with stdenv.lib.licenses; [
+      license = with lib.licenses; [
         psfl # Includes a portion of the python interpreter and standard library
         asl20 # Licence for Oil itself
       ];

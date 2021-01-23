@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     else throw "Unsupported platform: only Linux/Darwin x86/x64 are supported.";
 
   # Shared data (for the sources file)
-  pharo-share = import ./share.nix { inherit stdenv fetchurl unzip; };
+  pharo-share = import ./share.nix { inherit lib stdenv fetchurl unzip; };
 
   # Note: -fPIC causes the VM to segfault.
   hardeningDisable = [ "format" "pic"
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
 
     # Note: include ELF rpath in LD_LIBRARY_PATH for finding libc.
-    libs=$out:$(patchelf --print-rpath "$out/pharo"):${stdenv.lib.makeLibraryPath libs}
+    libs=$out:$(patchelf --print-rpath "$out/pharo"):${lib.makeLibraryPath libs}
 
     # Create the script
     cat > "$out/bin/${cmd}" <<EOF

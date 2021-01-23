@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre, withZ3 ? true, z3 }:
+{ lib, stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45, pcre, withZ3 ? true, z3 }:
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0mlw0z20qf0g9qrmdmbykzf87wlcgmah8bacmp4mk6dwfzr9g9n3";
   };
 
-  buildInputs = [ pcre ] ++ stdenv.lib.optionals withZ3 [ z3 ];
+  buildInputs = [ pcre ] ++ lib.optionals withZ3 [ z3 ];
   nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
 
   makeFlags = [ "PREFIX=$(out)" "FILESDIR=$(out)/cfg" "HAVE_RULES=yes" ]
-   ++ stdenv.lib.optionals withZ3 [ "USE_Z3=yes" "CPPFLAGS=-DNEW_Z3=1" ];
+   ++ lib.optionals withZ3 [ "USE_Z3=yes" "CPPFLAGS=-DNEW_Z3=1" ];
 
   outputs = [ "out" "man" ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     cp cppcheck.1 $man/share/man/man1/cppcheck.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A static analysis tool for C/C++ code";
     longDescription = ''
       Check C/C++ code for memory leaks, mismatching allocation-deallocation,

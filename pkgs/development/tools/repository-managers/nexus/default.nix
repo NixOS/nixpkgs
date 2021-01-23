@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/nexus \
       --set JAVA_HOME ${jre_headless} \
       --set ALTERNATIVE_NAME "nexus" \
-      --prefix PATH "${stdenv.lib.makeBinPath [ gawk ]}"
+      --prefix PATH "${lib.makeBinPath [ gawk ]}"
 
     runHook postInstall
   '';

@@ -2,7 +2,7 @@
 , extra, fetchgit, filepath, ghc, ghc-boot-th, ghc-paths, ghcide
 , hashable, haskell-lsp, haskell-lsp-types, hls-plugin-api
 , parser-combinators, pretty-simple, QuickCheck, safe-exceptions
-, shake, stdenv, temporary, text, time, transformers
+, shake, lib, stdenv, temporary, text, time, transformers
 , unordered-containers
 }:
 mkDerivation {
@@ -23,5 +23,5 @@ mkDerivation {
     unordered-containers
   ];
   description = "Eval plugin for Haskell Language Server";
-  license = stdenv.lib.licenses.asl20;
+  license = lib.licenses.asl20;
 }

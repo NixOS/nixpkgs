@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkg-config, zlib, rdkafka, yajl }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, zlib, rdkafka, yajl }:
 
 stdenv.mkDerivation rec {
   pname = "kafkacat";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./configure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A generic non-JVM producer and consumer for Apache Kafka";
     homepage = "https://github.com/edenhill/kafkacat";
     license = licenses.bsd2;

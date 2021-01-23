@@ -5,13 +5,14 @@
 , gfortran ? null
 , zlib ? null
 , szip ? null
-, mpi ? null
+, mpiSupport ? false
+, mpi
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 # cpp and mpi options are mutually exclusive
 # (--enable-unsupported could be used to force the build)
-assert !cpp || mpi == null;
+assert !cpp || !mpiSupport;
 
 let inherit (lib) optional optionals; in
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    mpiSupport = (mpi != null);
+    inherit mpiSupport;
     inherit mpi;
   };
 
@@ -38,13 +39,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = []
     ++ optional (zlib != null) zlib
-    ++ optional (mpi != null) mpi;
+    ++ optional mpiSupport mpi;
 
   configureFlags = []
     ++ optional cpp "--enable-cxx"
     ++ optional (gfortran != null) "--enable-fortran"
     ++ optional (szip != null) "--with-szlib=${szip}"
-    ++ optionals (mpi != null) ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
+    ++ optionals mpiSupport ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
     ++ optional enableShared "--enable-shared";
 
   patches = [

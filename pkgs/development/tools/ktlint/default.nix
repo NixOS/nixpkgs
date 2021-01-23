@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre_headless }:
+{ lib, stdenv, fetchurl, makeWrapper, jre_headless }:
 
 stdenv.mkDerivation rec {
   pname = "ktlint";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ktlint --prefix PATH : "${jre_headless}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An anti-bikeshedding Kotlin linter with built-in formatter";
     homepage = "https://ktlint.github.io/";
     license = licenses.mit;

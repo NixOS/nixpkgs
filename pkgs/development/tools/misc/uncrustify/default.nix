@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python }:
+{ lib, stdenv, fetchFromGitHub, cmake, python }:
 
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA";
     homepage = "http://uncrustify.sourceforge.net/";
     license = licenses.gpl2Plus;

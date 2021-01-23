@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pandoc, man }:
+{ lib, stdenv, fetchFromGitHub, pandoc, man }:
 stdenv.mkDerivation rec {
   pname = "git-ftp";
   version = "1.6.0";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [pandoc man];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Git powered FTP client written as shell script";
     homepage = "https://git-ftp.github.io/";
     license = licenses.gpl3;

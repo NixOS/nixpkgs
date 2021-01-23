@@ -3,10 +3,10 @@
 , cmake
 , hwloc
 , fftw
-, openmpi
 , perl
 , singlePrec ? true
 , mpiEnabled ? false
+, mpi
 , cpuAcceleration ? null
 }:
 
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fftw perl hwloc ]
-  ++ (lib.optionals mpiEnabled [ openmpi ]);
+  ++ (lib.optionals mpiEnabled [ mpi ]);
 
   cmakeFlags = [
     "-DGMX_SIMD:STRING=${SIMD cpuAcceleration}"

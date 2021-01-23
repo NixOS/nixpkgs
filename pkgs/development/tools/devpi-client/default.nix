@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonApplication
 , fetchPypi
 # buildInputs
@@ -49,7 +49,7 @@ buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://doc.devpi.net";
     description = "Client for devpi, a pypi index server and packaging meta tool";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, git, gfortran, openmpi, blas, liblapack, qt4, qwt6_qt4, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, cmake, git, gfortran, mpi, blas, liblapack, qt4, qwt6_qt4, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "elmerfem";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ cmake pkg-config git ];
-  buildInputs = [ gfortran openmpi blas liblapack qt4 qwt6_qt4 ];
+  buildInputs = [ gfortran mpi blas liblapack qt4 qwt6_qt4 ];
 
   preConfigure = ''
     patchShebangs ./

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, sqlite }:
+{ lib, stdenv, fetchurl, pkg-config, pure, sqlite }:
 
 stdenv.mkDerivation rec {
   baseName = "sql3";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A SQLite module for the Pure programming language";
     homepage = "http://puredocs.bitbucket.org/pure-sql3.html";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

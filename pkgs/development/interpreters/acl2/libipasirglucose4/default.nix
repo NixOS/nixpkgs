@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, unzip }:
+{ lib, stdenv, fetchurl, zlib, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "libipasirglucose4";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install -D libipasirglucose4.so $out/lib/libipasirglucose4.so
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shared library providing IPASIR interface to the Glucose SAT solver";
     license = licenses.mit;
     platforms = platforms.unix;

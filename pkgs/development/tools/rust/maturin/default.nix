@@ -19,8 +19,8 @@ in rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gmp openssl ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security
-    ++ stdenv.lib.optional stdenv.isLinux dbus;
+    ++ lib.optional stdenv.isDarwin Security
+    ++ lib.optional stdenv.isLinux dbus;
 
   # Requires network access, fails in sandbox.
   doCheck = false;

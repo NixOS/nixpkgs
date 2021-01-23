@@ -206,6 +206,8 @@ in {
 
   aiodns = callPackage ../development/python-modules/aiodns { };
 
+  aioeafm = callPackage ../development/python-modules/aioeafm { };
+
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
   aioeventlet = callPackage ../development/python-modules/aioeventlet { };
@@ -317,6 +319,8 @@ in {
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
 
   ambiclimate = callPackage ../development/python-modules/ambiclimate { };
+
+  amcrest = callPackage ../development/python-modules/amcrest { };
 
   amply = callPackage ../development/python-modules/amply { };
 
@@ -2184,7 +2188,6 @@ in {
 
   fenics = callPackage ../development/libraries/science/math/fenics {
     inherit (pkgs) pkg-config;
-    mpi = pkgs.openmpi;
     pytest = self.pytest_4;
   };
 
@@ -3486,7 +3489,7 @@ in {
 
   labelbox = callPackage ../development/python-modules/labelbox { };
 
-  lammps-cython = callPackage ../development/python-modules/lammps-cython { mpi = pkgs.openmpi; };
+  lammps-cython = callPackage ../development/python-modules/lammps-cython { mpi = pkgs.mpi; };
 
   langcodes = callPackage ../development/python-modules/langcodes { };
 
@@ -4120,7 +4123,7 @@ in {
 
   mpd = callPackage ../development/python-modules/mpd { };
 
-  mpi4py = callPackage ../development/python-modules/mpi4py { mpi = pkgs.openmpi; };
+  mpi4py = callPackage ../development/python-modules/mpi4py { mpi = pkgs.mpi; };
 
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
 
@@ -5204,6 +5207,8 @@ in {
   pycategories = callPackage ../development/python-modules/pycategories { };
 
   pycdio = callPackage ../development/python-modules/pycdio { };
+
+  pycfdns = callPackage ../development/python-modules/pycfdns { };
 
   pychart = callPackage ../development/python-modules/pychart { };
 

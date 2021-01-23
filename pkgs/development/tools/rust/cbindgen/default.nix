@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1lzzckzcgj496chbfd6lhwxcangv0krx8m5k2jwffnb9mfgac7hx";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   checkFlags = [
     # https://github.com/eqrion/cbindgen/issues/338

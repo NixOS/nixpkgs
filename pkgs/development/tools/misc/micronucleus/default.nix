@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
    };
 
    buildInputs = [ libusb-compat-0_1 ];
-   makeFlags = stdenv.lib.optionals stdenv.isDarwin [ "CC=cc" ];
+   makeFlags = lib.optionals stdenv.isDarwin [ "CC=cc" ];
 
    installPhase = ''
      mkdir -p $out/bin

@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bingrep";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-3eGYU5O7HSpawIL/8OVmROCzXfdnoMAnIujjrIp00xg=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Greps through binaries from various OSs and architectures, and colors them";
     homepage = "https://github.com/m4b/bingrep";
     license = licenses.mit;

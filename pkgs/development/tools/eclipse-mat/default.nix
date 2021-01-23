@@ -62,13 +62,13 @@ stdenv.mkDerivation rec {
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/mat/MemoryAnalyzer
     [ -f $libCairo ] && patchelf --set-rpath ${
-      stdenv.lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]
+      lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]
     } $libCairo
 
     # Create wrapper script.  Pass -configuration to store settings in ~/.eclipse-mat/<version>
     makeWrapper $out/mat/MemoryAnalyzer $out/bin/eclipse-mat \
       --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk ])} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk ])} \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --add-flags "-configuration \$HOME/.eclipse-mat/''${version}/configuration"
 

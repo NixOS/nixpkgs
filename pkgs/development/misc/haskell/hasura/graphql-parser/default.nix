@@ -1,6 +1,6 @@
 { mkDerivation, aeson, attoparsec, base, bytestring, containers
 , criterion, fetchgit, filepath, hedgehog, hpack, prettyprinter
-, protolude, regex-tdfa, scientific, stdenv, template-haskell, text
+, protolude, regex-tdfa, scientific, lib, stdenv, template-haskell, text
 , text-builder, th-lift-instances, unordered-containers, vector
 }:
 mkDerivation {
@@ -32,5 +32,5 @@ mkDerivation {
   doCheck = false;
   prePatch = "hpack";
   homepage = "https://github.com/hasura/graphql-parser-hs#readme";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
 }

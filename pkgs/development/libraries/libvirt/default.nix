@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
     patchShebangs . # fixes /usr/bin/python references
   ''
-  + (lib.concatStringsSep "\n" (stdenv.lib.mapAttrsToList patchBuilder overrides));
+  + (lib.concatStringsSep "\n" (lib.mapAttrsToList patchBuilder overrides));
 
   mesonAutoFeatures = "auto";
 

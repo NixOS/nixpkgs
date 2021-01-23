@@ -8,7 +8,7 @@ assert lib.assertMsg (sqliteSupport == true || postgresqlSupport == true || mysq
   "support for at least one database must be enabled";
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (lib) optional optionals optionalString;
   features = ''
     ${optionalString sqliteSupport "sqlite"} \
     ${optionalString postgresqlSupport "postgres"} \

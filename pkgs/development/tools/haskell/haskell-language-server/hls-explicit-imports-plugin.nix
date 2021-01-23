@@ -1,5 +1,5 @@
 { mkDerivation, aeson, base, containers, deepseq, fetchgit, ghc
-, ghcide, haskell-lsp-types, hls-plugin-api, shake, stdenv, text
+, ghcide, haskell-lsp-types, hls-plugin-api, shake, lib, stdenv, text
 , unordered-containers
 }:
 mkDerivation {
@@ -17,5 +17,5 @@ mkDerivation {
     hls-plugin-api shake text unordered-containers
   ];
   description = "Explicit imports plugin for Haskell Language Server";
-  license = stdenv.lib.licenses.asl20;
+  license = lib.licenses.asl20;
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gettext, buildPackages }:
+{ lib, stdenv, fetchurl, perl, gettext, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "texi2html";
@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
     patchShebangs separated_to_hash.pl
   '';
 
-  postInstall = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     for f in $out/bin/*; do
       substituteInPlace $f --replace "${buildPackages.perl}" "${perl}"
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Perl script which converts Texinfo source files to HTML output";
     homepage = "https://www.nongnu.org/texi2html/";
     license = licenses.gpl2;

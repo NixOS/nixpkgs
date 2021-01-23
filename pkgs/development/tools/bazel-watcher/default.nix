@@ -3,7 +3,7 @@
 , git
 , go
 , python
-, stdenv
+, lib, stdenv
 }:
 
 let
@@ -73,7 +73,7 @@ buildBazelPackage rec {
     '';
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel-watcher";
     description = "Tools for building Bazel targets when source files change";
     license = licenses.asl20;

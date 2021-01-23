@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub}:
+{lib, stdenv, fetchFromGitHub}:
 
 stdenv.mkDerivation rec {
   pname = "uftrace";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Function (graph) tracer for user-space";
     homepage = "https://github.com/namhyung/uftrace";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [stdenv.lib.maintainers.nthorne];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [lib.maintainers.nthorne];
   };
 }

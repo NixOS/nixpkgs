@@ -17,7 +17,8 @@ let
       buildInputs = [ fmt ];
 
       cmakeFlags = [
-        "-DSPDLOG_BUILD_SHARED=ON"
+        "-DSPDLOG_BUILD_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+        "-DSPDLOG_BUILD_STATIC=${if stdenv.hostPlatform.isStatic then "ON" else "OFF"}"
         "-DSPDLOG_BUILD_EXAMPLE=OFF"
         "-DSPDLOG_BUILD_BENCH=OFF"
         "-DSPDLOG_BUILD_TESTS=ON"

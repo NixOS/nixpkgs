@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "bootstrap";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Front-end framework for faster and easier web development";
     homepage = "https://getbootstrap.com/";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
   };
 
 }

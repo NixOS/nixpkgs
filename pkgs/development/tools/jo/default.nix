@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, autoreconfHook, pandoc, pkg-config}:
+{lib, stdenv, fetchFromGitHub, autoreconfHook, pandoc, pkg-config}:
 
 stdenv.mkDerivation rec {
   pname = "jo";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pandoc pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small utility to create JSON objects";
     homepage = "https://github.com/jpmens/jo";
     license = licenses.gpl2Plus;

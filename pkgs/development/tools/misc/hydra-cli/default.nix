@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client for the Hydra CI";
     homepage = "https://github.com/nlewo/hydra-cli";
     license = with licenses; [ mit ];

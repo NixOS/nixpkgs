@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake }:
 rustPlatform.buildRustPackage rec {
   pname = "unused";
   version = "0.2.1";
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1c0gj2wp0nydv0binxj3ikm5sm6y5z3pklp5b06dgvq02licz57a";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to identify potentially unused code";
     homepage = "https://unused.codes";
     license = licenses.mit;

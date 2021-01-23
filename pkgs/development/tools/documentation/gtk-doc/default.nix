@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
 , meson
 , ninja
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     docbook_xml_dtd_43
     docbook_xsl
     libxslt
-  ] ++ stdenv.lib.optionals withDblatex [
+  ] ++ lib.optionals withDblatex [
     dblatex
   ];
 
@@ -77,7 +77,7 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools to extract documentation embedded in GTK and GNOME source code";
     homepage = "https://www.gtk.org/gtk-doc";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonApplication
 , fetchPypi
 , isPy3k
@@ -46,9 +46,9 @@ buildPythonApplication rec {
 
   checkInputs = [ pytestCheckHook mock ];
 
-  disabledTests = stdenv.lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line interface for PostgreSQL";
     longDescription = ''
       Rich command-line interface for PostgreSQL with auto-completion and

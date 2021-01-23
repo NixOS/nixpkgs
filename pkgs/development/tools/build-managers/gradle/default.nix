@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
+{ lib, stdenv, fetchurl, unzip, jdk, java ? jdk, makeWrapper }:
 
 rec {
   gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation {
@@ -46,8 +46,8 @@ rec {
         build-by-convention behavior.
       '';
       homepage = "http://www.gradle.org/";
-      license = stdenv.lib.licenses.asl20;
-      platforms = stdenv.lib.platforms.unix;
+      license = lib.licenses.asl20;
+      platforms = lib.platforms.unix;
     };
   };
 

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, graalvm11-ce, glibcLocales }:
+{ lib, stdenv, fetchurl, graalvm11-ce, glibcLocales }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "babashka";
   version = "0.2.3";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     cp bb $out/bin/bb
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Clojure babushka for the grey areas of Bash";
     longDescription = ''
       The main idea behind babashka is to leverage Clojure in places where you

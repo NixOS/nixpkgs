@@ -41,7 +41,7 @@ self:
 let
   inherit (stdenv) buildPlatform hostPlatform;
 
-  inherit (stdenv.lib) fix' extends makeOverridable;
+  inherit (lib) fix' extends makeOverridable;
   inherit (haskellLib) overrideCabal;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
@@ -84,8 +84,8 @@ let
       # lost on `.override`) but determine the auto-args based on `drv` (the problem here
       # is that nix has no way to "passthrough" args while preserving the reflection
       # info that callPackage uses to determine the arguments).
-      drv = if stdenv.lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (stdenv.lib.functionArgs drv) scope;
+      drv = if lib.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (lib.functionArgs drv) scope;
 
       # this wraps the `drv` function to add a `overrideScope` function to the result.
       drvScope = allArgs: drv allArgs // {
@@ -98,7 +98,7 @@ let
           # nothing.
           in callPackageWithScope newScope drv manualArgs;
       };
-    in stdenv.lib.makeOverridable drvScope (auto // manualArgs);
+    in lib.makeOverridable drvScope (auto // manualArgs);
 
   mkScope = scope: let
       ps = pkgs.__splicedPackages;

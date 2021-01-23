@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, version ? "2.7.2" }:
+{ lib, stdenv, fetchurl, unzip, version ? "2.7.2" }:
 
 let
 
@@ -80,7 +80,7 @@ let
 
 in
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation {
 

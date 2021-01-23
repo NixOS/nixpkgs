@@ -1,7 +1,7 @@
 { mkDerivation, async, base, bytestring, connection, containers
 , directory, hpack, hspec, hspec-discover, hspec-expectations
 , http-client, http-conduit, lens, lens-aeson, megaparsec, mtl
-, optparse-applicative, parser-combinators, retry, stdenv, text
+, optparse-applicative, parser-combinators, retry, lib, stdenv, text
 , unix, unordered-containers, utf8-string, fetchzip, dotenv
 }:
 mkDerivation rec {
@@ -37,6 +37,6 @@ mkDerivation rec {
   preConfigure = "hpack";
   homepage = "https://github.com/channable/vaultenv#readme";
   description = "Runs processes with secrets from HashiCorp Vault";
-  license = stdenv.lib.licenses.bsd3;
-  maintainers = with stdenv.lib.maintainers; [ lnl7 manveru ];
+  license = lib.licenses.bsd3;
+  maintainers = with lib.maintainers; [ lnl7 manveru ];
 }

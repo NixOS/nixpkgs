@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     curl zlib
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   cargoBuildFlags = [ "--features no-self-update" ];
 

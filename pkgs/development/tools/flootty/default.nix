@@ -1,4 +1,4 @@
-{ stdenv, python3Packages }:
+{ lib, stdenv, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "Flootty";
@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0gfl143ly81pmmrcml91yr0ypvwrs5q4s1sfdc0l2qkqpy233ih7";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collaborative terminal. In practice, it's similar to a shared screen or tmux session";
     homepage = "https://floobits.com/help/flootty";
     license = licenses.asl20;

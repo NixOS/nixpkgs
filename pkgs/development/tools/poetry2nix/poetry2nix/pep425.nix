@@ -73,9 +73,9 @@ let
         if isLinux
         then
           (
-            x: x.platform == "manylinux1_${stdenv.platform.kernelArch}"
-              || x.platform == "manylinux2010_${stdenv.platform.kernelArch}"
-              || x.platform == "manylinux2014_${stdenv.platform.kernelArch}"
+            x: x.platform == "manylinux1_${stdenv.hostPlatform.linuxArch}"
+              || x.platform == "manylinux2010_${stdenv.hostPlatform.linuxArch}"
+              || x.platform == "manylinux2014_${stdenv.hostPlatform.linuxArch}"
               || x.platform == "any"
           )
         else (x: hasInfix "macosx" x.platform || x.platform == "any");

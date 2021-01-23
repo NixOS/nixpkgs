@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , libpng, gzip, fftw, blas, lapack
-, mpi ? null
+, withMPI ? false
+, mpi
 }:
 let packages = [
      "asphere" "body" "class2" "colloid" "compress" "coreshell"
@@ -8,7 +9,6 @@ let packages = [
      "opt" "peri" "qeq" "replica" "rigid" "shock" "snap" "srd" "user-reaxc"
     ];
     lammps_includes = "-DLAMMPS_EXCEPTIONS -DLAMMPS_GZIP -DLAMMPS_MEMALIGN=64";
-    withMPI = (mpi != null);
 in
 stdenv.mkDerivation rec {
   # LAMMPS has weird versioning converted to ISO 8601 format

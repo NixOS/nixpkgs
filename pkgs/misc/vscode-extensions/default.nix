@@ -128,6 +128,18 @@ let
         };
       };
 
+      davidanson.vscode-markdownlint = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-markdownlint";
+          publisher = "DavidAnson";
+          version = "0.38.0";
+          sha256 = "0d6hbsjrx1j8wrmfnvdwsa7sci1brplgxwkmy6sp74va7zxfjnqv";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       dhall.dhall-lang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "dhall-lang";
@@ -292,12 +304,36 @@ let
         };
       };
 
+      gruntfuggly.todo-tree = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "todo-tree";
+          publisher = "Gruntfuggly";
+          version = "0.0.196";
+          sha256 = "1l4f290018f2p76q6hn2b2injps6wz65as7dm537wrsvsivyg2qz";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       haskell.haskell = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "haskell";
           publisher = "haskell";
           version = "1.1.0";
           sha256 = "1wg06lyk0qn9jd6gi007sg7v0z9z8gwq7x2449d4ihs9n3w5l0gb";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
+      hookyqr.beautify = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "beautify";
+          publisher = "HookyQR";
+          version = "1.5.0";
+          sha256 = "1c0kfavdwgwham92xrh0gnyxkrl9qlkpv39l1yhrldn8vd10fj5i";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -342,6 +378,18 @@ let
           publisher = "jnoortheen";
           version = "0.1.7";
           sha256 = "1bw4wyq9abimxbhl7q9g8grvj2ax9qqq6mmqbiqlbsi2arvk0wrm";
+        };
+      };
+
+      jock.svg = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "svg";
+          publisher = "jock";
+          version = "1.4.4";
+          sha256 = "0kn2ic7pgbd4rbvzpsxfwyiwxa1iy92l0h3jsppxc8gk8xbqm2nc";
+        };
+        meta = with lib; {
+          license = licenses.mit;
         };
       };
 
@@ -473,6 +521,18 @@ let
         };
       };
 
+      rubymaniac.vscode-paste-and-indent = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-paste-and-indent";
+          publisher = "Rubymaniac";
+          version = "0.0.8";
+          sha256 = "0fqwcvwq37ndms6vky8jjv0zliy6fpfkh8d9raq8hkinfxq6klgl";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       matklad.rust-analyzer = callPackage ./rust-analyzer {};
 
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
@@ -558,6 +618,30 @@ let
           publisher = "skyapps";
           version = "0.2.1";
           sha256 = "0y1ivymn81ranmir25zk83kdjpjwcqpnc9r3jwfykjd9x0jib2hl";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
+      spywhere.guides = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "guides";
+          publisher = "spywhere";
+          version = "0.9.3";
+          sha256 = "1kvsj085w1xax6fg0kvsj1cizqh86i0pkzpwi0sbfvmcq21i6ghn";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
+      streetsidesoftware.code-spell-checker = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "code-spell-checker";
+          publisher = "streetsidesoftware";
+          version = "1.10.2";
+          sha256 = "1ll046rf5dyc7294nbxqk5ya56g2bzqnmxyciqpz2w5x7j75rjib";
         };
         meta = with lib; {
           license = licenses.mit;

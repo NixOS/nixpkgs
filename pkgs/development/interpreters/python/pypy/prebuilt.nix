@@ -22,7 +22,7 @@
 # This version of PyPy is primarily added to speed-up translation of
 # our PyPy source build when developing that expression.
 
-with stdenv.lib;
+with lib;
 
 let
   isPy3k = majorVersion == "3";
@@ -78,7 +78,7 @@ in with passthru; stdenv.mkDerivation {
 
     pushd $out
     find {lib,lib_pypy*} -name "*.so" -exec patchelf --remove-needed libncursesw.so.6 --replace-needed libtinfow.so.6 libncursesw.so.6 {} \;
-    find {lib,lib_pypy*} -name "*.so" -exec patchelf --set-rpath ${stdenv.lib.makeLibraryPath deps}:$out/lib {} \;
+    find {lib,lib_pypy*} -name "*.so" -exec patchelf --set-rpath ${lib.makeLibraryPath deps}:$out/lib {} \;
 
     echo "Removing bytecode"
     find . -name "__pycache__" -type d -depth -exec rm -rf {} \;
@@ -115,7 +115,7 @@ in with passthru; stdenv.mkDerivation {
 
   inherit passthru;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://pypy.org/";
     description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp . $out -R
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://shenlanguage.org;
     description = "Source code for the Shen Language";
     platforms = platforms.all;
