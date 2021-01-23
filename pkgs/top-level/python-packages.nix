@@ -5209,6 +5209,8 @@ in {
 
   pycdio = callPackage ../development/python-modules/pycdio { };
 
+  pycfdns = callPackage ../development/python-modules/pycfdns { };
+
   pychart = callPackage ../development/python-modules/pychart { };
 
   pychef = callPackage ../development/python-modules/pychef { };
