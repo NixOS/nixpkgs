@@ -14876,6 +14876,7 @@ let
     };
     propagatedBuildInputs = [ IOAsync Moo NetFrameLayerIPv6 namespaceclean ];
     buildInputs = [ TestFatal ];
+    preCheck = "rm t/icmp_ps.t t/icmpv6_ps.t"; # ping socket tests fail
     meta = {
       description = "asyncronously check remote host for reachability";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
