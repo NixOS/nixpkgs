@@ -562,7 +562,7 @@ in {
           ${./update-users-groups.pl} ${spec}
       '';
 
-    # for backwards compatibility
+    # for backwards
     system.activationScripts.groups = stringAfter [ "users" ] "";
 
     # Install all the user shells
@@ -580,7 +580,7 @@ in {
 
     environment.profiles = [ "$HOME/.nix-profile" ]
       ++ map (user: "/etc/profiles/per-user/${user.name}")
-      (builtins.attrValues cfg.users);
+      (builtins.attrValues (filterAttrs (_: u: u.packages != []) cfg.users));
 
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
