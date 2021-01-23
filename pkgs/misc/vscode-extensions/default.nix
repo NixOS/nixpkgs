@@ -328,6 +328,18 @@ let
         };
       };
 
+      hookyqr.beautify = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "beautify";
+          publisher = "HookyQR";
+          version = "1.5.0";
+          sha256 = "1c0kfavdwgwham92xrh0gnyxkrl9qlkpv39l1yhrldn8vd10fj5i";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       ibm.output-colorizer = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "output-colorizer";
