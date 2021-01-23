@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.clutter-project.org/";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ lethalman ];
-    platforms = lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
   };
 }

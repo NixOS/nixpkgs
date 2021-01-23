@@ -6,8 +6,8 @@
 , cursorSupport ? true, libXcursor ? null
 , threadSupport ? true
 , mysqlSupport ? false, libmysqlclient ? null
-, libGLSupported ? lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, openglSupport ? lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, openglSupport ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , libGL ? null, libGLU ? null, libXmu ? null
 , xlibsWrapper, xorgproto, zlib, libjpeg, libpng, which
 }:

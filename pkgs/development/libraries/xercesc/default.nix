@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = "https://xerces.apache.org/xerces-c/";
     description = "Validating XML parser written in a portable subset of C++";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

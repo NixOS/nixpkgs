@@ -1,4 +1,4 @@
-{ stdenv, pkgs, mavenbuild, fetchMaven }:
+{ lib, stdenv, pkgs, mavenbuild, fetchMaven }:
 
 with pkgs.javaPackages;
 
@@ -21,9 +21,9 @@ in rec {
     meta = {
       homepage = "https://junit.org/junit4/";
       description = "Simple framework to write repeatable tests. It is an instance of the xUnit architecture for unit testing frameworks";
-      license = stdenv.lib.licenses.epl10;
-      platforms = stdenv.lib.platforms.all;
-      maintainers = with stdenv.lib.maintainers;
+      license = lib.licenses.epl10;
+      platforms = lib.platforms.all;
+      maintainers = with lib.maintainers;
         [ nequissimus ];
     };
   };

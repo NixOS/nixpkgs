@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "lib" ];
 
   # Need to explicitly link to brotlicommon
-  patches = stdenv.lib.optional static ./brotli-static.patch;
+  patches = lib.optional static ./brotli-static.patch;
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [
     "-DCANONICAL_PREFIXES=ON"
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-  ] ++ stdenv.lib.optional static "-DCMAKE_SKIP_RPATH:BOOL=TRUE";
+  ] ++ lib.optional static "-DCMAKE_SKIP_RPATH:BOOL=TRUE";
 
   propagatedBuildInputs = [ brotli ];
 

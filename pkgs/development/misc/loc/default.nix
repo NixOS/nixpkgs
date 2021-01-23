@@ -18,8 +18,8 @@ buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/cgag/loc";
     description = "Count lines of code quickly";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ];
     platforms = platforms.unix;
   };
 }

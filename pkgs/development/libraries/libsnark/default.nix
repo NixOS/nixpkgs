@@ -24,6 +24,6 @@ in stdenv.mkDerivation rec {
     description = "C++ library for zkSNARKs";
     homepage = "https://github.com/scipr-lab/libsnark";
     license = licenses.mit;
-    platforms = lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
 , pkg-config, which
 # Updater dependencies
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
@@ -7,7 +7,7 @@
 , procps, icu
 }:
 
-with stdenv.lib;
+with lib;
 
 { enableNpm ? true, version, sha256, patches ? [] } @args:
 

@@ -18,7 +18,7 @@
 , lib, stdenv, fetchpatch
 }:
 
-with stdenv.lib;
+with lib;
 
 qtModule {
   name = "qtwebengine";

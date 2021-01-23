@@ -1,4 +1,4 @@
-{ stdenv, fetchurl,
+{ lib, stdenv, fetchurl,
   pkg-config, pure, haskellPackages }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Pure interface generator";
     homepage = "http://puredocs.bitbucket.org/pure-gen.html";
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.free;
+    platforms = lib.platforms.linux;
     hydraPlatforms = [];
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

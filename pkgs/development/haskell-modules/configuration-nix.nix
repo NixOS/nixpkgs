@@ -610,12 +610,12 @@ self: super: builtins.intersectAttrs super {
 
   git-annex = with pkgs;
     if (!stdenv.isLinux) then
-      let path = stdenv.lib.makeBinPath [ coreutils ];
+      let path = lib.makeBinPath [ coreutils ];
       in overrideCabal (addBuildTool super.git-annex makeWrapper) (_drv: {
         # This is an instance of https://github.com/NixOS/nix/pull/1085
         # Fails with:
         #   gpg: can't connect to the agent: File name too long
-        postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+        postPatch = lib.optionalString stdenv.isDarwin ''
           substituteInPlace Test.hs \
             --replace ', testCase "crypto" test_crypto' ""
         '';

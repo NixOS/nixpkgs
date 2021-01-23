@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     '';
 
     maintainers = [ lib.maintainers.viric ];
-    platforms = lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
