@@ -8,6 +8,7 @@
 , openssl
 , readline
 , sqlite
+, tzdata
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
 , bluez ? null, bluezSupport ? false
 , zlib
@@ -246,6 +247,9 @@ in with passthru; stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals (tzdata != null && pythonAtLeast "3.9" ) [
+    # https://docs.python.org/3/library/zoneinfo.html#zoneinfo-data-compile-time-config
+    "--with-tzpath=${tzdata}/share/zoneinfo"
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
   ] ++ optionals (pythonOlder "3.7") [

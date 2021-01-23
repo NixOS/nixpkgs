@@ -197,6 +197,7 @@ in {
     ncurses = null;
     gdbm = null;
     sqlite = null;
+    tzdata = null;
     configd = null;
     stripConfig = true;
     stripIdlelib = true;
