@@ -165,6 +165,25 @@ let
 
     enableParallelBuilding = true;
 
+    # In rare cases, APPLE may drop some headers quietly on new release.
+    doInstallCheck = attrs ? appleHeaders;
+    passAsFile = [ "appleHeaders" ];
+    installCheckPhase = ''
+      cd $out/include
+
+      result=$(diff -u "$appleHeadersPath" <(find * -type f | sort) --label "Listed in appleHeaders" --label "Found in \$out/include" || true)
+
+      if [ -z "$result" ]; then
+        echo "Apple header list is matched."
+      else
+        echo >&2 "\
+      Apple header list is inconsistent, please ensure no header file is unexpectedly dropped.
+      $result
+      "
+        exit 1
+      fi
+    '';
+
   } // attrs // {
     meta = (with lib; {
       platforms = platforms.darwin;
