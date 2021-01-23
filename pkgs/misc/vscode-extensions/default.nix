@@ -612,6 +612,18 @@ let
         };
       };
 
+      streetsidesoftware.code-spell-checker = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "code-spell-checker";
+          publisher = "streetsidesoftware";
+          version = "1.10.2";
+          sha256 = "1ll046rf5dyc7294nbxqk5ya56g2bzqnmxyciqpz2w5x7j75rjib";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       tamasfe.even-better-toml = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "even-better-toml";
