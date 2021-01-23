@@ -12,6 +12,7 @@ let
   usePostgresql = cfg.database.type == "postgres";
   useRedisUnixSocket = with cfg.cache.redis; enable && network == "unix";
   useLocalMemcached = with cfg.cache.memcached; enable && cfg.cache.memcached.caches == { host = memcached.listen; port = memcached.port; };
+  useLocalRedis = with cfg.cache.redis; enable && host == redis.bind;
   useSqlite = cfg.database.type == "sqlite3";
   configFile = pkgs.writeText "app.ini" ''
     APP_NAME = ${cfg.appName}
@@ -711,11 +712,16 @@ in
       };
     };
 
-    services.redis = mkIf (useRedisUnixSocket) {
-      enable = true;
-      settings.unixsocketperm = "770";
-      unixSocket = mkDefault "/run/redis/redis.sock";
-    };
+    services.redis = mkMerge [
+      (mkIf (useRedisUnixSocket) {
+        enable = true;
+        settings.unixsocketperm = "770";
+        unixSocket = mkDefault "/run/redis/redis.sock";
+      })
+      (mkIf (useLocalRedis) {
+        enable = true;
+      })
+    ];
 
     services.memcached = mkIf (useLocalMemcached) {
       enable = true;
