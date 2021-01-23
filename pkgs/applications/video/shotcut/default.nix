@@ -34,7 +34,7 @@ mkDerivation rec {
   ];
 
   prePatch = ''
-    sed 's_shotcutPath, "qmelt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
+    sed 's_shotcutPath, "melt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
     sed 's_shotcutPath, "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/jobs/ffmpegjob.cpp
     sed 's_qApp->applicationDirPath(), "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/docks/encodedock.cpp
     NICE=$(type -P nice)
