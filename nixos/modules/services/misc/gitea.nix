@@ -12,7 +12,7 @@ let
   usePostgresql = cfg.database.type == "postgres";
   useRedisUnixSocket = with cfg.cache.redis; enable && network == "unix";
   useLocalMemcached = with cfg.cache.memcached; enable && cfg.cache.memcached.caches == { host = memcached.listen; port = memcached.port; };
-  useLocalRedis = with cfg.cache.redis; enable && host == redis.bind;
+  useLocalRedis = with cfg.cache.redis; enable && network == "tcp" && host == redis.bind && port == redis.port;
   useSqlite = cfg.database.type == "sqlite3";
   configFile = pkgs.writeText "app.ini" ''
     APP_NAME = ${cfg.appName}
@@ -65,13 +65,13 @@ in
           host = mkOption {
             description = "Redis database host";
             type = with types; nullOr str;
-            default = null;
+            default = redis.bind;
             example = "127.0.0.1";
           };
           port = mkOption {
             description = "Redis database port";
-            type = with types; nullOr int;
-            default = null;
+            type = with types; int;
+            default = redis.port;
             example = 6379;
           };
           database = mkOption {
@@ -422,7 +422,7 @@ in
           (if (network == "unix") then {
             HOST = "network=unix,addr=${redis.unixSocket},db=${database},pool_size=${toString poolSize},idle_timeout=${idleTimeout}";
           } else if (network == "tcp") then {
-            HOST = "redis://:${if (user != null) then "${user}@" else ""}${host}${if (port != null) then ":${toString port}" else ""}/${database}?pool_size=${poolSize}&idle_timeout=${idleTimeout}";
+            HOST = "redis://:${if (user != null) then "${user}@" else ""}${host}:${toString port}/${database}?pool_size=${poolSize}&idle_timeout=${idleTimeout}";
           } else {
             # See allowed values in cfg.cache.redis.network
           })
