@@ -18,13 +18,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
-    sha256 = "036xbg65h255zlvz9l86sw6w9l4qfyf13x8p8ml7dj52hcdfvyb9";
+    sha256 = "1rcx2c07jg1ij81pnvg3px49hfbjmkagn68d3gp79z3gcajbp2av";
   };
 
   format = "other";
@@ -54,6 +54,10 @@ python3.pkgs.buildPythonApplication rec {
     pdfminer
     pycairo
   ];
+
+  checkPhase = ''
+    meson test --print-errorlogs
+  '';
 
   meta = with lib; {
     description = "LaTeX editor written in Python with Gtk";
