@@ -44,7 +44,7 @@
 buildPythonPackage rec {
   pname = "mitmproxy";
   version = "6.0.2";
-  disabled = isPy27;
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner  = pname;
