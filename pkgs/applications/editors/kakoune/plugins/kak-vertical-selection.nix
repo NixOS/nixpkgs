@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, lib }:
 stdenv.mkDerivation {
   name = "kak-vertical-selection";
   version = "2019-04-11";
