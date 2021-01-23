@@ -4611,8 +4611,6 @@ in {
 
   papermill = callPackage ../development/python-modules/papermill { };
 
-  paperspace = callPackage ../development/python-modules/paperspace { };
-
   openpaperwork-core = callPackage ../applications/office/paperwork/openpaperwork-core.nix { };
   openpaperwork-gtk = callPackage ../applications/office/paperwork/openpaperwork-gtk.nix { };
   paperwork-backend = callPackage ../applications/office/paperwork/paperwork-backend.nix { };
