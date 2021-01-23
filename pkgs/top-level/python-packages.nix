@@ -206,6 +206,8 @@ in {
 
   aiodns = callPackage ../development/python-modules/aiodns { };
 
+  aioeafm = callPackage ../development/python-modules/aioeafm { };
+
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
   aioeventlet = callPackage ../development/python-modules/aioeventlet { };
