@@ -101,8 +101,7 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      restartTriggers = [ config.environment.etc."nomad.json".source ]
-        ++ cfg.extraSettingsPaths;
+      restartTriggers = [ config.environment.etc."nomad.json".source ];
 
       path = cfg.extraPackages ++ (with pkgs; [
         # Client mode requires at least the following:
