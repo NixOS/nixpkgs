@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "quickjs";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     out=$(mktemp) && qjsbnc -flto "$temp" -o "$out" && "$out" | grep -q "Output from compiled program"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small and embeddable Javascript engine";
     homepage = "https://bellard.org/quickjs/";
     maintainers = with maintainers; [ stesie ];

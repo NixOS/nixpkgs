@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rakudo, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, rakudo, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "zef";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/zef --prefix RAKUDOLIB , "inst#$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Raku / Perl6 Module Management";
     homepage    = "https://github.com/ugexe/zef";
     license     = licenses.artistic2;

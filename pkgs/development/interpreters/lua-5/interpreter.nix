@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, readline
+{ lib, stdenv, fetchurl, readline
 , compat ? false
 , callPackage
 , packageOverrides ? (self: super: {})
@@ -50,7 +50,7 @@ self = stdenv.mkDerivation rec {
     runHook preConfigure
 
     makeFlagsArray+=(CFLAGS="-DLUA_USE_LINUX -O2 -fPIC${if compat then " -DLUA_COMPAT_ALL" else ""}" )
-    makeFlagsArray+=(${stdenv.lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.hostPlatform.config}-ar rcu'"})
+    makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.hostPlatform.config}-ar rcu'"})
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
       TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib" else "liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}"}" )
@@ -107,8 +107,8 @@ self = stdenv.mkDerivation rec {
       management with incremental garbage collection, making it ideal
       for configuration, scripting, and rapid prototyping.
     '';
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 };
 in self

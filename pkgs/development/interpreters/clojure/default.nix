@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper }:
+{ lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "clojure";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # See https://github.com/clojure/brew-install/blob/1.10.1/src/main/resources/clojure/install/linux-install.sh
   installPhase =
     let
-      binPath = stdenv.lib.makeBinPath [ rlwrap jdk ];
+      binPath = lib.makeBinPath [ rlwrap jdk ];
     in
     ''
       clojure_lib_dir=$out
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       -Sverbose \
       -Scp $out/libexec/clojure-tools-${version}.jar
   '';
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Lisp dialect for the JVM";
     homepage = "https://clojure.org/";
     license = licenses.epl10;

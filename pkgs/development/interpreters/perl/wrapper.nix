@@ -1,4 +1,4 @@
-{ stdenv, perl, buildEnv, makeWrapper
+{ lib, stdenv, perl, buildEnv, makeWrapper
 , extraLibs ? []
 , extraOutputsToInstall ? []
 , postBuild ? ""
@@ -28,7 +28,7 @@ let
       mkdir -p "$out/bin"
 
       # take every binary from perl packages and put them into the env
-      for path in ${stdenv.lib.concatStringsSep " " paths}; do
+      for path in ${lib.concatStringsSep " " paths}; do
         if [ -d "$path/bin" ]; then
           cd "$path/bin"
           for prg in *; do

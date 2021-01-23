@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   pname = "jython";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Python interpreter written in Java";
     homepage = "https://jython.org/";
-    license = stdenv.lib.licenses.psfl;
+    license = lib.licenses.psfl;
     platforms = jre.meta.platforms;
   };
 }

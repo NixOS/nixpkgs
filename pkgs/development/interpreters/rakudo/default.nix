@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # Some tests fail on Darwin
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Raku implementation on top of Moar virtual machine";
     homepage    = "https://www.rakudo.org";
     license     = licenses.artistic2;

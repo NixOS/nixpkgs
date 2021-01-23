@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation {
   pname = "metamath";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "1s9hyknfvhj86g3giayyf3dxzg23iij0rs7bdvj075v9qbyhqn9b";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Interpreter for the metamath proof language";
     longDescription = ''
       The metamath program is an ASCII-based ANSI C program with a command-line

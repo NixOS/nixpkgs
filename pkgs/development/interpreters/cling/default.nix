@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python
 , libffi
 , git
@@ -50,7 +50,7 @@ let
       "-DCLING_INCLUDE_TESTS=ON"
     ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "The Interactive C++ Interpreter";
       homepage = "https://root.cern/cling/";
       license = with licenses; [ lgpl21 ncsa ];
@@ -73,7 +73,7 @@ let
   flags = [
     "-nostdinc"
     "-nostdinc++"
-    "-isystem" "${stdenv.lib.getDev stdenv.cc.libc}/include"
+    "-isystem" "${lib.getDev stdenv.cc.libc}/include"
     "-I" "${unwrapped}/include"
     "-I" "${unwrapped}/lib/clang/5.0.2/include"
   ];
