@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   startScript = if stdenv.isx86_32 then "START_LINUX_X86"
     else        if stdenv.isx86_64 then "START_LINUX_X86_64"
     #else        if stdenv.isDarwin then "START_MACOS.app" # disabled because I cannot test on Darwin
-    else abort "Unsupported platform: ${stdenv.platform.kernelArch}.";
+    else abort "Unsupported platform: ${stdenv.hostPlatform.linuxArch}.";
 
   linuxExecutable = if stdenv.isx86_32 then "pixilang_linux_x86"
     else            if stdenv.isx86_64 then "pixilang_linux_x86_64"

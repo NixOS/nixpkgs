@@ -95,7 +95,7 @@ let
           else if stdenv.isDarwin then "darwin"
           else throw "Unsupported platform"
         );
-        platform_machine = stdenv.platform.kernelArch;
+        platform_machine = stdenv.hostPlatform.linuxArch;
         platform_python_implementation =
           let
             impl = python.passthru.implementation;

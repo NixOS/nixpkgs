@@ -1,7 +1,7 @@
 { lib }:
 
 rec {
-  # platform.gcc.arch to its features (as in /proc/cpuinfo)
+  # gcc.arch to its features (as in /proc/cpuinfo)
   features = {
     default        = [ ];
     # x86_64 Intel
