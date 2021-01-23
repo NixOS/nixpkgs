@@ -182,7 +182,10 @@ let
           "11-darwin-amd64" = ''
             echo ""
           '';
-        }.${javaVersionPlatform};
+        }.${javaVersionPlatform} + ''
+          # jni.h expects jni_md.h to be in the header search path.
+          ln -s $out/include/linux/*_md.h $out/include/
+        '';
 
         dontStrip = true;
 
