@@ -369,6 +369,18 @@ let
         };
       };
 
+      jock.svg = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "svg";
+          publisher = "jock";
+          version = "1.4.4";
+          sha256 = "0kn2ic7pgbd4rbvzpsxfwyiwxa1iy92l0h3jsppxc8gk8xbqm2nc";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       jpoissonnier.vscode-styled-components = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-styled-components";
