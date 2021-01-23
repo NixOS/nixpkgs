@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.lgpl21Plus;
 
-    platforms = lib.platforms.gnu ++ stdenv.lib.platforms.linux;         # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;         # arbitrary choice
     maintainers = [ ];
   };
 }

@@ -45,13 +45,13 @@ let
 
     meta = {
       description = "Package manager for the Erlang VM https://hex.pm";
-      license = stdenv.lib.licenses.mit;
+      license = lib.licenses.mit;
       homepage = "https://github.com/hexpm/hex";
-      maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
+      maintainers = with lib.maintainers; [ ericbmerritt ];
     };
 
     passthru = {
       env = shell self;
     };
 };
-in stdenv.lib.fix pkg
+in lib.fix pkg

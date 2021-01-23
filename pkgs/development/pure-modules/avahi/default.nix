@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, avahi }:
+{ lib, stdenv, fetchurl, pkg-config, pure, avahi }:
 
 stdenv.mkDerivation rec {
   baseName = "avahi";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A digital audio interface for the Pure programming language";
     homepage = "http://puredocs.bitbucket.org/pure-avahi.html";
-    license = stdenv.lib.licenses.lgpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, fcgi }:
+{ lib, stdenv, fetchurl, pkg-config, pure, fcgi }:
 
 stdenv.mkDerivation rec {
   baseName = "fastcgi";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lets you write FastCGI scripts with Pure, to be run by web servers like Apache";
     homepage = "http://puredocs.bitbucket.org/pure-fastcgi.html";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

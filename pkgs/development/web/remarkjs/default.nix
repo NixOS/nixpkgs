@@ -63,8 +63,8 @@ in stdenv.mkDerivation rec {
     homepage = "https://remarkjs.com";
     description = "A simple, in-browser, markdown-driven slideshow tool";
     maintainers = [];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
     broken = true;
   };
 }

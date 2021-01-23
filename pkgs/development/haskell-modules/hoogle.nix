@@ -120,7 +120,7 @@ buildPackages.stdenv.mkDerivation {
   meta = {
     description = "A local Hoogle database";
     platforms = ghc.meta.platforms;
-    hydraPlatforms = with stdenv.lib.platforms; none;
-    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    hydraPlatforms = with lib.platforms; none;
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

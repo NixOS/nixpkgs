@@ -14,7 +14,7 @@
 , enableDebugInfo ? false
 , ... }@attrs:
 
-with stdenv.lib;
+with lib;
 
 let
   debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "debug-info";

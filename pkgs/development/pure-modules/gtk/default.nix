@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, pure-ffi, gtk2 }:
+{ lib, stdenv, fetchurl, pkg-config, pure, pure-ffi, gtk2 }:
 
 stdenv.mkDerivation rec {
   baseName = "gtk";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A collection of bindings to use the GTK GUI toolkit version 2.x with Pure";
     homepage = "http://puredocs.bitbucket.org/pure-gtk.html";
-    license = stdenv.lib.licenses.lgpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

@@ -2,7 +2,7 @@
 , libXinerama, libSM, libXxf86vm
 , gtk2, gtk3
 , xorgproto, gst_all_1, setfile
-, libGLSupported ? lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withMesa ? libGLSupported
 , libGLU ? null, libGL ? null
 , compat24 ? false, compat26 ? true, unicode ? true

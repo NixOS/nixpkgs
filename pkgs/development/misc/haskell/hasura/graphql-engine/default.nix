@@ -13,7 +13,7 @@
 , optparse-applicative, pem, pg-client, postgresql-binary
 , postgresql-libpq, process, profunctors, psqueues, QuickCheck
 , regex-tdfa, safe, scientific, semver, shakespeare, split
-, Spock-core, stdenv, stm, stm-containers, template-haskell, text
+, Spock-core, lib, stdenv, stm, stm-containers, template-haskell, text
 , text-builder, text-conversions, th-lift-instances, these, time
 , transformers, transformers-base, unix, unordered-containers
 , uri-encode, uuid, vector, wai, wai-websockets, warp, websockets
@@ -68,8 +68,8 @@ mkDerivation {
   doCheck = false;
   homepage = "https://www.hasura.io";
   description = "GraphQL API over Postgres";
-  license = stdenv.lib.licenses.asl20;
-  maintainers = with stdenv.lib.maintainers; [ offline ];
+  license = lib.licenses.asl20;
+  maintainers = with lib.maintainers; [ offline ];
   hydraPlatforms = [];
   broken = true;
 }

@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     description = "A Java/JNI library for using Unix Domain Sockets from Java";
     homepage = "https://github.com/kohlschutter/junixsocket";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, gnuplot }:
+{ lib, stdenv, fetchurl, pkg-config, pure, gnuplot }:
 
 stdenv.mkDerivation rec {
   baseName = "gplot";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A pure binding to gnuplot";
     homepage = "http://puredocs.bitbucket.org/pure-gplot.html";
-    license = stdenv.lib.licenses.lgpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

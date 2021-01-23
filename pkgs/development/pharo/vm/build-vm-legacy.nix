@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   inherit name src;
 
-  pharo-share = import ./share.nix { inherit stdenv fetchurl unzip; };
+  pharo-share = import ./share.nix { inherit lib stdenv fetchurl unzip; };
 
   hardeningDisable = [ "format" "pic" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bash glibc openssl libGLU libGL freetype
                   xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
 
-  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath
+  LD_LIBRARY_PATH = lib.makeLibraryPath
     [ cairo libGLU libGL freetype openssl libuuid alsaLib
       xorg.libICE xorg.libSM ];
 
@@ -89,9 +89,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.lukego ];
     # Pharo VM sources are packaged separately for darwin (OS X)
-    platforms = stdenv.lib.filter
-      (system: with stdenv.lib.systems.elaborate { inherit system; };
+    platforms = lib.filter
+      (system: with lib.systems.elaborate { inherit system; };
          isUnix && !isDarwin)
-      stdenv.lib.platforms.mesaPlatforms;
+      lib.platforms.mesaPlatforms;
   };
 }

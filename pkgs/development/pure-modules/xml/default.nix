@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, libxml2, libxslt }:
+{ lib, stdenv, fetchurl, pkg-config, pure, libxml2, libxslt }:
 
 stdenv.mkDerivation rec {
   baseName = "xml";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A simplified interface to the Gnome libxml2 and libxslt libraries for Pure";
     homepage = "http://puredocs.bitbucket.org/pure-xml.html";
-    license = stdenv.lib.licenses.lgpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

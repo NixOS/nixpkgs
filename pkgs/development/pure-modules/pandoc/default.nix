@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, pandoc, gawk, getopt }:
+{ lib, stdenv, fetchurl, pkg-config, pure, pandoc, gawk, getopt }:
 
 stdenv.mkDerivation rec {
   baseName = "pandoc";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Converts Sphinx-formatted Pure documentation files to Markdown and other formats using Pandoc";
     homepage = "http://puredocs.bitbucket.org/pure-pandoc.html";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

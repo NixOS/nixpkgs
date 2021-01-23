@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, faust, libtool }:
+{ lib, stdenv, fetchurl, pkg-config, pure, faust, libtool }:
 
 stdenv.mkDerivation rec {
   baseName = "faust";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Lets you load and run Faust-generated signal processing modules in Pure";
     homepage = "http://puredocs.bitbucket.org/pure-faust.html";
-    license = stdenv.lib.licenses.lgpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

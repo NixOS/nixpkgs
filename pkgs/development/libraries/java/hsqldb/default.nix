@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "hsqldb";
   version = "2.5.1";
-  underscoreMajMin = lib.strings.replaceChars ["."] ["_"] (stdenv.lib.versions.majorMinor version);
+  underscoreMajMin = lib.strings.replaceChars ["."] ["_"] (lib.versions.majorMinor version);
 
   src = fetchurl {
     url = "mirror://sourceforge/project/hsqldb/hsqldb/hsqldb_${underscoreMajMin}/hsqldb-${version}.zip";
