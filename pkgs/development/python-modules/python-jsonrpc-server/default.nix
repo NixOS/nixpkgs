@@ -23,7 +23,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [ future ujson ]
-    ++ stdenv.lib.optional (pythonOlder "3.2") futures;
+    ++ lib.optional (pythonOlder "3.2") futures;
 
   meta = with lib; {
     homepage = "https://github.com/palantir/python-jsonrpc-server";

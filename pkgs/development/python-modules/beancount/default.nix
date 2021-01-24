@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
 , beautifulsoup4, bottle, chardet, dateutil
 , google_api_python_client, lxml, oauth2client
 , ply, python_magic, pytest, requests }:
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "http://furius.ca/beancount/";
     description = "Double-entry bookkeeping computer language";
     longDescription = ''
@@ -41,8 +41,8 @@ buildPythonPackage rec {
         financial transaction records in a text file, read them in memory,
         generate a variety of reports from them, and provides a web interface.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
   };
 }
 

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , pbr, click, dataclasses-json, htmlmin, jinja2, markdown2, pygments, pytz, pyyaml, requests, pytestCheckHook, beautifulsoup4, tox
 }:
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook beautifulsoup4 ];
   pytestFlagsArray = [ "--ignore tests/generate_test.py" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quickly generate HTML documentation from a JSON schema";
     homepage    = "https://github.com/coveooss/json-schema-for-humans";
     license     = licenses.asl20;

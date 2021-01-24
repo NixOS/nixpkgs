@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytest-flake8 ];
 
-  propagatedBuildInputs = [ dbus-python entrypoints ] ++ stdenv.lib.optional stdenv.isLinux secretstorage;
+  propagatedBuildInputs = [ dbus-python entrypoints ] ++ lib.optional stdenv.isLinux secretstorage;
 
   doCheck = !stdenv.isDarwin;
 

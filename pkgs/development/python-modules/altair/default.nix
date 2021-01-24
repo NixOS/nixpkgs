@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pandas
     six
     toolz
-  ] ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+  ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   checkInputs = [
     glibcLocales

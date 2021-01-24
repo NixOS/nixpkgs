@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ elasticsearch python-dateutil six ]
-                          ++ stdenv.lib.optional (!isPy3k) ipaddress;
+                          ++ lib.optional (!isPy3k) ipaddress;
 
   # ImportError: No module named test_elasticsearch_dsl
   # Tests require a local instance of elasticsearch

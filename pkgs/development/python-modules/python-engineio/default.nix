@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
-  preCheck = stdenv.lib.optionalString stdenv.isLinux ''
+  preCheck = lib.optionalString stdenv.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
       LD_PRELOAD=${libredirect}/lib/libredirect.so

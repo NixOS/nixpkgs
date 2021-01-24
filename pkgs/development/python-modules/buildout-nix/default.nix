@@ -1,4 +1,4 @@
-{ fetchPypi, stdenv, buildPythonPackage }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "zc.buildout";
@@ -13,10 +13,10 @@ buildPythonPackage rec {
 
   postInstall = "mv $out/bin/buildout{,-nix}";
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.buildout.org";
     description = "A software build and configuration system";
-    license = stdenv.lib.licenses.zpl21;
-    maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    license = licenses.zpl21;
+    maintainers = [ maintainers.goibhniu ];
   };
 }

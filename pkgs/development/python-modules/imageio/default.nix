@@ -24,7 +24,7 @@ buildPythonPackage rec {
     inherit pname version;
   };
 
-  checkInputs = [ pytest psutil ] ++ stdenv.lib.optionals isPy3k [
+  checkInputs = [ pytest psutil ] ++ lib.optionals isPy3k [
     imageio-ffmpeg ffmpeg_3
     ];
   propagatedBuildInputs = [ numpy pillow ];

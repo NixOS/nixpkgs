@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = stdenv.lib.optionals withMPI [ mpi ];
+  buildInputs = lib.optionals withMPI [ mpi ];
   propagatedBuildInputs = [ python.pkgs.numpy ]
-   ++ stdenv.lib.optionals withMPI [ python.pkgs.mpi4py ];
+   ++ lib.optionals withMPI [ python.pkgs.mpi4py ];
 
   dontAddPrefix = true;
   cmakeFlags = [

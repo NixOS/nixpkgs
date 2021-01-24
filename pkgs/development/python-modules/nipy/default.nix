@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "1pn731nsczrx198i2gadffqmfbhviglrclv6xxwhnbv6w5hfs2yk";
   };
 
-  buildInputs = stdenv.lib.optional doCheck [ nose ];
+  buildInputs = lib.optional doCheck [ nose ];
   propagatedBuildInputs = [ matplotlib nibabel numpy scipy sympy ];
 
   checkPhase = ''    # wants to be run in a different directory
