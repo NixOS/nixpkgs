@@ -6,6 +6,7 @@
 # compiler and the linker just "work".
 
 { name ? ""
+, lib
 , stdenvNoCC
 , bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
@@ -15,7 +16,7 @@
 , useMacosReexportHack ? false
 }:
 
-with stdenvNoCC.lib;
+with lib;
 
 assert nativeTools -> !propagateDoc && nativePrefix != "";
 assert !nativeTools ->
@@ -31,11 +32,11 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
+  targetPrefix = lib.optionalString (targetPlatform != hostPlatform)
                                         (targetPlatform.config + "-");
 
-  bintoolsVersion = stdenv.lib.getVersion bintools;
-  bintoolsName = stdenv.lib.removePrefix targetPrefix (stdenv.lib.getName bintools);
+  bintoolsVersion = lib.getVersion bintools;
+  bintoolsName = lib.removePrefix targetPrefix (lib.getName bintools);
 
   libc_bin = if libc == null then null else getBin libc;
   libc_dev = if libc == null then null else getDev libc;
@@ -62,7 +63,7 @@ let
     else if targetPlatform.system == "powerpc-linux"  then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.isMips                     then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
-    else if stdenv.lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
+    else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else null;
 
   expand-response-params =
@@ -326,10 +327,10 @@ stdenv.mkDerivation {
     let bintools_ = if bintools != null then bintools else {}; in
     (if bintools_ ? meta then removeAttrs bintools.meta ["priority"] else {}) //
     { description =
-        stdenv.lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
+        lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";
       priority = 10;
   } // optionalAttrs useMacosReexportHack {
-    platforms = stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 }
