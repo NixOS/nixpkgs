@@ -1,19 +1,14 @@
-{stdenv, lib, fetchzip}:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "darling";
-  name = pname;
+  pname   = "darling";
+  version = "unstable-2020-04-26";
 
-  src = fetchzip {
-    url = "https://github.com/darlinghq/darling/archive/d2cc5fa748003aaa70ad4180fff0a9a85dc65e9b.tar.gz";
-    sha256 = "11b51fw47nl505h63bgx5kqiyhf3glhp1q6jkpb6nqfislnzzkrf";
-    postFetch = ''
-      # Get rid of case conflict
-      mkdir $out
-      cd $out
-      tar -xzf $downloadedFile --strip-components=1
-      rm -r $out/src/libm
-    '';
+  src = fetchFromGitHub {
+    owner   = "darlinghq";
+    repo    = "darling";
+    rev     = "ea5f07d38a0d4667b4fdda42b131250e4b7c7296";
+    sha256  = "1qnp4fpnjf95pzxn51rmwadnj24llb64pb127yr2qkw35apbz00c";
   };
 
   # only packaging sandbox for now
