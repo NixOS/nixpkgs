@@ -7681,6 +7681,8 @@ in
 
   shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
 
+  shadered = callPackage ../development/tools/shadered { };
+
   go-shadowsocks2 = callPackage ../tools/networking/go-shadowsocks2 { };
 
   shabnam-fonts = callPackage ../data/fonts/shabnam-fonts { };
