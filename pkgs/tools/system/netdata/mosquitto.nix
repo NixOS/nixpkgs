@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    cp $out/lib/libmosquitto_static.a $out/lib/libmosquitto.a
-    cp $out/include/mosquitto.h $out/lib/mosquitto.h
+    ln $out/lib/libmosquitto_static.a $out/lib/libmosquitto.a
+    ln $out/include/mosquitto.h $out/lib/mosquitto.h
   '';
 }
