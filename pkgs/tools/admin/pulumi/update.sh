@@ -3,26 +3,26 @@
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="2.17.2"
+VERSION="2.18.2"
 
 # Grab latest release ${VERSION} from
 # https://github.com/pulumi/pulumi-${NAME}/releases
 plugins=(
     "auth0=1.5.2"
-    "aws=3.23.0"
+    "aws=3.25.0"
     "cloudflare=2.11.1"
-    "consul=2.6.3"
-    "datadog=2.14.1"
-    "digitalocean=3.2.1"
+    "consul=2.7.0"
+    "datadog=2.15.0"
+    "digitalocean=3.3.0"
     "docker=2.6.1"
-    "gcp=4.7.0"
-    "github=2.4.2"
-    "gitlab=3.4.1"
+    "gcp=4.8.0"
+    "github=2.5.0"
+    "gitlab=3.5.0"
     "hcloud=0.5.1"
-    "kubernetes=2.7.6"
+    "kubernetes=2.7.7"
     "mailgun=2.3.2"
     "mysql=2.3.3"
-    "openstack=2.10.2"
+    "openstack=2.11.0"
     "packet=3.2.2"
     "postgresql=2.5.3"
     "random=3.0.1"
