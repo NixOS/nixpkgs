@@ -1,4 +1,4 @@
-{ lib , buildGoModule , fetchFromGitHub, procps, podman }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "nomad-driver-podman";
