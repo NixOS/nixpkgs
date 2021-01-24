@@ -1,12 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, python3, serd, pcre, wafHook }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, python3, serd, pcre, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "sord";
-  version = "0.16.4";
+  version = "unstable-2021-01-12";
 
-  src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "1mwh4qvp9q4vgrgg5bz9sgjhxscncrylf2b06h0q55ddwzs9hndi";
+  # Commit picked in mitigation of #109729
+  src = fetchFromGitHub {
+    owner = "drobilla";
+    repo = pname;
+    rev = "d2efdb2d026216449599350b55c2c85c0d3efb89";
+    sha256 = "hHTwK+K6cj9MGO77a1IXiUZtEbXZ08cLGkYZ5eMOIVA=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ pkg-config python3 wafHook ];
