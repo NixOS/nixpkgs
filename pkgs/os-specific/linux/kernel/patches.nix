@@ -33,11 +33,6 @@
 
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
-  tag_hardened = {
-    name = "tag-hardened";
-    patch = ./hardened/tag-hardened.patch;
-  };
-
   hardened = let
     mkPatch = kernelVersion: src: {
       name = lib.removeSuffix ".patch" src.name;

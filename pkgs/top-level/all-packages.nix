@@ -18018,10 +18018,9 @@ in
         inherit (kernel) version;
       };
       kernelPatches = kernel.kernelPatches ++ [
-        kernelPatches.tag_hardened
         kernelPatches.hardened.${kernel.meta.branch}
       ];
-      modDirVersionArg = kernel.modDirVersion + (kernelPatches.hardened.${kernel.meta.branch}).extra + "-hardened";
+      modDirVersionArg = kernel.modDirVersion + (kernelPatches.hardened.${kernel.meta.branch}).extra;
       isHardened = true;
   });
 
