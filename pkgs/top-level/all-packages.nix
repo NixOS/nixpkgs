@@ -12876,6 +12876,8 @@ in
 
   ytt = callPackage ../development/tools/ytt {};
 
+  zydis = callPackage ../development/libraries/zydis { };
+
   winpdb = callPackage ../development/tools/winpdb { };
 
   grabserial = callPackage ../development/tools/grabserial { };
