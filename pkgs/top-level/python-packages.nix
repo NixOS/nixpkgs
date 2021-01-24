@@ -2369,6 +2369,8 @@ in {
 
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
 
+  fiat = callPackage ../development/python-modules/fiat { };
+
   fido2 = callPackage ../development/python-modules/fido2 { };
 
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
