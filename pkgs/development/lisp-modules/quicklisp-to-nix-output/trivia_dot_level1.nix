@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivia_dot_level1'';
-  version = ''trivia-20200925-git'';
+  baseName = "trivia_dot_level1";
+  version = "trivia-20200925-git";
 
-  description = ''Core patterns of Trivia'';
+  description = "Core patterns of Trivia";
 
   deps = [ args."alexandria" args."trivia_dot_level0" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivia/2020-09-25/trivia-20200925-git.tgz'';
-    sha256 = ''192306pdx50nikph36swipdy2xz1jqrr8p9c3bi91m8qws75wi4z'';
+    url = "http://beta.quicklisp.org/archive/trivia/2020-09-25/trivia-20200925-git.tgz";
+    sha256 = "192306pdx50nikph36swipdy2xz1jqrr8p9c3bi91m8qws75wi4z";
   };
 
   packageName = "trivia.level1";

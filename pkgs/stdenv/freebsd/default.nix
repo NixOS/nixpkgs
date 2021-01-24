@@ -87,7 +87,7 @@ let inherit (localSystem) system; in
         isClang      = true;
       };
 
-      preHook = ''export NIX_NO_SELF_RPATH=1'';
+      preHook = "export NIX_NO_SELF_RPATH=1";
     };
   })
 

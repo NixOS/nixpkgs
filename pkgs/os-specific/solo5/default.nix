@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libseccomp }:
+{ lib, stdenv, fetchurl, pkg-config, libseccomp, util-linux, qemu }:
 
 let version = "0.6.7";
 in stdenv.mkDerivation {
@@ -36,6 +36,7 @@ in stdenv.mkDerivation {
   '';
 
   doCheck = true;
+  checkInputs = [ util-linux qemu ];
   checkPhase = if stdenv.hostPlatform.isLinux then
     ''
     patchShebangs tests

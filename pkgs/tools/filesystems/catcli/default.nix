@@ -18,7 +18,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ docopt anytree ];
 
-  postPatch = '' patchShebangs . '';
+  postPatch = "patchShebangs . ";
 
   meta = with lib; {
     description = "The command line catalog tool for your offline data";

@@ -83,8 +83,7 @@ rec {
     ++ lib.optionals (hasFeature "gr-uhd" features) [ "share/gnuradio/examples/uhd" ]
     ++ lib.optionals (hasFeature "gr-qtgui" features) [ "share/gnuradio/examples/qt-gui" ]
   ;
-  postInstall = ''
-  ''
+  postInstall = ""
     # Gcc references
     + lib.optionalString (hasFeature "volk" features) ''
       ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libvolk.so)

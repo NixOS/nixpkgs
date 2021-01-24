@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "SUID_ROOT=" # do not try to setuid
-    "resdir=${placeholder ''out''}/share/X11"
+    "resdir=${placeholder "out"}/share/X11"
   ];
 
   meta = {

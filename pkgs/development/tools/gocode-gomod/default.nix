@@ -9,7 +9,7 @@ buildGoModule rec {
   # standard packages.
   allowGoReference = true;
 
-  excludedPackages = ''internal/suggest/testdata'';
+  excludedPackages = "internal/suggest/testdata";
 
   src = fetchFromGitHub {
     owner = "stamblerre";

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-appindicator" ];
 
-  preFixup = ''gappsWrapperArgs+=(--prefix PATH : ${encfs}/bin)'';
+  preFixup = "gappsWrapperArgs+=(--prefix PATH : ${encfs}/bin)";
 
   enableParallelBuilding = true;
 

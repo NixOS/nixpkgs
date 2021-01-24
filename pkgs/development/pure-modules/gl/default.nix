@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ pure freeglut libGLU libGL xlibsWrapper ];
   makeFlags = [
-    "libdir=${placeholder ''out''}/lib"
-    "prefix=${placeholder ''out''}/"
+    "libdir=${placeholder "out"}/lib"
+    "prefix=${placeholder "out"}/"
   ];
   setupHook = ../generic-setup-hook.sh;
 

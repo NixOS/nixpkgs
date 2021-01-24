@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytestcov mock cmdline ];
   propagatedBuildInputs = [ pytest-fixture-config pytest-shutil virtualenv ];
-  checkPhase = '' py.test tests/unit '';
+  checkPhase = "py.test tests/unit ";
 
   nativeBuildInputs = [ pytest ];
 

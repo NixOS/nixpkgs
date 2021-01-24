@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
     "NO_VENV=1"
   ];
 

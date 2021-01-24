@@ -3699,6 +3699,12 @@
     githubId = 896431;
     name = "Chris Hodapp";
   };
+  holymonson = {
+    email = "holymonson@gmail.com";
+    github = "holymonson";
+    githubId = 902012;
+    name = "Monson Shao";
+  };
   hongchangwu = {
     email = "wuhc85@gmail.com";
     github = "hongchangwu";

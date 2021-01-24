@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-ansi-text'';
-  version = ''20200218-git'';
+  baseName = "cl-ansi-text";
+  version = "20200218-git";
 
-  description = ''ANSI control string characters, focused on color'';
+  description = "ANSI control string characters, focused on color";
 
   deps = [ args."alexandria" args."cl-colors2" args."cl-ppcre" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-ansi-text/2020-02-18/cl-ansi-text-20200218-git.tgz'';
-    sha256 = ''1yn657rka3pcg3p5g9czbpk0f0rv81dbq1gknid1b24zg7krks5r'';
+    url = "http://beta.quicklisp.org/archive/cl-ansi-text/2020-02-18/cl-ansi-text-20200218-git.tgz";
+    sha256 = "1yn657rka3pcg3p5g9czbpk0f0rv81dbq1gknid1b24zg7krks5r";
   };
 
   packageName = "cl-ansi-text";

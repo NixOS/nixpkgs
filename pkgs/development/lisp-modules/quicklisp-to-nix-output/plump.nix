@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''plump'';
-  version = ''20200427-git'';
+  baseName = "plump";
+  version = "20200427-git";
 
-  description = ''An XML / XHTML / HTML parser that aims to be as lenient as possible.'';
+  description = "An XML / XHTML / HTML parser that aims to be as lenient as possible.";
 
   deps = [ args."array-utils" args."documentation-utils" args."trivial-indent" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/plump/2020-04-27/plump-20200427-git.tgz'';
-    sha256 = ''0l5bi503djjkhrih94h5jbihlm60h267qm2ycq9m9fldp4fjrjic'';
+    url = "http://beta.quicklisp.org/archive/plump/2020-04-27/plump-20200427-git.tgz";
+    sha256 = "0l5bi503djjkhrih94h5jbihlm60h267qm2ycq9m9fldp4fjrjic";
   };
 
   packageName = "plump";

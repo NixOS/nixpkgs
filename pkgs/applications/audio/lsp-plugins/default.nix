@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ jack2Full libsndfile libGLU libGL lv2 cairo ladspaH ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
     "ETC_PATH=$(out)/etc"
   ];
 

@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''esrap-peg'';
-  version = ''20191007-git'';
+  baseName = "esrap-peg";
+  version = "20191007-git";
 
-  description = ''A wrapper around Esrap to allow generating Esrap grammars from PEG definitions'';
+  description = "A wrapper around Esrap to allow generating Esrap grammars from PEG definitions";
 
   deps = [ args."alexandria" args."cl-unification" args."esrap" args."iterate" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/esrap-peg/2019-10-07/esrap-peg-20191007-git.tgz'';
-    sha256 = ''0285ngcm73rpzmr0ydy6frps2b4q6n4jymjv3ncwsh81x5blfvis'';
+    url = "http://beta.quicklisp.org/archive/esrap-peg/2019-10-07/esrap-peg-20191007-git.tgz";
+    sha256 = "0285ngcm73rpzmr0ydy6frps2b4q6n4jymjv3ncwsh81x5blfvis";
   };
 
   packageName = "esrap-peg";

@@ -190,8 +190,7 @@ let
       };
 
       devices = mkOption {
-        description = ''
-        '';
+        description = "";
       };
 
       extraAutochangerConfig = mkOption {

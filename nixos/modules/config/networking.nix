@@ -195,8 +195,7 @@ in
         '';
 
         # /etc/netgroup: Network-wide groups.
-        netgroup.text = mkDefault ''
-        '';
+        netgroup.text = mkDefault "";
 
         # /etc/host.conf: resolver configuration file
         "host.conf".text = ''

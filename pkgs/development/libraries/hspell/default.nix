@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "08x7rigq5pa1pfpl30qp353hbdkpadr1zc49slpczhsn0sg36pd6";
   };
 
-  patchPhase = ''patchShebangs .'';
+  patchPhase = "patchShebangs .";
   preBuild = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     make CC=${buildPackages.stdenv.cc}/bin/cc find_sizes
     mv find_sizes find_sizes_build

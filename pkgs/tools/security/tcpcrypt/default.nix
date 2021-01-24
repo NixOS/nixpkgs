@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0a015rlyvagz714pgwr85f8gjq1fkc0il7d7l39qcgxrsp15b96w";
   };
 
-  postUnpack = ''mkdir -vp $sourceRoot/m4'';
+  postUnpack = "mkdir -vp $sourceRoot/m4";
 
   outputs = [ "bin" "dev" "out" ];
   nativeBuildInputs = [ autoreconfHook ];

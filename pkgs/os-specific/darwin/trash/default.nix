@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./trash.diff ];
 
-  buildPhase = ''make all docs'';
+  buildPhase = "make all docs";
 
   installPhase = ''
     mkdir -p $out/bin

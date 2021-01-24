@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sed -i 's/^IS_APPLE := .*$/IS_APPLE := 1/' Makefile
   '';
 
-  configurePhase = '' patchShebangs make.sh '';
+  configurePhase = "patchShebangs make.sh ";
   buildPhase = "PREFIX=$out ./make.sh";
 
   doCheck = true;

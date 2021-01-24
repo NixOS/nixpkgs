@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''trivial-clipboard'';
-  version = ''20200925-git'';
+  baseName = "trivial-clipboard";
+  version = "20200925-git";
 
-  description = ''trivial-clipboard let access system clipboard.'';
+  description = "trivial-clipboard let access system clipboard.";
 
   deps = [ args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/trivial-clipboard/2020-09-25/trivial-clipboard-20200925-git.tgz'';
-    sha256 = ''1aksag9nfklkg0bshd7dxfip4dj9gl3x0cbisgd2c143k2csb1yc'';
+    url = "http://beta.quicklisp.org/archive/trivial-clipboard/2020-09-25/trivial-clipboard-20200925-git.tgz";
+    sha256 = "1aksag9nfklkg0bshd7dxfip4dj9gl3x0cbisgd2c143k2csb1yc";
   };
 
   packageName = "trivial-clipboard";

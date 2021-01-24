@@ -21,7 +21,7 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ go-bindata gotools makeWrapper ];
 
-  preBuild = ''go generate ./...'';
+  preBuild = "go generate ./...";
 
   postInstall = ''
     wrapProgram $out/bin/go2nix \

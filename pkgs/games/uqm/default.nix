@@ -12,7 +12,7 @@ assert use3DOVideos -> requireFile != null && writeText != null
 
 let
   videos = import ./3dovideo.nix {
-    inherit stdenv requireFile writeText fetchurl haskellPackages;
+    inherit stdenv lib requireFile writeText fetchurl haskellPackages;
   };
 
   remixPacks = lib.imap1 (num: sha256: fetchurl rec {

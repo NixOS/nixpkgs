@@ -14,8 +14,8 @@ let
       ClusterName=${cfg.clusterName}
       StateSaveLocation=${cfg.stateSaveLocation}
       SlurmUser=${cfg.user}
-      ${optionalString (cfg.controlMachine != null) ''controlMachine=${cfg.controlMachine}''}
-      ${optionalString (cfg.controlAddr != null) ''controlAddr=${cfg.controlAddr}''}
+      ${optionalString (cfg.controlMachine != null) "controlMachine=${cfg.controlMachine}"}
+      ${optionalString (cfg.controlAddr != null) "controlAddr=${cfg.controlAddr}"}
       ${toString (map (x: "NodeName=${x}\n") cfg.nodeName)}
       ${toString (map (x: "PartitionName=${x}\n") cfg.partitionName)}
       PlugStackConfig=${plugStackConfig}/plugstack.conf
@@ -25,7 +25,7 @@ let
 
   plugStackConfig = pkgs.writeTextDir "plugstack.conf"
     ''
-      ${optionalString cfg.enableSrunX11 ''optional ${pkgs.slurm-spank-x11}/lib/x11.so''}
+      ${optionalString cfg.enableSrunX11 "optional ${pkgs.slurm-spank-x11}/lib/x11.so"}
       ${cfg.extraPlugstackConfig}
     '';
 

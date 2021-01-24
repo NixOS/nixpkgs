@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Usual shenanigans
-  patchPhase = ''patchShebangs tests/regress/check.sh'';
+  patchPhase = "patchShebangs tests/regress/check.sh";
 
   # Includes a fix for the embedded soname being libyices.so.2.5, but
   # only installing the libyices.so.2.5.x file.

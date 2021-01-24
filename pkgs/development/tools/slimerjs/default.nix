@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   '';
   meta = {
     inherit (s) version;
-    description = ''Gecko-based programmatically-driven browser'';
+    description = "Gecko-based programmatically-driven browser";
     license = lib.licenses.mpl20 ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

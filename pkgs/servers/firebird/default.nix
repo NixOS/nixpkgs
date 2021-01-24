@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   # dosen't work. Copying the files manually which can be found
   # in ubuntu -dev -classic, -example packages:
   # maybe some of those files can be removed again
-  installPhase = ''cp -r gen/firebird $out'';
+  installPhase = "cp -r gen/firebird $out";
 
   meta = {
     description = "SQL relational database management system";

@@ -61,7 +61,7 @@ in
       };
 
       dataDir = mkOption {
-        default = ''/home/${user}/.config/quassel-irc.org'';
+        default = "/home/${user}/.config/quassel-irc.org";
         description = ''
           The directory holding configuration files, the SQlite database and the SSL Cert.
         '';

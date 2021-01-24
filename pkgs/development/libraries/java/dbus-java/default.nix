@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
   JAVA_HOME=jdk;
   JAVA="${jdk}/bin/java";
-  PREFIX=''''${out}'';
+  PREFIX="\${out}";
   JAVAUNIXLIBDIR="${libmatthew_java}/lib/jni";
   JAVAUNIXJARDIR="${libmatthew_java}/share/java";
   buildInputs = [ gettext jdk ];

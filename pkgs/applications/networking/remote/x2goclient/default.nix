@@ -28,7 +28,7 @@ mkDerivation {
 
   installTargets = [ "install_client" "install_man" ];
 
-  qtWrapperArgs = [ ''--suffix PATH : ${nx-libs}/bin:${openssh}/libexec'' ];
+  qtWrapperArgs = [ "--suffix PATH : ${nx-libs}/bin:${openssh}/libexec" ];
 
   meta = with lib; {
     description = "Graphical NoMachine NX3 remote desktop client";

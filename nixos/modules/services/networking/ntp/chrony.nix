@@ -82,6 +82,7 @@ in
       };
 
       initstepslew = mkOption {
+        type = types.attrsOf (types.either types.bool types.int);
         default = {
           enabled = true;
           threshold = 1000; # by default, same threshold as 'ntpd -g' (1000s)

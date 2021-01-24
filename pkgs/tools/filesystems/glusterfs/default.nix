@@ -90,7 +90,7 @@ in stdenv.mkDerivation rec {
     '';
 
   configureFlags = [
-    ''--localstatedir=/var''
+    "--localstatedir=/var"
     ];
 
   nativeBuildInputs = [ rpcsvc-proto ];
