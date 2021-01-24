@@ -2363,6 +2363,8 @@ in {
     hdf5 = pkgs.hdf5_1_10;
   };
 
+  ffc = callPackage ../development/python-modules/ffc { };
+
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
