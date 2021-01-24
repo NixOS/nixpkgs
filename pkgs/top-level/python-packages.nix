@@ -2859,6 +2859,8 @@ in {
 
   hatasmota = callPackage ../development/python-modules/hatasmota { };
 
+  haversine = callPackage ../development/python-modules/haversine { };
+
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
 
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
