@@ -27,10 +27,9 @@ stdenv.mkDerivation rec {
     "-DWITH_DOCS=NO"
   ];
 
-  buildPhase = ''
-    cd lib
-    make install
-  '';
+  makeFlags = [
+    "-Clib"
+  ];
 
   postInstall = ''
     cp $out/lib/libmosquitto_static.a $out/lib/libmosquitto.a
