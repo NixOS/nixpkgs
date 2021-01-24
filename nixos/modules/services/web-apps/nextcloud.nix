@@ -351,7 +351,7 @@ in {
         '')
         ++ (optional (versionOlder cfg.package.version "18") (upgradeWarning 17 "20.03"))
         ++ (optional (versionOlder cfg.package.version "19") (upgradeWarning 18 "20.09"))
-        ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.03"));
+        ++ (optional (versionOlder cfg.package.version "20") (upgradeWarning 19 "21.05"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -363,7 +363,7 @@ in {
             ''
           else if versionOlder stateVersion "20.03" then nextcloud17
           else if versionOlder stateVersion "20.09" then nextcloud18
-          else if versionOlder stateVersion "21.03" then nextcloud19
+          else if versionOlder stateVersion "21.05" then nextcloud19
           else nextcloud20
         );
     }

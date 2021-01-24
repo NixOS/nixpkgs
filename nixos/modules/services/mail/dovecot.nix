@@ -463,7 +463,7 @@ in
     environment.systemPackages = [ dovecotPkg ];
 
     warnings = mkIf (any isList options.services.dovecot2.mailboxes.definitions) [
-      "Declaring `services.dovecot2.mailboxes' as a list is deprecated and will break eval in 21.03! See the release notes for more info for migration."
+      "Declaring `services.dovecot2.mailboxes' as a list is deprecated and will break eval in 21.05! See the release notes for more info for migration."
     ];
 
     assertions = [

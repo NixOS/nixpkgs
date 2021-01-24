@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.hedgedoc;
 
-  name = if versionAtLeast config.system.stateVersion "21.03"
+  name = if versionAtLeast config.system.stateVersion "21.05"
     then "hedgedoc"
     else "codimd";
 
