@@ -34,6 +34,8 @@ buildPythonPackage rec {
     "getprotobyname"
     "waitpid"
     "static_tool_sees_all_symbols"
+    # stderr is being captured
+    "test_fallback_when_no_hook_claims_it"
   ];
 
   propagatedBuildInputs = [
