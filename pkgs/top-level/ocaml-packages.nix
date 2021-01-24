@@ -564,6 +564,10 @@ let
 
     magick = callPackage ../development/ocaml-modules/magick { };
 
+    mariadb = callPackage ../development/ocaml-modules/mariadb {
+      inherit (pkgs) mariadb;
+    };
+
     markup = callPackage ../development/ocaml-modules/markup { };
 
     mdx = callPackage ../development/ocaml-modules/mdx { };
