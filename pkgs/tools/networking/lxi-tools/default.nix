@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config
 , liblxi, readline, lua
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ liblxi readline lua ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for communicating with LXI compatible instruments";
     longDescription = ''
       lxi-tools is a collection of open source software tools
