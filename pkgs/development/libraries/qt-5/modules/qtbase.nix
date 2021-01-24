@@ -34,13 +34,14 @@ let
   compareVersion = v: builtins.compareVersions version v;
   qmakeCacheName =
     if compareVersion "5.12.4" < 0 then ".qmake.cache" else ".qmake.stash";
+  debugSymbols = debug || developerBuild;
 in
 
 stdenv.mkDerivation {
 
   name = "qtbase-${version}";
   inherit qtCompatVersion src version;
-  inherit debug;
+  debug = debugSymbols;
 
   propagatedBuildInputs =
     [
@@ -243,6 +244,7 @@ stdenv.mkDerivation {
       "-I" "${icu.dev}/include"
       "-pch"
     ]
+    ++ lib.optional debugSymbols "-debug"
     ++ lib.optionals (compareVersion "5.11.0" < 0)
     [
       "-qml-debug"
@@ -398,6 +400,8 @@ stdenv.mkDerivation {
       sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
           -e "/^host_bins=/ c host_bins=$dev/bin"
     '';
+
+  dontStrip = debugSymbols;
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
 
