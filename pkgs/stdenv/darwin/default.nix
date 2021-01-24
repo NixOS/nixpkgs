@@ -80,7 +80,7 @@ in rec {
 
       mkCC = overrides: import ../../build-support/cc-wrapper (
         let args = {
-          inherit shell;
+          inherit lib shell;
           inherit (last) stdenvNoCC;
 
           nativeTools  = false;
@@ -217,6 +217,7 @@ in rec {
 
         binutils = lib.makeOverridable (import ../../build-support/bintools-wrapper) {
           shell = "${bootstrapTools}/bin/bash";
+          inherit lib;
           inherit (self) stdenvNoCC;
 
           nativeTools  = false;

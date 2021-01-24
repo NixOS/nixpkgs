@@ -10,7 +10,7 @@
 , extraPackages ? [], extraBuildCommands ? ""
 }:
 
-with stdenvNoCC.lib;
+with lib;
 
 let
   stdenv = stdenvNoCC;
