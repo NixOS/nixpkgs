@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config
+{ lib, stdenv, callPackage, fetchFromGitHub, makeWrapper, autoreconfHook, pkg-config
 , CoreFoundation, IOKit, libossp_uuid
 , curl, libcap,  libuuid, lm_sensors, zlib, fetchpatch
 , nixosTests
@@ -7,6 +7,7 @@
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withSsl ? true, openssl
+, withCloud ? true, libwebsockets_3_2, json_c
 , withDebug ? false
 }:
 
@@ -14,6 +15,7 @@ with lib;
 
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
+  mosquitto = callPackage ./mosquitto.nix {};
 in stdenv.mkDerivation rec {
   version = "1.28.0";
   pname = "netdata";
@@ -25,8 +27,9 @@ in stdenv.mkDerivation rec {
     sha256 = "1266jbfw55r1zh00xi6c90j2fs9hw8hmsb7686rh04l8mffny9f4";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
   buildInputs = [ curl.dev zlib.dev ]
+    ++ optionals withCloud [ json_c libwebsockets_3_2 ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
     ++ optionals withCups [ cups ]
@@ -58,18 +61,20 @@ in stdenv.mkDerivation rec {
     ''}
   '';
 
-  preConfigure = optionalString (!stdenv.isDarwin) ''
+  preConfigure = optionalString withCloud ''
+    mkdir -p externaldeps
+    cp -r "${mosquitto}/lib" externaldeps/mosquitto;
+    cp -r "${libwebsockets_3_2}/lib" externaldeps/libwebsockets;
+  '' + optionalString (!stdenv.isDarwin) ''
     substituteInPlace collectors/python.d.plugin/python_modules/third_party/lm_sensors.py \
       --replace 'ctypes.util.find_library("sensors")' '"${lm_sensors.out}/lib/libsensors${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-  ];
+  configureFlags = [ "--localstatedir=/var" "--sysconfdir=/etc" ]
+    ++ optional withCloud "--enable-cloud";
 
   postFixup = ''
-    rm -r $out/sbin
+    wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${openssl}/bin
   '';
 
   passthru.tests.netdata = nixosTests.netdata;
