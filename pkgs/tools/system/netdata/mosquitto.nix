@@ -1,3 +1,9 @@
+# The Netdata project uses a custom fork of Mosquitto that
+# incorporates support for some callback functionality they
+# require.
+#
+# Also see https://github.com/netdata/netdata/issues/8961
+
 { stdenv, fetchFromGitHub, c-ares, cmake, libwebsockets_3_2, openssl }:
 
 stdenv.mkDerivation rec {
