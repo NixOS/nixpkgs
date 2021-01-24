@@ -164,6 +164,8 @@ in {
 
   adafruit-platformdetect = callPackage ../development/python-modules/adafruit-platformdetect { };
 
+  adafruit-pureio = callPackage ../development/python-modules/adafruit-pureio { };
+
   adal = callPackage ../development/python-modules/adal { };
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
