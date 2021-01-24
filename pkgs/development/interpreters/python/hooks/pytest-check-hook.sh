@@ -42,7 +42,7 @@ function pytestCheckPhase() {
         echo "Disabled test file \"$file\" does not exist. Aborting"
         exit 1
       fi
-      args+=" --ignore=$file"
+      args+=" --ignore=\"$file\""
     done
     args+=" ${pytestFlagsArray[@]}"
     eval "@pythonCheckInterpreter@ $args"
