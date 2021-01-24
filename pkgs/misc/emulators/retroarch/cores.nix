@@ -815,10 +815,13 @@ in with lib.licenses;
 
   play = mkLibRetroCore {
     core = "play";
-    src = fetchRetro {
-      repo = "play-";
-      rev = "884ae3b96c631f235cd18b2643d1f318fa6951fb";
-      sha256 = "0m9pk20jh4y02visgzfw64bpbw93bzs15x3a3bnd19yivm34dbfc";
+    version = "0.36";
+    src = fetchFromGitHub {
+      owner = "jpd002";
+      repo = "Play-";
+      rev = "0.36-1";
+      sha256 = "0rg86jr9lwfc8w28gcl18wshz6rlkglczl6k84i87w1xhzhy0gx7";
+      fetchSubmodules = true;
     };
     description = "Port of Play! to libretro";
     license = bsd2;
