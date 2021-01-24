@@ -77,8 +77,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = runtimeDeps;
 
-  installPhase = ''
-  '' + lib.optionalString stdenv.isLinux ''
+  installPhase = "" + lib.optionalString stdenv.isLinux ''
     for artifact in wezterm wezterm-gui wezterm-mux-server strip-ansi-escapes; do
       patchelf --set-rpath "${lib.makeLibraryPath runtimeDeps}" $releaseDir/$artifact
       install -D $releaseDir/$artifact -t $out/bin

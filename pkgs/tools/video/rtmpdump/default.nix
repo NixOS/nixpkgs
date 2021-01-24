@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  makeFlags = [ ''prefix=$(out)'' ]
+  makeFlags = [ "prefix=$(out)" ]
     ++ optional gnutlsSupport "CRYPTO=GNUTLS"
     ++ optional opensslSupport "CRYPTO=OPENSSL"
     ++ optional stdenv.isDarwin "SYS=darwin"

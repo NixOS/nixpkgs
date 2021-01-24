@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [mpfr];
   meta = {
     inherit version;
-    description = ''A multiple precision interval arithmetic library based on MPFR'';
+    description = "A multiple precision interval arithmetic library based on MPFR";
     homepage = "https://gforge.inria.fr/projects/mpfi/";
     license = lib.licenses.lgpl21Plus;
     maintainers = [lib.maintainers.raskin];

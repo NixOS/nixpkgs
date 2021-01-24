@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  checkPhase = ''nosetests'';
+  checkPhase = "nosetests";
 
   meta = with lib; {
     description = "Emoji for Python";

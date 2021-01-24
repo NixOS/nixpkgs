@@ -42,13 +42,13 @@ in
     };
 
     domain = mkOption {
-      description = ''Proxy account domain/workgroup name.'';
+      description = "Proxy account domain/workgroup name.";
     };
 
     password = mkOption {
       default = "/etc/cntlm.password";
       type = types.str;
-      description = ''Proxy account password. Note: use chmod 0600 on /etc/cntlm.password for security.'';
+      description = "Proxy account password. Note: use chmod 0600 on /etc/cntlm.password for security.";
     };
 
     netbios_hostname = mkOption {

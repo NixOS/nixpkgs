@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "GIT_VERSION=${version}"
     "GIT_TIMESTAMP="
-    "SHAREDIR=${placeholder ''out''}/share/osm2xmap"
-    "INSTALL_BINDIR=${placeholder ''out''}/bin"
-    "INSTALL_MANDIR=${placeholder ''out''}/share/man/man1"
+    "SHAREDIR=${placeholder "out"}/share/osm2xmap"
+    "INSTALL_BINDIR=${placeholder "out"}/bin"
+    "INSTALL_MANDIR=${placeholder "out"}/share/man/man1"
   ];
 
   NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";

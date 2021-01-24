@@ -27,14 +27,14 @@ in
       # the options below are the same as in "captive-browser.toml"
       browser = mkOption {
         type = types.str;
-        default = concatStringsSep " " [ ''${pkgs.chromium}/bin/chromium''
-                                         ''--user-data-dir=''${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive''
+        default = concatStringsSep " " [ "${pkgs.chromium}/bin/chromium"
+                                         "--user-data-dir=\${XDG_DATA_HOME:-$HOME/.local/share}/chromium-captive"
                                          ''--proxy-server="socks5://$PROXY"''
                                          ''--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE localhost"''
-                                         ''--no-first-run''
-                                         ''--new-window''
-                                         ''--incognito''
-                                         ''http://cache.nixos.org/''
+                                         "--no-first-run"
+                                         "--new-window"
+                                         "--incognito"
+                                         "http://cache.nixos.org/"
                                        ];
         description = ''
           The shell (/bin/sh) command executed once the proxy starts.
@@ -62,7 +62,7 @@ in
       socks5-addr = mkOption {
         type = types.str;
         default = "localhost:1666";
-        description = ''the listen address for the SOCKS5 proxy server'';
+        description = "the listen address for the SOCKS5 proxy server";
       };
 
       bindInterface = mkOption {

@@ -56,25 +56,25 @@ in
       syslog = mkOption {
         type = types.bool;
         default = true;
-        description = ''Whether to enable syslog output.'';
+        description = "Whether to enable syslog output.";
       };
 
       passwordAuthentication = mkOption {
         type = types.bool;
         default = true;
-        description = ''Whether to enable password authentication.'';
+        description = "Whether to enable password authentication.";
       };
 
       publicKeyAuthentication = mkOption {
         type = types.bool;
         default = true;
-        description = ''Whether to enable public key authentication.'';
+        description = "Whether to enable public key authentication.";
       };
 
       rootLogin = mkOption {
         type = types.bool;
         default = false;
-        description = ''Whether to enable remote root login.'';
+        description = "Whether to enable remote root login.";
       };
 
       loginShell = mkOption {
@@ -96,13 +96,13 @@ in
       tcpForwarding = mkOption {
         type = types.bool;
         default = true;
-        description = ''Whether to enable TCP/IP forwarding.'';
+        description = "Whether to enable TCP/IP forwarding.";
       };
 
       x11Forwarding = mkOption {
         type = types.bool;
         default = true;
-        description = ''Whether to enable X11 forwarding.'';
+        description = "Whether to enable X11 forwarding.";
       };
 
       subsystems = mkOption {

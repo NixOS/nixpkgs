@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   makefile = "unix/Makefile";
   buildFlags = if stdenv.isCygwin then [ "cygwin" ] else [ "generic" ];
   installFlags = [
-    "prefix=${placeholder ''out''}"
+    "prefix=${placeholder "out"}"
     "INSTALL=cp"
   ];
 

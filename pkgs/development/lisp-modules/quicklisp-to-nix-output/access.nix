@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''access'';
-  version = ''20151218-git'';
+  baseName = "access";
+  version = "20151218-git";
 
   parasites = [ "access-test" ];
 
@@ -11,8 +11,8 @@ rec {
   deps = [ args."alexandria" args."anaphora" args."cl-interpol" args."cl-ppcre" args."cl-unicode" args."closer-mop" args."flexi-streams" args."iterate" args."lisp-unit2" args."named-readtables" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/access/2015-12-18/access-20151218-git.tgz'';
-    sha256 = ''0f4257cxd1rpp46wm2qbnk0ynlc3dli9ib4qbn45hglh8zy7snfl'';
+    url = "http://beta.quicklisp.org/archive/access/2015-12-18/access-20151218-git.tgz";
+    sha256 = "0f4257cxd1rpp46wm2qbnk0ynlc3dli9ib4qbn45hglh8zy7snfl";
   };
 
   packageName = "access";

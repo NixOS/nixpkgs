@@ -354,7 +354,7 @@ in
 
         script = let
           tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
-          lastArchive = ''$(${tarsnap} --list-archives | sort | tail -1)'';
+          lastArchive = "$(${tarsnap} --list-archives | sort | tail -1)";
           run = ''${tarsnap} -x -f "${lastArchive}" ${optionalString cfg.verbose "-v"}'';
 
         in if (cfg.cachedir != null) then ''

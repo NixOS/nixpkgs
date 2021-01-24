@@ -10,7 +10,7 @@ gccStdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib mpi ];
-  setSourceRoot = ''sourceRoot=$(echo */src)'';
+  setSourceRoot = "sourceRoot=$(echo */src)";
   buildFlags = [ "thread" "mpis" ];
   preInstall = "mkdir -p $out/man/man1";
 

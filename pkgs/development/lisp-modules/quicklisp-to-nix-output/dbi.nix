@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''dbi'';
-  version = ''cl-20200610-git'';
+  baseName = "dbi";
+  version = "cl-20200610-git";
 
   parasites = [ "dbi/test" ];
 
-  description = ''Database independent interface for Common Lisp'';
+  description = "Database independent interface for Common Lisp";
 
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-mysql" args."cl-postgres" args."closer-mop" args."dbd-mysql" args."dbd-postgres" args."dbd-sqlite3" args."dbi-test" args."rove" args."split-sequence" args."sqlite" args."trivial-garbage" args."trivial-types" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-dbi/2020-06-10/cl-dbi-20200610-git.tgz'';
-    sha256 = ''1d7hwywcqzqwmr5b42c0mmjq3v3xxd4cwb4fn5k1wd7j6pr0bkas'';
+    url = "http://beta.quicklisp.org/archive/cl-dbi/2020-06-10/cl-dbi-20200610-git.tgz";
+    sha256 = "1d7hwywcqzqwmr5b42c0mmjq3v3xxd4cwb4fn5k1wd7j6pr0bkas";
   };
 
   packageName = "dbi";

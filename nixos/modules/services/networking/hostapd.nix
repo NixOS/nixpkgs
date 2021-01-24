@@ -20,8 +20,8 @@ let
     ssid=${cfg.ssid}
     hw_mode=${cfg.hwMode}
     channel=${toString cfg.channel}
-    ${optionalString (cfg.countryCode != null) ''country_code=${cfg.countryCode}''}
-    ${optionalString (cfg.countryCode != null) ''ieee80211d=1''}
+    ${optionalString (cfg.countryCode != null) "country_code=${cfg.countryCode}"}
+    ${optionalString (cfg.countryCode != null) "ieee80211d=1"}
 
     # logging (debug level)
     logger_syslog=-1

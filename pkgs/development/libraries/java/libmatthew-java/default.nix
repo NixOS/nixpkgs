@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "1yldkhsdzm0a41a0i881bin2jklhp85y3ah245jd6fz3npcx7l85";
   };
   JAVA_HOME=jdk;
-  PREFIX=''''${out}'';
+  PREFIX="\${out}";
   buildInputs = [ jdk ];
 
   meta = with lib; {

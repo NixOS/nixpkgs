@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   buildFlags = [ "all" ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
   ];
 
   # Install udev rules, but remove lines that set up the udev-acl

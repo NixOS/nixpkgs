@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''array-utils'';
-  version = ''20190710-git'';
+  baseName = "array-utils";
+  version = "20190710-git";
 
-  description = ''A few utilities for working with arrays.'';
+  description = "A few utilities for working with arrays.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/array-utils/2019-07-10/array-utils-20190710-git.tgz'';
-    sha256 = ''1fzsg3lqa79yrkad6fx924vai7i6m92i2rq8lyq37wrbwkhm7grh'';
+    url = "http://beta.quicklisp.org/archive/array-utils/2019-07-10/array-utils-20190710-git.tgz";
+    sha256 = "1fzsg3lqa79yrkad6fx924vai7i6m92i2rq8lyq37wrbwkhm7grh";
   };
 
   packageName = "array-utils";

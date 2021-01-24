@@ -55,8 +55,7 @@ rec {
       };
 
       # Do not remove static from make files as we want a static binary
-      patchPhase = ''
-      '';
+      patchPhase = "";
 
       NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });

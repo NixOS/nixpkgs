@@ -20,7 +20,7 @@ mkDerivation rec {
     ./disable-os-detection.patch
   ];
 
-  setSourceRoot = ''sourceRoot=$(echo */mythtv)'';
+  setSourceRoot = "sourceRoot=$(echo */mythtv)";
 
   buildInputs = [
     freetype qtbase qtwebkit qtscript lame zlib xlibsWrapper libGLU libGL

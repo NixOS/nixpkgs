@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  postPatch = ''patchShebangs .'';
+  postPatch = "patchShebangs .";
   inherit patches;
 
   outputs = [ "bin" "dev" "out" "man" ]

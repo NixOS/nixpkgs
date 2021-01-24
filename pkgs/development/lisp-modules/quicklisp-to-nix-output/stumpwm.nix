@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''stumpwm'';
-  version = ''20201016-git'';
+  baseName = "stumpwm";
+  version = "20201016-git";
 
-  description = ''A tiling, keyboard driven window manager'';
+  description = "A tiling, keyboard driven window manager";
 
   deps = [ args."alexandria" args."cl-ppcre" args."clx" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/stumpwm/2020-10-16/stumpwm-20201016-git.tgz'';
-    sha256 = ''06lc1d9y83x0ckqd9pls7a1dyriz650mpv1rigncr02qsj3aqpp2'';
+    url = "http://beta.quicklisp.org/archive/stumpwm/2020-10-16/stumpwm-20201016-git.tgz";
+    sha256 = "06lc1d9y83x0ckqd9pls7a1dyriz650mpv1rigncr02qsj3aqpp2";
   };
 
   packageName = "stumpwm";

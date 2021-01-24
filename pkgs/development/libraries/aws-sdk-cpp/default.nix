@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   postFixupHooks = [
     # This bodge is necessary so that the file that the generated -config.cmake file
     # points to an existing directory.
-    ''mkdir -p $out/include''
+    "mkdir -p $out/include"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup = ''wrapPythonPrograms'';
+  postFixup = "wrapPythonPrograms";
 
   meta = with lib; {
     description = "Fix for Intel CPU throttling issues";

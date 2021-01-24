@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   dontDisableStatic = static;
 
   meta = with lib; {
-    description = ''Command-line interface to IPMI-enabled devices'';
+    description = "Command-line interface to IPMI-enabled devices";
     license = licenses.bsd3;
     homepage = "https://sourceforge.net/projects/ipmitool/";
     platforms = platforms.unix;

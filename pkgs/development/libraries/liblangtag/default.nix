@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    ''--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias''
+    "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias"
   ];
 
   buildInputs = [ gettext glib libxml2 gobject-introspection gnome-common

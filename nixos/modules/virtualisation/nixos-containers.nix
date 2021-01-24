@@ -170,7 +170,7 @@ let
 
       ${concatStringsSep "\n" (
         mapAttrsToList (name: cfg:
-          ''ip link del dev ${name} 2> /dev/null || true ''
+          "ip link del dev ${name} 2> /dev/null || true "
         ) cfg.extraVeths
       )}
    '';
@@ -185,7 +185,7 @@ let
             fi
           ''
         else
-          ''${ipcmd} add ${cfg.${attribute}} dev $ifaceHost'';
+          "${ipcmd} add ${cfg.${attribute}} dev $ifaceHost";
       renderExtraVeth = name: cfg:
         if cfg.hostBridge != null then
           ''

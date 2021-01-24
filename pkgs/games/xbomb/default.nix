@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libXaw ];
 
   makeFlags = [
-    "INSTDIR=${placeholder ''out''}"
+    "INSTDIR=${placeholder "out"}"
   ];
 
   meta = with lib; {
