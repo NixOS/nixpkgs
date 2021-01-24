@@ -29143,7 +29143,7 @@ in
 
   ssh-audit = callPackage ../tools/security/ssh-audit { };
 
-  autocpu-freq = callPackage ../tools/system/autocpu-freq {  };
+  auto-cpufreq = callPackage ../tools/system/auto-cpufreq {  };
 
   thermald = callPackage ../tools/system/thermald { };
 
