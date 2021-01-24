@@ -1084,6 +1084,12 @@
     githubId = 75972;
     name = "Ben Booth";
   };
+  berberman = {
+    email = "berberman@yandex.com";
+    github = "berberman";
+    githubId = 26041945;
+    name = "Potato Hatsue";
+  };
   berce = {
     email = "bert.moens@gmail.com";
     github = "berce";
