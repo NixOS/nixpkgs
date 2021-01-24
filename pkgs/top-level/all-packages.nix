@@ -27168,6 +27168,7 @@ in
     dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
     draw-on-your-screen = callPackage ../desktops/gnome-3/extensions/draw-on-your-screen { };
     drop-down-terminal = callPackage ../desktops/gnome-3/extensions/drop-down-terminal { };
+    dynamic-panel-transparency = callPackage ../desktops/gnome-3/extensions/dynamic-panel-transparency { };
     easyScreenCast = callPackage ../desktops/gnome-3/extensions/EasyScreenCast { };
     emoji-selector = callPackage ../desktops/gnome-3/extensions/emoji-selector { };
     freon = callPackage ../desktops/gnome-3/extensions/freon { };
