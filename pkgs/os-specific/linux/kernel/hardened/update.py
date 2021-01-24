@@ -101,7 +101,7 @@ def verify_openpgp_signature(
 
 def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
     release = release_info.release
-    extra = f'.{release_info.version[-1]}'
+    extra = f'-{release_info.version[-1]}'
 
     def find_asset(filename: str) -> str:
         try:
@@ -138,7 +138,7 @@ def fetch_patch(*, name: str, release_info: ReleaseInfo) -> Optional[Patch]:
 
 def parse_version(version_str: str) -> Version:
     version: Version = []
-    for component in version_str.split("."):
+    for component in re.split('\.|\-', version_str):
         try:
             version.append(int(component))
         except ValueError:
@@ -208,7 +208,7 @@ failures = False
 releases = {}
 for release in repo.get_releases():
     version = parse_version(release.tag_name)
-    # needs to look like e.g. 5.6.3.a
+    # needs to look like e.g. 5.6.3-hardened1
     if len(version) < 4:
         continue
 
