@@ -20,7 +20,7 @@
 assert crossSystem == localSystem;
 
 let
-  inherit (localSystem) system platform;
+  inherit (localSystem) system;
 
   bootstrapClangVersion = "7.1.0";
 
@@ -148,7 +148,7 @@ in rec {
         __extraImpureHostDeps = commonImpureHostDeps;
 
         extraAttrs = {
-          inherit macosVersionMin platform;
+          inherit macosVersionMin;
         };
         overrides  = self: super: (overrides self super) // {
           inherit ccNoLibcxx;
@@ -522,7 +522,7 @@ in rec {
     extraAttrs = {
       libc = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
-      inherit macosVersionMin platform bootstrapTools;
+      inherit macosVersionMin bootstrapTools;
     };
 
     allowedRequisites = (with pkgs; [
