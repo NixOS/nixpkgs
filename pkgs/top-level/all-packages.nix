@@ -2633,6 +2633,8 @@ in
 
   sweep-visualizer = callPackage ../tools/misc/sweep-visualizer { };
 
+  swego = callPackage ../servers/swego { };
+
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
 
   syslogng = callPackage ../tools/system/syslog-ng { };
