@@ -8,8 +8,8 @@ let
     name = "bossa-bin2c";
     src = ./bin2c.c;
     dontUnpack = true;
-    buildPhase = ''cc $src -o bin2c'';
-    installPhase = ''mkdir -p $out/bin; cp bin2c $out/bin/'';
+    buildPhase = "cc $src -o bin2c";
+    installPhase = "mkdir -p $out/bin; cp bin2c $out/bin/";
   };
 
 in

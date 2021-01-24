@@ -28,8 +28,7 @@ buildPythonPackage rec {
        else
         ''--replace 'ALT_TOOL = "bsdtar"' "ALT_TOOL = \"${libarchive}/bin/bsdtar\""
         '')
-     + ''
-   '';
+     + "";
   # the tests only work with the standard unrar package
   doCheck = useUnrar;
   LC_ALL = "en_US.UTF-8";

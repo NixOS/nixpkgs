@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 #    ./CVE-2019-9232.CVE-2019-9325.CVE-2019-9371.CVE-2019-9433.patch
   ];
 
-  postPatch = ''patchShebangs .'';
+  postPatch = "patchShebangs .";
 
   outputs = [ "bin" "dev" "out" ];
   setOutputFlags = false;

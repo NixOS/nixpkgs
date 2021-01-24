@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     inherit version;
-    description = ''A small chess engine supporting fairy pieces'';
+    description = "A small chess engine supporting fairy pieces";
     longDescription = ''
        A version of micro-Max that reads the piece description
        from a file fmax.ini, so that arbitrary fairy pieces can be

@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ lua5_3 python ];
 
-  buildPhase = ''${stdenv.shell} make_unix.sh'';
+  buildPhase = "${stdenv.shell} make_unix.sh";
 
-  checkPhase = ''${python.interpreter} scripts/test.py'';
+  checkPhase = "${python.interpreter} scripts/test.py";
 
   installPhase = ''
     mkdir -p "$out/share/bam"

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncompress libX11 ];
 
-  buildPhase = '' ./build '';
+  buildPhase = "./build ";
 
   installPhase = ''
     mkdir -p "$out/bin"

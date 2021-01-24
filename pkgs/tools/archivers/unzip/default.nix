@@ -66,7 +66,7 @@ stdenv.mkDerivation {
   '';
 
   installFlags = [
-    "prefix=${placeholder ''out''}"
+    "prefix=${placeholder "out"}"
   ];
 
   setupHook = ./setup-hook.sh;

@@ -66,6 +66,20 @@ in
         description = ''
           Configuration for Nomad. See the <link xlink:href="https://www.nomadproject.io/docs/configuration">documentation</link>
           for supported values.
+
+          Notes about <literal>data_dir</literal>:
+
+          If <literal>data_dir</literal> is set to a value other than the
+          default value of <literal>"/var/lib/nomad"</literal> it is the Nomad
+          cluster manager's responsibility to make sure that this directory
+          exists and has the appropriate permissions.
+
+          Additionally, if <literal>dropPrivileges</literal> is
+          <literal>true</literal> then <literal>data_dir</literal>
+          <emphasis>cannot</emphasis> be customized. Setting
+          <literal>dropPrivileges</literal> to <literal>true</literal> enables
+          the <literal>DynamicUser</literal> feature of systemd which directly
+          manages and operates on <literal>StateDirectory</literal>.
         '';
         example = literalExample ''
           {
@@ -109,31 +123,41 @@ in
         iptables
       ]);
 
-      serviceConfig = {
-        DynamicUser = cfg.dropPrivileges;
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
-          concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths;
-        KillMode = "process";
-        KillSignal = "SIGINT";
-        LimitNOFILE = 65536;
-        LimitNPROC = "infinity";
-        OOMScoreAdjust = -1000;
-        Restart = "on-failure";
-        RestartSec = 2;
-        # Agrees with the default `data_dir = "/var/lib/nomad"` in `settings` above.
-        StateDirectory = "nomad";
-        TasksMax = "infinity";
-        User = optionalString cfg.dropPrivileges "nomad";
-      } // (optionalAttrs cfg.enableDocker {
-        SupplementaryGroups = "docker"; # space-separated string
-      });
+      serviceConfig = mkMerge [
+        {
+          DynamicUser = cfg.dropPrivileges;
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          ExecStart = "${cfg.package}/bin/nomad agent -config=/etc/nomad.json" +
+            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths;
+          KillMode = "process";
+          KillSignal = "SIGINT";
+          LimitNOFILE = 65536;
+          LimitNPROC = "infinity";
+          OOMScoreAdjust = -1000;
+          Restart = "on-failure";
+          RestartSec = 2;
+          TasksMax = "infinity";
+        }
+        (mkIf cfg.enableDocker {
+          SupplementaryGroups = "docker"; # space-separated string
+        })
+        (mkIf (cfg.settings.data_dir == "/var/lib/nomad") {
+          StateDirectory = "nomad";
+        })
+      ];
 
       unitConfig = {
         StartLimitIntervalSec = 10;
         StartLimitBurst = 3;
       };
     };
+
+    assertions = [
+      {
+        assertion = cfg.dropPrivileges -> cfg.settings.data_dir == "/var/lib/nomad";
+        message = "settings.data_dir must be equal to \"/var/lib/nomad\" if dropPrivileges is true";
+      }
+    ];
 
     # Docker support requires the Docker daemon to be running.
     virtualisation.docker.enable = mkIf cfg.enableDocker true;

@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = ''Debian package maintenance scripts'';
+    description = "Debian package maintenance scripts";
     license = licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
     maintainers = with maintainers; [raskin];
     platforms = with platforms; linux;

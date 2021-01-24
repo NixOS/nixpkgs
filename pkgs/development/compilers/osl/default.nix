@@ -19,7 +19,7 @@ in clangStdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DUSE_BOOST_WAVE=ON" "-DENABLERTTI=ON" ];
 
-  preConfigure = '' patchShebangs src/liboslexec/serialize-bc.bash '';
+  preConfigure = "patchShebangs src/liboslexec/serialize-bc.bash ";
 
   nativeBuildInputs = [ cmake boost_static flex bison];
   buildInputs = [

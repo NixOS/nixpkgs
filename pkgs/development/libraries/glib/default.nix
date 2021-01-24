@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     # Instead we just copy them over from the native output.
     "-Dgtk_doc=${boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
     "-Dnls=enabled"
-    "-Ddevbindir=${placeholder ''dev''}/bin"
+    "-Ddevbindir=${placeholder "dev"}/bin"
   ];
 
   NIX_CFLAGS_COMPILE = toString [

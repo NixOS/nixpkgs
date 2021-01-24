@@ -47,7 +47,7 @@ buildPythonApplication rec {
   # feed args to wrapPythonApp
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [aria libnotify ]}"
-    ''''${qtWrapperArgs[@]}''
+    "\${qtWrapperArgs[@]}"
   ];
 
   propagatedBuildInputs = [

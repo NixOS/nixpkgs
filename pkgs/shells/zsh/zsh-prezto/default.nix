@@ -1,15 +1,17 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "zsh-prezto";
-  version = "2020-05-20";
+  version = "unstable-2021-01-19";
+
   src = fetchFromGitHub {
     owner = "sorin-ionescu";
     repo = "prezto";
-    rev = "793f239a5e38ef2c4b76a4955bb734520303e8c4";
-    sha256 = "0xhdl1g0rvlikq6qxh6cwp6wsrgmw4l1rmmq5xpc7wl6dyh35yri";
+    rev = "704fc46c3f83ca1055becce65fb513a533f48982";
+    sha256 = "0rkbx6hllf6w6x64mggbhvm1fvbq5sr5kvf06sarfkpz5l0a5wh3";
     fetchSubmodules = true;
   };
+
   buildPhase = ''
     sed -i '/\''${ZDOTDIR:\-\$HOME}\/.zpreztorc" ]]/i\
     if [[ -s "/etc/zpreztorc" ]]; then\
@@ -20,15 +22,19 @@ stdenv.mkDerivation rec {
       sed -i -e "s|\''${ZDOTDIR:\-\$HOME}/.zprezto/|$out/|g" $i
     done
   '';
+
   installPhase = ''
     mkdir -p $out
     cp ./* $out/ -R
   '';
+
+  passthru.updateScript = unstableGitUpdater {};
+
   meta = with lib; {
     description = "Prezto is the configuration framework for Zsh; it enriches the command line interface environment with sane defaults, aliases, functions, auto completion, and prompt themes";
     homepage = "https://github.com/sorin-ionescu/prezto";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = with platforms; unix;
+    maintainers = with maintainers; [ holymonson ];
+    platforms = platforms.unix;
   };
 }

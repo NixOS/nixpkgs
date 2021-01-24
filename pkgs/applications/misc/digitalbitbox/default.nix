@@ -94,7 +94,7 @@ in mkDerivation rec {
     "format"
   ];
 
-  qtWrapperArgs = [ ''--prefix LD_LIBRARY_PATH : $out/lib'' ];
+  qtWrapperArgs = [ "--prefix LD_LIBRARY_PATH : $out/lib" ];
 
   postInstall = ''
     mkdir -p "$out/lib"

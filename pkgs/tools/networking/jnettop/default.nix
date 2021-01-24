@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  preConfigure = '' autoconf '';
+  preConfigure = "autoconf ";
 
   meta = {
     description = "Network traffic visualizer";

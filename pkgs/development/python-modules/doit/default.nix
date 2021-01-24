@@ -1,28 +1,36 @@
-{ lib, stdenv, fetchurl, python3Packages }:
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, isPy3k
+, mock
+, pytestCheckHook
+, cloudpickle
+, pyinotify
+, macfsevents
+}:
 
-let
+buildPythonPackage rec {
+  pname = "doit";
+  version = "0.33.1";
 
-  name = "doit";
-  version = "0.32.0";
+  disabled = !isPy3k;
 
-in python3Packages.buildPythonApplication {
-  name = "${name}-${version}";
-
-  src = fetchurl {
-    url = "mirror://pypi/d/${name}/${name}-${version}.tar.gz";
-    sha256 = "033m6y9763l81kgqd07rm62bngv3dsm3k9p28nwsn2qawl8h8g9j";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "37c3b35c2151647b968b2af24481112b2f813c30f695366db0639d529190a143";
   };
 
-  buildInputs = with python3Packages; [ mock pytest ];
-
-  propagatedBuildInputs = with python3Packages; [ cloudpickle ]
+  propagatedBuildInputs = [ cloudpickle ]
     ++ lib.optional stdenv.isLinux pyinotify
     ++ lib.optional stdenv.isDarwin macfsevents;
 
-  # Tests fail due to mysterious gdbm.open() resource temporarily
-  # unavailable errors.
-  doCheck = false;
-  checkPhase = "py.test";
+  checkInputs = [ mock pytestCheckHook ];
+
+  disabledTests = [
+    # depends on doit-py, which has a circular dependency on doit
+    "test___main__.py"
+  ];
 
   meta = with lib; {
     homepage = "https://pydoit.org/";
@@ -36,6 +44,5 @@ in python3Packages.buildPythonApplication {
       available.
     '';
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.all;
   };
 }

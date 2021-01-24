@@ -321,7 +321,7 @@ stdenv.mkDerivation {
   '';
 
   # Hack to avoid build and install directories in RPATHs.
-  preFixup = ''rm -rf $SWIFT_BUILD_ROOT $SWIFT_INSTALL_DIR'';
+  preFixup = "rm -rf $SWIFT_BUILD_ROOT $SWIFT_INSTALL_DIR";
 
   meta = with lib; {
     description = "The Swift Programming Language";

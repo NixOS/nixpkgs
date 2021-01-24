@@ -1933,6 +1933,8 @@ in {
 
   dogtail = callPackage ../development/python-modules/dogtail { };
 
+  doit = callPackage ../development/python-modules/doit { };
+
   dominate = callPackage ../development/python-modules/dominate { };
 
   dopy = callPackage ../development/python-modules/dopy { };

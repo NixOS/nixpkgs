@@ -70,7 +70,7 @@ in
           value must be a function which receives the attrset defined
           in <varname>python3Packages</varname> as the sole argument.
         '';
-        example = literalExample ''p: [ p.lxml p.requests ]'';
+        example = literalExample "p: [ p.lxml p.requests ]";
       };
 
     };

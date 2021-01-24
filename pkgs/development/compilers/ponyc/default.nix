@@ -87,10 +87,9 @@ stdenv.mkDerivation (rec {
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];
 
-  installPhase = ''
-    make config=release prefix=$out ''
-    + lib.optionalString stdenv.isDarwin '' bits=64 ''
-    + lib.optionalString (stdenv.isDarwin && (!lto)) '' lto=no ''
+  installPhase = "make config=release prefix=$out "
+    + lib.optionalString stdenv.isDarwin "bits=64 "
+    + lib.optionalString (stdenv.isDarwin && (!lto)) "lto=no "
     + '' install
 
     wrapProgram $out/bin/ponyc \

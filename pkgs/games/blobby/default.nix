@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = ''A blobby volleyball game'';
+    description = "A blobby volleyball game";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];

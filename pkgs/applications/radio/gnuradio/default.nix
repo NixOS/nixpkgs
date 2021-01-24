@@ -240,8 +240,7 @@ let
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
     ''
   ;
-  preConfigure = ''
-  ''
+  preConfigure = ""
     # If python-support is disabled, don't install volk's (git submodule)
     # volk_modtool - it references python.
     #

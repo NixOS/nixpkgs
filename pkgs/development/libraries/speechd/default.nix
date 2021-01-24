@@ -88,7 +88,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     # Audio method falls back from left to right.
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
-    "--with-systemdsystemunitdir=${placeholder ''out''}/lib/systemd/system"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ] ++ optional withPulse "--with-pulse"
     ++ optional withAlsa "--with-alsa"
     ++ optional withLibao "--with-libao"

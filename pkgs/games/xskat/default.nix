@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "install.man" ];
 
   meta = with lib; {
-    description = ''Famous german card game'';
+    description = "Famous german card game";
     platforms = platforms.unix;
     license = licenses.free;
-    longDescription = ''Play the german card game Skat against the AI or over IRC.'';
+    longDescription = "Play the german card game Skat against the AI or over IRC.";
     homepage = "http://www.xskat.de/";
   };
 }

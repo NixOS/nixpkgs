@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
   meta = {
     inherit (s) version;
-    description = ''Library for import of reflowable e-book formats'';
+    description = "Library for import of reflowable e-book formats";
     license = lib.licenses.lgpl21Plus ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;

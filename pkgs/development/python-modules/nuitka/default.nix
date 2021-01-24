@@ -31,7 +31,7 @@ in buildPythonPackage rec {
   '';
 
   # We do not want any wrappers here.
-  postFixup = '''';
+  postFixup = "";
 
   checkPhase = ''
     tests/run-tests

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     inherit version;
-    description = ''A parallel compressor/decompressor for xz format'';
+    description = "A parallel compressor/decompressor for xz format";
     license = lib.licenses.bsd2;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;

@@ -364,42 +364,42 @@ self: super:
     outputs = [ "out" "dev" ]; # to get rid of xorgserver.dev; man is tiny
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     installFlags = [
-      "sdkdir=${placeholder ''out''}/include/xorg"
+      "sdkdir=${placeholder "out"}/include/xorg"
     ];
   });
 
   xf86inputmouse = super.xf86inputmouse.overrideAttrs (attrs: {
     installFlags = [
-      "sdkdir=${placeholder ''out''}/include/xorg"
+      "sdkdir=${placeholder "out"}/include/xorg"
     ];
   });
 
   xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
     installFlags = [
-      "sdkdir=${placeholder ''out''}/include/xorg"
+      "sdkdir=${placeholder "out"}/include/xorg"
     ];
   });
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
     installFlags = [
-      "sdkdir=${placeholder ''dev''}/include/xorg"
+      "sdkdir=${placeholder "dev"}/include/xorg"
     ];
   });
 
   xf86inputsynaptics = super.xf86inputsynaptics.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ]; # *.pc pulls xorgserver.dev
     installFlags = [
-      "sdkdir=${placeholder ''out''}/include/xorg"
-      "configdir=${placeholder ''out''}/share/X11/xorg.conf.d"
+      "sdkdir=${placeholder "out"}/include/xorg"
+      "configdir=${placeholder "out"}/share/X11/xorg.conf.d"
     ];
   });
 
   xf86inputvmmouse = super.xf86inputvmmouse.overrideAttrs (attrs: {
     configureFlags = [
-      "--sysconfdir=${placeholder ''out''}/etc"
-      "--with-xorg-conf-dir=${placeholder ''out''}/share/X11/xorg.conf.d"
-      "--with-udev-rules-dir=${placeholder ''out''}/lib/udev/rules.d"
+      "--sysconfdir=${placeholder "out"}/etc"
+      "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
+      "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
     ];
 
     meta = attrs.meta // {

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoconf ncurses pcre ];
 
-  preConfigure = '' autoheader && autoconf '';
+  preConfigure = "autoheader && autoconf ";
 
   meta = with lib; {
     description = "Fast, modular log colorizer";

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     inherit version;
-    description = ''1D and 2D code reading library'';
+    description = "1D and 2D code reading library";
     license = lib.licenses.asl20;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

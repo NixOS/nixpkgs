@@ -2726,6 +2726,8 @@ in
 
   sweep-visualizer = callPackage ../tools/misc/sweep-visualizer { };
 
+  swego = callPackage ../servers/swego { };
+
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
 
   syslogng = callPackage ../tools/system/syslog-ng { };
@@ -4790,6 +4792,8 @@ in
 
   grpcui = callPackage ../tools/networking/grpcui { };
 
+  grpc-tools = callPackage ../development/tools/misc/grpc-tools { };
+
   grub = pkgsi686Linux.callPackage ../tools/misc/grub ({
     stdenv = overrideCC stdenv buildPackages.pkgsi686Linux.gcc6;
   } // (config.grub or {}));
@@ -6446,6 +6450,8 @@ in
     inherit (linuxPackages) nvidia_x11;
     nvidiaGpuSupport = config.cudaSupport or false;
   };
+
+  nomad-driver-podman = callPackage ../applications/networking/cluster/nomad-driver-podman { };
 
   notable = callPackage ../applications/misc/notable { };
 
@@ -11970,7 +11976,7 @@ in
 
   doctl = callPackage ../development/tools/doctl { };
 
-  doit = callPackage ../development/tools/build-managers/doit { };
+  doit = with python3Packages; toPythonApplication doit;
 
   dolt = callPackage ../servers/sql/dolt { };
 
@@ -23875,7 +23881,7 @@ in
 
   octoprint = callPackage ../applications/misc/octoprint { };
 
-  octoprint-plugins = throw ''octoprint-plugins are now part of the octoprint.python.pkgs package set.'';
+  octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set.";
 
   ocrad = callPackage ../applications/graphics/ocrad { };
 
