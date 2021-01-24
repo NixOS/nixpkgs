@@ -1036,6 +1036,12 @@
     githubId = 1015044;
     name = "Brandon Carrell";
   };
+  bcc32 = {
+    email = "me@bcc32.com";
+    github = "bcc32";
+    githubId = 1239097;
+    name = "Aaron Zeng";
+  };
   bcdarwin = {
     email = "bcdarwin@gmail.com";
     github = "bcdarwin";
