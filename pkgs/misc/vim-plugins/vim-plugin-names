@@ -408,6 +408,7 @@ nvim-lua/lsp-status.nvim
 nvim-lua/lsp_extensions.nvim
 nvim-lua/plenary.nvim
 nvim-lua/popup.nvim
+nvim-telescope/telescope-frecency.nvim
 nvim-telescope/telescope-fzf-writer.nvim
 nvim-telescope/telescope-fzy-native.nvim
 nvim-telescope/telescope.nvim
@@ -537,6 +538,7 @@ svermeulen/vim-subversive
 t9md/vim-choosewin
 t9md/vim-smalls
 takac/vim-hardtime
+tami5/sql.nvim
 tbodt/deoplete-tabnine
 ternjs/tern_for_vim
 terryma/vim-expand-region
@@ -665,6 +667,7 @@ VundleVim/Vundle.vim
 w0ng/vim-hybrid
 wakatime/vim-wakatime
 wannesm/wmgraphviz.vim
+wbthomason/packer.nvim
 weirongxu/coc-explorer
 wellle/targets.vim
 wellle/tmux-complete.vim
