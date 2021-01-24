@@ -231,7 +231,6 @@ in
     users.users.hydra =
       { description = "Hydra";
         group = "hydra";
-        createHome = true;
         home = baseDir;
         useDefaultShell = true;
         uid = config.ids.uids.hydra;
