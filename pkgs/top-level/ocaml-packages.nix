@@ -751,6 +751,10 @@ let
 
     pgocaml_ppx = callPackage ../development/ocaml-modules/pgocaml/ppx.nix {};
 
+    postgresql = callPackage ../development/ocaml-modules/postgresql {
+      inherit (pkgs) postgresql;
+    };
+
     ocaml-r = callPackage ../development/ocaml-modules/ocaml-r { };
 
     ocaml-sat-solvers = callPackage ../development/ocaml-modules/ocaml-sat-solvers { };
