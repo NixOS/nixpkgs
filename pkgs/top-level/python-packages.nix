@@ -7109,6 +7109,8 @@ in {
 
   sip = callPackage ../development/python-modules/sip { };
 
+  sip_5 = callPackage ../development/python-modules/sip/5.x.nix { };
+
   sipsimple = callPackage ../development/python-modules/sipsimple { };
 
   six = callPackage ../development/python-modules/six { };
