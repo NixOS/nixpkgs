@@ -1,16 +1,16 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, jdk8, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, jdk8, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase, libGL }:
 
 let
   jdk = jdk8;
-  libpath = with xorg; lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
+  libpath = with xorg; lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio libGL ];
 in mkDerivation rec {
   pname = "multimc";
-  version = "0.6.11";
+  version = "unstable-2021-01-17";
   src = fetchFromGitHub {
     owner = "MultiMC";
     repo = "MultiMC5";
-    rev = version;
-    sha256 = "1jkbmb4sgfk8d93f5l1vd9pkpvhq9sxacc61w0rvf5xmz0wnszmz";
+    rev = "02887536f773643313f15442fc82cebf616da54a";
+    sha256 = "1aykvavcv415lq488hx4ig2a79g5a561jg92gw14fb964r43782i";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ cmake file makeWrapper ];
@@ -34,6 +34,6 @@ in mkDerivation rec {
     '';
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.cleverca22 ];
+    maintainers = with maintainers; [ cleverca22 starcraft66 ];
   };
 }
