@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-lm" ];
 
   meta = with lib; {
-    description = ''The classic version of a quick tactics game LiquidWar'';
+    description = "The classic version of a quick tactics game LiquidWar";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

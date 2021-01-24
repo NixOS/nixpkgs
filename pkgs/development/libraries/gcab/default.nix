@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dinstalled_tests=true"
-    "-Dinstalled_test_prefix=${placeholder ''installedTests''}"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
   doCheck = true;

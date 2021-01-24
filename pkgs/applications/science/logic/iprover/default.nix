@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml eprover zlib ];
 
-  preConfigure = ''patchShebangs .'';
+  preConfigure = "patchShebangs .";
 
   installPhase = ''
     mkdir -p "$out/bin"

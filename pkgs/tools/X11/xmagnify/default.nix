@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1ngnp5f5zl3v35vhbdyjpymy6mwrs0476fm5nd7dzkba7n841jdh";
   };
 
-  prePatch = ''substituteInPlace ./Makefile --replace /usr $out'';
+  prePatch = "substituteInPlace ./Makefile --replace /usr $out";
 
   buildInputs = [ libX11 xorgproto ];
 

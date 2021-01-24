@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''marshal'';
-  version = ''cl-20201016-git'';
+  baseName = "marshal";
+  version = "cl-20201016-git";
 
-  description = ''marshal: Simple (de)serialization of Lisp datastructures.'';
+  description = "marshal: Simple (de)serialization of Lisp datastructures.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-marshal/2020-10-16/cl-marshal-20201016-git.tgz'';
-    sha256 = ''03j52yhgpc2myypgy07213l20rznxvf6m3sfbzy2wyapcmv7nxnz'';
+    url = "http://beta.quicklisp.org/archive/cl-marshal/2020-10-16/cl-marshal-20201016-git.tgz";
+    sha256 = "03j52yhgpc2myypgy07213l20rznxvf6m3sfbzy2wyapcmv7nxnz";
   };
 
   packageName = "marshal";

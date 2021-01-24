@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
   PBR_VERSION = version; # pbr needs either .git directory, sdist, or env var
 
   makeFlags = [
-    "prefix=${placeholder ''out''}"
+    "prefix=${placeholder "out"}"
   ];
 
   preFixup = ''

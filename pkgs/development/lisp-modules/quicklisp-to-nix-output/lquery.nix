@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''lquery'';
-  version = ''20200715-git'';
+  baseName = "lquery";
+  version = "20200715-git";
 
-  description = ''A library to allow jQuery-like HTML/DOM manipulation.'';
+  description = "A library to allow jQuery-like HTML/DOM manipulation.";
 
   deps = [ args."array-utils" args."clss" args."documentation-utils" args."form-fiddle" args."plump" args."trivial-indent" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lquery/2020-07-15/lquery-20200715-git.tgz'';
-    sha256 = ''1akj9yzz71733yfbqq9jig0zkx8brphzh35d8zzic0469idd3rcd'';
+    url = "http://beta.quicklisp.org/archive/lquery/2020-07-15/lquery-20200715-git.tgz";
+    sha256 = "1akj9yzz71733yfbqq9jig0zkx8brphzh35d8zzic0469idd3rcd";
   };
 
   packageName = "lquery";

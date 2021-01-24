@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   };
   meta = {
     inherit (s) version;
-    description = ''GUI for chess engines'';
+    description = "GUI for chess engines";
     homepage = "https://www.gnu.org/software/xboard/";
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;

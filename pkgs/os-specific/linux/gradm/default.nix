@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/etc/udev/rules.d"
   '';
 
-  postInstall = ''rmdir $out/dev'';
+  postInstall = "rmdir $out/dev";
 
   meta = with lib; {
     description = "grsecurity RBAC administration and policy analysis utility";

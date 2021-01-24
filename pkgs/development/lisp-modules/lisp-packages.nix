@@ -27,7 +27,7 @@ let lispPackages = rec {
         url = "https://beta.quicklisp.org/dist/quicklisp/2020-10-16/distinfo.txt";
         sha256 = "sha256:090xjcnyqcv8az9n1a7m0f6vzz2nwcncy95ha7ixb7fnd2rj1n65";
       };
-      buildPhase = '' true; '';
+      buildPhase = "true; ";
       postInstall = ''
         substituteAll ${./quicklisp.sh} "$out"/bin/quicklisp
         chmod a+x "$out"/bin/quicklisp
@@ -80,7 +80,7 @@ let lispPackages = rec {
 
   clx-truetype = buildLispPackage rec {
           baseName = "clx-truetype";
-          version = ''20160825-git'';
+          version = "20160825-git";
 
           buildSystems = [ "clx-truetype" ];
           parasites = [ "clx-truetype-test" ];
@@ -91,8 +91,8 @@ let lispPackages = rec {
                           cl-vectors clx trivial-features zpb-ttf
           ];
           src = pkgs.fetchurl {
-                  url = ''http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz'';
-                  sha256 = ''0ndy067rg9w6636gxwlpnw7f3ck9nrnjb03444pprik9r3c9in67'';
+                  url = "http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz";
+                  sha256 = "0ndy067rg9w6636gxwlpnw7f3ck9nrnjb03444pprik9r3c9in67";
           };
 
           packageName = "clx-truetype";

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   };
   meta = {
     inherit (s) version;
-    description = ''Import library for some old mac text documents'';
+    description = "Import library for some old mac text documents";
     license = lib.licenses.mpl20 ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;

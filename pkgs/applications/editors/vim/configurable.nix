@@ -137,8 +137,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optional tclSupport tcl
     ++ lib.optional rubySupport ruby;
 
-  preConfigure = ''
-    '' + lib.optionalString ftNixSupport ''
+  preConfigure = "" + lib.optionalString ftNixSupport ''
       cp ${vimPlugins.vim-nix.src}/ftplugin/nix.vim runtime/ftplugin/nix.vim
       cp ${vimPlugins.vim-nix.src}/indent/nix.vim runtime/indent/nix.vim
       cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim

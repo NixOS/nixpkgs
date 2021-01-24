@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
       --replace sample-projects $out/share/${pname}/sample-projects
    '';
 
-  buildPhase = '''';
+  buildPhase = "";
 
   installPhase = ''
     mkdir -p $out/share/${pname}

@@ -64,7 +64,7 @@ let
       HOME=. rebar3 compile
       ${if compilePorts then ''
         HOME=. rebar3 pc compile
-      '' else ''''}
+      '' else ""}
       runHook postBuild
     '';
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   makeFlags = ["PREFIX=$(out)"];
   meta = {
     inherit (s) version;
-    description = ''Cross-platform helper for creating interactive dialogs'';
+    description = "Cross-platform helper for creating interactive dialogs";
     license = lib.licenses.mit ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

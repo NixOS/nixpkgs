@@ -136,10 +136,8 @@ let
             cp ${bootDisk}/efi-vars.fd "$NIX_EFI_VARS" || exit 1
             chmod 0644 "$NIX_EFI_VARS" || exit 1
           fi
-        '' else ''
-        ''}
-      '' else ''
-      ''}
+        '' else ""}
+      '' else ""}
 
       cd $TMPDIR
       idx=0
@@ -187,8 +185,7 @@ let
                 efiVars=$out/efi-vars.fd
                 cp ${efiVarsDefault} $efiVars
                 chmod 0644 $efiVars
-              '' else ''
-              ''}
+              '' else ""}
             '';
           buildInputs = [ pkgs.util-linux ];
           QEMU_OPTS = "-nographic -serial stdio -monitor none"

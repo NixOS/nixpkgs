@@ -60,8 +60,7 @@ in
       version = mkOption {
         default = 2;
         type = types.enum [ 0 1 2 3 4 ];
-        description = ''
-        '';
+        description = "";
       };
 
       uboot = {

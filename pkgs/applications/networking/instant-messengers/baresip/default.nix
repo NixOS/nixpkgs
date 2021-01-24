@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "LIBRE_INC=${libre}/include/re"
     "LIBRE_SO=${libre}/lib"
     "LIBREM_PATH=${librem}"
-    ''PREFIX=$(out)''
+    "PREFIX=$(out)"
     "USE_VIDEO=1"
     "CCACHE_DISABLE=1"
 

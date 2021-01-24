@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "BUILD=RELEASE"
     "VERSION=${version}"
-    "BINDIR=${placeholder ''out''}/bin"
-    "UDEVDIR=${placeholder ''out''}/lib/udev/rules.d"
-    "MODLDIR=${placeholder ''out''}/lib/modules-load.d"
-    "MODPDIR=${placeholder ''out''}/lib/modprobe.d"
-    "SYSDDIR=${placeholder ''out''}/lib/systemd/system"
+    "BINDIR=${placeholder "out"}/bin"
+    "UDEVDIR=${placeholder "out"}/lib/udev/rules.d"
+    "MODLDIR=${placeholder "out"}/lib/modules-load.d"
+    "MODPDIR=${placeholder "out"}/lib/modprobe.d"
+    "SYSDDIR=${placeholder "out"}/lib/systemd/system"
   ];
 
   postUnpack = ''

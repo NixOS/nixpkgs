@@ -162,7 +162,7 @@ let
 
     postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
       wrapPythonPrograms
-    '' + attrs.postFixup or '''';
+    '' + attrs.postFixup or "";
 
     # Python packages built through cross-compilation are always for the host platform.
     disallowedReferences = lib.optionals (python.stdenv.hostPlatform != python.stdenv.buildPlatform) [ python.pythonForBuild ];

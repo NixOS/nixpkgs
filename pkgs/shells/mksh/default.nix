@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  buildPhase = ''sh ./Build.sh -r'';
+  buildPhase = "sh ./Build.sh -r";
 
   installPhase = ''
     install -D -m 755 mksh $out/bin/mksh

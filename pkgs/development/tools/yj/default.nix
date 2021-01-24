@@ -16,7 +16,7 @@ buildGoModule rec {
   buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
 
   meta = with lib; {
-    description = ''Convert YAML <=> TOML <=> JSON <=> HCL'';
+    description = "Convert YAML <=> TOML <=> JSON <=> HCL";
     license = licenses.asl20;
     maintainers = with maintainers; [ Profpatsch ];
     homepage = "https://github.com/sclevine/yj";

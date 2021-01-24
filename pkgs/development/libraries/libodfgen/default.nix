@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   };
   meta = {
     inherit (s) version;
-    description = ''A base library for generating ODF documents'';
+    description = "A base library for generating ODF documents";
     license = lib.licenses.mpl20 ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;

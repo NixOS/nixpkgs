@@ -42,8 +42,8 @@ in stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
-    "SYSCONFDIR=${placeholder ''out''}/etc"
+    "PREFIX=${placeholder "out"}"
+    "SYSCONFDIR=${placeholder "out"}/etc"
     "PYTHON=${python.interpreter}"
   ];
 

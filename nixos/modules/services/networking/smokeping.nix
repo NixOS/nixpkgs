@@ -303,7 +303,7 @@ in
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
       '';
-      script = ''${cfg.package}/bin/smokeping --config=${configPath} --nodaemon'';
+      script = "${cfg.package}/bin/smokeping --config=${configPath} --nodaemon";
     };
     systemd.services.thttpd = mkIf cfg.webService {
       wantedBy = [ "multi-user.target"];

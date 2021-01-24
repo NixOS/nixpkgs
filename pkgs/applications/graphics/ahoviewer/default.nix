@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lpthread";
 
-  postPatch = ''patchShebangs version.sh'';
+  postPatch = "patchShebangs version.sh";
 
   postInstall = ''
     wrapProgram $out/bin/ahoviewer \

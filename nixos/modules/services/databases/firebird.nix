@@ -117,7 +117,7 @@ in
         serviceConfig.User = cfg.user;
         serviceConfig.LogsDirectory = "firebird";
         serviceConfig.LogsDirectoryMode = "0700";
-        serviceConfig.ExecStart = ''${firebird}/bin/fbserver -d'';
+        serviceConfig.ExecStart = "${firebird}/bin/fbserver -d";
 
         # TODO think about shutdown
       };

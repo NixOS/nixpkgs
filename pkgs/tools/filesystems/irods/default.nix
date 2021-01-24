@@ -57,8 +57,7 @@ in rec {
     '';
 
     meta = common.meta // {
-      longDescription = common.meta.longDescription + ''
-        This package provides the servers and libraries.'';
+      longDescription = common.meta.longDescription + "This package provides the servers and libraries.";
     };
   });
 
@@ -93,8 +92,7 @@ in rec {
 
      meta = common.meta // {
        description = common.meta.description + " CLI clients";
-       longDescription = common.meta.longDescription + ''
-         This package provides the CLI clients, called 'icommands'.'';
+       longDescription = common.meta.longDescription + "This package provides the CLI clients, called 'icommands'.";
      };
   });
 }

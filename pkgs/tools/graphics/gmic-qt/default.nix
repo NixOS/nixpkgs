@@ -51,7 +51,7 @@ assert lib.assertMsg (builtins.hasAttr variant variants) "gmic-qt variant “${v
 assert lib.assertMsg (builtins.all (d: d != null) variants.${variant}.extraDeps or []) "gmic-qt variant “${variant}” is missing one of its dependencies.";
 
 mkDerivation rec {
-  pname = "gmic-qt${lib.optionalString (variant != "standalone") ''-${variant}''}";
+  pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
   version = "2.7.1";
 
   gmic-community = fetchFromGitHub {

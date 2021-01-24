@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "0m451msd127ay09yb8rbflg68szm8s4hh65j99f7s3mz375vc114";
   };
   buildInputs = [ apacheAnt jdk ];
-  PREFIX = ''''${env.out}'';
+  PREFIX = "\${env.out}";
   AXIS2_LIB = "${axis2}/lib";
   AXIS2_WEBAPP = "${axis2}/webapps/axis2";
   DBUS_JAVA_LIB = "${dbus_java}/share/java";

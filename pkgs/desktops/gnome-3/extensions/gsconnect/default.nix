@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     "-Dsshkeygen_path=${openssh}/bin/ssh-keygen"
     "-Dsession_bus_services_dir=${placeholder "out"}/share/dbus-1/services"
     "-Dpost_install=true"
-    "-Dinstalled_test_prefix=${placeholder ''installedTests''}"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
   postPatch = ''

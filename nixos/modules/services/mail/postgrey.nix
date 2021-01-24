@@ -163,7 +163,7 @@ in {
 
     systemd.services.postgrey = let
       bind-flag = if cfg.socket ? path then
-        ''--unix=${cfg.socket.path} --socketmode=${cfg.socket.mode}''
+        "--unix=${cfg.socket.path} --socketmode=${cfg.socket.mode}"
       else
         ''--inet=${optionalString (cfg.socket.addr != null) (cfg.socket.addr + ":")}${toString cfg.socket.port}'';
     in {
