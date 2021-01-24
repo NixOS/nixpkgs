@@ -725,6 +725,10 @@ let
 
     ocaml-lsp = callPackage ../development/ocaml-modules/ocaml-lsp { };
 
+    mariadb = callPackage ../development/ocaml-modules/mariadb {
+      inherit (pkgs) mariadb;
+    };
+
     ocaml-migrate-parsetree = ocaml-migrate-parsetree-1-8;
 
     ocaml-migrate-parsetree-1-8 = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree/1.8.x.nix { };
