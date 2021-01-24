@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.17.0";
+  version = "0.18.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zcxirpdvvl54pbfkgw7vz984879xwvdygqfpggnam24is2zjp78";
+    sha256 = "sha256-h6Zq5h8n/lAMkCSSapukgsB+Hg9WOAtwomTRnENboHY=";
   };
 
   checkInputs = [ astor pytestCheckHook pyopenssl trustme jedi pylint yapf ];
