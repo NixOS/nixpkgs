@@ -1,15 +1,20 @@
-{ pkgs, nodejs, stdenv, lib, ... }:
+{ pkgs, fetchFromGitHub, nodejs, stdenv, lib, ... }:
 
 let
-
-  packageName = with lib; concatStrings (map (entry: (concatStrings (mapAttrsToList (key: value: "${key}-${value}") entry))) (importJSON ./package.json));
+  src = fetchFromGitHub {
+    owner = "dvallin";
+    repo = "spacegun";
+    rev = "v0.3.3";
+    sha256 = "0cd9yzms44dj9ix8lrhbkby5zsyb8wambs24j6c3ibr67sggr6sq";
+  };
 
   nodePackages = import ./node-composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
 in
-nodePackages."${packageName}".override {
+nodePackages.package.override {
+  inherit src;
   nativeBuildInputs = [ pkgs.makeWrapper pkgs.nodePackages.node-gyp-build ];
 
   postInstall = ''
