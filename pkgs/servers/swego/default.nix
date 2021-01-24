@@ -30,7 +30,8 @@ buildGoModule rec {
     homepage = "https://github.com/nodauf/Swego";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ fab ];
-    # There is an issue with darwin
+    # darwin crashes with:
+    # src/controllers/parsingArgs.go:130:4: undefined: PrintEmbeddedFiles
     broken = stdenv.isDarwin;
   };
 }
