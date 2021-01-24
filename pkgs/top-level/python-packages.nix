@@ -1825,6 +1825,8 @@ in {
 
   digi-xbee = callPackage ../development/python-modules/digi-xbee { };
 
+  dijitso = callPackage ../development/python-modules/dijitso { };
+
   dill = callPackage ../development/python-modules/dill { };
 
   diofant = callPackage ../development/python-modules/diofant { };
