@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
-  postPatch = stdenv.lib.optional stdenv.isDarwin ''
+  postPatch = lib.optional stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     mkdir bin
     echo '#!${stdenv.shell}' > bin/pbpaste
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     wcwidth
     attrs
   ]
-  ++ stdenv.lib.optionals (pythonOlder "3.5") [contextlib2 typing]
+  ++ lib.optionals (pythonOlder "3.5") [contextlib2 typing]
   ;
 
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   # pytest-cov
   # argcomplete  will generate errors
   checkInputs= [ pytest mock which vim glibcLocales pytest-mock ]
-        ++ stdenv.lib.optional (pythonOlder "3.6") [ mock ];
+        ++ lib.optional (pythonOlder "3.6") [ mock ];
   checkPhase = ''
     # test_path_completion_user_expansion might be fixed in the next release
     py.test -k 'not test_path_completion_user_expansion'

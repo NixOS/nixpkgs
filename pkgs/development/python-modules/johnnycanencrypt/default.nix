@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pipInstallHook
@@ -49,7 +50,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     pcsclite
     nettle
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ PCSC ];
+  ] ++ lib.optionals stdenv.isDarwin [ PCSC ];
 
   # Needed b/c need to check AFTER python wheel is installed (using Rust Build, not buildPythonPackage)
   doCheck = false;
@@ -83,7 +84,7 @@ rustPlatform.buildRustPackage rec {
 
   pythonImportsCheck = [ "johnnycanencrypt" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kushaldas/johnnycanencrypt";
     description = "Python module for OpenPGP written in Rust";
     license = licenses.gpl3Plus;

@@ -45,7 +45,7 @@ buildPythonPackage rec {
     six
     toml
     wcwidth
-  ] ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+  ] ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
 

@@ -80,7 +80,7 @@ buildPythonPackage rec {
     "test_retry_dns_error"
     "test_custom_asyncio_loop_enabled_true"
     "test_custom_loop_asyncio"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_xmliter_encoding"
     "test_download"
   ];

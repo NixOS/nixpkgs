@@ -1,6 +1,7 @@
 { lib
 , buildPythonApplication
 , fetchPypi
+, makeDesktopItem
 , makePythonPath
 , dateutil
 , matplotlib
@@ -37,6 +38,23 @@ buildPythonApplication rec {
   ];
 
   doCheck = false; # it fails miserably with a core dump
+
+  desktopItem = makeDesktopItem rec {
+    name = pname;
+    exec = name;
+    icon = name;
+    desktopName = "Pyspread";
+    genericName = "Spreadsheet";
+    comment = meta.description;
+    categories = "Office;Development;Spreadsheet;";
+  };
+
+  postInstall = ''
+    runHook preInstall
+    install -D $out/share/applications
+    install -m 644 $desktopItem/share/applications/* $out/share/applications
+    runHook postInstall
+  '';
 
   fixupPhase = ''
     runHook preFixup

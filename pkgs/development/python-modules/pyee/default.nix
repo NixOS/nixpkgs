@@ -21,7 +21,7 @@ buildPythonPackage rec {
     pytest-trio
     pytestrunner
     twisted
-  ] ++ stdenv.lib.optional isPy27 [
+  ] ++ lib.optional isPy27 [
     attrs
     futures
     pyparsing

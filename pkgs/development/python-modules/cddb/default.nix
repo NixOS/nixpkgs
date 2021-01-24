@@ -9,7 +9,7 @@ buildPythonPackage rec {
   version = "1.4";
   disabled = isPy3k;
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.IOKit ];
+  buildInputs = lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.IOKit ];
 
   src = pkgs.fetchurl {
     url = "http://cddb-py.sourceforge.net/${pname}-${version}.tar.gz";

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six monotonic ];
 
-  checkInputs = [ testtools nose ] ++ stdenv.lib.optionals (!isPy3k) [ futures ];
+  checkInputs = [ testtools nose ] ++ lib.optionals (!isPy3k) [ futures ];
 
   checkPhase = ''
     nosetests

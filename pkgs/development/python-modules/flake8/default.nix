@@ -14,10 +14,10 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest mock pytestrunner ];
   propagatedBuildInputs = [ pyflakes pycodestyle mccabe ]
-    ++ stdenv.lib.optionals (pythonOlder "3.2") [ configparser functools32 ]
-    ++ stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ]
-    ++ stdenv.lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+    ++ lib.optionals (pythonOlder "3.2") [ configparser functools32 ]
+    ++ lib.optionals (pythonOlder "3.4") [ enum34 ]
+    ++ lib.optionals (pythonOlder "3.5") [ typing ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # fixtures fail to initialize correctly
   checkPhase = ''

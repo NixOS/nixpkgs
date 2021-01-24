@@ -25,7 +25,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    pytest ${stdenv.lib.optionalString stdenv.isDarwin "--ignore=cherrypy/test/test_wsgi_unix_socket.py"}
+    pytest ${lib.optionalString stdenv.isDarwin "--ignore=cherrypy/test/test_wsgi_unix_socket.py"}
   '';
 
   meta = with lib; {

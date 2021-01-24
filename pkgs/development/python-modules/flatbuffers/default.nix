@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , flatbuffers
 }:
@@ -16,6 +16,6 @@ buildPythonPackage rec {
 
   meta = flatbuffers.meta // {
     description = "Python runtime library for use with the Flatbuffers serialization format";
-    maintainers = with stdenv.lib.maintainers; [ wulfsta ];
+    maintainers = with lib.maintainers; [ wulfsta ];
   };
 }

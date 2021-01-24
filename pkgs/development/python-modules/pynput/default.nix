@@ -12,7 +12,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ sphinx ];
 
   propagatedBuildInputs = [ setuptools-lint xlib ]
-  ++ stdenv.lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.isLinux [
     evdev
   ];
 

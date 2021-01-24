@@ -29,7 +29,7 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./library-paths.patch;
       libgeos_c = GEOS_LIBRARY_PATH;
-      libc = stdenv.lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
+      libc = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
     })
   ];
 

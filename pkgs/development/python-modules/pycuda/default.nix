@@ -12,7 +12,7 @@
 , cudatoolkit
 , python
 , mkDerivation
-, lib, stdenv
+, lib
 }:
 let
   compyte = import ./compyte.nix {
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     sha256 = "effa3b99b55af67f3afba9b0d1b64b4a0add4dd6a33bdd6786df1aa4cc8761a5";
   };
 
-  preConfigure = with stdenv.lib.versions; ''
+  preConfigure = with lib.versions; ''
     ${python.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
                           --boost-lib-dir=${boost}/lib \
                           --no-use-shipped-boost \

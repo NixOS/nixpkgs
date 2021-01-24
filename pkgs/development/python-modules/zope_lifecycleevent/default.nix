@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   # zope uses pep 420 namespaces for python3, doesn't work with nix + python2
-  pythonImportsCheck = stdenv.lib.optionals isPy3k [
+  pythonImportsCheck = lib.optionals isPy3k [
     "zope.lifecycleevent"
     "zope.interface"
   ];

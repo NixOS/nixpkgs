@@ -62,7 +62,7 @@ buildPythonPackage rec {
 
   postFixup = ''
     mkdir -p "$out/bin"
-    makeWrapper "${debugger}/bin/${stdenv.lib.strings.getName debugger}" "$out/bin/pwntools-gdb"
+    makeWrapper "${debugger}/bin/${lib.strings.getName debugger}" "$out/bin/pwntools-gdb"
   '';
 
   meta = with lib; {

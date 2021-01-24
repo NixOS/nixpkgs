@@ -1,4 +1,5 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchurl
 , meson
 , ninja
@@ -51,11 +52,9 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/47390
   installCheckPhase = "meson test --print-errorlogs";
 
-  meta = {
+  meta = with lib; {
     homepage = "https://gstreamer.freedesktop.org";
-
     description = "Python bindings for GStreamer";
-
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
   };
 }

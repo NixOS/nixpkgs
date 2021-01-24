@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Resolve JSON Pointers in Python";
     homepage = "https://github.com/stefankoegl/python-json-pointer";
-    license = stdenv.lib.licenses.bsd2; # "Modified BSD license, says pypi"
+    license = licenses.bsd2; # "Modified BSD license, says pypi"
   };
 
 }

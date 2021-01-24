@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , setuptools, six, traits
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Traits-capable windowing framework";
     homepage = "https://github.com/enthought/pyface";
-    maintainers = with stdenv.lib.maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ knedlsepp ];
     license = licenses.bsdOriginal;
   };
 }

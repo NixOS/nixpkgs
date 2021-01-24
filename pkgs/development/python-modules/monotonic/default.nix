@@ -12,9 +12,9 @@ buildPythonPackage rec {
     sha256 = "23953d55076df038541e648a53676fb24980f7a1be290cdda21300b3bc21dfb0";
   };
 
-  __propagatedImpureHostDeps = stdenv.lib.optional stdenv.isDarwin "/usr/lib/libc.dylib";
+  __propagatedImpureHostDeps = lib.optional stdenv.isDarwin "/usr/lib/libc.dylib";
 
-  patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
+  patchPhase = lib.optionalString stdenv.isLinux ''
     substituteInPlace monotonic.py --replace \
       "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
   '';

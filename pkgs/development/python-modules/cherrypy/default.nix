@@ -41,7 +41,7 @@ buildPythonPackage rec {
       -k 'not KeyboardInterrupt and not daemonize and not Autoreload' \
       --deselect=cherrypy/test/test_static.py::StaticTest::test_null_bytes \
       --deselect=cherrypy/test/test_tools.py::ToolTests::testCombinedTools \
-      ${stdenv.lib.optionalString stdenv.isDarwin
+      ${lib.optionalString stdenv.isDarwin
         "--deselect=cherrypy/test/test_bus.py::BusMethodTests::test_block"}
   '';
 
