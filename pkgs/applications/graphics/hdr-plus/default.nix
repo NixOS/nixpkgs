@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , cmake, halide
 , libpng, libjpeg, libtiff, libraw
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Burst photography pipeline based on Google's HDR+";
     homepage = "https://www.timothybrooks.com/tech/hdr-plus/";
     license = licenses.mit;

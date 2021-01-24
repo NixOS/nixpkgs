@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, hamlib, pkg-config, qt5, qtbase, qttools, qtserialport, qtcharts, qmake, wrapQtAppsHook }:
+{ lib, stdenv, fetchurl, hamlib, pkg-config, qt5, qtbase, qttools, qtserialport, qtcharts, qmake, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "klog";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "KLog.pro" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multiplatform free hamradio logger";
     longDescription = ''
       KLog provides QSO management, useful QSL management DX-Cluster client, DXCC management,

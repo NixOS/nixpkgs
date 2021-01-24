@@ -37,7 +37,7 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
   * Not start with the package name.
   * Not have a period at the end.
 * `meta.license` must be set and fit the upstream license.
-  * If there is no upstream license, `meta.license` should default to `stdenv.lib.licenses.unfree`.
+  * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
 * `meta.maintainers` must be set.
 
 See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes) and on how to [submit changes to nixpkgs](https://nixos.org/nixpkgs/manual/#chap-submitting-changes).

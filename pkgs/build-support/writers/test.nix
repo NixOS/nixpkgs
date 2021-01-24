@@ -196,7 +196,7 @@ let
 
 in runCommand "test-writers" {
   passthru = { inherit writeTest bin simple; };
-  meta.platforms = stdenv.lib.platforms.all;
+  meta.platforms = lib.platforms.all;
 } ''
   ${lib.concatMapStringsSep "\n" (test: writeTest "success" "${test}/bin/test_writers") (lib.attrValues bin)}
   ${lib.concatMapStringsSep "\n" (test: writeTest "success" test) (lib.attrValues simple)}

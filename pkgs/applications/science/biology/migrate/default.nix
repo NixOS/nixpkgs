@@ -1,4 +1,4 @@
-{ gccStdenv, fetchurl, zlib, mpi }:
+{ lib, gccStdenv, fetchurl, zlib, mpi }:
 
 gccStdenv.mkDerivation rec {
   version = "3.7.2";
@@ -14,7 +14,7 @@ gccStdenv.mkDerivation rec {
   buildFlags = [ "thread" "mpis" ];
   preInstall = "mkdir -p $out/man/man1";
 
-  meta = with gccStdenv.lib; {
+  meta = with lib; {
     description = "Estimates population size, migration, population splitting parameters using genetic/genomic data";
     homepage = "https://peterbeerli.com/migrate-html5/index.html";
     license = licenses.mit;

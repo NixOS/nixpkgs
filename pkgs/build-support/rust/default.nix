@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , buildPackages
 , cacert
 , cargo
@@ -83,13 +84,13 @@ let
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';
 
-  targetIsJSON = stdenv.lib.hasSuffix ".json" target;
+  targetIsJSON = lib.hasSuffix ".json" target;
   useSysroot = targetIsJSON && !__internal_dontAddSysroot;
 
   # see https://github.com/rust-lang/cargo/blob/964a16a28e234a3d397b2a7031d4ab4a428b1391/src/cargo/core/compiler/compile_kind.rs#L151-L168
   # the "${}" is needed to transform the path into a /nix/store path before baseNameOf
   shortTarget = if targetIsJSON then
-      (stdenv.lib.removeSuffix ".json" (builtins.baseNameOf "${target}"))
+      (lib.removeSuffix ".json" (builtins.baseNameOf "${target}"))
     else target;
 
   sysroot = (callPackage ./sysroot {}) {
@@ -116,7 +117,7 @@ in
 # See https://os.phil-opp.com/testing/ for more information.
 assert useSysroot -> !(args.doCheck or true);
 
-stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optionalAttrs useSysroot {
+stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs useSysroot {
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
 } // {
   inherit cargoDeps;
@@ -124,7 +125,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optional
   patchRegistryDeps = ./patch-registry-deps;
 
   nativeBuildInputs = nativeBuildInputs ++ [ cacert git cargo rustc ];
-  buildInputs = buildInputs ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
+  buildInputs = buildInputs ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   patches = cargoPatches ++ patches;
 
@@ -147,11 +148,11 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optional
     cat >> .cargo/config <<'EOF'
     [target."${rust.toRustTarget stdenv.buildPlatform}"]
     "linker" = "${ccForBuild}"
-    ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
+    ${lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
     [target."${shortTarget}"]
     "linker" = "${ccForHost}"
     ${# https://github.com/rust-lang/rust/issues/46651#issuecomment-433611633
-      stdenv.lib.optionalString (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64) ''
+      lib.optionalString (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64) ''
     "rustflags" = [ "-C", "target-feature=+crt-static", "-C", "link-arg=-lgcc" ]
     ''}
     ''}
@@ -163,7 +164,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optional
   # After unpacking and applying patches, check that the Cargo.lock matches our
   # src package. Note that we do this after the patchPhase, because the
   # patchPhase may create the Cargo.lock if upstream has not shipped one.
-  postPatch = (args.postPatch or "") + stdenv.lib.optionalString validateCargoDeps ''
+  postPatch = (args.postPatch or "") + lib.optionalString validateCargoDeps ''
     cargoDepsLockfile=$NIX_BUILD_TOP/$cargoDepsCopy/Cargo.lock
     srcLockfile=$NIX_BUILD_TOP/$sourceRoot/Cargo.lock
 
@@ -206,7 +207,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optional
   '';
 
   buildPhase = with builtins; args.buildPhase or ''
-    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
+    ${lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
     runHook preBuild
 
     (
@@ -217,14 +218,14 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optional
       "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
       "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
       cargo build -j $NIX_BUILD_CORES \
-        ${stdenv.lib.optionalString (buildType == "release") "--release"} \
+        ${lib.optionalString (buildType == "release") "--release"} \
         --target ${target} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 
     runHook postBuild
 
-    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "popd"}
+    ${lib.optionalString (buildAndTestSubdir != null) "popd"}
 
     # This needs to be done after postBuild: packages like `cargo` do a pushd/popd in
     # the pre/postBuild-hooks that need to be taken into account before gathering
@@ -238,15 +239,15 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optional
   '';
 
   checkPhase = args.checkPhase or (let
-    argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${target} --frozen";
+    argstr = "${lib.optionalString (checkType == "release") "--release"} --target ${target} --frozen";
     threads = if cargoParallelTestThreads then "$NIX_BUILD_CORES" else "1";
   in ''
-    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
+    ${lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
     runHook preCheck
     echo "Running cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
     cargo test -j $NIX_BUILD_CORES ${argstr} -- --test-threads=${threads} ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
-    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "popd"}
+    ${lib.optionalString (buildAndTestSubdir != null) "popd"}
   '');
 
   doCheck = args.doCheck or true;

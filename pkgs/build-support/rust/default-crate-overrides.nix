@@ -1,4 +1,4 @@
-{ stdenv, pkg-config, curl, darwin, libiconv, libgit2, libssh2,
+{ lib, stdenv, pkg-config, curl, darwin, libiconv, libgit2, libssh2,
   openssl, sqlite, zlib, dbus, dbus-glib, gdk-pixbuf, cairo, python3,
   libsodium, postgresql, gmp, foundationdb, capnproto, nettle, clang,
   llvmPackages, ... }:
@@ -17,7 +17,7 @@ in
 
   cargo = attrs: {
     buildInputs = [ openssl zlib curl ]
-      ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
+      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
   };
 
   libz-sys = attrs: {
@@ -149,7 +149,7 @@ in
   };
 
   serde_derive = attrs: {
-    buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+    buildInputs = lib.optional stdenv.isDarwin Security;
   };
 
   thrussh-libsodium = attrs: {
