@@ -32,7 +32,7 @@ buildPythonPackage rec {
     ipywidgets
     pygments
     typing-extensions
-  ] ++ stdenv.lib.optional (pythonOlder "3.7") dataclasses;
+  ] ++ lib.optional (pythonOlder "3.7") dataclasses;
 
   checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "rich" ];

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   buildInputs = [ pkgs.coreutils ];
   propagatedBuildInputs = [ dateutil ];
 
-  preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  preInstall = lib.optionalString stdenv.isDarwin ''
     sed -i 's|^\([ ]*\)self.bin_path.*$|\1self.bin_path = "${pkgs.terminal-notifier}/bin/terminal-notifier"|' build/lib/pync/TerminalNotifier.py
   '';
 

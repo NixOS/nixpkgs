@@ -10,9 +10,9 @@ buildPythonPackage rec {
     sha256 = "815fdef4607474295d68da46978a54481dd1e7be153c7d60f9e72773cd38d77d";
   };
 
-  propagatedBuildInputs = with stdenv.lib; [ pycares ]
-    ++ optional (pythonOlder "3.7") typing
-    ++ optional (isPy27 || isPyPy) trollius;
+  propagatedBuildInputs = [ pycares ]
+    ++ lib.optional (pythonOlder "3.7") typing
+    ++ lib.optional (isPy27 || isPyPy) trollius;
 
   checkPhase = ''
     ${python.interpreter} tests.py

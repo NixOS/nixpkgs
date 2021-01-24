@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy decorator imageio imageio-ffmpeg tqdm requests proglog
-  ] ++ (stdenv.lib.optionals advancedProcessing [
+  ] ++ (lib.optionals advancedProcessing [
     opencv3 scikitimage scikitlearn scipy matplotlib youtube-dl
   ]);
 

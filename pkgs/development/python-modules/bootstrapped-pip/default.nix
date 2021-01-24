@@ -1,4 +1,4 @@
-{ stdenv, python, fetchPypi, makeWrapper, unzip, makeSetupHook
+{ lib, stdenv, python, fetchPypi, makeWrapper, unzip, makeSetupHook
 , pipInstallHook
 , setuptoolsBuildHook
 , wheel, pip, setuptools
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ":";
 
-  installPhase = stdenv.lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
+  installPhase = lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
   '' + ''
     # Give folders a known name
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Version of pip used for bootstrapping";
-    license = stdenv.lib.unique (pip.meta.license ++ setuptools.meta.license ++ wheel.meta.license);
+    license = lib.unique (pip.meta.license ++ setuptools.meta.license ++ wheel.meta.license);
     homepage = pip.meta.homepage;
   };
 }

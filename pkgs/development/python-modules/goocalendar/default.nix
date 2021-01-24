@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , pkg-config
@@ -9,8 +9,6 @@
 , goocanvas2
 , isPy3k
  }:
-
-with stdenv.lib;
 
 buildPythonPackage rec {
   pname = "GooCalendar";

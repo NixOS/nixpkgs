@@ -8,7 +8,7 @@ buildPythonPackage rec {
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0b9CgC0c7BE7Wtqg579/N0W0RSHcIWNYjSdtXNYdcY8=";
   };
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config meson ninja gobject-introspection ];
   buildInputs = [ glib gobject-introspection ]
-                 ++ stdenv.lib.optionals stdenv.isDarwin [ which ncurses ];
+                 ++ lib.optionals stdenv.isDarwin [ which ncurses ];
   propagatedBuildInputs = [ pycairo cairo ];
 
   passthru = {

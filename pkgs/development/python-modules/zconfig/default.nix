@@ -23,7 +23,7 @@ buildPythonPackage rec {
       url = "https://github.com/zopefoundation/ZConfig/commit/f0c2990d35ac3c924ecc8be4a5c71c8e4abbd0e5.patch";
       sha256 = "1bjg3wrvii0rwzf3s0vlpzgg2ckj0h2zxkyxwjcr64s4k2vaq9ij";
     })
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
+  ] ++ lib.optional stdenv.hostPlatform.isMusl ./remove-setlocale-test.patch;
 
   buildInputs = [ manuel docutils ];
   propagatedBuildInputs = [ zope_testrunner ];

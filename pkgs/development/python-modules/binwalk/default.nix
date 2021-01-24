@@ -35,7 +35,7 @@ buildPythonPackage {
   };
 
   propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract cramfsswap cramfsprogs sasquatch squashfsTools lzma pycrypto ]
-  ++ stdenv.lib.optionals visualizationSupport [ matplotlib pyqtgraph ];
+  ++ lib.optionals visualizationSupport [ matplotlib pyqtgraph ];
 
   # setup.py only installs version.py during install, not test
   postPatch = ''

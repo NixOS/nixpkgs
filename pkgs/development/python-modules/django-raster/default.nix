@@ -2,7 +2,7 @@
   numpy, django_colorful, pillow, psycopg2,
   pyparsing, django, celery, boto3, importlib-metadata
 }:
-if stdenv.lib.versionOlder django.version "2.0"
+if lib.versionOlder django.version "2.0"
 then throw "django-raster requires Django >= 2.0. Consider overiding the python package set to use django_2."
 else
 buildPythonPackage rec {

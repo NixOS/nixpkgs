@@ -125,7 +125,7 @@ in buildPythonPackage {
         zlib
       ];
 
-      rpath = stdenv.lib.makeLibraryPath (libpaths ++ cudapaths);
+      rpath = lib.makeLibraryPath (libpaths ++ cudapaths);
     in
     lib.optionalString stdenv.isLinux ''
       # This is an array containing all the directories in the tensorflow2

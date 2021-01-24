@@ -25,8 +25,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ colorama mypy pyyaml regex ]
-    ++ stdenv.lib.optionals (pythonOlder "3.7") [ dataclasses ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+    ++ lib.optionals (pythonOlder "3.7") [ dataclasses ]
+    ++ lib.optionals (pythonOlder "3.5") [ typing ];
   checkInputs = [ pytest-mypy ];
 
   checkPhase = ''

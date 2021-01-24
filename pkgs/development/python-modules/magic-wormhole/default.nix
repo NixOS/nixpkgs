@@ -34,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ spake2 pynacl six attrs twisted autobahn automat hkdf tqdm click humanize txtorcon ];
   checkInputs = [ mock magic-wormhole-transit-relay magic-wormhole-mailbox-server ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
   '';
 

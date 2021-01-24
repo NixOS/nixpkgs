@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , buildPythonPackage
 , isPy27
 , fetchPypi
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      libevdev = stdenv.lib.getLib pkgs.libevdev;
+      libevdev = lib.getLib pkgs.libevdev;
     })
   ];
 

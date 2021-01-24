@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     wheel
   ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   propagatedBuildInputs = [
     python

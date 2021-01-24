@@ -22,7 +22,7 @@ buildPythonPackage rec {
   buildInputs = [ pkgs.makeWrapper ];
 
   propagatedBuildInputs = [ pkgs.rtmpdump pycrypto requests ]
-    ++ stdenv.lib.optionals isPy27 [ singledispatch futures ];
+    ++ lib.optionals isPy27 [ singledispatch futures ];
 
   postInstall = ''
     wrapProgram $out/bin/livestreamer --prefix PATH : ${pkgs.rtmpdump}/bin

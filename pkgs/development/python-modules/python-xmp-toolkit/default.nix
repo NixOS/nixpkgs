@@ -26,7 +26,7 @@ buildPythonPackage {
 
   buildInputs = [ exempi ];
 
-  checkInputs = stdenv.lib.optionals (pythonOlder "3.3") [ mock ];
+  checkInputs = lib.optionals (pythonOlder "3.3") [ mock ];
 
   propagatedBuildInputs = [ pytz ];
 

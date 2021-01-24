@@ -15,7 +15,7 @@ buildPythonPackage rec {
   buildInputs = [ libev ];
   propagatedBuildInputs = [
     zope_interface
-  ] ++ stdenv.lib.optionals (!isPyPy) [ greenlet ];
+  ] ++ lib.optionals (!isPyPy) [ greenlet ];
 
   checkPhase = ''
     cd greentest

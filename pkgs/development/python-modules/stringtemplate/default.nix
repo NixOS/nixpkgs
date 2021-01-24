@@ -1,4 +1,4 @@
-{stdenv, fetchurl, buildPythonPackage, antlr, isPy3k}:
+{ lib, fetchurl, buildPythonPackage, antlr, isPy3k }:
 
 buildPythonPackage rec {
   pname = "PyStringTemplate";
@@ -16,9 +16,9 @@ buildPythonPackage rec {
   # No tests included in archive
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.stringtemplate.org/";
     description = "Text Templating Library";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }
