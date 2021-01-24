@@ -162,6 +162,8 @@ in {
 
   actdiag = callPackage ../development/python-modules/actdiag { };
 
+  adafruit-platformdetect = callPackage ../development/python-modules/adafruit-platformdetect { };
+
   adal = callPackage ../development/python-modules/adal { };
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
