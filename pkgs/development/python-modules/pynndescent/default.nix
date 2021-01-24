@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # fixes tests, included in next version
+    # fixes tests, included in 0.5.2
     (fetchpatch {
       url = "https://github.com/lmcinnes/pynndescent/commit/ef5d8c3c3bfe976063b6621e3e0734c0c22d813b.patch";
       sha256 = "sha256-49n3kevs3wpzd4FfZVKmNpF2o1V8pJs4KOx8zCAhR3s=";
