@@ -12,7 +12,7 @@ buildPythonPackage rec {
   patchPhase = ''
     # this test requires network access
     sed -i 's/test_server_with_path/noop/' avro/test/test_ipc.py
-  '' + (stdenv.lib.optionalString isPy3k ''
+  '' + (lib.optionalString isPy3k ''
     # these files require twisted, which is not python3 compatible
     rm avro/txipc.py
     rm avro/test/txsample*

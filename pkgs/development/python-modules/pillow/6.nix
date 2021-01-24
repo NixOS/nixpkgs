@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    python -m pytest -v -x -W always${stdenv.lib.optionalString stdenv.isDarwin " --deselect=Tests/test_file_icns.py::TestFileIcns::test_save --deselect=Tests/test_imagegrab.py::TestImageGrab::test_grab"}
+    python -m pytest -v -x -W always${lib.optionalString stdenv.isDarwin " --deselect=Tests/test_file_icns.py::TestFileIcns::test_save --deselect=Tests/test_imagegrab.py::TestImageGrab::test_grab"}
     runHook postCheck
   '';
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     freetype libjpeg openjpeg libimagequant zlib libtiff libwebp tcl lcms2 ]
-    ++ stdenv.lib.optionals (isPyPy) [ tk libX11 ];
+    ++ lib.optionals (isPyPy) [ tk libX11 ];
 
   # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
   # NOTE: The Pillow install script will, by default, add paths like /usr/lib
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     export CFLAGS="-I${libwebp}/include"
   ''
   # Remove impurities
-  + stdenv.lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py \
       --replace '"/Library/Frameworks",' "" \
       --replace '"/System/Library/Frameworks"' ""

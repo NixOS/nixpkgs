@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   checkInputs = [ blinker botocore chalice django flask tornado bottle rq falcon sqlalchemy werkzeug trytond
     executing pure-eval asttokens ]
-  ++ stdenv.lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
+  ++ lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
 
   propagatedBuildInputs = [ urllib3 certifi ];
 

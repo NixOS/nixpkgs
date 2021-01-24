@@ -17,7 +17,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [ blessings wcwidth ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+    ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   checkInputs = [ mock pyte nose ];
 

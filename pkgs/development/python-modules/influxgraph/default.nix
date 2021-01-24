@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "0l33sfwdh4bfprmzp2kx0d9098g6yxbnhyyx9qr3kzczpm0jg9vy";
   };
 
-  patchPhase = stdenv.lib.optionalString isPy3k ''
+  patchPhase = lib.optionalString isPy3k ''
     sed 's/python-memcached/python3-memcached/' \
       -i ./influxgraph.egg-info/requires.txt    \
       -i ./setup.py

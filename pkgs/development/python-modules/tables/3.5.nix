@@ -1,7 +1,5 @@
-{ stdenv, lib, fetchPypi, python, buildPythonPackage
+{ lib, fetchPypi, python, buildPythonPackage
 , cython, bzip2, lzo, numpy, numexpr, hdf5, six, c-blosc, mock }:
-
-with stdenv.lib;
 
 buildPythonPackage rec {
   version = "3.5.2";
@@ -18,10 +16,10 @@ buildPythonPackage rec {
   # The setup script complains about missing run-paths, but they are
   # actually set.
   setupPyBuildFlags = [
-    "--hdf5=${getDev hdf5}"
-    "--lzo=${getDev lzo}"
-    "--bzip2=${getDev bzip2}"
-    "--blosc=${getDev c-blosc}"
+    "--hdf5=${lib.getDev hdf5}"
+    "--lzo=${lib.getDev lzo}"
+    "--bzip2=${lib.getDev bzip2}"
+    "--blosc=${lib.getDev c-blosc}"
   ];
   # Run the test suite.
   # It requires the build path to be in the python search path.
@@ -50,9 +48,9 @@ buildPythonPackage rec {
   # Disable tests until the failure described above is fixed.
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Hierarchical datasets for Python";
     homepage = "http://www.pytables.org/";
-    license = stdenv.lib.licenses.bsd2;
+    license = licenses.bsd2;
   };
 }

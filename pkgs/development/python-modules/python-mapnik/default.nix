@@ -30,7 +30,7 @@ in buildPythonPackage rec {
   disabled = isPyPy;
   doCheck = false; # doesn't find needed test data files
   preBuild = let
-    pythonVersion = with stdenv.lib.versions; "${major python.version}${minor python.version}";
+    pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
   in ''
     export BOOST_PYTHON_LIB="boost_python${pythonVersion}"
     export BOOST_THREAD_LIB="boost_thread"

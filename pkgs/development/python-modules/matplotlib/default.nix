@@ -35,15 +35,15 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ which sphinx ]
-    ++ stdenv.lib.optional enableGhostscript ghostscript
-    ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
+    ++ lib.optional enableGhostscript ghostscript
+    ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
   propagatedBuildInputs =
     [ cycler dateutil numpy pyparsing tornado freetype kiwisolver
       certifi libpng mock pytz pillow ]
-    ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
-    ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
-    ++ stdenv.lib.optionals enableQt [ pyqt5 ];
+    ++ lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
+    ++ lib.optionals enableTk [ tcl tk tkinter libX11 ]
+    ++ lib.optionals enableQt [ pyqt5 ];
 
   setup_cfg = if stdenv.isDarwin then ./setup-darwin.cfg else ./setup.cfg;
   preBuild = ''
@@ -58,10 +58,9 @@ buildPythonPackage rec {
   # script.
   postPatch =
     let
-      inherit (stdenv.lib.strings) substring;
-      tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${substring 0 3 tk.version}"'';
+      tcl_tk_cache = ''"${tk}/lib", "${tcl}/lib", "${lib.strings.substring 0 3 tk.version}"'';
     in
-    stdenv.lib.optionalString enableTk
+    lib.optionalString enableTk
       "sed -i '/self.tcl_tk_cache = None/s|None|${tcl_tk_cache}|' setupext.py";
 
   # Matplotlib needs to be built against a specific version of freetype in

@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
 
   # disable a test that fails on aarch64 due to rounding errors
-  postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
+  postPatch = lib.optionalString stdenv.isAarch64 ''
     substituteInPlace test/test.py \
       --replace "test_overlay_with_gain_change" "notest_overlay_with_gain_change"
   '';

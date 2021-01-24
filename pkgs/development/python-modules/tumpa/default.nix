@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenPGP key creation and smartcard access";
     homepage = "https://github.com/kushaldas/tumpa";
     license = licenses.gpl3Plus;

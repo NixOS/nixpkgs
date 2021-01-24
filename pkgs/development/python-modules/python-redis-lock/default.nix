@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ redis ]
-  ++ stdenv.lib.optional withDjango django_redis;
+  ++ lib.optional withDjango django_redis;
 
 
   meta = with lib; {

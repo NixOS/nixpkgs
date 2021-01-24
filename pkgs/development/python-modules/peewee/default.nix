@@ -1,4 +1,6 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , sqlite
 , cython
 , apsw
@@ -40,7 +42,7 @@ buildPythonPackage rec {
 
   doCheck = withPostgres;
 
-  meta = with stdenv.lib;{
+  meta = with lib; {
     description = "a small, expressive orm";
     homepage    = "http://peewee-orm.com";
     license     = licenses.mit;

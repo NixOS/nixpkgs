@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ]
-    ++ stdenv.lib.optionals isPy35 [ async_generator ];
+    ++ lib.optionals isPy35 [ async_generator ];
 
   # No tests in archive
   doCheck = false;

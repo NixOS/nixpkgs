@@ -20,7 +20,7 @@ buildPythonPackage rec {
   checkInputs = [ unittest2 mock ];
   propagatedBuildInputs = [ pyasn1 ];
 
-  preConfigure = stdenv.lib.optionalString (isPy3k && pythonOlder "3.7") ''
+  preConfigure = lib.optionalString (isPy3k && pythonOlder "3.7") ''
     substituteInPlace setup.py --replace "open('README.md')" "open('README.md',encoding='utf-8')"
   '';
 

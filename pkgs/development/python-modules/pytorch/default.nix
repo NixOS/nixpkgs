@@ -265,7 +265,7 @@ in buildPythonPackage rec {
     cp -r $out/${python.sitePackages}/torch/lib     $lib/lib
   '';
 
-  postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.isDarwin ''
     for f in $(ls $lib/lib/*.dylib); do
         install_name_tool -id $lib/lib/$(basename $f) $f || true
     done

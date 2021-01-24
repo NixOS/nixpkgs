@@ -2,10 +2,6 @@
 , contextlib2, osxfuse
 }:
 
-let
-  inherit (stdenv.lib) optionals optionalString;
-in
-
 buildPythonPackage rec {
   pname = "llfuse";
   version = "1.3.8";
@@ -24,16 +20,18 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs =
-    optionals stdenv.isLinux [ fuse ]
-    ++ optionals stdenv.isDarwin [ osxfuse ];
+    lib.optionals stdenv.isLinux [ fuse ]
+    ++ lib.optionals stdenv.isDarwin [ osxfuse ];
+
   checkInputs = [ pytest which ] ++
-    optionals stdenv.isLinux [ attr ];
+    lib.optionals stdenv.isLinux [ attr ];
 
   propagatedBuildInputs = [ contextlib2 ];
 
   checkPhase = ''
-    py.test -k "not test_listdir" ${optionalString stdenv.isDarwin ''-m "not uses_fuse"''}
+    py.test -k "not test_listdir" ${lib.optionalString stdenv.isDarwin ''-m "not uses_fuse"''}
   '';
 
   meta = with lib; {

@@ -21,7 +21,7 @@ buildPythonPackage {
 
   checkInputs = [ nose mock ];
 
-  postPatch = stdenv.lib.optionalString isPy3k ''
+  postPatch = lib.optionalString isPy3k ''
     sed -i -e 's/open *(\([^)]*\))/open(\1, encoding="utf-8")/' setup.py
   '';
 

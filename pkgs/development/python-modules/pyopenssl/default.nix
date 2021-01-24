@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , openssl
@@ -12,9 +13,6 @@
 , six
 , fetchpatch
 }:
-
-with stdenv.lib;
-
 
 let
   # https://github.com/pyca/pyopenssl/issues/791
@@ -51,20 +49,19 @@ let
     # https://github.com/pyca/pyopenssl/issues/768
     "test_wantWriteError"
   ] ++ (
-    optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests
+    lib.optionals (lib.hasPrefix "libressl" openssl.meta.name) failingLibresslTests
   ) ++ (
-    optionals (versionAtLeast (getVersion openssl.name) "1.1") failingOpenSSL_1_1Tests
+    lib.optionals (lib.versionAtLeast (lib.getVersion openssl.name) "1.1") failingOpenSSL_1_1Tests
   ) ++ (
     # https://github.com/pyca/pyopenssl/issues/974
-    optionals stdenv.is32bit [ "test_verify_with_time" ]
+    lib.optionals stdenv.is32bit [ "test_verify_with_time" ]
   );
 
   # Compose the final string expression, including the "-k" and the single quotes.
-  testExpression = optionalString (disabledTests != [])
-    "-k 'not ${concatStringsSep " and not " disabledTests}'";
+  testExpression = lib.optionalString (disabledTests != [])
+    "-k 'not ${lib.concatStringsSep " and not " disabledTests}'";
 
 in
-
 
 buildPythonPackage rec {
   pname = "pyOpenSSL";
