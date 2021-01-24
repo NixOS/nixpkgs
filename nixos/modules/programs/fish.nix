@@ -24,7 +24,7 @@ let
     "source /etc/fish/${file}.fish"
   else
     ''
-      set fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish-foreign-env/functions $fish_function_path
+      set fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d $fish_function_path
       fenv source /etc/fish/foreign-env/${file} > /dev/null
       set -e fish_function_path[1]
     '';
