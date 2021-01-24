@@ -83,7 +83,9 @@ self = stdenv.mkDerivation rec {
     Libs: -L$out/lib -llua -lm
     Cflags: -I$out/include
     EOF
+    ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua-${luaversion}.pc"
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${luaversion}.pc"
+    ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${lib.replaceStrings [ "." ] [ "" ] luaversion}.pc"
   '';
 
   passthru = rec {
