@@ -112,17 +112,21 @@ in
     { name = "auto-blas-hook"; deps = [ blas lapack ]; }
     ../build-support/setup-hooks/audit-blas.sh;
 
-  autoreconfHook = makeSetupHook
-    { deps = [ autoconf automake gettext libtool ]; }
-    ../build-support/setup-hooks/autoreconf.sh;
+  autoreconfHook = callPackage (
+    { makeSetupHook, autoconf, automake, gettext, libtool }:
+    makeSetupHook
+      { deps = [ autoconf automake gettext libtool ]; }
+      ../build-support/setup-hooks/autoreconf.sh
+  ) { };
 
-  autoreconfHook264 = makeSetupHook
-    { deps = [ autoconf264 automake111x gettext libtool ]; }
-    ../build-support/setup-hooks/autoreconf.sh;
+  autoreconfHook264 = autoreconfHook.override {
+    autoconf = autoconf264;
+    automake = automake111x;
+  };
 
-  autoreconfHook269 = makeSetupHook
-    { deps = [ autoconf269 automake gettext libtool ]; }
-    ../build-support/setup-hooks/autoreconf.sh;
+  autoreconfHook269 = autoreconfHook.override {
+    autoconf = autoconf269;
+  };
 
   autoPatchelfHook = makeSetupHook { name = "auto-patchelf-hook"; }
     ../build-support/setup-hooks/auto-patchelf.sh;
