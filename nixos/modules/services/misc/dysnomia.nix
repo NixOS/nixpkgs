@@ -103,30 +103,36 @@ in
 
       properties = mkOption {
         description = "An attribute set in which each attribute represents a machine property. Optionally, these values can be shell substitutions.";
+        type = types.attrsOf types.str;
         default = {};
       };
 
       containers = mkOption {
         description = "An attribute set in which each key represents a container and each value an attribute set providing its configuration properties";
+        type = types.attrsOf types.attrs;
         default = {};
       };
 
       components = mkOption {
         description = "An atttribute set in which each key represents a container and each value an attribute set in which each key represents a component and each value a derivation constructing its initial state";
         default = {};
+        type = types.attrsOf types.attrs;
       };
 
       extraContainerProperties = mkOption {
         description = "An attribute set providing additional container settings in addition to the default properties";
         default = {};
+        type = types.attrsOf types.attrs;
       };
 
       extraContainerPaths = mkOption {
         description = "A list of paths containing additional container configurations that are added to the search folders";
+        type = types.listOf types.path;
         default = [];
       };
 
       extraModulePaths = mkOption {
+        type = types.listOf types.path;
         description = "A list of paths containing additional modules that are added to the search folders";
         default = [];
       };
