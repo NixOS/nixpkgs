@@ -28921,6 +28921,8 @@ in
 
   libretro = recurseIntoAttrs (callPackage ../misc/emulators/retroarch/cores.nix {
     retroarch = retroarchBare;
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   });
 
   retrofe = callPackage ../misc/emulators/retrofe { };

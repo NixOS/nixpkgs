@@ -1,7 +1,7 @@
 { lib, stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, fetchpatch, cmake, pkg-config, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
 , ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
-, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
+, miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl, libobjc, Foundation
 , buildPackages }:
 
 let
@@ -825,7 +825,8 @@ in with lib.licenses;
     };
     description = "Port of Play! to libretro";
     license = bsd2;
-    extraBuildInputs = [ boost ];
+    extraBuildInputs = [ boost ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc Foundation ];
     extraNativeBuildInputs = [ cmake openssl curl icu libGL libGLU xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [ "-DBUILD_PLAY=OFF -DBUILD_LIBRETRO_CORE=ON" ];

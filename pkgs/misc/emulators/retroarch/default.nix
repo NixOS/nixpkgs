@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  nativeBuildInputs = [ pkg-config wayland ]
+  nativeBuildInputs = [ pkg-config ]
+                      ++ optional stdenv.isLinux  wayland
                       ++ optional withVulkan makeWrapper;
 
   buildInputs = [ ffmpeg_3 freetype libxml2 libGLU libGL python3 SDL2 which ]
