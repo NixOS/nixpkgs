@@ -321,7 +321,6 @@ mapAliases ({
   libstdcxxHook = throw "libstdcxx hook has been removed because cc-wrapper is now directly aware of the c++ standard library intended to be used."; # 2020-06-22
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
   links = links2; # added 2016-01-31
-  linux_mptcp_5_9 = linux_5_9; # added 2020-01-07
   linux_rpi0 = linux_rpi1;
   linuxPackages_rpi0 = linuxPackages_rpi1;
 
