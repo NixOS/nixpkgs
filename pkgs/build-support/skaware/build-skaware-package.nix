@@ -1,6 +1,5 @@
-{ stdenv, cleanPackaging, fetchurl }:
-let lib = stdenv.lib;
-in {
+{ lib, stdenv, cleanPackaging, fetchurl }:
+{
   # : string
   pname
   # : string
@@ -98,7 +97,7 @@ in stdenv.mkDerivation {
   meta = {
     homepage = "https://skarnet.org/software/${pname}/";
     inherit description platforms;
-    license = stdenv.lib.licenses.isc;
+    license = lib.licenses.isc;
     maintainers = with lib.maintainers;
       [ pmahoney Profpatsch ] ++ maintainers;
   };

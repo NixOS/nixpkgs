@@ -1,4 +1,5 @@
-{ pkgs
+{ lib
+, pkgs
 , kernel ? pkgs.linux
 , img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
@@ -572,7 +573,7 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        PATH=$PATH:${stdenv.lib.makeBinPath [ dpkg dpkg glibc lzma ]}
+        PATH=$PATH:${lib.makeBinPath [ dpkg dpkg glibc lzma ]}
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.

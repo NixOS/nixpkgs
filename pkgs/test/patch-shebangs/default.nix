@@ -1,4 +1,4 @@
-{ stdenv, runCommand }:
+{ lib, stdenv, runCommand }:
 
 let
   bad-shebang = stdenv.mkDerivation {
@@ -13,7 +13,7 @@ let
   };
 in runCommand "patch-shebangs-test" {
   passthru = { inherit bad-shebang; };
-  meta.platforms = stdenv.lib.platforms.all;
+  meta.platforms = lib.platforms.all;
 } ''
   printf "checking whether patchShebangs works properly... ">&2
   if ! grep -q '^#!/bin/sh' ${bad-shebang}/bin/test; then

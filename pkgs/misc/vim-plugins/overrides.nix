@@ -698,7 +698,7 @@ self: super: {
         ln -s ${fzy-lua-native}/static $target/${fzy-lua-native-path}/static
         ln -s ${fzy-lua-native}/lua $target/${fzy-lua-native-path}/lua
       '';
-    meta.platforms = stdenv.lib.platforms.all;
+    meta.platforms = lib.platforms.all;
   });
 
 } // (

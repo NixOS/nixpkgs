@@ -35,7 +35,7 @@ let
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       # https://github.com/gradle/gradle/issues/4426
-      ${stdenv.lib.optionalString stdenv.isDarwin "export TERM=dumb"}
+      ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
       gradle --no-daemon desktop:release
     '';
     # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
     # https://github.com/gradle/gradle/issues/4426
-    ${stdenv.lib.optionalString stdenv.isDarwin "export TERM=dumb"}
+    ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
     # point to offline repo
     sed -ie "s#repositories {#repositories { maven { url '${deps}' };#g" build.gradle
     gradle --offline --no-daemon desktop:release
