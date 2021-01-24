@@ -11969,7 +11969,7 @@ in
 
   doctl = callPackage ../development/tools/doctl { };
 
-  doit = callPackage ../development/tools/build-managers/doit { };
+  doit = with python3Packages; toPythonApplication doit;
 
   dolt = callPackage ../servers/sql/dolt { };
 
