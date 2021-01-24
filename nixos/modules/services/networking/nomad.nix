@@ -137,7 +137,6 @@ in
           Restart = "on-failure";
           RestartSec = 2;
           TasksMax = "infinity";
-          User = optionalString cfg.dropPrivileges "nomad";
         }
         (mkIf cfg.enableDocker {
           SupplementaryGroups = "docker"; # space-separated string
