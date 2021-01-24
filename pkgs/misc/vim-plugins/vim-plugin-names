@@ -133,6 +133,7 @@ gentoo/gentoo-syntax
 GEverding/vim-hocon
 gfanto/fzf-lsp.nvim@main
 gibiansky/vim-textobj-haskell
+gioele/vim-autoswap
 glepnir/galaxyline.nvim@main
 glts/vim-textobj-comment
 godlygeek/csapprox
