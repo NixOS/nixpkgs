@@ -6,7 +6,7 @@ let
   lib' = pkgs.callPackage ./lib.nix {};
 
   # FIXME: add support for overrideScope
-  callPackageWithScope = scope: drv: args: lib'.callPackageWith scope drv args;
+  callPackageWithScope = scope: drv: args: lib.callPackageWith scope drv args;
   mkScope = scope: pkgs // scope;
 
   packages = self:
