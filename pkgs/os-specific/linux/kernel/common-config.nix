@@ -358,6 +358,7 @@ let
       F2FS_FS             = module;
       F2FS_FS_SECURITY    = option yes;
       F2FS_FS_ENCRYPTION  = option yes;
+      F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
       NFSD_PNFS              = whenBetween "4.0" "4.6" yes;
