@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Create templates of nix expressions from RPM .spec files";
     maintainers = with maintainers; [ tstrobel ];
-    platforms = with stdenv.lib.platforms; unix;
+    platforms = platforms.unix;
     hydraPlatforms = [];
   };
 }

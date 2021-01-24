@@ -38,10 +38,10 @@ in mkDerivation rec {
   passthru.updateScript = writeScript "${pname}-updater" ''
     #!${stdenv.shell}
     set -eu -o pipefail
-    PATH=${stdenv.lib.makeBinPath [curl pup common-updater-scripts]}:$PATH
+    PATH=${lib.makeBinPath [curl pup common-updater-scripts]}:$PATH
     latestVersion="$(curl -sS https://www.rescuetime.com/release-notes/linux | pup '.release:first-of-type h2 strong text{}' | tr -d '\n')"
 
-    for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
+    for platform in ${lib.concatStringsSep " " meta.platforms}; do
       # The script will not perform an update when the version attribute is up to date from previous platform run
       # We need to clear it before each run
       update-source-version ${pname} 0 $(yes 0 | head -64 | tr -d "\n") --system=$platform

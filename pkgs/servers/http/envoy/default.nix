@@ -1,4 +1,5 @@
-{ buildBazelPackage
+{ lib
+, buildBazelPackage
 , fetchFromGitHub
 , stdenv
 , cmake
@@ -109,7 +110,7 @@ buildBazelPackage rec {
     "--cxxopt=-Wno-uninitialized"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://envoyproxy.io";
     description = "Cloud-native edge and service proxy";
     license = licenses.asl20;
