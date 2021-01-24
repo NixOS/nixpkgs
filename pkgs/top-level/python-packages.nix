@@ -2502,6 +2502,8 @@ in {
 
   geojson = callPackage ../development/python-modules/geojson { };
 
+  geojson-client = callPackage ../development/python-modules/geojson-client { };
+
   geopandas = callPackage ../development/python-modules/geopandas { };
 
   geopy = if isPy3k then
