@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gitkraken";
-  version = "7.4.1";
+  version = "7.5.0";
 
   src = fetchzip {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-    sha256 = "1c9cyxx5sqvnilf6xp3ildq3lwl6mj8v1vl0wzyjpaiqky99lj9p";
+    sha256 = "1v89aza7iwph7k5phyld5m5856c5wbh8ncgg6lh7558v4xna0x57";
   };
 
   dontBuild = true;
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   ];
 
   desktopItem = makeDesktopItem {
-    name = "gitkraken";
+    name = pname;
     exec = "gitkraken";
     icon = "gitkraken";
     desktopName = "GitKraken";
@@ -88,10 +88,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
 
     mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications/
-
-    substituteInPlace $out/share/applications/gitkraken.desktop \
-      --replace $out/usr/share/gitkraken $out/bin
+    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     mkdir -p $out/share/pixmaps
     cp gitkraken.png $out/share/pixmaps/gitkraken.png
