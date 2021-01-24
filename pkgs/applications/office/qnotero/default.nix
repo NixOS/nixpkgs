@@ -26,6 +26,9 @@ python3Packages.buildPythonPackage rec {
     wrapQtApp "$out"/bin/qnotero
   '';
 
+  # no tests executed
+  doCheck = false;
+
   meta = {
     description = "Quick access to Zotero references";
     homepage = "http://www.cogsci.nl/software/qnotero";
