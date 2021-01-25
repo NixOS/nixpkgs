@@ -1,4 +1,4 @@
-{ fetchurl, SDL, stdenv }:
+{ lib, fetchurl, SDL, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "hhexen";
