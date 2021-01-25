@@ -96,7 +96,7 @@
     "braviatv" = ps: with ps; [ bravia-tv ];
     "broadlink" = ps: with ps; [ broadlink ];
     "brother" = ps: with ps; [ brother ];
-    "brottsplatskartan" = ps: with ps; [ ]; # missing inputs: brottsplatskartan
+    "brottsplatskartan" = ps: with ps; [ brottsplatskartan ];
     "browser" = ps: with ps; [ ];
     "brunt" = ps: with ps; [ ]; # missing inputs: brunt
     "bsblan" = ps: with ps; [ bsblan ];

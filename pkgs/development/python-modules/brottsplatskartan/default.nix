@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API wrapper for brottsplatskartan.se";
     homepage = "https://github.com/chrillux/brottsplatskartan";
-    license = with licenses; [ gpl2Only ];
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }
