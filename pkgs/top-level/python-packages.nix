@@ -951,6 +951,8 @@ in {
 
   bitbucket-cli = callPackage ../development/python-modules/bitbucket-cli { };
 
+  bitcash = callPackage ../development/python-modules/bitcash { };
+
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
 
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
@@ -1167,6 +1169,8 @@ in {
 
   case = callPackage ../development/python-modules/case { };
 
+  cashaddress-regtest = callPackage ../development/python-modules/cashaddress-regtest { };
+
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
   casttube = callPackage ../development/python-modules/casttube { };
@@ -1371,6 +1375,8 @@ in {
   cogapp = callPackage ../development/python-modules/cogapp { };
 
   coilmq = callPackage ../development/python-modules/coilmq { };
+
+  coincurve = callPackage ../development/python-modules/coincurve { };
 
   coinmarketcap = callPackage ../development/python-modules/coinmarketcap { };
 
