@@ -403,7 +403,6 @@ mapAliases ({
   openexr_ctl = ctl; # added 2018-04-25
   openjpeg_1 = throw "openjpeg_1 has been removed, use openjpeg_2 instead"; # added 2021-01-24
   openjpeg_2 = openjpeg; # added 2021-01-25
-  openjpeg_2_1 = openjpeg_2; # added 2018-10-25
   opensans-ttf = open-sans; # added 2018-12-04
   openssh_with_kerberos = openssh; # added 2018-01-28
   onnxruntime = throw "onnxruntime has been removed due to poor maintainability"; # added 2020-12-04
