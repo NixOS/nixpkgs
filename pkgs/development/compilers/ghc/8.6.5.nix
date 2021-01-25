@@ -110,6 +110,7 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "doc" ];
 
   patches = [
+    ./respect-ar-path.patch
     (fetchpatch { # https://phabricator.haskell.org/D5123
      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/13ff0b7ced097286e0d7b054f050871effe07f86.diff";
      name = "D5123.diff";

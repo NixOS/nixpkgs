@@ -116,6 +116,10 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
+  patches = [
+    ./respect-ar-path.patch
+  ];
+
   postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.

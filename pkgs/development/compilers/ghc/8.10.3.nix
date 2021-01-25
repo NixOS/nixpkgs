@@ -107,7 +107,9 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
+  patches = [
+    ./respect-ar-path.patch
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
     # Make Block.h compile with c++ compilers. Remove with the next release
     (fetchpatch {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/97d0b0a367e4c6a52a17c3299439ac7de129da24.patch";
