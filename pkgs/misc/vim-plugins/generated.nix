@@ -3082,6 +3082,18 @@ let
     meta.homepage = "https://github.com/neovim/nvimdev.nvim/";
   };
 
+  oceanic-material = buildVimPluginFrom2Nix {
+    pname = "oceanic-material";
+    version = "2020-11-02";
+    src = fetchFromGitHub {
+      owner = "glepnir";
+      repo = "oceanic-material";
+      rev = "900f487a1e8229a12f247a0cb7a533fe258945ae";
+      sha256 = "1i6k2p11bsvjrkn9sdkql0im8ys8l9y0l6i850n9hdzvq919cfxv";
+    };
+    meta.homepage = "https://github.com/glepnir/oceanic-material/";
+  };
+
   oceanic-next = buildVimPluginFrom2Nix {
     pname = "oceanic-next";
     version = "2021-01-24";
