@@ -16,7 +16,7 @@ fi
 
 # VSCode
 
-VSCODE_VER=$(curl --silent https://api.github.com/repos/Microsoft/vscode/releases/latest | jq --raw-output .tag_name)
+VSCODE_VER=$(curl --fail --silent https://api.github.com/repos/Microsoft/vscode/releases/latest | jq --raw-output .tag_name)
 sed -i "s/version = \".*\"/version = \"${VSCODE_VER}\"/" "$ROOT/vscode.nix"
 
 VSCODE_LINUX_URL="https://vscode-update.azurewebsites.net/${VSCODE_VER}/linux-x64/stable"
