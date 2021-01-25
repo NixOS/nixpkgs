@@ -12201,6 +12201,8 @@ in
 
   ccloud-cli = callPackage ../development/tools/ccloud-cli { };
 
+  hindsight = callPackage ../development/tools/hindsight { };
+
   htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
 
   hyenae = callPackage ../tools/networking/hyenae { };
