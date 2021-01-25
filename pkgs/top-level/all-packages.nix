@@ -29411,8 +29411,9 @@ in
 
   yaxg = callPackage ../tools/graphics/yaxg {};
 
-  yuzu = libsForQt5.callPackage ../misc/emulators/yuzu {
-    stdenv = gcc10Stdenv;
+  yuzu-mainline = import ../misc/emulators/yuzu {
+    branch = "mainline";
+    inherit pkgs;
   };
 
   zap = callPackage ../tools/networking/zap { };
