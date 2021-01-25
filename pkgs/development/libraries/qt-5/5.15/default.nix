@@ -132,10 +132,12 @@ let
         inherit developerBuild decryptSslTraffic;
       };
 
+      qt3d = callPackage ../modules/qt3d.nix {};
       qtcharts = callPackage ../modules/qtcharts.nix {};
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
+      qtgamepad = callPackage ../modules/qtgamepad.nix {};
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
@@ -147,6 +149,7 @@ let
       qtquick1 = null;
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
+      qtremoteobjects = callPackage ../modules/qtremoteobjects.nix {};
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
@@ -168,11 +171,11 @@ let
 
       env = callPackage ../qt-env.nix {};
       full = env "qt-full-${qtbase.version}" ([
-        qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
-        qtscript qtsensors qtserialport qtsvg qttools qttranslations
-        qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets
-        qtwebview qtx11extras qtxmlpatterns
+        qt3d qtcharts qtconnectivity qtdeclarative qtdoc qtgamepad
+        qtgraphicaleffects qtimageformats qtlocation qtmultimedia
+        qtquickcontrols qtquickcontrols2 qtremoteobjects qtscript qtsensors
+        qtserialport qtsvg qttools qttranslations qtvirtualkeyboard qtwebchannel
+        qtwebengine qtwebkit qtwebsockets qtwebview qtx11extras qtxmlpatterns
       ] ++ optional (!stdenv.isDarwin) qtwayland
         ++ optional (stdenv.isDarwin) qtmacextras);
 
