@@ -81,8 +81,9 @@ import ./make-test-python.nix ({ pkgs, ...} :
           base.wait_for_unit("searx-init")
           base.wait_for_file("/run/searx/settings.yml")
           output = base.succeed(
-              "${pkgs.yq-go}/bin/yq r /run/searx/settings.yml"
-              " 'engines.(name==startpage).shortcut'"
+              "${pkgs.yq-go}/bin/yq eval"
+              " '.engines[] | select(.name==\"startpage\") | .shortcut'"
+              " /run/searx/settings.yml"
           ).strip()
           assert output == "start", "Settings not merged"
 
