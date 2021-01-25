@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     # the .desktop is both invalid and pointless
-    rm $out/share/applications/qemu.desktop
+    rm -f $out/share/applications/qemu.desktop
 
     # copy qemu-ga (guest agent) to separate output
     mkdir -p $ga/bin
