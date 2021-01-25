@@ -1,7 +1,7 @@
 { stdenv, lib, fetchpatch
 , pkg-config, autoreconfHook
 , fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libgcrypt, libarchive, nspr, nss, popt, db, xz, python, lua, llvmPackages
-, sqlite
+, sqlite, zstd
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "man" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ cpio zlib bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
+  buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
                 ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     "--enable-python"
     "--enable-ndb"
     "--enable-sqlite"
+    "--enable-zstd"
     "--localstatedir=/var"
     "--sharedstatedir=/com"
   ];
