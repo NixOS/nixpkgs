@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, fetchurl, fetchpatch, fetchgit
+{ lib, callPackage, fetchurl, fetchpatch, fetchgit
 , ocaml-ng
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true

@@ -1,4 +1,4 @@
-{ lib, stdenv, pkg-config, fetchPypi, buildPythonPackage
+{ lib, pkg-config, fetchPypi, buildPythonPackage
 , buildPackages
 , zstd, pytest }:
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pyside, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pyside, pytest }:
 
 buildPythonPackage rec {
   pname = "QtPy";

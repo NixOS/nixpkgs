@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv }:
+{ pkgs, lib }:
 
 rec {
 

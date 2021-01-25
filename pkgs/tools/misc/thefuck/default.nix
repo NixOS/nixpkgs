@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonApplication
+{ lib, fetchFromGitHub, buildPythonApplication
 , colorama, decorator, psutil, pyte, six
 , pytest, pytest-mock
 }:

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, pycodestyle, isort }:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, pycodestyle, isort }:
 
 buildPythonPackage rec {
   pname = "avro";

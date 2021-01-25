@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, nose }:
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, nose }:
 
 buildPythonPackage rec {
   pname = "rope";

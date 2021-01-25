@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, beautifulsoup4, vcrpy, mock
+{ lib, buildPythonPackage, fetchPypi, beautifulsoup4, vcrpy, mock
 , django-mailman3, mailmanclient, readme_renderer
 }:
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPerlPackage, shortenPerlShebang
+{ lib, fetchFromGitHub, buildPerlPackage, shortenPerlShebang
 , DBDmysql, DBI, IOSocketSSL, TermReadKey
 }:
 

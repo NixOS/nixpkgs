@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 buildGoModule rec {
   pname = "terraform-provider-vpsadmin";
   version = "0.1.0";

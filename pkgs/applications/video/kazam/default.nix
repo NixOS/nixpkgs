@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, substituteAll, python3, gst_all_1, wrapGAppsHook, gobject-introspection
+{ lib, fetchurl, substituteAll, python3, gst_all_1, wrapGAppsHook, gobject-introspection
 , gtk3, libwnck3, keybinder3, intltool, libcanberra-gtk3, libappindicator-gtk3, libpulseaudio
 , fetchpatch }:
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, six, httplib2, requests }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, six, httplib2, requests }:
 
 buildPythonPackage rec {
   pname = "mailmanclient";

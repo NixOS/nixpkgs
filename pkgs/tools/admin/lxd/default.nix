@@ -1,4 +1,4 @@
-{ lib, stdenv, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
+{ lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
 , squashfsTools, iproute, iptables, ebtables, iptables-nftables-compat, libcap
 , libco-canonical, dqlite, raft-canonical, sqlite-replication, udev

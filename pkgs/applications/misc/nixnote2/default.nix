@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, boost
+{ lib, mkDerivation, fetchFromGitHub, boost
 , qtbase, qtwebkit, poppler, qmake, hunspell, html-tidy}:
 
 mkDerivation rec {

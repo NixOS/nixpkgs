@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
+{ lib, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
 , pyudev, six, libselinux, multipath-tools, lsof, util-linux
 }:
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, flake8, pytest, pytestcov, pexpect }:
+{ lib, buildPythonPackage, fetchFromGitHub, flake8, pytest, pytestcov, pexpect }:
 
 buildPythonPackage rec {
   pname = "readchar";

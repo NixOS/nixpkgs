@@ -1,5 +1,5 @@
 { mkXfceDerivation
-, lib, stdenv
+, lib
 , intltool
 , libxfce4ui
 , xfce4-panel

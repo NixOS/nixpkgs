@@ -1,4 +1,4 @@
-{ stdenv, lib, python3, fetchFromGitHub, ncurses }:
+{ lib, python3, fetchFromGitHub, ncurses }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "swaglyrics";

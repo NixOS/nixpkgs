@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, ninja, boost, meson, pkg-config, nix, isPy3k, python }:
+{ lib, buildPythonPackage, fetchFromGitHub, ninja, boost, meson, pkg-config, nix, isPy3k, python }:
 
 buildPythonPackage rec {
   pname = "pythonix";

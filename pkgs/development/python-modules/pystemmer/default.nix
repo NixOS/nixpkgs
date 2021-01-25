@@ -1,4 +1,4 @@
-{ lib, stdenv, python, fetchPypi, buildPythonPackage, cython }:
+{ lib, python, fetchPypi, buildPythonPackage, cython }:
 
 buildPythonPackage rec {
   pname = "PyStemmer";

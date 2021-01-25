@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub }:
+{ lib, mkDerivation, fetchFromGitHub }:
 
 mkDerivation rec {
   version = "compat-2.6.1";

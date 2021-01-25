@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "svg.path";
   version = "4.0.2";

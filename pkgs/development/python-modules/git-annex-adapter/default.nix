@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch, substituteAll
+{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch, substituteAll
 , python, util-linux, pygit2, gitMinimal, git-annex, cacert
 }:
 

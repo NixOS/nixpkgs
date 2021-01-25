@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, requests, flask-cors, dbus-python, pytestCheckHook, mock, isPy27 }:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, flask-cors, dbus-python, pytestCheckHook, mock, isPy27 }:
 
 buildPythonPackage rec {
   pname = "SwSpotify";

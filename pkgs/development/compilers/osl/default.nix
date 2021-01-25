@@ -1,4 +1,4 @@
-{ clangStdenv, lib, stdenv, fetchFromGitHub, cmake, zlib, openexr,
+{ clangStdenv, lib, fetchFromGitHub, cmake, zlib, openexr,
 openimageio, llvm, boost165, flex, bison, partio, pugixml,
 util-linux, python
 }:

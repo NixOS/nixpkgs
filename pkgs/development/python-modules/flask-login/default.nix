@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonAtLeast
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast
 , flask, blinker, nose, mock, semantic-version }:
 
 buildPythonPackage rec {

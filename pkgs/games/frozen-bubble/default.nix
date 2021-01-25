@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perlPackages, pkg-config, SDL, SDL_mixer, SDL_Pango, glib }:
+{ lib, fetchurl, perlPackages, pkg-config, SDL, SDL_mixer, SDL_Pango, glib }:
 
 perlPackages.buildPerlModule {
   pname = "frozen-bubble";

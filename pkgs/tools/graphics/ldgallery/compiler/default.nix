@@ -1,7 +1,7 @@
 # generated with cabal2nix by ./generate.sh
 { mkDerivation, aeson, base, cmdargs, containers, data-ordlist
 , directory, fetchgit, filepath, Glob, hpack, parallel-io, process
-, safe, lib, stdenv, text, time, yaml
+, safe, lib, text, time, yaml
 }:
 mkDerivation {
   pname = "ldgallery-compiler";

@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , python3
 , fetchFromGitHub
 }:

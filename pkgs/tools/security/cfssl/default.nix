@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, go-rice }:
+{ lib, buildGoModule, fetchFromGitHub, go-rice }:
 
 buildGoModule rec {
   pname = "cfssl";

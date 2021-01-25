@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, python3Packages, fetchFromGitLab, cacert,
+{ lib, callPackage, python3Packages, fetchFromGitLab, cacert,
   rustPlatform, bubblewrap, git, perlPackages, imagemagick7, fetchurl, fetchzip,
   jre, makeWrapper, tr-patcher, tes3cmd }:
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, dateutil, lxml }:
+{ lib, buildPythonPackage, fetchPypi, dateutil, lxml }:
 
 buildPythonPackage rec {
   pname = "feedgen";

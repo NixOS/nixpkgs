@@ -3,7 +3,7 @@
 , lxml
 , pillow
 , reportlab
-, lib, stdenv
+, lib
 }:
 buildPythonPackage rec {
   pname = "hocr-tools";

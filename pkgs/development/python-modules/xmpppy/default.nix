@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchurl, isPy3k }:
+{ lib, buildPythonPackage, fetchurl, isPy3k }:
 buildPythonPackage rec {
   pname = "xmpp.py";
   version = "0.5.0rc1";

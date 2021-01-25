@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook, chromaprint }:
+{ lib, fetchFromGitHub, python3Packages, wrapQtAppsHook, chromaprint }:
 
 python3Packages.buildPythonApplication rec {
   pname = "puddletag";

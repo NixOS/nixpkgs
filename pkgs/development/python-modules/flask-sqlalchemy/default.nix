@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, flask, mock, sqlalchemy, pytest }:
+{ lib, buildPythonPackage, fetchPypi, flask, mock, sqlalchemy, pytest }:
 
 buildPythonPackage rec {
   pname = "Flask-SQLAlchemy";

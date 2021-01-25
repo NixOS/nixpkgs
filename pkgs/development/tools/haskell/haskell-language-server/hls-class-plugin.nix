@@ -1,6 +1,6 @@
 { mkDerivation, aeson, base, containers, fetchgit, ghc
 , ghc-exactprint, ghcide, haskell-lsp, hls-plugin-api, lens, shake
-, lib, stdenv, text, transformers, unordered-containers
+, lib, text, transformers, unordered-containers
 }:
 mkDerivation {
   pname = "hls-class-plugin";

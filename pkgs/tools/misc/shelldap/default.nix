@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perlPackages }:
+{ lib, fetchurl, perlPackages }:
 perlPackages.buildPerlPackage rec {
   pname = "shelldap";
   version = "1.4.0";

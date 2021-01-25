@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, meson, ninja, pkg-config, nix-update-script
+{ lib, fetchgit, meson, ninja, pkg-config, nix-update-script
 , python3, gtk3, libsecret, gst_all_1, webkitgtk, glib
 , glib-networking, gtkspell3, hunspell, desktop-file-utils
 , gobject-introspection, wrapGAppsHook, gnome3 }:

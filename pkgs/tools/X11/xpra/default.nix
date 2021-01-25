@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkg-config, writeText
+{ lib, fetchurl, callPackage, substituteAll, python3, pkg-config, writeText
 , xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
 , wrapGAppsHook, xorgserver, getopt, xauth, util-linux, which
 , ffmpeg, x264, libvpx, libwebp, x265

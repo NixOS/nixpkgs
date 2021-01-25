@@ -2,7 +2,7 @@
 , cargo
 , lib
 , rustPlatform
-, stdenv
+
 }:
 
 rustPlatform.buildRustPackage rec {

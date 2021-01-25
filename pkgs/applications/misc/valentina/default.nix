@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchhg
+{ mkDerivation, lib, fetchhg
 , qmake, qttools
 , qtbase, qtsvg, qtxmlpatterns
 , poppler_utils

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoPackage, git, which, removeReferencesTo, go }:
+{ lib, fetchFromGitHub, buildGoPackage, git, which, removeReferencesTo, go }:
 
 buildGoPackage rec {
   pname = "quorum";

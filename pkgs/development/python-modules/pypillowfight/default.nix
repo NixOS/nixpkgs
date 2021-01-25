@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitLab, nose, pillow
+{ lib, buildPythonPackage, fetchFromGitLab, nose, pillow
 , isPy3k, isPyPy
 }:
 buildPythonPackage rec {

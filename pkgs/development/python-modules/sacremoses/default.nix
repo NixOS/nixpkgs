@@ -1,5 +1,5 @@
 { buildPythonPackage
-, lib, stdenv
+, lib
 , fetchFromGitHub
 , click
 , six

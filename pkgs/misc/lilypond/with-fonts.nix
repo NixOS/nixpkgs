@@ -1,4 +1,4 @@
-{ lib, stdenv, lndir, symlinkJoin, makeWrapper
+{ lib, lndir, symlinkJoin, makeWrapper
 , lilypond, openlilylib-fonts
 }:
 

@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchpatch, fetchFromGitHub, qmake, pkg-config
+{ mkDerivation, lib, fetchpatch, fetchFromGitHub, qmake, pkg-config
 , qtbase, qtsvg, qttools, qtserialport, boost, libgit2
 }:
 

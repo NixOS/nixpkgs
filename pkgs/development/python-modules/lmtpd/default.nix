@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, isPy3k, lib, stdenv }:
+{ buildPythonPackage, fetchPypi, isPy3k, lib }:
 
 buildPythonPackage rec {
   pname = "lmtpd";

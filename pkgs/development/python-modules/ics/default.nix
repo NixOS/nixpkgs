@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , tatsu, arrow
 , pytestCheckHook, pytest-flakes
 }:

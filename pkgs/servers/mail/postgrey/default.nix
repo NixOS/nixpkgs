@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, lib, runCommand, postfix }:
+{ fetchurl, perlPackages, lib, runCommand, postfix }:
 
 let
     mk-perl-flags = inputs: lib.concatStringsSep " " (map (dep: "-I ${dep}/${perlPackages.perl.libPrefix}") inputs);

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, fetchpatch }:
+{ lib, fetchFromGitHub, buildGoModule, fetchpatch }:
 
 buildGoModule rec {
   version = "0.6.0";

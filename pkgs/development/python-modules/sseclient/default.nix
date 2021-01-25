@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , requests, six
 , backports_unittest-mock, pytestCheckHook, pytestrunner }:
 

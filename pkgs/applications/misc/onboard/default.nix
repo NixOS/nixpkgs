@@ -1,5 +1,5 @@
 { fetchurl
-, lib, stdenv
+, lib
 , substituteAll
 , aspellWithDicts
 , at-spi2-core ? null

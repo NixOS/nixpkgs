@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchurl, fetchFromGitHub, go-bindata }:
+{ lib, buildGoPackage, fetchurl, fetchFromGitHub, go-bindata }:
 
 let
   version = "1.6.4";

@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgs, erlang }:
+{ lib, pkgs, erlang }:
 
 let
   inherit (lib) makeExtensible;

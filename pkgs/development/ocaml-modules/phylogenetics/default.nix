@@ -1,4 +1,4 @@
-{ lib, stdenv, buildDunePackage, fetchFromGitHub, ppx_deriving
+{ lib, buildDunePackage, fetchFromGitHub, ppx_deriving
 , alcotest, angstrom-unix, biocaml, gnuplot, gsl, lacaml, menhir, owl, printbox }:
 
 buildDunePackage rec {

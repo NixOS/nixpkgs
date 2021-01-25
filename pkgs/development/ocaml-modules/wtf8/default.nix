@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildDunePackage }:
+{ lib, fetchurl, buildDunePackage }:
 
 buildDunePackage rec {
   pname = "wtf8";

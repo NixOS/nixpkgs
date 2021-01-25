@@ -1,5 +1,5 @@
 { mkDerivation, aeson, aeson-casing, base, fetchgit, hashable
-, hpack, lib, stdenv, template-haskell, text, th-lift-instances
+, hpack, lib, template-haskell, text, th-lift-instances
 , unordered-containers
 }:
 mkDerivation {

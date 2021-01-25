@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip {
   name = "fira-code-symbols-20160811";

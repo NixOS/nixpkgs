@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, rustPlatform, runCommand } :
+{ lib, fetchFromGitHub, fetchurl, rustPlatform, runCommand } :
 with rustPlatform;
 
 buildRustPackage rec {

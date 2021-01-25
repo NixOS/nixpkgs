@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchgit, qtbase, cmake, asciidoc, docbook_xsl, json_c, mesa_glu, freeglut, trace-cmd, pkg-config }:
+{ lib, mkDerivation, fetchgit, qtbase, cmake, asciidoc, docbook_xsl, json_c, mesa_glu, freeglut, trace-cmd, pkg-config }:
 mkDerivation {
   pname = "kernelshark";
   version = "1.1.0";

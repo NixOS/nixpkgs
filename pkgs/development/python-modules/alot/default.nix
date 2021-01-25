@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, python, fetchFromGitHub, fetchpatch, isPy3k
+{ lib, buildPythonPackage, python, fetchFromGitHub, fetchpatch, isPy3k
 , notmuch, urwid, urwidtrees, twisted, python_magic, configobj, mock, file, gpgme
 , service-identity
 , gnupg ? null, sphinx, awk ? null, procps ? null, future ? null

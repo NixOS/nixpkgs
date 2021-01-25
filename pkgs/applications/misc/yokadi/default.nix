@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPythonApplication, dateutil,
+{ lib, fetchurl, buildPythonApplication, dateutil,
   sqlalchemy, setproctitle, icalendar }:
 
 buildPythonApplication rec {

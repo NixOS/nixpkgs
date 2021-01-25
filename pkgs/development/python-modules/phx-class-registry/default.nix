@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "phx-class-registry";

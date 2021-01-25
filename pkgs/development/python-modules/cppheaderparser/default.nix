@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , ply
-, lib, stdenv
+, lib
 }:
 
 buildPythonPackage rec {

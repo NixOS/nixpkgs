@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, requests, pykerberos, mock }:
+{ lib, fetchFromGitHub, buildPythonPackage, requests, pykerberos, mock }:
 
 buildPythonPackage rec {
   pname = "requests-kerberos";

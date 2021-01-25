@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, mkDerivation
+{ lib, fetchFromGitHub, mkDerivation
 , cmake, libjpeg, libpng, libtiff, boost
 , qtbase, qttools }:
 

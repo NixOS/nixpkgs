@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, mpv, requests, python-mpv-jsonipc }:
+{ lib, buildPythonApplication, fetchFromGitHub, mpv, requests, python-mpv-jsonipc }:
 
 buildPythonApplication rec {
   pname = "plex-mpv-shim";

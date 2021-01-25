@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , fetchFromGitHub
 , crystal_0_34
 , crystal_0_35

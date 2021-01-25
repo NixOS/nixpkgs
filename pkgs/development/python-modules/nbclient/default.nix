@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder,
+{ lib, buildPythonPackage, fetchPypi, pythonOlder,
   async_generator, traitlets, nbformat, nest-asyncio, jupyter_client,
   pytest, xmltodict, nbconvert, ipywidgets
 , doCheck ? true

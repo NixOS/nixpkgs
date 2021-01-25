@@ -1,4 +1,4 @@
-{ lib, stdenv, git, fetchFromGitHub, rustPlatform }:
+{ lib, git, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fac-build";

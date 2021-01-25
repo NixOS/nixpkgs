@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, makeWrapper, nixosTests
+{ lib, buildGoPackage, fetchFromGitHub, makeWrapper, nixosTests
 , systemd, withSystemdSupport ? true }:
 
 with lib;

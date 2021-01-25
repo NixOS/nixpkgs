@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, service-identity, requests, six
+{ lib, fetchPypi, buildPythonPackage, service-identity, requests, six
 , mock, twisted, incremental, pep8, httpbin
 }:
 

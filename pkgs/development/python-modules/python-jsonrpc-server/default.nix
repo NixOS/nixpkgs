@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , pytestCheckHook, mock, pytestcov, coverage
 , future, futures, ujson, isPy38
 }:

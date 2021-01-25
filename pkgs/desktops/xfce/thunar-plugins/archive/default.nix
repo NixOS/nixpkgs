@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , mkXfceDerivation
 , gtk3
 , thunar

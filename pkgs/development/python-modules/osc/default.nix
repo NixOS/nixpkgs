@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, bashInteractive, urlgrabber
+{ lib, buildPythonPackage, fetchFromGitHub, bashInteractive, urlgrabber
 , m2crypto, rpm, chardet
 }:
 

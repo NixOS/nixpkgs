@@ -1,4 +1,6 @@
-{lib, stdenv, fetchurl}: stdenv.mkDerivation {
+{ lib, stdenv, fetchurl }:
+
+stdenv.mkDerivation {
   name = "meta-build-env-0.1";
   src = fetchurl {
     url = "http://www.meta-environment.org/releases/meta-build-env-0.1.tar.gz";

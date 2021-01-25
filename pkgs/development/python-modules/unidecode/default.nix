@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "Unidecode";

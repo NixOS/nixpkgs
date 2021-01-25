@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, libpcap }:
+{ lib, buildGoPackage, fetchFromGitHub, libpcap }:
 
 buildGoPackage rec {
   pname = "goreplay";

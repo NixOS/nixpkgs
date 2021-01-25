@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , pkg-config
 , systemd, libyaml, openzwave, cython, pyserial
 , six, pydispatcher, urwid }:

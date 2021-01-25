@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, qt5, git, cmake
+{ lib, fetchFromGitHub, rustPlatform, qt5, git, cmake
 , pkg-config, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {

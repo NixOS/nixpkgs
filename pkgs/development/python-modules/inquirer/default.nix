@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python-editor, readchar, blessed, pytest, pytestcov, pexpect, pytest-mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, python-editor, readchar, blessed, pytest, pytestcov, pexpect, pytest-mock }:
 
 buildPythonPackage rec {
   pname = "inquirer";

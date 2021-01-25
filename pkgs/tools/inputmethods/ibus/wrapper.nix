@@ -1,4 +1,4 @@
-{ lib, stdenv, runCommand, makeWrapper, lndir
+{ lib, runCommand, makeWrapper, lndir
 , dconf, hicolor-icon-theme, ibus, librsvg, plugins ? []
 }:
 

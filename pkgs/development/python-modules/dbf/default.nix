@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, aenum, isPy3k, pythonOlder, enum34, python }:
+{ lib, fetchPypi, buildPythonPackage, aenum, isPy3k, pythonOlder, enum34, python }:
 
 buildPythonPackage rec {
     pname = "dbf";

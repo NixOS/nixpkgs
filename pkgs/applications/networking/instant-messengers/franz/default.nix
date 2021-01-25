@@ -1,4 +1,4 @@
-{ lib, stdenv, mkFranzDerivation, fetchurl }:
+{ lib, mkFranzDerivation, fetchurl }:
 
 mkFranzDerivation rec {
   pname = "franz";

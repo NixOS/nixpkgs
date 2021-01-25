@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, python, isPy3k, glibcLocales }:
+{ lib, fetchPypi, buildPythonPackage, python, isPy3k, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "aenum";

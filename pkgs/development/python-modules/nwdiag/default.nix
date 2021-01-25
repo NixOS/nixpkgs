@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
+{ lib, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
 , blockdiag, setuptools
 }:
 

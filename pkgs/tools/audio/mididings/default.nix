@@ -1,4 +1,4 @@
-{ lib, stdenv, pythonPackages, fetchFromGitHub, pkg-config, glib, alsaLib, libjack2  }:
+{ lib, pythonPackages, fetchFromGitHub, pkg-config, glib, alsaLib, libjack2  }:
 
 pythonPackages.buildPythonApplication {
   version = "2015-11-17";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildDotnetPackage, dotnetPackages, gtksharp,
+{ lib, fetchFromGitHub, buildDotnetPackage, dotnetPackages, gtksharp,
   gettext }:
 
 let

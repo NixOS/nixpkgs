@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, stdenv, libffi, isPy3k, pyasn1, clint, ndg-httpsclient
+{ buildPythonPackage, lib, libffi, isPy3k, pyasn1, clint, ndg-httpsclient
 , protobuf, requests, args, gpapi, pyaxmlparser, fetchFromGitHub
 }:
 

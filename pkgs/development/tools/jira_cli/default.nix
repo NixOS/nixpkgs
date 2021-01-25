@@ -1,4 +1,4 @@
-{ lib, stdenv, libffi, openssl, python3Packages }:
+{ lib, libffi, openssl, python3Packages }:
 let
   inherit (python3Packages) fetchPypi buildPythonApplication vcrpy mock hiro;
 in

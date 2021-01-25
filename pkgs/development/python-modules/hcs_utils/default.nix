@@ -1,4 +1,4 @@
-{ lib, stdenv, pythonOlder, buildPythonPackage, fetchPypi, six, glibcLocales, pytest }:
+{ lib, pythonOlder, buildPythonPackage, fetchPypi, six, glibcLocales, pytest }:
 
 buildPythonPackage rec {
   pname = "hcs_utils";

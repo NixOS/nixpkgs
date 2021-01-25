@@ -1,9 +1,8 @@
-{ stdenv
+{ lib
 , python3
 , fetchFromGitHub
 , nixFlakes
 , git
-, lib
 }:
 
 python3.pkgs.buildPythonApplication rec {

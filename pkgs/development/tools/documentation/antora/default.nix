@@ -1,4 +1,4 @@
-{ lib, stdenv, nodePackages }:
+{ lib, nodePackages }:
 
 let
   linkNodeDeps = ({ pkg, deps, name ? "" }:

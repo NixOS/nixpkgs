@@ -1,5 +1,5 @@
 { mkDerivation
-, lib, stdenv
+, lib
 , fetchFromGitLab
 , pkg-config
 , cmake

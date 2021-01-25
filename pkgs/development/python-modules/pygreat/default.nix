@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, future, pyusb }:
+{ lib, buildPythonPackage, isPy3k, fetchFromGitHub, future, pyusb }:
 
 buildPythonPackage {
   pname = "pygreat";

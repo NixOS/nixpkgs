@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchzip, gobject-introspection, idna, libsoup, precis-i18n, pygobject3, pyopenssl }:
+{ lib, buildPythonPackage, fetchzip, gobject-introspection, idna, libsoup, precis-i18n, pygobject3, pyopenssl }:
 
 let
   pname = "nbxmpp";

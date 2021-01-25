@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , aiohttp, jsonrpc-base }:
 
 buildPythonPackage rec {

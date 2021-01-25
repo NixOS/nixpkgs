@@ -1,5 +1,5 @@
 { mkDerivation
-, lib, stdenv
+, lib
 , pkg-config
 , zlib
 , qtbase

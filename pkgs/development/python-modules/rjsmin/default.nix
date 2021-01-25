@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "rjsmin";
   version = "1.1.0";

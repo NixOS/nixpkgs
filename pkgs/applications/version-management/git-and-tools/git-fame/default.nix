@@ -1,4 +1,4 @@
-{ lib, stdenv, bundlerEnv, ruby, bundlerUpdateScript }:
+{ lib, bundlerEnv, ruby, bundlerUpdateScript }:
 
 bundlerEnv {
   inherit ruby;

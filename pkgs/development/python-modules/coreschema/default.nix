@@ -1,5 +1,5 @@
 {
-  lib, stdenv,
+  lib,
   fetchFromGitHub,
   buildPythonPackage,
   jinja2,

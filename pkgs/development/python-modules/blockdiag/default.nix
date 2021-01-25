@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , setuptools, funcparserlib, pillow, webcolors, reportlab, docutils
 }:
 

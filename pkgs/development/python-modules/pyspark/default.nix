@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib, stdenv, py4j }:
+{ buildPythonPackage, fetchPypi, lib, py4j }:
 
 buildPythonPackage rec {
   pname = "pyspark";

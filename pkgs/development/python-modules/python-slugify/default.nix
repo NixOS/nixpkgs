@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, python, text-unidecode }:
+{ lib, fetchPypi, buildPythonPackage, python, text-unidecode }:
 
 buildPythonPackage rec {
     pname = "python-slugify";

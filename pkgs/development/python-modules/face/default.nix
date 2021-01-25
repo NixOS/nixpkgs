@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, boltons, pytest }:
+{ lib, buildPythonPackage, fetchPypi, boltons, pytest }:
 
 buildPythonPackage rec {
   pname = "face";

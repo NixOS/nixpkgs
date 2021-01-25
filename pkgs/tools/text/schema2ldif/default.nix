@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl, makeWrapper, perlPackages }: stdenv.mkDerivation rec {
+{ lib, stdenv, fetchurl, makeWrapper, perlPackages }:
+
+stdenv.mkDerivation rec {
   pname = "schema2ldif";
   version = "1.3";
 

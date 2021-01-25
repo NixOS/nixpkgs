@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , pytest, pytestrunner, pyyaml, six, pathlib2, isPy27 }:
 
 buildPythonPackage rec {

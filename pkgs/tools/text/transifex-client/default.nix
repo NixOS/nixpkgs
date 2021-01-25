@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonApplication, fetchPypi
+{ lib, buildPythonApplication, fetchPypi
 , python-slugify, requests, urllib3, six, setuptools }:
 
 buildPythonApplication rec {

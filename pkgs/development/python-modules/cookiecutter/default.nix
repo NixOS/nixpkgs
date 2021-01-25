@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPyPy
+{ lib, buildPythonPackage, fetchPypi, isPyPy
 , pytest, pytestcov, pytest-mock, freezegun
 , jinja2, future, binaryornot, click, whichcraft, poyo, jinja2_time, requests
 , python-slugify }:

@@ -1,4 +1,4 @@
-{ stdenv, eggDerivation, fetchurl, chickenEggs }:
+{ eggDerivation, fetchurl, chickenEggs }:
 
 # Note: This mostly reimplements the default.nix already contained in
 # the tarball. Is there a nicer way than duplicating code?

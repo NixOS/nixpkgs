@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages, glibcLocales }:
+{ lib, fetchFromGitHub, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "i3minator";

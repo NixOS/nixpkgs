@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , crayons, flask, flask-caching, gunicorn, maya, meinheld, whitenoise }:
 
 buildPythonPackage rec {

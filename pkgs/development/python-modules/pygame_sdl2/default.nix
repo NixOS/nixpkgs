@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchurl, isPy27
+{ lib, buildPythonPackage, fetchurl, isPy27
 , cython, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, libjpeg, libpng }:
 
 buildPythonPackage rec {

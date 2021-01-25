@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , colorama, mypy, pyyaml, regex
 , dataclasses, typing
 , pytestrunner, pytest-mypy

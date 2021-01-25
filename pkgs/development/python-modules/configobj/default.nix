@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage
+{ lib, buildPythonPackage
 , fetchFromGitHub
 , six
 , mock, pytest

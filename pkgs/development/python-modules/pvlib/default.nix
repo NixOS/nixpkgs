@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, numpy, pandas, pytz, six
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, numpy, pandas, pytz, six
 , pytestCheckHook, flaky, mock, pytest-mock, requests }:
 
 buildPythonPackage rec {

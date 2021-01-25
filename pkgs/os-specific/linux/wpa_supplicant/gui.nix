@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchpatch, qtbase, qmake, inkscape, imagemagick, wpa_supplicant }:
+{ lib, mkDerivation, fetchpatch, qtbase, qmake, inkscape, imagemagick, wpa_supplicant }:
 
 mkDerivation {
   name = "wpa_gui-${wpa_supplicant.version}";

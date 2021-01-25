@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, glibcLocales, pandoc, python3 }:
+{ lib, fetchFromGitHub, glibcLocales, pandoc, python3 }:
 
 let
   pythonPackages = python3.pkgs;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchPypi, buildPythonPackage, django }:
+{ lib, fetchurl, fetchPypi, buildPythonPackage, django }:
 
 buildPythonPackage rec {
   pname = "django-ranged-response";

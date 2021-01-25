@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl, pkg-config, makeDesktopItem
+{ mkDerivation, lib, fetchurl, pkg-config, makeDesktopItem
 , qtbase, qttools, qtmultimedia, qtquick1, qtquickcontrols
 , openssl, protobuf, qmake
 }:

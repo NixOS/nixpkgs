@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, cdparanoia, cdrdao, flac
+{ lib, fetchFromGitHub, python3, cdparanoia, cdrdao, flac
 , sox, accuraterip-checksum, libsndfile, util-linux, substituteAll }:
 
 python3.pkgs.buildPythonApplication rec {

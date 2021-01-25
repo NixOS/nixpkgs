@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, stdenv, lxml, click, fetchFromGitHub, pytest, isPy3k }:
+{ buildPythonPackage, lib, lxml, click, fetchFromGitHub, pytest, isPy3k }:
 
 buildPythonPackage rec {
   version = "0.3.24";

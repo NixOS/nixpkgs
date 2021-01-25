@@ -22,7 +22,7 @@
 , qtbase
 , qtimageformats
 , qttools
-, lib, stdenv
+, lib
 }:
 
 let

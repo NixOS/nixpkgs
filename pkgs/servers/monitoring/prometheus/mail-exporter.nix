@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
 
 buildGoModule {
   pname = "mailexporter";

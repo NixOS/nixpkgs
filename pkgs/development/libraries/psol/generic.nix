@@ -1,4 +1,4 @@
-{ fetchzip, lib, stdenv }:
+{ fetchzip, lib }:
 { version, sha256 }:
 { inherit version; } // fetchzip {
   inherit sha256;

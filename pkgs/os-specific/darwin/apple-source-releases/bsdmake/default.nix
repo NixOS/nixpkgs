@@ -1,4 +1,4 @@
-{ lib, stdenv, appleDerivation, makeWrapper }:
+{ lib, appleDerivation, makeWrapper }:
 
 appleDerivation {
   nativeBuildInputs = [ makeWrapper ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, glib, gtk3, wrapGAppsHook }:
+{ lib, fetchFromGitHub, rustPlatform, glib, gtk3, wrapGAppsHook }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-query-tree-viewer";

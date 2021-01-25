@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pythonPackages }:
+{ lib, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "menumaker";

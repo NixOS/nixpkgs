@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, setuptools, swig, verilog }:
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools, swig, verilog }:
 
 buildPythonPackage rec {
   pname = "cocotb";

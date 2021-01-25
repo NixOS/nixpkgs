@@ -1,4 +1,4 @@
-{ buildGoPackage, lib, stdenv, fetchFromGitHub }:
+{ buildGoPackage, lib, fetchFromGitHub }:
 
 buildGoPackage rec {
   version = "2.2.0";

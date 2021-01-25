@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , pkg-config
 , fetchurl
 , meson

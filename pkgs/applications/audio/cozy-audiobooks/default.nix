@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, fetchFromGitHub
 , ninja
 , meson
 , pkg-config

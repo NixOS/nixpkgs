@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub
+{ lib, mkDerivation, fetchFromGitHub
 , pkg-config, cmake, alsaLib, libjack2, dbus, qtbase, qttools, qtx11extras
 # Enable jack session support
 , jackSession ? false

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, requests, oauthlib }:
+{ lib, buildPythonPackage, fetchPypi, requests, oauthlib }:
 
 buildPythonPackage rec {
   pname = "discogs-client";

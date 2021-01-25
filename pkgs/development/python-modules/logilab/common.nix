@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, unittest2, six }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, unittest2, six }:
 
 buildPythonPackage rec {
   pname = "logilab-common";

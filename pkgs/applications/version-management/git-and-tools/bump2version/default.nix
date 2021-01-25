@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, isPy27, pytest, testfixtures, lib }:
+{ buildPythonApplication, fetchFromGitHub, isPy27, pytest, testfixtures, lib }:
 
 buildPythonApplication rec {
   pname = "bump2version";

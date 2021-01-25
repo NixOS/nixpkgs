@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchPypi,
   m2r, setuptools_scm, six, attrs }:
 
 buildPythonPackage rec {

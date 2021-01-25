@@ -2,7 +2,7 @@
 , criterion, fetchgit, file-embed, hashable, hashtables, hasql
 , hasql-pool, hasql-transaction, monad-control, mtl
 , postgresql-binary, postgresql-libpq, resource-pool, retry
-, scientific, lib, stdenv, template-haskell, text, text-builder, th-lift
+, scientific, lib, template-haskell, text, text-builder, th-lift
 , th-lift-instances, time, transformers-base, uuid, vector
 }:
 mkDerivation {

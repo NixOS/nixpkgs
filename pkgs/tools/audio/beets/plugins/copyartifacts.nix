@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, beets, pythonPackages, glibcLocales }:
+{ fetchFromGitHub, beets, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication {
   name = "beets-copyartifacts";

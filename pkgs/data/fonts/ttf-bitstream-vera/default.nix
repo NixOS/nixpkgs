@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip }:
+{ lib, fetchzip }:
 let
   pname = "ttf-bitstream-vera";
   version = "1.10";

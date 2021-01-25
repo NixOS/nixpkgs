@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python2Packages }:
+{ lib, fetchurl, python2Packages }:
 
 let version = "0.9.6.4"; in
 

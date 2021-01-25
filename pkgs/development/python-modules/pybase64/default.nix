@@ -1,4 +1,4 @@
-{ buildPythonPackage, isPy3k, lib, stdenv, fetchPypi, six, pytest }:
+{ buildPythonPackage, isPy3k, lib, fetchPypi, six, pytest }:
 
 buildPythonPackage rec {
   pname = "pybase64";

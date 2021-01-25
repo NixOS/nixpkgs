@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools_scm, mock }:
+{ lib, buildPythonPackage, fetchPypi, setuptools_scm, mock }:
 
 buildPythonPackage rec {
   pname = "backports.unittest_mock";

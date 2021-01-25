@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication {
   name = "python2nix-20140927";

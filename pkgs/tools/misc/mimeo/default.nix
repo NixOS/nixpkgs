@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, desktop-file-utils, file, python3Packages }:
+{ lib, fetchurl, desktop-file-utils, file, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mimeo";

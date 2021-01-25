@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pythonPackages, gettext, klick}:
+{ lib, fetchurl, pythonPackages, gettext, klick}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "gtklick";

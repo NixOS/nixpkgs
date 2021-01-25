@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, pkg-config,
+{ lib, buildGoPackage, fetchFromGitHub, pkg-config,
   cairo, gdk-pixbuf, glib, gnome3, wrapGAppsHook, gtk3 }:
 
 buildGoPackage rec {

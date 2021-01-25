@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoPackage, m4 }:
+{ lib, fetchFromGitHub, buildGoPackage, m4 }:
 
 buildGoPackage rec {
   name = "localtime-2017-11-07";

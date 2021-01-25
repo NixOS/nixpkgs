@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl, unzip, ... }: stdenv.mkDerivation rec {
+{ lib, stdenv, fetchurl, unzip, ... }:
+
+stdenv.mkDerivation rec {
   pname = "scriptaculous";
   version = "1.9.0";
 

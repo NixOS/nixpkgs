@@ -1,4 +1,4 @@
-{ lib, stdenv, pythonPackages }:
+{ lib, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "dotfiles";

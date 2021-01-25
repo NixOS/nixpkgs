@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPythonPackage, isPy27, pep8, nose, unittest2, docutils
+{ lib, fetchurl, buildPythonPackage, isPy27, pep8, nose, unittest2, docutils
 , blockdiag
 }:
 

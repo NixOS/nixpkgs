@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, flask, wtforms, nose }:
+{ lib, fetchPypi, buildPythonPackage, flask, wtforms, nose }:
 
 buildPythonPackage rec {
   pname = "Flask-WTF";

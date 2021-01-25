@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl, cmake, pkg-config
+{ mkDerivation, lib, fetchurl, cmake, pkg-config
 , alsaLib, fftw, flac, lame, libjack2, libmad, libpulseaudio
 , libsamplerate, libsndfile, libvorbis, portaudio, qtbase, wavpack
 }:

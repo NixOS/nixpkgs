@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, keybase }:
+{ lib, buildGoPackage, fetchFromGitHub, keybase }:
 
 buildGoPackage {
   pname = "kbfs";

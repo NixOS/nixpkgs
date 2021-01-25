@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python27Packages, geoip }:
+{ lib, fetchFromGitHub, python27Packages, geoip }:
 
 with lib;
 

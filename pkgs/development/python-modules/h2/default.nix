@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , enum34, hpack, hyperframe, pytestCheckHook, hypothesis }:
 
 buildPythonPackage rec {

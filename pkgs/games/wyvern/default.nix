@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , fetchgit
 , rustPlatform
 , unzip

@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, i3, autoreconfHook }:
+{ fetchurl, lib, i3, autoreconfHook }:
 
 i3.overrideAttrs (oldAttrs : rec {
 

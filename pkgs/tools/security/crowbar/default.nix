@@ -3,7 +3,7 @@
 , nmap
 , openvpn
 , python3Packages
-, lib, stdenv
+, lib
 , tigervnc
 }:
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, appleDerivation, cpio, xnu, Libc, Libm, libdispatch, cctools, Libinfo
+{ lib, appleDerivation, cpio, xnu, Libc, Libm, libdispatch, cctools, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
 , copyfile, removefile, libresolv, Libnotify, libplatform, libpthread
 , mDNSResponder, launchd, libutil, hfs, darling, darwin-stubs }:

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , django_environ, mock, django
 , pytest, pytestrunner, pytest-django
 }:

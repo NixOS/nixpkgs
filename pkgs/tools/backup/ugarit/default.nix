@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, eggDerivation, fetchegg }:
+{ pkgs, lib, eggDerivation, fetchegg }:
 let
   eggs = import ./eggs.nix { inherit eggDerivation fetchegg; };
 in with pkgs; eggDerivation rec {

@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, sqlite }: let
+{ lib, rustPlatform, fetchFromGitHub, sqlite }: let
 
 manifest = {
   description = "Bukubrow extension host application";

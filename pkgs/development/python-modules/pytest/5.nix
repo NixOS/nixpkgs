@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
 , atomicwrites
 , attrs
 , funcsigs

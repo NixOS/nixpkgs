@@ -1,5 +1,5 @@
 { fetchFromGitHub
-, lib, stdenv
+, lib
 , mkDerivation
 , SDL2
 , libGL

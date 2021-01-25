@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, agate, dbf, dbfread }:
+{ lib, fetchPypi, buildPythonPackage, agate, dbf, dbfread }:
 
 buildPythonPackage rec {
     pname = "agate-dbf";
