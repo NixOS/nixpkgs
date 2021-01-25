@@ -7133,6 +7133,8 @@ in
   inherit (callPackages ../tools/security/proxmark3 { gcc-arm-embedded = gcc-arm-embedded-8; })
     proxmark3 proxmark3-unstable;
 
+  proxmark3-rrg = libsForQt5.callPackage ../tools/security/proxmark3/proxmark3-rrg.nix { };
+
   proxychains = callPackage ../tools/networking/proxychains { };
 
   proxify = callPackage ../tools/networking/proxify { };
