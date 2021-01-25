@@ -61,6 +61,7 @@
 , "coinmon"
 , "configurable-http-proxy"
 , "cordova"
+, "cors-backdoor"
 , "cpy-cli"
 , "create-cycle-app"
 , "create-react-app"
