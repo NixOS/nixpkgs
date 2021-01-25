@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     install -Dm755 hhexen-gl -t $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux port of Raven Game's Hexen";
     homepage = "http://hhexen.sourceforge.net/hhexen.html";
     license = licenses.gpl2Plus;
