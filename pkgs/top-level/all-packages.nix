@@ -721,6 +721,11 @@ in
 
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
+  ajour = callPackage ../tools/games/ajour {
+    inherit (gnome3) zenity;
+    inherit (plasma5Packages) kdialog;
+  };
+
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
   metapixel = callPackage ../tools/graphics/metapixel { };
