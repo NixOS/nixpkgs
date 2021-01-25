@@ -1,6 +1,6 @@
-{ pname, version, src, branch
-, stdenv, fetchFromGitHub, wrapQtAppsHook
-, cmake, pkgconfig
+{ pname, version, src, branchName
+, stdenv, lib, fetchFromGitHub, wrapQtAppsHook
+, cmake, pkg-config
 , libpulseaudio, libjack2, alsaLib, sndio, ecasound
 , vulkan-loader, vulkan-headers
 , qtbase, qtwebengine, qttools
@@ -19,7 +19,7 @@
 stdenv.mkDerivation rec {
   inherit pname version src;
 
-  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [
     libpulseaudio libjack2 alsaLib sndio ecasound
     vulkan-loader vulkan-headers
@@ -36,10 +36,16 @@ stdenv.mkDerivation rec {
     ffmpeg
   ];
 
-  cmakeFlags = [ "-DENABLE_QT_TRANSLATION=ON" "-DYUZU_USE_QT_WEB_ENGINE=ON" "-DUSE_DISCORD_PRESENCE=ON" ];
+  cmakeFlags = [
+    "-DENABLE_QT_TRANSLATION=ON"
+    "-DYUZU_USE_QT_WEB_ENGINE=ON"
+    "-DUSE_DISCORD_PRESENCE=ON"
+  ];
 
   # Trick the configure system. This prevents a check for submodule directories.
-  preConfigure = "rm -f .gitmodules";
+  preConfigure = ''
+    rm -f .gitmodules
+  '';
 
   # Fix vulkan detection
   postFixup = ''
@@ -47,9 +53,9 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/yuzu-cmd --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://yuzu-emu.org";
-    description = "The ${branch} branch of an experimental Nintendo Switch emulator written in C++";
+    description = "The ${branchName} branch of an experimental Nintendo Switch emulator written in C++";
     longDescription = ''
       An experimental Nintendo Switch emulator written in C++.
       Using the mainline branch is recommanded for general usage.
