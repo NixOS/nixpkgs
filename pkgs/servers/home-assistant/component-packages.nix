@@ -270,7 +270,7 @@
     "folder_watcher" = ps: with ps; [ watchdog ];
     "foobot" = ps: with ps; [ ]; # missing inputs: foobot_async
     "forked_daapd" = ps: with ps; [ ]; # missing inputs: pyforked-daapd pylibrespot-java
-    "fortios" = ps: with ps; [ ]; # missing inputs: fortiosapi
+    "fortios" = ps: with ps; [ fortiosapi ];
     "foscam" = ps: with ps; [ ]; # missing inputs: libpyfoscam
     "foursquare" = ps: with ps; [ aiohttp-cors ];
     "free_mobile" = ps: with ps; [ ]; # missing inputs: freesms

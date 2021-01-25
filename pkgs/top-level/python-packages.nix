@@ -2390,6 +2390,8 @@ in {
 
   forbiddenfruit = callPackage ../development/python-modules/forbiddenfruit { };
 
+  fortiosapi = callPackage ../development/python-modules/fortiosapi { };
+
   FormEncode = callPackage ../development/python-modules/FormEncode { };
 
   foundationdb51 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb51; };
