@@ -10,6 +10,7 @@
 , unzip
 , which
 , gmp
+, libsodium
 , python3
 , sqlite
 , zlib
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autogen autoconf automake gettext libtool pkg-config py3 unzip which ];
 
-  buildInputs = [ gmp sqlite zlib ];
+  buildInputs = [ gmp libsodium sqlite zlib ];
 
   postPatch = ''
     patchShebangs \
