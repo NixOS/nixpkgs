@@ -1050,6 +1050,8 @@ in {
 
   brotlipy = callPackage ../development/python-modules/brotlipy { };
 
+  brottsplatskartan = callPackage ../development/python-modules/brottsplatskartan { };
+
   browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
 
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy { });
