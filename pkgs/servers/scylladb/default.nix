@@ -98,5 +98,6 @@ gcc8Stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     hydraPlatforms = []; # It's huge ATM, about 18 GB.
     maintainers = [ lib.maintainers.farlion ];
+    broken = true;
   };
 }
