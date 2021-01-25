@@ -6,13 +6,13 @@ let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wi
 
 in stdenv.mkDerivation rec {
   name = "rtl8192eu-${kernel.version}-${version}";
-  version = "4.4.1.20200620";
+  version = "unstable-2021-01-11";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = "rtl8192eu-linux-driver";
-    rev = "925ac2be34dd608a7ca42daebf9713f0c1bcec74";
-    sha256 = "159vg0scq47wnn600karpgzx3naaiyl1rg8608c8d28nhm62gvjz";
+    rev = "faf68bbf82623335e7997a473f9222751e275927";
+    sha256 = "1rz1j1yy66nwbxqsd7v9albhfjal210g8xis4vqmjk96zk0fz86r";
   };
 
   hardeningDisable = [ "pic" ];
