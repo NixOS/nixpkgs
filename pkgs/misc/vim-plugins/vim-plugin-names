@@ -135,6 +135,7 @@ gfanto/fzf-lsp.nvim@main
 gibiansky/vim-textobj-haskell
 gioele/vim-autoswap
 glepnir/galaxyline.nvim@main
+glepnir/lspsaga.nvim@main
 glts/vim-textobj-comment
 godlygeek/csapprox
 godlygeek/tabular
