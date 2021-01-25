@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
     "-Dxkb-config-extra-path=/etc/xkb" # default=$sysconfdir/xkb ($out/etc)
     "-Dx-locale-root=${libX11.out}/share/X11/locale"
-    "-Denable-xkbregistry=false" # Optional, separate library (TODO: Install into extra output)
     "-Denable-wayland=${lib.boolToString withWaylandSupport}"
   ];
 
