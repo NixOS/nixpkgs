@@ -3805,7 +3805,7 @@ in
 
   wsl-open = callPackage ../tools/misc/wsl-open { };
 
-  xkcdpass = with pythonPackages; toPythonApplication xkcdpass;
+  xkcdpass = with python3Packages; toPythonApplication xkcdpass;
 
   xob = callPackage ../tools/X11/xob { };
 
