@@ -738,7 +738,7 @@ rec {
     # created date be the time of building.
     created ? "1970-01-01T00:00:01Z",
     # Optional bash script to run on the files prior to fixturizing the layer.
-    extraCommands ? "",
+    extraCommands ? "", gid ? 0, uid ? 0,
     # We pick 100 to ensure there is plenty of room for extension. I
     # believe the actual maximum is 128.
     maxLayers ? 100
@@ -770,7 +770,7 @@ rec {
           mkdir $out
 
           tar \
-            --owner 0 --group 0 --mtime "@$SOURCE_DATE_EPOCH" \
+            --owner ${toString uid} --group ${toString gid} --mtime "@$SOURCE_DATE_EPOCH" \
             --hard-dereference \
             -C old_out \
             -cf $out/layer.tar .
