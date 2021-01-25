@@ -61,6 +61,12 @@ rustPlatform.buildRustPackage rec {
     numpy
   ];
 
+  # Remove with the next release after 0.5.0. This change is required
+  # for compatibility with maturin 0.9.0.
+  postPatch = ''
+    sed '/project-url = /d' -i Cargo.toml
+  '';
+
   buildPhase = ''
     runHook preBuild
     maturin build --release --manylinux off --strip --cargo-extra-args="-j $NIX_BUILD_CORES --frozen"
