@@ -5301,6 +5301,8 @@ in {
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
+  pyedimax = callPackage ../development/python-modules/pyedimax { };
+
   pyee = callPackage ../development/python-modules/pyee { };
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
