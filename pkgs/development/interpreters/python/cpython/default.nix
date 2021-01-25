@@ -280,7 +280,7 @@ in with passthru; stdenv.mkDerivation {
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
     "ac_cv_func_lchmod=no"
-  ] ++ optional static "LDFLAGS=-static";
+  ] ++ optional (static && !stdenv.hostPlatform.isDarwin) "LDFLAGS=-static";
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
