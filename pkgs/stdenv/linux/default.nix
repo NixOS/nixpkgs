@@ -42,7 +42,7 @@
 assert crossSystem == localSystem;
 
 let
-  inherit (localSystem) system platform;
+  inherit (localSystem) system;
 
   commonPreHook =
     ''
@@ -111,11 +111,6 @@ let
           stdenvNoCC = prevStage.ccWrapperStdenv;
         };
 
-        extraAttrs = {
-          # Having the proper 'platform' in all the stdenvs allows getting proper
-          # linuxHeaders for example.
-          inherit platform;
-        };
         overrides = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
@@ -369,7 +364,7 @@ in
         # TODO: remove this!
         inherit (prevStage) glibc;
 
-        inherit platform bootstrapTools;
+        inherit bootstrapTools;
         shellPackage = prevStage.bash;
       };
 
