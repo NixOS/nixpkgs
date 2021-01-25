@@ -160,7 +160,7 @@ in
 
     users.groups.nylon.gid = config.ids.gids.nylon;
 
-    systemd.services = fold (a: b: a // b) {} nylonUnits;
+    systemd.services = foldr (a: b: a // b) {} nylonUnits;
 
   };
 }

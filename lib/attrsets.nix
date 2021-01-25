@@ -5,7 +5,7 @@ let
   inherit (builtins) head tail length;
   inherit (lib.trivial) and;
   inherit (lib.strings) concatStringsSep sanitizeDerivationName;
-  inherit (lib.lists) fold concatMap concatLists;
+  inherit (lib.lists) fold foldr concatMap concatLists;
 in
 
 rec {
@@ -152,8 +152,8 @@ rec {
        => { a = [ 2 3 ]; }
   */
   foldAttrs = op: nul: list_of_attrs:
-    fold (n: a:
-        fold (name: o:
+    foldr (n: a:
+        foldr (name: o:
           o // { ${name} = op n.${name} (a.${name} or nul); }
         ) a (attrNames n)
     ) {} list_of_attrs;
@@ -433,7 +433,7 @@ rec {
        => true
    */
   matchAttrs = pattern: attrs: assert isAttrs pattern;
-    fold and true (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
+    foldr and true (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
       let pat = head values; val = head (tail values); in
       if length values == 1 then false
       else if isAttrs pat then isAttrs val && matchAttrs pat val
