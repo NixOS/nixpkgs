@@ -8,7 +8,7 @@
 }:
 let
   pname = "wasmer";
-  version = "1.0.0-beta1";
+  version = "1.0.0";
 
   wheel = rustPlatform.buildRustPackage rec {
     inherit pname version;
@@ -17,10 +17,10 @@ let
       owner = "wasmerio";
       repo = "wasmer-python";
       rev = version;
-      sha256 = "0302lcfjlw7nz18nf86z6swhhpp1qnpwcsm2fj4avl22rsv0h78j";
+      hash = "sha256-I1GfjLaPYMIHKh2m/5IQepUsJNiVUEJg49wyuuzUYtY=";
     };
 
-    cargoHash = "sha256-Rq5m9Lu6kePvohfhODLMOpGPFtCh0woTsQY2TufoiNQ=";
+    cargoHash = "sha256-txOOia1C4W+nsXuXp4EytEn82CFfSmiOYwRLC4WPImc=";
 
     nativeBuildInputs = [ maturin python ];
 

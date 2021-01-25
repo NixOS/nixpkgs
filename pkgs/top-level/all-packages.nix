@@ -1349,6 +1349,8 @@ in
 
   asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
 
+  go-audit = callPackage ../tools/system/go-audit { };
+
   gopass = callPackage ../tools/security/gopass { };
 
   gospider = callPackage ../tools/security/gospider { };
@@ -4344,6 +4346,8 @@ in
 
   getmail = callPackage ../tools/networking/getmail { };
 
+  getmail6 = callPackage ../tools/networking/getmail6 { };
+
   getopt = callPackage ../tools/misc/getopt { };
 
   gexiv2 = callPackage ../development/libraries/gexiv2 { };
@@ -5164,6 +5168,8 @@ in
   };
 
   iruby = callPackage ../applications/editors/jupyter-kernels/iruby { };
+
+  ike-scan = callPackage ../tools/security/ike-scan { };
 
   imapproxy = callPackage ../tools/networking/imapproxy {
     openssl = openssl_1_0_2;
@@ -7130,6 +7136,8 @@ in
   inherit (callPackages ../tools/security/proxmark3 { gcc-arm-embedded = gcc-arm-embedded-8; })
     proxmark3 proxmark3-unstable;
 
+  proxmark3-rrg = libsForQt5.callPackage ../tools/security/proxmark3/proxmark3-rrg.nix { };
+
   proxychains = callPackage ../tools/networking/proxychains { };
 
   proxify = callPackage ../tools/networking/proxify { };
@@ -8206,6 +8214,8 @@ in
 
   tilem = callPackage ../misc/emulators/tilem { };
 
+  tilp2 = callPackage ../applications/science/math/tilp2 { };
+
   timemachine = callPackage ../applications/audio/timemachine { };
 
   timelapse-deflicker = callPackage ../applications/graphics/timelapse-deflicker { };
@@ -9156,6 +9166,8 @@ in
 
   zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
 
+  zsh-fzf-tab = callPackage ../shells/zsh/zsh-fzf-tab { };
+
   zsh-autosuggestions = callPackage ../shells/zsh/zsh-autosuggestions { };
 
   zsh-powerlevel10k = callPackage ../shells/zsh/zsh-powerlevel10k { };
@@ -9499,8 +9511,6 @@ in
       mkdir -p "$rsrc/lib"
       ln -s "${cc}/lib" "$rsrc/include"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-    '' + lib.optionalString (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) ''
-      echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     '';
   };
 
@@ -10716,6 +10726,10 @@ in
   };
 
   crate2nix = callPackage ../development/tools/rust/crate2nix { };
+
+  convco = callPackage ../development/tools/convco {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   maturin = callPackage ../development/tools/rust/maturin { };
   inherit (rustPackages) rls;
@@ -13807,6 +13821,8 @@ in
 
   gflags = callPackage ../development/libraries/gflags { };
 
+  gfm = callPackage ../applications/science/math/gfm { };
+
   gperftools = callPackage ../development/libraries/gperftools { };
 
   grab-site = callPackage ../tools/backup/grab-site { };
@@ -15285,6 +15301,16 @@ in
   libtheora = callPackage ../development/libraries/libtheora { };
 
   libthreadar = callPackage ../development/libraries/libthreadar { };
+
+  libticables2 = callPackage ../development/libraries/libticables2 { };
+
+  libticalcs2 = callPackage ../development/libraries/libticalcs2 {
+    inherit (darwin) libobjc;
+  };
+
+  libticonv = callPackage ../development/libraries/libticonv { };
+
+  libtifiles2 = callPackage ../development/libraries/libtifiles2 { };
 
   libtiff = callPackage ../development/libraries/libtiff { };
 
@@ -18919,14 +18945,6 @@ in
     ];
   };
 
-  linux_5_9 = callPackage ../os-specific/linux/kernel/linux-5.9.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.request_key_helper
-      kernelPatches.export_kernel_fpu_functions."5.3"
-    ];
-  };
-
   linux_5_10 = callPackage ../os-specific/linux/kernel/linux-5.10.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -19219,7 +19237,6 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
-  linuxPackages_5_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_9);
   linuxPackages_5_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_10);
 
   # When adding to the list above:
@@ -19266,10 +19283,9 @@ in
         inherit (kernel) version;
       };
       kernelPatches = kernel.kernelPatches ++ [
-        kernelPatches.tag_hardened
         kernelPatches.hardened.${kernel.meta.branch}
       ];
-      modDirVersionArg = kernel.modDirVersion + (kernelPatches.hardened.${kernel.meta.branch}).extra + "-hardened";
+      modDirVersionArg = kernel.modDirVersion + (kernelPatches.hardened.${kernel.meta.branch}).extra;
       isHardened = true;
   });
 
@@ -21125,8 +21141,6 @@ in
   bombono = callPackage ../applications/video/bombono {};
 
   bonzomatic = callPackage ../applications/editors/bonzomatic { };
-
-  brackets = callPackage ../applications/editors/brackets { gconf = gnome2.GConf; };
 
   brave = callPackage ../applications/networking/browsers/brave { };
 
@@ -27198,13 +27212,15 @@ in
     tilingnome = callPackage ../desktops/gnome-3/extensions/tilingnome { };
     timepp = callPackage ../desktops/gnome-3/extensions/timepp { };
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
-    unite-shell = callPackage ../desktops/gnome-3/extensions/unite-shell { };
+    unite = callPackage ../desktops/gnome-3/extensions/unite { };
     window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
     window-is-ready-remover = callPackage ../desktops/gnome-3/extensions/window-is-ready-remover { };
     workspace-matrix = callPackage ../desktops/gnome-3/extensions/workspace-matrix { };
 
     nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
     mediaplayer = throw "gnomeExtensions.mediaplayer deprecated since 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
+  } // lib.optionalAttrs (config.allowAliases or false) {
+    unite-shell = gnomeExtensions.unite; # added 2021-01-19
   };
 
   gnome-connections = callPackage ../desktops/gnome-3/apps/gnome-connections { };
@@ -29150,7 +29166,7 @@ in
 
   ssh-audit = callPackage ../tools/security/ssh-audit { };
 
-  autocpu-freq = callPackage ../tools/system/autocpu-freq {  };
+  auto-cpufreq = callPackage ../tools/system/auto-cpufreq {  };
 
   thermald = callPackage ../tools/system/thermald { };
 

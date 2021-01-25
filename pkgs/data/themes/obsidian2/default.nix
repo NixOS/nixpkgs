@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "theme-obsidian2";
-  version = "2.17";
+  version = "2.18";
 
   src = fetchurl {
     url = "https://github.com/madmaxms/theme-obsidian-2/releases/download/v${version}/obsidian-2-theme.tar.xz";
-    sha256 = "1gff34xqypqjhh15lv4cc4ifsg07jx2znlsj9is4wmqf39a8h8n4";
+    sha256 = "1w3grlkws4ih7333hys33z4bgm33jbc78bq2pyp8nzw4q9d2hz2r";
   };
 
   sourceRoot = ".";

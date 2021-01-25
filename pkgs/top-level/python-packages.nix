@@ -162,6 +162,10 @@ in {
 
   actdiag = callPackage ../development/python-modules/actdiag { };
 
+  adafruit-platformdetect = callPackage ../development/python-modules/adafruit-platformdetect { };
+
+  adafruit-pureio = callPackage ../development/python-modules/adafruit-pureio { };
+
   adal = callPackage ../development/python-modules/adal { };
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
@@ -920,6 +924,8 @@ in {
   billiard = callPackage ../development/python-modules/billiard { };
 
   binaryornot = callPackage ../development/python-modules/binaryornot { };
+
+  binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
 
   binwalk = callPackage ../development/python-modules/binwalk {
     pyqtgraph = null;
@@ -2384,6 +2390,8 @@ in {
 
   forbiddenfruit = callPackage ../development/python-modules/forbiddenfruit { };
 
+  fortiosapi = callPackage ../development/python-modules/fortiosapi { };
+
   FormEncode = callPackage ../development/python-modules/FormEncode { };
 
   foundationdb51 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb51; };
@@ -2503,6 +2511,8 @@ in {
   GeoIP = callPackage ../development/python-modules/GeoIP { };
 
   geojson = callPackage ../development/python-modules/geojson { };
+
+  geojson-client = callPackage ../development/python-modules/geojson-client { };
 
   geopandas = callPackage ../development/python-modules/geopandas { };
 
@@ -2860,6 +2870,8 @@ in {
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
 
   hatasmota = callPackage ../development/python-modules/hatasmota { };
+
+  haversine = callPackage ../development/python-modules/haversine { };
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
 
@@ -7108,6 +7120,8 @@ in {
   singledispatch = callPackage ../development/python-modules/singledispatch { };
 
   sip = callPackage ../development/python-modules/sip { };
+
+  sip_5 = callPackage ../development/python-modules/sip/5.x.nix { };
 
   sipsimple = callPackage ../development/python-modules/sipsimple { };
 

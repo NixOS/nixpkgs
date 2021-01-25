@@ -2,9 +2,9 @@
 
 buildGoModule rec {
   pname = "ipfs-cluster";
-  version = "unstable-2020-10-20";
+  version = "0.13.1";
 
-  vendorSha256 = "0abfhl4v4yqy89aqn13ymj4rw5zhr92a9fh1abgpkr19adnyrs3d";
+  vendorSha256 = "0ls6d5ijl8bbh48w0i30mwd4a4na93iw9xqpbw23lnb8pvskaggh";
 
   patches = [
       ./test.patch
@@ -13,8 +13,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "ipfs-cluster";
-    rev = "c78f7839a2d5645806e01bfbf7af862600f8fbc4";
-    sha256 = "0fschpysma2piy2bfas56yapxm2cl6nj986ww3sp7ysldjzadmkk";
+    rev = "v${version}";
+    sha256 = "0kmsa7cnk88wrplsjysrpg6n0gd0risnhw0kh33jqx0fcg12b7h8";
   };
 
   meta = with lib; {

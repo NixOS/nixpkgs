@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.1.4";
+  version = "2021.1.5";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -270,7 +270,7 @@
     "folder_watcher" = ps: with ps; [ watchdog ];
     "foobot" = ps: with ps; [ ]; # missing inputs: foobot_async
     "forked_daapd" = ps: with ps; [ ]; # missing inputs: pyforked-daapd pylibrespot-java
-    "fortios" = ps: with ps; [ ]; # missing inputs: fortiosapi
+    "fortios" = ps: with ps; [ fortiosapi ];
     "foscam" = ps: with ps; [ ]; # missing inputs: libpyfoscam
     "foursquare" = ps: with ps; [ aiohttp-cors ];
     "free_mobile" = ps: with ps; [ ]; # missing inputs: freesms
@@ -292,7 +292,7 @@
     "generic" = ps: with ps; [ ];
     "generic_thermostat" = ps: with ps; [ ];
     "geniushub" = ps: with ps; [ ]; # missing inputs: geniushub-client
-    "geo_json_events" = ps: with ps; [ ]; # missing inputs: geojson_client
+    "geo_json_events" = ps: with ps; [ geojson-client ];
     "geo_location" = ps: with ps; [ ];
     "geo_rss_events" = ps: with ps; [ ]; # missing inputs: georss_generic_client
     "geofency" = ps: with ps; [ aiohttp-cors ];
@@ -885,7 +885,7 @@
     "uptime" = ps: with ps; [ ];
     "uptimerobot" = ps: with ps; [ ]; # missing inputs: pyuptimerobot
     "uscis" = ps: with ps; [ ]; # missing inputs: uscisstatus
-    "usgs_earthquakes_feed" = ps: with ps; [ ]; # missing inputs: geojson_client
+    "usgs_earthquakes_feed" = ps: with ps; [ geojson-client ];
     "utility_meter" = ps: with ps; [ ];
     "uvc" = ps: with ps; [ uvcclient ];
     "vacuum" = ps: with ps; [ ];
