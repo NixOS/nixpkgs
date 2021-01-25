@@ -46,7 +46,7 @@ let
         [[ -d "$out/share/applications" ]] && grep -q -R Exec=/ "$out/share/applications" && \
           >&2 echo -e "\033[1mERROR: ${pkg.name} desktop file cannot be firejailed because it specifies an absolute path to the unwrapped binary. Please use wrappedBinaries or better yet fix the ${pkg.name} desktop file in nixpkgs and/or upstream.\033[0m" && exit 1
         for bin in $(find "$out/bin" -type l); do
-          oldbin="$(readlink "$bin")"
+          oldbin="$(realpath "$bin")"
           rm "$bin"
           cat <<_EOF >"$bin"
         #! ${pkgs.runtimeShell} -e
