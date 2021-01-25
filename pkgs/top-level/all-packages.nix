@@ -9161,6 +9161,8 @@ in
 
   zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
 
+  zsh-fzf-tab = callPackage ../shells/zsh/zsh-fzf-tab { };
+
   zsh-autosuggestions = callPackage ../shells/zsh/zsh-autosuggestions { };
 
   zsh-powerlevel10k = callPackage ../shells/zsh/zsh-powerlevel10k { };
