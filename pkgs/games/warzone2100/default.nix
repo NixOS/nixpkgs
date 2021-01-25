@@ -62,7 +62,7 @@ mkDerivation rec {
     '';
     homepage = "http://wz2100.net";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.astsmtl ];
+    maintainers = with maintainers; [ astsmtl fgaz ];
     platforms = platforms.linux;
   };
 }
