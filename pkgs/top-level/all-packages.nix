@@ -5168,6 +5168,8 @@ in
 
   iruby = callPackage ../applications/editors/jupyter-kernels/iruby { };
 
+  ike-scan = callPackage ../tools/security/ike-scan { };
+
   imapproxy = callPackage ../tools/networking/imapproxy {
     openssl = openssl_1_0_2;
   };
