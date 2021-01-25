@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config
 , libpng, libtiff, lcms2, jpylyzer
 , mj2Support ? true # MJ2 executables
 , jpwlLibSupport ? true # JPWL library & executables
@@ -10,8 +10,6 @@
 , thirdPartySupport ? false # Third party libraries - OFF: only build when found, ON: always build
 , testsSupport ? true
 , jdk ? null
-# Inherit generics
-, branch, version, revision, sha256, patches ? [], extraFlags ? [], ...
 }:
 
 assert jpipServerSupport -> jpipLibSupport && curl != null && fcgi != null;
@@ -23,18 +21,24 @@ let
   mkFlag = optSet: flag: "-D${flag}=${if optSet then "ON" else "OFF"}";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "openjpeg";
-  inherit version;
+  version = "2.4.0"; # don't forget to change passthru.incDir
 
   src = fetchFromGitHub {
     owner = "uclouvain";
     repo = "openjpeg";
-    rev = revision;
-    inherit sha256;
+    rev = "v${version}";
+    sha256 = "143dvy5g6v6129lzvl0r8mrgva2fppkn0zl099qmi9yi9l9h7yyf";
   };
 
-  inherit patches;
+  patches = [
+    ./fix-cmake-config-includedir.patch
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/uclouvain/openjpeg/pull/1321.patch";
+      sha256 = "1cjpr76nf9g65nqkfnxnjzi3bv7ifbxpc74kxxibh58pzjlp6al8";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -52,7 +56,9 @@ stdenv.mkDerivation {
     (mkFlag jp3dSupport "BUILD_JP3D")
     (mkFlag thirdPartySupport "BUILD_THIRDPARTY")
     (mkFlag testsSupport "BUILD_TESTING")
-  ] ++ extraFlags;
+    "-DOPENJPEG_INSTALL_INCLUDE_DIR=${placeholder "dev"}/include/${passthru.incDir}"
+    "-DOPENJPEG_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/${passthru.incDir}"
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -71,7 +77,7 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    incDir = "openjpeg-${branch}";
+    incDir = "openjpeg-2.4";
   };
 
   meta = with lib; {
