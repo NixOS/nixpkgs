@@ -8207,6 +8207,8 @@ in
 
   tilem = callPackage ../misc/emulators/tilem { };
 
+  tilp2 = callPackage ../applications/science/math/tilp2 { };
+
   timemachine = callPackage ../applications/audio/timemachine { };
 
   timelapse-deflicker = callPackage ../applications/graphics/timelapse-deflicker { };
@@ -13806,6 +13808,8 @@ in
 
   gflags = callPackage ../development/libraries/gflags { };
 
+  gfm = callPackage ../applications/science/math/gfm { };
+
   gperftools = callPackage ../development/libraries/gperftools { };
 
   grab-site = callPackage ../tools/backup/grab-site { };
@@ -15284,6 +15288,16 @@ in
   libtheora = callPackage ../development/libraries/libtheora { };
 
   libthreadar = callPackage ../development/libraries/libthreadar { };
+
+  libticables2 = callPackage ../development/libraries/libticables2 { };
+
+  libticalcs2 = callPackage ../development/libraries/libticalcs2 {
+    inherit (darwin) libobjc;
+  };
+
+  libticonv = callPackage ../development/libraries/libticonv { };
+
+  libtifiles2 = callPackage ../development/libraries/libtifiles2 { };
 
   libtiff = callPackage ../development/libraries/libtiff { };
 
