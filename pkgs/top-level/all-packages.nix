@@ -27185,6 +27185,8 @@ in
 
   gnome-tour = callPackage ../desktops/gnome-3/core/gnome-tour { };
 
+  hhexen = callPackage ../games/hhexen { };
+
   hsetroot = callPackage ../tools/X11/hsetroot { };
 
   imwheel = callPackage ../tools/X11/imwheel { };
