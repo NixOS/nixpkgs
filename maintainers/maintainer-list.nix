@@ -2589,6 +2589,12 @@
     githubId = 119483;
     name = "Matthew Brown";
   };
+  eduardosm = {
+    email = "esm@eduardosm.net";
+    github = "eduardosm";
+    githubId = 761151;
+    name = "Eduardo Sánchez Muñoz";
+  };
   eduarrrd = {
     email = "e.bachmakov@gmail.com";
     github = "eduarrrd";
@@ -3710,6 +3716,12 @@
     github = "hongchangwu";
     githubId = 362833;
     name = "Hongchang Wu";
+  };
+  hoverbear = {
+    email = "operator+nix@hoverbear.org";
+    github = "hoverbear";
+    githubId = 130903;
+    name = "Ana Hobden";
   };
   hrdinka = {
     email = "c.nix@hrdinka.at";
@@ -6726,6 +6738,12 @@
     github = "nyanloutre";
     githubId = 7677321;
     name = "Paul Trehiou";
+  };
+  nyanotech = {
+    name = "nyanotech";
+    email = "nyanotechnology@gmail.com";
+    github = "nyanotech";
+    githubId = 33802077;
   };
   nyarly = {
     email = "nyarly@gmail.com";

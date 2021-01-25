@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, writeText, erlang }:
+{ lib, stdenv, fetchFromGitHub, writeText, erlang }:
 
 let
   shell = drv: stdenv.mkDerivation {

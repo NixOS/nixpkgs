@@ -1,4 +1,4 @@
-{ stdenv, buildHex }:
+{ lib, buildHex }:
 
 buildHex {
   name = "pc";
