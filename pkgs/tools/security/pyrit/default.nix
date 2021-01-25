@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, python2Packages, openssl, zlib, libpcap, opencl-headers, ocl-icd }:
+{ lib, fetchFromGitHub, python2Packages, openssl, zlib, libpcap, opencl-headers, ocl-icd }:
 
 let
   version = "2019-12-13";

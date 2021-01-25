@@ -1,9 +1,8 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , rustPlatform
 , bubblewrap
 , makeWrapper
-, lib
 }:
 
 rustPlatform.buildRustPackage rec {

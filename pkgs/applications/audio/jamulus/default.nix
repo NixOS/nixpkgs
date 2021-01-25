@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, qtscript, qmake, libjack2
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch, pkg-config, qtscript, qmake, libjack2
 }:
 
 mkDerivation rec {

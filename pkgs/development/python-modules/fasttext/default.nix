@@ -1,4 +1,4 @@
-{lib, stdenv, buildPythonPackage, fetchFromGitHub, numpy, pkgs, pybind11 }:
+{lib, buildPythonPackage, fetchFromGitHub, numpy, pkgs, pybind11 }:
 
 buildPythonPackage rec {
   inherit (pkgs.fasttext) pname version src;

@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkg-config
+{ lib, mkDerivation, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkg-config
 , libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations, qtsvg }:
 
 mkDerivation rec {

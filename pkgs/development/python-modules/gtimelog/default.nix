@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
+{ lib, fetchFromGitHub, makeWrapper
 , glibcLocales, gobject-introspection, gtk3, libsoup, libsecret
 , buildPythonPackage, python
 , pygobject3, freezegun, mock

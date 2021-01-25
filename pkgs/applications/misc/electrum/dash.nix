@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python2Packages }:
+{ lib, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   version = "2.9.3.1";

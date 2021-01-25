@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, python2Packages}:
+{ lib, fetchzip, python2Packages}:
 
 python2Packages.buildPythonApplication rec {
   pname = "gitinspector";

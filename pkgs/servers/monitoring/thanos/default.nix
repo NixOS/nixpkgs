@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "thanos";
   version = "0.17.2";

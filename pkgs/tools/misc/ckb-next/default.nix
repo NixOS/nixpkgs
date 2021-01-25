@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, substituteAll, udev
+{ lib, mkDerivation, fetchFromGitHub, substituteAll, udev
 , pkg-config, qtbase, cmake, zlib, kmod }:
 
 mkDerivation rec {

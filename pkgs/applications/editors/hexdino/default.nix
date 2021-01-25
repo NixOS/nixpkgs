@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, ncurses }:
+{ lib, fetchFromGitHub, rustPlatform, ncurses }:
 
 rustPlatform.buildRustPackage {
   pname = "hexdino";

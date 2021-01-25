@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "olefile";
   version = "0.46";

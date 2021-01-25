@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, go-bindata, gotools, nix-prefetch-git, git, makeWrapper,
+{ lib, buildGoPackage, go-bindata, gotools, nix-prefetch-git, git, makeWrapper,
   fetchFromGitHub }:
 
 buildGoPackage rec {

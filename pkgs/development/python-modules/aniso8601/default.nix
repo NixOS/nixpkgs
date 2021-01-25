@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , dateutil, mock, isPy3k }:
 
 buildPythonPackage rec {

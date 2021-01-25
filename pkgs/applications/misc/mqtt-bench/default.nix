@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
+{ lib, buildGoPackage, fetchFromGitHub, fetchpatch }:
 
 buildGoPackage rec {
   pname = "mqtt-bench";

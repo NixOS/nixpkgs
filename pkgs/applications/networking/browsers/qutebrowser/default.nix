@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchzip, python3
+{ lib, fetchurl, fetchzip, python3
 , mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null

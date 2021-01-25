@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
+{ lib, buildPythonPackage, fetchPypi, isPy27, pythonAtLeast
 , coverage, nose, pbkdf2 }:
 
 buildPythonPackage rec {

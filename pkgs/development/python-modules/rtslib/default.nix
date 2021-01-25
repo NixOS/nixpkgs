@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, six, pyudev, pygobject3 }:
+{ lib, fetchFromGitHub, buildPythonPackage, six, pyudev, pygobject3 }:
 
 buildPythonPackage rec {
   pname = "rtslib";

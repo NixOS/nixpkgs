@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pkg-config, fuse }:
+{ lib, buildPythonPackage, fetchPypi, pkg-config, fuse }:
 
 buildPythonPackage rec {
   pname = "fuse-python";

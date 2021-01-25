@@ -1,4 +1,4 @@
-{ lib, stdenv, openjdk11, fetchFromGitHub, jetbrains }:
+{ lib, openjdk11, fetchFromGitHub, jetbrains }:
 
 openjdk11.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk";

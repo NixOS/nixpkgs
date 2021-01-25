@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, pytest
+{ lib, fetchFromGitHub, buildPythonPackage, pytest
 , ecdsa , mnemonic, protobuf, hidapi, trezor }:
 
 buildPythonPackage rec {

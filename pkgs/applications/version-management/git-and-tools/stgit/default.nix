@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, fetchFromGitHub, git, installShellFiles }:
+{ lib, python3Packages, fetchFromGitHub, git, installShellFiles }:
 
 python3Packages.buildPythonApplication rec {
   pname = "stgit";

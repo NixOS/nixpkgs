@@ -1,4 +1,4 @@
-{ lib, stdenv, pythonPackages }:
+{ lib, pythonPackages }:
 
 with lib;
 with pythonPackages;

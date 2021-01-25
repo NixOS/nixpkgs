@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   name = "drone.io-${version}";

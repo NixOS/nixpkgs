@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, qttools, alsaLib }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qttools, alsaLib }:
 
 mkDerivation rec {
   version = "1.5.1";

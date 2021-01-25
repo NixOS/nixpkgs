@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, curl, pythonPackages, glibcLocales }:
+{ lib, fetchFromGitHub, curl, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "httpstat";

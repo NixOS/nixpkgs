@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, qttools, qtbase, poppler, flex, bison }:
+{ lib, mkDerivation, fetchFromGitHub, qmake, qttools, qtbase, poppler, flex, bison }:
 
 mkDerivation {
   pname = "tikzit";

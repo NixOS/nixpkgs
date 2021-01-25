@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, coverage, nose, six }:
+{ lib, buildPythonPackage, fetchPypi, coverage, nose, six }:
 
 buildPythonPackage rec {
   pname = "attrdict";

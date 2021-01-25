@@ -1,7 +1,7 @@
 { mkDerivation, fetchgit, ansi-terminal, ansi-wl-pprint, array, base, binary
 , bytestring, cmark, containers, directory, filepath, free, HUnit
 , indents, json, mtl, optparse-applicative, parsec, process
-, QuickCheck, quickcheck-io, split, lib, stdenv, tasty, tasty-golden
+, QuickCheck, quickcheck-io, split, lib, tasty, tasty-golden
 , tasty-hunit, tasty-quickcheck, text
 }:
 mkDerivation {

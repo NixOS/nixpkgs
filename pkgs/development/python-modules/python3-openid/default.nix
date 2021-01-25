@@ -1,4 +1,4 @@
-{ lib, stdenv, isPy3k, buildPythonPackage, fetchPypi, defusedxml }:
+{ lib, isPy3k, buildPythonPackage, fetchPypi, defusedxml }:
 
 buildPythonPackage rec {
   pname = "python3-openid";

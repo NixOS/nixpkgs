@@ -1,5 +1,5 @@
 { mkDerivation, base, containers, fetchgit, hedgehog
-, optparse-applicative, parsec, lib, stdenv, template-haskell, text
+, optparse-applicative, parsec, lib, template-haskell, text
 }:
 mkDerivation {
   pname = "dconf2nix";

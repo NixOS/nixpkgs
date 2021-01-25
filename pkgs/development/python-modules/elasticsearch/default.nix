@@ -2,7 +2,7 @@
 , fetchPypi
 , urllib3, requests
 , nosexcover, mock
-, lib, stdenv
+, lib
 }:
 
 buildPythonPackage (rec {

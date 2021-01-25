@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl, pkg-config, qttools, sconsPackages
+{ mkDerivation, lib, fetchurl, pkg-config, qttools, sconsPackages
 , GConf, avahi, boost, hunspell, libXScrnSaver, libedit, libidn, libnatpmp, libxml2
 , lua, miniupnpc, openssl, qtbase, qtmultimedia, qtsvg, qtwebkit, qtx11extras, zlib
 }:

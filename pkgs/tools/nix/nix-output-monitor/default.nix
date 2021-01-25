@@ -1,5 +1,5 @@
 { mkDerivation, ansi-terminal, async, attoparsec, base, containers
-, directory, HUnit, mtl, nix-derivation, process, relude, lib, stdenv
+, directory, HUnit, mtl, nix-derivation, process, relude, lib
 , stm, text, time, unix, fetchFromGitHub
 }:
 mkDerivation {

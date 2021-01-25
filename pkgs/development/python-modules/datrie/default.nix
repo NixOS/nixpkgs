@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch
+{ lib, buildPythonPackage, fetchPypi, fetchpatch
 , cython, pytest, pytestrunner, hypothesis }:
 
 buildPythonPackage rec {

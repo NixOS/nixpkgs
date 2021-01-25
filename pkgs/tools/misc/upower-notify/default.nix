@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit }:
 
 # To use upower-notify, the maintainer suggests adding something like this to your configuration.nix:
 #

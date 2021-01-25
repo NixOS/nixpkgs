@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pytest, pytestcov, pytest_xdist
 , six, numpy, scipy, pyyaml, h5py
 , keras-applications, keras-preprocessing

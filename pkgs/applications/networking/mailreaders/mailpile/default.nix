@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python2Packages, gnupg1orig, openssl, git }:
+{ lib, fetchFromGitHub, python2Packages, gnupg1orig, openssl, git }:
 
 python2Packages.buildPythonApplication rec {
   pname = "mailpile";

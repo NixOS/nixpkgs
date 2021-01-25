@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, net-snmp, nixosTests }:
+{ lib, buildGoPackage, fetchFromGitHub, net-snmp, nixosTests }:
 
 buildGoPackage rec {
   pname = "snmp_exporter";

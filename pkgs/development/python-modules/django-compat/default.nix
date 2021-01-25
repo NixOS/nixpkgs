@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python,
+{ lib, buildPythonPackage, fetchFromGitHub, python,
   django, six
 }:
 

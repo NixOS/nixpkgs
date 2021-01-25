@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, glibcLocales }:
+{ lib, python3, glibcLocales }:
 let
 
   localPython = python3.override {

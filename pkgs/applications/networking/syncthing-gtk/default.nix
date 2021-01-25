@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall
+{ lib, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall
 , gtk3, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook
 , gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3
 , bcrypt, gobject-introspection, gsettings-desktop-schemas

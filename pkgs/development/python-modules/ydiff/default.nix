@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, docutils, pygments
+{ lib, buildPythonPackage, fetchPypi, docutils, pygments
 , gitMinimal, mercurial, subversion, patchutils, less
 }:
 

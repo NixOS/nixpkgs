@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch
+{ lib, buildPythonPackage, fetchPypi, fetchpatch
 , nose, numpy
 , bottle, pyyaml, redis, six
 , zlib

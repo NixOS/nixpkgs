@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage, scrapy, six }:
+{ lib, fetchPypi, buildPythonPackage, scrapy, six }:
 
 buildPythonPackage rec {
   pname = "scrapy-splash";

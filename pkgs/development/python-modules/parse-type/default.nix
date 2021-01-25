@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi
+{ lib, fetchPypi
 , buildPythonPackage, pythonOlder
 , pytest, pytestrunner
 , parse, six, enum34

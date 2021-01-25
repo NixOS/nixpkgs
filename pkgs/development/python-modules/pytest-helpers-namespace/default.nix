@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchFromGitHub
 , pytest
-, lib, stdenv
+, lib
 }:
 
 buildPythonPackage rec {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, tornado }:
+{ lib, fetchPypi, buildPythonPackage, tornado }:
 
 buildPythonPackage rec {
   pname = "snakeviz";

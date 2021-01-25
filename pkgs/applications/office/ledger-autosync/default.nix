@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, fetchFromGitHub, ledger, hledger, useLedger ? true, useHledger ? true }:
+{ lib, python3Packages, fetchFromGitHub, ledger, hledger, useLedger ? true, useHledger ? true }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ledger-autosync";

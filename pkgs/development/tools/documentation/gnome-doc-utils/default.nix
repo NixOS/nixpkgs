@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2Python, libxslt, intltool, gnome3
+{ lib, fetchurl, pkg-config, libxml2Python, libxslt, intltool, gnome3
 , python2Packages }:
 
 python2Packages.buildPythonApplication rec {

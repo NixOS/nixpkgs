@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pep8, coverage, logilab_common, requests }:
 
 buildPythonPackage rec {

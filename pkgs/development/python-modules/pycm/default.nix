@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy3k, numpy, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, numpy, pytest }:
 
 buildPythonPackage rec {
   pname = "pycm";

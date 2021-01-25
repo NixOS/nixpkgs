@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, kitchen, requests, bunch, paver
+{ lib, buildPythonPackage, fetchPypi, kitchen, requests, bunch, paver
 , six, munch, urllib3, beautifulsoup4, openidc-client, lockfile }:
 
 buildPythonPackage rec {

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, installShellFiles, makeWrapper, gnupg, bzip2, xz, graphviz }:
+{ lib, buildGoPackage, fetchFromGitHub, installShellFiles, makeWrapper, gnupg, bzip2, xz, graphviz }:
 
 let
 

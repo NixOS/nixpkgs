@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, mailman, mock }:
+{ lib, buildPythonPackage, fetchPypi, mailman, mock }:
 
 buildPythonPackage rec {
   pname = "mailman-hyperkitty";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonApplication, protobuf }:
+{ lib, fetchPypi, buildPythonApplication, protobuf }:
 
 buildPythonApplication rec {
   pname = "mypy-protobuf";

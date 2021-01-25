@@ -1,4 +1,4 @@
-{ lib, stdenv, wayland, wayland-protocols, xorgserver, xkbcomp, xkeyboard_config
+{ lib, wayland, wayland-protocols, xorgserver, xkbcomp, xkeyboard_config
 , epoxy, libxslt, libunwind, makeWrapper, egl-wayland
 , defaultFontPath ? "" }:
 

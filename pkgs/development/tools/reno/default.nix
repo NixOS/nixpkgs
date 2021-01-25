@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , git
 , gnupg1
 , python3Packages

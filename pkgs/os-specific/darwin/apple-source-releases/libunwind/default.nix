@@ -1,4 +1,4 @@
-{ lib, stdenv, appleDerivation }:
+{ lib, appleDerivation }:
 
 appleDerivation {
   buildPhase = ":";

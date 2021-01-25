@@ -1,4 +1,4 @@
-{ lib, stdenv, pkg-config, buildGoPackage, fetchFromGitHub
+{ lib, pkg-config, buildGoPackage, fetchFromGitHub
 , makeWrapper, coreutils, gnupg, gnutar, squashfsTools, debootstrap
 }:
 

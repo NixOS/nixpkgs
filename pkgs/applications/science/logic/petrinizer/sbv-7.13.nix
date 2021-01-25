@@ -1,7 +1,7 @@
 { mkDerivation, array, async, base, bytestring, containers
 , crackNum, deepseq, directory, doctest, filepath, generic-deriving
 , ghc, Glob, hlint, mtl, pretty, process, QuickCheck, random
-, lib, stdenv, syb, tasty, tasty-golden, tasty-hunit, tasty-quickcheck
+, lib, syb, tasty, tasty-golden, tasty-hunit, tasty-quickcheck
 , template-haskell, time, z3
 }:
 mkDerivation {

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , mock, pytest, pytest-mock, pytest-server-fixtures, pytest-localserver
 , termcolor, click, markdown2, six, jsonref, pyyaml, xmltodict, attrs
 }:

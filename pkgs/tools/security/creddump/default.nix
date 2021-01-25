@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, python2, python2Packages }:
+{ lib, fetchFromGitLab, python2, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   pname = "creddump";

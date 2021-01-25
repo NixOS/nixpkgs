@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytestCheckHook, case, vine }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, case, vine }:
 
 buildPythonPackage rec {
   pname = "amqp";

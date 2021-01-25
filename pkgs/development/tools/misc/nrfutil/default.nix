@@ -1,4 +1,4 @@
-{ lib, stdenv, python37Packages, fetchFromGitHub }:
+{ lib, python37Packages, fetchFromGitHub }:
 
 with python37Packages; buildPythonApplication rec {
   pname = "nrfutil";

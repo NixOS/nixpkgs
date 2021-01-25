@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , xorgserver, pytest, pytest-xvfb, i3, python, xlib, xdpyinfo
 , makeFontsConf, coreutils
 }:

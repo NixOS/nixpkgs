@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
+{ lib, mkDerivation, fetchFromGitHub, fetchpatch, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
 , qtbase, qtx11extras
 , taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
 , libpulseaudio, gvfs, libcdio, libechonest, libspotify, pcre, projectm, protobuf

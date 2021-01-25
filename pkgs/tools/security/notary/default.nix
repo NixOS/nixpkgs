@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoPackage, libtool }:
+{ lib, fetchFromGitHub, buildGoPackage, libtool }:
 
 buildGoPackage rec {
   pname = "notary";

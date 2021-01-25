@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , python3Packages
 , pkg-config
 , librsvg

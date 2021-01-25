@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, makeWrapper }:
+{ lib, buildGoPackage, fetchFromGitHub, makeWrapper }:
 
 buildGoPackage rec {
   pname = "tewisay-unstable";

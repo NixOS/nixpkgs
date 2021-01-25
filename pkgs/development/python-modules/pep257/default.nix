@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchurl, pytest, mock }:
+{ lib, buildPythonPackage, fetchurl, pytest, mock }:
 buildPythonPackage rec {
   pname = "pep257";
   version = "0.7.0";

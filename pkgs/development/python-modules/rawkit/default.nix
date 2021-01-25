@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, fetchpatch
+{ lib, fetchPypi, buildPythonPackage, fetchpatch
 , libraw
 , pytest, mock }:
 

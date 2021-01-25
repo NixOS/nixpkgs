@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages, openssh, rsync }:
+{ lib, fetchFromGitHub, pythonPackages, openssh, rsync }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "pssh";

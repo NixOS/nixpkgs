@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, clang, haskellPackages }:
+{ lib, fetchFromGitHub, makeWrapper, clang, haskellPackages }:
 
 haskellPackages.mkDerivation rec {
 

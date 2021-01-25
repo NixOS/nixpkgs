@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, wrapGAppsHook, gettext
+{ lib, fetchFromGitHub, wrapGAppsHook, gettext
 , python3Packages, gnome3, gtk3, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
 
 let

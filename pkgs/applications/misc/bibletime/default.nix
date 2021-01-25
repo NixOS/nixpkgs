@@ -1,4 +1,4 @@
-{ lib, mkDerivation, stdenv, fetchurl, cmake, pkg-config, sword, boost, clucene_core
+{ lib, mkDerivation, fetchurl, cmake, pkg-config, sword, boost, clucene_core
 , qtbase, qttools, qtsvg, qtwebkit
 }:
 

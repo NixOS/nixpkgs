@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, makeWrapper, cmake
+{ lib, buildPythonApplication, fetchFromGitHub, makeWrapper, cmake
 , pytestrunner, pytest, six, pyparsing, asn1ate }:
 
 buildPythonApplication rec {

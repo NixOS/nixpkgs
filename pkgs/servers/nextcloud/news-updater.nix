@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3Packages, php }:
+{ lib, fetchurl, python3Packages, php }:
 
 python3Packages.buildPythonApplication rec {
   name = "nextcloud-news-updater-${version}";

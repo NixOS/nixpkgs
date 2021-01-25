@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub }: stdenv.mkDerivation rec {
+{ lib, stdenv, fetchFromGitHub }:
+
+stdenv.mkDerivation rec {
   pname = "tt-rss-theme-feedly";
   version = "2.5.0";
 

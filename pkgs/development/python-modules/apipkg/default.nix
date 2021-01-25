@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pytest, setuptools_scm, isPy3k }:
 
 buildPythonPackage rec {

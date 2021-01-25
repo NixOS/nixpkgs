@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , mkDerivation
 , fetchgit
 , autoreconfHook

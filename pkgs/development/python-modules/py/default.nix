@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools_scm }:
+{ lib, buildPythonPackage, fetchPypi, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "py";

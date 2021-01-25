@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, dnspython, pycountry, nose, setuptools_scm, six, isPy27 }:
+{ lib, buildPythonPackage, fetchPypi, dnspython, pycountry, nose, setuptools_scm, six, isPy27 }:
 
 buildPythonPackage rec {
   pname = "FormEncode";

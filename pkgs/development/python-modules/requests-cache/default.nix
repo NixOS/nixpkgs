@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , mock, requests, six, urllib3 }:
 
 buildPythonPackage rec {

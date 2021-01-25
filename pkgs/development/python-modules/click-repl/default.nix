@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, click, prompt_toolkit }:
+{ lib, buildPythonPackage, fetchPypi, click, prompt_toolkit }:
 
 buildPythonPackage rec {
   pname = "click-repl";

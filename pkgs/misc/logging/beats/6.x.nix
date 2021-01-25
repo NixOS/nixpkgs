@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, elk6Version, buildGoPackage, libpcap, systemd }:
+{ lib, fetchFromGitHub, elk6Version, buildGoPackage, libpcap, systemd }:
 
 let beat = package : extraArgs : buildGoPackage (rec {
       name = "${package}-${version}";

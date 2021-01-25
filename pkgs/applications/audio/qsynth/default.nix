@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, alsaLib, fluidsynth, libjack2, autoconf, pkg-config
+{ lib, fetchurl, alsaLib, fluidsynth, libjack2, autoconf, pkg-config
 , mkDerivation, qtbase, qttools, qtx11extras
 }:
 

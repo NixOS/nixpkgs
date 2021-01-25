@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchFromGitHub, python, lib, stdenv, django }:
+{ buildPythonPackage, fetchFromGitHub, python, lib, django }:
 
 buildPythonPackage rec {
   pname = "django-widget-tweaks";

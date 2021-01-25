@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, tex, extraFonts, chineseFonts, japaneseFonts, koreanFonts }:
+{ lib, fetchurl, tex, extraFonts, chineseFonts, japaneseFonts, koreanFonts }:
 rec {
   extraFontsSrc = fetchurl {
     url = "ftp://ftp.texmacs.org/pub/TeXmacs/fonts/TeXmacs-extra-fonts-1.0-noarch.tar.gz";

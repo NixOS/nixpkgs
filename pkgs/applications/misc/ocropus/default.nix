@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, pythonPackages, curl }:
+{ lib, fetchFromGitHub, fetchurl, pythonPackages, curl }:
 
 let
   getmodel = name: sha256: {

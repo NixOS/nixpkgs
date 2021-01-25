@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config
+{ lib, fetchFromGitHub, cmake, extra-cmake-modules, pkg-config
 , qtbase, qtimageformats, qtwebengine, qtx11extras, mkDerivation
 , libarchive, libXdmcp, libpthreadstubs, xcbutilkeysyms  }:
 

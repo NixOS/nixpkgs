@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, mock, git
+{ lib, buildPythonPackage, fetchPypi, pytest, mock, git
 , cherrypy, gevent, tornado }:
 
 buildPythonPackage rec {

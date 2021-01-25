@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, pyasn1 }:
+{ lib, fetchPypi, buildPythonPackage, pyasn1 }:
 
 buildPythonPackage rec {
   pname = "ldap3";

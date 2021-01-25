@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitLab, pkg-config, lxml, libvirt, nose }:
+{ lib, buildPythonPackage, fetchFromGitLab, pkg-config, lxml, libvirt, nose }:
 
 buildPythonPackage rec {
   pname = "libvirt";

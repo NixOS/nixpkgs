@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl } :
+{ lib, fetchurl } :
 
 let
   major = "3";

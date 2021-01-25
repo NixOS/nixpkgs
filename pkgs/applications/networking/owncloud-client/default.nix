@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, mkDerivation, cmake, pkg-config, qtbase, qtkeychain, sqlite, libsecret }:
+{ lib, fetchurl, mkDerivation, cmake, pkg-config, qtbase, qtkeychain, sqlite, libsecret }:
 
 mkDerivation rec {
   pname = "owncloud-client";

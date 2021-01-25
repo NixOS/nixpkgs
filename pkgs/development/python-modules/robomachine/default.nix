@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, pyparsing, robotframework, allpairspy }:
+{ lib, fetchPypi, buildPythonPackage, pyparsing, robotframework, allpairspy }:
 
 buildPythonPackage rec {
   pname = "RoboMachine";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, imagemagick }:
+{ lib, fetchFromGitHub, python3, imagemagick }:
 
 with python3.pkgs;
 

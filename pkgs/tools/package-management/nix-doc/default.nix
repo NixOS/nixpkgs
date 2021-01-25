@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, boost, nix, pkg-config }:
+{ lib, rustPlatform, fetchFromGitHub, boost, nix, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-doc";

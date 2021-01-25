@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, mkDerivation
+{ lib, fetchFromGitHub, cmake, pkg-config, mkDerivation
 , qtbase, qtx11extras, qtsvg, makeWrapper
 , vulkan-loader, libglvnd, xorg, python3, python3Packages
 , bison, pcre, automake, autoconf, addOpenGLRunpath

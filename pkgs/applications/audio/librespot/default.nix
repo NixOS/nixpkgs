@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, withRodio ? true
+{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, withRodio ? true
 , withALSA ? true, alsaLib ? null, withPulseAudio ? false, libpulseaudio ? null
 , withPortAudio ? false, portaudio ? null }:
 

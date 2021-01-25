@@ -3,7 +3,7 @@
 , fetchurl
 , meson
 , ninja
-, stdenv
+
 , pkg-config
 , python3
 , pygobject3

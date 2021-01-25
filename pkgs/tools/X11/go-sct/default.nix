@@ -1,4 +1,4 @@
-{ lib, stdenv, xorg, buildGoPackage, fetchFromGitHub }:
+{ lib, xorg, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "go-sct";

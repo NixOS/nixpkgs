@@ -1,6 +1,6 @@
 { mkDerivation, aeson, base, binary, bytestring, containers
 , directory, fetchgit, filepath, ghc-prim, hpack
-, optparse-applicative, lib, stdenv, text, unliftio
+, optparse-applicative, lib, text, unliftio
 , unordered-containers
 }:
 mkDerivation {

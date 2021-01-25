@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, nose }:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, nose }:
 
 buildPythonPackage rec {
   pname = "metaphone";

@@ -1,4 +1,4 @@
-{ lib, stdenv, kdeIntegration, fetchpatch, ... }:
+{ lib, kdeIntegration, fetchpatch, ... }:
 attrs:
 {
   patches = attrs.patches or [ ] ++ [

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, watchman }:
+{ lib, buildPythonPackage, fetchPypi, watchman }:
 
 buildPythonPackage rec {
   pname = "pywatchman";

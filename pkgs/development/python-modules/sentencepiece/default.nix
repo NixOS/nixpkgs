@@ -1,5 +1,5 @@
 { buildPythonPackage
-, stdenv
+
 , sentencepiece
 , pkg-config
 }:

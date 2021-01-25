@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl
+{ mkDerivation, lib, fetchurl
 , pkg-config, libtool, qmake
 , rsync, ssh
 }:

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perlPackages, wrapGAppsHook,
+{ lib, fetchurl, perlPackages, wrapGAppsHook,
   # libs
   librsvg, sane-backends, sane-frontends,
   # runtime dependencies

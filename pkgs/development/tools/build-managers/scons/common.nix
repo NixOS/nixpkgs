@@ -1,6 +1,6 @@
 { version, sha256 }:
 
-{ stdenv, fetchurl, python3Packages, lib }:
+{ fetchurl, python3Packages, lib }:
 
 python3Packages.buildPythonApplication rec {
   pname = "scons";

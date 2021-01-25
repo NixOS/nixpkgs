@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pythonPackages, makeWrapper, ffmpeg_3 }:
+{ lib, fetchFromGitHub, pythonPackages, makeWrapper, ffmpeg_3 }:
 
 pythonPackages.buildPythonApplication {
 

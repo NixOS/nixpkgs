@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, mupdf, swig }:
+{ lib, buildPythonPackage, fetchPypi, mupdf, swig }:
 buildPythonPackage rec {
   pname = "pymupdf";
   version = "1.18.0";

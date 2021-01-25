@@ -1,6 +1,6 @@
 { boost, cmake, fetchFromGitHub, ffmpeg, qtbase, qtx11extras,
   qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper,
-  mkDerivation, ninja, mpi, python3, lib, stdenv, tbb, libGLU, libGL }:
+  mkDerivation, ninja, mpi, python3, lib, tbb, libGLU, libGL }:
 
 mkDerivation rec {
   pname = "paraview";

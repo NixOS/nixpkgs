@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pkg-config, libversion, pythonOlder }:
+{ lib, buildPythonPackage, fetchPypi, pkg-config, libversion, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "libversion";

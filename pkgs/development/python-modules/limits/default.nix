@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, six }:
+{ lib, fetchPypi, buildPythonPackage, six }:
 
 buildPythonPackage rec {
   pname = "limits";

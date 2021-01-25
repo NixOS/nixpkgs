@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub }:
+{ lib, buildPythonPackage, fetchFromGitHub }:
 
 buildPythonPackage {
     pname = "pyext";

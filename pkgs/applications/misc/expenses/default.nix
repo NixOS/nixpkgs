@@ -1,5 +1,5 @@
 { lib
-, stdenv
+
 , buildGoModule
 , fetchFromGitHub
 , sqlite

@@ -7,7 +7,7 @@
 , hls-tactics-plugin, hslogger, hspec, hspec-core
 , hspec-expectations, lens, lsp-test, mtl, optparse-applicative
 , optparse-simple, ormolu, process, regex-tdfa, safe-exceptions
-, shake, lib, stdenv, stm, stylish-haskell, tasty, tasty-ant-xml
+, shake, lib, stm, stylish-haskell, tasty, tasty-ant-xml
 , tasty-expected-failure, tasty-golden, tasty-hunit, tasty-rerun
 , temporary, text, transformers, unordered-containers, with-utf8
 , yaml

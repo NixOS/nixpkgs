@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonApplication, fetchPypi, pythonOlder
+{ lib, buildPythonApplication, fetchPypi, pythonOlder
 , installShellFiles
 , mock, pytest, nose
 , pyyaml, backports_ssl_match_hostname, colorama, docopt

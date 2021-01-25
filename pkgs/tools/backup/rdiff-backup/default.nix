@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, python2Packages, librsync, gnused }:
+{lib, fetchurl, python2Packages, librsync, gnused }:
 
 python2Packages.buildPythonApplication {
   name = "rdiff-backup-1.3.3";

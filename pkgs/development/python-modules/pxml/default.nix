@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , pythonAtLeast
 , isPy27
 , buildPythonPackage

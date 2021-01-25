@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python3, cmake
+{ lib, buildPythonPackage, fetchFromGitHub, python3, cmake
 , pythonOlder, libnest2d, sip, clipper }:
 
 buildPythonPackage rec {

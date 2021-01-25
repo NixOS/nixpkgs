@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, geopandas, descartes, matplotlib, networkx, numpy
+{ lib, buildPythonPackage, fetchFromGitHub, geopandas, descartes, matplotlib, networkx, numpy
 , pandas, requests, Rtree, shapely, pytest, coverage, coveralls, folium, scikitlearn, scipy}:
 
 buildPythonPackage rec {

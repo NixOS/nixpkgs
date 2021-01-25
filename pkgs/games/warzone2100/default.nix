@@ -1,6 +1,33 @@
-{ lib, stdenv, mkDerivation, fetchurl, autoconf, automake
-, perl, unzip, zip, which, pkg-config, qtbase, qtscript
-, SDL2, libtheora, openal, glew, physfs, fribidi, libXrandr
+{ lib
+, mkDerivation
+, fetchurl
+, cmake
+, ninja
+, zip, unzip
+, pkg-config
+, asciidoctor
+, gettext
+
+, qtbase
+, qtscript
+, SDL2
+, libtheora
+, libvorbis
+, openal
+, openalSoft
+, glew
+, physfs
+, fribidi
+, libXrandr
+, miniupnpc
+, libsodium
+, curl
+, libpng
+, freetype
+, harfbuzz
+, sqlite
+, which
+
 , withVideos ? false
 }:
 
@@ -14,38 +41,61 @@ in
 
 mkDerivation rec {
   inherit pname;
-  version  = "3.3.0";
+  version  = "3.4.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/releases/${version}/${pname}-${version}_src.tar.xz";
-    sha256 = "1s0n67rh32g0bgq72p4qzkcqjlw58gc70r4r6gl9k90pil9chj6c";
+    url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
+    sha256 = "0savalmw1kp1sf8vg5aqrl5hc77p4jacxy5y9qj8k2hi2vqdfb7a";
   };
 
   buildInputs = [
-    qtbase qtscript SDL2 libtheora openal
-    glew physfs fribidi libXrandr
-  ];
-  nativeBuildInputs = [
-    perl zip unzip pkg-config autoconf automake
+    qtbase
+    qtscript
+    SDL2
+    libtheora
+    libvorbis
+    openal
+    openalSoft
+    glew
+    physfs
+    fribidi
+    libXrandr
+    miniupnpc
+    libsodium
+    curl
+    libpng
+    freetype
+    harfbuzz
+    sqlite
   ];
 
-  preConfigure = "./autogen.sh";
+  nativeBuildInputs = [
+    cmake
+    ninja
+    zip unzip
+    asciidoctor
+    gettext
+  ];
 
   postPatch = ''
     substituteInPlace lib/exceptionhandler/dumpinfo.cpp \
-                      --replace "which %s" "${which}/bin/which %s"
+                      --replace '"which "' '"${which}/bin/which "'
     substituteInPlace lib/exceptionhandler/exceptionhandler.cpp \
                       --replace "which %s" "${which}/bin/which %s"
   '';
 
-  configureFlags = [ "--with-distributor=NixOS" ];
+  cmakeFlags = [
+    "-DWZ_DISTRIBUTOR=NixOS"
+    # The cmake builder automatically sets CMAKE_INSTALL_BINDIR to an absolute
+    # path, but this results in an error.
+    # By resetting it, we let the CMakeLists set it to an accepted value
+    # based on prefix.
+    "-DCMAKE_INSTALL_BINDIR="
+  ];
 
-  hardeningDisable = [ "format" ];
-
-  enableParallelBuilding = true;
-
-  postInstall = lib.optionalString withVideos
-    "cp ${sequences_src} $out/share/warzone2100/sequences.wz";
+  postInstall = lib.optionalString withVideos ''
+    cp ${sequences_src} $out/share/warzone2100/sequences.wz
+  '';
 
   meta = with lib; {
     description = "A free RTS game, originally developed by Pumpkin Studios";
@@ -62,7 +112,7 @@ mkDerivation rec {
     '';
     homepage = "http://wz2100.net";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.astsmtl ];
+    maintainers = with maintainers; [ astsmtl fgaz ];
     platforms = platforms.linux;
   };
 }

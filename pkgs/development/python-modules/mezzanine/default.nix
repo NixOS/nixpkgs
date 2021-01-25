@@ -1,5 +1,5 @@
 { lib
-, stdenv
+
 , buildPythonPackage
 , fetchPypi
 , isPyPy

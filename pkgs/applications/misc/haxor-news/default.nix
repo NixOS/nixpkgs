@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, fetchpatch }:
+{ lib, fetchFromGitHub, python3, fetchpatch }:
 
 
 let

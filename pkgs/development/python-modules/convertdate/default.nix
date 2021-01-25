@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pymeeus, pytz }:
+{ lib, buildPythonPackage, fetchFromGitHub, pymeeus, pytz }:
 
 buildPythonPackage rec {
   pname = "convertdate";

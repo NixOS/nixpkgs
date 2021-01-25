@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python2Packages }:
+{ lib, fetchurl, python2Packages }:
 
 let
   inherit (python2Packages) buildPythonApplication;

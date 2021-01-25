@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, beancount }:
+{ lib, python3, beancount }:
 
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;

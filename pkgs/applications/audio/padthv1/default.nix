@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libjack2, alsaLib, libsndfile, liblo, lv2, qt5, fftwFloat, mkDerivation }:
+{ lib, fetchurl, pkg-config, libjack2, alsaLib, libsndfile, liblo, lv2, qt5, fftwFloat, mkDerivation }:
 
 mkDerivation rec {
   pname = "padthv1";

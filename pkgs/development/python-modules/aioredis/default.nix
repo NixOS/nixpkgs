@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pkgs, async-timeout, hiredis, isPyPy, isPy27
 }:
 

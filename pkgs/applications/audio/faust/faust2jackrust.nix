@@ -1,5 +1,4 @@
-{ stdenv
-, faust
+{ faust
 , libjack2
 , cargo
 , binutils

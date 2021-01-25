@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, fetchFromGitHub, glibcLocales }:
+{ lib, python3Packages, fetchFromGitHub, glibcLocales }:
 
 with python3Packages;
 buildPythonApplication rec {

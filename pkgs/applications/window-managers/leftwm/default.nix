@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libX11, libXinerama, makeWrapper }:
+{ lib, fetchFromGitHub, rustPlatform, libX11, libXinerama, makeWrapper }:
 
 let
     rpath = lib.makeLibraryPath [ libXinerama libX11 ];

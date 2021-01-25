@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub, lib, stdenv, nixosTests }:
+{ buildGoPackage, fetchFromGitHub, lib, nixosTests }:
 
 buildGoPackage rec {
   pname = "nginx-sso";

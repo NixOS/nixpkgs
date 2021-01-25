@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, colorama }:
+{ lib, fetchPypi, buildPythonPackage, colorama }:
 
 buildPythonPackage rec {
   pname = "crayons";

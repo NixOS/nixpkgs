@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, pythonOlder, fetchgit, cmake, sip }:
+{ lib, buildPythonPackage, pythonOlder, fetchgit, cmake, sip }:
 
 buildPythonPackage {
   pname = "libsavitar-lulzbot";

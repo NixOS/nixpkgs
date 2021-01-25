@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, qmake, qttools, hunspell, qtbase, qtmultimedia, mkDerivation }:
+{ lib, fetchurl, pkg-config, qmake, qttools, hunspell, qtbase, qtmultimedia, mkDerivation }:
 
 mkDerivation rec {
   pname = "focuswriter";

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, future, numpy }:
+{ lib, buildPythonPackage, fetchPypi, pytest, future, numpy }:
 
 buildPythonPackage rec {
   pname = "MDP";

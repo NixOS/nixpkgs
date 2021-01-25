@@ -2,7 +2,7 @@
 , fetchPypi
 , mock
 , zope_testing
-, lib, stdenv
+, lib
 }:
 
 buildPythonPackage rec {

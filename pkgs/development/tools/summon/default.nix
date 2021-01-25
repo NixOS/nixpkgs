@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib, patchResolver ? true }:
+{ buildGoModule, fetchFromGitHub, lib, patchResolver ? true }:
 
 with lib;
 

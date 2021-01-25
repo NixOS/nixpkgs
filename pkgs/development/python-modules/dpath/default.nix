@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, isPy27
+{ lib, fetchPypi, buildPythonPackage, isPy27
 , mock, pytestCheckHook, nose, hypothesis
 }:
 

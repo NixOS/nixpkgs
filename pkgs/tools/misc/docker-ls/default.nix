@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib, stdenv, docker }:
+{ buildGoModule, fetchFromGitHub, lib, docker }:
 
 buildGoModule rec {
   pname = "docker-ls";

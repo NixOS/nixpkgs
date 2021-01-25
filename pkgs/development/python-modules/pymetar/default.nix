@@ -1,4 +1,4 @@
-{ lib, stdenv, python, buildPythonPackage, isPy3k, fetchPypi }:
+{ lib, python, buildPythonPackage, isPy3k, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "pymetar";

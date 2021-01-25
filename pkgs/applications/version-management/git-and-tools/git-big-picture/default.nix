@@ -1,4 +1,4 @@
-{ fetchFromGitHub, python3Packages, lib, stdenv, git, graphviz }:
+{ fetchFromGitHub, python3Packages, lib, git, graphviz }:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-big-picture";

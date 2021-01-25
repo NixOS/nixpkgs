@@ -1,4 +1,4 @@
-{ lib, stdenv, castxml, fetchFromGitHub, buildPythonPackage,
+{ lib, castxml, fetchFromGitHub, buildPythonPackage,
 llvmPackages }:
 buildPythonPackage rec {
   pname = "pygccxml";

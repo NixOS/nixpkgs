@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata, installShellFiles }:
+{ lib, buildGoPackage, fetchFromGitHub, go-bindata, installShellFiles }:
 let
   goPackagePath = "k8s.io/kops";
 

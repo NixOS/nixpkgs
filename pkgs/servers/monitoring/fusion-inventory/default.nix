@@ -1,4 +1,4 @@
-{ stdenv, lib, perlPackages, nix, dmidecode, pciutils, usbutils, iproute, nettools
+{ lib, perlPackages, nix, dmidecode, pciutils, usbutils, iproute, nettools
 , fetchFromGitHub, makeWrapper
 }:
 

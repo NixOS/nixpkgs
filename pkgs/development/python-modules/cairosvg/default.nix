@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, fetchpatch
+{ lib, buildPythonPackage, fetchPypi, isPy3k, fetchpatch
 , cairocffi, cssselect2, defusedxml, pillow, tinycss2
 , pytest, pytestrunner, pytestcov, pytest-flake8, pytest-isort }:
 

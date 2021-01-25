@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, six, attrs, twisted, pyopenssl, service-identity, autobahn, treq, mock, pytest }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, six, attrs, twisted, pyopenssl, service-identity, autobahn, treq, mock, pytest }:
 
 buildPythonPackage rec {
   version = "0.4.1";

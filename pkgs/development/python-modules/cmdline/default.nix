@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pyyaml }:
+{ lib, buildPythonPackage, fetchPypi, pyyaml }:
 
 buildPythonPackage rec {
   pname = "cmdline";

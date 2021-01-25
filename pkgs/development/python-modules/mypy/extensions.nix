@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, typing, pythonOlder }:
+{ lib, fetchPypi, buildPythonPackage, typing, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "mypy-extensions";

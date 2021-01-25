@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, isPy3k, defusedxml }:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, defusedxml }:
 
 buildPythonPackage rec {
   pname = "PyAMF";

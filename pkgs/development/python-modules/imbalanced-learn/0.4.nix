@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, scikitlearn, pandas, nose, pytest }:
+{ lib, buildPythonPackage, fetchPypi, scikitlearn, pandas, nose, pytest }:
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";

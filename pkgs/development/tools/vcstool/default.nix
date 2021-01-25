@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages
+{ lib, python3Packages
 , git, breezy, subversion }:
 
 with python3Packages;

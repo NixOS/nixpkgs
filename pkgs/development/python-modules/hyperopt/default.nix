@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , cloudpickle, numpy, future, networkx
 , six, tqdm, scipy, pymongo
 }:

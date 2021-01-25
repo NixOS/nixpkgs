@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pytest, pytestcov, mock, cmdline, pytest-fixture-config, pytest-shutil, virtualenv }:
 
 buildPythonPackage rec {

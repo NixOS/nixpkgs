@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchPypi,
  ofxhome, ofxparse, beautifulsoup4, lxml, keyring
 }:
 

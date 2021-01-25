@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, flake8, six, orderedmultidict, pytest }:
+{ lib, buildPythonPackage, fetchPypi, flake8, six, orderedmultidict, pytest }:
 
 buildPythonPackage rec {
   pname = "furl";

@@ -5,7 +5,7 @@
 , pkg-config
 , python3
 , rustPlatform
-, lib, stdenv
+, lib
 , wrapGAppsHook
 }:
 

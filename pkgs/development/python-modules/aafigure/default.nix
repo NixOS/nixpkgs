@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pillow }:
+{ lib, buildPythonPackage, fetchPypi, pillow }:
 
 buildPythonPackage rec {
   pname = "aafigure";

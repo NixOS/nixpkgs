@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pypdf2 }:
+{ lib, buildPythonPackage, fetchPypi, pypdf2 }:
 
 buildPythonPackage rec {
   pname = "pdftools.pdfposter";

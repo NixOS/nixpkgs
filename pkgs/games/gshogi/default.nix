@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub
+{ lib, buildPythonApplication, fetchFromGitHub
 , gtk3, gobject-introspection
 , wrapGAppsHook, python3Packages }:
 

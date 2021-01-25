@@ -1,5 +1,5 @@
 { mkDerivation, aeson, base, containers, deepseq, fetchgit, ghc
-, ghcide, haskell-lsp-types, hls-plugin-api, shake, lib, stdenv, text
+, ghcide, haskell-lsp-types, hls-plugin-api, shake, lib, text
 , unordered-containers
 }:
 mkDerivation {

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, numpy, scipy, pillow }:
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, scipy, pillow }:
 
 buildPythonPackage rec {
   pname = "pyssim";

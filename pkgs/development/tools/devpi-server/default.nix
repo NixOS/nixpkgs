@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, nginx }:
+{ lib, fetchFromGitHub, python3Packages, nginx }:
 
 python3Packages.buildPythonApplication rec {
   pname = "devpi-server";
