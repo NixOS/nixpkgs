@@ -872,6 +872,8 @@ in {
 
   bitbucket-cli = callPackage ../development/python-modules/bitbucket-cli { };
 
+  bitcash = callPackage ../development/python-modules/bitcash { };
+
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
 
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
