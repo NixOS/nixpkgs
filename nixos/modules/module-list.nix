@@ -448,8 +448,6 @@
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
   ./services/misc/dwm-status.nix
-  ./services/misc/dysnomia.nix
-  ./services/misc/disnix.nix
   ./services/misc/docker-registry.nix
   ./services/misc/domoticz.nix
   ./services/misc/errbot.nix
