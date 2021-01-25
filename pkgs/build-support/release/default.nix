@@ -15,7 +15,7 @@ rec {
     } // args);
 
   antBuild = args: import ./ant-build.nix (
-    { inherit pkgs;
+    { inherit lib pkgs;
     } // args);
 
   mvnBuild = args: import ./maven-build.nix (
