@@ -110,6 +110,14 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "doc" ];
 
   patches = [
+    # See upstream patch at
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/4885. Since we build
+    # from source distributions, the auto-generated configure script needs to be
+    # patched as well, therefore we use an in-tree patch instead of pulling the
+    # upstream patch. Don't forget to check backport status of the upstream patch
+    # when adding new GHC releases in nixpkgs.
+    ./respect-ar-path.patch
+
     (fetchpatch { # https://phabricator.haskell.org/D5123
      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/13ff0b7ced097286e0d7b054f050871effe07f86.diff";
      name = "D5123.diff";
