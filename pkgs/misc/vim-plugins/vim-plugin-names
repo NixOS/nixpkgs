@@ -548,6 +548,7 @@ ternjs/tern_for_vim
 terryma/vim-expand-region
 terryma/vim-multiple-cursors
 tex/vimpreviewpandoc
+Th3Whit3Wolf/one-nvim@main
 theHamsta/nvim-dap-virtual-text
 thinca/vim-ft-diff_fold
 thinca/vim-prettyprint
