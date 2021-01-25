@@ -15944,9 +15944,7 @@ in
 
   openh264 = callPackage ../development/libraries/openh264 { };
 
-  openjpeg_1 = callPackage ../development/libraries/openjpeg/1.x.nix { };
-  openjpeg_2 = callPackage ../development/libraries/openjpeg/2.x.nix { };
-  openjpeg = openjpeg_2;
+  openjpeg = callPackage ../development/libraries/openjpeg { };
 
   openpa = callPackage ../development/libraries/openpa { };
 
@@ -21188,7 +21186,6 @@ in
   calibre = calibre-py3;
 
   calligra = libsForQt5.callPackage ../applications/office/calligra {
-    openjpeg = openjpeg_1;
     # Must use the same Qt version as Calligra itself:
     poppler = libsForQt5.poppler_0_61;
   };
@@ -22984,9 +22981,7 @@ in
 
   kpt = callPackage ../applications/networking/cluster/kpt { };
 
-  krita = libsForQt5.callPackage ../applications/graphics/krita {
-    openjpeg = openjpeg_1;
-  };
+  krita = libsForQt5.callPackage ../applications/graphics/krita { };
 
   krusader = libsForQt5.callPackage ../applications/misc/krusader { };
 
