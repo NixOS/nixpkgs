@@ -1082,6 +1082,8 @@ in {
 
   case = callPackage ../development/python-modules/case { };
 
+  cashaddress-regtest = callPackage ../development/python-modules/cashaddress-regtest { };
+
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
   casttube = callPackage ../development/python-modules/casttube { };
