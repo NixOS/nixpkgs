@@ -1,4 +1,4 @@
-{
+{ lib
 lib
 , stdenv
 , makeWrapper
@@ -70,4 +70,3 @@ in {
     jdk = jdk8.jre;
   });
 }
-
