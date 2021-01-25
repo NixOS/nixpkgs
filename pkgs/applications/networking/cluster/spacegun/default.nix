@@ -1,21 +1,16 @@
-{ pkgs, fetchFromGitHub, nodejs, stdenv, lib, ... }:
+{ pkgs, nodejs, stdenv, lib, ... }:
 
 let
-  src = fetchFromGitHub {
-    owner = "dvallin";
-    repo = "spacegun";
-    rev = "v0.3.3";
-    sha256 = "0cd9yzms44dj9ix8lrhbkby5zsyb8wambs24j6c3ibr67sggr6sq";
-  };
+
+  packageName = with lib; concatStrings (map (entry: (concatStrings (mapAttrsToList (key: value: "${key}-${value}") entry))) (importJSON ./package.json));
 
   nodePackages = import ./node-composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
 in
-nodePackages.package.override {
-  inherit src;
-  nativeBuildInputs = [ pkgs.makeWrapper pkgs.nodePackages.node-gyp-build ];
+nodePackages."${packageName}".override {
+  nativeBuildInputs = [ pkgs.makeWrapper ];
 
   postInstall = ''
     # Patch shebangs in node_modules, otherwise the webpack build fails with interpreter problems
