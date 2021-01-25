@@ -4345,6 +4345,8 @@ in
 
   getmail = callPackage ../tools/networking/getmail { };
 
+  getmail6 = callPackage ../tools/networking/getmail6 { };
+
   getopt = callPackage ../tools/misc/getopt { };
 
   gexiv2 = callPackage ../development/libraries/gexiv2 { };
