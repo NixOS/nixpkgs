@@ -2835,6 +2835,8 @@ in
 
   appleseed = callPackage ../tools/graphics/appleseed { };
 
+  apple-music-electron = callPackage ../applications/audio/apple-music-electron { };
+
   arping = callPackage ../tools/networking/arping { };
 
   arpoison = callPackage ../tools/networking/arpoison { };
