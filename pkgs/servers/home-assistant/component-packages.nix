@@ -202,7 +202,7 @@
     "econet" = ps: with ps; [ ]; # missing inputs: pyeconet
     "ecovacs" = ps: with ps; [ ]; # missing inputs: sucks
     "eddystone_temperature" = ps: with ps; [ construct ]; # missing inputs: beacontools[scan]
-    "edimax" = ps: with ps; [ ]; # missing inputs: pyedimax
+    "edimax" = ps: with ps; [ pyedimax ];
     "edl21" = ps: with ps; [ ]; # missing inputs: pysml
     "ee_brightbox" = ps: with ps; [ ]; # missing inputs: eebrightbox
     "efergy" = ps: with ps; [ ];
