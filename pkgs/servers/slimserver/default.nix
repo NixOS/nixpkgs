@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper
+{ lib, fetchurl, makeWrapper
 , perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
 
 perlPackages.buildPerlPackage rec {

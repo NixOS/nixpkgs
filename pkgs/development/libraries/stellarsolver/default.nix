@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake,
+{ lib, mkDerivation, fetchFromGitHub, cmake,
   qtbase, cfitsio, gsl, wcslib, withTester ? false }:
 
 mkDerivation rec {

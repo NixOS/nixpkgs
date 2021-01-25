@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, progressbar231, progressbar33, mock }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, progressbar231, progressbar33, mock }:
 
 buildPythonPackage rec {
   pname = "bitmath";

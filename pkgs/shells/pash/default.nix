@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildDotnetPackage }:
+{ lib, fetchFromGitHub, buildDotnetPackage }:
 
 buildDotnetPackage {
   baseName = "pash";

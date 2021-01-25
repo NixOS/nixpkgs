@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , itsdangerous, click, werkzeug, jinja2, pytest }:
 
 buildPythonPackage rec {

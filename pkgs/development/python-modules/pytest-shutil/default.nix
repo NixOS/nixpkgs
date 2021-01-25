@@ -1,4 +1,4 @@
-{ stdenv, lib, isPyPy, buildPythonPackage, fetchPypi
+{ lib, isPyPy, buildPythonPackage, fetchPypi
 , pytest, cmdline, pytestcov, coverage, setuptools-git, mock, pathpy, execnet
 , contextlib2, termcolor }:
 

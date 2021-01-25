@@ -1,4 +1,4 @@
-{ cmake, lib, stdenv, mkDerivation, fetchFromGitLab,
+{ cmake, lib, mkDerivation, fetchFromGitLab,
   qtmultimedia, qttools, ... }:
 
 mkDerivation rec {

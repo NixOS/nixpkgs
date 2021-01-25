@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchgit, fetchurl, cmake, sip, protobuf, pythonOlder }:
+{ lib, buildPythonPackage, fetchgit, fetchurl, cmake, sip, protobuf, pythonOlder }:
 
 buildPythonPackage {
   pname = "libarcus";

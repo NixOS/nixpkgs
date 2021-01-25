@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, notmuch }:
+{ lib, python3Packages, notmuch }:
 
 python3Packages.buildPythonApplication rec {
   pname = "afew";

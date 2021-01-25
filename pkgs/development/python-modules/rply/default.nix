@@ -1,4 +1,4 @@
-{ lib, stdenv, pytest, fetchFromGitHub, buildPythonPackage, appdirs }:
+{ lib, pytest, fetchFromGitHub, buildPythonPackage, appdirs }:
 
 buildPythonPackage rec {
   pname = "rply";

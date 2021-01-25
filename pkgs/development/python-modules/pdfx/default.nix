@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pdfminer, chardet, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, pdfminer, chardet, pytest }:
 
 buildPythonPackage rec {
   pname = "pdfx";

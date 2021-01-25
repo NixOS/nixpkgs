@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, requests, hidapi }:
+{ lib, fetchPypi, buildPythonPackage, requests, hidapi }:
 
 buildPythonPackage rec {
   pname = "python-u2flib-host";

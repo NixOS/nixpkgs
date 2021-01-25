@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, openssl }:
+{ lib, fetchFromGitHub, python3, openssl }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";

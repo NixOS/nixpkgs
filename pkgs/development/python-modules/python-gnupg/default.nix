@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, gnupg }:
+{ lib, buildPythonPackage, fetchPypi, gnupg }:
 
 buildPythonPackage rec {
   pname   = "python-gnupg";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, fetchNodeModules, buildPythonPackage
+{ lib, fetchgit, fetchNodeModules, buildPythonPackage
 , pgpy, flask, bleach, humanize, html5lib, markdown, psycopg2, pygments
 , requests, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, prometheus_client
 , celery, alembic, importlib-metadata, mistletoe

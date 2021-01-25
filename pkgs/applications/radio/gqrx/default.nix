@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gr-osmosdr
+{ lib, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gr-osmosdr
 , mkDerivation
 # drivers (optional):
 , rtl-sdr, hackrf

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python, mock, boto, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, python, mock, boto, pytest }:
 
 buildPythonPackage rec {
   pname = "amazon_kclpy";

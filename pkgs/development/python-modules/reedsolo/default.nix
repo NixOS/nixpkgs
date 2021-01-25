@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, cython, nose }:
+{ lib, buildPythonPackage, fetchFromGitHub, cython, nose }:
 
 buildPythonPackage rec {
   pname = "reedsolo";

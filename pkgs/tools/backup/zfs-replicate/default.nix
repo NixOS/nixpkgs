@@ -1,5 +1,5 @@
 { buildPythonApplication, click, fetchPypi, hypothesis, mypy, pytest
-, pytestcov, pytestrunner, lib, stdenv, stringcase
+, pytestcov, pytestrunner, lib, stringcase
 }:
 
 buildPythonApplication rec {

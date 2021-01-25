@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib, stdenv }:
+{ buildPythonPackage, fetchPypi, lib }:
 
 buildPythonPackage rec {
   pname = "python-ly";

@@ -1,9 +1,8 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , click
 , ecdsa
 , hidapi
-, lib
 , fetchPypi
 , pytest
 , pyaes

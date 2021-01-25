@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, six, pytest, pytestrunner }:
+{ lib, buildPythonPackage, fetchPypi, six, pytest, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "srptools";

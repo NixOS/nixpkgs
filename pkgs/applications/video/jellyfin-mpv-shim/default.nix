@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, callPackage
+{ lib, buildPythonApplication, fetchFromGitHub, callPackage
 , mpv, python-mpv-jsonipc, jellyfin-apiclient-python
 , pillow, tkinter, pystray, jinja2, pywebview }:
 

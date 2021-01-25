@@ -1,5 +1,5 @@
 { buildPythonPackage, fetchFromGitHub, pillow, click, dlib, numpy
-, face_recognition_models, lib, stdenv, flake8, pytest, glibcLocales
+, face_recognition_models, lib, flake8, pytest, glibcLocales
 }:
 
 buildPythonPackage rec {

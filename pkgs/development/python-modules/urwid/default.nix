@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, isPy27, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, isPy27, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "urwid";

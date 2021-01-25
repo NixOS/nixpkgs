@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, systemd, pkg-config }:
+{ lib, buildPythonPackage, fetchFromGitHub, systemd, pkg-config }:
 
 buildPythonPackage rec {
   pname = "systemd";

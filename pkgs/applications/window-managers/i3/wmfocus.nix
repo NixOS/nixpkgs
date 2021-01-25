@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform
+{ lib, fetchFromGitHub, rustPlatform
 , xorg, python3, pkg-config, cairo, libxkbcommon }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, jedi, pycodestyle,
+{ lib, buildPythonPackage, fetchFromGitHub, jedi, pycodestyle,
   psutil, pyflakes, rope, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
   spyder-kernels_0_5, qtpy, pyzmq, chardet, pyqtwebengine

@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, cmake, extra-cmake-modules, qtbase,
+{ lib, mkDerivation, fetchurl, cmake, extra-cmake-modules, qtbase,
   kcoreaddons, kdoctools, ki18n, kio, kxmlgui, ktextwidgets,
   libksane
 }:

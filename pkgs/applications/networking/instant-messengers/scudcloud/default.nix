@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3Packages }:
+{ lib, fetchurl, python3Packages }:
 
 let version = "1.63";
 in python3Packages.buildPythonPackage {

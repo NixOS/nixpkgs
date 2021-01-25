@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildLinux, linux_zen, ... } @ args:
+{ lib, fetchFromGitHub, buildLinux, linux_zen, ... } @ args:
 
 let
   version = "5.10.9";

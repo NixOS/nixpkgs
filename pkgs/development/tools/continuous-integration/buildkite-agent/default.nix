@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, buildGoModule,
+{ fetchFromGitHub, lib, buildGoModule,
   makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep }:
 buildGoModule rec {
   name = "buildkite-agent-${version}";

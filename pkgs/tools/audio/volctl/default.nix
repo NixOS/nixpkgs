@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, fetchFromGitHub, wrapGAppsHook, gobject-introspection, libpulseaudio, glib, gtk3, pango, xorg }:
+{ lib, python3Packages, fetchFromGitHub, wrapGAppsHook, gobject-introspection, libpulseaudio, glib, gtk3, pango, xorg }:
 
 python3Packages.buildPythonApplication rec {
   pname = "volctl";

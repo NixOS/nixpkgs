@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, fetchzip }:
+{ lib, python3Packages, fetchzip }:
 
 python3Packages.buildPythonApplication {
   pname = "pdf-parser";

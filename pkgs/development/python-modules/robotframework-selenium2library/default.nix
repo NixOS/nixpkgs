@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, robotframework-seleniumlibrary }:
+{ lib, buildPythonPackage, fetchPypi, robotframework-seleniumlibrary }:
 
 buildPythonPackage rec {
   version = "3.0.0";

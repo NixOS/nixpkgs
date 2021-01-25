@@ -6,7 +6,7 @@
 , http-conduit, http-types, lens-family-core, megaparsec, mtl
 , network-uri, open-browser, optparse-applicative, prettyprinter
 , process, QuickCheck, retry, rio, rio-orphans, safe, semver-range
-, lib, stdenv, stm, stringsearch, tar, template-haskell, temporary, text
+, lib, stm, stringsearch, tar, template-haskell, temporary, text
 , time, transformers, turtle, unliftio, unordered-containers
 , utf8-string, vector, versions, with-utf8, zlib
 }:

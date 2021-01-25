@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, glibcLocales, fetchPypi, six, pytz }:
+{ lib, buildPythonPackage, glibcLocales, fetchPypi, six, pytz }:
 
 buildPythonPackage rec {
   pname = "feedgenerator";

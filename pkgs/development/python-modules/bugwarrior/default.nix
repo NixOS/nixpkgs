@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, setuptools
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools
 , twiggy, requests, offtrac, bugzilla, taskw, dateutil, pytz, keyring, six
 , jinja2, pycurl, dogpile_cache, lockfile, click, pyxdg, future, jira }:
 

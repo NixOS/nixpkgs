@@ -1,4 +1,4 @@
-{ lib, stdenv, isPy27, buildPythonPackage, fetchPypi, scikitlearn }:
+{ lib, isPy27, buildPythonPackage, fetchPypi, scikitlearn }:
 
 buildPythonPackage rec {
   pname = "mlrose";

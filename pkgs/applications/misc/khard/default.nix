@@ -1,4 +1,4 @@
-{ lib, stdenv, glibcLocales, python3 }:
+{ lib, glibcLocales, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   version = "0.17.0";

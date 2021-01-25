@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pytest, pytest-shutil, pytest-fixture-config, psutil
 , requests, future, retry }:
 

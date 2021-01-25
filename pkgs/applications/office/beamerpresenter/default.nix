@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, installShellFiles,
+{ lib, mkDerivation, fetchFromGitHub, installShellFiles,
   qmake, qtbase, poppler, qtmultimedia }:
 
 mkDerivation rec {

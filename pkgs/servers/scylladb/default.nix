@@ -1,5 +1,5 @@
 {
-  lib, stdenv,
+  lib,
   fetchgit,
   python3Packages,
   pkg-config,

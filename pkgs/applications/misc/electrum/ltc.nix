@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , fetchurl
 , python3Packages
 , wrapQtAppsHook

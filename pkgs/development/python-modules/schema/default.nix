@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, contextlib2, pytest, mock }:
+{ lib, buildPythonPackage, fetchPypi, contextlib2, pytest, mock }:
 
 buildPythonPackage rec {
 

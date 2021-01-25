@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
+{ lib, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
 , bundlerEnv, pkg-config
 # libgit2 + dependencies
 , libgit2, openssl, zlib, pcre, http-parser }:

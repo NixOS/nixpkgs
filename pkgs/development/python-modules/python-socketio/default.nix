@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , bidict
 , buildPythonPackage
 , fetchFromGitHub

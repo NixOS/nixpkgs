@@ -1,6 +1,6 @@
 { mkDerivation, aeson, attoparsec, base, bytestring, containers
 , criterion, fetchgit, filepath, hedgehog, hpack, prettyprinter
-, protolude, regex-tdfa, scientific, lib, stdenv, template-haskell, text
+, protolude, regex-tdfa, scientific, lib, template-haskell, text
 , text-builder, th-lift-instances, unordered-containers, vector
 }:
 mkDerivation {

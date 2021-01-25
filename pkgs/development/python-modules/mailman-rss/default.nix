@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, withTwitter ? false}:
+{ lib, python3Packages, withTwitter ? false}:
 
 python3Packages.buildPythonApplication rec {
   pname = "mailman-rss";

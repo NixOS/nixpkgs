@@ -1,5 +1,5 @@
 { lib
-, stdenv
+
 , bash
 , binutils-unwrapped
 , coreutils

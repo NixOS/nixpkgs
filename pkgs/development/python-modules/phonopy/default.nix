@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, python, fetchPypi, numpy, pyyaml, matplotlib, h5py, spglib, pytestCheckHook }:
+{ lib, buildPythonPackage, python, fetchPypi, numpy, pyyaml, matplotlib, h5py, spglib, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "phonopy";

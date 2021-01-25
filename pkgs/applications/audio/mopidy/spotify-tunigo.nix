@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages, mopidy, mopidy-spotify }:
+{ lib, fetchFromGitHub, pythonPackages, mopidy, mopidy-spotify }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify-tunigo";

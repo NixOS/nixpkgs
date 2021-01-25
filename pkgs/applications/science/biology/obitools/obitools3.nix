@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3Packages, cmake, python3 }:
+{ lib, fetchurl, python3Packages, cmake, python3 }:
 
 let
   pythonPackages = python3Packages;

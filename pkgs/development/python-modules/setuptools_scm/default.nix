@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pip, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pip, pytest }:
 
 buildPythonPackage rec {
   pname = "setuptools_scm";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, python3, intltool, gtk3, gobject-introspection, gnome3 }:
+{ lib, fetchgit, python3, intltool, gtk3, gobject-introspection, gnome3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "onioncircuits";

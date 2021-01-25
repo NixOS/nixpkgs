@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gexiv2,
+{ lib, fetchFromGitHub, gtk3, pythonPackages, intltool, gexiv2,
   pango, gobject-introspection, wrapGAppsHook, gettext,
 # Optional packages:
  enableOSM ? true, osm-gps-map,

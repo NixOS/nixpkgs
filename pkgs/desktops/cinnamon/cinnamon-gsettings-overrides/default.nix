@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , runCommand
 , nixos-artwork
 , glib

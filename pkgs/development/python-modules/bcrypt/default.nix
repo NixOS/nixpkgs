@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, isPyPy, fetchPypi, pythonOlder
+{ lib, buildPythonPackage, isPyPy, fetchPypi, pythonOlder
 , cffi, pycparser, mock, pytest, py, six }:
 
 buildPythonPackage rec {

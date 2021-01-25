@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, pkgs }:
+{ lib, fetchFromGitHub, python3Packages, pkgs }:
 
 python3Packages.buildPythonApplication rec {
   pname = "dr14_tmeter";

@@ -1,4 +1,4 @@
-{ lib, stdenv, pythonPackages, mopidy }:
+{ lib, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Mopify";

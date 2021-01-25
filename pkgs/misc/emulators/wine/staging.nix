@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, wineUnstable }:
+{ lib, callPackage, wineUnstable }:
 
 with callPackage ./util.nix {};
 

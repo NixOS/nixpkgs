@@ -1,4 +1,4 @@
-{ lib, stdenv, appleDerivation, xcbuildHook, llvmPackages }:
+{ lib, appleDerivation, xcbuildHook, llvmPackages }:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];

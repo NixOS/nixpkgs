@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, pythonOlder, fetchPypi, pytest, mock }:
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";

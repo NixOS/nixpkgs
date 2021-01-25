@@ -1,4 +1,4 @@
-{ godot, lib, stdenv }:
+{ godot, lib }:
 godot.overrideAttrs (oldAttrs: rec {
   pname = "godot-server";
   sconsFlags = "target=release platform=server tools=no";

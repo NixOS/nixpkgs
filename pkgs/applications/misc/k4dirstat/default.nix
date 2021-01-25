@@ -6,7 +6,7 @@
 , kio
 , kjobwidgets
 , kxmlgui
-, lib, stdenv
+, lib
 }:
 
 mkDerivation rec {

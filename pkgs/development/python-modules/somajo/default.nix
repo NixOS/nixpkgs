@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, fetchFromGitHub, buildPythonPackage, isPy3k, regex }:
+{ pkgs, lib, fetchFromGitHub, buildPythonPackage, isPy3k, regex }:
 
 buildPythonPackage rec {
   pname = "SoMaJo";

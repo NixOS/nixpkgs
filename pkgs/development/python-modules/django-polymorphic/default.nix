@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python, django, dj-database-url }:
+{ lib, buildPythonPackage, fetchFromGitHub, python, django, dj-database-url }:
 
 buildPythonPackage rec {
   pname = "django-polymorphic";

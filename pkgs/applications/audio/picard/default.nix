@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5
+{ lib, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5
 , enablePlayback ? true
 , gst_all_1
 }:

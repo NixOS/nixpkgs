@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, xmpppy }:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, xmpppy }:
 
 buildPythonPackage rec {
   pname = "jabberbot";

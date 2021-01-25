@@ -11,12 +11,11 @@
 , pygobject3
 , pyudev
 , setproctitle
-, stdenv
 , wrapGAppsHook
 }:
 
 let
-  common = import ./common.nix { inherit stdenv lib fetchFromGitHub; };
+  common = import ./common.nix { inherit lib fetchFromGitHub; };
 in
 buildPythonApplication (common // rec {
   pname = "openrazer_daemon";

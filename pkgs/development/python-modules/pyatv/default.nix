@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage
+{ lib, buildPythonPackage
 , aiohttp
 , aiozeroconf
 , asynctest

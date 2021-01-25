@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pythonPackages, makeDesktopItem }:
+{ lib, fetchurl, pythonPackages, makeDesktopItem }:
 
 pythonPackages.buildPythonApplication rec {
   name = "winpdb-1.4.8";

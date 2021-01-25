@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, pkg-config, cmake, python3, mkDerivation
+{ lib, fetchFromGitHub, fetchurl, pkg-config, cmake, python3, mkDerivation
 , libX11, libXrandr, qtbase, qtwebchannel, qtwebengine, qtx11extras
 , libvdpau, SDL2, mpv, libGL }:
 let

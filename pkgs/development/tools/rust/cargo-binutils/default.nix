@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, runCommand }:
+{ lib, fetchFromGitHub, rustPlatform, runCommand }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binutils";

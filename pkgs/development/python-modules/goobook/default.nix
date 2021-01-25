@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , docutils, installShellFiles
 , google_api_python_client, simplejson, oauth2client, setuptools, xdg
 }:

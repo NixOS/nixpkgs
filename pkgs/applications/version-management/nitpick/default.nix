@@ -1,6 +1,6 @@
 { fetchFromGitHub
 , buildPythonPackage
-, lib, stdenv
+, lib
 , isPy27
 }:
 

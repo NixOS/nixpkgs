@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, isPy3k, fetchurl }:
+{ lib, buildPythonPackage, isPy3k, fetchurl }:
 
 buildPythonPackage rec {
   pname = "umemcache";

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, pytest
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pytest
 , construct }:
 
 buildPythonPackage rec {

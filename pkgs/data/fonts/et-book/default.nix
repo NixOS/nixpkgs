@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, fetchFromGitHub }:
 
 fetchFromGitHub rec {
   rev = "7e8f02dadcc23ba42b491b39e5bdf16e7b383031";

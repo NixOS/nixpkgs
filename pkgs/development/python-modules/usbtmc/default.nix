@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPythonPackage, pyusb }:
+{ lib, fetchurl, buildPythonPackage, pyusb }:
 
 buildPythonPackage rec {
   pname = "usbtmc";

@@ -1,4 +1,4 @@
-{ lib, stdenv, pythonPackages, fetchurl, xpdf }:
+{ lib, pythonPackages, fetchurl, xpdf }:
 let
   py = pythonPackages;
 in

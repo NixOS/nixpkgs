@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, python27Packages, wget, diamond, hmmer }:
+{ lib, fetchFromGitHub, fetchpatch, makeWrapper, python27Packages, wget, diamond, hmmer }:
 
 python27Packages.buildPythonApplication rec {
   pname = "eggnog-mapper";

@@ -2,7 +2,7 @@
 , containers, data-default, deepseq, Diff, directory, extra
 , fetchgit, filepath, ghc, ghc-lib, ghc-lib-parser-ex, ghcide
 , hashable, haskell-lsp, hlint, hls-plugin-api, hslogger, lens
-, regex-tdfa, shake, lib, stdenv, temporary, text, transformers
+, regex-tdfa, shake, lib, temporary, text, transformers
 , unordered-containers
 }:
 mkDerivation {

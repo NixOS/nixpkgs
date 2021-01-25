@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 # Upstream has a `./vendor` directory with all deps which we rely upon.
 buildGoPackage rec {

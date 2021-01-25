@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, jinja2, inflect }:
+{ lib, buildPythonPackage, fetchPypi, jinja2, inflect }:
 
 buildPythonPackage rec {
   pname = "jinja2_pluralize";

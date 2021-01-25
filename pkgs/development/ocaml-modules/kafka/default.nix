@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildDunePackage, base, cmdliner, ocaml_lwt,
+{ lib, fetchFromGitHub, buildDunePackage, base, cmdliner, ocaml_lwt,
   rdkafka, zlib }:
 
 buildDunePackage rec {

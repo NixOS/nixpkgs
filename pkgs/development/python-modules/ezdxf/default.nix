@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, pyparsing, pytest }:
+{ lib, buildPythonPackage, pythonOlder, fetchFromGitHub, pyparsing, pytest }:
 
 buildPythonPackage rec {
   version = "0.12";

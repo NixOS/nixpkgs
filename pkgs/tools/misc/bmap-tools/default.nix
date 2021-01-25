@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python2Packages }:
+{ lib, fetchFromGitHub, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   pname = "bmap-tools";

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, psutil, docutils }:
+{ lib, buildPythonPackage, fetchPypi, psutil, docutils }:
 
 buildPythonPackage rec {
   pname = "pynisher";

@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub
+{ lib, rustPlatform, fetchFromGitHub
 , libsodium, openssl
 , pkg-config
 }:

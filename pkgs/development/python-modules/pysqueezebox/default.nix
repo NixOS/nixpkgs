@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, pythonOlder, aiohttp }:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder, aiohttp }:
 
 buildPythonPackage rec {
   pname = "pysqueezebox";

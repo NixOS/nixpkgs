@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools_scm, pytest }:
+{ lib, buildPythonPackage, fetchPypi, setuptools_scm, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-runner";

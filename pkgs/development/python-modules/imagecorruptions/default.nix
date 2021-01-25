@@ -2,7 +2,7 @@
 , fetchPypi
 , numpy
 , scikitimage
-, lib, stdenv
+, lib
 , opencv3
 }:
 

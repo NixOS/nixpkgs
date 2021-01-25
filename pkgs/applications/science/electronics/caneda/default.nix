@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qwt }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qwt }:
 
 mkDerivation rec {
   pname = "caneda";

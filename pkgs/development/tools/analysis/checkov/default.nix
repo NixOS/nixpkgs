@@ -1,4 +1,4 @@
-{ stdenv, pkgs, lib, python3, fetchFromGitHub }:
+{ pkgs, lib, python3, fetchFromGitHub }:
 
 let
   pname = "checkov";

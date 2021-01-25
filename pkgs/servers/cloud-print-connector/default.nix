@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, avahi, cups, fetchpatch }:
+{ lib, buildGoPackage, fetchFromGitHub, avahi, cups, fetchpatch }:
 
 # TODO: Add a service for gcp-cups-connector and perhaps some other
 # kind of configuration for the same thing that gcp-connector-util

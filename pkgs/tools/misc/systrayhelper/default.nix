@@ -1,4 +1,4 @@
-{ lib, stdenv, pkg-config, libappindicator-gtk3, buildGoPackage, fetchFromGitHub }:
+{ lib, pkg-config, libappindicator-gtk3, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "systrayhelper";

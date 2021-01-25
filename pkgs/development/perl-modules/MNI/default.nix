@@ -1,4 +1,4 @@
-{ fetchFromGitHub, buildPerlPackage, lib, stdenv }:
+{ fetchFromGitHub, buildPerlPackage, lib }:
 
 buildPerlPackage {
   pname = "MNI-Perllib";

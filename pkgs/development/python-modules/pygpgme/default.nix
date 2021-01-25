@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchurl, isPyPy
+{ lib, buildPythonPackage, fetchurl, isPyPy
 , gpgme }:
 
 buildPythonPackage rec {

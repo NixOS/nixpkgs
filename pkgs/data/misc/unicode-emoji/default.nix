@@ -1,7 +1,6 @@
-{ stdenv
+{ lib
 , fetchurl
 , symlinkJoin
-, lib
 }:
 
 let

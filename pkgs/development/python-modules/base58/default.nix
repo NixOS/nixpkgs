@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, isPy27, pytest, pyhamcrest }:
+{ lib, fetchPypi, buildPythonPackage, isPy27, pytest, pyhamcrest }:
 
 buildPythonPackage rec {
   pname = "base58";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages, installShellFiles }:
+{ lib, fetchFromGitHub, pythonPackages, installShellFiles }:
 
 with pythonPackages;
 

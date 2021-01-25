@@ -1,4 +1,4 @@
-{ buildGoPackage, lib, stdenv, fetchurl }:
+{ buildGoPackage, lib, fetchurl }:
 
 buildGoPackage rec {
   name = "filegive-0.7.4";

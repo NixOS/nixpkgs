@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, p7zip,
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, p7zip,
   unzip, cabextract, zip, zopfli, lzip, zpaq, gnutar, gnugrep, diffutils, file,
   gzip, bzip2, xz}:
 

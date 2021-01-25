@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , lxml, pycryptodome, colorama }:
 
 buildPythonPackage rec {

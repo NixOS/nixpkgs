@@ -1,4 +1,4 @@
-{ buildGoPackage, lib, stdenv, fetchFromGitHub }:
+{ buildGoPackage, lib, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "curl-unix-socket-2015-04-10";

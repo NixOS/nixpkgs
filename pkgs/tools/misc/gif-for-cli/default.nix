@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, ffmpeg, zlib, libjpeg }:
+{ lib, fetchFromGitHub, python3Packages, ffmpeg, zlib, libjpeg }:
 
 python3Packages.buildPythonApplication {
   pname = "gif-for-cli";

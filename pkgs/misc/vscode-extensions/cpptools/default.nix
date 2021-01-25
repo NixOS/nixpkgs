@@ -1,4 +1,4 @@
-{ lib, stdenv, vscode-utils
+{ lib, vscode-utils
 , fetchurl, unzip
 , mono, writeScript, runtimeShell
 , jq, clang-tools

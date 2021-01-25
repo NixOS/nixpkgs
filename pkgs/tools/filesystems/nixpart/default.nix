@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPythonApplication, blivet }:
+{ lib, fetchurl, buildPythonApplication, blivet }:
 
 buildPythonApplication rec {
   pname = "nixpart";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, python3Packages, ffmpeg_3, mplayer, vcdimager, cdrkit, dvdauthor
+{ lib, fetchFromGitLab, python3Packages, ffmpeg_3, mplayer, vcdimager, cdrkit, dvdauthor
 , gtk3, gettext, wrapGAppsHook, gdk-pixbuf, gobject-introspection }:
 
 let

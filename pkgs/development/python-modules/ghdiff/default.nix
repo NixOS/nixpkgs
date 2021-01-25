@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , zope_testrunner, six, chardet}:
 
 buildPythonPackage rec {

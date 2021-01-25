@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, pytest }:
+{ lib, fetchFromGitHub, buildPythonPackage, pytest }:
 
 buildPythonPackage {
   pname = "iso3166";

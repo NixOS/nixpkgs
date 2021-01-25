@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, fetchFromGitHub, clang-unwrapped }:
+{ lib, python3, fetchFromGitHub, clang-unwrapped }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "whatstyle";

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, google-auth, six }:
+{ lib, buildPythonPackage, fetchPypi, google-auth, six }:
 
 buildPythonPackage rec {
   pname = "google-cloud-testutils";

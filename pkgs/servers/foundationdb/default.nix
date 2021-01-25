@@ -1,4 +1,4 @@
-{ gcc6Stdenv, stdenv, gccStdenv, llvmPackages
+{ gcc6Stdenv, gccStdenv, llvmPackages
 , lib, fetchurl, fetchpatch, fetchFromGitHub
 
 , cmake, ninja, which, findutils, m4, gawk

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages, file, less, highlight
+{ lib, fetchFromGitHub, python3Packages, file, less, highlight
 , imagePreviewSupport ? true, w3m ? null}:
 
 with lib;

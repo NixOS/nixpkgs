@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, pythonOlder, fetchPypi, prompt_toolkit, appdirs, docopt, jedi
+{ lib, buildPythonPackage, pythonOlder, fetchPypi, prompt_toolkit, appdirs, docopt, jedi
 , pygments, importlib-metadata, isPy3k }:
 
 buildPythonPackage rec {

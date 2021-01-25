@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, stdenv, pythonPackages
+{ fetchFromGitHub, lib, pythonPackages
 , mp3Support ? true, lame ? null
 , opusSupport ? true, opusTools ? null
 , faacSupport ? false, faac ? null

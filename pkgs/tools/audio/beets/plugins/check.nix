@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, beets, pythonPackages, flac, liboggz, mp3val }:
+{ lib, fetchFromGitHub, beets, pythonPackages, flac, liboggz, mp3val }:
 
 pythonPackages.buildPythonApplication rec {
   name = "beets-check";

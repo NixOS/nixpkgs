@@ -2,7 +2,7 @@
 , directory, extra, fetchgit, filepath, fingertree, generic-lens
 , ghc, ghc-boot-th, ghc-exactprint, ghc-source-gen, ghcide
 , haskell-lsp, hie-bios, hls-plugin-api, hspec, hspec-discover
-, lens, mtl, QuickCheck, refinery, retrie, shake, lib, stdenv, syb, text
+, lens, mtl, QuickCheck, refinery, retrie, shake, lib, syb, text
 , transformers
 }:
 mkDerivation {

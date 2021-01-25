@@ -1,4 +1,4 @@
-{ lib, stdenv, nettools, fetchFromGitHub  }:
+{ lib, nettools, fetchFromGitHub  }:
 
 nettools.overrideAttrs(oa: rec {
   name = "net-tools-mptcp";

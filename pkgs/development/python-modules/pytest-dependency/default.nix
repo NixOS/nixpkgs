@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pytest }:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, pytest }:
 
 buildPythonPackage rec {
   version = "0.5.1";

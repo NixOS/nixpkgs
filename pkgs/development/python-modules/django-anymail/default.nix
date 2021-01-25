@@ -1,5 +1,5 @@
 {
-    lib, stdenv,
+    lib,
     buildPythonPackage,
     fetchFromGitHub,
     six,

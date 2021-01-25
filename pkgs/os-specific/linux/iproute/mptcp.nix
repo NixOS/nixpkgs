@@ -1,4 +1,4 @@
-{ lib, stdenv, iproute, fetchFromGitHub }:
+{ lib, iproute, fetchFromGitHub }:
 
 iproute.overrideAttrs (oa: rec {
   pname = "iproute_mptcp";

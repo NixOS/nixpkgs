@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, qtbase, alsaLib, makeDesktopItem, libjack2 }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, alsaLib, makeDesktopItem, libjack2 }:
 
 let
   desktopItem = makeDesktopItem rec {

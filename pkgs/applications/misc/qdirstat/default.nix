@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, qmake
+{ lib, fetchFromGitHub, qmake
 , coreutils, xdg_utils, bash
 , makeWrapper, perlPackages, mkDerivation }:
 

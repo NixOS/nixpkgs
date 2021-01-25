@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, pythonAtLeast, setuptools
+{ lib, buildPythonPackage, fetchPypi, isPy3k, pythonAtLeast, setuptools
 , transitions, websockets, passlib, docopt, pyyaml, nose }:
 
 buildPythonPackage rec {

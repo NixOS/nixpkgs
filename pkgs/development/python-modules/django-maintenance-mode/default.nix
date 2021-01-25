@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, pytest, django }:
+{ lib, fetchFromGitHub, buildPythonPackage, pytest, django }:
 
 buildPythonPackage rec {
   pname = "django-maintenance-mode";

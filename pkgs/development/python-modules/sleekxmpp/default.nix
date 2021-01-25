@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, dns, pyasn1 }:
+{ lib, fetchPypi, buildPythonPackage, dns, pyasn1 }:
 
 buildPythonPackage rec {
   pname = "sleekxmpp";

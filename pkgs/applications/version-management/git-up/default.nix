@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pythonPackages, git }:
+{ lib, fetchurl, pythonPackages, git }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "git-up";

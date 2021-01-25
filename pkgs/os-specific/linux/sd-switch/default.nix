@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, rustPlatform, pkg-config, dbus }:
+{ lib, fetchFromGitLab, rustPlatform, pkg-config, dbus }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sd-switch";

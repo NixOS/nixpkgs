@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPythonPackage, isPy3k, pygments, wxPython }:
+{ lib, fetchurl, buildPythonPackage, isPy3k, pygments, wxPython }:
 
 buildPythonPackage rec {
   version = "1.2.3";

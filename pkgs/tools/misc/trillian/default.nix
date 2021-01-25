@@ -1,15 +1,11 @@
-{ stdenv
-, lib
+{ lib
 , buildGoModule
 , fetchFromGitHub
 }:
-let
+
+buildGoModule rec {
   pname = "trillian";
   version = "1.3.11";
-
-in
-buildGoModule {
-  inherit pname version;
   vendorSha256 = "0zxp1gjzcc3z6vkpc2bchbs1shwm1b28ks0jh4gf6zxpp4361j4l";
 
   src = fetchFromGitHub {
@@ -34,10 +30,10 @@ buildGoModule {
     "cmd/updatetree"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/google/trillian";
     description = "A transparent, highly scalable and cryptographically verifiable data store.";
-    license = [ lib.licenses.asl20 ];
-    maintainers = [ lib.maintainers.adisbladis ];
+    license = [ licenses.asl20 ];
+    maintainers = [ maintainers.adisbladis ];
   };
 }

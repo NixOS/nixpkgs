@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep
+{ buildGoPackage, makeWrapper, coreutils, git, openssh, bash, gnused, gnugrep
 , src, version, hasBootstrapScript, postPatch ? ""
 , ... }:
 let

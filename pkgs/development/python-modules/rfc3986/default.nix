@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, idna, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchPypi, idna, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "rfc3986";

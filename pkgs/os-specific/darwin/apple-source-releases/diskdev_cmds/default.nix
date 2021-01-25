@@ -1,4 +1,4 @@
-{ lib, stdenv, appleDerivation, xcbuildHook
+{ lib, appleDerivation, xcbuildHook
 , Libc, xnu, libutil }:
 
 appleDerivation {

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, python3, xvfb_run, stdenv
+{ lib, buildPythonPackage, fetchPypi, isPy3k, python3, xvfb_run
 , wrapGAppsHook, gobject-introspection, pygobject3, graphviz, gtk3, numpy }:
 
 buildPythonPackage rec {

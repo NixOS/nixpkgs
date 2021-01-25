@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, udev, pkg-config }:
+{ lib, fetchFromGitHub, rustPlatform, udev, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "g933-utils";

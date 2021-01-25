@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, six, nose, fudge, should-dsl }:
+{ lib, buildPythonPackage, fetchFromGitHub, six, nose, fudge, should-dsl }:
 
 buildPythonPackage rec {
   pname = "nose-of-yeti";

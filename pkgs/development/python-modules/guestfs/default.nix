@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchurl, libguestfs, qemu }:
+{ lib, buildPythonPackage, fetchurl, libguestfs, qemu }:
 
 buildPythonPackage rec {
   pname = "guestfs";

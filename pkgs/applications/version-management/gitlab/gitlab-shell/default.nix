@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, buildGoModule, ruby }:
+{ lib, fetchFromGitLab, buildGoModule, ruby }:
 
 buildGoModule rec {
   pname = "gitlab-shell";

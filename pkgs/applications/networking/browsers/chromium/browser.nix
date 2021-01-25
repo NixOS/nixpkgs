@@ -1,4 +1,4 @@
-{ lib, stdenv, mkChromiumDerivation, channel, enableWideVine, ungoogled }:
+{ lib, mkChromiumDerivation, channel, enableWideVine, ungoogled }:
 
 with lib;
 

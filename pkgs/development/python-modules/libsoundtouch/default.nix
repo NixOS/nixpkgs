@@ -1,6 +1,6 @@
 { buildPythonPackage
 , fetchFromGitHub
-, stdenv
+
 , lib
 , pythonOlder
 , requests

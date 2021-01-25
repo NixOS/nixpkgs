@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, pkg-config, qmake, qttools, qtbase, qtsvg, qtx11extras, fetchFromGitHub }:
+{ lib, mkDerivation, pkg-config, qmake, qttools, qtbase, qtsvg, qtx11extras, fetchFromGitHub }:
 mkDerivation rec {
   pname = "featherpad";
   version = "0.10.0";

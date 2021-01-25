@@ -1,4 +1,4 @@
-{ lib, stdenv, pythonPackages, fetchFromGitHub }:
+{ lib, pythonPackages, fetchFromGitHub }:
 
 let
   pgdbconn = pythonPackages.buildPythonPackage {

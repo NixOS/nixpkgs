@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , pythonOlder
-, lib, stdenv
+, lib
 , setuptools_scm
 , pytest
 , typing-extensions

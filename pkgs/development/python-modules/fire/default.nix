@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, six, hypothesis, mock
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, six, hypothesis, mock
 , python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
 
 buildPythonPackage rec {

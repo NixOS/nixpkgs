@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pep8, nose }:
+{ lib, buildPythonPackage, fetchFromGitHub, pep8, nose }:
 
 buildPythonPackage rec {
   version = "0.8";

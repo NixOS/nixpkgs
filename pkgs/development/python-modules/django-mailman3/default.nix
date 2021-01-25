@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, django-gravatar2, django_compressor
+{ lib, buildPythonPackage, fetchPypi, django-gravatar2, django_compressor
 , django-allauth, mailmanclient, django, mock
 }:
 

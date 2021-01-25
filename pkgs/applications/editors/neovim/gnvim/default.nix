@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, gtk, webkitgtk }:
+{ lib, rustPlatform, fetchFromGitHub, gtk, webkitgtk }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gnvim-unwrapped";

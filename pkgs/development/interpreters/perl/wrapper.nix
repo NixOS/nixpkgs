@@ -1,4 +1,4 @@
-{ lib, stdenv, perl, buildEnv, makeWrapper
+{ lib, perl, buildEnv, makeWrapper
 , extraLibs ? []
 , extraOutputsToInstall ? []
 , postBuild ? ""
