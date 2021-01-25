@@ -9,6 +9,9 @@
     x86_64 = "x64";
     i686 = "ia32";
     aarch64 = "arm64";
+    # Make sure that if the user overrides version parameter they're
+    # also need to override sources, to avoid mistakes
+    version = "2.10.5";
   in
   {
     "${version}-x86_64-darwin" = fetchurl {
@@ -29,6 +32,9 @@
     };
   }
 }:
+
+assert version != null && version != "";
+assert sources != null && (builtins.isAttrs sources);
 
 stdenv.mkDerivation {
   pname = "dart";
