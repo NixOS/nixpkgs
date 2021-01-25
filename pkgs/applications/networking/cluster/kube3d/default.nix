@@ -1,11 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, k3sVersion ? "1.20.0-k3s2" }:
 
-let
-  k3sVersion = "1.20.0-k3s2";
-in
 buildGoModule rec {
   pname = "kube3d";
-  version = "3.4.0";
+  version = "4.0.0";
 
   excludedPackages = "tools";
 
@@ -13,7 +10,7 @@ buildGoModule rec {
     owner = "rancher";
     repo = "k3d";
     rev = "v${version}";
-    sha256 = "1fisbzv786n841pagy7zbanll7k1g5ib805j9azs2s30cfhvi08b";
+    sha256 = "sha256-sHtPW9EaTycHh9d/vp28BvzhmbLUQYsu6yMfJlJYH+k=";
   };
 
   vendorSha256 = null;
@@ -24,8 +21,8 @@ buildGoModule rec {
     "-ldflags="
     "-w"
     "-s"
-    "-X github.com/rancher/k3d/v3/version.Version=v${version}"
-    "-X github.com/rancher/k3d/v3/version.K3sVersion=v${k3sVersion}"
+    "-X github.com/rancher/k3d/v4/version.Version=v${version}"
+    "-X github.com/rancher/k3d/v4/version.K3sVersion=v${k3sVersion}"
   ];
 
   doCheck = false;
