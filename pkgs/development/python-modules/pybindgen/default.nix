@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, isPy3k, setuptools_scm, pygccxml }:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, setuptools_scm, pygccxml }:
 buildPythonPackage rec {
   pname = "PyBindGen";
   version = "0.21.0";

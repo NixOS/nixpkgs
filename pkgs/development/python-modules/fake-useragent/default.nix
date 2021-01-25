@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, six, pytest }:
+{ lib, fetchPypi, buildPythonPackage, six, pytest }:
 
 buildPythonPackage rec {
   pname = "fake-useragent";

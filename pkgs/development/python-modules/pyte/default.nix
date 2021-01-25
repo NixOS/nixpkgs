@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, pytestrunner, wcwidth }:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytestrunner, wcwidth }:
 
 buildPythonPackage rec {
   pname = "pyte";

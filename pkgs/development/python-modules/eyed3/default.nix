@@ -1,11 +1,10 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
 , python
 , isPyPy
 , six
-, lib
 , filetype
 , deprecation
 , dataclasses

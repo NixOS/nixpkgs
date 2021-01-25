@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, qtbase, qttools, poppler }:
+{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qttools, poppler }:
 
 mkDerivation rec {
   pname = "lumina-pdf";

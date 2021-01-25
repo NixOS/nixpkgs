@@ -1,4 +1,4 @@
-{ lib, stdenv, symlinkJoin, prevo-tools, prevo-data, makeWrapper }:
+{ lib, symlinkJoin, prevo-tools, prevo-data, makeWrapper }:
 
 symlinkJoin rec {
   name = "prevo-${version}";

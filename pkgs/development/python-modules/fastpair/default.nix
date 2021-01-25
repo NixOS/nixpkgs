@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pytestrunner, pytest, scipy }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestrunner, pytest, scipy }:
 
 buildPythonPackage {
   pname = "fastpair";

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildRebar3, fetchHex }:
+{ lib, buildRebar3, fetchHex }:
 
 { name, version, sha256
 , builder ? buildRebar3

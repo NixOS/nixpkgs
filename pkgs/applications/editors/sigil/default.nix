@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, makeWrapper
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, makeWrapper
 , boost, xercesc, hunspell, zlib, pcre16
 , qtbase, qttools, qtwebengine, qtxmlpatterns
 , python3Packages

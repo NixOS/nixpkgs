@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , fetchurl
 , nix-update-script
 , python3Packages

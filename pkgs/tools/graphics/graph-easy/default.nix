@@ -1,4 +1,4 @@
-{ lib, stdenv, perlPackages, fetchurl }:
+{ lib, perlPackages, fetchurl }:
 
 perlPackages.buildPerlPackage {
   pname = "Graph-Easy";

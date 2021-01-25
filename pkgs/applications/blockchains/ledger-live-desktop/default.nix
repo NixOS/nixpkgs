@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, appimageTools, imagemagick }:
+{ lib, fetchurl, makeDesktopItem, appimageTools, imagemagick }:
 
 let
   pname = "ledger-live-desktop";

@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , sway-unwrapped
 , makeWrapper, symlinkJoin, writeShellScriptBin
 , withBaseWrapper ? true, extraSessionCommands ? "", dbus

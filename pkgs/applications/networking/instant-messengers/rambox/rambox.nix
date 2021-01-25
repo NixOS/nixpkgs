@@ -1,6 +1,6 @@
 { pname, version, src, meta, desktopName ? "Rambox" }:
 
-{ appimageTools, stdenv, lib, fetchurl, makeDesktopItem }:
+{ appimageTools, lib, fetchurl, makeDesktopItem }:
 
 let
   name = "${pname}-${version}";

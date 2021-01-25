@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, file, which, intltool, gobject-introspection,
+{ lib, fetchurl, file, which, intltool, gobject-introspection,
   findutils, xdg_utils, dconf, gtk3, python3Packages,
   wrapGAppsHook
 }:

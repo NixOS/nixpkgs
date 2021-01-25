@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub, libusb1, pkg-config, lib, stdenv, libiconv }:
+{ buildGoPackage, fetchFromGitHub, libusb1, pkg-config, lib, libiconv }:
 
 buildGoPackage rec {
   pname = "aws-okta";

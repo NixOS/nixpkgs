@@ -1,5 +1,5 @@
 { buildPythonPackage, pythonAtLeast, pytest, requests, requests_oauthlib, six
-, fetchFromGitHub, responses, lib, stdenv
+, fetchFromGitHub, responses, lib
 }:
 
 buildPythonPackage rec {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip }:
+{ lib, fetchzip }:
 let
   version = "2020-11-14";
 in

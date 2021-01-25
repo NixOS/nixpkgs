@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchurl, makeWrapper
+{ lib, buildGoPackage, fetchurl, makeWrapper
 , git, bash, gzip, openssh, pam
 , sqliteSupport ? true
 , pamSupport ? true

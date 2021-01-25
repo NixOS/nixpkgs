@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pep517, toml, mock, breezy, git, build }:
+{ lib, buildPythonPackage, fetchPypi, pep517, toml, mock, breezy, git, build }:
 
 buildPythonPackage rec {
   pname = "check-manifest";

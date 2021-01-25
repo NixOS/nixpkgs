@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config
+{ lib, fetchFromGitHub, rustPlatform, pkg-config
 , libsodium, libarchive, openssl, zeromq }:
 
 rustPlatform.buildRustPackage rec {

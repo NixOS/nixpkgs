@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, fetchFromGitHub
 , makeWrapper, makeDesktopItem, mkYarnPackage
 , electron, element-web
 }:

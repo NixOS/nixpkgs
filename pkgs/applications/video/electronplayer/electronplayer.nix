@@ -1,4 +1,4 @@
-{ appimageTools, lib, stdenv, fetchurl }:
+{ appimageTools, lib, fetchurl }:
 let
   pname = "electronplayer";
   version = "2.0.8";

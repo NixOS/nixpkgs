@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, python, fetchPypi, isPy3k, glibcLocales }:
+{ lib, buildPythonPackage, python, fetchPypi, isPy3k, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "pystache";

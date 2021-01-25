@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , stompclient, python-daemon, redis, pid, pytest, six, click, coverage
 , sqlalchemy }:
 

@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, trivialBuild }:
+{ fetchurl, lib, trivialBuild }:
 
 trivialBuild {
   pname = "sv-kalender";

@@ -1,4 +1,4 @@
-{ lib, stdenv, runtimeShell, fetchFromGitHub, python3, writeText, writeScript
+{ lib, runtimeShell, fetchFromGitHub, python3, writeText, writeScript
 , coreutils, sqlite }:
 
 with python3.pkgs;

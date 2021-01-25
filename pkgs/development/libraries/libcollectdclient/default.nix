@@ -1,4 +1,4 @@
-{ lib, stdenv, collectd }:
+{ lib, collectd }:
 with lib;
 
 collectd.overrideAttrs (oldAttrs: {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "rpl";

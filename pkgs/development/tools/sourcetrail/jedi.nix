@@ -1,6 +1,6 @@
 # Taken from a past commit of nixpkgs
 
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
+{ lib, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";

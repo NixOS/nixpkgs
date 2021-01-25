@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , beautifulsoup4, bottle, chardet, dateutil
 , google_api_python_client, lxml, oauth2client
 , ply, python_magic, pytest, requests }:

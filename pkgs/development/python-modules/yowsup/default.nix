@@ -1,4 +1,4 @@
-{ buildPythonPackage, lib, stdenv, fetchFromGitHub, six, python-axolotl, pytest
+{ buildPythonPackage, lib, fetchFromGitHub, six, python-axolotl, pytest
 , isPy3k, consonance, appdirs
 }:
 

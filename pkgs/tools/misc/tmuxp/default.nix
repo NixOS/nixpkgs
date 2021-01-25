@@ -1,4 +1,4 @@
-{ lib, stdenv, python }:
+{ lib, python }:
 
 with python.pkgs;
 

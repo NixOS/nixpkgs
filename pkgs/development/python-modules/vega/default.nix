@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage , fetchPypi, pythonOlder
+{ lib, buildPythonPackage , fetchPypi, pythonOlder
 , pytest, jupyter_core, pandas, ipywidgets, jupyter, altair }:
 
 buildPythonPackage rec {

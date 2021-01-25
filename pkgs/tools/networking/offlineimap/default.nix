@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python2Packages,
+{ lib, fetchFromGitHub, python2Packages,
   asciidoc, cacert, libxml2, libxslt, docbook_xsl }:
 
 python2Packages.buildPythonApplication rec {

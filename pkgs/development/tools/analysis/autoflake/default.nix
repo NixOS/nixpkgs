@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages }:
+{ lib, python3Packages }:
 
 with python3Packages;
 buildPythonApplication rec {

@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, dbus, gdk-pixbuf, libnotify, makeWrapper, pkg-config, xorg
+{ lib, rustPlatform, fetchFromGitHub, dbus, gdk-pixbuf, libnotify, makeWrapper, pkg-config, xorg
 , enableAlsaUtils ? true, alsaUtils, coreutils
 , enableNetwork ? true, dnsutils, iproute, wirelesstools }:
 

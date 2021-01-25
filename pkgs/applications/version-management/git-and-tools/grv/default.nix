@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, curl, ncurses, pkg-config, readline
+{ lib, buildGoPackage, fetchFromGitHub, curl, ncurses, pkg-config, readline
 , cmake }:
 let
   version = "0.3.2";

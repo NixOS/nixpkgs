@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
 let
   inherit (python3.pkgs) buildPythonApplication pytest mock pexpect;

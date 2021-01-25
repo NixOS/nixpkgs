@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3Packages }:
+{ lib, fetchurl, python3Packages }:
 
 with python3Packages;
 

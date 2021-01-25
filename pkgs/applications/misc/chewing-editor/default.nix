@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, pkg-config, libchewing, qtbase
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, libchewing, qtbase
 , qttools }:
 
 mkDerivation rec {

@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , fetchFromGitHub
 }: rec {
   version = "2.9.0";

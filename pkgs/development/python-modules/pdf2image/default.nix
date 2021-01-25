@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pillow, poppler_utils }:
+{ lib, buildPythonPackage, fetchPypi, pillow, poppler_utils }:
 
 buildPythonPackage rec {
   pname = "pdf2image";

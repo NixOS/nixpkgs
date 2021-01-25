@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, rnnoise-plugin }:
+{ lib, buildGoModule, fetchFromGitHub, rnnoise-plugin }:
 
 buildGoModule rec {
   pname = "NoiseTorch";

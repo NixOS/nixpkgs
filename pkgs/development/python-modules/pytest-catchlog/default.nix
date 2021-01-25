@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, unzip }:
+{ lib, buildPythonPackage, fetchPypi, pytest, unzip }:
 
 buildPythonPackage rec {
   pname = "pytest-catchlog";

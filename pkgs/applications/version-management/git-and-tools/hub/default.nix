@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, util-linux, nixosTests }:
+{ lib, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, util-linux, nixosTests }:
 
 buildGoPackage rec {
   pname = "hub";

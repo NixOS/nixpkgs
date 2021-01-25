@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonApplication, python3Packages, wrapGAppsHook
+{ lib, fetchFromGitHub, buildPythonApplication, python3Packages, wrapGAppsHook
 , xflux, librsvg, gtk3, gobject-introspection, pango, gdk-pixbuf, atk
 , pexpect, pyGtkGlade, pygobject3, pyxdg, libappindicator-gtk3
 }:

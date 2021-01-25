@@ -4,7 +4,7 @@
 , qmake
 , qtbase
 , qtwebkit
-, lib, stdenv
+, lib
 , wrapGAppsHook
 }:
 

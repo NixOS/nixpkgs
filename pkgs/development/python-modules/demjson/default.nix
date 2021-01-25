@@ -1,4 +1,4 @@
-{ lib, stdenv, python, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, python, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "demjson";

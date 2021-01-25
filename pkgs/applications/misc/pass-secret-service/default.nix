@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, dbus, gnupg }:
+{ lib, fetchFromGitHub, python3, dbus, gnupg }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pass-secret-service";

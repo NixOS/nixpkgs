@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , django, django_tagging, whisper, pycairo, cairocffi, ldap, memcached, pytz, urllib3, scandir
 }:
 buildPythonPackage rec {

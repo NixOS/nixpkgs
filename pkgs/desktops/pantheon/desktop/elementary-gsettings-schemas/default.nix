@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , runCommand
 , mutter
 , elementary-default-settings

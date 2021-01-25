@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, appstream, qtbase, qttools }:
+{ mkDerivation, appstream, qtbase, qttools }:
 
 # TODO: look into using the libraries from the regular appstream derivation as we keep duplicates here
 

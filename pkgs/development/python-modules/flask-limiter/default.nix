@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, flask, limits }:
+{ lib, fetchPypi, buildPythonPackage, flask, limits }:
 
 buildPythonPackage rec {
   pname = "Flask-Limiter";

@@ -9,7 +9,7 @@
 , scipy
 , shapely
 , six
-, lib, stdenv
+, lib
 }:
 
 buildPythonPackage rec {

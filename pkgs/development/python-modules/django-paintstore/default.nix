@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, requests, requests_oauthlib
+{ lib, buildPythonPackage, fetchPypi, requests, requests_oauthlib
 , django, python3-openid }:
 
 buildPythonPackage rec {

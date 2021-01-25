@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchurl }:
+{ lib, buildGoModule, fetchurl }:
 
 buildGoModule rec {
   pname = "matterbridge";

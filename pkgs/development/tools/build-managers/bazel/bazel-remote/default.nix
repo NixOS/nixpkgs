@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , git
 , go
-, lib, stdenv
+, lib
 }:
 
 buildBazelPackage rec {

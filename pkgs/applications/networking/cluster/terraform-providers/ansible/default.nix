@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 buildGoPackage rec {
   pname = "terraform-provider-ansible";
   version = "1.0.3";

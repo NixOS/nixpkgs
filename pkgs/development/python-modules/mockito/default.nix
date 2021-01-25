@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, funcsigs, pytest, numpy }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, funcsigs, pytest, numpy }:
 
 buildPythonPackage rec {
   version = "1.2.2";

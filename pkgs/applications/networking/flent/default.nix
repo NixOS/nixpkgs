@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonApplication, fetchPypi, matplotlib, procps, pyqt5, python
+{ lib, buildPythonApplication, fetchPypi, matplotlib, procps, pyqt5, python
 , pythonPackages, qt5, sphinx, xvfb_run }:
 
 buildPythonApplication rec {

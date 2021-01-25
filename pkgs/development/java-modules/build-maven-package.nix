@@ -5,7 +5,7 @@ with builtins;
 with lib;
 
 let
-  mavenMinimal = import ./maven-minimal.nix { inherit lib pkgs stdenv; };
+  mavenMinimal = import ./maven-minimal.nix { inherit lib pkgs ; };
 in stdenv.mkDerivation rec {
   inherit mavenDeps src name meta m2Path;
 

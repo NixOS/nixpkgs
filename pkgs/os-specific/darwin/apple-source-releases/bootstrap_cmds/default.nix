@@ -1,4 +1,4 @@
-{ lib, stdenv, appleDerivation, yacc, flex }:
+{ lib, appleDerivation, yacc, flex }:
 
 appleDerivation {
   nativeBuildInputs = [ yacc flex ];

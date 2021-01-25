@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage
+{ lib, buildPythonPackage
 , fetchPypi, isPy3k, linuxPackages
 , fastrlock, numpy, six, wheel, pytest, mock, setuptools
 , cudatoolkit, cudnn, nccl

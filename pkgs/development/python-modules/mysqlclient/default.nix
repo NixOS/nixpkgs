@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, libmysqlclient }:
+{ lib, buildPythonPackage, fetchPypi, libmysqlclient }:
 
 buildPythonPackage rec {
   pname = "mysqlclient";

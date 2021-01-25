@@ -209,6 +209,7 @@ in {
         KillSignal = "SIGQUIT";
         AmbientCapabilities = cfg.capabilities;
         CapabilityBoundingSet = cfg.capabilities;
+        RuntimeDirectory = mkIf (cfg.runDir == "/run/uwsgi") "uwsgi";
       };
     };
 

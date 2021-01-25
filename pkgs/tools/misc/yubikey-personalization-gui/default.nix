@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, mkDerivation, pkg-config, qtbase, qmake, imagemagick
+{ lib, fetchurl, mkDerivation, pkg-config, qtbase, qmake, imagemagick
 , libyubikey, yubikey-personalization }:
 
 mkDerivation rec {

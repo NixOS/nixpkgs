@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage }:
+{ lib, fetchFromGitHub, buildPythonPackage }:
 
 buildPythonPackage {
   pname = "radicale_infcloud";

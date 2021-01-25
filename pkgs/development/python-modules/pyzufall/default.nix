@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, python, buildPythonPackage, nose, future, coverage }:
+{ lib, fetchPypi, python, buildPythonPackage, nose, future, coverage }:
 
 buildPythonPackage rec {
   pname = "PyZufall";

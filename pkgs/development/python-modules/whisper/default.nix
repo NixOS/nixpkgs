@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, mock, six }:
+{ lib, buildPythonPackage, fetchPypi, mock, six }:
 
 buildPythonPackage rec {
   pname = "whisper";

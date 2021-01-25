@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchzip }:
+{ lib, buildGoPackage, fetchzip }:
 
 buildGoPackage rec {
   pname = "wireguard-go";

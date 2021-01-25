@@ -5,8 +5,6 @@ with lib;
 let
   cfg = config.boot.loader.raspberryPi;
 
-  inherit (pkgs.stdenv.hostPlatform) platform;
-
   builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
   builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; };
 
@@ -102,6 +100,6 @@ in
 
     system.build.installBootLoader = builder;
     system.boot.loader.id = "raspberrypi";
-    system.boot.loader.kernelFile = linux-kernel.target;
+    system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
   };
 }

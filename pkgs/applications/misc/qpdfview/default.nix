@@ -1,4 +1,4 @@
-{lib, stdenv, mkDerivation, fetchurl, qmake, qtbase, qtsvg, pkg-config, poppler, djvulibre, libspectre, cups
+{lib, mkDerivation, fetchurl, qmake, qtbase, qtsvg, pkg-config, poppler, djvulibre, libspectre, cups
 , file, ghostscript
 }:
 let

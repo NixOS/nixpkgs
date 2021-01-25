@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, docutils, fetchpatch }:
+{ lib, fetchFromGitHub, python3Packages, docutils, fetchpatch }:
 
 python3Packages.buildPythonApplication rec {
   pname = "httpie";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, readline, ncurses, canto-daemon }:
+{ lib, fetchFromGitHub, python3Packages, readline, ncurses, canto-daemon }:
 
 python3Packages.buildPythonApplication rec {
   version = "0.9.9";

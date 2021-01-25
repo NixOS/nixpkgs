@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit }:
+{ lib, fetchgit }:
 
 let
   version = "2017-03-30";

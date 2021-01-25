@@ -17,7 +17,7 @@
 , rq
 , sanic
 , sqlalchemy
-, lib, stdenv
+, lib
 , tornado
 , urllib3
 , trytond

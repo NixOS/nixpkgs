@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, soupsieve, pytest, python }:
+{ lib, buildPythonPackage, fetchPypi, soupsieve, pytest, python }:
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";

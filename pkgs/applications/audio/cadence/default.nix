@@ -1,7 +1,6 @@
-{ stdenv
+{ lib
 , a2jmidid
 , coreutils
-, lib
 , libjack2
 , fetchpatch
 , fetchzip

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonApplication, pyxdg, PyGithub }:
+{ lib, fetchFromGitHub, buildPythonApplication, pyxdg, PyGithub }:
 
 buildPythonApplication rec {
   pname = "cligh";

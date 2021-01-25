@@ -1,4 +1,4 @@
-{ lib, stdenv, antBuild, fetchgit, perl }:
+{ lib, antBuild, fetchgit, perl }:
 
 let
   version = "4.11";

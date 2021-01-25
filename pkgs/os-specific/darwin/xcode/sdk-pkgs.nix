@@ -2,7 +2,7 @@
 , clang-unwrapped
 , binutils-unwrapped
 , runCommand
-, stdenv
+
 , wrapBintoolsWith
 , wrapCCWith
 , buildIosSdk, targetIosSdkPkgs

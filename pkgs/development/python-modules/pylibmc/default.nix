@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib, stdenv, libmemcached, zlib, cyrus_sasl }:
+{ buildPythonPackage, fetchPypi, lib, libmemcached, zlib, cyrus_sasl }:
 
 buildPythonPackage rec {
   version = "1.6.1";

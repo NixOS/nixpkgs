@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, setuptools_scm, fusepy, fuse
+{ lib, buildPythonPackage, fetchPypi, setuptools_scm, fusepy, fuse
 , openssl }:
 
 buildPythonPackage rec {

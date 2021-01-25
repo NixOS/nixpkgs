@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, xpdf, imagemagick, tesseract }:
+{ lib, python3Packages, xpdf, imagemagick, tesseract }:
 
 python3Packages.buildPythonPackage rec {
   pname = "invoice2data";

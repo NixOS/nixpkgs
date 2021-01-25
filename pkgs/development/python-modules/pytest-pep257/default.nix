@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, pep257 }:
+{ lib, buildPythonPackage, fetchPypi, pytest, pep257 }:
 
 buildPythonPackage rec {
   pname = "pytest-pep257";

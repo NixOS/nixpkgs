@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, runtimeShell }:
+{ lib, buildGoPackage, fetchFromGitHub, runtimeShell }:
 
 buildGoPackage rec {
   pname = "hivemind";

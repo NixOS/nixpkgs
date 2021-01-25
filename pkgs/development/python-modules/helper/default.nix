@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pyyaml, mock }:
+{ lib, buildPythonPackage, fetchPypi, pyyaml, mock }:
 
 buildPythonPackage rec {
   pname = "helper";

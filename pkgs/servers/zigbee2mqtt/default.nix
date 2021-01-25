@@ -1,4 +1,4 @@
-{ pkgs, stdenv, system, dataDir ? "/opt/zigbee2mqtt/data", nixosTests }:
+{ pkgs, system, dataDir ? "/opt/zigbee2mqtt/data", nixosTests }:
 let
   package = (import ./node.nix { inherit pkgs system; }).package;
 in

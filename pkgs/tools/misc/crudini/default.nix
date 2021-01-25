@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, help2man, installShellFiles }:
+{ lib, fetchFromGitHub, python3Packages, help2man, installShellFiles }:
 
 python3Packages.buildPythonApplication rec {
   pname = "crudini";

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages
+{ lib, fetchFromGitHub, python3Packages
 , asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libxml2
 }:
 

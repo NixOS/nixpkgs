@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pylint }:
+{ lib, buildPythonPackage, fetchPypi, pylint }:
 
 buildPythonPackage rec {
   pname = "setuptools-lint";

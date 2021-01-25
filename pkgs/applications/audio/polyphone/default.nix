@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pkg-config, alsaLib, libjack2, portaudio, libogg, flac, libvorbis, rtmidi, qtsvg }:
+{ lib, mkDerivation, fetchFromGitHub, qmake, pkg-config, alsaLib, libjack2, portaudio, libogg, flac, libvorbis, rtmidi, qtsvg }:
 
 mkDerivation rec {
   version = "2.2.0";

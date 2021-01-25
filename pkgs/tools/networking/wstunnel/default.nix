@@ -1,6 +1,6 @@
 { mkDerivation, async, base, base64-bytestring, binary, bytestring
 , classy-prelude, cmdargs, connection, hslogger, mtl, network
-, network-conduit-tls, stdenv, streaming-commons, text
+, network-conduit-tls, streaming-commons, text
 , unordered-containers, websockets
 , hspec, iproute
 , lib, fetchFromGitHub, fetchpatch

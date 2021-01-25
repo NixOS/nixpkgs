@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, numpy, scipy, six, decorator, nose }:
+{ lib, buildPythonPackage, fetchPypi, numpy, scipy, six, decorator, nose }:
 
 buildPythonPackage rec {
   pname = "paramz";

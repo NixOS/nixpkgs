@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, django
+{ lib, buildPythonPackage, fetchPypi, django
 , redis, async-timeout, hiredis
 }:
 

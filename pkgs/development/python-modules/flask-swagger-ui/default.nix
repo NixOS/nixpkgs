@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, flask }:
+{ lib, buildPythonPackage, fetchPypi, flask }:
 
 buildPythonPackage rec {
   pname = "flask-swagger-ui";

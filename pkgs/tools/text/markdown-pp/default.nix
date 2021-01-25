@@ -1,4 +1,4 @@
-{ fetchFromGitHub, pythonPackages, lib, stdenv }:
+{ fetchFromGitHub, pythonPackages, lib }:
 
 with pythonPackages;
 buildPythonApplication rec {

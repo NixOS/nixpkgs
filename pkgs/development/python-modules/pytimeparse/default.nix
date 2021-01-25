@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, nose }:
+{ lib, fetchPypi, buildPythonPackage, nose }:
 
 buildPythonPackage rec {
     pname = "pytimeparse";

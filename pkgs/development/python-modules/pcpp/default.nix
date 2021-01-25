@@ -1,6 +1,6 @@
 { buildPythonPackage
 , fetchFromGitHub
-, lib, stdenv
+, lib
 }:
 
 buildPythonPackage rec {

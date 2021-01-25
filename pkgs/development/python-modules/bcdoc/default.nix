@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, docutils, six }:
+{ lib, buildPythonPackage, fetchPypi, docutils, six }:
 
 buildPythonPackage rec {
   pname = "bcdoc";

@@ -1,4 +1,4 @@
-{ godot, lib, stdenv }:
+{ godot, lib }:
 godot.overrideAttrs (oldAttrs: rec {
   pname = "godot-headless";
   sconsFlags = "target=release_debug platform=server tools=yes";

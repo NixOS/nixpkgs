@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, buildPythonApplication, python3Packages
+{ lib, fetchzip, buildPythonApplication, python3Packages
   , desktop-file-utils, freecell-solver }:
 
 buildPythonApplication rec {

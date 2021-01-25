@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, requests, zeroconf, netifaces, pytest }:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, requests, zeroconf, netifaces, pytest }:
 
 buildPythonPackage rec {
   pname = "netdisco";

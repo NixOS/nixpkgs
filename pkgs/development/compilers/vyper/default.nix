@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, writeText, asttokens
+{ lib, buildPythonPackage, fetchPypi, writeText, asttokens
 , pycryptodome, pytest_xdist, pytestcov, recommonmark, semantic-version, sphinx
 , sphinx_rtd_theme, pytestrunner }:
 

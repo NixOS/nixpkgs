@@ -1,5 +1,5 @@
 { python2
-, lib, stdenv
+, lib
 , fetchurl
 , pkg-config
 , libXext

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pyyaml, openssh
+{ lib, buildPythonPackage, fetchPypi, pyyaml, openssh
 , nose, bc, hostname, coreutils, bash, gnused
 }:
 

@@ -1,7 +1,7 @@
 { mkDerivation, async, base, bytestring, connection, containers
 , directory, hpack, hspec, hspec-discover, hspec-expectations
 , http-client, http-conduit, lens, lens-aeson, megaparsec, mtl
-, optparse-applicative, parser-combinators, retry, lib, stdenv, text
+, optparse-applicative, parser-combinators, retry, lib, text
 , unix, unordered-containers, utf8-string, fetchzip, dotenv
 }:
 mkDerivation rec {

@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl, pkg-config, qtbase, qttools, libjack2, alsaLib, liblo, lv2 }:
+{ mkDerivation, lib, fetchurl, pkg-config, qtbase, qttools, libjack2, alsaLib, liblo, lv2 }:
 
 mkDerivation rec {
   pname = "synthv1";

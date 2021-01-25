@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, six, setuptools_scm, pytest }:
+{ lib, buildPythonPackage, fetchPypi, six, setuptools_scm, pytest }:
 buildPythonPackage rec {
   pname = "python-dateutil";
   version = "2.8.1";

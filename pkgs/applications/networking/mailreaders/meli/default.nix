@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchgit
 , rustPlatform
 , pkg-config

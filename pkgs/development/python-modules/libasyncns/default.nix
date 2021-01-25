@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchurl
+{ lib, buildPythonPackage, fetchurl
 , libasyncns, pkg-config }:
 
 buildPythonPackage rec {

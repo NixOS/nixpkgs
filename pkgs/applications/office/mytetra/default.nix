@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, qmake, qtsvg, makeWrapper, xdg_utils }:
+{ lib, mkDerivation, fetchurl, qmake, qtsvg, makeWrapper, xdg_utils }:
 
 let
   version = "1.44.55";

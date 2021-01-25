@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k,
+{ lib, buildPythonPackage, fetchPypi, isPy3k,
   numpy, django_colorful, pillow, psycopg2,
   pyparsing, django, celery, boto3, importlib-metadata
 }:

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, ipaddress, isPy27 }:
+{ lib, buildPythonPackage, fetchFromGitHub, ipaddress, isPy27 }:
 
 buildPythonPackage rec {
   pname = "anonip";

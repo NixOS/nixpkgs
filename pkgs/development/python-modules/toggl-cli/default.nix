@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
 , click
 , click-completion
 , factory_boy

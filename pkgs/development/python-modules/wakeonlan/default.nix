@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, setuptools_scm, pytest, mock }:
+{ lib, fetchPypi, buildPythonPackage, setuptools_scm, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "wakeonlan";

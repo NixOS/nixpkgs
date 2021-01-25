@@ -1,4 +1,4 @@
-{ lib, stdenv, python27Packages, fetchgit }:
+{ lib, python27Packages, fetchgit }:
 let
   py = python27Packages;
   python = py.python;

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, setuptools_scm }:
+{ lib, buildPythonPackage, fetchPypi, pytest, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "pytest-celery";

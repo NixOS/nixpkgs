@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, zlib, freetype, cairo, lua5, texlive, ghostscript
+{ lib, fetchurl, makeWrapper, pkg-config, zlib, freetype, cairo, lua5, texlive, ghostscript
 , libjpeg, libpng, qtbase, mkDerivation
 }:
 

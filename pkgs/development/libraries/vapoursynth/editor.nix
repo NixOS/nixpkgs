@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromBitbucket
+{ lib, mkDerivation, fetchFromBitbucket
 , python3, vapoursynth
 , qmake, qtbase, qtwebsockets
 }:

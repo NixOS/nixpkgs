@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python27Packages, python36Packages, wmctrl,
+{ lib, fetchurl, python27Packages, python36Packages, wmctrl,
   qtbase, mkDerivationWith }:
 
 {

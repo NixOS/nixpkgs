@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python2, makeWrapper }:
+{ lib, fetchFromGitHub, python2, makeWrapper }:
 
 python2.pkgs.buildPythonApplication rec {
   pname = "headphones";

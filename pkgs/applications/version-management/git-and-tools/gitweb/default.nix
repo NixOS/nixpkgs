@@ -1,4 +1,4 @@
-{ lib, stdenv, buildEnv, git, fetchFromGitHub
+{ lib, buildEnv, git, fetchFromGitHub
 , gitwebTheme ? false }:
 
 let

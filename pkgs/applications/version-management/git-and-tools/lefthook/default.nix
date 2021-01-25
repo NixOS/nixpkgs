@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 # Currently `buildGo114Module` is passed as `buildGoModule` from
 # `../default.nix`. Please remove the fixed 1.14 once a new release has been

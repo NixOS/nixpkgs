@@ -1,4 +1,4 @@
-{ mkDerivation, lib, stdenv, fetchurl, cmake, pkg-config, makeWrapper
+{ mkDerivation, lib, fetchurl, cmake, pkg-config, makeWrapper
 , httrack, qtbase, qtmultimedia }:
 
 mkDerivation rec {

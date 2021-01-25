@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, pytest, fetchpatch }:
+{ lib, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, pytest, fetchpatch }:
 
 buildPythonPackage rec {
   pname = "credstash";

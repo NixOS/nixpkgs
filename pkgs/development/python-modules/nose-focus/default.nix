@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, six, nose, nose-of-yeti
+{ lib, buildPythonPackage, fetchFromGitHub, six, nose, nose-of-yeti
 , nose-pattern-exclude, which }:
 
 buildPythonPackage rec {

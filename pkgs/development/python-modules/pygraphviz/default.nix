@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, substituteAll, graphviz
+{ lib, buildPythonPackage, isPy3k, fetchPypi, substituteAll, graphviz
 , pkg-config, doctest-ignore-unicode, mock, nose }:
 
 buildPythonPackage rec {

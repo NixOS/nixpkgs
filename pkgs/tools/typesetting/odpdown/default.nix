@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pythonPackages, libreoffice }:
+{ lib, fetchurl, pythonPackages, libreoffice }:
 
 pythonPackages.buildPythonApplication rec {
 

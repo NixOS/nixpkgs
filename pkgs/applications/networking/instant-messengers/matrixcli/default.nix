@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit
+{ lib, fetchgit
   , buildPythonApplication, buildPythonPackage
   , pygobject3, pytestrunner, requests, responses, pytest, python-olm
   , canonicaljson, olm

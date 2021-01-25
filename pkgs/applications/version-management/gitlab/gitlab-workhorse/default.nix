@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, git, buildGoModule }:
+{ lib, fetchFromGitLab, git, buildGoModule }:
 
 buildGoModule rec {
   pname = "gitlab-workhorse";

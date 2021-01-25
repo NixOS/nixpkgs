@@ -5,7 +5,7 @@
 , jre
 , lib
 , pythonPackages
-, stdenv
+
 }:
 
 let

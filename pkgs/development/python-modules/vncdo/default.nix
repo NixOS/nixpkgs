@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, fetchFromGitHub
 , buildPythonPackage, isPy27
 , pillow
 , twisted

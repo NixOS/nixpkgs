@@ -1,6 +1,6 @@
 { mkDerivation, fetchFromGitHub, fetchpatch
 , aeson, aeson-pretty, attoparsec, base, bytestring, conduit, conduit-extra
-, containers, exceptions, mtl, optparse-simple, parsec, scientific, lib, stdenv
+, containers, exceptions, mtl, optparse-simple, parsec, scientific, lib
 , text, unordered-containers, vector
 }:
 mkDerivation rec {

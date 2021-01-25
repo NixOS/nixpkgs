@@ -884,7 +884,12 @@ in
     inherit (androidenv.androidPkgs_9_0) build-tools;
   };
 
-  appimage-run = callPackage ../tools/package-management/appimage-run {};
+  appimage-run = callPackage ../tools/package-management/appimage-run { };
+  appimage-run-tests = callPackage ../tools/package-management/appimage-run/test.nix {
+    appimage-run = appimage-run.override {
+      appimage-run-tests = null; /* break boostrap cycle for passthru.tests */
+    };
+  };
 
   appimagekit = callPackage ../tools/package-management/appimagekit {};
 
@@ -19277,7 +19282,7 @@ in
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
-        inherit lib stdenv;
+        inherit lib;
         inherit (kernel) version;
       };
       kernelPatches = kernel.kernelPatches ++ [

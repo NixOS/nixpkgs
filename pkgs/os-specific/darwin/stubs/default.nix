@@ -1,4 +1,4 @@
-{ lib, stdenv, writeScriptBin, runtimeShell }:
+{ lib, writeScriptBin, runtimeShell }:
 
 let fake = name: lib.overrideDerivation (writeScriptBin name ''
   #!${runtimeShell}

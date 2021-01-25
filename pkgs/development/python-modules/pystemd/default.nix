@@ -1,4 +1,4 @@
-{ lib, stdenv, python, systemd }:
+{ lib, python, systemd }:
 
 python.pkgs.buildPythonPackage rec {
   pname = "pystemd";

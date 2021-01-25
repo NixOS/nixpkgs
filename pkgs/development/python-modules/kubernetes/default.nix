@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonAtLeast,
+{ lib, buildPythonPackage, fetchPypi, pythonAtLeast,
   ipaddress, websocket_client, urllib3, pyyaml, requests_oauthlib, python-dateutil, google-auth, adal,
   isort, pytest, coverage, mock, sphinx, autopep8, pep8, codecov, recommonmark, nose }:
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, mopidy }:
+{ lib, python3Packages, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-youtube";

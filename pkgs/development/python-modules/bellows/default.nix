@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , click, click-log, pure-pcapy3
 , pyserial-asyncio, voluptuous, zigpy
 , asynctest, pytestCheckHook, pytest-asyncio }:

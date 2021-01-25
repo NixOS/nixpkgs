@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, fetchpatch, qmake, qttools, qtbase, poppler }:
+{ lib, mkDerivation, fetchurl, fetchpatch, qmake, qttools, qtbase, poppler }:
 
 mkDerivation rec {
   version = "2.1.3";

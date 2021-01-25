@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, python-Levenshtein, pycodestyle, hypothesis, pytest }:
+{ lib, buildPythonPackage, fetchPypi, python-Levenshtein, pycodestyle, hypothesis, pytest }:
 
 buildPythonPackage rec {
   pname = "fuzzywuzzy";

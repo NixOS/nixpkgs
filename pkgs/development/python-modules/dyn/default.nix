@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, pytestcov, mock
+{ lib, buildPythonPackage, fetchPypi, pytest, pytestcov, mock
 , pytest_xdist, covCore, glibcLocales }:
 
 buildPythonPackage rec {

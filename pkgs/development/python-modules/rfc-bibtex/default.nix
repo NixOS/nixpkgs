@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonApplication, fetchPypi, isPy3k }:
+{ lib, buildPythonApplication, fetchPypi, isPy3k }:
 
 buildPythonApplication rec {
   pname = "rfc-bibtex";

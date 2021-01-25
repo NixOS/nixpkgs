@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub, lib, stdenv, openssh, makeWrapper }:
+{ buildGoPackage, fetchFromGitHub, lib, openssh, makeWrapper }:
 
 buildGoPackage rec {
   pname = "diskrsync";

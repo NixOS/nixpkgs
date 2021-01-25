@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, pytz, requests, pytest, freezegun }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pytz, requests, pytest, freezegun }:
 
 buildPythonPackage rec {
   pname = "astral";

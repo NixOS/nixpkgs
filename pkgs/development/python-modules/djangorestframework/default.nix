@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, django, isPy27 }:
+{ lib, buildPythonPackage, fetchFromGitHub, django, isPy27 }:
 
 buildPythonPackage rec {
   version = "3.12.2";

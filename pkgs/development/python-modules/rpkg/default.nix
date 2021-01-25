@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, isPy3k, fetchurl, six, pycurl, cccolutils
+{ lib, buildPythonPackage, isPy3k, fetchurl, six, pycurl, cccolutils
 , koji, rpmfluff }:
 
 buildPythonPackage rec {

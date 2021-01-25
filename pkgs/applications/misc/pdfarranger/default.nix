@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lib
+{ fetchFromGitHub, lib
 , wrapGAppsHook, intltool
 , python3Packages, gtk3, poppler_gi
 }:

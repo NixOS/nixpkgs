@@ -1,4 +1,4 @@
-{ lib, stdenv, python3 }:
+{ lib, python3 }:
 
 let
   python = python3.override {

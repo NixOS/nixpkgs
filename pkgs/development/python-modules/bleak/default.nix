@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, isPy3k, fetchPypi, bluez, txdbus, pytest, pytestcov }:
+{ lib, buildPythonPackage, isPy3k, fetchPypi, bluez, txdbus, pytest, pytestcov }:
 
 buildPythonPackage rec {
   pname = "bleak";

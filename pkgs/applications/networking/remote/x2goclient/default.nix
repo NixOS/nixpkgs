@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
+{ lib, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
 , mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkg-config }:
 
 mkDerivation {

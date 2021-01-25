@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , pyjwt, pysocks, pytz, requests, six, nose, mock }:
 
 buildPythonPackage rec {

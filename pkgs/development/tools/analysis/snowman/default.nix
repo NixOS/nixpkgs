@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, boost, qtbase }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, boost, qtbase }:
 
 mkDerivation rec {
   pname = "snowman";
