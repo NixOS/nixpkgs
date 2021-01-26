@@ -496,4 +496,123 @@ buildImage {
    Creating base files like <literal>/etc/passwd</literal> or <literal>/etc/login.defs</literal> is necessary for shadow-utils to manipulate users and groups.
   </para>
  </section>
+ <section xml:id="ssec-pkgs-dockerTools-buildNixShellImage">
+  <title>buildNixShellImage</title>
+
+  <para>
+    Create a Docker image that sets up the environment to build a derivation, similar to a <command>nix-shell</command> environment.
+    If the derivation is fully buildable (i.e. <command>nix-build</command> can be used on it), running <command>genericBuild</command> inside such a Docker container
+    will also build it, with all outputs ending up in <filename>/home/outputs</filename>.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>name</varname>
+    </term>
+    <listitem>
+     <para>
+      The name of the resulting image.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <varname>drv</varname>
+    </term>
+    <listitem>
+     <para>
+      The derivation whose build environment should be available in the image.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <varname>tag</varname> <emphasis>optional</emphasis>
+    </term>
+    <listitem>
+     <para>
+      Tag of the generated image.
+     </para>
+     <para>
+      <emphasis>Default:</emphasis> the output path's hash
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <varname>extraPackages</varname> <emphasis>optional</emphasis>
+    </term>
+    <listitem>
+     <para>
+      A list of packages that should be added to the build environment. This is useful for additional
+      debugging/development tools like <literal>vim</literal> or <literal>strace</literal>.
+      Note that the derivation's <literal>nativeBuildInputs</literal> can also be used for this purpose.
+     </para>
+     <para>
+      <emphasis>Default:</emphasis> <literal>[]</literal>
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <varname>extraInit</varname> <emphasis>optional</emphasis>
+    </term>
+    <listitem>
+     <para>
+      Extra bash commands to run just after the image is started.
+      Note that the derivation's <literal>shellHook</literal> can also be used for this purpose.
+     </para>
+     <para>
+      <emphasis>Default:</emphasis> <literal>""</literal>
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+  <section xml:id="ssec-pkgs-dockerTools-buildNixShellImage-example">
+    <title>Building <literal>pkgs.hello</literal></title>
+
+    <para>
+     The following shows how to build the <literal>pkgs.hello</literal> package inside a Docker container built with <literal>buildNixShellImage</literal>.
+    </para>
+    <example xml:id='ex-dockerTools-buildNixShellImage'>
+    <title>Nix expression for a Docker image to build <literal>pkgs.hello</literal></title>
+<programlisting>
+with import &lt;nixpkgs&gt; {};
+dockerTools.buildNixShellImage {
+  name = "hello";
+  drv = hello;
+}
+</programlisting>
+    </example>
+    <para>
+      Now to build, load and run the image:
+    </para>
+<screen><![CDATA[
+$ nix-build hello.nix
+these derivations will be built:
+[...]
+Finished.
+/nix/store/2irs3yciz5pvi8r63bd0w16wnynx4l7b-docker-image-hello-env.tar.gz
+$ docker load -i result
+506c9779afde: Loading layer  10.24kB/10.24kB
+[...]
+96557dcba6be: Loading layer  10.24kB/10.24kB
+Loaded image: hello-env:2irs3yciz5pvi8r63bd0w16wnynx4l7b
+$ docker run -it hello-env:2irs3yciz5pvi8r63bd0w16wnynx4l7b
+bash-4.4$ genericBuild
+unpacking sources
+unpacking source archive /nix/store/3x7dwzq014bblazs7kq20p9hyzz0qh8g-hello-2.10.tar.gz
+[...]
+patching script interpreter paths in /home/outputs/out
+checking for references to /tmp/ in /home/outputs/out...
+bash-4.4$ $out/bin/hello
+Hello, world!
+]]></screen>
+  </section>
+ </section>
 </section>

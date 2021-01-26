@@ -4,6 +4,8 @@
   cacert,
   callPackage,
   closureInfo,
+  writeShellScript,
+  writeShellScriptBin,
   coreutils,
   docker,
   e2fsprogs,
@@ -18,6 +20,7 @@
   pigz,
   rsync,
   runCommand,
+  runCommandNoCC,
   runtimeShell,
   shadow,
   skopeo,
@@ -866,4 +869,96 @@ rec {
         makeWrapper ${streamScript} $out --add-flags ${conf}
       '';
     in result;
+
+  # This function builds a docker image that behaves like a nix-shell
+  buildNixShellImage =
+    # Use the environment of this derivation
+    { name ? drv.name + "-env"
+    , drv
+    , tag ? null
+    # Files to put on the image (a nix store path or list of paths).
+    , contents ? []
+    # uid/gid to run as inside the container
+    # Some compilers don't like to run as root
+    , uid ? 1000, gid ? 1000
+  }:
+    assert lib.assertMsg (! (drv.__structuredAttrs or false))
+      "buildNixShellImage does not work with the derivation ${drv.drvPath} because it uses __structuredAttrs";
+    let
+
+      # A mapping from output name to the nix store path where they should end up
+      outputPaths = lib.genAttrs drv.outputs (output: builtins.unsafeDiscardStringContext drv.${output}.outPath);
+
+      # Additional binaries available in this image, both as the initial
+      # command of the arguments, and within a bash
+      binaryPath = lib.makeBinPath [ bashInteractive builder coreutils ];
+
+      setupPackage = runCommandNoCC "setup" {
+        # Mimics a standard nix-shell
+        rc = ''
+          source $stdenv/setup
+          set +e
+          runHook shellHook
+          export PATH=$PATH:${binaryPath}
+        '';
+        passAsFile = [ "rc" ];
+      } ''
+        mkdir -p $out/{etc/ssl/certs,tmp,bin,usr/bin,home/user/{outputs,build}}
+        ln -s ${bashInteractive}/bin/sh $out/bin/sh
+        ln -s ${coreutils}/bin/env $out/usr/bin/env
+        cp "$rcPath" $out/home/user/.bashrc
+        ln -s "${cacert}/etc/ssl/certs/ca-bundle.crt" $out/etc/ssl/certs/ca-certificates.crt
+
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: path: ''
+          ln -s ${path} $out/home/user/outputs/${name}
+        '') outputPaths)}
+      '';
+
+      # Support for passAsFile
+      passAsFiles = lib.listToAttrs (map (attr:
+        lib.nameValuePair "${attr}Path" (writeText "pass-as-text-${attr}" drv.drvAttrs.${attr})
+      ) (drv.drvAttrs.passAsFile or []));
+
+      # We can't just use `toString` on all derivation attributes because that
+      # would not put path literals in the closure. So we explicitly copy
+      # those into the store here
+      stringValue = value: if builtins.typeOf value == "path" then "${value}"
+        else if builtins.isList value then toString (map stringValue value)
+        else toString value;
+
+      # Environment variables set in the image
+      envVars = lib.mapAttrs (name: stringValue) drv.drvAttrs // outputPaths // passAsFiles // {
+        # These are needed for stdenv setup to work
+        NIX_STORE = storeDir;
+        NIX_BUILD_TOP = "/home/user/build";
+
+        HOME = "/home/user";
+        TMPDIR = "/tmp";
+        PATH = binaryPath;
+      };
+
+      # A binary that calls the command to build the derivation
+      builder = writeShellScriptBin "buildDerivation" ''
+        exec ${lib.escapeShellArg (stringValue drv.drvAttrs.builder)} ${lib.escapeShellArgs (map stringValue drv.drvAttrs.args)}
+      '';
+
+    in buildLayeredImage {
+      inherit name tag;
+      contents = [ setupPackage ] ++ contents;
+      extraCommands = ''
+        # Creating nix/store here allows the user to write to it
+        # Which is necessary for the derivation output paths
+        mkdir -p ${lib.removePrefix "/" storeDir}
+      '';
+
+      # Run this image as the given uid/gid
+      config.User = "${toString uid}:${toString gid}";
+      # Set the owner of the files to that user as well
+      inherit uid gid;
+
+      # By default just starts a shell
+      config.Cmd = [ "bash" ];
+      config.WorkingDir = "/home/user";
+      config.Env = lib.mapAttrsToList (name: value: "${name}=${value}") envVars;
+    };
 }
