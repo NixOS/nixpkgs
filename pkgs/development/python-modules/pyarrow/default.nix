@@ -34,6 +34,13 @@ buildPythonPackage rec {
     export PYARROW_PARALLEL=$NIX_BUILD_CORES
   '';
 
+  # Deselect a single test because pyarrow prints a 2-line error message where
+  # only a single line is expected. The additional line of output comes from
+  # the glog library which is an optional dependency of arrow-cpp that is
+  # enabled in nixpkgs.
+  # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11393
+  pytestFlagsArray = [ "--deselect=pyarrow/tests/test_memory.py::test_env_var" ];
+
   dontUseSetuptoolsCheck = true;
   preCheck = ''
     mv pyarrow/tests tests
