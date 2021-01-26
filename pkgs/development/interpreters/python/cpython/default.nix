@@ -445,6 +445,13 @@ in with passthru; stdenv.mkDerivation {
     find $out -name "*.py" | ${pythonForBuildInterpreter} -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | ${pythonForBuildInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
+    '' + ''
+    # *strip* shebang from libpython gdb script - it should be dual-syntax and
+    # interpretable by whatever python the gdb in question is using, which may
+    # not even match the major version of this python. doing this after the
+    # bytecode compilations for the same reason - we don't want bytecode generated.
+    mkdir -p $out/share/gdb
+    sed '/^#!/d' Tools/gdb/libpython.py > $out/share/gdb/libpython.py
   '';
 
   preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
