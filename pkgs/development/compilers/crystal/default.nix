@@ -57,6 +57,7 @@ let
     buildCommand = ''
       mkdir -p $out
       tar --strip-components=1 -C $out -xf ${src}
+      patchShebangs $out
     '';
   };
 
@@ -151,6 +152,11 @@ let
         # crystal used to build this one.
         CRYSTAL_LIBRARY_PATH = "${placeholder "lib"}/crystal";
 
+        postBuild = ''
+          install -dm755 $lib/crystal
+          cp -r src/* $lib/crystal/
+        '';
+
         # We *have* to add `which` to the PATH or crystal is unable to build
         # stuff later if which is not available.
         installPhase = ''
@@ -163,8 +169,6 @@ let
             --suffix CRYSTAL_LIBRARY_PATH : ${
               lib.makeLibraryPath (commonBuildInputs extraBuildInputs)
             }
-          install -dm755 $lib/crystal
-          cp -r src/* $lib/crystal/
 
           install -dm755 $out/share/doc/crystal/api
           cp -r docs/* $out/share/doc/crystal/api/
