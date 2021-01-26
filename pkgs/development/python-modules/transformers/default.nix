@@ -41,7 +41,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   postPatch = ''
-    sed -ri 's/tokenizers==[0-9.]+/tokenizers/g' setup.py
+    sed -ri 's/tokenizers==[^"]+/tokenizers/g' setup.py src/transformers/dependency_versions_table.py
   '';
 
   pythonImportsCheck = [ "transformers" ];
