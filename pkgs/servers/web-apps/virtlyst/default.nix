@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config autoPatchelfHook ];
   buildInputs = [ qtbase libvirt cutelyst grantlee ];
 
+  dontWrapQtApps = true;
+
   installPhase = ''
     mkdir -p $out/lib
     cp src/libVirtlyst.so $out/lib

@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
       ++ optional (!stdenv.isDarwin) alsaLib
       ++ optional useSCEL emacs;
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";

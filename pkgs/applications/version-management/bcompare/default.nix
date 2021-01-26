@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   dontConfigure = true;
+  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "GUI application that allows to quickly and easily compare files and folders";

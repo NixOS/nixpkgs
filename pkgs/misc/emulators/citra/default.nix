@@ -14,6 +14,8 @@ mkDerivation {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 qtbase qtmultimedia boost ];
 
+  dontWrapQtApps = true;
+
   preConfigure = ''
     # Trick configure system.
     sed -n 's,^ *path = \(.*\),\1,p' .gitmodules | while read path; do

@@ -109,6 +109,7 @@ rec {
   };
   # Wrapping is done with an external wrapper
   dontWrapPythonPrograms = true;
+  dontWrapQtApps = true;
   # Tests should succeed, but it's hard to get LD_LIBRARY_PATH right in order
   # for it to happen.
   doCheck = false;

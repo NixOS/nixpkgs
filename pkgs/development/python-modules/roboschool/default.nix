@@ -44,6 +44,8 @@ buildPythonPackage rec {
     boost
   ];
 
+  dontWrapQtApps = true;
+
   NIX_CFLAGS_COMPILE="-I ${python}/include/${python.libPrefix}";
 
   patches = [

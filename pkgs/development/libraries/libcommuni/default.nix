@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   dontUseQmakeConfigure = true;
   configureFlags = [ "-config" "release" ];
 
+  dontWrapQtApps = true;
+
   preConfigure = ''
     sed -i -e 's|/bin/pwd|pwd|g' configure
   '';

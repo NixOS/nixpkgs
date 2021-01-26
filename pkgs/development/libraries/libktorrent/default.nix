@@ -27,6 +27,8 @@ in stdenv.mkDerivation rec {
     inherit mainVersion;
   };
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "A BitTorrent library used by KTorrent";
     homepage    = "https://www.kde.org/applications/internet/ktorrent/";

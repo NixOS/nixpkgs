@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake ];
   buildInputs = [ fftw qtbase ];
 
+  dontWrapQtApps = true;
+
   postPatch = ''
     substituteInPlace LibKeyFinder.pro \
       --replace "/usr/local" "$out" \

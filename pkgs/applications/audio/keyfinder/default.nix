@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
        --replace "\$\$[QT_INSTALL_PREFIX]" "$out"
   '';
 
+  dontWrapQtApps = true;
+
   enableParallelBuilding = true;
 
   meta = with lib; {

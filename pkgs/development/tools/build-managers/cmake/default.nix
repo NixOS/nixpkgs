@@ -14,7 +14,7 @@
 assert withQt5 -> useQt4 == false;
 assert useQt4 -> withQt5 == false;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "cmake"
           + lib.optionalString isBootstrap "-boot"
           + lib.optionalString useNcurses "-cursesUI"
@@ -130,4 +130,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ttuegel lnl7 ];
     license = licenses.bsd3;
   };
-}
+} // (if withQt5 then { dontWrapQtApps = true; } else {})
+)

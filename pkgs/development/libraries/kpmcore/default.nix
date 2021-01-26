@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules ];
 
+  dontWrapQtApps = true;
+
   meta = with lib; {
     maintainers = with lib.maintainers; [ peterhoeg ];
     # The build requires at least Qt 5.14:
