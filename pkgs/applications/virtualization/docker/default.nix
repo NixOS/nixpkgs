@@ -1,10 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, buildGoPackage
-, makeWrapper, removeReferencesTo, installShellFiles, pkgconfig
-, go-md2man, go, containerd, runc, docker-proxy, tini, libtool
-, sqlite, iproute, lvm2, systemd
-, btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs, git
-, procps, libseccomp
-}:
+{ lib, callPackage }:
 
 with lib;
 
@@ -14,7 +8,15 @@ rec {
       , runcRev, runcSha256
       , containerdRev, containerdSha256
       , tiniRev, tiniSha256
-    } :
+
+      # package dependencies
+      , stdenv, lib, fetchFromGitHub, fetchpatch, buildGoPackage
+      , makeWrapper, removeReferencesTo, installShellFiles, pkgconfig
+      , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
+      , sqlite, iproute, lvm2, systemd
+      , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs, git
+      , procps, libseccomp
+    }:
   let
     docker-runc = runc.overrideAttrs (oldAttrs: {
       name = "docker-runc-${version}";
@@ -197,7 +199,7 @@ rec {
   # Get revisions from
   # https://github.com/docker/docker-ce/tree/${version}/components/engine/hack/dockerfile/install/*
 
-  docker_18_09 = makeOverridable dockerGen rec {
+  docker_18_09 = callPackage dockerGen rec {
     version = "18.09.9";
     rev = "v${version}";
     sha256 = "0wqhjx9qs96q2jd091wffn3cyv2aslqn2cvpdpgljk8yr9s0yg7h";
@@ -209,7 +211,7 @@ rec {
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };
 
-  docker_19_03 = makeOverridable dockerGen rec {
+  docker_19_03 = callPackage dockerGen rec {
     version = "19.03.12";
     rev = "v${version}";
     sha256 = "0i5xr8q3yjrz5zsjcq63v4g1mzqpingjr1hbf9amk14484i2wkw7";
