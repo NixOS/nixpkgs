@@ -7235,6 +7235,16 @@
     github = "obsidian-systems-maintenance";
     githubId = 80847921;
   };
+  obfusk = {
+    email = "flx@obfusk.net";
+    github = "obfusk";
+    githubId = 1260687;
+    name = "Felix C. Stegerman";
+    keys = [{
+      longkeyid = "rsa4096/0x2F9607F09B360F2D";
+      fingerprint = "D5E4 A51D F8D2 55B9 FAC6  A9BB 2F96 07F0 9B36 0F2D";
+    }];
+  };
   odi = {
     email = "oliver.dunkl@gmail.com";
     github = "odi";
