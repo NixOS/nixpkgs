@@ -24,6 +24,19 @@ in {
       '';
     };
 
+    nginx.securityHeaders = mkOption {
+      type = types.str;
+      default = ''
+        add_header Referrer-Policy no-referrer;
+        add_header X-Content-Type-Options nosniff;
+        add_header X-Frame-Options	sameorigin;
+        add_header X-XSS-Protection	"1; mode=block";
+      '';
+      description = ''
+        A list of HTTP Security Headers that will be included into the grocy vhost.
+      '';
+    };
+
     phpfpm.settings = mkOption {
       type = with types; attrsOf (oneOf [ int str bool ]);
       default = {
@@ -136,12 +149,14 @@ in {
         { root = "${pkgs.grocy}/public";
           locations."/".extraConfig = ''
             rewrite ^ /index.php;
+            ${cfg.nginx.securityHeaders}
           '';
           locations."~ \\.php$".extraConfig = ''
             fastcgi_split_path_info ^(.+\.php)(/.+)$;
             fastcgi_pass unix:${config.services.phpfpm.pools.grocy.socket};
             include ${config.services.nginx.package}/conf/fastcgi.conf;
             include ${config.services.nginx.package}/conf/fastcgi_params;
+            ${cfg.nginx.securityHeaders}
           '';
           locations."~ \\.(js|css|ttf|woff2?|png|jpe?g|svg)$".extraConfig = ''
             add_header Cache-Control "public, max-age=15778463";
@@ -150,11 +165,12 @@ in {
             add_header X-Robots-Tag none;
             add_header X-Download-Options noopen;
             add_header X-Permitted-Cross-Domain-Policies none;
-            add_header Referrer-Policy no-referrer;
+            ${cfg.nginx.securityHeaders}
             access_log off;
           '';
           extraConfig = ''
             try_files $uri /index.php;
+            ${cfg.nginx.securityHeaders}
           '';
         }
         (mkIf cfg.nginx.enableSSL {
