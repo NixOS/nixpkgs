@@ -10514,4 +10514,10 @@
     github = "zupo";
     githubId = 311580;
   };
+  jbcrail = {
+    name = "Joseph Crail";
+    email = "jbcrail@gmail.com";
+    github = "jbcrail";
+    githubId = 6038;
+  };
 }
