@@ -7869,6 +7869,8 @@ in
 
   soapui = callPackage ../applications/networking/soapui { };
 
+  spglib = callPackage ../development/libraries/spglib { };
+
   ssh-askpass-fullscreen = callPackage ../tools/networking/ssh-askpass-fullscreen { };
 
   sshguard = callPackage ../tools/security/sshguard {};
@@ -10566,6 +10568,8 @@ in
   opam_1_2 = callPackage ../development/tools/ocaml/opam/1.2.2.nix {
     inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
   };
+
+  opam-installer = callPackage ../development/tools/ocaml/opam/installer.nix { };
 
   open-watcom-bin = callPackage ../development/compilers/open-watcom-bin { };
 
@@ -19663,6 +19667,7 @@ in
   prototool = callPackage ../development/tools/prototool { };
 
   qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
+  qemu_full = lowPrio (qemu.override { smbdSupport = true; cephSupport = true; });
 
   # See `xenPackages` source for explanations.
   # Building with `xen` instead of `xen-slim` is possible, but makes no sense.
