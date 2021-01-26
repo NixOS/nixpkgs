@@ -1,9 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, boost, gnuradio
-, makeWrapper, cppunit, gr-osmosdr, log4cpp
-, pythonSupport ? true, python, swig
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, boost
+, gnuradio
+, makeWrapper
+, cppunit
+, gr-osmosdr
+, log4cpp
+, pythonSupport ? true
+, python
+, swig
+, fetchpatch
 }:
-
-assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation {
   pname = "gr-ais";
@@ -12,14 +22,20 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "bistromath";
     repo = "gr-ais";
-    # Upstream PR: https://github.com/bistromath/gr-ais/commit/8502d0252a2a1a9b8d1a71795eaeb5d820684054
-    rev = "8502d0252a2a1a9b8d1a71795eaeb5d820684054";
-    sha256 = "1b9j0kc74cw12a7jv4lii77dgzqzg2s8ndzp4xmisxksgva1qfvh";
+    rev = "cdc1f52745853f9c739c718251830eb69704b26e";
+    sha256 = "1vl3kk8xr2mh5lf31zdld7yzmwywqffffah8iblxdzblgsdwxfl6";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/bistromath/gr-ais/commit/8502d0252a2a1a9b8d1a71795eaeb5d820684054.patch";
+      sha256 = "1cwalphldvf6dbhzwz1gi53z0cb4921qsvlz4138q7m6dxccvssg";
+    })
+  ];
 
   nativeBuildInputs = [ cmake makeWrapper pkg-config ];
   buildInputs = [ boost gnuradio cppunit gr-osmosdr log4cpp ]
-             ++ lib.optionals pythonSupport [ python swig ];
+    ++ lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''
     for prog in "$out"/bin/*; do
