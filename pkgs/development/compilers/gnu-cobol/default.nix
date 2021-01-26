@@ -1,16 +1,13 @@
 { lib, stdenv, fetchurl, gcc, makeWrapper
 , db, gmp, ncurses }:
 
-let
-  version = "2.2";
-in
 stdenv.mkDerivation rec {
   pname = "gnu-cobol";
-  inherit version;
+  version = "3.1.2";
 
   src = fetchurl {
-    url = "https://sourceforge.com/projects/open-cobol/files/gnu-cobol/${version}/gnucobol-${version}.tar.gz";
-    sha256 = "1jrjmdx0swssjh388pp08awhiisbrs2i7gx4lcm4p1k5rpg3hn4j";
+    url = "mirror://sourceforge/gnucobol/${lib.versions.majorMinor version}/gnucobol-${version}.tar.xz";
+    sha256 = "0x15ybfm63g7c9340fc6712h9v59spnbyaz4rf85pmnp3zbhaw2r";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,9 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An open-source COBOL compiler";
-    homepage = "https://sourceforge.net/projects/open-cobol/";
-    license = licenses.gpl3;
+    homepage = "https://sourceforge.net/projects/gnucobol/";
+    license = with licenses; [ gpl3Only lgpl3Only ];
     maintainers = with maintainers; [ ericsagnes ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.all;
   };
 }

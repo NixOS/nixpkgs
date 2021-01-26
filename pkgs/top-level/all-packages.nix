@@ -721,6 +721,11 @@ in
 
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
+  ajour = callPackage ../tools/games/ajour {
+    inherit (gnome3) zenity;
+    inherit (plasma5Packages) kdialog;
+  };
+
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
   metapixel = callPackage ../tools/graphics/metapixel { };
@@ -2829,6 +2834,8 @@ in
   apparix = callPackage ../tools/misc/apparix { };
 
   appleseed = callPackage ../tools/graphics/appleseed { };
+
+  apple-music-electron = callPackage ../applications/audio/apple-music-electron { };
 
   arping = callPackage ../tools/networking/arping { };
 
@@ -7158,6 +7165,8 @@ in
   cntlm = callPackage ../tools/networking/cntlm { };
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
+
+  pifi = callPackage ../applications/audio/pifi { };
 
   pmacct = callPackage ../tools/networking/pmacct { };
 
@@ -12245,6 +12254,10 @@ in
 
   jam = callPackage ../development/tools/build-managers/jam { };
 
+  javacc = callPackage ../development/tools/parsing/javacc {
+    jdk = jdk8;
+  };
+
   jbake = callPackage ../development/tools/jbake { };
 
   jbang = callPackage ../development/tools/jbang { };
@@ -12895,6 +12908,8 @@ in
   yq-go = callPackage ../development/tools/yq-go { };
 
   ytt = callPackage ../development/tools/ytt {};
+
+  zydis = callPackage ../development/libraries/zydis { };
 
   winpdb = callPackage ../development/tools/winpdb { };
 
@@ -16812,6 +16827,8 @@ in
 
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
   tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
+
+  tkrzw = callPackage ../development/libraries/tkrzw { };
 
   tl-expected = callPackage ../development/libraries/tl-expected { };
 
@@ -21788,7 +21805,6 @@ in
   fldigi = callPackage ../applications/radio/fldigi { };
 
   flink = callPackage ../applications/networking/cluster/flink { };
-  flink_1_5 = flink.override { version = "1.5"; };
 
   fllog = callPackage ../applications/radio/fllog { };
 
@@ -23238,6 +23254,8 @@ in
   lyrebird = callPackage ../applications/audio/lyrebird { };
 
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
+
+  m4acut = callPackage ../applications/audio/m4acut { };
 
   mac = callPackage ../development/libraries/mac { };
 
@@ -27240,6 +27258,8 @@ in
   gnome-connections = callPackage ../desktops/gnome-3/apps/gnome-connections { };
 
   gnome-tour = callPackage ../desktops/gnome-3/core/gnome-tour { };
+
+  hhexen = callPackage ../games/hhexen { };
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
 

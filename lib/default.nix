@@ -130,7 +130,7 @@ let
       assertMsg assertOneOf;
     inherit (self.debug) addErrorContextToAttrs traceIf traceVal traceValFn
       traceXMLVal traceXMLValMarked traceSeq traceSeqN traceValSeq
-      traceValSeqFn traceValSeqN traceValSeqNFn traceShowVal
+      traceValSeqFn traceValSeqN traceValSeqNFn traceFnSeqN traceShowVal
       traceShowValMarked showVal traceCall traceCall2 traceCall3
       traceValIfNot runTests testAllTrue traceCallXml attrNamesToStr;
     inherit (self.misc) maybeEnv defaultMergeArg defaultMerge foldArgs

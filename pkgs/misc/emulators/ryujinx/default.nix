@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
-, dotnet-sdk_3, dotnetPackages, dotnetCorePackages
+, dotnet-sdk_5, dotnetPackages, dotnetCorePackages
 , SDL2, libX11, openal
-, gtk3, gobject-introspection, wrapGAppsHook
+, gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
 }:
 
 let
@@ -13,16 +13,16 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "ryujinx";
-  version = "1.0.5551"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.6416"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "2dcc6333f8cbb959293832f52857bdaeab1918bf";
-    sha256 = "1hfa498fr9mdxas9s02y25ncb982wa1sqhl06jpnkhqsiicbkgcf";
+    rev = "ad491b5570ec428d0d87d56426b03125e2ca5220";
+    sha256 = "0gjrvdh6n26r9kkljiw9xvmvb47vmpwsjxi4iv41ir3nsdigdvsn";
   };
 
-  nativeBuildInputs = [ dotnet-sdk_3 dotnetPackages.Nuget makeWrapper wrapGAppsHook gobject-introspection ];
+  nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget makeWrapper wrapGAppsHook gobject-introspection gdk-pixbuf ];
 
   nugetDeps = linkFarmFromDrvs "${pname}-nuget-deps" (import ./deps.nix {
     fetchNuGet = { name, version, sha256 }: fetchurl {
@@ -73,12 +73,12 @@ in stdenv.mkDerivation rec {
     shopt -s extglob
 
     makeWrapper $out/lib/ryujinx/Ryujinx $out/bin/Ryujinx \
-      --set DOTNET_ROOT "${dotnetCorePackages.netcore_3_1}" \
+      --set DOTNET_ROOT "${dotnetCorePackages.net_5_0}" \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDeps}" \
       ''${gappsWrapperArgs[@]}
 
     for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ${src}/Ryujinx/Ui/assets/Icon.png $out/share/icons/hicolor/''${i}x$i/apps/ryujinx.png
+      install -D ${src}/Ryujinx/Ui/Resources/Logo_Ryujinx.png $out/share/icons/hicolor/''${i}x$i/apps/ryujinx.png
     done
     cp -r ${makeDesktopItem {
       desktopName = "Ryujinx";
