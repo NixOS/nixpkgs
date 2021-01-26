@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  version = "13.5.1";
+  version = "13.7.0";
   pname = "mediathekview";
   src = fetchurl {
     url = "https://download.mediathekview.de/stabil/MediathekView-${version}-linux.tar.gz";
-    sha256 = "0fixr6drim0wmh4q44zikcla4mrnm44nm95d5naqsgx6idalddrc";
+    sha256 = "sha256-9SQUsxs/Zt7YaZo6FdeEF3MOUO3IbkDGwV5i72/X4bk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -16,13 +16,13 @@ stdenv.mkDerivation rec {
     install -m644 MediathekView.jar $out/lib
 
     makeWrapper ${jre}/bin/java $out/bin/mediathek \
-      --add-flags "-Xmx1G -jar $out/lib/MediathekView.jar"
+      --add-flags "-Xmx1G --enable-preview -jar $out/lib/MediathekView.jar"
 
     makeWrapper ${jre}/bin/java $out/bin/MediathekView \
-      --add-flags "-Xmx1G -jar $out/lib/MediathekView.jar"
+      --add-flags "-Xmx1G --enable-preview -jar $out/lib/MediathekView.jar"
 
     makeWrapper ${jre}/bin/java $out/bin/MediathekView_ipv4 \
-      --add-flags "-Xmx1G -Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar"
+      --add-flags "-Xmx1G --enable-preview -Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar"
   '';
 
   meta = with lib; {
