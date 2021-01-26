@@ -18,4 +18,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.all;
   };
+
+  passthru = {
+    shellPath = "/bin/oksh";
+  };
 }
