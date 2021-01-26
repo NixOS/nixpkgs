@@ -92,6 +92,8 @@ rec {
         else if final.isx86_32 then "i386"
         else if final.isx86_64 then "x86_64"
         else if final.isMips then "mips"
+        else if final.isPower then "powerpc"
+        else if final.isRiscV then "riscv"
         else final.parsed.cpu.name;
 
       qemuArch =
