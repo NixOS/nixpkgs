@@ -56,6 +56,11 @@ stdenv.mkDerivation rec {
     echo "$VCSVersion" > lib/Basic/VCSVersion.inc
   '';
 
+  passthru = {
+    isClang = true;
+    inherit llvm;
+  };
+
   meta = with lib; {
     description = "ROCm fork of the clang C/C++/Objective-C/Objective-C++ LLVM compiler frontend";
     homepage = "https://llvm.org/";
