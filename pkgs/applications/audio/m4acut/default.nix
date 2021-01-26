@@ -1,4 +1,5 @@
 { lib, stdenv, autoreconfHook, fetchFromGitHub, l-smash }:
+
 stdenv.mkDerivation rec {
   pname = "m4acut";
   version = "0.1.2";
