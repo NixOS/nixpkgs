@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openAVproductions";
     repo = "openAV-ArtyFX";
-    rev = "492587461b50d140455aa3c98d915eb8673bebf0";
+    rev = "8c542627d936a01b1d97825e7f26a8e95633f7aa";
     sha256 = "0wwg8ivnpyy0235bapjy4g0ij85zq355jwi6c1nkrac79p4z9ail";
   };
 
