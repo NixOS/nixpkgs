@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nmigen";
     repo = "nmigen-soc";
-    rev = "f1b009c7e075bca461d10ec963a7eaa3bf4dfc14";
+    rev = "f5b5cd563e8e8d081b0535c4554c02b5456ee8b4";
     sha256 = "04kjaq9qp6ac3h0r1wlb4jyz56bb52l1rikmz1x7azvnr10xhrad";
   };
 
