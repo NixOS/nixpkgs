@@ -123,6 +123,7 @@ in {
       src = fetchFromGitHub {
         owner = "IceReaper";
         repo = "OpenRA" ;
+        # commit does not exist on any branch on the target repository
         rev = "4e8eab4ca00d1910203c8a103dfd2c002714daa8";
         sha256 = "1yyqparf93x8yzy1f46gsymgkj5jls25v2yc7ighr3f7mi3igdvq";
         name = "engine";
