@@ -51,10 +51,14 @@
 # case for `rustfmt`/etc from the `rust-sources).
 # Otherwise, everything from the tarball would've been built/tested.
 , buildAndTestSubdir ? null
+
+, verifyCargoDeps ? ""
 , ... } @ args:
 
 assert cargoVendorDir == null -> !(cargoSha256 == "" && cargoHash == "");
 assert buildType == "release" || buildType == "debug";
+
+assert verifyCargoDeps != "" -> throw "`verifyCargoDeps` is not needed as it is the default";
 
 let
 
