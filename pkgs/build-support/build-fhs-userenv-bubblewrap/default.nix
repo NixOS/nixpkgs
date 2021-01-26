@@ -24,8 +24,6 @@ let
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
   ]);
 
-  chrootenv = callPackage ./chrootenv {};
-
   etcBindFlags = let
     files = [
       # NixOS Compatibility
