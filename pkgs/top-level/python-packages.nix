@@ -557,6 +557,8 @@ in {
 
   avea = callPackage ../development/python-modules/avea { };
 
+  avion = callPackage ../development/python-modules/avion { };
+
   avro3k = callPackage ../development/python-modules/avro3k { };
 
   avro = callPackage ../development/python-modules/avro { };
