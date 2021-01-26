@@ -16,13 +16,13 @@ stdenv.mkDerivation rec {
     install -m644 MediathekView.jar $out/lib
 
     makeWrapper ${jre}/bin/java $out/bin/mediathek \
-      --add-flags "-Xmx1G -jar $out/lib/MediathekView.jar"
+      --add-flags "-Xmx1G --enable-preview -jar $out/lib/MediathekView.jar"
 
     makeWrapper ${jre}/bin/java $out/bin/MediathekView \
-      --add-flags "-Xmx1G -jar $out/lib/MediathekView.jar"
+      --add-flags "-Xmx1G --enable-preview -jar $out/lib/MediathekView.jar"
 
     makeWrapper ${jre}/bin/java $out/bin/MediathekView_ipv4 \
-      --add-flags "-Xmx1G -Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar"
+      --add-flags "-Xmx1G --enable-preview -Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar"
   '';
 
   meta = with lib; {
