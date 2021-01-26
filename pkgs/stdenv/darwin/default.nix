@@ -546,7 +546,6 @@ in rec {
 
       darwin = super.darwin // {
         inherit (prevStage.darwin) CF darwin-stubs;
-        xnu = super.darwin.xnu.override { inherit (prevStage) python3; };
       };
     });
   };
