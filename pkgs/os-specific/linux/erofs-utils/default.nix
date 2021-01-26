@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "erofs-utils";
-  version = "1.2";
+  version = "1.2.1";
   outputs = [ "out" "man" ];
 
   src = fetchgit {
     url =
       "https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git";
     rev = "v" + version;
-    sha256 = "07hvijq2hsn3gg1kb8abrfk23n83j57yx8kyv4wqgwhhvd30myjc";
+    sha256 = "1vb4mxsb59g29x7l22cffsqa8x743sra4j5zbmx89hjwpwm9vvcg";
   };
 
   buildInputs = [ autoreconfHook pkg-config fuse libuuid lz4 ];
