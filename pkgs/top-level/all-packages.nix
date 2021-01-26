@@ -12897,6 +12897,8 @@ in
 
   yaml2json = callPackage ../development/tools/yaml2json { };
 
+  yams = callPackage ../applications/audio/yams { };
+
   ycmd = callPackage ../development/tools/misc/ycmd {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     python = python3;
