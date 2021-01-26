@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, perl, pythonPackages, libiconv, jansson }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, perl, pythonPackages, libiconv, jansson }:
 
 stdenv.mkDerivation {
   pname = "universal-ctags";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config pythonPackages.docutils ];
-  buildInputs = [ jansson ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ jansson ] ++ lib.optional stdenv.isDarwin libiconv;
 
   # to generate makefile.in
   autoreconfPhase = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   checkFlags = [ "units" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A maintained ctags implementation";
     homepage = "https://ctags.io/";
     license = licenses.gpl2Plus;

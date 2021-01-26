@@ -95,7 +95,7 @@ let
           else if stdenv.isDarwin then "darwin"
           else throw "Unsupported platform"
         );
-        platform_machine = stdenv.platform.kernelArch;
+        platform_machine = stdenv.hostPlatform.linuxArch;
         platform_python_implementation =
           let
             impl = python.passthru.implementation;
@@ -132,7 +132,7 @@ let
               mVal = ''[a-zA-Z0-9\'"_\. ]+'';
               mOp = "in|[!=<>]+";
               e = stripStr exprs.value;
-              m = builtins.map stripStr (builtins.match ''^(${mVal}) *(${mOp}) *(${mVal})$'' e);
+              m = builtins.map stripStr (builtins.match "^(${mVal}) *(${mOp}) *(${mVal})$" e);
               m0 = processVar (builtins.elemAt m 0);
               m2 = processVar (builtins.elemAt m 2);
             in

@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , vscode-utils
 , useLocalExtensions ? false}:
 # Note that useLocalExtensions requires that vscode-server is not running

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, mock }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, mock }:
 
 buildPythonPackage rec {
   pname = "darcsver";

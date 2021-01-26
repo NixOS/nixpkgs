@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gcc }:
+{ lib, stdenv, fetchFromGitHub, gcc }:
 
 stdenv.mkDerivation rec {
   pname = "cakelisp";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
         --replace '"/usr/bin/g++"' '"${gcc}/bin/g++"'
     substituteInPlace src/ModuleManager.cpp \
         --replace '"/usr/bin/g++"' '"${gcc}/bin/g++"'
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace Build.sh --replace '--export-dynamic' '-export_dynamic'
     substituteInPlace runtime/HotReloading.cake --replace '--export-dynamic' '-export_dynamic'
     substituteInPlace Bootstrap.cake --replace '--export-dynamic' '-export_dynamic'
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     install -Dm755 bin/cakelisp -t $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A performance-oriented Lisp-like language";
     homepage = "https://github.com/makuto/cakelisp";
     license = licenses.gpl3Plus;

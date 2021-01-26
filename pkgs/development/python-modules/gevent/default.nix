@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, isPyPy, python, libev, greenlet
+{ lib, fetchPypi, buildPythonPackage, isPyPy, python, libev, greenlet
 , zope_interface
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   buildInputs = [ libev ];
   propagatedBuildInputs = [
     zope_interface
-  ] ++ stdenv.lib.optionals (!isPyPy) [ greenlet ];
+  ] ++ lib.optionals (!isPyPy) [ greenlet ];
 
   checkPhase = ''
     cd greentest

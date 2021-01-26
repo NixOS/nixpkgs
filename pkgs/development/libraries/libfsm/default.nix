@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , bmake
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DFA regular expression library & friends";
     homepage    = "https://github.com/katef/libfsm";
     license     = licenses.bsd2;

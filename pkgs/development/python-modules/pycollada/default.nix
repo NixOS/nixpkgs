@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, numpy, dateutil }:
+{ lib, fetchPypi, buildPythonPackage, numpy, dateutil }:
 
 buildPythonPackage rec {
   pname = "pycollada";

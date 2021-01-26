@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytestrunner, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytestrunner, pytest }:
 
 buildPythonPackage rec {
   pname = "Cerberus";

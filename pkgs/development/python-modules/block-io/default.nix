@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, base58, ecdsa, pycryptodome, requests, six, setuptools }:
+{ lib, fetchPypi, buildPythonPackage, base58, ecdsa, pycryptodome, requests, six, setuptools }:
 
 buildPythonPackage rec {
   pname = "block-io";

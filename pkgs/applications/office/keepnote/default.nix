@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python2Packages }:
+{ lib, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication {
   name = "keepnote-0.7.8";

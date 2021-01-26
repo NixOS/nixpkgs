@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, tkinter, supercollider }:
+{ lib, buildPythonPackage, fetchPypi, tkinter, supercollider }:
 
 buildPythonPackage rec {
   pname = "FoxDot";

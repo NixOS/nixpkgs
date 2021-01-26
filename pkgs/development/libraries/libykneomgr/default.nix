@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pcsclite, libzip, help2man }:
+{ lib, stdenv, fetchurl, pkg-config, pcsclite, libzip, help2man }:
 
 stdenv.mkDerivation rec {
   name = "libykneomgr-0.1.8";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     "--with-backend=pcsc"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://developers.yubico.com/libykneomgr";
     description = "A C library to interact with the CCID-part of the Yubikey NEO";
     license = licenses.bsd3;

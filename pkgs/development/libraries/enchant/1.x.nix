@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, aspell, pkg-config, glib, hunspell, hspell }:
+{ lib, stdenv, fetchurl, aspell, pkg-config, glib, hunspell, hspell }:
 
 stdenv.mkDerivation rec {
   version = "1.6.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ aspell glib hunspell hspell ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generic spell checking library";
     homepage = "https://abiword.github.io/enchant";
     platforms = platforms.unix;

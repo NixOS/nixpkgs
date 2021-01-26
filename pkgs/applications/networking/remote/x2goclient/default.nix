@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
+{ lib, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
 , mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkg-config }:
 
 mkDerivation {
@@ -28,7 +28,7 @@ mkDerivation {
 
   installTargets = [ "install_client" "install_man" ];
 
-  qtWrapperArgs = [ ''--suffix PATH : ${nx-libs}/bin:${openssh}/libexec'' ];
+  qtWrapperArgs = [ "--suffix PATH : ${nx-libs}/bin:${openssh}/libexec" ];
 
   meta = with lib; {
     description = "Graphical NoMachine NX3 remote desktop client";

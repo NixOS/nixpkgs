@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, pythonPackages, libmms }:
+{ fetchurl, lib, pythonPackages, libmms }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mimms";

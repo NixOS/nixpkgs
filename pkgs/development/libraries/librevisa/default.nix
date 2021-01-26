@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libusb1 }:
+{ lib, stdenv, fetchurl, pkg-config, libusb1 }:
 
 # TODO: add VXI development files, for VXI-11 (TCPIP) support
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Implementation of the VISA standard (for instrument control)";
     longDescription = ''
       LibreVISA aims to be a compliant implementation of the VISA standard in a

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, guile, guile-lib, libffi, pkg-config, glib }:
+{ fetchurl, lib, stdenv, guile, guile-lib, libffi, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
   pname = "g-wrap";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A wrapper generator for Guile";
     longDescription = ''
       G-Wrap is a tool (and Guile library) for generating function wrappers for

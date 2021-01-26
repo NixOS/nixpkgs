@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/google/sentencepiece";
     description = "Unsupervised text tokenizer for Neural Network-based text generation";
     license = licenses.asl20;

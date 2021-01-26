@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl
 , gfortran, fftw, blas, lapack
-, mpi ? null
+, useMpi ? false
+, mpi
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +22,9 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ fftw blas lapack gfortran ]
-    ++ (lib.optionals (mpi != null) [ mpi ]);
+    ++ (lib.optionals useMpi [ mpi ]);
 
-configureFlags = if (mpi != null) then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${gfortran}/bin/gfortran" ];
+configureFlags = if useMpi then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${gfortran}/bin/gfortran" ];
 
   makeFlags = [ "all" ];
 

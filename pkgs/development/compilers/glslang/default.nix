@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , bison
 , cmake
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Khronos reference front-end for GLSL and ESSL";
     license = licenses.asl20;

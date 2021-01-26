@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, geant_version }:
+{ lib, stdenv, fetchurl, geant_version }:
 
 let
   mkDataset = { name, version, sha256, envvar }:
@@ -24,7 +24,7 @@ let
       inherit envvar;
       setupHook = ./datasets-hook.sh;
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Data files for the Geant4 toolkit";
         homepage = "https://geant4.web.cern.ch/support/download";
         license = licenses.g4sl;

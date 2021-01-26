@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, which, pkg-config, mono }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, which, pkg-config, mono }:
 
 stdenv.mkDerivation rec {
   pname = "taglib-sharp";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-docs" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for reading and writing metadata in media files";
     homepage = "https://github.com/mono/taglib-sharp";
     platforms = platforms.linux;

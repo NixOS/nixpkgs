@@ -1,5 +1,5 @@
 { mkDerivation, fetchpatch
-, base, containers, gomp, hspec, QuickCheck, lib, stdenv
+, base, containers, gomp, hspec, QuickCheck, lib
 , transformers, z3
 }:
 mkDerivation {

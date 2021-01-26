@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, zlib, freetype, cairo, lua5, texlive, ghostscript
+{ lib, fetchurl, makeWrapper, pkg-config, zlib, freetype, cairo, lua5, texlive, ghostscript
 , libjpeg, libpng, qtbase, mkDerivation
 }:
 
@@ -22,7 +22,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  qtWrapperArgs = [ ''--prefix PATH : ${texlive}/bin''  ];
+  qtWrapperArgs = [ "--prefix PATH : ${texlive}/bin"  ];
 
   enableParallelBuilding = true;
 

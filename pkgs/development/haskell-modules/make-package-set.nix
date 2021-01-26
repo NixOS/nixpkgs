@@ -11,9 +11,13 @@
 , # package-set used for non-haskell dependencies (all of nixpkgs)
   pkgs
 
-, # stdenv to use for building haskell packages
+, # stdenv provides our build and host platforms
   stdenv
 
+, # this module provides the list of known licenses and maintainers
+  lib
+
+  # needed for overrideCabal & packageSourceOverrides
 , haskellLib
 
 , # hashes for downloading Hackage packages
@@ -22,7 +26,7 @@
 , # compiler to use
   ghc
 
-, # A function that takes `{ pkgs, stdenv, callPackage }` as the first arg and
+, # A function that takes `{ pkgs, lib, callPackage }` as the first arg and
   # `self` as second, and returns a set of haskell packages
   package-set
 
@@ -37,7 +41,7 @@ self:
 let
   inherit (stdenv) buildPlatform hostPlatform;
 
-  inherit (stdenv.lib) fix' extends makeOverridable;
+  inherit (lib) fix' extends makeOverridable;
   inherit (haskellLib) overrideCabal;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
@@ -80,8 +84,8 @@ let
       # lost on `.override`) but determine the auto-args based on `drv` (the problem here
       # is that nix has no way to "passthrough" args while preserving the reflection
       # info that callPackage uses to determine the arguments).
-      drv = if stdenv.lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (stdenv.lib.functionArgs drv) scope;
+      drv = if lib.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (lib.functionArgs drv) scope;
 
       # this wraps the `drv` function to add a `overrideScope` function to the result.
       drvScope = allArgs: drv allArgs // {
@@ -94,7 +98,7 @@ let
           # nothing.
           in callPackageWithScope newScope drv manualArgs;
       };
-    in stdenv.lib.makeOverridable drvScope (auto // manualArgs);
+    in lib.makeOverridable drvScope (auto // manualArgs);
 
   mkScope = scope: let
       ps = pkgs.__splicedPackages;
@@ -169,7 +173,7 @@ let
       };
     });
 
-in package-set { inherit pkgs stdenv callPackage; } self // {
+in package-set { inherit pkgs lib callPackage; } self // {
 
     inherit mkDerivation callPackage haskellSrc2nix hackage2nix buildHaskellPackages;
 

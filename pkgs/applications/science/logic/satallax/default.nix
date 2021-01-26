@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     inherit version;
-    description = ''Automated theorem prover for higher-order logic'';
+    description = "Automated theorem prover for higher-order logic";
     license = lib.licenses.mit ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

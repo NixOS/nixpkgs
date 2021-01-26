@@ -6,9 +6,11 @@
 , cmark
 , lmdb
 , lmdbxx
+, libsecret
 , tweeny
 , mkDerivation
 , qtbase
+, qtkeychain
 , qtmacextras
 , qtmultimedia
 , qttools
@@ -25,13 +27,13 @@
 
 mkDerivation rec {
   pname = "nheko";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "1cbhgaf9klgxdirrxj571fqwspm0byl75c1xc40l727a6qswvp7s";
+    sha256 = "00d6wx3lcgbks74jkdyifqxf8nlravqh88fyljd0sy7kzbah9msf";
   };
 
   nativeBuildInputs = [
@@ -46,6 +48,7 @@ mkDerivation rec {
     mtxclient
     olm
     boost17x
+    libsecret
     lmdb
     spdlog
     fmt
@@ -55,7 +58,12 @@ mkDerivation rec {
     qttools
     qtquickcontrols2
     qtgraphicaleffects
+    qtkeychain
   ] ++ lib.optional stdenv.isDarwin qtmacextras;
+
+  cmakeFlags = [
+    "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
+  ];
 
   meta = with lib; {
     description = "Desktop client for the Matrix protocol";

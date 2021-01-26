@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, callPackage, wrapCCWith }:
+{ lib, stdenv, fetchFromGitHub, callPackage, wrapCCWith }:
 
 let
   version = "4.0.0";
@@ -17,7 +17,6 @@ in rec {
       mkdir "$rsrc"
       ln -s "${cc}/lib/clang/$clang_version/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-      echo "--gcc-toolchain=${stdenv.cc.cc}" >> $out/nix-support/cc-cflags
       echo "-Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
       rm $out/nix-support/add-hardening.sh
       touch $out/nix-support/add-hardening.sh

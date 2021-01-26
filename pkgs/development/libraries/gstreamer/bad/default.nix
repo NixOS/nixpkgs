@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , meson
@@ -86,7 +86,7 @@
 assert faacSupport -> faac != null;
 
 let
-  inherit (stdenv.lib) optional optionals;
+  inherit (lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
   version = "1.18.2";
@@ -293,7 +293,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = false; # fails 20 out of 58 tests, expensive
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GStreamer Bad Plugins";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''

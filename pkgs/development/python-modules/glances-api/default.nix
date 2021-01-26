@@ -26,7 +26,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "glances_api" ];
 
   meta = with lib; {
-    description = "Python Wrapper for interacting with the Volkszahler API";
+    description = "Python API for interacting with Glances";
     homepage = "https://github.com/home-assistant-ecosystem/python-glances-api";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

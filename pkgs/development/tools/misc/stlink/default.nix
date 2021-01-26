@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libusb1 }:
+{ lib, stdenv, fetchFromGitHub, cmake, libusb1 }:
 
 let
   # The Darwin build of stlink explicitly refers to static libusb.
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/etc/modprobe.d
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "In-circuit debug and programming for ST-Link devices";
     license = licenses.bsd3;
     platforms = platforms.unix;

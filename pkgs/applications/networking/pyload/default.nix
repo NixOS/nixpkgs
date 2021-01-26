@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pythonPackages, gocr, unrar, rhino, spidermonkey_38 }:
+{ lib, fetchFromGitHub, fetchpatch, pythonPackages, gocr, unrar, rhino, spidermonkey_38 }:
 
 let
   beautifulsoup = pythonPackages.callPackage ./beautifulsoup.nix {

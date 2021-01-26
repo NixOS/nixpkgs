@@ -35,7 +35,7 @@ stdenv.mkDerivation {
       --prefix PATH : ${lib.makeBinPath [ nim tinycc ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "REPL for the Nim programming language";
     homepage = "https://github.com/wheineman/nrpl";
     license = licenses.mit;

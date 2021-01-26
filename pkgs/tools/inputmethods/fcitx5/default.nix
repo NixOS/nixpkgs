@@ -41,13 +41,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.0.3";
+  version = "5.0.4";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5";
     rev = version;
-    sha256 = "QYMH0WbhHqDKUvpj1VOB8U5sbBD89H6moLFkQBJijZA=";
+    sha256 = "sha256-2KGdR1m70Qatidzf/DZuFK3lc1t8z7sxjyhaxuc0Tqg=";
   };
 
   prePatch = ''
@@ -89,6 +89,8 @@ stdenv.mkDerivation rec {
     xkeyboard_config
     libxkbfile
   ];
+
+  passthru.updateScript = ./update.py;
 
   meta = with lib; {
     description = "Next generation of fcitx";

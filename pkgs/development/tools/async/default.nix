@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "async";

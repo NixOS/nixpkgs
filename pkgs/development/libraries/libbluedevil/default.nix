@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4 }:
+{ lib, stdenv, fetchurl, cmake, qt4 }:
 
 stdenv.mkDerivation rec {
   pname = "libbluedevil";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qt4 ];
 
   meta = {
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
   };
 }

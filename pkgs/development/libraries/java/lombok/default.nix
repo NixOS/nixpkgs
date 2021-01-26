@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jdk }:
+{ lib, stdenv, fetchurl, makeWrapper, jdk }:
 
 stdenv.mkDerivation rec {
   name = "lombok-1.18.16";
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library that can write a lot of boilerplate for your Java project";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.mit;
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
     homepage = "https://projectlombok.org/";
-    maintainers = [ stdenv.lib.maintainers.CrystalGamma ];
+    maintainers = [ lib.maintainers.CrystalGamma ];
   };
 }

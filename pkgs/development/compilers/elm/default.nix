@@ -2,7 +2,8 @@
 , haskell, nodejs
 , fetchurl, fetchpatch, makeWrapper, writeScriptBin
   # Rust dependecies
-, rustPlatform, openssl, pkg-config }:
+, rustPlatform, openssl, pkg-config, Security
+}:
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
 
@@ -96,7 +97,7 @@ let
 
   elmRustPackages =  {
     elm-json = import ./packages/elm-json.nix {
-      inherit rustPlatform fetchurl openssl stdenv pkg-config;
+      inherit lib rustPlatform fetchurl openssl stdenv pkg-config Security;
     } // {
       meta = with lib; {
         description = "Install, upgrade and uninstall Elm dependencies";
@@ -118,7 +119,7 @@ let
 
       elm-test = patchBinwrap [elmi-to-json]
         nodePkgs.elm-test // {
-          meta = with stdenv.lib; {
+          meta = with lib; {
             description = "Runs elm-test suites from Node.js";
             homepage = "https://github.com/rtfeldman/node-test-runner";
             license = licenses.bsd3;
@@ -128,7 +129,7 @@ let
 
       elm-verify-examples = patchBinwrap [elmi-to-json]
         nodePkgs.elm-verify-examples // {
-          meta = with stdenv.lib; {
+          meta = with lib; {
             description = "Verify examples in your docs";
             homepage = "https://github.com/stoeffel/elm-verify-examples";
             license = licenses.bsd3;
@@ -153,7 +154,7 @@ let
             mkdir -p unpacked_bin
             ln -sf ${elm-instrument}/bin/elm-instrument unpacked_bin/elm-instrument
           '';
-          meta = with stdenv.lib; {
+          meta = with lib; {
             description = "Work in progress - Code coverage tooling for Elm";
             homepage = "https://github.com/zwilias/elm-coverage";
             license = licenses.bsd3;
@@ -163,7 +164,7 @@ let
 
       create-elm-app = patchNpmElm (patchBinwrap [elmi-to-json]
         nodePkgs.create-elm-app) // {
-          meta = with stdenv.lib; {
+          meta = with lib; {
             description = "Create Elm apps with no build configuration";
             homepage = "https://github.com/halfzebra/create-elm-app";
             license = licenses.mit;
@@ -173,7 +174,7 @@ let
 
       elm-review = patchBinwrap [elmRustPackages.elm-json]
         nodePkgs.elm-review // {
-          meta = with stdenv.lib; {
+          meta = with lib; {
             description = "Analyzes Elm projects, to help find mistakes before your users find them";
             homepage = "https://package.elm-lang.org/packages/jfmengels/elm-review/${nodePkgs.elm-review.version}";
             license = licenses.bsd3;
@@ -182,7 +183,7 @@ let
         };
 
       elm-language-server = nodePkgs."@elm-tooling/elm-language-server" // {
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "Language server implementation for Elm";
           homepage = "https://github.com/elm-tooling/elm-language-server";
           license = licenses.mit;
@@ -191,7 +192,7 @@ let
       };
 
       elm-optimize-level-2 = nodePkgs."elm-optimize-level-2" // {
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "A second level of optimization for the Javascript that the Elm Compiler produces";
           homepage = "https://github.com/mdgriffith/elm-optimize-level-2";
           license = licenses.bsd3;

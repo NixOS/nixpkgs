@@ -1,4 +1,4 @@
-{ lib, stdenv, appleDerivation, libdispatch, xnu }:
+{ lib, appleDerivation, libdispatch, xnu }:
 
 appleDerivation {
   propagatedBuildInputs = [ libdispatch xnu ];

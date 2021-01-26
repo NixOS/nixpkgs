@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab
+{ lib, stdenv, fetchFromGitLab
 , meson, ninja, nasm, pkg-config
 , withTools ? false # "dav1d" binary
 , withExamples ? false, SDL2 # "dav1dplay" binary
@@ -21,15 +21,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja nasm pkg-config ];
   # TODO: doxygen (currently only HTML and not build by default).
-  buildInputs = stdenv.lib.optional withExamples SDL2
-    ++ stdenv.lib.optionals useVulkan [ libplacebo vulkan-loader vulkan-headers ];
+  buildInputs = lib.optional withExamples SDL2
+    ++ lib.optionals useVulkan [ libplacebo vulkan-loader vulkan-headers ];
 
   mesonFlags= [
-    "-Denable_tools=${stdenv.lib.boolToString withTools}"
-    "-Denable_examples=${stdenv.lib.boolToString withExamples}"
+    "-Denable_tools=${lib.boolToString withTools}"
+    "-Denable_examples=${lib.boolToString withExamples}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform AV1 decoder focused on speed and correctness";
     longDescription = ''
       The goal of this project is to provide a decoder for most platforms, and

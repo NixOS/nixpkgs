@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, mock, six, twisted, isPy37, isPy27 }:
+{ lib, buildPythonPackage, fetchPypi, pytest, mock, six, twisted, isPy37, isPy27 }:
 
 buildPythonPackage rec {
   pname = "txaio";

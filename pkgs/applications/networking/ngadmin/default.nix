@@ -1,17 +1,28 @@
-{ stdenv, lib, fetchgit, autoreconfHook, readline }:
+{ stdenv, lib, fetchFromGitHub, autoreconfHook, readline
+, withReadline ? true
+, enableEmu ? true
+, enableSpy ? true
+}:
 
 stdenv.mkDerivation {
   pname = "ngadmin";
-  version = "unstable-2017-11-17";
+  version = "unstable-2020-10-05";
 
-  src = fetchgit {
-    url = "https://git.netgeek.ovh/c/ngadmin.git";
-    rev = "95240c567b5c40129d733cbd76911ba7574e4998";
-    sha256 = "052ss82fs8cxk3dqdwlh3r8q9gsm36in2lxdgwj9sljdgwg75c34";
+  src = fetchFromGitHub {
+    owner = "Alkorin";
+    repo = "ngadmin";
+    rev = "5bf8650ce6d465b8cb1e570548819f0cefe9a87d";
+    sha256 = "15vixhwqcpbjdxlaznans9w63kwl29mdkds6spvbv2i7l33qnhq4";
   };
 
-  nativeBuildInputs = [ autoreconfHook readline ];
+  nativeBuildInputs =
+    [ autoreconfHook ]
+    ++ lib.optional withReadline readline;
   enableParallelBuild = true;
+  configureFlags = with lib;
+    optional (!withReadline) "--without-readline"
+    ++ optional enableEmu "--enable-emu"
+    ++ optional enableSpy "--enable-spy";
 
   meta = with lib; {
     description = "Netgear switch (NSDP) administration tool";

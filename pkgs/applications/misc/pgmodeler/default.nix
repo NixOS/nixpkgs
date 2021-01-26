@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , pkg-config
 , qmake

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   buildFlags =
     lib.optional stdenv.isDarwin "pcsclite_CFLAGS=-I${PCSC}/Library/Frameworks/PCSC.framework/Headers";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://code.videolan.org/videolan/aribb25";
     description = "Sample implementation of the ARIB STD-B25 standard";
     platforms = platforms.all;

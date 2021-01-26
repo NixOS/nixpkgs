@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 
 , cmake
@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja perl python ];
 
-  postConfigure = stdenv.lib.optionals enableThreading ''
+  postConfigure = lib.optionals enableThreading ''
     perl scripts/config.pl set MBEDTLS_THREADING_C    # Threading abstraction layer
     perl scripts/config.pl set MBEDTLS_THREADING_PTHREAD    # POSIX thread wrapper layer for the threading layer.
   '';
 
   cmakeFlags = [ "-DUSE_SHARED_MBEDTLS_LIBRARY=on" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://tls.mbed.org/";
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL";
     license = licenses.asl20;

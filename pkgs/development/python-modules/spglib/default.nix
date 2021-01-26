@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, numpy, nose, pyyaml }:
+{ lib, buildPythonPackage, fetchPypi, fetchpatch, numpy, nose, pyyaml }:
 
 buildPythonPackage rec {
   pname = "spglib";

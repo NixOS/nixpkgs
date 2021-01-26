@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nexus";
-  version = "3.29.0-02";
+  version = "3.29.2-02";
 
   src = fetchurl {
     url = "https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-${version}-unix.tar.gz";
-    sha256 = "0yxk3yy9vllxc9v4dn3fs8hh389lrw2g8gg24rx1w8bg05rrrr8z";
+    sha256 = "sha256-vHy7V32xlYaPJdc8oi3j98weOdc4R5S64Dwo9YI8o6c=";
   };
 
   preferLocalBuild = true;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/nexus \
       --set JAVA_HOME ${jre_headless} \
       --set ALTERNATIVE_NAME "nexus" \
-      --prefix PATH "${stdenv.lib.makeBinPath [ gawk ]}"
+      --prefix PATH "${lib.makeBinPath [ gawk ]}"
 
     runHook postInstall
   '';

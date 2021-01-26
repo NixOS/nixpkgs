@@ -1,4 +1,4 @@
-{ stdenv, ruby, bison, rake, fetchFromGitHub }:
+{ lib, stdenv, ruby, bison, rake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "mruby";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An embeddable implementation of the Ruby language";
     homepage = "https://mruby.org";
     maintainers = [ maintainers.nicknovitski ];

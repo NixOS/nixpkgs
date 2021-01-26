@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   postFixup = ''
     rm $out/lib/libgpuarray-static.a
-  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.isDarwin) ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
       patchelf --set-rpath "$p:$libraryPath" $1

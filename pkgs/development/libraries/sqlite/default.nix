@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null }:
+{ lib, stdenv, fetchurl, zlib, interactive ? false, readline ? null, ncurses ? null
+, python3Packages
+}:
 
 assert interactive -> readline != null && ncurses != null;
 
-with stdenv.lib;
+with lib;
 
 let
-  archiveVersion = import ./archive-version.nix stdenv.lib;
+  archiveVersion = import ./archive-version.nix lib;
 in
 
 stdenv.mkDerivation rec {
@@ -72,6 +74,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false; # fails to link against tcl
+
+  passthru.tests = {
+    inherit (python3Packages) sqlalchemy;
+  };
 
   meta = {
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";

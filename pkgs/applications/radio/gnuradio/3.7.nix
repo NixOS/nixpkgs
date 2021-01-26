@@ -241,8 +241,7 @@ let
     # gr-fcd feature was dropped in 3.8
     ++ lib.optionals (hasFeature "gr-fcd" features) [ "share/gnuradio/examples/fcd" ]
   ;
-  preConfigure = ''
-  ''
+  preConfigure = ""
     # wxgui and pygtk are not looked up properly, so we force them to be
     # detected as found, if they are requested by the `features` attrset.
     + lib.optionalString (hasFeature "gr-wxgui" features) ''

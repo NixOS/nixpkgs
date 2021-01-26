@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake}:
+{lib, stdenv, fetchurl, cmake}:
 
 let
   patch = fetchurl {
@@ -20,9 +20,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A real-time library for sampling rate conversion library";
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     homepage = "https://ccrma.stanford.edu/~jos/resample/Free_Resampling_Software.html";
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ lib.maintainers.sander ];
+    platforms = lib.platforms.unix;
   };
 }

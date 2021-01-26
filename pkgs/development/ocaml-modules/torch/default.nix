@@ -46,7 +46,7 @@ buildDunePackage rec {
     stdio
   ];
 
-  preBuild = ''export LIBTORCH=${pytorch.dev}/'';
+  preBuild = "export LIBTORCH=${pytorch.dev}/";
 
   doCheck = !stdenv.isAarch64;
   checkPhase = "dune runtest";

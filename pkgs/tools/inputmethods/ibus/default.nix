@@ -101,8 +101,8 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "test_execsdir=${placeholder ''installedTests''}/libexec/installed-tests/ibus"
-    "test_sourcesdir=${placeholder ''installedTests''}/share/installed-tests/ibus"
+    "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
+    "test_sourcesdir=${placeholder "installedTests"}/share/installed-tests/ibus"
   ];
 
   nativeBuildInputs = [

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytestCheckHook
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook
 , cheroot
 , dbutils, mysqlclient, pymysql, mysql-connector, psycopg2
 }:

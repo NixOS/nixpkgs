@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python opencascade smesh
     freetype libGL libGLU libX11
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+  ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   cmakeFlags = [
     "-Wno-dev"

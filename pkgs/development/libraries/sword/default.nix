@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, icu, clucene_core, curl }:
+{ lib, stdenv, fetchurl, pkg-config, icu, clucene_core, curl }:
 
 stdenv.mkDerivation rec {
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "-DU_USING_ICU_NAMESPACE=1"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A software framework that allows research manipulation of Biblical texts";
     homepage = "http://www.crosswire.org/sword/";
     longDescription = ''

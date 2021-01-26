@@ -6,8 +6,8 @@
 }:
 
 let
-  binpath = stdenv.lib.makeBinPath
-    ([ coreutils ncurses gnused gnugrep ] ++ stdenv.lib.optional (jdk != null) jdk);
+  binpath = lib.makeBinPath
+    ([ coreutils ncurses gnused gnugrep ] ++ lib.optional (jdk != null) jdk);
 in
 stdenv.mkDerivation rec {
   pname = "grails";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     rm -f "$out"/bin/*.bat
     # Improve purity
     sed -i -e '2iPATH=${binpath}:\$PATH' "$out"/bin/grails
-  '' + stdenv.lib.optionalString (jdk != null) ''
+  '' + lib.optionalString (jdk != null) ''
     # Inject JDK path into grails
     sed -i -e '2iJAVA_HOME=${jdk.home}' "$out"/bin/grails
   '';

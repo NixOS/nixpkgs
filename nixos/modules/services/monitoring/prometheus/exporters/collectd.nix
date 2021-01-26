@@ -20,7 +20,7 @@ in
       port = mkOption {
         type = types.int;
         default = 25826;
-        description = ''Network address on which to accept collectd binary network packets.'';
+        description = "Network address on which to accept collectd binary network packets.";
       };
 
       listenAddress = mkOption {

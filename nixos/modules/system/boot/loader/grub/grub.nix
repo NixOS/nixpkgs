@@ -327,6 +327,26 @@ in
         '';
       };
 
+      extraInstallCommands = mkOption {
+        default = "";
+        example = literalExample ''
+          # the example below generates detached signatures that GRUB can verify
+          # https://www.gnu.org/software/grub/manual/grub/grub.html#Using-digital-signatures
+          ''${pkgs.findutils}/bin/find /boot -not -path "/boot/efi/*" -type f -name '*.sig' -delete
+          old_gpg_home=$GNUPGHOME
+          export GNUPGHOME="$(mktemp -d)"
+          ''${pkgs.gnupg}/bin/gpg --import ''${priv_key} > /dev/null 2>&1
+          ''${pkgs.findutils}/bin/find /boot -not -path "/boot/efi/*" -type f -exec ''${pkgs.gnupg}/bin/gpg --detach-sign "{}" \; > /dev/null 2>&1
+          rm -rf $GNUPGHOME
+          export GNUPGHOME=$old_gpg_home
+        '';
+        type = types.lines;
+        description = ''
+          Additional shell commands inserted in the bootloader installer
+          script after generating menu entries.
+        '';
+      };
+
       extraPerEntryConfig = mkOption {
         default = "";
         example = "root (hd0)";
@@ -715,7 +735,7 @@ in
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
         ${pkgs.perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
-      ''));
+      '') + cfg.extraInstallCommands);
 
       system.build.grub = grub;
 

@@ -127,7 +127,7 @@ self: super:
   cryptography = super.cryptography.overridePythonAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs or [ ]
-        ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) self.python.pythonForBuild.pkgs.cffi;
+        ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) self.python.pythonForBuild.pkgs.cffi;
       buildInputs = old.buildInputs ++ [ pkgs.openssl ];
     }
   );
@@ -245,7 +245,7 @@ self: super:
 
   horovod = super.horovod.overridePythonAttrs (
     old: {
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.openmpi ];
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.mpi ];
     }
   );
 
@@ -443,7 +443,7 @@ self: super:
       inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
     in
     {
-      NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
+      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
 
       XDG_RUNTIME_DIR = "/tmp";
 
@@ -466,9 +466,9 @@ self: super:
         pkgs.libpng
         pkgs.freetype
       ]
-        ++ stdenv.lib.optionals enableGtk3 [ pkgs.cairo self.pycairo pkgs.gtk3 pkgs.gobject-introspection self.pygobject3 ]
-        ++ stdenv.lib.optionals enableTk [ pkgs.tcl pkgs.tk self.tkinter pkgs.libX11 ]
-        ++ stdenv.lib.optionals enableQt [ self.pyqt5 ]
+        ++ lib.optionals enableGtk3 [ pkgs.cairo self.pycairo pkgs.gtk3 pkgs.gobject-introspection self.pygobject3 ]
+        ++ lib.optionals enableTk [ pkgs.tcl pkgs.tk self.tkinter pkgs.libX11 ]
+        ++ lib.optionals enableQt [ self.pyqt5 ]
       ;
 
       inherit (super.matplotlib) patches;
@@ -528,14 +528,14 @@ self: super:
             { }
             {
               mpi = {
-                mpicc = "${pkgs.openmpi.outPath}/bin/mpicc";
+                mpicc = "${pkgs.mpi.outPath}/bin/mpicc";
               };
             }
         );
       };
     in
     {
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.openmpi ];
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.mpi ];
       enableParallelBuilding = true;
       preBuild = ''
         ln -sf ${cfg} mpi.cfg

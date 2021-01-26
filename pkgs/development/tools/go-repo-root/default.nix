@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   pname = "go-repo-root";
-  version = "20140911-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "20140911-${lib.strings.substring 0 7 rev}";
   rev = "90041e5c7dc634651549f96814a452f4e0e680f9";
 
   goPackagePath = "github.com/cstrahan/go-repo-root";

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
   buildInputs = [ ant jdk ];
 
-  buildPhase = ''ant make'';
+  buildPhase = "ant make";
 
   installPhase = ''
     mkdir -p $out

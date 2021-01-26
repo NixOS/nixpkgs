@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeWrapper, gnum4, texinfo, texLive, automake,
+{ fetchurl, lib, stdenv, makeWrapper, gnum4, texinfo, texLive, automake,
   enableX11 ? false, xlibsWrapper ? null }:
 
 let
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
   # XXX: The `check' target doesn't exist.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "MIT/GNU Scheme, a native code Scheme compiler";
 
     longDescription =

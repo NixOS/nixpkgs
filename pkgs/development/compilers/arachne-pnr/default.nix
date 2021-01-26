@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, icestorm }:
+{ lib, stdenv, fetchFromGitHub, icestorm }:
 
 with builtins;
 
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
       the IceStorm [2] icepack command.
     '';
     homepage = "https://github.com/cseed/arachne-pnr";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ shell thoughtpolice ];
+    platforms = lib.platforms.linux;
   };
 }

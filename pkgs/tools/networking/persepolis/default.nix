@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonApplication, fetchFromGitHub, makeWrapper
+{ lib, buildPythonApplication, fetchFromGitHub, makeWrapper
 , aria
 , libnotify
 , pulseaudio
@@ -47,7 +47,7 @@ buildPythonApplication rec {
   # feed args to wrapPythonApp
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [aria libnotify ]}"
-    ''''${qtWrapperArgs[@]}''
+    "\${qtWrapperArgs[@]}"
   ];
 
   propagatedBuildInputs = [

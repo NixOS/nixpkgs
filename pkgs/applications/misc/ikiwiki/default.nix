@@ -60,13 +60,13 @@ stdenv.mkDerivation {
   postInstall = ''
     for a in "$out/bin/"*; do
       wrapProgram $a --suffix PERL5LIB : $PERL5LIB --prefix PATH : ${perlPackages.perl}/bin:$out/bin \
-      ${lib.optionalString gitSupport ''--prefix PATH : ${git}/bin ''} \
-      ${lib.optionalString monotoneSupport ''--prefix PATH : ${monotone}/bin ''} \
-      ${lib.optionalString bazaarSupport ''--prefix PATH : ${breezy}/bin ''} \
-      ${lib.optionalString cvsSupport ''--prefix PATH : ${cvs}/bin ''} \
-      ${lib.optionalString cvsSupport ''--prefix PATH : ${cvsps}/bin ''} \
-      ${lib.optionalString subversionSupport ''--prefix PATH : ${subversion.out}/bin ''} \
-      ${lib.optionalString mercurialSupport ''--prefix PATH : ${mercurial}/bin ''} \
+      ${lib.optionalString gitSupport "--prefix PATH : ${git}/bin "} \
+      ${lib.optionalString monotoneSupport "--prefix PATH : ${monotone}/bin "} \
+      ${lib.optionalString bazaarSupport "--prefix PATH : ${breezy}/bin "} \
+      ${lib.optionalString cvsSupport "--prefix PATH : ${cvs}/bin "} \
+      ${lib.optionalString cvsSupport "--prefix PATH : ${cvsps}/bin "} \
+      ${lib.optionalString subversionSupport "--prefix PATH : ${subversion.out}/bin "} \
+      ${lib.optionalString mercurialSupport "--prefix PATH : ${mercurial}/bin "} \
       ${lib.optionalString docutilsSupport ''--prefix PYTHONPATH : "$(toPythonPath ${docutils})" ''} \
       ${lib.concatMapStrings (x: "--prefix PATH : ${x}/bin ") extraUtils}
     done

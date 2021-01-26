@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, glib }:
+{ lib, stdenv, fetchurl, pkg-config, glib }:
 
 stdenv.mkDerivation rec {
   name = "libvisual-0.4.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An abstraction library for audio visualisations";
     homepage = "https://sourceforge.net/projects/libvisual/";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 }

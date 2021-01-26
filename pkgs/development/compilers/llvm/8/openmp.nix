@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetch
 , cmake
 , llvm
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Components required to build an executable OpenMP program";
     homepage    = "https://openmp.llvm.org/";
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.all;
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.all;
   };
 }

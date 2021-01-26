@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, pycodestyle, glibcLocales
+{ lib, fetchPypi, buildPythonPackage, pycodestyle, glibcLocales
 , toml
 }:
 

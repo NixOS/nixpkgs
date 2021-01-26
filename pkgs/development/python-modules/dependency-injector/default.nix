@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, six, unittest2, pyyaml, flask }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, six, unittest2, pyyaml, flask }:
 
 let
   testPath =

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg_3, makeWrapper, perl, perlPackages, rtmpdump}:
+{ lib, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg_3, makeWrapper, perl, perlPackages, rtmpdump}:
 
 with lib;
 

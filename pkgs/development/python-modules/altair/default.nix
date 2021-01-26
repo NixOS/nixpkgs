@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , entrypoints
 , glibcLocales
 , ipython
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pandas
     six
     toolz
-  ] ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+  ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   checkInputs = [
     glibcLocales

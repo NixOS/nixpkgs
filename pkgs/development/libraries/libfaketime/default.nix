@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "libfaketime";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-date-in-gzip-man-page.patch
-  ] ++ (stdenv.lib.optionals stdenv.cc.isClang [
+  ] ++ (lib.optionals stdenv.cc.isClang [
     # https://github.com/wolfcw/libfaketime/issues/277
     ./0001-Remove-unsupported-clang-flags.patch
   ]);
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
   PREFIX = placeholder "out";
   LIBDIRNAME = "/lib";
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=cast-function-type -Wno-error=format-truncation";
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=cast-function-type -Wno-error=format-truncation";
 
   checkInputs = [ perl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Report faked system time to programs without having to change the system-wide time";
     homepage = "https://github.com/wolfcw/libfaketime/";
     license = licenses.gpl2;

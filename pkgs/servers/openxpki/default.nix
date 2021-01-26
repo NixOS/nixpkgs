@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, perl, openssl, perlPackages, gettext, python3Packages
+{ lib, fetchgit, perl, openssl, perlPackages, gettext, python3Packages
 # TODO: Remove extra dependencies once it is clear that they are NOT needed somewhere.
 , extraDependencies1 ? false, extraDependencies2 ? false, extraDependencies3 ? false }:
 

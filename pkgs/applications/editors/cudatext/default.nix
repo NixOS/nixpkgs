@@ -38,24 +38,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.118.2";
+  version = "1.122.3";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    sha256 = "0d6f4qfs7vifz7qkw2vkdjgd5w717wfpnxbc4qa4hs4g6y86ywmm";
+    sha256 = "1h56hj433z0n4l97zl1cwkjv0qvz4qmvf469zzjzf1nj4zj8px2b";
   };
-
-  patches = [
-    # Don't check for update
-    ./dont-check-update.patch
-  ];
 
   postPatch = ''
     substituteInPlace app/proc_globdata.pas \
       --replace "/usr/share/cudatext" "$out/share/cudatext" \
-      --replace "libpython3.so" "${python3}/lib/libpython3.so"
+      --replace "libpython3.so" "${python3}/lib/libpython${python3.pythonVersion}.so" \
+      --replace "AllowProgramUpdates:= true;" "AllowProgramUpdates:= false;"
   '';
 
   nativeBuildInputs = [ lazarus fpc ]

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pkg-config, libsmf, glib, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pkg-config, libsmf, glib, pytest }:
 
 buildPythonPackage rec {
   pname = "pysmf";

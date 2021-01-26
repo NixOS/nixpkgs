@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "nginxlog_exporter";

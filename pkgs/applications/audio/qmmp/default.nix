@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, cmake, pkg-config, xlibsWrapper
+{ lib, mkDerivation, fetchurl, cmake, pkg-config, xlibsWrapper
 , qtbase, qttools, qtmultimedia, qtx11extras
 # transports
 , curl, libmms

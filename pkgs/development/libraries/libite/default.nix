@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libconfuse }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libconfuse }:
 
 stdenv.mkDerivation rec {
   pname = "libite";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libconfuse ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Lightweight library of frog DNA";
     longDescription = ''

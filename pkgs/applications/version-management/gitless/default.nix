@@ -1,4 +1,4 @@
-{ fetchFromGitHub, python, lib, stdenv }:
+{ fetchFromGitHub, python, lib }:
 
 with python.pkgs;
 buildPythonApplication rec {

@@ -19,14 +19,14 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
   makeFlags = [
-    ''DESTDIR=$(out)''
+    "DESTDIR=$(out)"
   ];
   preInstall = ''
     mkdir -p "$out"/{share/man,bin}
   '';
   meta = {
     inherit (s) version;
-    description = ''Console implementation of 2048 game'';
+    description = "Console implementation of 2048 game";
     license = lib.licenses.bsd2;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

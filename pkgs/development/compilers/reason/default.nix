@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune_2
+{ lib, stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune_2
 , fix, menhir, merlin-extend, ppx_tools_versioned, utop, cppo
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --prefix OCAMLPATH : "$OCAMLPATH:$OCAMLFIND_DESTDIR"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://reasonml.github.io/";
     description = "Facebook's friendly syntax to OCaml";
     license = licenses.mit;

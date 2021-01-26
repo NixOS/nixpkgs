@@ -1,4 +1,4 @@
-{ lib, callPackage, runCommandLocal, writeShellScriptBin, stdenv, coreutils, bubblewrap }:
+{ lib, callPackage, runCommandLocal, writeShellScriptBin, coreutils, bubblewrap }:
 
 args @ {
   name

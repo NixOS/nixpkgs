@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, pytest
+{ lib, buildPythonPackage, fetchPypi, isPyPy, pytest
 , numpy, zlib, netcdf, hdf5, curl, libjpeg, cython, cftime
 }:
 buildPythonPackage rec {

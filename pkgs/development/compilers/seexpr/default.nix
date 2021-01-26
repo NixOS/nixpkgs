@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libpng, zlib, qt4,
+{ lib, stdenv, fetchFromGitHub, cmake, libpng, zlib, qt4,
 bison, flex, libGLU, pythonPackages
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libGLU libpng zlib qt4 pythonPackages.pyqt4 bison flex ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Embeddable expression evaluation engine from Disney Animation";
     homepage = "https://www.disneyanimation.com/technology/seexpr.html";
     maintainers = with maintainers; [ hodapp ];

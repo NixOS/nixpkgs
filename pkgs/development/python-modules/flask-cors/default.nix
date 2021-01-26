@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , nose, flask, six, packaging }:
 
 buildPythonPackage rec {

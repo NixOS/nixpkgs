@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonApplication, fuse
+{ lib, fetchFromGitHub, buildPythonApplication, fuse
 , appdirs, colorama, dateutil, requests, requests_toolbelt
 , fusepy, sqlalchemy }:
 

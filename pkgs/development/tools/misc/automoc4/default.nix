@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4 }:
+{ lib, stdenv, fetchurl, cmake, qt4 }:
 
 stdenv.mkDerivation rec {
   pname = "automoc4";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qt4 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://techbase.kde.org/Development/Tools/Automoc4";
     description = "KDE Meta Object Compiler";
     license = licenses.bsd2;

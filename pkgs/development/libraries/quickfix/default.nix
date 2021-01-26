@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, libtool }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "quickfix";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'UnitTest++' ' '
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "QuickFIX C++ Fix Engine Library";
     homepage = "http://www.quickfixengine.org";
     license = licenses.free; # similar to BSD 4-clause

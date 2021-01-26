@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , doxygen, fontconfig, graphviz-nox, libxml2, pkg-config, which
 , systemd }:
 
@@ -51,7 +51,7 @@ in stdenv.mkDerivation {
       --replace pcfile=${pkg-config} pcfile=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ library to control Z-Wave Networks via a USB Z-Wave Controller";
     homepage = "http://www.openzwave.net/";
     license = licenses.gpl3;

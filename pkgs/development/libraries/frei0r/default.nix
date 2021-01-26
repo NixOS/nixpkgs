@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, cairo, opencv, pkg-config }:
+{ lib, stdenv, fetchurl, autoconf, cairo, opencv, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "frei0r-plugins";
@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf pkg-config ];
   buildInputs = [ cairo opencv ];
 
-  postInstall = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for f in $out/lib/frei0r-1/*.so* ; do
       ln -s $f "''${f%.*}.dylib"
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://frei0r.dyne.org";
     description = "Minimalist, cross-platform, shared video plugins";
     license = licenses.gpl2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config
+{ lib, stdenv, fetchurl, pkg-config
 , systemd ? null
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "--enable-man-pages"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.liblogging.org/";
     description = "Lightweight signal-safe logging library";
     license = licenses.bsd2;

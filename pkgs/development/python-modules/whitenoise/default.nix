@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, isPy27 }:
+{ lib, fetchPypi, buildPythonPackage, isPy27 }:
 
 buildPythonPackage rec {
   pname = "whitenoise";

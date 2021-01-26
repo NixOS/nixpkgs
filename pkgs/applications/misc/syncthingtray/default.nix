@@ -1,5 +1,4 @@
 { mkDerivation
-, stdenv
 , lib
 , fetchFromGitHub
 , qtbase

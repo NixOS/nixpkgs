@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, openmpi, perl, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, mpi, perl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "ior";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = pname;
     rev = version;
-    sha256 = "036cg75c5vq6kijfv8f918vpm9sf1h7lyg6xr9fba7n0dwbbmycv";
+    sha256 = "sha256-pSjptDfiPlaToXe1yHyk9MQMC9PqcVSjqAmWLD11iOM=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openmpi perl ];
+  buildInputs = [ mpi perl ];
 
   enableParallelBuilding = true;
 

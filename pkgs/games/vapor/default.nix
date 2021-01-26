@@ -14,13 +14,13 @@ let
     name = "Vapor";
     exec = pname;
     icon = icon;
-    comment = "LÖVE Distribution Client"; 
+    comment = "LÖVE Distribution Client";
     desktopName = "Vapor";
     genericName = "vapor";
     categories = "Game;";
   };
 
-in 
+in
 
 stdenv.mkDerivation {
   name = "${pname}-${version}";

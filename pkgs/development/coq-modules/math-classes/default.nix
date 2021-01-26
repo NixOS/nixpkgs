@@ -4,8 +4,8 @@ with lib; mkCoqDerivation {
 
   pname = "math-classes";
   inherit version;
-  defaultVersion = if versions.range "8.6" "8.11" coq.coq-version then "8.11.0" else null;
-  release."8.11.0".sha256 = "1hjgncvm1m46lw6264w4dqsy8dbh74vhmzq52x0fba2yqlvy94sf";
+  defaultVersion = if versions.range "8.6" "8.12" coq.coq-version then "8.12.0" else null;
+  release."8.12.0".sha256 = "14nd6a08zncrl5yg2gzk0xf4iinwq4hxnsgm4fyv07ydbkxfb425";
 
   extraBuildInputs = [ bignums ];
 

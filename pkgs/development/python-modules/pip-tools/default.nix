@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, pip, pytest, click, six
+{ lib, fetchPypi, buildPythonPackage, pip, pytest, click, six
 , setuptools_scm, git, glibcLocales, mock }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest git glibcLocales mock ];
   propagatedBuildInputs = [ pip click six setuptools_scm ];
 
-  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) [
+  disabledTests = lib.concatMapStringsSep " and " (s: "not " + s) [
     # Depend on network tests:
     "test_allow_unsafe_option" #paramaterized, but all fail
     "test_annotate_option" #paramaterized, but all fail

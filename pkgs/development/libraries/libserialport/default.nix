@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, udev, darwin }:
+{ lib, stdenv, fetchurl, pkg-config, udev, darwin }:
 
 stdenv.mkDerivation rec {
   name = "libserialport-0.1.1";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = stdenv.lib.optional stdenv.isLinux udev
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.IOKit;
+  buildInputs = lib.optional stdenv.isLinux udev
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform shared library for serial port access";
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;

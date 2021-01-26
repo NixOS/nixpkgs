@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, qtscript }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtscript }:
 
 stdenv.mkDerivation rec {
   pname = "qbs";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool that helps simplify the build process for developing projects across multiple platforms";
     homepage = "https://wiki.qt.io/Qbs";
     license = licenses.lgpl3;

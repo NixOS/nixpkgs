@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ flask ];
 
-  checkInputs = [ blinker ] ++ stdenv.lib.optionals (!isPy3k) [ twill ];
+  checkInputs = [ blinker ] ++ lib.optionals (!isPy3k) [ twill ];
 
   # twill integration is outdated in Python 2, hence it the tests fails.
   # Some of the tests use localhost networking on darwin.

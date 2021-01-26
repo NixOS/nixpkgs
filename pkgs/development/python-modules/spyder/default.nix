@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree, jedi, pycodestyle,
+{ lib, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree, jedi, pycodestyle,
   psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
   spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle, watchdog, python-language-server
@@ -44,8 +44,7 @@ buildPythonPackage rec {
     sed -i /pyqtwebengine/d setup.py
     substituteInPlace setup.py \
       --replace "pyqt5<5.13" "pyqt5" \
-      --replace "parso==0.7.0" "parso" \
-      --replace "jedi==0.17.1" "jedi"
+      --replace "parso==0.7.0" "parso"
   '';
 
   postInstall = ''

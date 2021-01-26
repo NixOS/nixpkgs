@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jre}:
+{lib, stdenv, fetchurl, jre}:
 
 stdenv.mkDerivation rec {
   pname = "aspectj";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.eclipse.org/aspectj/";
     description = "A seamless aspect-oriented extension to the Java programming language";
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.epl10;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.epl10;
   };
 }

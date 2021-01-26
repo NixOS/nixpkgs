@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, lua5_3 }:
+{ lib, stdenv, fetchgit, lua5_3 }:
 
 stdenv.mkDerivation rec {
   pname = "quickscope-kak";

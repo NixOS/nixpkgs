@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, emacs, texinfo }:
+{ lib, stdenv, fetchurl, emacs, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "tramp-2.4.2";

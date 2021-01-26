@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , bzip2
 , expat
 , libffi
@@ -54,7 +54,7 @@ assert x11Support -> tcl != null
 
 assert bluezSupport -> bluez != null;
 
-with stdenv.lib;
+with lib;
 
 let
   buildPackages = pkgsBuildHost;
@@ -125,9 +125,15 @@ let
         if parsed.cpu.significantByte.name == "littleEndian" then "arm" else "armeb"
       else if isx86_32 then "i386"
       else parsed.cpu.name;
+    pythonAbiName =
+      # python's build doesn't differentiate between musl and glibc in its
+      # abi detection, our wrapper should match.
+      if stdenv.hostPlatform.isMusl then
+        replaceStrings [ "musl" ] [ "gnu" ] parsed.abi.name
+        else parsed.abi.name;
     multiarch =
       if isDarwin then "darwin"
-      else "${multiarchCpu}-${parsed.kernel.name}-${parsed.abi.name}";
+      else "${multiarchCpu}-${parsed.kernel.name}-${pythonAbiName}";
 
     abiFlags = optionalString (isPy36 || isPy37) "m";
 
@@ -363,14 +369,14 @@ in with passthru; stdenv.mkDerivation {
     find $out -type d -name __pycache__ -print0 | xargs -0 -I {} rm -rf "{}"
   '';
 
-  preFixup = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     # Ensure patch-shebangs uses shebangs of host interpreter.
-    export PATH=${stdenv.lib.makeBinPath [ "$out" bash ]}:$PATH
+    export PATH=${lib.makeBinPath [ "$out" bash ]}:$PATH
   '';
 
   # Add CPython specific setup-hook that configures distutils.sysconfig to
   # always load sysconfigdata from host Python.
-  postFixup = stdenv.lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     cat << "EOF" >> "$out/nix-support/setup-hook"
     ${sysconfigdataHook}
     EOF
@@ -379,8 +385,8 @@ in with passthru; stdenv.mkDerivation {
   # Enforce that we don't have references to the OpenSSL -dev package, which we
   # explicitly specify in our configure flags above.
   disallowedReferences =
-    stdenv.lib.optionals (openssl != null && !static) [ openssl.dev ]
-    ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    lib.optionals (openssl != null && !static) [ openssl.dev ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Ensure we don't have references to build-time packages.
     # These typically end up in shebangs.
     pythonForBuild buildPackages.bash

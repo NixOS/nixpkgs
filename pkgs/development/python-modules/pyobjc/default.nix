@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, isPy3k, buildPythonPackage }:
+{ lib, fetchPypi, isPy3k, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "pyobjc";
@@ -13,10 +13,10 @@ buildPythonPackage rec {
     sha256 = "2b6c3e98f1408564ace1df36927154d7827c8e2f382386ab5d2db95c891e35a0";
   };
 
-  meta = {
+  meta = with lib; {
     description = "A bridge between the Python and Objective-C programming languages";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
     homepage = "https://pythonhosted.org/pyobjc/";
   };
 }

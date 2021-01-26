@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub }:
+{ lib, mkDerivation, fetchFromGitHub }:
 
 mkDerivation rec {
   version = "compat-2.6.1";
@@ -18,11 +18,11 @@ mkDerivation rec {
     cd ..
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/UlfNorell/agda-prelude";
     description = "Programming library for Agda";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     maintainers = with maintainers; [ mudri alexarice turion ];
   };
 }

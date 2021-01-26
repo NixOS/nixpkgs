@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, emacs }:
+{ lib, stdenv, fetchurl, emacs }:
 
 # this package installs the emacs-mode which
 # resides in the hsc3 sources.

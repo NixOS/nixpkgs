@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, autoconf, automake
+{ lib, stdenv, fetchFromGitHub, perl, autoconf, automake
 , libtool, flex, libevent, hwloc, munge, zlib, pandoc
 } :
 
@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Process Management Interface for HPC environments";
     homepage = "https://openpmix.github.io/";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , cmake, pkg-config
 , libva, libpciaccess, intel-gmmlib
 , enableX11 ? true, libX11
@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-media-driver";
-  version = "20.4.5";
+  version = "21.1.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "media-driver";
     rev    = "intel-media-${version}";
-    sha256 = "149xkhhp8q06c1jzxjs24lnbfrlvf19m0hcwld593vv4arfpbpmf";
+    sha256 = "17cgs52f42jdvfb6q3wpkxaz2b41z59jdribpgb9qmcvizsnglxc";
   };
 
   cmakeFlags = [
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ libva libpciaccess intel-gmmlib ]
-    ++ stdenv.lib.optional enableX11 libX11;
+    ++ lib.optional enableX11 libX11;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Intel Media Driver for VAAPI — Broadwell+ iGPUs";
     longDescription = ''
       The Intel Media Driver for VAAPI is a new VA-API (Video Acceleration API)
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ primeos jfrankenau ];
   };
 
-  postFixup = stdenv.lib.optionalString enableX11 ''
-    patchelf --set-rpath "$(patchelf --print-rpath $out/lib/dri/iHD_drv_video.so):${stdenv.lib.makeLibraryPath [ libX11  ]}" \
+  postFixup = lib.optionalString enableX11 ''
+    patchelf --set-rpath "$(patchelf --print-rpath $out/lib/dri/iHD_drv_video.so):${lib.makeLibraryPath [ libX11  ]}" \
       $out/lib/dri/iHD_drv_video.so
   '';
 }

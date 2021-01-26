@@ -8,7 +8,7 @@ There are primarily two problems which the Qt infrastructure is designed to addr
 
 ```{=docbook}
 <programlisting>
-{ mkDerivation, lib, qtbase }: <co xml:id='qt-default-nix-co-1' />
+{ mkDerivation, qtbase }: <co xml:id='qt-default-nix-co-1' />
 
 mkDerivation { <co xml:id='qt-default-nix-co-2' />
   pname = "myapp";

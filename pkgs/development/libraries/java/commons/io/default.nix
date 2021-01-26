@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "2.8.0";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage    = "http://commons.apache.org/proper/commons-io";
     description = "A library of utilities to assist with developing IO functionality";
-    maintainers = with stdenv.lib.maintainers; [ copumpkin ];
-    license     = stdenv.lib.licenses.asl20;
-    platforms = with stdenv.lib.platforms; unix;
+    maintainers = with lib.maintainers; [ copumpkin ];
+    license     = lib.licenses.asl20;
+    platforms = with lib.platforms; unix;
   };
 }

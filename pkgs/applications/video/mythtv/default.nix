@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
+{ lib, mkDerivation, fetchFromGitHub, which, qtbase, qtwebkit, qtscript, xlibsWrapper
 , libpulseaudio, fftwSinglePrec , lame, zlib, libGLU, libGL, alsaLib, freetype
 , perl, pkg-config , libsamplerate, libbluray, lzo, libX11, libXv, libXrandr, libXvMC, libXinerama, libXxf86vm
 , libXmu , yasm, libuuid, taglib, libtool, autoconf, automake, file, exiv2, linuxHeaders
@@ -20,7 +20,7 @@ mkDerivation rec {
     ./disable-os-detection.patch
   ];
 
-  setSourceRoot = ''sourceRoot=$(echo */mythtv)'';
+  setSourceRoot = "sourceRoot=$(echo */mythtv)";
 
   buildInputs = [
     freetype qtbase qtwebkit qtscript lame zlib xlibsWrapper libGLU libGL

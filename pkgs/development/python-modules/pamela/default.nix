@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   postUnpack = ''
     substituteInPlace $sourceRoot/pamela.py --replace \
       'find_library("pam")' \
-      '"${stdenv.lib.getLib pkgs.pam}/lib/libpam.so"'
+      '"${lib.getLib pkgs.pam}/lib/libpam.so"'
   '';
 
   doCheck = false;

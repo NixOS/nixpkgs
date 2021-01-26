@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, isPy3k }:
+{ lib, fetchPypi, buildPythonPackage, isPy3k }:
 
 buildPythonPackage rec {
   pname = "sslib";

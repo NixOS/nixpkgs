@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nix-direnv";
-  version = "1.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
     rev = version;
-    sha256 = "sha256-/mlM1EeUlr1nTUJ5rB41idzk3Mfy/htjjPUARYDFpb0=";
+    sha256 = "sha256-D31ORVdS8P1OkPShsfjEFLVCcv8Bff9OyexUKKHdguQ=";
   };
 
   # Substitute instead of wrapping because the resulting file is

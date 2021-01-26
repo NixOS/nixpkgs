@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python3Packages, intltool, file
+{ lib, fetchurl, python3Packages, intltool, file
 , wrapGAppsHook, gtk-vnc, vte, avahi, dconf
 , gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, glib, libosinfo, gnome3

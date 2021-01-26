@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , ncurses
 , withLibrary ? false, libtool
 , unicodeSupport ? true
@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-rpath-hacks"
-    (stdenv.lib.withFeature withLibrary "libtool")
-    "--with-ncurses${stdenv.lib.optionalString unicodeSupport "w"}"
-    "--with-libtool-opts=${stdenv.lib.optionalString enableShared "-shared"}"
+    (lib.withFeature withLibrary "libtool")
+    "--with-ncurses${lib.optionalString unicodeSupport "w"}"
+    "--with-libtool-opts=${lib.optionalString enableShared "-shared"}"
   ];
 
-  installTargets = [ "install${stdenv.lib.optionalString withLibrary "-full"}" ];
+  installTargets = [ "install${lib.optionalString withLibrary "-full"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://invisible-island.net/dialog/dialog.html";
     description = "Display dialog boxes from shell";
     license = licenses.lgpl21Plus;

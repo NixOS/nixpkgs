@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkg-config, qttools
+{ lib, fetchurl, autoconf, automake, libtool, pkg-config, qttools
 , liblscp, libgig, qtbase, mkDerivation }:
 
 mkDerivation rec {

@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, qmake, pkg-config, udev
+{ lib, mkDerivation, fetchFromGitHub, qmake, pkg-config, udev
 , qtmultimedia, qtscript, alsaLib, ola, libftdi1, libusb-compat-0_1
 , libsndfile, libmad
 }:

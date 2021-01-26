@@ -1,4 +1,4 @@
-{lib, stdenv, python3Packages, fetchpatch, gettext, qt5, fetchFromGitHub}:
+{lib, python3Packages, fetchpatch, gettext, qt5, fetchFromGitHub}:
 
 python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
     "NO_VENV=1"
   ];
 

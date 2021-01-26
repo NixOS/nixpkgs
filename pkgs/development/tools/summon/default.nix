@@ -1,6 +1,6 @@
-{ stdenv, buildGoModule, fetchFromGitHub, lib, patchResolver ? true }:
+{ buildGoModule, fetchFromGitHub, lib, patchResolver ? true }:
 
-with stdenv.lib;
+with lib;
 
 buildGoModule rec {
   pname = "summon";

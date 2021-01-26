@@ -40,8 +40,8 @@ let
     if stdenv.cc.isClang then "clang++" else
     throw "Unknown C++ compiler";
   cxx_compiler = wrapped cxx_compiler_name "\\$HOME/.theano"
-    (    stdenv.lib.optional cudaSupport libgpuarray_
-      ++ stdenv.lib.optional cudnnSupport cudnn );
+    (    lib.optional cudaSupport libgpuarray_
+      ++ lib.optional cudnnSupport cudnn );
 
   libgpuarray_ = libgpuarray.override { inherit cudaSupport cudatoolkit; };
 
@@ -60,10 +60,10 @@ in buildPythonPackage rec {
     substituteInPlace theano/configdefaults.py \
       --replace 'StrParam(param, is_valid=warn_cxx)' 'StrParam('\'''${cxx_compiler}'\''', is_valid=warn_cxx)' \
       --replace 'rc == 0 and config.cxx != ""' 'config.cxx != ""'
-  '' + stdenv.lib.optionalString cudaSupport ''
+  '' + lib.optionalString cudaSupport ''
     substituteInPlace theano/configdefaults.py \
       --replace 'StrParam(get_cuda_root)' 'StrParam('\'''${cudatoolkit}'\''')'
-  '' + stdenv.lib.optionalString cudnnSupport ''
+  '' + lib.optionalString cudnnSupport ''
     substituteInPlace theano/configdefaults.py \
       --replace 'StrParam(default_dnn_base_path)' 'StrParam('\'''${cudnn}'\''')'
   '';

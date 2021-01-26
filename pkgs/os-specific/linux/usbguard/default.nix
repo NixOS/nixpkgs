@@ -2,6 +2,8 @@
 , lib
 , fetchFromGitHub
 , autoreconfHook
+, installShellFiles
+, nixosTests
 , asciidoc
 , pkg-config
 , libxslt
@@ -35,6 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    installShellFiles
     asciidoc
     pkg-config
     libxslt # xsltproc
@@ -65,6 +68,13 @@ stdenv.mkDerivation rec {
   ++ (lib.optional (libsodium != null) "--with-crypto-library=sodium");
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    installShellCompletion --bash --name usbguard.bash scripts/bash_completion/usbguard
+    installShellCompletion --zsh --name _usbguard scripts/usbguard-zsh-completion
+  '';
+
+  passthru.tests = nixosTests.usbguard;
 
   meta = with lib; {
     description = "The USBGuard software framework helps to protect your computer against BadUSB";

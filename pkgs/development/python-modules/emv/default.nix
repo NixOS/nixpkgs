@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , click, enum-compat, pyscard, pycountry, terminaltables
 , pytestCheckHook, pythonOlder
 }:

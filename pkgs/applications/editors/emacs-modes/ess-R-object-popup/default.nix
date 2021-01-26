@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation {
   name = "ess-R-object-popup-20130302";

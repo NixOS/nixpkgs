@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages, gnome2, keybinder }:
+{ lib, fetchFromGitHub, pythonPackages, gnome2, keybinder }:
 
 pythonPackages.buildPythonApplication rec {
   ver = "0.93";

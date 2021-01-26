@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, buildEnv, kodi, plugins }:
+{ lib, makeWrapper, buildEnv, kodi, plugins }:
 
 let
   drvName = builtins.parseDrvName kodi.name;

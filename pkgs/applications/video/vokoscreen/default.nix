@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, mkDerivation
+{ lib, fetchFromGitHub, mkDerivation
 , pkg-config, qtbase, qttools, qmake, qtmultimedia, qtx11extras, alsaLib, libv4l, libXrandr
 , ffmpeg
 }:

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , betamax, requests_toolbelt }:
 
 buildPythonPackage rec {

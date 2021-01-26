@@ -50,8 +50,7 @@ with lib;
       default = pkgs.hadoop;
       defaultText = "pkgs.hadoop";
       example = literalExample "pkgs.hadoop";
-      description = ''
-      '';
+      description = "";
     };
   };
 

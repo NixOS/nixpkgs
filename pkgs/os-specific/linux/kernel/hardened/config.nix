@@ -8,7 +8,7 @@
 #
 # See also <nixos/modules/profiles/hardened.nix>
 
-{ lib, stdenv, version }:
+{ lib, version }:
 
 with lib;
 with lib.kernel;

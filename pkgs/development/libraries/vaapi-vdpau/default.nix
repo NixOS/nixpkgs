@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libvdpau, libGLU, libGL, libva, pkg-config }:
+{ lib, stdenv, fetchurl, fetchpatch, libvdpau, libGLU, libGL, libva, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libva-vdpau-driver";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s,LIBVA_DRIVERS_PATH=.*,LIBVA_DRIVERS_PATH=$out/lib/dri," configure
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://cgit.freedesktop.org/vaapi/vdpau-driver";
     license = licenses.gpl2Plus;
     description = "VDPAU driver for the VAAPI library";

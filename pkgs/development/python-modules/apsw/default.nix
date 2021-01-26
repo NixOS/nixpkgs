@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch
 , sqlite, isPyPy }:
 
 buildPythonPackage rec {

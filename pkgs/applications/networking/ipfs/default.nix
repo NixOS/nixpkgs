@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchurl, nixosTests }:
+{ lib, buildGoModule, fetchurl, nixosTests }:
 
 buildGoModule rec {
   pname = "ipfs";

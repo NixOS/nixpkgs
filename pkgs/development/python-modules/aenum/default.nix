@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, python, isPy3k, glibcLocales }:
+{ lib, fetchPypi, buildPythonPackage, python, isPy3k, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "aenum";
@@ -22,10 +22,10 @@ buildPythonPackage rec {
   runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants";
-    maintainers = with stdenv.lib.maintainers; [ vrthra ];
-    license = with stdenv.lib.licenses; [ bsd3 ];
+    maintainers = with maintainers; [ vrthra ];
+    license = licenses.bsd3;
     homepage = "https://github.com/ethanfurman/aenum";
   };
 }

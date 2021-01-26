@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libmnl }:
+{ lib, stdenv, fetchurl, pkg-config, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "libnetfilter_cthelper";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       is used by conntrack-tools.
     '';
     homepage = "http://www.netfilter.org/projects/libnetfilter_cthelper/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

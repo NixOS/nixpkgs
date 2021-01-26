@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   makeFlags = [ "prefix=$(out)" "manprefix=$(out)/share/" ];
   meta = {
     inherit (s) version;
-    description = ''Tool to detach from controlling TTY and attach to another'';
+    description = "Tool to detach from controlling TTY and attach to another";
     license = lib.licenses.gpl2 ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

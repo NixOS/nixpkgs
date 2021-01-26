@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , lxml
 , pytest
 , text-unidecode

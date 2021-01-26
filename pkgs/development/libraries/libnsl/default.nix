@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libtirpc, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libtirpc, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libnsl";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libtirpc ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client interface library for NIS(YP) and NIS+";
     homepage = "https://github.com/thkukuk/libnsl";
     license = licenses.lgpl21;

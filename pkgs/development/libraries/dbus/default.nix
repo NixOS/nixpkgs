@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-user-session"
     "--enable-xml-docs"
-    "--libexecdir=${placeholder ''out''}/libexec"
+    "--libexecdir=${placeholder "out"}/libexec"
     "--datadir=/etc"
     "--localstatedir=/var"
     "--runstatedir=/run"
@@ -87,8 +87,8 @@ stdenv.mkDerivation rec {
     "--with-session-socket-dir=/tmp"
     "--with-system-pid-file=/run/dbus/pid"
     "--with-system-socket=/run/dbus/system_bus_socket"
-    "--with-systemdsystemunitdir=${placeholder ''out''}/etc/systemd/system"
-    "--with-systemduserunitdir=${placeholder ''out''}/etc/systemd/user"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
   ] ++ lib.optional (!x11Support) "--without-x"
   ++ lib.optionals (!stdenv.isDarwin) [ "--enable-apparmor" "--enable-libaudit" ];
 
@@ -103,8 +103,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   installFlags = [
-    "sysconfdir=${placeholder ''out''}/etc"
-    "datadir=${placeholder ''out''}/share"
+    "sysconfdir=${placeholder "out"}/etc"
+    "datadir=${placeholder "out"}/share"
   ];
 
   # it's executed from $lib by absolute path
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     daemon = dbus.out;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple interprocess messaging system";
     homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
     license = licenses.gpl2Plus; # most is also under AFL-2.1

@@ -20,9 +20,6 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/linux-pam/libpam-fix-build-with-eglibc-2.16.patch?id=05a62bda8ec255d7049a2bd4cf0fdc4b32bdb2cc";
       sha256 = "1ib6shhvgzinjsc603k2x1lxh9dic6qq449fnk110gc359m23j81";
     })
-    # From adelie's package repo, using local copy since it seems to be currently offline.
-    # (we previously used similar patch from void, but stopped working with update to 1.3.1)
-    ./musl-fix-pam_exec.patch
   ];
 
   outputs = [ "out" "doc" "man" /* "modules" */ ];

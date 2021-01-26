@@ -1,4 +1,4 @@
-{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+{ lib, stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
 , fetchpatch
 , which
 , buildPackages
@@ -14,7 +14,8 @@
 , enableNumpy ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
-, mpi ? null
+, useMpi ? false
+, mpi
 , extraB2Args ? []
 
 # Attributes inherit from specific versions
@@ -30,9 +31,9 @@ assert enablePython -> stdenv.hostPlatform == stdenv.buildPlatform;
 assert enableNumpy -> enablePython;
 
 # Boost <1.69 can't be build with clang >8, because pth was removed
-assert with stdenv.lib; ((toolset == "clang" && !(versionOlder stdenv.cc.version "8.0.0")) -> !(versionOlder version "1.69"));
+assert with lib; ((toolset == "clang" && !(versionOlder stdenv.cc.version "8.0.0")) -> !(versionOlder version "1.69"));
 
-with stdenv.lib;
+with lib;
 let
 
   variant = concatStringsSep ","
@@ -94,7 +95,7 @@ let
     ++ optional (variant == "release") "debug-symbols=off"
     ++ optional (toolset != null) "toolset=${toolset}"
     ++ optional (!enablePython) "--without-python"
-    ++ optional (mpi != null || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
+    ++ optional (useMpi || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
     ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
   ] ++ extraB2Args
@@ -140,7 +141,7 @@ stdenv.mkDerivation {
         substituteInPlace tools/build/src/tools/clang-darwin.jam \
           --replace '@rpath/$(<[1]:D=)' "$out/lib/\$(<[1]:D=)";
     fi;
-  '' + optionalString (mpi != null) ''
+  '' + optionalString useMpi ''
     cat << EOF >> user-config.jam
     using mpi : ${mpi}/bin/mpiCC ;
     EOF
@@ -150,7 +151,7 @@ stdenv.mkDerivation {
     EOF
   '';
 
-  NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.isDarwin
+  NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
                       "-headerpad_max_install_names";
 
   enableParallelBuilding = true;

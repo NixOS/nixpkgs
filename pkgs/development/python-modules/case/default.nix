@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , six, nose, unittest2, mock }:
 
 buildPythonPackage rec {

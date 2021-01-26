@@ -1,6 +1,4 @@
-{ lib, stdenv, fetchurl, buildPythonPackage, isPy3k }:
-
-with stdenv.lib;
+{ lib, buildPythonPackage, fetchurl, isPy3k }:
 
 buildPythonPackage rec {
   pname = "cdecimal";

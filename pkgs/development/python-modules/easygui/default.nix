@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage }:
+{ lib, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "easygui";

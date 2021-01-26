@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , nose, pyparsing, decorator, six, future }:
 
 buildPythonPackage rec {

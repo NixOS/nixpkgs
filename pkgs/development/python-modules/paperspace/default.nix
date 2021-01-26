@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage
 , boto3, requests, gradient_statsd, terminaltables
 , click-completion , click-didyoumean, click-help-colors
 , colorama, requests_toolbelt, gradient_sdk, progressbar2

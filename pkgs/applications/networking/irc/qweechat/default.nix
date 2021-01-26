@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python27Packages }:
+{ lib, fetchFromGitHub, python27Packages }:
 
 python27Packages.buildPythonApplication rec {
   version = "2016-07-29";

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , glibcLocales, git
 , mock, nose, markdown, lxml, typogrify
 , jinja2, pygments, docutils, pytz, unidecode, six, dateutil, feedgenerator

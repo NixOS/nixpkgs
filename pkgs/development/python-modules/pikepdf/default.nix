@@ -18,7 +18,7 @@
 , qpdf
 , setuptools-scm-git-archive
 , setuptools_scm
-, lib, stdenv
+, lib
 }:
 
 buildPythonPackage rec {

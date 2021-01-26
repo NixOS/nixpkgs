@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "samurai";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=" "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ninja-compatible build tool written in C";
     homepage = "https://github.com/michaelforney/samurai";
     license = with licenses; [ mit asl20 ]; # see LICENSE

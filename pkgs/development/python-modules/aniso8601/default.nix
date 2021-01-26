@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , dateutil, mock, isPy3k }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ dateutil ];
 
-  checkInputs = stdenv.lib.optional (!isPy3k) mock;
+  checkInputs = lib.optional (!isPy3k) mock;
 
   src = fetchPypi {
     inherit pname version;

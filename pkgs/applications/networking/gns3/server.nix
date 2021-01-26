@@ -1,6 +1,6 @@
 { stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
 
-{ lib, stdenv, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
 let
   defaultOverrides = commonOverrides ++ [

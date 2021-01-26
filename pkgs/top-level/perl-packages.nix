@@ -9641,6 +9641,21 @@ let
     buildInputs = [ TestNoWarnings ];
   };
 
+  HTTPAcceptLanguage = buildPerlModule {
+    pname = "HTTP-AcceptLanguage";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YA/YAPPO/HTTP-AcceptLanguage-0.02.tar.gz";
+      sha256 = "1bs29r72ibp0kmr3l1ypzszflpcw7z4yxxcgaijspsy99rb5yq1f";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    meta = {
+      homepage = "https://github.com/yappo/p5-HTTP-AcceptLanguage";
+      description = "Accept-Language header parser and find available language";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTTPBody = buildPerlPackage {
     pname = "HTTP-Body";
     version = "1.22";
@@ -10149,10 +10164,10 @@ let
 
   IOAsync = buildPerlModule {
     pname = "IO-Async";
-    version = "0.77";
+    version = "0.78";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.77.tar.gz";
-      sha256 = "153rfnbs2xwvx559h0ilfr0g9pg30avjad3cad659is9bdmfipri";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.78.tar.gz";
+      sha256 = "sha256-P7UYhZd7hiGKiepC84yvvOWCO/SPqqLRhaGGwqNYNmw=";
     };
     preCheck = "rm t/50resolver.t"; # this test fails with "Temporary failure in name resolution" in sandbox
     propagatedBuildInputs = [ Future StructDumb ];
@@ -11137,10 +11152,10 @@ let
 
   LinkEmbedder = buildPerlPackage {
     pname = "LinkEmbedder";
-    version = "1.15";
+    version = "1.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.15.tar.gz";
-      sha256 = "0ij2jvsiqnqz3qlzw8k3q37ys05wfh1ks2n692hs3bpg7ds3n8bc";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.16.tar.gz";
+      sha256 = "0pm5h5rlfparfvsi3ygj53mwjg8lwhql5mj0macfvsvfnfvnnp6j";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ Mojolicious ];
@@ -13388,10 +13403,10 @@ let
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "8.67";
+    version = "8.71";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.67.tar.gz";
-      sha256 = "0b1ajsfvpzcmy7qp1rjr2n1z263yk5bkzmal0kx72ajg1l1dd85v";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.71.tar.gz";
+      sha256 = "03bfxzq11v6k47axdwqhp2d3p1z17nwyxj0yww5z3x293p6zsnqm";
     };
     meta = {
       homepage = "https://mojolicious.org";
@@ -13498,10 +13513,10 @@ let
 
   MojoliciousPluginWebpack = buildPerlPackage {
     pname = "Mojolicious-Plugin-Webpack";
-    version = "0.13";
+    version = "0.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-Webpack-0.13.tar.gz";
-      sha256 = "7848c0698e1b52909c71add638f7523f5affdfb8133b4ddb6f23a3bca485e761";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-Webpack-0.14.tar.gz";
+      sha256 = "0b1a9rm5rlpqj6skgic4qzy4b1p35r2dhkh3rwaaypf9ha70i9gc";
     };
     propagatedBuildInputs = [ Mojolicious ];
     meta = {
@@ -14876,6 +14891,7 @@ let
     };
     propagatedBuildInputs = [ IOAsync Moo NetFrameLayerIPv6 namespaceclean ];
     buildInputs = [ TestFatal ];
+    preCheck = "rm t/icmp_ps.t t/icmpv6_ps.t"; # ping socket tests fail
     meta = {
       description = "asyncronously check remote host for reachability";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -17970,7 +17986,7 @@ let
       sha256 = "0wfdixpm3p94mnng474l0nh9mjiy8q8hbrbh2af4vwn2hmazr91f";
     };
     buildInputs = [ TestDeep TestDifferences TestLongString TestWarn ];
-    preBuild = ''ls'';
+    preBuild = "ls";
     meta = {
       homepage = "https://github.com/Sereal/Sereal";
       description = "Fast, compact, powerful binary deserialization";
@@ -19038,6 +19054,7 @@ let
       description = "lib/Safe/Hole.pm";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       homepage = "https://github.com/toddr/Safe-Hole";
+      broken = stdenv.isDarwin;
     };
   };
 
@@ -22913,7 +22930,7 @@ let
     };
     buildInputs = [ pkgs.xorg.libXext pkgs.xorg.libXScrnSaver pkgs.xorg.libX11 ];
     propagatedBuildInputs = [ InlineC ];
-    patchPhase = ''sed -ie 's,-L/usr/X11R6/lib/,-L${pkgs.xorg.libX11.out}/lib/ -L${pkgs.xorg.libXext.out}/lib/ -L${pkgs.xorg.libXScrnSaver}/lib/,' IdleTime.pm'';
+    patchPhase = "sed -ie 's,-L/usr/X11R6/lib/,-L${pkgs.xorg.libX11.out}/lib/ -L${pkgs.xorg.libXext.out}/lib/ -L${pkgs.xorg.libXScrnSaver}/lib/,' IdleTime.pm";
     meta = {
       description = "Get the idle time of X11";
     };

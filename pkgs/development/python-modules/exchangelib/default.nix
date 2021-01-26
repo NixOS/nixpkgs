@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage,
+{ lib, fetchFromGitHub, buildPythonPackage,
   pythonOlder,
   lxml, tzlocal, python-dateutil, pygments, requests-kerberos,
   defusedxml, cached-property, isodate, requests_ntlm, dnspython,

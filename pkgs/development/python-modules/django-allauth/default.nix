@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, requests, requests_oauthlib
+{ lib, buildPythonPackage, fetchFromGitHub, requests, requests_oauthlib
 , django, python3-openid, mock, coverage }:
 
 buildPythonPackage rec {

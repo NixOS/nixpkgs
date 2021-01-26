@@ -6,7 +6,7 @@
 }:
 
 { swingSupport ? true
-, stdenv
+, lib, stdenv
 , requireFile
 , makeWrapper
 , unzip
@@ -85,7 +85,7 @@ let result = stdenv.mkDerivation rec {
     };
 
   nativeBuildInputs = [ file ]
-    ++ stdenv.lib.optional installjce unzip;
+    ++ lib.optional installjce unzip;
 
   buildInputs = [ makeWrapper ];
 
@@ -149,7 +149,7 @@ let result = stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    rpath+="''${rpath:+:}${stdenv.lib.concatStringsSep ":" (map (a: "$jrePath/${a}") rSubPaths)}"
+    rpath+="''${rpath:+:}${lib.concatStringsSep ":" (map (a: "$jrePath/${a}") rSubPaths)}"
 
     # set all the dynamic linkers
     find $out -type f -perm -0100 \
@@ -174,7 +174,7 @@ let result = stdenv.mkDerivation rec {
     [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg_3 libxslt libGL xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk-pixbuf atk] ++
     (if swingSupport then [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc] else []);
 
-  rpath = stdenv.lib.strings.makeLibraryPath libraries;
+  rpath = lib.strings.makeLibraryPath libraries;
 
   passthru.mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
 
@@ -184,7 +184,7 @@ let result = stdenv.mkDerivation rec {
 
   passthru.architecture = architecture;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]; # some inherit jre.meta.platforms
   };

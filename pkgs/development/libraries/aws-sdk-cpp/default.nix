@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.8.113";
+  version = "1.8.121";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "0y784cjrxgrin3ck5f2lk0riyy9kv928kcb9y0gzka65imgma48c";
+    sha256 = "sha256-uita3HPcerxH/bnSIL3ZNUp68QXtKJLYi0pcnV7OBkQ=";
   };
 
   # FIXME: might be nice to put different APIs in different outputs
@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-DENABLE_TESTING=OFF"
-    "-DCURL_HAS_H2=0"
+    "-DCURL_HAS_H2=1"
+    "-DCURL_HAS_TLS_PROXY=1"
   ] ++ lib.optional (apis != ["*"])
     "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
 
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
   postFixupHooks = [
     # This bodge is necessary so that the file that the generated -config.cmake file
     # points to an existing directory.
-    ''mkdir -p $out/include''
+    "mkdir -p $out/include"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -1,4 +1,4 @@
-{ stdenv,
+{
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -15,9 +15,9 @@ buildPythonPackage rec {
   disabled = (pythonOlder "2.7");
 
   propagatedBuildInputs = [ requests future ]
-                             ++ stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ];
+                             ++ lib.optionals (pythonOlder "3.4") [ enum34 ];
 
-  postPatch = (stdenv.lib.optionalString (!pythonOlder "3.4") ''
+  postPatch = (lib.optionalString (!pythonOlder "3.4") ''
     sed -i -e '/"enum34",/d' setup.py
   '');
 

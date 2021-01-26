@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, lilv, lv2, serd, sord, sratom }:
+{ lib, stdenv, fetchurl, pkg-config, pure, lilv, lv2, serd, sord, sratom }:
 
 stdenv.mkDerivation rec {
   baseName = "lilv";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A Pure module for David Robillard’s Lilv, a library for LV2 plugin host writers";
     homepage = "http://puredocs.bitbucket.org/pure-lilv.html";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

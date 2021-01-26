@@ -1,5 +1,4 @@
-{stdenv
-, lib
+{ lib
 , fetchurl
 , util-linux
 , gpgme

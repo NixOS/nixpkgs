@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, astunparse }:
+{ lib, fetchPypi, buildPythonPackage, astunparse }:
 
 buildPythonPackage rec {
   pname = "gast";

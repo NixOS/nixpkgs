@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , meson
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   # see https://github.com/NixOS/nixpkgs/pull/53293#issuecomment-453739295
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GLib ICE implementation";
     longDescription = ''
       Libnice is an implementation of the IETF's Interactice Connectivity

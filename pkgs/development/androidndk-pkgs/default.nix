@@ -1,4 +1,4 @@
-{ androidenv, buildPackages, pkgs, targetPackages
+{ lib, androidenv, buildPackages, pkgs, targetPackages
 }:
 
 {
@@ -17,6 +17,7 @@
       };
     in
     import ./androidndk-pkgs.nix {
+      inherit lib;
       inherit (buildPackages)
         makeWrapper;
       inherit (pkgs)
@@ -46,6 +47,7 @@
       };
     in
     import ./androidndk-pkgs.nix {
+      inherit lib;
       inherit (buildPackages)
         makeWrapper;
       inherit (pkgs)

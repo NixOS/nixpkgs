@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openmpi } :
+{ lib, stdenv, fetchurl, mpi } :
 
 stdenv.mkDerivation rec {
   pname = "hpcg";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ openmpi ];
+  buildInputs = [ mpi ];
 
   makeFlags = [ "arch=Linux_MPI" ];
 

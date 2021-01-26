@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, bison, flex, bluez, pkg-config, gtk2 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, bison, flex, bluez, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   name = "cwiid-${version}-git";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s/0.6.00/0.6.0/" $out/lib/pkgconfig/cwiid.pc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux Nintendo Wiimote interface";
     homepage    = "http://cwiid.org";
     license     = licenses.gpl2Plus;

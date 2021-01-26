@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, makeWrapper, jre, writeScript, common-updater-scripts
+{ lib, stdenv, fetchurl, makeWrapper, jre, writeScript, common-updater-scripts
 , coreutils, git, gnused, nix, nixfmt }:
 
 let
-  version = "2.0.8";
+  version = "2.0.9";
 
   zshCompletion = fetchurl {
     url =
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
       "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
-    sha256 = "sha256-7dNJUMZu6YY3076cnjWHRisJZVn1NPRH1VC+cJjfI/8=";
+    sha256 = "sha256-jqSv9VBLotl6YVWgWNznvTThRIiMUStQ0WbN6u01b1c=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     #!${stdenv.shell}
     set -o errexit
     PATH=${
-      stdenv.lib.makeBinPath [
+      lib.makeBinPath [
         common-updater-scripts
         coreutils
         git
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://get-coursier.io/";
     description =
       "A Scala library to fetch dependencies from Maven / Ivy repositories";

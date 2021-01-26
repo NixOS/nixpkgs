@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   name = "clucene-core-0.9.21b";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc6.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Core library for full-featured text search engine";
     longDescription = ''
       CLucene is a high-performance, scalable, cross platform, full-featured,

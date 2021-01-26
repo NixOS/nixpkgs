@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , gettext
 , gobject-introspection
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "out" "dev" "devdoc" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "13q43iqld4l50yra45lhvkd376pn6qpk7rkx374zn8y9wsdzm9b7";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dinstalled_tests=true"
-    "-Dinstalled_test_prefix=${placeholder ''installedTests''}"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
   doCheck = true;
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GObject library to create cabinet files";
     homepage = "https://gitlab.gnome.org/GNOME/gcab";
     license = licenses.lgpl21Plus;

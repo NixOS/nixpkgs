@@ -1,10 +1,11 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildGoPackage
 , makeWrapper, installShellFiles, pkg-config
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
-, sqlite, iproute, lvm2, systemd
+, sqlite, iproute, lvm2, systemd, docker-buildx
 , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
 , procps, libseccomp
 , nixosTests
+, buildxSupport ? false
 }:
 
 with lib;
@@ -15,7 +16,7 @@ rec {
       , mobyRev, mobySha256
       , runcRev, runcSha256
       , containerdRev, containerdSha256
-      , tiniRev, tiniSha256
+      , tiniRev, tiniSha256, buildxSupport
     } :
   let
     docker-runc = runc.overrideAttrs (oldAttrs: {
@@ -54,8 +55,7 @@ rec {
       };
 
       # Do not remove static from make files as we want a static binary
-      patchPhase = ''
-      '';
+      patchPhase = "";
 
       NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
@@ -142,7 +142,7 @@ rec {
       makeWrapper
     ] ++ optionals (stdenv.isLinux) [
       sqlite lvm2 btrfs-progs systemd libseccomp
-    ];
+    ] ++ optionals (buildxSupport) [ docker-buildx ];
 
     # Keep eyes on BUILDTIME format - https://github.com/docker/cli/blob/${version}/scripts/build/.variables
     buildPhase = ''
@@ -167,6 +167,9 @@ rec {
       substituteInPlace ./scripts/build/.variables --replace "set -eu" ""
       substituteInPlace ./scripts/docs/generate-man.sh --replace "-v md2man" "-v go-md2man"
       substituteInPlace ./man/md2man-all.sh            --replace md2man go-md2man
+    '' + optionalString buildxSupport ''
+      substituteInPlace ./cli-plugins/manager/manager_unix.go --replace /usr/libexec/docker/cli-plugins \
+          ${lib.strings.makeSearchPathOutput "bin" "libexec/docker/cli-plugins" [docker-buildx]}
     '';
 
     outputs = ["out" "man"];
@@ -224,5 +227,6 @@ rec {
     containerdSha256 = "09xvhjg5f8h90w1y94kqqnqzhbhd62dcdd9wb9sdqakisjk6zrl0";
     tiniRev = "de40ad007797e0dcd8b7126f27bb87401d224240"; # v0.19.0
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
+    inherit buildxSupport;
   };
 }

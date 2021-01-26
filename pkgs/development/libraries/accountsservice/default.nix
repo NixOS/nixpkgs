@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , substituteAll
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "D-Bus interface for user account query and manipulation";
     homepage = "https://www.freedesktop.org/wiki/Software/AccountsService";
     license = licenses.gpl3;

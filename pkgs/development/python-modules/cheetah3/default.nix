@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, stdenv }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "Cheetah3";
@@ -11,10 +11,10 @@ buildPythonPackage rec {
 
   doCheck = false; # Circular dependency
 
-  meta = {
+  meta = with lib; {
     homepage = "http://www.cheetahtemplate.org/";
     description = "A template engine and code generation tool";
-    license = lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ pjjw ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pjjw ];
   };
 }

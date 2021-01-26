@@ -272,6 +272,7 @@ in
   nginx-variants = handleTest ./nginx-variants.nix {};
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
+  nomad = handleTest ./nomad.nix {};
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
   nsd = handleTest ./nsd.nix {};
   nzbget = handleTest ./nzbget.nix {};
@@ -402,9 +403,11 @@ in
   unbound = handleTest ./unbound.nix {};
   unit-php = handleTest ./web-servers/unit-php.nix {};
   upnp = handleTest ./upnp.nix {};
+  usbguard = handleTest ./usbguard.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
   vault = handleTest ./vault.nix {};
+  vault-postgresql = handleTest ./vault-postgresql.nix {};
   vector = handleTest ./vector.nix {};
   victoriametrics = handleTest ./victoriametrics.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};

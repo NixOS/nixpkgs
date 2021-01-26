@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, lib, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost }:
+{ mkDerivation, lib, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost }:
 
 mkDerivation {
   pname = "citra";

@@ -237,7 +237,7 @@ let
     name = "apparmor-kernel-patches-${apparmor-version}";
     src = apparmor-sources;
 
-    phases = ''unpackPhase installPhase'';
+    phases = "unpackPhase installPhase";
 
     installPhase = ''
       mkdir "$out"

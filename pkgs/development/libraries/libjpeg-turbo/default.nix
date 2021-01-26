@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, nasm
+{ lib, stdenv, fetchFromGitHub, cmake, nasm
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    stdenv.lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
+    lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
       ./mingw-boolean.patch;
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckTarget = "test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://libjpeg-turbo.org/";
     description = "A faster (using SIMD) libjpeg implementation";
     license = licenses.ijg; # and some parts under other BSD-style licenses

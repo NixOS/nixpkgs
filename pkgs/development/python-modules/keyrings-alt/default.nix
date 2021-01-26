@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27, six
 , pytest, backports_unittest-mock, keyring, setuptools_scm, toml
 }:
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools_scm toml ];
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytest keyring ] ++ stdenv.lib.optional (pythonOlder "3.3") backports_unittest-mock;
+  checkInputs = [ pytest keyring ] ++ lib.optional (pythonOlder "3.3") backports_unittest-mock;
 
   # heavily relies on importing tests from keyring package
   doCheck = false;

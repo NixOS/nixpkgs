@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "libschrift";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "libschrift.a" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/tomolt/libschrift";
     description = "A lightweight TrueType font rendering library";
     license = licenses.isc;

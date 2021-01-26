@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkg-config, xorg, alsaLib, libGLU, libGL, aalib
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, xorg, alsaLib, libGLU, libGL, aalib
 , libvorbis, libtheora, speex, zlib, perl, ffmpeg_3
 , flac, libcaca, libpulseaudio, libmng, libcdio, libv4l, vcdimager
 , libmpcdec
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.xine-project.org/";
     description = "A high-performance, portable and reusable multimedia playback engine";
     platforms = platforms.linux;

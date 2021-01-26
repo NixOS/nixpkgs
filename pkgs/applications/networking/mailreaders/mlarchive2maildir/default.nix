@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, notmuch }:
+{ lib, python3, notmuch }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mlarchive2maildir";

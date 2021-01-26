@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "libopenaptx";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Audio Processing Technology codec (aptX)";
     license = licenses.lgpl21Plus;
     homepage = "https://github.com/pali/libopenaptx";

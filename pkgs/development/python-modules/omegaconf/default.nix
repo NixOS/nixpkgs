@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , pytest, pytestrunner, pyyaml, six, pathlib2, isPy27 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest ];
   buildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ pyyaml six ] ++ stdenv.lib.optional isPy27 pathlib2;
+  propagatedBuildInputs = [ pyyaml six ] ++ lib.optional isPy27 pathlib2;
 
   meta = with lib; {
     description = "A framework for configuring complex applications";

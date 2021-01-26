@@ -1,4 +1,4 @@
-{ stdenv, substituteAll
+{ lib, stdenv, substituteAll
 , fetchurl, perl, gcc, llvm
 , ncurses5, gmp, glibc, libiconv
 , llvmPackages
@@ -10,11 +10,11 @@ assert stdenv.targetPlatform == stdenv.hostPlatform;
 let
   useLLVM = !stdenv.targetPlatform.isx86;
 
-  libPath = stdenv.lib.makeLibraryPath ([
+  libPath = lib.makeLibraryPath ([
     ncurses5 gmp
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
+  ] ++ lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
 
-  libEnvVar = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "DY"
+  libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
 
   glibcDynLinker = assert stdenv.isLinux;
@@ -22,7 +22,7 @@ let
        # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
        ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
     else
-      "${stdenv.lib.getLib glibc}/lib/ld-linux*";
+      "${lib.getLib glibc}/lib/ld-linux*";
 
 in
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
-  propagatedBuildInputs = stdenv.lib.optionals useLLVM [ llvmPackages.llvm ];
+  propagatedBuildInputs = lib.optionals useLLVM [ llvmPackages.llvm ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   postUnpack =
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
     # during linking
-    stdenv.lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
       # not enough room in the object files for the full path to libiconv :(
       for exe in $(find . -type f -executable); do
@@ -97,14 +97,14 @@ stdenv.mkDerivation rec {
     ''
       find . -name integer-gmp.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${gmp.out}/lib@" {} \;
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.isDarwin ''
       find . -name base.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${libiconv}/lib@" {} \;
     '' +
     # Rename needed libraries and binaries, fix interpreter
-    stdenv.lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.isLinux ''
       find . -type f -perm -0100 -exec patchelf \
-          --replace-needed libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.5 libncurses.so \
+          --replace-needed libncurses${lib.optionalString stdenv.is64bit "w"}.so.5 libncurses.so \
           --replace-needed libtinfo.so libtinfo.so.5 \
           --interpreter ${glibcDynLinker} {} \;
 
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     # (`__strdup` is defined to be an alias of `strdup` anyway[1]).
     # [1] http://refspecs.linuxbase.org/LSB_4.0.0/LSB-Core-generic/LSB-Core-generic/baselib---strdup-1.html
     # Use objcopy magic to make the change:
-    stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+    lib.optionalString stdenv.hostPlatform.isMusl ''
       find ./ghc-${version}/rts -name "libHSrts*.a" -exec ''${OBJCOPY:-objcopy} --redefine-sym __strdup=strdup {} \;
     '';
 
@@ -130,10 +130,10 @@ stdenv.mkDerivation rec {
       src = ./gcc-clang-wrapper.sh;
     };
   in
-  [ "--with-gmp-libraries=${stdenv.lib.getLib gmp}/lib"
-    "--with-gmp-includes=${stdenv.lib.getDev gmp}/include"
-  ] ++ stdenv.lib.optional stdenv.isDarwin            "--with-gcc=${gcc-clang-wrapper}"
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
+  [ "--with-gmp-libraries=${lib.getLib gmp}/lib"
+    "--with-gmp-includes=${lib.getDev gmp}/include"
+  ] ++ lib.optional stdenv.isDarwin            "--with-gcc=${gcc-clang-wrapper}"
+    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # Stripping combined with patchelf breaks the executables (they die
   # with a segfault or the kernel even refuses the execve). (NIXPKGS-85)
@@ -145,14 +145,14 @@ stdenv.mkDerivation rec {
 
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
-  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.isLinux ''
     for p in $(find "$out" -type f -executable); do
       if isELF "$p"; then
         echo "Patchelfing $p"
         patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
       fi
     done
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
       isScript $exe && continue
@@ -186,6 +186,6 @@ stdenv.mkDerivation rec {
     enableShared = true;
   };
 
-  meta.license = stdenv.lib.licenses.bsd3;
+  meta.license = lib.licenses.bsd3;
   meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "armv7l-linux" "aarch64-linux"];
 }

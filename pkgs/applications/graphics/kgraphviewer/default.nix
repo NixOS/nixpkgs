@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, cmake, extra-cmake-modules, pkg-config, wrapGAppsHook
+{ lib, mkDerivation, fetchurl, cmake, extra-cmake-modules, pkg-config, wrapGAppsHook
 , kconfig, kinit, kdoctools, kio, kparts, kwidgetsaddons
 , qtbase, qtsvg
 , boost, graphviz

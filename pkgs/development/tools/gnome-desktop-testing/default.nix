@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , glib
 , autoreconfHook
 , pkg-config
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNOME test runner for installed tests";
     homepage = "https://wiki.gnome.org/Initiatives/GnomeGoals/InstalledTests";
     license = licenses.lgpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, mpfr, libxml2, intltool, pkg-config, doxygen,
+{ lib, stdenv, fetchFromGitHub, mpfr, libxml2, intltool, pkg-config, doxygen,
   autoreconfHook, readline, libiconv, icu, curl, gnuplot, gettext }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     substituteInPlace libqalculate/Calculator-plot.cc \
       --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
       --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
-  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
+  '' + lib.optionalString stdenv.cc.isClang ''
     substituteInPlace src/qalc.cc \
       --replace 'printf(_("aborted"))' 'printf("%s", _("aborted"))'
   '';
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An advanced calculator library";
     homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [ gebner ];

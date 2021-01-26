@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchurl
 , pkg-config
@@ -12,7 +12,7 @@
 , xorgproto
 , gst_all_1
 , setfile
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , withMesa ? libGLSupported
 , libGLU ? null
 , libGL ? null
@@ -29,7 +29,7 @@
 , QTKit ? null
 }:
 
-with stdenv.lib;
+with lib;
 
 assert withMesa -> libGLU != null && libGL != null;
 assert withWebKit -> webkitgtk != null;

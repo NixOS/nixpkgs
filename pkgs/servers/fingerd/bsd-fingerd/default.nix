@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   preBuild = "cd fingerd";
 
-  preInstall = '' mkdir -p $out/man/man8 $out/sbin '';
+  preInstall = "mkdir -p $out/man/man8 $out/sbin ";
 
   meta = with lib; {
     platforms = platforms.linux;

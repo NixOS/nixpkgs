@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pkgs, pkg-config, chardet, lxml }:
+{ lib, buildPythonPackage, fetchPypi, pkgs, pkg-config, chardet, lxml }:
 
 buildPythonPackage rec {
   pname = "html5-parser";

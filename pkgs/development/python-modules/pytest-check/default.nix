@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-check";
-  version = "0.3.9";
+  version = "1.0.1";
 
   src = fetchPypi {
     pname = "pytest_check";
     inherit version;
-    sha256 = "0asrrz0fgk6wqffsz1ffd6z9xyw314fwh5bwjzcq75w8w1g4ass9";
+    sha256 = "1i01i5ab06ic11na13gcacrlcs2ab6rmaii0yz0x06z5ynnljn6s";
   };
 
   propagatedBuildInputs = [ pytest ];

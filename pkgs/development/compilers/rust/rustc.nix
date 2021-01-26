@@ -1,4 +1,4 @@
-{ stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
+{ lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget
 , fetchurl, file, python3
 , darwin, cmake, rust, rustPlatform
@@ -12,7 +12,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optionals optional optionalString concatStringsSep;
+  inherit (lib) optionals optional optionalString concatStringsSep;
   inherit (darwin.apple_sdk.frameworks) Security;
 in stdenv.mkDerivation rec {
   pname = "rustc";
@@ -117,7 +117,7 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs src/etc
 
-    ${optionalString (!withBundledLLVM) ''rm -rf src/llvm''}
+    ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
 
     # Fix the configure script to not require curl as we won't use it
     sed -i configure \
@@ -143,7 +143,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
-  postInstall = stdenv.lib.optionalString enableRustcDev ''
+  postInstall = lib.optionalString enableRustcDev ''
     # install rustc-dev components. Necessary to build rls, clippy...
     python x.py dist rustc-dev
     tar xf build/dist/rustc-dev*tar.gz
@@ -172,7 +172,7 @@ in stdenv.mkDerivation rec {
 
   passthru.llvm = llvmShared;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.rust-lang.org/";
     description = "A safe, concurrent, practical language";
     maintainers = with maintainers; [ madjar cstrahan globin havvy ];

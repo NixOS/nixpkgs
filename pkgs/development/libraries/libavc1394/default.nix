@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libraw1394 }:
+{ lib, stdenv, fetchurl, pkg-config, libraw1394 }:
 
 stdenv.mkDerivation rec {
   name = "libavc1394-0.5.4";
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libraw1394 ];
 
-  meta = { 
+  meta = {
     description = "Programming interface for the 1394 Trade Association AV/C (Audio/Video Control) Digital Interface Command Set";
     homepage = "https://sourceforge.net/projects/libavc1394/";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 }

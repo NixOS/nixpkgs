@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     minimal-module = pkgs.callPackage ./test-minimal-module {};
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A strongly-typed functional programming language that compiles to JavaScript";
     homepage = "https://www.purescript.org/";
     license = licenses.bsd3;

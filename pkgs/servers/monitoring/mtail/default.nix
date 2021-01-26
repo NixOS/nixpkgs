@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "mtail";
-  version = "3.0.0-rc41";
+  version = "3.0.0-rc43";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "mtail";
     rev = "v${version}";
-    sha256 = "0651p4ypy1m5m15rfmlbjywq2968hjh6lc2cbgq7grkdsad6lrgx";
+    sha256 = "1lw7gz6fh3z7j4hin4q6y3wxxl4sgd4li1c0z60hmvfs671n6dg9";
   };
 
   vendorSha256 = "0zymch6xfnyzjzizrjljmscqf8m99580zxjwc2rb9hn0324shcwq";

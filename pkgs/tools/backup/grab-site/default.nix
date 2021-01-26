@@ -1,4 +1,4 @@
-{ lib, stdenv, python37, fetchFromGitHub }:
+{ lib, python37, fetchFromGitHub }:
 let
   python = python37.override {
     self = python;

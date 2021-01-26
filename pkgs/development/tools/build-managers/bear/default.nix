@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     ./no-double-relative.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool that generates a compilation database for clang tooling";
     longDescription = ''
       Note: the bear command is very useful to generate compilation commands

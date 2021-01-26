@@ -6,6 +6,7 @@
 # compiler and the linker just "work".
 
 { name ? ""
+, lib
 , stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
 , gccForLibs ? null
@@ -18,7 +19,7 @@
 , libcxx ? null
 }:
 
-with stdenvNoCC.lib;
+with lib;
 
 assert nativeTools -> !propagateDoc && nativePrefix != "";
 assert !nativeTools ->
@@ -34,11 +35,11 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
+  targetPrefix = lib.optionalString (targetPlatform != hostPlatform)
                                            (targetPlatform.config + "-");
 
-  ccVersion = stdenv.lib.getVersion cc;
-  ccName = stdenv.lib.removePrefix targetPrefix (stdenv.lib.getName cc);
+  ccVersion = lib.getVersion cc;
+  ccName = lib.removePrefix targetPrefix (lib.getName cc);
 
   libc_bin = if libc == null then null else getBin libc;
   libc_dev = if libc == null then null else getDev libc;
@@ -65,6 +66,7 @@ let
     && libcxx == null
     && !(stdenv.targetPlatform.useLLVM or false)
     && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
+    && !(stdenv.targetPlatform.isiOS or false)
     && gccForLibs != null;
 
   # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
@@ -246,8 +248,8 @@ stdenv.mkDerivation {
 
   setupHooks = [
     ../setup-hooks/role.bash
-  ] ++ stdenv.lib.optional (cc.langC or true) ./setup-hook.sh
-    ++ stdenv.lib.optional (cc.langFortran or false) ./fortran-hook.sh;
+  ] ++ lib.optional (cc.langC or true) ./setup-hook.sh
+    ++ lib.optional (cc.langFortran or false) ./fortran-hook.sh;
 
   postFixup =
     # Ensure flags files exists, as some other programs cat them. (That these
@@ -287,6 +289,17 @@ stdenv.mkDerivation {
       echo "-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-cflags
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
       echo "-L${gccForLibs.lib}/${targetPlatform.config}/lib" >> $out/nix-support/cc-ldflags
+    ''
+
+    # TODO We would like to connect this to `useGccForLibs`, but we cannot yet
+    # because `libcxxStdenv` on linux still needs this. Maybe someday we'll
+    # always set `useLLVM` on Darwin, and maybe also break down `useLLVM` into
+    # fine-grained use flags (libgcc vs compiler-rt, ld.lld vs legacy, libc++
+    # vs libstdc++, etc.) since Darwin isn't `useLLVM` on all counts. (See
+    # https://clang.llvm.org/docs/Toolchain.html for all the axes one might
+    # break `useLLVM` into.)
+    + optionalString (isClang && gccForLibs != null && targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) ''
+      echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     ''
 
     ##
@@ -341,7 +354,7 @@ stdenv.mkDerivation {
     + optionalString (libcxx.isLLVM or false) (''
       echo "-isystem ${libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
-    '' + stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
+    '' + lib.optionalString stdenv.targetPlatform.isLinux ''
       echo "-lc++abi" >> $out/nix-support/libcxx-ldflags
     '')
 
@@ -401,32 +414,32 @@ stdenv.mkDerivation {
     # Always add -march based on cpu in triple. Sometimes there is a
     # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
     # that case.
-    + optionalString ((targetPlatform ? platform.gcc.arch) &&
-                      isGccArchSupported targetPlatform.platform.gcc.arch) ''
-      echo "-march=${targetPlatform.platform.gcc.arch}" >> $out/nix-support/cc-cflags-before
+    + optionalString ((targetPlatform ? gcc.arch) &&
+                      isGccArchSupported targetPlatform.gcc.arch) ''
+      echo "-march=${targetPlatform.gcc.arch}" >> $out/nix-support/cc-cflags-before
     ''
 
     # -mcpu is not very useful. You should use mtune and march
     # instead. It’s provided here for backwards compatibility.
-    + optionalString (targetPlatform ? platform.gcc.cpu) ''
-      echo "-mcpu=${targetPlatform.platform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
+    + optionalString (targetPlatform ? gcc.cpu) ''
+      echo "-mcpu=${targetPlatform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
     ''
 
     # -mfloat-abi only matters on arm32 but we set it here
     # unconditionally just in case. If the abi specifically sets hard
     # vs. soft floats we use it here.
-    + optionalString (targetPlatform ? platform.gcc.float-abi) ''
-      echo "-mfloat-abi=${targetPlatform.platform.gcc.float-abi}" >> $out/nix-support/cc-cflags-before
+    + optionalString (targetPlatform ? gcc.float-abi) ''
+      echo "-mfloat-abi=${targetPlatform.gcc.float-abi}" >> $out/nix-support/cc-cflags-before
     ''
-    + optionalString (targetPlatform ? platform.gcc.fpu) ''
-      echo "-mfpu=${targetPlatform.platform.gcc.fpu}" >> $out/nix-support/cc-cflags-before
+    + optionalString (targetPlatform ? gcc.fpu) ''
+      echo "-mfpu=${targetPlatform.gcc.fpu}" >> $out/nix-support/cc-cflags-before
     ''
-    + optionalString (targetPlatform ? platform.gcc.mode) ''
-      echo "-mmode=${targetPlatform.platform.gcc.mode}" >> $out/nix-support/cc-cflags-before
+    + optionalString (targetPlatform ? gcc.mode) ''
+      echo "-mmode=${targetPlatform.gcc.mode}" >> $out/nix-support/cc-cflags-before
     ''
-    + optionalString (targetPlatform ? platform.gcc.tune &&
-                      isGccArchSupported targetPlatform.platform.gcc.tune) ''
-      echo "-mtune=${targetPlatform.platform.gcc.tune}" >> $out/nix-support/cc-cflags-before
+    + optionalString (targetPlatform ? gcc.tune &&
+                      isGccArchSupported targetPlatform.gcc.tune) ''
+      echo "-mtune=${targetPlatform.gcc.tune}" >> $out/nix-support/cc-cflags-before
     ''
 
     # TODO: categorize these and figure out a better place for them
@@ -480,7 +493,7 @@ stdenv.mkDerivation {
     let cc_ = if cc != null then cc else {}; in
     (if cc_ ? meta then removeAttrs cc.meta ["priority"] else {}) //
     { description =
-        stdenv.lib.attrByPath ["meta" "description"] "System C compiler" cc_
+        lib.attrByPath ["meta" "description"] "System C compiler" cc_
         + " (wrapper script)";
       priority = 10;
   };

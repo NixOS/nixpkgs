@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, nose }:
+{ lib, buildPythonPackage, fetchFromGitHub, nose }:
 
 buildPythonPackage {
   pname = "ptable";

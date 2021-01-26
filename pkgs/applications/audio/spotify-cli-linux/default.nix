@@ -1,4 +1,4 @@
-{ lib, stdenv, python3Packages, dbus }:
+{ lib, python3Packages, dbus }:
 python3Packages.buildPythonApplication rec {
   pname = "spotify-cli-linux";
   version = "1.6.0";

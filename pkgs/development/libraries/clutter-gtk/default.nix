@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkg-config, meson, ninja
+{ fetchurl, lib, stdenv, pkg-config, meson, ninja
 , gobject-introspection, clutter, gtk3, gnome3 }:
 
 let
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "01ibniy4ich0fgpam53q252idm7f4fn5xg5qvizcfww90gn9652j";
   };
 
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Clutter-GTK";
     homepage = "http://www.clutter-project.org/";
-    license = stdenv.lib.licenses.lgpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ lethalman ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ lethalman ];
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
   };
 }

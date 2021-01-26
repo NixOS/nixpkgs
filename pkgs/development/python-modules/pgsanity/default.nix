@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , python
 , fetchPypi
 , buildPythonPackage
@@ -30,7 +30,7 @@ buildPythonPackage rec {
       run it through ecpg and
       let ecpg report on the syntax errors of the SQL.
     '';
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ nalbyuites ];
   };
 }

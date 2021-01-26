@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dbus-glib, glib, python2, pkg-config, libxslt
+{ lib, stdenv, fetchurl, dbus-glib, glib, python2, pkg-config, libxslt
 , gobject-introspection, vala, glibcLocales }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   passthru.python = python2;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://telepathy.freedesktop.org";
     platforms = platforms.unix;
     license = with licenses; [ bsd2 bsd3 lgpl21Plus ];

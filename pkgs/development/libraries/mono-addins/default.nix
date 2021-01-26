@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, mono4, gtk-sharp-2_0 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, mono4, gtk-sharp-2_0 }:
 
 stdenv.mkDerivation rec {
   pname = "mono-addins";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.mono-project.com/archived/monoaddins/";
     description = "A generic framework for creating extensible applications";
     longDescription = ''

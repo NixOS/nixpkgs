@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , asciidoc, libxslt, docbook_xsl
 , pam, yubikey-personalization, libyubikey, libykclient }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config asciidoc libxslt docbook_xsl ];
   buildInputs = [ pam yubikey-personalization libyubikey libykclient ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yubico PAM module";
     homepage = "https://developers.yubico.com/yubico-pam";
     license = licenses.bsd2;

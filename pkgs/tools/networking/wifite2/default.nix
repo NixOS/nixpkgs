@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, python3, wirelesstools
+{ lib, fetchFromGitHub, fetchpatch, python3, wirelesstools
 , aircrack-ng, wireshark-cli, reaverwps-t6x, cowpatty, hashcat, hcxtools
 , hcxdumptool, pyrit, which }:
 

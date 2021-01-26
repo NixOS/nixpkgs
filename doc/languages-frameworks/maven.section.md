@@ -116,7 +116,7 @@ The first step will be to build the Maven project as a fixed-output derivation i
 > Traditionally the Maven repository is at `~/.m2/repository`. We will override this to be the `$out` directory.
 
 ```nix
-{ stdenv, lib, maven }:
+{ lib, stdenv, maven }:
 stdenv.mkDerivation {
   name = "maven-repository";
   buildInputs = [ maven ];
@@ -168,7 +168,7 @@ If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a str
 Regardless of which strategy is chosen above, the step to build the derivation is the same.
 
 ```nix
-{ stdenv, lib, maven, callPackage }:
+{ stdenv, maven, callPackage }:
 # pick a repository derivation, here we will use buildMaven
 let repository = callPackage ./build-maven-repository.nix { };
 in stdenv.mkDerivation rec {
@@ -222,7 +222,7 @@ We will read the Maven repository and flatten it to a single list. This list wil
 We make sure to provide this classpath to the `makeWrapper`.
 
 ```nix
-{ stdenv, lib, maven, callPackage, makeWrapper, jre }:
+{ stdenv, maven, callPackage, makeWrapper, jre }:
 let
   repository = callPackage ./build-maven-repository.nix { };
 in stdenv.mkDerivation rec {
@@ -298,7 +298,7 @@ Main-Class: Main
 We will modify the derivation above to add a symlink to our repository so that it's accessible to our JAR during the `installPhase`.
 
 ```nix
-{ stdenv, lib, maven, callPackage, makeWrapper, jre }:
+{ stdenv, maven, callPackage, makeWrapper, jre }:
 # pick a repository derivation, here we will use buildMaven
 let repository = callPackage ./build-maven-repository.nix { };
 in stdenv.mkDerivation rec {

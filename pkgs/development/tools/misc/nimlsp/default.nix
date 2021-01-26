@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, srcOnly, nim }:
+{ lib, stdenv, fetchFromGitHub, srcOnly, nim }:
 let
   astpatternmatching = fetchFromGitHub {
     owner = "krux02";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin src/nimlsp
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Language Server Protocol implementation for Nim";
     homepage = "https://github.com/PMunch/nimlsp";
     license = licenses.mit;

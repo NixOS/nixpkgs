@@ -1,4 +1,4 @@
-{ lib, stdenv, go, buildGoPackage, fetchFromGitHub }:
+{ lib, go, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "pushgateway";

@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, file, qtbase, qttools, solid }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, file, qtbase, qttools, solid }:
 
 mkDerivation {
   pname = "dfilemanager";

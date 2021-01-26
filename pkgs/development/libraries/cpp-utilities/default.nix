@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
   checkFlagsArray = [ "LD_LIBRARY_PATH=$(PWD)" ];
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Martchus/cpp-utilities";
     description = "Common C++ classes and routines used by @Martchus' applications featuring argument parser, IO and conversion utilities";
     license = licenses.gpl2;

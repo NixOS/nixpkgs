@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "rlottie";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Samsung/rlottie";
     description = "A platform independent standalone c++ library for rendering vector based animations and art in realtime";
     license = licenses.unfree; # Mixed, see https://github.com/Samsung/rlottie/blob/master/COPYING

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "git-appraise-unstable";

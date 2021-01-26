@@ -1,4 +1,4 @@
-{ lib, stdenv, writeShellScriptBin, rss-bridge, php }:
+{ lib, writeShellScriptBin, rss-bridge, php }:
 
 let
   phpWithExts = (php.withExtensions

@@ -37,6 +37,7 @@ import ./default.nix {
   bootstrapHashes = {
     i686-unknown-linux-gnu = "e69689b0a1b66599cf83e7dd54f839419007e44376195e93e301a3175da3d854";
     x86_64-unknown-linux-gnu = "a41df89a461a580536aeb42755e43037556fba2e527dd13a1e1bb0749de28202";
+    x86_64-unknown-linux-musl = "7eeef2b7488ee96015db10bc52c43f6e023debc9a955ccb8efb382522bf35be9";
     arm-unknown-linux-gnueabihf = "ea18ccdfb62a153c2d43d013fdec56993cc9267f1cdc6f3834df8a2b9b468f08";
     armv7-unknown-linux-gnueabihf = "d44294732cf268ea84908f1135f574ab9489132a332eaa9d5bda547374b15d54";
     aarch64-unknown-linux-gnu = "a2d74ebeec0b6778026b6c37814cdc91d14db3b0d8b6d69d036216f4d9cf7e49";

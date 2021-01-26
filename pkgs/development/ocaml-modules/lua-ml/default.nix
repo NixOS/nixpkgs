@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, dune }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, opaline }:
 
 if !lib.versionAtLeast ocaml.version "4.07"
 then throw "lua-ml is not available for OCaml ${ocaml.version}"
@@ -16,11 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "04lv98nxmzanvyn4c0k6k0ax29f5xfdl8qzpf5hwadslq213a044";
   };
 
+  nativeBuildInputs = [ opaline ];
   buildInputs = [ ocaml findlib ocamlbuild ];
 
   buildFlags = [ "lib" ];
 
-  inherit (dune) installPhase;
+  installPhase = ''
+    opaline -prefix $out -libdir $OCAMLFIND_DESTDIR
+  '';
 
   meta = {
     description = "An embeddable Lua 2.5 interpreter implemented in OCaml";

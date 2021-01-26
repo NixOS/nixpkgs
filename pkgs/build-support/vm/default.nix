@@ -1,6 +1,7 @@
-{ pkgs
+{ lib
+, pkgs
 , kernel ? pkgs.linux
-, img ? pkgs.stdenv.hostPlatform.platform.kernelTarget
+, img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
 , rootModules ?
     [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
@@ -572,7 +573,7 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        PATH=$PATH:${stdenv.lib.makeBinPath [ dpkg dpkg glibc lzma ]}
+        PATH=$PATH:${lib.makeBinPath [ dpkg dpkg glibc lzma ]}
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.

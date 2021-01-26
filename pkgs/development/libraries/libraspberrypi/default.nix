@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     "-DVMCS_INSTALL_PREFIX=${placeholder "out"}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Userland tools & libraries for interfacing with Raspberry Pi hardware";
     homepage = "https://github.com/raspberrypi/userland";
     license = licenses.bsd3;

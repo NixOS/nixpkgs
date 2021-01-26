@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, mkDerivation
+{ lib, fetchFromGitHub, fetchpatch, mkDerivation
 , qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
 , qtconnectivity, qtcharts, libusb-compat-0_1
 , yacc, flex, zlib, qmake, makeDesktopItem, makeWrapper

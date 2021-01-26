@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, fetchFromGitHub, chromaprint
+{ lib, mkDerivation, fetchurl, fetchFromGitHub, chromaprint
 , fftw, flac, faad2, glibcLocales, mp4v2
 , libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
 , libGLU, libxcb, lilv, lv2, opusfile

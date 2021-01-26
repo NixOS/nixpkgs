@@ -141,7 +141,7 @@ let
 
     disallowedReferences = [ openjdk15-bootstrap ];
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = "https://openjdk.java.net/";
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";

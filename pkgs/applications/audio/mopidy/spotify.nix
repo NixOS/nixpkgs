@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pythonPackages, mopidy }:
+{ lib, fetchurl, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify";

@@ -4,7 +4,7 @@
 , libmng, which, libGLU, openssl, dbus, cups, pkg-config
 , libtiff, glib, icu, libmysqlclient, postgresql, sqlite, perl, coreutils, libXi
 , alsaLib
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , flashplayerFix ? false, gdk-pixbuf
 , gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2
 , gnomeStyle ? false, libgnomeui, GConf, gnome_vfs

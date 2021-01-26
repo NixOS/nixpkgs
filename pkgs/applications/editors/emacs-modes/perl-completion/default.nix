@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "perl-completion";

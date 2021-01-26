@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub
+{lib, stdenv, fetchFromGitHub
 , curl, makeWrapper, which, unzip
 , lua
 # for 'luarocks pack'
@@ -62,9 +62,9 @@ stdenv.mkDerivation rec {
     export LUA_PATH="src/?.lua;''${LUA_PATH:-}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
-    description = ''A package manager for Lua'';
+    description = "A package manager for Lua";
     license = licenses.mit ;
     maintainers = with maintainers; [raskin teto];
     platforms = platforms.linux ++ platforms.darwin;

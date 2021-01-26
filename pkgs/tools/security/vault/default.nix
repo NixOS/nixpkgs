@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoPackage, installShellFiles, nixosTests }:
+{ lib, fetchFromGitHub, buildGoPackage, installShellFiles, nixosTests }:
 
 buildGoPackage rec {
   pname = "vault";

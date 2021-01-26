@@ -79,6 +79,7 @@ deoplete-plugins/deoplete-clang
 deoplete-plugins/deoplete-dictionary
 deoplete-plugins/deoplete-go
 deoplete-plugins/deoplete-jedi
+deoplete-plugins/deoplete-lsp
 deoplete-plugins/deoplete-zsh
 derekelkins/agda-vim
 derekwyatt/vim-scala
@@ -132,7 +133,11 @@ gentoo/gentoo-syntax
 GEverding/vim-hocon
 gfanto/fzf-lsp.nvim@main
 gibiansky/vim-textobj-haskell
-glepnir/galaxyline.nvim
+gioele/vim-autoswap
+glepnir/galaxyline.nvim@main
+glepnir/lspsaga.nvim@main
+glepnir/oceanic-material
+glepnir/zephyr-nvim@main
 glts/vim-textobj-comment
 godlygeek/csapprox
 godlygeek/tabular
@@ -235,6 +240,7 @@ justincampbell/vim-eighties
 justinj/vim-pico8-syntax
 justinmk/vim-dirvish
 justinmk/vim-sneak
+jvirtanen/vim-hcl
 jvoorhis/coq.vim
 KabbAmine/vCoolor.vim
 KabbAmine/zeavim.vim
@@ -274,6 +280,7 @@ leanprover/lean.vim
 ledger/vim-ledger
 lepture/vim-jinja
 lervag/vimtex
+lewis6991/gitsigns.nvim@main
 lfilho/cosco.vim
 lifepillar/vim-mucomplete
 lighttiger2505/deoplete-vim-lsp
@@ -332,6 +339,7 @@ mengelbrecht/lightline-bufferline
 metakirby5/codi.vim
 mfukar/robotframework-vim
 mfussenegger/nvim-dap
+mfussenegger/nvim-jdtls
 mg979/vim-visual-multi
 mhartington/oceanic-next
 mhinz/vim-crates
@@ -350,6 +358,7 @@ mopp/sky-color-clock.vim
 morhetz/gruvbox
 motus/pig.vim
 mpickering/hlint-refactor-vim
+ms-jpq/chadtree@chad
 mtikekar/vim-bsv
 nanotech/jellybeans.vim
 natebosch/vim-lsc
@@ -403,6 +412,9 @@ nvim-lua/lsp-status.nvim
 nvim-lua/lsp_extensions.nvim
 nvim-lua/plenary.nvim
 nvim-lua/popup.nvim
+nvim-telescope/telescope-frecency.nvim
+nvim-telescope/telescope-fzf-writer.nvim
+nvim-telescope/telescope-fzy-native.nvim
 nvim-telescope/telescope.nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
@@ -494,7 +506,6 @@ Shougo/context_filetype.vim
 Shougo/defx.nvim
 Shougo/denite.nvim
 Shougo/deol.nvim
-Shougo/deoplete-lsp
 Shougo/deoplete.nvim
 Shougo/echodoc.vim
 Shougo/neco-syntax
@@ -531,11 +542,13 @@ svermeulen/vim-subversive
 t9md/vim-choosewin
 t9md/vim-smalls
 takac/vim-hardtime
+tami5/sql.nvim
 tbodt/deoplete-tabnine
 ternjs/tern_for_vim
 terryma/vim-expand-region
 terryma/vim-multiple-cursors
 tex/vimpreviewpandoc
+Th3Whit3Wolf/one-nvim@main
 theHamsta/nvim-dap-virtual-text
 thinca/vim-ft-diff_fold
 thinca/vim-prettyprint
@@ -659,6 +672,7 @@ VundleVim/Vundle.vim
 w0ng/vim-hybrid
 wakatime/vim-wakatime
 wannesm/wmgraphviz.vim
+wbthomason/packer.nvim
 weirongxu/coc-explorer
 wellle/targets.vim
 wellle/tmux-complete.vim
@@ -676,6 +690,6 @@ Xuyuanp/nerdtree-git-plugin
 ycm-core/YouCompleteMe
 Yggdroot/indentLine
 Yilin-Yang/vim-markbar
-yuki-ycino/ncm2-dictionary
+yuki-yano/ncm2-dictionary
 zah/nim.vim
 ziglang/zig.vim

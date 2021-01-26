@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, buildDotnetPackage }:
+{ lib, fetchFromGitHub, buildDotnetPackage }:
 
 buildDotnetPackage {
   baseName = "pash";
   version = "git-2016-07-06";
-  
+
   src = fetchFromGitHub {
     owner = "Pash-Project";
     repo = "Pash";

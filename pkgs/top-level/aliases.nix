@@ -70,6 +70,7 @@ mapAliases ({
   bazaarTools = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
   beegfs = throw "beegfs has been removed."; # added 2019-11-24
   bluezFull = bluez; # Added 2019-12-03
+  brackets = throw "brackets has been removed, it was unmaintained and had open vulnerabilities"; # added 2021-01-24
   bridge_utils = bridge-utils;  # added 2015-02-20
   bro = zeek; # added 2019-09-29
   bootchart = throw "bootchart has been removed from nixpkgs, as it is without a maintainer"; # added 2019-12-10
@@ -167,6 +168,7 @@ mapAliases ({
   firestr = throw "firestr has been removed."; # added 2019-12-08
   fish-foreign-env = throw "fish-foreign-env has been replaced with fishPlugins.foreign-env"; # added 2020-12-29, modified 2021-01-10
   flameGraph = flamegraph; # added 2018-04-25
+  flink_1_5 = throw "flink_1_5 was removed, use flink instead"; # added 2021-01-25
   flvtool2 = throw "flvtool2 has been removed."; # added 2020-11-03
   foldingathome = fahclient; # added 2020-09-03
   font-awesome-ttf = font-awesome; # 2018-02-25
@@ -258,6 +260,8 @@ mapAliases ({
   inboxer = throw "inboxer has been removed as it is no longer maintained and no longer works as Google shut down the inbox service this package wrapped.";
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
+  i-score = throw "i-score has been removed: abandoned upstream."; # added 2020-11-21
+  jamomacore = throw "jamomacore has been removed: abandoned upstream."; # added 2020-11-21
   jasper = throw "jasper has been removed: abandoned upstream with many vulnerabilities";
   jbuilder = dune; # added 2018-09-09
   jikes = throw "jikes was deprecated on 2019-10-07: abandoned by upstream";
@@ -319,7 +323,6 @@ mapAliases ({
   libstdcxxHook = throw "libstdcxx hook has been removed because cc-wrapper is now directly aware of the c++ standard library intended to be used."; # 2020-06-22
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
   links = links2; # added 2016-01-31
-  linux_mptcp_5_9 = linux_5_9; # added 2020-01-07
   linux_rpi0 = linux_rpi1;
   linuxPackages_rpi0 = linuxPackages_rpi1;
 
@@ -399,7 +402,8 @@ mapAliases ({
   oblogout = throw "oblogout has been removed from nixpkgs, as it's archived upstream."; # added 2019-12-10
   opencl-icd = ocl-icd; # added 2017-01-20
   openexr_ctl = ctl; # added 2018-04-25
-  openjpeg_2_1 = openjpeg_2; # added 2018-10-25
+  openjpeg_1 = throw "openjpeg_1 has been removed, use openjpeg_2 instead"; # added 2021-01-24
+  openjpeg_2 = openjpeg; # added 2021-01-25
   opensans-ttf = open-sans; # added 2018-12-04
   openssh_with_kerberos = openssh; # added 2018-01-28
   onnxruntime = throw "onnxruntime has been removed due to poor maintainability"; # added 2020-12-04

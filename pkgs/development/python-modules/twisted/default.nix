@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   # Patch t.p._inotify to point to libc. Without this,
   # twisted.python.runtime.platform.supportsINotify() == False
-  patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
+  patchPhase = lib.optionalString stdenv.isLinux ''
     substituteInPlace src/twisted/python/_inotify.py --replace \
       "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
   '';

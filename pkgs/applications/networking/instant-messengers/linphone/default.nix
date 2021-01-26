@@ -45,7 +45,7 @@
 , readline
 , speex
 , sqlite
-, stdenv
+
 , udev
 , zlib
 }:

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 
 let
   ARCH = {
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   buildPhase = "cd emu && make -j $NIX_BUILD_CORES -f Makefile.$ARCH";
   installPhase = "mkdir -p $out/bin && cp picat $out/bin/picat";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Logic-based programming langage";
     homepage    = "http://picat-lang.org/";
     license     = licenses.mpl20;

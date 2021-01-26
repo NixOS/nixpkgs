@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, openssl, bzip2 }:
+{ lib, buildPythonPackage, fetchPypi, openssl, bzip2 }:
 
 buildPythonPackage rec {
   pname = "zeroc-ice";

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, git }:
+{ lib, buildGoPackage, fetchFromGitHub, makeWrapper, git }:
 
 buildGoPackage rec {
   pname = "fac";
@@ -25,7 +25,7 @@ buildGoPackage rec {
     install -D go/src/${goPackagePath}/assets/doc/fac.1 $out/share/man/man1/fac.1
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "CUI for fixing git conflicts";
     inherit (src.meta) homepage;
     license = licenses.mit;

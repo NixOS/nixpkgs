@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cdk, unzip, gtk2, glib, ncurses, pkg-config}:
+{lib, stdenv, fetchurl, cdk, unzip, gtk2, glib, ncurses, pkg-config}:
 let
   s = # Generated upstream information
   rec {
@@ -23,10 +23,10 @@ stdenv.mkDerivation {
   makeFlags = ["PREFIX=$(out)"];
   meta = {
     inherit (s) version;
-    description = ''Cross-platform helper for creating interactive dialogs'';
-    license = stdenv.lib.licenses.mit ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "Cross-platform helper for creating interactive dialogs";
+    license = lib.licenses.mit ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
     homepage = "http://foicica.com/gtdialog";
     downloadPage = "http://foicica.com/gtdialog/download";
   };

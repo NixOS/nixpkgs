@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
+{ lib, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
 , alsaSupport ? true, alsaLib ? null
 , jackSupport ? false, libjack2 ? null
 , portaudioSupport ? false, portaudio ? null }:

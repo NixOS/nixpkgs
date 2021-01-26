@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchpatch, gnu-config, autoreconfHook, bison, binutils-unwrapped
 , libiberty, zlib
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for manipulating containers of machine code";
     longDescription = ''
       BFD is a library which provides a single interface to read and write

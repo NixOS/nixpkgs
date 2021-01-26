@@ -24,7 +24,7 @@
 , serd
 , sord
 , sratom
-, lib, stdenv
+, lib
 , suil
 }:
 

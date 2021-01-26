@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
+{ lib, stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "openldap";
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--enable-crypt"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--with-yielding_select=yes"
     "ac_cv_func_memcmp_working=yes"
-  ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
-    ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
-    ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+  ] ++ lib.optional (openssl == null) "--without-tls"
+    ++ lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
+    ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
   postBuild = ''
     make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/sha2
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     chmod +x "$out"/lib/*.{so,dylib}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://www.openldap.org/";
     description = "An open source implementation of the Lightweight Directory Access Protocol";
     license = licenses.openldap;

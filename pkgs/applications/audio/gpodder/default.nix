@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, python3Packages, intltool
+{ lib, fetchFromGitHub, python3, python3Packages, intltool
 , glibcLocales, gnome3, gtk3, wrapGAppsHook
 , gobject-introspection
 }:

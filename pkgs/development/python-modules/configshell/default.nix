@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonPackage, pyparsing, six, urwid }:
+{ lib, fetchFromGitHub, buildPythonPackage, pyparsing, six, urwid }:
 
 buildPythonPackage rec {
   pname = "configshell";

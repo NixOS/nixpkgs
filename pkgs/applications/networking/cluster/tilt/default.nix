@@ -1,17 +1,17 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "tilt";
   /* Do not use "dev" as a version. If you do, Tilt will consider itself
     running in development environment and try to serve assets from the
     source tree, which is not there once build completes.  */
-  version = "0.18.1";
+  version = "0.18.5";
 
   src = fetchFromGitHub {
     owner  = "tilt-dev";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1sdb2x06va0j9cxdwz95dklv2csq0s596wjsjqi4sq65y9bxjr7i";
+    sha256 = "0msfc2cgfq7dz02n2z898iw2bx98qsny3j4pzja767vcdpnzjmr5";
   };
   vendorSha256 = null;
 

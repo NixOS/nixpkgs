@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libpng libjpeg ] ++ lib.optional guiSupport libX11;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A general purpose cross-platform C++ machine learning library";
     homepage = "http://www.dlib.net";
     license = licenses.boost;

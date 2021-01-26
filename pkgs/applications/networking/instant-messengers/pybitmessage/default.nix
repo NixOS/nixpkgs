@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python2Packages, openssl }:
+{ lib, fetchFromGitHub, python2Packages, openssl }:
 
 python2Packages.buildPythonApplication rec {
   pname = "pybitmessage";

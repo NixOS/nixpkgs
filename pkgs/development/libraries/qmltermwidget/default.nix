@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase, qtquick1, qmake, qtmultimedia, utmp, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, qtbase, qtquick1, qmake, qtmultimedia, utmp, fetchpatch }:
 
 stdenv.mkDerivation {
   version = "2018-11-24";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ qtbase qtquick1 qtmultimedia ]
-                ++ stdenv.lib.optional stdenv.isDarwin utmp;
+                ++ lib.optional stdenv.isDarwin utmp;
   nativeBuildInputs = [ qmake ];
 
   patches = [
@@ -35,8 +35,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A QML port of qtermwidget";
     homepage = "https://github.com/Swordfish90/qmltermwidget";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ skeidel ];
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ skeidel ];
   };
 }

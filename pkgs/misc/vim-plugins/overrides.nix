@@ -14,6 +14,7 @@
 , buildVimPluginFrom2Nix
 , nodePackages
 , dasht
+, sqlite
 
 # deoplete-khard dependency
 , khard
@@ -283,6 +284,10 @@ self: super: {
 
   skim-vim = super.skim-vim.overrideAttrs(old: {
     dependencies = [ self.skim ];
+  });
+
+  sql-nvim = super.sql-nvim.overrideAttrs(old: {
+    buildInputs = [ sqlite ];
   });
 
   sved = let
@@ -654,7 +659,7 @@ self: super: {
           libiconv
         ];
 
-        cargoSha256 = "6tgSdIC9ThKvyiX1Unihwozhez6+HsQiqebugzNrKVc=";
+        cargoSha256 = "mq5q+cIWXDMeoZfumX1benulrP/AWKZnd8aI0OzY55c=";
       };
     in ''
       ln -s ${maple-bin}/bin/maple $target/bin/maple
@@ -671,6 +676,31 @@ self: super: {
       ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
     '';
   });
+
+  telescope-fzy-native-nvim = super.telescope-fzy-native-nvim.overrideAttrs (old: {
+    preFixup =
+      let
+        fzy-lua-native-path = "deps/fzy-lua-native";
+        fzy-lua-native =
+          stdenv.mkDerivation {
+            name = "fzy-lua-native";
+            src = "${old.src}/${fzy-lua-native-path}";
+            # remove pre-compiled binaries
+            preBuild = "rm -rf static/*";
+            installPhase = ''
+              install -Dm 444 -t $out/static static/*
+              install -Dm 444 -t $out/lua lua/*
+            '';
+          };
+      in
+      ''
+        rm -rf $target/${fzy-lua-native-path}/*
+        ln -s ${fzy-lua-native}/static $target/${fzy-lua-native-path}/static
+        ln -s ${fzy-lua-native}/lua $target/${fzy-lua-native-path}/lua
+      '';
+    meta.platforms = lib.platforms.all;
+  });
+
 } // (
   let
     nodePackageNames = [

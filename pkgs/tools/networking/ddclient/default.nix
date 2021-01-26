@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perlPackages, iproute, perl }:
+{ lib, fetchurl, perlPackages, iproute, perl }:
 
 perlPackages.buildPerlPackage rec {
   pname = "ddclient";

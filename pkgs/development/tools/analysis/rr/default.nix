@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto }:
+{ lib, stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto }:
 
 stdenv.mkDerivation rec {
   version = "5.4.0";
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
       time the same execution is replayed.
     '';
 
-    license = with stdenv.lib.licenses; [ mit bsd2 ];
-    maintainers = with stdenv.lib.maintainers; [ pierron thoughtpolice ];
-    platforms = stdenv.lib.platforms.x86;
+    license = with lib.licenses; [ mit bsd2 ];
+    maintainers = with lib.maintainers; [ pierron thoughtpolice ];
+    platforms = lib.platforms.x86;
   };
 }

@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   meta = {
     inherit (s) version;
-    description = ''A set of network-related (mostly VPN-related) tools'';
+    description = "A set of network-related (mostly VPN-related) tools";
     license = lib.licenses.bsd3 ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , mkDerivation
 , dbus
 , dbus_cplusplus

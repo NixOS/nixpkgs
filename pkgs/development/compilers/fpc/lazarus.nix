@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${lib.makeBinPath [ fpc gdb gnumake binutils ]}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical IDE for the FreePascal language";
     homepage = "https://www.lazarus.freepascal.org";
     license = licenses.gpl2Plus ;

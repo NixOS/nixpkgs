@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
+{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "fritzbox-exporter";

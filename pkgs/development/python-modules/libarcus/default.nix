@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, python, fetchFromGitHub
+{ lib, buildPythonPackage, python, fetchFromGitHub
 , cmake, sip, protobuf, pythonOlder }:
 
 buildPythonPackage rec {

@@ -15,18 +15,35 @@ let
 
   inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34;
 
-  sip = (pythonPackages.sip.override { sip-module = "PyQt5.sip"; }).overridePythonAttrs(oldAttrs: {
-    # If we install sip in another folder, then we need to create a __init__.py as well
-    # if we want to be able to import it with Python 2.
-    # Python 3 could rely on it being an implicit namespace package, however,
-    # PyQt5 we made an explicit namespace package so sip should be as well.
-    postInstall = ''
-      cat << EOF > $out/${python.sitePackages}/PyQt5/__init__.py
-      from pkgutil import extend_path
-      __path__ = extend_path(__path__, __name__)
-      EOF
-    '';
-  });
+  sip = if isPy3k then
+    pythonPackages.sip_5
+  else
+    (pythonPackages.sip.override { sip-module = "PyQt5.sip"; }).overridePythonAttrs(oldAttrs: {
+      # If we install sip in another folder, then we need to create a __init__.py as well
+      # if we want to be able to import it with Python 2.
+      # Python 3 could rely on it being an implicit namespace package, however,
+      # PyQt5 we made an explicit namespace package so sip should be as well.
+      postInstall = ''
+        cat << EOF > $out/${python.sitePackages}/PyQt5/__init__.py
+        from pkgutil import extend_path
+        __path__ = extend_path(__path__, __name__)
+        EOF
+      '';
+    });
+
+  pyqt5_sip = buildPythonPackage rec {
+    pname = "PyQt5_sip";
+    version = "12.8.1";
+
+    src = pythonPackages.fetchPypi {
+      inherit pname version;
+      sha256 = "30e944db9abee9cc757aea16906d4198129558533eb7fadbe48c5da2bd18e0bd";
+    };
+
+    # There is no test code and the check phase fails with:
+    # > error: could not create 'PyQt5/sip.cpython-38-x86_64-linux-gnu.so': No such file or directory
+    doCheck = false;
+  };
 
 in buildPythonPackage rec {
   pname = "PyQt5";
@@ -69,8 +86,7 @@ in buildPythonPackage rec {
 
   propagatedBuildInputs = [
     dbus-python
-    sip
-  ] ++ lib.optional (!isPy3k) enum34;
+  ] ++ (if isPy3k then [ pyqt5_sip ] else [ sip enum34 ]);
 
   patches = [
     # Fix some wrong assumptions by ./configure.py
@@ -103,7 +119,7 @@ in buildPythonPackage rec {
     runHook postConfigure
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (!isPy3k) ''
     ln -s ${sip}/${python.sitePackages}/PyQt5/sip.* $out/${python.sitePackages}/PyQt5/
     for i in $out/bin/*; do
       wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
@@ -116,26 +132,21 @@ in buildPythonPackage rec {
     EOF
   '';
 
-  installCheckPhase = let
-    modules = [
-      "PyQt5"
-      "PyQt5.QtCore"
-      "PyQt5.QtQml"
-      "PyQt5.QtWidgets"
-      "PyQt5.QtGui"
-    ]
+  # Checked using pythonImportsCheck
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "PyQt5"
+    "PyQt5.QtCore"
+    "PyQt5.QtQml"
+    "PyQt5.QtWidgets"
+    "PyQt5.QtGui"
+  ]
     ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
     ++ lib.optional withWebKit "PyQt5.QtWebKit"
     ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
     ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
-    ;
-    imports = lib.concatMapStrings (module: "import ${module};") modules;
-  in ''
-    echo "Checking whether modules can be imported..."
-    ${python.interpreter} -c "${imports}"
-  '';
-
-  doCheck = true;
+  ;
 
   enableParallelBuilding = true;
 

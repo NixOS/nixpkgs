@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, substituteAll
+{ fetchurl, lib, stdenv, substituteAll
 , libtool, gettext, zlib, bzip2, flac, libvorbis
 , exiv2, libgsf, rpm, pkg-config, fetchpatch
 , gstreamerSupport ? true, gst_all_1 ? null
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
       sha256 = "01xhcjbzv6p53wz7y2ii76kb8m9iwvnm4ip9w4a0bpgaxqz4b9fw";
       excludes = [ "ChangeLog" ];
     })
-  ] ++ stdenv.lib.optionals gstreamerSupport [
+  ] ++ lib.optionals gstreamerSupport [
 
     # Libraries cannot be wrapped so we need to hardcode the plug-in paths.
     (substituteAll {
       src = ./gst-hardcode-plugins.patch;
-      load_gst_plugins = stdenv.lib.concatMapStrings
+      load_gst_plugins = lib.concatMapStrings
         (plugin: ''gst_registry_scan_path(gst_registry_get(), "${plugin}/lib/gstreamer-1.0");'')
         (gstPlugins gst_all_1);
     })
@@ -62,10 +62,10 @@ stdenv.mkDerivation rec {
    [ libtool gettext zlib bzip2 flac libvorbis exiv2
      libgsf rpm
      pkg-config
-   ] ++ stdenv.lib.optionals gstreamerSupport
+   ] ++ lib.optionals gstreamerSupport
           ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
-     ++ stdenv.lib.optionals gtkSupport [ glib gtk3 ]
-     ++ stdenv.lib.optionals videoSupport [ ffmpeg_3 libmpeg2 ];
+     ++ lib.optionals gtkSupport [ glib gtk3 ]
+     ++ lib.optionals videoSupport [ ffmpeg_3 libmpeg2 ];
 
   configureFlags = [
     "--disable-ltdl-install"
@@ -105,9 +105,9 @@ stdenv.mkDerivation rec {
          additional MIME types are detected.
       '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

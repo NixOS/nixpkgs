@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoPackage, pkg-config, libappindicator-gtk3 }:
+{ lib, fetchFromGitHub, buildGoPackage, pkg-config, libappindicator-gtk3 }:
 
 buildGoPackage rec {
   pname = "syncthing-tray";

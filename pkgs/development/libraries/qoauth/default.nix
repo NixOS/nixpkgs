@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtbase, qmake, qca-qt5 }:
+{ lib, stdenv, fetchurl, qtbase, qmake, qca-qt5 }:
 
 stdenv.mkDerivation {
   name = "qoauth-2.0.0";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-I${qca-qt5}/include/Qca-qt5/QtCrypto";
   NIX_LDFLAGS = "-lqca-qt5";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt library for OAuth authentication";
     inherit (qtbase.meta) platforms;
     license = licenses.lgpl21;

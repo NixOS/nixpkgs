@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, numpy, nose, openmp }:
+{ lib, buildPythonPackage, fetchPypi, numpy, nose, openmp }:
 
 buildPythonPackage rec {
   pname = "pykdtree";

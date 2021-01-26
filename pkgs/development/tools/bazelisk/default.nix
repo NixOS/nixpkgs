@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "bazelisk";
@@ -17,7 +17,7 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.BazeliskVersion=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A user-friendly launcher for Bazel";
     longDescription = ''
       BEWARE: This package does not work on NixOS.

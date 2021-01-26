@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation {
   name = "railgun-2012-10-17";

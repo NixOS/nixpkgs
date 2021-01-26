@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoPackage
+{ lib, fetchFromGitHub, buildGoPackage
 , makeWrapper, nix-prefetch-scripts }:
 
 buildGoPackage rec {

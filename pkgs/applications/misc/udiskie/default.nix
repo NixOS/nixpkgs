@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, asciidoc-full, gettext
+{ lib, fetchFromGitHub, asciidoc-full, gettext
 , gobject-introspection, gtk3, libappindicator-gtk3, libnotify, librsvg
 , udisks2, wrapGAppsHook
 , python3Packages

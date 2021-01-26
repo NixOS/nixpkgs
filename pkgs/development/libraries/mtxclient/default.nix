@@ -1,12 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
 , pkg-config
 , boost17x
 , openssl
-, zlib
-, libsodium
 , olm
 , spdlog
 , nlohmann_json
@@ -14,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
     rev = "v${version}";
-    sha256 = "1dg4dq20g0ah62j5s3gpsxqq4ny7lxkxdxa9q6g54hdwkrb9ms7x";
+    sha256 = "1x820rcfz5r203dc8a0rzavcjjx10fsv1dicqg65m6kxx1w95j5r";
   };
 
   cmakeFlags = [
@@ -42,16 +40,14 @@ stdenv.mkDerivation rec {
     spdlog
     boost17x
     openssl
-    zlib
-    libsodium
     olm
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client API library for Matrix, built on top of Boost.Asio";
     homepage = "https://github.com/Nheko-Reborn/mtxclient";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz pstn ];
     platforms = platforms.all;
     # Should be fixable if a higher clang version is used, see:
     # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177

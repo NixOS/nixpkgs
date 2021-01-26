@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, pkg-config, qmake, qtscript, qtsvg }:
+{ lib, mkDerivation, fetchurl, pkg-config, qmake, qtscript, qtsvg }:
 
 mkDerivation rec {
   pname = "vym";

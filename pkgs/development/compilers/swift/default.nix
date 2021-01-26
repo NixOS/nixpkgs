@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , cmake
 , coreutils
 , glibc
@@ -121,7 +121,7 @@ let
 
   cmakeFlags = [
     "-DGLIBC_INCLUDE_PATH=${stdenv.cc.libc.dev}/include"
-    "-DC_INCLUDE_DIRS=${stdenv.lib.makeSearchPathOutput "dev" "include" devInputs}:${libxml2.dev}/include/libxml2"
+    "-DC_INCLUDE_DIRS=${lib.makeSearchPathOutput "dev" "include" devInputs}:${libxml2.dev}/include/libxml2"
     "-DGCC_INSTALL_PREFIX=${gccForLibs}"
   ];
 
@@ -282,7 +282,7 @@ stdenv.mkDerivation {
       installable_package=$INSTALLABLE_PACKAGE \
       install_prefix=$out \
       install_destdir=$SWIFT_INSTALL_DIR \
-      extra_cmake_options="${stdenv.lib.concatStringsSep "," cmakeFlags}"
+      extra_cmake_options="${lib.concatStringsSep "," cmakeFlags}"
   '';
 
   doCheck = true;
@@ -321,9 +321,9 @@ stdenv.mkDerivation {
   '';
 
   # Hack to avoid build and install directories in RPATHs.
-  preFixup = ''rm -rf $SWIFT_BUILD_ROOT $SWIFT_INSTALL_DIR'';
+  preFixup = "rm -rf $SWIFT_BUILD_ROOT $SWIFT_INSTALL_DIR";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Swift Programming Language";
     homepage = "https://github.com/apple/swift";
     maintainers = with maintainers; [ dtzWill ];

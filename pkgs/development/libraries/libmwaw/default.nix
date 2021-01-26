@@ -1,4 +1,4 @@
-{stdenv, fetchurl, boost, pkg-config, cppunit, zlib, libwpg, libwpd, librevenge}:
+{lib, stdenv, fetchurl, boost, pkg-config, cppunit, zlib, libwpg, libwpd, librevenge}:
 let
   s = # Generated upstream information
   rec {
@@ -23,9 +23,9 @@ stdenv.mkDerivation {
   };
   meta = {
     inherit (s) version;
-    description = ''Import library for some old mac text documents'';
-    license = stdenv.lib.licenses.mpl20 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    description = "Import library for some old mac text documents";
+    license = lib.licenses.mpl20 ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
   };
 }

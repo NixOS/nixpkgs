@@ -1,7 +1,7 @@
 { buildGoModule
 , docker
 , fetchFromGitHub
-, lib, stdenv
+, lib
 }:
 
 buildGoModule rec {

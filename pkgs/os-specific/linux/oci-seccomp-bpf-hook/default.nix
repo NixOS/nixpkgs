@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , buildGoModule
 , fetchFromGitHub
 , go-md2man

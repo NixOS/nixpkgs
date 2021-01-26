@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jdk }:
+{ lib, stdenv, fetchurl, makeWrapper, jdk }:
 
 stdenv.mkDerivation rec {
   name = "rascal-0.6.2";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.rascal-mpl.org/";
     description = "Command-line REPL for the Rascal metaprogramming language";
-    license = stdenv.lib.licenses.epl10;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.epl10;
+    maintainers = [ lib.maintainers.eelco ];
+    platforms = lib.platforms.unix;
   };
 }

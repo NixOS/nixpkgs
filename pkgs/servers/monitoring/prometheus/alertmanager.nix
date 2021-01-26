@@ -1,4 +1,4 @@
-{ lib, stdenv, go, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ lib, go, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
   pname = "alertmanager";

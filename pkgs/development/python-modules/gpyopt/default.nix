@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, setuptools
+{ lib, buildPythonPackage, fetchFromGitHub, setuptools
 , numpy, scipy, gpy, emcee, nose }:
 
 buildPythonPackage rec {

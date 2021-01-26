@@ -4,28 +4,29 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
+, poetry-core
 , pylint
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
 , pythonAtLeast
 }:
+
 buildPythonPackage rec {
   pname = "pytile";
-  version = "5.1.0";
+  version = "5.1.1";
   disabled = pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "0hdyb8ca4ihqf7yfkr3hbpkwz7g182ycra151y5dxn0319fillc3";
+    sha256 = "sha256-bVoFTaK/Alemtc5I+Z/M9y/FWczvJ+P86R0DMD89/BM=";
   };
 
   format = "pyproject";
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     aiohttp

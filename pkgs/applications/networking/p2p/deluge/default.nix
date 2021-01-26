@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, intltool, libtorrent-rasterbar, pythonPackages
+{ lib, fetchurl, intltool, libtorrent-rasterbar, pythonPackages
 , gtk3, glib, gobject-introspection, librsvg, wrapGAppsHook }:
 
 pythonPackages.buildPythonPackage rec {

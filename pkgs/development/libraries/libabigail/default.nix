@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , autoreconfHook
 , elfutils
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ABI Generic Analysis and Instrumentation Library";
     homepage = "https://sourceware.org/libabigail/";
     license = licenses.lgpl3Plus;

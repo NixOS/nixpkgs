@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
+{ config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
 , libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
@@ -11,7 +11,7 @@
 , darwin, fetchpatch
 }:
 
-with stdenv.lib;
+with lib;
 
 assert stdenv.isLinux -> util-linuxMinimal != null;
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   version = "2.66.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "l9+GcOMvn9T3OSsJgOZh3WJQEgFdWDUNoeWOND9K+YQ=";
   };
 
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
     # Instead we just copy them over from the native output.
     "-Dgtk_doc=${boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
     "-Dnls=enabled"
-    "-Ddevbindir=${placeholder ''dev''}/bin"
+    "-Ddevbindir=${placeholder "dev"}/bin"
   ];
 
   NIX_CFLAGS_COMPILE = toString [
@@ -182,7 +182,7 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript { packageName = "glib"; };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library of programming buildings blocks";
     homepage    = "https://www.gtk.org/";
     license     = licenses.lgpl21Plus;

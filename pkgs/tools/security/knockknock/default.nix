@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python2Packages, hping }:
+{ lib, fetchFromGitHub, python2Packages, hping }:
 let
   rev  = "bf14bbff";
 in python2Packages.buildPythonApplication rec {

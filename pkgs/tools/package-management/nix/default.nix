@@ -3,6 +3,7 @@
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
 , boehmgc
+, Security
 }:
 
 let
@@ -44,7 +45,7 @@ common =
           [ autoreconfHook
             autoconf-archive
             bison flex
-            lowdown mdbook
+            (lib.getBin lowdown) mdbook
             jq
            ];
 
@@ -52,8 +53,9 @@ common =
         [ curl openssl sqlite xz bzip2 nlohmann_json
           brotli boost editline
         ]
+        ++ lib.optionals stdenv.isDarwin [ Security ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive gmock ]
+        ++ lib.optionals is24 [ libarchive gmock lowdown ]
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
@@ -124,7 +126,7 @@ common =
         ]
         ++ lib.optional (
             stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system
-        ) ''--with-system=${stdenv.hostPlatform.nix.system}''
+        ) "--with-system=${stdenv.hostPlatform.nix.system}"
            # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
         ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
 

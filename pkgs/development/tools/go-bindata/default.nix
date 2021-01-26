@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage {
   pname = "go-bindata";
@@ -15,7 +15,7 @@ buildGoPackage {
 
   excludedPackages = "testdata";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/jteeuwen/go-bindata";
     description = "A small utility which generates Go code from any file, useful for embedding binary data in a Go program";
     maintainers = with maintainers; [ cstrahan ];

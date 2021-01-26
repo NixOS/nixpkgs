@@ -60,7 +60,7 @@ let ccache = stdenv.mkDerivation rec {
           local cname="$1"
           if [ -x "${unwrappedCC}/bin/$cname" ]; then
             makeWrapper ${ccache}/bin/ccache $out/bin/$cname \
-              --run ${stdenv.lib.escapeShellArg extraConfig} \
+              --run ${lib.escapeShellArg extraConfig} \
               --add-flags ${unwrappedCC}/bin/$cname
           fi
         }
@@ -84,7 +84,7 @@ let ccache = stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = "https://ccache.dev";
     downloadPage = "https://ccache.dev/download.html";

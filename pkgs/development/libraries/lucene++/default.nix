@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, boost, gtest }:
+{ lib, stdenv, fetchurl, cmake, boost, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "lucene++";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C++ port of the popular Java Lucene search engine";
     homepage = "https://github.com/luceneplusplus/LucenePlusPlus";
-    license = with stdenv.lib.licenses; [ asl20 lgpl3Plus ];
-    platforms = stdenv.lib.platforms.linux;
+    license = with lib.licenses; [ asl20 lgpl3Plus ];
+    platforms = lib.platforms.linux;
   };
 }

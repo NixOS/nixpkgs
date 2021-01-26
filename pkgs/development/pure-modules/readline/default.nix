@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure, readline }:
+{ lib, stdenv, fetchurl, pkg-config, pure, readline }:
 
 stdenv.mkDerivation rec {
   baseName = "readline";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A trivial wrapper around GNU readline, which gives Pure scripts access to the most important facilities of the readline interface";
     homepage = "http://puredocs.bitbucket.org/pure-readline.html";
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.free;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

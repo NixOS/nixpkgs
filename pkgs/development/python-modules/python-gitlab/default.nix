@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, requests, mock, httmock, pythonOlder, pytest, responses }:
+{ lib, buildPythonPackage, fetchPypi, requests, mock, httmock, pythonOlder, pytest, responses }:
 
 buildPythonPackage rec {
   pname = "python-gitlab";

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , ninja
 , meson
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1b3bcdkk5xd5asq797cch9id8692grsjxrc1ss87vv11m1ck4rb3";
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple GObject game controller library";
     homepage = "https://gnome.pages.gitlab.gnome.org/libmanette/";
     license = licenses.lgpl21Plus;

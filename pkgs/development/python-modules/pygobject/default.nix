@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonPackage, pkg-config, glib, isPy3k, pythonAtLeast }:
+{ lib, stdenv, fetchurl, python, buildPythonPackage, pkg-config, glib, isPy3k, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "pygobject";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   outputs = [ "out" "devdoc" ];
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     ./pygobject-2.0-fix-darwin.patch
   ];
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # same site-packages: we need a pth file for both. pygtk.py would be
   # used to select a specific version, in our setup it should have no
   # effect, but we leave it in case somebody expects and calls it.
-  postInstall = stdenv.lib.optionalString (!isPy3k) ''
+  postInstall = lib.optionalString (!isPy3k) ''
     mv $out/lib/${python.libPrefix}/site-packages/{pygtk.pth,${pname}-${version}.pth}
 
     # Prevent wrapping of codegen files as these are meant to be
@@ -34,9 +34,9 @@ buildPythonPackage rec {
     chmod a-x $out/share/pygobject/*/codegen/*.py
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for GLib";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

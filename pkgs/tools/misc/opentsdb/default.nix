@@ -32,5 +32,8 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    knownVulnerabilities = [
+      "CVE-2020-35476" # https://github.com/OpenTSDB/opentsdb/issues/2051
+    ];
   };
 }

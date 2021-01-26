@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages }:
+{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pubs";
@@ -12,14 +12,14 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    argcomplete dateutil configobj feedparser bibtexparser pyyaml requests six 
+    argcomplete dateutil configobj feedparser bibtexparser pyyaml requests six
     beautifulsoup4
   ];
 
   checkInputs = with python3Packages; [ pyfakefs mock ddt ];
 
   # Disabling git tests because they expect git to be preconfigured
-  # with the user's details. See 
+  # with the user's details. See
   # https://github.com/NixOS/nixpkgs/issues/94663
   preCheck = ''
     rm tests/test_git.py

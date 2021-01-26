@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, pkg-config }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "libco-canonical";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure }:
+{ lib, stdenv, fetchurl, pkg-config, pure }:
 
 stdenv.mkDerivation rec {
   baseName = "mpfr";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "This module makes the MPFR multiprecision floats available in Pure";
     homepage = "http://puredocs.bitbucket.org/pure-mpfr.html";
-    license = stdenv.lib.licenses.lgpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

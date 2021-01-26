@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , fetchFromGitLab
 , fetchpatch
 , python3

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perlPackages, makeWrapper, gnupg }:
+{ lib, fetchurl, perlPackages, makeWrapper, gnupg }:
 
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";

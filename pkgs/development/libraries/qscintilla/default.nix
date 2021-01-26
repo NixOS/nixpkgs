@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
       --replace '$$[QT_INSTALL_DATA]'         $out/share${lib.optionalString (! withQt5) "/qt"}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Qt port of the Scintilla text editing library";
     longDescription = ''
       QScintilla is a port to Qt of Neil Hodgson's Scintilla C++ editor

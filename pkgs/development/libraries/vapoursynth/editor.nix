@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromBitbucket
+{ lib, mkDerivation, fetchFromBitbucket
 , python3, vapoursynth
 , qmake, qtbase, qtwebsockets
 }:
@@ -10,7 +10,7 @@ mkDerivation rec {
   src = fetchFromBitbucket {
     owner = "mystery_keeper";
     repo = pname;
-    rev = stdenv.lib.toLower version;
+    rev = lib.toLower version;
     sha256 = "1zlaynkkvizf128ln50yvzz3b764f5a0yryp6993s9fkwa7djb6n";
   };
 
@@ -33,7 +33,7 @@ mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform editor for VapourSynth scripts";
     homepage = "https://bitbucket.org/mystery_keeper/vapoursynth-editor";
     license = licenses.mit;

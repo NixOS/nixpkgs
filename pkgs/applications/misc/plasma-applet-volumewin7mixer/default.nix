@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./cmake.patch ];
-  postPatch = '' rm build '';
+  postPatch = "rm build ";
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [ plasma-framework kwindowsystem plasma-pa ];
 

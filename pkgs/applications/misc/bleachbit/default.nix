@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , python3Packages
 , fetchurl
 , gettext
@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
   # prevent double wrapping from wrapGApps and wrapPythonProgram
   dontWrapGApps = true;
   makeWrapperArgs = [
-    ''''${gappsWrapperArgs[@]}''
+    "\${gappsWrapperArgs[@]}"
   ];
 
   strictDeps = false;

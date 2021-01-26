@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPythonApplication, dateutil }:
+{ lib, fetchFromGitHub, buildPythonApplication, dateutil }:
 
 buildPythonApplication rec {
   pname = "pdd";

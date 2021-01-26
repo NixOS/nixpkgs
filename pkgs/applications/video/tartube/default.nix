@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , gdk-pixbuf
 , gobject-introspection

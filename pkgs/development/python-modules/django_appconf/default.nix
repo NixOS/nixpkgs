@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, six, django, fetchpatch }:
+{ lib, buildPythonPackage, fetchFromGitHub, six, django, fetchpatch }:
 buildPythonPackage rec {
   pname = "django-appconf";
   version = "1.0.3";

@@ -1,4 +1,4 @@
-{ stdenv, cacert, git, cargo, python3 }:
+{ lib, stdenv, cacert, git, cargo, python3 }:
 let cargo-vendor-normalise = stdenv.mkDerivation {
   name = "cargo-vendor-normalise";
   src = ./cargo-vendor-normalise.py;
@@ -80,7 +80,7 @@ in stdenv.mkDerivation ({
 
   inherit (hash_) outputHashAlgo outputHash;
 
-  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 } // (builtins.removeAttrs args [
   "name" "sha256" "cargoUpdateHook"
 ]))

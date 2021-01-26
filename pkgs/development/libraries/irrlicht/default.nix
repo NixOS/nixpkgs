@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, libGLU, libGL, unzip, libXrandr, libX11, libXxf86vm }:
+{ lib, stdenv, fetchzip, libGLU, libGL, unzip, libXrandr, libX11, libXxf86vm }:
 
 let
   common = import ./common.nix { inherit fetchzip; };
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://irrlicht.sourceforge.net/";
-    license = stdenv.lib.licenses.zlib;
+    license = lib.licenses.zlib;
     description = "Open source high performance realtime 3D engine written in C++";
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

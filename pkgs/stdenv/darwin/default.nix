@@ -1,7 +1,5 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
-# The version of darwin.apple_sdk used for sources provided by apple.
-, appleSdkVersion ? "10.12"
 # Minimum required macOS version, used both for compatibility as well as reproducability.
 , macosVersionMin ? "10.12"
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
@@ -22,7 +20,7 @@
 assert crossSystem == localSystem;
 
 let
-  inherit (localSystem) system platform;
+  inherit (localSystem) system;
 
   bootstrapClangVersion = "7.1.0";
 
@@ -82,7 +80,7 @@ in rec {
 
       mkCC = overrides: import ../../build-support/cc-wrapper (
         let args = {
-          inherit shell;
+          inherit lib shell;
           inherit (last) stdenvNoCC;
 
           nativeTools  = false;
@@ -150,7 +148,7 @@ in rec {
         __extraImpureHostDeps = commonImpureHostDeps;
 
         extraAttrs = {
-          inherit macosVersionMin appleSdkVersion platform;
+          inherit macosVersionMin;
         };
         overrides  = self: super: (overrides self super) // {
           inherit ccNoLibcxx;
@@ -219,6 +217,7 @@ in rec {
 
         binutils = lib.makeOverridable (import ../../build-support/bintools-wrapper) {
           shell = "${bootstrapTools}/bin/bash";
+          inherit lib;
           inherit (self) stdenvNoCC;
 
           nativeTools  = false;
@@ -524,7 +523,7 @@ in rec {
     extraAttrs = {
       libc = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
-      inherit macosVersionMin appleSdkVersion platform bootstrapTools;
+      inherit macosVersionMin bootstrapTools;
     };
 
     allowedRequisites = (with pkgs; [

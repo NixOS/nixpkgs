@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fixDarwinDylibNames, compiler ? if stdenv.cc.isClang then "clang" else null, stdver ? null }:
+{ lib, stdenv, fetchFromGitHub, fixDarwinDylibNames, compiler ? if stdenv.cc.isClang then "clang" else null, stdver ? null }:
 
-with stdenv.lib; stdenv.mkDerivation rec {
+with lib; stdenv.mkDerivation rec {
   pname = "tbb";
   version = "2019_U9";
 
@@ -16,7 +16,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
   makeFlags = optional (compiler != null) "compiler=${compiler}"
     ++ optional (stdver != null) "stdver=${stdver}";
 
-  patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./glibc-struct-mallinfo.patch;
+  patches = lib.optional stdenv.hostPlatform.isMusl ./glibc-struct-mallinfo.patch;
 
   installPhase = ''
     runHook preInstall

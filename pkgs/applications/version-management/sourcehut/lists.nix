@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, buildPythonPackage
+{ lib, fetchgit, buildPythonPackage
 , python
 , srht, asyncpg, aiosmtpd, pygit2, emailthreads }:
 

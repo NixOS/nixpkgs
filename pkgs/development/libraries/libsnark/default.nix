@@ -5,7 +5,7 @@ let
   inherit (stdenv) lib;
 in stdenv.mkDerivation rec {
   name = "libsnark-pre${version}";
-  version = stdenv.lib.substring 0 8 rev;
+  version = lib.substring 0 8 rev;
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ openssl boost gmp ] ++ lib.optional stdenv.hostPlatform.isLinux procps;
@@ -20,10 +20,10 @@ in stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ library for zkSNARKs";
     homepage = "https://github.com/scipr-lab/libsnark";
     license = licenses.mit;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

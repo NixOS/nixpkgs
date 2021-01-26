@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/nickjj/rolespec";
     description = "A test library for testing Ansible roles";
     longDescription = ''

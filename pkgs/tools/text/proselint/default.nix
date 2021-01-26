@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPythonApplication, click, future, six }:
+{ lib, fetchurl, buildPythonApplication, click, future, six }:
 
 buildPythonApplication rec {
   pname = "proselint";

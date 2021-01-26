@@ -1,4 +1,4 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "unifdef-2.6";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     export DESTDIR=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://dotat.at/prog/unifdef/";
     description = "Selectively remove C preprocessor conditionals";
     license = licenses.bsd2;

@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , mkDerivation
 , fetchFromGitHub
 , cmake
@@ -7,21 +7,28 @@
 , qtx11extras
 , libxcb
 , libXdmcp
+, qtbase
 }:
 
 mkDerivation rec {
   pname = "fcitx5-qt";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-qt";
     rev = version;
-    sha256 = "BVOumk2xj3vmwmm4KwiktQhWyTuUA2OFwYXNR6HgwyM=";
+    sha256 = "sha256-QylvjhjiIujYGKFtL4bKVXpobkN5t6Q2MGf16dsL24A=";
   };
+
+  preConfigure = ''
+    substituteInPlace qt5/platforminputcontext/CMakeLists.txt \
+      --replace \$"{CMAKE_INSTALL_QT5PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
+  '';
 
   cmakeFlags = [
     "-DENABLE_QT4=0"
+    "-DENABLE_QT6=0"
   ];
 
   nativeBuildInputs = [

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonApplication, fetchPypi, isPy27, isPy36, dataclasses, libX11, libXinerama, libXrandr }:
+{ lib, buildPythonApplication, fetchPypi, isPy27, isPy36, dataclasses, libX11, libXinerama, libXrandr }:
 
 buildPythonApplication rec {
   pname = "screeninfo";
@@ -23,7 +23,7 @@ buildPythonApplication rec {
       --replace "load_library(\"Xrandr\")" "ctypes.cdll.LoadLibrary(\"${libXrandr}/lib/libXrandr.so\")"
   '';
 
-  propagatedBuildInputs = stdenv.lib.optional isPy36 dataclasses;
+  propagatedBuildInputs = lib.optional isPy36 dataclasses;
 
   buildInputs = [ libX11 libXinerama libXrandr];
 

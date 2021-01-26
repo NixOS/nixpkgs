@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchPypi,
   mistune, docutils } :
 buildPythonPackage rec {
   pname = "m2r";

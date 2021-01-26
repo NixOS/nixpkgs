@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
       $makeCmd INSTALL_DIR=$out install
-	'';
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ancillary tools for the D programming language compiler";
     homepage = "https://github.com/dlang/tools";
     license = lib.licenses.boost;
     maintainers = with maintainers; [ ThomasMader ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gmock, boost, pkg-config, protobuf, icu }:
+{ lib, stdenv, fetchFromGitHub, cmake, gmock, boost, pkg-config, protobuf, icu }:
 
 stdenv.mkDerivation rec {
   pname = "phonenumber";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   checkPhase = "./libphonenumber_test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google's i18n library for parsing and using phone numbers";
     license = licenses.asl20;
     maintainers = with maintainers; [ illegalprime ];

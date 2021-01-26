@@ -1,7 +1,7 @@
 { mkDerivation, fetchgit, ansi-terminal, ansi-wl-pprint, array, base, binary
 , bytestring, cmark, containers, directory, filepath, free, HUnit
 , indents, json, mtl, optparse-applicative, parsec, process
-, QuickCheck, quickcheck-io, split, stdenv, tasty, tasty-golden
+, QuickCheck, quickcheck-io, split, lib, tasty, tasty-golden
 , tasty-hunit, tasty-quickcheck, text
 }:
 mkDerivation {
@@ -36,5 +36,5 @@ mkDerivation {
   doHaddock = false;
   homepage = "https://elm-lang.org";
   description = "A source code formatter for Elm";
-  license = stdenv.lib.licenses.bsd3;
+  license = lib.licenses.bsd3;
 }

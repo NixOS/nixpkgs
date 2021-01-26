@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn }:
+{ lib, stdenv, fetchsvn }:
 
 stdenv.mkDerivation rec {
   pname = "acme";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       --replace "= gcc" "?= gcc"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multi-platform cross assembler for 6502/6510/65816 CPUs";
     homepage = "https://sourceforge.net/projects/acme-crossass/";
     license = licenses.gpl2Plus;

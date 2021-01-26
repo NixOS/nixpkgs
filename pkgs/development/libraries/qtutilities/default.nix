@@ -1,4 +1,12 @@
-{ stdenv, fetchFromGitHub, cpp-utilities, qttools, qtbase, cmake, pkg-config }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, cpp-utilities
+, qttools
+, qtbase
+, cmake
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "qtutilities";
@@ -14,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase cpp-utilities ];
   nativeBuildInputs = [ cmake qttools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Martchus/qtutilities";
     description = "Common C++ classes and routines used by @Martchus' applications featuring argument parser, IO and conversion utilities";
     license = licenses.gpl2;

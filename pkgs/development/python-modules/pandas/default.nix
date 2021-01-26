@@ -27,11 +27,7 @@
 , libcxx ? null
 }:
 
-let
-  inherit (stdenv.lib) optional optionals optionalString;
-  inherit (stdenv) isDarwin;
-
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pandas";
   version = "1.1.5";
 
@@ -41,7 +37,7 @@ in buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ cython ];
-  buildInputs = optional isDarwin libcxx;
+  buildInputs = lib.optional stdenv.isDarwin libcxx;
   propagatedBuildInputs = [
     beautifulsoup4
     bottleneck
@@ -62,11 +58,11 @@ in buildPythonPackage rec {
 
   # doesn't work with -Werror,-Wunused-command-line-argument
   # https://github.com/NixOS/nixpkgs/issues/39687
-  hardeningDisable = optional stdenv.cc.isClang "strictoverflow";
+  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
-  postPatch = optionalString isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     cpp_sdk="${libcxx}/include/c++/v1";
     echo "Adding $cpp_sdk to the setup.py common_include variable"
     substituteInPlace setup.py \
@@ -76,7 +72,7 @@ in buildPythonPackage rec {
 
   # Parallel Cythonization is broken in Python 3.8 on Darwin. Fixed in the next
   # release. https://github.com/pandas-dev/pandas/pull/30862
-  setupPyBuildFlags = optionals (!(isPy38 && isDarwin)) [
+  setupPyBuildFlags = lib.optionals (!(isPy38 && stdenv.isDarwin)) [
     # As suggested by
     # https://pandas.pydata.org/pandas-docs/stable/development/contributing.html#creating-a-python-environment
     "--parallel=$NIX_BUILD_CORES"
@@ -114,7 +110,7 @@ in buildPythonPackage rec {
     "test_constructor_with_embedded_frames"
     # tries to import compiled C extension locally
     "test_missing_required_dependency"
-  ] ++ optionals isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"
   ];
@@ -128,7 +124,7 @@ in buildPythonPackage rec {
   ''
   # TODO: Get locale and clipboard support working on darwin.
   #       Until then we disable the tests.
-  + optionalString isDarwin ''
+  + lib.optionalString stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     echo "#!${runtimeShell}" > pbcopy
     echo "#!${runtimeShell}" > pbpaste

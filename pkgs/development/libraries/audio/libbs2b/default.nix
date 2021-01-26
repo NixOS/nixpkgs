@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, libsndfile }:
+{ lib, stdenv, fetchurl, pkg-config, libsndfile }:
 
 stdenv.mkDerivation rec {
   pname = "libbs2b";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://bs2b.sourceforge.net/";
     description = "Bauer stereophonic-to-binaural DSP library";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

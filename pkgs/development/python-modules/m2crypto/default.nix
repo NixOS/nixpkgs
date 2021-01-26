@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchpatch
 , buildPythonPackage
 , fetchPypi

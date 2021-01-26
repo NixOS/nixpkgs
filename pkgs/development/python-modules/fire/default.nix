@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, six, hypothesis, mock
+{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, six, hypothesis, mock
 , python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
 
 buildPythonPackage rec {
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0s5r6l39ck2scks54hmwwdf4lcihqqnqzjfx9lz2b67vxkajpwmc";
   };
 
-  propagatedBuildInputs = [ six termcolor ] ++ stdenv.lib.optional isPy27 enum34;
+  propagatedBuildInputs = [ six termcolor ] ++ lib.optional isPy27 enum34;
 
   checkInputs = [ hypothesis mock python-Levenshtein pytest ];
 

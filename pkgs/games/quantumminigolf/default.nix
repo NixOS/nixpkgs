@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   '';
   meta = {
     inherit (s) version;
-    description = ''Quantum mechanics-based minigolf-like game'';
+    description = "Quantum mechanics-based minigolf-like game";
     license = lib.licenses.gpl2 ;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

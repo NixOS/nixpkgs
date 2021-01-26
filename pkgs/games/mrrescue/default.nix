@@ -13,13 +13,13 @@ let
     name = "mrrescue";
     exec = pname;
     icon = icon;
-    comment = "Arcade-style fire fighting game"; 
+    comment = "Arcade-style fire fighting game";
     desktopName = "Mr. Rescue";
     genericName = "mrrescue";
     categories = "Game;";
   };
 
-in 
+in
 
 stdenv.mkDerivation {
   name = "${pname}-${version}";

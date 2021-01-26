@@ -364,7 +364,7 @@ let
       count = mkOption {
         type = types.int;
         default = 1;
-        description = ''Count of subordinate user ids'';
+        description = "Count of subordinate user ids";
       };
     };
   };
@@ -381,7 +381,7 @@ let
       count = mkOption {
         type = types.int;
         default = 1;
-        description = ''Count of subordinate group ids'';
+        description = "Count of subordinate group ids";
       };
     };
   };

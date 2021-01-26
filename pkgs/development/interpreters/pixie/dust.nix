@@ -1,4 +1,4 @@
-{ stdenv, pixie, fetchFromGitHub }:
+{ lib, stdenv, pixie, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "dust-0-91";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Provides tooling around pixie, e.g. a nicer repl, running tests and fetching dependencies";
     homepage = src.meta.homepage;
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

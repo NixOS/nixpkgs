@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
+{ lib, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
 xercesc, ode, eigen, qtbase, qttools, qtwebengine, qtxmlpatterns, wrapQtAppsHook,
 opencascade-occt, gts, hdf5, vtk, medfile, zlib, python3Packages, swig,
 gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkg-config, mpi ? null }:

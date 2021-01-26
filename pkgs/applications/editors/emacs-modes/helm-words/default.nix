@@ -1,4 +1,4 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation {
   name = "helm-words-20190917";

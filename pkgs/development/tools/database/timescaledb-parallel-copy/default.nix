@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "timescaledb-parallel-copy";
@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "03siay3hv1sgmmp7w4f9b0xb8c6bnbx0v4wy5grjl5k04zhnj76b";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bulk, parallel insert of CSV records into PostgreSQL";
     homepage = "https://github.com/timescale/timescaledb-parallel-copy";
     license = licenses.asl20;

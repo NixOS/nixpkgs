@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, perl }:
+{ lib, stdenv, fetchurl, gfortran, perl }:
 
 let
   version = "4.3.4";
@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
   doCheck = true;
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library of exchange-correlation functionals for density-functional theory";
     homepage = "https://octopus-code.org/wiki/Libxc";
     license = licenses.lgpl3;

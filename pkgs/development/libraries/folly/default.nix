@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , boost
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (rec {
   pname = "folly";
-  version = "2021.01.18.00";
+  version = "2021.01.18.01";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-jTLHaaD/Rkfo96IMV4XtvmPzo34P26e17IabFU/5o6Y=";
+    sha256 = "sha256-Q70zD+8maRQp+f1fqPyhJEpjVYt3eORD85fIk7Za9lw=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open-source C++ library developed and used at Facebook";
     homepage = "https://github.com/facebook/folly";
     license = licenses.asl20;
@@ -60,6 +60,6 @@ stdenv.mkDerivation (rec {
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ abbradar pierreis ];
   };
-} // stdenv.lib.optionalAttrs stdenv.isDarwin {
+} // lib.optionalAttrs stdenv.isDarwin {
   LDFLAGS = "-ljemalloc";
 })

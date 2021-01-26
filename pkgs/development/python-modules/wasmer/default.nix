@@ -8,19 +8,19 @@
 }:
 let
   pname = "wasmer";
-  version = "1.0.0-beta1";
+  version = "1.0.0";
 
   wheel = rustPlatform.buildRustPackage rec {
-    name = "${pname}-${version}-py${python.version}";
+    inherit pname version;
 
     src = fetchFromGitHub {
       owner = "wasmerio";
       repo = "wasmer-python";
       rev = version;
-      sha256 = "0302lcfjlw7nz18nf86z6swhhpp1qnpwcsm2fj4avl22rsv0h78j";
+      hash = "sha256-I1GfjLaPYMIHKh2m/5IQepUsJNiVUEJg49wyuuzUYtY=";
     };
 
-    cargoSha256 = "0d83dniijjq8rc4fcwj6ja5x4hxh187afnqfd8c9fzb8nx909a0v";
+    cargoHash = "sha256-txOOia1C4W+nsXuXp4EytEn82CFfSmiOYwRLC4WPImc=";
 
     nativeBuildInputs = [ maturin python ];
 
@@ -50,8 +50,6 @@ let
 in
 buildPythonPackage rec {
   inherit pname version;
-  # we can only support one python version because the cargo hash changes with the python version
-  disabled = !isPy38;
 
   format = "wheel";
   src = wheel;

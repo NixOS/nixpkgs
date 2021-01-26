@@ -1,6 +1,6 @@
 { mkDerivation, callPackage, buildPackages
 , async, base, bytestring, containers, fetchFromGitLab, mtl
-, parallel-io, parsec, lib, stdenv, stm, transformers
+, parallel-io, parsec, lib, stm, transformers
 }:
 let
   z3 = callPackage ./z3.nix { gomp = null; z3 = buildPackages.z3; };

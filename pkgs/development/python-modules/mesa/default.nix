@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27
 , cookiecutter, networkx , pandas, tornado, tqdm
 , pytest }:
 

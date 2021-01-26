@@ -159,7 +159,7 @@ let
           export GEM_HOME="$out/${passthru.gemPath}"
         '';
 
-        installFlags = stdenv.lib.optional docSupport "install-doc";
+        installFlags = lib.optional docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
           # Remove unnecessary groff reference from runtime closure, since it's big
@@ -208,7 +208,7 @@ let
 
         disallowedRequisites = op (!jitSupport) stdenv.cc.cc;
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "The Ruby language";
           homepage    = "http://www.ruby-lang.org/en/";
           license     = licenses.ruby;

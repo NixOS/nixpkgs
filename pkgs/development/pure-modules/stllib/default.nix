@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure }:
+{ lib, stdenv, fetchurl, pkg-config, pure }:
 
 stdenv.mkDerivation rec {
   baseName = "stllib";
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An “umbrella” package that contains a pair of Pure addons, pure-stlvec and pure-stlmap";
     homepage = "http://puredocs.bitbucket.org/pure-stllib.html";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

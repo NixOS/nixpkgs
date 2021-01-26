@@ -1,4 +1,4 @@
-{ lib, stdenv, python3, fetchFromGitHub, wrapQtAppsHook, buildEnv, aspellDicts
+{ lib, python3, fetchFromGitHub, wrapQtAppsHook, buildEnv, aspellDicts
 # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
 # available.
 , enchantAspellDicts ? with aspellDicts; [ en en-computers en-science ]

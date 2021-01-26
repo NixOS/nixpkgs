@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, bash, autoconf, automake, libtool, pkg-config, libcangjie
+{ lib, fetchurl, bash, autoconf, automake, libtool, pkg-config, libcangjie
 , sqlite, buildPythonPackage, cython
 }:
 

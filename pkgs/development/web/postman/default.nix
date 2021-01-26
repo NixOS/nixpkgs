@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "postman";
-  version = "7.36.0";
+  version = "7.36.1";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "1wdbwlli9lzxxcwbc94fybfq6ipzvsv0waqcr1mjqzlfjqaqgrsb";
+    sha256 = "sha256-6brThKTAQI3cu3SSqvEIT1nwlQ/jPTP+d/Q/m/Ez5nQ=";
     name = "${pname}.tar.gz";
   };
 
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" _Postman
     for file in $(find . -type f \( -name \*.node -o -name _Postman -o -name \*.so\* \) ); do
       ORIGIN=$(patchelf --print-rpath $file); \
-      patchelf --set-rpath "${stdenv.lib.makeLibraryPath buildInputs}:$ORIGIN" $file
+      patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:$ORIGIN" $file
     done
     popd
   '';

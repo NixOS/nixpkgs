@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, emacs, python }:
+{ lib, fetchurl, stdenv, emacs, python }:
 
 stdenv.mkDerivation rec {
   name = "cedet-1.1";

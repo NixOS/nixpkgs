@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, pytest, mock }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "cloudpickle";

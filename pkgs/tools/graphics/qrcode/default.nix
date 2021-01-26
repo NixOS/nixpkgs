@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = ''A small QR-code tool'';
+    description = "A small QR-code tool";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = with platforms; linux;

@@ -1,7 +1,7 @@
 { bctoolbox
 , cmake
 , fetchFromGitLab
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bctoolbox ];
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Real-Time Transport Protocol (RFC3550) stack";
     homepage = "https://linphone.org/technical-corner/ortp";
     license = licenses.gpl3Plus;

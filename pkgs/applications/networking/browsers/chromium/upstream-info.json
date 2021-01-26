@@ -1,26 +1,26 @@
 {
   "stable": {
-    "version": "87.0.4280.141",
-    "sha256": "0x9k809m36pfirnw2vnr9pk93nxdbgrvna0xf1rs3q91zkbr2x8l",
-    "sha256bin64": "0wq3yi0qyxzcid390w5rh4xjq92fjajvlifjl70g6sqnbk6vgvdp",
+    "version": "88.0.4324.96",
+    "sha256": "17y7x50cx2d3bbz0hna25j8pyqsk0914266mpvrpk5am52xwb5c9",
+    "sha256bin64": "09210781s9y49l6qkbd1v8w52741rmhxz6cc6qsldnqpm5mwlgsc",
     "deps": {
       "gn": {
-        "version": "2020-09-09",
+        "version": "2020-11-05",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "e002e68a48d1c82648eadde2f6aafa20d08c36f2",
-        "sha256": "0x4c7amxwzxs39grqs3dnnz0531mpf1p75niq7zhinyfqm86i4dk"
+        "rev": "53d92014bf94c3893886470a1c7c1289f8818db0",
+        "sha256": "1xcm07qjk6m2czi150fiqqxql067i832adck6zxrishm70c9jbr9"
       }
     },
     "chromedriver": {
-      "version": "87.0.4280.88",
-      "sha256_linux": "1insh1imi25sj4hdkbll5rzwnag8wvfxv4ckshpq8akl8r13p6lj",
-      "sha256_darwin": "048hsqp6575r980m769lzznvxypmfcwn89f1d3ik751ymzmb5r78"
+      "version": "88.0.4324.27",
+      "sha256_linux": "1vx1llg0x6903ggqa345iswd63y9c24184zv784q01zqxqwn0g8p",
+      "sha256_darwin": "0x1s6crfwkcn86w6p8g4vmx5raqlr41pjr4h2dbwppgrc0nx1p14"
     }
   },
   "beta": {
-    "version": "88.0.4324.87",
-    "sha256": "0pfrx8b2rmrxx5dfv4kc1ggrgi7kj7gbxrzqzd7rsvjpasyidbxg",
-    "sha256bin64": "07xl02zg5pi89l6dqrbqx2ibl8pm9v6njqfl8p4l2hwsb881hx8g",
+    "version": "88.0.4324.96",
+    "sha256": "17y7x50cx2d3bbz0hna25j8pyqsk0914266mpvrpk5am52xwb5c9",
+    "sha256bin64": "1v7bpidqs8y3k7kzfp52q8xsdc515mnf9arfw9pp5bsp79fl3rik",
     "deps": {
       "gn": {
         "version": "2020-11-05",
@@ -31,15 +31,15 @@
     }
   },
   "dev": {
-    "version": "89.0.4385.0",
-    "sha256": "0cwfwkaidxi86n80kcn3lxrwz90zp6ra9dib1nd4xnhpgl7vjjjf",
-    "sha256bin64": "1hvrdvmlqc95qb9gn7iihal4h1kzf6jqrhk9xvv45chsvwl79pmd",
+    "version": "89.0.4389.9",
+    "sha256": "12jiy5p1cbrs0gc3kd86walcnh038lzs5gnb9vif45f7kxn3c9pm",
+    "sha256bin64": "1wmidvf5gfm1xkpaj07gsvyk1r8b6jbcv46w5vclydlc1r6wh81s",
     "deps": {
       "gn": {
-        "version": "2020-12-22",
+        "version": "2021-01-07",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "0d67e272bdb8145f87d238bc0b2cb8bf80ccec90",
-        "sha256": "07mrfl9hbjldbgidwwhr482a0s0ppqzwa5j7v5nbqxj18j55iril"
+        "rev": "595e3be7c8381d4eeefce62a63ec12bae9ce5140",
+        "sha256": "08y7cjlgjdbzja5ij31wxc9i191845m01v1hc7y176svk9y0hj1d"
       }
     }
   },

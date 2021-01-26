@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, execnet, pytest
+{ lib, fetchPypi, buildPythonPackage, execnet, pytest
 , setuptools_scm, pytest-forked, filelock, psutil, six, isPy3k }:
 
 buildPythonPackage rec {

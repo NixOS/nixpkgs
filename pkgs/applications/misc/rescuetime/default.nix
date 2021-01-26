@@ -1,16 +1,16 @@
 { stdenv, lib, fetchurl, dpkg, patchelf, qt5, libXtst, libXext, libX11, mkDerivation, makeWrapper, libXScrnSaver, writeScript, common-updater-scripts, curl, pup }:
 
 let
-  version = "2.16.4.2";
+  version = "2.16.5.1";
   src =
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_${version}_i386.deb";
-      sha256 = "0zyal9n3rfj8i13v1q25inq6qyil7897483cdhqvwpb8wskrij4c";
+      sha256 = "1xrvyy0higc1fbc8ascpaszvg2bl6x0a35bzmdq6dkay48hnrd8b";
     } else fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_${version}_amd64.deb";
-      sha256 = "03bmnkxhip1wilnfqs8akmy1hppahxrmnm8gasnmw5s922vn06cv";
+      sha256 = "09ng0yal66d533vzfv27k9l2va03rqbqmsni43qi3hgx7w9wx5ii";
     };
 in mkDerivation rec {
   # https://www.rescuetime.com/updates/linux_release_notes.html
@@ -38,10 +38,10 @@ in mkDerivation rec {
   passthru.updateScript = writeScript "${pname}-updater" ''
     #!${stdenv.shell}
     set -eu -o pipefail
-    PATH=${stdenv.lib.makeBinPath [curl pup common-updater-scripts]}:$PATH
+    PATH=${lib.makeBinPath [curl pup common-updater-scripts]}:$PATH
     latestVersion="$(curl -sS https://www.rescuetime.com/release-notes/linux | pup '.release:first-of-type h2 strong text{}' | tr -d '\n')"
 
-    for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
+    for platform in ${lib.concatStringsSep " " meta.platforms}; do
       # The script will not perform an update when the version attribute is up to date from previous platform run
       # We need to clear it before each run
       update-source-version ${pname} 0 $(yes 0 | head -64 | tr -d "\n") --system=$platform

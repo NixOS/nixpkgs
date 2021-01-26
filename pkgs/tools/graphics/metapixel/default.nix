@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpng, libjpeg, giflib, perl, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, libpng, libjpeg, giflib, perl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "metapixel";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp metapixel-sizesort $out/bin/metapixel-sizesort
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/schani/metapixel";
     description = "Tool for generating photomosaics";
     license = licenses.gpl2Only;

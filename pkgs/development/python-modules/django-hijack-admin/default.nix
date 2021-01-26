@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, python,
+{ lib, buildPythonPackage, fetchFromGitHub, python,
   django_hijack, django_nose }:
 buildPythonPackage rec {
   pname = "django-hijack-admin";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "fiche";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line pastebin for sharing terminal output";
     longDescription = ''
       Fiche is a command line pastebin server for sharing terminal output.

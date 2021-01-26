@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "duktape";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An embeddable Javascript engine, with a focus on portability and compact footprint";
     homepage = "https://duktape.org/";
     downloadPage = "https://duktape.org/download.html";

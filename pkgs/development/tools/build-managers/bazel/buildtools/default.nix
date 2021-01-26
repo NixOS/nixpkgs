@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "bazel-buildtools";
@@ -19,7 +19,7 @@ buildGoPackage rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.buildVersion=${version} -X main.buildScmRevision=${src.rev}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps";
     homepage = "https://github.com/bazelbuild/buildtools";
     license = licenses.asl20;

@@ -1,4 +1,4 @@
-{buildPerlPackage, lib, stdenv, fetchurl, DBDmysql}:
+{buildPerlPackage, lib, fetchurl, DBDmysql}:
 
 buildPerlPackage {
   pname = "maatkit";

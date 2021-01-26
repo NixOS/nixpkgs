@@ -1,4 +1,4 @@
-{ lib, stdenv, git, setuptools, setuptools_scm, fetchFromGitHub, requests, boto3, buildPythonPackage, responses }:
+{ lib, git, setuptools, setuptools_scm, fetchFromGitHub, requests, boto3, buildPythonPackage, responses }:
 
 buildPythonPackage rec {
     pname = "sapi-python-client";

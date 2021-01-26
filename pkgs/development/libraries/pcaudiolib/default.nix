@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Provides a C API to different audio devices";
     homepage = "https://github.com/espeak-ng/pcaudiolib";
     license = licenses.gpl3;

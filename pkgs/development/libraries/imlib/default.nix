@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, libX11, libXext, xorgproto, libjpeg, libungif, libtiff, libpng}:
+{lib, stdenv, fetchurl, fetchpatch, libX11, libXext, xorgproto, libjpeg, libungif, libtiff, libpng}:
 
 stdenv.mkDerivation {
   name = "imlib-1.9.15";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   buildInputs = [libjpeg libXext libX11 xorgproto libtiff libungif libpng];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An image loading and rendering library for X11";
     platforms = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];

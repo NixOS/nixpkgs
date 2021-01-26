@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "tecla-1.6.3";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     description = "Command-line editing library";
     license = "as-is";
 
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.peti ];
   };
 }

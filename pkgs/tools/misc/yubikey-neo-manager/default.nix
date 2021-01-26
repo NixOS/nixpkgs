@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python27Packages
+{ lib, fetchurl, python27Packages
 , libykneomgr, yubikey-personalization, libu2f-host }:
 
 python27Packages.buildPythonPackage rec {

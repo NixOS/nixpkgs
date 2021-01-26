@@ -3,7 +3,7 @@
 }:
 
 let
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     cairo
     stdenv.cc.cc
     gdk-pixbuf

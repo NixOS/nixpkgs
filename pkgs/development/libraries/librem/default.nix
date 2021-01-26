@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, openssl, libre}:
+{lib, stdenv, fetchurl, zlib, openssl, libre}:
 stdenv.mkDerivation rec {
   version = "0.6.0";
   pname = "librem";
@@ -10,17 +10,17 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "LIBRE_MK=${libre}/share/re/re.mk"
     "LIBRE_INC=${libre}/include/re"
-    ''PREFIX=$(out)''
+    "PREFIX=$(out)"
   ]
-  ++ stdenv.lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.lib.getDev stdenv.cc.cc}"
-  ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.lib.getDev stdenv.cc.libc}"
+  ++ lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${lib.getDev stdenv.cc.cc}"
+  ++ lib.optional (stdenv.cc.libc != null) "SYSROOT=${lib.getDev stdenv.cc.libc}"
   ;
   meta = {
     description = " A library for real-time audio and video processing";
     homepage = "http://www.creytiv.com/rem.html";
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    license = stdenv.lib.licenses.bsd3;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [raskin];
+    license = lib.licenses.bsd3;
     downloadPage = "http://www.creytiv.com/pub/";
     updateWalker = true;
     downloadURLRegexp = "/rem-.*[.]tar[.].*";

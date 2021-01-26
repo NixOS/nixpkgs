@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "unicorn";
-  version = stdenv.lib.getVersion unicorn-emu;
+  version = lib.getVersion unicorn-emu;
 
   src = unicorn-emu.src;
   sourceRoot = "source/bindings/python";

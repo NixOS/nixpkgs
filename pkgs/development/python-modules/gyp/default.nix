@@ -14,7 +14,7 @@ buildPythonPackage {
     sha256 = "0r9phq5yrmj968vdvy9vivli35wn1j9a6iwshp69wl7q4p0x8q2b";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     ./no-darwin-cflags.patch
     ./no-xcode.patch
   ];

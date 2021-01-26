@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0m9vi01b1km0cpknflyzsjnknbava0s1n6393b2bpjwyvb6j5613";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Directory event monitoring daemon";
     homepage = "https://www.gnu.org.ua/software/direvent/";
     license = licenses.gpl3Plus;

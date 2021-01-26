@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
+{ lib, buildGoPackage, fetchFromGitHub, fetchpatch }:
 
 let
   generic = { patches ? [] }:

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python2, makeWrapper }:
+{ lib, fetchFromGitHub, python2, makeWrapper }:
 
 python2.pkgs.buildPythonApplication rec {
   pname = "sickrage";
@@ -7,7 +7,7 @@ python2.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SickRage";
     repo = "SickRage";
-    rev = version; 
+    rev = version;
     sha256 = "0lzklpsxqrb73inbv8almnhbnb681pmi44gzc8i4sjwmdksiiif9";
   };
 

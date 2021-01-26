@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, mkDerivation, cmake, protobuf
+{ lib, fetchFromGitHub, mkDerivation, cmake, protobuf
 , qtbase, qtmultimedia, qttools, qtwebsockets, wrapQtAppsHook
 }:
 

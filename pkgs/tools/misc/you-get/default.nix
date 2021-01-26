@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonApplication, fetchPypi }:
+{ lib, buildPythonApplication, fetchPypi }:
 
 buildPythonApplication rec {
   pname = "you-get";

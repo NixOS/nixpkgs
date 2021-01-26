@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ lib, stdenv, fetchurl, fetchFromGitHub
 , autoreconfHook
 , glib
 , db
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook glib db pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for intelligent sentence-based Chinese pinyin input method";
     homepage    = "https://sourceforge.net/projects/libpinyin";
     license     = licenses.gpl2;

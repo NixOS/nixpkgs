@@ -3,7 +3,7 @@ libvterm}:
 
 stdenv.mkDerivation rec {
   name = "vwm-2.1.3";
- 
+
   src = fetchurl {
     url = "mirror://sourceforge/vwm/${name}.tar.gz";
     sha256 = "1r5wiqyfqwnyx7dfihixlnavbvg8rni36i4gq169aisjcg7laxaf";
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p $out/bin $out/include
   '';
- 
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses glib libviper libpseudo gpm libvterm ];
- 
+
   meta = with lib; {
     homepage = "http://vwm.sourceforge.net/";
     description = "Dynamic window manager for the console";

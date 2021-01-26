@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libiscsi";
@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  # This problem is gone on libiscsi master.
+  NIX_CFLAGS_COMPILE = if stdenv.hostPlatform.is32bit then "-Wno-error=sign-compare" else null;
+
+  meta = with lib; {
     description = "iscsi client library and utilities";
     homepage = "https://github.com/sahlberg/libiscsi";
     license = licenses.lgpl2;

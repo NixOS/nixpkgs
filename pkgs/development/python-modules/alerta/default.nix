@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , six, click, requests, requests-hawk, pytz, tabulate, pythonOlder
 }:
 

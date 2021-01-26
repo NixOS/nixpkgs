@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , libtool, pkg-config, automake, autoconf, intltool
 , glib, gobject-introspection, gtk2, gtk-doc
 , clutter, clutter-gtk
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     sed -i 's/GLfloat/gfloat/g' mx/mx-texture-frame.c
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.clutter-project.org/";
     description = "A Clutter-based toolkit";
     longDescription =

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, python2Packages, picocom
+{ lib, fetchurl, python2Packages, picocom
 , avrdude, arduino-core }:
 
 python2Packages.buildPythonApplication rec {

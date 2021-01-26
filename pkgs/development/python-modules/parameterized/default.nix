@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, nose, mock, glibcLocales, isPy3k, isPy38 }:
+{ lib, fetchPypi, buildPythonPackage, nose, mock, glibcLocales, isPy3k, isPy38 }:
 
 buildPythonPackage rec {
   pname = "parameterized";

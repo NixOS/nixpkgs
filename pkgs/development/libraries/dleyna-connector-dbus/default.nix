@@ -1,4 +1,4 @@
-{ stdenv, autoreconfHook, pkg-config, fetchFromGitHub, dbus, dleyna-core, glib }:
+{ lib, stdenv, autoreconfHook, pkg-config, fetchFromGitHub, dbus, dleyna-core, glib }:
 
 stdenv.mkDerivation rec {
   pname = "dleyna-connector-dbus";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ dbus dleyna-core glib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A D-Bus API for the dLeyna services";
     homepage = "https://01.org/dleyna";
     maintainers = [ maintainers.jtojnar ];

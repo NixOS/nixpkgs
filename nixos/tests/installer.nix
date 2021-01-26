@@ -326,8 +326,8 @@ let
           ]
           ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
           ++ optionals (bootLoader == "grub" && grubVersion == 2) [
-            pkgs.grub2
-            pkgs.grub2_efi
+            (pkgs.grub2.override { zfsSupport = true; })
+            (pkgs.grub2_efi.override { zfsSupport = true; })
           ];
 
           nix.binaryCaches = mkForce [ ];

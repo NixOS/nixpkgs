@@ -58,6 +58,8 @@ let
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
+    bheap = callPackage ../development/ocaml-modules/bheap { };
+
     bigarray-compat = callPackage ../development/ocaml-modules/bigarray-compat { };
 
     bigarray-overlap = callPackage ../development/ocaml-modules/bigarray-overlap { };
@@ -146,6 +148,8 @@ let
 
     cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
 
+    cohttp-mirage = callPackage ../development/ocaml-modules/cohttp/mirage.nix { };
+
     conduit = callPackage ../development/ocaml-modules/conduit { };
 
     conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
@@ -153,6 +157,8 @@ let
     conduit-lwt = callPackage ../development/ocaml-modules/conduit/lwt.nix { };
 
     conduit-lwt-unix = callPackage ../development/ocaml-modules/conduit/lwt-unix.nix { };
+
+    conduit-mirage = callPackage ../development/ocaml-modules/conduit/mirage.nix { };
 
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
@@ -277,6 +283,8 @@ let
 
     eigen = callPackage ../development/ocaml-modules/eigen { };
 
+    either = callPackage ../development/ocaml-modules/either { };
+
     elina = callPackage ../development/ocaml-modules/elina { };
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
@@ -284,6 +292,8 @@ let
     elpi = callPackage ../development/ocaml-modules/elpi { };
 
     encore = callPackage ../development/ocaml-modules/encore { };
+
+    emile = callPackage ../development/ocaml-modules/emile { };
 
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
@@ -360,6 +370,8 @@ let
     hkdf = callPackage ../development/ocaml-modules/hkdf { };
 
     hmap = callPackage ../development/ocaml-modules/hmap { };
+
+    hxd = callPackage ../development/ocaml-modules/hxd { };
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
@@ -845,6 +857,8 @@ let
 
     pcap-format = callPackage ../development/ocaml-modules/pcap-format { };
 
+    pecu = callPackage ../development/ocaml-modules/pecu { };
+
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
     phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
@@ -873,6 +887,8 @@ let
 
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
 
+    repr = callPackage ../development/ocaml-modules/repr { };
+
     result = callPackage ../development/ocaml-modules/ocaml-result { };
 
     secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
@@ -896,6 +912,8 @@ let
     ulex = callPackage ../development/ocaml-modules/ulex { };
 
     tls = callPackage ../development/ocaml-modules/tls { };
+
+    tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
 
     torch = callPackage ../development/ocaml-modules/torch {
       inherit (pkgs.python3Packages) pytorch;
@@ -954,6 +972,8 @@ let
 
     ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix {
     };
+
+    ppx_repr = callPackage ../development/ocaml-modules/repr/ppx.nix { };
 
     ppx_tools =
       if lib.versionAtLeast ocaml.version "4.02"
@@ -1065,6 +1085,8 @@ let
 
     variantslib_p4 = callPackage ../development/ocaml-modules/variantslib { };
 
+    vchan = callPackage ../development/ocaml-modules/vchan { };
+
     vg = callPackage ../development/ocaml-modules/vg { };
 
     visitors = callPackage ../development/ocaml-modules/visitors { };
@@ -1075,9 +1097,21 @@ let
 
     webmachine = callPackage ../development/ocaml-modules/webmachine { };
 
+    wodan = callPackage ../development/ocaml-modules/wodan { };
+
+    wodan-irmin = callPackage ../development/ocaml-modules/wodan/irmin.nix { };
+
+    wodan-unix = callPackage ../development/ocaml-modules/wodan/unix.nix { };
+
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
 
     x509 = callPackage ../development/ocaml-modules/x509 { };
+
+    xenstore = callPackage ../development/ocaml-modules/xenstore { };
+
+    xenstore_transport = callPackage ../development/ocaml-modules/xenstore_transport { };
+
+    xenstore-tool = callPackage ../development/ocaml-modules/xenstore-tool { };
 
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
 

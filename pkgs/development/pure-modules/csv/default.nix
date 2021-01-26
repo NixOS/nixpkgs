@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, pure }:
+{ lib, stdenv, fetchurl, pkg-config, pure }:
 
 stdenv.mkDerivation rec {
   baseName = "csv";
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Comma Separated Value Interface for the Pure Programming Language";
     homepage = "http://puredocs.bitbucket.org/pure-csv.html";
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ asppsa ];
+    license = lib.licenses.free;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ asppsa ];
   };
 }

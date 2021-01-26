@@ -1,4 +1,4 @@
-{ godot, stdenv }:
+{ godot, lib }:
 godot.overrideAttrs (oldAttrs: rec {
   pname = "godot-headless";
   sconsFlags = "target=release_debug platform=server tools=yes";
@@ -14,5 +14,5 @@ godot.overrideAttrs (oldAttrs: rec {
   '';
   meta.description =
     "Free and Open Source 2D and 3D game engine (headless build)";
-  meta.maintainers = with stdenv.lib.maintainers; [ twey yusdacra ];
+  meta.maintainers = with lib.maintainers; [ twey yusdacra ];
 })

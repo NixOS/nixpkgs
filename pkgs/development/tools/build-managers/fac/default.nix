@@ -1,4 +1,4 @@
-{ stdenv, git, fetchFromGitHub, rustPlatform }:
+{ lib, git, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fac-build";
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
         'std::process::Command::new("${git}/bin/git")'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''
       A build system that uses ptrace to handle dependencies automatically
     '';

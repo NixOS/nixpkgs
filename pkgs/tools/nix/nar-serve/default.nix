@@ -1,7 +1,7 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
-, stdenv
+
 }:
 let
   pname = "nar-serve";

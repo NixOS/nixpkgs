@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, writeText, asttokens
+{ lib, buildPythonPackage, fetchPypi, writeText, asttokens
 , pycryptodome, pytest_xdist, pytestcov, recommonmark, semantic-version, sphinx
 , sphinx_rtd_theme, pytestrunner }:
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     $out/bin/vyper "${sample-contract}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pythonic Smart Contract Language for the EVM";
     homepage = "https://github.com/vyperlang/vyper";
     license = licenses.asl20;

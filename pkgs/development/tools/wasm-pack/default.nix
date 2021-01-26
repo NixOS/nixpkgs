@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     # gracefully exit while doing work.
     # See: https://github.com/rustwasm/wasm-pack/issues/650
     libressl
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ curl Security ];
+  ] ++ lib.optionals stdenv.isDarwin [ curl Security ];
 
   # Most tests rely on external resources and build artifacts.
   # Disabling check here to work with build sandboxing.

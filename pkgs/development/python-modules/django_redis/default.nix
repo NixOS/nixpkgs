@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage,
+{ lib, fetchPypi, buildPythonPackage,
   mock, django, redis, msgpack }:
 buildPythonPackage rec {
   pname = "django-redis";

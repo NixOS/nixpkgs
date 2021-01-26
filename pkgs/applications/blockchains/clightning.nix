@@ -1,28 +1,35 @@
-{ lib, stdenv, python3, pkg-config, which, libtool, autoconf, automake,
-  autogen, sqlite, gmp, zlib, fetchurl, unzip, fetchpatch, gettext }:
-
-with lib;
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, autogen
+, gettext
+, libtool
+, pkg-config
+, unzip
+, which
+, gmp
+, libsodium
+, python3
+, sqlite
+, zlib
+}:
+let
+  py3 = python3.withPackages (p: [ p.Mako ]);
+in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "022fw6rbn0chg0432h9q05w8qnys0hd9hf1qm2qlnnmamxw4dyfy";
+    sha256 = "b4563921ed8bccd59d32b031f81825dc57fbe90882f0ecd5da89e48b59ff18b2";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ autogen autoconf automake gettext libtool pkg-config py3 unzip which ];
 
-  nativeBuildInputs = [ autoconf autogen automake libtool pkg-config which unzip gettext ];
-  buildInputs =
-    let py3 = python3.withPackages (p: [ p.Mako ]);
-    in [ sqlite gmp zlib py3 ];
-
-  makeFlags = [ "prefix=$(out) VERSION=v${version}" ];
-
-  configurePhase = ''
-    ./configure --prefix=$out --disable-developer --disable-valgrind
-  '';
+  buildInputs = [ gmp libsodium sqlite zlib ];
 
   postPatch = ''
     patchShebangs \
@@ -32,18 +39,24 @@ stdenv.mkDerivation rec {
       devtools/sql-rewrite.py
   '';
 
-  doCheck = false;
+  configurePhase = ''
+    ./configure --prefix=$out --disable-developer --disable-valgrind
+  '';
 
-  meta = {
+  makeFlags = [ "prefix=$(out) VERSION=v${version}" ];
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "A Bitcoin Lightning Network implementation in C";
-    longDescription= ''
+    longDescription = ''
       c-lightning is a standard compliant implementation of the Lightning
       Network protocol. The Lightning Network is a scalability solution for
       Bitcoin, enabling secure and instant transfer of funds between any two
       parties for any amount.
     '';
     homepage = "https://github.com/ElementsProject/lightning";
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ jb55 prusnak ];
     license = licenses.mit;
     platforms = platforms.linux;
   };

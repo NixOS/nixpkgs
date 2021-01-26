@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, ffmpeg_3
+{ lib, fetchurl, makeDesktopItem, ffmpeg_3
 , qmake, qttools, mkDerivation
 , qtbase, qtdeclarative, qtlocation, qtquickcontrols2, qtwebchannel, qtwebengine
 }:

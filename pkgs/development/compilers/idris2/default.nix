@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub, makeWrapper
 , clang, chez
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "PREFIX=$(out)" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "OS=";
+    ++ lib.optional stdenv.isDarwin "OS=";
 
   # The name of the main executable of pkgs.chez is `scheme`
   buildFlags = [ "bootstrap-build" "SCHEME=scheme" ];
@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A purely functional programming language with first class types";
     homepage = "https://github.com/idris-lang/Idris2";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ wchresta ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wchresta ];
     inherit (chez.meta) platforms;
   };
 }

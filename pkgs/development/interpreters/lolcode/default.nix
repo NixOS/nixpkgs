@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkg-config, doxygen, cmake, readline }:
+{ lib, stdenv, fetchurl, pkg-config, doxygen, cmake, readline }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
 
   pname = "lolcode";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 
 }

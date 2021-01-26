@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, pkg-config, libnl, python }:
+{ lib, stdenv, fetchurl, qt4, pkg-config, libnl, python }:
 
 let
   version = "016";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sed -e "s@/usr\(/lib/ntrack/modules/\)@$out&@" -i common/ntrack.c
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network Connectivity Tracking library for Desktop Applications";
     homepage = "https://launchpad.net/ntrack";
     platforms = platforms.linux;

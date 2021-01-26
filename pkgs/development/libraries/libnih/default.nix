@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkg-config, dbus, expat }:
+{ lib, stdenv, fetchurl, pkg-config, dbus, expat }:
 
 let version = "1.0.3"; in
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A small library for C application development";
     homepage = "https://launchpad.net/libnih";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

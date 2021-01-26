@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
 

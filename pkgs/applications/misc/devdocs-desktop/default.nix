@@ -1,4 +1,4 @@
-{ lib, stdenv, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3 }:
+{ lib, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3 }:
 
 let
   version = "0.7.1";

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
 , aria2, poetry, pytest, pytestcov, pytest_xdist, responses
 , asciimatics, loguru, requests, setuptools, websocket_client
 }:

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "4.3.1";
+  version = "5.0.0";
   pname = "openapi-generator-cli";
 
   jarfilename = "${pname}-${version}.jar";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://maven/org/openapitools/${pname}/${version}/${jarfilename}";
-    sha256 = "1h9infspwbij9ahb376vc4ijakrqb7xww573ccrqvchxphbcsf7l";
+    sha256 = "13kgc84kyrypr0xy4xifrzqcy4qlvcxc7f0jy3n1xkjl3vhav7w3";
   };
 
   phases = [ "installPhase" ];

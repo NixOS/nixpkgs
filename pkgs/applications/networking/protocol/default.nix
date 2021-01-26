@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub }:
+{ lib, buildPythonApplication, fetchFromGitHub }:
 
 buildPythonApplication {
   pname = "protocol-unstable";

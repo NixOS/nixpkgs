@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, isPy3k, isPy35, async_generator }:
+{ lib, buildPythonPackage, fetchPypi, pytest, isPy3k, isPy35, async_generator }:
 buildPythonPackage rec {
   pname = "pytest-asyncio";
   version = "0.14.0";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ]
-    ++ stdenv.lib.optionals isPy35 [ async_generator ];
+    ++ lib.optionals isPy35 [ async_generator ];
 
   # No tests in archive
   doCheck = false;

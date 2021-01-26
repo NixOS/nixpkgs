@@ -1,5 +1,5 @@
 { fetchFromGitHub
-, lib, stdenv
+, lib
 , gobject-introspection
 , meson
 , ninja

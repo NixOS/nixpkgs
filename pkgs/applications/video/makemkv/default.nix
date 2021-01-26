@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , mkDerivation
 , fetchurl
 , autoPatchelfHook
@@ -45,7 +45,7 @@ in mkDerivation {
     let
       binPath = lib.makeBinPath [ jre_headless ];
     in lib.optionals withJava [
-      ''--prefix PATH : ${binPath}''
+      "--prefix PATH : ${binPath}"
     ];
 
   installPhase = ''

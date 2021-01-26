@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, help2man, curl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, help2man, curl }:
 
 stdenv.mkDerivation {
   pname = "libykclient";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkg-config help2man ];
   buildInputs = [ curl ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Yubikey C client library";
     homepage = "https://developers.yubico.com/yubico-c-client";
     license = licenses.bsd2;

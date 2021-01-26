@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtool }:
+{ lib, stdenv, fetchurl, libtool }:
 
 stdenv.mkDerivation {
   name = "libxmi-1.2";
@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Library for rasterizing 2-D vector graphics";
     homepage = "https://www.gnu.org/software/libxmi/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
     maintainers = [ ];
   };
 }

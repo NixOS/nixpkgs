@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, django-picklefield, arrow
+{ lib, buildPythonPackage, fetchPypi, django-picklefield, arrow
 , blessed, django, future }:
 
 buildPythonPackage rec {

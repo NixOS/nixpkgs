@@ -1,4 +1,4 @@
-{ pkg-config, lib, stdenv, rustPlatform, rustc, cargo, docker, openssl, fetchFromGitHub }:
+{ pkg-config, lib, rustPlatform, rustc, cargo, docker, openssl, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tensorman";

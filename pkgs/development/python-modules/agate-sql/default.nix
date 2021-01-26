@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchPypi, buildPythonPackage, agate, sqlalchemy, crate }:
+{ lib, fetchPypi, buildPythonPackage, agate, sqlalchemy, crate }:
 
 buildPythonPackage rec {
     pname = "agate-sql";

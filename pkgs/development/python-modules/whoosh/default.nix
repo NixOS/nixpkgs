@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   pname = "Whoosh";

@@ -1,4 +1,4 @@
-{ stdenv, clang-tools, grpc, curl, cmake, pkg-config, fetchFromGitHub, doxygen, protobuf, crc32c, c-ares, fetchurl, openssl, zlib }:
+{ lib, stdenv, clang-tools, grpc, curl, cmake, pkg-config, fetchFromGitHub, doxygen, protobuf, crc32c, c-ares, fetchurl, openssl, zlib }:
 let
   googleapis = fetchFromGitHub {
     owner = "googleapis";
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS:BOOL=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = with licenses; [ asl20 ];
     homepage = "https://github.com/googleapis/google-cloud-cpp";
     description = "C++ Idiomatic Clients for Google Cloud Platform services";

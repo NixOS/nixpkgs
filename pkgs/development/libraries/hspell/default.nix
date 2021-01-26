@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, zlib }:
+{ lib, stdenv, fetchurl, perl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "${passthru.pname}-${passthru.version}";
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "08x7rigq5pa1pfpl30qp353hbdkpadr1zc49slpczhsn0sg36pd6";
   };
 
-  patchPhase = ''patchShebangs .'';
+  patchPhase = "patchShebangs .";
   buildInputs = [ perl zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Hebrew spell checker";
     homepage = "http://hspell.ivrix.org.il/";
     platforms = platforms.all;

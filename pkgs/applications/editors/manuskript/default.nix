@@ -1,4 +1,4 @@
-{ lib, stdenv, zlib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
+{ lib, zlib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "manuskript";
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
       --replace sample-projects $out/share/${pname}/sample-projects
    '';
 
-  buildPhase = '''';
+  buildPhase = "";
 
   installPhase = ''
     mkdir -p $out/share/${pname}
