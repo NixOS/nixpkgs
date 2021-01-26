@@ -1,5 +1,4 @@
 { lib
-
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -7,13 +6,13 @@
 
 buildGoModule rec {
   pname = "gdu";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ppsz7ys08lmg5s7lszqc2zcp2vjm54aai3yr3sb4jf3knbmyg5g";
+    sha256 = "0ilaywj5vz8lgvm63j2saakhmgb2134idn6l8msbif4lsawlr313";
   };
 
   vendorSha256 = "058h71gmgi3n4b697myi5890arzw8fkzmxlm1aiwzyfh3k9iv0wh";

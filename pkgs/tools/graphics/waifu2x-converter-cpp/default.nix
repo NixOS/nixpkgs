@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "waifu2x-converter-cpp";
-  version = "5.3.3";
+  version = "5.3.4";
 
   src = fetchFromGitHub {
     owner = "DeadSix27";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04r0xyjknvcwk70ilj1p3qwlcz3i6sqgcp0qbc9qwxnsgrrgz09w";
+    sha256 = "0rv8bnyxz89za6gwk9gmdbaf3j7c1j52mip7h81rir288j35m84x";
   };
 
   patchPhase = ''

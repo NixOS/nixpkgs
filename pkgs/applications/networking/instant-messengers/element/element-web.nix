@@ -12,11 +12,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "element-web";
-  version = "1.7.17";
+  version = "1.7.18";
 
   src = fetchurl {
     url = "https://github.com/vector-im/element-web/releases/download/v${version}/element-v${version}.tar.gz";
-    sha256 = "sha256-9DyA3h0sQCzOFZ9gEReJrMQOnygFvEB7PeIpkG/F5H4=";
+    sha256 = "sha256-fgbdlVTPPZriOoDsBbpmDWEEzHEunaDIl/sT4/6A9LM=";
   };
 
   installPhase = ''

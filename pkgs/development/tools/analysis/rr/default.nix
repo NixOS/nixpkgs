@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto }:
+{ lib, gcc9Stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto }:
 
-stdenv.mkDerivation rec {
+gcc9Stdenv.mkDerivation rec {
   version = "5.4.0";
   pname = "rr";
 

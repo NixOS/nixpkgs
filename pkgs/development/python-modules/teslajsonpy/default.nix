@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "0.10.4";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "zabuldon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18frynmy47i9c24mdy819y2dnjwmhnmkly5mbmhikpbmm6d0yjf1";
+    sha256 = "sha256-yfaUa12doOvdFkbHHdOYcFcu86hYZtt2i0tya2ENjf4=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,12 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook ];
 
   # Not all Home Assistant related check pass
-  disabledTests = [ "test_values_on_init" ];
+  # https://github.com/zabuldon/teslajsonpy/issues/121
+  # https://github.com/zabuldon/teslajsonpy/pull/124
+  disabledTests = [
+    "test_values_on_init"
+    "test_get_value_on_init"
+  ];
   pythonImportsCheck = [ "teslajsonpy" ];
 
   meta = with lib; {
