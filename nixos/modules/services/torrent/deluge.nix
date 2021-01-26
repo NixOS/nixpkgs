@@ -41,6 +41,7 @@ in {
 
         openFilesLimit = mkOption {
           default = openFilesLimit;
+          type = types.either types.int types.str;
           description = ''
             Number of files to allow deluged to open.
           '';
