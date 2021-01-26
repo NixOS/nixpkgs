@@ -8,7 +8,6 @@
 , pytest
 , mock
 , util-linux
-, isPy38
 }:
 
 buildPythonPackage rec {
@@ -24,7 +23,7 @@ buildPythonPackage rec {
 
   # capturer is broken on darwin / py38, so we skip the test until a fix for
   # https://github.com/xolox/python-capturer/issues/10 is released.
-  doCheck = !(isPy38 && stdenv.isDarwin);
+  doCheck = !stdenv.isDarwin;
   checkPhase = ''
     PATH=$PATH:$out/bin pytest . -k "not test_plain_text_output_format \
                                      and not test_auto_install"
