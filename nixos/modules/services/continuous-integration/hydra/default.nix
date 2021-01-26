@@ -231,6 +231,7 @@ in
     users.users.hydra =
       { description = "Hydra";
         group = "hydra";
+        # We don't enable `createHome` here because the creation of the home directory is handled by the hydra-init service below.
         home = baseDir;
         useDefaultShell = true;
         uid = config.ids.uids.hydra;
