@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, fetchpatch
 , glib
 , gobject-introspection
 , gtk3
@@ -22,22 +21,15 @@
 
 stdenv.mkDerivation rec {
   pname = "xapps";
-  version = "1.8.9";
+  version = "2.0.6";
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/linuxmint/xapp/pull/110/commits/208563d4e2bbcfbeb4425d05f649867065c37615.patch";
-      sha256 = "0brqndfgawhayrm36cjh6fkff274729jivjq3h5jx93lprvl2zih";
-    })
-  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "01jx7612p0c0pi0r7fn5g08s6zjfmq1gfm5hi0fkzl0fxf2cx7a7";
+    sha256 = "11qbz547qlfsvkz4bdxhryrsf10aw5jc2f1glbik7pvmmm87gf4f";
   };
 
   # TODO: https://github.com/NixOS/nixpkgs/issues/36468
@@ -91,6 +83,10 @@ stdenv.mkDerivation rec {
     # Patch pastebin & inxi location
     sed "s|/usr/bin/pastebin|$out/bin/pastebin|" -i scripts/upload-system-info
     sed "s|'inxi'|'${inxi}/bin/inxi'|" -i scripts/upload-system-info
+
+    # Patch gtk3 module target dir
+    substituteInPlace libxapp/meson.build \
+         --replace "gtk3_dep.get_pkgconfig_variable('libdir')" "'$out'"
   '';
 
   meta = with lib; {
