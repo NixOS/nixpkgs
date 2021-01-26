@@ -4079,6 +4079,12 @@
     githubId = 45598;
     name = "William Casarin";
   };
+  jbcrail = {
+    name = "Joseph Crail";
+    email = "jbcrail@gmail.com";
+    github = "jbcrail";
+    githubId = 6038;
+  };
   jbedo = {
     email = "cu@cua0.org";
     github = "jbedo";
@@ -10571,11 +10577,5 @@
     email = "nejczupan+nix@gmail.com";
     github = "zupo";
     githubId = 311580;
-  };
-  jbcrail = {
-    name = "Joseph Crail";
-    email = "jbcrail@gmail.com";
-    github = "jbcrail";
-    githubId = 6038;
   };
 }
