@@ -5,6 +5,7 @@ fetchFromGitHub {
 
   owner = "tomokuni";
   repo = "Myrica";
+  # commit does not exist on any branch on the target repository
   rev = "b737107723bfddd917210f979ccc32ab3eb6dc20";
   sha256 = "187rklcibbkai6m08173ca99qn8v7xpdfdv0izpymmavj85axm12";
 
