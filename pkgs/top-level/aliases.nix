@@ -168,6 +168,7 @@ mapAliases ({
   firestr = throw "firestr has been removed."; # added 2019-12-08
   fish-foreign-env = throw "fish-foreign-env has been replaced with fishPlugins.foreign-env"; # added 2020-12-29, modified 2021-01-10
   flameGraph = flamegraph; # added 2018-04-25
+  flink_1_5 = throw "flink_1_5 was removed, use flink instead"; # added 2021-01-25
   flvtool2 = throw "flvtool2 has been removed."; # added 2020-11-03
   foldingathome = fahclient; # added 2020-09-03
   font-awesome-ttf = font-awesome; # 2018-02-25

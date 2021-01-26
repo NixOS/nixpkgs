@@ -1050,6 +1050,8 @@ in {
 
   brotlipy = callPackage ../development/python-modules/brotlipy { };
 
+  brottsplatskartan = callPackage ../development/python-modules/brottsplatskartan { };
+
   browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
 
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy { });
@@ -5316,6 +5318,8 @@ in {
   pydy = callPackage ../development/python-modules/pydy { };
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
+
+  pyedimax = callPackage ../development/python-modules/pyedimax { };
 
   pyee = callPackage ../development/python-modules/pyee { };
 

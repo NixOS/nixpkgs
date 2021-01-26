@@ -11,11 +11,11 @@ let
 
 in gnustep'.gsmakeDerivation rec {
   pname = "pikopixel";
-  version = "1.0-b9e";
+  version = "1.0-b10";
 
   src = fetchurl {
     url = "http://twilightedge.com/downloads/PikoPixel.Sources.${version}.tar.gz";
-    sha256 = "1gmgb5ch7s6fwvg85l6pl6fsx0maqwd8yvg7sz3r9lj32g2pz5wn";
+    sha256 = "1b27npgsan2nx1p581b9q2krx4506yyd6s34r4sf1r9x9adshm77";
   };
 
   sourceRoot = "PikoPixel.Sources.${version}/PikoPixel";
