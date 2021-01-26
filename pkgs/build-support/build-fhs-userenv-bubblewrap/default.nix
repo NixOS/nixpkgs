@@ -35,6 +35,8 @@ let
       "hosts"
       "resolv.conf"
       "nsswitch.conf"
+      # User profiles
+      "profiles"
       # Sudo & Su
       "login.defs"
       "sudoers"
