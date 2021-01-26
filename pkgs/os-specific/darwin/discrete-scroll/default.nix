@@ -1,8 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, Cocoa }:
+{ stdenv, fetchFromGitHub, Cocoa }:
 
-## after launching for the first time, grant access for parent application (e.g. Terminal.app)
-## from 'system preferences >> security & privacy >> accessibility'
-## and then launch again
+## After launching for the first time, grant access for parent application (e.g. Terminal.app)
+## from "system preferences >> security & privacy >> accessibility" and then launch again.
 
 stdenv.mkDerivation rec {
   pname = "discrete-scroll";
@@ -22,15 +21,15 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp ./dc $out/bin/discretescroll
+    mkdir -p "$out/bin"
+    cp ./dc "$out/bin/discretescroll"
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Fix for OS X's scroll wheel problem";
     homepage = "https://github.com/emreyolcu/discrete-scroll";
     platforms = platforms.darwin;
     license = licenses.mit;
-    maintainers = with lib.maintainers; [ bb2020 ];
+    maintainers = with maintainers; [ bb2020 ];
   };
 }
