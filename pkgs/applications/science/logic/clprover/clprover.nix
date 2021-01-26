@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   version = "1.0.3";
 
   src = fetchzip {
-    url = "http://cgi.csc.liv.ac.uk/~ullrich/CLProver++/CLProver++-v1.0.3-18-04-2015.zip";
+    url = "https://cgi.csc.liv.ac.uk/~ullrich/CLProver++/CLProver++-v1.0.3-18-04-2015.zip";
     sha256 = "10kmlg4m572qwfzi6hkyb0ypb643xw8sfb55xx7866lyh37w1q3s";
     stripRoot = false;
   };
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Resolution-based theorem prover for Coalition Logic implemented in C++";
-    homepage = "http://cgi.csc.liv.ac.uk/~ullrich/CLProver++/";
+    homepage = "https://cgi.csc.liv.ac.uk/~ullrich/CLProver++/";
     license = licenses.gpl3; # Note that while the website states that it is GPLv2 but the file in the zip as well as the comments in the source state it is GPLv3
     maintainers = with maintainers; [ mgttlinger ];
     platforms = [ "x86_64-linux" ];
