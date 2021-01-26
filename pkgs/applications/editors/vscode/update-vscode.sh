@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq gnugrep gnused gawk
+#!nix-shell -i bash -p curl jq gnused
 
 # Update script for the vscode versions and hashes.
 # Usually doesn't need to be called by hand,
