@@ -111,7 +111,6 @@ in stdenv.mkDerivation rec {
     "-Ddriver_esx=enabled"
     "-Ddriver_remote=enabled"
     "-Dpolkit=enabled"
-    "-Ddbus=enabled"
     (opt "storage_iscsi" enableIscsi)
   ] ++ optionals stdenv.isLinux [
     (opt "storage_zfs" (zfs != null))
@@ -119,8 +118,6 @@ in stdenv.mkDerivation rec {
     "-Dapparmor=enabled"
     "-Dsecdriver_apparmor=enabled"
     "-Dnumad=enabled"
-    "-Dmacvtap=enabled"
-    "-Dvirtualport=enabled"
     "-Dstorage_disk=enabled"
     (opt "storage_rbd" enableCeph)
   ] ++ optionals stdenv.isDarwin [
