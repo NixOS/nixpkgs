@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec  {
   pname = "kora-icon-theme";
-  version = "1.3.4";
+  version = "1.4.1";
 
   src = fetchFromGitHub  {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
-    sha256 = "01s7zhwwbdqgksjvfvn7kqijxzzc7734f707yk8y7anshq0518x3";
+    sha256 = "sha256-YGhusal8g/UXMqrQvj147OScg51uNABTMIXxVXvnpKY=";
   };
 
   nativeBuildInputs = [
