@@ -77,6 +77,27 @@ in import ./make-test-python.nix ({ lib, ... }: {
         after = [ "acme-a.example.test.service" "nginx-config-reload.service" ];
       };
 
+      # Test that account creation is collated into one service
+      specialisation.account-creation.configuration = { nodes, pkgs, lib, ... }: let
+        email = "newhostmaster@example.test";
+        caDomain = nodes.acme.config.test-support.acme.caDomain;
+        # Exit 99 to make it easier to track if this is the reason a renew failed
+        testScript = ''
+          test -e accounts/${caDomain}/${email}/account.json || exit 99
+        '';
+      in {
+        security.acme.email = lib.mkForce email;
+        systemd.services."b.example.test".preStart = testScript;
+        systemd.services."c.example.test".preStart = testScript;
+
+        services.nginx.virtualHosts."b.example.test" = (vhostBase pkgs) // {
+          enableACME = true;
+        };
+        services.nginx.virtualHosts."c.example.test" = (vhostBase pkgs) // {
+          enableACME = true;
+        };
+      };
+
       # Cert config changes will not cause the nginx configuration to change.
       # This tests that the reload service is correctly triggered.
       # It also tests that postRun is exec'd as root
@@ -289,7 +310,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
       acme.start()
       webserver.start()
 
-      acme.wait_for_unit("default.target")
+      acme.wait_for_unit("network-online.target")
       acme.wait_for_unit("pebble.service")
 
       client.succeed("curl https://${caDomain}:15000/roots/0 > /tmp/ca.crt")
@@ -313,6 +334,15 @@ in import ./make-test-python.nix ({ lib, ... }: {
           webserver.succeed("systemctl start test-renew-nginx.target")
           check_issuer(webserver, "a.example.test", "pebble")
           check_connection(client, "a.example.test")
+
+      with subtest("Runs 1 cert for account creation before others"):
+          switch_to(webserver, "account-creation")
+          webserver.wait_for_unit("acme-finished-a.example.test.target")
+          check_connection(client, "a.example.test")
+          webserver.wait_for_unit("acme-finished-b.example.test.target")
+          webserver.wait_for_unit("acme-finished-c.example.test.target")
+          check_connection(client, "b.example.test")
+          check_connection(client, "c.example.test")
 
       with subtest("Can reload web server when cert configuration changes"):
           switch_to(webserver, "cert-change")
