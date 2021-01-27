@@ -158,8 +158,7 @@ let
   in fetchApple' pname version sha256;
 
   appleDerivation' = pname: version: sdkName: sha256: attrs: stdenv.mkDerivation ({
-    inherit pname;
-    version = "${version}-${sdkName}";
+    inherit pname version;
 
     src = if attrs ? srcs then null else (fetchApple' pname version sha256);
 
