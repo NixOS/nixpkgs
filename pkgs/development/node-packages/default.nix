@@ -17,7 +17,7 @@ let
       buildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
         for prog in bower2nix fetch-bower; do
-          wrapProgram "$out/bin/$prog" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.git pkgs.nix ]}
+          wrapProgram "$out/bin/$prog" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.git pkgs.nix ]}
         done
       '';
     };
@@ -91,7 +91,7 @@ let
     makam =  super.makam.override {
       buildInputs = [ pkgs.nodejs pkgs.makeWrapper ];
       postFixup = ''
-        wrapProgram "$out/bin/makam" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nodejs ]}
+        wrapProgram "$out/bin/makam" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nodejs ]}
         ${
           if stdenv.isLinux
             then "patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""
@@ -138,7 +138,7 @@ let
     node2nix = super.node2nix.override {
       buildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
-        wrapProgram "$out/bin/node2nix" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nix ]}
+        wrapProgram "$out/bin/node2nix" --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.nix ]}
       '';
     };
 
@@ -168,7 +168,7 @@ let
       '';
 
       postInstall = let
-        pnpmLibPath = stdenv.lib.makeBinPath [
+        pnpmLibPath = pkgs.lib.makeBinPath [
           nodejs.passthru.python
           nodejs
         ];
@@ -185,7 +185,7 @@ let
 
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall =  ''
-        wrapProgram "$out/bin/pulp" --suffix PATH : ${stdenv.lib.makeBinPath [
+        wrapProgram "$out/bin/pulp" --suffix PATH : ${pkgs.lib.makeBinPath [
           pkgs.purescript
         ]}
       '';
@@ -220,7 +220,7 @@ let
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/typescript-language-server" \
-          --prefix PATH : ${stdenv.lib.makeBinPath [ self.typescript ]}
+          --prefix PATH : ${pkgs.lib.makeBinPath [ self.typescript ]}
       '';
     };
 
