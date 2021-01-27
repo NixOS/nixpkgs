@@ -165,6 +165,9 @@ stdenv.mkDerivation {
   qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
   qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
 
+  # don't strip away debugging symbols when build with developerBuild
+  dontStrip = developerBuild;
+
   setOutputFlags = false;
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -257,6 +260,7 @@ stdenv.mkDerivation {
     ++ lib.optionals developerBuild [
       "-developer-build"
       "-no-warnings-are-errors"
+      "-force-debug-info"
     ]
     ++ (
       if (!stdenv.hostPlatform.isx86_64) then [
