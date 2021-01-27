@@ -12,13 +12,13 @@ assert trackerSearch -> (python3 != null);
 with lib;
 mkDerivation rec {
   pname = "qbittorrent";
-  version = "4.3.1";
+  version = "4.3.3";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qbittorrent";
     rev = "release-${version}";
-    sha256 = "17ih00q7idrpl3b2vgh4smva6lazs5jw06pblriscn1lrwdvrc38";
+    sha256 = "0y8vrvfv8n6zg6pgg5a9hmvxi2z9rrfd9k8zv04nv5js91b99ncq";
   };
 
   # NOTE: 2018-05-31: CMake is working but it is not officially supported

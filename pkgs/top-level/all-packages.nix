@@ -2640,6 +2640,8 @@ in
 
   pbzx = callPackage ../tools/compression/pbzx { };
 
+  pcb2gcode = callPackage ../tools/misc/pcb2gcode { };
+
   persepolis = python3Packages.callPackage ../tools/networking/persepolis {
     wrapQtAppsHook = qt5.wrapQtAppsHook;
   };
@@ -5084,6 +5086,8 @@ in
   http-prompt = callPackage ../tools/networking/http-prompt { };
 
   http-getter = callPackage ../applications/networking/flent/http-getter.nix { };
+
+  httpdump = callPackage ../tools/security/httpdump { };
 
   httpie = callPackage ../tools/networking/httpie { };
 
@@ -13150,6 +13154,8 @@ in
   ormolu = haskellPackages.ormolu.bin;
 
   capnproto = callPackage ../development/libraries/capnproto { };
+
+  capnproto-java = callPackage ../development/tools/capnproto-java { };
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
@@ -23583,7 +23589,6 @@ in
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or stdenv.isLinux;
-      qt5 = qt514;
     }).mumble;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
