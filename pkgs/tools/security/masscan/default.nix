@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "1.3.1";
 
   src = fetchFromGitHub {
-    owner  = "robertdavidgraham";
-    repo   = "masscan";
-    rev    = version;
+    owner = "robertdavidgraham";
+    repo = "masscan";
+    rev = version;
     sha256 = "sha256-gH0zOf2kl6cqws1nB3QPtaAjpvNAgbawXRx77bqJTIc=";
   };
 
@@ -34,9 +34,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast scan of the Internet";
-    homepage    = "https://github.com/robertdavidgraham/masscan";
-    license     = licenses.agpl3;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/robertdavidgraham/masscan";
+    changelog = "https://github.com/robertdavidgraham/masscan/releases/tag/${version}";
+    license = licenses.agpl3Only;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }
