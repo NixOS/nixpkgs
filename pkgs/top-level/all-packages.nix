@@ -7055,6 +7055,8 @@ in
 
   tautulli = python3Packages.callPackage ../servers/tautulli { };
 
+  pleroma-otp = callPackage ../servers/pleroma-otp { };
+
   ploticus = callPackage ../tools/graphics/ploticus {
     libpng = libpng12;
   };
