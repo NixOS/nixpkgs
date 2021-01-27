@@ -1,7 +1,6 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 let
-  inherit (stdenv) lib;
   baseVersion = "0.3.1";
   commit = "9ba85274dcc21bf8132cbe3b3dccfcb4aab57d9f";
 in

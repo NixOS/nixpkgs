@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkg-config, gcc-arm-embedded, bluez5
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config, gcc-arm-embedded, bluez5
 , readline
 
 , hardwarePlatform ? "PM3RDV4"
@@ -29,7 +29,7 @@ mkDerivation rec {
     install -Dt $out/firmware bootrom/obj/bootrom.elf armsrc/obj/fullimage.elf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client for proxmark3, powerful general purpose RFID tool";
     homepage = "https://rfidresearchgroup.com/";
     license = licenses.gpl2Plus;

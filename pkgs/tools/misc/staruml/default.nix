@@ -4,7 +4,6 @@
 , libXdamage, expat }:
 
 let
-  inherit (stdenv) lib;
   LD_LIBRARY_PATH = lib.makeLibraryPath
     [ glib gtk2 gdk-pixbuf alsaLib nss nspr GConf cups libgcrypt dbus libXdamage expat ];
 in

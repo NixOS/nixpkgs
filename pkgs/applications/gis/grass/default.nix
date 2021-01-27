@@ -1,9 +1,7 @@
-{ stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
+{ lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
 , cairo, readline, ffmpeg_3, makeWrapper, wxGTK30, netcdf, blas
 , proj, gdal, geos, sqlite, postgresql, libmysqlclient, python2Packages, libLAS, proj-datumgrid
 }:
-
-let inherit (stdenv) lib; in
 
 stdenv.mkDerivation rec {
   name = "grass";

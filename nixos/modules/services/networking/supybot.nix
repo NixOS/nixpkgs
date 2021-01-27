@@ -64,6 +64,7 @@ in
       };
 
       extraPackages = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = p: [];
         description = ''
           Extra Python packages available to supybot plugins. The

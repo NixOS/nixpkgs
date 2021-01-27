@@ -41,15 +41,15 @@ let
 in
 {
   varnish60 = common {
-    version = "6.0.5";
-    sha256 = "11aw202s7zdp5qp66hii5nhgm2jk0d86pila7gqrnjgc7x8fs8a0";
+    version = "6.0.7";
+    sha256 = "0njs6xpc30nc4chjdm4d4g63bigbxhi4dc46f4az3qcz51r8zl2a";
   };
   varnish62 = common {
-    version = "6.2.2";
-    sha256 = "10s3qdvb95pkwp3wxndrigb892h0109yqr8dw4smrhfi0knhnfk5";
+    version = "6.2.3";
+    sha256 = "02b6pqh5j1d4n362n42q42bfjzjrngd6x49b13q7wzsy6igd1jsy";
   };
   varnish63 = common {
-    version = "6.3.1";
-    sha256 = "0xa14pd68zpi5hxcax3arl14rcmh5d1cdwa8gv4l5f23mmynr8ni";
+    version = "6.3.2";
+    sha256 = "1f5ahzdh3am6fij5jhiybv3knwl11rhc5r3ig1ybzw55ai7788q8";
   };
 }
