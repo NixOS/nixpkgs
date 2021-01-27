@@ -1,6 +1,6 @@
 # generic builder for Emacs packages
 
-{ lib, stdenv, emacs, texinfo }:
+{ lib, stdenv, emacs, texinfo, ... }:
 
 with lib;
 
