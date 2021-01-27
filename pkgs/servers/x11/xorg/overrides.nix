@@ -1,5 +1,5 @@
 { abiCompat ? null,
-  stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
+  lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
   automake, autoconf, gettext, libiconv, libtool, intltool,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
@@ -9,7 +9,7 @@
 }:
 
 let
-  inherit (stdenv) lib isDarwin;
+  inherit (stdenv) isDarwin;
   inherit (lib) overrideDerivation;
 
   malloc0ReturnsNullCrossFlag = lib.optional

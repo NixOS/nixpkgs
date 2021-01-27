@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   passthru = {
     tests.tor = nixosTests.tor;
     updateScript = import ./update.nix {
-      inherit (stdenv) lib;
+      inherit lib;
       inherit
         writeScript
         common-updater-scripts

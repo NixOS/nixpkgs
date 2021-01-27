@@ -1,4 +1,4 @@
-{ fetchgit, pkg-config, gettext, runCommand, makeWrapper
+{ lib, fetchgit, pkg-config, gettext, runCommand, makeWrapper
 , elfutils, kernel, gnumake, python2, python2Packages
 }:
 
@@ -10,7 +10,6 @@ let
   version = "4.1";
 
   inherit (kernel) stdenv;
-  inherit (stdenv) lib;
 
   ## stap binaries
   stapBuild = stdenv.mkDerivation {

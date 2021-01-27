@@ -1,4 +1,4 @@
-{ stdenv, skawarePackages
+{ lib, stdenv, skawarePackages
 
 # Whether to build the TLS/SSL tools and what library to use
 # acceptable values: "libressl", false
@@ -8,7 +8,6 @@
 
 with skawarePackages;
 let
-  inherit (stdenv) lib;
   sslSupportEnabled = sslSupport != false;
   sslLibs = {
     libressl = libressl;

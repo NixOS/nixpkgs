@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , wrapQtAppsHook
 , pcsclite
@@ -15,8 +16,6 @@
 , yubikey-manager
 , yubikey-personalization
 }:
-
-let inherit (stdenv) lib; in
 
 stdenv.mkDerivation rec {
   pname = "yubikey-manager-qt";
