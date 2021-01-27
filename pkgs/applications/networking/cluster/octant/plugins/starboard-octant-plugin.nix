@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-fhIIqirEEdqn/n8bBtLw07fEGfnpC/8SOLbkhnytyME=";
 
+  buildFlagsArray = [ "-ldflags=" "-s" "-w" ];
+
   meta = with lib; {
     description = "Octant plugin for viewing Starboard security information";
     longDescription = ''
