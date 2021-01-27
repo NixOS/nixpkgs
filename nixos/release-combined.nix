@@ -62,7 +62,6 @@ in rec {
         (onFullSupported "nixos.tests.boot-stage1")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiCdrom")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.uefiUsb")
-        (onSystems ["x86_64-linux"] "nixos.tests.chromium")
         (onFullSupported "nixos.tests.containers-imperative")
         (onFullSupported "nixos.tests.containers-ip")
         (onSystems ["x86_64-linux"] "nixos.tests.docker")

@@ -152,5 +152,15 @@ in stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = [ maintainers.msteen ];
     platforms = [ "x86_64-linux" ];
+    knownVulnerabilities = [
+      ''
+        This version of Google Chrome is outdated, has known security issues,
+        and will no longer be updated. Please consider switching to the new
+        stable NixOS channel (20.09) or installing Google Chrome from an active
+        channel. A list of the missing security fixes can be found here:
+        https://chromereleases.googleblog.com/2021/01/stable-channel-update-for-desktop.html
+        https://chromereleases.googleblog.com/2021/01/stable-channel-update-for-desktop_19.html
+      ''
+    ];
   };
 }

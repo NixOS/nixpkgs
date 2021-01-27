@@ -91,5 +91,15 @@ mkChromiumDerivation (base: rec {
     hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];
     timeout = 172800; # 48 hours
     broken = channel == "dev"; # Requires LLVM 11
+    knownVulnerabilities = [
+      ''
+        This version of Chromium is outdated, has known security issues,
+        and will no longer be updated. Please consider switching to the new
+        stable NixOS channel (20.09) or installing Chromium from an active
+        channel. A list of the missing security fixes can be found here:
+        https://chromereleases.googleblog.com/2021/01/stable-channel-update-for-desktop.html
+        https://chromereleases.googleblog.com/2021/01/stable-channel-update-for-desktop_19.html
+      ''
+    ];
   };
 })
