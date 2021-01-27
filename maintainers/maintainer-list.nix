@@ -8639,6 +8639,12 @@
     githubId = 36899624;
     name = "squalus";
   };
+  srapenne = {
+    email = "solene@perso.pw";
+    github = "rapenne-s";
+    githubId = 248016;
+    name = "Solène Rapenne";
+  };
   srghma = {
     email = "srghma@gmail.com";
     github = "srghma";
