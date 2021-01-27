@@ -65,10 +65,18 @@ let
 
   dashboardFile = pkgs.writeText "dashboard.yaml" (builtins.toJSON dashboardConfiguration);
 
+  notifierConfiguration = {
+    apiVersion = 1;
+    notifiers = cfg.provision.notifiers;
+  };
+
+  notifierFile = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
+
   provisionConfDir =  pkgs.runCommand "grafana-provisioning" { } ''
     mkdir -p $out/{datasources,dashboards}
     ln -sf ${datasourceFile} $out/datasources/datasource.yaml
     ln -sf ${dashboardFile} $out/dashboards/dashboard.yaml
+    ln -sf ${notifierFile} $out/notifiers/notifier.yaml
   '';
 
   # Get a submodule without any embedded metadata:
@@ -200,6 +208,64 @@ let
           type = types.path;
           description = "Path grafana will watch for dashboards";
         };
+      };
+    };
+  };
+
+  grafanaTypes.notifierConfig = types.submodule {
+    options = {
+      name = mkOption {
+        type = types.str;
+        default = "default";
+        description = "Notifier name";
+      };
+      type = mkOption {
+        type = types.enum ["dingding" "discord" "email" "googlechat" "hipchat" "kafka" "line" "teams" "opsgenie" "pagerduty" "prometheus-alertmanager" "pushover" "sensu" "sensugo" "slack" "telegram" "threema" "victorops" "webhook"];
+        description = "Notifier type";
+      };
+      uid = mkOption {
+        type = types.str;
+        description = "Unique notifier identifier";
+      };
+      org_id = mkOption {
+        type = types.int;
+        default = 1;
+        description = "Organization ID";
+      };
+      org_name = mkOption {
+        type = types.str;
+        default = "Main Org.";
+        description = "Organization name";
+      };
+      is_default = mkOption {
+        type = types.bool;
+        description = "Is the default notifier";
+        default = false;
+      };
+      send_reminder = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Should the notifier be sent reminder notifications while alerts continue to fire";
+      };
+      frequency = mkOption {
+        type = types.str;
+        default = "5m";
+        description = "How frequently should the notifier be sent reminders";
+      };
+      disable_resolve_message = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Turn off the message that sends when an alert returns to OK";
+      };
+      settings = mkOption {
+        type = types.nullOr types.attrs;
+        default = null;
+        description = "Settings for the notifier type";
+      };
+      secure_settings = mkOption {
+        type = types.nullOr types.attrs;
+        default = null;
+        description = "Secure settings for the notifier type";
       };
     };
   };
@@ -346,6 +412,12 @@ in {
         description = "Grafana dashboard configuration";
         default = [];
         type = types.listOf grafanaTypes.dashboardConfig;
+        apply = x: map _filter x;
+      };
+      notifiers = mkOption {
+        description = "Grafana notifier configuration";
+        default = [];
+        type = types.listOf grafanaTypes.notifierConfig;
         apply = x: map _filter x;
       };
     };
@@ -496,6 +568,9 @@ in {
       (optional (
         any (x: x.password != null || x.basicAuthPassword != null || x.secureJsonData != null) cfg.provision.datasources
       ) "Datasource passwords will be stored as plaintext in the Nix store!")
+      (optional (
+        any (x: x.secure_settings != null) cfg.provision.notifiers
+      ) "Notifier secure settings will be stored as plaintext in the Nix store!")
     ];
 
     environment.systemPackages = [ cfg.package ];
