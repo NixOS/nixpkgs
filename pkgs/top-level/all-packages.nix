@@ -8604,6 +8604,10 @@ in
 
   vix = callPackage ../tools/misc/vix { };
 
+  vkBasalt = callPackage ../tools/graphics/vkBasalt {
+    vkBasalt32 = pkgsi686Linux.vkBasalt;
+  };
+
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
   vncrec = callPackage ../tools/video/vncrec { };
