@@ -1,4 +1,4 @@
-{ stdenv, runCommand, fetchurl
+{ lib, stdenv, runCommand, fetchurl
 , fetchpatch
 , ensureNewerSourcesHook
 , cmake, pkg-config
@@ -36,7 +36,6 @@
 # We must have one crypto library
 assert cryptopp != null || (nss != null && nspr != null);
 
-with stdenv; with lib;
 let
   shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 
@@ -76,7 +75,7 @@ let
     none = [ ];
   };
 
-  getMeta = description: {
+  getMeta = description: with lib; {
      homepage = "https://ceph.com/";
      inherit description;
      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
@@ -148,11 +147,11 @@ in rec {
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
       snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
-    ] ++ optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.isLinux [
       linuxHeaders util-linux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14
       rdma-core rabbitmq-c
-    ] ++ optionals hasRadosgw [
+    ] ++ lib.optionals hasRadosgw [
       optFcgi optExpat optCurl optFuse optLibedit
     ];
 

@@ -1,8 +1,6 @@
-{ stdenv, bzip2, zlib, autoconf, automake, cmake, gnumake, help2man , texinfo, libtool , cppzmq , libarchive, avro-cpp, boost, jansson, zeromq, openssl, pam, libiodbc, kerberos, gcc, libcxx, which, catch2 }:
+{ lib, stdenv, bzip2, zlib, autoconf, automake, cmake, gnumake, help2man , texinfo, libtool , cppzmq , libarchive, avro-cpp, boost, jansson, zeromq, openssl, pam, libiodbc, kerberos, gcc, libcxx, which, catch2 }:
 
 # Common attributes of irods packages
-
-with stdenv;
 
 {
   nativeBuildInputs = [ autoconf automake cmake gnumake help2man texinfo which gcc ];
@@ -35,7 +33,7 @@ with stdenv;
     "
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Integrated Rule-Oriented Data System (iRODS)";
     longDescription = ''
       The Integrated Rule-Oriented Data System (iRODS) is open source data management
