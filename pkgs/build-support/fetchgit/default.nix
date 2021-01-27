@@ -1,6 +1,6 @@
-{stdenvNoCC, git, git-lfs, cacert}: let
+{lib, stdenvNoCC, git, git-lfs, cacert}: let
   urlToName = url: rev: let
-    inherit (stdenvNoCC.lib) removeSuffix splitString last;
+    inherit (lib) removeSuffix splitString last;
     base = last (splitString ":" (baseNameOf (removeSuffix "/" url)));
 
     matched = builtins.match "(.*).git" base;
@@ -56,7 +56,7 @@ stdenvNoCC.mkDerivation {
   fetcher = ./nix-prefetch-git;  # This must be a string to ensure it's called with bash.
 
   nativeBuildInputs = [ git ]
-    ++ stdenvNoCC.lib.optionals fetchLFS [ git-lfs ];
+    ++ lib.optionals fetchLFS [ git-lfs ];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
@@ -66,7 +66,7 @@ stdenvNoCC.mkDerivation {
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars ++ [
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
     "GIT_PROXY_COMMAND" "SOCKS_SERVER"
   ];
 

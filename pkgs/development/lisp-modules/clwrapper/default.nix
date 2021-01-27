@@ -1,4 +1,4 @@
-{stdenv, asdf, which, bash, lisp ? null}:
+{lib, stdenv, asdf, which, bash, lisp ? null}:
 stdenv.mkDerivation {
   name = "cl-wrapper-script";
 
@@ -52,6 +52,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Script used to wrap Common Lisp implementations";
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = [lib.maintainers.raskin];
   };
 }
