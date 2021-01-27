@@ -123,6 +123,9 @@ mapAliases ({
   dbus_glib = dbus-glib; # added 2018-02-25
   dbus_libs = dbus; # added 2018-04-25
   diffuse = throw "diffuse has been removed from nixpkgs, as it's unmaintained"; # added 2019-12-10
+  disnix = throw "disnix has been removed."; # added 2021-01-27
+  disnixos = throw "disnixos has been removed."; # added 2021-01-27
+  DisnixWebService = throw "DisnixWebService has been removed."; # added 2021-01-27
   dbus_tools = dbus.out; # added 2018-04-25
   deadbeef-mpris2-plugin = deadbeefPlugins.mpris2; # added 2018-02-23
   deadpixi-sam = deadpixi-sam-unstable;
@@ -139,6 +142,8 @@ mapAliases ({
   docker_compose = docker-compose; # 2018-11-10
   draftsight = throw "draftsight has been removed, no longer available as freeware"; # added 2020-08-14
   dvb_apps = throw "dvb_apps has been removed."; # added 2020-11-03
+  dydisnix = throw "dydisnix has been removed."; # added 2021-01-27
+  dysnomia = throw "dysnomia has been removed."; # added 2021-01-27
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   elasticmq = throw "elasticmq has been removed in favour of elasticmq-server-bin"; # added 2021-01-17
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18

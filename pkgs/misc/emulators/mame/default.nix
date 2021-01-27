@@ -1,9 +1,7 @@
-{ stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
+{ lib, stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
 , python, pkg-config, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama
 , libpcap, CoreAudioKit, ForceFeedback
 , installShellFiles }:
-
-with stdenv;
 
 let
   majorVersion = "0";

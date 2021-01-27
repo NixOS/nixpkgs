@@ -1,5 +1,6 @@
-{ stdenv, fetchzip }@args:
-let lib = import ../extra-lib.nix {inherit (args.stdenv) lib;}; in
+{ lib, stdenv, fetchzip }@args:
+let lib' = lib; in
+let lib = import ../extra-lib.nix {lib = lib';}; in
 with builtins; with lib;
 let
   default-fetcher = {domain ? "github.com", owner ? "", repo, rev, name ? "source", sha256 ? null, ...}@args:

@@ -2,7 +2,7 @@
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
-, perl, perlPackages, python2Packages, pkg-config
+, perl, perlPackages, python3Packages, pkg-config
 , poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang
@@ -321,13 +321,13 @@ latexindent = perlPackages.buildPerlPackage rec {
 };
 
 
-pygmentex = python2Packages.buildPythonApplication rec {
+pygmentex = python3Packages.buildPythonApplication rec {
   pname = "pygmentex";
   inherit (src) version;
 
   src = lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs);
 
-  propagatedBuildInputs = with python2Packages; [ pygments chardet ];
+  propagatedBuildInputs = with python3Packages; [ pygments chardet ];
 
   dontBuild = true;
 
