@@ -1,5 +1,5 @@
 { buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , lib
 , pytest
 , pytest-xdist
@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-order";
-  version = "0.9.3";
+  version = "0.9.4";
 
-  src = fetchFromGitHub {
-    owner = "mrbean-bremen";
-    repo = "pytest-order";
-    rev = "486e0966c651f3c57bbc2172e9914e478de55b6b";
-    sha256 = "1mfw2x8r5hn4g5cd6jca92lvqrd9297gsc5bvz18dzjlrm8zlycc";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0b7i8z6rywnkb3skyg8bnfqgkjrwvkn64b4q07wfl1q7x65ksd26";
   };
+
+  checkPhase = false;
 
   propagatedBuildInputs = [ pytest ];
 
