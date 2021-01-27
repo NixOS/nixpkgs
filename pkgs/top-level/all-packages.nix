@@ -24191,6 +24191,10 @@ in
 
   wmctrl = callPackage ../tools/X11/wmctrl { };
 
+  wmderland = callPackage ../applications/window-managers/wmderland { };
+
+  wmderlandc = callPackage ../applications/window-managers/wmderlandc { };
+
   wmii_hg = callPackage ../applications/window-managers/wmii-hg { };
 
   wofi = callPackage ../applications/misc/wofi { };

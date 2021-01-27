@@ -371,6 +371,7 @@ in
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
   wasabibackend = handleTest ./wasabibackend.nix {};
   wireguard = handleTest ./wireguard {};
+  wmderland = handleTest ./wmderland.nix {};
   wordpress = handleTest ./wordpress.nix {};
   xandikos = handleTest ./xandikos.nix {};
   xautolock = handleTest ./xautolock.nix {};
