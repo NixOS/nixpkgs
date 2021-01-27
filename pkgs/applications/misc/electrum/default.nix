@@ -125,7 +125,7 @@ python3.pkgs.buildPythonApplication {
   '';
 
   passthru.updateScript = import ./update.nix {
-    inherit (stdenv) lib;
+    inherit lib;
     inherit
       writeScript
       common-updater-scripts

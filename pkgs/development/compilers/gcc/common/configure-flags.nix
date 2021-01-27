@@ -39,8 +39,7 @@ assert langJava -> lib.versionOlder version "7";
 
 let
   inherit (stdenv)
-    buildPlatform hostPlatform targetPlatform
-    lib;
+    buildPlatform hostPlatform targetPlatform;
 
   crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";

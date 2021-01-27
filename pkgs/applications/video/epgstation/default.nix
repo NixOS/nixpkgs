@@ -91,7 +91,7 @@ let
     # NOTE: this may take a while since it has to update all packages in
     # nixpkgs.nodePackages
     passthru.updateScript = import ./update.nix {
-      inherit (stdenv) lib;
+      inherit lib;
       inherit (src.meta) homepage;
       inherit
         pname

@@ -1,4 +1,4 @@
-{ stdenv, callPackage, vimUtils, buildEnv, makeWrapper }:
+{ lib, stdenv, callPackage, vimUtils, buildEnv, makeWrapper }:
 
 let
   macvim = callPackage ./macvim.nix { inherit stdenv; };
@@ -12,7 +12,6 @@ let
     # sourcing of the user's vimrc. Use `customRC = "source $HOME/.vim/vimrc"`
     # if you want to preserve that behavior.
     configure = let
-      inherit (stdenv) lib;
       doConfig = config: let
         vimrcConfig = config // {
           # always source the bundled system vimrc

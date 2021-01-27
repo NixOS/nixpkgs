@@ -13,7 +13,8 @@
 , csdp ? null
 , version, coq-version ? null,
 }@args:
-let lib = import ../../../../build-support/coq/extra-lib.nix {inherit (stdenv) lib;}; in
+let lib' = lib; in
+let lib = import ../../../../build-support/coq/extra-lib.nix {lib = lib';}; in
 with builtins; with lib;
 let
   release = {
