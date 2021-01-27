@@ -10,15 +10,14 @@
 
 buildGoModule rec {
   pname = "oci-seccomp-bpf-hook";
-  version = "1.2.0";
+  version = "1.2.1";
   src = fetchFromGitHub {
     owner = "containers";
     repo = "oci-seccomp-bpf-hook";
     rev = "v${version}";
-    sha256 = "143x4daixzhhhpli1l14r7dr7dn3q42w8dddr16jzhhwighsirqw";
+    sha256 = "0zbrpv6j4gd4l36zl2dljazdm85qlqwchf0xvmnaywcj8c8b49xw";
   };
   vendorSha256 = null;
-  doCheck = false;
 
   outputs = [ "out" "man" ];
   nativeBuildInputs = [
@@ -30,6 +29,10 @@ buildGoModule rec {
     bcc
     libseccomp
   ];
+
+  checkPhase = ''
+    go test -v ./...
+  '';
 
   buildPhase = ''
     make
