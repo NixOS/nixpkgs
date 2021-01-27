@@ -5086,6 +5086,8 @@ in
 
   http-getter = callPackage ../applications/networking/flent/http-getter.nix { };
 
+  httpdump = callPackage ../tools/security/httpdump { };
+
   httpie = callPackage ../tools/networking/httpie { };
 
   httping = callPackage ../tools/networking/httping {};
