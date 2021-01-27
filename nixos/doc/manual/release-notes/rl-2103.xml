@@ -461,6 +461,11 @@ self: super:
       mouse section.
      </para>
    </listitem>
+   <listitem>
+    <para>
+     ALSA OSS emulation (<varname>sound.enableOSSEmulation</varname>) is now disabled by default.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
