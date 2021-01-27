@@ -14,11 +14,14 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   dontBuild = true;
 
+  outputs = [ "out" "interactiveShellInit_zsh" ];
+
   installPhase = ''
     mkdir -p $out/share/zsh-bd
     cp {.,$out/share/zsh-bd}/bd.zsh
     cd $out/share/zsh-bd
     ln -s bd{,.plugin}.zsh
+    cp bd.plugin.zsh $interactiveShellInit_zsh
   '';
 
   meta = {
