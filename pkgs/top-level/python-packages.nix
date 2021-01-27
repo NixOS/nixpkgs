@@ -7099,6 +7099,8 @@ in {
 
   simanneal = callPackage ../development/python-modules/simanneal { };
 
+  simpervisor = callPackage ../development/python-modules/simpervisor { };
+
   simpleai = callPackage ../development/python-modules/simpleai { };
 
   simpleaudio = callPackage ../development/python-modules/simpleaudio { };
