@@ -25236,7 +25236,7 @@ in
   }).overrideAttrs (oldAttrs: rec {
     pname = "vim-darwin";
     meta = {
-      platforms = stdenv.lib.platforms.darwin;
+      platforms = lib.platforms.darwin;
     };
   });
 
