@@ -25,7 +25,7 @@ in {
     };
 
     nginx.securityHeaders = mkOption {
-      type = types.str;
+      type = types.lines;
       default = ''
         add_header Referrer-Policy no-referrer;
         add_header X-Content-Type-Options nosniff;
