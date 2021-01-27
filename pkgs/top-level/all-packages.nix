@@ -18940,7 +18940,6 @@ in
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.export_kernel_fpu_functions."4.14"
       ];
   };
 
@@ -18949,7 +18948,6 @@ in
       [ kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.export_kernel_fpu_functions."4.14"
       ];
   };
 
@@ -18958,7 +18956,6 @@ in
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
       kernelPatches.rtl8761b_support
-      kernelPatches.export_kernel_fpu_functions."5.3"
     ];
   };
 
@@ -18966,7 +18963,6 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
-      kernelPatches.export_kernel_fpu_functions."5.3"
     ];
   };
 
@@ -18974,7 +18970,6 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
-      kernelPatches.export_kernel_fpu_functions."5.3"
     ];
   };
 
@@ -18982,7 +18977,6 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
-      kernelPatches.export_kernel_fpu_functions."5.3"
     ];
   };
 
@@ -18990,7 +18984,6 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
-      kernelPatches.export_kernel_fpu_functions."5.3"
       kernelPatches.export-rt-sched-migrate
     ];
   };
@@ -19021,7 +19014,6 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
-      kernelPatches.export_kernel_fpu_functions."5.3"
     ];
   };
 
@@ -19029,7 +19021,6 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
-      kernelPatches.export_kernel_fpu_functions."5.3"
     ];
   };
 
