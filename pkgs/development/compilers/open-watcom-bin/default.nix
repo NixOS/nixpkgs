@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchurl, qemu, expect, writeScript, writeScriptBin, ncurses, bash, coreutils }:
+{ lib, stdenvNoCC, fetchurl, qemu, expect, writeScript, writeScriptBin, ncurses, bash, coreutils }:
 
 let
 
@@ -112,7 +112,7 @@ stdenvNoCC.mkDerivation rec {
     done
   '';
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "A C/C++ Compiler (binary distribution)";
     homepage = "http://www.openwatcom.org/";
     license = licenses.watcom;
