@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkg-config, qt5
 , avahi, boost, libopus, libsndfile, protobuf, speex, libcap
-, alsaLib, python
+, alsaLib, python3
 , rnnoise
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
@@ -25,7 +25,7 @@ let
     patches = (source.patches or [])
       ++ [ ./fix-rnnoise-argument.patch ];
 
-    nativeBuildInputs = [ pkg-config python qt5.qmake ]
+    nativeBuildInputs = [ pkg-config python3 qt5.qmake ]
       ++ (overrides.nativeBuildInputs or [ ]);
 
     buildInputs = [ boost protobuf avahi ]

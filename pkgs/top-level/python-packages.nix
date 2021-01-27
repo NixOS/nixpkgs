@@ -2001,6 +2001,8 @@ in {
 
   easywatch = callPackage ../development/python-modules/easywatch { };
 
+  ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
+
   eccodes = toPythonModule (pkgs.eccodes.override {
     enablePython = true;
     pythonPackages = self;
