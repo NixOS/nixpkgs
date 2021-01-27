@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 buildGoModule rec {
   pname = "terraform-provider-elasticsearch";
   version = "0.7.0";
@@ -20,7 +20,7 @@ buildGoModule rec {
   # if the versions are not provided via file paths.
   postInstall = "mv $out/bin/terraform-provider-elasticsearch{,_v${version}}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terraform provider for elasticsearch";
     homepage = "https://github.com/phillbaker/terraform-provider-elasticsearch";
     license = licenses.mpl20;

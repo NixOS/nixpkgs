@@ -1,10 +1,10 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , buildGoModule
 }:
 
 buildGoModule rec {
-  name = "terraform-provider-keycloak-${version}";
+  pname = "terraform-provider-keycloak";
   version = "1.20.0";
 
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ buildGoModule rec {
 
   postInstall = "mv $out/bin/terraform-provider-keycloak{,_v${version}}";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terraform provider for keycloak";
     homepage = "https://github.com/mrparkers/terraform-provider-keycloak";
     license = licenses.mpl20;
