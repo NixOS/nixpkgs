@@ -25082,6 +25082,8 @@ in
 
   tabula = callPackage ../applications/misc/tabula { };
 
+  tabula-java = callPackage ../applications/misc/tabula-java { };
+
   tasknc = callPackage ../applications/misc/tasknc { };
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
