@@ -115,7 +115,7 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = "https://www.ejabberd.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sander abbradar ajs124 ];
+    maintainers = with maintainers; [ sander abbradar ];
     broken = withElixir;
   };
 }
