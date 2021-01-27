@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin/
     mv nb $out/bin/
     mv bin/bookmark $out/bin/
+    
+    runHook postInstall
   '';
 
   postInstall = ''
