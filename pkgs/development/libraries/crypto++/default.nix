@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, }:
+{ lib, stdenv, fetchFromGitHub, nasm, which
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !enableStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "crypto++";
@@ -12,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1gwn8yh1mh41hkh6sgnhb9c3ygrdazd7645msl20i0zdvcp7f5w3";
   };
 
+  outputs = [ "out" "dev" ];
+
   postPatch = ''
     substituteInPlace GNUmakefile \
         --replace "AR = libtool" "AR = ar" \
@@ -19,12 +24,17 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
-  buildFlags = [ "shared" "libcryptopp.pc" ];
+  buildFlags =
+       lib.optional enableStatic "static"
+    ++ lib.optional enableShared "shared"
+    ++ [ "libcryptopp.pc" ];
   enableParallelBuilding = true;
 
   doCheck = true;
 
-  preInstall = "rm libcryptopp.a"; # built for checks but we don't install static lib into the nix store
+  # built for checks but we don't install static lib into the nix store
+  preInstall = lib.optionalString (!enableStatic) "rm libcryptopp.a";
+
   installTargets = [ "install-lib" ];
   installFlags = [ "LDCONF=true" ];
   postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''

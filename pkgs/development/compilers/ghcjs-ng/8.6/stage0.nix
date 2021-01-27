@@ -10,7 +10,7 @@
     , ghcjs-th, haddock-api-ghcjs, hashable, haskell-src-exts
     , haskell-src-meta, http-types, HUnit, lens, lifted-base, mtl
     , network, optparse-applicative, parallel, parsec, process, random
-    , regex-posix, safe, shelly, split, stdenv, stringsearch, syb
+    , regex-posix, safe, shelly, split, lib, stringsearch, syb
     , system-fileio, system-filepath, tar, template-haskell
     , template-haskell-ghcjs, terminfo, test-framework
     , test-framework-hunit, text, time, transformers
@@ -61,7 +61,7 @@
   ghc-api-ghcjs = callPackage
     ({ mkDerivation, alex, array, base, binary, bytestring, containers
     , deepseq, directory, filepath, ghc-boot, ghc-boot-th, ghc-heap
-    , ghci-ghcjs, happy, hpc, process, stdenv, template-haskell-ghcjs
+    , ghci-ghcjs, happy, hpc, process, lib, template-haskell-ghcjs
     , terminfo, time, transformers, unix
     }:
     mkDerivation {
@@ -81,7 +81,7 @@
 
   ghci-ghcjs = callPackage
     ({ mkDerivation, array, base, binary, bytestring, containers
-    , deepseq, filepath, ghc-boot, ghc-boot-th, ghc-heap, stdenv
+    , deepseq, filepath, ghc-boot, ghc-boot-th, ghc-heap, lib
     , template-haskell-ghcjs, transformers, unix
     }:
     mkDerivation {
@@ -98,7 +98,7 @@
 
   ghcjs-th = callPackage
     ({ mkDerivation, base, binary, bytestring, containers, ghc-prim
-    , ghci-ghcjs, stdenv, template-haskell-ghcjs
+    , ghci-ghcjs, lib, template-haskell-ghcjs
     }:
     mkDerivation {
       pname = "ghcjs-th";
@@ -115,7 +115,7 @@
   haddock-api-ghcjs = callPackage
     ({ mkDerivation, array, base, bytestring, Cabal, containers, deepseq
     , directory, filepath, ghc-api-ghcjs, ghc-boot, ghc-paths
-    , haddock-library-ghcjs, hspec, hspec-discover, QuickCheck, stdenv
+    , haddock-library-ghcjs, hspec, hspec-discover, QuickCheck, lib
     , transformers, xhtml
     }:
     mkDerivation {
@@ -142,7 +142,7 @@
   haddock-library-ghcjs = callPackage
     ({ mkDerivation, base, base-compat, bytestring, containers, deepseq
     , directory, filepath, haddock-library, hspec, hspec-discover
-    , optparse-applicative, parsec, QuickCheck, stdenv, text
+    , optparse-applicative, parsec, QuickCheck, lib, text
     , transformers, tree-diff
     }:
     mkDerivation {
@@ -164,7 +164,7 @@
     }) {};
 
   template-haskell-ghcjs = callPackage
-    ({ mkDerivation, base, ghc-boot-th, pretty, stdenv }:
+    ({ mkDerivation, base, ghc-boot-th, pretty, lib }:
     mkDerivation {
       pname = "template-haskell-ghcjs";
       version = "2.14.0.0";
