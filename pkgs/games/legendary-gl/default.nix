@@ -22,7 +22,7 @@ buildPythonApplication rec {
 
   doCheck = false;
 
-  pythonImportsCheck = [ "requests" ];
+  pythonImportsCheck = [ "legendary" ];
 
   meta = with lib; {
     description = "A free and open-source Epic Games Launcher alternative";
