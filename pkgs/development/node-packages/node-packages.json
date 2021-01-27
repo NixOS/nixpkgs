@@ -96,6 +96,7 @@
 , "graphql-cli"
 , "grunt-cli"
 , "makam"
+, "meshcommander"
 , "gqlint"
 , "gtop"
 , "gulp"

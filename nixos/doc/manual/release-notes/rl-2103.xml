@@ -612,6 +612,15 @@ self: super:
    </listitem>
    <listitem>
     <para>
+     In the ACME module, the data used to build the hash for the account
+     directory has changed to accomodate new features to reduce account
+     rate limit issues. This will trigger new account creation on the first
+     rebuild following this update. No issues are expected to arise from this,
+     thanks to the new account creation handling.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      <xref linkend="opt-users.users._name_.createHome" /> now always ensures home directory permissions to be <literal>0700</literal>.
      Permissions had previously been ignored for already existing home directories, possibly leaving them readable by others.
      The option's description was incorrect regarding ownership management and has been simplified greatly.

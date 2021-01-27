@@ -45,7 +45,7 @@ let
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
-    { inherit stdenv fetchzip; }
+    { inherit lib stdenv fetchzip; }
     { inherit release releaseRev; location = { owner = "coq"; repo = "coq";}; }
     args.version;
   version = fetched.version;

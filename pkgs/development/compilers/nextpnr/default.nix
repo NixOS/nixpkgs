@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake
 , boost, python3, eigen
 , icestorm, trellis
 , llvmPackages
@@ -12,7 +12,7 @@
 let
   boostPython = boost.override { python = python3; enablePython = true; };
 in
-with stdenv; mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nextpnr";
   version = "2021.01.02";
 

@@ -327,6 +327,37 @@ in package-set { inherit pkgs lib callPackage; } self // {
         # packages.  You should set this to true if you have benchmarks defined
         # in your local packages that you want to be able to run with cabal benchmark
         doBenchmark ? false
+        # An optional function that can modify the generic builder arguments
+        # for the fake package that shellFor uses to construct its environment.
+        #
+        # Example:
+        #   let
+        #     # elided...
+        #     haskellPkgs = pkgs.haskell.packages.ghc884.override (hpArgs: {
+        #       overrides = pkgs.lib.composeExtensions (hpArgs.overrides or (_: _: { })) (
+        #         _hfinal: hprev: {
+        #           mkDerivation = args: hprev.mkDerivation ({
+        #             doCheck = false;
+        #             doBenchmark = false;
+        #             doHoogle = true;
+        #             doHaddock = true;
+        #             enableLibraryProfiling = false;
+        #             enableExecutableProfiling = false;
+        #           } // args);
+        #         }
+        #       );
+        #     });
+        #   in
+        #   hpkgs.shellFor {
+        #     packages = p: [ p.foo ];
+        #     genericBuilderArgsModifier = args: args // { doCheck = true; doBenchmark = true };
+        #   }
+        #
+        # This will disable tests and benchmarks for everything in "haskellPkgs"
+        # (which will invalidate the binary cache), and then re-enable them
+        # for the "shellFor" environment (ensuring that any test/benchmark
+        # dependencies for "foo" will be available within the nix-shell).
+      , genericBuilderArgsModifier ? (args: args)
       , ...
       } @ args:
       let
@@ -443,7 +474,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         # This is a derivation created with `haskellPackages.mkDerivation`.
         #
         # pkgWithCombinedDeps :: HaskellDerivation
-        pkgWithCombinedDeps = self.mkDerivation genericBuilderArgs;
+        pkgWithCombinedDeps = self.mkDerivation (genericBuilderArgsModifier genericBuilderArgs);
 
         # The derivation returned from `envFunc` for `pkgWithCombinedDeps`.
         #
@@ -457,7 +488,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         # pkgWithCombinedDepsDevDrv :: Derivation
         pkgWithCombinedDepsDevDrv = pkgWithCombinedDeps.envFunc { inherit withHoogle; };
 
-        mkDerivationArgs = builtins.removeAttrs args [ "packages" "withHoogle" "doBenchmark" ];
+        mkDerivationArgs = builtins.removeAttrs args [ "genericBuilderArgsModifier" "packages" "withHoogle" "doBenchmark" ];
 
       in pkgWithCombinedDepsDevDrv.overrideAttrs (old: mkDerivationArgs // {
         nativeBuildInputs = old.nativeBuildInputs ++ mkDerivationArgs.nativeBuildInputs or [];

@@ -4,7 +4,7 @@
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
-, makeWrapper, python, ruby, perl
+, makeWrapper, python3, ruby, perl
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
@@ -25,7 +25,7 @@ let
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv lib makeWrapper writeText
-      stdenv python ruby perl;
+      stdenv python3 ruby perl;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
 
