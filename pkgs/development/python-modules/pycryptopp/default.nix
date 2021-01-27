@@ -34,8 +34,6 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptoolsDarcs darcsver pkgs.cryptopp ];
 
-  doCheck = false;
-
   meta = with stdenv.lib; {
     homepage = "https://tahoe-lafs.org/trac/pycryptopp";
     description = "Python wrappers for the Crypto++ library";
