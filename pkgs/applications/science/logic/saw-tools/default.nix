@@ -53,7 +53,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Tools for software verification and analysis";
     homepage    = "https://saw.galois.com";
-    license     = licenses.bsd3;
+    license     = lib.licenses.bsd3;
     platforms   = lib.platforms.linux;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
