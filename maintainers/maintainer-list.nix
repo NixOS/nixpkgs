@@ -8403,6 +8403,12 @@
     githubId = 321799;
     name = "Paul Colomiets";
   };
+  takagiy = {
+    email = "takagiy.4dev@gmail.com";
+    github = "takagiy";
+    githubId = 18656090;
+    name = "Yuki Takagi";
+  };
   taketwo = {
     email = "alexandrov88@gmail.com";
     github = "taketwo";
