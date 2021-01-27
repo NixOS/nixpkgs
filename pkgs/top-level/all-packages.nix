@@ -28885,18 +28885,6 @@ in
 
   solfege = python3Packages.callPackage ../misc/solfege { };
 
-  disnix = callPackage ../tools/package-management/disnix { };
-
-  dysnomia = callPackage ../tools/package-management/disnix/dysnomia (config.disnix or {
-    inherit (pythonPackages) supervisor;
-  });
-
-  dydisnix = callPackage ../tools/package-management/disnix/dydisnix { };
-
-  disnixos = callPackage ../tools/package-management/disnix/disnixos { };
-
-  DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService { };
-
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
 
   lice = callPackage ../tools/misc/lice {};

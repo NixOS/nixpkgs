@@ -71,7 +71,7 @@ in
       #utmp = 29; # unused
       # ddclient = 30; # converted to DynamicUser = true
       davfs2 = 31;
-      #disnix = 33; # unused
+      #disnix = 33; # module removed
       osgi = 34;
       tor = 35;
       cups = 36;
@@ -387,7 +387,7 @@ in
       utmp = 29;
       # ddclient = 30; # converted to DynamicUser = true
       davfs2 = 31;
-      disnix = 33;
+      #disnix = 33; # module removed
       osgi = 34;
       tor = 35;
       #cups = 36; # unused
