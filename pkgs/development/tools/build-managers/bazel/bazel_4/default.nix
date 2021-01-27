@@ -271,8 +271,8 @@ stdenv.mkDerivation rec {
       bazel-examples = fetchFromGitHub {
         owner = "bazelbuild";
         repo = "examples";
-        rev = "5d8c8961a2516ebf875787df35e98cadd08d43dc";
-        sha256 = "03c1bwlq5bs3hg96v4g4pg2vqwhqq6w538h66rcpw02f83yy7fs8";
+        rev = "4183fc709c26a00366665e2d60d70521dc0b405d";
+        sha256 = "1mm4awx6sa0myiz9j4hwp71rpr7yh8vihf3zm15n2ii6xb82r31k";
       };
 
     in (if !stdenv.hostPlatform.isDarwin then {
