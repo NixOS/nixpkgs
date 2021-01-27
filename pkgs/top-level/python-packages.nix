@@ -4867,6 +4867,8 @@ in {
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
+  pynndescent = callPackage ../development/python-modules/pynndescent { };
+
   pysbd = callPackage ../development/python-modules/pysbd { };
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
@@ -6504,6 +6506,8 @@ in {
       };
     });
   in if isPy3k then pyxattr' else pyxattr_2;
+
+  pyworld = callPackage ../development/python-modules/pyworld { };
 
   pyx = callPackage ../development/python-modules/pyx { };
 

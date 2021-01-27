@@ -25,6 +25,7 @@ in {
     };
 
     packages = mkOption {
+      type = types.functionTo (types.listOf types.package);
       default = hp: [];
       defaultText = "hp: []";
       example = "hp: with hp; [ text lens ]";

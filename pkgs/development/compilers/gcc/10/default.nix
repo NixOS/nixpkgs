@@ -245,7 +245,7 @@ stdenv.mkDerivation ({
 
   inherit
     (import ../common/extra-target-flags.nix {
-      inherit stdenv crossStageStatic libcCross threadsCross;
+      inherit lib stdenv crossStageStatic libcCross threadsCross;
     })
     EXTRA_FLAGS_FOR_TARGET
     EXTRA_LDFLAGS_FOR_TARGET

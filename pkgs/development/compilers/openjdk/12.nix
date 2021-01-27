@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, bash, pkg-config, autoconf, cpio, file, which, unzip
 , zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk11
+, libXcursor, libXrandr, fontconfig, openjdk11, fetchpatch
 , setJavaClassPath
 , headless ? false
 , enableJavaFX ? openjfx.meta.available, openjfx
@@ -43,6 +43,11 @@ let
       (fetchurl {
         url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
         sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
+      })
+      # Fix gnumake 4.3 incompatibility
+      (fetchpatch {
+        url = "https://github.com/openjdk/panama-foreign/commit/af5c725b8109ce83fc04ef0f8bf6aaf0b50c0441.patch";
+        sha256 = "0ja84kih5wkjn58pml53s59qnavb1z92dc88cbgw7vcyqwc1gs0h";
       })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk10.patch

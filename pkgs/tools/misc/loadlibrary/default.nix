@@ -5,7 +5,7 @@
 
 stdenv_32bit.mkDerivation rec {
   name = "loadlibrary-${version}";
-  version = "20170525-${stdenv_32bit.lib.strings.substring 0 7 rev}";
+  version = "20170525-${lib.strings.substring 0 7 rev}";
   rev = "721b084c088d779075405b7f20c77c2578e2a961";
   src = fetchFromGitHub {
     inherit rev;

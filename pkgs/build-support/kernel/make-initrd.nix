@@ -83,7 +83,7 @@ in stdenvNoCC.mkDerivation rec {
   builder = ./make-initrd.sh;
 
   nativeBuildInputs = [ perl cpio ]
-    ++ stdenvNoCC.lib.optional makeUInitrd ubootTools;
+    ++ lib.optional makeUInitrd ubootTools;
 
   compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
 

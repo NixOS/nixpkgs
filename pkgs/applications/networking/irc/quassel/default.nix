@@ -20,7 +20,6 @@
 }:
 
 let
-    inherit (stdenv) lib;
     buildClient = monolithic || client;
     buildCore = monolithic || enableDaemon;
 in

@@ -1,8 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, openssl, boost, gmp, procps }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, openssl, boost, gmp, procps }:
 
 let
   rev = "9e6b19ff15bc19fba5da1707ba18e7f160e5ed07";
-  inherit (stdenv) lib;
 in stdenv.mkDerivation rec {
   name = "libsnark-pre${version}";
   version = lib.substring 0 8 rev;

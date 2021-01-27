@@ -3,7 +3,6 @@
 , gettext, vim, bc, screen }:
 
 let
-  inherit (stdenv) lib;
   pythonEnv = python3.withPackages (ps: with ps; [ snack ]);
 in
 stdenv.mkDerivation rec {
