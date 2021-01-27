@@ -29,7 +29,7 @@ stdenv.mkDerivation ({
     packageBaseDir=$out/libexec/android-sdk/${package.path}
     mkdir -p $packageBaseDir
     cd $packageBaseDir
-    cp -av $sourceRoot/* .
+    cp -a $sourceRoot/* .
     ${patchInstructions}
   '';
 
