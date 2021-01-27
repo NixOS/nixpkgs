@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, python27Packages, git
+{ lib, stdenv, fetchurl, makeWrapper, python27Packages, git
 , docbook_xml_dtd_412, docbook_xsl, asciidoc, xmlto, pypy
 , breezy ? null, cvs ? null, darcs ? null, fossil ? null
 , mercurial ? null, monotone ? null, rcs ? null

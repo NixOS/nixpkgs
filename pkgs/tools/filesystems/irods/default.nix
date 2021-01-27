@@ -1,13 +1,11 @@
-{ stdenv, fetchFromGitHub, bzip2, zlib, autoconf, automake, cmake, gnumake, help2man , texinfo, libtool , cppzmq , libarchive, avro-cpp_llvm, boost, jansson, zeromq, openssl , pam, libiodbc, kerberos, gcc, libcxx, which, catch2 }:
-
-with stdenv;
+{ lib, stdenv, fetchFromGitHub, bzip2, zlib, autoconf, automake, cmake, gnumake, help2man , texinfo, libtool , cppzmq , libarchive, avro-cpp_llvm, boost, jansson, zeromq, openssl , pam, libiodbc, kerberos, gcc, libcxx, which, catch2 }:
 
 let
   avro-cpp=avro-cpp_llvm;
 in
 let
   common = import ./common.nix {
-    inherit stdenv bzip2 zlib autoconf automake cmake gnumake
+    inherit lib stdenv bzip2 zlib autoconf automake cmake gnumake
             help2man texinfo libtool cppzmq libarchive jansson
             zeromq openssl pam libiodbc kerberos gcc libcxx
             boost avro-cpp which catch2;
@@ -83,7 +81,7 @@ in rec {
      '';
 
      cmakeFlags = common.cmakeFlags ++ [
-       "-DCMAKE_INSTALL_PREFIX=${out}"
+       "-DCMAKE_INSTALL_PREFIX=${stdenv.out}"
        "-DIRODS_DIR=${irods}/lib/irods/cmake"
        "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,${irods}/lib"
        "-DCMAKE_MODULE_LINKER_FLAGS=-Wl,-rpath,${irods}/lib"

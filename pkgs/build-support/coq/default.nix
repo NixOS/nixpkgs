@@ -35,7 +35,7 @@ let
     "extraInstallFlags" "setCOQBIN" "mlPlugin"
     "dropAttrs" "dropDerivationAttrs" "keepAttrs" ] ++ dropAttrs) keepAttrs;
   fetch = import ../coq/meta-fetch/default.nix
-    { inherit stdenv fetchzip; } ({
+    { inherit lib stdenv fetchzip; } ({
       inherit release releaseRev;
       location = { inherit domain owner repo; };
     } // optionalAttrs (args?fetcher) {inherit fetcher;});
