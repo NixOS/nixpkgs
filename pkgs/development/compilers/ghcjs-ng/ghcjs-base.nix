@@ -4,6 +4,7 @@
 , quickcheck-unicode, random, scientific, test-framework
 , test-framework-hunit, test-framework-quickcheck2, text, time
 , transformers, unordered-containers, vector
+, lib
 }:
 mkDerivation {
   pname = "ghcjs-base";
