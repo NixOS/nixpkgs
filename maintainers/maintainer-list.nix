@@ -7891,6 +7891,12 @@
     githubId = 3621083;
     name = "Roosembert (Roosemberth) Palacios";
   };
+  rovanion = {
+    email = "rovanion.luckey+nixpkgs@gmail.com";
+    github = "rovanion";
+    githubId = 632775;
+    name = "Rovanion Luckey";
+  };
   rople380 = {
     name = "rople380";
     email = "55679162+rople380@users.noreply.github.com";
