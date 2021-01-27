@@ -10176,6 +10176,7 @@ in
           headless = true;
           inherit (gnome2) GConf gnome_vfs;
           openjdk13-bootstrap = callPackage ../development/compilers/openjdk/12.nix {
+            stdenv = gcc8Stdenv; /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
             openjfx = openjfx11; /* need this despite next line :-( */
             enableJavaFX = false;
             headless = true;
