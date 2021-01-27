@@ -308,12 +308,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2020.3.1"; /* updated by script */
+    version = "2020.3.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "0am4h8w1dmjl08iphqy78ivb91vkrvskg95dgm24zcj0n8rwmaq6"; /* updated by script */
+      sha256 = "0zkjmvi27b69xrkn4s6f5788n5yn044phgf48kamfqfs37q4xf1d"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -321,12 +321,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2020.3.1"; /* updated by script */
+    version = "2020.3.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
-      sha256 = "1kwz0aq4b664awppakj4syppk218nynwxv4ngc7pa3k9v4g2sdah"; /* updated by script */
+      sha256 = "1vac21d9p52z4k1dl903rc2dbbcf873xbg8rx1fp9nsaaphnc9lq"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -334,12 +334,12 @@ in
 
   mps = buildMps rec {
     name = "mps-${version}";
-    version = "2020.2.3"; /* updated by script */
+    version = "2020.3"; /* updated by script */
     description = "Create your own domain-specific language";
     license = lib.licenses.unfree;
     src = fetchurl {
-      url = "https://download.jetbrains.com/mps/2020.2/MPS-${version}.tar.gz";
-      sha256 = "1wd3d8pc155m54y5p2056p0x93v2nv9457i7la53ibbs7rj1j7kw"; /* updated by script */
+      url = "https://download.jetbrains.com/mps/2020.3/MPS-${version}.tar.gz";
+      sha256 = "0dr1z2sxarz1xif4swxx28hpzsyjd86m0c3xdaw5lmpqwqlzvc5h"; /* updated by script */
     };
     wmClass = "jetbrains-mps";
     update-channel = "MPS RELEASE";
@@ -412,12 +412,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2020.3.1"; /* updated by script */
+    version = "2020.3.2"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
     license = lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "1bfq3xwnfz6f04d0lq584q7pg775a8y35b1b62w81dbfh43l4fj0"; /* updated by script */
+      sha256 = "1jpa4gfy0xmmscjqca4pvvwvh4h3lg02nbf1m5wcsjdcywbk9y40"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WebStorm RELEASE";
