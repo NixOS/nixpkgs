@@ -31,10 +31,10 @@ rec {
 
   firefox-esr-78 = common rec {
     pname = "firefox-esr";
-    ffversion = "78.6.1esr";
+    ffversion = "78.7.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "3kq9vb0a8qblqk995xqhghw5d694mr1cjd5alkkwxbdjhpc1mck0ayn40xjph0znga6qdcq8l366p0by8ifbsdhv0x39ng8nvx9jvdf";
+      sha512 = "0606prndxfv9nvrpcnagwky04j4jhn1139gr72a0rydfagznsaqwy13gpzdf58ifycdln63052kchlh2dslz5m8hifp215ydcppv8xg";
     };
 
     meta = {
