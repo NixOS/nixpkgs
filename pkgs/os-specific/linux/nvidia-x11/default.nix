@@ -22,10 +22,10 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "x86_64-linux"
     then generic {
-      version = "460.32.03";
-      sha256_64bit = "0qb0f8djys55b7qgvpbwafw5lkwvmcslqz3i2kr3jm354gy248ag";
-      settingsSha256 = "0mfkw0s4gy1dx671cp1kbpkpkf9c4271w5dz0ykiacz22simi83l";
-      persistencedSha256 = "1zrnmwlwqg3pgy1jvldy9iv994wr823rl7vjr1kqnngdmn7bflxl";
+      version = "460.39";
+      sha256_64bit = "0zx3v4xas9z18yv1z3irp626h8kvcg8aw344sqpacfh1g106dw0b";
+      settingsSha256 = "15fa6lmfmgg02gya47ynx5d7cqsb73w4rbg4ly7lc1pnwl5f9qhm";
+      persistencedSha256 = "1dj3w03fa1i32c9c7w9392bg3nr2dk8mm4qm0wv12cv587zml0gx";
     }
     else legacy_390;
 
