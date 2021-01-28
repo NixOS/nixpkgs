@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-synapse";
-  version = "0.6.0";
+  version = "0.7.0";
   disabled = pythonOlder "3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f81cb52b220774aab93ffcf25bdc17e03fd84b6916836640789f86fbf636b984";
+    sha256 = "3cf37df471f75441b0afe98a0f3a548434e9bc6a6426dca8c089950b5423f63f";
     extension = "zip";
   };
 
