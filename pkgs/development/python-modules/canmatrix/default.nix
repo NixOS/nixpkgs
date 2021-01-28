@@ -13,7 +13,7 @@
 , xlrd
 , XlsxWriter
 , pyyaml
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -48,14 +48,11 @@ buildPythonPackage rec {
       --replace "version = versioneer.get_version()" "version = \"${version}\""
   '';
 
-  checkInputs = [
-    pytest
-  ];
-
+  checkInputs = [ pytestCheckHook ];
   # long_envvar_name_imports requires stable key value pair ordering
-  checkPhase = ''
-    pytest -s src/canmatrix -k 'not long_envvar_name_imports'
-  '';
+  pytestFlagsArray = [ "-s src/canmatrix" ];
+  disabledTests = [ "long_envvar_name_imports" ];
+  pythonImportsCheck = [ "canmatrix" ];
 
   meta = with lib; {
     homepage = "https://github.com/ebroecker/canmatrix";
