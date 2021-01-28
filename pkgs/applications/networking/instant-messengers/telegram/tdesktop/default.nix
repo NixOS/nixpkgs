@@ -1,5 +1,5 @@
-{ mkDerivation, lib, fetchurl, fetchsvn
-, pkgconfig, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
+{ mkDerivation, lib, fetchurl, callPackage
+, pkgconfig, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook, removeReferencesTo
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 , tl-expected, hunspell
@@ -17,14 +17,17 @@ with lib;
 # - https://git.alpinelinux.org/aports/tree/testing/telegram-desktop/APKBUILD
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
-mkDerivation rec {
+let
+  tg_owt = callPackage ./tg_owt.nix {};
+
+in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.3.0";
+  version = "2.4.4";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "0yga4p36jrc5m3d8q2y2g0505c2v540w5hgcscapl4xj9hyb21dw";
+    sha256 = "09lhikaybf57rki62miqcaxxrdg1ni2rj9aj4w9mrbzdv849fyc8";
   };
 
   postPatch = ''
@@ -38,12 +41,13 @@ mkDerivation rec {
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [ pkgconfig cmake ninja python3 wrapGAppsHook wrapQtAppsHook ];
+  nativeBuildInputs = [ pkgconfig cmake ninja python3 wrapGAppsHook wrapQtAppsHook removeReferencesTo ];
 
   buildInputs = [
     qtbase qtimageformats gtk3 libsForQt5.libdbusmenu enchant2 lz4 xxHash
     dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
     tl-expected hunspell
+    tg_owt
     # TODO: Shouldn't be required:
     pcre xorg.libpthreadstubs xorg.libXdmcp utillinux libselinux libsepol epoxy at-spi2-core libXtst
   ];
@@ -60,7 +64,6 @@ mkDerivation rec {
     "-DDESKTOP_APP_USE_PACKAGED_GSL=OFF"
     "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME=ON"
     "-DTDESKTOP_USE_PACKAGED_TGVOIP=OFF"
-    "-DDESKTOP_APP_DISABLE_WEBRTC_INTEGRATION=ON"
     #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'
     "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
   ];
@@ -82,6 +85,9 @@ mkDerivation rec {
   # TODO: Package mapbox-variant
 
   postFixup = ''
+    # Nuke refs to `tg_owt` which is introduced by `__FILE__` in headers.
+    remove-references-to -t ${tg_owt} $out/bin/telegram-desktop
+
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
     wrapProgram $out/bin/telegram-desktop \
