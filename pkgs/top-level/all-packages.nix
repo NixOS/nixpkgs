@@ -1856,6 +1856,8 @@ in
 
   chelf = callPackage ../tools/misc/chelf { };
 
+  chisel = callPackage ../tools/networking/chisel { };
+
   cht-sh = callPackage ../tools/misc/cht.sh { };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
