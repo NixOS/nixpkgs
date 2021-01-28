@@ -13,6 +13,7 @@ import sys
 from codecs import iterdecode
 from collections import OrderedDict
 from datetime import datetime
+from distutils.version import LooseVersion
 from os.path import abspath, dirname
 from urllib.request import urlopen
 
@@ -122,7 +123,7 @@ def print_updates(channels_old, channels_new):
     for channel_name in channels_old:
         version_old = channels_old[channel_name]["version"]
         version_new = channels_new[channel_name]["version"]
-        if version_old < version_new:
+        if LooseVersion(version_old) < LooseVersion(version_new):
             attr_name = channel_name_to_attr_name(channel_name)
             print(f'- {attr_name}: {version_old} -> {version_new}')
 
