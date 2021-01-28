@@ -105,6 +105,16 @@ in
           }));
       };
 
+      systemd.packages = [ cfg.package ];
+
+      systemd.services.podman.serviceConfig = {
+        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
+      };
+
+      systemd.sockets.podman.wantedBy = [ "sockets.target" ];
+
+      systemd.tmpfiles.packages = [ cfg.package ];
+
       assertions = [
         {
           assertion = cfg.dockerCompat -> !config.virtualisation.docker.enable;
