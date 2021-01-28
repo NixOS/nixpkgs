@@ -1111,6 +1111,8 @@ in
 
   bunny = callPackage ../tools/package-management/bunny { };
 
+  callaudiod = callPackage ../applications/audio/callaudiod { };
+
   calls = callPackage ../applications/networking/calls { };
 
   inherit (nodePackages) castnow;
@@ -9597,8 +9599,6 @@ in
   flutterPackages =
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter = flutterPackages.stable;
-  flutter-beta = flutterPackages.beta;
-  flutter-dev = flutterPackages.dev;
 
   fpc = callPackage ../development/compilers/fpc { };
 
@@ -21790,6 +21790,8 @@ in
 
   fdr = libsForQt5.callPackage ../applications/science/programming/fdr { };
 
+  feedbackd = callPackage ../applications/misc/feedbackd { };
+
   fehlstart = callPackage ../applications/misc/fehlstart { };
 
   fetchmail = callPackage ../applications/misc/fetchmail { };
@@ -23911,6 +23913,8 @@ in
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio { };
 
   obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
+
+  obs-gstreamer = callPackage ../applications/video/obs-studio/obs-gstreamer.nix { };
 
   obs-move-transition = callPackage ../applications/video/obs-studio/obs-move-transition.nix { };
 
@@ -29490,9 +29494,6 @@ in
   spdlog = spdlog_1;
 
   dart = callPackage ../development/interpreters/dart { };
-  dart_old = dart.override    { version = "1.24.3"; };
-  dart_stable = dart.override { version = "2.7.2"; };
-  dart_dev = dart.override    { version = "2.9.0-4.0.dev"; };
 
   httrack = callPackage ../tools/backup/httrack { };
 

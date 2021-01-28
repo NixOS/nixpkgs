@@ -117,6 +117,9 @@ mapAliases ({
   cv = progress; # added 2015-09-06
   d1x_rebirth = dxx-rebirth; # added 2018-04-25
   d2x_rebirth = dxx-rebirth; # added 2018-04-25
+  dart_dev = throw "Non-stable versions of Dart have been removed."; # added 2020-01-15
+  dart_old = throw "Non-stable versions of Dart have been removed."; # added 2020-01-15
+  dart_stable = dart; # added 2020-01-15
   dat = nodePackages.dat;
   dbvisualizer = throw "dbvisualizer has been removed from nixpkgs, as it's unmaintained"; # added 2020-09-20
   dbus_daemon = dbus.daemon; # added 2018-04-25
@@ -174,6 +177,8 @@ mapAliases ({
   fish-foreign-env = throw "fish-foreign-env has been replaced with fishPlugins.foreign-env"; # added 2020-12-29, modified 2021-01-10
   flameGraph = flamegraph; # added 2018-04-25
   flink_1_5 = throw "flink_1_5 was removed, use flink instead"; # added 2021-01-25
+  flutter-beta = throw "Non-stable versions of Flutter have been removed. You can use flutterPackages.mkFlutter to generate a package for other Flutter versions."; # added 2020-01-15
+  flutter-dev = throw "Non-stable versions of Flutter have been removed. You can use flutterPackages.mkFlutter to generate a package for other Flutter versions."; # added 2020-01-15
   flvtool2 = throw "flvtool2 has been removed."; # added 2020-11-03
   foldingathome = fahclient; # added 2020-09-03
   font-awesome-ttf = font-awesome; # 2018-02-25
