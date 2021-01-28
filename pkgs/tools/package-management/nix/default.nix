@@ -226,6 +226,12 @@ in rec {
         url = "https://github.com/NixOS/nix/commit/d4870462f8f539adeaa6dca476aff6f1f31e1981.patch";
         sha256 = "mTvLvuxb2QVybRDgntKMq+b6da/s3YgM/ll2rWBeY/Y=";
       })
+      # Fix the ETag bug. PR merged. Remove when updating to >= 20210125
+      # https://github.com/NixOS/nixpkgs/pull/109309#issuecomment-768331750
+      (fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/c5b42c5a42138329c6d02da0d8a53cb59c6077f4.patch";
+        sha256 = "sha256-d4RNOKMxa4NMbFgYcqWRv2ByHt8F/XUWV+6P9qHz7S4=";
+      })
     ];
 
     inherit storeDir stateDir confDir boehmgc;
