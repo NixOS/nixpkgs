@@ -23311,6 +23311,8 @@ in
 
   markdown-pp = callPackage ../tools/text/markdown-pp { };
 
+  mark = callPackage ../tools/text/mark { };
+
   marp = callPackage ../applications/office/marp { };
 
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
