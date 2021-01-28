@@ -6565,6 +6565,8 @@ in {
 
   reflink = callPackage ../development/python-modules/reflink { };
 
+  regenmaschine = callPackage ../development/python-modules/regenmaschine { };
+
   regex = callPackage ../development/python-modules/regex { };
 
   regional = callPackage ../development/python-modules/regional { };
