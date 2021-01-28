@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcommuni";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "communi";
     repo = "libcommuni";
     rev = "v${version}";
-    sha256 = "15crqc7a4kwrfbxs121rpdysw0694hh7dr290gg7pm61akvnrqcm";
+    sha256 = "sha256-ABvrMoOVSycbQ8iRDzi7zkFnuSgHMMBgm9cDUWlD4uc=";
   };
 
   buildInputs = [ qtbase qtdeclarative ];
