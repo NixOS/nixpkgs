@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   pname = "google-fonts";
-  version = "2019-07-14";
+  version = "unstable-2021-01-19";
 
   outputs = [ "out" "adobeBlank" ];
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "f113126dc4b9b1473d9354a86129c9d7b837aa1a";
-    sha256 = "0safw5prpa63mqcyfw3gr3a535w4c9hg5ayw5pkppiwil7n3pyxs";
+    rev = "a3a831f0fe44cd58465c6937ea06873728f2ba0d";
+    sha256 = "19abx2bj7mkysv2ihr43m3kpyf6kv6v2qjlm1skxc82rb72xqhix";
   };
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" ];
@@ -21,18 +23,9 @@ stdenv.mkDerivation {
     # directories. This causes non-determinism in the install since
     # the installation order of font files with the same name is not
     # fixed.
-    rm -rv ofl/alefhebrew \
-      ofl/misssaintdelafield \
-      ofl/mrbedford \
-      ofl/siamreap \
-      ofl/terminaldosislight
-
-    # See comment above, the structure of these is a bit odd
-    # We keep the ofl/<font>/static/ variants
-    rm -rv ofl/comfortaa/*.ttf \
-      ofl/mavenpro/*.ttf \
-      ofl/muli/*.ttf \
-      ofl/oswald/*.ttf
+    rm -rv ofl/cabincondensed \
+           ofl/signikanegative \
+           ofl/signikanegativesc
 
     if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
       echo "error: duplicate font names"
