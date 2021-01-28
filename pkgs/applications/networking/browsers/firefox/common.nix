@@ -131,28 +131,13 @@ buildStdenv.mkDerivation ({
       sha256 = "135n9brliqy42lj3nqgb9d9if7x6x9nvvn0z4anbyf89bikixw48";
     })
 
-  # there are two flavors of pipewire support
-  # The patches for the ESR release and the patches for the current stable
-  # release.
-  # Until firefox upstream stabilizes pipewire support we will have to continue
-  # tracking multiple versions here.
+  # This patch adds pipewire support for the ESR release
   ++ lib.optional (pipewireSupport && lib.versionOlder ffversion "83")
     (fetchpatch {
       # https://src.fedoraproject.org/rpms/firefox/blob/master/f/firefox-pipewire-0-3.patch
       url = "https://src.fedoraproject.org/rpms/firefox/raw/e99b683a352cf5b2c9ff198756859bae408b5d9d/f/firefox-pipewire-0-3.patch";
       sha256 = "0qc62di5823r7ly2lxkclzj9rhg2z7ms81igz44nv0fzv3dszdab";
     })
-    ++
-    # This picks pipewire patches from fedora that are part of https://bugzilla.mozilla.org/show_bug.cgi?id=1672944
-    lib.optionals (pipewireSupport && lib.versionAtLeast ffversion "83") (let
-      fedora_revision = "d6756537dd8cf4d9816dc63ada66ea026e0fd128";
-      mkPWPatch = spec: fetchpatch {
-        inherit (spec) name sha256;
-        url = "https://src.fedoraproject.org/rpms/firefox/raw/${fedora_revision}/f/${spec.name}";
-      };
-    in map mkPWPatch [
-        { name = "pw6.patch"; sha256 = "12lhx9wjpw0ahbfmw07wsx76bb223mr453q9cg8cq951vyskch3s"; }
-    ])
 
   ++ patches;
 
