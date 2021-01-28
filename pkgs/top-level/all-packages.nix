@@ -1111,6 +1111,8 @@ in
 
   bunny = callPackage ../tools/package-management/bunny { };
 
+  callaudiod = callPackage ../applications/audio/callaudiod { };
+
   calls = callPackage ../applications/networking/calls { };
 
   inherit (nodePackages) castnow;
@@ -21786,6 +21788,8 @@ in
   };
 
   fdr = libsForQt5.callPackage ../applications/science/programming/fdr { };
+
+  feedbackd = callPackage ../applications/misc/feedbackd { };
 
   fehlstart = callPackage ../applications/misc/fehlstart { };
 
