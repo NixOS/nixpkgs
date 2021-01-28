@@ -557,6 +557,8 @@ in {
 
   avea = callPackage ../development/python-modules/avea { };
 
+  avion = callPackage ../development/python-modules/avion { };
+
   avro3k = callPackage ../development/python-modules/avro3k { };
 
   avro = callPackage ../development/python-modules/avro { };
@@ -996,6 +998,8 @@ in {
   block-io = callPackage ../development/python-modules/block-io { };
 
   bluepy = callPackage ../development/python-modules/bluepy { };
+
+  bluepy-devices = callPackage ../development/python-modules/bluepy-devices { };
 
   bme680 = callPackage ../development/python-modules/bme680 { };
 
@@ -1506,6 +1510,8 @@ in {
     callPackage ../development/python-modules/cryptography/vectors.nix { };
 
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
+
+  csrmesh  = callPackage ../development/python-modules/csrmesh { };
 
   csscompressor = callPackage ../development/python-modules/csscompressor { };
 
