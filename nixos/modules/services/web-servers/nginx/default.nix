@@ -801,7 +801,7 @@ in
         ProtectControlGroups = true;
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         LockPersonality = true;
-        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) pkgs.nginx.modules);
+        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) cfg.package.modules);
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         PrivateMounts = true;
