@@ -45,7 +45,7 @@ in mkDerivation rec {
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
-    rev = "refs/tags/${version}";
+    rev = version;
     sha256 = "1plr5a7k5scxlibhbknhhk19ipk8las14dzs7v64zx7rhpj00009";
     fetchSubmodules = true;
   };
