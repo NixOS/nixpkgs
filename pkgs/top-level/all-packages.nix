@@ -1150,6 +1150,8 @@ in
 
   go-check = callPackage ../development/tools/check { };
 
+  go-cve-search = callPackage ../tools/security/go-cve-search { };
+
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
   claws = callPackage ../tools/misc/claws { };
