@@ -53,12 +53,12 @@ in {
     version = "19.0.6";
     sha256 = "sha256-pqqIayE0OyTailtd2zeYi+G1APjv/YHqyO8jCpq7KJg=";
     extraVulnerabilities = [
-      "Nextcloud 19 is still supported, but CVE-2020-8259 & CVE-2020-8152 are unfixed!"
+      "Nextcloud 19 is still supported, but CVE-2020-8259 & CVE-2020-8152 are unfixed! Please note that both CVEs only affect the file encryption module which is turned off by default. Alternatively, `pkgs.nextcloud20` can be used."
     ];
   };
 
   nextcloud20 = generic {
-    version = "20.0.4";
-    sha256 = "sha256-Jp8WIuMm9dEeOH04YarU4rDnkzSul+7Vp7M1K6dmFCA=";
+    version = "20.0.5";
+    sha256 = "5c70dd33024012a1651fd099133d052d129a4dadc6935f44bb9c3e2b360befe3";
   };
 }

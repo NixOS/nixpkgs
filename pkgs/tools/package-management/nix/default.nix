@@ -34,7 +34,6 @@ common =
       version = lib.getVersion name;
 
       is24 = lib.versionAtLeast version "2.4pre";
-      isExactly24 = lib.versionAtLeast version "2.4" && lib.versionOlder version "2.4";
 
       VERSION_SUFFIX = suffix;
 
@@ -94,9 +93,15 @@ common =
             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
           ''}
         '' +
-        # For Nix 2.4, patch around an issue where the Nix configure step pulls in the
-        # build system's bash and other utilities when cross-compiling
-        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly24) ''
+        # On all versions before c9f51e87057652db0013289a95deffba495b35e7,
+        # released with 2.3.8, we need to patch around an issue where the Nix
+        # configure step pulls in the build system's bash and other utilities
+        # when cross-compiling.
+        lib.optionalString (
+          stdenv.buildPlatform != stdenv.hostPlatform &&
+          (lib.versionOlder "2.3.8" (lib.traceVal version) && !is24)
+          # The additional is24 condition is required as versionOlder doesn't understand nixUnstable version strings
+        ) ''
           mkdir tmp/
           substitute corepkgs/config.nix.in tmp/config.nix.in \
             --subst-var-by bash ${bash}/bin/bash \
@@ -189,10 +194,10 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.9";
+    name = "nix-2.3.10";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "72331fdba220517a0ccabcf5c9735703c31674bfb4ef0b64da5d8f715d6022fa";
+      sha256 = "a8a85e55de43d017abbf13036edfb58674ca136691582f17080c1cd12787b7ab";
     };
 
     inherit storeDir stateDir confDir boehmgc;

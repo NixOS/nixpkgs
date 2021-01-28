@@ -2,7 +2,7 @@
   "name": "element-desktop",
   "productName": "Element",
   "main": "src/electron-main.js",
-  "version": "1.7.16",
+  "version": "1.7.18",
   "description": "A feature-rich client for Matrix.org",
   "author": "Element",
   "repository": {
@@ -57,12 +57,12 @@
     "tar": "^6.0.1"
   },
   "hakDependencies": {
-    "matrix-seshat": "^2.2.1",
+    "matrix-seshat": "^2.2.3",
     "keytar": "^5.6.0"
   },
   "build": {
     "appId": "im.riot.app",
-    "electronVersion": "10.1.6",
+    "electronVersion": "10.2.0",
     "files": [
       "package.json",
       {

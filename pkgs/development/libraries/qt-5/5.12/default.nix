@@ -8,7 +8,7 @@ top-level attribute to `top-level/all-packages.nix`.
 
 1. Update the URL in `pkgs/development/libraries/qt-5/$VERSION/fetch.sh`.
 2. From the top of the Nixpkgs tree, run
-   `./maintainers/scripts/fetch-kde-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
+   `./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-5/$VERSION`.
 3. Check that the new packages build correctly.
 4. Commit the changes and open a pull request.
 
@@ -51,7 +51,7 @@ let
 
   patches = {
     qtbase =
-      optionals stdenv.isDarwin [
+      [
         ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
         ./qtbase.patch.d/0002-qtbase-mac.patch
         ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
@@ -71,19 +71,6 @@ let
         # Ensure -I${includedir} is added to Cflags in pkg-config files.
         # See https://github.com/NixOS/nixpkgs/issues/52457
         ./qtbase.patch.d/0014-qtbase-pkg-config.patch
-
-        # https://bugreports.qt.io/browse/QTBUG-81715
-        # remove after updating to qt > 5.12.7
-        (fetchpatch {
-          name = "fix-qt5_make_output_file-cmake-macro.patch";
-          url = "https://code.qt.io/cgit/qt/qtbase.git/patch/?id=8a3fde00bf53d99e9e4853e8ab97b0e1bcf74915";
-          sha256 = "1gpcbdpyazdxnmldvhsf3pfwr2gjvi08x3j6rxf543rq01bp6cpx";
-        })
-        (fetchpatch {
-          name = "QTBUG-78937.patch";
-          url = "https://code.qt.io/cgit/qt/qtbase.git/patch/?id=67a9c600ad14ee44501a6df3509daa8234b97606";
-          sha256 = "1jiky1w9j8rka78r4q0yabb8w2l5j6csdjysynz7gs1ry4xjfdxd";
-        })
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
@@ -106,7 +93,7 @@ let
         stripLen = 1;
         extraPrefix = "src/3rdparty/";
       })
-    ] ++ optionals stdenv.isDarwin [
+
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-darwin-fix-failed-static-assertion.patch
     ];
@@ -117,7 +104,7 @@ let
         sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
       })
       ./qtwebkit.patch
-    ] ++ optionals stdenv.isDarwin [
+
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch
     ];

@@ -8,12 +8,12 @@
 
 let
   executableName = "element-desktop";
-  version = "1.7.16";
+  version = "1.7.18";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${version}";
-    sha256 = "sha256-mdHsw1Vi+2hrAF7biX3pJqfRaZU2lpw9zUZdcCm717g=";
+    sha256 = "sha256-5k+VVcloFAcFvk683r7njOCuj7OOnHS9QLEHFu0g+5o=";
   };
   electron = electron_9;
 

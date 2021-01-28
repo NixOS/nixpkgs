@@ -319,6 +319,10 @@ stdenv.mkDerivation ({
       }/lib:$(patchelf --print-rpath "$out"/lib/${binaryName}*/libxul.so)" \
         "$out"/lib/${binaryName}*/libxul.so
     patchelf --add-needed ${xorg.libXScrnSaver.out}/lib/libXss.so $out/lib/${binaryName}/${binaryName}
+    ${lib.optionalString (pipewireSupport && lib.versionAtLeast ffversion "83") ''
+      patchelf --add-needed "${lib.getLib pipewire}/lib/libpipewire-0.3.so" \
+        "$out"/lib/${binaryName}/${binaryName}
+    ''}
   '';
 
   doInstallCheck = true;

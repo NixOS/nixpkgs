@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot";
-  version = "2.3.11.3";
+  version = "2.3.13";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs =
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/2.3/${pname}-${version}.tar.gz";
-    sha256 = "1p5gp8jbavcsaara5mfn5cbrnlxssajnchczbgmmfzr7228fmnfk";
+    sha256 = "1i7ijss79a23v7b6lycfzaa8r5rh01k0h0b9h0j4a6n11sw7by53";
   };
 
   enableParallelBuilding = true;
@@ -89,5 +89,6 @@ stdenv.mkDerivation rec {
   };
   passthru.tests = {
     opensmtpd-interaction = nixosTests.opensmtpd;
+    inherit (nixosTests) dovecot;
   };
 }

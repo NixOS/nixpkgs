@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with maintainers; [ erictapen ];
     platforms = platforms.linux;
+    broken = true; # fails to build with recent versions of botan. https://github.com/das-labor/neopg/issues/98
   };
 }

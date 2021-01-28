@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grocy";
-  version = "2.7.1";
+  version = "3.0.1";
 
   src = fetchurl {
     url = "https://github.com/grocy/grocy/releases/download/v${version}/grocy_${version}.zip";
-    sha256 = "0ab1yxj499vadakq2c1lils3ir6fm02wrdgrirrlar4s4z6c4p7r";
+    sha256 = "sha256-Yjxv0LcLNtpYs4ntBano9NUxwdWgF5etA/M6hUVzOa8=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     unzip ${src} -d .
   '';
 
+  # NOTE: if patches are created from a git checkout, those should be modified
+  # with `unixdos` to make sure those apply here.
   patches = [
     ./0001-Define-configs-with-env-vars.patch
     ./0002-Remove-check-for-config-file-as-it-s-stored-in-etc-g.patch

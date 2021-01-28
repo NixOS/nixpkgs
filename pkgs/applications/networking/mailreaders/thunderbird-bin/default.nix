@@ -39,6 +39,7 @@
 , gnused
 , gnugrep
 , gnupg
+, gpgme
 , runtimeShell
 }:
 
@@ -118,6 +119,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  # See "Note on GPG support" in `../thunderbird/default.nix` for explanations
+  # on adding `gnupg` and `gpgme` into PATH/LD_LIBRARY_PATH.
+
   installPhase =
     ''
       mkdir -p "$prefix/usr/lib/thunderbird-bin-${version}"
@@ -158,7 +162,9 @@ stdenv.mkDerivation {
         --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS" \
         --set SNAP_NAME "thunderbird" \
         --set MOZ_LEGACY_PROFILES 1 \
-        --set MOZ_ALLOW_DOWNGRADE 1
+        --set MOZ_ALLOW_DOWNGRADE 1 \
+        --prefix PATH : "${stdenv.lib.getBin gnupg}/bin" \
+        --prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib gpgme}/lib"
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {

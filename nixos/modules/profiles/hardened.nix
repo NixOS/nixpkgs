@@ -1,5 +1,10 @@
 # A profile with most (vanilla) hardening options enabled by default,
-# potentially at the cost of features and performance.
+# potentially at the cost of stability, features and performance.
+#
+# This profile enables options that are known to affect system
+# stability. If you experience any stability issues when using the
+# profile, try disabling it. If you report an issue and use this
+# profile, always mention that you do.
 
 { config, lib, pkgs, ... }:
 

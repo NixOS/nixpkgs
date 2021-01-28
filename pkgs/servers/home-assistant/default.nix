@@ -144,5 +144,9 @@ in with py.pkgs; buildPythonApplication rec {
     description = "Open-source home automation platform running on Python 3";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda globin mic92 hexa ];
+    knownVulnerabilities = [
+      "https://www.home-assistant.io/blog/2021/01/22/security-disclosure/"
+      "https://www.home-assistant.io/blog/2021/01/23/security-disclosure2/"
+    ];
   };
 }

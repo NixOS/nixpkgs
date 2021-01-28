@@ -104,8 +104,8 @@ in rec {
   asterisk = asterisk_17;
 
   asterisk_13 = common {
-    version = "13.37.0";
-    sha256 = "09wc6cqh4f15wm62drzdppwvh7nwgnbwapvz1kgb0qdgixsshn3v";
+    version = "13.38.0";
+    sha256 = "1kxff6pbry8nydkspi0mqllidz2lw3d3g3r127x8jwgx021x0rik";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
@@ -113,8 +113,8 @@ in rec {
   };
 
   asterisk_16 = common {
-    version = "16.14.0";
-    sha256 = "1y120p4jlhg4iwihdxlk64y3y3n8w7y785lwqxsyqg6zviz0ghx6";
+    version = "16.15.0";
+    sha256 = "12nc7ywm6w1xyn720kdc1sqz5wkjjrkxr25wisl02f4v5wz8py7m";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;
@@ -122,8 +122,8 @@ in rec {
   };
 
   asterisk_17 = common {
-    version = "17.8.0";
-    sha256 = "0xhwh8s8n8xg43gcdkqjj484assva7lm5ah1b306a5nf6j8p9bjy";
+    version = "17.9.0";
+    sha256 = "1fnm1z7g45m883ivkm36r4kqb7163bzazi70mwf0fc2rc28jd1z4";
     externals = {
       "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
       "addons/mp3" = mp3-202;

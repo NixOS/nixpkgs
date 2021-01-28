@@ -138,6 +138,7 @@ mapAliases ({
 
   firestr = throw "firestr has been removed."; # added 2019-12-08
   flameGraph = flamegraph; # added 2018-04-25
+  flink_1_5 = throw "flink_1_5 was removed, use flink instead"; # added 2021-01-25
   foldingathome = fahclient; # added 2020-09-03
   font-awesome-ttf = font-awesome; # 2018-02-25
   # 2019-10-31
@@ -352,6 +353,7 @@ mapAliases ({
   oblogout = throw "oblogout has been removed from nixpkgs, as it's archived upstream."; # added 2019-12-10
   opencl-icd = ocl-icd; # added 2017-01-20
   openexr_ctl = ctl; # added 2018-04-25
+  openjpeg_1 = throw "openjpeg_1 has been removed, use openjpeg_2 instead"; # added 2021-01-24
   openjpeg_2_1 = openjpeg_2; # added 2018-10-25
   opensans-ttf = open-sans; # added 2018-12-04
   openssh_with_kerberos = openssh; # added 2018-01-28
@@ -736,8 +738,6 @@ mapAliases ({
   /* Cleanup before 21.03 */
   riot-desktop = throw "riot-desktop is now element-desktop!";
   riot-web = throw "riot-web is now element-web";
-
-  ant-dracula-theme = throw "ant-dracula-theme is now dracula-theme, and theme name is Dracula instead of Ant-Dracula.";
 
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:

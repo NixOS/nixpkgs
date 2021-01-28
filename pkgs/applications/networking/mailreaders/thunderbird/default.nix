@@ -14,6 +14,8 @@
 , glib
 , gnugrep
 , gnused
+, gnupg
+, gpgme
 , icu
 , jemalloc
 , lib
@@ -70,13 +72,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.6.0";
+  version = "78.6.1";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "0hx9gg3ngpvgshrz9j7ni4kh3chadqd5w5fpywjjw4naj0k53d0i9jjhq4p6fyvf6rb2g825ibqq794lr9drn6nrfndh5w1yn5lw69n";
+      "1vzka0msy6gqyxgwyp2dknp6rmgzhcjsyq2hf798wf4wrb7rrrsyrgqrd8skss929wakda0slqng505lhig79za7wyyh531f7i9qbv7";
   };
 
   nativeBuildInputs = [
@@ -286,6 +288,15 @@ stdenv.mkDerivation rec {
     ${desktopItem.buildCommand}
   '';
 
+  # Note on GPG support:
+  # Thunderbird's native GPG support does not yet support smartcards.
+  # The official upstream recommendation is to configure fall back to gnupg
+  # using the Thunderbird config `mail.openpgp.allow_external_gnupg`
+  # and GPG keys set up; instructions with pictures at:
+  # https://anweshadas.in/how-to-use-yubikey-or-any-gpg-smartcard-in-thunderbird-78/
+  # For that to work out of the box, it requires `gnupg` on PATH and
+  # `gpgme` in `LD_LIBRARY_PATH`; we do this below.
+
   preFixup = ''
     # Needed to find Mozilla runtime
     gappsWrapperArgs+=(
@@ -295,6 +306,8 @@ stdenv.mkDerivation rec {
       --set SNAP_NAME "thunderbird"
       --set MOZ_LEGACY_PROFILES 1
       --set MOZ_ALLOW_DOWNGRADE 1
+      --prefix PATH : "${lib.getBin gnupg}/bin"
+      --prefix LD_LIBRARY_PATH : "${lib.getLib gpgme}/lib"
     )
   '';
 

@@ -8,7 +8,7 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 let
 
   makeZfsTest = name:
-    { kernelPackage ? pkgs.linuxPackages_latest
+    { kernelPackage ? if enableUnstable then pkgs.linuxPackages_latest else pkgs.linuxPackages
     , enableUnstable ? false
     , extraTest ? ""
     }:
