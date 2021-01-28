@@ -1,0 +1,33 @@
+diff --git a/Ryujinx/Program.cs b/Ryujinx/Program.cs
+index 29043bb8..d3973c7c 100644
+--- a/Ryujinx/Program.cs
++++ b/Ryujinx/Program.cs
+@@ -54,9 +54,6 @@ namespace Ryujinx
+                 }
+             }
+
+-            // Delete backup files after updating.
+-            Task.Run(Updater.CleanupUpdate);
+-
+             Toolkit.Init(new ToolkitOptions
+             {
+                 Backend = PlatformBackend.PreferNative
+@@ -146,11 +143,6 @@ namespace Ryujinx
+                 mainWindow.LoadApplication(launchPathArg);
+             }
+
+-            if (ConfigurationState.Instance.CheckUpdatesOnStart.Value && Updater.CanUpdate(false))
+-            {
+-                _ = Updater.BeginParse(mainWindow, false);
+-            }
+-
+             Application.Run();
+         }
+
+@@ -200,4 +192,4 @@ namespace Ryujinx
+             Logger.Shutdown();
+         }
+     }
+-}
+\ No newline at end of file
++}

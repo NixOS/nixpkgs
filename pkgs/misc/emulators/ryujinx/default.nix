@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, makeWrapper, makeDesktopItem, linkFarmFromDrvs
 , dotnet-sdk_5, dotnetPackages, dotnetCorePackages
-, SDL2, libX11, openal
+, SDL2, libX11, ffmpeg, openal, libsoundio
 , gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook
 }:
 
@@ -9,17 +9,19 @@ let
     SDL2
     gtk3
     libX11
+    ffmpeg
     openal
+    libsoundio
   ];
 in stdenv.mkDerivation rec {
   pname = "ryujinx";
-  version = "1.0.6416"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.0.6448"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "ad491b5570ec428d0d87d56426b03125e2ca5220";
-    sha256 = "0gjrvdh6n26r9kkljiw9xvmvb47vmpwsjxi4iv41ir3nsdigdvsn";
+    rev = "9eb0ab05c6e820e113b3c61cbacd9b085b2819c4";
+    sha256 = "168nm7p6lqswmsya6gf3296ligyjabqmbrdzginkcviii643yslz";
   };
 
   nativeBuildInputs = [ dotnet-sdk_5 dotnetPackages.Nuget makeWrapper wrapGAppsHook gobject-introspection gdk-pixbuf ];
@@ -32,7 +34,10 @@ in stdenv.mkDerivation rec {
     };
   });
 
-  patches = [ ./log.patch ]; # Without this, Ryujinx tries to write logs to the nix store. This patch makes it write to "~/.config/Ryujinx/Logs" on Linux.
+  patches = [
+    ./log.patch # Without this, Ryujinx attempts to write logs to the nix store. This patch makes it write to "~/.config/Ryujinx/Logs" on Linux.
+    ./disable-updater.patch # This disables the auto-updater, which does not work as it attempts to modify the nix store.
+  ];
 
   configurePhase = ''
     runHook preConfigure
