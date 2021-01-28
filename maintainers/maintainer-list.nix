@@ -5640,6 +5640,12 @@
     email = "markus@wotringer.de";
     name = "Markus Wotringer";
   };
+  marijanp = {
+    name = "Marijan Petričević";
+    email = "marijan.petricevic94@gmail.com";
+    github = "marijanp";
+    githubId = 13599169;
+  };
   marius851000 = {
     email = "mariusdavid@laposte.net";
     name = "Marius David";
@@ -8648,6 +8654,12 @@
     github = "squalus";
     githubId = 36899624;
     name = "squalus";
+  };
+  srapenne = {
+    email = "solene@perso.pw";
+    github = "rapenne-s";
+    githubId = 248016;
+    name = "Solène Rapenne";
   };
   srghma = {
     email = "srghma@gmail.com";
