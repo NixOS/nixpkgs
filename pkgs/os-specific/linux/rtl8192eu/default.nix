@@ -6,7 +6,7 @@ let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wi
 
 in stdenv.mkDerivation rec {
   name = "rtl8192eu-${kernel.version}-${version}";
-  version = "unstable-2021-01-11";
+  version = "4.4.1.20210111";
 
   src = fetchFromGitHub {
     owner = "Mange";
