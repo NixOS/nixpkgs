@@ -40,8 +40,7 @@ buildPythonPackage rec {
       --replace "python-slugify>=1.2.6,<4" "python-slugify"
   '';
 
-  # pytest seems to hang with python3.8
-  doCheck = !stdenv.isDarwin && pythonOlder "3.8";
+  doCheck = !stdenv.isDarwin;
 
   checkInputs = ([
     pytest pytestcov
