@@ -217,7 +217,7 @@ let
     environment = proxy_env;
 
     path =
-      if cfg.backend == "docker" then [ pkgs.docker ]
+      if cfg.backend == "docker" then [ config.virtualisation.docker.package ]
       else if cfg.backend == "podman" then [ config.virtualisation.podman.package ]
       else throw "Unhandled backend: ${cfg.backend}";
 
