@@ -50,6 +50,7 @@ in
       };
 
       policy = mkOption {
+        type = types.lines;
         default =
           ''
             <?xml version="1.0"?>

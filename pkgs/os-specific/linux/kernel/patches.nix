@@ -79,17 +79,6 @@
       patch = ./rtl8761b-support.patch;
     };
 
-  export_kernel_fpu_functions = {
-    "4.14" = {
-      name = "export_kernel_fpu_functions";
-      patch = ./export_kernel_fpu_functions_4_14.patch;
-    };
-    "5.3" = {
-      name = "export_kernel_fpu_functions";
-      patch = ./export_kernel_fpu_functions_5_3.patch;
-    };
-  };
-
   export-rt-sched-migrate = {
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;

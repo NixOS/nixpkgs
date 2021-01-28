@@ -31,19 +31,19 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "6.8.0";
+  version = "7.0.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-        sha256 = "0hhk2r0dnm9zmfwmnsnmnacm4pik6z60llp22axx7kcpqxv98nv5";
+        sha256 = "12fxkpy7j2qhfxypw9jg3bzdd9xx6vf6x96iy5kjihh89n236f6a";
       }
     else
       fetchgit {
         url = "https://gitlab.com/libvirt/libvirt.git";
         rev = "v${version}";
-        sha256 = "sha256-BQZPdmDE0g7xWd6QOHMKosP2HgVpIjsfgfohA9VxEHs=";
+        sha256 = "0xg9d410008mny73r2cp5ipghqpk0gz9gy7j32vcfk691dq75b3c";
         fetchSubmodules = true;
       };
 
@@ -111,7 +111,6 @@ in stdenv.mkDerivation rec {
     "-Ddriver_esx=enabled"
     "-Ddriver_remote=enabled"
     "-Dpolkit=enabled"
-    "-Ddbus=enabled"
     (opt "storage_iscsi" enableIscsi)
   ] ++ optionals stdenv.isLinux [
     (opt "storage_zfs" (zfs != null))
@@ -119,8 +118,6 @@ in stdenv.mkDerivation rec {
     "-Dapparmor=enabled"
     "-Dsecdriver_apparmor=enabled"
     "-Dnumad=enabled"
-    "-Dmacvtap=enabled"
-    "-Dvirtualport=enabled"
     "-Dstorage_disk=enabled"
     (opt "storage_rbd" enableCeph)
   ] ++ optionals stdenv.isDarwin [
