@@ -1,10 +1,9 @@
-{ channel
-, pname
+{ pname
 , version
-, sha256Hash
 , patches
 , dart
-, filename ? "flutter_linux_${version}-${channel}.tar.xz"
+, src
+, depsSha256
 }:
 
 { bash
@@ -13,7 +12,8 @@
 , coreutils
 , git
 , runCommand
-, lib, stdenv
+, stdenv
+, lib
 , fetchurl
 , alsaLib
 , dbus
@@ -30,21 +30,20 @@
 , nspr
 , nss
 , systemd
+, callPackage
 }:
 let
-  drvName = "flutter-${channel}-${version}";
+  repository = callPackage ./repository.nix {
+    inherit src pname version dart depsSha256;
+  };
+  drvName = "flutter-${version}";
+
   flutter = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";
 
-    src = fetchurl {
-      url =
-        "https://storage.googleapis.com/flutter_infra/releases/${channel}/linux/${filename}";
-      sha256 = sha256Hash;
-    };
+    buildInputs = [ git repository ];
 
-    buildInputs = [ git ];
-
-    inherit patches;
+    inherit src patches;
 
     postPatch = ''
       patchShebangs --build ./bin/
@@ -52,25 +51,25 @@ let
     '';
 
     buildPhase = ''
-      FLUTTER_ROOT=$(pwd)
-      FLUTTER_TOOLS_DIR="$FLUTTER_ROOT/packages/flutter_tools"
-      SNAPSHOT_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.snapshot"
-      STAMP_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.stamp"
-      SCRIPT_PATH="$FLUTTER_TOOLS_DIR/bin/flutter_tools.dart"
-      DART_SDK_PATH="${dart}"
+      export FLUTTER_ROOT="$(pwd)"
+      export FLUTTER_TOOLS_DIR="$FLUTTER_ROOT/packages/flutter_tools"
+      export SCRIPT_PATH="$FLUTTER_TOOLS_DIR/bin/flutter_tools.dart"
 
-      HOME=../.. # required for pub upgrade --offline, ~/.pub-cache
-                 # path is relative otherwise it's replaced by /build/flutter
+      mkdir -p "$out/bin/cache"
+      export SNAPSHOT_PATH="$out/bin/cache/flutter_tools.snapshot"
+      export STAMP_PATH="$out/bin/cache/flutter_tools.stamp"
 
-      (cd "$FLUTTER_TOOLS_DIR" && ${dart}/bin/pub upgrade --offline)
+      export DART_SDK_PATH="${dart}"
+      export PUB_CACHE="${repository}"
+
+      pushd "$FLUTTER_TOOLS_DIR"
+      ${dart}/bin/pub get --offline
+      popd
 
       local revision="$(cd "$FLUTTER_ROOT"; git rev-parse HEAD)"
       ${dart}/bin/dart --snapshot="$SNAPSHOT_PATH" --packages="$FLUTTER_TOOLS_DIR/.packages" "$SCRIPT_PATH"
       echo "$revision" > "$STAMP_PATH"
       echo -n "${version}" > version
-
-      rm -rf bin/cache/{artifacts,dart-sdk,downloads}
-      rm -f  bin/cache/*.stamp
     '';
 
     installPhase = ''
@@ -146,7 +145,7 @@ runCommand drvName
     homepage = "https://flutter.dev";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ babariviere ericdallo ];
+    maintainers = with maintainers; [ babariviere ericdallo thiagokokada ];
   };
 } ''
   mkdir -p $out/bin

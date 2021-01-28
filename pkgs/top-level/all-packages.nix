@@ -9596,8 +9596,6 @@ in
   flutterPackages =
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter = flutterPackages.stable;
-  flutter-beta = flutterPackages.beta;
-  flutter-dev = flutterPackages.dev;
 
   fpc = callPackage ../development/compilers/fpc { };
 
@@ -29489,9 +29487,6 @@ in
   spdlog = spdlog_1;
 
   dart = callPackage ../development/interpreters/dart { };
-  dart_old = dart.override    { version = "1.24.3"; };
-  dart_stable = dart.override { version = "2.7.2"; };
-  dart_dev = dart.override    { version = "2.9.0-4.0.dev"; };
 
   httrack = callPackage ../tools/backup/httrack { };
 
