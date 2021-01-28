@@ -999,6 +999,8 @@ in
 
   aws-google-auth = python3Packages.callPackage ../tools/admin/aws-google-auth { };
 
+  aws-mfa = python3Packages.callPackage ../tools/admin/aws-mfa { };
+
   aws-nuke = callPackage ../tools/admin/aws-nuke { };
 
   aws-okta = callPackage ../tools/security/aws-okta { };
