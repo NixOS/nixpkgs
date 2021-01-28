@@ -6,18 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-limit";
-  version = "0.0.4";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "alopatindev";
     repo = "cargo-limit";
     rev = version;
-    sha256 = "0ky62hbf6byxci28vqsps4xkf4r8irz5rz9q1pfmr68ls7bwywm7";
+    sha256 = "sha256-GYdWKRgdS9gCQRu1C8ht0wC1eBTtIMg585OuAfDn/+4=";
   };
 
-  cargoPatches = [ ./cargo-Add-Cargo.lock.patch ];
-
-  cargoSha256 = "0vdpz7xhkf05fr430hz00w0d2ghjhmhmpi89jzcdw1cmrnidywly";
+  cargoSha256 = "0381wgyb2xnsiick8invrkhcvp905rrfyikgv01w6qn9872z11s0";
 
   passthru = {
     updateScript = nix-update-script {
