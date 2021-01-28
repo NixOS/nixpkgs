@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   drivers = config.services.xserver.videoDrivers;
 
   # FIXME: should introduce an option like
@@ -13,11 +11,11 @@ let
   # driver.
   nvidiaForKernel = kernelPackages:
     if elem "nvidia" drivers then
-        kernelPackages.nvidia_x11
+      kernelPackages.nvidia_x11
     else if elem "nvidiaBeta" drivers then
-        kernelPackages.nvidia_x11_beta
+      kernelPackages.nvidia_x11_beta
     else if elem "nvidiaVulkanBeta" drivers then
-        kernelPackages.nvidia_x11_vulkan_beta
+      kernelPackages.nvidia_x11_vulkan_beta
     else if elem "nvidiaLegacy304" drivers then
       kernelPackages.nvidia_x11_legacy304
     else if elem "nvidiaLegacy340" drivers then
@@ -41,9 +39,8 @@ let
   syncCfg = pCfg.sync;
   offloadCfg = pCfg.offload;
   primeEnabled = syncCfg.enable || offloadCfg.enable;
-  nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
+  nvidiaPersistencedEnabled = cfg.nvidiaPersistenced;
 in
-
 {
   imports =
     [
@@ -54,102 +51,104 @@ in
     ];
 
   options = {
-    hardware.nvidia.powerManagement.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Experimental power management through systemd. For more information, see
-        the NVIDIA docs, on Chapter 21. Configuring Power Management Support.
-      '';
-    };
+    hardware.nvidia = {
+      powerManagement.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Experimental power management through systemd. For more information, see
+          the NVIDIA docs, on Chapter 21. Configuring Power Management Support.
+        '';
+      };
 
-    hardware.nvidia.modesetting.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Enable kernel modesetting when using the NVIDIA proprietary driver.
+      modesetting.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable kernel modesetting when using the NVIDIA proprietary driver.
 
-        Enabling this fixes screen tearing when using Optimus via PRIME (see
-        <option>hardware.nvidia.prime.sync.enable</option>. This is not enabled
-        by default because it is not officially supported by NVIDIA and would not
-        work with SLI.
-      '';
-    };
+          Enabling this fixes screen tearing when using Optimus via PRIME (see
+          <option>hardware.nvidia.prime.sync.enable</option>. This is not enabled
+          by default because it is not officially supported by NVIDIA and would not
+          work with SLI.
+        '';
+      };
 
-    hardware.nvidia.prime.nvidiaBusId = mkOption {
-      type = types.str;
-      default = "";
-      example = "PCI:1:0:0";
-      description = ''
-        Bus ID of the NVIDIA GPU. You can find it using lspci; for example if lspci
-        shows the NVIDIA GPU at "01:00.0", set this option to "PCI:1:0:0".
-      '';
-    };
+      prime.nvidiaBusId = mkOption {
+        type = types.str;
+        default = "";
+        example = "PCI:1:0:0";
+        description = ''
+          Bus ID of the NVIDIA GPU. You can find it using lspci; for example if lspci
+          shows the NVIDIA GPU at "01:00.0", set this option to "PCI:1:0:0".
+        '';
+      };
 
-    hardware.nvidia.prime.intelBusId = mkOption {
-      type = types.str;
-      default = "";
-      example = "PCI:0:2:0";
-      description = ''
-        Bus ID of the Intel GPU. You can find it using lspci; for example if lspci
-        shows the Intel GPU at "00:02.0", set this option to "PCI:0:2:0".
-      '';
-    };
+      prime.intelBusId = mkOption {
+        type = types.str;
+        default = "";
+        example = "PCI:0:2:0";
+        description = ''
+          Bus ID of the Intel GPU. You can find it using lspci; for example if lspci
+          shows the Intel GPU at "00:02.0", set this option to "PCI:0:2:0".
+        '';
+      };
 
-    hardware.nvidia.prime.sync.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Enable NVIDIA Optimus support using the NVIDIA proprietary driver via PRIME.
-        If enabled, the NVIDIA GPU will be always on and used for all rendering,
-        while enabling output to displays attached only to the integrated Intel GPU
-        without a multiplexer.
+      prime.sync.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable NVIDIA Optimus support using the NVIDIA proprietary driver via PRIME.
+          If enabled, the NVIDIA GPU will be always on and used for all rendering,
+          while enabling output to displays attached only to the integrated Intel GPU
+          without a multiplexer.
 
-        Note that this option only has any effect if the "nvidia" driver is specified
-        in <option>services.xserver.videoDrivers</option>, and it should preferably
-        be the only driver there.
+          Note that this option only has any effect if the "nvidia" driver is specified
+          in <option>services.xserver.videoDrivers</option>, and it should preferably
+          be the only driver there.
 
-        If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
-        specified (<option>hardware.nvidia.prime.nvidiaBusId</option> and
-        <option>hardware.nvidia.prime.intelBusId</option>).
+          If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
+          specified (<option>hardware.nvidia.prime.nvidiaBusId</option> and
+          <option>hardware.nvidia.prime.intelBusId</option>).
 
-        If you enable this, you may want to also enable kernel modesetting for the
-        NVIDIA driver (<option>hardware.nvidia.modesetting.enable</option>) in order
-        to prevent tearing.
+          If you enable this, you may want to also enable kernel modesetting for the
+          NVIDIA driver (<option>hardware.nvidia.modesetting.enable</option>) in order
+          to prevent tearing.
 
-        Note that this configuration will only be successful when a display manager
-        for which the <option>services.xserver.displayManager.setupCommands</option>
-        option is supported is used.
-      '';
-    };
+          Note that this configuration will only be successful when a display manager
+          for which the <option>services.xserver.displayManager.setupCommands</option>
+          option is supported is used.
+        '';
+      };
 
-    hardware.nvidia.prime.sync.allowExternalGpu = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Configure X to allow external NVIDIA GPUs when using optimus.
-      '';
-    };
+      prime.sync.allowExternalGpu = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Configure X to allow external NVIDIA GPUs when using optimus.
+        '';
+      };
 
-    hardware.nvidia.prime.offload.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Enable render offload support using the NVIDIA proprietary driver via PRIME.
+      prime.offload.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable render offload support using the NVIDIA proprietary driver via PRIME.
 
-        If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
-        specified (<option>hardware.nvidia.prime.nvidiaBusId</option> and
-        <option>hardware.nvidia.prime.intelBusId</option>).
-      '';
-    };
+          If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
+          specified (<option>hardware.nvidia.prime.nvidiaBusId</option> and
+          <option>hardware.nvidia.prime.intelBusId</option>).
+        '';
+      };
 
-    hardware.nvidia.nvidiaPersistenced = mkOption {
-      default = false;
-      type = types.bool;
-      description = ''
-        Update for NVIDA GPU headless mode, i.e. nvidia-persistenced. It ensures all
-        GPUs stay awake even during headless mode.
-      '';
+      nvidiaPersistenced = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Update for NVIDA GPU headless mode, i.e. nvidia-persistenced. It ensures all
+          GPUs stay awake even during headless mode.
+        '';
+      };
     };
   };
 
@@ -190,14 +189,15 @@ in
 
     services.xserver.useGlamor = mkDefault offloadCfg.enable;
 
-    services.xserver.drivers = optional primeEnabled {
-      name = "modesetting";
-      display = offloadCfg.enable;
-      deviceSection = ''
-        BusID "${pCfg.intelBusId}"
-        ${optionalString syncCfg.enable ''Option "AccelMethod" "none"''}
-      '';
-    } ++ singleton {
+    services.xserver.drivers = optional primeEnabled
+      {
+        name = "modesetting";
+        display = offloadCfg.enable;
+        deviceSection = ''
+          BusID "${pCfg.intelBusId}"
+          ${optionalString syncCfg.enable ''Option "AccelMethod" "none"''}
+        '';
+      } ++ singleton {
       name = "nvidia";
       modules = [ nvidia_x11.bin ];
       display = !offloadCfg.enable;
@@ -239,30 +239,32 @@ in
 
     systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;
 
-    systemd.services = let
-      baseNvidiaService = state: {
-        description = "NVIDIA system ${state} actions";
+    systemd.services =
+      let
+        baseNvidiaService = state: {
+          description = "NVIDIA system ${state} actions";
 
-        path = with pkgs; [ kbd ];
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${nvidia_x11.out}/bin/nvidia-sleep.sh '${state}'";
+          path = with pkgs; [ kbd ];
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${nvidia_x11.out}/bin/nvidia-sleep.sh '${state}'";
+          };
         };
-      };
 
-      nvidiaService = sleepState: (baseNvidiaService sleepState) // {
-        before = [ "systemd-${sleepState}.service" ];
-        requiredBy = [ "systemd-${sleepState}.service" ];
-      };
+        nvidiaService = sleepState: (baseNvidiaService sleepState) // {
+          before = [ "systemd-${sleepState}.service" ];
+          requiredBy = [ "systemd-${sleepState}.service" ];
+        };
 
-      services = (builtins.listToAttrs (map (t: nameValuePair "nvidia-${t}" (nvidiaService t)) ["hibernate" "suspend"]))
-        // {
+        services = (builtins.listToAttrs (map (t: nameValuePair "nvidia-${t}" (nvidiaService t)) [ "hibernate" "suspend" ]))
+          // {
           nvidia-resume = (baseNvidiaService "resume") // {
             after = [ "systemd-suspend.service" "systemd-hibernate.service" ];
             requiredBy = [ "systemd-suspend.service" "systemd-hibernate.service" ];
           };
         };
-    in optionalAttrs cfg.powerManagement.enable services
+      in
+      optionalAttrs cfg.powerManagement.enable services
       // optionalAttrs nvidiaPersistencedEnabled {
         "nvidia-persistenced" = mkIf nvidiaPersistencedEnabled {
           description = "NVIDIA Persistence Daemon";
@@ -278,9 +280,9 @@ in
       };
 
     systemd.tmpfiles.rules = optional config.virtualisation.docker.enableNvidia
-        "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
-      ++ optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
-        "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+      "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
+    ++ optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+      "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
     boot.extraModulePackages = [ nvidia_x11.bin ];
 
