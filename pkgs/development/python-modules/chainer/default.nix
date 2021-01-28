@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "chainer";
-  version = "6.5.0";
+  version = "7.7.0";
   disabled = !isPy3k; # python2.7 abandoned upstream
 
   # no tests in Pypi tarball
@@ -13,13 +13,8 @@ buildPythonPackage rec {
     owner = "chainer";
     repo = "chainer";
     rev = "v${version}";
-    sha256 = "0ha9fbl6sa3fbnsz3y1pg335iiskdbxw838m5j06zgzy156zna1x";
+    sha256 = "0m97k5bv4pcp5rvbczvrr2vxddwzw2h42cm021f5y779jx5ghclh";
   };
-
-  # remove on 7.0 or 6.6 release
-  postPatch = ''
-    sed -i '/typing/d' setup.py
-  '';
 
   checkInputs = [
     pytest
@@ -35,7 +30,7 @@ buildPythonPackage rec {
 
   # avoid gpu tests
   checkPhase = ''
-    pytest tests/chainer_tests/utils_tests -k 'not gpu and not cupy'
+    pytest tests/chainer_tests/utils_tests -k 'not gpu and not cupy and not ideep'
   '';
 
   meta = with lib; {
