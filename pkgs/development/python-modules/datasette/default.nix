@@ -27,13 +27,13 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.53";
+  version = "0.54";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "datasette";
     rev = version;
-    sha256 = "1rsgxkvav1qy2ia2csm1jvabd8klh3ly8719979gdlx2il1cjjkz";
+    sha256 = "sha256-7cfoKteBOnwFsViBegAYhb/NLUSwMSyFVbwDF9ngD8w=";
   };
 
   nativeBuildInputs = [ pytestrunner ];
