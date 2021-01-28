@@ -342,9 +342,9 @@
     "owner": "gitlabhq",
     "provider-source-address": "registry.terraform.io/gitlabhq/gitlab",
     "repo": "terraform-provider-gitlab",
-    "rev": "v3.1.0",
-    "sha256": "1an34ckz7lz1k25lkjpbmls55zp9pacr46vjnjjpqx6bx5s95f5g",
-    "version": "3.1.0"
+    "rev": "v3.4.0",
+    "sha256": "03k3xjhxw70n00dvwd0fkdshff9hnicrah6rm6zqmksb4mb7wji3",
+    "version": "3.4.0"
   },
   "google": {
     "owner": "hashicorp",
