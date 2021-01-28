@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
@@ -12,6 +12,15 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-ilSDLbPQnmhQcNbtKCpUNmyZY0JUY/Ksg0sj/t7veT0=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/procs --completion $shell > procs.$shell
+      installShellCompletion procs.$shell
+    done
+  '';
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
