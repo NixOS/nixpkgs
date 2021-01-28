@@ -659,7 +659,7 @@
     "rainbird" = ps: with ps; [ ]; # missing inputs: pyrainbird
     "raincloud" = ps: with ps; [ ]; # missing inputs: raincloudy
     "rainforest_eagle" = ps: with ps; [ ]; # missing inputs: eagle200_reader uEagle
-    "rainmachine" = ps: with ps; [ ]; # missing inputs: regenmaschine
+    "rainmachine" = ps: with ps; [ regenmaschine ];
     "random" = ps: with ps; [ ];
     "raspihats" = ps: with ps; [ smbus-cffi ]; # missing inputs: raspihats
     "raspyrfm" = ps: with ps; [ ]; # missing inputs: raspyrfm-client
