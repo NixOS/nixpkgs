@@ -412,6 +412,7 @@ mapAliases ({
   oblogout = throw "oblogout has been removed from nixpkgs, as it's archived upstream."; # added 2019-12-10
   opencl-icd = ocl-icd; # added 2017-01-20
   openexr_ctl = ctl; # added 2018-04-25
+  openisns = open-isns; # added 2020-01-28
   openjpeg_1 = throw "openjpeg_1 has been removed, use openjpeg_2 instead"; # added 2021-01-24
   openjpeg_2 = openjpeg; # added 2021-01-25
   opensans-ttf = open-sans; # added 2018-12-04
