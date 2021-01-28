@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, filelock, protobuf, numpy, pytest, mock, typing-extensions
+, filelock, protobuf, numpy, pytestCheckHook, mock, typing-extensions
 , cupy, cudaSupport ? false
 }:
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     mock
   ];
 
@@ -28,10 +28,13 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals cudaSupport [ cupy ];
 
-  # avoid gpu tests
-  checkPhase = ''
-    pytest tests/chainer_tests/utils_tests -k 'not gpu and not cupy and not ideep'
-  '';
+  pytestFlagsArray = [ "tests/chainer_tests/utils_tests" ];
+
+  disabledTests = [
+    "gpu"
+    "cupy"
+    "ideep"
+  ];
 
   meta = with lib; {
     description = "A flexible framework of neural networks for deep learning";
