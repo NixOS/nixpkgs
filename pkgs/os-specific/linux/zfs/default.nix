@@ -191,12 +191,12 @@ in {
   # to be adapted
   zfsStable = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "5.10";
+    incompatibleKernelVersion = "5.11";
 
     # this package should point to the latest release.
-    version = "0.8.6";
+    version = "2.0.1";
 
-    sha256 = "1mp27midxfhzzbsd84dcc10wrs3fx6hfmkayyw58s3q2mxbrghn2";
+    sha256 = "0wmw823ildwm9rcfyk22pvzg100yhps3y9hfjlrpspfd1hhkbp0d";
   };
 
   zfsUnstable = common {
