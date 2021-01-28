@@ -1,48 +1,56 @@
-{ stdenv, fetchurl, python2Packages, which, xz }:
-
+{ stdenv, lib, fetchurl, python2Packages, which, xz }:
 let
   extractor = fetchurl {
-    url = https://raw.githubusercontent.com/imirkin/re-vp2/master/extract_firmware.py;
-    sha256 = "03dd1il0cjs8xi411pkckkfjga348j0cgd6dix20gd4kwmlvyjqm";
+    url = "https://raw.githubusercontent.com/imirkin/re-vp2/d19d818d1e05c7c68afb052073cc8a487cac8f5d/extract_firmware.py";
+    sha256 = "sha256-FUu/aeWTtAdEj820x4BEZKgn3Zxs3hBI7EhLBmgMrQ0=";
   };
 
+  # there is firmware for additional models in the package from nvidia, but these are the only ones that have been tested.
   chipModel = [
     { chip = "nve4"; model = "gk104"; }
     { chip = "nve6"; model = "gk106"; }
     { chip = "nve7"; model = "gk107"; }
   ];
 
-in stdenv.mkDerivation rec {
-  name = "linux-firmware-nvidia-${version}";
+in
+stdenv.mkDerivation rec {
+  pname = "linux-firmware-nvidia";
   version = "325.15";
 
   src = fetchurl {
     url = "http://us.download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}.run";
-    sha256 = "0xc7w2ia2fnkn20s6aq1f4ib2ljxmd2931vnrkvl2injzr5hwy9x";
+    sha256 = "sha256-PXkOS/7SRkH3zHaHkUSrXVKxInEBK6OBsNM6oaLgh3U=";
   };
 
-  phases = [ "installPhase" ];
-
   nativeBuildInputs = [ which xz ];
+
+  unpackPhase = ''
+    ${stdenv.shell} ${src} --extract-only
+    ${python2Packages.python.interpreter} ${extractor}
+  '';
+
+  dontConfigure = true;
+
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
 
     dir=$out/lib/firmware
-    ${stdenv.shell} ${src} --extract-only
-    ${python2Packages.python.interpreter} ${extractor}
 
     mkdir -p $dir/{nouveau,nvidia}
     cp -rd nv* vuc-* $dir/nouveau
 
-    ${stdenv.lib.concatStringsSep "\n" (map (entry: ''
+  '' + lib.concatStringsSep "\n" (map
+    (entry: ''
       mkdir -p $dir/nvidia/${entry.model}
 
       ln -rs $dir/nouveau/${entry.chip}_fuc409c $dir/nvidia/${entry.model}/fecs_inst.bin
       ln -rs $dir/nouveau/${entry.chip}_fuc409d $dir/nvidia/${entry.model}/fecs_data.bin
       ln -rs $dir/nouveau/${entry.chip}_fuc41ac $dir/nvidia/${entry.model}/gpccs_inst.bin
       ln -rs $dir/nouveau/${entry.chip}_fuc41ad $dir/nvidia/${entry.model}/gpccs_data.bin
-    '') chipModel)}
+    '')
+    chipModel) + ''
 
     runHook postInstall
   '';
@@ -50,7 +58,7 @@ in stdenv.mkDerivation rec {
   # Firmware blobs do not need fixing and should not be modified
   dontFixup = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Binary firmware for nVidia cards";
     longDescription = ''
       This package contains proprietary firmware blobs for nVidia graphics cards
@@ -59,10 +67,10 @@ in stdenv.mkDerivation rec {
       If you card is supported but not handled by this package, please find your
       here https://nouveau.freedesktop.org/wiki/CodeNames/ and let us know.
     '';
-    homepage = http://nvidia.com;
-    hydraPlatforms = [];
+    homepage = "https://nvidia.com";
+    hydraPlatforms = [ ];
     license = licenses.unfree;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.linux;
   };
 }
