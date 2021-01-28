@@ -29377,6 +29377,8 @@ in
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
 
+  xortool = python3Packages.callPackage ../tools/security/xortool { };
+
   xow = callPackage ../misc/drivers/xow { };
 
   xbps = callPackage ../tools/package-management/xbps { };
