@@ -27534,6 +27534,11 @@ in
     boost = boost166;
   };
 
+  pinball = callPackage ../games/pinball {
+    autoreconfHook = with buildPackages;
+      autoreconfHook.override { automake = automake115x; };
+  };
+
   pingus = callPackage ../games/pingus {};
 
   pioneer = callPackage ../games/pioneer { };
