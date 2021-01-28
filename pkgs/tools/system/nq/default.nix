@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     description = "Unix command line queue utility";
     homepage = "https://github.com/chneukirchen/nq";
     license = licenses.publicDomain;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ cstrahan ];
   };
 }
