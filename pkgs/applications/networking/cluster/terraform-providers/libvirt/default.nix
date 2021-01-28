@@ -38,7 +38,7 @@ buildGoPackage rec {
     sha256 = "0ak2lpnv6h0i7lzfcggd90jpfhvsasdr6nflkflk2drlcpalggj9";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [ libvirt ];
 
