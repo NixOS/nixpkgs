@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, callPackage
 , fetchurl
 , fetchpatch
 , fetchFromGitHub
@@ -175,6 +176,35 @@ in {
     postInstall = ''
       mkdir -p $out/spl
       cp spl/u-boot-spl $out/spl/
+    '';
+  };
+
+  ubootNanoPCT4 = buildUBoot rec {
+    # vanilla u-boot does not work with the nanopc-t4
+    # so we use this repo with the required patches applied
+    src = fetchFromGitHub {
+      owner = "tmountain";
+      repo = "u-boot-nanopct4";
+      rev = "23f6f74ec3ba53263ed97ec3cac9979b0ad998bc";
+      sha256 = "07b3gcizkswld796l502bj6ln0hwz7wcm2rp3knpjmmha5llb5dz";
+    };
+
+    version = "2020.10";
+    # this provides wrapped rkbin binaries that are patched to work with NixOS
+    rkbin = callPackage "${src}/rkbin" {};
+
+    defconfig = "nanopc-t4-rk3399_defconfig";
+
+    extraMeta = {
+      platforms = [ "aarch64-linux" ];
+      license = lib.licenses.unfreeRedistributableFirmware;
+    };
+    filesToInstall = [ "idbloader.bin" "uboot.img" "trust.bin" ];
+    postBuild = ''
+      ./tools/mkimage -n rk3399 -T rksd -d ${rkbin}/share/rkbin/rk33/rk3399_ddr_800MHz_v1.24.bin idbloader.bin
+      cat ${rkbin}/share/rkbin/rk33/rk3399_miniloader_v1.19.bin >> idbloader.bin
+      ${rkbin}/bin/trust_merger --replace bl31.elf ${rkbin}/share/rkbin/rk33/rk3399_bl31_v1.30.elf trust.ini
+      ${rkbin}/bin/loaderimage --pack --uboot ./u-boot-dtb.bin uboot.img
     '';
   };
 
