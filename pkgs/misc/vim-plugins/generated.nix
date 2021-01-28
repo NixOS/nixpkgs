@@ -2842,6 +2842,18 @@ let
     meta.homepage = "https://github.com/roxma/nvim-cm-racer/";
   };
 
+  nvim-compe = buildVimPluginFrom2Nix {
+    pname = "nvim-compe";
+    version = "2021-01-28";
+    src = fetchFromGitHub {
+      owner = "hrsh7th";
+      repo = "nvim-compe";
+      rev = "c2247bceb2fba741800faaa98c0a7459c00e88da";
+      sha256 = "0q6f0j36jjgxj5pnvgmkf3mm9yarw5a4cx2fhs4igd8hry8n6hw4";
+    };
+    meta.homepage = "https://github.com/hrsh7th/nvim-compe/";
+  };
+
   nvim-completion-manager = buildVimPluginFrom2Nix {
     pname = "nvim-completion-manager";
     version = "2018-07-27";

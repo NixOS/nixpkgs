@@ -168,6 +168,7 @@ HerringtonDarkholme/yats.vim
 honza/vim-snippets
 hoob3rt/lualine.nvim
 hotwatermorning/auto-git-diff
+hrsh7th/nvim-compe
 hrsh7th/vim-vsnip
 hrsh7th/vim-vsnip-integ
 hsanson/vim-android
