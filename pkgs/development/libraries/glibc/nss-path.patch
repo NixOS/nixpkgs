@@ -1,0 +1,50 @@
+diff -ru -x '*~' glibc-2.32-orig/nss/nsswitch.c glibc-2.32/nss/nsswitch.c
+--- glibc-2.32-orig/nss/nsswitch.c	2020-08-05 04:17:00.000000000 +0200
++++ glibc-2.32/nss/nsswitch.c	2021-01-29 19:40:50.730883061 +0100
+@@ -349,6 +349,35 @@
+ 		__nss_shlib_revision);
+ 
+       ni->library->lib_handle = __libc_dlopen (shlib_name);
++
++      if (ni->library->lib_handle == NULL)
++	{
++	  const char *nss_path = __libc_secure_getenv ("NIX_GLIBC_NSS_PATH");
++	  if (!nss_path)
++	    nss_path = DEFAULT_NSS_PATH;
++
++	  const char *pos = nss_path;
++
++	  while (*pos)
++	    {
++	      const char *end = __strchrnul(pos, ':');
++	      if (pos != end)
++		{
++		  char shlib_path[1024];
++		  size_t shlib_pathlen = (end - pos) + 1 + strlen (shlib_name) + 1;
++		  if (shlib_pathlen < sizeof(shlib_path))
++		    {
++		      __stpcpy (__stpcpy (__stpncpy (shlib_path, pos, end - pos), "/"), shlib_name);
++		      ni->library->lib_handle = __libc_dlopen (shlib_path);
++		      if (ni->library->lib_handle != NULL)
++			break;
++		    }
++		  if (!*end) break;
++		  pos = end + 1;
++		}
++	    }
++	}
++
+       if (ni->library->lib_handle == NULL)
+ 	{
+ 	  /* Failed to load the library.  */
+diff -ru -x '*~' glibc-2.32-orig/sysdeps/generic/unsecvars.h glibc-2.32/sysdeps/generic/unsecvars.h
+--- glibc-2.32-orig/sysdeps/generic/unsecvars.h	2020-08-05 04:17:00.000000000 +0200
++++ glibc-2.32/sysdeps/generic/unsecvars.h	2021-01-29 15:38:37.067684060 +0100
+@@ -27,6 +27,7 @@
+   "LOCPATH\0"								      \
+   "MALLOC_TRACE\0"							      \
+   "NIS_PATH\0"								      \
++  "NIX_GLIBC_NSS_PATH\0"						      \
+   "NLSPATH\0"								      \
+   "RESOLV_HOST_CONF\0"							      \
+   "RES_OPTIONS\0"							      \
