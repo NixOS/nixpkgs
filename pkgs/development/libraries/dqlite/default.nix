@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dqlite";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0h7ypigj1b6xbspzc35y89jkp84v8rqiv9qgkyqlqylr7mcw952a";
+    sha256 = "sha256-Savy919boHqR3D3JfKsuZDMRQYJ1Yjfy7oA3w/L+dT4=";
   };
 
   nativeBuildInputs = [ autoreconfHook file pkg-config ];
