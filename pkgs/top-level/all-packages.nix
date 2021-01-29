@@ -23205,8 +23205,6 @@ in
   spek = callPackage ../applications/audio/spek { };
 
   spotify = callPackage ../applications/audio/spotify {
-    libgcrypt = libgcrypt_1_5;
-    libpng = libpng12;
     curl = curl.override {
       sslSupport = false; gnutlsSupport = true;
     };
