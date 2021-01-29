@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchFromGitHub
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.isStatic
+, enableShared ? !stdenv.isStatic
 }:
 let
   yesno = b: if b then "yes" else "no";

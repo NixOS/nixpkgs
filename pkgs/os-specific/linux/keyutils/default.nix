@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ./conf-symlink.patch
   ];
 
-  makeFlags = lib.optionals stdenv.hostPlatform.isStatic "NO_SOLIB=1";
+  makeFlags = lib.optionals stdenv.isStatic "NO_SOLIB=1";
 
   BUILDDATE = "1970-01-01";
   outputs = [ "out" "lib" "dev" ];

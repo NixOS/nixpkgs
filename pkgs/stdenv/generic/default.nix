@@ -161,6 +161,8 @@ let
       inherit overrides;
 
       inherit cc hasCC;
+
+      isStatic = false;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

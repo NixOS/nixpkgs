@@ -69,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isStatic; # libpwquality doesn't provide bindings when static
+    broken = stdenv.isStatic; # libpwquality doesn't provide bindings when static
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";
     homepage = "https://gitlab.gnome.org/World/PasswordSafe";
     license = licenses.gpl3Only;

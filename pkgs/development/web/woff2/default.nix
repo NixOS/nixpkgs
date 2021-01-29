@@ -1,5 +1,5 @@
 { brotli, cmake, pkg-config, fetchFromGitHub, lib, stdenv
-, static ? stdenv.hostPlatform.isStatic
+, static ? stdenv.isStatic
 }:
 
 stdenv.mkDerivation rec {

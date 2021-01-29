@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook perl python3 ];
   buildInputs = [ cracklib ];
 
-  patches = lib.optional stdenv.hostPlatform.isStatic [
+  patches = lib.optional stdenv.isStatic [
     (fetchpatch {
       name = "static-build.patch";
       url = "https://github.com/libpwquality/libpwquality/pull/40.patch";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = lib.optional stdenv.hostPlatform.isStatic [
+  configureFlags = lib.optional stdenv.isStatic [
     # Python binding generates a shared library which are unavailable with musl build
     "--disable-python-bindings"
   ];

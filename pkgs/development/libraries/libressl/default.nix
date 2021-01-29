@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, cmake, cacert, fetchpatch
-, buildShared ? !stdenv.hostPlatform.isStatic
+, buildShared ? !stdenv.isStatic
 }:
 
 let

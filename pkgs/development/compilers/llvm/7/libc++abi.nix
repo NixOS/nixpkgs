@@ -1,7 +1,7 @@
 { lib, stdenv, cmake, fetch, libcxx, llvm, version
 , standalone ? false
   # on musl the shared objects don't build
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.isStatic
 }:
 
 stdenv.mkDerivation {

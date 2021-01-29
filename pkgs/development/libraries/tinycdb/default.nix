@@ -2,7 +2,7 @@
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
   cross = "${stdenv.hostPlatform.config}";
-  static = stdenv.hostPlatform.isStatic;
+  static = stdenv.isStatic;
 
   cc = if !isCross then "cc" else "${cross}-cc";
   ar = if !isCross then "ar" else "${cross}-ar";

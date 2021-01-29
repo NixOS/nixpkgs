@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, openssl, fetchpatch, static ? stdenv.hostPlatform.isStatic }:
+{ stdenv, lib, fetchurl, openssl, fetchpatch, static ? stdenv.isStatic }:
 
 let
   pkgname = "ipmitool";

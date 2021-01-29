@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, fetchpatch
-, staticOnly ? stdenv.hostPlatform.isStatic
+, staticOnly ? stdenv.isStatic
 }:
 
 # ?TODO: there's also python lib in there

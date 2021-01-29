@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.isStatic
 }:
 
 stdenv.mkDerivation rec {

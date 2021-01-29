@@ -1,5 +1,5 @@
 { lib, stdenv, cmake, fetch, libcxx, libunwind, llvm, version
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.isStatic
 }:
 
 stdenv.mkDerivation {

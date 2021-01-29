@@ -10,7 +10,7 @@
 , zstd
 , enableJemalloc ? false, jemalloc
 , enableLite ? false
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.isStatic
 }:
 
 stdenv.mkDerivation rec {

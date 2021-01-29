@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages
-, staticBuild ? stdenv.hostPlatform.isStatic
+, staticBuild ? stdenv.isStatic
 }:
 
 let inherit (buildPackages.buildPackages) gcc; in
