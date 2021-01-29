@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "chisel";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "jpillora";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dayc0mbvybsydx2r170m5cfmf0p4896vk9xawpk7gncxclrwpv6";
+    sha256 = "sha256-1vg9tJLYbW8pfPpw3gQ15c9Kwj2lFfblMRhOK4yWKb8=";
   };
 
-  vendorSha256 = "01wh8fn76jn8hnf7gj759k8dwqrr0p36xmsxfc8dayzinpl10fqv";
+  vendorSha256 = "sha256-GzsQ6LXxe9UQc13XbsYFOWPe0EzlyHechchKc6xDkAc=";
 
   # tests require access to the network
   doCheck = false;
