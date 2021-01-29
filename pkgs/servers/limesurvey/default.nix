@@ -37,5 +37,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.limesurvey.org";
     maintainers = with maintainers; [offline];
     platforms = with platforms; unix;
+    knownVulnerabilities = [
+      # https://github.com/LimeSurvey/LimeSurvey/blob/3.x-LTS/docs/release_notes.txt
+      "Unauthorized access to statistics of a survey with certain permission configurations"
+      "Persistent XSS in browse response"
+    ];
   };
 }
