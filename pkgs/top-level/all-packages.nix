@@ -728,6 +728,8 @@ in
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
 
+  gobgp = callPackage ../tools/networking/gobgp { };
+
   metapixel = callPackage ../tools/graphics/metapixel { };
 
   ### APPLICATIONS/TERMINAL-EMULATORS
