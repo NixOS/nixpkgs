@@ -11,11 +11,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "genymotion";
-  version = "2.8.0";
+  version = "3.2.0";
   src = fetchurl {
     url = "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
     name = "genymotion-${version}-linux_x64.bin";
-    sha256 = "0lvfdlpmmsyq2i9gs4mf6a8fxkfimdr4rhyihqnfhjij3fzxz4lk";
+    sha256 = "sha256-T5ZKssJFKmNJ1FFZ0SUMPTWSIeKzzBqfrPH5quXy+6E=";
   };
 
   buildInputs = [ makeWrapper which xdg_utils ];
