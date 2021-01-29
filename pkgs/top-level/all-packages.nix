@@ -9184,7 +9184,7 @@ in
 
   zplug = callPackage ../shells/zsh/zplug { };
 
-  zplugin = callPackage ../shells/zsh/zplugin {} ;
+  zinit = callPackage ../shells/zsh/zinit {} ;
 
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
 

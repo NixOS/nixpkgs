@@ -840,6 +840,8 @@ mapAliases ({
   /* Added 2021-01-02 */
   ttyrec = ovh-ttyrec;
 
+  zplugin = zinit; # Added 2021-01-30
+
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
   https://github.com/NixOS/nixpkgs/pull/101369 */
