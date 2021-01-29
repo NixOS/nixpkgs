@@ -621,7 +621,7 @@
     "plaato" = ps: with ps; [ aiohttp-cors ];
     "plant" = ps: with ps; [ sqlalchemy ];
     "plex" = ps: with ps; [ aiohttp-cors plexapi plexauth plexwebsocket pysonos ];
-    "plugwise" = ps: with ps; [ ]; # missing inputs: plugwise
+    "plugwise" = ps: with ps; [ plugwise ];
     "plum_lightpad" = ps: with ps; [ ]; # missing inputs: plumlightpad
     "pocketcasts" = ps: with ps; [ ]; # missing inputs: pycketcasts
     "point" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pypoint
@@ -659,7 +659,7 @@
     "rainbird" = ps: with ps; [ ]; # missing inputs: pyrainbird
     "raincloud" = ps: with ps; [ ]; # missing inputs: raincloudy
     "rainforest_eagle" = ps: with ps; [ ]; # missing inputs: eagle200_reader uEagle
-    "rainmachine" = ps: with ps; [ ]; # missing inputs: regenmaschine
+    "rainmachine" = ps: with ps; [ regenmaschine ];
     "random" = ps: with ps; [ ];
     "raspihats" = ps: with ps; [ smbus-cffi ]; # missing inputs: raspihats
     "raspyrfm" = ps: with ps; [ ]; # missing inputs: raspyrfm-client
