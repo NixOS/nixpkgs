@@ -90,6 +90,7 @@ in {
       };
 
       startupOptions = mkOption {
+        type = types.listOf types.str;
         default = [
           "-Xms${cfg.initialJavaHeapSize}"
           "-Xmx${cfg.maxJavaHeapMemory}"
@@ -105,6 +106,7 @@ in {
 
       extraOptions = mkOption {
         default = [ ];
+        type = types.listOf types.str;
         example = [
           "-X debug"
           "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5006"
