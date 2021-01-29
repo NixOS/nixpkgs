@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -10,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "0.48.0";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1p37cfkcpqv74gp7g099alkqxanfc002kaq1cim6zkinx50gxjxw";
+    sha256 = "0mchjxlhrw73846acj99s6pig93infkbdgrmym6yzk8dg0ynx5gw";
   };
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
@@ -31,18 +32,11 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  cargoSha256 = "02djpwvwrrp7f0ifiypx1cr1v4bkqxrhqfhy0abfjszza95fjasv";
+  cargoSha256 = "0w17nv3zgczaznf1pkpj26ppxzv1arlva8zdg6b3l7m8qkkz8jn2";
 
-  checkFlags = [
-    "--skip=directory_in_home"
-    "--skip=home_directory"
-    "--skip=directory_in_root"
-    "--skip=truncation_symbol_not_truncated_home"
-    "--skip=truncation_symbol_truncated_home"
-    "--skip=folder_with_glide_yaml"
-    "--skip=shows_multiple_tfms"
-    "--skip=shows_pinned_in_project_below_root_with_global_json"
-  ];
+  preCheck = ''
+    HOME=$TMPDIR
+  '';
 
   meta = with lib; {
     description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
