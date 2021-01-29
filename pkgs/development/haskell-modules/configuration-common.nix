@@ -815,8 +815,9 @@ self: super: {
   # https://github.com/haskell-hvr/cryptohash-sha512/pull/5#issuecomment-752796913
   cryptohash-sha512 = dontCheck (doJailbreak super.cryptohash-sha512);
 
-  # Depends on tasty < 1.x, which we don't have.
-  cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
+  # https://github.com/haskell-hvr/cryptohash-sha256/issues/11
+  # Jailbreak is necessary to break out of tasty < 1.x dependency.
+  cryptohash-sha256 = markUnbroken (doJailbreak super.cryptohash-sha256);
 
   # Needs tasty-quickcheck ==0.8.*, which we don't have.
   cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
