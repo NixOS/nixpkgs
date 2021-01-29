@@ -246,10 +246,10 @@ self: super: {
 
   minimap-vim = super.minimap-vim.overrideAttrs(old: {
     preFixup = ''
-      substituteInPlace $out/share/vim-plugins/minimap-vim/plugin/minimap.vim --replace "code-minimap" \
-      "${code-minimap}/bin/code-minimap"
-      substituteInPlace $out/share/vim-plugins/minimap-vim/bin/minimap_generator.sh --replace "code-minimap" \
-      "${code-minimap}/bin/code-minimap"
+      substituteInPlace $out/share/vim-plugins/minimap-vim/plugin/minimap.vim \
+        --replace "code-minimap" "${code-minimap}/bin/code-minimap"
+      substituteInPlace $out/share/vim-plugins/minimap-vim/bin/minimap_generator.sh \
+        --replace "code-minimap" "${code-minimap}/bin/code-minimap"
     '';
   });
 
