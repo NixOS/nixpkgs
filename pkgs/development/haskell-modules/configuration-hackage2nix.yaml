@@ -3297,6 +3297,7 @@ broken-packages:
   - atomic-primops-foreign
   - atomic-primops-vector
   - atomo
+  - atp
   - atp-haskell
   - ats-pkg
   - ats-setup
@@ -4958,6 +4959,7 @@ broken-packages:
   - envstatus
   - epanet-haskell
   - epass
+  - ephemeral
   - epi-sim
   - epic
   - epoll
