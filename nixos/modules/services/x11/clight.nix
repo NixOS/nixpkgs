@@ -49,11 +49,26 @@ in {
     };
 
     settings = let
-      validConfigTypes = with types; either int (either str (either bool float));
+      oneOrMore  = type: with types; either type (listOf type);
+      validConfigTypes = with types; oneOf [int str bool float]
+        // { description = "setting type (integer, string, bool or floating point)"; };
+      configType = with types; attrsOf (nullOr (oneOrMore validConfigTypes))
+        // { description = ''
+              clight.conf configuration type. The format consists of an
+              attribute set of settings. Each setting can be either `null`,
+              one value or a list of values. The allowed values are integers,
+              strings, booleans or floating points.
+             '';
+           };
     in mkOption {
-      type = with types; attrsOf (nullOr (either validConfigTypes (listOf validConfigTypes)));
+      type = configType;
       default = {};
-      example = { captures = 20; gamma_long_transition = true; ac_capture_timeouts = [ 120 300 60 ]; };
+      example = literalExample ''
+        { captures = 20;
+          gamma_long_transition = true;
+          ac_capture_timeouts = [ 120 300 60 ];
+        };
+      '';
       description = ''
         Additional configuration to extend clight.conf. See
         <link xlink:href="https://github.com/FedeDP/Clight/blob/master/Extra/clight.conf"/> for a

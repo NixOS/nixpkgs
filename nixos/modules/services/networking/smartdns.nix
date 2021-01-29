@@ -30,8 +30,13 @@ in {
 
     settings = mkOption {
       type =
-      let atom = oneOf [ str int bool ];
-      in attrsOf (coercedTo atom toList (listOf atom));
+      let
+        atom = oneOf [ str int bool ];
+        oneOrMore = t: coercedTo t toList (listOf t) //
+          { description = "one or a list of ${lib.types.showsPrec 1 t}";
+            precedence = 1;
+          };
+      in attrsOf (oneOrMore atom);
       example = literalExample ''
         {
           bind = ":5353 -no-rule -group example";
