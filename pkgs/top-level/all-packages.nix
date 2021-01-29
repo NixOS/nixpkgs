@@ -15566,7 +15566,7 @@ in
   libxmp = callPackage ../development/libraries/libxmp { };
 
   libxslt = callPackage ../development/libraries/libxslt {
-    python = if stdenv.isDarwin then python2 else python3;
+    python = python3;
   };
 
   libxsmm = callPackage ../development/libraries/libxsmm { };
