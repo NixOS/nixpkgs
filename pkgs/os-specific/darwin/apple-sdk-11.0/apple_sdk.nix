@@ -129,7 +129,11 @@ in rec {
     };
   };
 
-  overrides = super: {};
+  overrides = super: {
+    CoreFoundation = lib.overrideDerivation super.CoreFoundation (drv: {
+      setupHook = ./cf-setup-hook.sh;
+    });
+  };
 
   bareFrameworks = (
     lib.mapAttrs framework (import ./frameworks.nix {

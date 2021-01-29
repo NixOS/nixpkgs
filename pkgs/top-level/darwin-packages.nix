@@ -162,7 +162,23 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   # TODO: make swift-corefoundation build with apple_sdk_11_0.Libsystem
   CF = if useAppleSDKLibs
-    then apple_sdk.frameworks.CoreFoundation
+    then
+      # This attribute (CF) is included in extraBuildInputs in the stdenv. This
+      # is typically the open source project. When a project refers to
+      # "CoreFoundation" it has an extra setup hook to force impure system
+      # CoreFoundation into the link step.
+      #
+      # In this branch, we only have a single "CoreFoundation" to choose from.
+      # To be compatible with the existing convention, we define
+      # CoreFoundation with the setup hook, and CF as the same package but
+      # with the setup hook removed.
+      #
+      # This may seem unimportant, but without it packages (e.g., bacula) will
+      # fail with linker errors referring ___CFConstantStringClassReference.
+      # It's not clear to me why some packages need this extra setup.
+      lib.overrideDerivation apple_sdk.frameworks.CoreFoundation (drv: {
+        setupHook = null;
+      })
     else callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { };
 
   # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
