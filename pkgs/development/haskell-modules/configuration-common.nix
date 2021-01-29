@@ -64,7 +64,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0w71kbz127fcli24sxsvd48l5xamwamjwhr18x9alam5cldqkkz1";
+      sha256 = "1m9jfr5b0qwajwwmvcq02263bmnqgcqvpdr06sdwlfz3sxsjfp8r";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -815,8 +815,9 @@ self: super: {
   # https://github.com/haskell-hvr/cryptohash-sha512/pull/5#issuecomment-752796913
   cryptohash-sha512 = dontCheck (doJailbreak super.cryptohash-sha512);
 
-  # Depends on tasty < 1.x, which we don't have.
-  cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
+  # https://github.com/haskell-hvr/cryptohash-sha256/issues/11
+  # Jailbreak is necessary to break out of tasty < 1.x dependency.
+  cryptohash-sha256 = markUnbroken (doJailbreak super.cryptohash-sha256);
 
   # Needs tasty-quickcheck ==0.8.*, which we don't have.
   cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
@@ -1377,11 +1378,6 @@ self: super: {
   # jailbreaking pandoc-citeproc because it has not bumped upper bound on pandoc
   pandoc-citeproc = doJailbreak super.pandoc-citeproc;
 
-  # 2021-01-17: Tests are broken because of a version mismatch.
-  # See here: https://github.com/jgm/pandoc/issues/7035
-  # This problem is fixed on master. Remove override when this assert fails.
-  pandoc = assert super.pandoc.version == "2.11.3.2"; dontCheck super.pandoc;
-
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
 
@@ -1417,7 +1413,7 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/610
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck (super.haskell-language-server.override {
-    lsp-test = dontCheck self.lsp-test_0_11_0_7;
+    lsp-test = dontCheck self.lsp-test;
     fourmolu = self.fourmolu_0_3_0_0;
   });
   # 2021-01-20
@@ -1426,12 +1422,10 @@ self: super: {
   apply-refact = super.apply-refact_0_8_2_1;
 
   fourmolu = dontCheck super.fourmolu;
+
   # 1. test requires internet
   # 2. dependency shake-bench hasn't been published yet so we also need unmarkBroken and doDistribute
-  ghcide = doDistribute (unmarkBroken (dontCheck
-  (super.ghcide_0_7_0_0.override {
-    lsp-test = dontCheck self.lsp-test_0_11_0_7;
-  })));
+  ghcide = doDistribute (unmarkBroken (dontCheck (super.ghcide_0_7_0_0.override { lsp-test = dontCheck self.lsp-test; })));
   refinery = doDistribute super.refinery_0_3_0_0;
   data-tree-print = doJailbreak super.data-tree-print;
 
