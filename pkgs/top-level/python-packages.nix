@@ -204,6 +204,8 @@ in {
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
+  aiocoap = callPackage ../development/python-modules/aiocoap { };
+
   aioconsole = callPackage ../development/python-modules/aioconsole { };
 
   aiocontextvars = callPackage ../development/python-modules/aiocontextvars { };
@@ -4911,6 +4913,8 @@ in {
 
   pluginbase = callPackage ../development/python-modules/pluginbase { };
 
+  plugwise = callPackage ../development/python-modules/plugwise { };
+
   plumbum = callPackage ../development/python-modules/plumbum { };
 
   ply = callPackage ../development/python-modules/ply { };
@@ -6651,6 +6655,8 @@ in {
   reedsolo = callPackage ../development/python-modules/reedsolo { };
 
   reflink = callPackage ../development/python-modules/reflink { };
+
+  regenmaschine = callPackage ../development/python-modules/regenmaschine { };
 
   regex = callPackage ../development/python-modules/regex { };
 

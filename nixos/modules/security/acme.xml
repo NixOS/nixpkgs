@@ -115,15 +115,18 @@ services.nginx = {
 <programlisting>
 <xref linkend="opt-security.acme.acceptTerms" /> = true;
 <xref linkend="opt-security.acme.email" /> = "admin+acme@example.com";
+
+# /var/lib/acme/.challenges must be writable by the ACME user
+# and readable by the Nginx user. The easiest way to achieve
+# this is to add the Nginx user to the ACME group.
+<link linkend="opt-users.users._name_.extraGroups">users.users.nginx.extraGroups</link> = [ "acme" ];
+
 services.nginx = {
   <link linkend="opt-services.nginx.enable">enable</link> = true;
   <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link> = {
     "acmechallenge.example.com" = {
       # Catchall vhost, will redirect users to HTTPS for all vhosts
       <link linkend="opt-services.nginx.virtualHosts._name_.serverAliases">serverAliases</link> = [ "*.example.com" ];
-      # /var/lib/acme/.challenges must be writable by the ACME user
-      # and readable by the Nginx user.
-      # By default, this is the case.
       locations."/.well-known/acme-challenge" = {
         <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.root">root</link> = "/var/lib/acme/.challenges";
       };
@@ -134,6 +137,7 @@ services.nginx = {
   };
 }
 # Alternative config for Apache
+<link linkend="opt-users.users._name_.extraGroups">users.users.wwwrun.extraGroups</link> = [ "acme" ];
 services.httpd = {
   <link linkend="opt-services.httpd.enable">enable = true;</link>
   <link linkend="opt-services.httpd.virtualHosts">virtualHosts</link> = {
