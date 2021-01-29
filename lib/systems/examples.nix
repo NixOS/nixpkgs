@@ -131,6 +131,12 @@ rec {
   armhf-embedded = {
     config = "arm-none-eabihf";
     libc = "newlib";
+    # GCC8+ does not build without this
+    # (https://www.mail-archive.com/gcc-bugs@gcc.gnu.org/msg552339.html):
+    gcc = {
+      arch = "armv5t";
+      fpu = "vfp";
+    };
   };
 
   aarch64-embedded = {
