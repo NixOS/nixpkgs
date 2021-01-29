@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fomp";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "01ld6yjrqrki6zwac8lmwmqkr5rv0sdham4pfbfkjwck4hi1gqqw";
+    sha256 = "sha256-xnGijydiO3B7BjSlryFuH1j/OPio9hCYbniq2IXp2W8=";
   };
 
   nativeBuildInputs = [ pkg-config wafHook ];
