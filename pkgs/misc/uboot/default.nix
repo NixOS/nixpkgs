@@ -189,11 +189,11 @@ in {
     defconfig = "nanopc-t4-rk3399_defconfig";
 
     extraMeta = {
-      platforms = [ "aarch64-linux" ];
+      platforms = ["aarch64-linux"];
       license = lib.licenses.unfreeRedistributableFirmware;
     };
-    BL31="${armTrustedFirmwareRK3328}/bl31.elf";
-    filesToInstall = [ "u-boot.itb" "idbloader.img"];
+    BL31="${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = ["u-boot.itb" "idbloader.img"];
     postBuild = ''
       ./tools/mkimage -n rk3399 -T rksd -d ${rkbin}/rk33/rk3399_ddr_800MHz_v1.24.bin idbloader.img
       cat ${rkbin}/rk33/rk3399_miniloader_v1.19.bin >> idbloader.img
