@@ -6,11 +6,11 @@
 # files.
 
 stdenv.mkDerivation rec {
-  name = "help2man-1.47.16";
+  name = "help2man-1.47.17";
 
   src = fetchurl {
     url = "mirror://gnu/help2man/${name}.tar.xz";
-    sha256 = "1x586h7wvripcay35kdh2kvydx84y8yy93ffjah2rqw6bc65iy1y";
+    sha256 = "sha256-2jo1xQseH4yPoyLWn6R8kBHORDqPuNHWcbHwG4sACOs=";
   };
 
   nativeBuildInputs = [ gettext perlPackages.LocaleGettext ];
