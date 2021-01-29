@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchFromGitHub, callPackage
+{ lib, fetchurl, fetchFromGitHub, fetchpatch, callPackage
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
@@ -25,7 +25,7 @@ common =
   , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
   , enableStatic ? false
   , name, suffix ? "", src
-
+  , patches ? []
   }:
   let
      sh = busybox-sandbox-shell;
@@ -215,6 +215,15 @@ in rec {
       rev = "5a6ddb3de14a1684af6c793d663764d093fa7846";
       sha256 = "0qhd3nxvqzszzsfvh89xhd239ycqb0kq2n0bzh9br78pcb60vj3g";
     };
+
+    patches = [
+      # Fix the ETag bug. PR merged. Remove when updating to >= 20210125
+      # https://github.com/NixOS/nixpkgs/pull/109309#issuecomment-768331750
+      (fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/c5b42c5a42138329c6d02da0d8a53cb59c6077f4.patch";
+        sha256 = "sha256-d4RNOKMxa4NMbFgYcqWRv2ByHt8F/XUWV+6P9qHz7S4=";
+      })
+    ];
 
     inherit storeDir stateDir confDir boehmgc;
   });

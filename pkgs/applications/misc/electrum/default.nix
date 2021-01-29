@@ -19,15 +19,7 @@
 }:
 
 let
-  version = "4.0.2";
-
-  # electrum is not compatible with dnspython 2.0.0 yet
-  # use the latest 1.x release instead
-  py = python3.override {
-    packageOverrides = self: super: {
-      dnspython = super.dnspython_1;
-    };
-  };
+  version = "4.0.9";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -43,7 +35,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "1xpkbard994n1gwl95b558x69k1m1m258bc220nxrajg1pywh90f";
+    sha256 = "0cmdyfabllw4wnpqpdxp3l6hjnm0cvkwxn0z8ph4x54sf4zq9iz3";
 
     extraPostFetch = ''
       mv $out ./all
@@ -52,13 +44,13 @@ let
   };
 in
 
-py.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication {
   pname = "electrum";
   inherit version;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "05ibrr6ysf6fncs1pimhxvyr7d659jwj2r2a9pdd3cmn1dxzy2w1";
+    sha256 = "1fvjiagi78f32nxgr2rx8jas8hxfvpp1c8fpfcalvykmlhdc2gva";
   };
 
   postUnpack = ''
@@ -68,25 +60,22 @@ py.pkgs.buildPythonApplication {
 
   nativeBuildInputs = stdenv.lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
     attrs
     bitstring
+    cryptography
     dnspython
-    ecdsa
     jsonrpclib-pelix
     matplotlib
     pbkdf2
     protobuf
-    pyaes
-    pycryptodomex
     pysocks
     qrcode
     requests
     tlslite-ng
-
     # plugins
     ckcc-protocol
     keepkey
@@ -123,10 +112,15 @@ py.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum
   '';
 
-  checkInputs = with py.pkgs; [ pytest ];
+  checkInputs = with python3.pkgs; [ pytestCheckHook pycryptodomex ];
 
-  checkPhase = ''
-    py.test electrum/tests
+  pytestFlagsArray = [ "electrum/tests" ];
+
+  disabledTests = [
+    "test_loop"  # test tries to bind 127.0.0.1 causing permission error
+  ];
+
+  postCheck = ''
     $out/bin/electrum help >/dev/null
   '';
 
@@ -156,6 +150,6 @@ py.pkgs.buildPythonApplication {
     homepage = "https://electrum.org/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ehmry joachifm np ];
+    maintainers = with maintainers; [ ehmry joachifm np prusnak ];
   };
 }
