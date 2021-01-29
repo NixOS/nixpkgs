@@ -1417,7 +1417,7 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/610
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck (super.haskell-language-server.override {
-    lsp-test = dontCheck self.lsp-test_0_11_0_7;
+    lsp-test = dontCheck self.lsp-test_0_12_0_0;
     fourmolu = self.fourmolu_0_3_0_0;
   });
   # 2021-01-20
@@ -1430,7 +1430,7 @@ self: super: {
   # 2. dependency shake-bench hasn't been published yet so we also need unmarkBroken and doDistribute
   ghcide = doDistribute (unmarkBroken (dontCheck
   (super.ghcide_0_7_0_0.override {
-    lsp-test = dontCheck self.lsp-test_0_11_0_7;
+    lsp-test = dontCheck self.lsp-test_0_12_0_0;
   })));
   refinery = doDistribute super.refinery_0_3_0_0;
   data-tree-print = doJailbreak super.data-tree-print;
