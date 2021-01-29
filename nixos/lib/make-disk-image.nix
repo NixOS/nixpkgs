@@ -257,7 +257,8 @@ let format' = format; in let
     ''}
 
     echo "copying staging root to image..."
-    cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} -t ${fsType} -i $diskImage $root/* /
+    cptofs -p ${optionalString (partitionTableType != "none") "-P ${rootPartition}"} -t ${fsType} -i $diskImage $root/* / ||
+      (echo >&2 "ERROR: cptofs failed. diskSize might be too small for closure."; exit 1)
   '';
 in pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
