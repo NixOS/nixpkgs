@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, perl, pythonPackages, libiconv, jansson }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "universal-ctags";
-  version = "unstable-2019-07-30";
+  version = "5.9.20210124.0";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
-    rev = "920e7910146915e5cae367bc9f135ffd8b042042";
-    sha256 = "14n3ix77rkhq6vq6kspmgjrmm0kg0f8cxikyqdq281sbnfq8bajn";
+    rev = "p${version}";
+    sha256 = "082yq629s2p4fc5kmjhmzx9q9grc32hwfr1x55ydvhi4x68dbx6d";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config pythonPackages.docutils ];
