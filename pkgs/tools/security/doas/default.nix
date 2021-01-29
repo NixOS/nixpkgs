@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , bison
 , pam
 
@@ -30,6 +31,12 @@ stdenv.mkDerivation rec {
     # Allow doas to discover binaries in /run/current-system/sw/{s,}bin and
     # /run/wrappers/bin
     ./0001-add-NixOS-specific-dirs-to-safe-PATH.patch
+
+    (fetchpatch {
+      name = "CVE-2019-25016.patch";
+      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/9e259950190c924b4a17825aad2d7cee87fbd75b/main/doas/reset-path.patch";
+      sha256 = "sha256-Nx+i2+HOtCQ65AC6aJGAq12Pxr2BLDrKlt1PTUstDug=";
+    })
   ];
 
   postPatch = ''
