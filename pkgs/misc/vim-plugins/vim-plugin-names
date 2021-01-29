@@ -677,6 +677,7 @@ wbthomason/packer.nvim
 weirongxu/coc-explorer
 wellle/targets.vim
 wellle/tmux-complete.vim
+wfxr/minimap.vim
 whonore/Coqtail
 will133/vim-dirdiff
 wincent/command-t
