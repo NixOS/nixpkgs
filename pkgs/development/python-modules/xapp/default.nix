@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "xapp";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "python-xapp";
     rev = version;
-    sha256 = "1pp3z4q6ryxcc26kaq222j53ji110n2v7rx29c7vy1fbb8mq64im";
+    sha256 = "1zgh4k96i939w4scikajmlriayk1zg3md16f8fckjvqbphpxrysl";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +32,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace "xapp/os.py" --replace "/usr/bin/pkexec" "${polkit}/bin/pkexec"
   '';
+
+  doCheck = false;
+  pythonImportsCheck = [ "xapp" ];
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/python-xapp";
