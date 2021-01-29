@@ -3,13 +3,11 @@
 , autoreconfHook
 , pkg-config
 , enableUdev ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
-, udev ? null
+, udev
 , libobjc
 , IOKit
 , withStatic ? false
 }:
-
-assert enableUdev -> udev != null;
 
 stdenv.mkDerivation rec {
   pname = "libusb";
