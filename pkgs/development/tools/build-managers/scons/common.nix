@@ -16,10 +16,18 @@ python3Packages.buildPythonApplication rec {
   postPatch = lib.optionalString (lib.versionAtLeast version "4.0.0") ''
     substituteInPlace setup.cfg \
       --replace "build/dist" "dist"
+  '' + lib.optionalString (lib.versionAtLeast version "4.1.0") ''
+    substituteInPlace setup.cfg \
+      --replace "build/doc/man/" ""
   '';
 
   # The release tarballs don't contain any tests (runtest.py and test/*):
   doCheck = lib.versionOlder version "4.0.0";
+
+  postInstall = lib.optionalString (lib.versionAtLeast version "4.1.0") ''
+    mkdir -p "$out/share/man/man1"
+    mv "$out/"*.1 "$out/share/man/man1/"
+  '';
 
   meta = with lib; {
     description = "An improved, cross-platform substitute for Make";

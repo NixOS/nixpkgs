@@ -7,12 +7,12 @@
 # files.
 
 stdenv.mkDerivation (rec {
-  name = "ed-${version}";
-  version = "1.16";
+  pname = "ed";
+  version = "1.17";
 
   src = fetchurl {
-    url = "mirror://gnu/ed/${name}.tar.lz";
-    sha256 = "0b4b1lwizvng9bvpcjnmpj2i80xz9xw2w8nfff27b2h4mca7mh6g";
+    url = "mirror://gnu/ed/${pname}-${version}.tar.lz";
+    sha256 = "0m2yrkfjjraakxr98nsiakqrn351h99n706x9asgmdi57j43kpki";
   };
 
   nativeBuildInputs = [ lzip ];
