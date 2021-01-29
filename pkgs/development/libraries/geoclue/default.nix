@@ -7,14 +7,14 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "geoclue";
-  version = "2.5.6";
+  version = "2.5.7";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "13fk6n4j74lvcsrg3kwbw1mkxgcr3iy9dnysmy0pclfsym8z5m5m";
+    sha256 = "sha256-8oYY63/Mu6OOyMP75vlnM4weuGZyFDlfnXiRhIneYdc=";
   };
 
   patches = [
