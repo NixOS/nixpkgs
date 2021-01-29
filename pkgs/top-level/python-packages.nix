@@ -7772,7 +7772,7 @@ in {
   # Used by circus and grab-site, 2020-08-29
   tornado_4 = callPackage ../development/python-modules/tornado/4.nix { };
 
-  # Used by luigi, 2020-08-29
+  # Used by streamlit, graphite_beacon, 2021-01-29
   tornado_5 = callPackage ../development/python-modules/tornado/5.nix { };
 
   towncrier = callPackage ../development/python-modules/towncrier { inherit (pkgs) git; };
