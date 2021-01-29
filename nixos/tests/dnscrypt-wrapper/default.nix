@@ -31,6 +31,7 @@ import ../make-test-python.nix ({ pkgs, ... }: {
 
     client = { lib, ... }:
       { services.dnscrypt-proxy2.enable = true;
+        services.dnscrypt-proxy2.upstreamDefaults = false;
         services.dnscrypt-proxy2.settings = {
           server_names = [ "server" ];
           static.server.stamp = "sdns://AQAAAAAAAAAAEDE5Mi4xNjguMS4xOjUzNTMgFEHYOv0SCKSuqR5CDYa7-58cCBuXO2_5uTSVU9wNQF0WMi5kbnNjcnlwdC1jZXJ0LnNlcnZlcg";
