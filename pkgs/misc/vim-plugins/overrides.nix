@@ -14,7 +14,8 @@
 , buildVimPluginFrom2Nix
 , nodePackages
 , dasht
-, sqlite, code-minimap
+, sqlite
+, code-minimap
 
 # deoplete-khard dependency
 , khard
