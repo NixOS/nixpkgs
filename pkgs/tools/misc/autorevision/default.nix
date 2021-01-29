@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "autorevision";
-  version = "1.21";
+  version = "1.22";
 
   src = fetchurl {
     url = "https://github.com/Autorevision/autorevision/releases/download/v%2F${version}/autorevision-${version}.tgz";
-    sha256 = "07ssirjy2mgbqxr792n3rqa408hm7qnhwfjzd73rqfwvjcahy1q8";
+    sha256 = "sha256-3ktLVC73m2xddq5BhxVKw/FJd6pZ5RVb7fv29dxUoRE=";
   };
 
   buildInputs = [

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "go-chromecast";
-  version = "0.2.7";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "vishen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OCykgy49RZL2aAE0OeHxj8zkFnr32sIYjtoFMwESqLg=";
+    sha256 = "sha256-ehIhFqZeVidhYTgqOLlf0aMHKG0cOe6245UyOVM/nOg=";
   };
 
   vendorSha256 = "sha256-idxElk4Sy7SE9G1OMRw8YH4o8orBa80qhBXPA+ar620=";
