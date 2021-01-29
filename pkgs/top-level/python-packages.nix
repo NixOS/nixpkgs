@@ -4876,6 +4876,8 @@ in {
 
   pluginbase = callPackage ../development/python-modules/pluginbase { };
 
+  plugwise = callPackage ../development/python-modules/plugwise { };
+
   plumbum = callPackage ../development/python-modules/plumbum { };
 
   ply = callPackage ../development/python-modules/ply { };
