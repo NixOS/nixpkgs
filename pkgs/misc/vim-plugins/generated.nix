@@ -2302,6 +2302,18 @@ let
     meta.homepage = "https://github.com/vim-scripts/mayansmoke/";
   };
 
+  minimap-vim = buildVimPluginFrom2Nix {
+    pname = "minimap-vim";
+    version = "2021-01-04";
+    src = fetchFromGitHub {
+      owner = "wfxr";
+      repo = "minimap.vim";
+      rev = "3e9ba8aae59441ed82b50b186f608e03aecb4f0e";
+      sha256 = "1z264hr0vbsdc0ffaiflzq952xv4h1g55i08dnlifvpizhqbalv6";
+    };
+    meta.homepage = "https://github.com/wfxr/minimap.vim/";
+  };
+
   mkdx = buildVimPluginFrom2Nix {
     pname = "mkdx";
     version = "2021-01-28";

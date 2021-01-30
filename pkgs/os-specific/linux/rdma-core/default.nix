@@ -4,7 +4,7 @@
 } :
 
 let
-  version = "33.0";
+  version = "33.1";
 
 in stdenv.mkDerivation {
   pname = "rdma-core";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "04q4z95nxxxjc674qnbwn19bv18nl3x7xwp6aql17h1cw3gdmhw4";
+    sha256 = "1p97r8ngfx1d9aq8p3f027323m7kgmk30kfrikf3jlkpr30rksbv";
   };
 
   nativeBuildInputs = [ cmake pkg-config pandoc docutils makeWrapper ];
@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "RDMA Core Userspace Libraries and Daemons";
     homepage = "https://github.com/linux-rdma/rdma-core";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ markuskowa ];
   };

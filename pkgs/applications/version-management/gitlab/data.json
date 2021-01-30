@@ -1,13 +1,13 @@
 {
-  "version": "13.7.1",
-  "repo_hash": "13bbi9ps6z8q9di9gni2ckydgfk7pxkaqf0wgx8gfwm80sc7s0km",
+  "version": "13.7.4",
+  "repo_hash": "1ggx76k6941rhccsd585p4h5k4zb87yvg0pmpzhwhh2q4ma2sywm",
   "owner": "gitlab-org",
   "repo": "gitlab",
-  "rev": "v13.7.1-ee",
+  "rev": "v13.7.4-ee",
   "passthru": {
-    "GITALY_SERVER_VERSION": "13.7.1",
-    "GITLAB_PAGES_VERSION": "1.32.0",
+    "GITALY_SERVER_VERSION": "13.7.4",
+    "GITLAB_PAGES_VERSION": "1.34.0",
     "GITLAB_SHELL_VERSION": "13.14.0",
-    "GITLAB_WORKHORSE_VERSION": "8.58.0"
+    "GITLAB_WORKHORSE_VERSION": "8.58.2"
   }
 }
