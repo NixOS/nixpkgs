@@ -2,14 +2,14 @@
 
  buildPythonPackage rec {
   pname = "pydsdl";
-  version = "1.4.2";
-  disabled = pythonOlder "3.5"; # only python>=3.5 is supported
+  version = "1.10.0";
+  disabled = pythonOlder "3.6"; # only python>=3.6 is supported
 
   src = fetchFromGitHub {
     owner = "UAVCAN";
     repo = pname;
     rev = version;
-    sha256 = "03kbpzdrjzj5vpgz5rhc110pm1axdn3ynv88b42zq6iyab4k8k1x";
+    sha256 = "0ikwswd6q4nkfr7wnjf4llwh9alydj57ny5yys0yakaq457sy6q4";
   };
 
   propagatedBuildInputs = [
