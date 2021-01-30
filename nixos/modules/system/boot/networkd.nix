@@ -437,6 +437,7 @@ let
           "IPv6ProxyNDP"
           "IPv6ProxyNDPAddress"
           "IPv6PrefixDelegation"
+          "DHCPv6PrefixDelegation"
           "IPv6MTUBytes"
           "Bridge"
           "Bond"
@@ -478,6 +479,7 @@ let
         (assertValueOneOf "IPv4ProxyARP" boolValues)
         (assertValueOneOf "IPv6ProxyNDP" boolValues)
         (assertValueOneOf "IPv6PrefixDelegation" ["static" "dhcpv6" "yes" "false"])
+        (assertValueOneOf "DHCPv6PrefixDelegation" boolValues)
         (assertByteFormat "IPv6MTUBytes")
         (assertValueOneOf "ActiveSlave" boolValues)
         (assertValueOneOf "PrimarySlave" boolValues)
@@ -666,6 +668,17 @@ let
         (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
         (assertValueOneOf "WithoutRA" ["solicit" "information-request"])
         (assertRange "SendOption" 1 65536)
+      ];
+
+      sectionDHCPv6PrefixDelegation = checkUnitConfig "DHCPv6PrefixDelegation" [
+        (assertOnlyFields [
+          "SubnetId"
+          "Announce"
+          "Assign"
+          "Token"
+        ])
+        (assertValueOneOf "Announce" boolValues)
+        (assertValueOneOf "Assign" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
@@ -1101,6 +1114,18 @@ let
       '';
     };
 
+    dhcpV6PrefixDelegationConfig = mkOption {
+      default = {};
+      example = { SubnetId = "auto"; Announce = true; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionDHCPv6PrefixDelegation;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[DHCPv6PrefixDelegation]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     dhcpServerConfig = mkOption {
       default = {};
       example = { PoolOffset = 50; EmitDNS = false; };
@@ -1467,6 +1492,10 @@ let
         + optionalString (def.dhcpV6Config != { }) ''
           [DHCPv6]
           ${attrsToSection def.dhcpV6Config}
+        ''
+        + optionalString (def.dhcpV6PrefixDelegationConfig != { }) ''
+          [DHCPv6PrefixDelegation]
+          ${attrsToSection def.dhcpV6PrefixDelegationConfig}
         ''
         + optionalString (def.dhcpServerConfig != { }) ''
           [DHCPServer]
