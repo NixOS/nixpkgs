@@ -6939,6 +6939,8 @@ in
 
   pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
 
+  pcsc-safenet = callPackage ../tools/security/pcsc-safenet { };
+
   pcsc-scm-scl011 = callPackage ../tools/security/pcsc-scm-scl011 { };
   ifdnfc = callPackage ../tools/security/ifdnfc { };
 
@@ -7911,8 +7913,6 @@ in
   sonar-scanner-cli = callPackage ../tools/security/sonar-scanner-cli { };
 
   solr = callPackage ../servers/search/solr { };
-  solr_7 = solr;
-  solr_8 = solr;
 
   solvespace = callPackage ../applications/graphics/solvespace { };
 
@@ -21225,11 +21225,7 @@ in
 
   calculix = callPackage ../applications/science/math/calculix {};
 
-  calibre-py2 = libsForQt5.callPackage ../applications/misc/calibre { pythonPackages = python2Packages; };
-
-  calibre-py3 = libsForQt5.callPackage ../applications/misc/calibre { pythonPackages = python3Packages; };
-
-  calibre = calibre-py3;
+  calibre = libsForQt5.callPackage ../applications/misc/calibre { };
 
   calligra = libsForQt5.callPackage ../applications/office/calligra {
     # Must use the same Qt version as Calligra itself:
@@ -23314,6 +23310,8 @@ in
   marathonctl = callPackage ../tools/virtualization/marathonctl { } ;
 
   markdown-pp = callPackage ../tools/text/markdown-pp { };
+
+  mark = callPackage ../tools/text/mark { };
 
   marp = callPackage ../applications/office/marp { };
 
@@ -29556,7 +29554,7 @@ in
 
   snowsql = callPackage ../applications/misc/snowsql {};
 
-  snowmachine = python3Packages.callPackage ../applications/snowmachine {};
+  snowmachine = python3Packages.callPackage ../applications/misc/snowmachine {};
 
   sidequest = callPackage ../applications/misc/sidequest {};
 
