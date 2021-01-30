@@ -120,7 +120,6 @@ rec {
       libusb1
       udev
       dbus-glib
-      libav
       atk
       at-spi2-atk
       libudev0-shim
