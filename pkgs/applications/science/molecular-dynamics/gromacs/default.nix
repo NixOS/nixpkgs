@@ -24,11 +24,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gromacs";
-  version = "2020.4";
+  version = "2021";
 
   src = fetchurl {
     url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
-    sha256 = "1rplvgna60nqyb8nspaz3bfkwb044kv3zxdaa5whql5m441nj6am";
+    sha256 = "sha256-76eKuECbD1vw+8oXT7j7zwEoFTJrXHGp18OFzemo+Hs=";
   };
 
   nativeBuildInputs = [ cmake ];
