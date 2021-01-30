@@ -7,7 +7,7 @@ in stdenv.mkDerivation rec {
   pname = "linuxband";
 
   src = fetchurl {
-    url = "http://linuxband.org/assets/sources/${pname}-${version}.tar.gz";
+    url = "https://linuxband.org/assets/sources/${pname}-${version}.tar.gz";
     sha256 = "1r71h4yg775m4gax4irrvygmrsclgn503ykmc2qwjsxa42ri4n2n";
   };
 
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A GUI front-end for MMA: Type in the chords, choose the groove and it will play an accompaniment";
-    homepage = "http://linuxband.org/";
+    homepage = "https://linuxband.org/";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;
