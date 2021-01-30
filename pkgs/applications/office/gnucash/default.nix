@@ -25,11 +25,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "4.2";
+  version = "4.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "020k1mm909dcgs52ls4v7xx3yn8gqazi9awyr81l6y7pkq1spn2n";
+    sha256 = "sha256-2R4NEmtGHXHeG8GyDZzxQnBDU97AfT5lmdE4QidZ5no=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper cmake gtest ];
