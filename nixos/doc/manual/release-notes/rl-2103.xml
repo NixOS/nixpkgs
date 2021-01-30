@@ -479,6 +479,14 @@ self: super:
   <itemizedlist>
    <listitem>
     <para>
+     <literal>stdenv.lib</literal> has been deprecated and will break
+     eval in 21.11.  Please use <literal>pkgs.lib</literal> instead.
+     See <link xlink:href="https://github.com/NixOS/nixpkgs/issues/108938">#108938</link>
+     for details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The Mailman NixOS module (<literal>services.mailman</literal>) has a new
      option <xref linkend="opt-services.mailman.enablePostfix" />, defaulting
      to true, that controls integration with Postfix.
