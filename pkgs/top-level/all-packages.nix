@@ -15834,6 +15834,8 @@ in
 
   nika-fonts = callPackage ../data/fonts/nika-fonts { };
 
+  nikto = callPackage ../tools/networking/nikto { };
+
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
   nntp-proxy = callPackage ../applications/networking/nntp-proxy { };
