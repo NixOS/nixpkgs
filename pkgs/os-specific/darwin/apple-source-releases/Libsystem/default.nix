@@ -1,7 +1,7 @@
 { lib, appleDerivation, cpio, xnu, Libc, Libm, libdispatch, cctools, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
 , copyfile, removefile, libresolv, Libnotify, libplatform, libpthread
-, mDNSResponder, launchd, libutil, hfs, darling, darwin-stubs }:
+, mDNSResponder, launchd, libutil, darling, darwin-stubs }:
 
 appleDerivation {
   dontBuild = true;
@@ -23,7 +23,7 @@ appleDerivation {
                ${libclosure} ${CarbonHeaders} ${libdispatch} ${ncurses.dev} \
                ${CommonCrypto} ${copyfile} ${removefile} ${libresolv} \
                ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} \
-               ${libutil} ${libpthread} ${hfs}; do
+               ${libutil} ${libpthread}; do
       (cd $dep/include && find . -name '*.h' | cpio -pdm $out/include)
     done
 
