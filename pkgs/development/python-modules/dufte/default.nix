@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "dufte";
-  version = "0.2.9";
+  version = "0.2.12";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nkaczipbsm8c14j9svxry2wigmn5iharibb6b8g062sjaph8x17";
+    sha256 = "0ag1d7h1wijkc7v2vpgkbqjlnpiwd4nh8zhxiby0989bpmlp3jr3";
   };
   format = "pyproject";
 
@@ -34,6 +34,10 @@ buildPythonPackage rec {
   '';
   checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "dufte" ];
+  pytestFlagsArray = [
+    # we don't have the "exdown" package (yet)
+    "--ignore=test/test_readme.py"
+  ];
 
   meta = with lib; {
     description = "Clean matplotlib plots";
