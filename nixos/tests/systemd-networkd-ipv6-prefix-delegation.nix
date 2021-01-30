@@ -165,7 +165,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
               # accept the delegated prefix.
               PrefixDelegationHint  = "::/48";
             };
-            ipv6PrefixDelegationConfig = {
+            ipv6SendRAConfig = {
               # Let networkd know that we would very much like to use DHCPv6
               # to obtain the "managed" information. Not sure why they can't
               # just take that from the upstream RAs.
@@ -179,24 +179,20 @@ import ./make-test-python.nix ({pkgs, ...}: {
             name = "eth2";
             networkConfig = {
               Description = "Client interface";
-              # the client shouldn't be allowed to send us RAs, that would be weird.
+              # The client shouldn't be allowed to send us RAs, that would be weird.
               IPv6AcceptRA = false;
 
-              # Just delegate prefixes from the DHCPv6 PD pool.
-              # If you also want to distribute a local ULA prefix you want to
-              # set this to `yes` as that includes both static prefixes as well
-              # as PD prefixes.
-              IPv6PrefixDelegation = "dhcpv6";
+              # Delegate prefixes from the DHCPv6 PD pool.
+              DHCPv6PrefixDelegation = true;
+              IPv6SendRA = true;
             };
-            # finally "act as router" (according to systemd.network(5))
-            ipv6PrefixDelegationConfig = {
-              RouterLifetimeSec = 300; # required as otherwise no RA's are being emitted
 
-              # In a production environment you should consider setting these as well:
+            # In a production environment you should consider setting these as well:
+            # ipv6SendRAConfig = {
               #EmitDNS = true;
               #EmitDomains = true;
               #DNS= = "fe80::1"; # or whatever "well known" IP your router will have on the inside.
-            };
+            # };
 
             # This adds a "random" ULA prefix to the interface that is being
             # advertised to the clients.
