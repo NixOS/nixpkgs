@@ -19040,6 +19040,27 @@ in
     ];
   };
 
+  # Needs a `date` and a `sha256` argument. If version differs from `linux_testing` it also needs
+  # `extraMeta.branch` and `extraMeta.rc`.
+  linux_next = args: with lib;
+    let
+      defaultArgs = {
+        extraMeta.branch = linux_testing.meta.branch;
+        extraMeta.rc = last (splitString "-" linux_testing.version);
+        kernelPatches = linux_testing.kernelPatches;
+        sha256 = fakeSha256;
+      };
+      combined = recursiveUpdate defaultArgs args;
+      realArgs = { inherit version; } // combined;
+      version =
+        let branch = combined.extraMeta.branch + ".0";
+            rc = combined.extraMeta.rc;
+        in concatStringsSep "-" (
+          # X.Y.0-rcZ-next
+          [branch] ++ optional (rc != "") rc ++ ["next"]
+        );
+    in callPackage ../os-specific/linux/kernel/linux-next.nix realArgs;
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -19285,6 +19306,7 @@ in
 
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
   linuxPackages_testing = linuxPackagesFor pkgs.linux_testing;
+  linuxPackages_next = args: linuxPackagesFor (pkgs.linux_next args);
 
   linuxPackages_custom = { version, src, configfile, allowImportFromDerivation ? true }:
     recurseIntoAttrs (linuxPackagesFor (pkgs.linuxManualConfig {
