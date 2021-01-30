@@ -42,6 +42,7 @@ in {
           enable = true;
           startAt = "20:00";
         };
+        phpExtraExtensions = all: [ all.bz2 ];
       };
 
       environment.systemPackages = [ cfg.services.nextcloud.occ ];

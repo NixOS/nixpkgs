@@ -27,6 +27,7 @@ in {
 
       extraGroups = mkOption {
         default = [ ];
+        type = types.listOf types.str;
         example = [ "wheel" "docker" ];
         description = ''
           List of extra groups that the "gocd-server" user should be a part of.
@@ -92,6 +93,7 @@ in {
       };
 
       startupOptions = mkOption {
+        type = types.listOf types.str;
         default = [
           "-Xms${cfg.initialJavaHeapSize}"
           "-Xmx${cfg.maxJavaHeapMemory}"
@@ -113,6 +115,7 @@ in {
 
       extraOptions = mkOption {
         default = [ ];
+        type = types.listOf types.str;
         example = [
           "-X debug"
           "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"

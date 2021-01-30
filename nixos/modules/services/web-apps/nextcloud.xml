@@ -182,6 +182,17 @@
   </para>
  </section>
 
+ <section xml:id="installing-apps-php-extensions-nextcloud">
+  <title>Installing Apps and PHP extensions</title>
+
+  <para>
+   Nextcloud apps are installed statefully through the web interface.
+
+   Some apps may require extra PHP extensions to be installed.
+   This can be configured with the <xref linkend="opt-services.nextcloud.phpExtraExtensions" /> setting.
+  </para>
+ </section>
+
  <section xml:id="module-services-nextcloud-maintainer-info">
   <title>Maintainer information</title>
 
