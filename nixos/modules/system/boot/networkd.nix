@@ -643,18 +643,29 @@ let
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
         (assertOnlyFields [
+          "UseAddress"
           "UseDNS"
           "UseNTP"
+          "RouteMetric"
           "RapidCommit"
+          "MUDURL"
+          "RequestOptions"
+          "SendVendorOption"
           "ForceDHCPv6PDOtherInformation"
           "PrefixDelegationHint"
-          "RouteMetric"
+          "WithoutRA"
+          "SendOption"
+          "UserClass"
+          "VendorClass"
         ])
+        (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
+        (assertInt "RouteMetric")
         (assertValueOneOf "RapidCommit" boolValues)
         (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
-        (assertInt "RouteMetric")
+        (assertValueOneOf "WithoutRA" ["solicit" "information-request"])
+        (assertRange "SendOption" 1 65536)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
