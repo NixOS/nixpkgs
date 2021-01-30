@@ -53,4 +53,9 @@ rec {
     version = "4.0.21";
     sha256 = "01k05x4711ngin598jr9dag4ml3m7hi6pkgr4dsb02ryh1kc6146";
   };
+
+  libwebsockets_4_1 = generic {
+    version = "4.1.6";
+    sha256 = "0x56v4hsx92vm1zibfmnqb5g3v23kzciffn3fjlsc3sly2pknhsg";
+  };
 }
