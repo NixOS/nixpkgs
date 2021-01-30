@@ -130,6 +130,22 @@ let
 
     cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
+    caqti = callPackage ../development/ocaml-modules/caqti { };
+
+    caqti-async = callPackage ../development/ocaml-modules/caqti/async.nix { };
+
+    caqti-driver-mariadb = callPackage ../development/ocaml-modules/caqti/driver-mariadb.nix { };
+
+    caqti-driver-postgresql = callPackage ../development/ocaml-modules/caqti/driver-postgresql.nix { };
+
+    caqti-driver-sqlite3 = callPackage ../development/ocaml-modules/caqti/driver-sqlite3.nix { };
+
+    caqti-dynload = callPackage ../development/ocaml-modules/caqti/dynload.nix { };
+
+    caqti-lwt = callPackage ../development/ocaml-modules/caqti/lwt.nix { };
+
+    caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
+
     cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
     charInfo_width = callPackage ../development/ocaml-modules/charInfo_width { };
@@ -564,6 +580,10 @@ let
 
     magick = callPackage ../development/ocaml-modules/magick { };
 
+    mariadb = callPackage ../development/ocaml-modules/mariadb {
+      inherit (pkgs) mariadb;
+    };
+
     markup = callPackage ../development/ocaml-modules/markup { };
 
     mdx = callPackage ../development/ocaml-modules/mdx { };
@@ -872,6 +892,10 @@ let
     posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
 
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
+
+    postgresql = callPackage ../development/ocaml-modules/postgresql {
+      inherit (pkgs) postgresql;
+    };
 
     ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix { };
 

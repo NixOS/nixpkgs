@@ -106,7 +106,7 @@ let
   versionRange = min-version: upto-version:
     let inherit (upstream-info) version;
         result = versionAtLeast version min-version && versionOlder version upto-version;
-        ungoogled-version = (importJSON ./upstream-info.json).ungoogled.version;
+        ungoogled-version = (importJSON ./upstream-info.json).ungoogled-chromium.version;
     in if versionAtLeast ungoogled-version upto-version
        then warn "chromium: ungoogled version ${ungoogled-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
             result
@@ -152,8 +152,12 @@ let
     patches = [
       ./patches/no-build-timestamps.patch # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed)
       ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
-      # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ];
+      # ++ optional (versionRange "68" "72") (githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
+    ] ++ optional (versionRange "89" "90") (githubPatch
+      # To fix the build of chromiumBeta:
+      "b5b80df7dafba8cafa4c6c0ba2153dfda467dfc9" # add dependency on opus in webcodecs
+      "1r4wmwaxz5xbffmj5wspv2xj8s32j9p6jnwimjmalqg3al2ba64x"
+    );
 
     postPatch = ''
       # remove unused third-party
