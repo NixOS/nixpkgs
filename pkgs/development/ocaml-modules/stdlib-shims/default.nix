@@ -2,10 +2,10 @@
 
 buildDunePackage rec {
   pname = "stdlib-shims";
-  version = "0.1.0";
+  version = "0.3.0";
   src = fetchurl {
     url = "https://github.com/ocaml/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "1jv6yb47f66239m7hsz7zzw3i48mjpbvfgpszws48apqx63wjwsk";
+    sha256 = "sha256-ur9y05F7hvcHiF8MVSjjbGP8y2mPS0bPK6tcfM3W2Eo=";
   };
   minimumOCamlVersion = "4.02";
   doCheck = true;
