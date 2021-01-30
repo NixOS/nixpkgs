@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
       stripLen = 1;
       sha256 = "06h88a659jcqf6ps1m91qy78s6s9krbkwnz28f5qh7032vlp6qpw";
     })
+    (fetchpatch {
+      name = "CVE-2019-17546.patch";
+      url = "https://github.com/OSGeo/gdal/commit/21674033ee246f698887604c7af7ba1962a40ddf.patch";
+      stripLen = 1;
+      sha256 = "095888k0cyxh120jsr319pm23hgv977b8i9kc1zxwz37ci3nis3g";
+    })
   ];
 
   buildInputs = [ unzip libjpeg libtiff libgeotiff libpng proj openssl sqlite
