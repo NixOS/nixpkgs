@@ -12114,6 +12114,10 @@ in
 
   csslint = callPackage ../development/web/csslint { };
 
+  cvise = python3Packages.callPackage ../development/tools/misc/cvise {
+    inherit (llvmPackages_11) llvm clang-unwrapped;
+  };
+
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
 
