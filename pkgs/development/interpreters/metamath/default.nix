@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 let
-  version = "0.194";
+  version = "0.196";
 in stdenv.mkDerivation {
   pname = "metamath";
   inherit version;
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "metamath";
     repo = "metamath-exe";
     rev = "v${version}";
-    sha256 = "1bc5h2jdqbgna8zbhqyphlqcldz4vddg72r2rnjjjzxnxb2skvj7";
+    sha256 = "sha256-/ofH5fq7lUxbbRBAczsLNG3UPsOMbCdcxkB3el5OPcU=";
   };
 
   meta = with lib; {
