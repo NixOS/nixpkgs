@@ -140,7 +140,7 @@ let
     ]
 
     ++ (if (enableMultilib || targetPlatform.isAvr)
-      then ["--enable-multilib" "--disable-libquadmath"]
+      then ["--enable-multilib" "--disable-libquadmath" "--with-multilib-list=rmprofile" ]
       else ["--disable-multilib"])
     ++ lib.optional (!enableShared) "--disable-shared"
     ++ [

@@ -8,7 +8,7 @@ in lib.concatLists [
   (lib.optional (p ? cpu) "--with-cpu=${p.cpu}")
   (lib.optional (p ? abi) "--with-abi=${p.abi}")
   (lib.optional (p ? fpu) "--with-fpu=${p.fpu}")
-  (lib.optional (p ? float) "--with-float=${p.float}")
+  (lib.optional (!targetPlatform.gcc.enableMultilib or false && (p ? float)) "--with-float=${p.float}") # --with-multilib-list conflicts with --with-float
   (lib.optional (p ? mode) "--with-mode=${p.mode}")
   (lib.optional
     (let tp = targetPlatform; in tp.isPower && tp.libc == "glibc" && tp.is64bit && tp.isLittleEndian)

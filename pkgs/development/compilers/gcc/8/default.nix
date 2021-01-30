@@ -19,7 +19,7 @@
 , libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
-, enableMultilib ? false
+, enableMultilib ? stdenv.targetPlatform.gcc.enableMultilib or false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null

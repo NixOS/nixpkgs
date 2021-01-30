@@ -26,7 +26,7 @@
 , libXrender ? null, xorgproto ? null
 , libXrandr ? null, libXi ? null
 , x11Support ? langJava
-, enableMultilib ? false
+, enableMultilib ? stdenv.targetPlatform.gcc.enableMultilib or false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
