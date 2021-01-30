@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, xmlstarlet, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, fetchurl, xmlstarlet, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
   pname = "processing";
@@ -10,6 +10,14 @@ stdenv.mkDerivation rec {
     rev = "processing-0270-${version}";
     sha256 = "0cvv8jda9y8qnfcsziasyv3w7h3w22q78ihr23cm4an63ghxci58";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "oraclejdk-8u281-compat.patch";
+      url = "https://github.com/processing/processing/commit/7e176876173c93e3a00a922e7ae37951366d1761.patch";
+      sha256 = "g+zwpoIVgw7Sp6QWW3vyPZ/fKHk+o/YCY6xnrX8IGKo=";
+    })
+  ];
 
   nativeBuildInputs = [ ant rsync makeWrapper ];
   buildInputs = [ jdk ];

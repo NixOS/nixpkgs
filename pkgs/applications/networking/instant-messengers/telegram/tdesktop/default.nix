@@ -22,12 +22,12 @@ let
 
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.5.1";
+  version = "2.5.8";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "1qpap599h2c4hlmr00k82r6138ym4zqrbfpvm97gm97adn3mxk7i";
+    sha256 = "0zj1g24fi4m84p6zj9yk55v8sbhn0jdpdhp33y12d2msz0qwp2cw";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ in mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook removeReferencesTo ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 libsForQt5.libdbusmenu enchant2 lz4 xxHash
+    qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu enchant2 lz4 xxHash
     dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
     tl-expected hunspell
     tg_owt

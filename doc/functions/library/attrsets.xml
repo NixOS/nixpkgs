@@ -1711,4 +1711,43 @@ recursiveUpdate
   </example>
  </section>
 
+ <section xml:id="function-library-lib.attrsets.cartesianProductOfSets">
+  <title><function>lib.attrsets.cartesianProductOfSets</function></title>
+
+  <subtitle><literal>cartesianProductOfSets :: AttrSet -> [ AttrSet ]</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.cartesianProductOfSets" />
+
+  <para>
+    Return the cartesian product of attribute set value combinations.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      An attribute set with attributes that carry lists of values.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.cartesianProductOfSets-example">
+   <title>Creating the cartesian product of a list of attribute values</title>
+<programlisting><![CDATA[
+cartesianProductOfSets { a = [ 1 2 ]; b = [ 10 20 ]; }
+=> [
+     { a = 1; b = 10; }
+     { a = 1; b = 20; }
+     { a = 2; b = 10; }
+     { a = 2; b = 20; }
+   ]
+]]></programlisting>
+  </example>
+ </section>
+
 </section>

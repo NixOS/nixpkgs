@@ -629,7 +629,9 @@ rec {
       crossLists (x:y: "${toString x}${toString y}") [[1 2] [3 4]]
       => [ "13" "14" "23" "24" ]
   */
-  crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [f];
+  crossLists = builtins.trace
+    "lib.crossLists is deprecated, use lib.cartesianProductOfSets instead"
+    (f: foldl (fs: args: concatMap (f: map f args) fs) [f]);
 
 
   /* Remove duplicate elements from the list. O(n^2) complexity.

@@ -3,8 +3,8 @@
 }:
 
 let
-  rev = "6eaebec41b34a0a0d98f02892d0cfe6bbcbc0a39";
-  sha256 = "0dbc36j09jmxvznal55hi3qrfyvj4y0ila6347nav9skcmk8fm64";
+  rev = "be23804afce3bb2e80a1d57a7c1318c71b82b7de";
+  sha256 = "0avdxkig8z1ainzyxkm9vmlvkyqbjalwb4h9s9kcail82mnldnhc";
 
 in stdenv.mkDerivation {
   pname = "tg_owt";
@@ -23,6 +23,11 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     libjpeg openssl libopus ffmpeg alsaLib libpulseaudio protobuf
+  ];
+
+  cmakeFlags = [
+    # Building as a shared library isn't officially supported and currently broken:
+    "-DBUILD_SHARED_LIBS=OFF"
   ];
 
   meta.license = lib.licenses.bsd3;
