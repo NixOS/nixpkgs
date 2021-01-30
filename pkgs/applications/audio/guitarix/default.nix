@@ -41,11 +41,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "guitarix";
-  version = "0.41.0";
+  version = "0.42.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "0qsfbyrrpb3bbdyq68k28mjql7kglxh8nqcw9jvja28x6x9ik5a0";
+    sha256 = "sha256-eX5G4HFI+6ieRvrE7+c6WzqY8HC8qF2z0UPeeBsULIA=";
   };
 
   nativeBuildInputs = [
