@@ -7725,6 +7725,12 @@
     githubId = 42433779;
     name = "Rémy Grünblatt";
   };
+  rguevara84 = {
+    email = "fuzztkd@gmail.com";
+    github = "rguevara84";
+    githubId = 12279531;
+    name = "Ricardo Guevara";
+  };
   rht = {
     email = "rhtbot@protonmail.com";
     github = "rht";
