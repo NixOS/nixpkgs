@@ -13687,7 +13687,7 @@ in
 
   gdal_1_11 = callPackage ../development/libraries/gdal/gdal-1_11.nix { };
 
-  gdal_2 = callPackage ../development/libraries/gdal/2.4.0.nix { };
+  gdal_2 = callPackage ../development/libraries/gdal/2.4.nix { };
 
   gdcm = callPackage ../development/libraries/gdcm { };
 
