@@ -681,6 +681,29 @@ let
         (assertValueOneOf "Assign" boolValues)
       ];
 
+      sectionIPv6AcceptRA = checkUnitConfig "IPv6AcceptRA" [
+        (assertOnlyFields [
+          "UseDNS"
+          "UseDomains"
+          "RouteTable"
+          "UseAutonomousPrefix"
+          "UseOnLinkPrefix"
+          "RouterDenyList"
+          "RouterAllowList"
+          "PrefixDenyList"
+          "PrefixAllowList"
+          "RouteDenyList"
+          "RouteAllowList"
+          "DHCPv6Client"
+        ])
+        (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
+        (assertRange "RouteTable" 0 4294967295)
+        (assertValueOneOf "UseAutonomousPrefix" boolValues)
+        (assertValueOneOf "UseOnLinkPrefix" boolValues)
+        (assertValueOneOf "DHCPv6Client" (boolValues ++ ["always"]))
+      ];
+
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
         (assertOnlyFields [
           "PoolOffset"
@@ -1126,6 +1149,18 @@ let
       '';
     };
 
+    ipv6AcceptRAConfig = mkOption {
+      default = {};
+      example = { UseDNS = true; DHCPv6Client = "always"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6AcceptRA;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[IPv6AcceptRA]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     dhcpServerConfig = mkOption {
       default = {};
       example = { PoolOffset = 50; EmitDNS = false; };
@@ -1496,6 +1531,10 @@ let
         + optionalString (def.dhcpV6PrefixDelegationConfig != { }) ''
           [DHCPv6PrefixDelegation]
           ${attrsToSection def.dhcpV6PrefixDelegationConfig}
+        ''
+        + optionalString (def.ipv6AcceptRAConfig != { }) ''
+          [IPv6AcceptRA]
+          ${attrsToSection def.ipv6AcceptRAConfig}
         ''
         + optionalString (def.dhcpServerConfig != { }) ''
           [DHCPServer]
