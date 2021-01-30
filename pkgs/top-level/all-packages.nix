@@ -124,10 +124,6 @@ in
     { deps = [ autoconf269 automake gettext libtool ]; }
     ../build-support/setup-hooks/autoreconf.sh;
 
-  autoreconfHook271 = makeSetupHook
-    { deps = [ autoconf271 automake gettext libtool ]; }
-    ../build-support/setup-hooks/autoreconf.sh;
-
   autoPatchelfHook = makeSetupHook { name = "auto-patchelf-hook"; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
@@ -11620,15 +11616,14 @@ in
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
-  autoconf = autoconf270;
+  autoconf = autoconf271;
 
   autoconf-archive = callPackage ../development/tools/misc/autoconf-archive { };
 
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
   autoconf264 = callPackage ../development/tools/misc/autoconf/2.64.nix { };
   autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
-  autoconf270 = callPackage ../development/tools/misc/autoconf { };
-  autoconf271 = callPackage ../development/tools/misc/autoconf/2.71.nix { };
+  autoconf271 = callPackage ../development/tools/misc/autoconf { };
 
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
