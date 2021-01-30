@@ -370,6 +370,16 @@ in
     };
   };
 
+  spnego-http-auth = {
+    src = fetchFromGitHub {
+      name = "spnego-http-auth";
+      owner = "stnoonan";
+      repo = "spnego-http-auth-nginx-module";
+      rev = "72c8ee04c81f929ec84d5a6d126f789b77781a8c";
+      sha256 = "05rw3a7cv651951li995r5l1yzz6kwkm2xpbd59jsfzd74bw941i";
+    };
+  };
+
   statsd = {
     src = fetchFromGitHub {
       name = "statsd";
