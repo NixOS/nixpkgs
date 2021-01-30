@@ -6,7 +6,6 @@ let
     prePatch = (attrs.prePatch or "") + ''
       rm -f azure_bdist_wheel.py tox.ini
       substituteInPlace setup.py \
-        --replace "wheel==0.30.0" "wheel" \
         --replace "cryptography>=2.3.1,<3.0.0" "cryptography"
       sed -i "/azure-namespace-package/c\ " setup.cfg
     '';
@@ -137,6 +136,9 @@ let
       azure-mgmt-billing = overrideAzureMgmtPackage super.azure-mgmt-billing "1.0.0" "zip"
         "8b55064546c8e94839d9f8c98e9ea4b021004b3804e192bf39fa65b603536ad0";
 
+      azure-mgmt-botservice = overrideAzureMgmtPackage super.azure-mgmt-botservice "0.2.0" "zip"
+        "sha256-sh2IWOaaoW0luQjEARah93PBJ+xN1gLLuFQuvzmlXYM=";
+
       azure-mgmt-policyinsights = overrideAzureMgmtPackage super.azure-mgmt-policyinsights "0.5.0" "zip"
         "1wxh7mgrknnhqyafdd7sbwx8plx0zga2af21vs6yhxy48lw9w8pd";
 
@@ -149,11 +151,11 @@ let
       azure-mgmt-recoveryservicesbackup = overrideAzureMgmtPackage super.azure-mgmt-recoveryservicesbackup "0.6.0" "zip"
         "13s2k4jl8570bj6jkqzm0w29z29rl7h5i7czd3kr6vqar5wj9xjd";
 
-      azure-mgmt-resource = overrideAzureMgmtPackage super.azure-mgmt-resource "10.3.0" "zip"
-        "1bb95rlwfikfl3pgyga0v5lfgr1xyaybm1nq2498rncfcvdpkjhz";
+      azure-mgmt-resource = overrideAzureMgmtPackage super.azure-mgmt-resource "12.0.0" "zip"
+        "sha256-h3nif64OgekSh4mjOSTbom8qDXVrIVNksbQ3LwILnx8=";
 
-      azure-mgmt-appconfiguration = overrideAzureMgmtPackage super.azure-mgmt-appconfiguration "0.6.0" "zip"
-        "0pvc8f3g12q7als0pgy26kqi2i9grykwrjyiv2vijci9wxn22vpy";
+      azure-mgmt-appconfiguration = overrideAzureMgmtPackage super.azure-mgmt-appconfiguration "1.0.1" "zip"
+        "b58bbe82a7429ba589292024896b58d96fe9fa732c578569cac349928dc2ca5f";
 
       azure-mgmt-cognitiveservices = overrideAzureMgmtPackage super.azure-mgmt-cognitiveservices "6.3.0" "zip"
         "059lhbxqx1r1717s8xz5ahpxwphq5fgy0h7k6b63cahm818rs0hx";
@@ -248,8 +250,8 @@ let
       azure-mgmt-synapse = overrideAzureMgmtPackage super.azure-mgmt-synapse "0.5.0" "zip"
         "0dr8xml9zlsnag761zx7ifvdkhsv4syzxpmdn4gbf9c5qcq65dsf";
 
-      azure-mgmt-datamigration = overrideAzureMgmtPackage super.azure-mgmt-datamigration "0.1.0" "zip"
-        "1pq5rn32yvrf5kqjafnj0kc92gpfg435w2l0k7cm8gvlja4r4m77";
+      azure-mgmt-datamigration = overrideAzureMgmtPackage super.azure-mgmt-datamigration "4.1.0" "zip"
+        "c33d1deb0ee173a15c8ec21a1e714ba544fe5f4895d3b1d8b0581f3c1b2e8ce4";
 
       azure-mgmt-relay = overrideAzureMgmtPackage super.azure-mgmt-relay "0.1.0" "zip"
         "1jss6qhvif8l5s0lblqw3qzijjf0h88agciiydaa7f4q577qgyfr";
@@ -414,12 +416,12 @@ let
       });
 
       knack = super.knack.overridePythonAttrs(oldAttrs: rec {
-        version = "0.7.2";
+        version = "0.8.0rc2";
 
         src = super.fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
-          sha256 = "1jh81xyri7wb7vqa049imf6dfy3nc501bq3p0miaka8ffvvaxinz";
+          sha256 = "sha256-4pzgVwOVcT5UsjbyGkE30xashMASUzoQe2OGHSnK5do=";
         };
       });
 
