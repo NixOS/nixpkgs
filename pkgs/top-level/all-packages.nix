@@ -1184,6 +1184,8 @@ in
 
   crcpp = callPackage ../development/libraries/crcpp { };
 
+  crypt_blowfish = callPackage ../development/libraries/crypt_blowfish { };
+
   cudd = callPackage ../development/libraries/cudd { };
 
   cue = callPackage ../development/tools/cue { };
@@ -10768,6 +10770,8 @@ in
 
   crate2nix = callPackage ../development/tools/rust/crate2nix { };
 
+  crcutil = callPackage ../development/libraries/crcutil { };
+
   convco = callPackage ../development/tools/convco {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -10840,6 +10844,8 @@ in
   };
 
   squeak = callPackage ../development/compilers/squeak { };
+
+  squeasel = callPackage ../development/libraries/squeasel { };
 
   squirrel-sql = callPackage ../development/tools/database/squirrel-sql {
     drivers = [ mssql_jdbc mysql_jdbc postgresql_jdbc ];
@@ -29782,9 +29788,13 @@ in
 
   cagebreak = callPackage ../applications/window-managers/cagebreak/default.nix {};
 
+  cds = callPackage ../development/libraries/cds {};
+
   psftools = callPackage ../os-specific/linux/psftools {};
 
   lc3tools = callPackage ../development/tools/lc3tools {};
+
+  yugabyte = callPackage ../servers/sql/yugabyte {};
 
   zktree = callPackage ../applications/misc/zktree {};
 }
