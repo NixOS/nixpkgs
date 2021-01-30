@@ -9922,6 +9922,12 @@
     githubId = 43315;
     name = "William Roe";
   };
+  wldhx = {
+    email = "wldhx+nixpkgs@wldhx.me";
+    github = "wldhx";
+    githubId = 15619766;
+    name = "wldhx";
+  };
   wmertens = {
     email = "Wout.Mertens@gmail.com";
     github = "wmertens";
