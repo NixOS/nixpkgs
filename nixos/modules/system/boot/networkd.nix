@@ -436,7 +436,7 @@ let
           "IPv4ProxyARP"
           "IPv6ProxyNDP"
           "IPv6ProxyNDPAddress"
-          "IPv6PrefixDelegation"
+          "IPv6SendRA"
           "DHCPv6PrefixDelegation"
           "IPv6MTUBytes"
           "Bridge"
@@ -478,7 +478,7 @@ let
         (assertMinimum "IPv6HopLimit" 0)
         (assertValueOneOf "IPv4ProxyARP" boolValues)
         (assertValueOneOf "IPv6ProxyNDP" boolValues)
-        (assertValueOneOf "IPv6PrefixDelegation" ["static" "dhcpv6" "yes" "false"])
+        (assertValueOneOf "IPv6SendRA" boolValues)
         (assertValueOneOf "DHCPv6PrefixDelegation" boolValues)
         (assertByteFormat "IPv6MTUBytes")
         (assertValueOneOf "ActiveSlave" boolValues)
@@ -732,7 +732,7 @@ let
         (assertValueOneOf "EmitTimezone" boolValues)
       ];
 
-      sectionIPv6PrefixDelegation = checkUnitConfig "IPv6PrefixDelegation" [
+      sectionIPv6SendRA = checkUnitConfig "IPv6SendRA" [
         (assertOnlyFields [
           "Managed"
           "OtherInformation"
@@ -1173,13 +1173,20 @@ let
       '';
     };
 
+    # systemd.network.networks.*.ipv6PrefixDelegationConfig has been deprecated
+    # in 247 in favor of systemd.network.networks.*.ipv6SendRAConfig.
     ipv6PrefixDelegationConfig = mkOption {
+      visible = false;
+      apply = _: throw "The option `systemd.network.networks.*.ipv6PrefixDelegationConfig` has been replaced by `systemd.network.networks.*.ipv6SendRAConfig`.";
+    };
+
+    ipv6SendRAConfig = mkOption {
       default = {};
       example = { EmitDNS = true; Managed = true; OtherInformation = true; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6PrefixDelegation;
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPv6SendRA;
       description = ''
         Each attribute in this set specifies an option in the
-        <literal>[IPv6PrefixDelegation]</literal> section of the unit.  See
+        <literal>[IPv6SendRA]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -1540,9 +1547,9 @@ let
           [DHCPServer]
           ${attrsToSection def.dhcpServerConfig}
         ''
-        + optionalString (def.ipv6PrefixDelegationConfig != { }) ''
-          [IPv6PrefixDelegation]
-          ${attrsToSection def.ipv6PrefixDelegationConfig}
+        + optionalString (def.ipv6SendRAConfig != { }) ''
+          [IPv6SendRA]
+          ${attrsToSection def.ipv6SendRAConfig}
         ''
         + flip concatMapStrings def.ipv6Prefixes (x: ''
           [IPv6Prefix]
@@ -1558,7 +1565,6 @@ let
 in
 
 {
-
   options = {
 
     systemd.network.enable = mkOption {
