@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "gpxsee";
-  version = "8.2";
+  version = "8.3";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "05wn4kmvsswwd2q2pffxbplb38capwv7iddsghix3r5zds13142z";
+    sha256 = "sha256-D58Q9qZ7x2j//pOQa+oIgVK/9F0du2FUoZprSFEKViU=";
   };
 
   patches = (substituteAll {
