@@ -7725,6 +7725,12 @@
     githubId = 42433779;
     name = "Rémy Grünblatt";
   };
+  rguevara84 = {
+    email = "fuzztkd@gmail.com";
+    github = "rguevara84";
+    githubId = 12279531;
+    name = "Ricardo Guevara";
+  };
   rht = {
     email = "rhtbot@protonmail.com";
     github = "rht";
@@ -9921,6 +9927,12 @@
     github = "wjlroe";
     githubId = 43315;
     name = "William Roe";
+  };
+  wldhx = {
+    email = "wldhx+nixpkgs@wldhx.me";
+    github = "wldhx";
+    githubId = 15619766;
+    name = "wldhx";
   };
   wmertens = {
     email = "Wout.Mertens@gmail.com";
