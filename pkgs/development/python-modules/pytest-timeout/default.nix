@@ -16,7 +16,8 @@ buildPythonPackage rec {
   };
 
   patches = fetchpatch {
-    url = "https://bitbucket.org/pytest-dev/pytest-timeout/commits/36998c891573d8ec1db1acd4f9438cb3cf2aee2e/raw";
+    name = "raw";  # Preserve name from prior URL to prevent rebuilds
+    url = "https://github.com/pytest-dev/pytest-timeout/commit/20c2ba5ef60007b5071acfd62b326cafce0e5493.patch";
     sha256 = "05zc2w7mjgv8rm8i1cbxp7k09vlscmay5iy78jlzgjqkrx3wkf46";
   };
 
