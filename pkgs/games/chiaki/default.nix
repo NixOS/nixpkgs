@@ -18,13 +18,13 @@
 
 mkDerivation rec {
   pname = "chiaki";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchgit {
     url = "https://git.sr.ht/~thestr4ng3r/chiaki";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0l532i9j6wmzbxqx7fg69kgfd1zy1r1wlw6f756vpxpgswivi892";
+    sha256 = "1hgh2j71rch53cnpm3f195gpfgrb4hd0yqa810k3ikar8zl4h7sd";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://git.sr.ht/~thestr4ng3r/chiaki";
     description = "Free and Open Source PlayStation Remote Play Client";
-    license = licenses.gpl3Plus;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ delroth ];
     platforms = platforms.all;
   };
