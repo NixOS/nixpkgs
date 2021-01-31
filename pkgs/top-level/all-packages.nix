@@ -16419,6 +16419,8 @@ in
 
   readosm = callPackage ../development/libraries/readosm { };
 
+  rinutils = callPackage ../development/libraries/rinutils { };
+
   kissfft = callPackage ../development/libraries/kissfft { };
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
