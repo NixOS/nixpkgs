@@ -152,7 +152,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-whiskermenu-plugin = callPackage ./panel-plugins/xfce4-whiskermenu-plugin { };
 
-  xfce4-windowck-plugin = callPackage ./panel-plugins/xfce4-windowck-plugin.nix { };
+  xfce4-windowck-plugin = callPackage ./panel-plugins/xfce4-windowck-plugin { };
 
   xfce4-pulseaudio-plugin = callPackage ./panel-plugins/xfce4-pulseaudio-plugin { };
 
