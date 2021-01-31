@@ -1,26 +1,27 @@
-{ buildPythonApplication, fetchFromGitHub, lib, paramiko, peewee, pyqt5
-, python-dateutil, APScheduler, psutil, qdarkstyle, secretstorage
-, appdirs, setuptools, qt5
+{ lib
+, python3
+, fetchFromGitHub
+, wrapQtAppsHook
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "vorta";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     rev = "v${version}";
-    sha256 = "069fq5gv324l2ap3g6m6i12lhq1iqm27dsmaagyc3sva945j0gxw";
+    sha256 = "1amq0fz3xrnxplzd6ih2azx6b4k1w496kcr7f8agfp617f5rkwa5";
   };
 
   postPatch = ''
     sed -i -e '/setuptools_git/d' -e '/pytest-runner/d' setup.cfg
   '';
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     paramiko peewee pyqt5 python-dateutil APScheduler psutil qdarkstyle
     secretstorage appdirs setuptools
   ];
@@ -33,7 +34,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     homepage = "https://vorta.borgbase.com/";
     maintainers = with maintainers; [ ma27 ];
     description = "Desktop Backup Client for Borg";
