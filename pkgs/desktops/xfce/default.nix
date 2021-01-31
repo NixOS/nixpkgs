@@ -110,7 +110,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-cpufreq-plugin = callPackage ./panel-plugins/xfce4-cpufreq-plugin { };
 
-  xfce4-cpugraph-plugin = callPackage ./panel-plugins/xfce4-cpugraph-plugin.nix { };
+  xfce4-cpugraph-plugin = callPackage ./panel-plugins/xfce4-cpugraph-plugin { };
 
   xfce4-datetime-plugin = callPackage ./panel-plugins/xfce4-datetime-plugin { };
 
