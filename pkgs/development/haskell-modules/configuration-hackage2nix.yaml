@@ -6854,7 +6854,6 @@ broken-packages:
   - hugs2yc
   - hulk
   - HulkImport
-  - hum
   - human-parse
   - human-text
   - humble-prelude
