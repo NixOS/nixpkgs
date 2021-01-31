@@ -1,16 +1,24 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk3, xfce }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, libxfce4util
+, xfce4-panel
+, libxfce4ui
+, gtk3
+, xfce
+}:
 
 let
   category = "panel-plugins";
-in
-
-stdenv.mkDerivation rec {
-  pname  = "xfce4-genmon-plugin";
-  version = "4.0.2";
+in stdenv.mkDerivation rec {
+  pname  = "xfce4-systemload-plugin";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "1ai3pwgv61nv7i2dyrvncnc63r8kdjbkp40vp51vzak1dx924v15";
+    sha256 = "BTG435I8ujvo0GTLi2OLlU33SRXlpEciiZlReEd4mDU=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +40,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://docs.xfce.org/panel-plugins/xfce4-genmon-plugin";
-    description = "Generic monitor plugin for the Xfce panel";
-    license = licenses.gpl2Plus;
+    homepage = "https://docs.xfce.org/panel-plugins/xfce4-systemload-plugin";
+    description = "System load plugin for Xfce panel";
+    license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
   };
 }

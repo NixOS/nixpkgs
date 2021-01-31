@@ -1,17 +1,25 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk2, xfce }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, libxfce4util
+, xfce4-panel
+, libxfce4ui
+, xfconf
+, gtk3
+, xfce
+}:
 
 let
   category = "panel-plugins";
-in
-
-with lib;
-stdenv.mkDerivation rec {
-  pname  = "xfce4-embed-plugin";
-  version = "1.6.0";
+in stdenv.mkDerivation rec {
+  pname  = "xfce4-eyes-plugin";
+  version = "4.5.1";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "0a72kqsjjh45swimqlpyrahdnplp0383v0i4phr4n6g8c1ixyry7";
+    sha256 = "1iaszzkagl1mb0cdafrvlfjnjklhhs9y90517par34sjiqbq1dsd";
   };
 
   nativeBuildInputs = [
@@ -23,7 +31,8 @@ stdenv.mkDerivation rec {
     libxfce4util
     libxfce4ui
     xfce4-panel
-    gtk2
+    xfconf
+    gtk3
   ];
 
   passthru.updateScript = xfce.updateScript {
@@ -32,11 +41,11 @@ stdenv.mkDerivation rec {
     versionLister = xfce.archiveLister category pname;
   };
 
-  meta = {
-    homepage = "https://docs.xfce.org/panel-plugins/xfce4-embed-plugin";
-    description = "Embed arbitrary app windows on Xfce panel";
+  meta = with lib; {
+    homepage = "https://docs.xfce.org/panel-plugins/xfce4-eyes-plugin";
+    description = "Rolling eyes (following mouse pointer) plugin for the Xfce panel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
   };
 }

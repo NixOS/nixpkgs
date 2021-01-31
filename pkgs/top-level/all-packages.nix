@@ -5954,7 +5954,8 @@ in
   inherit (callPackages ../development/libraries/libwebsockets { })
     libwebsockets_3_1
     libwebsockets_3_2
-    libwebsockets_4_0;
+    libwebsockets_4_0
+    libwebsockets_4_1;
   libwebsockets = libwebsockets_3_2;
 
   licensee = callPackage ../tools/package-management/licensee { };
@@ -9562,6 +9563,7 @@ in
     crystal_0_33
     crystal_0_34
     crystal_0_35
+    crystal_0_36
     crystal;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
@@ -13336,6 +13338,8 @@ in
 
   cxx-prettyprint = callPackage ../development/libraries/cxx-prettyprint { };
 
+  cxxopts = callPackage ../development/libraries/cxxopts { };
+
   cxxtest = python2Packages.callPackage ../development/libraries/cxxtest { };
 
   cypress = callPackage ../development/web/cypress { };
@@ -13689,7 +13693,7 @@ in
 
   gdal_1_11 = callPackage ../development/libraries/gdal/gdal-1_11.nix { };
 
-  gdal_2 = callPackage ../development/libraries/gdal/2.4.0.nix { };
+  gdal_2 = callPackage ../development/libraries/gdal/2.4.nix { };
 
   gdcm = callPackage ../development/libraries/gdcm { };
 

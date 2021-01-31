@@ -17,9 +17,9 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.04";
 
-  buildInputs = [ perl ncurses ppxlib ];
+  buildInputs = [ perl ncurses ];
 
-  propagatedBuildInputs = [ camlp5 ppx_deriving re ];
+  propagatedBuildInputs = [ camlp5 ppxlib ppx_deriving re ];
 
   meta = {
     description = "Embeddable λProlog Interpreter";

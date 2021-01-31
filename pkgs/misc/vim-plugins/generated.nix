@@ -2194,6 +2194,18 @@ let
     meta.homepage = "https://github.com/junegunn/limelight.vim/";
   };
 
+  lispdocs-nvim = buildVimPluginFrom2Nix {
+    pname = "lispdocs-nvim";
+    version = "2021-01-26";
+    src = fetchFromGitHub {
+      owner = "tami5";
+      repo = "lispdocs.nvim";
+      rev = "3c506bbffb2608f3671f0c41c28fb9f6626353d5";
+      sha256 = "0m4iscxwdglvlkxhzs9gzx1iqvnvgknqxgss5k00wr0nrax8q3pl";
+    };
+    meta.homepage = "https://github.com/tami5/lispdocs.nvim/";
+  };
+
   lsp-status-nvim = buildVimPluginFrom2Nix {
     pname = "lsp-status-nvim";
     version = "2021-01-05";

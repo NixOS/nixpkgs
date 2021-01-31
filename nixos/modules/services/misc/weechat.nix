@@ -20,6 +20,7 @@ in
       type = types.str;
     };
     binary = mkOption {
+      type = types.path;
       description = "Binary to execute (by default \${weechat}/bin/weechat).";
       example = literalExample ''
         ''${pkgs.weechat}/bin/weechat-headless
