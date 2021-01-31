@@ -8,7 +8,7 @@
 
   kimap, akonadi, akonadi-contacts, akonadi-mime, kalarmcal, kcalendarcore, kcalutils,
   kholidays, kidentitymanagement, libkdepim, mailcommon, kmailtransport, kmime,
-  pimcommon, kpimtextedit, kdepim-apps-libs, messagelib,
+  pimcommon, kpimtextedit, messagelib,
 
   qtx11extras,
 
@@ -29,7 +29,7 @@ mkDerivation {
 
     kimap akonadi akonadi-contacts akonadi-mime kalarmcal kcalendarcore kcalutils
     kholidays kidentitymanagement libkdepim mailcommon kmailtransport kmime
-    pimcommon kpimtextedit kdepim-apps-libs messagelib
+    pimcommon kpimtextedit messagelib
 
     qtx11extras
   ];

@@ -2,7 +2,7 @@
   mkDerivation, lib, kdepimTeam, fetchpatch,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-search, grantlee, grantleetheme, kcmutils, kcompletion,
-  kcrash, kdbusaddons, kdepim-apps-libs, ki18n, kontactinterface, kparts,
+  kcrash, kdbusaddons, ki18n, kontactinterface, kparts,
   kpimtextedit, kxmlgui, libkdepim, libkleo, mailcommon, pimcommon, prison,
   qgpgme, qtbase,
 }:
@@ -23,7 +23,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     akonadi akonadi-search grantlee grantleetheme kcmutils kcompletion kcrash
-    kdbusaddons kdepim-apps-libs ki18n kontactinterface kparts kpimtextedit
+    kdbusaddons ki18n kontactinterface kparts kpimtextedit
     kxmlgui libkdepim libkleo mailcommon pimcommon prison qgpgme qtbase
   ];
 }
