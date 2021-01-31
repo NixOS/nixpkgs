@@ -479,6 +479,14 @@ self: super:
   <itemizedlist>
    <listitem>
     <para>
+     <literal>stdenv.lib</literal> has been deprecated and will break
+     eval in 21.11.  Please use <literal>pkgs.lib</literal> instead.
+     See <link xlink:href="https://github.com/NixOS/nixpkgs/issues/108938">#108938</link>
+     for details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The Mailman NixOS module (<literal>services.mailman</literal>) has a new
      option <xref linkend="opt-services.mailman.enablePostfix" />, defaulting
      to true, that controls integration with Postfix.
@@ -651,6 +659,11 @@ self: super:
     </para>
     <para>
      The <varname>platform</varname> grouping of these things never meant anything, and was just a historial/implementation artifact that was overdue removal.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <varname>services.restic</varname> now uses a dedicated cache directory for every backup defined in <varname>services.restic.backups</varname>. The old global cache directory, <literal>/root/.cache/restic</literal>, is now unused and can be removed to free up disk space.
     </para>
    </listitem>
   </itemizedlist>

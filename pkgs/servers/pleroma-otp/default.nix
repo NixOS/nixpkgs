@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , autoPatchelfHook
 , fetchurl
 , file
@@ -60,11 +61,11 @@ stdenv.mkDerivation {
     pleroma = nixosTests.pleroma;
   };
 
-  meta = {
+  meta = with lib; {
     description = "ActivityPub microblogging server";
     homepage = https://git.pleroma.social/pleroma/pleroma;
-    license = stdenv.lib.licenses.agpl3;
-    maintainers = with stdenv.lib.maintainers; [ ninjatrappeur ];
+    license = licenses.agpl3;
+    maintainers = with maintainers; [ ninjatrappeur ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

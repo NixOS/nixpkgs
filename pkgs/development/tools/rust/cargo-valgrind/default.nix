@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , nix-update-script
@@ -30,10 +31,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram $out/bin/cargo-valgrind --prefix PATH : ${stdenv.lib.makeBinPath [ valgrind ]}
+    wrapProgram $out/bin/cargo-valgrind --prefix PATH : ${lib.makeBinPath [ valgrind ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = ''Cargo subcommand "valgrind": runs valgrind and collects its output in a helpful manner'';
     homepage = "https://github.com/jfrimmel/cargo-valgrind";
     license = with licenses; [ asl20 /* or */ mit ];
