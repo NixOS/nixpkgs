@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A python script that will make your terminal snow";
-    homepage = "http://github.com/sontek/snowmachine";
+    homepage = "https://github.com/sontek/snowmachine";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ djanatyn ];
   };
