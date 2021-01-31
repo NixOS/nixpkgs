@@ -13,6 +13,10 @@ stdenv.mkDerivation {
     sha256 = "1fyxfrzdcs6blxhkw3bcgkksaf3byrsj4cbyrqgb4869k3ynap96";
   };
 
+  patches = [
+    ./CVE-2019-19451.patch
+  ];
+
   buildInputs =
     [ gtk2 libxml2 gettext python libxml2Python docbook5
       libxslt docbook_xsl libart_lgpl ]
