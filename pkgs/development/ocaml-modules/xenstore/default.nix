@@ -1,5 +1,5 @@
 { lib, buildDunePackage, fetchurl
-, cstruct, ppx_cstruct, lwt, ounit
+, cstruct, ppx_cstruct, lwt, ounit, stdlib-shims
 }:
 
 buildDunePackage rec {
@@ -16,7 +16,7 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ ppx_cstruct ];
-  propagatedBuildInputs = [ cstruct lwt ];
+  propagatedBuildInputs = [ stdlib-shims cstruct lwt ];
 
   doCheck = true;
   checkInputs = [ ounit ];
