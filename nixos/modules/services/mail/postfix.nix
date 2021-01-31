@@ -560,6 +560,7 @@ in
 
       transport = mkOption {
         default = "";
+        type = types.lines;
         description = "
           Entries for the transport map, cf. man-page transport(8).
         ";
@@ -573,6 +574,7 @@ in
 
       dnsBlacklistOverrides = mkOption {
         default = "";
+        type = types.lines;
         description = "contents of check_client_access for overriding dnsBlacklists";
       };
 
