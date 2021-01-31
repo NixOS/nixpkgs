@@ -22,6 +22,7 @@ in
 
       extraPackages = mkOption {
         default = self: [];
+        type = types.listOf types.package;
         example = literalExample ''
           haskellPackages: [
             haskellPackages.wreq
