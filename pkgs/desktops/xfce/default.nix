@@ -120,7 +120,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin { };
 
-  xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin.nix { };
+  xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin { };
 
   xfce4-genmon-plugin = callPackage ./panel-plugins/xfce4-genmon-plugin.nix { };
 
