@@ -12,7 +12,7 @@
 , tabulate
 , nbformat
 , jsonschema
-, pytest
+, pytestCheckHook
 , colorama
 , pygments
 , tornado
@@ -40,7 +40,16 @@ buildPythonPackage rec {
     jsonschema
     mock
     tabulate
-    pytest
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    "test_apply_filter_no_repo"
+    "test_diff_api_checkpoint"
+    "test_filter_cmd_invalid_filter"
+    "test_inline_merge"
+    "test_interrogate_filter_no_repo"
+    "test_merge_input_strategy_inline_source_conflict"
   ];
 
   nativeBuildInputs = [ setuptools_scm ];
