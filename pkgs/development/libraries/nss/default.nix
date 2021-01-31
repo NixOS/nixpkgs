@@ -142,7 +142,7 @@ in stdenv.mkDerivation rec {
     chmod 0755 $out/bin/nss-config
   '';
 
-  postInstall = stdenv.lib.optionalString useP11kit ''
+  postInstall = lib.optionalString useP11kit ''
     # Replace built-in trust with p11-kit connection
     ln -sf ${p11-kit}/lib/pkcs11/p11-kit-trust.so $out/lib/libnssckbi.so
   '';
