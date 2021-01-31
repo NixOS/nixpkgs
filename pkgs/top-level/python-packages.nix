@@ -3102,6 +3102,8 @@ in {
 
   imaplib2 = callPackage ../development/python-modules/imaplib2 { };
 
+  imap-tools = callPackage ../development/python-modules/imap-tools { };
+
   imbalanced-learn = if isPy27 then
     callPackage ../development/python-modules/imbalanced-learn/0.4.nix { }
   else
@@ -4432,6 +4434,8 @@ in {
   nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
   nplusone = callPackage ../development/python-modules/nplusone { };
+
+  npyscreen = callPackage ../development/python-modules/npyscreen { };
 
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
@@ -7340,6 +7344,8 @@ in {
     callPackage ../development/python-modules/sphinx/2.nix { };
 
   sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
+
+  sphinx-autobuild = callPackage ../development/python-modules/sphinx-argparse { };
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 

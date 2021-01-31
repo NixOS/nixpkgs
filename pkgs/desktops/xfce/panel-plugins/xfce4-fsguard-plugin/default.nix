@@ -1,16 +1,25 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk3, xfce }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, libxfce4util
+, xfce4-panel
+, libxfce4ui
+, xfconf
+, gtk3
+, xfce
+}:
 
 let
   category = "panel-plugins";
-in
-
-stdenv.mkDerivation rec {
-  pname  = "xfce4-eyes-plugin";
-  version = "4.5.1";
+in stdenv.mkDerivation rec {
+  pname  = "xfce4-fsguard-plugin";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "1iaszzkagl1mb0cdafrvlfjnjklhhs9y90517par34sjiqbq1dsd";
+    sha256 = "Z9jmohmnEXxZaTrbxZw5puujHj8YpUmRie9O8otVQQU=";
   };
 
   nativeBuildInputs = [
@@ -33,10 +42,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://docs.xfce.org/panel-plugins/xfce4-eyes-plugin";
-    description = "Rolling eyes (following mouse pointer) plugin for the Xfce panel";
-    license = licenses.gpl2Plus;
+    homepage = "https://docs.xfce.org/panel-plugins/xfce4-fsguard-plugin";
+    description = "Filesystem usage monitor plugin for the Xfce panel";
+    license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
   };
 }
