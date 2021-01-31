@@ -1,6 +1,6 @@
-From b8c6a2a017321649db8fec553a644b8da2300514 Mon Sep 17 00:00:00 2001
+From badd4be311afd37a99126c60490f1ae5daced6c4 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
-Date: Mon, 13 Jul 2020 11:41:35 -0500
+Date: Sun, 31 Jan 2021 11:00:15 -0600
 Subject: [PATCH 2/3] akonadi timestamps
 
 ---
@@ -8,10 +8,10 @@ Subject: [PATCH 2/3] akonadi timestamps
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/src/server/storage/dbconfigmysql.cpp b/src/server/storage/dbconfigmysql.cpp
-index 527649b..08c3dd4 100644
+index 99324f6..3c170a8 100644
 --- a/src/server/storage/dbconfigmysql.cpp
 +++ b/src/server/storage/dbconfigmysql.cpp
-@@ -235,8 +235,7 @@ bool DbConfigMysql::startInternalServer()
+@@ -240,8 +240,7 @@ bool DbConfigMysql::startInternalServer()
      bool confUpdate = false;
      QFile actualFile(actualConfig);
      // update conf only if either global (or local) is newer than actual
@@ -22,5 +22,5 @@ index 527649b..08c3dd4 100644
          QFile localFile(localConfig);
          if (globalFile.open(QFile::ReadOnly) && actualFile.open(QFile::WriteOnly)) {
 -- 
-2.25.4
+2.29.2
 
