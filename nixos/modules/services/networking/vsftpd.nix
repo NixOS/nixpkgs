@@ -152,6 +152,7 @@ in
       enable = mkEnableOption "vsftpd";
 
       userlist = mkOption {
+        type = types.listOf types.str;
         default = [];
         description = "See <option>userlistFile</option>.";
       };
