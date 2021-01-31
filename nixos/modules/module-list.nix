@@ -46,6 +46,7 @@
   ./hardware/cpu/intel-microcode.nix
   ./hardware/digitalbitbox.nix
   ./hardware/device-tree.nix
+  ./hardware/sensor/hddtemp.nix
   ./hardware/sensor/iio.nix
   ./hardware/keyboard/zsa.nix
   ./hardware/ksm.nix
