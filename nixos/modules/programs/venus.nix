@@ -133,6 +133,21 @@ in
 
       feeds = mkOption {
         default = [];
+        type = types.listOf (types.submodule { options = {
+            feedUrl = mkOption {
+              type = types.str;
+              description = "Url for feed.";
+            };
+            name = mkOption {
+              type = types.str;
+              description = "Name of feed.";
+            };
+            homepageUrl = mkOption {
+              type = types.str;
+              description = "Feed Homepage url.";
+            };
+          };
+        });
         example = [
           {
             name = "Rok Garbas";
