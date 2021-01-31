@@ -128,7 +128,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-i3-workspaces-plugin = callPackage ./panel-plugins/xfce4-i3-workspaces-plugin { };
 
-  xfce4-namebar-plugin = callPackage ./panel-plugins/xfce4-namebar-plugin.nix { };
+  xfce4-namebar-plugin = callPackage ./panel-plugins/xfce4-namebar-plugin { };
 
   xfce4-netload-plugin = callPackage ./panel-plugins/xfce4-netload-plugin { };
 
