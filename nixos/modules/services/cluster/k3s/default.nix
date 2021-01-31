@@ -47,6 +47,7 @@ in
 
     extraFlags = mkOption {
       description = "Extra flags to pass to the k3s command.";
+      type = types.str;
       default = "";
       example = "--no-deploy traefik --cluster-cidr 10.24.0.0/16";
     };
