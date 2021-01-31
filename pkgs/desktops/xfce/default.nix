@@ -132,7 +132,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-netload-plugin = callPackage ./panel-plugins/xfce4-netload-plugin { };
 
-  xfce4-notes-plugin = callPackage ./panel-plugins/xfce4-notes-plugin.nix { };
+  xfce4-notes-plugin = callPackage ./panel-plugins/xfce4-notes-plugin { };
 
   xfce4-mailwatch-plugin = callPackage ./panel-plugins/xfce4-mailwatch-plugin.nix { };
 
