@@ -23,5 +23,6 @@ buildDunePackage rec {
     description = "A Protocol Buffers codec generator for OCaml";
     license = licenses.mit;
     maintainers = [ maintainers.vyorkin ];
+    broken = true;
   };
 }
