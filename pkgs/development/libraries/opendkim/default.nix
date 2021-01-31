@@ -1,13 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, libbsd, openssl, libmilter
+{ lib, stdenv, fetchFromGitHub, pkg-config, libbsd, openssl, libmilter
 , autoreconfHook, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "opendkim";
-  version = "2.10.3";
+  version = "2.11.0-Beta2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/opendkim/files/${pname}-${version}.tar.gz";
-    sha256 = "06v8bqhh604sz9rh5bvw278issrwjgc4h1wx2pz9a84lpxbvm823";
+  src = fetchFromGitHub {
+    owner = "trusteddomainproject";
+    repo = "OpenDKIM";
+    rev = "rel-opendkim-${lib.replaceChars ["."] ["-"] version}";
+    sha256 = "0nx3in8sa6xna4vfacj8g60hfzk61jpj2ldag80xzxip9c3rd2pw";
   };
 
   configureFlags= [
@@ -19,8 +21,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
 
   buildInputs = [ libbsd openssl libmilter perl ];
-
-  patches = [ ./openssl-1.1.patch ];
 
   postInstall = ''
     wrapProgram $out/sbin/opendkim-genkey \
