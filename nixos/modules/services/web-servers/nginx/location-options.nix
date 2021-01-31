@@ -52,7 +52,7 @@ with lib;
       default = false;
       example = true;
       description = ''
-        Whether to supporty proxying websocket connections with HTTP/1.1.
+        Whether to support proxying websocket connections with HTTP/1.1.
       '';
     };
 
