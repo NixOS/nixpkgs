@@ -2526,6 +2526,8 @@ in {
 
   geojson-client = callPackage ../development/python-modules/geojson-client { };
 
+  geomet = callPackage ../development/python-modules/geomet { };
+
   geopandas = callPackage ../development/python-modules/geopandas { };
 
   geopy = if isPy3k then
@@ -2792,6 +2794,8 @@ in {
   greenlet = callPackage ../development/python-modules/greenlet { };
 
   grequests = callPackage ../development/python-modules/grequests { };
+
+  gremlinpython = callPackage ../development/python-modules/gremlinpython { };
 
   grib-api = disabledIf (!isPy27) (toPythonModule (pkgs.grib-api.override {
     enablePython = true;
