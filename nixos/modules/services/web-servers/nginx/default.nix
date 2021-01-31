@@ -404,6 +404,7 @@ in
 
       logError = mkOption {
         default = "stderr";
+        type = types.str;
         description = "
           Configures logging.
           The first parameter defines a file that will store the log. The
