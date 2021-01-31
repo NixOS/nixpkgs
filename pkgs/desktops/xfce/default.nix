@@ -148,7 +148,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-xkb-plugin = callPackage ./panel-plugins/xfce4-xkb-plugin { };
 
-  xfce4-weather-plugin = callPackage ./panel-plugins/xfce4-weather-plugin.nix { };
+  xfce4-weather-plugin = callPackage ./panel-plugins/xfce4-weather-plugin { };
 
   xfce4-whiskermenu-plugin = callPackage ./panel-plugins/xfce4-whiskermenu-plugin { };
 
