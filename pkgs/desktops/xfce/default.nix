@@ -118,7 +118,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-embed-plugin = callPackage ./panel-plugins/xfce4-embed-plugin { };
 
-  xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin.nix { };
+  xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin { };
 
   xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin.nix { };
 
