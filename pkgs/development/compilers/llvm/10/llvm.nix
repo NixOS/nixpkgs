@@ -124,7 +124,7 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_TABLEGEN=${buildPackages.llvm_10}/bin/llvm-tblgen"
     (
       let
-        nativeCC = pkgsBuildBuild.stdenv.cc;
+        nativeCC = pkgsBuildBuild.targetPackages.stdenv.cc;
         nativeBintools = nativeCC.bintools.bintools;
         nativeToolchainFlags = [
           "-DCMAKE_C_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}cc"
