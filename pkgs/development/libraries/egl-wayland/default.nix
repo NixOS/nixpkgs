@@ -40,7 +40,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "egl-wayland";
-  version = "1.1.4";
+  version = "1.1.6";
 
   outputs = [ "out" "dev" ];
 
@@ -48,12 +48,8 @@ in stdenv.mkDerivation rec {
     owner = "Nvidia";
     repo = pname;
     rev = version;
-    sha256 = "0wvamjcfycd7rgk7v14g2rin55xin9rfkxmivyay3cm08vnl7y1d";
+    sha256 = "1n9lg8hpjgxlf7dpddkjhbslsfd0symla2wk6jjmnl9n9jv2gmzk";
   };
-
-  # Add missing include
-  # https://github.com/NVIDIA/egl-wayland/pull/24
-  patches = [ ./eglmesaext.patch ];
 
   nativeBuildInputs = [
     meson
