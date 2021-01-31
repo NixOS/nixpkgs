@@ -1340,11 +1340,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   utilmacros = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
-    name = "util-macros-1.19.2";
+    name = "util-macros-1.19.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/util/util-macros-1.19.2.tar.bz2";
-      sha256 = "04p7ydqxgq37jklnfj18b70zsifiz4h50wvrk94i2112mmv37r6p";
+      url = "mirror://xorg/individual/util/util-macros-1.19.3.tar.bz2";
+      sha256 = "0w8ryfqylprz37zj9grl4jzdsqq67ibfwq5raj7vm1i7kmp2x08g";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
