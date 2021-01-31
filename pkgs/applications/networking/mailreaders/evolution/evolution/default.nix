@@ -120,7 +120,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "evolution";
-      attrPath = "gnome3.evolution";
     };
   };
 
