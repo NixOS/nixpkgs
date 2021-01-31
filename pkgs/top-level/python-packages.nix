@@ -4638,6 +4638,8 @@ in {
 
   panel = callPackage ../development/python-modules/panel { };
 
+  panflute = callPackage ../development/python-modules/panflute { };
+
   papermill = callPackage ../development/python-modules/papermill { };
 
   paperspace = callPackage ../development/python-modules/paperspace { };
