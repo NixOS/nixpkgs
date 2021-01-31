@@ -1,12 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+}:
 
 buildPythonPackage rec {
   pname = "cachetools";
-  version = "4.1.1";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bbaa39c3dede00175df2dc2b03d0cf18dd2d32a7de7beb68072d13043c9edb20";
+    sha256 = "sha256-9Gninnqkz/ZNjeSq2VznbejqESWhbGjg2T9lw8Pckuk=";
   };
 
   meta = with lib; {
