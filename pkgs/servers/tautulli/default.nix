@@ -15,8 +15,6 @@ buildPythonApplication rec {
     sha256 = "QHpVIOtGFzNqAEcBCv48YWO4pYatbTe/CWwcwjbj+34=";
   };
 
-  doBuild = false;
-
   installPhase = ''
     mkdir -p $out/bin $out/libexec/tautulli
     cp -R contrib data lib plexpy Tautulli.py $out/libexec/tautulli
