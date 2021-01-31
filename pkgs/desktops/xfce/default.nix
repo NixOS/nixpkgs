@@ -124,7 +124,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-genmon-plugin = callPackage ./panel-plugins/xfce4-genmon-plugin { };
 
-  xfce4-hardware-monitor-plugin = callPackage ./panel-plugins/xfce4-hardware-monitor-plugin.nix { };
+  xfce4-hardware-monitor-plugin = callPackage ./panel-plugins/xfce4-hardware-monitor-plugin { };
 
   xfce4-i3-workspaces-plugin = callPackage ./panel-plugins/xfce4-i3-workspaces-plugin.nix { };
 
