@@ -26385,6 +26385,10 @@ in
     lua = lua5;
   };
 
+  black-hole-solver = callPackage ../games/black-hole-solver {
+    inherit (perlPackages) PathTiny;
+  };
+
   blackshades = callPackage ../games/blackshades { };
 
   blobby = callPackage ../games/blobby { };
