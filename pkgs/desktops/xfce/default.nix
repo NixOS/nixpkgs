@@ -136,7 +136,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-mailwatch-plugin = callPackage ./panel-plugins/xfce4-mailwatch-plugin.nix { };
 
-  xfce4-mpc-plugin = callPackage ./panel-plugins/xfce4-mpc-plugin.nix { };
+  xfce4-mpc-plugin = callPackage ./panel-plugins/xfce4-mpc-plugin { };
 
   xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin.nix { };
 
