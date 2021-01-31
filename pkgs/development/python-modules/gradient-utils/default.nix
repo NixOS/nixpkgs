@@ -1,28 +1,40 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , hyperopt
 , lib
+, mock
 , numpy
+, poetry
 , prometheus_client
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "gradient-utils";
   version = "0.3.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0a99yygv30vibfawk6zd1jd6lva8fjnr99l1ahaf0nqjyw6jl4nw";
+  src = fetchFromGitHub {
+    owner = "Paperspace";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "083hnkv19mhvdc8nx28f1nph50c903gxh9g9q8531abv0w8m0744";
   };
 
   postPatch = ''
-    sed -i 's/hyperopt==0.1.2/hyperopt>=0.1.2/' setup.py
-    sed -i 's/numpy==1.18.5/numpy>=1.18.5/' setup.py
+    substituteInPlace pyproject.toml \
+      --replace 'numpy = "1.18.5"' 'numpy = "^1.18.5"' \
+      --replace 'hyperopt = "0.1.2"' 'hyperopt = ">=0.1.2"'
   '';
 
+  nativeBuildInputs = [ poetry ];
+  checkInputs = [ mock pytestCheckHook ];
   propagatedBuildInputs = [ hyperopt prometheus_client numpy ];
 
-  pythonImportsCheck = [ "gradient_utils" ];
+  preCheck = "export HOSTNAME=myhost-experimentId";
+  disabledTests = [
+    "test_add_metrics_pushes_metrics" # requires a working prometheus push gateway
+  ];
 
   meta = with lib; {
     description = "Gradient ML SDK";
