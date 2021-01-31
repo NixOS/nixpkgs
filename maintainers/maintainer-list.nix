@@ -3741,6 +3741,12 @@
     githubId = 130903;
     name = "Ana Hobden";
   };
+  holgerpeters = {
+    name = "Holger Peters";
+    email = "holger.peters@posteo.de";
+    github = "HolgerPeters";
+    githubId = 4097049;
+  };
   hrdinka = {
     email = "c.nix@hrdinka.at";
     github = "hrdinka";
