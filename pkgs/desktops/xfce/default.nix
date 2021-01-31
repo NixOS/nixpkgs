@@ -122,7 +122,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin { };
 
-  xfce4-genmon-plugin = callPackage ./panel-plugins/xfce4-genmon-plugin.nix { };
+  xfce4-genmon-plugin = callPackage ./panel-plugins/xfce4-genmon-plugin { };
 
   xfce4-hardware-monitor-plugin = callPackage ./panel-plugins/xfce4-hardware-monitor-plugin.nix { };
 
