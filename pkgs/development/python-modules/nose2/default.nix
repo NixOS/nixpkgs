@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
 , six
 , pythonOlder
 , coverage
@@ -20,8 +21,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six coverage ];
 
-  # AttributeError: 'module' object has no attribute 'collector'
-  doCheck = false;
+  checkPhase = ''
+    ${python.interpreter} -m unittest
+  '';
 
   meta = with lib; {
     description = "nose2 is the next generation of nicer testing for Python";
