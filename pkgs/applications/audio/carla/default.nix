@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
       patchPythonScript "$f"
     done
     patchPythonScript "$out/share/carla/carla_settings.py"
+    patchPythonScript "$out/share/carla/carla_database.py"
 
     for program in $out/bin/*; do
       wrapQtApp "$program" \
