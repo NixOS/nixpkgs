@@ -34,10 +34,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     file liblo alsaLib fluidsynth ffmpeg_3 jack2 libpulseaudio libsndfile
-  ] ++ pythonPath
-    ++ optional withQt qtbase
+  ] ++ optional withQt qtbase
     ++ optional withGtk2 gtk2
     ++ optional withGtk3 gtk3;
+
+  propagatedBuildInputs = pythonPath;
 
   enableParallelBuilding = true;
 
