@@ -441,6 +441,7 @@ in
 
       serverFlagsSection = mkOption {
         default = "";
+        type = types.lines;
         example =
           ''
           Option "BlankTime" "0"
