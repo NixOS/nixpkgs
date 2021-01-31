@@ -153,11 +153,11 @@ let
       }) mkDerivation;
 
       # Slated for deprecation in 21.11
-      lib = builtins.trace
+      lib = if config.allowAlises then builtins.trace
         ( "Warning: `stdenv.lib` is deprecated and will be removed in the next release."
          + " Please use `pkgs.lib` instead."
          + " For more information see https://github.com/NixOS/nixpkgs/issues/108938")
-        lib;
+        lib else throw "`stdenv.lib` is a deprecated alias for `pkgs.lib`";
 
       inherit fetchurlBoot;
 
