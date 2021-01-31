@@ -28,6 +28,8 @@ buildPythonPackage rec {
   # requires a certificates file
   doCheck = false;
 
+  pythonImportsCheck = [ "libcloud" ];
+
   meta = with lib; {
     description = "A unified interface to many cloud providers";
     homepage = "https://libcloud.apache.org/";
