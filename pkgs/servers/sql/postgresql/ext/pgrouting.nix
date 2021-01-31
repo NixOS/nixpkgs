@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     changelog   = "https://github.com/pgRouting/pgrouting/releases/tag/v${version}";
     maintainers = [ maintainers.steve-chavez ];
     platforms   = postgresql.meta.platforms;
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Plus;
   };
 }
