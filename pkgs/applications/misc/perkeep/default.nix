@@ -55,6 +55,5 @@ in buildGoModule rec {
     homepage = "https://perkeep.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ cstrahan danderson kalbasit ];
-    platforms = platforms.unix;
   };
 }
