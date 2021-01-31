@@ -506,6 +506,8 @@ let
 
     kafka = callPackage ../development/ocaml-modules/kafka { };
 
+    kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix { };
+
     ke = callPackage ../development/ocaml-modules/ke { };
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
