@@ -19575,6 +19575,8 @@ in
 
   go-migrate = callPackage ../development/tools/go-migrate { };
 
+  gomacro = callPackage ../development/tools/gomacro { };
+
   gomodifytags = callPackage ../development/tools/gomodifytags { };
 
   go-langserver = callPackage ../development/tools/go-langserver { };
