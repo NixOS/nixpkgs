@@ -20,6 +20,7 @@ buildPythonApplication rec {
 
   disabled = pythonOlder "3.8";
 
+  # no tests
   doCheck = false;
 
   pythonImportsCheck = [ "legendary" ];
