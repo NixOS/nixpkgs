@@ -283,5 +283,5 @@ in {
     '')
   ];
 
-  meta.maintainers = with lib.maintainers; [ nand0p mic92 ];
+  meta.maintainers = with lib.maintainers; [ nand0p mic92 lopsided98 ];
 }
