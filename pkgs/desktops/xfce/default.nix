@@ -98,7 +98,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-icon-theme = callPackage ./art/xfce4-icon-theme { };
 
-  xfwm4-themes = callPackage ./art/xfwm4-themes.nix { };
+  xfwm4-themes = callPackage ./art/xfwm4-themes { };
 
   #### PANEL PLUGINS
 
