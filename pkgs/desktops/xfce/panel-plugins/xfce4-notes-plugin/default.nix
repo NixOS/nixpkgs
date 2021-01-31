@@ -1,16 +1,27 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, intltool, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk2, libunique, xfce }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, intltool
+, libxfce4util
+, xfce4-panel
+, libxfce4ui
+, xfconf
+, gtk2
+, libunique
+, xfce
+}:
 
 let
   category = "panel-plugins";
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname  = "xfce4-notes-plugin";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "1cjlvvcsigyh40xa26b2vc5zylgss0nlaw72sablzhii2kkw7907";
+    sha256 = "E/kJyUi2Oflt5kz3k+t0yxd5WJIB05M+/yFO6PNasIg=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +51,6 @@ stdenv.mkDerivation rec {
     description = "Sticky notes plugin for Xfce panel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
   };
 }
