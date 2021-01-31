@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU
+, withRpathHook ? true }:
 
 let
   # 10.12 adds a new sysdir.h that our version of CF in the main derivation depends on, but
@@ -10,7 +11,7 @@ let
   };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   pname = "swift-corefoundation";
   version = "unstable-2018-09-14";
 
@@ -104,4 +105,6 @@ stdenv.mkDerivation {
       ln -s Versions/Current/$i $base/$i
     done
   '';
-}
+} // lib.optionalAttrs withRpathHook {
+  setupHook = ./corefoundation-setup-hook.sh;
+})

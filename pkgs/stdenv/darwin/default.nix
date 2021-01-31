@@ -54,6 +54,7 @@ let
     "/usr/lib/system/libunc.dylib" # This dependency is "hidden", so our scanning code doesn't pick it up
   ];
 
+  withoutRpathHook = drv: if useAppleSDKLibs then drv else drv.override { withRpathHook = false; };
 in
 rec {
   commonPreHook = ''
@@ -461,7 +462,8 @@ rec {
         darwin = super.darwin.overrideScope (_: _: {
           inherit (darwin)
             binutils dyld Libsystem xnu configd ICU libdispatch libclosure
-            launchd CF objc4 darwin-stubs sigtool postLinkSignHook signingUtils;
+            launchd objc4 darwin-stubs sigtool postLinkSignHook signingUtils;
+          CF = withoutRpathHook darwin.CF;
         });
       };
     in
@@ -471,7 +473,7 @@ rec {
       '';
 
       extraNativeBuildInputs = [ pkgs.xz ];
-      extraBuildInputs = [ pkgs.darwin.CF ];
+      extraBuildInputs = [ (withoutRpathHook pkgs.darwin.CF) ];
       libcxx = pkgs."${finalLlvmPackages}".libcxx;
 
       allowedRequisites =
@@ -541,7 +543,7 @@ rec {
       # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
       # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
       extraNativeBuildInputs = with pkgs; [ xz ];
-      extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
+      extraBuildInputs = [ (withoutRpathHook pkgs.darwin.CF) pkgs.bash ];
       libcxx = pkgs."${finalLlvmPackages}".libcxx;
 
       extraPreHook = ''
@@ -617,17 +619,17 @@ rec {
 
           # See useAppleSDKLibs in darwin-packages.nix
           CF = if useAppleSDKLibs then super.darwin.CF else
-          superDarwin.CF.override {
+          withoutRpathHook (superDarwin.CF.override {
             inherit libxml2;
             python3 = prevStage.python3;
-          };
+          });
         });
       };
     in
     with prevStage; stageFun 4 prevStage {
       shell = "${pkgs.bash}/bin/bash";
       extraNativeBuildInputs = with pkgs; [ xz ];
-      extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
+      extraBuildInputs = [ (withoutRpathHook pkgs.darwin.CF) pkgs.bash ];
       libcxx = pkgs."${finalLlvmPackages}".libcxx;
 
       extraPreHook = ''
@@ -681,7 +683,6 @@ rec {
       targetPlatform = localSystem;
 
       preHook = commonPreHook + ''
-        export NIX_COREFOUNDATION_RPATH=${pkgs.darwin.CF}/Library/Frameworks
         export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
       '';
 
