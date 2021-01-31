@@ -19306,6 +19306,25 @@ in
 
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
   linuxPackages_testing = linuxPackagesFor pkgs.linux_testing;
+
+  # linuxPackages_next - as well as linux_next itself - takes a set with 2 required and 2 optional key-value pairs as an argument:
+  #   1. date: REQUIRED - The daily tarball of the kernel sources you would like to use.
+  #   2. sha256: REQUIRED - You don't have to know this before starting. When left undefined, it will fail and promt the hash to use.
+  #   3. extraMeta.branch: OPTIONAL - If linux_testing is too far behind upstream, you may need to set this manually.
+  #   4. extraMeta.rc: OPTIONAL - If linux_testing is too far behind upstream, you may need to set this manually.
+  #
+  # In general, the error message of a failed kernel build will tell you what the optional arguments should be. In the example below
+  # the error was:
+  #   Error: modDirVersion 5.11.0-rc5-next-20210118 specified in the Nix expression is wrong, it should be: 5.11.0-rc3-next-20210118
+  #
+  # Usage:
+  #
+  # boot.kernelPackages = pkgs.linuxPackages_next {
+  #   date = "20210118"                                               # required
+  #   sha256 = "1nqlpqnqkx263yrrvy2xyyx9yr3s0nap3vrf4lfzz7saav2jmf9r" # required
+  #   extraMeta.branch = "5.11"                                       # optional, if linux_testing is too far off.
+  #   extraMeta.branch = "rc3"                                        # optional, if linux_testing is too far off.
+  # }
   linuxPackages_next = args: linuxPackagesFor (pkgs.linux_next args);
 
   linuxPackages_custom = { version, src, configfile, allowImportFromDerivation ? true }:
