@@ -1015,11 +1015,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libXt = callPackage ({ stdenv, pkg-config, fetchurl, libICE, xorgproto, libSM, libX11 }: stdenv.mkDerivation {
-    name = "libXt-1.2.0";
+    name = "libXt-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXt-1.2.0.tar.bz2";
-      sha256 = "0cbqlyssr8aia88c8i7z59z9d0kp3p2hp6683xhz9ndyv8qza7dk";
+      url = "mirror://xorg/individual/lib/libXt-1.2.1.tar.bz2";
+      sha256 = "0q1x7842r8rcn2m0q4q9f69h4qa097fyizs8brzx5ns62s7w1737";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkg-config ];
