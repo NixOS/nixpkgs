@@ -114,7 +114,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-datetime-plugin = callPackage ./panel-plugins/xfce4-datetime-plugin { };
 
-  xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin.nix { };
+  xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin { };
 
   xfce4-embed-plugin = callPackage ./panel-plugins/xfce4-embed-plugin.nix { };
 
