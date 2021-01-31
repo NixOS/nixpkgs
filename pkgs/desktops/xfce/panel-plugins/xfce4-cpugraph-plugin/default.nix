@@ -1,16 +1,30 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, glib, exo, libXtst, xorgproto, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk3, hicolor-icon-theme, xfce }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, glib
+, exo
+, libXtst
+, xorgproto
+, libxfce4util
+, xfce4-panel
+, libxfce4ui
+, xfconf
+, gtk3
+, hicolor-icon-theme
+, xfce
+}:
 
 let
   category = "panel-plugins";
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname  = "xfce4-cpugraph-plugin";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "193bj1p54l4zrvgdjj0pvjn161d6dn82jh9invcy09sqwlj0mkiy";
+    sha256 = "YVrfmr2RQXpEMZ2OTa3GAS+iKjd48vN5cXUS3Lfvkko=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +56,6 @@ stdenv.mkDerivation rec {
     description = "CPU graph show for Xfce panel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
   };
 }
