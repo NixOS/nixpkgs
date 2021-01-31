@@ -4435,6 +4435,8 @@ in {
 
   nplusone = callPackage ../development/python-modules/nplusone { };
 
+  npyscreen = callPackage ../development/python-modules/npyscreen { };
+
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
