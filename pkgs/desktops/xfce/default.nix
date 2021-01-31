@@ -138,7 +138,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-mpc-plugin = callPackage ./panel-plugins/xfce4-mpc-plugin { };
 
-  xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin.nix { };
+  xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin { };
 
   xfce4-systemload-plugin = callPackage ./panel-plugins/xfce4-systemload-plugin { };
 
