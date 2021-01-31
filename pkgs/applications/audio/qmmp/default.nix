@@ -12,7 +12,7 @@
 }:
 
 # Additional plugins that can be added:
-#  wavpack (http://www.wavpack.com/)
+#  wavpack (https://www.wavpack.com/)
 #  gme (Game music support)
 #  Ogg Opus support
 #  BS2B effect plugin (http://bs2b.sourceforge.net/)
