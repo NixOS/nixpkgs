@@ -4721,6 +4721,8 @@ in {
 
   prometheus_client = callPackage ../development/python-modules/prometheus_client { };
 
+  prometheus-flask-exporter = callPackage ../development/python-modules/prometheus-flask-exporter { };
+
   promise = callPackage ../development/python-modules/promise { };
 
   prompt_toolkit = let
