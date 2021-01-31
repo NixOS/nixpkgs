@@ -29,6 +29,6 @@ buildPythonApplication rec {
     description = "A free and open-source Epic Games Launcher alternative";
     homepage = "https://github.com/derrod/legendary";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ wchresta equirosa ];
+    maintainers = with maintainers; [ equirosa ];
   };
 }
