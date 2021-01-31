@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, pkg-config, libnl
+{ lib, stdenv, fetchurl, fetchpatch, openssl, pkg-config, libnl
 , dbus, readline ? null, pcsclite ? null
 }:
 
@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
       url = "https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch";
       sha256 = "15xjyy7crb557wxpx898b5lnyblxghlij0xby5lmj9hpwwss34dz";
     })
+    (fetchpatch {
+      # Expose OWE key management capability over DBus, remove >= 2.10
+      name = "dbus-Export-OWE-capability-and-OWE-BSS-key_mgmt.patch";
+      url = "https://w1.fi/cgit/hostap/patch/?id=7800725afb27397f7d6033d4969e2aeb61af4737";
+      sha256 = "0c1la7inf4m5y9gzdjjdnhpkx32pm8vi6m5knih8p77q4mbrdgg8";
+    })
   ];
 
   # TODO: Patch epoll so that the dbus actually responds
@@ -32,6 +38,7 @@ stdenv.mkDerivation rec {
     CONFIG_EAP_SAKE=y
     CONFIG_EAP_GPSK=y
     CONFIG_EAP_GPSK_SHA256=y
+    CONFIG_OWE=y
     CONFIG_WPS=y
     CONFIG_WPS_ER=y
     CONFIG_WPS_NFS=y
