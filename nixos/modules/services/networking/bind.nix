@@ -18,7 +18,7 @@ let
       type = types.bool;
     };
     file = mkOption {
-      type = types.str;
+      type = types.either types.str types.path;
       description = "Zone file resource records contain columns of data, separated by whitespace, that define the record.";
     };
     masters = mkOption {
