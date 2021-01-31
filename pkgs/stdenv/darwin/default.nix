@@ -29,6 +29,8 @@ let
     "/usr/lib/libSystem.B.dylib"
     "/usr/lib/system/libunc.dylib" # This dependency is "hidden", so our scanning code doesn't pick it up
   ];
+
+  withoutRpathHook = drv: drv.override { withRpathHook = false; };
 in rec {
   commonPreHook = ''
     export NIX_ENFORCE_NO_NATIVE=''${NIX_ENFORCE_NO_NATIVE-1}
@@ -343,7 +345,8 @@ in rec {
       darwin = super.darwin // {
         inherit (darwin)
           binutils dyld Libsystem xnu configd ICU libdispatch libclosure
-          launchd CF darwin-stubs;
+          launchd darwin-stubs;
+        CF = withoutRpathHook darwin.CF;
       };
     };
   in with prevStage; stageFun 2 prevStage {
@@ -352,7 +355,7 @@ in rec {
     '';
 
     extraNativeBuildInputs = [ pkgs.xz ];
-    extraBuildInputs = [ pkgs.darwin.CF ];
+    extraBuildInputs = [ (withoutRpathHook pkgs.darwin.CF) ];
     libcxx = pkgs.libcxx;
 
     allowedRequisites =
@@ -399,7 +402,7 @@ in rec {
     # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
     # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
     extraNativeBuildInputs = with pkgs; [ xz ];
-    extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
+    extraBuildInputs = [ (withoutRpathHook pkgs.darwin.CF) pkgs.bash ];
     libcxx = pkgs.libcxx;
 
     extraPreHook = ''
@@ -448,16 +451,16 @@ in rec {
       darwin = super.darwin // rec {
         inherit (darwin) dyld Libsystem libiconv locale darwin-stubs;
 
-        CF = super.darwin.CF.override {
+        CF = withoutRpathHook (super.darwin.CF.override {
           inherit libxml2;
           python3 = prevStage.python3;
-        };
+        });
       };
     };
   in with prevStage; stageFun 4 prevStage {
     shell = "${pkgs.bash}/bin/bash";
     extraNativeBuildInputs = with pkgs; [ xz ];
-    extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
+    extraBuildInputs = [ (withoutRpathHook pkgs.darwin.CF) pkgs.bash ];
     libcxx = pkgs.libcxx;
 
     extraPreHook = ''
@@ -503,7 +506,6 @@ in rec {
     targetPlatform = localSystem;
 
     preHook = commonPreHook + ''
-      export NIX_COREFOUNDATION_RPATH=${pkgs.darwin.CF}/Library/Frameworks
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
