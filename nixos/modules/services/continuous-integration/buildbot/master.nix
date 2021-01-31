@@ -223,7 +223,7 @@ in {
       };
 
       pythonPackages = mkOption {
-        type = types.listOf types.package;
+        type = types.functionTo (types.listOf types.package);
         default = pythonPackages: with pythonPackages; [ ];
         defaultText = "pythonPackages: with pythonPackages; [ ]";
         description = "Packages to add the to the PYTHONPATH of the buildbot process.";
