@@ -1,10 +1,10 @@
 { callPackage, fetchpatch, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "2.3.1";
-  branch = "2.3";
+  version = "2.4.0";
+  branch = "2.4";
   revision = "v${version}";
-  sha256 = "1dn98d2dfa1lqyxxmab6rrcv52dyhjr4g7i4xf2w54fqsx14ynrb";
+  sha256 = "143dvy5g6v6129lzvl0r8mrgva2fppkn0zl099qmi9yi9l9h7yyf";
 
   extraFlags = [
     "-DOPENJPEG_INSTALL_INCLUDE_DIR=${placeholder "dev"}/include/openjpeg-${branch}"
@@ -13,25 +13,16 @@ callPackage ./generic.nix (args // rec {
 
   patches = [
     ./fix-cmake-config-includedir.patch
+
+    # Fix finding openjpeg.h: https://github.com/uclouvain/openjpeg/pull/1321
     (fetchpatch {
-      url = "https://github.com/uclouvain/openjpeg/commit/21399f6b7d318fcdf4406d5e88723c4922202aa3.patch";
-      name = "CVE-2019-12973-1.patch";
-      sha256 = "161yvnfbzy2016qqapm0ywfgglgs1v8ljnk6fj8d2bwdh1cxxz8f";
+      url = "https://github.com/uclouvain/openjpeg/pull/1321/commits/14f4c27e7c91f745a1dda9991b5deea3cbef2072.patch";
+      sha256 = "sha256-lVnzMAy6pSKFnz9eEneDld6zpzfsAmGurPOjTU5Nqnw=";
     })
     (fetchpatch {
-      url = "https://github.com/uclouvain/openjpeg/commit/3aef207f90e937d4931daf6d411e092f76d82e66.patch";
-      name = "CVE-2019-12973-2.patch";
-      sha256 = "1jkkfw13l7nx4hxdhc7z17f4vfgqcaf09zpl235kypbxx1ygc7vq";
+      url = "https://github.com/uclouvain/openjpeg/pull/1321/commits/4d0b49edad7fb31ebbf03c60a45b72aaa7b7412b.patch";
+      sha256 = "sha256-zU7t6SjmGjt35w875GSQnoTDl8V8yzG1LK2QY0jEnZM=";
     })
-    (fetchpatch {
-      url = "https://github.com/uclouvain/openjpeg/commit/024b8407392cb0b82b04b58ed256094ed5799e04.patch";
-      name = "CVE-2020-6851.patch";
-      sha256 = "1lfwlzqxb69cwzjp8v9lijz4c2qhf3b8m6sq1khipqlgrb3l58xw";
-    })
-    (fetchpatch {
-      url = "https://github.com/uclouvain/openjpeg/commit/05f9b91e60debda0e83977e5e63b2e66486f7074.patch";
-      name = "CVE-2020-8112.patch";
-      sha256 = "16kykc8wbq9kx9w9kkf3i7snak82m184qrl9bpxvkjl7h0n9aw49";
-    })
+
   ];
 })

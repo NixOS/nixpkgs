@@ -17694,14 +17694,7 @@ in
     ];
   };
 
-  linux_5_8 = callPackage ../os-specific/linux/kernel/linux-5.8.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.request_key_helper
-    ];
-  };
-
-  linux_5_9 = callPackage ../os-specific/linux/kernel/linux-5.9.nix {
+  linux_5_10 = callPackage ../os-specific/linux/kernel/linux-5.10.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
@@ -17942,7 +17935,7 @@ in
 
   # Update this when adding the newest kernel major version!
   # And update linux_latest_for_hardened below if the patches are already available
-  linuxPackages_latest = linuxPackages_5_9;
+  linuxPackages_latest = linuxPackages_5_10;
   linux_latest = linuxPackages_latest.kernel;
 
   # Realtime kernel packages.
@@ -17964,8 +17957,7 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
-  linuxPackages_5_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_8);
-  linuxPackages_5_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_9);
+  linuxPackages_5_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_10);
 
   # When adding to the list above:
   # - Update linuxPackages_latest to the latest version
@@ -18003,7 +17995,7 @@ in
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
     let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
-      linux_latest_for_hardened = pkgs.linux_5_9;
+      linux_latest_for_hardened = pkgs.linux_5_10;
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
