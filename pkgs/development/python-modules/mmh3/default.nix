@@ -18,6 +18,5 @@ buildPythonPackage rec {
     description = "Python wrapper for MurmurHash3, a set of fast and robust hash functions";
     homepage = "https://pypi.org/project/mmh3/";
     license = licenses.cc0;
-    maintainers = [ maintainers.danieldk ];
   };
 }
