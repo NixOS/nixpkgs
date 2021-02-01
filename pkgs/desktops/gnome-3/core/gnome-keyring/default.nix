@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, dbus, libgcrypt, pam, python2, glib, libxslt
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, dbus, libgcrypt, pam, python2, glib, libxslt
 , gettext, gcr, libcap_ng, libselinux, p11-kit, openssh, wrapGAppsHook
 , docbook_xsl, docbook_xml_dtd_43, gnome3 }:
 
@@ -10,6 +10,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gnome-keyring/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "11sgffrrpss5cmv3b717pqlbhgq17l1xd33fsvqgsw8simxbar52";
   };
+
+  patches = [
+    # version 3.36.0 is incompatible with libncap_ng >= 0.8.1. remove patch after update.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-keyring/-/commit/ebc7bc9efacc17049e54da8d96a4a29943621113.diff";
+      sha256 = "07bx7zmdswqsa3dj37m729g35n1prhylkw7ya8a7h64i10la12cs";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 
