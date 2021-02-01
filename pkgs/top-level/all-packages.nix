@@ -1033,6 +1033,8 @@ in
 
   boxes = callPackage ../tools/text/boxes { };
 
+  boundary = callPackage ../tools/networking/boundary { };
+
   chamber = callPackage ../tools/admin/chamber {  };
 
   charm = callPackage ../applications/misc/charm { };
