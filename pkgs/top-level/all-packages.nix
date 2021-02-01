@@ -30847,6 +30847,7 @@ in
   mfcl8690cdwcupswrapper = callPackage ../misc/cups/drivers/mfcl8690cdwcupswrapper { };
   mfcl8690cdwlpr = callPackage ../misc/cups/drivers/mfcl8690cdwlpr { };
 
+  mfc9140cdncupswrapper = callPackage ../misc/cups/drivers/mfc9140cdncupswrapper { };
   mfc9140cdnlpr = callPackage ../misc/cups/drivers/mfc9140cdnlpr { };
 
   samsung-unified-linux-driver_1_00_36 = callPackage ../misc/cups/drivers/samsung/1.00.36/default.nix { };
