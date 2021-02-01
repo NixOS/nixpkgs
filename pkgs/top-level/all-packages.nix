@@ -26561,6 +26561,9 @@ in
 
   gemrb = callPackage ../games/gemrb { };
 
+  gimx = callPackage ../games/gimx {};
+  gimx-afterglow = lowPrio (gimx.override { gimxAuth = "afterglow"; });
+
   gl117 = callPackage ../games/gl-117 {};
 
   globulation2 = callPackage ../games/globulation {
