@@ -650,7 +650,7 @@ in
         xorg.xprop
         xorg.xauth
         pkgs.xterm
-        pkgs.xdg_utils
+        pkgs.xdg-utils
         xorg.xf86inputevdev.out # get evdev.4 man page
       ]
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;

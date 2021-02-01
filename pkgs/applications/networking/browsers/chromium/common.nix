@@ -4,7 +4,7 @@
 , gnutar, bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
-, xdg_utils, yasm, nasm, minizip, libwebp
+, xdg-utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2
 
 , python2Packages, perl, pkg-config
@@ -89,7 +89,7 @@ let
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
     libpng libcap
-    xdg_utils minizip libwebp
+    xdg-utils minizip libwebp
     libusb1 re2
     ffmpeg libxslt libxml2
     nasm
@@ -196,7 +196,7 @@ let
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
 
-      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
+      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
 
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \

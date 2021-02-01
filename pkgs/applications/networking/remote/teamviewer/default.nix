@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg_utils, dbus
+{ mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg-utils, dbus
 , qtbase, qtwebkit, qtx11extras, qtquickcontrols, glibc
 , libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes
 , wrapQtAppsHook
@@ -36,7 +36,7 @@ mkDerivation rec {
     ln -s $out/share/teamviewer/tv_bin/desktop/com.teamviewer.*.desktop $out/share/applications
     ln -s /var/lib/teamviewer $out/share/teamviewer/config
     ln -s /var/log/teamviewer $out/share/teamviewer/logfiles
-    ln -s ${xdg_utils}/bin $out/share/teamviewer/tv_bin/xdg-utils
+    ln -s ${xdg-utils}/bin $out/share/teamviewer/tv_bin/xdg-utils
 
     for i in 16 20 24 32 48 256; do
       size=$i"x"$i

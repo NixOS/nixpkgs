@@ -20,7 +20,7 @@
 , python3Packages
 , libusb1
 , libmtp
-, xdg_utils
+, xdg-utils
 , makeDesktopItem
 , removeReferencesTo
 }:
@@ -84,7 +84,7 @@ mkDerivation rec {
     poppler_utils
     qtbase
     sqlite
-    xdg_utils
+    xdg-utils
   ] ++ (
     with python3Packages; [
       apsw
