@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnugrep gnused gawk
+#!nix-shell -i bash -p curl jq gnused
 
 # Update script for the vscode versions and hashes.
 # Usually doesn't need to be called by hand,
@@ -16,8 +16,7 @@ fi
 
 # VSCode
 
-VSCODE_VER=$(curl -s -L "https://code.visualstudio.com/Download" | grep "is now available" | awk -F'</span>' '{print $1}' | awk -F'>' '{print $NF}')
-VSCODE_VER=$(curl -s -L "https://code.visualstudio.com/updates/v${VSCODE_VER/./_}" | grep "Downloads:" | awk -F'code.visualstudio.com/' '{print $2}' | awk -F'/' '{print $1}')
+VSCODE_VER=$(curl --fail --silent https://api.github.com/repos/Microsoft/vscode/releases/latest | jq --raw-output .tag_name)
 sed -i "s/version = \".*\"/version = \"${VSCODE_VER}\"/" "$ROOT/vscode.nix"
 
 VSCODE_LINUX_URL="https://vscode-update.azurewebsites.net/${VSCODE_VER}/linux-x64/stable"
