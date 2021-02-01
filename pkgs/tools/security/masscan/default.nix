@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "masscan";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "robertdavidgraham";
     repo = "masscan";
     rev = version;
-    sha256 = "sha256-gH0zOf2kl6cqws1nB3QPtaAjpvNAgbawXRx77bqJTIc=";
+    sha256 = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
