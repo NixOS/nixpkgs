@@ -28,6 +28,5 @@ buildGoModule rec {
     description = "A thin wrapper for Terraform that supports locking for Terraform state and enforces best practices";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg jk ];
-    platforms = platforms.all;
   };
 }
