@@ -8963,7 +8963,6 @@ broken-packages:
   - postgresql-tx-squeal
   - postgresql-tx-squeal-compat-simple
   - postgresql-typed-lifted
-  - postgrest
   - postgrest-ws
   - postie
   - postmark
