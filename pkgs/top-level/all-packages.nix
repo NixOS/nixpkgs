@@ -7910,6 +7910,8 @@ in
 
   ssh-chat = callPackage ../applications/networking/instant-messengers/ssh-chat { };
 
+  ssh-to-pgp = callPackage ../tools/security/ssh-to-pgp { };
+
   suricata = callPackage ../applications/networking/ids/suricata {
     python = python3;
   };
