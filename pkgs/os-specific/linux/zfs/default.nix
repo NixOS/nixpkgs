@@ -21,6 +21,12 @@ let
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
   buildUser = any (n: n == configFile) [ "user" "all" ];
 
+  # remove this patch at the next ZFS release (> 2.0.1)
+  reapplyPathSanitizerPatch = fetchpatch {
+    url = "https://github.com/openzfs/zfs/commit/03f036cbccdd8699f5fe8540ef317595a35bceb8.patch";
+    sha256 = "c157bbb6551a4e720c3faba005e1b72e4692d304c6ff5e0e685691bd47197dca";
+  };
+
   common = { version
     , sha256
     , extraPatches ? []
@@ -190,7 +196,7 @@ in {
 
     sha256 = "0wmw823ildwm9rcfyk22pvzg100yhps3y9hfjlrpspfd1hhkbp0d";
 
-    extraPatches = [ ];
+    extraPatches = [ reapplyPathSanitizerPatch ];
   };
 
   zfsUnstable = common {
@@ -202,6 +208,6 @@ in {
 
     sha256 = "0wmw823ildwm9rcfyk22pvzg100yhps3y9hfjlrpspfd1hhkbp0d";
 
-    extraPatches = [ ];
+    extraPatches = [ reapplyPathSanitizerPatch ];
   };
 }
