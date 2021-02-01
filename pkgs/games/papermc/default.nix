@@ -31,6 +31,6 @@ in stdenv.mkDerivation {
     homepage    = "https://papermc.io/";
     license     = lib.licenses.gpl3Only;
     platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ aaronjanse ];
+    maintainers = with lib.maintainers; [ aaronjanse neonfuz ];
   };
 }
