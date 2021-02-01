@@ -1488,6 +1488,8 @@ in {
 
   credstash = callPackage ../development/python-modules/credstash { };
 
+  criticality-score = callPackage ../development/python-modules/criticality-score { };
+
   croniter = callPackage ../development/python-modules/croniter { };
 
   cryptacular = callPackage ../development/python-modules/cryptacular { };
