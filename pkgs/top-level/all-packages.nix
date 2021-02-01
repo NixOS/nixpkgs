@@ -21188,6 +21188,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
 
+  blflash = callPackage ../tools/misc/blflash { };
+
   blogc = callPackage ../applications/misc/blogc { };
 
   bluefish = callPackage ../applications/editors/bluefish {
