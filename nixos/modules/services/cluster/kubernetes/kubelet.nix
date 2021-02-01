@@ -265,6 +265,7 @@ in
             --authentication-token-webhook \
             --authentication-token-webhook-cache-ttl="10s" \
             --authorization-mode=Webhook \
+            --cgroup-driver systemd \
             ${optionalString (cfg.clientCaFile != null)
               "--client-ca-file=${cfg.clientCaFile}"} \
             ${optionalString (cfg.clusterDns != "")
