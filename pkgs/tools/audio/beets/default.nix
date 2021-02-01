@@ -2,6 +2,7 @@
 , pythonPackages, imagemagick, gobject-introspection, gst_all_1
 , runtimeShell
 , fetchpatch
+, unstableGitUpdater
 
 # Attributes needed for tests of the external plugins
 , callPackage, beets
@@ -132,13 +133,13 @@ in pythonPackages.buildPythonApplication rec {
   # unstable does not require bs1770gain[2].
   # [1]: https://discourse.beets.io/t/forming-a-beets-core-team/639
   # [2]: https://github.com/NixOS/nixpkgs/pull/90504
-  version = "unstable-2020-12-22";
+  version = "unstable-2021-01-29";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
-    rev = "53dcb24d10788897f20c341774b474808ec2c0b6";
-    sha256 = "sha256-P++NA13T2TRHW3Se10np8BSe/WRBYAKRte5xKoHKW50=";
+    rev = "04ea754d00e2873ae9aa2d9e07c5cefd790eaee2";
+    sha256 = "sha256-BIa3hnOsBxThbA2WCE4q9eaFNtObr3erZBBqobVOSiQ=";
   };
 
   propagatedBuildInputs = [
@@ -290,6 +291,7 @@ in pythonPackages.buildPythonApplication rec {
 
   passthru = {
     externalPlugins = plugins;
+    updateScript = unstableGitUpdater { url = "https://github.com/beetbox/beets"; };
   };
 
   meta = {
