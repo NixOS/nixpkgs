@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, kernel }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, kernel, kernelAtLeast }:
 
 stdenv.mkDerivation rec {
   name = "isgx-${version}-${kernel.version}";
@@ -35,9 +35,19 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Intel SGX Linux Driver";
+    longDescription = ''
+      The linux-sgx-driver project (isgx) hosts an out-of-tree driver
+      for the Linux* Intel(R) SGX software stack, which would be used
+      until the driver upstreaming process is complete (before 5.11.0).
+
+      It is used to support Enhanced Privacy Identification (EPID)
+      based attestation on the platforms without Flexible Launch Control.
+    '';
     homepage = "https://github.com/intel/linux-sgx-driver";
-    license = with licenses; [ bsd3 gpl2 ];
+    license = with licenses; [ bsd3 /* OR */ gpl2Only ];
     maintainers = with maintainers; [ oxalica ];
     platforms = platforms.linux;
+    # The driver is already in kernel >= 5.11.0.
+    broken = kernelAtLeast "5.11.0";
   };
 }
