@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitLab, pkg-config, autoconf, automake, libiconv, drake
-, ruby, docbook_xsl, file, xdg_utils, gettext, expat, boost, libebml, zlib
+, ruby, docbook_xsl, file, xdg-utils, gettext, expat, boost, libebml, zlib
 , fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark, pcre2
 , withGUI ? true
   , qtbase ? null
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    expat file xdg_utils boost libebml zlib fmt
+    expat file xdg-utils boost libebml zlib fmt
     libmatroska libogg libvorbis flac cmark pcre2
   ] ++ optional  stdenv.isDarwin libiconv
     ++ optionals withGUI [ qtbase qtmultimedia wrapQtAppsHook ];

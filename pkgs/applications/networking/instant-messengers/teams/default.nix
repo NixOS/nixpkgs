@@ -10,7 +10,7 @@
 , at-spi2-atk
 , coreutils
 , gawk
-, xdg_utils
+, xdg-utils
 , systemd }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin:${xdg_utils}/bin")
+    gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin:${xdg-utils}/bin")
   '';
 
   installPhase = ''
