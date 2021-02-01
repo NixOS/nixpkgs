@@ -9570,7 +9570,7 @@ in
 
   icr = callPackage ../development/tools/icr { };
 
-  scry = callPackage ../development/tools/scry {};
+  scry = callPackage ../development/tools/scry { };
 
   dasm = callPackage ../development/compilers/dasm/default.nix { };
 
