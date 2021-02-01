@@ -6835,6 +6835,8 @@ in
 
   ovh-ttyrec = callPackage ../tools/misc/ovh-ttyrec { };
 
+  ovito = libsForQt5.callPackage ../applications/graphics/ovito { };
+
   owncloud-client = libsForQt514.callPackage ../applications/networking/owncloud-client { };
 
   oxidized = callPackage ../tools/admin/oxidized { };
