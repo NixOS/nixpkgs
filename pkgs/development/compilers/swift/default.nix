@@ -328,5 +328,8 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     badPlatforms = platforms.i686;
     broken = stdenv.isAarch64; # 2018-09-04, never built on Hydra
+    knownVulnerabilities = [
+      "CVE-2020-9861"
+    ];
   };
 }

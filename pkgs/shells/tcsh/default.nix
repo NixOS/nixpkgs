@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/${pname}-${version}.tar.gz"
-      "ftp://ftp.astron.com/pub/tcsh/${pname}-${version}.tar.gz"
-      "ftp://ftp.funet.fi/pub/unix/shells/tcsh/${pname}-${version}.tar.gz"
+      "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/old/${pname}-${version}.tar.gz"
+      "ftp://ftp.astron.com/pub/tcsh/old/${pname}-${version}.tar.gz"
+      "ftp://ftp.funet.fi/pub/unix/shells/tcsh/old/${pname}-${version}.tar.gz"
     ];
     sha256 = "0nw8prz1n0lmr82wnpyhrzmki630afn7p9cfgr3vl00vr9c72a7d";
   };
