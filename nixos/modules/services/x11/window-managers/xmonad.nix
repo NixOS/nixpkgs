@@ -43,7 +43,8 @@ in {
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = "pkgs.haskellPackages";
-        type = types.package;
+        # unspecified: Avoid the cost of evaluating _every package_ in the `haskellPackages` attrset.
+        type = types.attrsOf types.unspecified;
         example = literalExample "pkgs.haskell.packages.ghc784";
         description = ''
           haskellPackages used to build Xmonad and other packages.
