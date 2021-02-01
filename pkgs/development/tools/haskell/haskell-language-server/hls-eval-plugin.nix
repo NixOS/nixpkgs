@@ -1,17 +1,16 @@
 { mkDerivation, aeson, base, containers, deepseq, Diff, directory
 , extra, fetchgit, filepath, ghc, ghc-boot-th, ghc-paths, ghcide
-, hashable, haskell-lsp, haskell-lsp-types, hls-plugin-api
+, hashable, haskell-lsp, haskell-lsp-types, hls-plugin-api, lib
 , parser-combinators, pretty-simple, QuickCheck, safe-exceptions
-, shake, lib, temporary, text, time, transformers
-, unordered-containers
+, shake, temporary, text, time, transformers, unordered-containers
 }:
 mkDerivation {
   pname = "hls-eval-plugin";
-  version = "0.1.0.0";
+  version = "0.1.0.1";
   src = fetchgit {
     url = "https://github.com/haskell/haskell-language-server.git";
-    sha256 = "0p6fqs07lajbi2g1wf4w3j5lvwknnk58n12vlg48cs4iz25gp588";
-    rev = "eb58f13f7b8e4f9bc771af30ff9fd82dc4309ff5";
+    sha256 = "18g0d7zac9xwywmp57dcrjnvms70f2mawviswskix78cv0iv4sk5";
+    rev = "46d2a3dc7ef49ba57b2706022af1801149ab3f2b";
     fetchSubmodules = true;
   };
   postUnpack = "sourceRoot+=/plugins/hls-eval-plugin; echo source root reset to $sourceRoot";

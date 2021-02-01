@@ -42,8 +42,9 @@ hls_new_version=$hls_latest_release
 echo "Updating haskell-language-server from old version $hls_old_version to new version $hls_new_version."
 echo "Running cabal2nix and outputting to ${hls_derivation_file}..."
 cabal2nix --revision "$hls_new_version" "https://github.com/haskell/haskell-language-server.git" > "$hls_derivation_file"
-cabal2nix --revision "$hls_new_version" --subpath plugins/tactics "https://github.com/haskell/haskell-language-server.git" > "${script_dir}/hls-tactics-plugin.nix"
-for plugin in "hls-hlint-plugin" "hls-explicit-imports-plugin" "hls-retrie-plugin" "hls-class-plugin" "hls-eval-plugin"; do
+cabal2nix --revision "$hls_new_version" --subpath ghcide "https://github.com/haskell/haskell-language-server.git" > "${script_dir}/ghcide.nix"
+cabal2nix --revision "$hls_new_version" --subpath hls-plugin-api "https://github.com/haskell/haskell-language-server.git" > "${script_dir}/hls-plugin-api.nix"
+for plugin in "hls-hlint-plugin" "hls-explicit-imports-plugin" "hls-retrie-plugin" "hls-class-plugin" "hls-eval-plugin" "hls-tactics-plugin"; do
    cabal2nix --revision "$hls_new_version" --subpath plugins/$plugin "https://github.com/haskell/haskell-language-server.git" > "${script_dir}/$plugin.nix"
 done
 

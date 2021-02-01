@@ -27,6 +27,8 @@ self: super: {
   hls-retrie-plugin = self.callPackage ../tools/haskell/haskell-language-server/hls-retrie-plugin.nix { };
   hls-class-plugin = self.callPackage ../tools/haskell/haskell-language-server/hls-class-plugin.nix { };
   hls-eval-plugin = self.callPackage ../tools/haskell/haskell-language-server/hls-eval-plugin.nix { };
+  ghcide = self.callPackage ../tools/haskell/haskell-language-server/ghcide.nix { };
+  hls-plugin-api = self.callPackage ../tools/haskell/haskell-language-server/hls-plugin-api.nix { };
 
   nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
 

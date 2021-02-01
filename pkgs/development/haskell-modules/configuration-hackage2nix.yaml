@@ -1037,8 +1037,8 @@ default-package-overrides:
   - haskell-gi-overloading ==1.0
   - haskell-import-graph ==1.0.4
   - haskell-lexer ==1.1
-  - haskell-lsp ==0.22.0.0
-  - haskell-lsp-types ==0.22.0.0
+  - haskell-lsp ==0.23.0.0
+  - haskell-lsp-types ==0.23.0.0
   - haskell-names ==0.9.9
   - haskell-src ==1.0.3.1
   - haskell-src-exts ==1.23.1
@@ -1453,7 +1453,7 @@ default-package-overrides:
   - loop ==0.3.0
   - lrucache ==1.2.0.1
   - lrucaching ==0.3.3
-  - lsp-test ==0.11.0.5
+  - lsp-test ==0.11.0.7
   - lucid ==2.9.12
   - lucid-cdn ==0.2.2.0
   - lucid-extras ==0.2.2
@@ -2707,8 +2707,6 @@ extra-packages:
   - dependent-map == 0.2.4.0            # required by Hasura 1.3.1, 2020-08-20
   - dependent-sum == 0.4                # required by Hasura 1.3.1, 2020-08-20
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
-  - ghcide == 0.7.0.0                   # Needed for hls 0.8.0
-  - apply-refact == 0.8.2.1             # Needed for hls 0.8.0
 
 package-maintainers:
   peti:
