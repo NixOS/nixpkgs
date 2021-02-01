@@ -3,6 +3,7 @@
 , lib
 , fetchFromGitHub
 , python3
+, nix-update-script
   # To include additional plugins, pass them here as an overlay.
 , packageOverrides ? self: super: {}
 }:
@@ -170,7 +171,10 @@ let
                 "test_set_external_modification"
               ];
 
-              passthru.python = self.python;
+              passthru = {
+                python = self.python;
+                updateScript = nix-update-script { attrPath = "octoprint"; };
+              };
 
               meta = with lib; {
                 homepage = "https://octoprint.org/";
