@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "radvd";
-  version = "2.18";
+  version = "2.19";
 
   src = fetchurl {
     url = "http://www.litech.org/radvd/dist/${pname}-${version}.tar.xz";
-    sha256 = "1p2wlv3djvla0r84hdncc3wfa530xigs7z9ssc2v5r1pcpzgxgz1";
+    sha256 = "0h722f17h7cra1sjgrxhrrvx54mm47fs039909yhbabigxch8kjn";
   };
 
   nativeBuildInputs = [ pkg-config bison flex check ];
