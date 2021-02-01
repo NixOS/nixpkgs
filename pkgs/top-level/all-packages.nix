@@ -7279,7 +7279,10 @@ in
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio { };
 
-  rtmidi = callPackage ../development/libraries/audio/rtmidi { };
+  rtmidi = callPackage ../development/libraries/audio/rtmidi {
+    jack = libjack2;
+    inherit (darwin.apple_sdk.frameworks) CoreMIDI CoreAudio CoreServices;
+  };
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
