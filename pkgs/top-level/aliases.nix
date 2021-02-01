@@ -733,6 +733,7 @@ mapAliases ({
   wireguard = wireguard-tools; # added 2018-05-19
   morituri = whipper; # added 2018-09-13
   xp-pen-g430 = pentablet-driver; # added 2020-05-03
+  xdg_utils = xdg-utils; # added 2021-02-01
   xfceUnstable = xfce4-14; # added 2019-09-17
   xfce4-14 = xfce;
   xfce4-12 = throw "xfce4-12 has been replaced by xfce4-14"; # added 2020-03-14
