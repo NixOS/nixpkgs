@@ -3080,6 +3080,8 @@ in
 
   cjdns = callPackage ../tools/networking/cjdns { };
 
+  cjson = callPackage ../development/libraries/cjson { };
+
   cksfv = callPackage ../tools/networking/cksfv { };
 
   clementine = libsForQt514.callPackage ../applications/audio/clementine {
