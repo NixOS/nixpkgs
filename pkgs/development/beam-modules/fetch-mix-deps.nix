@@ -1,13 +1,9 @@
-{ stdenvNoCC, elixir, hex, rebar, rebar3, cacert, git }:
+{ stdenvNoCC, lib, elixir, hex, rebar, rebar3, cacert, git }:
 
 { name, version, sha256, src, mixEnv ? "prod", debug ? false, meta ? { } }:
 
-with stdenvNoCC.lib;
-
 stdenvNoCC.mkDerivation ({
   name = "mix-deps-${name}-${version}";
-
-  phases = [ "configurePhase" "downloadPhase" ];
 
   nativeBuildInputs = [ elixir hex cacert git ];
 
@@ -29,9 +25,9 @@ stdenvNoCC.mkDerivation ({
     export REBAR_CACHE_DIR="$TMPDIR/rebar3.cache"
   '';
 
-  downloadPhase = ''
-    ln -s ${src}/mix.exs ./mix.exs
-    ln -s ${src}/mix.lock ./mix.lock
+  dontBuild = true;
+
+  installPhase = ''
     mix deps.get --only ${mixEnv}
   '';
 
@@ -39,6 +35,6 @@ stdenvNoCC.mkDerivation ({
   outputHashMode = "recursive";
   outputHash = sha256;
 
-  impureEnvVars = stdenvNoCC.lib.fetchers.proxyImpureEnvVars;
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars;
   inherit meta;
 })
