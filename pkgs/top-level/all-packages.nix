@@ -11740,7 +11740,7 @@ in
     buildJdk = jdk8_headless;
     buildJdkName = "jdk8";
     runJdk = jdk11_headless;
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
     bazel_self = bazel_4;
   };
 
