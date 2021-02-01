@@ -2938,6 +2938,18 @@ let
     meta.homepage = "https://github.com/Iron-E/nvim-highlite/";
   };
 
+  nvim-hlslens = buildVimPluginFrom2Nix {
+    pname = "nvim-hlslens";
+    version = "2021-01-21";
+    src = fetchFromGitHub {
+      owner = "kevinhwang91";
+      repo = "nvim-hlslens";
+      rev = "492c61ccef4562687d319bba48f824426b4613d6";
+      sha256 = "1587mms2qr8n6igsln54vanpzhhm1s7mhrvr4iyszh47dlhjkvdi";
+    };
+    meta.homepage = "https://github.com/kevinhwang91/nvim-hlslens/";
+  };
+
   nvim-hs-vim = buildVimPluginFrom2Nix {
     pname = "nvim-hs-vim";
     version = "2020-08-29";
