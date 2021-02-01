@@ -14753,6 +14753,8 @@ in
 
   libgda = callPackage ../development/libraries/libgda { };
 
+  libgda6 = callPackage ../development/libraries/libgda/6.x.nix { };
+
   libgdamm = callPackage ../development/libraries/libgdamm { };
 
   libgdata = callPackage ../development/libraries/libgdata { };
