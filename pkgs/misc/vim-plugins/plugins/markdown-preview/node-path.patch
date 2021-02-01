@@ -1,0 +1,32 @@
+diff --git a/autoload/mkdp/nvim/rpc.vim b/autoload/mkdp/nvim/rpc.vim
+index 391ceb0..74bee4a 100644
+--- a/autoload/mkdp/nvim/rpc.vim
++++ b/autoload/mkdp/nvim/rpc.vim
+@@ -53,8 +53,8 @@ function! mkdp#nvim#rpc#get_command() abort
+   let l:pre_build = s:root_dir . '/app/bin/markdown-preview-' . mkdp#util#get_platform()
+   if executable(l:pre_build)
+     let l:cmd = [l:pre_build, '--path', s:script]
+-  elseif executable('node')
+-    let l:cmd = ['node', s:root_dir . '/app/index.js', '--path', s:script]
++  elseif executable('@node@')
++    let l:cmd = ['@node@', s:root_dir . '/app/index.js', '--path', s:script]
+   endif
+   if !exists('l:cmd')
+     echohl Error | echon '[vim-node-rpc] pre build and node not found!' | echohl None
+diff --git a/autoload/mkdp/rpc.vim b/autoload/mkdp/rpc.vim
+index 7f9da30..1379bdb 100644
+--- a/autoload/mkdp/rpc.vim
++++ b/autoload/mkdp/rpc.vim
+@@ -59,9 +59,9 @@ function! mkdp#rpc#start_server() abort
+   let l:mkdp_server_script = s:mkdp_root_dir . '/app/bin/markdown-preview-' . mkdp#util#get_platform()
+   if executable(l:mkdp_server_script)
+     let l:cmd = [l:mkdp_server_script, '--path', s:mkdp_root_dir . '/app/server.js']
+-  elseif executable('node')
++  elseif executable('@node@')
+     let l:mkdp_server_script = s:mkdp_root_dir . '/app/index.js'
+-    let l:cmd = ['node', l:mkdp_server_script, '--path', s:mkdp_root_dir . '/app/server.js']
++    let l:cmd = ['@node@', l:mkdp_server_script, '--path', s:mkdp_root_dir . '/app/server.js']
+   endif
+   if exists('l:cmd')
+     if s:is_vim
+

@@ -1,5 +1,5 @@
 { lib, stdenv
-, python, cmake, meson, vim, ruby
+, python, cmake, meson, vim, ruby, nodejs
 , which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
 , llvmPackages, rustPlatform, buildGoModule
 , pkg-config, curl, openssl, libgit2, libiconv
@@ -13,6 +13,7 @@
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
 , nodePackages
+, mkYarnPackage
 , dasht
 , sqlite
 , code-minimap
@@ -291,6 +292,44 @@ self: super: {
   fzf-vim = super.fzf-vim.overrideAttrs(old: {
     dependencies = [ self.fzfWrapper ];
   });
+
+  markdown-preview = let
+    src = fetchFromGitHub {
+      owner = "iamcco";
+      repo = "markdown-preview.nvim";
+      rev = "d319eaac9ef155d2e2cb846c6754a22e9e8a494a";
+      sha256 = "1mch9s2fbk068q2hrxz5ksrw4b15h8vdxg1zi9ads9s4v8rb3hcg";
+    };
+    app = mkYarnPackage {
+      name = "markdown-preview-app";
+      src = "${src}/app";
+      packageJSON = ./plugins/markdown-preview/package.json;
+      yarnLock = ./plugins/markdown-preview/yarn.lock;
+      yarnNix = ./plugins/markdown-preview/yarn.nix;
+      installPhase = ''
+        mkdir $out
+        mv node_modules $out/node_modules
+        mv deps $out/deps
+      '';
+      distPhase = ''
+        true
+      '';
+    };
+  in buildVimPluginFrom2Nix {
+    pname = "markdown-preview";
+    version = "2020-09-09";
+    src = src;
+    patches = [
+      (substituteAll {
+        src = ./plugins/markdown-preview/node-path.patch;
+        node = "${nodejs}/bin/node";
+      })
+    ];
+    buildPhase = ''
+      rm -r app
+      ln -s ${app}/deps/markdown-preview-vim app
+    '';
+  };
 
   skim-vim = super.skim-vim.overrideAttrs(old: {
     dependencies = [ self.skim ];
