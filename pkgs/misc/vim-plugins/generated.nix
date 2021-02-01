@@ -4166,6 +4166,18 @@ let
     meta.homepage = "https://github.com/markonm/traces.vim/";
   };
 
+  train-nvim = buildVimPluginFrom2Nix {
+    pname = "train-nvim";
+    version = "2020-09-10";
+    src = fetchFromGitHub {
+      owner = "tjdevries";
+      repo = "train.nvim";
+      rev = "7b2e9a59af58385d88bf39c5311c08f839e2b1ce";
+      sha256 = "1pbv8c2wb6b2h9czx7c0c8v0q7v0wc4w9s6qgw7hcbqdl3jv1svh";
+    };
+    meta.homepage = "https://github.com/tjdevries/train.nvim/";
+  };
+
   tslime-vim = buildVimPluginFrom2Nix {
     pname = "tslime-vim";
     version = "2020-09-09";
