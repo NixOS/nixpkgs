@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "awesomeversion";
-  version = "21.1.8";
+  version = "21.2.0";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hNsFkGSzqt5ujqk+AO1FW/yzwPxEN+AA7EVazvkwz2o=";
+    sha256 = "1rzd0mcxdjnnzg35hvdvacwrr9brwmkw9bwlb5x6bcp24ry9yl0q";
   };
 
   postPatch = ''
