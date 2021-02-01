@@ -4,7 +4,7 @@
   qtwebengine,
   grantlee, grantleetheme,
   kdbusaddons, ki18n, kiconthemes, kio, kitemmodels, ktextwidgets, prison,
-  akonadi, akonadi-mime, kcontacts, kmime,
+  akonadi, akonadi-mime, kcontacts, kmime, libkleo,
 }:
 
 mkDerivation {
@@ -18,7 +18,7 @@ mkDerivation {
     qtwebengine
     grantlee grantleetheme
     kdbusaddons ki18n kiconthemes kio kitemmodels ktextwidgets prison
-    akonadi-mime kcontacts kmime
+    akonadi-mime kcontacts kmime libkleo
   ];
   propagatedBuildInputs = [ akonadi ];
   outputs = [ "out" "dev" ];
