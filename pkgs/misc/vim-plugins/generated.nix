@@ -2626,6 +2626,18 @@ let
     meta.homepage = "https://github.com/sbdchd/neoformat/";
   };
 
+  neogit = buildVimPluginFrom2Nix {
+    pname = "neogit";
+    version = "2021-01-25";
+    src = fetchFromGitHub {
+      owner = "TimUntersberger";
+      repo = "neogit";
+      rev = "f1ed542f846242e9cc052f43f730c1daf479dce6";
+      sha256 = "0xqy688h2kff2lp490qi9i7gmafy21bxx0dpq7j0bzy55ycw70q6";
+    };
+    meta.homepage = "https://github.com/TimUntersberger/neogit/";
+  };
+
   neoinclude-vim = buildVimPluginFrom2Nix {
     pname = "neoinclude-vim";
     version = "2020-09-13";
