@@ -553,6 +553,7 @@ terryma/vim-multiple-cursors
 tex/vimpreviewpandoc
 Th3Whit3Wolf/one-nvim@main
 theHamsta/nvim-dap-virtual-text
+ThePrimeagen/vim-apm
 thinca/vim-ft-diff_fold
 thinca/vim-prettyprint
 thinca/vim-quickrun
