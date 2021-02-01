@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , python2
+, unstableGitUpdater
 }:
 stdenv.mkDerivation rec {
   name = "klipper";
@@ -38,6 +39,8 @@ stdenv.mkDerivation rec {
     chmod 755 $out/lib/klipper/klippy.py
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { url = meta.homepage; };
 
   meta = with lib; {
     description = "The Klipper 3D printer firmware";
