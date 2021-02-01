@@ -25,14 +25,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
   installPhase = ''
     runHook preInstall
-    install -Dm644 isgx.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/intel/sgx
+    install -D isgx.ko -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/intel/sgx
     runHook postInstall
   '';
 
