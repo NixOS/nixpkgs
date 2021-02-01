@@ -8782,6 +8782,8 @@ in
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
   };
 
+  htmltest = callPackage ../development/tools/htmltest { };
+
   rcm = callPackage ../tools/misc/rcm {};
 
   td = callPackage ../tools/misc/td { };
