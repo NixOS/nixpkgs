@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, xorg, freetype, fontconfig, openssl, glib, nss, nspr, expat
 , alsaLib, dbus, zlib, libxml2, libxslt, makeWrapper, xkeyboard_config, systemd
-, libGL, xcbutilkeysyms, xdg_utils, libtool }:
+, libGL, xcbutilkeysyms, xdg-utils, libtool }:
 
 let
   version = "4.30.5.1682";
 
   rpath = lib.makeLibraryPath [
-    xdg_utils
+    xdg-utils
     xorg.libXext
     xorg.libSM
     xorg.libICE

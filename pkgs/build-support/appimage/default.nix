@@ -66,7 +66,7 @@ rec {
       xorg.xrandr
       which
       perl
-      xdg_utils
+      xdg-utils
       iana-etc
       krb5
     ];

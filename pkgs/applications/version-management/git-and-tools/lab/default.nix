@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, xdg_utils, installShellFiles, git }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, xdg-utils, installShellFiles, git }:
 
 buildGoModule rec {
   pname = "lab";
@@ -22,7 +22,7 @@ buildGoModule rec {
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   postInstall = ''
-    wrapProgram $out/bin/lab --prefix PATH ":" "${lib.makeBinPath [ git xdg_utils ]}";
+    wrapProgram $out/bin/lab --prefix PATH ":" "${lib.makeBinPath [ git xdg-utils ]}";
     for shell in bash fish zsh; do
       $out/bin/lab completion $shell > lab.$shell
       installShellCompletion lab.$shell

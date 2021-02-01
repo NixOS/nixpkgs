@@ -5,7 +5,7 @@
 , tl-expected, hunspell
 # TODO: Shouldn't be required:
 , pcre, xorg, util-linux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
-, xdg_utils
+, xdg-utils
 }:
 
 with lib;
@@ -83,7 +83,7 @@ in mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH : ${xdg_utils}/bin \
+      --prefix PATH : ${xdg-utils}/bin \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
