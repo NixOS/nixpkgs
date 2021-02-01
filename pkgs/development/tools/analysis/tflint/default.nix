@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tflint";
-  version = "0.23.1";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    sha256 = "19vgan743xsnglwva93fs4sqcbpqbyrxbgn5qff809ns8hj8ir94";
+    sha256 = "18alpz29i0w44xnrpw82h16k99q01dd0gkp7ap5cqcf2cyjgzb06";
   };
 
-  vendorSha256 = "1y6ra9bkp6wl0pikvyqywhg5w18v3glnyvwqrddkkkabspl05nqx";
+  vendorSha256 = "1r58nchag97fs0c7rxxxfa8y0vg9df76mmvn4hdc8vzi4h1025nd";
 
   doCheck = false;
 

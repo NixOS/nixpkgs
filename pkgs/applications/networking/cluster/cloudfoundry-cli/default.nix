@@ -1,19 +1,20 @@
-{ lib, stdenv, buildGoPackage, fetchFromGitHub, fetchurl, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, fetchurl, installShellFiles }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cloudfoundry-cli";
-  version = "7.0.1";
-
-  goPackagePath = "code.cloudfoundry.org/cli";
-
-  subPackages = [ "." ];
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "0jh4x7xlijp1naak5qyc256zkzlrczl6g4iz94s8wx2zj7np0q5l";
+    sha256 = "0cf5vshyz6j70sv7x43r1404hdcmkzxgdb7514kjilp5z6wsr1nv";
   };
+  # vendor directory stale
+  deleteVendor = true;
+  vendorSha256 = "0p0s0dr7kpmmnim4fps62vj4zki2qxxdq5ww0fzrf1372xbl4kp2";
+
+  subPackages = [ "." ];
 
   # upstream have helpfully moved the bash completion script to a separate
   # repo which receives no releases or even tags
@@ -24,24 +25,16 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  makeTarget = let hps = stdenv.hostPlatform.system; in
-    if hps == "x86_64-darwin" then
-      "out/cf-cli_osx"
-    else if hps == "x86_64-linux" then
-      "out/cf-cli_linux_x86-64"
-    else if hps == "i686-linux" then
-      "out/cf-cli_linux_i686"
-    else
-      throw "make target for this platform unknown";
+  buildFlagsArray = [
+    "-ldflags="
+    "-s"
+    "-w"
+    "-X code.cloudfoundry.org/cli/version.binaryBuildDate=1970-01-01"
+    "-X code.cloudfoundry.org/cli/version.binaryVersion=${version}"
+  ];
 
-  buildPhase = ''
-    cd go/src/${goPackagePath}
-    CF_BUILD_DATE="1970-01-01" make $makeTarget
-    cp $makeTarget out/cf
-  '';
-
-  installPhase = ''
-    install -Dm555 out/cf "$out/bin/cf"
+  postInstall = ''
+    mv "$out/bin/cli" "$out/bin/cf"
     installShellCompletion --bash $bashCompletionScript
   '';
 
@@ -50,6 +43,5 @@ buildGoPackage rec {
     homepage = "https://github.com/cloudfoundry/cli";
     maintainers = with maintainers; [ ris ];
     license = licenses.asl20;
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

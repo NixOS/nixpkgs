@@ -153,8 +153,8 @@ let
       ./patches/no-build-timestamps.patch # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed)
       ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
       # ++ optional (versionRange "68" "72") (githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-    ] ++ optional (versionRange "89" "90") (githubPatch
-      # To fix the build of chromiumBeta:
+    ] ++ optional (versionRange "89" "90.0.4402.0") (githubPatch
+      # To fix the build of chromiumBeta and chromiumDev:
       "b5b80df7dafba8cafa4c6c0ba2153dfda467dfc9" # add dependency on opus in webcodecs
       "1r4wmwaxz5xbffmj5wspv2xj8s32j9p6jnwimjmalqg3al2ba64x"
     );
@@ -279,6 +279,12 @@ let
       # Disable PGO (defaults to 2 since M89) because it fails without additional changes:
       # error: Could not read profile ../../chrome/build/pgo_profiles/chrome-linux-master-1610647094-405a32bcf15e5a84949640f99f84a5b9f61e2f2e.profdata: Unsupported instrumentation profile format version
       chrome_pgo_phase = 0;
+    } // optionalAttrs (chromiumVersionAtLeast "90") {
+      # Disable build with TFLite library because it fails without additional changes:
+      # ninja: error: '../../chrome/test/data/simple_test.tflite', needed by 'test_data/simple_test.tflite', missing and no known rule to make it
+      # Note: chrome/test/data/simple_test.tflite is in the Git repository but not in chromium-90.0.4400.8.tar.xz
+      # See also chrome/services/machine_learning/README.md
+      build_with_tflite_lib = false;
     } // optionalAttrs ungoogled {
       chrome_pgo_phase = 0;
       enable_hangout_services_extension = false;

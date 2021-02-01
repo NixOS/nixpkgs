@@ -19,11 +19,11 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "duplicity";
-  version = "0.8.15";
+  version = "0.8.17";
 
   src = fetchurl {
     url = "https://code.launchpad.net/duplicity/${majorMinor version}-series/${majorMinorPatch version}/+download/duplicity-${version}.tar.gz";
-    sha256 = "1kg467mxg5a97v1rlv4shk32krgv8ys4nczq4b11av4bp1lgysdc";
+    sha256 = "114rwkf9b3h4fcagrx013sb7krc4hafbwl9gawjph2wd9pkv2wx2";
   };
 
   patches = [
