@@ -96,5 +96,6 @@ stdenv.mkDerivation rec {
       proprietary software with GTK without any license fees or
       royalties.
     '';
+    changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };
 }
