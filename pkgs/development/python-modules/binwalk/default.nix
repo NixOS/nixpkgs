@@ -17,10 +17,10 @@
 , matplotlib
 , nose
 , pycrypto
-, pyqtgraph ? null }:
+, pyqtgraph
+, visualizationSupport ? false }:
 
 let
-  visualizationSupport = (pyqtgraph != null) && (matplotlib != null);
   version = "2.2.0";
 in
 buildPythonPackage {

@@ -931,14 +931,10 @@ in {
 
   binho-host-adapter = callPackage ../development/python-modules/binho-host-adapter { };
 
-  binwalk = callPackage ../development/python-modules/binwalk {
-    pyqtgraph = null;
-    matplotlib = null;
-  };
+  binwalk = callPackage ../development/python-modules/binwalk { };
 
   binwalk-full = appendToName "full" (self.binwalk.override {
-    pyqtgraph = self.pyqtgraph;
-    matplotlib = self.matplotlib;
+    visualizationSupport = true;
   });
 
   biopython = callPackage ../development/python-modules/biopython { };
