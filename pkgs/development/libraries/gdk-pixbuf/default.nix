@@ -44,6 +44,12 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/gdk-pixbuf/merge_requests/59.diff";
       sha256 = "0kaflac3mrh6031hwxk7j9fhli775hc503818h8zfl6b28zyn93f";
     })
+
+    (fetchpatch {
+      name = "CVE-2020-29385.patch";
+      url = "https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/bdd3acbd48a575d418ba6bf1b32d7bda2fae1c81.patch";
+      sha256 = "0cbf9sigdk49323wdhi46lxap8agjl72wjscvsg5mxq1dfc9f98k";
+    })
   ];
 
   nativeBuildInputs = [
