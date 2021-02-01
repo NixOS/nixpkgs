@@ -21,6 +21,9 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
+  # cargo test has an x86-only dependency
+  doCheck = stdenv.hostPlatform.isx86;
+
   postBuild = ''
     cargo run --example generate-docs
     cargo run --example generate-completions
