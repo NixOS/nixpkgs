@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo
 , makeWrapper, unzip, which, writeTextFile
 , curl, tzdata, gdb, darwin, git, callPackage
 , targetPackages, fetchpatch, bash
@@ -100,17 +100,17 @@ stdenv.mkDerivation rec {
   top = "$(echo $NIX_BUILD_TOP)";
   pathToDmd = "${top}/dmd/generated/${osname}/release/${bits}/dmd";
 
-  # Buid and install are based on http://wiki.dlang.org/Building_DMD
+  # Build and install are based on http://wiki.dlang.org/Building_DMD
   buildPhase = ''
-      cd dmd
-      make -j$NIX_BUILD_CORES -f posix.mak INSTALL_DIR=$out BUILD=release ENABLE_RELEASE=1 PIC=1 HOST_DMD=${HOST_DMD}
-      cd ../druntime
-      make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd}
-      cd ../phobos
-      echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
-      echo ${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > LibcurlPathFile
-      make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$(pwd)"
-      cd ..
+    cd dmd
+    make -j$NIX_BUILD_CORES -f posix.mak INSTALL_DIR=$out BUILD=release ENABLE_RELEASE=1 PIC=1 HOST_DMD=${HOST_DMD}
+    cd ../druntime
+    make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd}
+    cd ../phobos
+    echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
+    echo ${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > LibcurlPathFile
+    make -j$NIX_BUILD_CORES -f posix.mak BUILD=release ENABLE_RELEASE=1 PIC=1 INSTALL_DIR=$out DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$(pwd)"
+    cd ..
   '';
 
   doCheck = true;
@@ -162,6 +162,12 @@ stdenv.mkDerivation rec {
 
       substitute ${dmdConfFile} "$out/bin/dmd.conf" --subst-var out
   '';
+
+  preFixup = ''
+    find $out/bin -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${HOST_DMD} '{}' +
+  '';
+
+  disallowedReferences = [ dmdBootstrap ];
 
   meta = with lib; {
     description = "Official reference compiler for the D language";
