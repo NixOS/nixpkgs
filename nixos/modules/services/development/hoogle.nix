@@ -41,7 +41,7 @@ in {
     haskellPackages = mkOption {
       description = "Which haskell package set to use.";
       default = pkgs.haskellPackages;
-      type = types.package;
+      type = types.functionTo (types.listOf types.package);
       defaultText = "pkgs.haskellPackages";
     };
 
