@@ -4652,6 +4652,8 @@ in {
 
   panel = callPackage ../development/python-modules/panel { };
 
+  panflute = callPackage ../development/python-modules/panflute { };
+
   papermill = callPackage ../development/python-modules/papermill { };
 
   openpaperwork-core = callPackage ../applications/office/paperwork/openpaperwork-core.nix { };
