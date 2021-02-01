@@ -2,6 +2,7 @@
 , pythonPackages, imagemagick, gobject-introspection, gst_all_1
 , runtimeShell
 , fetchpatch
+, unstableGitUpdater
 
 # Attributes needed for tests of the external plugins
 , callPackage, beets
@@ -290,6 +291,7 @@ in pythonPackages.buildPythonApplication rec {
 
   passthru = {
     externalPlugins = plugins;
+    updateScript = unstableGitUpdater { url = "https://github.com/beetbox/beets"; };
   };
 
   meta = {
