@@ -25,6 +25,5 @@ buildGoModule rec {
     homepage = "https://github.com/Mic92/ssh-to-pgp";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.unix;
   };
 }
