@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 025cd522b2ab698130cf964c8e7ca91b0729e07a
-  ref: refs/tags/6.0.27
+  revision: 84ecddbbed1f1957b8684c2027bb8a3e5eb163a0
+  ref: refs/tags/6.0.28
   specs:
-    metasploit-framework (6.0.27)
+    metasploit-framework (6.0.28)
       actionpack (~> 5.2.2)
       activerecord (~> 5.2.2)
       activesupport (~> 5.2.2)
@@ -92,7 +92,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    Ascii85 (1.0.3)
+    Ascii85 (1.1.0)
     actionpack (5.2.4.4)
       actionview (= 5.2.4.4)
       activesupport (= 5.2.4.4)
@@ -124,7 +124,7 @@ GEM
     arel-helpers (2.12.0)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.1.0)
-    aws-partitions (1.418.0)
+    aws-partitions (1.422.0)
     aws-sdk-core (3.111.2)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
@@ -229,7 +229,7 @@ GEM
     mini_portile2 (2.5.0)
     minitest (5.14.3)
     mqtt (0.5.0)
-    msgpack (1.3.3)
+    msgpack (1.4.2)
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
@@ -252,15 +252,15 @@ GEM
       pcaprub
     patch_finder (1.0.2)
     pcaprub (0.13.0)
-    pdf-reader (2.4.1)
-      Ascii85 (~> 1.0.0)
+    pdf-reader (2.4.2)
+      Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
     pg (1.2.3)
     public_suffix (4.0.6)
-    puma (5.1.1)
+    puma (5.2.0)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -343,7 +343,7 @@ GEM
       openssl-cmac
       rubyntlm
       windows_error
-    rubyntlm (0.6.2)
+    rubyntlm (0.6.3)
     rubyzip (2.3.0)
     sawyer (0.8.2)
       addressable (>= 2.3.5)
@@ -367,7 +367,7 @@ GEM
     ttfunk (1.7.0)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2020.6)
+    tzinfo-data (1.2021.1)
       tzinfo (>= 1.0.0)
     unf (0.1.4)
       unf_ext
