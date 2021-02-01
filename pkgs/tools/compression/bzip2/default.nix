@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     description = "High-quality data compression program";
     license = licenses.bsdOriginal;
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = with maintainers; [ mic92 ];
   };
 }
