@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tool for Linux filesystem snapshot management";
     homepage = "http://snapper.io";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ tstrobel markuskowa ];
   };
