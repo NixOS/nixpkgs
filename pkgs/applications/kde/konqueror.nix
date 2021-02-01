@@ -2,7 +2,7 @@
 , mkDerivation
 , extra-cmake-modules, kdoctools
 , kdelibs4support, kcmutils, khtml, kdesu
-, qtwebkit, qtwebengine, qtx11extras, qtscript, qtwayland
+, qtbase, qtwebkit, qtwebengine, qtx11extras, qtscript, qtwayland
 }:
 
 mkDerivation {
@@ -24,5 +24,6 @@ mkDerivation {
   meta = {
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ ];
+    broken = lib.versionOlder qtbase.version "5.13";
   };
 }
