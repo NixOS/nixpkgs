@@ -2908,6 +2908,16 @@ in
 
   beanstalkd = callPackage ../servers/beanstalkd { };
 
+  bee = callPackage ../applications/networking/bee/bee.nix {
+    version = "release";
+  };
+
+  bee-unstable = bee.override {
+    version = "unstable";
+  };
+
+  bee-clef = callPackage ../applications/networking/bee/bee-clef.nix { };
+
   beets = callPackage ../tools/audio/beets {
     pythonPackages = python3Packages;
   };
