@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of the Precision Time Protocol (PTP) according to IEEE standard 1588 for Linux";
     homepage = "http://linuxptp.sourceforge.net/";
     maintainers = [ maintainers.markuskowa ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

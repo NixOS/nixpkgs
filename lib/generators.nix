@@ -236,17 +236,12 @@ rec {
         + libStr.concatMapStringsSep introSpace (go (indent + "  ")) v
         + outroSpace + "]"
     else if isFunction v then
-      # functionArgs throws in case of (partially applied) builtins
-      # on nix before commit b2748c6e99239ff6803ba0da76c362790c8be192
-      # which includes current nix stable
-      # TODO remove tryEval workaround when the issue is resolved on nix stable
-      let fna = builtins.tryEval (lib.functionArgs v);
+      let fna = lib.functionArgs v;
           showFnas = concatStringsSep ", " (libAttr.mapAttrsToList
                        (name: hasDefVal: if hasDefVal then name + "?" else name)
-                       fna.value);
-      in if !fna.success || fna.value == {}
-         then "<function>"
-         else "<function, args: {${showFnas}}>"
+                       fna);
+      in if fna == {}    then "<function>"
+                         else "<function, args: {${showFnas}}>"
     else if isAttrs    v then
       # apply pretty values if allowed
       if attrNames v == [ "__pretty" "val" ] && allowPrettyValues

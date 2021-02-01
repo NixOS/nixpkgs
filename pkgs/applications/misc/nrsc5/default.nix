@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/theori-io/nrsc5";
     description = "HD-Radio decoder for RTL-SDR";
     platforms = lib.platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ markuskowa ];
   };
 }

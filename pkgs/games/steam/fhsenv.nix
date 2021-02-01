@@ -29,7 +29,7 @@ let
       # Needed by gdialog, including in the steam-runtime
       perl
       # Open URLs
-      xdg_utils
+      xdg-utils
       iana-etc
       # Steam Play / Proton
       python3

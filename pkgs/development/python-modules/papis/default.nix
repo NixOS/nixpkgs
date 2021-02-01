@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, xdg_utils
+{ lib, buildPythonPackage, fetchFromGitHub, xdg-utils
 , requests, filetype, pyparsing, configparser, arxiv2bib
 , pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
 , click, python-slugify, habanero, isbnlib, typing-extensions
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   checkInputs = ([
     pytest pytestcov
   ]) ++ [
-    xdg_utils
+    xdg-utils
   ];
 
   # most of the downloader tests and 4 other tests require a network connection

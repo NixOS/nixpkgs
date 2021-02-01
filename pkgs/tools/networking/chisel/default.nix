@@ -17,6 +17,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-GzsQ6LXxe9UQc13XbsYFOWPe0EzlyHechchKc6xDkAc=";
 
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/jpillora/chisel/share.BuildVersion=${version}" ];
+
   # tests require access to the network
   doCheck = false;
 

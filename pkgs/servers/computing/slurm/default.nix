@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.schedmd.com/";
     description = "Simple Linux Utility for Resource Management";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ jagajaga markuskowa ];
   };
 }

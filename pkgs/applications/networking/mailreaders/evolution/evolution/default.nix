@@ -41,11 +41,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.38.2";
+  version = "3.38.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1whjgfhcxpb5yhhvyqb8pv71vprw6fv02czin4k4z6dxrxsq32qx";
+    sha256 = "1kfshljvkpbh965rjlyy1qjjm0ic3rdxisyy9c5jjvv2qlk65b3z";
   };
 
   nativeBuildInputs = [
@@ -120,7 +120,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "evolution";
-      attrPath = "gnome3.evolution";
     };
   };
 

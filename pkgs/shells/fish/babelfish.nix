@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "babelfish";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "bouk";
     repo = "babelfish";
     rev = "v${version}";
-    sha256 = "1sr6y79igyfc9ia33nyrjjm4my1jrpcw27iks37kygh93npsb3r1";
+    sha256 = "0b1knj9llwzwnl4w3d6akvlc57dp0fszjkq98w8wybcvkbpd3ip1";
   };
 
-  vendorSha256 = "0xjy50wciw329kq1nkd7hhaipcp4fy28hhk6cdq21qwid6g21gag";
+  vendorSha256 = "0kspqwbgiqfkfj9a9pdwzc0jdi9p35abqqqjhcpvqwdxw378w5lz";
 
   meta = with lib; {
     description = "Translate bash scripts to fish";

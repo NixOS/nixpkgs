@@ -3080,6 +3080,8 @@ in
 
   cjdns = callPackage ../tools/networking/cjdns { };
 
+  cjson = callPackage ../development/libraries/cjson { };
+
   cksfv = callPackage ../tools/networking/cksfv { };
 
   clementine = libsForQt514.callPackage ../applications/audio/clementine {
@@ -8781,6 +8783,8 @@ in
   htmldoc = callPackage ../tools/typesetting/htmldoc {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
   };
+
+  htmltest = callPackage ../development/tools/htmltest { };
 
   rcm = callPackage ../tools/misc/rcm {};
 
@@ -25866,7 +25870,7 @@ in
 
   xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 
-  xdg_utils = callPackage ../tools/X11/xdg-utils {
+  xdg-utils = callPackage ../tools/X11/xdg-utils {
     w3m = w3m-batch;
   };
 
