@@ -30,6 +30,7 @@
 , docbook-xsl-nons
 , ninja
 , gcab
+, gnutls
 , python3
 , wrapGAppsHook
 , json-glib
@@ -87,7 +88,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.5.3";
+    version = "1.5.5";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -96,7 +97,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "005y5wicmm6f2v8i9m3axx7ivgj3z8mbqps4v9m71bsqmq298j86";
+      sha256 = "0c2m9qz1g7zxqc6w90w9hksf8y9hvlh0vyvx06q01x893j5hzxh6";
     };
 
     patches = [
@@ -129,6 +130,7 @@ let
       shared-mime-info
       valgrind
       gcab
+      gnutls
       docbook_xml_dtd_43
       docbook-xsl-nons
       help2man
@@ -274,7 +276,6 @@ let
 
     passthru = {
       filesInstalledToEtc = [
-        "fwupd/ata.conf"
         "fwupd/daemon.conf"
         "fwupd/redfish.conf"
         "fwupd/remotes.d/lvfs-testing.conf"
@@ -283,7 +284,7 @@ let
         "fwupd/remotes.d/vendor-directory.conf"
         "fwupd/thunderbolt.conf"
         "fwupd/upower.conf"
-        "fwupd/uefi.conf"
+        "fwupd/uefi_capsule.conf"
         "pki/fwupd/GPG-KEY-Hughski-Limited"
         "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
         "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
