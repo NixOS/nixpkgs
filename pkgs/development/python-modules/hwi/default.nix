@@ -2,14 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , bitbox02
-, btchip
-, ckcc-protocol
 , ecdsa
 , hidapi
 , libusb1
 , mnemonic
 , pyaes
-, trezor
 , pythonAtLeast
 }:
 
@@ -34,14 +31,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     bitbox02
-    btchip
-    ckcc-protocol
     ecdsa
     hidapi
     libusb1
     mnemonic
     pyaes
-    trezor
   ];
 
   # tests require to clone quite a few firmwares

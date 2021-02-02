@@ -38,7 +38,15 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Yelp";
     description = "Yelp's universal stylesheets for Mallard and DocBook";
     maintainers = teams.gnome.members;
-    license = [licenses.gpl2 licenses.lgpl2];
-    platforms = platforms.linux;
+    license = with licenses; [
+      # See https://gitlab.gnome.org/GNOME/yelp-xsl/blob/master/COPYING
+      # Stylesheets
+      lgpl2Plus
+      # Icons, unclear: https://gitlab.gnome.org/GNOME/yelp-xsl/issues/25
+      gpl2
+      # highlight.js
+      bsd3
+    ];
+    platforms = platforms.unix;
   };
 }

@@ -1033,6 +1033,8 @@ in
 
   boxes = callPackage ../tools/text/boxes { };
 
+  boundary = callPackage ../tools/networking/boundary { };
+
   chamber = callPackage ../tools/admin/chamber {  };
 
   charm = callPackage ../applications/misc/charm { };
@@ -5207,6 +5209,8 @@ in
     packages = config.ihaskell.packages or (self: []);
   };
 
+  ijq = callPackage ../development/tools/ijq { };
+
   iruby = callPackage ../applications/editors/jupyter-kernels/iruby { };
 
   ike-scan = callPackage ../tools/security/ike-scan { };
@@ -6832,6 +6836,8 @@ in
   overmind = callPackage ../applications/misc/overmind { };
 
   ovh-ttyrec = callPackage ../tools/misc/ovh-ttyrec { };
+
+  ovito = libsForQt5.callPackage ../applications/graphics/ovito { };
 
   owncloud-client = libsForQt514.callPackage ../applications/networking/owncloud-client { };
 
@@ -14751,6 +14757,8 @@ in
 
   libgda = callPackage ../development/libraries/libgda { };
 
+  libgda6 = callPackage ../development/libraries/libgda/6.x.nix { };
+
   libgdamm = callPackage ../development/libraries/libgdamm { };
 
   libgdata = callPackage ../development/libraries/libgdata { };
@@ -22417,7 +22425,7 @@ in
 
   gocr = callPackage ../applications/graphics/gocr { };
 
-  gobby5 = callPackage ../applications/editors/gobby { };
+  gobby = callPackage ../applications/editors/gobby { };
 
   gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
@@ -29497,8 +29505,13 @@ in
 
   yaxg = callPackage ../tools/graphics/yaxg {};
 
-  yuzu = libsForQt5.callPackage ../misc/emulators/yuzu {
-    stdenv = gcc10Stdenv;
+  yuzu-mainline = import ../misc/emulators/yuzu {
+    branch = "mainline";
+    inherit (pkgs) libsForQt5 fetchFromGitHub;
+  };
+  yuzu-ea = import ../misc/emulators/yuzu {
+    branch = "early-access";
+    inherit (pkgs) libsForQt5 fetchFromGitHub;
   };
 
   zap = callPackage ../tools/networking/zap { };
