@@ -17,18 +17,19 @@
 , fetchurl
 , wayland
 , libxkbcommon
+, nix-update-script
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.8.5";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "1pg8j9wvwgrzsv4xdai6i6jgdcc922v0m42rbqxvbghbksrc8la3";
+    sha256 = "sha256-dzPOuT+v1JtYzvAtqZ/eVWQSYQLAWX3TyS3jXdBmDdg=";
     rev = "v${version}";
   };
 
@@ -52,6 +53,12 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = "rm $out/bin/retroarch-cg2glsl";
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "retroarchBare";
+    };
+  };
 
   meta = {
     homepage = "https://libretro.com";
