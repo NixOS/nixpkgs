@@ -1,4 +1,4 @@
-{ pkgs, lib, fetchFromGitHub, buildPythonPackage, isPy3k, regex }:
+{ lib, stdenv, fetchFromGitHub, buildPythonPackage, isPy3k, regex }:
 
 buildPythonPackage rec {
   pname = "SoMaJo";
@@ -13,6 +13,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ regex ];
+
+  # loops forever
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Tokenizer and sentence splitter for German and English web texts";

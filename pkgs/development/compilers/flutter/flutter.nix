@@ -25,6 +25,10 @@
 , libXcursor
 , libXdamage
 , libXfixes
+, libXrender
+, libXtst
+, libXi
+, libXext
 , libGL
 , nspr
 , nss
@@ -114,7 +118,11 @@ let
         libXcomposite
         libXcursor
         libXdamage
+        libXext
         libXfixes
+        libXi
+        libXrender
+        libXtst
         libGL
         nspr
         nss

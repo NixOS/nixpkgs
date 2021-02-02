@@ -2105,6 +2105,8 @@ in {
 
   ewmh = callPackage ../development/python-modules/ewmh { };
 
+  exdown = callPackage ../development/python-modules/exdown { };
+
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
   execnet = callPackage ../development/python-modules/execnet { };

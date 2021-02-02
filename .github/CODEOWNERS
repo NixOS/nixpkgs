@@ -76,6 +76,7 @@
 /pkgs/development/interpreters/python   @FRidh
 /pkgs/development/python-modules        @FRidh @jonringer
 /doc/languages-frameworks/python.section.md     @FRidh
+/pkgs/development/tools/poetry2nix @adisbladis
 
 # Haskell
 /pkgs/development/compilers/ghc                       @cdepillabout
