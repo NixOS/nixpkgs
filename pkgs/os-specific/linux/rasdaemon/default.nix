@@ -2,6 +2,7 @@
 , autoreconfHook
 , glibcLocales, kmod, coreutils, perl
 , dmidecode, hwdata, sqlite
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -92,6 +93,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/ras-mc-ctl \
       --replace 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
   '';
+
+  passthru.tests = nixosTests.rasdaemon;
 
   meta = with lib; {
     description = ''
