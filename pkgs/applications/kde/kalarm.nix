@@ -4,8 +4,8 @@
 
   kauth, kcodecs, kcompletion, kconfig, kconfigwidgets, kdbusaddons, kdoctools,
   kguiaddons, ki18n, kiconthemes, kidletime, kjobwidgets, kcmutils,
-  kdelibs4support, kio,
-  knotifications, kservice, kwidgetsaddons, kwindowsystem, kxmlgui, phonon,
+  kdelibs4support, kio, knotifications, knotifyconfig, kservice, kwidgetsaddons,
+  kwindowsystem, kxmlgui, phonon,
 
   kimap, akonadi, akonadi-contacts, akonadi-mime, kalarmcal, kcalendarcore, kcalutils,
   kholidays, kidentitymanagement, libkdepim, mailcommon, kmailtransport, kmime,
@@ -26,11 +26,12 @@ mkDerivation {
   buildInputs = [
     kauth kcodecs kcompletion kconfig kconfigwidgets kdbusaddons kdoctools
     kguiaddons ki18n kiconthemes kidletime kjobwidgets kcmutils kdelibs4support
-    kio knotifications kservice kwidgetsaddons kwindowsystem kxmlgui phonon
+    kio knotifications knotifyconfig kservice kwidgetsaddons kwindowsystem
+    kxmlgui phonon
 
-    kimap akonadi akonadi-contacts akonadi-mime kalarmcal kcalendarcore kcalutils
-    kholidays kidentitymanagement libkdepim mailcommon kmailtransport kmime
-    pimcommon kpimtextedit messagelib
+    kimap akonadi akonadi-contacts akonadi-mime kalarmcal kcalendarcore
+    kcalutils kholidays kidentitymanagement libkdepim mailcommon kmailtransport
+    kmime pimcommon kpimtextedit messagelib
 
     qtx11extras
   ];
