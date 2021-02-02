@@ -31,6 +31,11 @@ buildPythonApplication rec {
       url = "https://github.com/LibreCybernetics/coconut/commit/2916a087da1e063cc4438b68d4077347fd1ea4a2.patch";
       sha256 = "136jbd2rvnifw30y73vv667002nf7sbkm5qyihshj4db7ngysr6q";
     })
+    (fetchpatch {
+      name = "support-python-3.9.patch";
+      url = "https://github.com/evhub/coconut/commit/5c724b4dd92fb62c614d8192e3cac3dd1d475790.patch";
+      sha256 = "04xmzyfmyv6gr2l2z6pdxlllwzcmwxvahxzqyxglr36hfl33ad71";
+    })
   ];
 
   checkInputs = [
