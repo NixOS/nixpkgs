@@ -263,6 +263,7 @@ kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
 konfekt/fastfold
 konfekt/vim-DetectSpellLang
+kosayoda/nvim-lightbulb
 kristijanhusak/defx-git
 kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor

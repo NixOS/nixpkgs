@@ -132,6 +132,18 @@ self: super:
     }
   );
 
+  datadog-lambda = super.datadog-lambda.overridePythonAttrs (old: {
+    postPatch = ''
+      substituteInPlace setup.py --replace "setuptools==" "setuptools>="
+    '';
+    buildInputs = old.buildInputs ++ [ self.setuptools ];
+  });
+
+  ddtrace = super.ddtrace.overridePythonAttrs (old: {
+    buildInputs = old.buildInputs ++
+      (pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.darwin.IOKit ]) ++ [ self.cython ];
+  });
+
   dictdiffer = super.dictdiffer.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ self.pytest-runner ];
@@ -235,7 +247,7 @@ self: super:
     old:
     if old.format != "wheel" then rec {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkg-config ];
-      buildInputs = old.buildInputs ++ [ pkgs.hdf5 self.pkg-config self.cython ];
+      buildInputs = old.buildInputs ++ [ pkgs.hdf5 self.pkgconfig self.cython ];
       configure_flags = "--hdf5=${pkgs.hdf5}";
       postConfigure = ''
         ${self.python.executable} setup.py configure ${configure_flags}
@@ -407,7 +419,7 @@ self: super:
         export LLVM_CONFIG=${pkgs.llvm}/bin/llvm-config
       '';
 
-      __impureHostDeps = pkgs.lib.optionals pkgs.stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
+      __impureHostDeps = lib.optionals pkgs.stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
 
       passthru = old.passthru // { llvm = pkgs.llvm; };
     }
@@ -549,6 +561,12 @@ self: super:
     }
   );
 
+  mysqlclient = super.mysqlclient.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ pkgs.libmysqlclient ];
+    }
+  );
+
   netcdf4 = super.netcdf4.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
@@ -615,6 +633,13 @@ self: super:
     }
   );
 
+  osqp = super.osqp.overridePythonAttrs (
+    old: {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.cmake ];
+      dontUseCmakeConfigure = true;
+    }
+  );
+
   parsel = super.parsel.overridePythonAttrs (
     old: rec {
       nativeBuildInputs = old.nativeBuildInputs ++ [ self.pytest-runner ];
@@ -641,6 +666,28 @@ self: super:
       buildInputs = with pkgs; [ freetype libjpeg zlib libtiff libwebp tcl lcms2 ] ++ old.buildInputs;
     }
   );
+
+  # Work around https://github.com/nix-community/poetry2nix/issues/244
+  # where git deps are not picked up as they should
+  pip =
+    if lib.versionAtLeast super.pip.version "20.3" then
+      super.pip.overridePythonAttrs
+        (old:
+          let
+            pname = "pip";
+            version = "20.2.4";
+          in
+          {
+            name = pname + "-" + version;
+            inherit version;
+            src = pkgs.fetchFromGitHub {
+              owner = "pypa";
+              repo = pname;
+              rev = version;
+              sha256 = "eMVV4ftgV71HLQsSeaOchYlfaJVgzNrwUynn3SA1/Do=";
+              name = "${pname}-${version}-source";
+            };
+          }) else super.pip;
 
   poetry-core = super.poetry-core.overridePythonAttrs (old: {
     # "Vendor" dependencies (for build-system support)
@@ -972,6 +1019,10 @@ self: super:
 
   pytest = super.pytest.overridePythonAttrs (
     old: {
+      # Fixes https://github.com/pytest-dev/pytest/issues/7891
+      postPatch = old.postPatch or "" + ''
+        sed -i '/\[metadata\]/aversion = ${old.version}' setup.cfg
+      '';
       doCheck = false;
     }
   );
@@ -995,6 +1046,28 @@ self: super:
       '';
     }
   );
+
+  # pytest-splinter seems to put a .marker file in an empty directory
+  # presumably so it's tracked by and can be installed with MANIFEST.in, see
+  # https://github.com/pytest-dev/pytest-splinter/commit/a48eeef662f66ff9d3772af618748e73211a186b
+  #
+  # This directory then gets used as an empty initial profile directory and is
+  # zipped up. But if the .marker file is in the Nix store, it has the
+  # creation date of 1970, and Zip doesn't work with such old files, so it
+  # fails at runtime!
+  #
+  # We fix this here by just removing the file after the installation
+  #
+  # The error you get without this is:
+  #
+  # E           ValueError: ZIP does not support timestamps before 1980
+  # /nix/store/55b9ip7xkpimaccw9pa0vacy5q94f5xa-python3-3.7.6/lib/python3.7/zipfile.py:357: ValueError
+  pytest-splinter = super.pytest-splinter.overrideAttrs (old: {
+    postInstall = old.postInstall or "" + ''
+      rm $out/${super.python.sitePackages}/pytest_splinter/profiles/firefox/.marker
+    '';
+  });
+
 
   ffmpeg-python = super.ffmpeg-python.overridePythonAttrs (
     old: {
@@ -1168,14 +1241,16 @@ self: super:
           # is explicitly disabled with USE_CUDA=0.
           find $out -name "*.so" -exec ${pkgs.patchelf}/bin/patchelf --remove-needed libcuda.so.1 {} \;
         '';
-        buildInputs = old.buildInputs ++ lib.optionals enableCuda [
+        buildInputs = (old.buildInputs or [ ])
+          ++ [ self.typing-extensions ]
+          ++ lib.optionals enableCuda [
           pkgs.linuxPackages.nvidia_x11
           pkgs.nccl.dev
           pkgs.nccl.out
         ];
         propagatedBuildInputs = [
-          super.numpy
-          super.future
+          self.numpy
+          self.future
         ];
       })
     )
@@ -1257,15 +1332,15 @@ self: super:
         format = "wheel";
       };
       # If "wheel" is built from source
-      sourcePackage = (
+      sourcePackage = ((
         pkgs.python3.pkgs.override {
           python = self.python;
         }
-      ).wheel.overridePythonAttrs (
-        old: {
-          inherit (super.wheel) pname name version src;
-        }
-      );
+      ).wheel.override {
+        inherit (self) buildPythonPackage bootstrapped-pip setuptools;
+      }).overrideAttrs (old: {
+        inherit (super.wheel) pname name version src;
+      });
     in
     if isWheel then wheelPackage else sourcePackage;
 
@@ -1303,6 +1378,15 @@ self: super:
     }
   );
 
+  packaging = super.packaging.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++
+        # From 20.5 until 20.7, packaging used flit for packaging (heh)
+        # See https://github.com/pypa/packaging/pull/352 and https://github.com/pypa/packaging/pull/367
+        lib.optional (lib.versionAtLeast old.version "20.5" && lib.versionOlder old.version "20.8") [ self.flit-core ];
+    }
+  );
+
   supervisor = super.supervisor.overridePythonAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ [
@@ -1317,4 +1401,47 @@ self: super:
       propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.toolz ];
     }
   );
+
+  # For some reason the toml dependency of tqdm declared here:
+  # https://github.com/tqdm/tqdm/blob/67130a23646ae672836b971e1086b6ae4c77d930/pyproject.toml#L2
+  # is not translated correctly to a nix dependency.
+  tqdm = super.tqdm.overrideAttrs (
+    old: {
+      buildInputs = [ super.toml ] ++ old.buildInputs;
+    }
+  );
+
+  watchdog = super.watchdog.overrideAttrs (
+    old: {
+      buildInputs = old.buildInputs or [ ]
+        ++ pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.CoreServices;
+    }
+  );
+
+  # pyee cannot find `vcversioner` and other "setup requirements", so it tries to
+  # download them from the internet, which only works when nix sandboxing is disabled.
+  # Additionally, since pyee uses vcversioner to specify its version, we need to do this
+  # manually specify its version.
+  pyee = super.pyee.overrideAttrs (
+    old: {
+      postPatch = old.postPatch or "" + ''
+        sed -i setup.py \
+          -e '/setup_requires/,/],/d' \
+          -e 's/vcversioner={},/version="${old.version}",/'
+      '';
+    }
+  );
+
+  # nixpkgs has setuptools_scm 4.1.2
+  # but newrelic has a seemingly unnecessary version constraint for <4
+  # So we patch that out
+  newrelic = super.newrelic.overridePythonAttrs (
+    old: {
+      postPatch = old.postPatch or "" + ''
+        substituteInPlace setup.py --replace '"setuptools_scm>=3.2,<4"' '"setuptools_scm"'
+      '';
+    }
+  );
+
+
 }
