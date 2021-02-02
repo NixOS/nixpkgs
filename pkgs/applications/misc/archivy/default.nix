@@ -17,7 +17,6 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace requirements.txt \
       --replace 'WTForms ==' 'WTForms >=' \
       --replace 'attrs == 20.2.0' 'attrs' \
-      --replace 'beautifulsoup4 ==' 'beautifulsoup4 >=' \
       --replace 'elasticsearch ==' 'elasticsearch >=' \
       --replace 'python_dotenv ==' 'python_dotenv >=' \
       --replace 'python_frontmatter == 0.5.0' 'python_frontmatter' \
