@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
-  rev = "4db8d5c27413f69297adfffac57485d88d73c60e";
-  version = "2020-12-26";
+  rev = "562e2f74295f9c3ba2b3c8a87f6665b171dcdf47";
+  version = "2021-02-01";
 
   src = fetchFromGitHub {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "B8abzdohkw3aPhbENJ2vxZFLWhIpf0HF/uv+WJbVRYg=";
+    sha256 = "1787ghqc62wnhkhc6x2ly63bvkmprgifw497npx2l08d3s4q7kbk";
   };
 
   dontBuild = true;
@@ -25,9 +25,7 @@ stdenv.mkDerivation rec {
 
     install bin/sbt $out/bin
 
-    wrapProgram $out/bin/sbt --prefix PATH : ${
-      lib.makeBinPath [ which curl ]
-    }
+    wrapProgram $out/bin/sbt --prefix PATH : ${lib.makeBinPath [ which curl ]}
   '';
 
   passthru = {
