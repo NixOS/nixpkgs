@@ -67,7 +67,7 @@ in {
 
   in (mkMerge [{
 
-    environment.systemPackages = [ cfg.package pkgs.ipsecTools ];
+    environment.systemPackages = [ cfg.package (mkIf (cfg.ipsec && (versionOlder cfg.package.version "2.6.0")) pkgs.ipsecTools) ];
 
     boot.kernelModules = [ "tun" "openvswitch" ];
 
