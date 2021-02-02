@@ -14,12 +14,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "boundary";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchsrc version {
-    x86_64-linux = "sha256-+YGXSyaGhfNk+T5P7wCqsNEYwpV/Oet7kOM8OPC1A6I=";
-    aarch64-linux = "sha256-tikxRBF2Y+urv7S1EUu2d60twZWox1pI96yYX357r8o=";
-    x86_64-darwin = "sha256-N+6iiybnWZkruhUe9TRcGaq5xES/iHzlEVGcghT4EUc=";
+    x86_64-linux = "sha256-A8dfmFjvOHDwotCyRq9QQ9uHJIkq1JkIwtHsqDqTSNo=";
+    aarch64-linux = "sha256-i2qc4bmoSzUwNCQmnXLFQ+W4VZjVwXzEBSF3NeTju3M=";
+    x86_64-darwin = "sha256-lKGTpS2TmgxFdjUsBXKg8Mu6oJA0VidHc/noWWEuUVo=";
   };
 
   dontConfigure = true;
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
   dontPatchShebangs = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     homepage = "https://boundaryproject.io/";
