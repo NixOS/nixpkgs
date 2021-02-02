@@ -84,7 +84,10 @@ let
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qtwebengine = [ ]
-      ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
+      ++ optionals stdenv.isDarwin [
+        ./qtwebengine-darwin-no-platform-check.patch
+        ./qtwebengine-mac-dont-set-dsymutil-path.patch
+      ];
     qtwebkit = [
       (fetchpatch {
         name = "qtwebkit-bison-3.7-build.patch";
