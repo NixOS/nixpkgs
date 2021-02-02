@@ -8,7 +8,7 @@
 , enableTaglib ? true, taglib
 , enableLibmagic ? true, file
 , enableLibmatroska ? true, libmatroska, libebml
-, enableAvcodec ? false, libav
+, enableAvcodec ? false, ffmpeg
 , enableLibexif ? true, libexif
 , enableExiv2 ? false, exiv2
 , enableFFmpegThumbnailer ? false, ffmpegthumbnailer
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
   ++ optionals enableTaglib [ taglib ]
   ++ optionals enableLibmagic [ file ]
   ++ optionals enableLibmatroska [ libmatroska libebml ]
-  ++ optionals enableAvcodec [ libav.dev ]
+  ++ optionals enableAvcodec [ ffmpeg.dev ]
   ++ optionals enableLibexif [ libexif ]
   ++ optionals enableExiv2 [ exiv2 ]
   ++ optionals enableInotifyTools [ inotify-tools ]
