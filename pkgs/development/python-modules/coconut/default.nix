@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  fetchpatch,
-
-  cpyparsing,
-  ipykernel,
-  mypy,
-  pygments,
-  pytest,
-  prompt_toolkit,
-  tkinter,
-  watchdog
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, fetchpatch
+, cpyparsing
+, ipykernel
+, mypy
+, pygments
+, pytestCheckHook
+, prompt_toolkit
+, tkinter
+, watchdog
 }:
 
 buildPythonApplication rec {
@@ -35,13 +33,19 @@ buildPythonApplication rec {
     })
   ];
 
-  checkInputs = [ pytest tkinter ];
+  checkInputs = [
+    pytestCheckHook
+    tkinter
+  ];
+
   # Currently most tests do not work on Hydra due to external fetches.
-  checkPhase = ''
-    pytest tests/constants_test.py
-    pytest tests/main_test.py::TestShell::test_compile_to_file
-    pytest tests/main_test.py::TestShell::test_convenience
-  '';
+  pytestFlagsArray = [
+    "tests/constants_test.py"
+    "tests/main_test.py::TestShell::test_compile_to_file"
+    "tests/main_test.py::TestShell::test_convenience"
+  ];
+
+  pythonImportsCheck = [ "coconut" ];
 
   meta = with lib; {
     homepage = "http://coconut-lang.org/";
