@@ -170,7 +170,7 @@ let
     installCheckPhase = ''
       cd $out/include
 
-      result=$(diff -u "$appleHeadersPath" <(find * -type f | sort) --label "Listed in appleHeaders" --label "Found in \$out/include" || true)
+      result=$(diff -u "$appleHeadersPath" <(find * -type f | sort) --label "Listed in appleHeaders" --label "Found in $out/include" || true)
 
       if [ -z "$result" ]; then
         echo "Apple header list is matched."
@@ -193,7 +193,8 @@ let
   applePackage' = namePath: version: sdkName: sha256: let
     pname = builtins.head (lib.splitString "/" namePath);
     appleDerivation = appleDerivation' pname version sdkName sha256;
-    callPackage = pkgs.newScope (packages // pkgs.darwin // { inherit appleDerivation; });
+
+    callPackage = pkgs.newScope (pkgs.darwin // packages // { inherit appleDerivation; });
   in callPackage (./. + "/${namePath}");
 
   applePackage = namePath: sdkName: sha256: let
