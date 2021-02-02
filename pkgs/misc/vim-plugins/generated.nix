@@ -2986,6 +2986,18 @@ let
     meta.homepage = "https://github.com/mfussenegger/nvim-jdtls/";
   };
 
+  nvim-lightbulb = buildVimPluginFrom2Nix {
+    pname = "nvim-lightbulb";
+    version = "2021-02-02";
+    src = fetchFromGitHub {
+      owner = "kosayoda";
+      repo = "nvim-lightbulb";
+      rev = "3437cc5696f6c6f1a46b1ad1445d9c917d3fa4bc";
+      sha256 = "1i53c7wrbx52ybm9v1m6p8n8894gyb2hylv7iac063nkhnhl7v6h";
+    };
+    meta.homepage = "https://github.com/kosayoda/nvim-lightbulb/";
+  };
+
   nvim-lspconfig = buildVimPluginFrom2Nix {
     pname = "nvim-lspconfig";
     version = "2021-02-01";
