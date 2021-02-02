@@ -10752,6 +10752,9 @@ in
   cargo-deny = callPackage ../development/tools/rust/cargo-deny {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-edit = callPackage ../development/tools/rust/cargo-edit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-embed = callPackage ../development/tools/rust/cargo-embed { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-flash = callPackage ../development/tools/rust/cargo-flash { };
