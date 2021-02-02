@@ -166,12 +166,11 @@ let
 
         # $out/bin/native-image needs zlib to build native executables.
         propagatedBuildInputs = [ setJavaClassPath zlib ] ++
-                                # On Darwin native-image calls clang and it
-                                # tries to include <Foundation/Foundation.h>,
-                                # and Interactive Ruby (irb) requires OpenSSL
-                                # headers.
-                                lib.optionals stdenv.hostPlatform.isDarwin
-                                  [ Foundation openssl ];
+          # On Darwin native-image calls clang and it
+          # tries to include <Foundation/Foundation.h>,
+          # and Interactive Ruby (irb) requires OpenSSL
+          # headers.
+          lib.optionals stdenv.hostPlatform.isDarwin [ Foundation openssl ];
 
         doInstallCheck = true;
         installCheckPhase = ''
