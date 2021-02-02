@@ -181,7 +181,7 @@ stdenv.mkDerivation rec {
     # the xcode_locator tool.
     # This patch removes using the -fobjc-arc compiler option and makes the code
     # compile without automatic reference counting. Caveat: this leaks memory, but
-    # we neglect this fact.
+    # we accept this fact because xcode_locator is only a short-lived process used during the build.
     ./no-arc.patch
 
     # --experimental_strict_action_env (which may one day become the default
