@@ -25,6 +25,9 @@ buildPythonPackage rec {
     ++ lib.optional stdenv.isLinux pyinotify
     ++ lib.optional stdenv.isDarwin macfsevents;
 
+  # hangs on darwin
+  doCheck = !stdenv.isDarwin;
+
   checkInputs = [ mock pytestCheckHook ];
 
   disabledTests = [

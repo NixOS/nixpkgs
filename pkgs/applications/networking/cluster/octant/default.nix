@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     x86_64-darwin = "0y2qjdlyvhrzwg0fmxsr3jl39kd13276a7wg0ndhdjfwxvdwpxkz";
   };
 
-  doBuild = false;
   doCheck = false;
 
   installPhase = ''
