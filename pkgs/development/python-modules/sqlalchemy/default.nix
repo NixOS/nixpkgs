@@ -2,6 +2,7 @@
 , mock
 , pysqlite
 , pytestCheckHook
+, pytest_xdist
 }:
 
 buildPythonPackage rec {
@@ -23,8 +24,11 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+    pytest_xdist
     mock
   ] ++ lib.optional (!isPy3k) pysqlite;
+
+  pytestFlagsArray = [ "-n auto" ];
 
   postInstall = ''
     sed -e 's:--max-worker-restart=5::g' -i setup.cfg
