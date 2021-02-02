@@ -20,7 +20,7 @@ buildGoModule rec {
     cp -r ./static $static
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Videoconferencing server that is easy to deploy, written in Go";
     homepage = "https://github.com/jech/galene";
     license = licenses.mit;
