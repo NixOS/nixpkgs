@@ -15108,6 +15108,8 @@ in
 
   libkate = callPackage ../development/libraries/libkate { };
 
+  libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
+
   libkml = callPackage ../development/libraries/libkml { };
 
   libksba = callPackage ../development/libraries/libksba { };
