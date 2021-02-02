@@ -1349,6 +1349,8 @@ in {
 
   cmdtest = callPackage ../development/python-modules/cmdtest { };
 
+  cmsis-svd = callPackage ../development/python-modules/cmsis-svd { };
+
   cntk = callPackage ../development/python-modules/cntk { };
 
   cnvkit = callPackage ../development/python-modules/cnvkit { };
