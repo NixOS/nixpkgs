@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , autoreconfHook269, util-linux, nukeReferences, coreutils
-, perl, buildPackages
+, perl, buildPackages, nixosTests
 , configFile ? "all"
 
 # Userspace dependencies
@@ -162,6 +162,13 @@ let
       '';
 
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
+
+      passthru.tests = if isUnstable then
+        [ nixosTests.zfs.unstable ]
+      else [
+        nixosTests.zfs.installer
+        nixosTests.zfs.stable
+      ];
 
       meta = {
         description = "ZFS Filesystem Linux Kernel module";
