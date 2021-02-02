@@ -28,11 +28,11 @@ let
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.18.222"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.18.223"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nVBQ2Lj5+zyvj3g0W3Rxh+CZwG7sbqKehvg6vAhHexs=";
+    sha256 = "sha256-Myc6iT04VO2DliCiYvn4JtuoLVBWYNp8EbE4giYmrtk=";
   };
 
   # https://github.com/aws/aws-cli/issues/4837
