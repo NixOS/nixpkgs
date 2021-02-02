@@ -3,7 +3,8 @@
   extra-cmake-modules,
 
   kauth, kcodecs, kcompletion, kconfig, kconfigwidgets, kdbusaddons, kdoctools,
-  kguiaddons, ki18n, kiconthemes, kjobwidgets, kcmutils, kdelibs4support, kio,
+  kguiaddons, ki18n, kiconthemes, kidletime, kjobwidgets, kcmutils,
+  kdelibs4support, kio,
   knotifications, kservice, kwidgetsaddons, kwindowsystem, kxmlgui, phonon,
 
   kimap, akonadi, akonadi-contacts, akonadi-mime, kalarmcal, kcalendarcore, kcalutils,
@@ -24,8 +25,8 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kauth kcodecs kcompletion kconfig kconfigwidgets kdbusaddons kdoctools
-    kguiaddons ki18n kiconthemes kjobwidgets kcmutils kdelibs4support kio
-    knotifications kservice kwidgetsaddons kwindowsystem kxmlgui phonon
+    kguiaddons ki18n kiconthemes kidletime kjobwidgets kcmutils kdelibs4support
+    kio knotifications kservice kwidgetsaddons kwindowsystem kxmlgui phonon
 
     kimap akonadi akonadi-contacts akonadi-mime kalarmcal kcalendarcore kcalutils
     kholidays kidentitymanagement libkdepim mailcommon kmailtransport kmime
