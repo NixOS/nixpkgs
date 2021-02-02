@@ -466,6 +466,19 @@ self: super:
      ALSA OSS emulation (<varname>sound.enableOSSEmulation</varname>) is now disabled by default.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      Thinkfan as been updated to <literal>1.2.x</literal>, which comes with a
+      new YAML based configuration format. For this reason, several NixOS options
+      of the thinkfan module have been changed to non-backward compatible types.
+      In addition, a new <xref linkend="opt-services.thinkfan.settings"/> option has
+      been added.
+    </para>
+    <para>
+      Please read the <link xlink:href="https://github.com/vmatare/thinkfan#readme">
+      thinkfan documentation</link> before updating.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
