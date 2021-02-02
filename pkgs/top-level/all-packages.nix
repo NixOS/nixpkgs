@@ -156,6 +156,8 @@ in
 
   fiche = callPackage ../servers/fiche { };
 
+  fishnet = callPackage ../servers/fishnet { };
+
   avro-tools = callPackage ../development/tools/avro-tools { };
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
