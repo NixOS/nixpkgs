@@ -156,6 +156,8 @@ in
 
   fiche = callPackage ../servers/fiche { };
 
+  fishnet = callPackage ../servers/fishnet { };
+
   avro-tools = callPackage ../development/tools/avro-tools { };
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
@@ -1268,6 +1270,8 @@ in
   genymotion = callPackage ../development/mobile/genymotion { };
 
   gaia = callPackage ../development/libraries/gaia { };
+
+  galene = callPackage ../servers/web-apps/galene {};
 
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
@@ -8335,6 +8339,8 @@ in
 
   tmuxinator = callPackage ../tools/misc/tmuxinator { };
 
+  tmux-mem-cpu-load = callPackage ../tools/misc/tmux-mem-cpu-load { };
+
   tmux-xpanes = callPackage ../tools/misc/tmux-xpanes { };
 
   tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
@@ -10279,9 +10285,9 @@ in
     inherit (darwin) libiconv libobjc libresolv;
   }) mx jvmci8 graalvm8;
 
-  inherit (callPackages ../development/compilers/graalvm/community-edition.nix { })
-    graalvm8-ce
-    graalvm11-ce;
+  inherit (callPackages ../development/compilers/graalvm/community-edition.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  }) graalvm8-ce graalvm11-ce;
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
     graalvm8-ee

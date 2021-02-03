@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
     native-image \
       -jar ${src} \
       -H:Name=bb \
+      ${optionalString stdenv.isDarwin ''-H:-CheckToolchain''} \
       -H:+ReportExceptionStackTraces \
       -J-Dclojure.spec.skip-macros=true \
       -J-Dclojure.compiler.direct-linking=true \
       "-H:IncludeResources=BABASHKA_VERSION" \
       "-H:IncludeResources=SCI_VERSION" \
       -H:ReflectionConfigurationFiles=${reflectionJson} \
-      --initialize-at-run-time=java.lang.Math\$RandomNumberGeneratorHolder \
       --initialize-at-build-time \
       -H:Log=registerResource: \
       -H:EnableURLProtocols=http,https \
