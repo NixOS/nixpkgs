@@ -26248,6 +26248,8 @@ in
 
   armagetronad = callPackage ../games/armagetronad { };
 
+  armagetronad-dedicated = callPackage ../games/armagetronad { dedicatedServer = true; };
+
   arena = callPackage ../games/arena {};
 
   arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
