@@ -11,6 +11,7 @@
 , swig
 , meson-tools
 , armTrustedFirmwareAllwinner
+, armTrustedFirmwareAllwinnerH6
 , armTrustedFirmwareRK3328
 , armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
@@ -239,6 +240,13 @@ in {
   ubootOrangePiPc = buildUBoot {
     defconfig = "orangepi_pc_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootOrangePi3 = buildUBoot {
+    defconfig = "orangepi_3_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinnerH6}/bl31.bin";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
