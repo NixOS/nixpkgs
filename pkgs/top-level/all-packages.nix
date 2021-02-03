@@ -860,7 +860,7 @@ in
 
   alpine-make-vm-image = callPackage ../tools/virtualization/alpine-make-vm-image { };
 
-  amazon-ec2-utils = callPackage ../tools/admin/amazon-ec2-utils { };
+  amazon-ec2-utils = callPackage ../tools/virtualization/amazon-ec2-utils { };
 
   amazon-ecs-cli = callPackage ../tools/virtualization/amazon-ecs-cli { };
 
@@ -1052,8 +1052,6 @@ in
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
-
-  ec2-utils = callPackage ../tools/virtualization/ec2-utils { };
 
   exoscale-cli = callPackage ../tools/admin/exoscale-cli { };
 
