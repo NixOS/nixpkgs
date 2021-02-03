@@ -4,6 +4,7 @@
 , git
 , go
 , lib
+, stdenv
 }:
 
 buildBazelPackage rec {
@@ -86,5 +87,6 @@ buildBazelPackage rec {
     license = licenses.asl20;
     maintainers = [ maintainers.uri-canva ];
     platforms = platforms.darwin ++ platforms.linux;
+    broken = stdenv.isDarwin;
   };
 }
