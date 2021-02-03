@@ -513,7 +513,7 @@ in
             script = (importLib {
               # See comments at importLib definition.
               zpoolCmd = "${cfgZfs.package}/sbin/zpool";
-              zfsCmd = "${cfgZfs.package}/sbin/zfs";
+              awkCmd = "${pkgs.gawk}/bin/awk";
               inherit cfgZfs;
             }) + ''
               poolImported "${pool}" && exit
