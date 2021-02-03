@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.1.2";
+  version = "3.2.2";
   pname = "django-cache-url";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d0ee0d6c5daab92787bff47a4a6f5a6cf97c3c80d81a990820b2af16e12ad65a";
+    sha256 = "419b1667fe654a1b032073371b67d3fcfbe2a6392337c0e5e6c4ec741a6342a5";
   };
 
   checkInputs = [ pytest ];
