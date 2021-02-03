@@ -9940,6 +9940,12 @@
     githubId = 6016963;
     name = "Patrick Winter";
   };
+  winterqt = {
+    email = "nixos@winter.cafe";
+    github = "winterqt";
+    githubId = 78392041;
+    name = "Winter";
+  };
   wishfort36 = {
     email = "42300264+wishfort36@users.noreply.github.com";
     github = "wishfort36";
