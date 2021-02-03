@@ -4898,6 +4898,8 @@ in {
 
   python-openems = callPackage ../development/python-modules/python-openems { };
 
+  python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
+
   python-tado = callPackage ../development/python-modules/python-tado { };
 
   pkutils = callPackage ../development/python-modules/pkutils { };
