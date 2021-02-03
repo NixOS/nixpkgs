@@ -339,6 +339,9 @@ in
               <literal>CI_SERVER_URL=&lt;CI server URL&gt;</literal>
 
               <literal>REGISTRATION_TOKEN=&lt;registration secret&gt;</literal>
+
+              WARNING: make sure to use quoted absolute path,
+              or it is going to be copied to Nix Store.
             '';
           };
           registrationFlags = mkOption {
@@ -523,7 +526,10 @@ in
     };
   };
   config = mkIf cfg.enable {
-    warnings = optional (cfg.configFile != null) "services.gitlab-runner.`configFile` is deprecated, please use services.gitlab-runner.`services`.";
+    warnings = (mapAttrsToList
+      (n: v: "services.gitlab-runner.services.${n}.`registrationConfigFile` points to a file in Nix Store. You should use quoted absolute path to prevent this.")
+      (filterAttrs (n: v: isStorePath v.registrationConfigFile) cfg.services))
+    ++ optional (cfg.configFile != null) "services.gitlab-runner.`configFile` is deprecated, please use services.gitlab-runner.`services`.";
     environment.systemPackages = [ cfg.package ];
     systemd.services.gitlab-runner = {
       description = "Gitlab Runner";
