@@ -35,40 +35,6 @@ let
   );
 
   toSPAJSON = attrs: lib.concatStringsSep "\n" (mkSPAKeyValue attrs);
-  originalEtc =
-    let
-      mkEtcFile = n: nameValuePair n { source = "${cfg.package}/etc/${n}"; };
-    in listToAttrs (map mkEtcFile cfg.package.filesInstalledToEtc);
-
-  customEtc = {
-    # If any paths are updated here they must also be updated in the package test.
-    "alsa/conf.d/49-pipewire-modules.conf" = mkIf cfg.alsa.enable {
-      text = ''
-        pcm_type.pipewire {
-          libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
-          ${optionalString enable32BitAlsaPlugins
-            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;"}
-        }
-        ctl_type.pipewire {
-          libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;
-          ${optionalString enable32BitAlsaPlugins
-            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;"}
-        }
-      '';
-    };
-    "alsa/conf.d/50-pipewire.conf" = mkIf cfg.alsa.enable {
-      source = "${cfg.package}/share/alsa/alsa.conf.d/50-pipewire.conf";
-    };
-    "alsa/conf.d/99-pipewire-default.conf" = mkIf cfg.alsa.enable {
-      source = "${cfg.package}/share/alsa/alsa.conf.d/99-pipewire-default.conf";
-    };
-
-    "pipewire/media-session.d/with-alsa" = mkIf cfg.alsa.enable { text = ""; };
-    "pipewire/media-session.d/with-pulseaudio" = mkIf cfg.pulse.enable { text = ""; };
-    "pipewire/media-session.d/with-jack" = mkIf cfg.jack.enable { text = ""; };
-
-    "pipewire/pipewire.conf" = { text = toSPAJSON cfg.config; };
-  };
 in {
 
   meta = {
@@ -174,7 +140,7 @@ in {
             libpipewire-module-portal = "null";
             libpipewire-module-access = {
               args.access = {
-                allowed = ["${builtins.unsafeDiscardStringContext cfg.sessionManager}"];
+                allowed = ["${builtins.unsafeDiscardStringContext cfg.sessionManagerExecutable}"];
                 rejected = [];
                 restricted = [];
                 force = "flatpak";
@@ -200,47 +166,26 @@ in {
             # Execute the given program. This is usually used to start the
             # session manager. run the session manager with -h for options
             #
-            "${builtins.unsafeDiscardStringContext cfg.sessionManager}" = { args = "\"${lib.concatStringsSep " " cfg.sessionManagerArguments}\""; };
+            "${builtins.unsafeDiscardStringContext cfg.sessionManagerExecutable}" = { args = "\"${lib.concatStringsSep " " cfg.sessionManagerArguments}\""; };
           };
         };
       };
 
-      sessionManager = mkOption {
+      sessionManagerExecutable = mkOption {
         type = types.str;
-        default = "${cfg.package}/bin/pipewire-media-session";
-        example = literalExample ''"\$\{pipewire\}/bin/pipewire-media-session"'';
+        default = "";
+        example = literalExample ''${pkgs.pipewire.mediaSession}/bin/pipewire-media-session'';
         description = ''
-          Path to the pipewire session manager executable.
+          Path to the session manager executable.
         '';
       };
 
       sessionManagerArguments = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         example = literalExample ''["-p" "bluez5.msbc-support=true"]'';
         description = ''
           Arguments passed to the pipewire session manager.
-        '';
-      };
-
-      sessionManagerEtcFiles = mkOption {
-        type = types.attrs;
-        default = {};
-        example = literalExample ''
-          "pipewire/pipewire.conf" = {
-            # REPLACES THE FULL CONTENTS OF pipewire.conf, only showing a fragment here.
-            exec = {
-              ## exec <program-name>
-              #
-              # Execute the given program. This is usually used to start the
-              # session manager. run the session manager with -h for options
-              #
-              "/run/current-system/sw/bin/pipewire-media-session" = { args = "\"\""; };
-            };
-          };
-        '';
-        description = ''
-          Advanced. Replace or add config files to /etc/
         '';
       };
 
@@ -286,12 +231,35 @@ in {
     systemd.user.services.pipewire.bindsTo = [ "dbus.service" ];
     services.udev.packages = [ cfg.package ];
 
+    # If any paths are updated here they must also be updated in the package test.
+    environment.etc."alsa/conf.d/49-pipewire-modules.conf" = mkIf cfg.alsa.enable {
+      text = ''
+        pcm_type.pipewire {
+          libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
+          ${optionalString enable32BitAlsaPlugins
+            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;"}
+        }
+        ctl_type.pipewire {
+          libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;
+          ${optionalString enable32BitAlsaPlugins
+            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;"}
+        }
+      '';
+    };
+    environment.etc."alsa/conf.d/50-pipewire.conf" = mkIf cfg.alsa.enable {
+      source = "${cfg.package}/share/alsa/alsa.conf.d/50-pipewire.conf";
+    };
+    environment.etc."alsa/conf.d/99-pipewire-default.conf" = mkIf cfg.alsa.enable {
+      source = "${cfg.package}/share/alsa/alsa.conf.d/99-pipewire-default.conf";
+    };
+
     environment.sessionVariables.LD_LIBRARY_PATH =
       lib.optional cfg.jack.enable "/run/current-system/sw/lib/pipewire";
 
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/464#note_723554
-    systemd.user.services.pipewire.environment."PIPEWIRE_LINK_PASSIVE" = "1";
-
-    environment.etc = originalEtc // customEtc // cfg.sessionManagerEtcFiles;
+    systemd.user.services.pipewire.environment = {
+      "PIPEWIRE_LINK_PASSIVE" = "1";
+      "PIPEWIRE_CONFIG_FILE" = pkgs.writeText "pipewire.conf" (toSPAJSON cfg.config);
+    };
   };
 }

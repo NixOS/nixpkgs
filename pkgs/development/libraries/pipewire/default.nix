@@ -23,8 +23,6 @@
 , makeFontsConf
 , callPackage
 , nixosTests
-, python3
-, runCommand
 , withMediaSession ? true
 , gstreamerSupport ? true, gst_all_1 ? null
 , ffmpegSupport ? true, ffmpeg ? null
@@ -40,13 +38,6 @@ let
     fontDirectories = [];
   };
 
-  runPythonCommand = name: buildCommandPython: runCommand name {
-    nativeBuildInputs = [ python3 ];
-      inherit buildCommandPython;
-  } ''
-    exec python3 -c "$buildCommandPython"
-  '';
-
   mesonBool = b: if b then "true" else "false";
 
   self = stdenv.mkDerivation rec {
@@ -60,6 +51,7 @@ let
       "jack"
       "dev"
       "doc"
+      "mediaSession"
       "installedTests"
     ];
 
@@ -133,48 +125,21 @@ let
       moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
       moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
       moveToOutput "bin/pipewire-pulse" "$pulse"
+      moveToOutput "bin/pipewire-media-session" "$mediaSession"
     '';
 
     passthru = {
-      filesInstalledToEtc = [
-        "pipewire/pipewire.conf"
-      ] ++ lib.optionals withMediaSession [
-        "pipewire/media-session.d/alsa-monitor.conf"
-        "pipewire/media-session.d/bluez-monitor.conf"
-        "pipewire/media-session.d/media-session.conf"
-        "pipewire/media-session.d/v4l2-monitor.conf"
-      ];
+      installedTests = nixosTests.installed-tests.pipewire;
 
-      tests = let
-        listToPy = list: "[${lib.concatMapStringsSep ", " (f: "'${f}'") list}]";
-      in {
-        installedTests = nixosTests.installed-tests.pipewire;
-
-        # This ensures that all the paths used by the NixOS module are found.
-        test-paths = callPackage ./test-paths.nix {
-          paths-out = [
-            "share/alsa/alsa.conf.d/50-pipewire.conf"
-          ];
-          paths-lib = [
-            "lib/alsa-lib/libasound_module_pcm_pipewire.so"
-            "share/alsa-card-profile/mixer"
-          ];
-        };
-
-        passthruMatches = runPythonCommand "fwupd-test-passthru-matches" ''
-          import itertools
-          import configparser
-          import os
-          import pathlib
-          etc = '${self}/etc'
-          package_etc = set(itertools.chain.from_iterable([[os.path.relpath(os.path.join(prefix, file), etc) for file in files] for (prefix, dirs, files) in os.walk(etc)]))
-          passthru_etc = set(${listToPy passthru.filesInstalledToEtc})
-          assert len(package_etc - passthru_etc) == 0, f'pipewire package contains the following paths in /etc that are not listed in passthru.filesInstalledToEtc: {package_etc - passthru_etc}'
-          assert len(passthru_etc - package_etc) == 0, f'pipewire package lists the following paths in passthru.filesInstalledToEtc that are not contained in /etc: {passthru_etc - package_etc}'
-          config = configparser.RawConfigParser()
-          config.read('${self}/etc/fwupd/daemon.conf')
-          pathlib.Path(os.getenv('out')).touch()
-        '';
+      # This ensures that all the paths used by the NixOS module are found.
+      test-paths = callPackage ./test-paths.nix {
+        paths-out = [
+          "share/alsa/alsa.conf.d/50-pipewire.conf"
+        ];
+        paths-lib = [
+          "lib/alsa-lib/libasound_module_pcm_pipewire.so"
+          "share/alsa-card-profile/mixer"
+        ];
       };
     };
 
