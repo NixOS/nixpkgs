@@ -11,6 +11,8 @@
 , scdoc
 , libnotify
 , glib
+, wrapGAppsHook
+, hicolor-icon-theme
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +26,11 @@ stdenv.mkDerivation rec {
     sha256 = "12z643c7vzffhjsxaz1lak99i4nwm688pha0hh4pg69jf5wz5xx3";
   };
 
-  nativeBuildInputs = [ glib meson ninja pkg-config scdoc ];
+  nativeBuildInputs = [ glib meson ninja pkg-config scdoc wrapGAppsHook ];
 
-  buildInputs = [ cairo pango gtk libnotify wayland glib ];
+  buildInputs = [
+    cairo pango gtk libnotify wayland glib hicolor-icon-theme
+  ];
 
   strictDeps = true;
 
