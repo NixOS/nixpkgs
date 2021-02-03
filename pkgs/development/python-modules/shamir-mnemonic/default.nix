@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "shamir-mnemonic";
-  version = "0.2.0";
+  version = "0.2.1";
 
   disabled = !isPy3k;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "trezor";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "0lkkbl50n8g5z44x7rk1ly6ld0vlassahwagm8b15bvxfi0q9yqb";
+    sha256 = "1mi1n01yw8yycbiv1l0xnfzlhhq2arappyvyi2jm5yq65jln77kg";
   };
 
   propagatedBuildInputs = [
