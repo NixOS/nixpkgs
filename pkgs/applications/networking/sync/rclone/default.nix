@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.53.4";
+  version = "1.54.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1w6dsf8hw0wap4090ixl01p64yn53xidfdbpy6rc3xaifypj185d";
+    sha256 = "sha256-A0c5bHP5W/NTwAh1ifGaw4AG37qYXK9P/Fjk68gkUNk=";
   };
 
-  vendorSha256 = "1l4iz31k1pylvf0zrp4nhxna70s1ma4981x6q1s3dhszjxil5c88";
+  vendorSha256 = "sha256-Cpn/dUD9E2BzUlAISC+IDCW59OkEKZTpqdlvF/clV+M=";
 
   subPackages = [ "." ];
 
