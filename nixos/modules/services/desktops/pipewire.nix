@@ -156,7 +156,12 @@ in {
             # If nofail is given, module initialization failures are ignored.
             #
             libpipewire-module-rtkit = {
-              args = "\"rt.prio=20 rt.time.soft=200000 rt.time.hard=200000\"";
+              args = {
+                rt.prio = 20;
+                rt.time.soft = 200000;
+                rt.time.hard = 200000;
+                nice.level = -11;
+              };
               flags = "ifexists|nofail";
             };
             libpipewire-module-protocol-native = { _priority = -100; _content = "null"; };
@@ -168,7 +173,12 @@ in {
             libpipewire-module-client-device = "null";
             libpipewire-module-portal = "null";
             libpipewire-module-access = {
-              args = "\"access.allowed=${builtins.unsafeDiscardStringContext cfg.sessionManager} access.force=flatpak\"";
+              args.access = {
+                allowed = ["${builtins.unsafeDiscardStringContext cfg.sessionManager}"];
+                rejected = [];
+                restricted = [];
+                force = "flatpak";
+              };
             };
             libpipewire-module-adapter = "null";
             libpipewire-module-link-factory = "null";
