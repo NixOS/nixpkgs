@@ -134,6 +134,19 @@ in buildFHSUserEnv rec {
     libuuid
     libbsd
     alsaLib
+
+    # needed by getcap for vr startup
+    libcap
+
+    # dependencies for mesa drivers, needed inside pressure-vessel
+    expat
+    wayland
+    xlibs.libxcb
+    xlibs.libXdamage
+    xlibs.libxshmfence
+    xlibs.libXxf86vm
+    llvm_11.lib
+    libelf
   ] ++ (if (!nativeOnly) then [
     (steamPackages.steam-runtime-wrapped.override {
       inherit runtimeOnly;
