@@ -111,7 +111,7 @@ assert withCryptsetup ->
 let
   wantCurl = withRemote || withImportd;
 
-  version = "247.2";
+  version = "247.3";
 in
 stdenv.mkDerivation {
   inherit version pname;
@@ -122,7 +122,7 @@ stdenv.mkDerivation {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    sha256 = "091pwrvxz3gcf80shlp28d6l4gvjzc6pb61v4mwxmk9d71qaq7ry";
+    sha256 = "0zn0b74iwz3vxabqsk4yydwpgky3c5z4dl83wxbs1qi5d2dnbqa7";
   };
 
   # If these need to be regenerated, `git am path/to/00*.patch` them into a
