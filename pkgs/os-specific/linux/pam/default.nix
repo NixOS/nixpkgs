@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch, flex, cracklib, db4, gettext
 , nixosTests
 }:
 
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" /* "modules" */ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ flex ];
+  nativeBuildInputs = [ flex ]
+    ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
   buildInputs = [ cracklib db4 ];
 
