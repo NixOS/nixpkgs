@@ -1,5 +1,14 @@
-{ aiofiles, adb-shell, buildPythonPackage, fetchFromGitHub, isPy3k, lib, mock
-, pure-python-adb, python }:
+{ lib
+, adb-shell
+, aiofiles
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, mock
+, pure-python-adb
+, pytestCheckHook
+, python
+}:
 
 buildPythonPackage rec {
   pname = "androidtv";
@@ -16,14 +25,16 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ adb-shell pure-python-adb ]
     ++ lib.optionals (isPy3k) [ aiofiles ];
 
-  checkInputs = [ mock ];
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests -t .
-  '';
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "androidtv" ];
 
   meta = with lib; {
     description =
-      "Communicate with an Android TV or Fire TV device via ADB over a network.";
+      "Communicate with an Android TV or Fire TV device via ADB over a network";
     homepage = "https://github.com/JeffLIrion/python-androidtv/";
     license = licenses.mit;
     maintainers = with maintainers; [ jamiemagee ];
