@@ -7264,6 +7264,8 @@ in {
 
   softlayer = callPackage ../development/python-modules/softlayer { };
 
+  solax = callPackage ../development/python-modules/solax { };
+
   solo-python = disabledIf (!pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
 
   somajo = callPackage ../development/python-modules/somajo { };
