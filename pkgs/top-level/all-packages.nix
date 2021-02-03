@@ -2128,6 +2128,8 @@ in
 
   dosage = callPackage ../applications/graphics/dosage { };
 
+  dotenv-linter = callPackage ../development/tools/analysis/dotenv-linter { };
+
   dot-merlin-reader = callPackage ../development/tools/ocaml/merlin/dot-merlin-reader.nix { };
 
   dozenal = callPackage ../applications/misc/dozenal { };
