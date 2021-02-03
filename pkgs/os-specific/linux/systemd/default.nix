@@ -1,3 +1,5 @@
+# NOTE: Make sure to (re-)format this file on changes with `nixpkgs-fmt`!
+
 { stdenv
 , lib
 , fetchFromGitHub
