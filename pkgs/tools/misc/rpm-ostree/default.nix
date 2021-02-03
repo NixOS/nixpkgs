@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2020.8";
+  version = "2021.1";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "1iyl6bjkj3drlwds579bh25xcmlwj9lkkbdmcdanq5b3shbmpyhi";
+    sha256 = "sha256-1GpM7IW27MgbXG6iVo5qnWaotwN1GgcXf7dFGRF8s0w=";
   };
 
   nativeBuildInputs = [
