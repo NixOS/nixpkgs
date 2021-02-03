@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
   ] ++ lib.optionals (stdenv.isDarwin) [
     "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
+    "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.parsed.cpu.name}"
   ] ++ lib.optionals (useLLVM || bareMetal || isMusl) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
