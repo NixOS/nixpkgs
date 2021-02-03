@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , beautifulsoup4
 , geojson
 , lxml
@@ -15,10 +15,11 @@ buildPythonPackage rec {
   pname = "osmpythontools";
   version = "0.2.8";
 
-  src = fetchPypi {
-    pname = "OSMPythonTools";
-    inherit version;
-    sha256 = "8a33adbd266127e342d12da755075fae08f398032a6f0909b5e86bef13960a85";
+  src = fetchFromGitHub {
+    owner = "mocnik-science";
+    repo = "osm-python-tools";
+    rev = "v${version}";
+    sha256 = "1hkc18zcw1fqx8zk3z18xpas87vkcpgsch5cavqda4aihl51vmy2";
   };
 
   propagatedBuildInputs = [
