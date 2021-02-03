@@ -23,7 +23,7 @@ import ./generic.nix (rec {
       supports many file formats, and provides powerful image
       processing and graphics capabilities.
     '';
-    license = "http://www.pythonware.com/products/pil/license.htm";
+    license = licenses.hpnd;
     maintainers = with maintainers; [ goibhniu prikhi SuperSandro2000 ];
   };
 } // args )
