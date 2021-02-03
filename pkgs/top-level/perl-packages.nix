@@ -6986,6 +6986,23 @@ let
     };
   };
 
+  EmailStuffer = buildPerlPackage {
+    pname = "Email-Stuffer";
+    version = "0.018";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Stuffer-0.018.tar.gz";
+      sha256 = "02wapphmcqbl1sg32x2az863lz5bb2dlckibxfqrjdlny27a406h";
+    };
+    buildInputs = [ Moo TestFatal ];
+    propagatedBuildInputs = [ EmailMIME EmailSender ModuleRuntime ParamsUtil ];
+    meta = {
+      homepage = "https://github.com/rjbs/Email-Stuffer";
+      description = "A more casual approach to creating and sending Email:: emails";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ sgo ];
+    };
+  };
+
   EmailValid = buildPerlPackage {
     pname = "Email-Valid";
     version = "1.202";
