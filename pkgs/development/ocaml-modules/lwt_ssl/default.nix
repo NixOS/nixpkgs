@@ -5,6 +5,7 @@ buildDunePackage rec {
   version = "1.1.3";
 
   minimumOCamlVersion = "4.02";
+  useDune2 = true;
 
   src = fetchzip {
     url = "https://github.com/aantron/${pname}/archive/${version}.tar.gz";
