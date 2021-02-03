@@ -36,6 +36,3 @@ while read pkg_spec; do
 EOF
 done < <(find ./nuget_tmp.packages -name '*.nuspec' | sort)
 echo "]" >>"$deps_file"
-
-popd
-rm -r "$src"
