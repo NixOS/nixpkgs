@@ -27386,6 +27386,8 @@ in
     eigen = eigen2;
   };
 
+  chemtool = callPackage ../applications/science/chemistry/chemtool { };
+
   d-seams = callPackage ../applications/science/chemistry/d-seams {};
 
   gwyddion = callPackage ../applications/science/chemistry/gwyddion {};
