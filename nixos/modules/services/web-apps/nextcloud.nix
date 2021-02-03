@@ -344,6 +344,10 @@ in {
             && !(acfg.adminpass != null && acfg.adminpassFile != null));
           message = "Please specify exactly one of adminpass or adminpassFile";
         }
+        { assertion = ((hasPrefix "/home" cfg.home) || (hasPrefix "/run/user" cfg.home) || (hasPrefix "/root" cfg.home));
+          message = "/home, /run/user or /root can't be used by nextcloud as home";
+          # because phpfpm-nextcloud.service has ProtectHome set to true (see https://github.com/NixOS/nixpkgs/pull/81623)
+        }
       ];
 
       warnings = let
