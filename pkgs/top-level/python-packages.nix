@@ -5989,6 +5989,8 @@ in {
 
   pysychonaut = callPackage ../development/python-modules/pysychonaut { };
 
+  pysyncobj = callPackage ../development/python-modules/pysyncobj { };
+
   pytabix = callPackage ../development/python-modules/pytabix { };
 
   pytado = callPackage ../development/python-modules/pytado { };
