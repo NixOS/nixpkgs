@@ -70,7 +70,7 @@ let
         installPhase = if installPhase != null then installPhase else ''
           runHook preInstall
           mkdir -p $out
-          find \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
+          find -not \( -path ${everythingFile} -or -path ${lib.interfaceFile everythingFile} \) -and \( ${concatMapStringsSep " -or " (p: "-name '*.${p}'") (extensions ++ extraExtensions)} \) -exec cp -p --parents -t "$out" {} +
           runHook postInstall
         '';
       };
