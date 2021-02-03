@@ -53,5 +53,6 @@ pythonPackages.buildPythonApplication rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = teams.deshaw.members;
+    broken = true; # tests time out
   };
 }
