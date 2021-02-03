@@ -46,5 +46,6 @@ buildPythonApplication rec {
     maintainers = [ lib.maintainers.raskin ];
     platforms = with lib.platforms; linux ++ darwin;
     homepage = "http://visidata.org/";
+    changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };
 }
