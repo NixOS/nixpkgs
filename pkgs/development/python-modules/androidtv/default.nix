@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "androidtv";
-  version = "0.0.50";
+  version = "0.0.57";
 
   # pypi does not contain tests, using github sources instead
   src = fetchFromGitHub {
     owner = "JeffLIrion";
     repo = "python-androidtv";
     rev = "v${version}";
-    sha256 = "1iqw40szwgzvhv3fbnx2wwfnw0d3clcwk9vsq1xsn30fjil2vl7b";
+    sha256 = "sha256-xOLMUf72VHeBzbMnhJGOnUIKkflnY4rV9NS/P1aYLJc=";
   };
 
   propagatedBuildInputs = [ adb-shell pure-python-adb ]
