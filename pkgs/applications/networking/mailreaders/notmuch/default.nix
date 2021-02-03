@@ -95,13 +95,10 @@ stdenv.mkDerivation rec {
     make -C vim DESTDIR="$out/share/vim" prefix="" install
   '' + optionalString (!isNull ruby) ''
     make -C bindings/ruby install DESTDIR="" prefix="$out" install
-    # This is very specific, see pkgs/development/interpreters/ruby/default.nix
+    # This is very hacky, see pkgs/development/interpreters/ruby/default.nix
     mkdir -p $out/nix-support
     cat > $out/nix-support/setup-hook <<EOF
-    notmuchRubyBindingLibPath() {
-      addToSearchPath RUBYLIB \$1/lib/ruby/vendor_ruby/${ruby.version.libDir}/${stdenv.targetPlatform.system}
-    }
-    addEnvHooks "$hostOffset" notmuchRubyBindingLibPath
+    addToSearchPath RUBYLIB $out/lib/ruby/vendor_ruby/${ruby.version.libDir}/${stdenv.targetPlatform.system}
     EOF
   '';
 
