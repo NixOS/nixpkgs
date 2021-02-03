@@ -20,9 +20,24 @@ stdenv.mkDerivation rec {
     sha256 = "18vgm5w5pjnpipa34j4x87q10695w2jnqwvc2f027afy7mnzw7kz";
   };
 
+  postPatch = ''
+    # fix hardcoded install path
+    substituteInPlace CMakeLists.txt --replace /etc $out/etc
+
+    # fix command paths in unit files
+    for unit in rcscripts/systemd/*; do
+      substituteInPlace "$unit" \
+        --replace /bin/kill ${procps}/bin/kill \
+        --replace /usr/bin/pkill ${procps}/bin/pkill \
+        --replace /usr/bin/sleep ${coreutils}/bin/sleep
+    done
+  '';
+
   cmakeFlags = [
     "-DCMAKE_INSTALL_DOCDIR=share/doc/${pname}"
     "-DUSE_NVML=OFF"
+    # force install unit files
+    "-DSYSTEMD_FOUND=ON"
   ] ++ lib.optional smartSupport "-DUSE_ATASMART=ON";
 
   nativeBuildInputs = [ cmake pkg-config ];
