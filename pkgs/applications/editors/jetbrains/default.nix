@@ -336,7 +336,7 @@ in
     name = "mps-${version}";
     version = "2020.3"; /* updated by script */
     description = "Create your own domain-specific language";
-    license = lib.licenses.unfree;
+    license = lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/mps/2020.3/MPS-${version}.tar.gz";
       sha256 = "0dr1z2sxarz1xif4swxx28hpzsyjd86m0c3xdaw5lmpqwqlzvc5h"; /* updated by script */
