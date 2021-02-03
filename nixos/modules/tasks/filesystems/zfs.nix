@@ -513,7 +513,7 @@ in
             script = (importLib {
               # See comments at importLib definition.
               zpoolCmd = "${cfgZfs.package}/sbin/zpool";
-              zfsCmd = "${cfgZfs.package}/sbin/zfs";
+              awkCmd = "${pkgs.gawk}/bin/awk";
               inherit cfgZfs;
             }) + ''
               poolImported "${pool}" && exit
@@ -528,7 +528,7 @@ in
                 ${optionalString (if isBool cfgZfs.requestEncryptionCredentials
                                   then cfgZfs.requestEncryptionCredentials
                                   else cfgZfs.requestEncryptionCredentials != []) ''
-                  ${packages.zfsUser}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
+                  ${cfgZfs.package}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
                     (${optionalString (!isBool cfgZfs.requestEncryptionCredentials) ''
                          if ! echo '${concatStringsSep "\n" cfgZfs.requestEncryptionCredentials}' | grep -qFx "$ds"; then
                            continue
@@ -538,10 +538,10 @@ in
                       none )
                         ;;
                       prompt )
-                        ${config.systemd.package}/bin/systemd-ask-password "Enter key for $ds:" | ${packages.zfsUser}/sbin/zfs load-key "$ds"
+                        ${config.systemd.package}/bin/systemd-ask-password "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds"
                         ;;
                       * )
-                        ${packages.zfsUser}/sbin/zfs load-key "$ds"
+                        ${cfgZfs.package}/sbin/zfs load-key "$ds"
                         ;;
                     esac) < /dev/null # To protect while read ds kl in case anything reads stdin
                   done
