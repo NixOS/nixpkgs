@@ -7295,9 +7295,15 @@ in
 
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
-  rtaudio = callPackage ../development/libraries/audio/rtaudio { };
+  rtaudio = callPackage ../development/libraries/audio/rtaudio {
+    jack = libjack2;
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+  };
 
-  rtmidi = callPackage ../development/libraries/audio/rtmidi { };
+  rtmidi = callPackage ../development/libraries/audio/rtmidi {
+    jack = libjack2;
+    inherit (darwin.apple_sdk.frameworks) CoreMIDI CoreAudio CoreServices;
+  };
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
