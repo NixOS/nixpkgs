@@ -484,6 +484,8 @@ in {
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
 
+  asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
+
   asyncio-throttle = callPackage ../development/python-modules/asyncio-throttle { };
 
   asyncpg = callPackage ../development/python-modules/asyncpg { };
