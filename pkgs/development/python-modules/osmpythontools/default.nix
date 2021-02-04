@@ -13,14 +13,16 @@
 
 buildPythonPackage rec {
   pname = "osmpythontools";
-  version = "0.2.8";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "mocnik-science";
     repo = "osm-python-tools";
     rev = "v${version}";
-    sha256 = "1hkc18zcw1fqx8zk3z18xpas87vkcpgsch5cavqda4aihl51vmy2";
+    sha256 = "1qpj03fgn8rmrg9a9vk7bw32k9hdy15g5p2q3a6q52ykpb78jdz5";
   };
+
+  patches = [ ./remove-test-only-dependencies.patch ];
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -33,7 +35,7 @@ buildPythonPackage rec {
     xarray
   ];
 
-  # no tests included
+  # tests touch network
   doCheck = false;
 
   pythonImportsCheck = [
