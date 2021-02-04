@@ -1,15 +1,21 @@
-{ pkgs, nodejs, stdenv, lib, ... }:
+{ pkgs, nodejs, stdenv, fetchFromGitHub, lib, ... }:
 
 let
-
-  packageName = with lib; concatStrings (map (entry: (concatStrings (mapAttrsToList (key: value: "${key}-${value}") entry))) (importJSON ./package.json));
+  src = fetchFromGitHub {
+    owner = "matrix-org";
+    repo = "matrix-appservice-slack";
+    rev = "1.4.0";
+    sha256 = "1xm75rgg7yrz40y2w1njiwfwz17a8wwlvr7a6zyxvkl8cqrgzp6d";
+  };
 
   nodePackages = import ./node-composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
   };
 in
-nodePackages."${packageName}".override {
+nodePackages.package.override {
+  inherit src;
+
   nativeBuildInputs = [ pkgs.makeWrapper ];
 
   postInstall = ''
