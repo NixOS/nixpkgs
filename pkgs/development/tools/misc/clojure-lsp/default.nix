@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, graalvm11-ce }:
+{ lib, stdenv, fetchurl, fetchFromGitHub, graalvm11-ce, babashka }:
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
@@ -7,6 +7,14 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/${pname}.jar";
     sha256 = "sha256-fLwubRwWa1fu37bdkaCr2uZK79z37wqPLToOb5BlegY=";
+  };
+
+  # For tests
+  ghSrc = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "1ydf8bgwvjp77wyhjqwzn7crpn5hxmq701czlkhpm5ablnxcwhn7";
   };
 
   dontUnpack = true;
@@ -21,6 +29,7 @@ stdenv.mkDerivation rec {
           "-J-Dclojure.spec.skip-macros=true"
           "-H:+ReportExceptionStackTraces"
           "--enable-url-protocols=jar"
+          # TODO: Enable in GraalVM 21.0.0
           # "-H:+InlineBeforeAnalysis"
           "-H:Log=registerResource:"
           "--verbose"
@@ -49,8 +58,9 @@ stdenv.mkDerivation rec {
     install -Dm755 clojure-lsp $out/bin/clojure-lsp
   '';
 
-  installCheckPhase = ''
-    $out/bin/clojure-lsp --version
+  doCheck = true;
+  checkPhase = ''
+    ${babashka}/bin/bb ${ghSrc}/integration-test/run-all.clj ./clojure-lsp
   '';
 
   meta = with lib; {
