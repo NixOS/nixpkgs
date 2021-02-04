@@ -1490,6 +1490,11 @@ self: super: {
   gi-gtk-hs = assert super.gi-gtk-hs.version == "0.3.8.1"; self.gi-gtk-hs_0_3_9;
   gi-xlib = assert super.gi-xlib.version == "2.0.8"; self.gi-xlib_2_0_9;
 
+  # Readline uses Distribution.Simple from Cabal 2, in a way that is not
+  # compatible with Cabal 3
+  readline = unmarkBroken (
+    appendPatch super.readline ./patches/readline-fix-for-cabal-3.patch);
+
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
 } // (let
