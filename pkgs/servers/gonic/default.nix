@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub
+{ lib, buildGoModule, fetchFromGitHub
 , pkg-config, taglib, alsaLib
 
 # Disable on-the-fly transcoding,
@@ -7,53 +7,26 @@
 # to the original file, but if transcoding is configured
 # that takes a while. So best to disable all transcoding
 # in the configuration if you disable transcodingSupport.
-, transcodingSupport ? true, ffmpeg
+, transcodingSupport ? true, ffmpeg }:
 
-# udpater
-, writers, vgo2nix }:
-
-assert transcodingSupport -> ffmpeg != null;
-
-let
-  # update these, then run `updateScript` to update dependencies
-  version = "0.11.0";
-  rev = "056fb54a703ef5b5194ce112cbbdd8fb53dbb1ea";
-  sha256 = "0hd794wrz29nh89lfnq67w1rc23sg085rqf1agwlgpqycns2djl9";
-
+buildGoModule rec {
+  pname = "gonic";
+  version = "0.12.0";
   src = fetchFromGitHub {
     owner = "sentriz";
-    repo = "gonic";
-    inherit rev sha256;
+    repo = pname;
+    rev = "6c69bd3be6279f743c83596c4f0fc12798fdb26a";
+    sha256 = "1igb2lbkc1nfxp49id3yxql9sbdqr467661jcgnchcnbayj4d664";
   };
-
-in
-buildGoPackage {
-  pname = "gonic-${version}";
-  inherit version src;
-  goPackagePath = "go.senan.xyz/gonic";
-  goDeps = ./deps.nix;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ taglib alsaLib ];
-
-  postPatch = lib.optionalString transcodingSupport ''
-    substituteInPlace \
-       server/encode/encode.go \
-      --replace \
-        'ffmpegPath = "/usr/bin/ffmpeg"' \
-        'ffmpegPath = "${ffmpeg}/bin/ffmpeg"' \
-  '';
-
-  passthru.updateScript = writers.writeDash "update-gonic" ''
-    ${vgo2nix}/bin/vgo2nix \
-      -dir ${src} \
-      -outfile ${lib.escapeShellArg (toString ./deps.nix)}
-  '';
+  vendorSha256 = "0inxlqxnkglz4j14jav8080718a80nqdcl866lkql8r6zcxb4fm9";
 
   meta = {
     homepage = "https://github.com/sentriz/gonic";
     description = "Music streaming server / subsonic server API implementation";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ Profpatsch ];
   };
 }
