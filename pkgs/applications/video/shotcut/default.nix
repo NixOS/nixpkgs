@@ -21,7 +21,7 @@
 , common-updater-scripts
 }:
 
-assert lib.versionAtLeast mlt.version "6.22.1";
+assert lib.versionAtLeast mlt.version "6.24.0";
 
 mkDerivation rec {
   pname = "shotcut";
