@@ -1,35 +1,37 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
-, cmake
 , fetchPypi
 , h3
-, python
+, scikit-build
+, cmake
+, numpy
+, cython
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "h3";
-  version = "3.7.0";
+  version = "3.7.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cd27fc8ecd9183f93934079b7c986401f499030ff2e2171eace9de462fab561d";
+    sha256 = "16pa023rdrw5iylky0y1mycz8pkfdwchr531w7grpyn0n06ym5w0";
   };
 
-  patches = [
-    ./disable-custom-install.patch
-    ./hardcode-h3-path.patch
-  ];
+  nativeBuildInputs = [ scikit-build cmake cython ];
+  propagatedBuildInputs = [ numpy ];
 
-  preBuild = ''
-    substituteInPlace h3/h3.py \
-      --subst-var-by libh3_path ${h3}/lib/libh3${stdenv.hostPlatform.extensions.sharedLibrary}
-  '';
+  dontConfigure = true;
+
+  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "h3" ];
 
   meta = with lib; {
     homepage = "https://github.com/uber/h3-py";
-    description = "This library provides Python bindings for the H3 Core Library.";
+    description = "Hierarchical hexagonal geospatial indexing system";
     license = licenses.asl20;
-    platforms = platforms.unix ++ platforms.darwin;
     maintainers = [ maintainers.kalbasit ];
   };
 }
