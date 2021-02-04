@@ -1,4 +1,4 @@
-{ lib, callPackage, runCommandLocal, writeShellScriptBin, glibc, coreutils, bubblewrap }:
+{ lib, callPackage, runCommandLocal, writeShellScriptBin, glibc, pkgsi686Linux, coreutils, bubblewrap }:
 
 let buildFHSEnv = callPackage ./env.nix { }; in
 
@@ -143,6 +143,11 @@ let
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
       --remount-ro ${glibc}/etc \
+      --tmpfs ${pkgsi686Linux.glibc}/etc \
+      --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf \
+      --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \
+      --ro-bind ${pkgsi686Linux.glibc}/etc/rpc ${pkgsi686Linux.glibc}/etc/rpc \
+      --remount-ro ${pkgsi686Linux.glibc}/etc \
       ${etcBindFlags}
       "''${ro_mounts[@]}"
       "''${symlinks[@]}"
