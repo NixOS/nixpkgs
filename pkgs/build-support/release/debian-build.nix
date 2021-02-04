@@ -4,7 +4,7 @@
 { name ? "debian-build"
 , lib
 , diskImage
-, src, lib, stdenv, vmTools, checkinstall
+, src, stdenv, vmTools, checkinstall
 , fsTranslation ? false
 , # Features provided by this package.
   debProvides ? []
