@@ -12,7 +12,7 @@
 , sqlite
 , tinyxml
 , wxGTK30-gtk3
-, xdg_utils
+, xdg-utils
 }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     tinyxml
     wxGTK30-gtk3
     wxGTK30-gtk3.gtk
-    xdg_utils
+    xdg-utils
   ];
 
   enableParallelBuilding = true;

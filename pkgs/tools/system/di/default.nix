@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "di";
-  version = "4.48";
+  version = "4.48.0.1";
 
   src = fetchurl {
     url = "https://gentoo.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0crvvfsxh8ryc0j19a2x52i9zacvggm8zi6j3kzygkcwnpz4km8r";
+    sha256 = "sha256-YFCFRDGeq2h/UXKme/NnnCuFdtw2Vim6Y3SbytaItGc=";
   };
 
   makeFlags = [ "INSTALL_DIR=$(out)" ];

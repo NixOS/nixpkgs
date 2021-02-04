@@ -21,6 +21,19 @@ rec {
     config = "powerpc64le-unknown-linux-musl";
   };
 
+  ppc64-elfv1 = {
+    config = "powerpc64-unknown-linux-elfv1";
+  };
+  ppc64-elfv2 = {
+    config = "powerpc64-unknown-linux-elfv2";
+  };
+  ppc64 = ppc64-elfv2; # default to modern elfv2
+
+  ppc64-musl = {
+    config = "powerpc64-unknown-linux-musl";
+    gcc = { abi = "elfv2"; }; # for gcc configuration
+  };
+
   sheevaplug = {
     config = "armv5tel-unknown-linux-gnueabi";
   } // platforms.sheevaplug;

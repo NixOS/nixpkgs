@@ -85,6 +85,8 @@ mapAliases ({
   buildGo112Package = throw "buildGo112Package has been removed"; # added 2020-04-26
   buildGo112Module = throw "buildGo112Module has been removed"; # added 2020-04-26
   bundler_HEAD = bundler; # added 2015-11-15
+  calibre-py2 = throw "calibre-py2 has been removed from nixpkgs, as calibre has upgraded to python 3. Please use calibre as replacement."; # added 2021-01-13
+  calibre-py3 = throw "calibre-py3 has been removed from nixpkgs, as calibre's default python version is now 3. Please use calibre as replacement."; # added 2021-01-13
   caddy1 = throw "caddy 1.x has been removed from nixpkgs, as it's unmaintained: https://github.com/caddyserver/caddy/blob/master/.github/SECURITY.md#supported-versions"; # added 2020-10-02
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   cargo-tree = throw "cargo-tree has been removed, use the builtin `cargo tree` command instead."; # added 2020-08-20
@@ -240,6 +242,7 @@ mapAliases ({
   gnuvd = throw "gnuvd was removed because the backend service is missing"; # added 2020-01-14
   go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
+  gobby5 = gobby; # added 2021-02-01
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
   goimports = gotools; # added 2018-09-16
   gometalinter = throw "gometalinter was abandoned by upstream. Consider switching to golangci-lint instead"; # added 2020-04-23
@@ -488,6 +491,7 @@ mapAliases ({
   piwik = matomo; # added 2018-01-16
   pkgconfig = pkg-config; # added 2018-02-02, moved to aliases.nix 2021-01-18
   pkgconfigUpstream = pkg-configUpstream; # added 2018-02-02
+  planner = throw "planner has been removed from nixpkgs, as it is no longer developed and still uses python2/PyGTK."; # added 2021-02-02
   pltScheme = racket; # just to be sure
   plexpy = tautulli; # plexpy got renamed to tautulli, added 2019-02-22
   pmtools = acpica-tools; # added 2018-11-01
@@ -609,6 +613,7 @@ mapAliases ({
   smugline = throw "smugline has been removed from nixpkgs, as it's unmaintained and depends on deprecated libraries."; # added 2020-11-04
   slim = throw "slim has been removed. Please use a different display-manager"; # added 2019-11-11
   slimThemes = throw "slimThemes has been removed because slim has been also"; # added 2019-11-11
+  solr_8 = solr; # added 2021-01-30
   spectral = neochat; # added 2020-12-27
   sundials_3 = throw "sundials_3 was removed in 2020-02. outdated and no longer needed";
 
@@ -730,6 +735,7 @@ mapAliases ({
   wireguard = wireguard-tools; # added 2018-05-19
   morituri = whipper; # added 2018-09-13
   xp-pen-g430 = pentablet-driver; # added 2020-05-03
+  xdg_utils = xdg-utils; # added 2021-02-01
   xfceUnstable = xfce4-14; # added 2019-09-17
   xfce4-14 = xfce;
   xfce4-12 = throw "xfce4-12 has been replaced by xfce4-14"; # added 2020-03-14
@@ -748,6 +754,7 @@ mapAliases ({
   xv = xxv; # added 2020-02-22
   youtubeDL = youtube-dl;  # added 2014-10-26
   ytop = throw "ytop has been abandoned by upstream. Consider switching to bottom instead";
+  yuzu = yuzu-mainline; # added 2021-01-25
   zdfmediathk = mediathekview; # added 2019-01-19
   gnome_user_docs = gnome-user-docs; # added 2019-11-20
   # spidermonkey is not ABI upwards-ompatible, so only allow this for nix-shell

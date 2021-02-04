@@ -16,12 +16,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace is_KeyFinder.pro \
-       --replace "keyfinder.0" "keyfinder" \
        --replace "-stdlib=libc++" "" \
        --replace "\$\$[QT_INSTALL_PREFIX]" "$out"
   '';
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Musical key detection for digital audio (graphical UI)";

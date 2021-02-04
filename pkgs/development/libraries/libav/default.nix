@@ -43,6 +43,7 @@ let
 
     patches = []
       ++ optional (vpxSupport && hasPrefix "0.8." version) ./vpxenc-0.8.17-libvpx-1.5.patch
+      ++ optional (vpxSupport && hasPrefix "12." version) ./vpx-12.3-libvpx-1.8.patch
       ;
 
     postPatch = ''

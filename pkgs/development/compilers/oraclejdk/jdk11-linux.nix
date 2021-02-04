@@ -9,12 +9,12 @@
 
 let result = stdenv.mkDerivation rec {
   pname = "oraclejdk";
-  version = "11.0.8";
+  version = "11.0.10";
 
   src = requireFile {
     name = "jdk-${version}_linux-x64_bin.tar.gz";
     url = "https://www.oracle.com/java/technologies/javase-jdk11-downloads.html";
-    sha256 = "6390878c91e29bad7b2483eb0b470620bd145269600f3b6a9d65724e6f83b6fd";
+    sha256 = "94bd34f85ee38d3ef59e5289ec7450b9443b924c55625661fffe66b03f2c8de2";
   };
 
   installPhase = ''

@@ -15,6 +15,7 @@
 , nodePackages
 , dasht
 , sqlite
+, code-minimap
 
 # deoplete-khard dependency
 , khard
@@ -243,6 +244,15 @@ self: super: {
     dependencies = with super; [ webapi-vim ];
   });
 
+  minimap-vim = super.minimap-vim.overrideAttrs(old: {
+    preFixup = ''
+      substituteInPlace $out/share/vim-plugins/minimap-vim/plugin/minimap.vim \
+        --replace "code-minimap" "${code-minimap}/bin/code-minimap"
+      substituteInPlace $out/share/vim-plugins/minimap-vim/bin/minimap_generator.sh \
+        --replace "code-minimap" "${code-minimap}/bin/code-minimap"
+    '';
+  });
+
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;
     preInstall = "cd data/syntax-highlighting/vim";
@@ -287,8 +297,11 @@ self: super: {
   });
 
   sql-nvim = super.sql-nvim.overrideAttrs(old: {
-    buildInputs = [ sqlite ];
-  });
+    postPatch = ''
+      substituteInPlace lua/sql/defs.lua \
+        --replace "vim.g.sql_clib_path or" "vim.g.sql_clib_path or '${sqlite.out}/lib/libsqlite3.so' or"
+    '';
+   });
 
   sved = let
     # we put the script in its own derivation to benefit the magic of wrapGAppsHook
@@ -675,6 +688,10 @@ self: super: {
       mkdir $target/binaries
       ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
     '';
+  });
+
+  telescope-frecency-nvim = super.telescope-frecency-nvim.overrideAttrs(old: {
+    dependencies = [ self.sql-nvim ];
   });
 
   telescope-fzy-native-nvim = super.telescope-fzy-native-nvim.overrideAttrs (old: {

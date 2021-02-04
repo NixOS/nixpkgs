@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = "patchShebangs .";
-  preBuild = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preBuild = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     make CC=${buildPackages.stdenv.cc}/bin/cc find_sizes
     mv find_sizes find_sizes_build
     make clean
 
     substituteInPlace Makefile --replace "./find_sizes" "./find_sizes_build"
-    substituteInPlace Makefile --replace "ar cr" "${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar cr"
-    substituteInPlace Makefile --replace "ranlib" "${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
-    substituteInPlace Makefile --replace "STRIP=strip" "STRIP=${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
+    substituteInPlace Makefile --replace "ar cr" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar cr"
+    substituteInPlace Makefile --replace "ranlib" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
+    substituteInPlace Makefile --replace "STRIP=strip" "STRIP=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
   '';
   nativeBuildInputs = [ perl zlib ];
 #  buildInputs = [ zlib ];

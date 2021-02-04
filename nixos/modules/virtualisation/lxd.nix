@@ -5,13 +5,12 @@
 with lib;
 
 let
-
   cfg = config.virtualisation.lxd;
-  zfsCfg = config.boot.zfs;
+in {
+  imports = [
+    (mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
+  ];
 
-in
-
-{
   ###### interface
 
   options = {
@@ -51,18 +50,10 @@ in
         '';
       };
 
-      zfsPackage = mkOption {
-        type = types.package;
-        default = with pkgs; if zfsCfg.enableUnstable then zfsUnstable else zfs;
-        defaultText = "pkgs.zfs";
-        description = ''
-          The ZFS package to use with LXD.
-        '';
-      };
-
       zfsSupport = mkOption {
         type = types.bool;
-        default = false;
+        default = config.boot.zfs.enabled;
+        defaultText = "config.boot.zfs.enabled";
         description = ''
           Enables lxd to use zfs as a storage for containers.
 
@@ -87,7 +78,6 @@ in
   };
 
   ###### implementation
-
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
@@ -110,7 +100,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "systemd-udev-settle.service" ];
 
-      path = lib.optional cfg.zfsSupport cfg.zfsPackage;
+      path = lib.optional config.boot.zfs.enabled config.boot.zfs.package;
 
       preStart = ''
         mkdir -m 0755 -p /var/lib/lxc/rootfs

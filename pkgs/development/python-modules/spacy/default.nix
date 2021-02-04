@@ -71,6 +71,6 @@ buildPythonPackage rec {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = "https://github.com/explosion/spaCy";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk sdll ];
+    maintainers = with maintainers; [ sdll ];
   };
 }

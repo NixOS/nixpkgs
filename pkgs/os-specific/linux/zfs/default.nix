@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , autoreconfHook269, util-linux, nukeReferences, coreutils
-, perl, buildPackages
+, perl, buildPackages, nixosTests
 , configFile ? "all"
 
 # Userspace dependencies
@@ -157,6 +157,13 @@ let
 
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
 
+      passthru.tests = if isUnstable then
+        [ nixosTests.zfs.unstable ]
+      else [
+        nixosTests.zfs.installer
+        nixosTests.zfs.stable
+      ];
+
       meta = {
         description = "ZFS Filesystem Linux Kernel module";
         longDescription = ''
@@ -186,11 +193,9 @@ in {
     # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "2.0.1";
+    version = "2.0.2";
 
-    sha256 = "0wmw823ildwm9rcfyk22pvzg100yhps3y9hfjlrpspfd1hhkbp0d";
-
-    extraPatches = [ ];
+    sha256 = "sha256-KzrRQwfQRvIQkHG5mj6cGBdcv2VEhC5y7bi09DaKqhY=";
   };
 
   zfsUnstable = common {
@@ -198,10 +203,8 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.0.1";
+    version = "2.0.2";
 
-    sha256 = "0wmw823ildwm9rcfyk22pvzg100yhps3y9hfjlrpspfd1hhkbp0d";
-
-    extraPatches = [ ];
+    sha256 = "sha256-KzrRQwfQRvIQkHG5mj6cGBdcv2VEhC5y7bi09DaKqhY=";
   };
 }

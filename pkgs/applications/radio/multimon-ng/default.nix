@@ -37,7 +37,8 @@ stdenv.mkDerivation {
       ZVEI3 DZVEI PZVEI EEA EIA CCIR MORSE CW
     '';
     homepage = "https://github.com/EliasOenal/multimon-ng";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
+    maintainers = [ maintainers.markuskowa ];
   };
 }

@@ -5,22 +5,34 @@
 , pathtools
 , pyyaml
 , pkgs
+, pytest-cov
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "0.10.4";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e38bffc89b15bafe2a131f0e1c74924cf07dcec020c2e0a26cccd208831fcd43";
+    sha256 = "sha256-N2y8KjXAOSsP5/8W+8GzA/2Z1N2ZEatVge6daa3IiYI=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin
     [ pkgs.darwin.apple_sdk.frameworks.CoreServices ];
-  propagatedBuildInputs = [ argh pathtools pyyaml ];
 
-  doCheck = false;
+  propagatedBuildInputs = [
+    argh
+    pathtools
+    pyyaml
+  ];
+
+  checkInputs = [
+    pytest-cov
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "watchdog" ];
 
   meta = with lib; {
     description = "Python API and shell utilities to monitor file system events";

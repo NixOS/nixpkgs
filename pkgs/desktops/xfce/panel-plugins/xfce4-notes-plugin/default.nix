@@ -1,0 +1,56 @@
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, intltool
+, libxfce4util
+, xfce4-panel
+, libxfce4ui
+, xfconf
+, gtk2
+, libunique
+, xfce
+}:
+
+let
+  category = "panel-plugins";
+in stdenv.mkDerivation rec {
+  pname  = "xfce4-notes-plugin";
+  version = "1.9.0";
+
+  src = fetchurl {
+    url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+    sha256 = "E/kJyUi2Oflt5kz3k+t0yxd5WJIB05M+/yFO6PNasIg=";
+  };
+
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
+
+  buildInputs = [
+    libxfce4util
+    libxfce4ui
+    xfce4-panel
+    xfconf
+    gtk2
+    libunique
+  ];
+
+  hardeningDisable = [ "format" ];
+
+  passthru.updateScript = xfce.updateScript {
+    inherit pname version;
+    attrPath = "xfce.${pname}";
+    versionLister = xfce.archiveLister category pname;
+  };
+
+  meta = with lib; {
+    homepage = "https://docs.xfce.org/panel-plugins/xfce4-notes-plugin";
+    description = "Sticky notes plugin for Xfce panel";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = [ ];
+  };
+}

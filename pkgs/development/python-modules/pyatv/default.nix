@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.7.5";
+  version = "0.7.6";
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06qj6r9kcal2nimg8rpjfid8rnlz43l7hn0v9v1mpayjmv2fl8sp";
+    sha256 = "1lahv6f97fizgh5b2w5yz9455l8ygn99rslhiygkgjywi2flx3p3";
   };
 
   nativeBuildInputs = [ pytestrunner];

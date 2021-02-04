@@ -3,7 +3,6 @@
 , patches
 , dart
 , src
-, depsSha256
 }:
 
 { bash
@@ -26,22 +25,21 @@
 , libXcursor
 , libXdamage
 , libXfixes
+, libXrender
+, libXtst
+, libXi
+, libXext
 , libGL
 , nspr
 , nss
 , systemd
-, callPackage
 }:
 let
-  repository = callPackage ./repository.nix {
-    inherit src pname version dart depsSha256;
-  };
   drvName = "flutter-${version}";
-
   flutter = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";
 
-    buildInputs = [ git repository ];
+    buildInputs = [ git ];
 
     inherit src patches;
 
@@ -55,12 +53,13 @@ let
       export FLUTTER_TOOLS_DIR="$FLUTTER_ROOT/packages/flutter_tools"
       export SCRIPT_PATH="$FLUTTER_TOOLS_DIR/bin/flutter_tools.dart"
 
-      mkdir -p "$out/bin/cache"
-      export SNAPSHOT_PATH="$out/bin/cache/flutter_tools.snapshot"
-      export STAMP_PATH="$out/bin/cache/flutter_tools.stamp"
+      export SNAPSHOT_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.snapshot"
+      export STAMP_PATH="$FLUTTER_ROOT/bin/cache/flutter_tools.stamp"
 
       export DART_SDK_PATH="${dart}"
-      export PUB_CACHE="${repository}"
+
+      HOME=../.. # required for pub upgrade --offline, ~/.pub-cache
+                 # path is relative otherwise it's replaced by /build/flutter
 
       pushd "$FLUTTER_TOOLS_DIR"
       ${dart}/bin/pub get --offline
@@ -70,6 +69,9 @@ let
       ${dart}/bin/dart --snapshot="$SNAPSHOT_PATH" --packages="$FLUTTER_TOOLS_DIR/.packages" "$SCRIPT_PATH"
       echo "$revision" > "$STAMP_PATH"
       echo -n "${version}" > version
+
+      rm -r bin/cache/{artifacts,dart-sdk,downloads}
+      rm bin/cache/*.stamp
     '';
 
     installPhase = ''
@@ -116,7 +118,11 @@ let
         libXcomposite
         libXcursor
         libXdamage
+        libXext
         libXfixes
+        libXi
+        libXrender
+        libXtst
         libGL
         nspr
         nss

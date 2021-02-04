@@ -89,6 +89,9 @@ let
       ln -s /host/etc/resolv.conf resolv.conf
       ln -s /host/etc/nsswitch.conf nsswitch.conf
 
+      # symlink user profiles
+      ln -s /host/etc/profiles profiles
+
       # symlink sudo and su stuff
       ln -s /host/etc/login.defs login.defs
       ln -s /host/etc/sudoers sudoers

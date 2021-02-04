@@ -17,20 +17,8 @@ let
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
 
-  enableZfs = inInitrd || inSystem;
-
-  kernel = config.boot.kernelPackages;
-
-  packages = if config.boot.zfs.enableUnstable then {
-    zfs = kernel.zfsUnstable;
-    zfsUser = pkgs.zfsUnstable;
-  } else {
-    zfs = kernel.zfs;
-    zfsUser = pkgs.zfs;
-  };
-
   autosnapPkg = pkgs.zfstools.override {
-    zfs = packages.zfsUser;
+    zfs = cfgZfs.package;
   };
 
   zfsAutoSnap = "${autosnapPkg}/bin/zfs-auto-snapshot";
@@ -111,6 +99,20 @@ in
 
   options = {
     boot.zfs = {
+      package = mkOption {
+        readOnly = true;
+        type = types.package;
+        default = if config.boot.zfs.enableUnstable then pkgs.zfsUnstable else pkgs.zfs;
+        description = "Configured ZFS userland tools package.";
+      };
+
+      enabled = mkOption {
+        readOnly = true;
+        type = types.bool;
+        default = inInitrd || inSystem;
+        description = "True if ZFS filesystem support is enabled";
+      };
+
       enableUnstable = mkOption {
         type = types.bool;
         default = false;
@@ -354,7 +356,7 @@ in
   ###### implementation
 
   config = mkMerge [
-    (mkIf enableZfs {
+    (mkIf cfgZfs.enabled {
       assertions = [
         {
           assertion = config.networking.hostId != null;
@@ -366,20 +368,24 @@ in
         }
       ];
 
-      virtualisation.lxd.zfsSupport = true;
-
       boot = {
         kernelModules = [ "zfs" ];
-        extraModulePackages = with packages; [ zfs ];
+
+        extraModulePackages = [
+          (if config.boot.zfs.enableUnstable then
+            config.boot.kernelPackages.zfsUnstable
+           else
+            config.boot.kernelPackages.zfs)
+        ];
       };
 
       boot.initrd = mkIf inInitrd {
         kernelModules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
         extraUtilsCommands =
           ''
-            copy_bin_and_libs ${packages.zfsUser}/sbin/zfs
-            copy_bin_and_libs ${packages.zfsUser}/sbin/zdb
-            copy_bin_and_libs ${packages.zfsUser}/sbin/zpool
+            copy_bin_and_libs ${cfgZfs.package}/sbin/zfs
+            copy_bin_and_libs ${cfgZfs.package}/sbin/zdb
+            copy_bin_and_libs ${cfgZfs.package}/sbin/zpool
           '';
         extraUtilsCommandsTest = mkIf inInitrd
           ''
@@ -433,7 +439,7 @@ in
       services.zfs.zed.settings = {
         ZED_EMAIL_PROG = mkDefault "${pkgs.mailutils}/bin/mail";
         PATH = lib.makeBinPath [
-          packages.zfsUser
+          cfgZfs.package
           pkgs.coreutils
           pkgs.curl
           pkgs.gawk
@@ -461,18 +467,18 @@ in
             "vdev_clear-led.sh"
           ]
         )
-        (file: { source = "${packages.zfsUser}/etc/${file}"; })
+        (file: { source = "${cfgZfs.package}/etc/${file}"; })
       // {
         "zfs/zed.d/zed.rc".text = zedConf;
-        "zfs/zpool.d".source = "${packages.zfsUser}/etc/zfs/zpool.d/";
+        "zfs/zpool.d".source = "${cfgZfs.package}/etc/zfs/zpool.d/";
       };
 
-      system.fsPackages = [ packages.zfsUser ]; # XXX: needed? zfs doesn't have (need) a fsck
-      environment.systemPackages = [ packages.zfsUser ]
+      system.fsPackages = [ cfgZfs.package ]; # XXX: needed? zfs doesn't have (need) a fsck
+      environment.systemPackages = [ cfgZfs.package ]
         ++ optional cfgSnapshots.enable autosnapPkg; # so the user can run the command to see flags
 
-      services.udev.packages = [ packages.zfsUser ]; # to hook zvol naming, etc.
-      systemd.packages = [ packages.zfsUser ];
+      services.udev.packages = [ cfgZfs.package ]; # to hook zvol naming, etc.
+      systemd.packages = [ cfgZfs.package ];
 
       systemd.services = let
         getPoolFilesystems = pool:
@@ -506,8 +512,8 @@ in
             environment.ZFS_FORCE = optionalString cfgZfs.forceImportAll "-f";
             script = (importLib {
               # See comments at importLib definition.
-              zpoolCmd="${packages.zfsUser}/sbin/zpool";
-              awkCmd="${pkgs.gawk}/bin/awk";
+              zpoolCmd = "${cfgZfs.package}/sbin/zpool";
+              awkCmd = "${pkgs.gawk}/bin/awk";
               inherit cfgZfs;
             }) + ''
               poolImported "${pool}" && exit
@@ -522,7 +528,7 @@ in
                 ${optionalString (if isBool cfgZfs.requestEncryptionCredentials
                                   then cfgZfs.requestEncryptionCredentials
                                   else cfgZfs.requestEncryptionCredentials != []) ''
-                  ${packages.zfsUser}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
+                  ${cfgZfs.package}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
                     (${optionalString (!isBool cfgZfs.requestEncryptionCredentials) ''
                          if ! echo '${concatStringsSep "\n" cfgZfs.requestEncryptionCredentials}' | grep -qFx "$ds"; then
                            continue
@@ -532,10 +538,10 @@ in
                       none )
                         ;;
                       prompt )
-                        ${config.systemd.package}/bin/systemd-ask-password "Enter key for $ds:" | ${packages.zfsUser}/sbin/zfs load-key "$ds"
+                        ${config.systemd.package}/bin/systemd-ask-password "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds"
                         ;;
                       * )
-                        ${packages.zfsUser}/sbin/zfs load-key "$ds"
+                        ${cfgZfs.package}/sbin/zfs load-key "$ds"
                         ;;
                     esac) < /dev/null # To protect while read ds kl in case anything reads stdin
                   done
@@ -561,7 +567,7 @@ in
               RemainAfterExit = true;
             };
             script = ''
-              ${packages.zfsUser}/sbin/zfs set nixos:shutdown-time="$(date)" "${pool}"
+              ${cfgZfs.package}/sbin/zfs set nixos:shutdown-time="$(date)" "${pool}"
             '';
           };
         createZfsService = serv:
@@ -587,7 +593,7 @@ in
       systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })
 
-    (mkIf (enableZfs && cfgSnapshots.enable) {
+    (mkIf (cfgZfs.enabled && cfgSnapshots.enable) {
       systemd.services = let
                            descr = name: if name == "frequent" then "15 mins"
                                     else if name == "hourly" then "hour"
@@ -625,7 +631,7 @@ in
                             }) snapshotNames);
     })
 
-    (mkIf (enableZfs && cfgScrub.enable) {
+    (mkIf (cfgZfs.enabled && cfgScrub.enable) {
       systemd.services.zfs-scrub = {
         description = "ZFS pools scrubbing";
         after = [ "zfs-import.target" ];
@@ -633,11 +639,11 @@ in
           Type = "oneshot";
         };
         script = ''
-          ${packages.zfsUser}/bin/zpool scrub ${
+          ${cfgZfs.package}/bin/zpool scrub ${
             if cfgScrub.pools != [] then
               (concatStringsSep " " cfgScrub.pools)
             else
-              "$(${packages.zfsUser}/bin/zpool list -H -o name)"
+              "$(${cfgZfs.package}/bin/zpool list -H -o name)"
             }
         '';
       };
@@ -652,11 +658,11 @@ in
       };
     })
 
-    (mkIf (enableZfs && cfgTrim.enable) {
+    (mkIf (cfgZfs.enabled && cfgTrim.enable) {
       systemd.services.zpool-trim = {
         description = "ZFS pools trim";
         after = [ "zfs-import.target" ];
-        path = [ packages.zfsUser ];
+        path = [ cfgZfs.package ];
         startAt = cfgTrim.interval;
         # By default we ignore errors returned by the trim command, in case:
         # - HDDs are mixed with SSDs

@@ -23,7 +23,7 @@
 , libxcb
 , libxkbcommon
 , wayland
-, xdg_utils
+, xdg-utils
 
   # Darwin Frameworks
 , AppKit
@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace alacritty/src/config/mouse.rs \
-      --replace xdg-open ${xdg_utils}/bin/xdg-open
+      --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
 
   installPhase = ''

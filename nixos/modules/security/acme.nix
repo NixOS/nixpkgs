@@ -346,7 +346,7 @@ let
       webroot = mkOption {
         type = types.nullOr types.str;
         default = null;
-        example = "/var/lib/acme/acme-challenges";
+        example = "/var/lib/acme/acme-challenge";
         description = ''
           Where the webroot of the HTTP vhost is located.
           <filename>.well-known/acme-challenge/</filename> directory
@@ -579,12 +579,12 @@ in {
         example = literalExample ''
           {
             "example.com" = {
-              webroot = "/var/www/challenges/";
+              webroot = "/var/lib/acme/acme-challenge/";
               email = "foo@example.com";
               extraDomainNames = [ "www.example.com" "foo.example.com" ];
             };
             "bar.example.com" = {
-              webroot = "/var/www/challenges/";
+              webroot = "/var/lib/acme/acme-challenge/";
               email = "bar@example.com";
             };
           }

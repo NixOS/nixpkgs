@@ -12,11 +12,11 @@ assert taglibSupport -> (taglib != null);
 with lib;
 stdenv.mkDerivation rec {
   pname = "ncmpcpp";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "https://rybczak.net/ncmpcpp/stable/${pname}-${version}.tar.bz2";
-    sha256 = "0x35nd4v31sma8fliqdbn1nxpjyi8hv472318sfb3xbmr4wlm0fb";
+    sha256 = "sha256-+qv2FXyMsbJKBZryduFi+p+aO5zTgQxDuRKIYMk4Ohs=";
   };
 
   configureFlags = [ "BOOST_LIB_SUFFIX=" ]

@@ -1,6 +1,19 @@
 { lib, fetchpatch, fetchurl }:
 
 {
+  ath_regd_optional = rec {
+    name = "ath_regd_optional";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = "https://github.com/openwrt/openwrt/raw/ed2015c38617ed6624471e77f27fbb0c58c8c660/package/kernel/mac80211/patches/ath/402-ath_regd_optional.patch";
+      sha256 = "1ssDXSweHhF+pMZyd6kSrzeW60eb6MO6tlf0il17RC0=";
+      postFetch = ''
+        sed -i 's/CPTCFG_/CONFIG_/g' $out
+        sed -i '/--- a\/local-symbols/,$d' $out
+      '';
+    };
+  };
+
   bridge_stp_helper =
     { name = "bridge-stp-helper";
       patch = ./bridge-stp-helper.patch;

@@ -1,8 +1,8 @@
 {
   "stable": {
-    "version": "88.0.4324.96",
-    "sha256": "17y7x50cx2d3bbz0hna25j8pyqsk0914266mpvrpk5am52xwb5c9",
-    "sha256bin64": "09210781s9y49l6qkbd1v8w52741rmhxz6cc6qsldnqpm5mwlgsc",
+    "version": "88.0.4324.146",
+    "sha256": "0zc2gx5wjv00n2xmlagjd2xv4plg128d1kkhy7j8kpxvx3xiic9q",
+    "sha256bin64": "109wz6w1c8v32b7fvcbks1wj8ycdyb9y88alksmr3h42z3s0b4id",
     "deps": {
       "gn": {
         "version": "2020-11-05",
@@ -12,15 +12,15 @@
       }
     },
     "chromedriver": {
-      "version": "88.0.4324.27",
-      "sha256_linux": "1vx1llg0x6903ggqa345iswd63y9c24184zv784q01zqxqwn0g8p",
-      "sha256_darwin": "0x1s6crfwkcn86w6p8g4vmx5raqlr41pjr4h2dbwppgrc0nx1p14"
+      "version": "88.0.4324.96",
+      "sha256_linux": "0hhy3c50hlnic6kz19565s8wv2yn7k45hxnkxbvb46zhcc5s2z41",
+      "sha256_darwin": "11mzcmp6dr8wzyv7v2jic7l44lr77phi4y3z1ghszhfdz5dil5xp"
     }
   },
   "beta": {
-    "version": "89.0.4389.23",
-    "sha256": "1d5pv4bhskh4l8x5ygccxwiryf05mwr1qzq1dzn6q82damr6dpq5",
-    "sha256bin64": "0swyx2a1gh9mi2jayymcvzwm9cb265ks43wg823abss4q3rskg84",
+    "version": "89.0.4389.40",
+    "sha256": "1da7l8i8hhsjnziyapynnwzfxjrj6m4p8076hg8bjqqv8alhg2zq",
+    "sha256bin64": "17f9yhz1w0r7panvzavmx7zyaw0i8yarlxx4zb5ghxl8hs37sasr",
     "deps": {
       "gn": {
         "version": "2021-01-07",
@@ -44,19 +44,19 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "87.0.4280.141",
-    "sha256": "0x9k809m36pfirnw2vnr9pk93nxdbgrvna0xf1rs3q91zkbr2x8l",
-    "sha256bin64": "0wq3yi0qyxzcid390w5rh4xjq92fjajvlifjl70g6sqnbk6vgvdp",
+    "version": "88.0.4324.146",
+    "sha256": "0zc2gx5wjv00n2xmlagjd2xv4plg128d1kkhy7j8kpxvx3xiic9q",
+    "sha256bin64": "109wz6w1c8v32b7fvcbks1wj8ycdyb9y88alksmr3h42z3s0b4id",
     "deps": {
       "gn": {
-        "version": "2020-09-09",
+        "version": "2020-11-05",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "e002e68a48d1c82648eadde2f6aafa20d08c36f2",
-        "sha256": "0x4c7amxwzxs39grqs3dnnz0531mpf1p75niq7zhinyfqm86i4dk"
+        "rev": "53d92014bf94c3893886470a1c7c1289f8818db0",
+        "sha256": "1xcm07qjk6m2czi150fiqqxql067i832adck6zxrishm70c9jbr9"
       },
       "ungoogled-patches": {
-        "rev": "87.0.4280.141-1",
-        "sha256": "0r09d27jrdz01rcwifchbq7ksh2bac15h8svq18jx426mr56dzla"
+        "rev": "88.0.4324.146-1",
+        "sha256": "0vp53b3jdsay6a17n27vi6cj10jj6zz94gr9ip4r5zf45qq6jx3w"
       }
     }
   }

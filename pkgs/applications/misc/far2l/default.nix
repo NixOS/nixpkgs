@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkg-config, wxGTK30, glib, pcre, m4, bash,
-  xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
+  xdg-utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
 
 let
   newer-colorer-schemes = fetchFromGitHub {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '' + ''
     echo 'echo ${version}' > far2l/bootstrap/scripts/vbuild.sh
     substituteInPlace far2l/bootstrap/open.sh              \
-      --replace 'xdg-open'    '${xdg_utils}/bin/xdg-open'
+      --replace 'xdg-open'    '${xdg-utils}/bin/xdg-open'
     substituteInPlace far2l/vtcompletor.cpp                \
       --replace '"/bin/bash"' '"${bash}/bin/bash"'
     substituteInPlace multiarc/src/formats/zip/zip.cpp     \

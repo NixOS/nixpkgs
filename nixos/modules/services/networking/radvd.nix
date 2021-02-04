@@ -33,6 +33,7 @@ in
     };
 
     services.radvd.config = mkOption {
+      type = types.lines;
       example =
         ''
           interface eth0 {

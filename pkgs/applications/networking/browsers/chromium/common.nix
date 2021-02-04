@@ -4,7 +4,7 @@
 , gnutar, bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
-, xdg_utils, yasm, nasm, minizip, libwebp
+, xdg-utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2
 
 , python2Packages, perl, pkg-config
@@ -89,7 +89,7 @@ let
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
     libpng libcap
-    xdg_utils minizip libwebp
+    xdg-utils minizip libwebp
     libusb1 re2
     ffmpeg libxslt libxml2
     nasm
@@ -106,7 +106,7 @@ let
   versionRange = min-version: upto-version:
     let inherit (upstream-info) version;
         result = versionAtLeast version min-version && versionOlder version upto-version;
-        ungoogled-version = (importJSON ./upstream-info.json).ungoogled.version;
+        ungoogled-version = (importJSON ./upstream-info.json).ungoogled-chromium.version;
     in if versionAtLeast ungoogled-version upto-version
        then warn "chromium: ungoogled version ${ungoogled-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
             result
@@ -152,8 +152,12 @@ let
     patches = [
       ./patches/no-build-timestamps.patch # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed)
       ./patches/widevine-79.patch # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags
-      # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ];
+      # ++ optional (versionRange "68" "72") (githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
+    ] ++ optional (versionRange "89" "90.0.4402.0") (githubPatch
+      # To fix the build of chromiumBeta and chromiumDev:
+      "b5b80df7dafba8cafa4c6c0ba2153dfda467dfc9" # add dependency on opus in webcodecs
+      "1r4wmwaxz5xbffmj5wspv2xj8s32j9p6jnwimjmalqg3al2ba64x"
+    );
 
     postPatch = ''
       # remove unused third-party
@@ -192,7 +196,7 @@ let
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
 
-      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
+      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
 
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
@@ -275,6 +279,12 @@ let
       # Disable PGO (defaults to 2 since M89) because it fails without additional changes:
       # error: Could not read profile ../../chrome/build/pgo_profiles/chrome-linux-master-1610647094-405a32bcf15e5a84949640f99f84a5b9f61e2f2e.profdata: Unsupported instrumentation profile format version
       chrome_pgo_phase = 0;
+    } // optionalAttrs (chromiumVersionAtLeast "90") {
+      # Disable build with TFLite library because it fails without additional changes:
+      # ninja: error: '../../chrome/test/data/simple_test.tflite', needed by 'test_data/simple_test.tflite', missing and no known rule to make it
+      # Note: chrome/test/data/simple_test.tflite is in the Git repository but not in chromium-90.0.4400.8.tar.xz
+      # See also chrome/services/machine_learning/README.md
+      build_with_tflite_lib = false;
     } // optionalAttrs ungoogled {
       chrome_pgo_phase = 0;
       enable_hangout_services_extension = false;

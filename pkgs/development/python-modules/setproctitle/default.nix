@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , pytestCheckHook
 }:
@@ -7,6 +8,8 @@
 buildPythonPackage rec {
   pname = "setproctitle";
   version = "1.2";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

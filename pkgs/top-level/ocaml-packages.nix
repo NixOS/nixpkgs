@@ -130,6 +130,22 @@ let
 
     cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
+    caqti = callPackage ../development/ocaml-modules/caqti { };
+
+    caqti-async = callPackage ../development/ocaml-modules/caqti/async.nix { };
+
+    caqti-driver-mariadb = callPackage ../development/ocaml-modules/caqti/driver-mariadb.nix { };
+
+    caqti-driver-postgresql = callPackage ../development/ocaml-modules/caqti/driver-postgresql.nix { };
+
+    caqti-driver-sqlite3 = callPackage ../development/ocaml-modules/caqti/driver-sqlite3.nix { };
+
+    caqti-dynload = callPackage ../development/ocaml-modules/caqti/dynload.nix { };
+
+    caqti-lwt = callPackage ../development/ocaml-modules/caqti/lwt.nix { };
+
+    caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
+
     cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
     charInfo_width = callPackage ../development/ocaml-modules/charInfo_width { };
@@ -564,6 +580,10 @@ let
 
     magick = callPackage ../development/ocaml-modules/magick { };
 
+    mariadb = callPackage ../development/ocaml-modules/mariadb {
+      inherit (pkgs) mariadb;
+    };
+
     markup = callPackage ../development/ocaml-modules/markup { };
 
     mdx = callPackage ../development/ocaml-modules/mdx { };
@@ -873,6 +893,10 @@ let
 
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
+    postgresql = callPackage ../development/ocaml-modules/postgresql {
+      inherit (pkgs) postgresql;
+    };
+
     ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix { };
 
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
@@ -951,14 +975,11 @@ let
 
     ppx_blob = callPackage ../development/ocaml-modules/ppx_blob { };
 
-    ppx_cstruct = callPackage ../development/ocaml-modules/cstruct/ppx.nix {};
+    ppx_cstruct = callPackage ../development/ocaml-modules/cstruct/ppx.nix { };
 
     ppx_derivers = callPackage ../development/ocaml-modules/ppx_derivers {};
 
-    ppx_deriving =
-      if lib.versionAtLeast ocaml.version "4.02"
-      then callPackage ../development/ocaml-modules/ppx_deriving {}
-      else null;
+    ppx_deriving = callPackage ../development/ocaml-modules/ppx_deriving {};
 
     ppx_deriving_protobuf = callPackage ../development/ocaml-modules/ppx_deriving_protobuf {};
 
@@ -989,6 +1010,8 @@ let
     process = callPackage ../development/ocaml-modules/process { };
 
     prof_spacetime = callPackage ../development/ocaml-modules/prof_spacetime { };
+
+    progress = callPackage ../development/ocaml-modules/progress { };
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
@@ -1029,6 +1052,8 @@ let
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
     sedlex_2 = callPackage ../development/ocaml-modules/sedlex/2.nix { };
+
+    semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
 
     sodium = callPackage ../development/ocaml-modules/sodium { };
 
