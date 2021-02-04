@@ -460,7 +460,8 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
-    free = false;
+    # Note: we currently consider these "free" for inclusion in the
+    # channel.
   };
 
   lgpl2Only = spdx {
