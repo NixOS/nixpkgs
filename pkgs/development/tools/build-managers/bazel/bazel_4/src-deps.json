@@ -57,8 +57,8 @@
     },
     "android_tools": {
         "name": "android_tools",
-        "sha256": "761e997a9055fe5e2b70aba8d64e78d4c2113feafaa8ac81909cb63e403f3087",
-        "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.19.0rc1.tar.gz"
+        "sha256": "ea5c0589a01e2a9f43c20e5c145d3530e3b3bdbe7322789bc5da38d0ca49b837",
+        "url": "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.19.0rc3.tar.gz"
     },
     "android_tools_for_testing": {
         "name": "android_tools_for_testing",
@@ -882,9 +882,9 @@
     },
     "remote_coverage_tools": {
         "name": "remote_coverage_tools",
-        "sha256": "96ac6bc9b9fbc67b532bcae562da1642409791e6a4b8e522f04946ee5cc3ff8e",
+        "sha256": "cd14f1cb4559e4723e63b7e7b06d09fcc3bd7ba58d03f354cdff1439bd936a7d",
         "urls": [
-            "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v2.1.zip"
+            "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v2.5.zip"
         ]
     },
     "remote_coverage_tools_for_testing": {
@@ -906,10 +906,10 @@
         "generator_function": "maybe",
         "generator_name": "remote_java_tools_darwin",
         "name": "remote_java_tools_darwin",
-        "sha256": "e0291e8956ac295143da4a673ca50727f7376665ee82b649a4ee810b64ff76c1",
+        "sha256": "64e5de2175dfccb96831573946b80d106edf3801d9db38b564514bf3581d466b",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v8.0/java_tools_javac11_darwin-v8.0.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/javac11_v8.0/java_tools_javac11_darwin-v8.0.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.0/java_tools_javac11_darwin-v10.0.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.0/java_tools_javac11_darwin-v10.0.zip"
         ]
     },
     "remote_java_tools_darwin_for_testing": {
@@ -977,10 +977,10 @@
         "generator_function": "maybe",
         "generator_name": "remote_java_tools_linux",
         "name": "remote_java_tools_linux",
-        "sha256": "c24aef916cc5a8e9f6d53db1f93c54fe5790a58996a1099592e1dfe992acc81e",
+        "sha256": "69e65353c2cd65780abcbcce4daae973599298273b0f8b4d469eed822cb220d1",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v8.0/java_tools_javac11_linux-v8.0.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/javac11_v8.0/java_tools_javac11_linux-v8.0.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.0/java_tools_javac11_linux-v10.0.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.0/java_tools_javac11_linux-v10.0.zip"
         ]
     },
     "remote_java_tools_linux_for_testing": {
@@ -1003,10 +1003,10 @@
         "generator_function": "maybe",
         "generator_name": "remote_java_tools_windows",
         "name": "remote_java_tools_windows",
-        "sha256": "444c391977e50af4e10549a28d021069d2ca7745a0e7b9b968a7b153fe3ea430",
+        "sha256": "d2f62af8daa0a3d55789b605f6582e37038329c64843337c71e64515468e55c4",
         "urls": [
-            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v8.0/java_tools_javac11_windows-v8.0.zip",
-            "https://github.com/bazelbuild/java_tools/releases/download/javac11_v8.0/java_tools_javac11_windows-v8.0.zip"
+            "https://mirror.bazel.build/bazel_java_tools/releases/javac11/v10.0/java_tools_javac11_windows-v10.0.zip",
+            "https://github.com/bazelbuild/java_tools/releases/download/javac11_v10.0/java_tools_javac11_windows-v10.0.zip"
         ]
     },
     "remote_java_tools_windows_for_testing": {
@@ -1026,7 +1026,7 @@
         ]
     },
     "remotejdk11_linux": {
-        "build_file": "@local_jdk//:BUILD.bazel",
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
         "generator_function": "maybe",
         "generator_name": "remotejdk11_linux",
         "name": "remotejdk11_linux",
@@ -1037,7 +1037,7 @@
         ]
     },
     "remotejdk11_linux_aarch64": {
-        "build_file": "@local_jdk//:BUILD.bazel",
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
         "generator_function": "maybe",
         "generator_name": "remotejdk11_linux_aarch64",
         "name": "remotejdk11_linux_aarch64",
@@ -1082,15 +1082,15 @@
         ]
     },
     "remotejdk11_linux_ppc64le": {
-        "build_file": "@local_jdk//:BUILD.bazel",
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
         "generator_function": "maybe",
         "generator_name": "remotejdk11_linux_ppc64le",
         "name": "remotejdk11_linux_ppc64le",
         "sha256": "a417db0295b1f4b538ecbaf7c774f3a177fab9657a665940170936c0eca4e71a",
         "strip_prefix": "jdk-11.0.7+10",
         "urls": [
-            "https://mirror.bazel.com/openjdk/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7%2B10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.7_10.tar.gz",
-            "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7%2B10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.7_10.tar.gz"
+            "https://mirror.bazel.build/openjdk/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.7_10.tar.gz",
+            "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.7_10.tar.gz"
         ]
     },
     "remotejdk11_linux_ppc64le_for_testing": {
@@ -1109,6 +1109,18 @@
         "urls": [
             "https://mirror.bazel.build/openjdk/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.7_10.tar.gz",
             "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_ppc64le_linux_hotspot_11.0.7_10.tar.gz"
+        ]
+    },
+    "remotejdk11_linux_s390x": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk11_linux_s390x",
+        "name": "remotejdk11_linux_s390x",
+        "sha256": "d9b72e87a1d3ebc0c9552f72ae5eb150fffc0298a7cb841f1ce7bfc70dcd1059",
+        "strip_prefix": "jdk-11.0.7+10",
+        "urls": [
+            "https://mirror.bazel.build/github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_s390x_linux_hotspot_11.0.7_10.tar.gz",
+            "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.7+10/OpenJDK11U-jdk_s390x_linux_hotspot_11.0.7_10.tar.gz"
         ]
     },
     "remotejdk11_linux_s390x_for_testing": {
@@ -1130,7 +1142,7 @@
         ]
     },
     "remotejdk11_macos": {
-        "build_file": "@local_jdk//:BUILD.bazel",
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
         "generator_function": "maybe",
         "generator_name": "remotejdk11_macos",
         "name": "remotejdk11_macos",
@@ -1158,7 +1170,7 @@
         ]
     },
     "remotejdk11_win": {
-        "build_file": "@local_jdk//:BUILD.bazel",
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
         "generator_function": "maybe",
         "generator_name": "remotejdk11_win",
         "name": "remotejdk11_win",
@@ -1185,6 +1197,17 @@
             "https://mirror.bazel.build/openjdk/azul-zulu11.37.17-ca-jdk11.0.6/zulu11.37.17-ca-jdk11.0.6-win_x64.zip"
         ]
     },
+    "remotejdk14_linux": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk14_linux",
+        "name": "remotejdk14_linux",
+        "sha256": "48bb8947034cd079ad1ef83335e7634db4b12a26743a0dc314b6b861480777aa",
+        "strip_prefix": "zulu14.28.21-ca-jdk14.0.1-linux_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu14.28.21-ca-jdk14.0.1-linux_x64.tar.gz"
+        ]
+    },
     "remotejdk14_linux_for_testing": {
         "build_file": "@local_jdk//:BUILD.bazel",
         "name": "remotejdk14_linux_for_testing",
@@ -1202,6 +1225,17 @@
             "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu14.28.21-ca-jdk14.0.1-linux_x64.tar.gz"
         ]
     },
+    "remotejdk14_macos": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk14_macos",
+        "name": "remotejdk14_macos",
+        "sha256": "088bd4d0890acc9f032b738283bf0f26b2a55c50b02d1c8a12c451d8ddf080dd",
+        "strip_prefix": "zulu14.28.21-ca-jdk14.0.1-macosx_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu14.28.21-ca-jdk14.0.1-macosx_x64.tar.gz"
+        ]
+    },
     "remotejdk14_macos_for_testing": {
         "build_file": "@local_jdk//:BUILD.bazel",
         "name": "remotejdk14_macos_for_testing",
@@ -1217,6 +1251,17 @@
         "strip_prefix": "zulu14.28.21-ca-jdk14.0.1-macosx_x64",
         "urls": [
             "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu14.28.21-ca-jdk14.0.1-macosx_x64.tar.gz"
+        ]
+    },
+    "remotejdk14_win": {
+        "build_file": "@bazel_tools//tools/jdk:jdk.BUILD",
+        "generator_function": "maybe",
+        "generator_name": "remotejdk14_win",
+        "name": "remotejdk14_win",
+        "sha256": "9cb078b5026a900d61239c866161f0d9558ec759aa15c5b4c7e905370e868284",
+        "strip_prefix": "zulu14.28.21-ca-jdk14.0.1-win_x64",
+        "urls": [
+            "https://mirror.bazel.build/cdn.azul.com/zulu/bin/zulu14.28.21-ca-jdk14.0.1-win_x64.zip"
         ]
     },
     "remotejdk14_win_for_testing": {
