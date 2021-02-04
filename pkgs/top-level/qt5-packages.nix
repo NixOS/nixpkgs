@@ -95,8 +95,6 @@ in (kdeFrameworks // plasma5 // plasma5.thirdParty // kdeApplications // qt5 // 
 
   libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
-  libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
-
   libktorrent = callPackage ../development/libraries/libktorrent { };
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
