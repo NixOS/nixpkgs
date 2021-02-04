@@ -265,6 +265,8 @@ in buildFHSUserEnv rec {
     fi
 
     export STEAM_RUNTIME=${if nativeOnly then "0" else "/steamrt"}
+
+    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json:/usr/share/vulkan/icd.d/intel_icd.i686.json:/usr/share/vulkan/icd.d/lvp_icd.x86_64.json:/usr/share/vulkan/icd.d/lvp_icd.i686.json:/usr/share/vulkan/icd.d/nvidia_icd.json:/usr/share/vulkan/icd.d/nvidia_icd32.json:/usr/share/vulkan/icd.d/radeon_icd.x86_64.json:/usr/share/vulkan/icd.d/radeon_icd.i686.json
   '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''
