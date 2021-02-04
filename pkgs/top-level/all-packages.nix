@@ -230,6 +230,8 @@ in
 
   deadcode = callPackage ../development/tools/deadcode { };
 
+  each = callPackage ../tools/text/each { };
+
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
   glade = callPackage ../development/tools/glade { };
