@@ -476,8 +476,6 @@ let
 
     irmin-http = callPackage ../development/ocaml-modules/irmin/http.nix { };
 
-    irmin-mem = callPackage ../development/ocaml-modules/irmin/mem.nix { };
-
     irmin-pack = callPackage ../development/ocaml-modules/irmin/pack.nix { };
 
     irmin-test = callPackage ../development/ocaml-modules/irmin/test.nix { };
