@@ -8261,7 +8261,7 @@ in
 
   textadept11 = callPackage ../applications/editors/textadept/11 { };
 
-  texworks = libsForQt514.callPackage ../applications/editors/texworks { };
+  texworks = libsForQt5.callPackage ../applications/editors/texworks { };
 
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
@@ -24566,7 +24566,7 @@ in
 
   rclone = callPackage ../applications/networking/sync/rclone { };
 
-  rclone-browser = libsForQt514.callPackage ../applications/networking/sync/rclone/browser.nix { };
+  rclone-browser = libsForQt5.callPackage ../applications/networking/sync/rclone/browser.nix { };
 
   rcs = callPackage ../applications/version-management/rcs { };
 
