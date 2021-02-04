@@ -3,13 +3,11 @@
 , autoreconfHook
 , pkgconfig
 , enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
-, systemd ? null
+, systemd
 , libobjc
 , IOKit
 , withStatic ? false
 }:
-
-assert enableSystemd -> systemd != null;
 
 stdenv.mkDerivation rec {
   pname = "libusb";
