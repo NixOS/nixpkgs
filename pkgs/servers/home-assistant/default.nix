@@ -180,6 +180,7 @@ in with py.pkgs; buildPythonApplication rec {
     # assert 0 == 1 where 0 = len([])
     "test_error_posted_as_event"
     # RuntimeError: Event loop is closed
+    "test_config_path"
     "test_info_endpoint_register_callback_timeout"
   ];
 
