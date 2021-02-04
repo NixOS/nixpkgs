@@ -139,6 +139,7 @@ in buildFHSUserEnv rec {
     libcap
 
     # dependencies for mesa drivers, needed inside pressure-vessel
+    mesa.drivers
     expat
     wayland
     xlibs.libxcb
