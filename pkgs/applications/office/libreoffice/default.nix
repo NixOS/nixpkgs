@@ -58,17 +58,12 @@ in (mkDrv rec {
 
   outputs = [ "out" "dev" ];
 
-  # For some reason librdf_redland sometimes refers to rasqal.h instead
-  # of rasqal/rasqal.h
   NIX_CFLAGS_COMPILE = [
-    "-I${librdf_rasqal}/include/rasqal"
-  ] ++ lib.optionals stdenv.isx86_64 [ "-mno-fma" "-mno-avx" ]
-  # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
-  ++ [ "-fno-visibility-inlines-hidden" ];
-
-  patches = [
-    ./xdg-open-brief.patch
+    "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
+    "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
   ];
+
+  patches = [ ./xdg-open-brief.patch ];
 
   tarballPath = "external/tarballs";
 
@@ -378,7 +373,7 @@ in (mkDrv rec {
     "--enable-kf5"
     "--enable-qt5"
     "--enable-gtk3-kde5"
-  ] ++ lib.optional (lib.versionOlder version "6.4") "--disable-gtk"; # disables GTK2, GTK3 is still there
+  ];
 
   checkPhase = ''
     make unitcheck
