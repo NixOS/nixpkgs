@@ -14,8 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-ey/fUHkPoWjWlLjh1WNpwMKOkdQKgFYcLwQdx2RQ3CI=";
 
   meta = with lib; {
-    homepage = "gemini://gem.limpet.net/agate";
-    changelog = "gemini://gem.limpet.net/agate";
+    homepage = "https://proxy.vulpes.one/gemini/gem.limpet.net/agate";
+    changelog = "https://proxy.vulpes.one/gemini/gem.limpet.net/agate";
     description = "Very simple server for the Gemini hypertext protocol";
     longDescription = ''
       Agate is a server for the Gemini network protocol, built with the Rust
