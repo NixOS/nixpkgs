@@ -15140,6 +15140,8 @@ in
 
   libkate = callPackage ../development/libraries/libkate { };
 
+  libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
+
   libkml = callPackage ../development/libraries/libkml { };
 
   libksba = callPackage ../development/libraries/libksba { };
@@ -23061,7 +23063,7 @@ in
 
   keyfinder = libsForQt5.callPackage ../applications/audio/keyfinder { };
 
-  keyfinder-cli = libsForQt5.callPackage ../applications/audio/keyfinder-cli { };
+  keyfinder-cli = callPackage ../applications/audio/keyfinder-cli { };
 
   kgraphviewer = libsForQt5.callPackage ../applications/graphics/kgraphviewer { };
 
