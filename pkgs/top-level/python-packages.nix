@@ -8324,6 +8324,8 @@ in {
 
   xattr = callPackage ../development/python-modules/xattr { };
 
+  xboxapi = callPackage ../development/python-modules/xboxapi { };
+
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
   xcffib = callPackage ../development/python-modules/xcffib { };
