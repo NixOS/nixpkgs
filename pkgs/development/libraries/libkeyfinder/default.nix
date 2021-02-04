@@ -11,10 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "005qq81xfzi1iifvpgkqpizxcrfisafq2r0cjp4fxqh1ih7bfimv";
   };
 
-  # needed for linking libkeyfinder.so into keyfinder-tests executable
-  preBuild = ''
-    export LD_LIBRARY_PATH=$(pwd)
-  '';
+  # needed for finding libkeyfinder.so to link it into keyfinder-tests executable
+  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
 
   nativeBuildInputs = [ cmake ];
 
