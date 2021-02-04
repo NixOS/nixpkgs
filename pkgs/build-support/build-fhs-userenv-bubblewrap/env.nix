@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, writeText, writeScriptBin, pkgs, pkgsi686Linux }:
+{ stdenv, lib, buildEnv, writeText, writeScriptBin, pkgs, pkgsi686Linux }:
 
 { name, profile ? ""
 , targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
@@ -138,7 +138,20 @@ let
     mkdir -m0755 usr
     cd usr
     ${setupLibDirs}
-    for i in bin sbin share include; do
+    ${lib.optionalString isMultiBuild ''
+    if [ -d "${staticUsrProfileMulti}/share" ]; then
+      cp -rLf ${staticUsrProfileMulti}/share share
+    fi
+    ''}
+    if [ -d "${staticUsrProfileTarget}/share" ]; then
+      if [ -d share ]; then
+        chmod -R 755 share
+        cp -rLTf ${staticUsrProfileTarget}/share share
+      else
+        cp -rLf ${staticUsrProfileTarget}/share share
+      fi
+    fi
+    for i in bin sbin include; do
       if [ -d "${staticUsrProfileTarget}/$i" ]; then
         cp -rsHf "${staticUsrProfileTarget}/$i" "$i"
       fi
