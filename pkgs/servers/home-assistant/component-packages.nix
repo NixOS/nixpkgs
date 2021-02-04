@@ -761,7 +761,7 @@
     "solaredge" = ps: with ps; [ stringcase ]; # missing inputs: solaredge
     "solaredge_local" = ps: with ps; [ ]; # missing inputs: solaredge-local
     "solarlog" = ps: with ps; [ ]; # missing inputs: sunwatcher
-    "solax" = ps: with ps; [ ]; # missing inputs: solax
+    "solax" = ps: with ps; [ solax ];
     "soma" = ps: with ps; [ pysoma ];
     "somfy" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pymfy
     "somfy_mylink" = ps: with ps; [ ]; # missing inputs: somfy-mylink-synergy
@@ -944,7 +944,7 @@
     "x10" = ps: with ps; [ ];
     "xbee" = ps: with ps; [ ]; # missing inputs: xbee-helper
     "xbox" = ps: with ps; [ aiohttp-cors ]; # missing inputs: xbox-webapi
-    "xbox_live" = ps: with ps; [ ]; # missing inputs: xboxapi
+    "xbox_live" = ps: with ps; [ xboxapi ];
     "xeoma" = ps: with ps; [ pyxeoma ];
     "xfinity" = ps: with ps; [ ]; # missing inputs: xfinity-gateway
     "xiaomi" = ps: with ps; [ ha-ffmpeg ];
