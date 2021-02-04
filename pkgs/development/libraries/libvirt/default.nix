@@ -33,6 +33,28 @@ in stdenv.mkDerivation rec {
         fetchSubmodules = true;
       };
 
+  patches = [
+    # Patches for CVE-2020-25637
+    (fetchpatch {
+      name = "libvirt-CVE-2020-25637-p1";
+      url = "https://libvirt.org/git/?p=libvirt.git;a=patch;h=955029bd0ad7ef96000f529ac38204a8f4a96401";
+      sha256 = "1diblx24spzyak4d94nmydfdyppc6zmw5qzja151llzwxic9a05k";
+    })
+    (fetchpatch {
+      name = "libvirt-CVE-2020-25637-p2";
+      url = "https://libvirt.org/git/?p=libvirt.git;a=patch;h=50864dcda191eb35732dbd80fb6ca251a6bba923";
+      sha256 = "1gz21hjaf02yqrx7ziyqsxcrrrf2fcw1h8py1rqkqbfcg146yn3y";
+    })
+    (fetchpatch {
+      name = "libvirt-CVE-2020-25637-p3";
+      url = "https://libvirt.org/git/?p=libvirt.git;a=patch;h=e4116eaa44cb366b59f7fe98f4b88d04c04970ad";
+      sha256 = "1m0408hnsyb8b7r88g2ykbfd0dc4971yndy07x7wkpzgayk1igjr";
+    })
+    # Part of the CVE-2020-25637 patches, but checked in to fix a merge conflict
+    # Modified from https://libvirt.org/git/?p=libvirt.git;a=commitdiff;h=a63b48c5ecef077bf0f909a85f453a605600cf05
+    ./patches/0001-qemu-agent-set-ifname-to-NULL-after-freeing.patch
+  ];
+
   nativeBuildInputs = [ makeWrapper pkgconfig docutils ] ++ optionals (!buildFromTarball) [ autoreconfHook ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
