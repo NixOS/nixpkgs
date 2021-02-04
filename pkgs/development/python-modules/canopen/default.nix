@@ -29,6 +29,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [ "canopen" ];
+
   meta = with lib; {
     homepage = "https://github.com/christiansandberg/canopen/";
     description = "CANopen stack implementation";
