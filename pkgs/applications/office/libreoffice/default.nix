@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, lib, pam, python3, libxslt, perl, ArchiveZip, gettext
+{ stdenv, fetchurl, fetchpatch, lib, pam, python3, libxslt, perl, ArchiveZip, box2d, gettext
 , IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
@@ -391,7 +391,7 @@ in (mkDrv rec {
     ++ lib.optional kdeIntegration wrapQtAppsHook;
 
   buildInputs = with xorg;
-    [ ant ArchiveZip boost cairo clucene_core
+    [ ant ArchiveZip boost box2d cairo clucene_core
       IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
       freetype getopt gperf gtk3
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
