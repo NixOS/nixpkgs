@@ -68,6 +68,14 @@ let
       { BORG_PASSPHRASE = passphrase; }
     else { };
 
+  mkBackupTimer = name: cfg:
+    nameValuePair "borgbackup-job-${name}" {
+      timerConfig = {
+        RandomizedDelaySec = cfg.randomizedDelaySec;
+        Persistent = cfg.persistent;
+      };
+    };
+
   mkBackupService = name: cfg:
     let
       userHome = config.users.users.${cfg.user}.home;
@@ -289,6 +297,35 @@ in {
               automatically, use <literal>[ ]</literal>.
               It will generate a systemd service borgbackup-job-NAME.
               You may trigger it manually via systemctl restart borgbackup-job-NAME.
+            '';
+          };
+
+          randomizedDelaySec = mkOption {
+            default = "0";
+            type = types.str;
+            example = "45min";
+            description = ''
+              Add a randomized delay before each backup run.
+              The delay will be chosen between zero and this value.
+              This value must be a time span in the format specified by
+              <citerefentry><refentrytitle>systemd.time</refentrytitle>
+              <manvolnum>7</manvolnum></citerefentry>
+            '';
+          };
+
+          persistent = mkOption {
+            default = true;
+            type = types.bool;
+            example = false;
+            description = ''
+              Takes a boolean argument. If true, the time when the service
+              unit was last triggered is stored on disk. When the timer is
+              activated, the service unit is triggered immediately if it
+              would have been triggered at least once during the time when
+              the timer was inactive. Such triggering is nonetheless
+              subject to the delay imposed by RandomizedDelaySec=. This is
+              useful to catch up on missed runs of the service when the
+              system was powered down.
             '';
           };
 
@@ -667,6 +704,9 @@ in {
         mapAttrs' mkBackupService jobs
         # A repo named "foo" is mapped to systemd.services.borgbackup-repo-foo
         // mapAttrs' mkRepoService repos;
+
+      systemd.timers =
+        mapAttrs' mkBackupTimer jobs;
 
       users = mkMerge (mapAttrsToList mkUsersConfig repos);
 
