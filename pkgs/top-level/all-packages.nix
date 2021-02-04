@@ -16417,7 +16417,7 @@ in
   gofish = callPackage ../servers/gopher/gofish { };
 
   grafana = callPackage ../servers/monitoring/grafana {
-    buildGoModule = buildGo114Module;
+    buildGoModule = buildGo115Module;
   };
 
   grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
