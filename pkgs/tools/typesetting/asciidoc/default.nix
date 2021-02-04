@@ -263,7 +263,6 @@ stdenv.mkDerivation rec {
   '') + ''
     patchShebangs .
 
-    sed -i -e "s,/etc/vim,,g" Makefile.in
     # Note: this substitution will not work in the planned 10.0.0 release:
     #
     # https://github.com/asciidoc/asciidoc-py3/commit/dfffda23381014481cd13e8e9d8f131e1f93f08a
