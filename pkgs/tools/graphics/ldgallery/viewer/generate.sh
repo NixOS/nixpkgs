@@ -24,11 +24,7 @@ node2nix \
   --input ./package.json \
   --lock ./package-lock.json \
   --output node-packages.nix \
-  --composition node-composition.nix
+  --composition node-composition.nix \
+  --no-copy-node-env
 
 rm package.json package-lock.json
-
-# Temporary quickfix to accomodate for the util-linux package rename.
-# See https://github.com/svanderburg/node2nix/issues/213
-git restore :/pkgs/development/node-packages/node-env.nix
-sed -i 's/utillinux/util-linux/g' node-composition.nix

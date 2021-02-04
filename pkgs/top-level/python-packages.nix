@@ -484,6 +484,8 @@ in {
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
 
+  asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
+
   asyncio-throttle = callPackage ../development/python-modules/asyncio-throttle { };
 
   asyncpg = callPackage ../development/python-modules/asyncpg { };
@@ -2926,6 +2928,8 @@ in {
 
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
+  hijri-converter = callPackage ../development/python-modules/hijri-converter { };
+
   hiredis = callPackage ../development/python-modules/hiredis { };
 
   hiro = callPackage ../development/python-modules/hiro { };
@@ -4901,6 +4905,8 @@ in {
 
   python-openems = callPackage ../development/python-modules/python-openems { };
 
+  python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
+
   python-tado = callPackage ../development/python-modules/python-tado { };
 
   pkutils = callPackage ../development/python-modules/pkutils { };
@@ -6100,6 +6106,8 @@ in {
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
+  pytest-httpserver = callPackage ../development/python-modules/pytest-httpserver { };
+
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
@@ -7267,6 +7275,8 @@ in {
 
   softlayer = callPackage ../development/python-modules/softlayer { };
 
+  solax = callPackage ../development/python-modules/solax { };
+
   solo-python = disabledIf (!pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
 
   somajo = callPackage ../development/python-modules/somajo { };
@@ -8328,6 +8338,8 @@ in {
   xarray = callPackage ../development/python-modules/xarray { };
 
   xattr = callPackage ../development/python-modules/xattr { };
+
+  xboxapi = callPackage ../development/python-modules/xboxapi { };
 
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 

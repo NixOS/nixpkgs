@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "python-tado";
-  version = "0.9.0";
+  version = "0.11.0";
 
   disabled = pythonOlder "3.5";
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "wmalgadey";
     repo = "PyTado";
     rev = version;
-    sha256 = "0cr5sxdvjgdrrlhl32rs8pwyay8liyi6prm37y66dn00b41cb5l3";
+    sha256 = "0fw4f9gqnhxwpxyb34qi8bl5pmzz13h4x3mdk903hhjyccanqncr";
   };
 
   propagatedBuildInputs = [ requests ];

@@ -9,8 +9,7 @@
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
-, packageOverrides ? self: super: {
-}
+, packageOverrides ? self: super: {}
 
 # Skip pip install of required packages on startup
 , skipPip ? true }:
@@ -57,7 +56,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.1.5";
+  hassVersion = "2021.2.0";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -76,7 +75,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "sha256-xi5rHZlhwgEHll3TFlRu7D963tdcQNMmWcoXVjEFLXo=";
+    sha256 = "116aq683wy7sxdbxr43li90irpfbsz0dv8w0r1fghcjpwlj7ihwa";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -88,8 +87,9 @@ in with py.pkgs; buildPythonApplication rec {
       --replace "bcrypt==3.1.7" "bcrypt>=3.1.7" \
       --replace "cryptography==3.2" "cryptography" \
       --replace "pip>=8.0.3,<20.3" "pip" \
-      --replace "pyyaml==5.3.1" "pyyaml>=5.3.1" \
-      --replace "requests==2.25.0" "requests>=2.24.0" \
+      --replace "pytz>=2020.5" "pytz>=2020.4" \
+      --replace "pyyaml==5.4.1" "pyyaml" \
+      --replace "requests==2.25.1" "requests>=2.25.0" \
       --replace "ruamel.yaml==0.15.100" "ruamel.yaml>=0.15.100"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
@@ -99,10 +99,10 @@ in with py.pkgs; buildPythonApplication rec {
     aiohttp astral async-timeout attrs bcrypt certifi ciso8601 httpx jinja2
     pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
     setuptools voluptuous voluptuous-serialize yarl
-    # From default_config. frontend, http, image, mobile_app and recorder components as well as
-    # the auth.mfa_modules.totp module
-    aiohttp-cors defusedxml distro emoji hass-frontend pynacl pillow pyotp
-    pyqrcode sqlalchemy
+    # From default_config. dhcp, frontend, http, image, mobile_app and
+    # recorder components as well as the auth.mfa_modules.totp module
+    aiohttp-cors aiohue defusedxml distro emoji hass-frontend pynacl pillow pyotp
+    pyqrcode scapy sqlalchemy python-openzwave-mqtt
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   # upstream only tests on Linux, so do we.
@@ -114,13 +114,16 @@ in with py.pkgs; buildPythonApplication rec {
 
   # We cannot test all components, since they'd introduce lots of dependencies, some of which are unpackaged,
   # but we should test very common stuff, like what's in `default_config`.
+  # https://github.com/home-assistant/core/commits/dev/homeassistant/components/default_config/manifest.json
   componentTests = [
     "api"
     "automation"
     "config"
     "configurator"
+    "counter"
     "default_config"
     "demo"
+    "dhcp"
     "discovery"
     "frontend"
     "group"
@@ -145,6 +148,8 @@ in with py.pkgs; buildPythonApplication rec {
     "system_health"
     "system_log"
     "tag"
+    "timer"
+    "webhook"
     "websocket_api"
     "zeroconf"
     "zone"
@@ -156,31 +161,26 @@ in with py.pkgs; buildPythonApplication rec {
     "--ignore tests/components"
     # prone to race conditions due to parallel file access
     "--ignore tests/test_config.py"
-    # tries to import unpackaged dependencies
-    "--ignore tests/test_loader.py"
     # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0
     "--ignore tests/auth/mfa_modules/test_notify.py"
     "tests"
   ] ++ map (component: "tests/components/" + component) componentTests;
 
   disabledTests = [
-    # AssertionError: merge_log_err.call_count != 0
-    "test_merge"
-    # ModuleNotFoundError: No module named 'pyqwikswitch'
-    "test_merge_id_schema"
     # AssertionError: assert 'unknown' == 'not_home'
     "test_device_tracker_not_home"
-    # Racy https://github.com/home-assistant/core/issues/41425
-    "test_cached_event_message"
-    # ValueError: count must be a positive integer (got 0)
-    "test_media_view"
-    # AssertionError: len(events) == 1
-    "test_error_posted_as_event"
     # keyring.errors.NoKeyringError: No recommended backend was available.
     "test_secrets_from_unrelated_fails"
     "test_secrets_credstash"
+    # AssertionError: Expected 'start' to have been called once. Called 0 times.
+    "test_setup_and_stop"
+    # AssertionError: assert {} == {'test': <ANY...ckage': <ANY>}
+    "test_get_custom_components_internal"
+    # assert 0 == 1 where 0 = len([])
+    "test_error_posted_as_event"
     # RuntimeError: Event loop is closed
-    "test_remove_older_logs"
+    "test_config_path"
+    "test_info_endpoint_register_callback_timeout"
   ];
 
   preCheck = ''
