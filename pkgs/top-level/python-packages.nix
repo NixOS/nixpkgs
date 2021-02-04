@@ -484,6 +484,8 @@ in {
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
 
+  asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
+
   asyncio-throttle = callPackage ../development/python-modules/asyncio-throttle { };
 
   asyncpg = callPackage ../development/python-modules/asyncpg { };
@@ -2926,6 +2928,8 @@ in {
 
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
+  hijri-converter = callPackage ../development/python-modules/hijri-converter { };
+
   hiredis = callPackage ../development/python-modules/hiredis { };
 
   hiro = callPackage ../development/python-modules/hiro { };
@@ -4895,6 +4899,8 @@ in {
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
+
+  python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
 
   python-tado = callPackage ../development/python-modules/python-tado { };
 

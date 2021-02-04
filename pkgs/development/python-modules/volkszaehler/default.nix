@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "volkszaehler";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "087gw1k3f81lm859r0j65cjia8c2dcy4cx8c7s3mb5msb1csdh0x";
+    sha256 = "13zhxq08wn5y9yn6xbazfl0gxxysmirwpc26wcnr6jk2va1kpc4l";
   };
 
   propagatedBuildInputs = [
