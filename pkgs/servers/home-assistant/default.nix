@@ -95,22 +95,43 @@ in with py.pkgs; buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    # From setup.py
-    aiohttp astral async-timeout attrs bcrypt certifi ciso8601 httpx jinja2
-    pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
-    setuptools voluptuous voluptuous-serialize yarl
-    # From default_config. dhcp, frontend, http, image, mobile_app and
-    # recorder components as well as the auth.mfa_modules.totp module
-    aiohttp-cors aiohue defusedxml distro emoji hass-frontend pynacl pillow pyotp
-    pyqrcode scapy sqlalchemy python-openzwave-mqtt
+    # Only packages required in setup.py + hass-frontend
+    aiohttp
+    astral
+    async-timeout
+    attrs
+    bcrypt
+    certifi
+    ciso8601
+    cryptography
+    hass-frontend
+    httpx
+    jinja2
+    pip
+    pyjwt
+    python-slugify
+    pytz
+    pyyaml
+    requests
+    ruamel_yaml
+    voluptuous
+    voluptuous-serialize
+    yarl
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.isLinux;
 
   checkInputs = [
-    asynctest pytestCheckHook pytest-aiohttp pytest_xdist requests-mock hass-nabucasa netdisco pydispatcher
-  ];
+    # test infrastructure
+    asynctest
+    pytest-aiohttp
+    pytest-xdist
+    pytestCheckHook
+    requests-mock
+    # component dependencies
+    pyotp
+  ] ++ lib.concatMap (component: getPackages component py.pkgs) componentTests;
 
   # We cannot test all components, since they'd introduce lots of dependencies, some of which are unpackaged,
   # but we should test very common stuff, like what's in `default_config`.
@@ -130,6 +151,7 @@ in with py.pkgs; buildPythonApplication rec {
     "history"
     "homeassistant"
     "http"
+    "hue"
     "input_boolean"
     "input_datetime"
     "input_text"
@@ -153,6 +175,7 @@ in with py.pkgs; buildPythonApplication rec {
     "websocket_api"
     "zeroconf"
     "zone"
+    "zwave"
   ];
 
   pytestFlagsArray = [
