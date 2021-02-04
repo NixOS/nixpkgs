@@ -944,7 +944,7 @@
     "x10" = ps: with ps; [ ];
     "xbee" = ps: with ps; [ ]; # missing inputs: xbee-helper
     "xbox" = ps: with ps; [ aiohttp-cors ]; # missing inputs: xbox-webapi
-    "xbox_live" = ps: with ps; [ ]; # missing inputs: xboxapi
+    "xbox_live" = ps: with ps; [ xboxapi ];
     "xeoma" = ps: with ps; [ pyxeoma ];
     "xfinity" = ps: with ps; [ ]; # missing inputs: xfinity-gateway
     "xiaomi" = ps: with ps; [ ha-ffmpeg ];
