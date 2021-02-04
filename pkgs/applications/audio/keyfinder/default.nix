@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, qmake, taglib }:
+{ lib, mkDerivation, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, qmake, taglib }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "keyfinder";
-  version = "2.2";
+  version = "2.4";
 
   src = fetchFromGitHub {
-    sha256 = "0vjszk1h8vj2qycgbffzy6k7amg75jlvlnzwaqhz9nll2pcvw0zl";
-    rev = version;
+    sha256 = "11yhdwan7bz8nn8vxr54drckyrnlxynhx5s981i475bbccg8g7ls";
+    rev = "530034d6fe86d185f6a68b817f8db5f552f065d7"; # tag is missing
     repo = "is_KeyFinder";
     owner = "ibsh";
   };
