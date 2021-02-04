@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, graalvm11-ce }:
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
@@ -11,14 +11,46 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ graalvm11-ce ];
+
+  buildPhase = with lib; ''
+    args=("-jar" "${src}"
+          "-H:Name=clojure-lsp"
+          ${optionalString stdenv.isDarwin ''"-H:-CheckToolchain"''}
+          "-J-Dclojure.compiler.direct-linking=true"
+          "-J-Dclojure.spec.skip-macros=true"
+          "-H:+ReportExceptionStackTraces"
+          "--enable-url-protocols=jar"
+          # "-H:+InlineBeforeAnalysis"
+          "-H:Log=registerResource:"
+          "--verbose"
+          "-H:IncludeResources=\"CLOJURE_LSP_VERSION|db/.*|static/.*|templates/.*|.*.yml|.*.xml|.*/org/sqlite/.*|org/sqlite/.*|.*.properties\""
+          "-H:ConfigurationFileDirectories=graalvm"
+          "--initialize-at-build-time"
+          "--report-unsupported-elements-at-runtime"
+          "--no-server"
+          "--no-fallback"
+          "--native-image-info"
+          "--allow-incomplete-classpath"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.AudioFileReader"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.MidiFileReader"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.MixerProvider"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.FormatConversionProvider"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.sampled.spi.AudioFileWriter"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.MidiDeviceProvider"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.SoundbankReader"
+          "-H:ServiceLoaderFeatureExcludeServices=javax.sound.midi.spi.MidiFileWriter"
+          "-J-Xmx4g")
+
+    native-image "''${args[@]}"
+  '';
 
   installPhase = ''
-    install -Dm644 $src $out/share/java/${pname}.jar
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
-      --add-flags "-Xmx2g" \
-      --add-flags "-server" \
-      --add-flags "-jar $out/share/java/${pname}.jar"
+    install -Dm755 clojure-lsp $out/bin/clojure-lsp
+  '';
+
+  installCheckPhase = ''
+    $out/bin/clojure-lsp --version
   '';
 
   meta = with lib; {
@@ -26,6 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/snoe/clojure-lsp";
     license = licenses.mit;
     maintainers = [ maintainers.ericdallo ];
-    platforms = jre.meta.platforms;
+    platforms = graalvm11-ce.meta.platforms;
   };
 }
