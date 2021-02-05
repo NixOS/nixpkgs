@@ -1,6 +1,7 @@
 # Functions for copying sources to the Nix store.
 { lib }:
 
+# Tested in lib/tests/sources.sh
 let
   inherit (builtins)
     hasContext
