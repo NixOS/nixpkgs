@@ -3504,9 +3504,9 @@ in {
 
   kmapper = callPackage ../development/python-modules/kmapper { };
 
-  kmsxx = toPythonModule ((callPackage ../development/libraries/kmsxx {
-    inherit (pkgs.kmsxx) stdenv;
-    inherit (pkgs) pkg-config;
+  kmsxx = toPythonModule ((pkgs.callPackage ../development/libraries/kmsxx {
+    inherit python;
+    inherit (python.pkgs) pybind11;
     withPython = true;
   }).overrideAttrs (oldAttrs: { name = "${python.libPrefix}-${pkgs.kmsxx.name}"; }));
 
