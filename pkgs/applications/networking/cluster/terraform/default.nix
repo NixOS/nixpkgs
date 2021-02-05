@@ -157,9 +157,9 @@ in rec {
   });
 
   terraform_0_14 = pluggable (generic {
-    version = "0.14.5";
-    sha256 = "0drf049zghpm3ajrn006w621s7bw5r1s8gl77nd1cj2zcw2nzn1r";
-    vendorSha256 = "0z9mkilazrkpbccnkws4hcc49djdwzn0cdbgqkm9bnp9fyg3rfvs";
+    version = "0.14.6";
+    sha256 = "0ba3vd6lswy4pd0qywdbx8cf71j5z3p8p8kdjs9m4qbyrzsbq0fk";
+    vendorSha256 = "0pk5mgj19a8by7wbn5xd6kgr1kxrazhvg851fvs8mq3j0ayb32nb";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
