@@ -57,7 +57,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.2.0";
+  hassVersion = "2021.2.1";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -76,7 +76,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "116aq683wy7sxdbxr43li90irpfbsz0dv8w0r1fghcjpwlj7ihwa";
+    sha256 = "0a8l23n6j0x1hjcifajgbrip7b4l8xcgxn2wa1lcg27p1cghrv5m";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -101,6 +101,7 @@ in with py.pkgs; buildPythonApplication rec {
     astral
     async-timeout
     attrs
+    awesomeversion
     bcrypt
     certifi
     ciso8601
@@ -205,6 +206,7 @@ in with py.pkgs; buildPythonApplication rec {
     # RuntimeError: Event loop is closed
     "test_config_path"
     "test_info_endpoint_register_callback_timeout"
+    "test_scan_match_st"
   ];
 
   preCheck = ''
