@@ -29,6 +29,8 @@ let
      Valid choices are qtwebengine (recommended) or qtwebkit.
    '';
 
+  qtVersion = with lib.versions; "qt_${major qtbase.version}${minor qtbase.version}_${patch qtbase.version}";
+
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
   version = "2.0.2";
@@ -113,6 +115,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/qutebrowser \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
+      --prefix QUTE_DARKMODE_VARIANT : ${qtVersion} \
       --add-flags '--backend ${backend}'
   '';
 
