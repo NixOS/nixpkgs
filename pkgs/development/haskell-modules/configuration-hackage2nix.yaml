@@ -73,9 +73,11 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # haskell-language-server 0.5.0.0 doesn't accept newer versions
-  - fourmolu ==0.2.*
-  - refinery ==0.2.*
+  - hls-plugin-api == 0.6.0.0           # Needed for hls 0.8.0
+  - hls-eval-plugin == 0.1.0.0          # Needed for hls 0.8.0
+  - hls-hlint-plugin == 0.1.0.0         # Needed for hls 0.8.0
+  - ghcide == 0.7.0.0                   # Needed for hls 0.8.0
+
   # Stackage Nightly 2021-02-02
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
@@ -2709,7 +2711,6 @@ extra-packages:
   - dependent-map == 0.2.4.0            # required by Hasura 1.3.1, 2020-08-20
   - dependent-sum == 0.4                # required by Hasura 1.3.1, 2020-08-20
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
-  - ghcide == 0.7.0.0                   # Needed for hls 0.8.0
   - apply-refact == 0.8.2.1             # Needed for hls 0.8.0
 
 package-maintainers:
@@ -6038,7 +6039,6 @@ broken-packages:
   - haskell-igraph
   - haskell-in-space
   - haskell-kubernetes
-  - haskell-language-server
   - haskell-lsp-client
   - haskell-ml
   - haskell-mpfr
@@ -6468,9 +6468,6 @@ broken-packages:
   - hlrdb
   - hlrdb-core
   - hls
-  - hls-explicit-imports-plugin
-  - hls-hlint-plugin
-  - hls-retrie-plugin
   - hlwm
   - hly
   - hmark
