@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub , gtk3, breeze-icons, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub , gtk3, adwaita-icon-theme, breeze-icons, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec  {
   pname = "kora-icon-theme";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec  {
   ];
 
   propagatedBuildInputs = [
+    adwaita-icon-theme
     breeze-icons
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec  {
     mv kora* $out/share/icons/
 
     for theme in $out/share/icons/*; do
-      gtk-update-icon-cache $theme
+      gtk-update-icon-cache -f $theme
     done
   '';
 
