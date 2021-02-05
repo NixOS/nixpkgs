@@ -1960,6 +1960,8 @@ in {
 
   dpkt = callPackage ../development/python-modules/dpkt { };
 
+  drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
+
   drf-yasg = callPackage ../development/python-modules/drf-yasg { };
 
   drms = callPackage ../development/python-modules/drms { };
@@ -2086,6 +2088,8 @@ in {
   etebase = callPackage ../development/python-modules/etebase {
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
   };
+
+  etebase-server = callPackage ../servers/etebase { };
 
   etesync = callPackage ../development/python-modules/etesync { };
 
