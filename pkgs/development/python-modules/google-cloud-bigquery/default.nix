@@ -4,6 +4,7 @@
 , pytestCheckHook
 , freezegun
 , google-cloud-core
+, google-cloud-storage
 , google-cloud-testutils
 , google-resumable-media
 , grpcio
@@ -11,16 +12,17 @@
 , mock
 , pandas
 , proto-plus
+, psutil
 , pyarrow
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "2.6.2";
+  version = "2.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c940bf190a681d80b6f6cd7541924ad411de5f0585b2c8c5e420ab750e2024d";
+    sha256 = "29721972f5e539e486fbdc722ddf849ad86acd092680d16c271430dc16023544";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +38,8 @@ buildPythonPackage rec {
     ipython
     mock
     pandas
+    psutil
+    google-cloud-storage
     pytestCheckHook
   ];
 
@@ -43,6 +47,12 @@ buildPythonPackage rec {
   preCheck = ''
     rm -r google
   '';
+
+  disabledTests = [
+    # requires credentials
+    "test_bigquery_magic"
+    "TestBigQuery"
+  ];
 
   pythonImportsCheck = [
     "google.cloud.bigquery"
