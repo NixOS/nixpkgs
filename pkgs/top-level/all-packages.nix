@@ -19523,6 +19523,8 @@ in
     enableCmdlib = true;
   };
 
+  maddy = callPackage ../servers/maddy/default.nix { };
+
   mbelib = callPackage ../development/libraries/audio/mbelib { };
 
   mbpfan = callPackage ../os-specific/linux/mbpfan { };
