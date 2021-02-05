@@ -1261,6 +1261,8 @@ in
 
   fitnesstrax = callPackage ../applications/misc/fitnesstrax/default.nix { };
 
+  flavours = callPackage ../applications/misc/flavours { };
+
   flood = nodePackages.flood;
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
@@ -8053,7 +8055,7 @@ in
 
   subsurface = libsForQt514.callPackage ../applications/misc/subsurface { };
 
-  sudo = if stdenv.isDarwin then darwin.sudo else callPackage ../tools/security/sudo { };
+  sudo = callPackage ../tools/security/sudo { };
 
   suidChroot = callPackage ../tools/system/suid-chroot { };
 
@@ -12972,6 +12974,8 @@ in
   xxdiff-tip = xxdiff;
 
   yaml2json = callPackage ../development/tools/yaml2json { };
+
+  yams = callPackage ../applications/audio/yams { };
 
   ycmd = callPackage ../development/tools/misc/ycmd {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -18432,6 +18436,8 @@ in
 
   storm = callPackage ../servers/computing/storm { };
 
+  switcheroo-control = callPackage ../os-specific/linux/switcheroo-control { };
+
   slurm = callPackage ../servers/computing/slurm { gtk2 = null; };
 
   slurm-spank-x11 = callPackage ../servers/computing/slurm-spank-x11 { };
@@ -19520,6 +19526,8 @@ in
     enableDmeventd = true;
     enableCmdlib = true;
   };
+
+  maddy = callPackage ../servers/maddy/default.nix { };
 
   mbelib = callPackage ../development/libraries/audio/mbelib { };
 
