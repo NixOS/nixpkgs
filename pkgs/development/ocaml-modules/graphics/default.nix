@@ -3,13 +3,13 @@
 buildDunePackage rec {
 
   pname = "graphics";
-  version = "5.1.0";
+  version = "5.1.1";
 
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/ocaml/graphics/releases/download/${version}/graphics-${version}.tbz";
-    sha256 = "16z997mp0ccilaqqvmz3wp7vx0ghaf4ik9qklgd4piklcl1yv5n5";
+    sha256 = "sha256-KGyD497ZKHA2xeXHezmh3P1zoSlre1h5N9zjkAFmMo4=";
   };
 
   buildInputs = [ dune-configurator ];
