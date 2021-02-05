@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, fetchgit
+, fetchpatch
+, fetchFromGitHub
 , buildPackages
 , pkgsCross
 }:
@@ -54,31 +55,43 @@ let
 in {
   inherit buildHardkernelFirmware;
 
-  # https://wiki.odroid.com/odroid-c2/software/building_u-boot
-  firmwareOdroidC2 = let
-    name = "odroidc2";
-    odroidc2-bl301 = fetchgit {
-      url = "https://github.com/hardkernel/u-boot_firmware.git";
-      rev = "b7b90c1099b057d35ebae886b7846b5d9bfb4143"; # "odroidc2-bl301"
-      sha256 = "0kdb1mg5zd7qyabfpbh98cs07icfzpkywvva13ybf4mf5g50g0n3";
-      deepClone = true;
-    };
-  in buildHardkernelFirmware {
+  firmwareOdroidC2 = buildHardkernelFirmware {
     defconfig = "odroidc2_config";
     name = "firmware-odroid-c2";
     version = "2015.01";
-    src = fetchgit {
-      url = "https://github.com/hardkernel/u-boot.git";
-      rev = "fac4d2da0a1b61dfdeaca0034a45151ff5983fb8"; # "odroidc2-v2015.01"
-      sha256 = "0jrpd7vww659nazyrv5af6n165akhz0h9hnxajq7gz906igc5raz";
-      leaveDotGit = true;
+    src = fetchFromGitHub {
+      owner = "hardkernel";
+      repo = "u-boot";
+      rev = "fac4d2da0a1b61dfdeaca0034a45151ff5983fb8";
+      sha256 = "09s0y69ilrwnvqi1g11axsnhylq8kfljwqxdfjifa227mi0kzq37";
     };
 
+    # https://wiki.odroid.com/odroid-c2/software/building_u-boot
     prePatch = ''
-      git remote add u-boot_firmware ${odroidc2-bl301}/
-      git fetch u-boot_firmware
-      git cherry-pick --no-commit \
-        5ce504067bb83de03d17173d5585e849df5d5a33^..${odroidc2-bl301.rev}
+      patch -p1 < ${fetchpatch {
+        url = "https://github.com/hardkernel/u-boot_firmware/commit/5ce504067bb83de03d17173d5585e849df5d5a33.patch";
+        sha256 = "0m9slsv7lwm2cf2akmx1x6mqzmfckrvw1r0nls91w6g40982qwly";
+      }}
+      patch -p1 < ${fetchpatch {
+        url = "https://github.com/hardkernel/u-boot_firmware/commit/0002fa877ca919e808e5fb7675194f17abde5d8d.patch";
+        sha256 = "0hr6037xl69v9clch8i3vr80vgfn453wcvza630mzifkkn2d1fh8";
+      }}
+      patch -p1 < ${fetchpatch {
+        url = "https://github.com/hardkernel/u-boot_firmware/commit/b129006d2bdd0aee3bc78593f9401b0873e6baf9.patch";
+        sha256 = "1bj7mb6h8njpvimjbjgv801ay97gwdgg9cd1hlv39fwqvv1nzfir";
+      }}
+      patch -p1 < ${fetchpatch {
+        url = "https://github.com/hardkernel/u-boot_firmware/commit/d3642b8329a605f641046cf25aeba935fa2f06dc.patch";
+        sha256 = "0iw06zvw8407s3r3n6v89z6jj8r6lwy0qm1izhf815qi3wxh55pq";
+      }}
+      patch -p1 < ${fetchpatch {
+        url = "https://github.com/hardkernel/u-boot_firmware/commit/911ab14f86b7c820aa3fe310b7eb7be0398292b1.patch";
+        sha256 = "1sq4mynw6iivx2xm0hp55x7r58bvfgav62d169q5mwgi9imbv6kg";
+      }}
+      patch -p1 < ${fetchpatch {
+        url = "https://github.com/hardkernel/u-boot_firmware/commit/b7b90c1099b057d35ebae886b7846b5d9bfb4143.patch";
+        sha256 = "17x5fc2rphgz6jybya7yk35j4h9iq0b7cnq2qhkq3lpw2060ldlg";
+      }}
 
       substituteInPlace ./arch/arm/cpu/armv8/gxb/firmware/scp_task/Makefile \
         --replace "CROSS_COMPILE" "CROSS_COMPILE_32"
@@ -97,11 +110,11 @@ in {
     name = "firmware-odroid-c4";
     defconfig = "odroidc4_defconfig";
     version = "2015.01";
-    src = fetchgit {
-      url = "https://github.com/hardkernel/u-boot.git";
-      rev = "90ebb7015c1bfbbf120b2b94273977f558a5da46"; # "odroidg12-v2015.01"
-      sha256 = "1v8z5m0k6a9iw0qbkn6qcwh02rsdsfax29l2ilshr39a3nj40i96";
-      leaveDotGit = true;
+    src = fetchFromGitHub {
+      owner = "hardkernel";
+      repo = "u-boot";
+      rev = "90ebb7015c1bfbbf120b2b94273977f558a5da46";
+      sha256 = "0kv9hpsgpbikp370wknbyj6r6cyhp7hng3ng6xzzqaw13yy4qiz9";
     };
 
     prePatch = ''
