@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "gradient";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15s21945hg342195ig7nchap5mdnsw931iis92pr7hy8ff0rks3n";
+    sha256 = "d0980ecf8c49cc4a48ca77fb277f3306d1831338fe72497559f5b52d076735f4";
   };
 
   postPatch = ''
