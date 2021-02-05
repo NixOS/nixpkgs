@@ -666,6 +666,12 @@ self: super:
      <varname>services.restic</varname> now uses a dedicated cache directory for every backup defined in <varname>services.restic.backups</varname>. The old global cache directory, <literal>/root/.cache/restic</literal>, is now unused and can be removed to free up disk space.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>isync</literal>: The <literal>isync</literal> compatibility wrapper was removed and the Master/Slave
+     terminology has been deprecated and should be replaced with Far/Near in the configuration file.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
