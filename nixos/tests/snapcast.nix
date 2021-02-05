@@ -4,6 +4,7 @@ let
   port = 10004;
   tcpPort = 10005;
   httpPort = 10080;
+  tcpStreamPort = 10006;
 in {
   name = "snapcast";
   meta = with pkgs.lib.maintainers; {
@@ -21,10 +22,15 @@ in {
           mpd = {
             type = "pipe";
             location = "/run/snapserver/mpd";
+            query.mode = "create";
           };
           bluetooth = {
             type = "pipe";
             location = "/run/snapserver/bluetooth";
+          };
+          tcp = {
+            type = "tcp";
+            location = "127.0.0.1:${toString tcpStreamPort}";
           };
         };
       };
@@ -42,6 +48,7 @@ in {
     server.wait_until_succeeds("ss -ntl | grep -q ${toString port}")
     server.wait_until_succeeds("ss -ntl | grep -q ${toString tcpPort}")
     server.wait_until_succeeds("ss -ntl | grep -q ${toString httpPort}")
+    server.wait_until_succeeds("ss -ntl | grep -q ${toString tcpStreamPort}")
 
     with subtest("check that pipes are created"):
         server.succeed("test -p /run/snapserver/mpd")
