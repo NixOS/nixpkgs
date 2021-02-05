@@ -210,15 +210,6 @@ in {
   ubootOdroidC2 = buildUBoot {
     defconfig = "odroid-c2_defconfig";
 
-    # Fix eMMC boot issue on meson-gxbb boards
-    # Patches are queued for U-Boot 2021.01 release
-    patches = [
-      (fetchurl { #0001-pinctrl-meson-fix-bit-manipulation-of-pin-bias-confi.patch
-        url = "https://gitlab.denx.de/u-boot/custodians/u-boot-amlogic/-/commit/5ccd5d2cc98224108ae9fb09593a862c9caa5e80.patch";
-        sha256 = "19jvfqm1gkcmgd07wyv2srpg88a42zz2x46i7kxxybvi1vx8qkyl";
-      })
-    ];
-
     postBuild = ''
       # BL301 image needs at least 64 bytes of padding after it to place
       # signing headers (with amlbootsig)
@@ -263,23 +254,6 @@ in {
     "U-Boot for Odroid C4 must be cross-compiled on x86_64-linux system. Once built, U-Boot image must be signed by 'aml_encrypt_g12a' tool, which is available for x86_64-linux platform only.");
   buildUBoot {
     defconfig = "odroid-c4_defconfig";
-
-    # Fix eMMC/SD read issues on meson-sm1/meson-gx boards.
-    # Patches are queued for U-Boot 2021.01 release
-    patches = [
-      (fetchurl { #0001-mmc-meson-gx-move-arch-header-to-local-header.patch
-        url = "https://gitlab.denx.de/u-boot/custodians/u-boot-amlogic/-/commit/77863d43eb2b40319619bbb4f781270d8f027189.patch";
-        sha256 = "10nf0klspqmy15a8bb8ybhl53x11v1cqvh20i6bxyqm10zwlqbhl";
-      })
-      (fetchurl { #0002-mmc-meson-gx-change-clock-phase-value-on-SM1-SoCs.patch
-        url = "https://gitlab.denx.de/u-boot/custodians/u-boot-amlogic/-/commit/0dbb54eb3257c243c7968f967a6b183b1edb56c8.patch";
-        sha256 = "1xwj67h50gc32y7lrj7mh56s0zhwrd1vvxrpvhb2yhf1y17jf7rc";
-      })
-      (fetchurl { #0003-ARM-dts-meson-sm1-add-u-boot-specific-MMC-controller.patch
-        url = "https://gitlab.denx.de/u-boot/custodians/u-boot-amlogic/-/commit/c87eab81616d671a6004ffc95847bad21b7eb005.patch";
-        sha256 = "11l19vx8q2a8j95liv1nwkn9cjryxk9qgmj68ya4lr4j0c5qzh7c";
-      })
-    ];
 
     postBuild = ''
       # blx_fix() resembles function from:
