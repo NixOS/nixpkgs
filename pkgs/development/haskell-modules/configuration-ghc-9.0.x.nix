@@ -100,10 +100,6 @@ self: super: {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/regex-base-0.94.0.0.patch";
     sha256 = "0k5fglbl7nnhn8400c4cpnflxcbj9p3xi5prl9jfmszr31jwdy5d";
   });
-  syb = appendPatch (dontCheck super.syb) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/master/patches/syb-0.7.1.patch";
-    sha256 = "1407r8xv6bfnmpbw7glfh4smi76a2fc9pkq300c3d9f575708zqr";
-  });
 
   # The test suite depends on ChasingBottoms, which is broken with ghc-9.0.x.
   unordered-containers = dontCheck super.unordered-containers;
