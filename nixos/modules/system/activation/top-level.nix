@@ -173,7 +173,6 @@ in
           };
 
           options.configuration = mkOption {
-            type = types.attrsOf types.anything;
             default = {};
             description = "Arbitrary NixOS configuration options.";
           };
