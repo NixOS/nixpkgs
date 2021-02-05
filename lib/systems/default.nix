@@ -112,6 +112,15 @@ rec {
         aarch64 = "arm64";
       }.${final.parsed.cpu.name} or final.parsed.cpu.name;
 
+      darwinPlatform =
+        if final.isMacOS then "macos"
+        else if final.isiOS then "ios"
+        else null;
+      # The canonical name for this attribute is darwinSdkVersion, but some
+      # platforms define the old name "sdkVer".
+      darwinSdkVersion = final.sdkVer or "10.12";
+      darwinMinVersion = final.darwinSdkVersion;
+
       emulator = pkgs: let
         qemu-user = pkgs.qemu.override {
           smartcardSupport = false;
