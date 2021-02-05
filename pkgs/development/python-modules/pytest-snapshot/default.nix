@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-snapshot";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p33fcplfykwf5mdwg25n8hjgzxpx8w1iprjnfzibpxclfrxmy5i";
+    sha256 = "77d736073598a6224825eef8b8e0c760812a61410af2180cb070b27eb79f257d";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
