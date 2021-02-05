@@ -88,5 +88,6 @@ self: super: {
 
   # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend super.ghc-lib-parser-ex self.ghc-lib-parser;
+  hls-hlint-plugin = addBuildDepend super.hls-hlint-plugin self.ghc-lib;
 
 }
