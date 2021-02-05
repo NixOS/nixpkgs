@@ -23176,6 +23176,8 @@ in
 
   lame = callPackage ../development/libraries/lame { };
 
+  labwc = callPackage ../applications/window-managers/labwc { };
+
   larswm = callPackage ../applications/window-managers/larswm { };
 
   lash = callPackage ../applications/audio/lash { };
