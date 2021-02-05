@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "helper";
-  version = "2.4.2";
+  version = "2.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0p56dvjpaz9wnr0ik2wmvgqjf9ji180bhjky7q272l5dan94lgd6";
+    sha256 = "4af39471d25c8820f505bc5c5b1447878bdbec0781c60d73d9ffbdf5383152b4";
   };
 
   checkInputs = [ mock ];
