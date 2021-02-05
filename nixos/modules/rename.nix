@@ -70,6 +70,7 @@ with lib;
     '')
 
     (mkRemovedOptionModule [ "services" "seeks" ] "")
+    (mkRemovedOptionModule [ "services" "venus" ] "The corresponding package was removed from nixpkgs.")
 
     # Do NOT add any option renames here, see top of the file
   ];
