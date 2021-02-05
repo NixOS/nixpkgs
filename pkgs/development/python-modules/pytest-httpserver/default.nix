@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pytest-asyncio
 , pytest-cov
 , pytestCheckHook
@@ -11,21 +10,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpserver";
-  version = "0.3.6";
+  version = "0.3.7";
 
   src = fetchPypi {
     pname = "pytest_httpserver";
     inherit version;
-    sha256 = "1wdhbzv6x2v4qsqwgsc5660c4lxplh9b61vfj1zqhbhs36y96vl9";
+    sha256 = "sha256-YgTcrUlwh2jz0tJdMUgjm8RcqrtpJ/oUQm3SnxUc5Z4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "remove-pytest-runner.patch";
-      url = "https://github.com/csernazs/pytest-httpserver/commit/c9752018bc2f13d141dd52c92df75c19ea388836.patch";
-      sha256 = "0b76ywzl2gwddbqqlb662mfv5j42l88l5hffm7jbxzvqbz94mx3k";
-    })
-  ];
 
   propagatedBuildInputs = [ werkzeug ];
 
