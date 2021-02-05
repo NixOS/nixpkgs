@@ -19,13 +19,12 @@
 , jre8
 , pipewire_0_2
 , libva
+, libdrm, wayland, mesa, libxkbcommon # Ozone
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
-, libdrm ? null, wayland ? null, mesa ? null, libxkbcommon ? null # useOzone
 
 # package customization
-, useOzone ? true
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -143,11 +142,11 @@ let
       jre
       pipewire_0_2
       libva
+      libdrm wayland mesa.drivers libxkbcommon
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio
-      ++ optionals useOzone [ libdrm wayland mesa.drivers libxkbcommon ];
+      ++ optional pulseSupport libpulseaudio;
 
     patches = [
       ./patches/no-build-timestamps.patch # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed)
@@ -226,11 +225,11 @@ let
     '';
 
     gnFlags = mkGnFlags ({
+      is_official_build = true;
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
       host_toolchain = "//build/toolchain/linux/unbundle:default";
-      is_official_build = true;
+      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
 
-      use_vaapi = !stdenv.isAarch64; # TODO: Remove once M88 is released
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
       use_gio = gnomeSupport;
@@ -266,15 +265,6 @@ let
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
-    } // optionalAttrs useOzone {
-      use_ozone = true;
-      use_xkbcommon = true;
-      use_glib = true;
-      use_gtk = true;
-      use_system_libwayland = true;
-      use_system_minigbm = true;
-      use_system_libdrm = true;
-      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
     } // optionalAttrs (chromiumVersionAtLeast "89") {
       # Disable PGO (defaults to 2 since M89) because it fails without additional changes:
       # error: Could not read profile ../../chrome/build/pgo_profiles/chrome-linux-master-1610647094-405a32bcf15e5a84949640f99f84a5b9f61e2f2e.profdata: Unsupported instrumentation profile format version
