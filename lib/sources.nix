@@ -17,8 +17,6 @@ let
     pathExists
     readFile
     ;
-in
-rec {
 
   # Returns the type of a path: regular (for file), symlink, or directory
   pathType = p: getAttr (baseNameOf p) (readDir (dirOf p));
@@ -84,16 +82,11 @@ rec {
   #
   cleanSourceWith = { filter ? _path: _type: true, src, name ? null }:
     let
-      isFiltered = src ? _isLibCleanSourceWith;
-      origSrc = if isFiltered then src.origSrc else src;
-      filter' = if isFiltered then name: type: filter name type && src.filter name type else filter;
-      name' = if name != null then name else if isFiltered then src.name else "source";
-    in {
-      inherit origSrc;
-      filter = filter';
-      outPath = builtins.path { filter = filter'; path = origSrc; name = name'; };
-      _isLibCleanSourceWith = true;
-      name = name';
+      orig = toSourceAttributes src;
+    in fromSourceAttributes {
+      inherit (orig) origSrc;
+      filter = path: type: filter path type && orig.filter path type;
+      name = if name != null then name else orig.name;
     };
 
   # Filter sources by a list of regular expressions.
@@ -177,4 +170,55 @@ rec {
   pathHasContext = builtins.hasContext or (lib.hasPrefix storeDir);
 
   canCleanSource = src: src ? _isLibCleanSourceWith || !(pathHasContext (toString src));
+
+  # -------------------------------------------------------------------------- #
+  # Internal functions
+  #
+
+  # toSourceAttributes : sourceLike -> SourceAttrs
+  #
+  # Convert any source-like object into a simple, singular representation.
+  # We don't expose this representation in order to avoid having a fifth path-
+  # like class of objects in the wild.
+  # (Existing ones being: paths, strings, sources and x//{outPath})
+  # So instead of exposing internals, we build a library of combinator functions.
+  toSourceAttributes = src:
+    let
+      isFiltered = src ? _isLibCleanSourceWith;
+    in
+    {
+      # The original path
+      origSrc = if isFiltered then src.origSrc else src;
+      filter = if isFiltered then src.filter else _: _: true;
+      name = if isFiltered then src.name else "source";
+    };
+
+  # fromSourceAttributes : SourceAttrs -> Source
+  #
+  # Inverse of toSourceAttributes for Source objects.
+  fromSourceAttributes = { origSrc, filter, name }:
+    {
+      _isLibCleanSourceWith = true;
+      inherit origSrc filter name;
+      outPath = builtins.path { inherit filter name; path = origSrc; };
+    };
+
+in {
+  inherit
+    pathType
+    pathIsDirectory
+    pathIsRegularFile
+
+    pathIsGitRepo
+    commitIdFromGitRepo
+
+    cleanSource
+    cleanSourceWith
+    cleanSourceFilter
+    pathHasContext
+    canCleanSource
+
+    sourceByRegex
+    sourceFilesBySuffices
+    ;
 }
