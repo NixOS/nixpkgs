@@ -7561,6 +7561,7 @@ broken-packages:
   - libxml-enumerator
   - libxslt
   - lie
+  - lifetimes
   - lifted-base-tf
   - lifted-protolude
   - lifter
