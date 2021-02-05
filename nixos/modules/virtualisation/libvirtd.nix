@@ -169,6 +169,9 @@ in {
       source = "/run/${dirName}/nix-helpers/qemu-bridge-helper";
     };
 
+    # required for usb redirection in virt manager
+    virtualisation.spiceUSBRedirection.enable = lib.mkDefault true;
+
     systemd.packages = [ pkgs.libvirt ];
 
     systemd.services.libvirtd-config = {
