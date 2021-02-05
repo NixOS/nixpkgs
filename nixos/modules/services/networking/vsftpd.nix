@@ -158,9 +158,8 @@ in
       };
 
       userlistFile = mkOption {
-        type = types.path;
-        default = pkgs.writeText "userlist" (concatMapStrings (x: "${x}\n") cfg.userlist);
-        defaultText = "pkgs.writeText \"userlist\" (concatMapStrings (x: \"\${x}\n\") cfg.userlist)";
+        type = types.nullOr types.path;
+        default = null;
         description = ''
           Newline separated list of names to be allowed/denied if <option>userlistEnable</option>
           is <literal>true</literal>. Meaning see <option>userlistDeny</option>.
@@ -279,7 +278,12 @@ in
         assertion = (cfg.enableVirtualUsers -> cfg.userDbPath != null)
                  && (cfg.enableVirtualUsers -> cfg.localUsers != null);
         message = "vsftpd: If enableVirtualUsers is true, you need to setup both the userDbPath and localUsers options.";
-      }];
+      }
+      {
+        assertion = (cfg.userListFile == null ) ||  (cfg.userlist == []);
+        message = "vsftpd: You can only use userListFile or userlist not both";
+      }
+    ];
 
     users.users = {
       "vsftpd" = {
@@ -300,9 +304,12 @@ in
 
     users.groups.ftp.gid = config.ids.gids.ftp;
 
+
     # If you really have to access root via FTP use mkOverride or userlistDeny
     # = false and whitelist root
     services.vsftpd.userlist = if cfg.userlistDeny then ["root"] else [];
+
+    services.vsftpd.userlistFile = lib.mkIf (cfg.userlist != []) (pkgs.writeText "userlist" (concatMapStrings (x: "${x}\n") cfg.userlist));
 
     systemd = {
       tmpfiles.rules = optional cfg.anonymousUser
