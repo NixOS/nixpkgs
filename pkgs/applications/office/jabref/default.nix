@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, wrapGAppsHook, gtk3, gsettings-desktop-schemas
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, wrapGAppsHook, gtk3, gsettings-desktop-schemas, xdg_utils
 , zlib , libX11, libXext, libXi, libXrender, libXtst, libGL, alsaLib, libav, cairo, freetype, pango, gdk-pixbuf, glib }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
   buildInputs = [ gsettings-desktop-schemas ] ++ systemLibs;
+  propagatedBuildInputs = [ xdg_utils ];
 
   systemLibs = [ gtk3 zlib libX11 libXext libXi libXrender libXtst libGL alsaLib libav cairo freetype pango gdk-pixbuf glib ];
   systemLibPaths = lib.makeLibraryPath systemLibs;
