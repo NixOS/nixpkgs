@@ -42,7 +42,7 @@
 
 let
   version = "2.31";
-  patchSuffix = "";
+  patchSuffix = "-74";
   sha256 = "05zxkyz9bv3j9h0xyid1rhvh3klhsmrpkf3bcs6frvlgyr2gwilj";
 in
 
@@ -59,6 +59,15 @@ stdenv.mkDerivation ({
 
   patches =
     [
+      /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git
+         and using git or something would complicate bootstrapping.
+         Fortunately it's not too big.
+          $ git checkout origin/release/2.31/master; git describe
+          glibc-2.31-74-gd0c84d22b6
+          $ git show --reverse glibc-2.31.. | gzip -n -9 --rsyncable - > 2.31-master.patch.gz
+       */
+      ./2.31-master.patch.gz
+
       /* Have rpcgen(1) look for cpp(1) in $PATH.  */
       ./rpcgen-path.patch
 
@@ -113,10 +122,6 @@ stdenv.mkDerivation ({
       })
 
       ./fix-x64-abi.patch
-      ./2.30-cve-2020-1752.patch
-      ./2.31-cve-2020-10029.patch
-      ./2.31-cve-2020-6096.0.patch
-      ./2.31-cve-2020-6096.1.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
