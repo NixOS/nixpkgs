@@ -5562,6 +5562,12 @@
     githubId = 2057309;
     name = "Sergey Sofeychuk";
   };
+  lxea = {
+    email = "nix@amk.ie";
+    github = "lxea";
+    githubId = 7910815;
+    name = "Alex McGrath";
+  };
   lynty = {
     email = "ltdong93+nix@gmail.com";
     github = "lynty";
