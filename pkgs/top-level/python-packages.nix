@@ -5929,6 +5929,8 @@ in {
 
   pyslurm = callPackage ../development/python-modules/pyslurm { slurm = pkgs.slurm; };
 
+  pysma = callPackage ../development/python-modules/pysma { };
+
   pysmb = callPackage ../development/python-modules/pysmb { };
 
   pysmbc = callPackage ../development/python-modules/pysmbc { inherit (pkgs) pkg-config; };
