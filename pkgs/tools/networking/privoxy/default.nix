@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   pname = "privoxy";
-  version = "3.0.30";
+  version = "3.0.31";
 
   src = fetchurl {
     url = "mirror://sourceforge/ijbswa/Sources/${version}%20%28stable%29/${pname}-${version}-stable-src.tar.gz";
-    sha256 = "sha256-pP4kHF2nAQsoS/ienp4xoyHx8+scx5ZVnT+6ublBXuE=";
+    sha256 = "sha256-B3cpo6rHkiKk6NiKZQ2QKNFv1LDWA42o9fXkcSDQBOs=";
   };
 
   hardeningEnable = [ "pie" ];
