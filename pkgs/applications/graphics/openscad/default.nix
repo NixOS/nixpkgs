@@ -29,13 +29,13 @@
 
 mkDerivation rec {
   pname = "openscad";
-  version = "2019.05";
+  version = "2021.01";
 
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
     rev = "${pname}-${version}";
-    sha256 = "1qz384jqgk75zxk7sqd22ma9pyd94kh4h6a207ldx7p9rny6vc5l";
+    sha256 = "sha256-2tOLqpFt5klFPxHNONnHVzBKEFWn4+ufx/MU+eYbliA=";
   };
 
   nativeBuildInputs = [ bison flex pkg-config gettext qmake ];
