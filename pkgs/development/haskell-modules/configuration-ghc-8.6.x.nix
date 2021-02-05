@@ -94,4 +94,6 @@ self: super: {
 
   # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
   exceptions = super.exceptions_0_10_4;
+
+  mmorph = super.mmorph_1_1_3;
 }
