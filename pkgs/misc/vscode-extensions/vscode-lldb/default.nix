@@ -95,6 +95,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/vadimcn/vscode-lldb";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ oxalica ];
-    platforms = platforms.all;
+    # Build failed on x86_64-darwin.
+    platforms = [ "x86_64-linux" ];
   };
 }
