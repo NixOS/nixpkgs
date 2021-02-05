@@ -49,6 +49,7 @@ let
     , meta
     , buildInputs ? []
     , everythingFile ? "./Everything.agda"
+    , includePaths ? []
     , libraryName ? pname
     , libraryFile ? "${libraryName}.agda-lib"
     , buildPhase ? null
@@ -57,6 +58,7 @@ let
     , ...
     }: let
       agdaWithArgs = withPackages (builtins.filter (p: p ? isAgdaDerivation) buildInputs);
+      includePathArgs = concatMapStrings (path: "-i" + path + " ") (includePaths ++ [(dirOf everythingFile)]);
     in
       {
         inherit libraryName libraryFile;
@@ -67,7 +69,7 @@ let
 
         buildPhase = if buildPhase != null then buildPhase else ''
           runHook preBuild
-          agda -i ${dirOf everythingFile} ${everythingFile}
+          agda ${includePathArgs} ${everythingFile}
           runHook postBuild
         '';
 
