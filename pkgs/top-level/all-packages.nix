@@ -8053,7 +8053,7 @@ in
 
   subsurface = libsForQt514.callPackage ../applications/misc/subsurface { };
 
-  sudo = if stdenv.isDarwin then darwin.sudo else callPackage ../tools/security/sudo { };
+  sudo = callPackage ../tools/security/sudo { };
 
   suidChroot = callPackage ../tools/system/suid-chroot { };
 
