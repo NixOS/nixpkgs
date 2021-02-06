@@ -6,7 +6,7 @@
 , libGLU, libGL, perl, python2, libpulseaudio
 , unzip, xorg, wget, which, yasm, zip, zlib
 
-, withGTK3 ? false, gtk3
+, withGTK3 ? true, gtk3
 }:
 
 let
@@ -16,14 +16,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "28.17.0";
+  version = "29.0.0";
 
   src = fetchFromGitHub {
     githubBase = "repo.palemoon.org";
     owner = "MoonchildProductions";
     repo = "Pale-Moon";
     rev = "${version}_Release";
-    sha256 = "0478xn5skpls91hkraykc308hppdc8vj9xbgvlm5wkv0y4dp7h5x";
+    sha256 = "1v870kxbl7b0kazd6krjiarvbjwmv13hgwkzpi054i9cf8z7pyiv";
     fetchSubmodules = true;
   };
 
@@ -119,6 +119,9 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     ./mach install
 
+    # Fix missing icon due to wrong WMClass
+    substituteInPlace ./palemoon/branding/official/palemoon.desktop \
+      --replace 'StartupWMClass="pale moon"' 'StartupWMClass=Pale moon'
     desktop-file-install --dir=$out/share/applications \
       ./palemoon/branding/official/palemoon.desktop
 

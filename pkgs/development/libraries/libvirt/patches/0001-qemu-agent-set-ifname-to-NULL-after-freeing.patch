@@ -1,0 +1,34 @@
+From 88002560d48ae7b778c6be5b8daa21ea443e52e1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Fri, 18 Sep 2020 17:56:37 +0200
+Subject: [PATCH 4/4] qemu: agent: set ifname to NULL after freeing
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CVE-2020-25637
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+Reported-by: Ilja Van Sprundel <ivansprundel@ioactive.com>
+Fixes: 0977b8aa071de550e1a013d35e2c72615e65d520
+Reviewed-by: Mauro Matteo Cascella <mcascell@redhat.com>
+Reviewed-by: Jiri Denemark <jdenemar@redhat.com>
+---
+ src/qemu/qemu_agent.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/qemu/qemu_agent.c b/src/qemu/qemu_agent.c
+index d7fcc869c6..31d3268d42 100644
+--- a/src/qemu/qemu_agent.c
++++ b/src/qemu/qemu_agent.c
+@@ -2166,6 +2166,7 @@ qemuAgentGetInterfaces(qemuAgentPtr agent,
+ 
+         /* Has to be freed for each interface. */
+         virStringListFree(ifname);
++        ifname = NULL;
+ 
+         /* as well as IP address which - moreover -
+          * can be presented multiple times */
+-- 
+2.30.0
+
