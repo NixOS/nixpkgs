@@ -1,7 +1,7 @@
-{ lib, appleDerivation, xcbuildHook }:
+{ lib, appleDerivation, xcbuildHook, launchd }:
 
 appleDerivation {
-  nativeBuildInputs = [ xcbuildHook ];
+  nativeBuildInputs = [ xcbuildHook launchd ];
 
   patchPhase = ''
     # NOTE: these hashes must be recalculated for each version change
