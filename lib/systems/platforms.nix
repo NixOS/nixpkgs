@@ -309,9 +309,6 @@ rec {
         SERIAL_8250_EXTENDED y
         SERIAL_8250_SHARE_IRQ y
 
-        # Fix broken sunxi-sid nvmem driver.
-        TI_CPTS y
-
         # Hangs ODROID-XU4
         ARM_BIG_LITTLE_CPUIDLE n
 
