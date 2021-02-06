@@ -1,26 +1,17 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
-  name = "html2text-1.3.2a";
+stdenv.mkDerivation rec {
+  pname = "html2text";
+  version = "2.0.0";
 
-  src = fetchurl {
-    url = "http://www.mbayer.de/html2text/downloads/html2text-1.3.2a.tar.gz";
-    sha256 = "000b39d5d910b867ff7e087177b470a1e26e2819920dcffd5991c33f6d480392";
+  src = fetchFromGitHub {
+    owner = "grobian";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0f1hpkxbg29rccx3lh2360lyry04f1zw5lq1nawhj3rrzlrkjgcl";
   };
 
-  preConfigure = ''
-    substituteInPlace configure \
-        --replace /bin/echo echo \
-        --replace CXX=unknown ':'
-  '';
-
-  # the --prefix has no effect
-  installPhase = ''
-    mkdir -p $out/bin $out/man/man{1,5}
-    cp html2text $out/bin
-    cp html2text.1.gz $out/man/man1
-    cp html2textrc.5.gz $out/man/man5
-  '';
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
     description = "Convert HTML to plain text";
