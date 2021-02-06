@@ -49,6 +49,8 @@ buildPythonPackage rec {
     responses
   ];
 
+  pythonImportsCheck = [ "slack" ];
+
   meta = with lib; {
     description = "A client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API";
     homepage = "https://github.com/slackapi/python-slackclient";

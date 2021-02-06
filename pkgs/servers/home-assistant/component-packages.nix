@@ -744,7 +744,7 @@
     "slack" = ps: with ps; [ ]; # missing inputs: slackclient
     "sleepiq" = ps: with ps; [ ]; # missing inputs: sleepyq
     "slide" = ps: with ps; [ ]; # missing inputs: goslide-api
-    "sma" = ps: with ps; [ ]; # missing inputs: pysma
+    "sma" = ps: with ps; [ pysma ];
     "smappee" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pysmappee
     "smart_meter_texas" = ps: with ps; [ ]; # missing inputs: smart-meter-texas
     "smarthab" = ps: with ps; [ ]; # missing inputs: smarthab

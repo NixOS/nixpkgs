@@ -107,8 +107,16 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/18549
   patches = [
+    # See upstream patch at
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/4885. Since we build
+    # from source distributions, the auto-generated configure script needs to be
+    # patched as well, therefore we use an in-tree patch instead of pulling the
+    # upstream patch. Don't forget to check backport status of the upstream patch
+    # when adding new GHC releases in nixpkgs.
+    ./respect-ar-path.patch
+
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/18549
     ./issue-18549.patch
   ] ++ lib.optionals stdenv.isDarwin [
     # Make Block.h compile with c++ compilers. Remove with the next release

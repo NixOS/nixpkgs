@@ -120,7 +120,7 @@ let
   # with generated bindata yet.
   k3sBuildStage1 = buildGoPackage rec {
     name = "k3s-build-1";
-    version = "${k3sVersion}";
+    version = k3sVersion;
 
     goPackagePath = "github.com/rancher/k3s";
 
@@ -160,7 +160,7 @@ let
   };
   k3sBin = buildGoPackage rec {
     name = "k3s-bin";
-    version = "${k3sVersion}";
+    version = k3sVersion;
 
     goPackagePath = "github.com/rancher/k3s";
 
