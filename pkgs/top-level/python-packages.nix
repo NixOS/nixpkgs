@@ -2841,6 +2841,8 @@ in {
 
   gumath = callPackage ../development/python-modules/gumath { };
 
+  gusmobile = callPackage ../development/python-modules/gusmobile { };
+
   gunicorn = if isPy27 then
     callPackage ../development/python-modules/gunicorn/19.nix { }
   else
