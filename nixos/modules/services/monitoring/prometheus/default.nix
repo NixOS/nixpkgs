@@ -383,7 +383,11 @@ let
       '';
 
       relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
-        List of relabel configurations.
+        List of target relabel configurations.
+      '';
+
+      metric_relabel_configs = mkOpt (types.listOf promTypes.relabel_config) ''
+        List of metric relabel configurations.
       '';
 
       sample_limit = mkDefOpt types.int "0" ''
