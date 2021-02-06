@@ -3,11 +3,11 @@
 with lib;
 
 let
-   cfg = config.services.dunst;
-   reservedSections = [
-     "global" "experimental" "frame" "shortcuts"
-     "urgency_low" "urgency_normal" "urgency_critical"
-   ];
+  cfg = config.services.dunst;
+  reservedSections = [
+    "global" "experimental" "frame" "shortcuts"
+    "urgency_low" "urgency_normal" "urgency_critical"
+  ];
 in {
 
 options.services.dunst = {
