@@ -51,5 +51,11 @@ buildGoPackage rec {
     homepage = "https://gogs.io";
     license = licenses.mit;
     maintainers = [ maintainers.schneefux ];
+    knownVulnerabilities = [
+      "CVE-2018-15178"
+      "CVE-2020-9329"
+      "CVE-2020-14958"
+      "CVE-2020-15867"
+    ];
   };
 }
