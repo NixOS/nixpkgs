@@ -9,7 +9,7 @@
 , imagemagick
 , netcat-gnu
 , p7zip
-, python2
+, python3
 , unzip
 , wget
 , wine
@@ -54,9 +54,10 @@ let
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: lib.makeLibraryPath [ xorg.libX11 libGL ];
 
-  python = python2.withPackages(ps: with ps; [
-    wxPython
+  python = python3.withPackages(ps: with ps; [
+    wxPython_4_1
     setuptools
+    natsort
   ]);
 
 in stdenv.mkDerivation {
@@ -68,7 +69,16 @@ in stdenv.mkDerivation {
     sha256 = "0n40927c8cnjackfns68zwl7h4d7dvhf7cyqdkazzwwx4k2xxvma";
   };
 
+  patches = [
+    ./0001-fix-locale.patch
+  ];
+
   nativeBuildInputs = [ makeWrapper ];
+
+  preBuild = ''
+    makeFlagsArray+=(PYTHON="python -m py_compile")
+  '';
+
 
   buildInputs = [
     xorg.libX11
@@ -77,6 +87,7 @@ in stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    substituteAllInPlace python/lib/lng.py
     patchShebangs python tests/python
     sed -i "s/ %F//g" etc/PlayOnLinux.desktop
   '';
