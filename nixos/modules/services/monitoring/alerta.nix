@@ -95,7 +95,7 @@ in
         ALERTA_SVR_CONF_FILE = alertaConf;
       };
       serviceConfig = {
-        ExecStart = "${pkgs.python36Packages.alerta-server}/bin/alertad run --port ${toString cfg.port} --host ${cfg.bind}";
+        ExecStart = "${pkgs.alerta-server}/bin/alertad run --port ${toString cfg.port} --host ${cfg.bind}";
         User = "alerta";
         Group = "alerta";
       };

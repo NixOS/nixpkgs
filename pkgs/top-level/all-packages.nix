@@ -17733,6 +17733,8 @@ in
 
   adguardhome = callPackage ../servers/adguardhome {};
 
+  alerta-server = callPackage ../servers/monitoring/alerta { };
+
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
   apacheHttpd = pkgs.apacheHttpd_2_4;
 
