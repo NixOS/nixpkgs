@@ -101,7 +101,20 @@ options.services.dunst = {
 
 config =
   let
-    dunstConfig = lib.generators.toINI {} allOptions;
+    dunstValueString = v: with builtins;
+      let err = t: v: abort
+        ("generators.mkValueStringDefault: " +
+         "${t} not supported: ${toPretty {} v}");
+      in   if isInt      v then toString v
+      else if isString   v then ''"${v}"''
+      else if true  ==   v then "true"
+      else if false ==   v then "false"
+      else err "this value is" (toString v);
+    dunstConfig = lib.generators.toINI {
+      mkKeyValue = lib.generators.mkKeyValueDefault {
+        mkValueString = dunstValueString;
+      } "=";
+    } allOptions;
     allOptions = {
       global = cfg.globalConfig;
       shortcut = cfg.shortcutConfig;
