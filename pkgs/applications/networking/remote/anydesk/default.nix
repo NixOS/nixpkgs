@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem
+{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, genericUpdater, writeShellScript
 , atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg
 , lsb-release, freetype, fontconfig, polkit, polkit_gnome
 , pulseaudio }:
@@ -26,6 +26,19 @@ in stdenv.mkDerivation rec {
       "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
     ];
     sha256 = "1qbq6r0yanjappsi8yglw8r54bwf32bjb2i63awmr6pk5kmhhy3r";
+  };
+
+  passthru = {
+    updateScript = genericUpdater {
+      inherit pname version;
+      versionLister = writeShellScript "anydesk-versionLister" ''
+        echo "# Versions for $1:" >> "$2"
+        curl -s https://anydesk.com/en/downloads/linux \
+          | grep "https://[a-z0-9._/-]*-amd64.tar.gz" -o \
+          | uniq \
+          | sed 's,.*/anydesk-\(.*\)-amd64.tar.gz,\1,g'
+      '';
+    };
   };
 
   buildInputs = [
