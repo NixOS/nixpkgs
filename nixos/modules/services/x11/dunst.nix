@@ -49,6 +49,14 @@ options.services.dunst = {
     '';
   };
 
+  frameConfig = mkOption {
+    type = with types; attrsOf (oneOf [bool str int]);
+    default = {};
+    description = ''
+      The frame configuration for dunst.
+    '';
+  };
+
   urgencyConfig = {
     low = mkOption {
       type = with types; attrsOf (oneOf [bool str int]);
@@ -71,6 +79,14 @@ options.services.dunst = {
         The critical urgency section of the dunst configuration.
       '';
     };
+  };
+
+  experimentalConfig = mkOption {
+    type = with types; attrsOf (oneOf [bool str int]);
+    default = {};
+    description = ''
+      The experimental configuration for dunst.
+    '';
   };
 
   rules = mkOption {
@@ -118,6 +134,8 @@ config =
     allOptions = {
       global = cfg.globalConfig;
       shortcut = cfg.shortcutConfig;
+      frameConfig = cfg.frameConfig;
+      experimental = cfg.experimentalConfig;
       urgency_normal = cfg.urgencyConfig.normal;
       urgency_low = cfg.urgencyConfig.low;
       urgency_critical = cfg.urgencyConfig.critical;
