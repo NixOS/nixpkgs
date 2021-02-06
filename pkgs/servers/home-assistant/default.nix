@@ -127,6 +127,8 @@ in with py.pkgs; buildPythonApplication rec {
     yarl
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
+  makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
+
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.isLinux;
 
@@ -139,49 +141,151 @@ in with py.pkgs; buildPythonApplication rec {
     requests-mock
     # component dependencies
     pyotp
+    respx
   ] ++ lib.concatMap (component: getPackages component py.pkgs) componentTests;
 
-  # We cannot test all components, since they'd introduce lots of dependencies, some of which are unpackaged,
-  # but we should test very common stuff, like what's in `default_config`.
-  # https://github.com/home-assistant/core/commits/dev/homeassistant/components/default_config/manifest.json
+  # We can reasonably test components that don't communicate with any network
+  # services. Before adding new components to this list make sure we have all
+  # its dependencies packaged and listed in ./component-packages.nix.
   componentTests = [
+    "alert"
     "api"
+    "auth"
     "automation"
+    "bayesian"
+    "binary_sensor"
+    "caldav"
+    "calendar"
+    "camera"
+    "climate"
+    "cloud"
+    "command_line"
     "config"
     "configurator"
+    "conversation"
     "counter"
+    "cover"
     "default_config"
     "demo"
+    "derivative"
+    "device_automation"
+    "device_sun_light_trigger"
+    "device_tracker"
     "dhcp"
     "discovery"
+    "emulated_hue"
+    "esphome"
+    "fan"
+    "ffmpeg"
+    "file"
+    "filesize"
+    "filter"
+    "flux"
+    "folder"
+    "folder_watcher"
+    "fritzbox"
+    "fritzbox_callmonitor"
     "frontend"
+    "generic"
+    "generic_thermostat"
+    "geo_json_events"
+    "geo_location"
     "group"
+    "hddtemp"
     "history"
+    "history_stats"
     "homeassistant"
+    "html5"
     "http"
     "hue"
+    "ifttt"
+    "image"
+    "image_processing"
+    "influxdb"
     "input_boolean"
     "input_datetime"
     "input_text"
     "input_number"
     "input_select"
+    "intent"
+    "intent_script"
+    "ipp"
+    "light"
+    "local_file"
+    "local_ip"
+    "lock"
     "logbook"
+    "logentries"
     "logger"
+    "lovelace"
+    "manual"
+    "manual_mqtt"
+    "media_player"
     "media_source"
+    "met"
     "mobile_app"
+    "modbus"
+    "moon"
+    "mqtt"
+    "mqtt_eventstream"
+    "mqtt_json"
+    "mqtt_room"
+    "mqtt_statestream"
+    "notify"
+    "number"
+    "ozw"
+    "panel_custom"
+    "panel_iframe"
+    "persistent_notification"
     "person"
+    "prometheus"
+    "proximity"
+    "push"
+    "python_script"
+    "random"
+    "recorder"
+    "rest"
+    "rest_command"
+    "rmvtransport"
+    "rss_feed_template"
+    "safe_mode"
     "scene"
     "script"
+    "search"
     "shell_command"
+    "shopping_list"
+    "simulated"
+    "sensor"
+    "smtp"
+    "sql"
     "ssdp"
+    "stream"
     "sun"
+    "switch"
     "system_health"
     "system_log"
     "tag"
+    "tasmota"
+    "tcp"
+    "template"
+    "threshold"
+    "time_date"
     "timer"
+    "tod"
+    "tts"
+    "universal"
+    "updater"
+    "upnp"
+    "uptime"
+    "vacuum"
+    "weather"
     "webhook"
     "websocket_api"
+    "wled"
+    "workday"
+    "worldclock"
     "zeroconf"
+    "zha"
     "zone"
     "zwave"
   ];
@@ -191,12 +295,17 @@ in with py.pkgs; buildPythonApplication rec {
     "-n 2"
     # assign tests grouped by file to workers
     "--dist loadfile"
-    # don't bulk test all components
-    "--ignore tests/components"
-    # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0
-    "--ignore tests/auth/mfa_modules/test_notify.py"
+    # tests are located in tests/
     "tests"
+    # dynamically add packages required for component tests
   ] ++ map (component: "tests/components/" + component) componentTests;
+
+  disabledTestPaths = [
+    # don't bulk test all components
+    "tests/components"
+    # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0
+    "tests/auth/mfa_modules/test_notify.py"
+  ];
 
   disabledTests = [
     # AssertionError: assert 1 == 0
@@ -212,8 +321,6 @@ in with py.pkgs; buildPythonApplication rec {
     # the tests require the existance of a media dir
     mkdir /build/media
   '';
-
-  makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
   passthru = {
     inherit (py.pkgs) hass-frontend;
