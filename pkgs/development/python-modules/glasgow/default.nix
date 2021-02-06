@@ -18,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "glasgow";
-  version = "unstable-2020-06-29";
+  version = "unstable-2021-01-09";
   # python software/setup.py --version
-  realVersion = "0.1.dev1352+g${lib.substring 0 7 src.rev}";
+  realVersion = "0.1.dev1654+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "f885790d7927b893e631c33744622d6ebc18b5e3";
-    sha256 = "sha256-fSorSEa5K09aPEOk4XPWOFRxYl1KGVy29jOBqIvs2hk=";
+    rev = "b1985b3c46b7aebc426f70ca22c5f1e05376238b";
+    sha256 = "sha256-rHz8jbAn8N6xFxDcVu6cEtcvvA8/lKrmcMrITdcApXI=";
   };
 
   nativeBuildInputs = [ setuptools_scm sdcc ];
