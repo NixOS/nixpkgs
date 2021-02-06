@@ -101,7 +101,7 @@ in
       };
     };
 
-    environment.systemPackages = [ pkgs.python36Packages.alerta ];
+    environment.systemPackages = [ pkgs.alerta ];
 
     users.users.alerta = {
       uid = config.ids.uids.alerta;
