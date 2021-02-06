@@ -5138,6 +5138,12 @@
     githubId = 45168934;
     name = "Louis Blin";
   };
+  lcycon = {
+    email = "luke@lukecycon.com";
+    github = "lcycon";
+    githubId = 471773;
+    name = "Luke Cycon";
+  };
   lucc = {
     email = "lucc+nix@posteo.de";
     github = "lucc";
