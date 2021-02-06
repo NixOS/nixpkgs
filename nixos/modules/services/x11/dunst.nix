@@ -238,9 +238,9 @@ options.services.dunst = {
 
 config =
   let
-    dunstValueString = v: with builtins;
+    dunstValue = v: with builtins;
       let err = t: v: abort
-        ("generators.mkValueStringDefault: " +
+        ("dunstValue: " +
          "${t} not supported: ${toPretty {} v}");
       in   if isInt      v then toString v
       else if isString   v then ''"${v}"''
@@ -249,7 +249,7 @@ config =
       else err "this value is" (toString v);
     dunstConfig = lib.generators.toINI {
       mkKeyValue = lib.generators.mkKeyValueDefault {
-        mkValueString = dunstValueString;
+        mkValueString = dunstValue;
       } "=";
     } allOptions;
     allOptions = {
