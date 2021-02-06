@@ -1,11 +1,11 @@
-{ config, stdenv, lib, callPackage, fetchurl, nss_3_44 }:
+{ config, stdenv, lib, callPackage, fetchurl, rustPackages_1_44, rustPackages_1_49 }:
 
 let
-  common = opts: callPackage (import ./common.nix opts) {};
+  commonCP = opts: callPackage (import ./common.nix opts);
 in
 
 rec {
-  firefox = common rec {
+  firefox = commonCP rec {
     pname = "firefox";
     ffversion = "85.0";
     src = fetchurl {
@@ -27,9 +27,11 @@ rec {
       attrPath = "firefox-unwrapped";
       versionKey = "ffversion";
     };
-  };
+  }
+  { inherit (rustPackages_1_49) cargo rustc; }
+  ;
 
-  firefox-esr-78 = common rec {
+  firefox-esr-78 = commonCP rec {
     pname = "firefox-esr";
     ffversion = "78.7.0esr";
     src = fetchurl {
@@ -51,5 +53,7 @@ rec {
       attrPath = "firefox-esr-78-unwrapped";
       versionKey = "ffversion";
     };
-  };
+  }
+  { inherit (rustPackages_1_44) cargo rustc; }
+  ;
 }
