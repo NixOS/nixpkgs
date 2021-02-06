@@ -94,4 +94,9 @@ self: super: {
 
   # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
   exceptions = super.exceptions_0_10_4;
+
+  # Older compilers need the latest ghc-lib to build this package.
+  hls-hlint-plugin = addBuildDepend super.hls-hlint-plugin self.ghc-lib;
+
+  mmorph = super.mmorph_1_1_3;
 }

@@ -1405,28 +1405,20 @@ self: super: {
   # quickcheck-instances is only used in the tests of binary-instances.
   binary-instances = dontCheck super.binary-instances;
 
-  # tons of overrides for bleeding edge versions for ghcide and hls
-  # overriding aeson on all of them to prevent double compilations
-  # this shouldn‘t break anything because nearly all their reverse deps are
-  # in this list or marked as broken anyways
   # 2020-11-19: Checks nearly fixed, but still disabled because of flaky tests:
   # https://github.com/haskell/haskell-language-server/issues/610
   # https://github.com/haskell/haskell-language-server/issues/611
-  haskell-language-server = dontCheck (super.haskell-language-server.override {
-    lsp-test = dontCheck self.lsp-test;
-    fourmolu = self.fourmolu_0_3_0_0;
-  });
+  haskell-language-server = dontCheck super.haskell-language-server;
+
   # 2021-01-20
   # apply-refact 0.9.0.0 get's a build error with hls-hlint-plugin 0.8.0
   # https://github.com/haskell/haskell-language-server/issues/1240
   apply-refact = super.apply-refact_0_8_2_1;
 
-  fourmolu = dontCheck super.fourmolu;
-
   # 1. test requires internet
   # 2. dependency shake-bench hasn't been published yet so we also need unmarkBroken and doDistribute
-  ghcide = doDistribute (unmarkBroken (dontCheck (super.ghcide_0_7_0_0.override { lsp-test = dontCheck self.lsp-test; })));
-  refinery = doDistribute super.refinery_0_3_0_0;
+  ghcide = doDistribute (unmarkBroken (dontCheck super.ghcide));
+
   data-tree-print = doJailbreak super.data-tree-print;
 
   # 2020-11-15: aeson 1.5.4.1 needs to new quickcheck-instances for testing
@@ -1527,7 +1519,7 @@ self: super: {
 
   # 2020-12-05: http-client is fixed on too old version
   essence-of-live-coding-warp = super.essence-of-live-coding-warp.override {
-    http-client = self.http-client_0_7_4;
+    http-client = self.http-client_0_7_5;
   };
 
   # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
