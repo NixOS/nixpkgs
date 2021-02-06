@@ -34,7 +34,7 @@ options.services.dunst = {
   };
 
   globalConfig = mkOption {
-    type = with types; attrsOf str;
+    type = with types; attrsOf (oneOf [bool str int]);
     default = {};
     description = ''
       The global configuration section for dunst.
@@ -42,7 +42,7 @@ options.services.dunst = {
   };
 
   shortcutConfig = mkOption {
-    type = with types; attrsOf str;
+    type = with types; attrsOf (oneOf [bool str int]);
     default = {};
     description = ''
       The shortcut configuration for dunst.
@@ -51,21 +51,21 @@ options.services.dunst = {
 
   urgencyConfig = {
     low = mkOption {
-      type = with types; attrsOf str;
+      type = with types; attrsOf (oneOf [bool str int]);
       default = {};
       description = ''
         The low urgency section of the dunst configuration.
       '';
     };
     normal = mkOption {
-      type = with types; attrsOf str;
+      type = with types; attrsOf (oneOf [bool str int]);
       default = {};
       description = ''
         The normal urgency section of the dunst configuration.
       '';
     };
     critical = mkOption {
-      type = with types; attrsOf str;
+      type = with types; attrsOf (oneOf [bool str int]);
       default = {};
       description = ''
         The critical urgency section of the dunst configuration.
@@ -74,7 +74,7 @@ options.services.dunst = {
   };
 
   rules = mkOption {
-    type = with types; attrsOf (attrsOf str);
+    type = with types; attrsOf (oneOf [bool str int]);
     default = {};
     description = ''
        These rules allow the conditional modification of notifications.
