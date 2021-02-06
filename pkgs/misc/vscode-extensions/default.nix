@@ -498,6 +498,15 @@ let
 
       ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
 
+      ms-toolsai.jupyter = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jupyter";
+          publisher = "ms-toolsai";
+          version = "2020.12.414227025";
+          sha256 = "1zv5p37qsmp2ycdaizb987b3jw45604vakasrggqk36wkhb4bn1v";
+        };
+      };
+
       ms-python.python = callPackage ./python {
         extractNuGet = callPackage ./python/extract-nuget.nix { };
       };
