@@ -25528,7 +25528,9 @@ in
 
   volnoti = callPackage ../applications/misc/volnoti { };
 
-  vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
+  vorbis-tools = callPackage ../applications/audio/vorbis-tools {
+    autoreconfHook = buildPackages.autoreconfHook269;
+  };
 
   vscode = callPackage ../applications/editors/vscode/vscode.nix { };
 
