@@ -41,6 +41,8 @@ let
     mopidy-tunein = callPackage ./tunein.nix { };
 
     mopidy-youtube = callPackage ./youtube.nix { };
+
+    mopidy-subidy = callPackage ./subidy.nix { };
   };
 
 in self
