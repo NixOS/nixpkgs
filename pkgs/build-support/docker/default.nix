@@ -556,7 +556,7 @@ rec {
 
         mkdir image
         touch baseFiles
-        baseEnvs='[]'
+        baseVars='{}'
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
           tar -C image -xpf "$fromImage"
@@ -564,7 +564,7 @@ rec {
           # Store the layers and the environment variables from the base image
           cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
           configName="$(cat ./image/manifest.json | jq -r '.[0].Config')"
-          baseEnvs="$(cat "./image/$configName" | jq '.config.Env // []')"
+          baseVars="$(cat "./image/$configName" | jq '.config | {Hostname, User, ExposedPorts, Env, Cmd, Volumes, WorkingDir, Entrypoint, Labels, Shell, Healthcheck} | with_entries(select(.value != null))')"
 
           # Extract the parentID from the manifest
           if [[ -n "$fromImageName" ]] && [[ -n "$fromImageTag" ]]; then
@@ -647,8 +647,27 @@ rec {
           echo "$layerID/layer.tar"
         ) | sponge layer-list
 
-        # Create image json and image manifest
-        imageJson=$(cat ${baseJson} | jq '.config.Env = $baseenv + .config.Env' --argjson baseenv "$baseEnvs")
+        # Create env json, image json and image manifest
+        envJson=$(jq -s '
+# this will essantially split up the list seperated by `=`,
+# so that we get a key value list, which we convert into
+# a object of { key = value }; which we use to find duplicates
+# later on. Keep in mind that we do support `KEY`, as suppose to
+# `KEY=VALUE`, we will still add the `=` to a plain (`KEY` -> `KEY=`).
+# this should be fixed at some point (TODO/BUG as this sets the value,
+# to empty as opposed to doing nothing).
+def envListToDict: (
+    map(match("([^=]+)=?(.*)?")
+    | {(.captures[0].string): .captures[1].string})
+    | if (. | length) > 0 then . | add else {} end
+);
+
+($basevars.Env // [] | envListToDict) * (.[0].config.Env // [] | envListToDict)
+| to_entries | map(.key+"="+(.value))
+' --argjson basevars "$baseVars" ${baseJson})
+
+        imageJson=$(cat ${baseJson} | jq '.config = ($basevars * (.config // {}))' --argjson basevars "$baseVars")
+        imageJson=$(echo "$imageJson" | jq '.config.Env = $newenv' --argjson newenv "$envJson")
         imageJson=$(echo "$imageJson" | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
 
