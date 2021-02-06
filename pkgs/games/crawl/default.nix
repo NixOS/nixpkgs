@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.26.0";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    sha256 = "0g0icmhppb6f5amf5r2ksfylrlipz2cd8gd85pmd05k463nrmwqi";
+    sha256 = "sha256-lh0lCMZRH+c6jSHjLFDU3wjy6Oyp59ZcPaqg5PWVrkk=";
   };
 
   # Patch hard-coded paths and remove force library builds
