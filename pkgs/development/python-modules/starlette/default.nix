@@ -10,26 +10,25 @@
 , python-multipart
 , pyyaml
 , requests
-, ujson
 , aiosqlite
 , databases
 , pytestCheckHook
+, pytest-cov
 , pytest-asyncio
-, pytestcov
 , typing-extensions
 , ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.13.8";
+  version = "0.14.2";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "11i0yd8cqwscixajl734g11vf8pghki11c81chzfh8ifmj6mf9jk";
+    sha256 = "0fz28czvwiww693ig9vwdja59xxs7m0yp1df32ms1hzr99666bia";
   };
 
   propagatedBuildInputs = [
@@ -40,13 +39,14 @@ buildPythonPackage rec {
     python-multipart
     pyyaml
     requests
-    ujson
   ] ++ lib.optional stdenv.isDarwin [ ApplicationServices ];
 
   checkInputs = [
     aiosqlite
     databases
     pytestCheckHook
+    pytest-cov
+    pytest-asyncio
     typing-extensions
   ];
 
