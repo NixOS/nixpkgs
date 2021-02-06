@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw, libheif, libde265
 , ApplicationServices
@@ -11,38 +11,18 @@ let
     else if stdenv.hostPlatform.system == "armv7l-linux" then "armv7l"
     else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64"
     else throw "ImageMagick is not supported on this platform.";
-
-  cfg = {
-    version = "6.9.11-14";
-    sha256 = "0x51vf48g75cfp0mbwf3ckmlwa6v00592xx3gvrqzjzx7vlayjyg";
-    patches = [];
-  }
-    # Freeze version on mingw so we don't need to port the patch too often.
-    # FIXME: This version has multiple security vulnerabilities
-    // lib.optionalAttrs (stdenv.hostPlatform.isMinGW) {
-        version = "6.9.2-0";
-        sha256 = "17ir8bw1j7g7srqmsz3rx780sgnc21zfn0kwyj78iazrywldx8h7";
-        patches = [(fetchpatch {
-          name = "mingw-build.patch";
-          url = "https://raw.githubusercontent.com/Alexpux/MINGW-packages/"
-            + "01ca03b2a4ef/mingw-w64-imagemagick/002-build-fixes.patch";
-          sha256 = "1pypszlcx2sf7wfi4p37w1y58ck2r8cd5b2wrrwr9rh87p7fy1c0";
-        })];
-      };
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "imagemagick";
-  inherit (cfg) version;
+  version = "6.9.11-60";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick6";
-    rev = cfg.version;
-    inherit (cfg) sha256;
+    rev = version;
+    sha256 = "12810882a0kf4zlgyi290z9bjs921m05njbljkjfw6s1hf0mncl0";
   };
-
-  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
