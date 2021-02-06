@@ -26,5 +26,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej eelco ];
+    # https://github.com/awslabs/aws-c-common/issues/754
+    broken = stdenv.hostPlatform.isMusl;
   };
 }
