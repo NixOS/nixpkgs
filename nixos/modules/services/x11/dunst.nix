@@ -239,14 +239,14 @@ options.services.dunst = {
 config =
   let
     dunstValue = v: with builtins;
-      let err = t: v: abort
-        ("dunstValue: " +
-         "${t} not supported: ${toPretty {} v}");
-      in   if isInt      v then toString v
-      else if isString   v then ''"${v}"''
-      else if true  ==   v then "true"
-      else if false ==   v then "false"
-      else err "this value is" (toString v);
+      let
+        err = t: v: abort
+          ("dunstValue: " +
+           "${t} not supported: ${toPretty {} (toString v)}");
+        isValid = v: any (f: f v) [isInt isString isBool];
+      in if isValid v
+           then toJSON v
+           else err "this value is" v;
     dunstConfig = lib.generators.toINI {
       mkKeyValue = lib.generators.mkKeyValueDefault {
         mkValueString = dunstValue;
