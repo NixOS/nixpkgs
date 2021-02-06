@@ -4,16 +4,6 @@
 , pulseaudio }:
 
 let
-  sha256 = {
-    x86_64-linux = "19751ygq1ng79aniqx91qawc0cw07cwdjdjd88azc9ww6z6nv0mp";
-    i386-linux   = "0dwc7v4p1dz51444zwn0kds23yi87r4h2d3isfj9xwkn90pxb7in";
-  }.${stdenv.hostPlatform.system} or (throw "system ${stdenv.hostPlatform.system} not supported");
-
-  arch = {
-    x86_64-linux = "amd64";
-    i386-linux   = "i386";
-  }.${stdenv.hostPlatform.system} or (throw "system ${stdenv.hostPlatform.system} not supported");
-
   description = "Desktop sharing application, providing remote support and online meetings";
 
   desktopItem = makeDesktopItem {
@@ -28,14 +18,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "6.0.1";
+  version = "6.1.0";
 
   src = fetchurl {
     urls = [
-      "https://download.anydesk.com/linux/${pname}-${version}-${arch}.tar.gz"
-      "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-${arch}.tar.gz"
+      "https://download.anydesk.com/linux/${pname}-${version}-amd64.tar.gz"
+      "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
     ];
-    inherit sha256;
+    sha256 = "1qbq6r0yanjappsi8yglw8r54bwf32bjb2i63awmr6pk5kmhhy3r";
   };
 
   buildInputs = [
@@ -83,7 +73,7 @@ in stdenv.mkDerivation rec {
     inherit description;
     homepage = "https://www.anydesk.com";
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ shyim ];
   };
 }
