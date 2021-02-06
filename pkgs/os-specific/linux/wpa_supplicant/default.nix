@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
       url = "https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch";
       sha256 = "15xjyy7crb557wxpx898b5lnyblxghlij0xby5lmj9hpwwss34dz";
     })
+    # P2P: Fix copying of secondary device types for P2P group client (https://w1.fi/security/2020-2/)
+    (fetchurl {
+      name = "CVE-2021-0326.patch";
+      url = "https://w1.fi/security/2020-2/0001-P2P-Fix-copying-of-secondary-device-types-for-P2P-gr.patch";
+      sha256 = "19f4hx0p547mdx8y8arb3vclwyy4w9c8a6a40ryj7q33730mrmn4";
+    })
   ];
 
   # TODO: Patch epoll so that the dbus actually responds
