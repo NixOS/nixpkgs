@@ -222,10 +222,10 @@ rec {
           )"
         else
           echo "From-image name or tag wasn't set. Reading the first ID."
-          parentID="$(cat "image/manifest.json" | jq -r '.[0].Config | rtrimstr(".json")')"
+          parentID="$(cat "image/manifest.json" | jq -r '.[-1].Config | rtrimstr(".json")')"
         fi
 
-        cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
+        cat ./image/manifest.json  | jq -r '.[-1].Layers | .[]' > layer-list
       else
         touch layer-list
       fi
@@ -562,8 +562,8 @@ rec {
           tar -C image -xpf "$fromImage"
 
           # Store the layers and the environment variables from the base image
-          cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
-          configName="$(cat ./image/manifest.json | jq -r '.[0].Config')"
+          cat ./image/manifest.json  | jq -r '.[-1].Layers | .[]' > layer-list
+          configName="$(cat ./image/manifest.json | jq -r '.[-1].Config')"
           baseVars="$(cat "./image/$configName" | jq '.config | {Hostname, User, ExposedPorts, Env, Cmd, Volumes, WorkingDir, Entrypoint, Labels, Shell, Healthcheck} | with_entries(select(.value != null))')"
 
           # Extract the parentID from the manifest
@@ -575,7 +575,7 @@ rec {
             )"
           else
             echo "From-image name or tag wasn't set. Reading the first ID."
-            parentID="$(cat "image/manifest.json" | jq -r '.[0].Config | rtrimstr(".json")')"
+            parentID="$(cat "image/manifest.json" | jq -r '.[-1].Config | rtrimstr(".json")')"
           fi
 
           # Otherwise do not import the base image configuration and manifest
@@ -676,12 +676,12 @@ def envListToDict: (
           imageJson=$(echo "$imageJson" | jq ".history |= . + [{\"created\": \"$(jq -r .created ${baseJson})\"}]")
           # diff_ids order is from the bottom-most to top-most layer
           imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= . + [\"sha256:$layerChecksum\"]")
-          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= . + [\"$layerTar\"]")
+          manifestJson=$(echo "$manifestJson" | jq ".[-1].Layers |= . + [\"$layerTar\"]")
         done
 
         imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
         echo "$imageJson" > "image/$imageJsonChecksum.json"
-        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"$imageJsonChecksum.json\"")
+        manifestJson=$(echo "$manifestJson" | jq ".[-1].Config = \"$imageJsonChecksum.json\"")
         echo "$manifestJson" > image/manifest.json
 
         # Store the json under the name image/repositories.
