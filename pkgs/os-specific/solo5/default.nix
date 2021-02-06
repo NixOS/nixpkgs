@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, libseccomp, util-linux, qemu }:
 
-let version = "0.6.7";
+let version = "0.6.8";
 in stdenv.mkDerivation {
   pname = "solo5";
   inherit version;
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
   src = fetchurl {
     url =
       "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    sha256 = "05k9adg3440zk5baa6ry8z5dj8d8r8hvzafh2469pdgcnr6h45gr";
+    sha256 = "sha256-zrxNCXJIuEbtE3YNRK8Bxu2koHsQkcF+xItoIyhj9Uc=";
   };
 
   hardeningEnable = [ "pie" ];
