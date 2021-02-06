@@ -303,7 +303,8 @@ rec {
       preferBuiltin = true;
       target = "zImage";
       extraConfig = ''
-        # Serial port for Raspberry Pi 3. Upstream forgot to add it to the ARMv7 defconfig.
+        # Serial port for Raspberry Pi 3. Wasn't included in ARMv7 defconfig
+        # until 4.17.
         SERIAL_8250_BCM2835AUX y
         SERIAL_8250_EXTENDED y
         SERIAL_8250_SHARE_IRQ y
