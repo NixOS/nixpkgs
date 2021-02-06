@@ -124,11 +124,11 @@ config =
     } // cfg.rules;
 
     iconPath = concatStringsSep ":" cfg.iconDirs;
+    iconArg = if lib.stringLength iconPath == 0 then [] else [ "-icon_path" iconPath ];
 
     dunst-args = [
       "-config" (pkgs.writeText "dunstrc" dunstConfig)
-      "-icon_path" iconPath
-    ] ++ cfg.extraArgs;
+    ] ++ iconArg ++ cfg.extraArgs;
 
   in mkIf cfg.enable {
 
