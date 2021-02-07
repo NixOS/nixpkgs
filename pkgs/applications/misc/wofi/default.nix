@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "wofi";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~scoopta/wofi";
     rev = "v${version}";
-    sha256 = "0glpb2gf5n78s01z3rn614ak8ibxhfr824gy6xlljbxclgds264i";
+    sha256 = "1bnf078fg1kwslzwm1mjxwcqqq3bhk1dzymwfw9gk3brqbxrl75c";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook installShellFiles ];
