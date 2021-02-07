@@ -138,11 +138,11 @@
 </programlisting>
     </para>
     <para>
-     For a more useful example, try the following. This configuration only allows unfree packages named flash player and visual studio code:
+     For a more useful example, try the following. This configuration only allows unfree packages named roon-server and visual studio code:
 <programlisting>
 {
   allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-    "flashplayer"
+    "roon-server"
     "vscode"
   ];
 }
