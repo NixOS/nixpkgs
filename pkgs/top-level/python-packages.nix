@@ -276,6 +276,8 @@ in {
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
+  aiorecollect = callPackage ../development/python-modules/aiorecollect { };
+
   aioredis = callPackage ../development/python-modules/aioredis { };
 
   aioresponses = callPackage ../development/python-modules/aioresponses { };
