@@ -479,6 +479,21 @@ self: super:
       thinkfan documentation</link> before updating.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Adobe Flash Player support has been dropped from the tree. In particular,
+     the following packages no longer support it:
+     <itemizedlist>
+      <listitem><simpara><package>chromium</package></simpara></listitem>
+      <listitem><simpara><package>firefox</package></simpara></listitem>
+      <listitem><simpara><package>qt48</package></simpara></listitem>
+      <listitem><simpara><package>qt5.qtwebkit</package></simpara></listitem>
+     </itemizedlist>
+     Additionally, packages <package>flashplayer</package> and
+     <package>hal-flash</package> were removed along with the
+     <varname>services.flashpolicyd</varname> module.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
