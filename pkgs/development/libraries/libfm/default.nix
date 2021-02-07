@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
   name = if extraOnly
     then "libfm-extra-${version}"
     else "libfm-${version}";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/pcmanfm/libfm-${version}.tar.xz";
-    sha256 = "1r6gl49xrykldwz8y4h2s7gjarxigg3bbkrj0gphxjj1vr5j9ccn";
+    sha256 = "sha256-pQQmMDBM+OXYz/nVZca9VG8ii0jJYBU+02ajTofK0eU=";
   };
 
   nativeBuildInputs = [ vala pkg-config intltool ];
