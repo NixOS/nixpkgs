@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchurl, darwin }:
+{ lib, stdenv, fetchurl, darwin, meson, abseil-cpp, ninja }:
 
 stdenv.mkDerivation rec {
-  name = "webrtc-audio-processing-0.3.1";
+  name = "webrtc-audio-processing-1.0";
 
   src = fetchurl {
-    url = "https://freedesktop.org/software/pulseaudio/webrtc-audio-processing/${name}.tar.xz";
-    sha256 = "1gsx7k77blfy171b6g3m0k0s0072v6jcawhmx1kjs9w5zlwdkzd0";
+    url = "https://freedesktop.org/software/pulseaudio/webrtc-audio-processing/${name}.tar.gz";
+    sha256 = "0vwkw5xw8l37f5vbzbkipjsf03r7b8nnrfbfbhab8bkvf79306j4";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
+  buildInputs = [ meson abseil-cpp ninja ] ++
+    lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks;
+      [ ApplicationServices ]);
 
   patchPhase = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace webrtc/base/checks.cc --replace 'defined(__UCLIBC__)' 1
