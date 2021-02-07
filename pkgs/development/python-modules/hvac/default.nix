@@ -14,6 +14,8 @@ buildPythonPackage rec {
   # Requires running a Vault server
   doCheck = false;
 
+  pythonImportsCheck = [ "hvac" ];
+
   meta = with lib; {
     description = "HashiCorp Vault API client";
     homepage = "https://github.com/ianunruh/hvac";
