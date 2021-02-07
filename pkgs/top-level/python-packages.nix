@@ -4900,6 +4900,8 @@ in {
 
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
+  pynuki = callPackage ../development/python-modules/pynuki { };
+
   pysbd = callPackage ../development/python-modules/pysbd { };
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
