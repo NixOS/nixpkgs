@@ -170,60 +170,60 @@
   </para>
 
   <para>
-   Reviewing process:
+   Review process:
   </para>
 
   <itemizedlist>
    <listitem>
     <para>
-     Ensure that the package versioning is fitting the guidelines.
+     Ensure that the package versioning fits the guidelines.
     </para>
    </listitem>
    <listitem>
     <para>
-     Ensure that the commit name is fitting the guidelines.
+     Ensure that the commit name fits the guidelines.
     </para>
    </listitem>
    <listitem>
     <para>
-     Ensure that the meta field contains correct information.
+     Ensure that the meta fields contain correct information.
     </para>
     <itemizedlist>
      <listitem>
       <para>
-       License must be checked to be fitting upstream license.
+       License must match the upstream license.
       </para>
      </listitem>
      <listitem>
       <para>
-       Platforms should be set or the package will not get binary substitutes.
+       Platforms should be set (or the package will not get binary substitutes).
       </para>
      </listitem>
      <listitem>
       <para>
-       A maintainer must be set. This can be the package submitter or a community member that accepts to take maintainership of the package.
+       Maintainers must be set. This can be the package submitter or a community member that accepts taking up maintainership of the package.
       </para>
      </listitem>
     </itemizedlist>
    </listitem>
    <listitem>
     <para>
-     Ensure that the code contains no typos.
+     Report detected typos.
     </para>
    </listitem>
    <listitem>
     <para>
-     Ensure the package source.
+     Ensure the package source:
     </para>
     <itemizedlist>
      <listitem>
       <para>
-       Mirrors urls should be used when available.
+       Uses mirror URLs when available.
       </para>
      </listitem>
      <listitem>
       <para>
-       The most appropriate function should be used (e.g. packages from GitHub should use <literal>fetchFromGitHub</literal>).
+       Uses the most appropriate functions (e.g. packages from GitHub should use <literal>fetchFromGitHub</literal>).
       </para>
      </listitem>
     </itemizedlist>
