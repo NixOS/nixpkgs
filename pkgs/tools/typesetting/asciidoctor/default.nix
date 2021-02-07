@@ -1,4 +1,4 @@
-{ lib, bundlerApp, makeWrapper,
+{ lib, bundlerApp, makeWrapper, libxslt,
   # Optional dependencies, can be null
   epubcheck, kindlegen,
   bundlerUpdateScript
