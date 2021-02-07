@@ -60,14 +60,11 @@ in
       '';
     };
 
-    buildInputs = (if stdenv.isDarwin
-      then [ unzip ]
-      else [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages)
-        ++ [ libsecret libXScrnSaver ];
+    buildInputs = [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages ++ [ libsecret libXScrnSaver ];
 
     runtimeDependencies = lib.optional (stdenv.isLinux) [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
-    nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+    nativeBuildInputs = [unzip] ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
 
     dontBuild = true;
     dontConfigure = true;

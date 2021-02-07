@@ -14,7 +14,8 @@ stdenv.mkDerivation rec
 
   outputs = [ "out" ];
 
-  buildInputs = [ unzip openexr boost tbb jemalloc c-blosc ilmbase ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ openexr boost tbb jemalloc c-blosc ilmbase ];
 
   setSourceRoot = ''
     sourceRoot=$(echo */openvdb)

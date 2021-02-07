@@ -68,7 +68,8 @@ in stdenv.mkDerivation {
   pname = "opam";
   version = "$OPAM_RELEASE";
 
-  buildInputs = [ unzip curl ncurses ocaml makeWrapper getconf ] ++ lib.optional stdenv.isLinux bubblewrap;
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ curl ncurses ocaml makeWrapper getconf ] ++ lib.optional stdenv.isLinux bubblewrap;
 
   src = srcs.opam;
 

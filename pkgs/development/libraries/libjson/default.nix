@@ -9,7 +9,7 @@ in stdenv.mkDerivation {
     sha256 = "0xkk5qc7kjcdwz9l04kmiz1nhmi7iszl3k165phf53h3a4wpl9h7";
   };
   patches = [ ./install-fix.patch ];
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
   makeFlags = [ "prefix=$(out)" ];
   preInstall = "mkdir -p $out/lib";
 

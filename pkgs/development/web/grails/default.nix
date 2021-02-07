@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l99x3g485qjpdd7ga553xpi1s6rq21p8v16qjzqwdhyld961qsr";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   dontBuild = true;
 

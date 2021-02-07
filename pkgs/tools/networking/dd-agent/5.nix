@@ -51,8 +51,8 @@ in stdenv.mkDerivation rec {
 
   patches = [ ./40103-iostat-fix.patch ];
 
+  nativeBuildInputs = [ unzip ];
   buildInputs = [
-    unzip
     makeWrapper
   ] ++ (with python'.pkgs; [
     requests

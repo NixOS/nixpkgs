@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     url = "http://releases.mercenariesguild.net/tremded/mg_tremded_source_1.01.tar.gz";
     sha256 = "1njrqlhzjvy9myddzkagszwdcf3m4h08wip888w2rmbshs6kz6ql";
   };
-  buildInputs = [ unzip libGLU libGL libX11 SDL openal ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ libGLU libGL libX11 SDL openal ];
   unpackPhase = ''
     unzip $src1
     cd tremulous

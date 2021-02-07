@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "vrthra";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   preConfigure = ''
     cd build;
@@ -25,7 +25,6 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-     unzip
      pkg-config
      ncurses
   ];

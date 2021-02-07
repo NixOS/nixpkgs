@@ -3,7 +3,8 @@
 stdenv.mkDerivation {
   name = "AntTweakBar-1.16";
 
-  buildInputs = [ unzip xorg.libX11 libGLU libGL ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ xorg.libX11 libGLU libGL ];
 
   src = fetchurl {
     url = "mirror://sourceforge/project/anttweakbar/AntTweakBar_116.zip";
