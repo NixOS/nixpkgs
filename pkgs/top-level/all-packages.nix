@@ -2664,8 +2664,6 @@ in
 
   pbgopy = callPackage ../tools/text/pbgopy { };
 
-  pbpst = callPackage ../applications/misc/pbpst { };
-
   pbzx = callPackage ../tools/compression/pbzx { };
 
   pcb2gcode = callPackage ../tools/misc/pcb2gcode { };
@@ -11686,6 +11684,8 @@ in
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
+
+  b4 = callPackage ../development/tools/b4 { };
 
   babeltrace = callPackage ../development/tools/misc/babeltrace { };
 

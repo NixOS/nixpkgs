@@ -1,21 +1,18 @@
-{ fetchurl, lib, stdenv
-
-# Optional dependencies
-, bzip2 ? null }:
+{ fetchurl, lib, stdenv, bzip2 }:
 stdenv.mkDerivation rec {
   pname = "cfitsio";
-  version = "3.47";
+  version = "3.49";
 
   src = fetchurl {
     url = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-${version}.tar.gz";
-    sha256 = "1vzlxnrjckz78p2wf148v2z3krkwnykfqvlj42sz3q711vqid1a1";
+    sha256 = "1cyl1qksnkl3cq1fzl4dmjvkd6329b57y9iqyv44wjakbh6s4rav";
   };
 
   buildInputs = [ bzip2 ];
 
   patches = [ ./darwin-rpath-universal.patch ];
 
-  configureFlags = lib.optional (bzip2 != null) "--with-bzip2=${bzip2.out}";
+  configureFlags = "--with-bzip2=${bzip2.out}";
 
   hardeningDisable = [ "format" ];
 

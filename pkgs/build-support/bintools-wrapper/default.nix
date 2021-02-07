@@ -64,6 +64,7 @@ let
     else if targetPlatform.system == "powerpc-linux"  then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.isMips                     then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
+    else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
     else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else null;
 
