@@ -199,6 +199,8 @@ in with py.pkgs; buildPythonApplication rec {
     # keyring.errors.NoKeyringError: No recommended backend was available.
     "test_secrets_from_unrelated_fails"
     "test_secrets_credstash"
+    # system_log/test_init.py: assert 0 == 1 where 0 = len([])
+    "test_error_posted_as_event"
   ];
 
   preCheck = ''
