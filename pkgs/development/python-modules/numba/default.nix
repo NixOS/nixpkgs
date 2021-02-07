@@ -4,13 +4,9 @@
 , fetchPypi
 , python
 , buildPythonPackage
-, isPy27
-, isPy3k
 , numpy
 , llvmlite
 , setuptools
-, funcsigs
-, singledispatch
 , libcxx
 }:
 
@@ -27,8 +23,7 @@ buildPythonPackage rec {
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
-  propagatedBuildInputs = [numpy llvmlite setuptools]
-    ++ lib.optionals isPy27 [ funcsigs singledispatch];
+  propagatedBuildInputs = [numpy llvmlite setuptools];
 
   # Copy test script into $out and run the test suite.
   checkPhase = ''
