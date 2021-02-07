@@ -1,19 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi, pyyaml, mock }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyyaml
+, pytestCheckHook
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "helper";
   version = "2.5.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4af39471d25c8820f505bc5c5b1447878bdbec0781c60d73d9ffbdf5383152b4";
+  src = fetchFromGitHub {
+    owner = "gmr";
+    repo = pname;
+    rev = version;
+    sha256 = "0zypjv8rncvrsgl200v7d3bn08gs48dwqvgamfqv71h07cj6zngp";
   };
 
-  checkInputs = [ mock ];
-  propagatedBuildInputs = [ pyyaml ];
+  propagatedBuildInputs = [
+    pyyaml
+  ];
 
-  # No tests in the pypi tarball
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    mock
+  ];
+
+  pythonImportsCheck = [
+    "helper"
+    "helper.config"
+  ];
 
   meta = with lib; {
     description = "Development library for quickly writing configurable applications and daemons";
