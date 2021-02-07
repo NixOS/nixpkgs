@@ -5826,6 +5826,8 @@ in
 
   np2kai = callPackage ../misc/emulators/np2kai { };
 
+  ox = callPackage ../applications/editors/ox { };
+
   file-rename = callPackage ../tools/filesystems/file-rename { };
 
   kcollectd = libsForQt5.callPackage ../tools/misc/kcollectd {};
