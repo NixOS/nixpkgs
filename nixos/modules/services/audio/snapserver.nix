@@ -48,8 +48,8 @@ let
     ++ [ "--stream.port ${toString cfg.port}" ]
     ++ optionalNull cfg.sampleFormat "--stream.sampleformat ${cfg.sampleFormat}"
     ++ optionalNull cfg.codec "--stream.codec ${cfg.codec}"
-    ++ optionalNull cfg.streamBuffer "--stream.stream_buffer ${cfg.streamBuffer}"
-    ++ optionalNull cfg.buffer "--stream.buffer ${cfg.buffer}"
+    ++ optionalNull cfg.streamBuffer "--stream.stream_buffer ${toString cfg.streamBuffer}"
+    ++ optionalNull cfg.buffer "--stream.buffer ${toString cfg.buffer}"
     ++ optional cfg.sendToMuted "--stream.send_to_muted"
     # tcp json rpc
     ++ [ "--tcp.enabled ${toString cfg.tcp.enable}" ]
