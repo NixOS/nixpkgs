@@ -22,6 +22,7 @@
 , jq
 , xorg
 , libGL
+, steam-run-native
 # needed for avoiding crash on file selector
 , gsettings-desktop-schemas
 }:
@@ -100,9 +101,16 @@ in stdenv.mkDerivation {
 
     install -D -m644 etc/PlayOnLinux.desktop $out/share/applications/playonlinux.desktop
 
-    makeWrapper $out/share/playonlinux/playonlinux $out/bin/playonlinux \
+    makeWrapper $out/share/playonlinux/playonlinux{,-wrapper} \
       --prefix PATH : ${binpath} \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/GConf
+    # steam-run is needed to run the downloaded wine executables
+    mkdir -p $out/bin
+    cat > $out/bin/playonlinux <<EOF
+    #!${stdenv.shell} -e
+    exec ${steam-run-native}/bin/steam-run $out/share/playonlinux/playonlinux-wrapper "\$@"
+    EOF
+    chmod a+x $out/bin/playonlinux
 
     bunzip2 $out/share/playonlinux/bin/check_dd_x86.bz2
     patchelf --set-interpreter $(cat ${ld32}) --set-rpath ${libs pkgsi686Linux} $out/share/playonlinux/bin/check_dd_x86
@@ -121,7 +129,7 @@ in stdenv.mkDerivation {
     description = "GUI for managing Windows programs under linux";
     homepage = "https://www.playonlinux.com/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.a1russell ];
+    maintainers = [ maintainers.pasqui23 ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
