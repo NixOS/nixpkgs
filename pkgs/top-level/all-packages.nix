@@ -22662,6 +22662,10 @@ in
 
   ht = callPackage ../applications/editors/ht { };
 
+  ht-rust = callPackage ../tools/networking/ht-rust {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   hubstaff = callPackage ../applications/misc/hubstaff { };
 
   hue-cli = callPackage ../tools/networking/hue-cli { };
