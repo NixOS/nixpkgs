@@ -1,0 +1,58 @@
+diff --git a/include/llvm/ADT/Triple.h b/include/llvm/ADT/Triple.h
+index 6bad18f19244..95459ca997c5 100644
+--- a/include/llvm/ADT/Triple.h
++++ b/include/llvm/ADT/Triple.h
+@@ -166,6 +166,7 @@ public:
+     DragonFly,
+     FreeBSD,
+     Fuchsia,
++    Genode,
+     IOS,
+     KFreeBSD,
+     Linux,
+@@ -502,6 +503,8 @@ public:
+ 
+   bool isOSDragonFly() const { return getOS() == Triple::DragonFly; }
+ 
++  bool isOSGenode() const { return getOS() == Triple::Genode; }
++
+   bool isOSSolaris() const {
+     return getOS() == Triple::Solaris;
+   }
+diff --git a/lib/Support/Triple.cpp b/lib/Support/Triple.cpp
+index fec1985ccaca..1f3e4f07fb8e 100644
+--- a/lib/Support/Triple.cpp
++++ b/lib/Support/Triple.cpp
+@@ -197,6 +197,7 @@ StringRef Triple::getOSTypeName(OSType Kind) {
+   case Emscripten: return "emscripten";
+   case FreeBSD: return "freebsd";
+   case Fuchsia: return "fuchsia";
++  case Genode: return "genode";
+   case Haiku: return "haiku";
+   case HermitCore: return "hermit";
+   case Hurd: return "hurd";
+@@ -494,6 +495,7 @@ static Triple::OSType parseOS(StringRef OSName) {
+     .StartsWith("dragonfly", Triple::DragonFly)
+     .StartsWith("freebsd", Triple::FreeBSD)
+     .StartsWith("fuchsia", Triple::Fuchsia)
++    .StartsWith("genode", Triple::Genode)
+     .StartsWith("ios", Triple::IOS)
+     .StartsWith("kfreebsd", Triple::KFreeBSD)
+     .StartsWith("linux", Triple::Linux)
+diff --git a/unittests/ADT/TripleTest.cpp b/unittests/ADT/TripleTest.cpp
+index dc7a28c72f20..eb62772c1dda 100644
+--- a/unittests/ADT/TripleTest.cpp
++++ b/unittests/ADT/TripleTest.cpp
+@@ -248,6 +248,12 @@ TEST(TripleTest, ParsedIDs) {
+   EXPECT_EQ(Triple::Fuchsia, T.getOS());
+   EXPECT_EQ(Triple::UnknownEnvironment, T.getEnvironment());
+ 
++  T = Triple("x86_64-unknown-genode");
++  EXPECT_EQ(Triple::x86_64, T.getArch());
++  EXPECT_EQ(Triple::UnknownVendor, T.getVendor());
++  EXPECT_EQ(Triple::Genode, T.getOS());
++  EXPECT_EQ(Triple::UnknownEnvironment, T.getEnvironment());
++
+   T = Triple("x86_64-unknown-hermit");
+   EXPECT_EQ(Triple::x86_64, T.getArch());
+   EXPECT_EQ(Triple::UnknownVendor, T.getVendor());

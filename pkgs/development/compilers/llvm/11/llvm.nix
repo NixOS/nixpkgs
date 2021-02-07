@@ -35,6 +35,18 @@ in stdenv.mkDerivation (rec {
   src = fetch pname "0a5mb65xa5bal8q6cb37xgkqis2bip87fsafgq3wbsva9cjprn6c";
   polly_src = fetch "polly" "1smrqm9s0r2g9h0v0nil6y9wn2ih4l5bddk4dhgn538ngc7cxpq8";
 
+  patches = [
+    # Patch to recognize Genode system triples.
+    # This can be combined with a patched Clang and
+    # the GCC runtime libraries to build a Genode
+    # toolchain.
+    # The plan is to upstream once Clang can build for
+    # Genode using the LLVM runtime libraries, probably
+    # for release 13.
+    # https://github.com/tworaz/llvm-project/tree/genode
+    ./llvm-genode.patch
+  ];
+
   unpackPhase = ''
     unpackFile $src
     mv llvm-${release_version}* llvm
