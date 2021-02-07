@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vwkw5xw8l37f5vbzbkipjsf03r7b8nnrfbfbhab8bkvf79306j4";
   };
 
-  buildInputs = [ meson abseil-cpp ninja ] ++
+  propagatedBuildInputs = [ abseil-cpp ];
+  buildInputs = [ meson ninja ] ++
     lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks;
       [ ApplicationServices ]);
 
