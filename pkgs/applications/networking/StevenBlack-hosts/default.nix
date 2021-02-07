@@ -1,5 +1,5 @@
 { stdenvNoCC, fetchFromGitHub, python3, lib
-, flags ? {} ,whitelist ? ""}:
+, flags ? {} ,allowList ? ""}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "StevenBlack-hosts";
@@ -11,15 +11,15 @@ stdenvNoCC.mkDerivation rec {
     sha256 ="zQMzXci1/21PCvi8AGqyDataQl/kQJJ+jszxXd2XMQc=";
   };
 
-  inherit whitelist;
-  passAsFile = ["whitelist"];
+  inherit allowList;
+  passAsFile = ["allowList"];
   buildPhase =
     let
       py = python3.withPackages (ps: with ps;[
         lxml beautifulsoup4
       ]);
     in ''
-      ln -s $whitelistPath whitelist
+      ln -s $allowListPath whitelist
       ${py}/bin/python updateHostsFile.py \
         ${lib.cli.toGNUCommandLineShell
           {} (flags // {

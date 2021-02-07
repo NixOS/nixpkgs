@@ -8,7 +8,7 @@ with lib;
         Flags to passs while building the hosts file.
         Note that compress and skipstatichosts are passed by default.
         See also <link xlink:href="https://github.com/StevenBlack/hosts#command-line-options>here</link> for details.
-        Note that options that modify directly the hosts file or he global DNS cache will error out
+        Note that options that modify directly the hosts file or the global DNS cache will error out
         as the host file is first built in the standard nix sandbox.
       '';
       default = {};
@@ -18,7 +18,7 @@ with lib;
       );
 
     };
-    whitelist = mkOption {
+    allowList = mkOption {
       description = "List of hosts names to allow,one host per line.";
       default = "";
       example = ''
@@ -42,7 +42,7 @@ with lib;
 
       networking.hostFiles = let
         hosts = pkgs.StevenBlack-hosts.override {
-          inherit (cfg) flags whitelist;
+          inherit (cfg) flags allowList;
         };
       in [( "${hosts}/share/StevenBlack-hosts/hosts" )];
     };
