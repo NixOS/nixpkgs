@@ -23533,6 +23533,8 @@ in
 
   mmsd = callPackage ../tools/networking/mmsd { };
 
+  mmtc = callPackage ../applications/audio/mmtc { };
+
   moc = callPackage ../applications/audio/moc { };
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
