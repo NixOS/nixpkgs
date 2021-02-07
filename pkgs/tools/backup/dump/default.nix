@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dump";
-  version = "0.4b46";
+  version = "0.4b47";
 
   src = fetchurl {
     url = "mirror://sourceforge/dump/dump-${version}.tar.gz";
-    sha256 = "15rg5y15ak0ppqlhcih78layvg7cwp6hc16p3c58xs8svlkxjqc0";
+    sha256 = "sha256-0CGs3k+77T2T662YFCL2cfSNZrKeyI196DZC7Pv/T9A=";
   };
 
   buildInputs = [ e2fsprogs pkg-config ncurses readline ];

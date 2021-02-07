@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "labwc";
-  version = "unstable-2021-01-12";
+  version = "unstable-2021-02-06";
 
   src = fetchFromGitHub {
     owner = "johanmalm";
     repo = pname;
-    rev = "2a7086d9f7367d4a81bce58a6f7fc6614bbfbdb3";
-    sha256 = "ECwEbWkCjktNNtbLSCflOVlEyxkg4XTfRevq7+qQ2IA=";
+    rev = "4a8fcf5c6d0b730b1e2e17e544ce7d7d3c72cd13";
+    sha256 = "g1ba8dchUN393eis0VAu1bIjQfthDGLaSijSavz4lfU=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja pandoc ];
@@ -54,4 +54,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-# TODO: report a SIGSEGV when labwc starts inside a started Wayland window

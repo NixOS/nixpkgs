@@ -14,6 +14,8 @@ buildGoModule rec {
   runVend = true;
   vendorSha256 = "sha256-GcIaUIuTiSY1aKxRtclfl7hMNaZZx4uoVG7ahjF/4Hs=";
 
+  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=v${version}" ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
