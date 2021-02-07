@@ -75,7 +75,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
   </para>
 
   <variablelist>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-description">
     <term>
      <varname>description</varname>
     </term>
@@ -94,7 +94,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-longDescription">
     <term>
      <varname>longDescription</varname>
     </term>
@@ -104,7 +104,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-branch">
     <term>
      <varname>branch</varname>
     </term>
@@ -114,7 +114,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-homepage">
     <term>
      <varname>homepage</varname>
     </term>
@@ -124,7 +124,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-downloadPage">
     <term>
      <varname>downloadPage</varname>
     </term>
@@ -134,7 +134,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-changelog">
     <term>
      <varname>changelog</varname>
     </term>
@@ -144,7 +144,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-license">
     <term>
      <varname>license</varname>
     </term>
@@ -183,7 +183,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-maintainers">
     <term>
      <varname>maintainers</varname>
     </term>
@@ -193,7 +193,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-priority">
     <term>
      <varname>priority</varname>
     </term>
@@ -203,7 +203,7 @@ hello-2.3  A program that produces a familiar, friendly greeting
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-platforms">
     <term>
      <varname>platforms</varname>
     </term>
@@ -217,7 +217,7 @@ meta.platforms = lib.platforms.linux;
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-tests">
     <term>
      <varname>tests</varname>
     </term>
@@ -244,7 +244,7 @@ meta.platforms = lib.platforms.linux;
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-timeout">
     <term>
      <varname>timeout</varname>
     </term>
@@ -254,7 +254,7 @@ meta.platforms = lib.platforms.linux;
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-hydraPlatforms">
     <term>
      <varname>hydraPlatforms</varname>
     </term>
@@ -268,7 +268,7 @@ meta.hydraPlatforms = [];
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-broken">
     <term>
      <varname>broken</varname>
     </term>
@@ -278,7 +278,7 @@ meta.hydraPlatforms = [];
      </para>
     </listitem>
    </varlistentry>
-   <varlistentry>
+   <varlistentry xml:id="var-meta-updateWalker">
     <term>
      <varname>updateWalker</varname>
     </term>
