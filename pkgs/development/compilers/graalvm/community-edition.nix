@@ -146,8 +146,8 @@ let
         '';
 
         postFixup = ''
-          rpath="${ {  "8" = "$out/jre/lib/amd64/jli:$out/jre/lib/amd64/server:$out/jre/lib/amd64";
-                      "11" = "$out/lib/jli:$out/lib/server:$out/lib";
+          rpath="${ {  "8" = "$out/jre/lib/amd64/jli:$out/jre/lib/amd64/server:$out/jre/lib/amd64:$out/jre/languages/ruby/lib/cext";
+                      "11" = "$out/lib/jli:$out/lib/server:$out/lib:$out/languages/ruby/lib/cext";
                     }.${javaVersion}
                  }:${
             lib.makeLibraryPath [
@@ -204,11 +204,13 @@ let
 
           echo '1 + 1' | $out/bin/graalpython
 
-          # TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
-          # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
-          # though `openssl` is in `propagatedBuildInputs`. For more details see:
-          # https://github.com/NixOS/nixpkgs/pull/105815
-          # echo '1 + 1' | $out/bin/irb
+          ${lib.optionalString stdenv.isLinux ''
+            # TODO: `irb` on MacOS gives an error saying "Could not find OpenSSL
+            # headers, install via Homebrew or MacPorts or set OPENSSL_PREFIX", even
+            # though `openssl` is in `propagatedBuildInputs`. For more details see:
+            # https://github.com/NixOS/nixpkgs/pull/105815
+            echo '1 + 1' | $out/bin/irb
+          ''}
 
           echo '1 + 1' | $out/bin/node -i
         ${lib.optionalString (javaVersion == "11") ''
