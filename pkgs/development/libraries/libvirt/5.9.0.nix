@@ -133,5 +133,10 @@ in stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz globin ];
+    knownVulnerabilities = [
+      "https://security.libvirt.org/2019/0008.html"
+      "https://security.libvirt.org/2019/0009.html"
+      "https://security.libvirt.org/2020/0001.html"
+    ];
   };
 }
