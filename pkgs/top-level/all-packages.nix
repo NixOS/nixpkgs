@@ -9577,10 +9577,14 @@ in
   rust_1_45 = callPackage ../development/compilers/rust/1_45.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+  rust_1_49 = callPackage ../development/compilers/rust/1_49.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
   rust = rust_1_45;
 
   rustPackages_1_44 = rust_1_44.packages.stable;
   rustPackages_1_45 = rust_1_45.packages.stable;
+  rustPackages_1_49 = rust_1_49.packages.stable;
   rustPackages = rustPackages_1_45;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
@@ -20618,7 +20622,6 @@ in
 
   firefoxPackages = recurseIntoAttrs (callPackage ../applications/networking/browsers/firefox/packages.nix {
     callPackage = pkgs.newScope {
-      inherit (rustPackages_1_44) cargo rustc;
       libpng = libpng_apng;
       python = python2;
       gnused = gnused_422;
