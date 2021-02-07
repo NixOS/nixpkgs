@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dwxg54pv6ihphbia0iw65r64whd7v8nm4wwhcz219642cgpv54y";
   };
 
+  cmakeFlags = "-DBUILD_SHARED_LIBS=ON";
+
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
