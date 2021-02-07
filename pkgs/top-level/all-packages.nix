@@ -13854,13 +13854,9 @@ in
 
   flite = callPackage ../development/libraries/flite { };
 
-  fltk13 = callPackage ../development/libraries/fltk {
-    inherit (darwin.apple_sdk.frameworks) Cocoa AGL GLUT;
-  };
-  fltk14 = callPackage ../development/libraries/fltk/1.4.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa AGL GLUT;
-  };
-  fltk = res.fltk13;
+  fltk13 = callPackage ../development/libraries/fltk/1.3.nix { };
+  fltk14 = callPackage ../development/libraries/fltk/1.4.nix { };
+  fltk = fltk13;
 
   flyway = callPackage ../development/tools/flyway { };
 
