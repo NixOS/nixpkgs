@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, zlib, bzip2, perl, cpio, gawk, coreutils, ApplicationServices }:
+{ lib, stdenv, buildPackages, fetchurl, zlib, bzip2, perl, cpio, gawk, coreutils, ApplicationServices }:
 
 stdenv.mkDerivation rec {
   pname = "blast";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchurl {
-    url = "ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-src.tar.gz";
-    sha256 = "09nry5knj5hhxpn0a5ww1gb1704grd4r1y7adbjl6kqwq37dkk9s";
+    url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-src.tar.gz";
+    sha256 = "0m0r9vkw631ky1za1wilsfk9k9spwqh22nkrb9a57rbwmrc1i3nq";
   };
 
   sourceRoot = "ncbi-blast-${version}+-src/c++";
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
         --replace /bin/date ${coreutils}/bin/date
   '';
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
   # perl is necessary in buildInputs so that installed perl scripts get patched
