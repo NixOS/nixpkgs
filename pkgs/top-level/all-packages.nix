@@ -2664,8 +2664,6 @@ in
 
   pbgopy = callPackage ../tools/text/pbgopy { };
 
-  pbpst = callPackage ../applications/misc/pbpst { };
-
   pbzx = callPackage ../tools/compression/pbzx { };
 
   pcb2gcode = callPackage ../tools/misc/pcb2gcode { };
