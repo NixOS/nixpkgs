@@ -26,6 +26,8 @@ buildPythonPackage rec {
   # no tests available
   doCheck = false;
 
+  pythonImportsCheck = [ "mautrix" ];
+
   meta = with lib; {
     homepage = "https://github.com/tulir/mautrix-python";
     description = "A Python 3 asyncio Matrix framework.";
