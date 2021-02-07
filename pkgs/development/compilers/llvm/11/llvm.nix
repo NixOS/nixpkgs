@@ -55,6 +55,8 @@ in stdenv.mkDerivation (rec {
 
   propagatedBuildInputs = [ ncurses zlib ];
 
+  patches = [ ./llvm-genode.patch ];
+
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
