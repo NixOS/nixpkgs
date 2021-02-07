@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 84ecddbbed1f1957b8684c2027bb8a3e5eb163a0
-  ref: refs/tags/6.0.28
+  revision: f54a838fa686f495854a71cb32fadcb1853b6201
+  ref: refs/tags/6.0.29
   specs:
-    metasploit-framework (6.0.28)
+    metasploit-framework (6.0.29)
       actionpack (~> 5.2.2)
       activerecord (~> 5.2.2)
       activesupport (~> 5.2.2)
@@ -31,9 +31,9 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.27)
+      metasploit-payloads (= 2.0.28)
       metasploit_data_models
-      metasploit_payloads-mettle (= 1.0.5)
+      metasploit_payloads-mettle (= 1.0.6)
       mqtt
       msgpack
       nessus_rest
@@ -124,23 +124,23 @@ GEM
     arel-helpers (2.12.0)
       activerecord (>= 3.1.0, < 7)
     aws-eventstream (1.1.0)
-    aws-partitions (1.422.0)
-    aws-sdk-core (3.111.2)
+    aws-partitions (1.424.0)
+    aws-sdk-core (3.112.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.221.0)
-      aws-sdk-core (~> 3, >= 3.109.0)
+    aws-sdk-ec2 (1.224.0)
+      aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.46.0)
-      aws-sdk-core (~> 3, >= 3.109.0)
+    aws-sdk-iam (1.47.0)
+      aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.41.0)
-      aws-sdk-core (~> 3, >= 3.109.0)
+    aws-sdk-kms (1.42.0)
+      aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.87.0)
-      aws-sdk-core (~> 3, >= 3.109.0)
+    aws-sdk-s3 (1.88.0)
+      aws-sdk-core (~> 3, >= 3.112.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.2.2)
@@ -183,10 +183,10 @@ GEM
     hrr_rb_ssh (0.3.0.pre2)
       ed25519 (~> 1.2)
     http_parser.rb (0.6.0)
-    i18n (1.8.7)
+    i18n (1.8.8)
       concurrent-ruby (~> 1.0)
     io-console (0.5.7)
-    irb (1.3.2)
+    irb (1.3.3)
       reline (>= 0.1.5)
     jmespath (1.4.0)
     jsobfu (0.4.2)
@@ -214,7 +214,7 @@ GEM
       activemodel (~> 5.2.2)
       activesupport (~> 5.2.2)
       railties (~> 5.2.2)
-    metasploit-payloads (2.0.27)
+    metasploit-payloads (2.0.28)
     metasploit_data_models (4.1.1)
       activerecord (~> 5.2.2)
       activesupport (~> 5.2.2)
@@ -224,7 +224,7 @@ GEM
       pg
       railties (~> 5.2.2)
       recog (~> 2.0)
-    metasploit_payloads-mettle (1.0.5)
+    metasploit_payloads-mettle (1.0.6)
     method_source (1.0.0)
     mini_portile2 (2.5.0)
     minitest (5.14.3)
@@ -238,7 +238,7 @@ GEM
     net-ssh (6.1.0)
     network_interface (0.0.2)
     nexpose (7.2.1)
-    nio4r (2.5.4)
+    nio4r (2.5.5)
     nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
@@ -260,7 +260,7 @@ GEM
       ttfunk
     pg (1.2.3)
     public_suffix (4.0.6)
-    puma (5.2.0)
+    puma (5.2.1)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -281,10 +281,10 @@ GEM
       thor (>= 0.19.0, < 2.0)
     rake (13.0.3)
     rb-readline (0.5.5)
-    recog (2.3.18)
+    recog (2.3.19)
       nokogiri
     redcarpet (3.5.1)
-    reline (0.2.2)
+    reline (0.2.3)
       io-console (~> 0.5)
     rex-arch (0.1.14)
       rex-text
@@ -294,7 +294,7 @@ GEM
       rex-core
       rex-struct2
       rex-text
-    rex-core (0.1.14)
+    rex-core (0.1.15)
     rex-encoder (0.1.5)
       metasm
       rex-arch
@@ -374,6 +374,7 @@ GEM
     unf_ext (0.0.7.7)
     warden (1.2.9)
       rack (>= 2.0.9)
+    webrick (1.7.0)
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -381,7 +382,8 @@ GEM
     xdr (3.0.2)
       activemodel (>= 4.2, < 7.0)
       activesupport (>= 4.2, < 7.0)
-    xmlrpc (0.3.1)
+    xmlrpc (0.3.2)
+      webrick
     zeitwerk (2.4.2)
 
 PLATFORMS
