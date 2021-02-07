@@ -28,8 +28,8 @@ rustPlatform.buildRustPackage rec {
   # rls-rustc links to rustc_private crates
   CARGO_BUILD_RUSTFLAGS = if stdenv.isDarwin then "-C rpath" else null;
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ openssh openssl curl zlib libiconv makeWrapper rustPlatform.rust.rustc.llvm ]
+  nativeBuildInputs = [ pkg-config cmake makeWrapper ];
+  buildInputs = [ openssh openssl curl zlib libiconv rustPlatform.rust.rustc.llvm ]
     ++ (lib.optionals stdenv.isDarwin [ CoreFoundation Security ]);
 
   doCheck = true;

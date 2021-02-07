@@ -9,7 +9,8 @@ stdenv.mkDerivation {
     sha256 = "0axz7r30p34z5hgvdglznc82g7yvm3g56dv5190jixskx6ba58rs";
   };
 
-  buildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ unzip ];
 
   unpackCmd = "unzip -o $curSrc";  # tries to go interactive without -o
 

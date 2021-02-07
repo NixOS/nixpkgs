@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "17v1gcmg5q661b047zxjar735i4d3508dimw1x3z1pk4d1zjhp3x";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse autoconf automake makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ fuse autoconf automake ];
 
   preConfigure = "./autogen.sh";
 

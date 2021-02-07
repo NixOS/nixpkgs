@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
       ln -s $out/share/nwjs/nw $out/bin
   '';
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   meta = with lib; {
     description = "An app runtime based on Chromium and node.js";

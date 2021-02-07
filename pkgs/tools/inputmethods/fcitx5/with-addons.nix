@@ -5,7 +5,7 @@ symlinkJoin {
 
   paths = [ fcitx5 fcitx5-configtool fcitx5-lua fcitx5-qt fcitx5-gtk ] ++ addons;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/fcitx5 \

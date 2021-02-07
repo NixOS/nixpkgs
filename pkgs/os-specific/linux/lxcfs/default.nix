@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gC1Q+kG/oKfYvuHVKstpRWfL/thsemULrimPrV/eeaI=";
   };
 
-  nativeBuildInputs = [ pkg-config help2man autoreconfHook ];
-  buildInputs = [ fuse makeWrapper ];
+  nativeBuildInputs = [ pkg-config help2man autoreconfHook makeWrapper ];
+  buildInputs = [ fuse ];
 
   preConfigure = lib.optionalString enableDebugBuild ''
     sed -i 's,#AM_CFLAGS += -DDEBUG,AM_CFLAGS += -DDEBUG,' Makefile.am

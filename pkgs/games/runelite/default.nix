@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     startupNotify = null;
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   # colon is bash form of no-op (do nothing)
   dontUnpack = true;

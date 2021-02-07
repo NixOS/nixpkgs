@@ -13,7 +13,7 @@ jruby = stdenv.mkDerivation rec {
     sha256 = "1dg0fz9b8m1k0sypvpxnf4xjqwc0pyy35xw4rsg4a7pha4jkprrj";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
      mkdir -pv $out/docs

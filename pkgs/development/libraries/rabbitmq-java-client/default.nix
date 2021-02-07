@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "03kspkgzzjsbq6f8yl2zj5m30qwgxv3l58hrbf6gcgxb5rpfk6sh";
   };
 
-  buildInputs = [ ant jdk python makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ ant jdk python ];
 
   buildPhase = "ant dist";
 
