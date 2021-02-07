@@ -1,17 +1,35 @@
-{ lib, fetchPypi, buildPythonPackage
-, attrs, boto3, requests, gradient_statsd, terminaltables
-, click-completion , click-didyoumean, click-help-colors
-, colorama, requests_toolbelt, gradient-utils, halo, progressbar2
-, marshmallow, pyyaml, websocket_client
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, attrs
+, boto3
+, click-completion
+, click-didyoumean
+, click-help-colors
+, colorama
+, gradient-utils
+, gradient_statsd
+, halo
+, marshmallow
+, progressbar2
+, pyyaml
+, requests
+, requests_toolbelt
+, terminaltables
+, websocket_client
+, pytestCheckHook
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "gradient";
   version = "1.4.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d0980ecf8c49cc4a48ca77fb277f3306d1831338fe72497559f5b52d076735f4";
+  src = fetchFromGitHub {
+    owner = "Paperspace";
+    repo = "gradient-cli";
+    rev = "v${version}";
+    sha256 = "1w8607j3wzgjvzszkl72glax0jg34gga90mkvv6awi7r9va9p30m";
   };
 
   postPatch = ''
@@ -22,19 +40,37 @@ buildPythonPackage rec {
       --replace 'marshmallow<' 'marshmallow>='
   '';
 
-  propagatedBuildInputs = [ attrs boto3 requests gradient_statsd terminaltables
-    click-completion click-didyoumean click-help-colors requests_toolbelt
-    colorama gradient-utils halo marshmallow progressbar2 pyyaml websocket_client
+  propagatedBuildInputs = [
+    attrs
+    boto3
+    requests
+    gradient_statsd
+    terminaltables
+    click-completion
+    click-didyoumean
+    click-help-colors
+    requests_toolbelt
+    colorama
+    gradient-utils
+    halo
+    marshmallow
+    progressbar2
+    pyyaml
+    websocket_client
   ];
 
-  # tries to use /homeless-shelter to mimic container usage, etc
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    mock
+  ];
+
+  pythonImportsCheck = [ "gradient" ];
 
   meta = with lib; {
     description = "The command line interface for Gradient";
-    homepage    = "https://github.com/Paperspace/gradient-cli";
-    license     = licenses.isc;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/Paperspace/gradient-cli";
+    license = licenses.isc;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }
