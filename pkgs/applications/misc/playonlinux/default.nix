@@ -22,6 +22,8 @@
 , jq
 , xorg
 , libGL
+# needed for avoiding crash on file selector
+, gsettings-desktop-schemas
 }:
 
 let
@@ -99,7 +101,8 @@ in stdenv.mkDerivation {
     install -D -m644 etc/PlayOnLinux.desktop $out/share/applications/playonlinux.desktop
 
     makeWrapper $out/share/playonlinux/playonlinux $out/bin/playonlinux \
-      --prefix PATH : ${binpath}
+      --prefix PATH : ${binpath} \
+      --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/GConf
 
     bunzip2 $out/share/playonlinux/bin/check_dd_x86.bz2
     patchelf --set-interpreter $(cat ${ld32}) --set-rpath ${libs pkgsi686Linux} $out/share/playonlinux/bin/check_dd_x86
