@@ -7150,7 +7150,7 @@
     name = "Paulus Esterhazy";
   };
   petabyteboy = {
-    email = "me@pbb.lc";
+    email = "milan@petabyte.dev";
     github = "petabyteboy";
     githubId = 3250809;
     name = "Milan Pässler";
