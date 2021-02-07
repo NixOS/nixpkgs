@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   patches = [ (fetchpatch {
     # https://bugs.archlinux.org/task/69121
-    url = https://github.com/libusb/libusb/commit/f6d2cb561402c3b6d3627c0eb89e009b503d9067.patch;
+    url = "https://github.com/libusb/libusb/commit/f6d2cb561402c3b6d3627c0eb89e009b503d9067.patch";
     sha256 = "1dbahikcbwkjhyvks7wbp7fy2bf7nca48vg5z0zqvqzjb9y595cq";
     excludes = [ "libusb/version_nano.h" ];
   }) ];
