@@ -22026,10 +22026,10 @@ let
 
   TextTrim = buildPerlPackage {
     pname = "Text-Trim";
-    version = "1.03";
+    version = "1.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJT/Text-Trim-1.03.tar.gz";
-      sha256 = "0ks9afvx9c1b6px98wwzhbyhd2y6hdg7884814fc9pnx8qfzrz50";
+      url = "mirror://cpan/authors/id/R/RJ/RJT/Text-Trim-1.04.tar.gz";
+      sha256 = "04dap9599riz2kiyhb1x46h01g95sr6c9azndivd2g6kg688m1ym";
     };
     meta = {
       description = "Remove leading and/or trailing whitespace from strings";
