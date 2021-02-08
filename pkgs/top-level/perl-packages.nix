@@ -19965,10 +19965,10 @@ let
 
   Test2Suite = buildPerlPackage {
     pname = "Test2-Suite";
-    version = "0.000138";
+    version = "0.000139";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Suite-0.000138.tar.gz";
-      sha256 = "0x887d8y657k7072k5f5ly36f067ldafm27xbd9lh5nirvr2vxqc";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Test2-Suite-0.000139.tar.gz";
+      sha256 = "0hwp0w8qncb0rhf99j94w6fc91kszdn0y90psy4cnd7c2904g6sm";
     };
     propagatedBuildInputs = [ ModulePluggable ScopeGuard SubInfo TermTable TestSimple13 ];
     meta = {
