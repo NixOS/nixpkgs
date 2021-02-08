@@ -219,6 +219,15 @@ in rec {
        '';
     };
 
+    startLimitBurst = mkOption {
+       type = types.int;
+       description = ''
+         Configure unit start rate limiting. Units which are started
+         more than startLimitBurst times within an interval time
+         interval are not permitted to start any more.
+       '';
+    };
+
   };
 
 
