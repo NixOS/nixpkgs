@@ -8938,12 +8938,12 @@ let
 
   Graph = buildPerlPackage {
     pname = "Graph";
-    version = "0.9712";
+    version = "0.9717";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/Graph-0.9712.tar.gz";
-      sha256 = "1as4ngbqxrjv9f31hm3wg8pyiyrz5fbbvlpfsrm68k1yskwkgkcg";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/Graph-0.9717.tar.gz";
+      sha256 = "14n4pfg05ly3hw4ivnxqk1vha5jkkx1ssg9iln56qfdjs7h0p58i";
     };
-    propagatedBuildInputs = [ HeapFibonacci ];
+    propagatedBuildInputs = [ HeapFibonacci SetObject ];
   };
 
   GraphicsTIFF = buildPerlPackage {
