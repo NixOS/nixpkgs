@@ -17971,10 +17971,10 @@ let
 
   RoleTiny = buildPerlPackage {
     pname = "Role-Tiny";
-    version = "2.001004";
+    version = "2.002004";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Role-Tiny-2.001004.tar.gz";
-      sha256 = "92ba5712850a74102c93c942eb6e7f62f7a4f8f483734ed289d08b324c281687";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Role-Tiny-2.002004.tar.gz";
+      sha256 = "0i9b4jd4vd6w8nldyhk6y5zsiga4ari83afhaam86kwa2fgfxgfp";
     };
     meta = {
       description = "Roles. Like a nouvelle cuisine portion size slice of Moose";
