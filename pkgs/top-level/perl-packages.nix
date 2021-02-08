@@ -3263,11 +3263,11 @@ let
 
   CompressRawZlib = buildPerlPackage {
     pname = "Compress-Raw-Zlib";
-    version = "2.096";
+    version = "2.100";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.096.tar.gz";
-      sha256 = "04jrqvqsa2c655idw7skv5rhb9vx9997h4n9if5p99srq4hblk6d";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.100.tar.gz";
+      sha256 = "0alr2nmamfw69rq4r2vaf5wnkla98ig5a32gg50ilymhn9n03ilz";
     };
 
     preConfigure = ''
