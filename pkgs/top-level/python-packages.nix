@@ -4904,6 +4904,8 @@ in {
 
   pysbd = callPackage ../development/python-modules/pysbd { };
 
+  pyshark = callPackage ../development/python-modules/pyshark { };
+
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
