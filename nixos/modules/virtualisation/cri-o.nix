@@ -20,7 +20,7 @@ in
     enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
     storageDriver = mkOption {
-      type = types.enum [ "btrfs" "overlay" "vfs" ];
+      type = types.enum [ "aufs" "btrfs" "devmapper" "overlay" "vfs" "zfs" ];
       default = "overlay";
       description = "Storage driver to be used";
     };
