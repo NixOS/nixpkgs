@@ -13,6 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "0qnx5y6c90fphl9mj9d20j2dfgy6s5yr5l0xnzid0vh71zrp6jwv";
   };
 
+  patches = [
+    # Fix for https://github.com/open-source-parsers/jsoncpp/issues/1235.
+    (fetchpatch {
+      url = "https://github.com/open-source-parsers/jsoncpp/commit/ac2870298ed5b5a96a688d9df07461b31f83e906.patch";
+      sha256 = "02wswhiwypmf1jn3rj9q1fw164kljiv4l8h0q6wyijzr77hq4wsg";
+    })
+  ];
+
   /* During darwin bootstrap, we have a cp that doesn't understand the
    * --reflink=auto flag, which is used in the default unpackPhase for dirs
    */

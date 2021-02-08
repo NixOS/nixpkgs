@@ -1,5 +1,7 @@
 {
   chronic = {
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "1hrdkn4g8x7dlzxwb1rfgr8kw3bp4ywg5l4y4i9c2g5cwv62yvvn";
@@ -11,7 +13,7 @@
     groups = ["default"];
     platforms = [];
     source = {
-      remotes = ["http://rubygems.org"];
+      remotes = ["https://rubygems.org"];
       sha256 = "0yclf57n2j3cw8144ania99h1zinf8q3f5zrhqa754j6gl95rp9d";
       type = "gem";
     };
@@ -21,7 +23,7 @@
     groups = ["default"];
     platforms = [];
     source = {
-      remotes = ["http://rubygems.org"];
+      remotes = ["https://rubygems.org"];
       sha256 = "1isj1b3ywgg2m1vdlnr41lpvpm3dbyarf1lla4dfibfmad9csfk9";
       type = "gem";
     };
@@ -33,9 +35,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0zkbmwx5bp2dr54bwhkn831918ijwh022rq45qg38wz2skih7izp";
+      sha256 = "0hsmzjxj1f5ma816gag1b3bdjbynhj2szgar955fcs3gbbzv4sk7";
       type = "gem";
     };
-    version = "0.6.0";
+    version = "0.7.1";
   };
 }
