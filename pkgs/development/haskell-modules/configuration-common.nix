@@ -1410,10 +1410,14 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck super.haskell-language-server;
 
-  # 2021-01-20
-  # apply-refact 0.9.0.0 get's a build error with hls-hlint-plugin 0.8.0
-  # https://github.com/haskell/haskell-language-server/issues/1240
-  apply-refact = super.apply-refact_0_8_2_1;
+  # 2021-02-08: Jailbreaking because of
+  # https://github.com/haskell/haskell-language-server/issues/1329
+  hls-tactics-plugin = doJailbreak super.hls-tactics-plugin;
+
+  # 2021-02-08: Overrides because nightly is to old for hls 0.9.0
+  lsp-test = doDistribute (dontCheck self.lsp-test_0_11_0_7);
+  haskell-lsp = doDistribute self.haskell-lsp_0_23_0_0;
+  haskell-lsp-types = doDistribute self.haskell-lsp-types_0_23_0_0;
 
   # 1. test requires internet
   # 2. dependency shake-bench hasn't been published yet so we also need unmarkBroken and doDistribute
