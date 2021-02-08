@@ -29,6 +29,18 @@ with lib.maintainers; {
     scope = "Maintain ACME-related packages and modules.";
   };
 
+  beam = {
+    members = [
+      ankhers
+      Br1ght0ne
+      DianaOlympos
+      gleber
+      happysalada
+      yurrriq
+    ];
+    scope = "Maintain BEAM-related packages and modules.";
+  };
+
   cinnamon = {
     members = [
       mkg20001

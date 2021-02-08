@@ -10,11 +10,11 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "ding-1.8.1";
+  name = "ding-1.9";
 
   src = fetchurl {
     url = "http://ftp.tu-chemnitz.de/pub/Local/urz/ding/${name}.tar.gz";
-    sha256 = "0chjqs3z9zs1w3l7b5lsaj682rgnkf9kibcbzhggqqcn1pbvl5sq";
+    sha256 = "sha256-aabIH894WihsBTo1LzIBzIZxxyhRYVxLcHpDQwmwmOU=";
   };
 
   buildInputs = [ aspellEnv fortune gnugrep makeWrapper tk tre ];

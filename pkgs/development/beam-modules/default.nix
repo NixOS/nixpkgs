@@ -33,6 +33,7 @@ let
         buildRebar3 = callPackage ./build-rebar3.nix {};
         buildHex = callPackage ./build-hex.nix {};
         buildErlangMk = callPackage ./build-erlang-mk.nix {};
+        fetchMixDeps = callPackage ./fetch-mix-deps.nix { };
         buildMix = callPackage ./build-mix.nix {};
 
         # BEAM-based languages.

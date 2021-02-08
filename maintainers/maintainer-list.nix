@@ -2279,6 +2279,12 @@
     githubId = 265220;
     name = "David Leung";
   };
+  DianaOlympos = {
+    email = "DianaOlympos@noreply.github.com";
+    github = "DianaOlympos";
+    githubId = 15774340;
+    name = "Thomas Depierre";
+  };
   dipinhora = {
     email = "dipinhora+github@gmail.com";
     github = "dipinhora";
@@ -9975,6 +9981,12 @@
     github = "winpat";
     githubId = 6016963;
     name = "Patrick Winter";
+  };
+  winterqt = {
+    email = "nixos@winter.cafe";
+    github = "winterqt";
+    githubId = 78392041;
+    name = "Winter";
   };
   wishfort36 = {
     email = "42300264+wishfort36@users.noreply.github.com";

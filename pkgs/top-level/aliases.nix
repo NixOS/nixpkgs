@@ -709,6 +709,7 @@ mapAliases ({
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   unicorn-emu = unicorn; # added 2020-10-29
   unifiStable = unifi6; # added 2020-12-28
+  untrunc = untrunc-anthwlock; # added 2021-02-01
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
   usbguard-nox = usbguard; # added 2019-09-04
   utillinux = util-linux; # added 2020-11-24
@@ -847,6 +848,8 @@ mapAliases ({
 
   /* Added 2021-01-02 */
   ttyrec = ovh-ttyrec;
+
+  zplugin = zinit; # Added 2021-01-30
 
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:

@@ -171,7 +171,7 @@ in buildFHSUserEnv rec {
     SDL2
     libusb1
     dbus-glib
-    libav
+    ffmpeg
     atk
     # Only libraries are needed from those two
     libudev0-shim
