@@ -15,6 +15,7 @@ let
   inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 
 stdenv.mkDerivation {
@@ -43,21 +44,25 @@ stdenv.mkDerivation {
     (mesonFeatureFlag "graphite" withGraphite2)
     (mesonFeatureFlag "icu" withIcu)
     (mesonFeatureFlag "coretext" withCoreText)
+    (mesonFeatureFlag "introspection" (!isCross))
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
     ninja
-    gobject-introspection
     libintl
     pkg-config
     python3
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ];
+    glib # glib-mkenums
+  ] ++ lib.optional (!isCross) gobject-introspection;
 
   buildInputs = [ glib freetype cairo ] # recommended by upstream
+    ++ lib.optional (!isCross) gobject-introspection
     ++ lib.optionals withCoreText [ ApplicationServices CoreText ];
 
   propagatedBuildInputs = []
