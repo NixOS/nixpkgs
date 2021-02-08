@@ -42,9 +42,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "The LXQt notification daemon";
     homepage = "https://github.com/lxqt/lxqt-notificationd";
-    license = licenses.lgpl21;
+    description = "The LXQt notification daemon";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };

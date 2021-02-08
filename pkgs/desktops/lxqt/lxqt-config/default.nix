@@ -58,9 +58,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Tools to configure LXQt and the underlying operating system";
     homepage = "https://github.com/lxqt/lxqt-config";
-    license = licenses.lgpl21;
+    description = "Tools to configure LXQt and the underlying operating system";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
