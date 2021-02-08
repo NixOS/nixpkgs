@@ -616,6 +616,18 @@ let
     meta.homepage = "https://github.com/rhysd/committia.vim/";
   };
 
+  compe-tabnine = buildVimPluginFrom2Nix {
+    pname = "compe-tabnine";
+    version = "2021-02-08";
+    src = fetchFromGitHub {
+      owner = "tzachar";
+      repo = "compe-tabnine";
+      rev = "0b884f2b0bc965826e69d4377cd06a48a36995ec";
+      sha256 = "0mwqk9ixirjybv9b2f1n08052iv6hcdr5l73f7jij35nc5anclad";
+    };
+    meta.homepage = "https://github.com/tzachar/compe-tabnine/";
+  };
+
   completion-buffers = buildVimPluginFrom2Nix {
     pname = "completion-buffers";
     version = "2021-01-17";
