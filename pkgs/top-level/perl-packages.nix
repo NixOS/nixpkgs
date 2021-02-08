@@ -10241,10 +10241,10 @@ let
 
   IOAIO = buildPerlPackage {
     pname = "IO-AIO";
-    version = "4.73";
+    version = "4.75";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/IO-AIO-4.73.tar.gz";
-      sha256 = "0nmcwj385zdk65z8b9ivsvbm1d7a3d5gfnhy7mkbgyi4h33lfnws";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/IO-AIO-4.75.tar.gz";
+      sha256 = "0ds8q4m3ld4j44clsvzsbcydphs686jdm4x1g8vclfj6cbsy6snc";
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
