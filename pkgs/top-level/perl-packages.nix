@@ -9046,10 +9046,10 @@ let
 
   Gtk2GladeXML = buildPerlPackage {
     pname = "Gtk2-GladeXML";
-    version = "1.007";
+    version = "1.008";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TS/TSCH/Gtk2-GladeXML-1.007.tar.gz";
-      sha256 = "50240a2bddbda807c8f8070de941823b7bf3d288a13be6d0d6563320b42c445a";
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk2-GladeXML-1.008.tar.gz";
+      sha256 = "13pkfj1fx0vpip5ypkqm06j4vbjs58ljfmzwvv2adz4ajn4gqvjz";
     };
     propagatedBuildInputs = [ pkgs.gnome2.libglade pkgs.gtk2 Gtk2 ];
     meta = {
