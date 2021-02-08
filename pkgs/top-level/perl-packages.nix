@@ -10384,10 +10384,10 @@ let
 
   IOInteractive = buildPerlPackage {
     pname = "IO-Interactive";
-    version = "1.022";
+    version = "1.023";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/IO-Interactive-1.022.tar.gz";
-      sha256 = "0ed53b8ae93ae877e98e0d89b7b429e29ccd1ee4c28e952c4ea9aa73d01febdc";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/IO-Interactive-1.023.tar.gz";
+      sha256 = "1gdy4p9q0wdwar8w5hasb10qz5f6ci8g9rdj1q9jl3ja50ml278h";
     };
     meta = {
       description = "Utilities for interactive I/O";
