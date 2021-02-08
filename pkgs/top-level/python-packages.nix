@@ -5688,6 +5688,8 @@ in {
 
   pymsteams = callPackage ../development/python-modules/pymsteams { };
 
+  py-multiaddr = callPackage ../development/python-modules/py-multiaddr { };
+
   py-multibase = callPackage ../development/python-modules/py-multibase { };
 
   py-multicodec = callPackage ../development/python-modules/py-multicodec { };
