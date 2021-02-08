@@ -11719,10 +11719,10 @@ let
 
   Logger = buildPerlPackage {
     pname = "Log-ger";
-    version = "0.037";
+    version = "0.038";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Log-ger-0.037.tar.gz";
-      sha256 = "0f5078g8lkyw09ijpz7dna5xw6yvpd0m283fdrw3s152xmr43qn2";
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Log-ger-0.038.tar.gz";
+      sha256 = "16kgbaly09j48ad44b7i0s66bx885vrb26j6141z5m15rh6zk3b0";
     };
     meta = {
       homepage = "https://metacpan.org/release/Log-ger";
