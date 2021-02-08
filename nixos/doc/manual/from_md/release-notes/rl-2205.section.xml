@@ -325,6 +325,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://upterm.dev">uptermd</link>, an
+          open-source solution for sharing terminal sessions instantly
+          over the public internet via secure tunnels. Available at
+          <link linkend="opt-services.uptermd.enable">services.uptermd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/mbrubeck/agate">agate</link>,
           a very simple server for the Gemini hypertext protocol.
           Available as
