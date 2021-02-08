@@ -126,6 +126,10 @@ let
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;
       platforms = with platforms; linux ++ darwin;
+      knownVulnerabilities =
+        optional (versionOlder version "12.1") "CVE-2017-9051"
+        ++ optionals (versionOlder version "12.3") [ "CVE-2018-5684" "CVE-2018-5766" ]
+        ++ optionals (versionOlder version "12.4") [ "CVE-2019-9717" "CVE-2019-9720" ];
     };
   }; # libavFun
 

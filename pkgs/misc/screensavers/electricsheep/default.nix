@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, libav, lua5_1, curl
+{ stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, ffmpeg, lua5_1, curl
 , libpng, xorg, pkgconfig, flam3, libgtop, boost, tinyxml, freeglut, libGLU, libGL
 , glee }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [
-    wxGTK30 libav lua5_1 curl libpng xorg.libXrender
+    wxGTK30 ffmpeg lua5_1 curl libpng xorg.libXrender
     flam3 libgtop boost tinyxml freeglut libGLU libGL glee
   ];
 
