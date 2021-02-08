@@ -7453,10 +7453,10 @@ let
 
   ExtUtilsInstall = buildPerlPackage {
     pname = "ExtUtils-Install";
-    version = "2.18";
+    version = "2.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-Install-2.18.tar.gz";
-      sha256 = "1i9hgvk3wcyshigfwvlrm2qilh8xvb7lfk3qdjrbnrrvl9xqgpg5";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-Install-2.20.tar.gz";
+      sha256 = "0j4ihbfcx5p1p09r1b308wi5byvp49d7s0qyv05a3c4lmg2z38d4";
     };
     meta = {
       description = "Install files from here to there";
