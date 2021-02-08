@@ -441,6 +441,9 @@ stdenv.mkDerivation {
                       isGccArchSupported targetPlatform.gcc.tune) ''
       echo "-mtune=${targetPlatform.gcc.tune}" >> $out/nix-support/cc-cflags-before
     ''
+    + optionalString targetPlatform.isXtensa ''
+      echo "-mlongcalls" >> $out/nix-support/cc-cflags-before
+    ''
 
     # TODO: categorize these and figure out a better place for them
     + optionalString hostPlatform.isCygwin ''

@@ -9647,6 +9647,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   });
 
+  espressifXtensaOverlays = callPackage ../development/misc/espressif/xtensa-overlays.nix { };
+
   apache-flex-sdk = callPackage ../development/compilers/apache-flex-sdk { };
 
   fasm = pkgsi686Linux.callPackage ../development/compilers/fasm {
@@ -9674,12 +9676,16 @@ in
   gerbil-support = callPackage ../development/compilers/gerbil/gerbil-support.nix { };
   gerbilPackages-unstable = gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
 
-  gccFun = callPackage (if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
-    then ../development/compilers/gcc/6
+  gccFun = callPackage (with stdenv.targetPlatform; 
+    if (isVc4 || libc == "relibc") then ../development/compilers/gcc/6
+    else if isXtensa then ../development/compilers/gcc/8
     else ../development/compilers/gcc/10);
-  gcc = if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
-    then gcc6 else
-      if stdenv.targetPlatform.isAarch64 then gcc9 else gcc10;
+
+  gcc = with stdenv.targetPlatform;
+    if isVc4 || libc == "relibc" then gcc6
+    else if isXtensa then gcc8
+    else if isAarch64 then gcc9
+    else gcc10;
   gcc-unwrapped = gcc.cc;
 
   gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {

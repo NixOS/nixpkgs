@@ -118,6 +118,10 @@ rec {
 
     or1k     = { bits = 32; significantByte = bigEndian; family = "or1k"; };
 
+    lx106    = { bits = 32; significantByte = littleEndian; family = "xtensa"; arch = "lx106"; };
+    esp32    = { bits = 32; significantByte = littleEndian; family = "xtensa"; arch = "esp32"; };
+    esp32s2  = { bits = 32; significantByte = littleEndian; family = "xtensa"; arch = "esp32s2"; };
+
     js       = { bits = 32; significantByte = littleEndian; family = "js"; };
   };
 
@@ -410,6 +414,8 @@ rec {
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "mmixware";                   }
       else if hasPrefix "netbsd" (elemAt l 2)
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
+      else if (elem (elemAt l 1) ["lx106" "esp32" "esp32s2"])
+        then { cpu = elemAt l 1; vendor = "unknown"; kernel = "none"; abi = elemAt l 2; }
       else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])
         then { cpu = elemAt l 0; vendor = "unknown"; kernel = elemAt l 1; abi = elemAt l 2; }
       else if (elemAt l 2 == "ghcjs")

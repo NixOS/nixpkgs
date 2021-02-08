@@ -9,6 +9,7 @@
 , flex
 , texinfo
 , perl
+, espressifXtensaOverlays
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -19,7 +20,6 @@
 let
   reuseLibs = enableShared && withAllTargets;
 
-  version = "2.35.1";
   basename = "binutils";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
@@ -31,6 +31,15 @@ let
     rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
     sha256 = "1kdrz6fki55lm15rwwamn74fnqpy0zlafsida2zymk76n3656c63";
   };
+
+  xtensa-binutils-src = fetchFromGitHub {
+    owner = "espressif";
+    repo = "binutils-gdb";
+    rev = "esp-2020r3-binutils";
+    sha256 = "0az64lv5n52x2hkx43y0d82llfk61cxkblm32zzlk2a26lw4916b";
+  };
+
+  version = "2.35.1";
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
@@ -38,11 +47,16 @@ let
   });
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ((if (with stdenv.targetPlatform; isVc4 || isXtensa) then {
+  name = targetPrefix + basename;
+} else {
   pname = targetPrefix + basename;
   inherit version;
-
-  src = if stdenv.targetPlatform.isVc4 then vc4-binutils-src else normal-src;
+}) // {
+  src = with stdenv.targetPlatform;
+    if isVc4 then vc4-binutils-src
+    else if isXtensa then xtensa-binutils-src
+    else normal-src;
 
   patches = [
     # Make binutils output deterministic by default.
@@ -74,13 +88,9 @@ stdenv.mkDerivation {
   outputs = [ "out" "info" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [
-    bison
-    perl
-    texinfo
-  ] ++ (lib.optionals stdenv.targetPlatform.isiOS [
-    autoreconfHook
-  ]) ++ lib.optionals stdenv.targetPlatform.isVc4 [ flex ];
+  nativeBuildInputs = [ bison perl texinfo ]
+    ++ (lib.optional stdenv.targetPlatform.isiOS autoreconfHook)
+    ++ (lib.optional (with stdenv.targetPlatform; isVc4 || isXtensa) flex);
   buildInputs = [ zlib gettext ];
 
   inherit noSysDirs;
@@ -125,7 +135,10 @@ stdenv.mkDerivation {
     # RUNPATH instead of RPATH on binaries.  This is important because
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     "--enable-new-dtags"
-  ] ++ lib.optionals gold [ "--enable-gold" "--enable-plugins" ];
+  ] ++ (lib.optionals gold [ "--enable-gold" "--enable-plugins" ])
+
+  # Git-based builds default to building both binutils and gdb at once. 
+  ++ (lib.optional stdenv.targetPlatform.isXtensa "--disable-gdb");
 
   doCheck = false; # fails
 
@@ -161,4 +174,8 @@ stdenv.mkDerivation {
        collision due to the ld/as wrappers/symlinks in the latter. */
     priority = 10;
   };
-}
+} // lib.optionalAttrs stdenv.targetPlatform.isXtensa {
+  postPatch = ''
+    cp -RT ${espressifXtensaOverlays stdenv.targetPlatform}/binutils .
+  '';
+})

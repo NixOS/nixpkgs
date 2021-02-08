@@ -137,6 +137,19 @@ rec {
     libc = "newlib";
   };
 
+  esp8266 = {
+    config = "xtensa-lx106-elf";
+    libc = "newlib";
+  };
+  esp32 = {
+    config = "xtensa-esp32-elf";
+    libc = "newlib";
+  };
+  esp32s2 = {
+    config = "xtensa-esp32s2-elf";
+    libc = "newlib";
+  };
+
   arm-embedded = {
     config = "arm-none-eabi";
     libc = "newlib";

@@ -38,6 +38,10 @@ let
     "vc4-none"
     "or1k-none"
 
+    "esp32-none"
+    "esp32s2-none"
+    "lx106-none"
+
     "mmix-mmixware"
 
     "js-ghcjs"
