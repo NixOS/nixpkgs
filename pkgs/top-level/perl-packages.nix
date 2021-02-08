@@ -22504,10 +22504,10 @@ let
 
   TreeSimple = buildPerlPackage {
     pname = "Tree-Simple";
-    version = "1.33";
+    version = "1.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-Simple-1.33.tgz";
-      sha256 = "1alnwb6c7n4al91m9cyknvcyvdz521lh22dz1hyk4v7c50adffnv";
+      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-Simple-1.34.tgz";
+      sha256 = "176j8zgsndfnxb5mxaiarnva3ghck1jxgxwkz77r9fr2sadpksdp";
     };
     buildInputs = [ TestException ];
     meta = {
