@@ -4482,14 +4482,15 @@ let
     propagatedBuildInputs = [ Clone ];
   };
 
-  CSSMinifierXS = buildPerlModule {
+  CSSMinifierXS = buildPerlPackage {
     pname = "CSS-Minifier-XS";
-    version = "0.09";
+    version = "0.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GT/GTERMARS/CSS-Minifier-XS-0.09.tar.gz";
-      sha256 = "1myswrmh0sqp5xjpp03x45z8arfmgkjx0srl3r6kjsyzl1zrk9l8";
+      url = "mirror://cpan/authors/id/G/GT/GTERMARS/CSS-Minifier-XS-0.13.tar.gz";
+      sha256 = "10hz0ns8vgkahlhfqqvs5di7ld16zyr0g3bbbp1g2an8rl4f66f4";
     };
     perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
+    buildInputs = [ TestDiagINC ];
     meta = {
       description = "XS based CSS minifier";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
