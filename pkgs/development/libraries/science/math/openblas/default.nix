@@ -15,8 +15,8 @@
 # Select a specific optimization target (other than the default)
 # See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
 , target ? null
-, enableStatic ? false
-, enableShared ? true
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
 with stdenv.lib;
@@ -71,6 +71,13 @@ let
       NO_AVX512 = true;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
+
+    powerpc64le-linux = {
+      BINARY = 64;
+      TARGET = setTarget "POWER5";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
   };
 in
 
@@ -99,12 +106,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.10";
+  version = "0.3.13";
+
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "174id98ga82bhz2v7sy9yj6pqy0h0088p3mkdikip69p9rh3d17b";
+    sha256 = "14jxh0v3jfbw4mfjx4mcz4dd51lyq7pqvh9k8dg94539ypzjr2lj";
   };
 
   inherit blas64;
@@ -132,12 +142,6 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [
     buildPackages.gfortran
     buildPackages.stdenv.cc
-  ];
-
-  # Disable an optimisation which seems to cause issues, pending an
-  # upstream fix: https://github.com/xianyi/OpenBLAS/issues/2496
-  patches = stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [
-    ./0001-Disable-optimised-aarch64-dgemm_beta-pending-fix.patch
   ];
 
   makeFlags = mkMakeFlagsFromConfig (config // {
