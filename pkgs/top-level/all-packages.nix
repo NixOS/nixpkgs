@@ -27322,6 +27322,8 @@ in
 
   zeroad = zeroadPackages.zeroad;
 
+  _0verkill = callPackage ../games/0verkill { };
+
   ### DESKTOP ENVIRONMENTS
 
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
