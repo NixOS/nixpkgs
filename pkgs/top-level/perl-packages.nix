@@ -17628,10 +17628,10 @@ let
 
   PodStrip = buildPerlModule {
      pname = "Pod-Strip";
-     version = "1.02";
+     version = "1.100";
      src = fetchurl {
-       url = "mirror://cpan/authors/id/D/DO/DOMM/Pod-Strip-1.02.tar.gz";
-       sha256 = "1zsjfw2cjq1bd3ppl67fdvrx46vj9lina0c3cv9qgk5clzvaq3fq";
+       url = "mirror://cpan/authors/id/D/DO/DOMM/Pod-Strip-1.100.tar.gz";
+       sha256 = "1kflmrs6kjzn81vn0ybwjvqadc0mpkq44kxswzpyrjm93xk6ll37";
      };
      meta = {
        description = "Remove POD from Perl code";
