@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "nmigen";
     repo = "nmigen";
     rev = "c79caead33fff14e2dec42b7e21d571a02526876";
-    sha256 = "sha256-3+mxHyg0a92/BfyePtKT5Hsk+ra+fQzTjCJ2Ech44/s=";
+    hash = "sha256-3+mxHyg0a92/BfyePtKT5Hsk+ra+fQzTjCJ2Ech44/s=";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

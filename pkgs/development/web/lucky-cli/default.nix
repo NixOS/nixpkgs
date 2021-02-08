@@ -8,7 +8,7 @@ crystal.buildCrystalPackage rec {
     owner = "luckyframework";
     repo = "lucky_cli";
     rev = "v${version}";
-    sha256 = "sha256-/DKDg2lJO6PikF7+kbwRX8ClS8rflH8KdrZNx7AR36g=";
+    hash = "sha256-/DKDg2lJO6PikF7+kbwRX8ClS8rflH8KdrZNx7AR36g=";
   };
 
   # the integration tests will try to clone a remote repos

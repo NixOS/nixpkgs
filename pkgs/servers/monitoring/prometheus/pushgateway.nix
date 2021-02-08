@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "pushgateway";
-    sha256 = "sha256-z8xM9rq7wKH7bwzjSmGh+2pO5Y10szmIH82ztRrOCNs=";
+    hash = "sha256-z8xM9rq7wKH7bwzjSmGh+2pO5Y10szmIH82ztRrOCNs=";
   };
 
   buildUser = "nix@nixpkgs";

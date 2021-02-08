@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kvwEUcbiwnMqw2PQ9Z1+pgir3b7QYt2o6Y6ajJhs5GQ=";
+    hash = "sha256-kvwEUcbiwnMqw2PQ9Z1+pgir3b7QYt2o6Y6ajJhs5GQ=";
   };
 
   propagatedBuildInputs = [ pyyaml ] ++ lib.optionals isPy27 [ enum34 pathlib ] ;

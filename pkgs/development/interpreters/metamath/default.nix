@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "metamath";
     repo = "metamath-exe";
     rev = "v${version}";
-    sha256 = "sha256-/ofH5fq7lUxbbRBAczsLNG3UPsOMbCdcxkB3el5OPcU=";
+    hash = "sha256-/ofH5fq7lUxbbRBAczsLNG3UPsOMbCdcxkB3el5OPcU=";
   };
 
   meta = with lib; {

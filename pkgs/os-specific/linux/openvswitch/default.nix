@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-GAttQsCrSybyH1i4vzszdiA9dHWqeo7xUTZVFMNQiP4=";
+    hash = "sha256-GAttQsCrSybyH1i4vzszdiA9dHWqeo7xUTZVFMNQiP4=";
   };
 
   kernel = optional (_kernel != null) _kernel.dev;

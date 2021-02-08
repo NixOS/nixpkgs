@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "CISOfy";
     repo = pname;
     rev = version;
-    sha256 = "sha256-+RkzsBcQhHrfY8gEiJK3ptDeulJzA3IuVXiYEpyAsmk=";
+    hash = "sha256-+RkzsBcQhHrfY8gEiJK3ptDeulJzA3IuVXiYEpyAsmk=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];

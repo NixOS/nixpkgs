@@ -31,7 +31,7 @@ mkDerivation rec {
       "https://tellico-project.org/files/tellico-${version}.tar.xz"
       "https://tellico-project.org/files/tellico-${lib.versions.majorMinor version}.tar.xz"
     ];
-    sha256 = "sha256-9cdbUTa2Mt3/yNylOSdGjgDETD74sR0dU4C58uW0Y6o=";
+    hash = "sha256-9cdbUTa2Mt3/yNylOSdGjgDETD74sR0dU4C58uW0Y6o=";
   };
 
   nativeBuildInputs = [

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "lanoxx";
     repo = "tilda";
     rev = "${pname}-${version}";
-    sha256 = "sha256-uDx28jmjNUyzJbgTJiHbjI9U5mYb9bnfl/9AjbxNUWA=";
+    hash = "sha256-uDx28jmjNUyzJbgTJiHbjI9U5mYb9bnfl/9AjbxNUWA=";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];

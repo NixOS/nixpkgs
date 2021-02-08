@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "uproot3";
     rev = version;
-    sha256 = "sha256-6/e+qMgwyFUo8MRRTAaGp9WLPxE2fqMEK4paq26Epzc=";
+    hash = "sha256-6/e+qMgwyFUo8MRRTAaGp9WLPxE2fqMEK4paq26Epzc=";
   };
 
   nativeBuildInputs = [ pytestrunner ];

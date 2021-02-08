@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://fukuchi.org/works/qrencode/qrencode-${version}.tar.gz";
-    sha256 = "sha256-2kSO1PUqumvLDNSMrA3VG4aSvMxM0SdDFAL8pvgXHo4=";
+    hash = "sha256-2kSO1PUqumvLDNSMrA3VG4aSvMxM0SdDFAL8pvgXHo4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

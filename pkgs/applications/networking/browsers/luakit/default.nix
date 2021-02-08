@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "luakit";
     repo = pname;
     rev = version;
-    sha256 = "sha256-78B8vXkWsFMJIHA72Qrk2SWubrY6YuArqcM0UAPjpzc=";
+    hash = "sha256-78B8vXkWsFMJIHA72Qrk2SWubrY6YuArqcM0UAPjpzc=";
   };
 
   nativeBuildInputs = [

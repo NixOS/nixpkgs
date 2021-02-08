@@ -18,7 +18,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/kstars-${version}.tar.xz";
-    sha256 = "sha256-gf+yaXiYQFuO1/nvdP6OOuD4QrRtPAQTwQZAbYNKxUU=";
+    hash = "sha256-gf+yaXiYQFuO1/nvdP6OOuD4QrRtPAQTwQZAbYNKxUU=";
   };
 
   patches = [

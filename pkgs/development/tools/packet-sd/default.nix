@@ -7,7 +7,7 @@ buildGoModule rec {
     owner = "packethost";
     repo = "prometheus-packet-sd";
     rev = "v${version}";
-    sha256 = "sha256-2k8AsmyhQNNZCzpVt6JdgvI8IFb5pRi4ic6Yn2NqHMM=";
+    hash = "sha256-2k8AsmyhQNNZCzpVt6JdgvI8IFb5pRi4ic6Yn2NqHMM=";
   };
 
   vendorSha256 = null;

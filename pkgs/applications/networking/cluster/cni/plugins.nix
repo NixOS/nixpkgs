@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "containernetworking";
     repo = "plugins";
     rev = "v${version}";
-    sha256 = "sha256-n+OtFXgFmW0xsGEtC6ua0qjdsJSbEjn08mAl5Z51Kp8=";
+    hash = "sha256-n+OtFXgFmW0xsGEtC6ua0qjdsJSbEjn08mAl5Z51Kp8=";
   };
 
   vendorSha256 = null;

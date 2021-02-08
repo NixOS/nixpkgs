@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}dist/${name}.tar.gz";
-    sha256 = "sha256-2ICceNXcHtenujKlpVxRFIVRMsxNpIBfjTqvjPRuqkw=";
+    hash = "sha256-2ICceNXcHtenujKlpVxRFIVRMsxNpIBfjTqvjPRuqkw=";
   };
 
   nativeBuildInputs = [ bison flex ];

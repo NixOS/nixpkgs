@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dbeaver.io/files/${version}/dbeaver-ce-${version}-linux.gtk.x86_64.tar.gz";
-    sha256 = "sha256-4BVXcR8/E4uIrPQJe9KU9577j4XLTxJWTO8g0vCHWts=";
+    hash = "sha256-4BVXcR8/E4uIrPQJe9KU9577j4XLTxJWTO8g0vCHWts=";
   };
 
   installPhase = ''

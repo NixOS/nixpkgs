@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "AdelKS";
     repo = "ZeGrapher";
     rev = "v${version}";
-    sha256 = "sha256-OSQXm0gDI1zM2MBM4iiY43dthJcAZJkprklolsNMEvk=";
+    hash = "sha256-OSQXm0gDI1zM2MBM4iiY43dthJcAZJkprklolsNMEvk=";
   };
 
   nativeBuildInputs = [

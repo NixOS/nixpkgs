@@ -8,7 +8,7 @@ mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-    sha256 = "sha256-451be1O/y92ib5hZNVbf8iCkD+e9DoK47Z7IkMnwuo0=";
+    hash = "sha256-451be1O/y92ib5hZNVbf8iCkD+e9DoK47Z7IkMnwuo0=";
   };
 
   phases = [ "installPhase" ];

@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7u8AwIr1Ah/7zCfXFwj/C/CaD/B3uLRkZ8Gf6d18Xp0=";
+    hash = "sha256-7u8AwIr1Ah/7zCfXFwj/C/CaD/B3uLRkZ8Gf6d18Xp0=";
   };
 
   nativeBuildInputs = [ poetry-core ];

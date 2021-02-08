@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-${version}-unix.tar.gz";
-    sha256 = "sha256-vHy7V32xlYaPJdc8oi3j98weOdc4R5S64Dwo9YI8o6c=";
+    hash = "sha256-vHy7V32xlYaPJdc8oi3j98weOdc4R5S64Dwo9YI8o6c=";
   };
 
   preferLocalBuild = true;

@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-Bkap0Ld5zz+HxEjkZrmPZieUpyim4/gpE8oL0q9LGqk=";
+    hash = "sha256-Bkap0Ld5zz+HxEjkZrmPZieUpyim4/gpE8oL0q9LGqk=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

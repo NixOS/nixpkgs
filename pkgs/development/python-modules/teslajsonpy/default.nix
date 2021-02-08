@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "zabuldon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-s0IZ1UNldYddaR3zJoYS6ey8Kjxd1fr4fOwf0gNNbow=";
+    hash = "sha256-s0IZ1UNldYddaR3zJoYS6ey8Kjxd1fr4fOwf0gNNbow=";
   };
 
   patches = [

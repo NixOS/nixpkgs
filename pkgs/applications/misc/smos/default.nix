@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/NorfairKing/smos/releases/download/v${version}/smos-release.zip";
-    sha256 = "sha256:07yavk7xl92yjwwjdig90yq421n8ldv4fjfw7izd4hfpzw849a12";
+    hash = "sha256:07yavk7xl92yjwwjdig90yq421n8ldv4fjfw7izd4hfpzw849a12";
   };
 
   phases = [ "unpackPhase" ];

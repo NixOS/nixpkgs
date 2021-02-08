@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-E6blMhDkZa3Wbdbsw7f8jdHwHFINOQ48XC5pQdkVPtQ=";
+    hash = "sha256-E6blMhDkZa3Wbdbsw7f8jdHwHFINOQ48XC5pQdkVPtQ=";
   };
 
   buildInputs = [ makeWrapper ];

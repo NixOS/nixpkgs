@@ -8,7 +8,7 @@ buildGoModule rec {
         owner = "liquidata-inc";
         repo = "dolt";
         rev = "v${version}";
-        sha256 = "sha256-SYgBy2WGP6ssMDohnbflnd2XpF8iwmxoTTlHQYc1+Wo=";
+        hash = "sha256-SYgBy2WGP6ssMDohnbflnd2XpF8iwmxoTTlHQYc1+Wo=";
     };
 
     modRoot = "./go";

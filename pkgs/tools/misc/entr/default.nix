@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://entrproject.org/code/${pname}-${version}.tar.gz";
-    sha256 = "sha256-tsGrdkTYO7Kiadx0Fghno74PXfEWx+tFPCUFMXNTRCk=";
+    hash = "sha256-tsGrdkTYO7Kiadx0Fghno74PXfEWx+tFPCUFMXNTRCk=";
   };
 
   postPatch = ''

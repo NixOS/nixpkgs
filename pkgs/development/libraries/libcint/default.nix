@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "sunqm";
     repo = "libcint";
     rev = "v${version}";
-    sha256 = "sha256-/S5LcaIIAXq9QiH8wGPSw8KpWC3afX9HqiHrWHmGQ6s=";
+    hash = "sha256-/S5LcaIIAXq9QiH8wGPSw8KpWC3afX9HqiHrWHmGQ6s=";
   };
 
   nativeBuildInputs = [ cmake ];

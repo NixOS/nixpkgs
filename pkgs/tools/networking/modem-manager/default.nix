@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   package = "ModemManager";
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${package}/${package}-${version}.tar.xz";
-    sha256 = "sha256-TqYLN1p2HhfnuwlbyolFee0OjjOyc9xpi1y+A5R/NX8=";
+    hash = "sha256-TqYLN1p2HhfnuwlbyolFee0OjjOyc9xpi1y+A5R/NX8=";
   };
 
   nativeBuildInputs = [ vala gobject-introspection gettext pkg-config ];

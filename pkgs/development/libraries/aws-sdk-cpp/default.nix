@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "awslabs";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "sha256-uita3HPcerxH/bnSIL3ZNUp68QXtKJLYi0pcnV7OBkQ=";
+    hash = "sha256-uita3HPcerxH/bnSIL3ZNUp68QXtKJLYi0pcnV7OBkQ=";
   };
 
   # FIXME: might be nice to put different APIs in different outputs

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-2R4NEmtGHXHeG8GyDZzxQnBDU97AfT5lmdE4QidZ5no=";
+    hash = "sha256-2R4NEmtGHXHeG8GyDZzxQnBDU97AfT5lmdE4QidZ5no=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper cmake gtest ];

@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
       owner = "rust-embedded";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-Dgn+f4aSsDSh+RC8yvt3ydkdtwib5jEVsnZkod5c7Vo=";
+      hash = "sha256-Dgn+f4aSsDSh+RC8yvt3ydkdtwib5jEVsnZkod5c7Vo=";
     };
   in runCommand "source" { } ''
     cp -R ${repo} $out

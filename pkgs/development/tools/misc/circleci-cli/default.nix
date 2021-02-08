@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "CircleCI-Public";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KY1kqqRRpwNt0ovllfFcWSsJAH2J1NrlQAueqQrw354=";
+    hash = "sha256-KY1kqqRRpwNt0ovllfFcWSsJAH2J1NrlQAueqQrw354=";
   };
 
   vendorSha256 = "sha256-6FBMLwoLM2BtnMHQfpY7f7NiQt5evsL4CfYTZvr3gAs=";

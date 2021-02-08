@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "editorconfig-checker";
     repo = "editorconfig-checker";
     rev = version;
-    sha256 = "sha256-u3gTzsAoV4fgQjsnONIIGFE/Y02bKbCTg30O9FTI2/w=";
+    hash = "sha256-u3gTzsAoV4fgQjsnONIIGFE/Y02bKbCTg30O9FTI2/w=";
   };
 
   vendorSha256 = "sha256-0Eznh9xXuYf4mVZipyE99fKwkGYeSAorhBLamupGkvw=";

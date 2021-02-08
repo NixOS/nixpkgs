@@ -12,7 +12,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "vmware";
     repo = "govmomi";
-    sha256 = "sha256-Urfrkeqbl0+GB2Vr2IfekiilRvGcG0vGO5MGeZcP4C8=";
+    hash = "sha256-Urfrkeqbl0+GB2Vr2IfekiilRvGcG0vGO5MGeZcP4C8=";
   };
 
   meta = {

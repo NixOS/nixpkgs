@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Ow8iFVeBFfKOKmqlSbNRKGADlDBL151vKLDTs9b0bAM=";
+    hash = "sha256-Ow8iFVeBFfKOKmqlSbNRKGADlDBL151vKLDTs9b0bAM=";
   };
 
   nativeBuildInputs = [

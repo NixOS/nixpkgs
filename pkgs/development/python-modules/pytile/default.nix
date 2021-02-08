@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bVoFTaK/Alemtc5I+Z/M9y/FWczvJ+P86R0DMD89/BM=";
+    hash = "sha256-bVoFTaK/Alemtc5I+Z/M9y/FWczvJ+P86R0DMD89/BM=";
   };
 
   format = "pyproject";

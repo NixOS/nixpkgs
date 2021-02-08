@@ -25,7 +25,7 @@ mkDerivation rec {
     owner = "buddhi1980";
     repo = "mandelbulber2";
     rev = version;
-    sha256 = "sha256-JgpYGzD2FsqcCWnOKBiVCxUKqLfT4S++uUBZekhGWmA=";
+    hash = "sha256-JgpYGzD2FsqcCWnOKBiVCxUKqLfT4S++uUBZekhGWmA=";
   };
 
   nativeBuildInputs = [

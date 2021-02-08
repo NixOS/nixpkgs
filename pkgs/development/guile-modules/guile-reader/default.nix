@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.savannah.nongnu.org/releases/guile-reader/${pname}-${version}.tar.gz";
-    sha256 = "sha256-OMK0ROrbuMDKt42QpE7D6/9CvUEMW4SpEBjO5+tk0rs=";
+    hash = "sha256-OMK0ROrbuMDKt42QpE7D6/9CvUEMW4SpEBjO5+tk0rs=";
   };
 
   nativeBuildInputs = [ pkg-config ];

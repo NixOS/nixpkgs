@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "wxFormBuilder";
     repo = "wxFormBuilder";
     rev = "d053665cc33a79dd935b518b5e7aea6baf493c92";
-    sha256 = "sha256-hTO7Fyp5ZWpq2CfIYEXB85oOkNrqr6Njfh8h0t9B6wU=";
+    hash = "sha256-hTO7Fyp5ZWpq2CfIYEXB85oOkNrqr6Njfh8h0t9B6wU=";
     fetchSubmodules = true;
   };
 

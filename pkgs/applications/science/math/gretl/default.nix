@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/gretl/${pname}-${version}.tar.xz";
-    sha256 = "sha256-BDaTv6PORiBnsEaU7uXJIKuxTqIgpY44vUmSViyME0A=";
+    hash = "sha256-BDaTv6PORiBnsEaU7uXJIKuxTqIgpY44vUmSViyME0A=";
   };
 
   buildInputs = [

@@ -14,7 +14,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "nginxinc";
     repo = "nginx-prometheus-exporter";
-    sha256 = "sha256-fFzwJXTwtI0NXZYwORRZomj/wADqxW+wvDH49QK0IZw=";
+    hash = "sha256-fFzwJXTwtI0NXZYwORRZomj/wADqxW+wvDH49QK0IZw=";
   };
 
   doCheck = true;

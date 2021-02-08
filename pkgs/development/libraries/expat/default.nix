@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/libexpat/libexpat/releases/download/R_${lib.replaceStrings ["."] ["_"] version}/${name}.tar.xz";
-    sha256 = "sha256-Xf5Tj4tbY/A+mO2sUg19mmpNIuSC5cltTQb8xUhcJfI=";
+    hash = "sha256-Xf5Tj4tbY/A+mO2sUg19mmpNIuSC5cltTQb8xUhcJfI=";
   };
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers

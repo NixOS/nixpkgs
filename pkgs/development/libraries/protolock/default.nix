@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "nilslice";
     repo = "protolock";
     rev = "v${version}";
-    sha256 = "sha256-rnsHVJHFE/8JIOfMWqGBfIbIuOFyHtT54Vu/DaRY9js=";
+    hash = "sha256-rnsHVJHFE/8JIOfMWqGBfIbIuOFyHtT54Vu/DaRY9js=";
   };
 
   vendorSha256 = "sha256-3kRGLZgYcbUQb6S+NrleMNNX0dXrE9Yer3vvqxiP4So=";

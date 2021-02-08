@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "denesb";
     repo = "xfce4-i3-workspaces-plugin";
     rev = version;
-    sha256 = "sha256-+tjxMr0UbE3BLdxBwNr2mZqKSQOOtw69FmN4rk4loyA=";
+    hash = "sha256-+tjxMr0UbE3BLdxBwNr2mZqKSQOOtw69FmN4rk4loyA=";
   };
 
   nativeBuildInputs = [

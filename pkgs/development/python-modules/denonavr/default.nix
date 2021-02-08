@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "scarface-4711";
     repo = "denonavr";
     rev = version;
-    sha256 = "sha256-3ap8F3ayBTpaR98md+gT0+hkIWlFBNxStTGWT5AL//A=";
+    hash = "sha256-3ap8F3ayBTpaR98md+gT0+hkIWlFBNxStTGWT5AL//A=";
   };
 
   propagatedBuildInputs = [

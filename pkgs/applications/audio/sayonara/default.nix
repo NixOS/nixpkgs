@@ -21,7 +21,7 @@ mkDerivation rec {
     owner = "luciocarreras";
     repo = "sayonara-player";
     rev = version;
-    sha256 = "sha256-SbJS0DQvbW++CNXbuDHQxFlLRb1kTtDdIdHOqu0YxeQ=";
+    hash = "sha256-SbJS0DQvbW++CNXbuDHQxFlLRb1kTtDdIdHOqu0YxeQ=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config qttools ];

@@ -9,7 +9,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/alkimia/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-AASnBo3/CqLLb0f3DSHBKQc74R8u2yHxRRK8RHBIfR8=";
+    hash = "sha256-AASnBo3/CqLLb0f3DSHBKQc74R8u2yHxRRK8RHBIfR8=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules doxygen graphviz ];

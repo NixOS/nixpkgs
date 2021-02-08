@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "PapirusDevelopmentTeam";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TQEpNFmsloq1jIg6QsuY8kllINpmwJCY+Anwker6Z5M=";
+    hash = "sha256-TQEpNFmsloq1jIg6QsuY8kllINpmwJCY+Anwker6Z5M=";
   };
 
   nativeBuildInputs = [

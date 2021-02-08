@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "blakemcbride";
     repo = "TECOC";
     rev = "79fcb6cfd6c5f9759f6ec46aeaf86d5806b13a0b";
-    sha256 = "sha256-JooLvoh9CxLHLOXXxE7zA7R9yglr9BGUwX4nrw2/vIw=";
+    hash = "sha256-JooLvoh9CxLHLOXXxE7zA7R9yglr9BGUwX4nrw2/vIw=";
   };
 
   buildInputs = [ ncurses ];

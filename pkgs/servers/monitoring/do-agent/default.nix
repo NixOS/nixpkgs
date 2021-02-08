@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "digitalocean";
     repo = "do-agent";
     rev = version;
-    sha256 = "sha256-0m2dL7oFF45yR4Vu+AW3ROf16w1iioI5McVauOQA/XQ=";
+    hash = "sha256-0m2dL7oFF45yR4Vu+AW3ROf16w1iioI5McVauOQA/XQ=";
   };
 
   buildFlagsArray = ''

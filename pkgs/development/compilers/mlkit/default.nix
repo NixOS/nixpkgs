@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "melsman";
     repo = "mlkit";
     rev = "v${version}";
-    sha256 = "sha256-aa6dRcGTXGakJsHCvHXRKs5BHtIZi6V2r8348epzpVc=";
+    hash = "sha256-aa6dRcGTXGakJsHCvHXRKs5BHtIZi6V2r8348epzpVc=";
   };
 
   nativeBuildInputs = [ autoreconfHook mlton ];

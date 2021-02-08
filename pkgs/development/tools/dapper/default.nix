@@ -13,7 +13,7 @@ buildGoPackage rec {
     owner = "rancher";
     repo = "dapper";
     rev = "v${version}";
-    sha256 = "sha256-QzPW1uC/WuYM/lLqyKodIozGTz5Qn1haoDvgNgjhrRA=";
+    hash = "sha256-QzPW1uC/WuYM/lLqyKodIozGTz5Qn1haoDvgNgjhrRA=";
   };
    patchPhase = ''
      substituteInPlace main.go --replace 0.0.0 ${version}

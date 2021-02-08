@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "FedeDP";
     repo = "Clight";
     rev = version;
-    sha256 = "sha256-NmfnE6ZWgG9erBmrFFIhutnB1t2Ix/6jo+EeXYVtehg=";
+    hash = "sha256-NmfnE6ZWgG9erBmrFFIhutnB1t2Ix/6jo+EeXYVtehg=";
   };
 
   # dbus-1.pc has datadir=/etc

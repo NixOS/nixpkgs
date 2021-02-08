@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://mathr.co.uk/blog/code/${pname}-${version}.tar.gz";
-    sha256 = "sha256-6OJ2R72ziHOsVw1GwalompKwG7Z/WQidHN0IeE9wUtA=";
+    hash = "sha256-6OJ2R72ziHOsVw1GwalompKwG7Z/WQidHN0IeE9wUtA=";
   };
 
   meta = with lib; {

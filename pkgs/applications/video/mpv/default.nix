@@ -101,7 +101,7 @@ in stdenv.mkDerivation rec {
     owner  = "mpv-player";
     repo   = "mpv";
     rev    = "v${version}";
-    sha256 = "sha256-3l32qQBpvWVjbLp5CZtO039oDQeH7C/cNAKtJxrzlRk=";
+    hash = "sha256-3l32qQBpvWVjbLp5CZtO039oDQeH7C/cNAKtJxrzlRk=";
   };
 
   patches = [

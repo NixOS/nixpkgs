@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner  = "cdown";
     repo   = "clipmenu";
     rev    = version;
-    sha256 = "sha256-nvctEwyho6kl4+NXi76jT2kG7nchmI2a7mgxlgjXA5A=";
+    hash = "sha256-nvctEwyho6kl4+NXi76jT2kG7nchmI2a7mgxlgjXA5A=";
   };
 
   postPatch = ''

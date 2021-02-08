@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/particl/particl-core/archive/v${version}.tar.gz";
-    sha256 = "sha256-nAsQvYWUejSu/4MMIwZhlV5Gjza/Da4jcp6/01lppvg=";
+    hash = "sha256-nAsQvYWUejSu/4MMIwZhlV5Gjza/Da4jcp6/01lppvg=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

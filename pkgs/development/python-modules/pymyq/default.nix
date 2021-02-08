@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "arraylabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uCXgJxMy5gZQBvhHnmfev/rfJXOjhLqZdOrn8SetUT0=";
+    hash = "sha256-uCXgJxMy5gZQBvhHnmfev/rfJXOjhLqZdOrn8SetUT0=";
   };
 
   propagatedBuildInputs = [

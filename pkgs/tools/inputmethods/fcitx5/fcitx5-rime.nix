@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "fcitx";
     repo = "fcitx5-rime";
     rev = version;
-    sha256 = "sha256-mPNZ/B5bpxua+E1T+oz9v2QKAzGraA2cfT8oJacC35U=";
+    hash = "sha256-mPNZ/B5bpxua+E1T+oz9v2QKAzGraA2cfT8oJacC35U=";
   };
 
   cmakeFlags = [

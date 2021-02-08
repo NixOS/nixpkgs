@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/morpheus65535/bazarr/archive/v${version}.tar.gz";
-    sha256 = "sha256-Ecbx7FHpcEkcWBAKCtZPtQKX5ibvU4tajSJ5pyEboKc=";
+    hash = "sha256-Ecbx7FHpcEkcWBAKCtZPtQKX5ibvU4tajSJ5pyEboKc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

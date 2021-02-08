@@ -10,7 +10,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-vJL30E6xI/nFbb4wR69nv3FSQPqZSHrB0czypF4IVME=";
+    hash = "sha256-vJL30E6xI/nFbb4wR69nv3FSQPqZSHrB0czypF4IVME=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];

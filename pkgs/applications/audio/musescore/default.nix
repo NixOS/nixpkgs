@@ -13,7 +13,7 @@ mkDerivation rec {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${version}";
-    sha256 = "sha256-0M+idYnrgXyH6WLp+2jIYRnFzTB93v+dG1XHmSNyPjE=";
+    hash = "sha256-0M+idYnrgXyH6WLp+2jIYRnFzTB93v+dG1XHmSNyPjE=";
   };
 
   patches = [

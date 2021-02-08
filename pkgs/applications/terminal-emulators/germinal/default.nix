@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "Keruspe";
     repo = "Germinal";
     rev = "v${version}";
-    sha256 = "sha256-HUi+skF4bJj5CY2cNTOC4tl7jhvpXYKqBx2rqKzjlo0=";
+    hash = "sha256-HUi+skF4bJj5CY2cNTOC4tl7jhvpXYKqBx2rqKzjlo0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];

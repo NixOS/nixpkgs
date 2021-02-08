@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
       owner = "dellytools";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-DWwC35r8cQbePUzppkFQlev0YZdxk2+BSrNTW/DOY3M=";
+      hash = "sha256-DWwC35r8cQbePUzppkFQlev0YZdxk2+BSrNTW/DOY3M=";
   };
 
   buildInputs = [ zlib htslib bzip2 lzma ncurses boost ];

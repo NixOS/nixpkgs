@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "fbb-git";
     repo = "bisoncpp";
     rev = "6.04.00";
-    sha256 = "sha256:0aa9bij4g08ilsk6cgrbgi03vyhqr9fn6j2164sjin93m63212wl";
+    hash = "sha256:0aa9bij4g08ilsk6cgrbgi03vyhqr9fn6j2164sjin93m63212wl";
   };
 
   buildInputs = [ bobcat ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   gpl = fetchurl {
     url = "https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt";
-    sha256 = "sha256:0hq6i0dm4420825fdm0lnnppbil6z67ls67n5kgjcd912dszjxw1";
+    hash = "sha256:0hq6i0dm4420825fdm0lnnppbil6z67ls67n5kgjcd912dszjxw1";
   };
 
   postPatch = ''

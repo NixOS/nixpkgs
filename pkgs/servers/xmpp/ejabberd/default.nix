@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/${pname}-${version}.tgz";
-    sha256 = "sha256-nZxdYXRyv4UejPLHNT/p6CrvW22Koo7rZSi96KRjqFQ=";
+    hash = "sha256-nZxdYXRyv4UejPLHNT/p6CrvW22Koo7rZSi96KRjqFQ=";
   };
 
   nativeBuildInputs = [ fakegit ];

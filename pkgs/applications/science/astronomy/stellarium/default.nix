@@ -12,7 +12,7 @@ mkDerivation rec {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "sha256-EhlcaMxlDyX2RneBrpbmLScc9vd77Tf7RPblbQqAqZ0=";
+    hash = "sha256-EhlcaMxlDyX2RneBrpbmLScc9vd77Tf7RPblbQqAqZ0=";
   };
 
   nativeBuildInputs = [ cmake perl wrapQtAppsHook ];

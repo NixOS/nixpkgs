@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-5+OLhEH3f+udyCMctDSoYZCiHy82ksKBRX6Z016cNOo=";
+    hash = "sha256-5+OLhEH3f+udyCMctDSoYZCiHy82ksKBRX6Z016cNOo=";
   };
 
   nativeBuildInputs = [

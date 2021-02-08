@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://alsa/lib/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-91VL4aVs3/RotY/BwpuVtkhkxZADjdMJx6l4xxFpCPc=";
+    hash = "sha256-91VL4aVs3/RotY/BwpuVtkhkxZADjdMJx6l4xxFpCPc=";
   };
 
   patches = [

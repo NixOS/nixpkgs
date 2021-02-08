@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "JeffLIrion";
     repo = "python-androidtv";
     rev = "v${version}";
-    sha256 = "sha256-xOLMUf72VHeBzbMnhJGOnUIKkflnY4rV9NS/P1aYLJc=";
+    hash = "sha256-xOLMUf72VHeBzbMnhJGOnUIKkflnY4rV9NS/P1aYLJc=";
   };
 
   propagatedBuildInputs = [ adb-shell pure-python-adb ]

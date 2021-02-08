@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "pekdon";
     repo = "pekwm";
     rev = "release-${version}";
-    sha256 = "sha256-R1XDEk097ycMI3R4SjUEJv37CiMaDCQMvg7N8haN0MM=";
+    hash = "sha256-R1XDEk097ycMI3R4SjUEJv37CiMaDCQMvg7N8haN0MM=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];

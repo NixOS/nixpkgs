@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-33ufeOhZb5nSgpXKc4cI8GVe4Fd4nf2SHHsbq5ZXgpg=";
+    hash = "sha256-33ufeOhZb5nSgpXKc4cI8GVe4Fd4nf2SHHsbq5ZXgpg=";
   };
 
   # Hidden dependency that wasn't included in CMakeLists.txt:

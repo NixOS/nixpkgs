@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "roehling";
     repo = "postsrsd";
     rev = version;
-    sha256 = "sha256-AqOHHOnGqOnIw5hPPiJjUJFiwngTux7gwn8qig0t7hs=";
+    hash = "sha256-AqOHHOnGqOnIw5hPPiJjUJFiwngTux7gwn8qig0t7hs=";
   };
 
   cmakeFlags = [ "-DGENERATE_SRS_SECRET=OFF" "-DINIT_FLAVOR=systemd" ];

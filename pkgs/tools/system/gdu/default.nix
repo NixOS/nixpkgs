@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "dundee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-m4J797bmQzKuyA01JgDLVlf+PbXDVXWtYbID/0QVLxE=";
+    hash = "sha256-m4J797bmQzKuyA01JgDLVlf+PbXDVXWtYbID/0QVLxE=";
   };
 
   vendorSha256 = "sha256-kIMd0xzQ+c+jCpX2+qdD/GcFEirR15PMInbEV184EBU=";

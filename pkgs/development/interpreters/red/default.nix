@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     rev = "755eb943ccea9e78c2cab0f20b313a52404355cb";
     owner = "red";
     repo = "red";
-    sha256 = "sha256:045rrg9666zczgrwyyyglivzdzja103s52b0fzj7hqmr1fz68q37";
+    hash = "sha256:045rrg9666zczgrwyyyglivzdzja103s52b0fzj7hqmr1fz68q37";
   };
 
   rebol = fetchurl {

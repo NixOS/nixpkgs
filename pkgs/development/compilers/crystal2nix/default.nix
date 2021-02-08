@@ -8,7 +8,7 @@ crystal.buildCrystalPackage rec {
     owner = "peterhoeg";
     repo = "crystal2nix";
     rev = "v${version}";
-    sha256 = "sha256-K1ElG8VC/D0axmSRaufH3cE50xNQisAmFucDkV+5O0s=";
+    hash = "sha256-K1ElG8VC/D0axmSRaufH3cE50xNQisAmFucDkV+5O0s=";
   };
 
   format = "shards";

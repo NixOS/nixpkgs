@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-E/tPjVc+XLDCFYzloAipwWjB4I86kAe/6NVoJSCrY2M=";
+    hash = "sha256-E/tPjVc+XLDCFYzloAipwWjB4I86kAe/6NVoJSCrY2M=";
   };
 
   vendorSha256 = "sha256-YoQF0Eug747LhsR3V0IplwXgm0ndDqK1pUVjguOhjOU=";

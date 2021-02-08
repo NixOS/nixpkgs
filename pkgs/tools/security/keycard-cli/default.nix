@@ -14,7 +14,7 @@ buildGoPackage rec {
     owner = "status-im";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ejFvduZs3eWc6efr9o4pXb6qw2QWWQTtkTxF80vOGNU=";
+    hash = "sha256-ejFvduZs3eWc6efr9o4pXb6qw2QWWQTtkTxF80vOGNU=";
   };
 
   buildFlagsArray = [

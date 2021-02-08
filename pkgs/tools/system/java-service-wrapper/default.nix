@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    sha256 = "sha256-rnlloa0DicWT1RlP2szDvBINvT5/RZ17GOarUzvX1AI=";
+    hash = "sha256-rnlloa0DicWT1RlP2szDvBINvT5/RZ17GOarUzvX1AI=";
   };
 
   buildInputs = [ jdk ];

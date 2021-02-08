@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "pkkid";
     repo = "python-plexapi";
     rev = version;
-    sha256 = "sha256-gRXNOGd9YGcGysKbAtiNwi5NxPvv39F6PEXBjiYbVq4=";
+    hash = "sha256-gRXNOGd9YGcGysKbAtiNwi5NxPvv39F6PEXBjiYbVq4=";
   };
 
   propagatedBuildInputs = [

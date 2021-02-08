@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     repo = "bup";
     owner = "bup";
     rev = version;
-    sha256 = "sha256-SWnEJ5jwu/Jr2NLsTS8ajWay0WX/gYbOc3J6w00DndI=";
+    hash = "sha256-SWnEJ5jwu/Jr2NLsTS8ajWay0WX/gYbOc3J6w00DndI=";
   };
 
   buildInputs = [

@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "out-of-cheese-error";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-OqJceRO1RFOLgNi3SbTKLw62tSfJSO7T2/u0RTX89AM=";
+    hash = "sha256-OqJceRO1RFOLgNi3SbTKLw62tSfJSO7T2/u0RTX89AM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

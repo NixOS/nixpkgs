@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/twbs/bootstrap/releases/download/v${version}/${pname}-${version}-dist.zip";
-    sha256 = "sha256-CiEUUa0mCrUSp+XCoWNs8plJxhWHZZD+K+UBJSDu1CM=";
+    hash = "sha256-CiEUUa0mCrUSp+XCoWNs8plJxhWHZZD+K+UBJSDu1CM=";
   };
 
   buildInputs = [ unzip ];

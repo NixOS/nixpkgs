@@ -5,7 +5,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchurl {
     url = "https://github.com/zwilias/elm-json/archive/v${version}.tar.gz";
-    sha256 = "sha256:1b9bhl7rb01ylqjbfd1ccm26lhk4hzwd383rbg89aj2jwjv0w4hs";
+    hash = "sha256:1b9bhl7rb01ylqjbfd1ccm26lhk4hzwd383rbg89aj2jwjv0w4hs";
   };
 
   cargoPatches = [ ./elm-json.patch ];

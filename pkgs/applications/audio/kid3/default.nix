@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/kid3/kid3/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-DEZ5J1QendgXJ1gBZ3h0LwsVTLL1vPznJ7Nc+97jFB8=";
+    hash = "sha256-DEZ5J1QendgXJ1gBZ3h0LwsVTLL1vPznJ7Nc+97jFB8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];

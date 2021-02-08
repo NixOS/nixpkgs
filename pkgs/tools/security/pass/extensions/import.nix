@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     owner = "roddhjav";
     repo = "pass-import";
     rev = "v${version}";
-    sha256 = "sha256-nH2xAqWfMT+Brv3z9Aw6nbvYqArEZjpM28rKsRPihqA=";
+    hash = "sha256-nH2xAqWfMT+Brv3z9Aw6nbvYqArEZjpM28rKsRPihqA=";
   };
 
   patches = [ ./0001-Fix-installation-with-Nix.patch ];

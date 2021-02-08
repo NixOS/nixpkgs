@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/atftp/${pname}-${version}.tar.gz";
-    sha256 = "sha256-08nNDZcd/Hhtel9AVcNdTmaq/IECrANHPvIlvfftsmo=";
+    hash = "sha256-08nNDZcd/Hhtel9AVcNdTmaq/IECrANHPvIlvfftsmo=";
   };
 
   buildInputs = [ readline tcp_wrappers pcre makeWrapper gcc ];

@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "fullstorydev";
     repo = "grpcurl";
     rev = "v${version}";
-    sha256 = "sha256-ZrL23eqA56BApwUtBwL5nSAd2LZbQxthyiFBnkJ5+Zg=";
+    hash = "sha256-ZrL23eqA56BApwUtBwL5nSAd2LZbQxthyiFBnkJ5+Zg=";
   };
 
   subPackages = [ "cmd/grpcurl" ];

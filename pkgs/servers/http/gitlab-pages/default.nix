@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "gitlab-pages";
     rev = "v${version}";
-    sha256 = "sha256-bJ9BQbAe35z5cIw0HhFjM6arWf1Tdy4gRipAHywxZZk=";
+    hash = "sha256-bJ9BQbAe35z5cIw0HhFjM6arWf1Tdy4gRipAHywxZZk=";
   };
 
   vendorSha256 = "sha256-amPL0gzvqsacj7+UNJeZOQbeiBESUttbtPHxLpDykRI=";

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${majorMinorPatch version}/lazarus-${version}.tar.gz";
-    sha256 = "sha256-ZNViZGjdJKMzKyBfOr0KWBq33hsGCi1X4hhkBmz9Q7c=";
+    hash = "sha256-ZNViZGjdJKMzKyBfOr0KWBq33hsGCi1X4hhkBmz9Q7c=";
   };
 
   postPatch = ''

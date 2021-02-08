@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchurl {
     url = "https://github.com/42wim/matterbridge/archive/v${version}.tar.gz";
-    sha256 = "sha256-ehn6KdPpDpfdyWCVfLuZLq2dDmZXc6InlnovqNsdG6Y=";
+    hash = "sha256-ehn6KdPpDpfdyWCVfLuZLq2dDmZXc6InlnovqNsdG6Y=";
   };
 
   meta = with lib; {

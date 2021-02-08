@@ -23,7 +23,7 @@ mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-W41Poq5S+opkasIGYo13SQZWQF1HjfFnH7u9DW5HNA0=";
+    hash = "sha256-W41Poq5S+opkasIGYo13SQZWQF1HjfFnH7u9DW5HNA0=";
   };
 
   postPatch = ''

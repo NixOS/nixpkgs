@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-/jmC6kzZrrO0ujX2J58LV3o3F10ygr4kuaVTe1a48Bw=";
+    hash = "sha256-/jmC6kzZrrO0ujX2J58LV3o3F10ygr4kuaVTe1a48Bw=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

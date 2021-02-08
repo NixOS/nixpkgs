@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "fcitx";
     repo = "xcb-imdkit";
     rev = version;
-    sha256 = "sha256-ISaVsMtDsyfhbhsAwDSWkQ7ZcpNtvC7M9NFQsWA5ju8=";
+    hash = "sha256-ISaVsMtDsyfhbhsAwDSWkQ7ZcpNtvC7M9NFQsWA5ju8=";
   };
 
   nativeBuildInputs = [

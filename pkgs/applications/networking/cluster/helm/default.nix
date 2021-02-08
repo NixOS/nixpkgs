@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "sha256-XFWJtzKQrZL6lcr8JNiEQ8ldG5289x5pE21E8XgoYkA=";
+    hash = "sha256-XFWJtzKQrZL6lcr8JNiEQ8ldG5289x5pE21E8XgoYkA=";
   };
   vendorSha256 = "sha256-mjWQxCCtTgj1VCFjnuJWgDjwMt/r4jiFC9Of+CXRgPg=";
 

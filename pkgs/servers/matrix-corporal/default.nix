@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "devture";
     repo = pname;
     rev = version;
-    sha256 = "sha256-u1ppwy+t2ewAH0/+R6e0Ja5A3PQG/lUy2b6kgcMVj8E=";
+    hash = "sha256-u1ppwy+t2ewAH0/+R6e0Ja5A3PQG/lUy2b6kgcMVj8E=";
   };
 
   buildFlagsArray = [

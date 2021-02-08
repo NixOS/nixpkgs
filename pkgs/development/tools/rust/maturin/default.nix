@@ -11,7 +11,7 @@ in rustPlatform.buildRustPackage rec {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    sha256 = "sha256-X5/1zEVhhdTuyXcUwC3jVv9Gblmv8LT+ftsVo8BnnZs=";
+    hash = "sha256-X5/1zEVhhdTuyXcUwC3jVv9Gblmv8LT+ftsVo8BnnZs=";
   };
 
   cargoSha256 = "sha256-PBmuPIpCwC7fr/MKFaeSd/0avoEATlxoeMHisjouAeI=";

@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-co00Ye/QVNSG4h67m56+37JLilBVzHxUwMs1vS3wYX4=";
+    hash = "sha256-co00Ye/QVNSG4h67m56+37JLilBVzHxUwMs1vS3wYX4=";
   };
 
   vendorSha256 = "sha256-q7n8WLw/A2wr3z5h7zaFERY7lO5UIsmTD2mrcH/vpNs=";

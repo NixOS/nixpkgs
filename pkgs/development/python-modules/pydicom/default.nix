@@ -16,7 +16,7 @@ let
     owner = "${pname}";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "sha256-iExy+mUs1uqs/u9N6btlqyP6/TvoPVsuOuzs56zZAS8=";
+    hash = "sha256-iExy+mUs1uqs/u9N6btlqyP6/TvoPVsuOuzs56zZAS8=";
   };
 
   # Pydicom needs pydicom-data to run some tests. If these files are downloaded
@@ -25,7 +25,7 @@ let
     owner = "${pname}";
     repo = "${pname}-data";
     rev = "bbb723879690bb77e077a6d57657930998e92bd5";
-    sha256 = "sha256-dCI1temvpNWiWJYVfQZKy/YJ4ad5B0e9hEKHJnEeqzk=";
+    hash = "sha256-dCI1temvpNWiWJYVfQZKy/YJ4ad5B0e9hEKHJnEeqzk=";
   };
 
 in

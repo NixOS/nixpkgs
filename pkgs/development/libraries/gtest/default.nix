@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "fix-pkgconfig-paths.patch";
       url = "https://github.com/google/googletest/commit/5126ff48d9ac54828d1947d1423a5ef2a8efee3b.patch";
-      sha256 = "sha256-TBvECU/9nuvwjsCjWJP2b6DNy+FYnHIFZeuVW7g++JE=";
+      hash = "sha256-TBvECU/9nuvwjsCjWJP2b6DNy+FYnHIFZeuVW7g++JE=";
     })
   ];
 

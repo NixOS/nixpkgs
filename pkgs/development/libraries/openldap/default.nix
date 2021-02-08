@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    sha256 = "sha256-x7pH4ebstbQ289Qygd9Xq+/6mSYhQa7IImKLwiD2tFo=";
+    hash = "sha256-x7pH4ebstbQ289Qygd9Xq+/6mSYhQa7IImKLwiD2tFo=";
   };
 
   # TODO: separate "out" and "bin"

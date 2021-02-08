@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
   src = fetchurl {
     url =
       "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    sha256 = "sha256-zrxNCXJIuEbtE3YNRK8Bxu2koHsQkcF+xItoIyhj9Uc=";
+    hash = "sha256-zrxNCXJIuEbtE3YNRK8Bxu2koHsQkcF+xItoIyhj9Uc=";
   };
 
   hardeningEnable = [ "pie" ];

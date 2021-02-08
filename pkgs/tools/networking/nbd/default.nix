@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/nbd/${name}.tar.xz";
-    sha256 = "sha256-52iK852Rczu80tsIBixE/lA9AE5RUodAE5xEr/amvvk=";
+    hash = "sha256-52iK852Rczu80tsIBixE/lA9AE5RUodAE5xEr/amvvk=";
   };
 
   buildInputs = [ glib ]

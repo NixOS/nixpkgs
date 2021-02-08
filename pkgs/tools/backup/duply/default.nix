@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/2.3.x/duply_${version}.tgz";
-    sha256 = "sha256-I1KkblFnZVOCvcWEarGsSXnzlod2+yZ4okaTpckLFbE=";
+    hash = "sha256-I1KkblFnZVOCvcWEarGsSXnzlod2+yZ4okaTpckLFbE=";
   };
 
   buildInputs = [ txt2man makeWrapper ];

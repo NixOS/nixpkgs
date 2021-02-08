@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    sha256 = "sha256-OIQk7ngg1wsB6DFcxhrviPGlhzdaAWBi9C2roSNg1eI=";
+    hash = "sha256-OIQk7ngg1wsB6DFcxhrviPGlhzdaAWBi9C2roSNg1eI=";
   };
 
   # Adapt the linux-only CMakeLists to darwin (more reliable than make-macos.sh)

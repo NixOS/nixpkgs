@@ -20,7 +20,7 @@ buildGoModule rec {
     owner = "AkihiroSuda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lSvYiTh67gK9kJls7VsayV8T3H6RzFEEKe49BOWnUBw=";
+    hash = "sha256-lSvYiTh67gK9kJls7VsayV8T3H6RzFEEKe49BOWnUBw=";
   };
 
   vendorSha256 = "sha256-qywiaNoO3pI7sfyPbwWR8BLd86RvJ2xSWwCJUsm3RkM=";

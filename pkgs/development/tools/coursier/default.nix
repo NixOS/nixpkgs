@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
       "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
-    sha256 = "sha256-jqSv9VBLotl6YVWgWNznvTThRIiMUStQ0WbN6u01b1c=";
+    hash = "sha256-jqSv9VBLotl6YVWgWNznvTThRIiMUStQ0WbN6u01b1c=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

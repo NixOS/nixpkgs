@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "minio";
     repo = "mc";
     rev = "RELEASE.${version}";
-    sha256 = "sha256-1JUCoeLFMDvzT5KdQw+ZdYWPgdWKIL3kJ/LCIsqc6xE=";
+    hash = "sha256-1JUCoeLFMDvzT5KdQw+ZdYWPgdWKIL3kJ/LCIsqc6xE=";
   };
 
   vendorSha256 = "sha256-3wWUIFpNXom2MuUEDgAAEHlWRXhUzId+shZW/i5Rw4A=";

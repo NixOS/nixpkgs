@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "sha256-mO4HJHHlXiCMmHjlFcQQrUYso2+HtK/L7K0CPzos70o=";
+    hash = "sha256-mO4HJHHlXiCMmHjlFcQQrUYso2+HtK/L7K0CPzos70o=";
   };
 
   nativeBuildInputs = [ pkg-config ];

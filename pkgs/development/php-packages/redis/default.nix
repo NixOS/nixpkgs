@@ -4,7 +4,7 @@ buildPecl {
   pname = "redis";
 
   version = "5.3.3";
-  sha256 = "sha256-N3iRYeFkzVIjmjDJojjaYf7FyDlc2sOFtu2PDFD9kvA=";
+  hash = "sha256-N3iRYeFkzVIjmjDJojjaYf7FyDlc2sOFtu2PDFD9kvA=";
 
   internalDeps = with php.extensions; [
     session

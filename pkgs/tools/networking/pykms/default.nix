@@ -40,7 +40,7 @@ pypkgs.buildPythonApplication rec {
     owner = "SystemRage";
     repo = "py-kms";
     rev = "a3b0c85b5b90f63b33dfa5ae6085fcd52c6da2ff";
-    sha256 = "sha256-u0R0uJMQxHnJUDenxglhQkZza3/1DcyXCILcZVceygA=";
+    hash = "sha256-u0R0uJMQxHnJUDenxglhQkZza3/1DcyXCILcZVceygA=";
   };
 
   sourceRoot = "source/py-kms";

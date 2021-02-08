@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/${pname}.jar";
-    sha256 = "sha256-kKjgAO3DEpZOm91Tzkhj4rmNOaacZi74o/qfp8n11Z4=";
+    hash = "sha256-kKjgAO3DEpZOm91Tzkhj4rmNOaacZi74o/qfp8n11Z4=";
   };
 
   dontUnpack = true;

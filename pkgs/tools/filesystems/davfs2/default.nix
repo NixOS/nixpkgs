@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/davfs2/${name}.tar.gz";
-    sha256 = "sha256-LmtnVoW9kXdyvmDwmZrgmMgPef8g3BMej+xFR8u2O1A=";
+    hash = "sha256-LmtnVoW9kXdyvmDwmZrgmMgPef8g3BMej+xFR8u2O1A=";
   };
 
   buildInputs = [ neon zlib ];

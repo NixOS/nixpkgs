@@ -20,7 +20,7 @@ let
   majorVersion = "1";
   minorVersion = "5";
   maintenanceVersion = "3";
-  src_sha256 = "sha256:0jds8lrhk4hfdv7dg5p2ibzin9ivga7wrx7zwcmz6dqp3x792n1i";
+  src_hash = "sha256:0jds8lrhk4hfdv7dg5p2ibzin9ivga7wrx7zwcmz6dqp3x792n1i";
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
 in
 

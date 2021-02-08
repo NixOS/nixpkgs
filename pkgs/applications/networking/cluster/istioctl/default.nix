@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "istio";
     repo = "istio";
     rev = version;
-    sha256 = "sha256-9mQYJvZU/Ra+LyzfDbWGfopkdGBD7DpS9/yvRvGHDKg=";
+    hash = "sha256-9mQYJvZU/Ra+LyzfDbWGfopkdGBD7DpS9/yvRvGHDKg=";
   };
   vendorSha256 = "sha256-7LQY32hNXLxg/IUBbzzgb67yrbPGLCTNtmNvjE9tUno=";
 

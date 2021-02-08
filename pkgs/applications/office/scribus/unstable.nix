@@ -40,7 +40,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-devel/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1CV2lVOc+kDerYq9rwTFHjTU10vK1aLJNNCObp1Dt6s=";
+    hash = "sha256-1CV2lVOc+kDerYq9rwTFHjTU10vK1aLJNNCObp1Dt6s=";
   };
 
   nativeBuildInputs = [

@@ -26,7 +26,7 @@ stdenv.mkDerivation (rec {
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-RFjY3nhJ30TMqxXhaxVIsoUiTbul8I+sBwwcDgvMTPo=";
+    hash = "sha256-RFjY3nhJ30TMqxXhaxVIsoUiTbul8I+sBwwcDgvMTPo=";
   };
 
   patches = [ ./sys-getdents-undeclared.patch ]

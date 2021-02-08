@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     inherit rev;
     owner = "spwhitton";
     repo = "git-remote-gcrypt";
-    sha256 = "sha256-uHgz8Aj5w8UOo/XbptCRKON1RAdDfFsLL9ZDEF1QrPQ=";
+    hash = "sha256-uHgz8Aj5w8UOo/XbptCRKON1RAdDfFsLL9ZDEF1QrPQ=";
   };
 
   outputs = [ "out" "man" ];

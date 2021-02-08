@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "go-swagger";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mBBjZRjaD1m6sIKR1/MRAKW25bGVNihxBwQMbw/lby4=";
+    hash = "sha256-mBBjZRjaD1m6sIKR1/MRAKW25bGVNihxBwQMbw/lby4=";
   };
 
   vendorSha256 = "sha256-Am0ypcViUcAcf96qv5qE7K3FvQuQs1XlpIqZf2upWyc=";

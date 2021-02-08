@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "catboost";
     repo = "catboost";
     rev = "v${version}";
-    sha256 = "sha256-pzmwEiKziB4ldnKgeCsP2HdnisX8sOkLssAzNfcSEx8=";
+    hash = "sha256-pzmwEiKziB4ldnKgeCsP2HdnisX8sOkLssAzNfcSEx8=";
   };
 
   nativeBuildInputs = [ clang_7 python2 ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "format.patch";
       url = "https://github.com/catboost/catboost/pull/1528/commits/a692ba42e5c0f62e5da82b2f6fccfa77deb3419c.patch";
-      sha256 = "sha256-fNGucHxsSDFRLk3hFH7rm+zzTdDpY9/QjRs8K+AzVvo=";
+      hash = "sha256-fNGucHxsSDFRLk3hFH7rm+zzTdDpY9/QjRs8K+AzVvo=";
     })
   ];
 

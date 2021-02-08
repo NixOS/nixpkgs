@@ -41,7 +41,7 @@ mkDerivation rec {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "sha256-+ZQ80J94Teqt4Gy6fw/pS7FwILK/TPehtJDy72Bdy1E=";
+    hash = "sha256-+ZQ80J94Teqt4Gy6fw/pS7FwILK/TPehtJDy72Bdy1E=";
   };
 
   buildInputs = [

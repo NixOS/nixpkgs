@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "lxc";
     repo = "lxcfs";
     rev = "lxcfs-${version}";
-    sha256 = "sha256-gC1Q+kG/oKfYvuHVKstpRWfL/thsemULrimPrV/eeaI=";
+    hash = "sha256-gC1Q+kG/oKfYvuHVKstpRWfL/thsemULrimPrV/eeaI=";
   };
 
   nativeBuildInputs = [ pkg-config help2man autoreconfHook ];

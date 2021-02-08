@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    sha256 = "sha256-cotv0EQKnrUgpBF7ibOHm8gKg6zXS2i19PTi29PajWc=";
+    hash = "sha256-cotv0EQKnrUgpBF7ibOHm8gKg6zXS2i19PTi29PajWc=";
   };
 
   preBuild = ''

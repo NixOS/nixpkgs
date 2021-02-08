@@ -11,7 +11,7 @@ stdenv.mkDerivation (rec {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${version}";
-    sha256 = "sha256-42hmdMwOYSWGiDCmhuqtpCWtvtyD2l+kA/bhHD/Qh5Y=";
+    hash = "sha256-42hmdMwOYSWGiDCmhuqtpCWtvtyD2l+kA/bhHD/Qh5Y=";
   };
 
   buildInputs = [ ocaml makeWrapper ncurses ];

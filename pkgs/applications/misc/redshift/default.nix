@@ -138,7 +138,7 @@ rec {
       owner = "chinstrap";
       repo = pname;
       rev = "v${version}";
-      sha256 = "sha256-78z2CQ+r7undbp+8E0mMDNWWl+RXeS5he/ax0VomRYY=";
+      hash = "sha256-78z2CQ+r7undbp+8E0mMDNWWl+RXeS5he/ax0VomRYY=";
     };
 
     meta = redshift.meta // {

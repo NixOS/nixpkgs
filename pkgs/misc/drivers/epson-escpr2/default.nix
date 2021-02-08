@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
       "https://download3.ebz.epson.net/dsc/f/03/00/12/09/63/b7d2bb6a97c9ad99a96ebc68f8abcb1254888e94/epson-inkjet-printer-escpr2-1.1.24-1lsb3.2.src.rpm"
       "https://web.archive.org/web/20201112163802if_/https://download3.ebz.epson.net/dsc/f/03/00/12/09/63/b7d2bb6a97c9ad99a96ebc68f8abcb1254888e94/epson-inkjet-printer-escpr2-1.1.24-1lsb3.2.src.rpm"
     ];
-    sha256 = "sha256-DPzjKKsTWbfDk1MsVPXNsO5D7C/RiNegmwq2sEMx2co=";
+    hash = "sha256-DPzjKKsTWbfDk1MsVPXNsO5D7C/RiNegmwq2sEMx2co=";
   };
 
   patches = [ ./cups-filter-ppd-dirs.patch ];

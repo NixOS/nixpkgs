@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.savannah.nongnu.org/releases/skribilo/${pname}-${version}.tar.gz";
-    sha256 = "sha256-AIJqIcRjT7C0EO6J60gGjERdgAglh0ZU49U9XKPwvwk=";
+    hash = "sha256-AIJqIcRjT7C0EO6J60gGjERdgAglh0ZU49U9XKPwvwk=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper ];

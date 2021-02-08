@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = version;
-    sha256 = "sha256-51HXbX15uB1Xf9Re7Qi41BnJ9OW+GeXQhylJ+HwP0f8=";
+    hash = "sha256-51HXbX15uB1Xf9Re7Qi41BnJ9OW+GeXQhylJ+HwP0f8=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -10,7 +10,7 @@
   src = fetchgit {
     url = "git://git.tvdr.de/vdr.git";
     rev = "V20406";
-    sha256 = "sha256-te9lMmnWpesv+np2gJUDL17pI0WyVxhUnoBsFSRtOco=";
+    hash = "sha256-te9lMmnWpesv+np2gJUDL17pI0WyVxhUnoBsFSRtOco=";
   };
 
   enableParallelBuilding = true;

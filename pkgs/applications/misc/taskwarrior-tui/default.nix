@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     owner = "kdheepak";
     repo = "taskwarrior-tui";
     rev = "v${version}";
-    sha256 = "sha256-NQzZhWoLeDF7iTgIljbVi0ULAe7DeIn45Cu6bgFCfKQ=";
+    hash = "sha256-NQzZhWoLeDF7iTgIljbVi0ULAe7DeIn45Cu6bgFCfKQ=";
   };
 
   # Because there's a test that requires terminal access

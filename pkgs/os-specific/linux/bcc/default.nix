@@ -12,7 +12,7 @@ python.pkgs.buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://github.com/iovisor/bcc/releases/download/v${version}/bcc-src-with-submodule.tar.gz";
-    sha256 = "sha256-0F8tppVFu7cnuSnlgcEvbEdykxYhGJnTc04I98/yIVs=";
+    hash = "sha256-0F8tppVFu7cnuSnlgcEvbEdykxYhGJnTc04I98/yIVs=";
   };
   format = "other";
 

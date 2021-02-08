@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";
-    sha256 = "sha256-CPPSJVKf01TA89Qk/uyvIU+ejo5JyT4Mc35KKJPv4IE=";
+    hash = "sha256-CPPSJVKf01TA89Qk/uyvIU+ejo5JyT4Mc35KKJPv4IE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "qpdf";
     repo = "qpdf";
     rev = "release-qpdf-${version}";
-    sha256 = "sha256-abPT1u/ceBrE1U+omOHiU3UjLrmcpdSpe1vgar0wUGk=";
+    hash = "sha256-abPT1u/ceBrE1U+omOHiU3UjLrmcpdSpe1vgar0wUGk=";
   };
 
   nativeBuildInputs = [ perl ];

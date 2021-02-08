@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "jarun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PgWg396AQ15CAnfTXGDpSg1UXx7mNCtknEjJd/KV4MU=";
+    hash = "sha256-PgWg396AQ15CAnfTXGDpSg1UXx7mNCtknEjJd/KV4MU=";
   };
 
   buildInputs = [ python ];

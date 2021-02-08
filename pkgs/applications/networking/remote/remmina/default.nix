@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "sha256-n3YfLKCv6CoBeUIv+1yN6RIih63PTFj5zr+dZDJwYdw=";
+    hash = "sha256-n3YfLKCv6CoBeUIv+1yN6RIih63PTFj5zr+dZDJwYdw=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];

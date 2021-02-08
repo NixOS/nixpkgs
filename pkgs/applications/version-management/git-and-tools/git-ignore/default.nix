@@ -10,7 +10,7 @@ buildRustPackage rec {
     owner = "sondr3";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bKIBPqGKiS3ey8vH2F4EoleV1H2PTOp+71d/YW3jkT0=";
+    hash = "sha256-bKIBPqGKiS3ey8vH2F4EoleV1H2PTOp+71d/YW3jkT0=";
   };
 
   cargoSha256 = "sha256-D1CIITuZSAsKYsK8U0q8HwPsYCyrfkTXZThxufEEkWU=";

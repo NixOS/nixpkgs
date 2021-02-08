@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "praw-dev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-onxag3kmswqqSycbwW+orofrukry0pCaRSxVRq2u53A=";
+    hash = "sha256-onxag3kmswqqSycbwW+orofrukry0pCaRSxVRq2u53A=";
   };
 
   propagatedBuildInputs = [

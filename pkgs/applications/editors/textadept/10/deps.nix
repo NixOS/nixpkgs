@@ -1,7 +1,7 @@
 {
     "99fa62b828ee.zip" = {
       url = "http://foicica.com/hg/scintilla/archive/99fa62b828ee.zip";
-      sha256 = "sha256-QO4iGhx72CfB1/0Pp/Qab92qm98VZn/EkrHZGndoHVc=";
+      hash = "sha256-QO4iGhx72CfB1/0Pp/Qab92qm98VZn/EkrHZGndoHVc=";
     };
     "lua-5.3.5.tar.gz" = {
       url = "http://www.lua.org/ftp/lua-5.3.5.tar.gz";
@@ -9,15 +9,15 @@
     };
     "lpeg-1.0.2.tar.gz" = {
       url = "http://www.inf.puc-rio.br/~roberto/lpeg/lpeg-1.0.2.tar.gz";
-      sha256 = "sha256-SNZldgUbbHg4j6rQm3BJMJMmRYj80PJY3aqxzdShX/4=";
+      hash = "sha256-SNZldgUbbHg4j6rQm3BJMJMmRYj80PJY3aqxzdShX/4=";
     };
     "v1_7_0_2.zip" = {
       url = "https://github.com/keplerproject/luafilesystem/archive/v1_7_0_2.zip";
-      sha256 = "sha256-kXSriR8dOStCpYeyr7c3+VZez4qGDS5aK/9FeFj1hHg=";
+      hash = "sha256-kXSriR8dOStCpYeyr7c3+VZez4qGDS5aK/9FeFj1hHg=";
     };
     "db67f8a489e8.zip" = {
       url = "http://foicica.com/hg/gtdialog/archive/db67f8a489e8.zip";
-      sha256 = "sha256-UIvjbDrg3jyz7t2tm4y1zzH/TG6Kqaz3LE5y2U6OHuM=";
+      hash = "sha256-UIvjbDrg3jyz7t2tm4y1zzH/TG6Kqaz3LE5y2U6OHuM=";
     };
     "cdk-5.0-20150928.tgz" = {
       url = "http://invisible-mirror.net/archives/cdk/cdk-5.0-20150928.tgz";

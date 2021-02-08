@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EjzWx3wcmTfB3OmN0OB37K6wYKVO3HzGEIf+uihas8k=";
+    hash = "sha256-EjzWx3wcmTfB3OmN0OB37K6wYKVO3HzGEIf+uihas8k=";
   };
 
   propagatedBuildInputs = [

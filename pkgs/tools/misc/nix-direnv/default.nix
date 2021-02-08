@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "nix-community";
     repo = "nix-direnv";
     rev = version;
-    sha256 = "sha256-D31ORVdS8P1OkPShsfjEFLVCcv8Bff9OyexUKKHdguQ=";
+    hash = "sha256-D31ORVdS8P1OkPShsfjEFLVCcv8Bff9OyexUKKHdguQ=";
   };
 
   # Substitute instead of wrapping because the resulting file is

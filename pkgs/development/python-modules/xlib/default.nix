@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "python-xlib";
     repo = "python-xlib";
     rev = version;
-    sha256 = "sha256-zOG1QzRa5uN36Ngv8i5s3mq+VIoRzxFj5ltUbKdonJ0=";
+    hash = "sha256-zOG1QzRa5uN36Ngv8i5s3mq+VIoRzxFj5ltUbKdonJ0=";
   };
 
   checkPhase = ''

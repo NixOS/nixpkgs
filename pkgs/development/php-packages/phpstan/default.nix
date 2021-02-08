@@ -8,7 +8,7 @@ mkDerivation {
 
   src = pkgs.fetchurl {
     url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-    sha256 = "sha256-VSA/37LTawwIL1qdyp35auml7we3xDdrZN21/V3BWlM=";
+    hash = "sha256-VSA/37LTawwIL1qdyp35auml7we3xDdrZN21/V3BWlM=";
   };
 
   phases = [ "installPhase" ];

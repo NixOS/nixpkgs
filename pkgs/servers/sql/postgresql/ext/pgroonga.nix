@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-YDDO3t6ARbQv72QotjA7DNxOlRo2O5CYzrH+/eEzj3w=";
+    hash = "sha256-YDDO3t6ARbQv72QotjA7DNxOlRo2O5CYzrH+/eEzj3w=";
   };
 
   nativeBuildInputs = [ pkg-config ];

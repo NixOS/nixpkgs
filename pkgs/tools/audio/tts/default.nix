@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     owner = "mozilla";
     repo = "TTS";
     rev = "df5899daf4ba4ec89544edf94f9c2e105c544461";
-    sha256 = "sha256-lklG8DqG04LKJY93z2axeYhW8gtpbRG41o9ow2gJjuA=";
+    hash = "sha256-lklG8DqG04LKJY93z2axeYhW8gtpbRG41o9ow2gJjuA=";
   };
 
   preBuild = ''

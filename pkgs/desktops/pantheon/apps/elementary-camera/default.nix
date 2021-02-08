@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "sha256-asl5NdSuLItXebxvqGlSEjwWhdButmka12YQAYkQT44=";
+    hash = "sha256-asl5NdSuLItXebxvqGlSEjwWhdButmka12YQAYkQT44=";
   };
 
   passthru = {

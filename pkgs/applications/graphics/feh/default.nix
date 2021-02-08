@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://feh.finalrewind.org/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Q3Qg838RYU4AjQZuKjve/Px4FEyCEpmLK6zdXSHqI7Q=";
+    hash = "sha256-Q3Qg838RYU4AjQZuKjve/Px4FEyCEpmLK6zdXSHqI7Q=";
   };
 
   outputs = [ "out" "man" "doc" ];

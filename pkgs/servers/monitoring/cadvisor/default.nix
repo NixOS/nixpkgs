@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "google";
     repo = "cadvisor";
     rev = "v${version}";
-    sha256 = "sha256-2gwN3/sYPcDy1EUxt9mYviciN9/ZVdChIsuMt3Ueq68=";
+    hash = "sha256-2gwN3/sYPcDy1EUxt9mYviciN9/ZVdChIsuMt3Ueq68=";
   };
 
   modRoot = "./cmd";

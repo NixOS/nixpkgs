@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${pname}-${version}.tar.gz";
-    sha256 = "sha256-wzQtQuZxOcFluLEo0DO1yWiToTrF8lkzGQMVIU6HqUg=";
+    hash = "sha256-wzQtQuZxOcFluLEo0DO1yWiToTrF8lkzGQMVIU6HqUg=";
   };
 
   configureFlags = [

@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
     owner = "gluster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pjJQAFEb44yNqvNAOclZsiEDZBgcfIxliD3La1IsKPs=";
+    hash = "sha256-pjJQAFEb44yNqvNAOclZsiEDZBgcfIxliD3La1IsKPs=";
   };
   inherit buildInputs propagatedBuildInputs;
 

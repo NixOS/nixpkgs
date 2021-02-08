@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "https://github.com/linux-pam/linux-pam/releases/download/v${version}/Linux-PAM-${version}.tar.xz";
-    sha256 = "sha256-IB1AcwsRNbGzzeoJ8sKKxjTXMYHM0Bcs7d7jZJxXkvw=";
+    hash = "sha256-IB1AcwsRNbGzzeoJ8sKKxjTXMYHM0Bcs7d7jZJxXkvw=";
   };
 
   patches = lib.optionals (stdenv.hostPlatform.libc == "musl") [

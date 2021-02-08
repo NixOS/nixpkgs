@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-PH/YSrOoS6RSWyUenVYSDa7mJqODFoSpdP2tR2+QJw0=";
+    hash = "sha256-PH/YSrOoS6RSWyUenVYSDa7mJqODFoSpdP2tR2+QJw0=";
   };
 
   buildInputs = [ libXinerama gettext hamlib fltk14 libjpeg libpng portaudio

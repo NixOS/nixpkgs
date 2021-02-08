@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "petervanderdoes";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kHirHG/bfsU6tKyQ0khNSTyChhzHfzib+HyA3LOtBI8=";
+    hash = "sha256-kHirHG/bfsU6tKyQ0khNSTyChhzHfzib+HyA3LOtBI8=";
   };
 
   buildInputs = [ pkgs.makeWrapper ];

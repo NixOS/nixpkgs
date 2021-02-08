@@ -10,7 +10,7 @@ in buildPythonPackage rec {
     owner = "mysql";
     repo = "mysql-connector-python";
     rev = version;
-    sha256 = "sha256-YVtcHbDsW1mTjbCY1YhqgtqWv4keKlLExn2AhlOzNEw=";
+    hash = "sha256-YVtcHbDsW1mTjbCY1YhqgtqWv4keKlLExn2AhlOzNEw=";
   };
 
   propagatedBuildInputs = with py.pkgs; [ protobuf dnspython ];

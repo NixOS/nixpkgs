@@ -11,7 +11,7 @@ let
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
-    sha256 = "sha256-mi+AeHg9zO0vjF0OZCufPkliInqxTvDGV350wqAwe90=";
+    hash = "sha256-mi+AeHg9zO0vjF0OZCufPkliInqxTvDGV350wqAwe90=";
     fetchSubmodules = true;
   };
 

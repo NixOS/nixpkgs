@@ -25,7 +25,7 @@ let lispPackages = rec {
         # Will usually be replaced with a fresh version anyway, but needs to be
         # a valid distinfo.txt
         url = "https://beta.quicklisp.org/dist/quicklisp/2020-10-16/distinfo.txt";
-        sha256 = "sha256:090xjcnyqcv8az9n1a7m0f6vzz2nwcncy95ha7ixb7fnd2rj1n65";
+        hash = "sha256:090xjcnyqcv8az9n1a7m0f6vzz2nwcncy95ha7ixb7fnd2rj1n65";
       };
       buildPhase = "true; ";
       postInstall = ''

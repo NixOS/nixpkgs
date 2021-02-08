@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "CrunchyData";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6KFYTZq126uvxQ5IOrMN+hpnAk/WtmS1Dam7w6Oif1M=";
+    hash = "sha256-6KFYTZq126uvxQ5IOrMN+hpnAk/WtmS1Dam7w6Oif1M=";
   };
 
   vendorSha256 = "sha256-qdlh9H039GwKTxOhx+dzyUHkzJbaOeuguKnBOyAPe/E=";

@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     owner = "zalando";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IlRltJrEMrRiwVVMYQywb0MqwEoL8MX3do2GlHXjuPc=";
+    hash = "sha256-IlRltJrEMrRiwVVMYQywb0MqwEoL8MX3do2GlHXjuPc=";
   };
 
   # cdiff renamed to ydiff; remove when patroni source reflects this.

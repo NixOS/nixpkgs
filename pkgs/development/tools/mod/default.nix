@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "marwan-at-work";
     repo = "mod";
     rev = "v${version}";
-    sha256 = "sha256-IPdZ2PSS4rYVoMxrunse8Z2NHXLjXAoBcDvB6D70ki0=";
+    hash = "sha256-IPdZ2PSS4rYVoMxrunse8Z2NHXLjXAoBcDvB6D70ki0=";
   };
 
   vendorSha256 = "sha256-1+06/yXi07iWZhcCEGNnoL2DpeVRYMW/NdyEhZQePbk=";

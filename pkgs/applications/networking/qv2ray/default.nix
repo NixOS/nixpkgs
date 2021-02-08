@@ -23,7 +23,7 @@ mkDerivation rec {
     owner = "Qv2ray";
     repo = "Qv2ray";
     rev = "v${version}";
-    sha256 = "sha256-zf3IlpRbZGDZMEny0jp7S+kWtcE1Z10U9GzKC0W0mZI=";
+    hash = "sha256-zf3IlpRbZGDZMEny0jp7S+kWtcE1Z10U9GzKC0W0mZI=";
     fetchSubmodules = true;
   };
 

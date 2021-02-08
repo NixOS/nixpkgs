@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gentoo.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-YFCFRDGeq2h/UXKme/NnnCuFdtw2Vim6Y3SbytaItGc=";
+    hash = "sha256-YFCFRDGeq2h/UXKme/NnnCuFdtw2Vim6Y3SbytaItGc=";
   };
 
   makeFlags = [ "INSTALL_DIR=$(out)" ];

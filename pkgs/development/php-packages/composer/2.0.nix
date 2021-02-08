@@ -8,7 +8,7 @@ mkDerivation {
 
   src = fetchurl {
     url = "https://getcomposer.org/download/${version}/composer.phar";
-    sha256 = "sha256-JPqlvIB+OZ8y6aIaM/u1sGht+ciFDvq+LAR8LM+5+cw=";
+    hash = "sha256-JPqlvIB+OZ8y6aIaM/u1sGht+ciFDvq+LAR8LM+5+cw=";
   };
 
   dontUnpack = true;

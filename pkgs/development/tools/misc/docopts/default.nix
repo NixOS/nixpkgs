@@ -8,7 +8,7 @@ buildGoPackage rec {
     owner = "docopt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PmsTkPT/sf70MKYLhHvjCDb2o3VQ1k7d++RUW7rcoAg=";
+    hash = "sha256-PmsTkPT/sf70MKYLhHvjCDb2o3VQ1k7d++RUW7rcoAg=";
   };
 
   goPackagePath = "github.com/docopt/${pname}";

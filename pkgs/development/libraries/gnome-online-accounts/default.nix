@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gnome-online-accounts";
     rev = version;
-    sha256 = "sha256-NRGab/CMJxe31rr20+5wYZF2rOzoSNdztfNVojBd5ag=";
+    hash = "sha256-NRGab/CMJxe31rr20+5wYZF2rOzoSNdztfNVojBd5ag=";
   };
 
   outputs = [ "out" "man" "dev" "devdoc" ];

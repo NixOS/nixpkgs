@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "pvizeli";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RJeHPCTuaLN+zB0N0FGt4qrTI6++1ks5iBn64Cx0Psc=";
+    hash = "sha256-RJeHPCTuaLN+zB0N0FGt4qrTI6++1ks5iBn64Cx0Psc=";
   };
 
   postPatch = ''

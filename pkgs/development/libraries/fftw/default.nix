@@ -18,7 +18,7 @@ stdenv.mkDerivation {
       "http://fftw.org/fftw-${version}.tar.gz"
       "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz"
     ];
-    sha256 = "sha256-vyx85AsEroEa9xTetRJRDMLBe5q51t3PSf5Eh+6nrz0=";
+    hash = "sha256-vyx85AsEroEa9xTetRJRDMLBe5q51t3PSf5Eh+6nrz0=";
   };
 
   outputs = [ "out" "dev" "man" ]

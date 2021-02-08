@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://launchpad.net/${pname}/trunk/${version}/+download/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-cppODnUKQpS9kFkkOqxU3yqAElAVn8VQtQsP4Carkos=";
+    hash = "sha256-cppODnUKQpS9kFkkOqxU3yqAElAVn8VQtQsP4Carkos=";
   };
 
   nativeBuildInputs = [ cmake perl pkg-config makeWrapper ];

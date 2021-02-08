@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "simh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-65+YfOWpVXPeT64TZcSaWJY+ODQ0q/pwF9jb8xGdpIs=";
+    hash = "sha256-65+YfOWpVXPeT64TZcSaWJY+ODQ0q/pwF9jb8xGdpIs=";
   };
 
   buildInputs = [ SDL2 SDL2_ttf libpcap vde2 pcre ];

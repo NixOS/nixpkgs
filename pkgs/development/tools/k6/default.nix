@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "loadimpact";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eUvkW6IBmUp4/zYNlQKrNrxMszdzU8v6tCc2o4DN1As=";
+    hash = "sha256-eUvkW6IBmUp4/zYNlQKrNrxMszdzU8v6tCc2o4DN1As=";
   };
 
   subPackages = [ "./" ];

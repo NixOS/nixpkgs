@@ -26,7 +26,7 @@ stdenv.mkDerivation rec{
     owner = "corectrl";
     repo = "corectrl";
     rev = "v${version}";
-    sha256 = "sha256-YQDrxPqCa3OzNKd3UiAffqqvOrgbXmDFJGjYPetolyY=";
+    hash = "sha256-YQDrxPqCa3OzNKd3UiAffqqvOrgbXmDFJGjYPetolyY=";
   };
 
   nativeBuildInputs = [

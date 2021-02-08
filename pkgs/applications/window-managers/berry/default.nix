@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "JLErvin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-2kFVOE5l1KQvDb5KDL7y0p4M7awJLrxJF871cyc0YZ8=";
+    hash = "sha256-2kFVOE5l1KQvDb5KDL7y0p4M7awJLrxJF871cyc0YZ8=";
   };
 
   buildInputs =[

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnupg/ntbtls/ntbtls-${version}.tar.bz2";
-    sha256 = "sha256-ZJ/nSjEdE+Q7FrJuuqkWZd22MpJbc5AlkurD7TBRnhc=";
+    hash = "sha256-ZJ/nSjEdE+Q7FrJuuqkWZd22MpJbc5AlkurD7TBRnhc=";
   };
 
   outputs = [ "dev" "out" ];

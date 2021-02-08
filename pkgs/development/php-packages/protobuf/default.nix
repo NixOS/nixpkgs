@@ -12,7 +12,7 @@ buildPecl {
     # TODO: remove with next update
     (fetchpatch {
       url = "https://github.com/protocolbuffers/protobuf/commit/823f351448f7c432bed40b89ee3309e0a94c1855.patch";
-      sha256 = "sha256-ozHtO8s9zvmh/+wBEge3Yn3n0pbpR3dAojJcuAg/G3s=";
+      hash = "sha256-ozHtO8s9zvmh/+wBEge3Yn3n0pbpR3dAojJcuAg/G3s=";
       stripLen = 4;
       includes = [
         "array.c"

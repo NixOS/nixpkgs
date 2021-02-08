@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "https://packages.groonga.org/source/groonga/${pname}-${version}.tar.gz";
-    sha256 = "sha256-9NKyY+oliGIJQaNHdHOs+1GAfdZ0sy+mbQFrRNXpjLM=";
+    hash = "sha256-9NKyY+oliGIJQaNHdHOs+1GAfdZ0sy+mbQFrRNXpjLM=";
   };
 
   buildInputs = with lib;

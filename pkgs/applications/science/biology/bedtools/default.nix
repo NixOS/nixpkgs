@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "arq5x";
     repo = "bedtools2";
     rev = "v${version}";
-    sha256 = "sha256-NqKldF7ePJn3pT+AkESIQghBKSFFOEBBsTaKEbU+oaQ=";
+    hash = "sha256-NqKldF7ePJn3pT+AkESIQghBKSFFOEBBsTaKEbU+oaQ=";
   };
 
   buildInputs = [ zlib python bzip2 lzma ];

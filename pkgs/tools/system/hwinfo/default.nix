@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "opensuse";
     repo = "hwinfo";
     rev = version;
-    sha256 = "sha256-T/netiZqox+qa19wH+h8cbsGbiM+9VrSEIjccrPYqws=";
+    hash = "sha256-T/netiZqox+qa19wH+h8cbsGbiM+9VrSEIjccrPYqws=";
   };
 
   patchPhase = ''

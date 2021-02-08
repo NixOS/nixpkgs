@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "openethereum";
     repo = "openethereum";
     rev = "v${version}";
-    sha256 = "sha256-RUrJuJF0R0mc7XdLyk915fRWtMfzjp5QE6oeWxHfyEQ=";
+    hash = "sha256-RUrJuJF0R0mc7XdLyk915fRWtMfzjp5QE6oeWxHfyEQ=";
   };
 
   cargoSha256 = "sha256-b+winsCzU0sXGDX6nUtWq4JrIyTcJ3uva7RlV5VsXfk=";

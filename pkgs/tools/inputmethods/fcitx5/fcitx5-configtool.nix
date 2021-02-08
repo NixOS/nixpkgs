@@ -25,7 +25,7 @@ mkDerivation rec {
     owner = "fcitx";
     repo = "fcitx5-configtool";
     rev = version;
-    sha256 = "sha256-kw0KIbS5SVMf6kR/9xsYiChHXQBM0enSVXyh0QfiiPY=";
+    hash = "sha256-kw0KIbS5SVMf6kR/9xsYiChHXQBM0enSVXyh0QfiiPY=";
   };
 
   cmakeFlags = [

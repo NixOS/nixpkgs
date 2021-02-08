@@ -248,7 +248,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       url = "https://git.videolan.org/?p=ffmpeg.git;a=patch;h=7c59e1b0f285cd7c7b35fcd71f49c5fd52cf9315";
-      sha256 = "sha256-dqpmpDFETTuWHWolMoLaubU4BeDEuQaBNA0wmzL1f8o=";
+      hash = "sha256-dqpmpDFETTuWHWolMoLaubU4BeDEuQaBNA0wmzL1f8o=";
       name = "fix_libsrt.patch";
     })
     # Patch ffmpeg for svt-av1 until version 4.4

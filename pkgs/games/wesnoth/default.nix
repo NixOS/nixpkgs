@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     rev = version;
     owner = "wesnoth";
     repo = "wesnoth";
-    sha256 = "sha256-HbQy5yhNe6HFydipqh2wWcyLfIjbdRjcBQaqAOtBJsY=";
+    hash = "sha256-HbQy5yhNe6HFydipqh2wWcyLfIjbdRjcBQaqAOtBJsY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

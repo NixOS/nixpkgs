@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/${pname}-${version}.tar.gz";
-    sha256 = "sha256-N+0SIUEiuXLhig2UmVA55XdIGRk573QRWx1B2IETZLw=";
+    hash = "sha256-N+0SIUEiuXLhig2UmVA55XdIGRk573QRWx1B2IETZLw=";
   };
 
   doCheck = true; # not cross;

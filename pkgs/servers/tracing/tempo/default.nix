@@ -8,7 +8,7 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "tempo";
-    sha256 = "sha256-Har0JJqr6mkliKh25n+F4tork+bzfI/bv19H/rIRb9g=";
+    hash = "sha256-Har0JJqr6mkliKh25n+F4tork+bzfI/bv19H/rIRb9g=";
   };
 
   vendorSha256 = null;

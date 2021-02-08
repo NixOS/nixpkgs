@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "rsyslog";
     repo = "librelp";
     rev = "v${version}";
-    sha256 = "sha256-nE7YavjZj+nHcTNkcl/xVAaP+9XfHlTEsW18aPO/ABY=";
+    hash = "sha256-nE7YavjZj+nHcTNkcl/xVAaP+9XfHlTEsW18aPO/ABY=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

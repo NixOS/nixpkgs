@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "bitnami-labs";
     repo = "sealed-secrets";
     rev = "v${version}";
-    sha256 = "sha256-sUeXzmgSOkpqzqrX9+wNGj2X7gcf5QSpavXK4MJe8qE=";
+    hash = "sha256-sUeXzmgSOkpqzqrX9+wNGj2X7gcf5QSpavXK4MJe8qE=";
   };
 
   vendorSha256 = null;

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "jackaudio";
     repo = "jack2";
     rev = "v${version}";
-    sha256 = "sha256-T6UJpLsXrsIL3HaChfVP52w0v9DCs/sJqty2/kAWNfE=";
+    hash = "sha256-T6UJpLsXrsIL3HaChfVP52w0v9DCs/sJqty2/kAWNfE=";
   };
 
   nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];

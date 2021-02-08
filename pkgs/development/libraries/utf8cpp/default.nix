@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     repo = "utfcpp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-l5sneFsuvPDIRni2x+aR9fmQ9bzXNnIiP9EzZ63sNtg=";
+    hash = "sha256-l5sneFsuvPDIRni2x+aR9fmQ9bzXNnIiP9EzZ63sNtg=";
   };
 
   cmakeFlags = [

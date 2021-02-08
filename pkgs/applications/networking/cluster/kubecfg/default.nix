@@ -10,7 +10,7 @@ buildGoPackage {
     owner = "bitnami";
     repo = "kubecfg";
     rev = "v${version}";
-    sha256 = "sha256-/91im204vBS3NjrMOvwTVO6tEBgdpirqJFqCnbIB+iQ=";
+    hash = "sha256-/91im204vBS3NjrMOvwTVO6tEBgdpirqJFqCnbIB+iQ=";
   };
 
   goPackagePath = "github.com/bitnami/kubecfg";

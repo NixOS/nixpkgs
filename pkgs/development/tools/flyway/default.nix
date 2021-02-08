@@ -7,7 +7,7 @@
       inherit version;
       src = fetchurl {
         url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${version}/flyway-commandline-${version}.tar.gz";
-        sha256 = "sha256-oO7k6JOKUm11OYNN+tH/zqF9ucgrsnF4PcphT8+xnS8=";
+        hash = "sha256-oO7k6JOKUm11OYNN+tH/zqF9ucgrsnF4PcphT8+xnS8=";
       };
       nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;

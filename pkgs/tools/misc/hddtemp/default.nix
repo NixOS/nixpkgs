@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/hddtemp/hddtemp-${version}.tar.bz2";
-    sha256 = "sha256-YYVBWEBUCT1TvootnoHJcXTzDwCvkcuHAKl+RC1571s=";
+    hash = "sha256-YYVBWEBUCT1TvootnoHJcXTzDwCvkcuHAKl+RC1571s=";
   };
 
   # from Gentoo

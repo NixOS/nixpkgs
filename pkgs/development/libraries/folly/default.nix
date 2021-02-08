@@ -25,7 +25,7 @@ stdenv.mkDerivation (rec {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-n2cpXdjPZYNjvSHBZFFn3JFwqYCFWc8qSKwet80LtJE=";
+    hash = "sha256-n2cpXdjPZYNjvSHBZFFn3JFwqYCFWc8qSKwet80LtJE=";
   };
 
   nativeBuildInputs = [

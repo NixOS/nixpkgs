@@ -10,7 +10,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://repo.steampowered.com/steam/pool/steam/s/steam/steam_${version}.tar.gz";
-    sha256 = "sha256-ZeiCYjxnH0Ath5bB20QHmE8R3wU4/3RiAw2NUhrrKNM=";
+    hash = "sha256-ZeiCYjxnH0Ath5bB20QHmE8R3wU4/3RiAw2NUhrrKNM=";
   };
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];

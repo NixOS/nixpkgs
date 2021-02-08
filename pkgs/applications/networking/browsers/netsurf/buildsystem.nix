@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}.tar.gz";
-    sha256 = "sha256-k4QeMUpoggmiC4dF8GU5PzqQ8Bvmj0Xpa8jS9KKqmio=";
+    hash = "sha256-k4QeMUpoggmiC4dF8GU5PzqQ8Bvmj0Xpa8jS9KKqmio=";
   };
 
   makeFlags = [

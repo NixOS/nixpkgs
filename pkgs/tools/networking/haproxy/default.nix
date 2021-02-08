@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-YBSM3+3WsZxAHbzXXM12pTwgvHbEkDK6Mq+YoKXEle0=";
+    hash = "sha256-YBSM3+3WsZxAHbzXXM12pTwgvHbEkDK6Mq+YoKXEle0=";
   };
 
   buildInputs = [ openssl zlib ]

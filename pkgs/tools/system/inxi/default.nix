@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
     owner = "smxi";
     repo = "inxi";
     rev = version;
-    sha256 = "sha256-P1AYo4Ao9lDxJXyZd64wBxNgQIvEcT00ThjtcB2v52I=";
+    hash = "sha256-P1AYo4Ao9lDxJXyZd64wBxNgQIvEcT00ThjtcB2v52I=";
   };
 
   buildInputs = [ perl makeWrapper ];

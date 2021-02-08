@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "pdfcpu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Rx/LUp5s2DhEKuLUklYXjtTXjqBju+5YzK1hNfBCnIE=";
+    hash = "sha256-Rx/LUp5s2DhEKuLUklYXjtTXjqBju+5YzK1hNfBCnIE=";
   };
 
   vendorSha256 = "sha256-/SsDDFveovJfuEdnOkxHAWccS8PJW5k9IHSxSJAgHMQ=";

@@ -13,7 +13,7 @@ buildRustPackage rec {
     owner = "tox-rs";
     repo = "tox-node";
     rev = "v${version}";
-    sha256 = "sha256-tB6v2NEBdTNHf89USdQOr/pV0mbxxb8ftOYPPJMvz5Y=";
+    hash = "sha256-tB6v2NEBdTNHf89USdQOr/pV0mbxxb8ftOYPPJMvz5Y=";
   };
 
   buildInputs = [ libsodium openssl ];

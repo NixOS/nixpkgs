@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://sourceforge.net/projects/forth-4th/files/${pname}-${version}/${pname}-${version}-unix.tar.gz";
-    sha256 = "sha256-+CL33Yz7CxdEpi1lPG7+kzV4rheJ7GCgiFCaOLyktPw=";
+    hash = "sha256-+CL33Yz7CxdEpi1lPG7+kzV4rheJ7GCgiFCaOLyktPw=";
   };
 
   dontConfigure = true;

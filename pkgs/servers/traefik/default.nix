@@ -6,7 +6,7 @@ buildGoModule rec {
 
   src = fetchzip {
     url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
-    sha256 = "sha256-W6NtlIxeRg432RTiaJHu25Izv1VWNqYetzilCr2gPjU=";
+    hash = "sha256-W6NtlIxeRg432RTiaJHu25Izv1VWNqYetzilCr2gPjU=";
     stripRoot = false;
   };
 

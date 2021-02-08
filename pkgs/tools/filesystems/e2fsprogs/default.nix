@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-X2SsUKK2C45nxbOCuxN97Dk0QBcQPK/8OmFVRCTy1pM=";
+    hash = "sha256-X2SsUKK2C45nxbOCuxN97Dk0QBcQPK/8OmFVRCTy1pM=";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];

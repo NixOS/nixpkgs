@@ -13,7 +13,7 @@ let
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${version}";
-    sha256 = "sha256-kQMswcEGsefQ8HCWxYPgvxOKP5cgvXx8oCl5Inh6sOg=";
+    hash = "sha256-kQMswcEGsefQ8HCWxYPgvxOKP5cgvXx8oCl5Inh6sOg=";
   };
 in mkYarnPackage rec {
   name = "element-desktop-${version}";

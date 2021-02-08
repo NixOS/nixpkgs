@@ -8,7 +8,7 @@ mkDerivation {
   version = "0.1.0.1";
   src = fetchgit {
     url = "https://github.com/hasura/graphql-parser-hs.git";
-    sha256 = "sha256-oem/h0AQPk7eSM/P6wMoWV9KirxutE4hnQWwrpQ6TGk=";
+    hash = "sha256-oem/h0AQPk7eSM/P6wMoWV9KirxutE4hnQWwrpQ6TGk=";
     rev = "ba8e26fef1488cf3c8c08e86f02730f56ec84e1f";
     fetchSubmodules = true;
   };

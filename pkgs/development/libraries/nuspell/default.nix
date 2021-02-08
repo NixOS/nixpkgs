@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "nuspell";
     repo = "nuspell";
     rev = "v${version}";
-    sha256 = "sha256-sQ3Q2+FOf2bXCKcgd6XvEb+QZzzDccs/4+CpJbEd1PQ=";
+    hash = "sha256-sQ3Q2+FOf2bXCKcgd6XvEb+QZzzDccs/4+CpJbEd1PQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config pandoc ];

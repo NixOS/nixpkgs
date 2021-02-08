@@ -18,7 +18,7 @@ mkDerivation rec {
     owner = "fcitx";
     repo = "fcitx5-qt";
     rev = version;
-    sha256 = "sha256-QylvjhjiIujYGKFtL4bKVXpobkN5t6Q2MGf16dsL24A=";
+    hash = "sha256-QylvjhjiIujYGKFtL4bKVXpobkN5t6Q2MGf16dsL24A=";
   };
 
   preConfigure = ''

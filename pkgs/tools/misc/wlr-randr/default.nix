@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JeSxFXSFxcTwJz9EaLb18wtD4ZIT+ATeYM5OyDTJhDQ=";
+    hash = "sha256-JeSxFXSFxcTwJz9EaLb18wtD4ZIT+ATeYM5OyDTJhDQ=";
   };
 
   nativeBuildInputs = [ meson ninja cmake pkg-config ];

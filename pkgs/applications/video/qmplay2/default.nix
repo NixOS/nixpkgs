@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
     owner = "zaps166";
     repo = "QMPlay2";
     rev = version;
-    sha256 = "sha256-+XXlQI9MyENioYmzqbbZYQ6kaMATBjPrPaErR2Vqhus=";
+    hash = "sha256-+XXlQI9MyENioYmzqbbZYQ6kaMATBjPrPaErR2Vqhus=";
     fetchSubmodules = true;
   };
 

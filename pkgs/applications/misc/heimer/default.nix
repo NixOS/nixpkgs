@@ -8,7 +8,7 @@ mkDerivation rec {
     owner = "juzzlin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-upsOmf46bCO8sVp5dBHPLUBZYZP3JyXa7H5KXbd76qo=";
+    hash = "sha256-upsOmf46bCO8sVp5dBHPLUBZYZP3JyXa7H5KXbd76qo=";
   };
 
   nativeBuildInputs = [ cmake ];

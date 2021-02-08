@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     # Patch for CVE-2020-8037
     (fetchpatch {
       url = "https://github.com/the-tcpdump-group/tcpdump/commit/32027e199368dad9508965aae8cd8de5b6ab5231.patch";
-      sha256 = "sha256-bO3aV032ru9+M/9isBRjmH8jTZLKj9Zf9ha2rmOaZwc=";
+      hash = "sha256-bO3aV032ru9+M/9isBRjmH8jTZLKj9Zf9ha2rmOaZwc=";
     })
   ];
 

@@ -8,7 +8,7 @@ mkDerivation rec {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "sha256-D58Q9qZ7x2j//pOQa+oIgVK/9F0du2FUoZprSFEKViU=";
+    hash = "sha256-D58Q9qZ7x2j//pOQa+oIgVK/9F0du2FUoZprSFEKViU=";
   };
 
   patches = (substituteAll {

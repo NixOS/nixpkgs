@@ -19,7 +19,7 @@
   # c.f. https://community.roonlabs.com/t/latest-roon-server-is-not-available-for-download-on-nixos/118129
   src = fetchurl {
     url = "https://web.archive.org/web/20210202130624/https://download.roonlabs.com/builds/RoonServer_linuxx64.tar.bz2";
-    sha256 = "sha256-S1c3RvN/HE8zwpGZARYRy/Gu4OTG0CjWbxJhZ3cKoVE=";
+    hash = "sha256-S1c3RvN/HE8zwpGZARYRy/Gu4OTG0CjWbxJhZ3cKoVE=";
   };
 
   buildInputs = [

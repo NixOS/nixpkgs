@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "PandorasFox";
     repo = "i3lock-color";
     rev = version;
-    sha256 = "sha256-E+ejc26eyCJ0PnMpDgQrouaBIaUH0SWlzB08fQs8lDw=";
+    hash = "sha256-E+ejc26eyCJ0PnMpDgQrouaBIaUH0SWlzB08fQs8lDw=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

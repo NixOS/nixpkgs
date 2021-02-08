@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "wmww";
     repo = "gtk-layer-shell";
     rev = "v${version}";
-    sha256 = "sha256-516N45q5EZTq5eLCqH/T/VV/AxgBsQhJ+yZdLOEeDUk=";
+    hash = "sha256-516N45q5EZTq5eLCqH/T/VV/AxgBsQhJ+yZdLOEeDUk=";
   };
 
   nativeBuildInputs = [

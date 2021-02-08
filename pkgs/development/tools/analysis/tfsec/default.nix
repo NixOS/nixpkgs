@@ -8,7 +8,7 @@ buildGoPackage rec {
     owner = "tfsec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-36yiX/uTqjiG+ZdQUQGPiLxSxIXE6ThH/LMqBGnm1d8=";
+    hash = "sha256-36yiX/uTqjiG+ZdQUQGPiLxSxIXE6ThH/LMqBGnm1d8=";
   };
 
   goPackagePath = "github.com/tfsec/tfsec";

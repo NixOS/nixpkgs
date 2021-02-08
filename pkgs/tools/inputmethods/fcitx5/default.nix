@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     owner = "fcitx";
     repo = "fcitx5";
     rev = version;
-    sha256 = "sha256-2KGdR1m70Qatidzf/DZuFK3lc1t8z7sxjyhaxuc0Tqg=";
+    hash = "sha256-2KGdR1m70Qatidzf/DZuFK3lc1t8z7sxjyhaxuc0Tqg=";
   };
 
   prePatch = ''

@@ -16,7 +16,7 @@ mkYarnPackage rec {
     owner = "grafana";
     repo = "grafana-image-renderer";
     rev = "ce1f81438e5f69c7fd7c73ce08bab624c4c92e25";
-    sha256 = "sha256-1Ke1KLLNZ1dkLH0BWB60r2c45RBbndd0eepjc0nlHVk=";
+    hash = "sha256-1Ke1KLLNZ1dkLH0BWB60r2c45RBbndd0eepjc0nlHVk=";
   };
 
   buildPhase = ''

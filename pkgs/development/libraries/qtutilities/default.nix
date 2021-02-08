@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "Martchus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vHx2JMPqioY8jUpBOIFdhhN1mIUV3LS8ayQOo3g7bY0=";
+    hash = "sha256-vHx2JMPqioY8jUpBOIFdhhN1mIUV3LS8ayQOo3g7bY0=";
   };
 
   buildInputs = [ qtbase cpp-utilities ];

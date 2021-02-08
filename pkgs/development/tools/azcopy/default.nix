@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "Azure";
     repo = "azure-storage-azcopy";
     rev = "v${version}";
-    sha256 = "sha256-zA0/5lpVefZD0m7g7SfqSRAFkQm2b+g/F3doCl9oAn8=";
+    hash = "sha256-zA0/5lpVefZD0m7g7SfqSRAFkQm2b+g/F3doCl9oAn8=";
   };
 
   subPackages = [ "." ];

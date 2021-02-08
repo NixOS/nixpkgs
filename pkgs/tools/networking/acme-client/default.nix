@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://data.wolfsden.cz/sources/acme-client-${version}.tar.xz";
-    sha256 = "sha256-AYI7WfRTb5R0/hDX5Iqkq5nrLZ4gQecAGObSajSA+vw=";
+    hash = "sha256-AYI7WfRTb5R0/hDX5Iqkq5nrLZ4gQecAGObSajSA+vw=";
   };
 
   nativeBuildInputs = [ pkg-config ];

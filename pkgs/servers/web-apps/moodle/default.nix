@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
       "https://download.moodle.org/stable${stableVersion}/${pname}-${version}.tgz";
-    sha256 = "sha256-VHlz8twsp7mSwZPatJkciHaDOP0r0EudeG5i3gjPUT8=";
+    hash = "sha256-VHlz8twsp7mSwZPatJkciHaDOP0r0EudeG5i3gjPUT8=";
   };
 
   phpConfig = writeText "config.php" ''

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "Duncaen";
     repo = "OpenDoas";
     rev = "v${version}";
-    sha256 = "sha256-F0FVVspGDZmzxy4nsb/wsEoCw4eHscymea7tIKrWzD0=";
+    hash = "sha256-F0FVVspGDZmzxy4nsb/wsEoCw4eHscymea7tIKrWzD0=";
   };
 
   # otherwise confuses ./configure

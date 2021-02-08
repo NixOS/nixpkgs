@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "p11-glue";
     repo = pname;
     rev = version;
-    sha256 = "sha256-erWqElJr0iESNUk9EZiJRmSMYhns8GxuFLNw7mIIIWs=";
+    hash = "sha256-erWqElJr0iESNUk9EZiJRmSMYhns8GxuFLNw7mIIIWs=";
   };
 
   outputs = [ "out" "dev"];

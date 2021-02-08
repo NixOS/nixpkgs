@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tVPSJO/9IXlibLkb6Cv+8azdvuXbcNOI1qYk4VQc4WI=";
+    hash = "sha256-tVPSJO/9IXlibLkb6Cv+8azdvuXbcNOI1qYk4VQc4WI=";
   };
 
   patches = [

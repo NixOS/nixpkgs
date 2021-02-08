@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "grml";
     repo = "grml-etc-core";
     rev = "v${version}";
-    sha256 = "sha256-5QwP+dMOm6UBbQ1X1OcHawHSi3DJIciny2sV7biE18c=";
+    hash = "sha256-5QwP+dMOm6UBbQ1X1OcHawHSi3DJIciny2sV7biE18c=";
   };
 
   buildInputs = [ zsh coreutils txt2tags procps ]

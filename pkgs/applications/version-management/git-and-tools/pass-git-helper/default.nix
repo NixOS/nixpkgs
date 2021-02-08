@@ -8,7 +8,7 @@ buildPythonApplication rec {
     owner  = "languitar";
     repo   = "pass-git-helper";
     rev    = "v${version}";
-    sha256 = "sha256-GdsFPpBdoEaOCmdKxw5xTuFOcGFH94w5q/lV891lCUs=";
+    hash = "sha256-GdsFPpBdoEaOCmdKxw5xTuFOcGFH94w5q/lV891lCUs=";
   };
 
   propagatedBuildInputs = [ pyxdg ];

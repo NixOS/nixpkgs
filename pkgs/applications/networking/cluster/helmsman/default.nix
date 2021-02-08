@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "Praqma";
     repo = "helmsman";
     rev = "v${version}";
-    sha256 = "sha256-4oJ/undqDSNn+Xn8eFEgOx+7263tmdXTHxXBkyFLpsE=";
+    hash = "sha256-4oJ/undqDSNn+Xn8eFEgOx+7263tmdXTHxXBkyFLpsE=";
   };
 
   vendorSha256 = "sha256-mktq5Dnk1mBO2yy5SeMDxa/akXdO5i2WafMTGtH53H8=";

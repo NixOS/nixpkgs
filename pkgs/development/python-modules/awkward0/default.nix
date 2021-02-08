@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "awkward-0.x";
     rev = version;
-    sha256 = "sha256-C6/byIGcabGjws5QI9sh5BO2M4Lhqkooh4mSjUEKCKU=";
+    hash = "sha256-C6/byIGcabGjws5QI9sh5BO2M4Lhqkooh4mSjUEKCKU=";
   };
 
   nativeBuildInputs = [ pytestrunner ];

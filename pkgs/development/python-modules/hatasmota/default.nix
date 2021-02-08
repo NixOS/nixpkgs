@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "emontnemery";
     repo = pname;
     rev = version;
-    sha256 = "sha256-QOireN6uRIa7UBKsE63r6yT+mzfs8uOGzzDcNahELws=";
+    hash = "sha256-QOireN6uRIa7UBKsE63r6yT+mzfs8uOGzzDcNahELws=";
   };
 
   propagatedBuildInputs = [

@@ -32,7 +32,7 @@ buildGoModule rec {
     owner = "digitalocean";
     repo = "doctl";
     rev = "v${version}";
-    sha256 = "sha256-vhg5X8H4VegSDORtj1rgNKlWQo1H1e/vvO01LJkVK+A=";
+    hash = "sha256-vhg5X8H4VegSDORtj1rgNKlWQo1H1e/vvO01LJkVK+A=";
   };
 
   meta = with lib; {

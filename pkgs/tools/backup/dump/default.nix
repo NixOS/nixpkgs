@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/dump/dump-${version}.tar.gz";
-    sha256 = "sha256-0CGs3k+77T2T662YFCL2cfSNZrKeyI196DZC7Pv/T9A=";
+    hash = "sha256-0CGs3k+77T2T662YFCL2cfSNZrKeyI196DZC7Pv/T9A=";
   };
 
   buildInputs = [ e2fsprogs pkg-config ncurses readline ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/LightBurnSoftware/deployment/releases/download/${version}/LightBurn-Linux64-v${version}.7z";
-    sha256 = "sha256-FtkBIoz5u70DbZZBH4uSaAkmOphWA9H0uYuukIPVGUM=";
+    hash = "sha256-FtkBIoz5u70DbZZBH4uSaAkmOphWA9H0uYuukIPVGUM=";
   };
 
   buildInputs = [

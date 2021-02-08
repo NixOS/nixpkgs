@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchurl {
     url = "https://product-downloads.atlassian.com/software/confluence/downloads/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ScE0UXmoxHb7HOJhSfOLXj3Wb3/XitFuOR36Iktmgxk=";
+    hash = "sha256-ScE0UXmoxHb7HOJhSfOLXj3Wb3/XitFuOR36Iktmgxk=";
   };
 
   buildPhase = ''

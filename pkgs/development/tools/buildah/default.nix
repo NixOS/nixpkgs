@@ -20,7 +20,7 @@ buildGoModule rec {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    sha256 = "sha256-mHr+FuDMxLA5Y7BNbDN75mdHVP6Ah1/S5vXg6cC/dcE=";
+    hash = "sha256-mHr+FuDMxLA5Y7BNbDN75mdHVP6Ah1/S5vXg6cC/dcE=";
   };
 
   outputs = [ "out" "man" ];

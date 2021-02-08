@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-F+0iZZPo5GbOPD+M5YOzbHnxYxierVTWMWE8w9pcgL0=";
+    hash = "sha256-F+0iZZPo5GbOPD+M5YOzbHnxYxierVTWMWE8w9pcgL0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

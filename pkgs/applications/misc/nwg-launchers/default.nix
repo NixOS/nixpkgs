@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "nwg-piotr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vuvYL9N9xdg27uhiTe2OqxZ3/n/9EjlqPxtNMXpqpE8=";
+    hash = "sha256-vuvYL9N9xdg27uhiTe2OqxZ3/n/9EjlqPxtNMXpqpE8=";
   };
 
   nativeBuildInputs = [

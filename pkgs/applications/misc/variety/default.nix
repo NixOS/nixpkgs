@@ -22,7 +22,7 @@ buildPythonApplication rec {
     owner = "varietywalls";
     repo = "variety";
     rev = version;
-    sha256 = "sha256-6dLz4KXavXwnk5GizBH46d2EHMHPjRo0WnnUuVMtI1M=";
+    hash = "sha256-6dLz4KXavXwnk5GizBH46d2EHMHPjRo0WnnUuVMtI1M=";
   };
 
   nativeBuildInputs = [ intltool wrapGAppsHook ];

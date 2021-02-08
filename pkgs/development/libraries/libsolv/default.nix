@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner  = "openSUSE";
     repo   = "libsolv";
     rev    = version;
-    sha256 = "sha256-LPOS+yDwNpyO9tkFoIy4SCQymytOGB26Pfyd/EFEYnc=";
+    hash = "sha256-LPOS+yDwNpyO9tkFoIy4SCQymytOGB26Pfyd/EFEYnc=";
   };
 
   cmakeFlags = [

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     owner  = "bbidulock";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WVlp8ir7w/wv4CI11dTQZkLcnW8JYLRQ+bbz73KEcWo=";
+    hash = "sha256-WVlp8ir7w/wv4CI11dTQZkLcnW8JYLRQ+bbz73KEcWo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config perl asciidoc ];

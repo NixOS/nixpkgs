@@ -15,7 +15,7 @@ let
 
   cfg = {
     version = "7.0.10-61";
-    sha256 = "sha256-c/90N5H9iz5JYmn7/ynHgSOAmO5NTtkxajChZvjfMP8=";
+    hash = "sha256-c/90N5H9iz5JYmn7/ynHgSOAmO5NTtkxajChZvjfMP8=";
     patches = [];
   };
 in

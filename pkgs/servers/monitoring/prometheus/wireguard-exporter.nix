@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "MindFlavor";
     repo = "prometheus_wireguard_exporter";
     rev = version;
-    sha256 = "sha256-nzY+pCkj0/m7cWPq5+xvQ1b1/PqdI6QuxNdTRT030tY=";
+    hash = "sha256-nzY+pCkj0/m7cWPq5+xvQ1b1/PqdI6QuxNdTRT030tY=";
   };
 
   cargoSha256 = "sha256-L2ohowt5+F3XJSzoihtJ2prW2bzZiNMUL9vqHIZBy1M=";

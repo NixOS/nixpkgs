@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "sha256-kFDy8Zlx+D5JDyNlAmB/ICTe4K9s6KDbALP5pom5OQg=";
+    hash = "sha256-kFDy8Zlx+D5JDyNlAmB/ICTe4K9s6KDbALP5pom5OQg=";
   };
 
   meta = with lib; {

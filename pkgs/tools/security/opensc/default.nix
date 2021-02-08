@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "OpenSC";
     repo = "OpenSC";
     rev = version;
-    sha256 = "sha256-OjOfA1pIu8NeN+hPuow5UVMKsg0PrsLojw5h05/Qm+o=";
+    hash = "sha256-OjOfA1pIu8NeN+hPuow5UVMKsg0PrsLojw5h05/Qm+o=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

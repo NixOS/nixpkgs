@@ -34,7 +34,7 @@ let
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
-    sha256 = "sha256-Mg56HQ9G/Nn0E/EEbiFsviO7K85t62xqYzBEJeSLGUI=";
+    hash = "sha256-Mg56HQ9G/Nn0E/EEbiFsviO7K85t62xqYzBEJeSLGUI=";
   });
 in
 

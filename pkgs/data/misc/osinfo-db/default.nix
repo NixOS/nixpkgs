@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://releases.pagure.org/libosinfo/${pname}-${version}.tar.xz";
-    sha256 = "sha256-C7Vq7d+Uos9IhTwOgsrK64c9mMGVkNgfvOrbBqORsRs=";
+    hash = "sha256-C7Vq7d+Uos9IhTwOgsrK64c9mMGVkNgfvOrbBqORsRs=";
   };
 
   nativeBuildInputs = [ osinfo-db-tools gettext libxml2 ];

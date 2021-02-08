@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     owner  = "cmus";
     repo   = "cmus";
     rev    = "v${version}";
-    sha256 = "sha256-HEiEnEWf/MzhPO19VKTLYzhylpEvyzy1Jxs6EW2NU34=";
+    hash = "sha256-HEiEnEWf/MzhPO19VKTLYzhylpEvyzy1Jxs6EW2NU34=";
   };
 
   patches = [ ./option-debugging.patch ];

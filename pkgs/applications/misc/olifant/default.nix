@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "cleac";
     repo = pname;
     rev = version;
-    sha256 = "sha256-3hnEa4Q1dH0R8Jp+Ew0+dH1PEm3F+56jYwqhJ+vll4M=";
+    hash = "sha256-3hnEa4Q1dH0R8Jp+Ew0+dH1PEm3F+56jYwqhJ+vll4M=";
   };
 
   nativeBuildInputs = [

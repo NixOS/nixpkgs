@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "AyatanaIndicators";
     repo = pname;
     rev = version;
-    sha256 = "sha256-nJ4F2faK0XZPj9GzUk3Ueap5h6rALFXISHqFQ30RuoU=";
+    hash = "sha256-nJ4F2faK0XZPj9GzUk3Ueap5h6rALFXISHqFQ30RuoU=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook gtk-doc vala gobject-introspection ];

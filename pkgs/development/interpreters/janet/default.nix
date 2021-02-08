@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "janet-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8sIF+jvhRoKNfvPs/WjMZmysAeEjOKaiqi7bY0Bbcxw=";
+    hash = "sha256-8sIF+jvhRoKNfvPs/WjMZmysAeEjOKaiqi7bY0Bbcxw=";
   };
 
   nativeBuildInputs = [ meson ninja ];

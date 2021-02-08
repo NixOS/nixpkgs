@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "coredns";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "sha256-F4YiLjWrAjCNorR5dHQ2nzEBVWvJVuDDmAbUXruaPYQ=";
+    hash = "sha256-F4YiLjWrAjCNorR5dHQ2nzEBVWvJVuDDmAbUXruaPYQ=";
   };
 
   vendorSha256 = "sha256-QvT1vnvF+gvABh2SzR6vUsj3KCD8ABqZwXQUm3NldM0=";

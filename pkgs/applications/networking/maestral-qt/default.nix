@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "v${version}";
-    sha256 = "sha256-2S2sa2/HVt3IRsE98PT2XwpONjaYENBzYW+ezBFrJYI=";
+    hash = "sha256-2S2sa2/HVt3IRsE98PT2XwpONjaYENBzYW+ezBFrJYI=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

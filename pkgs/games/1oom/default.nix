@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "KilgoreTroutMaskReplicant";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+HwSykSyAGHtITVOu4nIG87kWwVxGyFXb/NRSjhWlvs=";
+    hash = "sha256-+HwSykSyAGHtITVOu4nIG87kWwVxGyFXb/NRSjhWlvs=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

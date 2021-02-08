@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner  = "pgRouting";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-ahDQ+nSTeIsdjID/ZwiGZCVBzOf0/oQs3SYsFYEEoxY=";
+    hash = "sha256-ahDQ+nSTeIsdjID/ZwiGZCVBzOf0/oQs3SYsFYEEoxY=";
   };
 
   installPhase = ''

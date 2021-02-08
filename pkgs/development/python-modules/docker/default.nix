@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BgSnRxnV0t5Dh1OTS3Vb/NpvYvSbjkswlppLCiqKEiA=";
+    hash = "sha256-BgSnRxnV0t5Dh1OTS3Vb/NpvYvSbjkswlppLCiqKEiA=";
   };
 
   nativeBuildInputs = lib.optional isPy27 mock;

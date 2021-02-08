@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner  = "MusicPlayerDaemon";
     repo   = "ncmpc";
     rev    = "v${version}";
-    sha256 = "sha256-Qu41TL8KSKC9L25D6Z8bEbJUJQ9QI08grTGZ+0qGdUQ=";
+    hash = "sha256-Qu41TL8KSKC9L25D6Z8bEbJUJQ9QI08grTGZ+0qGdUQ=";
   };
 
   buildInputs = [ glib ncurses mpd_clientlib boost ]

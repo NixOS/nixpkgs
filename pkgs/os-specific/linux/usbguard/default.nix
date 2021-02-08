@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "USBGuard";
     repo = pname;
     rev = "usbguard-${version}";
-    sha256 = "sha256-CPuBQmDOpXWn0jPo4HRyDCZUpDy5NmbvUHxXoVbMd/I=";
+    hash = "sha256-CPuBQmDOpXWn0jPo4HRyDCZUpDy5NmbvUHxXoVbMd/I=";
     fetchSubmodules = true;
   };
 

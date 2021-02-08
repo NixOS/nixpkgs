@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pytest_httpserver";
     inherit version;
-    sha256 = "sha256-YgTcrUlwh2jz0tJdMUgjm8RcqrtpJ/oUQm3SnxUc5Z4=";
+    hash = "sha256-YgTcrUlwh2jz0tJdMUgjm8RcqrtpJ/oUQm3SnxUc5Z4=";
   };
 
   propagatedBuildInputs = [ werkzeug ];

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-5vdkW1mpooROtLGn7/USlg1/BKRlSvAvf9L4re1dtAo=";
+    hash = "sha256-5vdkW1mpooROtLGn7/USlg1/BKRlSvAvf9L4re1dtAo=";
   };
 
   postPatch = ''

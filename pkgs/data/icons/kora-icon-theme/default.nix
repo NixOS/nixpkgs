@@ -8,7 +8,7 @@ stdenv.mkDerivation rec  {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
-    sha256 = "sha256-YGhusal8g/UXMqrQvj147OScg51uNABTMIXxVXvnpKY=";
+    hash = "sha256-YGhusal8g/UXMqrQvj147OScg51uNABTMIXxVXvnpKY=";
   };
 
   nativeBuildInputs = [
