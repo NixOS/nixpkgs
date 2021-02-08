@@ -238,9 +238,6 @@ in
     services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
   })] ++ [(mkIf config.services.prometheus.exporters.rtl_433.enable {
     hardware.rtl-sdr.enable = mkDefault true;
-  })] ++ [(mkIf config.services.nginx.enable {
-    systemd.services.prometheus-nginx-exporter.after = [ "nginx.service" ];
-    systemd.services.prometheus-nginx-exporter.requires = [ "nginx.service" ];
   })] ++ [(mkIf config.services.postfix.enable {
     services.prometheus.exporters.postfix.group = mkDefault config.services.postfix.setgidGroup;
   })] ++ (mapAttrsToList (name: conf:
