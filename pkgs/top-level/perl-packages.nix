@@ -768,10 +768,10 @@ let
 
   ArrayCompare = buildPerlModule {
     pname = "Array-Compare";
-    version = "3.0.7";
+    version = "3.0.8";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Array-Compare-v3.0.7.tar.gz";
-      sha256 = "1p2kv4p2p5i6a665ax4b8iq1wal4x0g259yv32cc2ypbk7v11qs4";
+      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Array-Compare-v3.0.8.tar.gz";
+      sha256 = "0d6q8abjp6nnd5hm0g3svqy54vp5p5ir9sii4h6q8lq1j5g3nirh";
     };
 
     buildInputs = [ TestNoWarnings ];
