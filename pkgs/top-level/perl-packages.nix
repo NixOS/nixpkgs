@@ -22518,10 +22518,10 @@ let
 
   TreeSimpleVisitorFactory = buildPerlPackage {
     pname = "Tree-Simple-VisitorFactory";
-    version = "0.15";
+    version = "0.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-Simple-VisitorFactory-0.15.tgz";
-      sha256 = "06y2vazkl307k59hnkp9h5bp3p7711kgmp1qdhb2lgnfwzn84zin";
+      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-Simple-VisitorFactory-0.16.tgz";
+      sha256 = "19hdi00rw492m5r51b495gv5c64g91g98f8lm6sgym1cl7x3ixcw";
     };
     propagatedBuildInputs = [ TreeSimple ];
     buildInputs = [ TestException ];
