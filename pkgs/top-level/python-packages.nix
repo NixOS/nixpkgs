@@ -3660,6 +3660,8 @@ in {
     inherit python;
   })).py;
 
+  libpurecool = callPackage ../development/python-modules/libpurecool { };
+
   libredwg = toPythonModule (pkgs.libredwg.override {
     enablePython = true;
     inherit (self) python libxml2;
