@@ -12900,10 +12900,10 @@ let
 
   Minion = buildPerlPackage {
     pname = "Minion";
-    version = "10.14";
+    version = "10.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.14.tar.gz";
-      sha256 = "1xs0z61p42qqzqwlag4fci40lzxfy6pdccijgf8wswb2vk6xambg";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.15.tar.gz";
+      sha256 = "01andji1b9iykw59bglab50886h5gwgx8lq9ajn7005c5q7zz0fx";
     };
     propagatedBuildInputs = [ Mojolicious ];
     meta = {
