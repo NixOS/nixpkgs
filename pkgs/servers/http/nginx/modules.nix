@@ -22,6 +22,17 @@ in
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
   ngx_aws_auth = throw "ngx_aws_auth was renamed to aws-auth";
 
+  akamai-token-validate = {
+    src = fetchFromGitHub {
+      name = "akamai-token-validate";
+      owner = "kaltura";
+      repo = "nginx-akamai-token-validate-module";
+      rev = "34fd0c94d2c43c642f323491c4f4a226cd83b962";
+      sha256 = "0yf34s11vgkcl03wbl6gjngm3p9hs8vvm7hkjkwhjh39vkk2a7cy";
+    };
+    inputs = [ pkgs.openssl ];
+  };
+
   aws-auth = {
     src = fetchFromGitHub {
       name = "aws-auth";
@@ -320,6 +331,17 @@ in
     };
   };
 
+  secure-token = {
+    src = fetchFromGitHub {
+      name = "secure-token";
+      owner = "kaltura";
+      repo = "nginx-secure-token-module";
+      rev = "95bdc0d1aca06ea7fe42555f71e65910bd74914d";
+      sha256 = "19wzck1xzq4kz7nyabcwzlank1k7wi7w2wn2c1mwz374c79g8ggp";
+    };
+    inputs = [ pkgs.openssl ];
+  };
+
   set-misc = {
     src = fetchFromGitHub {
       name = "set-misc";
@@ -470,6 +492,17 @@ in
       sha256 = "1b0v471mzbcys73pzr7gpvzzhff0cva0l5ff32cv7z1v9c0ypji7";
     };
     inputs = [ pkgs.ffmpeg_3 ];
+  };
+
+  vod = {
+    src = fetchFromGitHub {
+      name = "vod";
+      owner = "kaltura";
+      repo = "nginx-vod-module";
+      rev = "e46079f51282d5a378e6911714b5f3a533bb7700";
+      sha256 = "0pzzq4xcq7jg8mxwnz7srj1nczg9ajd1b8q58qlm03lny8nd2hr5";
+    };
+    inputs = [ pkgs.ffmpeg_3 pkgs.fdk_aac pkgs.openssl pkgs.libxml2 pkgs.libiconv ];
   };
 
   vts = {
