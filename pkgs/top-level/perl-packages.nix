@@ -16731,10 +16731,10 @@ let
 
   perlldap = buildPerlPackage {
     pname = "perl-ldap";
-    version = "0.66";
+    version = "0.68";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARSCHAP/perl-ldap-0.66.tar.gz";
-      sha256 = "09263ce6166e80c98d689d41d09995b813389fd069b784601f6dc57f8e2b4102";
+      url = "mirror://cpan/authors/id/M/MA/MARSCHAP/perl-ldap-0.68.tar.gz";
+      sha256 = "0ldkjmww5a6s23v8hllv8wxqzf93syd934l691hlp7ks7vz8kwz2";
     };
     buildInputs = [ TextSoundex ];
     propagatedBuildInputs = [ ConvertASN1 ];
