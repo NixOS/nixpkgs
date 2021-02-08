@@ -12389,10 +12389,10 @@ let
 
   MathGMPz = buildPerlPackage {
     pname = "Math-GMPz";
-    version = "0.48";
+    version = "0.49";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SI/SISYPHUS/Math-GMPz-0.48.tar.gz";
-      sha256 = "f4459ed32fb9bb793e2504fd442c515fd468a4a34d2a1f98e46ca41e275c73cb";
+      url = "mirror://cpan/authors/id/S/SI/SISYPHUS/Math-GMPz-0.49.tar.gz";
+      sha256 = "0v0vhz07sikr1afv0j5ycnj422fc6rcgqcbrcimhi7vfhwrxqs8k";
     };
     buildInputs = [ pkgs.gmp ];
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
