@@ -204,6 +204,8 @@ in {
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
+  ailment = callPackage ../development/python-modules/ailment { };
+
   aiocoap = callPackage ../development/python-modules/aiocoap { };
 
   aioconsole = callPackage ../development/python-modules/aioconsole { };
