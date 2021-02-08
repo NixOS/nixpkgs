@@ -126,7 +126,7 @@ in stdenv.mkDerivation ({
     '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ sjmackenzie couchemar gleber ];
+    maintainers = teams.beam.members;
     license = licenses.asl20;
   } // meta);
 }
