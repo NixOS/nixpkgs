@@ -20211,6 +20211,22 @@ let
     };
   };
 
+  TestDiagINC = buildPerlPackage {
+    pname = "Test-DiagINC";
+    version = "0.008";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-DiagINC-0.008.tar.gz";
+      sha256 = "20a05ea7c8f05bc9150195fff5fa56b7304f6bbf3d439e4af46e163da1dfc947";
+    };
+    buildInputs = [ CaptureTiny ];
+    meta = {
+      homepage = "https://github.com/dagolden/Test-DiagINC";
+      description = "List modules and versions loaded if tests fail";
+      license = lib.licenses.asl20;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   TestDir = buildPerlPackage {
     pname = "Test-Dir";
     version = "1.16";
