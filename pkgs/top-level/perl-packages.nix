@@ -3932,11 +3932,12 @@ let
 
   CryptCBC = buildPerlPackage {
     pname = "Crypt-CBC";
-    version = "2.33";
+    version = "3.00";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LD/LDS/Crypt-CBC-2.33.tar.gz";
-      sha256 = "0ig698lmpjz7fslnznxm0609lvlnvf4f3s370082nzycnqhxww3a";
+      url = "mirror://cpan/authors/id/L/LD/LDS/Crypt-CBC-3.00.tar.gz";
+      sha256 = "1n0vnl27yw805xsfan4ma91g1pja0jmjfm61zz25aqgdr022vsgr";
     };
+    propagatedBuildInputs = [ CryptPBKDF2 ];
   };
 
   CryptCurve25519 = buildPerlPackage {
