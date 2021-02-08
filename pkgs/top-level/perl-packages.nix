@@ -7494,10 +7494,10 @@ let
 
   ExtUtilsMakeMaker = buildPerlPackage {
     pname = "ExtUtils-MakeMaker";
-    version = "7.56";
+    version = "7.58";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.56.tar.gz";
-      sha256 = "05h058iwx81qs384kgyx34qnhqznavzwmhdsin65c434hga8jly9";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.58.tar.gz";
+      sha256 = "1vhy9kw75rviaj2jvykfmmrkaia2hwdisi1z747nqlr6v5n76wxa";
     };
     meta = {
       description = "Create a module Makefile";
