@@ -6893,10 +6893,10 @@ let
 
   EmailMIMEContentType = buildPerlPackage {
     pname = "Email-MIME-ContentType";
-    version = "1.024";
+    version = "1.026";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-ContentType-1.024.tar.gz";
-      sha256 = "42d164ac7ff4dc2ea848e710fe21fa85509a3bcbb91ed2d356e4aba951ed8835";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-ContentType-1.026.tar.gz";
+      sha256 = "0zahm69cz36g3nqfan4ra6wwhvp6xrlzcaw1v9zqwfx9nwq1jjbl";
     };
     meta = {
       homepage = "https://github.com/rjbs/Email-MIME-ContentType";
