@@ -21,9 +21,10 @@ python2Packages.buildPythonApplication {
       pysqlite
       datadog
       digital-ocean
-      libvirt
       typing
-    ] ++ nixopsAzurePackages;
+      ]
+      ++ lib.optional (!libvirt.passthru.libvirt.meta.insecure or true) libvirt
+      ++ nixopsAzurePackages;
 
   checkPhase =
   # Ensure, that there are no (python) import errors
