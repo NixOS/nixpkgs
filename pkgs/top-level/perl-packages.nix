@@ -10227,10 +10227,10 @@ let
 
   IO = buildPerlPackage {
     pname = "IO";
-    version = "1.42";
+    version = "1.45";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-1.42.tar.gz";
-      sha256 = "eec5cc33a6cddba8b5d2425b60752882add7e4d41b7431a0ea4dcd73cc1f8cca";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-1.45.tar.gz";
+      sha256 = "0071f99bxpsl2rk2ykf2ykrnfsp1lqslmvz0c3bpwaxdhqx4n41v";
     };
     doCheck = false;
     meta = {
