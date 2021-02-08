@@ -8823,10 +8823,10 @@ let
 
   Gnome2Wnck = buildPerlPackage {
     pname = "Gnome2-Wnck";
-    version = "0.16";
+    version = "0.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TS/TSCH/Gnome2-Wnck-0.16.tar.gz";
-      sha256 = "604a8ece88ac29f132d59b0caac27657ec31371c1606a4698a2160e88ac586e5";
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-Wnck-0.18.tar.gz";
+      sha256 = "0daaav23f41rzz4f1fk5jba9rdzxd4i0jfx7h0kizx6pnb4cxgj4";
     };
     buildInputs = [ pkgs.libwnck pkgs.glib pkgs.gtk2 ];
     propagatedBuildInputs = [ Gtk2 ];
