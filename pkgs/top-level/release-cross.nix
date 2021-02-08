@@ -191,6 +191,9 @@ in
   armhf-embedded = mapTestOnCross lib.systems.examples.armhf-embedded embedded;
   aarch64-embedded = mapTestOnCross lib.systems.examples.aarch64-embedded embedded;
   aarch64be-embedded = mapTestOnCross lib.systems.examples.aarch64be-embedded embedded;
+  esp8266 = mapTestOnCross lib.systems.examples.esp8266 embedded;
+  esp32 = mapTestOnCross lib.systems.examples.esp32 embedded;
+  esp32s2 = mapTestOnCross lib.systems.examples.esp32s2 embedded;
   powerpc-embedded = mapTestOnCross lib.systems.examples.ppc-embedded embedded;
   powerpcle-embedded = mapTestOnCross lib.systems.examples.ppcle-embedded embedded;
   i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;

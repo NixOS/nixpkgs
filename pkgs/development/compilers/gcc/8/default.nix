@@ -1,4 +1,4 @@
-{ lib, stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
+{ lib, stdenv, targetPackages, fetchurl, fetchFromGitHub, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
@@ -11,6 +11,7 @@
 , enableLTO ? !stdenv.hostPlatform.isStatic
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
+, flex
 , gmp, mpfr, libmpc, gettext, which, patchelf
 , libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
@@ -27,6 +28,7 @@
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
+, espressifXtensaOverlays
 }:
 
 # LTO needs libelf and zlib.
@@ -83,7 +85,12 @@ stdenv.mkDerivation ({
 
   builder = ../builder.sh;
 
-  src = fetchurl {
+  src = if stdenv.targetPlatform.isXtensa then fetchFromGitHub {
+    owner = "espressif";
+    repo = "gcc";
+    rev = "esp-2020r3";
+    sha256 = "0vq9qjqzi2mrvq3fkmrk6ipz628nnj091dbxqmd2ax860vyj4bmb";
+  } else fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
     sha256 = "0l7d4m9jx124xsk6xardchgy2k5j5l2b15q322k31f0va4d8826k";
   };
@@ -97,6 +104,10 @@ stdenv.mkDerivation ({
   libc_dev = stdenv.cc.libc_dev;
 
   hardeningDisable = [ "format" "pie" ];
+
+  ${if stdenv.targetPlatform.isXtensa then "prePatch" else null} = ''
+    cp -RT ${espressifXtensaOverlays targetPlatform}/gcc .
+  '';
 
   postPatch = ''
     configureScripts=$(find . -name configure)
@@ -151,7 +162,8 @@ stdenv.mkDerivation ({
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
-    ++ (optional (perl != null) perl);
+    ++ (optional (perl != null) perl)
+    ++ (optional targetPlatform.isXtensa flex);
 
   # For building runtime libs
   depsBuildTarget =

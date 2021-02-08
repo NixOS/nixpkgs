@@ -55,6 +55,9 @@ let
 
     # Windows
     "x86_64-windows" "i686-windows"
+
+    # Xtensa
+    "xtensa-none"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -81,6 +84,7 @@ in {
   m68k          = filterDoubles predicates.isM68k;
   s390          = filterDoubles predicates.isS390;
   js            = filterDoubles predicates.isJavaScript;
+  xtensa        = filterDoubles predicates.isXtensa;
 
   bigEndian     = filterDoubles predicates.isBigEndian;
   littleEndian  = filterDoubles predicates.isLittleEndian;

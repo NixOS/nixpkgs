@@ -124,6 +124,8 @@ rec {
     or1k     = { bits = 32; significantByte = bigEndian; family = "or1k"; };
 
     js       = { bits = 32; significantByte = littleEndian; family = "js"; };
+
+    xtensa   = { bits = 32; significantByte = littleEndian; family = "xtensa"; };
   };
 
   # GNU build systems assume that older NetBSD architectures are using a.out.
@@ -232,6 +234,9 @@ rec {
 
   vendors = setTypes types.openVendor {
     apple = {};
+    esp8266 = {};
+    esp32 = {};
+    esp32s2 = {};
     pc = {};
     # Actually matters, unlocking some MinGW-w64-specific options in GCC. See
     # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
@@ -428,6 +433,8 @@ rec {
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "mmixware";                   }
       else if hasPrefix "netbsd" (elemAt l 2)
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
+      else if (elem (elemAt l 1) ["esp8266" "esp32" "esp32s2"])
+        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "none"; abi = elemAt l 2; }
       else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])
         then { cpu = elemAt l 0; vendor = "unknown"; kernel = elemAt l 1; abi = elemAt l 2; }
       else if (elemAt l 2 == "ghcjs")
