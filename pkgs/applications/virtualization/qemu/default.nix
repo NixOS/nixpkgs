@@ -118,8 +118,6 @@ stdenv.mkDerivation rec {
       "--enable-tools"
       "--enable-guest-agent"
     ]
-    # disable sysctl check on darwin.
-    ++ optional stdenv.isDarwin "--cpu=x86_64"
     ++ optional numaSupport "--enable-numa"
     ++ optional seccompSupport "--enable-seccomp"
     ++ optional smartcardSupport "--enable-smartcard"
