@@ -11798,10 +11798,10 @@ let
 
   LogLog4perl = buildPerlPackage {
     pname = "Log-Log4perl";
-    version = "1.53";
+    version = "1.54";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/Log-Log4perl-1.53.tar.gz";
-      sha256 = "13n39byny3yif3x6nrj9iriw8jhbhxqavwrrlm277v3f066v9gwg";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/Log-Log4perl-1.54.tar.gz";
+      sha256 = "1gpa08vd71lm24mzzkgzphfbsnymh6z5gfb6fsja7njc7cny9axv";
     };
     meta = {
       homepage = "https://mschilli.github.io/log4perl/";
