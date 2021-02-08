@@ -6649,6 +6649,21 @@
     githubId = 8214542;
     name = "Nicolò Balzarotti";
   };
+  nicoo = {
+    name = "nicoo";
+    email = "nicoo@debian.org";
+
+    github = "nicoo";
+    githubId = 1155801;
+    keys = [{
+      longkeyid = "rsa4096/0xEC9D370872BC7A8C";
+      fingerprint = "E44E 9EA5 4B8E 256A FB73  49D3 EC9D 3708 72BC 7A8C";
+    }, {
+      # TODO: Update after rollover
+      longkeyid = "ed25519/0x0F63562823B906C5";
+      fingerprint = "87F0 9D62 2010 10F0 6112  78E5 0F63 5628 23B9 06C5";
+    }];
+  };
   NieDzejkob = {
     email = "kuba@kadziolka.net";
     github = "NieDzejkob";
