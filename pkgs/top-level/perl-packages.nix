@@ -5595,10 +5595,10 @@ let
 
   DBDCSV = buildPerlPackage {
     pname = "DBD-CSV";
-    version = "0.56";
+    version = "0.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.56.tgz";
-      sha256 = "16rhgchwlnnvjklca0d4sa3lmlj29zc0iwclk41y5fz6kg8c2qjs";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.57.tgz";
+      sha256 = "0jijrm74bfmlszzwiny80fmr106jyjxl55a6zls90cwizy2c53ky";
     };
     propagatedBuildInputs = [ DBI SQLStatement TextCSV_XS ];
   };
