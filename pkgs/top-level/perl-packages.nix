@@ -1725,10 +1725,10 @@ let
 
   CarpAssertMore = buildPerlPackage {
     pname = "Carp-Assert-More";
-    version = "1.24";
+    version = "1.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PETDANCE/Carp-Assert-More-1.24.tar.gz";
-      sha256 = "0axjfl1hp7s4lcfxjj41zcp397dzhjqzd95innzxnz914xkc2p5s";
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/Carp-Assert-More-1.26.tar.gz";
+      sha256 = "14x4m4dlj7pwq2r2fsmww3q3xb61cdgnrlmjh5mms3ikaln6rmmk";
     };
     propagatedBuildInputs = [ CarpAssert ];
     meta = {
