@@ -10332,10 +10332,10 @@ let
 
   IOCompress = buildPerlPackage {
     pname = "IO-Compress";
-    version = "2.096";
+    version = "2.100";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.096.tar.gz";
-      sha256 = "9d219fd5df4b490b5d2f847921e3cb1c3392758fa0bae9b05a8992b3620ba572";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.100.tar.gz";
+      sha256 = "0dkckjc94x8kaprna3vxb21r19i0i5c1bm07qh2ccrr95szb08rd";
     };
     propagatedBuildInputs = [ CompressRawBzip2 CompressRawZlib ];
     meta = {
