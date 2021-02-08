@@ -10,18 +10,18 @@ python3Packages.buildPythonPackage rec {
 	};
 
 	propagatedBuildInputs =
-		with python3Packages; [
+		(with python3Packages; [
 			mutagen
 			pygobject3
-		] ++ [
-			pkgs.bubblewrap
-			pkgs.cairo
-			pkgs.exiftool
-			pkgs.ffmpeg
-			pkgs.librsvg
-			pkgs.poppler_gi
-			pkgs.gdk_pixbuf
-		];
+		]) ++ (with pkgs; [
+			bubblewrap
+			cairo
+			exiftool
+			ffmpeg
+			librsvg
+			poppler_gi
+			gdk_pixbuf
+		]);
 
 	# Test runner seems to have incorrect PATH
 	doCheck = false;
