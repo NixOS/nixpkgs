@@ -4082,12 +4082,12 @@ let
     };
   };
 
-  CryptPasswdMD5 = buildPerlModule {
+  CryptPasswdMD5 = buildPerlPackage {
     pname = "Crypt-PasswdMD5";
-    version = "1.40";
+    version = "1.41";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Crypt-PasswdMD5-1.40.tgz";
-      sha256 = "0j0r74f18nk63phddzqbf7wqma2ci4p4bxvrwrxsy0aklbp6lzdp";
+      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Crypt-PasswdMD5-1.41.tgz";
+      sha256 = "0fh8hcf1fx72jvmvy7lwyc4wzvzr4zyak711p18sfc9n6cir2dhz";
     };
   };
 
