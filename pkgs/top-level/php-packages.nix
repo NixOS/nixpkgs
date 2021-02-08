@@ -520,7 +520,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
       { name = "xsl";
         buildInputs = [ libxslt libxml2 ];
-        doCheck = !(lib.versionOlder php.version "7.4");
+        doCheck = lib.versionOlder php.version "8.0";
         configureFlags = [ "--with-xsl=${libxslt.dev}" ]; }
       { name = "zend_test"; }
       { name = "zip";
