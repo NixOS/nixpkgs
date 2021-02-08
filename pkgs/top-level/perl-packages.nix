@@ -13605,10 +13605,10 @@ let
 
   MojoliciousPluginStatus = buildPerlPackage {
     pname = "Mojolicious-Plugin-Status";
-    version = "1.12";
+    version = "1.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-Status-1.12.tar.gz";
-      sha256 = "1hn333220ba3hxl9aks0ywx933zv6klyi3a0iw571q76z5a8r2jn";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-Status-1.13.tar.gz";
+      sha256 = "19xdv6bpmg1gl39dmm59lagvx6jkdzckj4idmqz8gf2y64ca2k4f";
     };
     propagatedBuildInputs = [ BSDResource CpanelJSONXS FileMap Mojolicious ];
     meta = {
