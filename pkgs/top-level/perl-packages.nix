@@ -11044,10 +11044,10 @@ let
 
   libnet = buildPerlPackage {
     pname = "libnet";
-    version = "3.12";
+    version = "3.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/libnet-3.12.tar.gz";
-      sha256 = "1px35q9qchzd7rxqldj87vbrall8v31blidhmh0d25d5hyq9lw25";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/libnet-3.13.tar.gz";
+      sha256 = "131lvfivairppp3zfwcfq8i3qidbky4kibxi1rl938ja5lgzndas";
     };
     meta = {
       description = "Collection of network protocol modules";
