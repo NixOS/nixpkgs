@@ -18502,12 +18502,12 @@ let
 
   SQLAbstract = buildPerlPackage {
     pname = "SQL-Abstract";
-    version = "1.87";
+    version = "2.000001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IL/ILMARI/SQL-Abstract-1.87.tar.gz";
-      sha256 = "e926a0a83da7efa18e57e5b2952a2ab3b7563a51733fc6dd5c89f12156481c4a";
+      url = "mirror://cpan/authors/id/M/MS/MSTROUT/SQL-Abstract-2.000001.tar.gz";
+      sha256 = "16kf9swjn8rsmacl7l9an4z79sk5hxyyzq769ga2151l5ik459im";
     };
-    buildInputs = [ TestDeep TestException TestWarn ];
+    buildInputs = [ DataDumperConcise TestDeep TestException TestWarn ];
     propagatedBuildInputs = [ HashMerge MROCompat Moo ];
     meta = {
       description = "Generate SQL from Perl data structures";
