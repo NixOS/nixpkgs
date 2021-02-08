@@ -705,6 +705,8 @@ in
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
 
+  agate = callPackage ../servers/gemini/agate { };
+
   agda-pkg = callPackage ../development/tools/agda-pkg { };
 
   agrep = callPackage ../tools/text/agrep { };
