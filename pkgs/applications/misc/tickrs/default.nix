@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, perl }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, perl, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tickrs";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-GsK0T9BfIqr0N4wxIhvvTmNEC6I2j3XPeAJMJjRiZKU=";
 
   nativeBuildInputs = [ perl ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Realtime ticker data in your terminal";
