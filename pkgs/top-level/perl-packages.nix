@@ -1445,10 +1445,10 @@ let
 
   BusinessISBNData = buildPerlPackage {
     pname = "Business-ISBN-Data";
-    version = "20191107";
+    version = "20210112.002";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISBN-Data-20191107.tar.gz";
-      sha256 = "03faqnxx7qxgr2dcdra2iq60ziilpkas2ra41cs8klwky5j4yk44";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISBN-Data-20210112.002.tar.gz";
+      sha256 = "153s0j0xravva95ybqzrrdbak396ac5x2lp8fid4s175m5lflpqy";
     };
     meta = {
       description = "Data pack for Business::ISBN";
