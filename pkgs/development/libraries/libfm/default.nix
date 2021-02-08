@@ -1,14 +1,23 @@
-{ lib, stdenv, fetchurl, glib, intltool, menu-cache, pango, pkg-config, vala
+{ lib
+, stdenv
+, fetchurl
+, glib
+, intltool
+, menu-cache
+, pango
+, pkg-config
+, vala
 , extraOnly ? false
-, withGtk3 ? false, gtk2, gtk3 }:
+, withGtk3 ? true , gtk3, gtk2
+}:
 let
     gtk = if withGtk3 then gtk3 else gtk2;
     inherit (lib) optional;
 in
 stdenv.mkDerivation rec {
-  name = if extraOnly
-    then "libfm-extra-${version}"
-    else "libfm-${version}";
+  pname = if extraOnly
+          then "libfm-extra"
+          else "libfm";
   version = "1.3.2";
 
   src = fetchurl {
@@ -17,16 +26,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ vala pkg-config intltool ];
-  buildInputs = [ glib gtk pango ] ++ optional (!extraOnly) menu-cache;
+  buildInputs = [ glib gtk pango ]
+                ++ optional (!extraOnly) menu-cache;
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-  ] ++ optional extraOnly "--with-extra-only"
-    ++ optional withGtk3 "--with-gtk=3";
+  configureFlags = [ "--sysconfdir=/etc" ]
+                   ++ optional extraOnly "--with-extra-only"
+                   ++ optional withGtk3 "--with-gtk=3";
 
-  installFlags = [
-    "sysconfdir=${placeholder "out"}/etc"
-  ];
+  installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 
   # libfm-extra is pulled in by menu-cache and thus leads to a collision for libfm
   postInstall = optional (!extraOnly) ''
