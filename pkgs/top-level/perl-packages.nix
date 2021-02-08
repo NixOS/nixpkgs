@@ -9060,10 +9060,10 @@ let
 
   Gtk2TrayIcon = buildPerlPackage {
     pname = "Gtk2-TrayIcon";
-    version = "0.06";
+    version = "0.07";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BORUP/Gtk2-TrayIcon-0.06.tar.gz";
-      sha256 = "cbb7632b75d7f41554dfe8ee9063dbfd1d8522291077c65d0d82e9ceb5e94ae2";
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk2-TrayIcon-0.07.tar.gz";
+      sha256 = "0m25jrxsj5qjvqs8j90mkbk0fpps0d9wpn3pm6gdl4z6lscjpz1r";
     };
     propagatedBuildInputs = [ pkgs.gtk2 Gtk2 ];
     meta = {
