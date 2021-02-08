@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     LD_OHASH="-lutil"
     BUILD_DB=0
     CC=${stdenv.cc.targetPrefix}cc
+  '' + lib.optionalString stdenv.isDarwin ''
+    HOMEBREWDIR="/usr/local/Cellar"
   '';
 
   patches = [
