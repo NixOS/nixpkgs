@@ -195,7 +195,7 @@
     "dwd_weather_warnings" = ps: with ps; [ ]; # missing inputs: dwdwfsapi
     "dweet" = ps: with ps; [ ]; # missing inputs: dweepy
     "dynalite" = ps: with ps; [ ]; # missing inputs: dynalite_devices
-    "dyson" = ps: with ps; [ aiohttp-cors zeroconf ]; # missing inputs: libpurecool
+    "dyson" = ps: with ps; [ aiohttp-cors libpurecool zeroconf ];
     "eafm" = ps: with ps; [ aioeafm ];
     "ebox" = ps: with ps; [ ]; # missing inputs: pyebox
     "ebusd" = ps: with ps; [ ]; # missing inputs: ebusdpy
