@@ -40,9 +40,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Qt based process manager";
     homepage = "https://github.com/lxqt/qps";
-    license = licenses.gpl2;
+    description = "Qt based process manager";
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux; # does not build on darwin
     maintainers = with maintainers; [ romildo ];
   };

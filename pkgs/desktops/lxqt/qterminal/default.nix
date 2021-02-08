@@ -36,9 +36,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "A lightweight Qt-based terminal emulator";
     homepage = "https://github.com/lxqt/qterminal";
-    license = licenses.gpl2;
+    description = "A lightweight Qt-based terminal emulator";
+    license = licenses.gpl2Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo globin ];
   };

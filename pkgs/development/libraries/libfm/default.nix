@@ -8,8 +8,9 @@
 , pkg-config
 , vala
 , extraOnly ? false
-, withGtk3 ? true , gtk3, gtk2
+, withGtk3 ? false, gtk2, gtk3
 }:
+
 let
     gtk = if withGtk3 then gtk3 else gtk2;
     inherit (lib) optional;

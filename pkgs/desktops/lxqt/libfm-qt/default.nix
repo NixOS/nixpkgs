@@ -46,9 +46,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Core library of PCManFM-Qt (Qt binding for libfm)";
     homepage = "https://github.com/lxqt/libfm-qt";
-    license = licenses.lgpl21;
+    description = "Core library of PCManFM-Qt (Qt binding for libfm)";
+    license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
   };
