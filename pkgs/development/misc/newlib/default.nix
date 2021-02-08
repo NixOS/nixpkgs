@@ -22,7 +22,7 @@ stdenv.mkDerivation ((if (with stdenv.targetPlatform; isOr1k || isVc4 || isXtens
 }) // {
   src = with stdenv.targetPlatform;
     if isXtensa then xtensa-src
-    else default-src;
+    else normal-src;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   # newlib expects CC to build for build platform, not host platform
