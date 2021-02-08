@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wf-config";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchurl {
-    url = "https://github.com/WayfireWM/wf-config/releases/download/${version}/wf-config-${version}.tar.xz";
-    sha256 = "1a5aqybhbp9dp4jygrm3gbkdap5qbd52y6ihfr4rm1cj37sckcn0";
+    url = "https://github.com/WayfireWM/wf-config/releases/download/v${version}/wf-config-${version}.tar.xz";
+    sha256 = "1bas5gsbnf8jxkkxd95992chz8yk5ckgg7r09gfnmm7xi8w0pyy7";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, fetchurl }:
+{ lib, stdenv, callPackage, fetchurl, nixosTests }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -44,6 +44,8 @@ in
       url = "https://github.com/VSCodium/vscodium/releases/download/${version}/VSCodium-${plat}-${version}.${archive_fmt}";
       inherit sha256;
     };
+
+    tests = nixosTests.vscodium;
 
     meta = with lib; {
       description = ''

@@ -3,6 +3,9 @@
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu
 
+# Populate passthru.tests
+, tests
+
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
 , executableName, longName, shortName, pname
@@ -16,7 +19,7 @@ in
     inherit pname version src sourceRoot;
 
     passthru = {
-      inherit executableName;
+      inherit executableName tests;
     };
 
     desktopItem = makeDesktopItem {

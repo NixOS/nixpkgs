@@ -1,4 +1,4 @@
-{ config, lib, callPackage, vscode-utils, nodePackages,llvmPackages_8, llvmPackages_latest }:
+{ config, lib, callPackage, vscode-utils, nodePackages,llvmPackages_8 }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -689,9 +689,7 @@ let
         };
       };
 
-      vadimcn.vscode-lldb = callPackage ./vscode-lldb {
-        lldb = llvmPackages_latest.lldb;
-      };
+      vadimcn.vscode-lldb = callPackage ./vscode-lldb { };
 
       vincaslt.highlight-matching-tag = buildVscodeMarketplaceExtension {
         mktplcRef = {

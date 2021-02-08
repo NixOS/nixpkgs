@@ -40,9 +40,9 @@ mkDerivation rec {
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    description = "Qt implementation of freedesktop.org xdg specs";
     homepage = "https://github.com/lxqt/libqtxdg";
-    license = licenses.lgpl21;
+    description = "Qt implementation of freedesktop.org xdg specs";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
