@@ -4070,10 +4070,10 @@ let
 
   CryptJWT = buildPerlPackage {
     pname = "Crypt-JWT";
-    version = "0.029";
+    version = "0.031";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/Crypt-JWT-0.029.tar.gz";
-      sha256 = "0fccff29065a0098eef151deeb33c12c0d68e16a1cb4e7465b26ebbd4c18cd2f";
+      url = "mirror://cpan/authors/id/M/MI/MIK/Crypt-JWT-0.031.tar.gz";
+      sha256 = "07j7pqqacz1dbidkrs0qx15ndvspbqk0858iqphqky9kbm6l91fw";
     };
     propagatedBuildInputs = [ CryptX JSON ];
     meta = {
