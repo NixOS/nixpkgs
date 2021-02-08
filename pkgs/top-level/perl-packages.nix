@@ -176,10 +176,10 @@ let
 
   AlienBuild = buildPerlPackage {
     pname = "Alien-Build";
-    version = "2.37";
+    version = "2.38";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Build-2.37.tar.gz";
-      sha256 = "0lgdr4d4hpv9q6i8lzs5lrilrwj8zm1cxzxwdgvl69j8k2zbq01h";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Build-2.38.tar.gz";
+      sha256 = "1vdxg0bqs0sbgk5wias3k0r98zkarmma3jwzcvgrb3x0s4b43gbb";
     };
     propagatedBuildInputs = [ CaptureTiny FFICheckLib FileWhich Filechdir PathTiny PkgConfig ];
     buildInputs = [ DevelHide Test2Suite ];
