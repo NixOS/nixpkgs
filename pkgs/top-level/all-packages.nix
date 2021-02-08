@@ -705,6 +705,8 @@ in
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
 
+  agate = callPackage ../servers/gemini/agate { };
+
   agda-pkg = callPackage ../development/tools/agda-pkg { };
 
   agrep = callPackage ../tools/text/agrep { };
@@ -7993,6 +7995,8 @@ in
 
   stubby = callPackage ../tools/networking/stubby { };
 
+  surface-control = callPackage ../applications/misc/surface-control { };
+
   syntex = callPackage ../tools/graphics/syntex {};
 
   sl = callPackage ../tools/misc/sl { stdenv = gccStdenv; };
@@ -8556,8 +8560,6 @@ in
   unrpa = with python3Packages; toPythonApplication unrpa;
 
   untex = callPackage ../tools/text/untex { };
-
-  untrunc = callPackage ../tools/video/untrunc { };
 
   untrunc-anthwlock = callPackage ../tools/video/untrunc-anthwlock { };
 
@@ -9235,7 +9237,7 @@ in
 
   zplug = callPackage ../shells/zsh/zplug { };
 
-  zplugin = callPackage ../shells/zsh/zplugin {} ;
+  zinit = callPackage ../shells/zsh/zinit {} ;
 
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
 
@@ -26343,6 +26345,8 @@ in
 
   abbaye-des-morts = callPackage ../games/abbaye-des-morts { };
 
+  abuse = callPackage ../games/abuse { };
+
   adom = callPackage ../games/adom { };
 
   airstrike = callPackage ../games/airstrike { };
@@ -27337,6 +27341,8 @@ in
   });
 
   zeroad = zeroadPackages.zeroad;
+
+  _0verkill = callPackage ../games/0verkill { };
 
   ### DESKTOP ENVIRONMENTS
 
