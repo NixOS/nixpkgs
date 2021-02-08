@@ -1114,6 +1114,8 @@ in
 
   bmap-tools = callPackage ../tools/misc/bmap-tools { };
 
+  bonnmotion = callPackage ../development/tools/misc/bonnmotion { };
+
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
   bonfire = callPackage ../tools/misc/bonfire { };
