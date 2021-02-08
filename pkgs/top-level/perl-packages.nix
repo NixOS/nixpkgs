@@ -22556,10 +22556,10 @@ let
 
   Twiggy = buildPerlPackage {
      pname = "Twiggy";
-     version = "0.1025";
+     version = "0.1026";
      src = fetchurl {
-       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Twiggy-0.1025.tar.gz";
-       sha256 = "1a57knbwync7rlzhsz1kdc0sd380xnaccwgiy1qwj5d87abdynnp";
+       url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Twiggy-0.1026.tar.gz";
+       sha256 = "17kzqpx4v1m6bsrqd0z6bcv6n0pbab7sghjd67s8x6mfv5pfm4ad";
      };
      propagatedBuildInputs = [ AnyEvent Plack ];
      buildInputs = [ TestRequires TestSharedFork TestTCP ];
