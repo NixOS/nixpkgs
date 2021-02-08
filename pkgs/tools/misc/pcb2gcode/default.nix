@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "pcb2gcode";
     repo = "pcb2gcode";
     rev = "v${version}";
-    sha256 = "sha256-GSLWpLp/InAxVolKmBIjljpe3ZzmS/87TWKwzax5SkY=";
+    hash = "sha256-GSLWpLp/InAxVolKmBIjljpe3ZzmS/87TWKwzax5SkY=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

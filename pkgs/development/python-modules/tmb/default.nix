@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "alemuro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-xwzaJuiQxExUA5W4kW7t1713S6NOvDNagcD3/dwA+DE=";
+    hash = "sha256-xwzaJuiQxExUA5W4kW7t1713S6NOvDNagcD3/dwA+DE=";
   };
 
   propagatedBuildInputs = [ requests ];

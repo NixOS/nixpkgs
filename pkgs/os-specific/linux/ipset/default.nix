@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ipset.netfilter.org/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-skkGukPi/jIr1BhjR2dh10mkvd9c5MImW6BLA7x+nPY=";
+    hash = "sha256-skkGukPi/jIr1BhjR2dh10mkvd9c5MImW6BLA7x+nPY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -12,7 +12,7 @@ crystal.buildCrystalPackage rec {
     repo = pname;
     # rev = "v${version}";
     rev = "580a1879810a9f5d63d8a0d90fbdaa99d86b58da";
-    sha256 = "sha256-WjpkkHfy38wDj/ejXyyMtd5rLfTRoj/7D+SAhRROnbU=";
+    hash = "sha256-WjpkkHfy38wDj/ejXyyMtd5rLfTRoj/7D+SAhRROnbU=";
   };
 
   # we are already testing for this, so we can ignore the failures

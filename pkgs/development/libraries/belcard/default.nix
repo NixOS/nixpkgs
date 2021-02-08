@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FTHtd93LOnRek9fqvI+KBkk/+53Bwy9GKCEo0NDtops=";
+    hash = "sha256-FTHtd93LOnRek9fqvI+KBkk/+53Bwy9GKCEo0NDtops=";
   };
 
   buildInputs = [ bctoolbox belr ];

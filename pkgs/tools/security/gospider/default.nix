@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "jaeles-project";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yfW94sQzT1u6O0s1sqpeANlukC5y8fNvHNL2c77+dxU=";
+    hash = "sha256-yfW94sQzT1u6O0s1sqpeANlukC5y8fNvHNL2c77+dxU=";
   };
 
   vendorSha256 = "sha256-1aOw0lk+khcX9IETA0+wGx91BFXrJ79zYWhEI2JrhDU=";

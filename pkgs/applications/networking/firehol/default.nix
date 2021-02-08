@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "firehol";
     repo = "firehol";
     rev = "v${version}";
-    sha256 = "sha256-gq7l7QoUsK+j5DUn84kD9hlUTC4hz3ds3gNJc1tRygs=";
+    hash = "sha256-gq7l7QoUsK+j5DUn84kD9hlUTC4hz3ds3gNJc1tRygs=";
   };
 
   patches = [

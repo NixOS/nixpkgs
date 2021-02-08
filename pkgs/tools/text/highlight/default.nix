@@ -11,7 +11,7 @@ let
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
-      sha256 = "sha256-1EBdtORd9P5DJUmbZa9KjR3UUoHOKLbjqbxpFi5WFvQ=";
+      hash = "sha256-1EBdtORd9P5DJUmbZa9KjR3UUoHOKLbjqbxpFi5WFvQ=";
     };
 
     enableParallelBuilding = true;

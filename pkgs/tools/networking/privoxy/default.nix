@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/ijbswa/Sources/${version}%20%28stable%29/${pname}-${version}-stable-src.tar.gz";
-    sha256 = "sha256-B3cpo6rHkiKk6NiKZQ2QKNFv1LDWA42o9fXkcSDQBOs=";
+    hash = "sha256-B3cpo6rHkiKk6NiKZQ2QKNFv1LDWA42o9fXkcSDQBOs=";
   };
 
   hardeningEnable = [ "pie" ];

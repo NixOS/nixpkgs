@@ -19,7 +19,7 @@ crystal.buildCrystalPackage rec {
     owner = "crystal-community";
     repo = "icr";
     rev = "8c57cd7c1fdf8088cb05c1587bd6c40d244a8a80";
-    sha256 = "sha256-b0w6oG2npNgdi2ZowMlJy0iUxQWqb9+DiruQl7Ztb0E=";
+    hash = "sha256-b0w6oG2npNgdi2ZowMlJy0iUxQWqb9+DiruQl7Ztb0E=";
   };
 
   shardsFile = ./shards.nix;

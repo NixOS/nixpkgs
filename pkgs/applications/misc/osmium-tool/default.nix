@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "osmcode";
     repo = "osmium-tool";
     rev = "v${version}";
-    sha256 = "sha256-IeFbcgwayBl3xxv3onCJr0f1oeveyyNlLxXQlzOoVq0=";
+    hash = "sha256-IeFbcgwayBl3xxv3onCJr0f1oeveyyNlLxXQlzOoVq0=";
   };
 
   nativeBuildInputs = [

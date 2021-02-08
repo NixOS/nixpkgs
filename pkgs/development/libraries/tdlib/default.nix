@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
     rev = "v${version}";
 
-    sha256 = "sha256-sZzp9k7KDnqftcSGSgXkIy0siCksGPBmRckySU/J0TU=";
+    hash = "sha256-sZzp9k7KDnqftcSGSgXkIy0siCksGPBmRckySU/J0TU=";
   };
 
   buildInputs = [ gperf openssl readline zlib ];

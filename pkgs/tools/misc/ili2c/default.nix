@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "claeis";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-FHhx+f253+UdbFjd2fOlUY1tpQ6pA2aVu9CBSwUVoKQ=";
+    hash = "sha256-FHhx+f253+UdbFjd2fOlUY1tpQ6pA2aVu9CBSwUVoKQ=";
   };
 
   buildPhase = "ant jar";

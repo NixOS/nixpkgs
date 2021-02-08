@@ -33,7 +33,7 @@ mkDerivation rec {
     owner = "network";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xGqGFJHyoZXHLv/n3UGr/KVbgs5Gc9kKKWIuKMr9DtQ=";
+    hash = "sha256-xGqGFJHyoZXHLv/n3UGr/KVbgs5Gc9kKKWIuKMr9DtQ=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];

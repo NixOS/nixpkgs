@@ -8,7 +8,7 @@ buildGoModule rec {
     repo = "advanced-ssh-config";
     owner = "moul";
     rev = "v${version}";
-    sha256 = "sha256-/StB5yee9sbkebuJt6JDI+bp52NG0bBhprzmdepL+ek=";
+    hash = "sha256-/StB5yee9sbkebuJt6JDI+bp52NG0bBhprzmdepL+ek=";
   };
 
   vendorSha256 = "sha256-6OAsO7zWAgPfQWD9k+nYH7hnDDUlKIjTB61ivvoubn0=";

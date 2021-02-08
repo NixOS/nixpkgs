@@ -182,7 +182,7 @@ let
           name = "gitlens";
           publisher = "eamodio";
           version = "11.1.3";
-          sha256 = "sha256-hqJg3jP4bbXU4qSJOjeKfjkPx61yPDMsQdSUVZObK/U=";
+          hash = "sha256-hqJg3jP4bbXU4qSJOjeKfjkPx61yPDMsQdSUVZObK/U=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -302,7 +302,7 @@ let
           name = "Go";
           publisher = "golang";
           version = "0.18.1";
-          sha256 = "sha256-b2Wa3TULQQnBm1/xnDCB9SZjE+Wxz5wBttjDEtf8qlE=";
+          hash = "sha256-b2Wa3TULQQnBm1/xnDCB9SZjE+Wxz5wBttjDEtf8qlE=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -314,7 +314,7 @@ let
           name = "vscode-graphql";
           publisher = "GraphQL";
           version = "0.3.13";
-          sha256 = "sha256-JjEefVHQUYidUsr8Ce/dh7hLDm21WkyS+2RwsXHoY04=";
+          hash = "sha256-JjEefVHQUYidUsr8Ce/dh7hLDm21WkyS+2RwsXHoY04=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -415,7 +415,7 @@ let
           name = "vscode-styled-components";
           publisher = "jpoissonnier";
           version = "1.4.1";
-          sha256 = "sha256-ojbeuYBCS+DjF5R0aLuBImzoSOb8mXw1s0Uh0CzggzE=";
+          hash = "sha256-ojbeuYBCS+DjF5R0aLuBImzoSOb8mXw1s0Uh0CzggzE=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -439,7 +439,7 @@ let
           name = "dotenv";
           publisher = "mikestead";
           version = "1.0.1";
-          sha256 = "sha256-dieCzNOIcZiTGu4Mv5zYlG7jLhaEsJR05qbzzzQ7RWc=";
+          hash = "sha256-dieCzNOIcZiTGu4Mv5zYlG7jLhaEsJR05qbzzzQ7RWc=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -507,7 +507,7 @@ let
           name = "debugger-for-chrome";
           publisher = "msjsdiag";
           version = "4.12.11";
-          sha256 = "sha256-9i3TgCFThnFF5ccwzS4ATj5c2Xoe/4tDFGv75jJxeQ4=";
+          hash = "sha256-9i3TgCFThnFF5ccwzS4ATj5c2Xoe/4tDFGv75jJxeQ4=";
         };
         meta = {
           license = lib.licenses.mit;

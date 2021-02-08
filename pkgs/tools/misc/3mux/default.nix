@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "aaronjanse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-auEMG3txO2JS/2dMFBtEujv9s5I0A80Vwts5kXjH600=";
+    hash = "sha256-auEMG3txO2JS/2dMFBtEujv9s5I0A80Vwts5kXjH600=";
   };
 
   vendorSha256 = "sha256-rcbnyScD2GU1DLY6dTEPgFNXZfgkxXPn5lt6HRqa0d8=";

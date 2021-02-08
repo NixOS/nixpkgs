@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "jnsh";
     repo = pname;
     rev = version;
-    sha256 = "sha256-P7YZTD5bAWNWepL7qsZZAMf8ujzNbHOj/SLx8Fw3bi4=";
+    hash = "sha256-P7YZTD5bAWNWepL7qsZZAMf8ujzNbHOj/SLx8Fw3bi4=";
   };
 
   nativeBuildInputs = [

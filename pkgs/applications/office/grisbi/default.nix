@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/grisbi/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-b3I87tlXhIjM/bFjhsJTNFQvZxIGKsIbsf4zZT5sHXg=";
+    hash = "sha256-b3I87tlXhIjM/bFjhsJTNFQvZxIGKsIbsf4zZT5sHXg=";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];

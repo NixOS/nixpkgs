@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     owner = "freeciv";
     repo = "freeciv";
     rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-tRjik2LONwKFZOcIuyFDoE1fD23UnZHMdNLo0DdYyOc=";
+    hash = "sha256-tRjik2LONwKFZOcIuyFDoE1fD23UnZHMdNLo0DdYyOc=";
   };
 
   postPatch = ''

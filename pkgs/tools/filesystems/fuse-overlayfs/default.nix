@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lus+1hkc4GxrTxtdfDJ0XqJp37dcjKp4/sI3CEh8cYA=";
+    hash = "sha256-lus+1hkc4GxrTxtdfDJ0XqJp37dcjKp4/sI3CEh8cYA=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

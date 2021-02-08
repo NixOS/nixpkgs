@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "installer-team";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mfv1b40n/opXdyj6IXWVf/32sWlS+/DbXIRwE1zX4KM=";
+    hash = "sha256-mfv1b40n/opXdyj6IXWVf/32sWlS+/DbXIRwE1zX4KM=";
   };
 
   buildInputs = [ makeWrapper ];

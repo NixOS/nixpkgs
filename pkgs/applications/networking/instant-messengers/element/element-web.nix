@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/vector-im/element-web/releases/download/v${version}/element-v${version}.tar.gz";
-    sha256 = "sha256-8R7l/Pmymd5+/Fri7z2/TDj1h2FL0QgLICoXajePing=";
+    hash = "sha256-8R7l/Pmymd5+/Fri7z2/TDj1h2FL0QgLICoXajePing=";
   };
 
   installPhase = ''

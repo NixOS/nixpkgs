@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.pangeia.com.br/pub/seg/pac/${name}.tar.gz";
-    sha256 = "sha256-FUySaSH1PbYHKKfLyXyohli2lMFLfSiO/jg+CEmRVgc=";
+    hash = "sha256-FUySaSH1PbYHKKfLyXyohli2lMFLfSiO/jg+CEmRVgc=";
   };
 
   # TODO: a lazy work-around for linux build failure ...

@@ -7,7 +7,7 @@ let
   sonarScannerArchPackage = {
     "x86_64-linux" = {
       url = "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${version}-linux.zip";
-      sha256 = "sha256-rmvDb5l2BGV8j94Uhu2kJXwoDAHA3VncAahqGvLY3I0=";
+      hash = "sha256-rmvDb5l2BGV8j94Uhu2kJXwoDAHA3VncAahqGvLY3I0=";
     };
     "x86_64-darwin" = {
       url = "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${version}-macosx.zip";

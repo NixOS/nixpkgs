@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-meeNqV1jKUwWc7P3p/LicPsbpzpKKFmQ1wP9DuXc9NY=";
+    hash = "sha256-meeNqV1jKUwWc7P3p/LicPsbpzpKKFmQ1wP9DuXc9NY=";
   };
 
   buildInputs = [

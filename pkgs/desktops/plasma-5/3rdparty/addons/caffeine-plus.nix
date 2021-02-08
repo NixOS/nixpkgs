@@ -9,7 +9,7 @@ mkDerivation rec {
     owner = "qunxyz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/Nz0kSDGok7GjqSQtjH/8q/u6blVTFPO6kfjEyt/jEo=";
+    hash = "sha256-/Nz0kSDGok7GjqSQtjH/8q/u6blVTFPO6kfjEyt/jEo=";
   };
 
   buildInputs = [

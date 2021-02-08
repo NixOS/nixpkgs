@@ -9,7 +9,7 @@ buildGoModule rec {
     owner = "cheat";
     repo = "cheat";
     rev = version;
-    sha256 = "sha256-Q/frWu82gB15LEzwYCbJr7k0yZ+AXBvcPWxoevSpeqU=";
+    hash = "sha256-Q/frWu82gB15LEzwYCbJr7k0yZ+AXBvcPWxoevSpeqU=";
   };
 
   subPackages = [ "cmd/cheat" ];

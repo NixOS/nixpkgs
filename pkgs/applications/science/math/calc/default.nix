@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
       "https://github.com/lcn2/calc/releases/download/${version}/${pname}-${version}.tar.bz2"
       "http://www.isthe.com/chongo/src/calc/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "sha256-Pg8nvW+RDy1Vb+Xg+5tnDxZEVkD80VcQGyZVayq8zsk=";
+    hash = "sha256-Pg8nvW+RDy1Vb+Xg+5tnDxZEVkD80VcQGyZVayq8zsk=";
   };
 
   patchPhase = ''

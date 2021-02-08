@@ -10,7 +10,7 @@ link-grammar = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.abisource.com/downloads/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-EcT/VR+lFpJX2sxXUIDGOwdceQ7awpmEqUZBoJk7UFs=";
+    hash = "sha256-EcT/VR+lFpJX2sxXUIDGOwdceQ7awpmEqUZBoJk7UFs=";
   };
 
   nativeBuildInputs = [ pkg-config python3 ];

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://debian/pool/main/libp/libpaper/libpaper_${version}.tar.gz";
-    sha256 = "sha256-yLuUbsk9PCxyu7HXJX6QFyoipEoHoH+2uAKluyyV/dw=";
+    hash = "sha256-yLuUbsk9PCxyu7HXJX6QFyoipEoHoH+2uAKluyyV/dw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

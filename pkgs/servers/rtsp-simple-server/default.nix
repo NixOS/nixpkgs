@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "aler9";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9PjITPuCndz/EuFEt9docmWN93TwZQbnyHV161hUwS0=";
+    hash = "sha256-9PjITPuCndz/EuFEt9docmWN93TwZQbnyHV161hUwS0=";
   };
 
   vendorSha256 = "sha256-6tp1hN1dRKm523IegMpsTO+/gktywqdNZflUbE4TPuU=";

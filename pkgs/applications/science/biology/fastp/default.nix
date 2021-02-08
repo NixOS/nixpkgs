@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "OpenGene";
     repo = "fastp";
     rev = "v${version}";
-    sha256 = "sha256-pANwppkO9pfV9vctB7HmNCzYRtf+Xt+5HMKzvFuvyFM=";
+    hash = "sha256-pANwppkO9pfV9vctB7HmNCzYRtf+Xt+5HMKzvFuvyFM=";
   };
 
   buildInputs = [ zlib ];

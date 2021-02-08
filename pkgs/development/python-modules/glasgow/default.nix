@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
     rev = "f885790d7927b893e631c33744622d6ebc18b5e3";
-    sha256 = "sha256-fSorSEa5K09aPEOk4XPWOFRxYl1KGVy29jOBqIvs2hk=";
+    hash = "sha256-fSorSEa5K09aPEOk4XPWOFRxYl1KGVy29jOBqIvs2hk=";
   };
 
   nativeBuildInputs = [ setuptools_scm sdcc ];

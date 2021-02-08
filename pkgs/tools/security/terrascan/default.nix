@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "accurics";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RZFh9RVU8RwtLGIP7OWnf0yNsXfElqWSXieljqp8ahU=";
+    hash = "sha256-RZFh9RVU8RwtLGIP7OWnf0yNsXfElqWSXieljqp8ahU=";
   };
 
   vendorSha256 = "sha256-Ya/33ocPhY5OSnCEyULsOIHaxwb1yNEle3JEYo/7/Yk=";

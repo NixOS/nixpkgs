@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "ClementTsang";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9L7FtYIaWSOwNQ8zOLvxjt51o8A5MqqfF/iIyJs2TJA=";
+    hash = "sha256-9L7FtYIaWSOwNQ8zOLvxjt51o8A5MqqfF/iIyJs2TJA=";
   };
 
   prePatch = ''

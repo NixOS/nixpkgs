@@ -18,7 +18,7 @@ mkDerivation rec {
     owner = "Arisotura";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bvi0Y+zwfEcsZMNxoH85hxwIGn0UIYlg/ZaE6yJ7vlo=";
+    hash = "sha256-bvi0Y+zwfEcsZMNxoH85hxwIGn0UIYlg/ZaE6yJ7vlo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];

@@ -8,7 +8,7 @@ mkDerivation rec {
     owner = "corrados";
     repo = "jamulus";
     rev = "r${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-b187Q8KXcU32C2hGFqs6R2CqWgmieq6ewQDx+elEgP4=";
+    hash = "sha256-b187Q8KXcU32C2hGFqs6R2CqWgmieq6ewQDx+elEgP4=";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];

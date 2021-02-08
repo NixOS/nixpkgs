@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "google";
     repo = "evcxr";
     rev = "v${version}";
-    sha256 = "sha256-33XeepqwYmTMcObroPTuxykYuM9qYI1+LV5lZIFSomg=";
+    hash = "sha256-33XeepqwYmTMcObroPTuxykYuM9qYI1+LV5lZIFSomg=";
   };
 
   cargoSha256 = "sha256-tjCID3YeGkxcq/LqJDMHGNpv1MCXKtcLlDnNkFwx1zU=";

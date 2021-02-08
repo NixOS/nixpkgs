@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GxMQPP8i/NWvduf10f+xVyuG666pChj9RsiF4jfygyY=";
+    hash = "sha256-GxMQPP8i/NWvduf10f+xVyuG666pChj9RsiF4jfygyY=";
   };
 
   nativeBuildInputs = [

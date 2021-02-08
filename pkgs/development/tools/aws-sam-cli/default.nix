@@ -19,7 +19,7 @@ let
         version = "1.27.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "sha256-MlgSL0zWcbo9wUE4LdBBLBI9ufExe+2LJucin2NjRFQ=";
+          hash = "sha256-MlgSL0zWcbo9wUE4LdBBLBI9ufExe+2LJucin2NjRFQ=";
         };
       });
 
@@ -27,7 +27,7 @@ let
         version = "0.7.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "sha256-lAgoGDyTe87FMHUyEbcPZzwKmquDHkMnNImzEFON/4Y=";
+          hash = "sha256-lAgoGDyTe87FMHUyEbcPZzwKmquDHkMnNImzEFON/4Y=";
         };
       });
 

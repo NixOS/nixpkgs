@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "cutelyst";
     repo = "cutelyst";
     rev = "v${version}";
-    sha256 = "sha256-RidUZqDnzRrgW/7LVF+BF01zNcf1cJ/kS7OF/t1Q65c=";
+    hash = "sha256-RidUZqDnzRrgW/7LVF+BF01zNcf1cJ/kS7OF/t1Q65c=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];

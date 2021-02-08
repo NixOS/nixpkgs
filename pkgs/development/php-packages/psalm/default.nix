@@ -8,7 +8,7 @@ mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
-    sha256 = "sha256-4hqgAPflzNmeQQaxQATpWYBB5Pz7jKu8Vlw3BiMyhtw=";
+    hash = "sha256-4hqgAPflzNmeQQaxQATpWYBB5Pz7jKu8Vlw3BiMyhtw=";
   };
 
   phases = [ "installPhase" ];

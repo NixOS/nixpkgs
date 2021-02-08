@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "bootandy";
     repo = "dust";
     rev = "v${version}";
-    sha256 = "sha256-JwGa1icwV1yqxy90Psd9bzM7VzM7HPA6kONkI3Y745Q=";
+    hash = "sha256-JwGa1icwV1yqxy90Psd9bzM7VzM7HPA6kONkI3Y745Q=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''

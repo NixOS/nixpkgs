@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     repo = "libfastjson";
     owner = "rsyslog";
     rev = "v${version}";
-    sha256 = "sha256-2LyBdJR0dV1CElcGfrlmNwX52lVtx9X/Z4h/1XFjOIs=";
+    hash = "sha256-2LyBdJR0dV1CElcGfrlmNwX52lVtx9X/Z4h/1XFjOIs=";
   };
 
   buildInputs = [ autoconf automake libtool ];

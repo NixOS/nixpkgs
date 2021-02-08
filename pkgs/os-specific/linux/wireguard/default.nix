@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-${version}.tar.xz";
-    sha256 = "sha256-8RPJEk+6NaJP3LNZYEncLlkdrw2jHxNekKwEr+YpHeQ=";
+    hash = "sha256-8RPJEk+6NaJP3LNZYEncLlkdrw2jHxNekKwEr+YpHeQ=";
   };
 
   hardeningDisable = [ "pic" ];

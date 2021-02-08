@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang-nursery";
     repo = "mdBook";
     rev = "v${version}";
-    sha256 = "sha256-cS2fME3X8bFmEz6czoL+2ZFbflJP58+lIeC5SVleCNg=";
+    hash = "sha256-cS2fME3X8bFmEz6czoL+2ZFbflJP58+lIeC5SVleCNg=";
   };
 
   cargoSha256 = "sha256-iuJyprLp6HofcdH0NgNK2Vl+1FtdAvZPcltPUb5B2XU=";

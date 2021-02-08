@@ -195,7 +195,7 @@ in {
     # this package should point to the latest release.
     version = "2.0.2";
 
-    sha256 = "sha256-KzrRQwfQRvIQkHG5mj6cGBdcv2VEhC5y7bi09DaKqhY=";
+    hash = "sha256-KzrRQwfQRvIQkHG5mj6cGBdcv2VEhC5y7bi09DaKqhY=";
   };
 
   zfsUnstable = common {
@@ -205,6 +205,6 @@ in {
     # this package should point to a version / git revision compatible with the latest kernel release
     version = "2.0.2";
 
-    sha256 = "sha256-KzrRQwfQRvIQkHG5mj6cGBdcv2VEhC5y7bi09DaKqhY=";
+    hash = "sha256-KzrRQwfQRvIQkHG5mj6cGBdcv2VEhC5y7bi09DaKqhY=";
   };
 }

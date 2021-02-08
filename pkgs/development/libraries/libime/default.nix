@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "fcitx";
     repo = "libime";
     rev = version;
-    sha256 = "sha256-Ykj4/3yKUqK0BRqW1E2zFYNgeUOXQ1DsotmKU6c8vEg=";
+    hash = "sha256-Ykj4/3yKUqK0BRqW1E2zFYNgeUOXQ1DsotmKU6c8vEg=";
     fetchSubmodules = true;
   };
 

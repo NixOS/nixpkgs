@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "nodauf";
     repo = "Swego";
     rev = "v${version}";
-    sha256 = "sha256-Wt+2spZfgBWzZEQP+SiDYI5DdLKrwFMgYT1ukbF4x0I=";
+    hash = "sha256-Wt+2spZfgBWzZEQP+SiDYI5DdLKrwFMgYT1ukbF4x0I=";
   };
 
   vendorSha256 = "sha256-EPcyhnTis7g0uVl+cJdG7iMbisjh7iuMhpzM/SSOeFI=";

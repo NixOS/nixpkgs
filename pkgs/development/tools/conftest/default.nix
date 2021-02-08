@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "open-policy-agent";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "sha256-mSiZjpsFZfkM522f1WcJgBexiBS0o3uf1g94pjhgGVU=";
+    hash = "sha256-mSiZjpsFZfkM522f1WcJgBexiBS0o3uf1g94pjhgGVU=";
   };
 
   vendorSha256 = "sha256-iCIuEvwkbfBZ858yZZyVf5om6YLsGKRvzFmYzJBrRf4=";

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.exodus.io/releases/${pname}-linux-x64-${version}.zip";
-    sha256 = "sha256-cc0m1gOwIY4M0ljSSdj8WaQfU/ikGI1Zlf8gGDdht4Q=";
+    hash = "sha256-cc0m1gOwIY4M0ljSSdj8WaQfU/ikGI1Zlf8gGDdht4Q=";
   };
 
   sourceRoot = ".";

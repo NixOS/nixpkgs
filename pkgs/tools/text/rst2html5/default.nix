@@ -9,7 +9,7 @@ in python3Packages.buildPythonPackage {
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jmToDFLQODqgTycBp2J8LyoJ1Zxho9w1VdhFMzvDFkg=";
+    hash = "sha256-jmToDFLQODqgTycBp2J8LyoJ1Zxho9w1VdhFMzvDFkg=";
   };
 
   propagatedBuildInputs = with python3Packages;

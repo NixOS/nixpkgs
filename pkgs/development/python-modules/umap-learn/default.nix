@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "lmcinnes";
     repo = "umap";
     rev = version;
-    sha256 = "sha256-2Z5RDi4bz8hh8zMwkcCQY9NrGaVd1DJEBOmrCl2oSvM=";
+    hash = "sha256-2Z5RDi4bz8hh8zMwkcCQY9NrGaVd1DJEBOmrCl2oSvM=";
   };
 
   checkInputs = [

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/moe/${pname}-${version}.tar.lz";
-    sha256 = "sha256-DvvLz1pKjZZlQcbLCZugq2QWeANm286C2f+ZWoWl4vk=";
+    hash = "sha256-DvvLz1pKjZZlQcbLCZugq2QWeANm286C2f+ZWoWl4vk=";
   };
 
   prePatch = ''

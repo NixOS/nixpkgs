@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/nco/nco/archive/${version}.tar.gz";
-    sha256 = "sha256-Q4okOoyodofAsMrSmAhFISeY05Be+i7OX4qy2annQq4=";
+    hash = "sha256-Q4okOoyodofAsMrSmAhFISeY05Be+i7OX4qy2annQq4=";
   };
 
   prePatch = ''

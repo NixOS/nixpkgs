@@ -8,11 +8,11 @@ import ./generic.nix {
   }
   {
     url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-libs/vtk/files/vtk-8.2.0-gcc-10.patch?id=c4256f68d3589570443075eccbbafacf661f785f";
-    sha256 = "sha256:0bpwrdfmi15grsg4jy7bzj2z6511a0c160cmw5lsi65aabyh7cl5";
+    hash = "sha256:0bpwrdfmi15grsg4jy7bzj2z6511a0c160cmw5lsi65aabyh7cl5";
   }
   {
     url = "https://gitlab.kitware.com/vtk/vtk/-/merge_requests/6943.diff";
-    sha256 = "sha256:1nzdw3f6bsri04y528zj2klqkb9p8s4lnl9g5zvm119m1cmyhn04";
+    hash = "sha256:1nzdw3f6bsri04y528zj2klqkb9p8s4lnl9g5zvm119m1cmyhn04";
   }
   ];
 }

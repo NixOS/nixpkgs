@@ -8,7 +8,7 @@ buildGoModule rec {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    sha256 = "sha256-nknRQdlYVfqCi9SMVTak615Yn/9N99+zHITDKL5nZ00=";
+    hash = "sha256-nknRQdlYVfqCi9SMVTak615Yn/9N99+zHITDKL5nZ00=";
   };
 
   vendorSha256 = null;

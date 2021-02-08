@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "Francesco149";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fUtyQaHcNBmDs1BPbFGieKY/CFyETqBxYzzIXSERFJY=";
+    hash = "sha256-fUtyQaHcNBmDs1BPbFGieKY/CFyETqBxYzzIXSERFJY=";
   };
 
   buildPhase = ''

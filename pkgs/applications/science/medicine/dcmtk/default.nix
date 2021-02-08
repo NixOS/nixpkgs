@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "DCMTK";
     repo = pname;
     rev = "DCMTK-${version}";
-    sha256 = "sha256-bpvf2JJXikV/CqmXZb3w4Ua3VBEQcQk7PXw9ie0t8xo=";
+    hash = "sha256-bpvf2JJXikV/CqmXZb3w4Ua3VBEQcQk7PXw9ie0t8xo=";
   };
 
   nativeBuildInputs = [ cmake ];

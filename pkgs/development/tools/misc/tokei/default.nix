@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "XAMPPRocky";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jqDsxUAMD/MCCI0hamkGuCYa8rEXNZIR8S+84S8FbgI=";
+    hash = "sha256-jqDsxUAMD/MCCI0hamkGuCYa8rEXNZIR8S+84S8FbgI=";
   };
 
   cargoSha256 = "sha256-iUDc54E8AiLMJw9h99kg/3VmaSi8GqfQyrPwa9nJ994=";

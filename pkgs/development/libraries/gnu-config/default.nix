@@ -6,11 +6,11 @@ let
   # Don't use fetchgit as this is needed during Aarch64 bootstrapping
   configGuess = fetchurl {
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.guess?id=${rev}";
-    sha256 = "sha256-TSLpYIDGSp1flqCBi2Sgg9IWDV5bcO+Hn2Menv3R6KU=";
+    hash = "sha256-TSLpYIDGSp1flqCBi2Sgg9IWDV5bcO+Hn2Menv3R6KU=";
   };
   configSub = fetchurl {
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.sub?id=${rev}";
-    sha256 = "sha256-DkCGDN/DE3phQ1GO/Ua5ZPPtp0Ya93PnW3yfSK8EV9s=";
+    hash = "sha256-DkCGDN/DE3phQ1GO/Ua5ZPPtp0Ya93PnW3yfSK8EV9s=";
   };
 in stdenv.mkDerivation {
   pname = "gnu-config";

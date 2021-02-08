@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     # is ignored. To find out the correct file_nr, go to https://gforge.inria.fr/projects/mpfi/
     # and click on Download in the section "Latest File Releases".
     url = "https://gforge.inria.fr/frs/download.php/file/${file_nr}/mpfi-${version}.tar.bz2";
-    sha256 = "sha256-I4PUV7IIxs088uZracTOR0d7Kg2zH77AzUseuqJHGS8=";
+    hash = "sha256-I4PUV7IIxs088uZracTOR0d7Kg2zH77AzUseuqJHGS8=";
   };
   buildInputs = [mpfr];
   meta = {

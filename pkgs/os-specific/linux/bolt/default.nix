@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "bolt";
     repo = "bolt";
     rev = version;
-    sha256 = "sha256-lcJE+bMK2S2GObHMy/Fu12WGb3T1HrWjsNyZPz4/f4E=";
+    hash = "sha256-lcJE+bMK2S2GObHMy/Fu12WGb3T1HrWjsNyZPz4/f4E=";
   };
 
   nativeBuildInputs = [

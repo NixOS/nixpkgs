@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "http://comicneue.com/${pname}-${version}.zip";
-    sha256 = "sha256-DjRZtFnJOtZnxhfpgU5ihZFAonRK608/BQztCAExIU0=";
+    hash = "sha256-DjRZtFnJOtZnxhfpgU5ihZFAonRK608/BQztCAExIU0=";
     stripRoot = false; # because it comes with a __MACOSX directory
   };
 

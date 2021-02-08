@@ -9,7 +9,7 @@ buildGoModule rec {
     owner = "FiloSottile";
     repo = "age";
     rev = "v${version}";
-    sha256 = "sha256-1LCcCEf2/R0am0jpA8yKl44+AoUFkbepxp9V6/nZkBQ=";
+    hash = "sha256-1LCcCEf2/R0am0jpA8yKl44+AoUFkbepxp9V6/nZkBQ=";
   };
 
   meta = with lib; {

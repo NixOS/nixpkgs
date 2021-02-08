@@ -157,7 +157,7 @@ in {
       patch = "7";
       suffix = "";
     };
-    sha256 = "sha256-3cwd8Wu1uHqkLsXSCluQLy0IjKommyjgFZD5enmOxQo=";
+    hash = "sha256-3cwd8Wu1uHqkLsXSCluQLy0IjKommyjgFZD5enmOxQo=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -183,7 +183,7 @@ in {
       patch = "0";
       suffix = "a4";
     };
-    sha256 = "sha256-McHBl7IZuOH96je/izkxur0Edirn+igVkQU/pbek73M=";
+    hash = "sha256-McHBl7IZuOH96je/izkxur0Edirn+igVkQU/pbek73M=";
     inherit (darwin) configd;
     inherit passthruFun;
   };

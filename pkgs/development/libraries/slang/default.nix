@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.jedsoft.org/releases/slang/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-/J47D8T2fDwfbUPJDBalxC0Re44oRXxbRoMbi1064xo=";
+    hash = "sha256-/J47D8T2fDwfbUPJDBalxC0Re44oRXxbRoMbi1064xo=";
   };
 
   outputs = [ "out" "dev" "man" "doc" ];

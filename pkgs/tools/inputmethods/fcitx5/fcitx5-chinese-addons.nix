@@ -37,7 +37,7 @@ mkDerivation rec {
     owner = "fcitx";
     repo = "fcitx5-chinese-addons";
     rev = version;
-    sha256 = "sha256-kCihpRUtUXrqqf7FPQp8ZRexiygOuDVOdQwVx7tSn+c=";
+    hash = "sha256-kCihpRUtUXrqqf7FPQp8ZRexiygOuDVOdQwVx7tSn+c=";
   };
 
   cmakeFlags = [

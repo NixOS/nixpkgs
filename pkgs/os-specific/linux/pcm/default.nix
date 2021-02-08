@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "opcm";
     repo = "pcm";
     rev = version;
-    sha256 = "sha256-xiC9XDuFcAzD2lVuzBWUvHy1Z1shEXM2KPFabKvgh1Y=";
+    hash = "sha256-xiC9XDuFcAzD2lVuzBWUvHy1Z1shEXM2KPFabKvgh1Y=";
   };
 
   installPhase = ''

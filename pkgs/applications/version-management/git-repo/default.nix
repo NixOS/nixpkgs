@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "sha256-k9G0lN7qKQhWiXibzhC9Ma9h+44LQJ966MIakWk5nJM=";
+    hash = "sha256-k9G0lN7qKQhWiXibzhC9Ma9h+44LQJ966MIakWk5nJM=";
   };
 
   patches = [ ./import-ssl-module.patch ];

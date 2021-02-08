@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "sha256-CvrwVyx5QP9CeEraJsUInV2pG5puSJebpXQiLwnrFSs=";
+    hash = "sha256-CvrwVyx5QP9CeEraJsUInV2pG5puSJebpXQiLwnrFSs=";
   };
 
   patches = [

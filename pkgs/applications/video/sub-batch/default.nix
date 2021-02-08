@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     repo = pname;
     # Upstream doesn't tag releases.
     rev = "631bd6e2d931f8a8e12798f4b6460739a14bcfff";
-    sha256 = "sha256-424e40v2LBxlmgDKxvsT/iuUn/IKWPKMwih0cSQ5sFE=";
+    hash = "sha256-424e40v2LBxlmgDKxvsT/iuUn/IKWPKMwih0cSQ5sFE=";
   };
 
   cargoSha256 = "sha256-l+BTF9PGb8bG8QHhNCoBsrsVX8nlRjPlaea1ESFfMW0=";

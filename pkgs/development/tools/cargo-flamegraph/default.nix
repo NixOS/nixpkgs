@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     owner = "flamegraph-rs";
     repo = "flamegraph";
     rev = "v${version}";
-    sha256 = "sha256-IpmvFUWNaFQ1ls7u625vvj1TnRYXR+X1mAGdBcwRFLk=";
+    hash = "sha256-IpmvFUWNaFQ1ls7u625vvj1TnRYXR+X1mAGdBcwRFLk=";
   };
 
   cargoSha256 = "sha256-2YHkEQZqjKEvg4h9kIVhqmgq+SMF1c3r8UbSQivZh7w=";

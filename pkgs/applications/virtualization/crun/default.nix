@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OdB7UXLG99ErbfSCvq87LxBy5EYkUvTfyQNG70RFbl4=";
+    hash = "sha256-OdB7UXLG99ErbfSCvq87LxBy5EYkUvTfyQNG70RFbl4=";
     fetchSubmodules = true;
   };
 

@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
     owner = "audacity";
     repo = "audacity";
     rev = "Audacity-${version}";
-    sha256 = "sha256-hpRTo5B0EMyzORopsNPOgv6mohBkwJfWfCLnPvFmdFI=";
+    hash = "sha256-hpRTo5B0EMyzORopsNPOgv6mohBkwJfWfCLnPvFmdFI=";
   };
 
   patches = [
     (fetchpatch {
       url = "https://github.com/audacity/audacity/commit/a070b5d8a8ba10fb86edba6aeb8fdab0f66ba408.patch";
-      sha256 = "sha256-8UZupGcN+/tytAhyy5T1P0nufvsQPeyLgOUMGt7l8Oc=";
+      hash = "sha256-8UZupGcN+/tytAhyy5T1P0nufvsQPeyLgOUMGt7l8Oc=";
       name = "audacity_xdg_paths.patch";
     })
   ];

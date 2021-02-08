@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "muflihun";
     repo = "easyloggingpp";
     rev = "v${version}";
-    sha256 = "sha256-sFWmZMnucMuvpwDzuowni21KiD3bx0lH1Ts+yhusOYs=";
+    hash = "sha256-sFWmZMnucMuvpwDzuowni21KiD3bx0lH1Ts+yhusOYs=";
   };
 
   nativeBuildInputs = [cmake];

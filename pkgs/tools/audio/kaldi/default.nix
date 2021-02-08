@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     owner = "kaldi-asr";
     repo = "kaldi";
     rev = "813b73185a18725e4f6021981d17221d6ee23a19";
-    sha256 = "sha256-lTqXTG5ZTPmhCgt+BVzOwjKEIj+bLGUa+IxJq+XtHUg=";
+    hash = "sha256-lTqXTG5ZTPmhCgt+BVzOwjKEIj+bLGUa+IxJq+XtHUg=";
   };
 
   cmakeFlags = [

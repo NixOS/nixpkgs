@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "sl1pm4t";
     repo = "terraform-provider-lxd";
     rev = "v${version}";
-    sha256 = "sha256-ikI8LQ6qawdeUSb1Ee03H409DQw2M4QtsIxAESxXNRI=";
+    hash = "sha256-ikI8LQ6qawdeUSb1Ee03H409DQw2M4QtsIxAESxXNRI=";
   };
 
   vendorSha256 = "sha256-IjpC7bFodqdrqVUEQdZBc6N8py5+t2kRYvcQiPr7CHc=";

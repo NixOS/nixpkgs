@@ -8,7 +8,7 @@ python3Packages.buildPythonPackage rec {
     owner = "AdnanHodzic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NDIdQ4gUN2jG+VWXsv3fdUogZxOOiNtnbekD30+jx6M=";
+    hash = "sha256-NDIdQ4gUN2jG+VWXsv3fdUogZxOOiNtnbekD30+jx6M=";
   };
 
   propagatedBuildInputs = with python3Packages; [ click distro psutil ];

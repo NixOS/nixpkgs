@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.tu-chemnitz.de/pub/Local/urz/ding/${name}.tar.gz";
-    sha256 = "sha256-aabIH894WihsBTo1LzIBzIZxxyhRYVxLcHpDQwmwmOU=";
+    hash = "sha256-aabIH894WihsBTo1LzIBzIZxxyhRYVxLcHpDQwmwmOU=";
   };
 
   buildInputs = [ aspellEnv fortune gnugrep makeWrapper tk tre ];

@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "gleam-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ka1GxukX3HR40fMeiiXHguyPKrpGngG2tXDColR7eQA=";
+    hash = "sha256-ka1GxukX3HR40fMeiiXHguyPKrpGngG2tXDColR7eQA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

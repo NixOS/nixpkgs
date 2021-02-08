@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "Azure";
     repo = "msrest-for-python";
     rev = "v${version}";
-    sha256 = "sha256-hcUJrWw5EU0aO5Gyhn5+LmuRQN9Bom59cTz3maQ0jvw=";
+    hash = "sha256-hcUJrWw5EU0aO5Gyhn5+LmuRQN9Bom59cTz3maQ0jvw=";
   };
 
   propagatedBuildInputs = [

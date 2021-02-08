@@ -21,7 +21,7 @@ fetchzip {
     done
   '';
 
-  sha256 = "sha256-x7JSXS9Q1fzlJTVR+MAS3f2+cmo/H0s1qkY9FPjx2zI=";
+  hash = "sha256-x7JSXS9Q1fzlJTVR+MAS3f2+cmo/H0s1qkY9FPjx2zI=";
 
   meta = {
     description = "Some TrueType fonts from Microsoft Windows Vista (Calibri, Cambria, Candara, Consolas, Constantia, Corbel)";

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner  = "s3fs-fuse";
     repo   = "s3fs-fuse";
     rev    = "v${version}";
-    sha256 = "sha256-LxqTKu9F8FqHnjp1a9E/+WbH1Ol6if/OpY7LGsVE9Bw=";
+    hash = "sha256-LxqTKu9F8FqHnjp1a9E/+WbH1Ol6if/OpY7LGsVE9Bw=";
   };
 
   buildInputs = [ curl openssl libxml2 ]

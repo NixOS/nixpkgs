@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "linuxaudio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WNt74tSWV8bY4TnpLp86PsnrjkqWynJJt3Ra4gZl2fQ=";
+    hash = "sha256-WNt74tSWV8bY4TnpLp86PsnrjkqWynJJt3Ra4gZl2fQ=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper meson ninja ];

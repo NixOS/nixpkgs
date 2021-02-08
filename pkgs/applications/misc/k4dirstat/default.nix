@@ -17,7 +17,7 @@ mkDerivation rec {
     owner = "jeromerobert";
     repo = pname;
     rev = version;
-    sha256 = "sha256-U5p/gW5GPxRoM9XknP8G7iVhLDoqmvgspeRsmCRdxDg=";
+    hash = "sha256-U5p/gW5GPxRoM9XknP8G7iVhLDoqmvgspeRsmCRdxDg=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];

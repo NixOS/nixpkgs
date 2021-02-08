@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
-    sha256 = "sha256-73bclasKBjIaG9Jeh1SJy6Esn2YRl0ygE1zwZ7sgyWA=";
+    hash = "sha256-73bclasKBjIaG9Jeh1SJy6Esn2YRl0ygE1zwZ7sgyWA=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];

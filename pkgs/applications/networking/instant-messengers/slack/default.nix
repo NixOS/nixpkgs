@@ -45,7 +45,7 @@ let
   x86_64-darwin-sha256 = "0qflv2glfy7d77zjgqi7qcjr53c9dni26gmqkg9vk2xijmmd3xy7";
 
   x86_64-linux-version = "4.12.2";
-  x86_64-linux-sha256 = "sha256-G5uQI078N7AbhEJs6a/17Hoi5DSdwvYLM1T/ttrEw4s=";
+  x86_64-linux-hash = "sha256-G5uQI078N7AbhEJs6a/17Hoi5DSdwvYLM1T/ttrEw4s=";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;

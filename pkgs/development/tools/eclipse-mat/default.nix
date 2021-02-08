@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
-    sha256 = "sha256-HtIKcGfdjb2wovGGSxv16ud7y1cPQFBn77pkhiekAkI=";
+    hash = "sha256-HtIKcGfdjb2wovGGSxv16ud7y1cPQFBn77pkhiekAkI=";
   };
 
   desktopItem = makeDesktopItem {

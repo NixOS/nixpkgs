@@ -179,7 +179,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
   custom-toot = pkgs.toot.overrideAttrs(old:{
     patches = [ (pkgs.fetchpatch {
       url = "https://github.com/NinjaTrappeur/toot/commit/b4a4c30f41c0cb7e336714c2c4af9bc9bfa0c9f2.patch";
-      sha256 = "sha256-0xxNwjR/fStLjjUUhwzCCfrghRVts+fc+fvVJqVcaFg=";
+      hash = "sha256-0xxNwjR/fStLjjUUhwzCCfrghRVts+fc+fvVJqVcaFg=";
     }) ];
   });
 

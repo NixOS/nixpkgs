@@ -230,7 +230,7 @@ in rec {
       # https://github.com/NixOS/nixpkgs/pull/109309#issuecomment-768331750
       (fetchpatch {
         url = "https://github.com/NixOS/nix/commit/c5b42c5a42138329c6d02da0d8a53cb59c6077f4.patch";
-        sha256 = "sha256-d4RNOKMxa4NMbFgYcqWRv2ByHt8F/XUWV+6P9qHz7S4=";
+        hash = "sha256-d4RNOKMxa4NMbFgYcqWRv2ByHt8F/XUWV+6P9qHz7S4=";
       })
     ];
 

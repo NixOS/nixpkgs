@@ -20,7 +20,7 @@ buildGoPackage rec {
 
   src = fetchurl {
     url = "https://github.com/hpcng/singularity/releases/download/v${version}/singularity-${version}.tar.gz";
-    sha256 = "sha256-gtLGUGNWAZXsNFUZMb48MluV6OIAnpJ1X9farTRuCDw=";
+    hash = "sha256-gtLGUGNWAZXsNFUZMb48MluV6OIAnpJ1X9farTRuCDw=";
   };
 
   goPackagePath = "github.com/sylabs/singularity";

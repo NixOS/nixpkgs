@@ -12,7 +12,7 @@ mkDerivation rec {
     owner = "opentx";
     repo = "opentx";
     rev = "release/${version}";
-    sha256 = "sha256-0B41TkTs4sNGYzpMGbsgCLT2ThkP6foeuwLUIzKKGkU=";
+    hash = "sha256-0B41TkTs4sNGYzpMGbsgCLT2ThkP6foeuwLUIzKKGkU=";
   };
 
   nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];

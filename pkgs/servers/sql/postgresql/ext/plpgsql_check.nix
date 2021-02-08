@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "okbob";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mYFItrFC0BeRwLfZA1SAV+4rvrNrx75lTWS7w2ZDHag=";
+    hash = "sha256-mYFItrFC0BeRwLfZA1SAV+4rvrNrx75lTWS7w2ZDHag=";
   };
 
   buildInputs = [ postgresql ];

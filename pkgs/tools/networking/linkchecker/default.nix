@@ -10,7 +10,7 @@ buildPythonApplication rec {
     owner = pname;
     repo = pname;
     rev = "v" + version;
-    sha256 = "sha256-gcaamRxGn124LZ8rU+WzjRookU3akDO0ZyzI7/S6kFA=";
+    hash = "sha256-gcaamRxGn124LZ8rU+WzjRookU3akDO0ZyzI7/S6kFA=";
   };
 
   nativeBuildInputs = [ gettext ];

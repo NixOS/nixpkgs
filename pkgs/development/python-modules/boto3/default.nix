@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WKRA9MlqHy8HZXfHCFI3hUum20GnyR5KM/swBo+NRpI=";
+    hash = "sha256-WKRA9MlqHy8HZXfHCFI3hUum20GnyR5KM/swBo+NRpI=";
   };
 
   propagatedBuildInputs = [ botocore jmespath s3transfer ] ++ lib.optionals (!isPy3k) [ futures ];

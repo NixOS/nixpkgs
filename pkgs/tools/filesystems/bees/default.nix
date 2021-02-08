@@ -10,7 +10,7 @@ let
       owner = "Zygo";
       repo = "bees";
       rev = "v${version}";
-      sha256 = "sha256-brEjr7lhmKDCIDeLq+XP+ZTxv1RvwoUlszMSEYygxv8=";
+      hash = "sha256-brEjr7lhmKDCIDeLq+XP+ZTxv1RvwoUlszMSEYygxv8=";
     };
 
     buildInputs = [

@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication rec {
     owner = "keithgg";
     repo = "puddletag";
     rev = version;
-    sha256 = "sha256-9l8Pc77MX5zFkOqU00HFS8//3Bzd2OMnVV1brmWsNAQ=";
+    hash = "sha256-9l8Pc77MX5zFkOqU00HFS8//3Bzd2OMnVV1brmWsNAQ=";
   };
 
   sourceRoot = "source/source";

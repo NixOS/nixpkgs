@@ -8,7 +8,7 @@ crystal.buildCrystalPackage rec {
     owner = "crystal-ameba";
     repo = "ameba";
     rev = "v${version}";
-    sha256 = "sha256-+ZsefwH1hag2syWaEXkdxgmxk6JsxP7MvV+ILlo+Hy8=";
+    hash = "sha256-+ZsefwH1hag2syWaEXkdxgmxk6JsxP7MvV+ILlo+Hy8=";
   };
 
   meta = with lib; {

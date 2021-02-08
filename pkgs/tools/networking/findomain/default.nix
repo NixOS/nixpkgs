@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Edu4rdSHL";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eM3XTZ/Y0Kk5bdC+xskS/btGEVrC50342YBYJdXAlDg=";
+    hash = "sha256-eM3XTZ/Y0Kk5bdC+xskS/btGEVrC50342YBYJdXAlDg=";
   };
 
   cargoSha256 = "sha256-U3WXb6qGGshaWJ3GIC+c3W9Y8Cz0O23J7mVojCwitlk=";

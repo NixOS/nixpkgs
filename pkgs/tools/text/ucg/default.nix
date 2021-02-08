@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     owner = "gvansickle";
     repo = pname;
     rev = "c3a67632f1e3f332bfb102f0db167f34a2e42da7";
-    sha256 = "sha256-/wU1PmI4ejlv7gZzZNasgROYXFiDiIxE9BFoCo6+G5Y=";
+    hash = "sha256-/wU1PmI4ejlv7gZzZNasgROYXFiDiIxE9BFoCo6+G5Y=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

@@ -30,7 +30,7 @@ mkDerivation rec {
     # Remove after next release.
     (fetchpatch {
       url = "https://invent.kde.org/pim/zanshin/-/commit/4850c08998b33b37af99c3312d193b063b3e8174.diff";
-      sha256 = "sha256:0lh0a035alhmws3zyfnkb814drq5cqxvzpwl4g1g5d435gy8k4ps";
+      hash = "sha256:0lh0a035alhmws3zyfnkb814drq5cqxvzpwl4g1g5d435gy8k4ps";
     })
   ];
 

@@ -9,7 +9,7 @@ let
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "sha256-UQ1r8271EiZDU/h2zta6toMRfk2GjXol8GexYL9n+BE=";
+    hash = "sha256-UQ1r8271EiZDU/h2zta6toMRfk2GjXol8GexYL9n+BE=";
   };
 
   webui = mkYarnPackage {
@@ -35,7 +35,7 @@ in buildGoPackage rec {
     # Fix https://github.com/prometheus/prometheus/issues/8144
     (fetchpatch {
       url = "https://github.com/prometheus/prometheus/commit/8b64b70fe4a5aa2877c95aa12c6798b12d3ff7ec.patch";
-      sha256 = "sha256-RuXT5pBXv8z6WoE59KNGh+OXr1KGLGWs/n0Hjf4BuH8=";
+      hash = "sha256-RuXT5pBXv8z6WoE59KNGh+OXr1KGLGWs/n0Hjf4BuH8=";
     })
   ];
 

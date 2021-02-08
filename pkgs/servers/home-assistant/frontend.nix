@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-N+n1DI1oZ/j+GydH+Du21zTNA6leW4YBri7cAMvAac4=";
+    hash = "sha256-N+n1DI1oZ/j+GydH+Du21zTNA6leW4YBri7cAMvAac4=";
   };
 
   # there is nothing to strip in this package

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/plantuml/${version}/plantuml.${version}.jar";
-    sha256 = "sha256-QERrsTB8GO+B8DZkl1Ruru9Bw+uL9ojQbJ321sbqIws=";
+    hash = "sha256-QERrsTB8GO+B8DZkl1Ruru9Bw+uL9ojQbJ321sbqIws=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

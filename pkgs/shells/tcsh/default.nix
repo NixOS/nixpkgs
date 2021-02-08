@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       "ftp://ftp.funet.fi/pub/unix/shells/tcsh/${pname}-${version}.tar.gz"
       "ftp://ftp.funet.fi/pub/unix/shells/tcsh/old/${pname}-${version}.tar.gz"
     ];
-    sha256 = "sha256-viz9ZT0qDH9QbS3RTBIyS6dJvUhAN75t9Eo5c/UiYrc=";
+    hash = "sha256-viz9ZT0qDH9QbS3RTBIyS6dJvUhAN75t9Eo5c/UiYrc=";
   };
 
   buildInputs = [ ncurses ];

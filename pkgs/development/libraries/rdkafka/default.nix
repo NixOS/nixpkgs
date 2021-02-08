@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "edenhill";
     repo = "librdkafka";
     rev = "v${version}";
-    sha256 = "sha256-VCGR0Q8FcoDLr+CFTk/OLMI4zs87K/IdZS1ANmkeb4s=";
+    hash = "sha256-VCGR0Q8FcoDLr+CFTk/OLMI4zs87K/IdZS1ANmkeb4s=";
   };
 
   nativeBuildInputs = [ pkg-config ];

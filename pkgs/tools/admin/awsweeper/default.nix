@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "jckuester";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fpWoLFSwSVxaiWyVMSmQTd3o/zOySUXNM2YhxMQ7nsA=";
+    hash = "sha256-fpWoLFSwSVxaiWyVMSmQTd3o/zOySUXNM2YhxMQ7nsA=";
   };
 
   vendorSha256 = "sha256-1u1mzANLlWduAQF1GUX7BJSyYlSZwNQISqKwbyRlGog=";

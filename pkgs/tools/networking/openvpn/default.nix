@@ -87,6 +87,6 @@ in
 
   openvpn = generic {
     version = "2.5.0";
-    sha256 = "sha256-AppCbkTWVstOEYkxnJX+b8mGQkdyT1WZ2Z35xMNHj70=";
+    hash = "sha256-AppCbkTWVstOEYkxnJX+b8mGQkdyT1WZ2Z35xMNHj70=";
   };
 }

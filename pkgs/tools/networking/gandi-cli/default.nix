@@ -15,7 +15,7 @@ buildPythonApplication rec {
     owner = "Gandi";
     repo = "gandi.cli";
     rev = version;
-    sha256 = "sha256-KLeEbbzgqpmBjeTc5RYsFScym8xtMqVjU+H0lyDM0+o=";
+    hash = "sha256-KLeEbbzgqpmBjeTc5RYsFScym8xtMqVjU+H0lyDM0+o=";
   };
 
   propagatedBuildInputs = [

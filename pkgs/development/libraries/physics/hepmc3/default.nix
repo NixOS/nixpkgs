@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC3-${version}.tar.gz";
-    sha256 = "sha256-jKrazCyWmIPNH5lLYieV/IhftLFdrYyK5kvL2/DL1H0=";
+    hash = "sha256-jKrazCyWmIPNH5lLYieV/IhftLFdrYyK5kvL2/DL1H0=";
   };
 
   nativeBuildInputs = [ cmake ];

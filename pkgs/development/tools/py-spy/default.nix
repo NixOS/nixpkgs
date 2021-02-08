@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "benfred";
     repo = "py-spy";
     rev = "v${version}";
-    sha256 = "sha256-7282DGLNHpKorNTHvpMLmqF2DrEVMIiQIzf5nTuJ7lc=";
+    hash = "sha256-7282DGLNHpKorNTHvpMLmqF2DrEVMIiQIzf5nTuJ7lc=";
   };
 
   NIX_CFLAGS_COMPILE = "-L${libunwind}/lib";

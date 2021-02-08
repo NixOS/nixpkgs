@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "pgpartman";
     repo   = pname;
     rev    = "refs/tags/v${version}";
-    sha256 = "sha256-jFG2Zna97FHZin2V3Cwy5JcdeFh09Yy/eoyHtcCorPA=";
+    hash = "sha256-jFG2Zna97FHZin2V3Cwy5JcdeFh09Yy/eoyHtcCorPA=";
   };
 
   installPhase = ''

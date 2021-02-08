@@ -35,7 +35,7 @@ mkDerivation rec {
     owner = "openscad";
     repo = "openscad";
     rev = "${pname}-${version}";
-    sha256 = "sha256-2tOLqpFt5klFPxHNONnHVzBKEFWn4+ufx/MU+eYbliA=";
+    hash = "sha256-2tOLqpFt5klFPxHNONnHVzBKEFWn4+ufx/MU+eYbliA=";
   };
 
   nativeBuildInputs = [ bison flex pkg-config gettext qmake ];

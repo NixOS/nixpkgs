@@ -8,7 +8,7 @@ mkDerivation rec {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    sha256 = "sha256-bWqZiRv/mJzw+WY+7dLIzYBu8jhglBqgTjiXyQ1y6IQ=";
+    hash = "sha256-bWqZiRv/mJzw+WY+7dLIzYBu8jhglBqgTjiXyQ1y6IQ=";
   };
 
   buildInputs = [ qtbase qtmultimedia ];

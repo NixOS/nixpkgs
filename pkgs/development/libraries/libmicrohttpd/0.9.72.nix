@@ -5,6 +5,6 @@ callPackage ./generic.nix ( rec {
 
   src = fetchurl {
     url = "mirror://gnu/libmicrohttpd/libmicrohttpd-${version}.tar.gz";
-    sha256 = "sha256-Cugl+ODX9BIB/USg3xz0VMHLC8UP6dWcJlUiYCZML/g=";
+    hash = "sha256-Cugl+ODX9BIB/USg3xz0VMHLC8UP6dWcJlUiYCZML/g=";
   };
 })

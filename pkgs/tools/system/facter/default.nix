@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.14.15";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-vRtDctiulR5YmcwNCZtSU/tsRjs1+DP07NFVSL1TSuI=";
+    hash = "sha256-vRtDctiulR5YmcwNCZtSU/tsRjs1+DP07NFVSL1TSuI=";
     rev = version;
     repo = pname;
     owner = "puppetlabs";

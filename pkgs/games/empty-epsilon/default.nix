@@ -16,7 +16,7 @@ let
       owner = "daid";
       repo = "SeriousProton";
       rev = "EE-${version}";
-      sha256 = "sha256-/gwJPlvvOCv5XIsiVgZ8Eb/7vgwG/V+s/soGVCfYrwo=";
+      hash = "sha256-/gwJPlvvOCv5XIsiVgZ8Eb/7vgwG/V+s/soGVCfYrwo=";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     owner = "daid";
     repo = "EmptyEpsilon";
     rev = "EE-${version}";
-    sha256 = "sha256-HbF6xThR+ogNHbAcXF03DaBhwVhNEr5BJO7jeeVZH/o=";
+    hash = "sha256-HbF6xThR+ogNHbAcXF03DaBhwVhNEr5BJO7jeeVZH/o=";
   };
 
   nativeBuildInputs = [ cmake ];

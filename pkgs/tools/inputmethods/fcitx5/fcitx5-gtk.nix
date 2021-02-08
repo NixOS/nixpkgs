@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "fcitx";
     repo = "fcitx5-gtk";
     rev = version;
-    sha256 = "sha256-+BzXbZyzC3fvLqysufblk0zK9fAg5jslVdm/v3jz4B4=";
+    hash = "sha256-+BzXbZyzC3fvLqysufblk0zK9fAg5jslVdm/v3jz4B4=";
   };
 
   cmakeFlags = [

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     # download, but that is actually a graphical installer that is much harder
     # to unpack than the deb.
     url = "https://www.bluej.org/download/files/BlueJ-linux-${builtins.replaceStrings ["."] [""] version}.deb";
-    sha256 = "sha256-U81FIf67Qm/86+hA9iUCHt61dxiZsTkkequlVjft6/0=";
+    hash = "sha256-U81FIf67Qm/86+hA9iUCHt61dxiZsTkkequlVjft6/0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

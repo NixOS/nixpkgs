@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "weaveworks";
     repo = "flux";
     rev = version;
-    sha256 = "sha256-/go8V1EjY/iL3csoNpPyeWORvWCf0WnnaSOgiZ8UFQ8=";
+    hash = "sha256-/go8V1EjY/iL3csoNpPyeWORvWCf0WnnaSOgiZ8UFQ8=";
   };
 
   vendorSha256 = "sha256-GEU0Q2Elhiel20xvup+i1DSXCjQdA9s7cWykcbKR5KA=";

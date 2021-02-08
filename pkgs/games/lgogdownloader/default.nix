@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "Sude-";
     repo = "lgogdownloader";
     rev = "v${version}";
-    sha256 = "sha256-3xFlFokqdD1Nstu7TSUCaHUxvSodIb12QNVjmNgn9gs=";
+    hash = "sha256-3xFlFokqdD1Nstu7TSUCaHUxvSodIb12QNVjmNgn9gs=";
   };
 
   nativeBuildInputs = [ cmake pkg-config help2man ];

@@ -5,7 +5,7 @@ let
 in fetchzip {
   name = "JuliaMono-${version}";
   url = "https://github.com/cormullion/juliamono/releases/download/v${version}/JuliaMono.zip";
-  sha256 = "sha256-/MVT6n842sSiuPZNYxN3q1vn6yvMvmcTEDyvAd2GikA=";
+  hash = "sha256-/MVT6n842sSiuPZNYxN3q1vn6yvMvmcTEDyvAd2GikA=";
 
   postFetch = ''
     mkdir -p $out/share/fonts/truetype

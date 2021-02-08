@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ewWw3PyJGRHP23J6WBBWs9YGl4vTb9/j/soZ6n5wbLM=";
+    hash = "sha256-ewWw3PyJGRHP23J6WBBWs9YGl4vTb9/j/soZ6n5wbLM=";
   };
 
   postPatch = ''

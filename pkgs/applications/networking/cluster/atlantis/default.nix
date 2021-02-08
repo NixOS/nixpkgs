@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "runatlantis";
     repo = "atlantis";
     rev = "v${version}";
-    sha256 = "sha256-1sak6CaqFhiBIoaa7kERXLHsgn24oMgBlOJaQDuF61E=";
+    hash = "sha256-1sak6CaqFhiBIoaa7kERXLHsgn24oMgBlOJaQDuF61E=";
   };
 
   vendorSha256 = null;

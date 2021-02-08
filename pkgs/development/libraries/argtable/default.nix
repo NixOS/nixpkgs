@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "argtable";
     repo = "argtable3";
     rev = srcVersion;
-    sha256 = "sha256-sL6mnxsuL1K0DY26jLF/2Czo0RxHYJ3xU3VyavISiMM=";
+    hash = "sha256-sL6mnxsuL1K0DY26jLF/2Czo0RxHYJ3xU3VyavISiMM=";
   };
 
   nativeBuildInputs = [ cmake ];

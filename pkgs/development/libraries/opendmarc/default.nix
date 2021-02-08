@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "trusteddomainproject";
     repo = "opendmarc";
     rev = "rel-opendmarc-${builtins.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-SQH85FLfVEEtYhR1+A1XxCDMiTjDgLQX6zifbLxCa5c=";
+    hash = "sha256-SQH85FLfVEEtYhR1+A1XxCDMiTjDgLQX6zifbLxCa5c=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];

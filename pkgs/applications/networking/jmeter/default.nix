@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "5.4.1";
   src = fetchurl {
     url = "https://archive.apache.org/dist/jmeter/binaries/apache-${pname}-${version}.tgz";
-    sha256 = "sha256-TtrpmIHRzbUEiYesy9ArPzza3qShCNFtB/sVJe9hLPM=";
+    hash = "sha256-TtrpmIHRzbUEiYesy9ArPzza3qShCNFtB/sVJe9hLPM=";
   };
 
   nativeBuildInputs = [ makeWrapper jre ];

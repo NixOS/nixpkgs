@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src =
     fetchurl {
       url = "https://d1uj6qtbmh3dt5.cloudfront.net/2020.2/Clients/nice-dcv-viewer-${version}.el8.x86_64.rpm";
-      sha256 = "sha256-SUpfHd/Btc07cfjc3zx5I5BiNatr/c4E2/mfJuU4R1E=";
+      hash = "sha256-SUpfHd/Btc07cfjc3zx5I5BiNatr/c4E2/mfJuU4R1E=";
     };
 
   nativeBuildInputs = [ autoPatchelfHook python3Packages.rpm ];

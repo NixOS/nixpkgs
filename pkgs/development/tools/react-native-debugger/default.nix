@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   version = "0.11.7";
   src = fetchurl {
     url = "https://github.com/jhen0409/react-native-debugger/releases/download/v${version}/rn-debugger-linux-x64.zip";
-    sha256 = "sha256-UXKObJKk9UUgWtm8U+nXWvIJUr4NLm2f//pGTHJISYA=";
+    hash = "sha256-UXKObJKk9UUgWtm8U+nXWvIJUr4NLm2f//pGTHJISYA=";
   };
 
   buildInputs = [ unzip ];

@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "tendermint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tkIoLYfqlnyyAAgEKyQgE317uwyhc8xRTCTUXi+9r9s=";
+    hash = "sha256-tkIoLYfqlnyyAAgEKyQgE317uwyhc8xRTCTUXi+9r9s=";
   };
 
   vendorSha256 = "sha256-DviK+MkJwcv2Dhwmqra5G/fTaWxXFbUSUVnAkSHjeII=";

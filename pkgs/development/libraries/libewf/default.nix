@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/libyal/libewf/releases/download/${version}/libewf-experimental-${version}.tar.gz";
-    sha256 = "sha256-dI1We2bsBRDcyqd6HLC7eBE99dpzSkhHtNgt0ZE4aDc=";
+    hash = "sha256-dI1We2bsBRDcyqd6HLC7eBE99dpzSkhHtNgt0ZE4aDc=";
   };
 
   nativeBuildInputs = [ pkg-config ];

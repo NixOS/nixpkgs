@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    sha256 = "sha256-e4pE30MvJ/9wrYA1oolBF+5C1IHTm+4xhDb88Il9E7o=";
+    hash = "sha256-e4pE30MvJ/9wrYA1oolBF+5C1IHTm+4xhDb88Il9E7o=";
   };
 
   passthru.tests.consul = nixosTests.consul;

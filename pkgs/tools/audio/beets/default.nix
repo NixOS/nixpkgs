@@ -139,7 +139,7 @@ in pythonPackages.buildPythonApplication rec {
     owner = "beetbox";
     repo = "beets";
     rev = "04ea754d00e2873ae9aa2d9e07c5cefd790eaee2";
-    sha256 = "sha256-BIa3hnOsBxThbA2WCE4q9eaFNtObr3erZBBqobVOSiQ=";
+    hash = "sha256-BIa3hnOsBxThbA2WCE4q9eaFNtObr3erZBBqobVOSiQ=";
   };
 
   propagatedBuildInputs = [

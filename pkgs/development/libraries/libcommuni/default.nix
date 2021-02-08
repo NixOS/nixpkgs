@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "communi";
     repo = "libcommuni";
     rev = "v${version}";
-    sha256 = "sha256-ABvrMoOVSycbQ8iRDzi7zkFnuSgHMMBgm9cDUWlD4uc=";
+    hash = "sha256-ABvrMoOVSycbQ8iRDzi7zkFnuSgHMMBgm9cDUWlD4uc=";
   };
 
   buildInputs = [ qtbase qtdeclarative ];

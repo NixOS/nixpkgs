@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "rancher";
     repo = "k3d";
     rev = "v${version}";
-    sha256 = "sha256-ZdPBlGlrgSJQlp6sWUeXm34+O30WtXHy5hvye40qew0=";
+    hash = "sha256-ZdPBlGlrgSJQlp6sWUeXm34+O30WtXHy5hvye40qew0=";
   };
 
   vendorSha256 = null;

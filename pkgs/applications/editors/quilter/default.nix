@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "sha256-A8Ov0rITHuMLDYTueeDO89KtxlP0pNk1pA7O4x3Q9fE=";
+    hash = "sha256-A8Ov0rITHuMLDYTueeDO89KtxlP0pNk1pA7O4x3Q9fE=";
   };
 
   nativeBuildInputs = [

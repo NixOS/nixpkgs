@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/aide/aide/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-T9iNHV3ccMaYxlGeu8BcjTLD9tgTe7/e/q66r9bbhns=";
+    hash = "sha256-T9iNHV3ccMaYxlGeu8BcjTLD9tgTe7/e/q66r9bbhns=";
   };
 
   buildInputs = [ flex bison libmhash zlib acl attr libselinux pcre ];

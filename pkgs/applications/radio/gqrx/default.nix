@@ -15,7 +15,7 @@ mkDerivation rec {
     owner = "csete";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "sha256-mMaxu0jq2GaNLWjLsJQXx+zCxtyiCAZQJJZ8GJtnllQ=";
+    hash = "sha256-mMaxu0jq2GaNLWjLsJQXx+zCxtyiCAZQJJZ8GJtnllQ=";
   };
 
   nativeBuildInputs = [ cmake ];

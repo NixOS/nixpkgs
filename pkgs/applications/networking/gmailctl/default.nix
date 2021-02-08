@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "mbrt";
     repo = "gmailctl";
     rev = "v${version}";
-    sha256 = "sha256-UZzpecW4vW1JYUDCcwDIJXCGjw80fgZC4wvCh0DdE98=";
+    hash = "sha256-UZzpecW4vW1JYUDCcwDIJXCGjw80fgZC4wvCh0DdE98=";
   };
 
   vendorSha256 = "sha256-5oVr1qazTzsSNVLvcAsAN8UyrJOeqLjSVinImLOyJlk=";

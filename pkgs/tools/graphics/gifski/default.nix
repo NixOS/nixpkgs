@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "ImageOptim";
     repo = "gifski";
     rev = version;
-    sha256 = "sha256-dBgDIS6U2iKzyo5nO0NOD488zfEbaZJH7luJN6khrnc=";
+    hash = "sha256-dBgDIS6U2iKzyo5nO0NOD488zfEbaZJH7luJN6khrnc=";
   };
 
   cargoSha256 = "sha256-/i5ZBCWFlhoheHsCI5f9yJ7sa6l/DB4AJckq5orinwI=";

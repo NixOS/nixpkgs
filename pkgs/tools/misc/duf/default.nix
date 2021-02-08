@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "muesli";
     repo = "duf";
     rev = "v${version}";
-    sha256 = "sha256-Wm3gfir6blQFLLi+2bT5Y/5tf7qUxEddJQ7tCYfBGgM=";
+    hash = "sha256-Wm3gfir6blQFLLi+2bT5Y/5tf7qUxEddJQ7tCYfBGgM=";
   };
 
   vendorSha256 = "0icxy6wbqjqawr6i5skwp1z37fq303p8f95crd8lwn6pjjiqzk4i";

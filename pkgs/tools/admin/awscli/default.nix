@@ -32,7 +32,7 @@ in with py.pkgs; buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8T0zFxR7hLdt2ZZvkshckIO2XNGZIbQuwfeGxqQs7rs=";
+    hash = "sha256-8T0zFxR7hLdt2ZZvkshckIO2XNGZIbQuwfeGxqQs7rs=";
   };
 
   postPatch = ''

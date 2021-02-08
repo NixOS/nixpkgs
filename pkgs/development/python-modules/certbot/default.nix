@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lMQkVc2UzC5GqEy88rcaJ74CaT3+YWveNDCXql/McRM=";
+    hash = "sha256-lMQkVc2UzC5GqEy88rcaJ74CaT3+YWveNDCXql/McRM=";
   };
 
   sourceRoot = "source/${pname}";

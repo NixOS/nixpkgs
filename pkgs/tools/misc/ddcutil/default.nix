@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner  = "rockowitz";
     repo   = "ddcutil";
     rev    = "v${version}";
-    sha256 = "sha256-+HxezUWQHyL9r4QZkJyWzWnjquq/ux5W5j2B5prH8Fg=";
+    hash = "sha256-+HxezUWQHyL9r4QZkJyWzWnjquq/ux5W5j2B5prH8Fg=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

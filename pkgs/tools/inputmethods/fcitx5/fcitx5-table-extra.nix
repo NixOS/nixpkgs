@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "fcitx";
     repo = "fcitx5-table-extra";
     rev = version;
-    sha256 = "sha256-Bqxdi/rjiTKqHLvVFVcQMjz/I0xxTiBgUIRkZjLuK+M=";
+    hash = "sha256-Bqxdi/rjiTKqHLvVFVcQMjz/I0xxTiBgUIRkZjLuK+M=";
   };
 
   nativeBuildInputs = [

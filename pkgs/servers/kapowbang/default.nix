@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "BBVA";
     repo = "kapow";
     rev = "v${version}";
-    sha256 = "sha256-+GZarnG+SlxynoXYTvI1f9eki3DobiDt7vUdWlC0ECk=";
+    hash = "sha256-+GZarnG+SlxynoXYTvI1f9eki3DobiDt7vUdWlC0ECk=";
   };
 
   vendorSha256 = "sha256-vXu64o/MTmw9oZL4MIHB+PEfYLcKVh5A5iGZ1RW1Xd4=";

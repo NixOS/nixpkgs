@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "jonmacs";
     repo = "jove";
     rev = version;
-    sha256 = "sha256-uQRNKV06ipOHrOsvsceqIFGGlRv5qOQy18q0tFkR6Kg=";
+    hash = "sha256-uQRNKV06ipOHrOsvsceqIFGGlRv5qOQy18q0tFkR6Kg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

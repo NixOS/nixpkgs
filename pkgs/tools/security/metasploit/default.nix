@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "sha256-QDgInLW/uOBGf0ioPPBMUZv/c9tA7OtTOfp2CEAjf24=";
+    hash = "sha256-QDgInLW/uOBGf0ioPPBMUZv/c9tA7OtTOfp2CEAjf24=";
   };
 
   buildInputs = [ makeWrapper ];

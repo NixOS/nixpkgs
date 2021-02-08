@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "bougyman";
     repo = "wifish";
     rev = version;
-    sha256 = "sha256-eTErN6CfKDey/wV+9o9cBVaG5FzCRBiA9UicrMz3KBc=";
+    hash = "sha256-eTErN6CfKDey/wV+9o9cBVaG5FzCRBiA9UicrMz3KBc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

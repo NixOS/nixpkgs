@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "https://launchpad.net/armagetronad/${versionMajor}/${version}/+download/armagetronad-${version}.tbz";
-    sha256 = "sha256-WbbHwBzj+MylQ34z+XSmN1KVQaEapPUsGlwXSZ4m9qE";
+    hash = "sha256-WbbHwBzj+MylQ34z+XSmN1KVQaEapPUsGlwXSZ4m9qE";
   };
 
   enableParallelBuilding = true;

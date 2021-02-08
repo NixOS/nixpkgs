@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    sha256 = "sha256-fX1miI8yXzn/T9cbbZ/7E6/tLs3RXsX3PgfC7sBxIjU=";
+    hash = "sha256-fX1miI8yXzn/T9cbbZ/7E6/tLs3RXsX3PgfC7sBxIjU=";
   };
 
   postPatch = ''

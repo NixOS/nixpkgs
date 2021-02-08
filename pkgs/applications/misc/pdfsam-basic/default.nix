@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/torakiki/pdfsam/releases/download/v${version}/pdfsam_${version}-1_amd64.deb";
-    sha256 = "sha256-fbcU3NZdQ8NR5tLjEJyOPneVWNMBddLdttLeVwIUtpg=";
+    hash = "sha256-fbcU3NZdQ8NR5tLjEJyOPneVWNMBddLdttLeVwIUtpg=";
   };
 
   unpackPhase = ''

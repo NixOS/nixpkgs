@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://codeberg.org/dnkl/tllist.git";
     rev = version;
-    sha256 = "sha256-+u8p/VmI61SGRhZHaJBwgcVNetNOrYzg2NVQehbfRqg=";
+    hash = "sha256-+u8p/VmI61SGRhZHaJBwgcVNetNOrYzg2NVQehbfRqg=";
   };
 
   nativeBuildInputs = [

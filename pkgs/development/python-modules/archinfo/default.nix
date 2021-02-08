@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YlqCRLx8mqHXMKPCWqcGvHxRBGOxbwMZWPEDX/jEDdI=";
+    hash = "sha256-YlqCRLx8mqHXMKPCWqcGvHxRBGOxbwMZWPEDX/jEDdI=";
   };
 
   checkInputs = [

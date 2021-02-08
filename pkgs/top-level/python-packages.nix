@@ -3858,7 +3858,7 @@ in {
       version = "2.2.1";
       src = old.src.override {
         inherit version;
-        sha256 = "sha256-7ubWkqk1vyaJDLMOuKwUx2Bjziyi3HqpaQq4pKp4Z+0=";
+        hash = "sha256-7ubWkqk1vyaJDLMOuKwUx2Bjziyi3HqpaQq4pKp4Z+0=";
       };
     });
     watchdog = self.watchdog.overridePythonAttrs (old: rec {

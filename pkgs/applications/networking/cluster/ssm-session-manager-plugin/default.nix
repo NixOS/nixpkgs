@@ -4,11 +4,11 @@ let
   source = if stdenv.isDarwin then {
     url =
       "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/mac/sessionmanager-bundle.zip";
-    sha256 = "sha256-HP+opNjS53zR9eUxpNUHGD9rZN1z7lDc6+nONR8fa/s=";
+    hash = "sha256-HP+opNjS53zR9eUxpNUHGD9rZN1z7lDc6+nONR8fa/s=";
   } else {
     url =
       "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/ubuntu_64bit/session-manager-plugin.deb";
-    sha256 = "sha256-EZ9ncj1YYlod1RLfXOpZFijnKjLYWYVBb+C6yd42l34=";
+    hash = "sha256-EZ9ncj1YYlod1RLfXOpZFijnKjLYWYVBb+C6yd42l34=";
   };
   platformBuildInput = if stdenv.isDarwin then [ unzip ] else [ dpkg ];
   unpackCmd = if stdenv.isDarwin then "unzip $src" else "dpkg-deb -x $src .";

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DzceLtK5IWL+/T3edD5kjKCKahsrBQBIZ/vdx+IR5CQ=";
+    hash = "sha256-DzceLtK5IWL+/T3edD5kjKCKahsrBQBIZ/vdx+IR5CQ=";
   };
 
   patches = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/gegl/-/merge_requests/83
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gegl/-/merge_requests/83.patch";
-      sha256 = "sha256-CSBYbJ2xnEN23xrla1qqr244jxOR5vNK8ljBSXdg4yE=";
+      hash = "sha256-CSBYbJ2xnEN23xrla1qqr244jxOR5vNK8ljBSXdg4yE=";
     })
   ];
 

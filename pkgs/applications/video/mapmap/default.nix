@@ -49,7 +49,7 @@ mkDerivation rec {
     # fix build with libsForQt515
     (fetchpatch {
       url = "https://github.com/mapmapteam/mapmap/pull/518/commits/ac49acc1e2ec839832b86838e93a8c13030affeb.patch";
-      sha256 = "sha256-tSLbyIDv5mSejnw9oru5KLAyQqjgJLLREKQomEUcGt8=";
+      hash = "sha256-tSLbyIDv5mSejnw9oru5KLAyQqjgJLLREKQomEUcGt8=";
     })
   ];
 

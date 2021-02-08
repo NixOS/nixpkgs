@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "indilib";
     repo = "indi";
     rev = "v${version}";
-    sha256 = "sha256-WTRfV6f764tDGKnQVd1jeYN/qXa/VRTFK0mMalc+9aU=";
+    hash = "sha256-WTRfV6f764tDGKnQVd1jeYN/qXa/VRTFK0mMalc+9aU=";
   };
 
   patches = [

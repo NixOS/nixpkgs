@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "jpillora";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1vg9tJLYbW8pfPpw3gQ15c9Kwj2lFfblMRhOK4yWKb8=";
+    hash = "sha256-1vg9tJLYbW8pfPpw3gQ15c9Kwj2lFfblMRhOK4yWKb8=";
   };
 
   vendorSha256 = "sha256-GzsQ6LXxe9UQc13XbsYFOWPe0EzlyHechchKc6xDkAc=";

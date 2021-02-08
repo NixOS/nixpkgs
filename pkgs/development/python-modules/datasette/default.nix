@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = "datasette";
     rev = version;
-    sha256 = "sha256-Ixh56X9dI/FIJPXHXXGnFiYj3qeBmvW5L1FF7/0ofUQ=";
+    hash = "sha256-Ixh56X9dI/FIJPXHXXGnFiYj3qeBmvW5L1FF7/0ofUQ=";
   };
 
   nativeBuildInputs = [ pytestrunner ];

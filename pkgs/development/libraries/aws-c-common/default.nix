@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-izEZMOPHj/9EL78b/t3M0Tki6eA8eRrpG7DO2tkpf1A=";
+    hash = "sha256-izEZMOPHj/9EL78b/t3M0Tki6eA8eRrpG7DO2tkpf1A=";
   };
 
   nativeBuildInputs = [ cmake ];

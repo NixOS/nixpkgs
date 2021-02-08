@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
     owner = "FedeDP";
     repo = "Clightd";
     rev = version;
-    sha256 = "sha256-BEGum0t+FrCTAEQwTsWeYpoIqimTAz+Bv/ZQPQ3fePY=";
+    hash = "sha256-BEGum0t+FrCTAEQwTsWeYpoIqimTAz+Bv/ZQPQ3fePY=";
   };
 
   patches = [
     # Not needed by next version bump
     (fetchpatch {
       url = "https://github.com/FedeDP/Clightd/commit/a52a2888e3798c572dad359a017cb0d40e7c5fb7.patch";
-      sha256 = "sha256-nUzNBia1EvBQxinAfjyKbuldBoHLY1hfMaxgG2lKQWg=";
+      hash = "sha256-nUzNBia1EvBQxinAfjyKbuldBoHLY1hfMaxgG2lKQWg=";
     })
   ];
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "kosua20";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-t7DRPV0FSg6v81GzHLK2O++sfjr2aFT+xg3+wFd0UFg=";
+    hash = "sha256-t7DRPV0FSg6v81GzHLK2O++sfjr2aFT+xg3+wFd0UFg=";
   };
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper];

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "sha256-lYjMvxMIReANNwMr62u881Nugrs9piOaN3EmrvGzRns=";
+    hash = "sha256-lYjMvxMIReANNwMr62u881Nugrs9piOaN3EmrvGzRns=";
   };
 
   nativeBuildInputs = [ cmake perl installShellFiles ];

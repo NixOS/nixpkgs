@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://gitlab.freedesktop.org/xdg/${pname}.git";
     rev = "d11b33ec7f24cfb1546f6b459611d440013bdc72";
-    sha256 = "sha256-8PtXfI8hRneEpnUvIV3M+6ACjlkx0w/NEiJFdGbbHnQ=";
+    hash = "sha256-8PtXfI8hRneEpnUvIV3M+6ACjlkx0w/NEiJFdGbbHnQ=";
   };
 
   # just needed when built from git

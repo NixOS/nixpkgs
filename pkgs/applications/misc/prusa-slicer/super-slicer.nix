@@ -12,7 +12,7 @@ let
     src = fetchFromGitHub {
       owner = "supermerill";
       repo = "SuperSlicer";
-      sha256 = "sha256-ThmsxFXI1uReK+JwpHrIWzHpBdIOP77kDjv+QaK+Azk=";
+      hash = "sha256-ThmsxFXI1uReK+JwpHrIWzHpBdIOP77kDjv+QaK+Azk=";
       rev = version;
     };
 

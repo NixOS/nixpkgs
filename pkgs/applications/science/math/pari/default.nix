@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     # Versions with current majorMinor values are at http://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz
     url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-v8iPxPc1L0hA5uNSxy8DacvqikVAOxg0piafNwmXCxw=";
+    hash = "sha256-v8iPxPc1L0hA5uNSxy8DacvqikVAOxg0piafNwmXCxw=";
   };
 
   buildInputs = [

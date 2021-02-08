@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "nektos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vlE0tN6m/PZtDZiIs/glTWYP+E4qzD0MAeQjX+OAcHY=";
+    hash = "sha256-vlE0tN6m/PZtDZiIs/glTWYP+E4qzD0MAeQjX+OAcHY=";
   };
 
   vendorSha256 = "sha256-9LEyxIBe4c938RQbLOQOsAb9MGNtjngm48P3P83BTNw=";

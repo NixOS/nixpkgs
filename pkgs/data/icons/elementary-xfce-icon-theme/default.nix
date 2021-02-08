@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "shimmerproject";
     repo = "elementary-xfce";
     rev = "v${version}";
-    sha256 = "sha256-E8f6UU/4Y9Nfk7LjDcdyV+TdeVj/zl3oFCyEu3Gz27w=";
+    hash = "sha256-E8f6UU/4Y9Nfk7LjDcdyV+TdeVj/zl3oFCyEu3Gz27w=";
   };
 
   nativeBuildInputs = [

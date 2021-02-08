@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     rev = version;
-    sha256 = "sha256-OHtmUFm/9GkpIzz0DdSdlHyBFRIgu8GxQ4S4VMJik9o=";
+    hash = "sha256-OHtmUFm/9GkpIzz0DdSdlHyBFRIgu8GxQ4S4VMJik9o=";
   };
 
   buildInputs = [ nose mock ];

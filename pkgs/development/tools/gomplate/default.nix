@@ -9,7 +9,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     inherit owner rev;
     repo = pname;
-    sha256 = "sha256-liy8cqn+hWoTOHchCY1LLu23tNvz7eGA+AN0d0APjC4=";
+    hash = "sha256-liy8cqn+hWoTOHchCY1LLu23tNvz7eGA+AN0d0APjC4=";
   };
 
   vendorSha256 = "sha256-Ph9z/Tom7O7V7yZ/On+etty+Bl653HiY/J3d3yfweeQ=";

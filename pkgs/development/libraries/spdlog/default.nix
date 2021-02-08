@@ -50,7 +50,7 @@ in
 {
   spdlog_1 = generic {
     version = "1.8.1";
-    sha256 = "sha256-EyZhYgcdtZC+vsOUKShheY57L0tpXltduHWwaoy6G9k=";
+    hash = "sha256-EyZhYgcdtZC+vsOUKShheY57L0tpXltduHWwaoy6G9k=";
   };
 
   spdlog_0 = generic {

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "Tox";
     repo   = "toxic";
     rev    = "v${version}";
-    sha256 = "sha256-EElDi/VEYgYPpoDNatxcKQC1pnCU8kOcj0bAFojD9fU=";
+    hash = "sha256-EElDi/VEYgYPpoDNatxcKQC1pnCU8kOcj0bAFojD9fU=";
   };
 
   makeFlags = [ "PREFIX=$(out)"];

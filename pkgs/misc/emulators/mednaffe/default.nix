@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "AmatCoder";
     repo = "mednaffe";
     rev = version;
-    sha256 = "sha256-BS/GNnRYj9klc4RRj7LwNikgApNttv4IyWPL694j+gM=";
+    hash = "sha256-BS/GNnRYj9klc4RRj7LwNikgApNttv4IyWPL694j+gM=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];

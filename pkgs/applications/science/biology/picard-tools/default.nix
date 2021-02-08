@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/broadinstitute/picard/releases/download/${version}/picard.jar";
-    sha256 = "sha256-O+bA7vP7Y9AbFA+nEjE6O1i0DcAWVLO2Guw0ntq55s4=";
+    hash = "sha256-O+bA7vP7Y9AbFA+nEjE6O1i0DcAWVLO2Guw0ntq55s4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

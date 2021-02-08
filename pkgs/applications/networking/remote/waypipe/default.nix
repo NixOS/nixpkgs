@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "mstoeckl";
     repo = "waypipe";
     rev = "v${version}";
-    sha256 = "sha256-LtfrSEwZikOXp/fdyJ/+EylRx19zdsHMkrl1eEf1/aY=";
+    hash = "sha256-LtfrSEwZikOXp/fdyJ/+EylRx19zdsHMkrl1eEf1/aY=";
   };
 
   postPatch = ''

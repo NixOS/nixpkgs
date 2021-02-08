@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "operator-framework";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KxYGXwK6wF5MDY+zrSdcQqBYkSdnxOCYudTh+TwTkm8=";
+    hash = "sha256-KxYGXwK6wF5MDY+zrSdcQqBYkSdnxOCYudTh+TwTkm8=";
   };
 
   vendorSha256 = "sha256-GRw0u6zox2gseQhrx7n0M3WVu4+yCKZ7D/QHVcBRb30=";

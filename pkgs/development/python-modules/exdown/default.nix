@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vnSso3vmPIjX7JX+NwoxguwqwPHocJACeh5H0ClPcUI=";
+    hash = "sha256-vnSso3vmPIjX7JX+NwoxguwqwPHocJACeh5H0ClPcUI=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://ngircd.barton.de/pub/ngircd/${pname}-${version}.tar.xz";
-    sha256 = "sha256-VcFv0mAJ9vxqAH3076yHoC4SL2gGEs2hzibhehjYYlQ=";
+    hash = "sha256-VcFv0mAJ9vxqAH3076yHoC4SL2gGEs2hzibhehjYYlQ=";
   };
 
   configureFlags = [

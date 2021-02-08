@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gNMLVh5ntVCxiIKLshRvYXi5dYLZ8qiZFwZxbNPVFTk=";
+    hash = "sha256-gNMLVh5ntVCxiIKLshRvYXi5dYLZ8qiZFwZxbNPVFTk=";
   };
 
   vendorSha256 = "sha256-f/1Vxuc87eQie/j1b14q/1lAAzRk+ZDkBaTmHtCy7go=";

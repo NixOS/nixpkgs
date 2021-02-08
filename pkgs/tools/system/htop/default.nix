@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "htop-dev";
     repo = pname;
     rev = version;
-    sha256 = "sha256-9zecDd3oZ24RyOLnKdJmR29Chx6S24Kvuf/F7RYzl4I=";
+    hash = "sha256-9zecDd3oZ24RyOLnKdJmR29Chx6S24Kvuf/F7RYzl4I=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

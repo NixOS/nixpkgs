@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://han.de/~werner/${pname}-${version}.tar.gz";
-    sha256 = "sha256-WDqnFVLRNH4Oq+OaI2+loXS/Z93piHGFO5/iojO8rvE=";
+    hash = "sha256-WDqnFVLRNH4Oq+OaI2+loXS/Z93piHGFO5/iojO8rvE=";
   };
 
   buildInputs = [

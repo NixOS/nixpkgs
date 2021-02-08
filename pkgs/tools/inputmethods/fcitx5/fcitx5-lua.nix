@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "fcitx";
     repo = "fcitx5-lua";
     rev = version;
-    sha256 = "sha256-lFlHn2q/kpq1EIKKhYVdJofXqtOHnpLz7PoWuNAhmhE=";
+    hash = "sha256-lFlHn2q/kpq1EIKKhYVdJofXqtOHnpLz7PoWuNAhmhE=";
   };
 
   nativeBuildInputs = [

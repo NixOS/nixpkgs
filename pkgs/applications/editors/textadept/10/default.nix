@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchhg {
     url = "http://foicica.com/hg/textadept";
     rev = "textadept_${version}";
-    sha256 = "sha256-dEZSx2tuHTWYhk9q5iGlrWTAvDvKaM8HaHwXcFcv33s=";
+    hash = "sha256-dEZSx2tuHTWYhk9q5iGlrWTAvDvKaM8HaHwXcFcv33s=";
   };
 
   preConfigure =

@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     owner = "glimpse-editor";
     repo = "Glimpse";
     rev = "v${version}";
-    sha256 = "sha256-qbZQmAo7fuJWWbn0QTyxAwAenZOdsGueUq5/3IV8Njc=";
+    hash = "sha256-qbZQmAo7fuJWWbn0QTyxAwAenZOdsGueUq5/3IV8Njc=";
   };
 
   patches = [

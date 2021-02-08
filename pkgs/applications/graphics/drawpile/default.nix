@@ -75,14 +75,14 @@ in mkDerivation rec {
     owner = "drawpile";
     repo = "drawpile";
     rev = version;
-    sha256 = "sha256-AFFY+FcY9ExAur13OoWR9285RZtBe6jnRIrwi5raiCM=";
+    hash = "sha256-AFFY+FcY9ExAur13OoWR9285RZtBe6jnRIrwi5raiCM=";
   };
 
   patches = [
     # fix for libmicrohttpd 0.9.71
     (fetchpatch {
       url = "https://github.com/drawpile/Drawpile/commit/ed1a75deb113da2d1df91a28f557509c4897130e.diff";
-      sha256 = "sha256-54wabH5F3Hf+6vv9rpCwCRdhjSaUFtuF/mE1/U+CpOA=";
+      hash = "sha256-54wabH5F3Hf+6vv9rpCwCRdhjSaUFtuF/mE1/U+CpOA=";
       name = "mhdfix.patch"; })
   ];
 

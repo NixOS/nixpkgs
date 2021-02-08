@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "decred";
     repo = "dcrwallet";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-WUfmv+laOwR/fc4osAFzPKqHQR+wOtSdLEsysICnuvg=";
+    hash = "sha256-WUfmv+laOwR/fc4osAFzPKqHQR+wOtSdLEsysICnuvg=";
   };
 
   vendorSha256 = "sha256-9IRNlULvARIZu6dWaKrvx6fiDJ80SBLINhK/9tW9k/0=";

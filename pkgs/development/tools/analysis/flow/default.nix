@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner  = "facebook";
     repo   = "flow";
     rev    = "refs/tags/v${version}";
-    sha256 = "sha256-Qr/fizCV+t6SbETEqns72Xv24ucLcqi1JRXF8SAtQRU=";
+    hash = "sha256-Qr/fizCV+t6SbETEqns72Xv24ucLcqi1JRXF8SAtQRU=";
   };
 
   installPhase = ''

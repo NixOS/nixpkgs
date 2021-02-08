@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "rebuy-de";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ULHT2ysAVZHSojIdsbPTuwskwOQVrK8f14r9eq+Effs=";
+    hash = "sha256-ULHT2ysAVZHSojIdsbPTuwskwOQVrK8f14r9eq+Effs=";
   };
 
   vendorSha256 = "sha256-GUCsl5VyptNvStJZgCsJDlllZasX1OhbVkahcQFuiC8=";

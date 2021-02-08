@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "bitcoinclassic";
     repo = "bitcoinclassic";
     rev = "v${version}";
-    sha256 = "sha256-V1cOB5FLotGS5jup/aVaiDiyr/v2KJ2SLcIu/Hrjuwk=";
+    hash = "sha256-V1cOB5FLotGS5jup/aVaiDiyr/v2KJ2SLcIu/Hrjuwk=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

@@ -120,7 +120,7 @@ let
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-CVi+fcmFMJMv7X4okALlVsxqsuUsirHgQT61IHdrBNE=";
+        hash = "sha256-CVi+fcmFMJMv7X4okALlVsxqsuUsirHgQT61IHdrBNE=";
       };
 
       buildInputs = [

@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "pimoroni";
     repo = "bme680-python";
     rev = "v${version}";
-    sha256 = "sha256-oIXh1JnGTI/Cj4MQFpWq+sWR2X+ioCsK0Q+T7wPITCQ=";
+    hash = "sha256-oIXh1JnGTI/Cj4MQFpWq+sWR2X+ioCsK0Q+T7wPITCQ=";
   };
 
   propagatedBuildInputs = [ smbus-cffi ];

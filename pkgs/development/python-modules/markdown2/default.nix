@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "trentm";
     repo = "python-markdown2";
     rev = version;
-    sha256 = "sha256:03qmf087phpj0h9hx111k4r5pkm48dhb61mqhp1v75gd09k0z79z";
+    hash = "sha256:03qmf087phpj0h9hx111k4r5pkm48dhb61mqhp1v75gd09k0z79z";
   };
 
   checkInputs = [ pygments ];

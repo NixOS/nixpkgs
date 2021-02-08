@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "sha256-5xoNbdUE86XZV/zpowKB62Hs+ZHIrzFf4AYaG5eh0CE=";
+    hash = "sha256-5xoNbdUE86XZV/zpowKB62Hs+ZHIrzFf4AYaG5eh0CE=";
   };
 
   nativeBuildInputs = [

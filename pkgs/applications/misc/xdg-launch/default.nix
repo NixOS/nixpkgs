@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "bbidulock";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WY1TAPnXAn5GOaP9aMHar761m1MkKm4vavLlWELWUu8=";
+    hash = "sha256-WY1TAPnXAn5GOaP9aMHar761m1MkKm4vavLlWELWUu8=";
   };
 
   preConfigure = "./autogen.sh";

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://www.jedsoft.org/releases/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-vzeX0P+2+IuKtrX+2lQDeJj7VMDS6XurD2pb2jhxy2Q=";
+    hash = "sha256-vzeX0P+2+IuKtrX+2lQDeJj7VMDS6XurD2pb2jhxy2Q=";
   };
 
   nativeBuildInputs = [ pkg-config ];

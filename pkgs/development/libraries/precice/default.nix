@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "precice";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AQc+p/twsfkzwpWeznGpLLSqINKSrWCwH+PdNIrdYA8=";
+    hash = "sha256-AQc+p/twsfkzwpWeznGpLLSqINKSrWCwH+PdNIrdYA8=";
   };
 
   cmakeFlags = [

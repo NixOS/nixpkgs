@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "robertdavidgraham";
     repo = "masscan";
     rev = version;
-    sha256 = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
+    hash = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];

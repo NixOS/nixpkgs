@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   src = python3Packages.fetchPypi {
     inherit version;
     pname = "graph_cli";
-    sha256 = "sha256-/v9COgAjuunJ06HHl55J0moV1p4uO+N+w2QwE8tgebQ=";
+    hash = "sha256-/v9COgAjuunJ06HHl55J0moV1p4uO+N+w2QwE8tgebQ=";
   };
 
   propagatedBuildInputs = with python3Packages; [
