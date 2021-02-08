@@ -11734,6 +11734,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   });
 
+  espressifXtensaOverlays = callPackage ../development/misc/espressif/xtensa-overlays.nix { };
+
   apache-flex-sdk = callPackage ../development/compilers/apache-flex-sdk { };
 
   fasm = pkgsi686Linux.callPackage ../development/compilers/fasm {
@@ -11778,6 +11780,7 @@ with pkgs;
         if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
         else if (stdenv.targetPlatform.isAarch64 && stdenv.isDarwin) then 11
         else if stdenv.targetPlatform.isAarch64 then 9
+        else if stdenv.targetPlatform.isXtensa then 8
         else 10;
       numS = toString num;
     in {
@@ -13957,6 +13960,8 @@ with pkgs;
   resim = callPackage ../misc/emulators/resim {};
 
   or1k-newlib = callPackage ../development/misc/or1k/newlib.nix {};
+
+  xtensa-newlib = callPackage ../development/misc/xtensa/newlib.nix {};
 
   rappel = callPackage ../development/misc/rappel { };
 
@@ -16662,6 +16667,7 @@ with pkgs;
     else if name == "newlib" && stdenv.targetPlatform.isMsp430 then targetPackages.msp430NewlibCross or msp430NewlibCross
     else if name == "newlib" && stdenv.targetPlatform.isVc4 then targetPackages.vc4-newlib or vc4-newlib
     else if name == "newlib" && stdenv.targetPlatform.isOr1k then targetPackages.or1k-newlib or or1k-newlib
+    else if name == "newlib" && stdenv.targetPlatform.isXtensa then targetPackages.xtensa-newlib or xtensa-newlib
     else if name == "newlib" then targetPackages.newlibCross or newlibCross
     else if name == "newlib-nano" then targetPackages.newlib-nanoCross or newlib-nanoCross
     else if name == "musl" then targetPackages.muslCross or muslCross

@@ -13,6 +13,7 @@ in
 , flex
 , texinfo
 , perl
+, espressifXtensaOverlays
 }:
 
 # configure silently disables ld.gold if it's unsupported,
@@ -27,7 +28,6 @@ assert gold -> execFormatIsELF stdenv.targetPlatform;
 let
   reuseLibs = enableShared && withAllTargets;
 
-  version = "2.35.2";
   basename = "binutils";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
@@ -39,6 +39,15 @@ let
     rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
     sha256 = "1kdrz6fki55lm15rwwamn74fnqpy0zlafsida2zymk76n3656c63";
   };
+
+  xtensa-binutils-src = fetchFromGitHub {
+    owner = "espressif";
+    repo = "binutils-gdb";
+    rev = "esp-2020r3-binutils";
+    sha256 = "0az64lv5n52x2hkx43y0d82llfk61cxkblm32zzlk2a26lw4916b";
+  };
+
+  version = "2.35.2";
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
@@ -46,11 +55,20 @@ let
   });
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ((if (with stdenv.targetPlatform; isVc4 || isXtensa) then {
+  name = targetPrefix + basename;
+} else {
   pname = targetPrefix + basename;
   inherit version;
+}) // {
+  src = with stdenv.targetPlatform;
+    if isVc4 then vc4-binutils-src
+    else if isXtensa then xtensa-binutils-src
+    else normal-src;
 
-  src = if stdenv.targetPlatform.isVc4 then vc4-binutils-src else normal-src;
+  ${if stdenv.targetPlatform.isXtensa then "prePatch" else null} = ''
+    cp -RT ${espressifXtensaOverlays stdenv.targetPlatform}/binutils .
+  '';
 
   patches = [
     # Make binutils output deterministic by default.
@@ -69,6 +87,7 @@ stdenv.mkDerivation {
     # cross-compiling.
     ./always-search-rpath.patch
 
+  ] ++ lib.optional (!(with stdenv.targetPlatform; isVc4 || isXtensa)) [
     # Fix quadratic slowdown in `strip` performance.
     # See #129467 and https://sourceware.org/bugzilla/show_bug.cgi?id=28058
     # Remove when we're on binutils > 2.36.1.
@@ -99,13 +118,9 @@ stdenv.mkDerivation {
   outputs = [ "out" "info" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [
-    bison
-    perl
-    texinfo
-  ] ++ (lib.optionals stdenv.targetPlatform.isiOS [
-    autoreconfHook
-  ]) ++ lib.optionals stdenv.targetPlatform.isVc4 [ flex ];
+  nativeBuildInputs = [ bison perl texinfo ]
+    ++ lib.optional stdenv.targetPlatform.isiOS autoreconfHook
+    ++ lib.optional (with stdenv.targetPlatform; isVc4 || isXtensa) flex;
   buildInputs = [ zlib gettext ];
 
   inherit noSysDirs;
@@ -161,7 +176,10 @@ stdenv.mkDerivation {
   ] ++ lib.optionals gold [
     "--enable-gold"
     "--enable-plugins"
-  ];
+  ]
+  # Git-based builds default to building both binutils and gdb at once. 
+  # TODO: enable unconditionally
+    ++ lib.optional stdenv.targetPlatform.isXtensa "--disable-gdb";
 
   doCheck = false; # fails
 
@@ -199,4 +217,4 @@ stdenv.mkDerivation {
        collision due to the ld/as wrappers/symlinks in the latter. */
     priority = 10;
   };
-}
+})
