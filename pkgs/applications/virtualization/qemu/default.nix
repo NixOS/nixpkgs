@@ -108,6 +108,10 @@ stdenv.mkDerivation rec {
     # this script isn't marked as executable b/c it's indirectly used by meson. Needed to patch its shebang
     chmod +x ./scripts/shaderinclude.pl
     patchShebangs .
+    # avoid conflicts with libc++ include for <version>
+    mv VERSION QEMU_VERSION
+    substituteInPlace meson.build \
+      --replace "'VERSION'" "'QEMU_VERSION'"
   '' + optionalString stdenv.hostPlatform.isMusl ''
     NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
   '';
