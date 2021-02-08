@@ -8795,10 +8795,10 @@ let
 
   Gnome2Canvas = buildPerlPackage {
     pname = "Gnome2-Canvas";
-    version = "1.004";
+    version = "1.006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-Canvas-1.004.tar.gz";
-      sha256 = "0g42bfmqq5395m55np95pfj4i1qbrmx2ml4zhi4cw4sx4fdv7drr";
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-Canvas-1.006.tar.gz";
+      sha256 = "0hmbwmnm6n462lgh7n0hhd51wmrsalwvckkba7bf47cj733nf1k9";
     };
     buildInputs = [ pkgs.gnome2.libgnomecanvas ];
     meta = {
