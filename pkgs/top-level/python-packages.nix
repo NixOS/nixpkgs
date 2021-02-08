@@ -6520,6 +6520,8 @@ in {
 
   pyvera = callPackage ../development/python-modules/pyvera { };
 
+  pyvex = callPackage ../development/python-modules/pyvex { };
+
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
   pyvips = callPackage ../development/python-modules/pyvips {
