@@ -204,6 +204,8 @@ in {
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
+  ailment = callPackage ../development/python-modules/ailment { };
+
   aiocoap = callPackage ../development/python-modules/aiocoap { };
 
   aioconsole = callPackage ../development/python-modules/aioconsole { };
@@ -6519,6 +6521,8 @@ in {
   pyvcf = callPackage ../development/python-modules/pyvcf { };
 
   pyvera = callPackage ../development/python-modules/pyvera { };
+
+  pyvex = callPackage ../development/python-modules/pyvex { };
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
