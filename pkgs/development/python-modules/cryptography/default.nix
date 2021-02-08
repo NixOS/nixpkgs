@@ -2,9 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, isPy27
-, ipaddress
 , openssl
+, setuptools-rust
 , cryptography_vectors
 , darwin
 , packaging
@@ -13,20 +12,20 @@
 , isPyPy
 , cffi
 , pytest
+, pytest-subtests
 , pretend
 , iso8601
 , pytz
 , hypothesis
-, enum34
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "3.3.2"; # Also update the hash in vectors.nix
+  version = "3.4.2"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vcvw4lkw1spiq322pm1256kail8nck6bbgpdxx3pqa905wd6q2s";
+    sha256 = "1i1mx5y9hkyfi9jrrkcw804hmkcglxi6rmf7vin7jfnbr2bf4q64";
   };
 
   outputs = [ "out" "dev" ];
@@ -35,15 +34,13 @@ buildPythonPackage rec {
     cffi
   ];
 
-  buildInputs = [ openssl ]
+  buildInputs = [ openssl setuptools-rust ]
              ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
     packaging
     six
   ] ++ lib.optionals (!isPyPy) [
     cffi
-  ] ++ lib.optionals isPy27 [
-    ipaddress enum34
   ];
 
   checkInputs = [
@@ -52,8 +49,14 @@ buildPythonPackage rec {
     iso8601
     pretend
     pytest
+    pytest-subtests
     pytz
   ];
+
+  # TODO: This temporary workaround is only supported for Cryptography 3.4.x
+  # and we need to figure out how to build it with the Rust dependencies.
+  # https://cryptography.io/en/latest/faq.html?highlight=rust#installing-cryptography-fails-with-error-can-not-find-rust-compiler
+  CRYPTOGRAPHY_DONT_BUILD_RUST = 1;
 
   checkPhase = ''
     py.test --disable-pytest-warnings tests
