@@ -3736,6 +3736,8 @@ in
 
   edid-generator = callPackage ../tools/misc/edid-generator { };
 
+  edir = callPackage ../tools/misc/edir { };
+
   editres = callPackage ../tools/graphics/editres { };
 
   edit = callPackage ../applications/editors/edit { };
@@ -5823,6 +5825,8 @@ in
   now-cli = callPackage ../development/web/now-cli {};
 
   np2kai = callPackage ../misc/emulators/np2kai { };
+
+  ox = callPackage ../applications/editors/ox { };
 
   file-rename = callPackage ../tools/filesystems/file-rename { };
 
@@ -8558,6 +8562,8 @@ in
   untrunc-anthwlock = callPackage ../tools/video/untrunc-anthwlock { };
 
   up = callPackage ../tools/misc/up { };
+
+  upterm = callPackage ../tools/misc/upterm { };
 
   upx = callPackage ../tools/compression/upx { };
 
@@ -22662,6 +22668,10 @@ in
   hpmyroom = libsForQt5.callPackage ../applications/networking/hpmyroom { };
 
   ht = callPackage ../applications/editors/ht { };
+
+  ht-rust = callPackage ../tools/networking/ht-rust {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   hubstaff = callPackage ../applications/misc/hubstaff { };
 
