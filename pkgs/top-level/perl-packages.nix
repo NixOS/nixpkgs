@@ -3512,10 +3512,10 @@ let
 
   ConfigTiny = buildPerlPackage {
     pname = "Config-Tiny";
-    version = "2.24";
+    version = "2.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Config-Tiny-2.24.tgz";
-      sha256 = "0cjj2f0pj9y3cx1lgk2qp6arsnyaacf7kj6v33iqczn59f798r0h";
+      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Config-Tiny-2.26.tgz";
+      sha256 = "0pyggn3yq9ffjnw3i1n5r9kg4b90jw926apbvzxq8y7cpa8k5dc3";
     };
     buildInputs = [ TestPod ];
   };
