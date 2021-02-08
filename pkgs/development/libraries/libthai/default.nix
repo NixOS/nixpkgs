@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "04g93bgxrcnay9fglpq2lj9nr7x1xh06i60m7haip8as9dxs3q7z";
   };
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ installShellFiles libdatrie pkg-config ];
 
   buildInputs = [ libdatrie ];
 
