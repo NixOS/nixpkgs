@@ -19588,10 +19588,10 @@ let
 
   TemplateTiny = buildPerlPackage {
     pname = "Template-Tiny";
-    version = "1.12";
+    version = "1.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AD/ADAMK/Template-Tiny-1.12.tar.gz";
-      sha256 = "073e062c630b51dfb725cd6485a329155cb72d5c596e8cb698eb67c4566f0a4a";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Template-Tiny-1.13.tar.gz";
+      sha256 = "0zmzcp87bgairz9n71pmd7ypxh8q58fqy918d4a9firf7c4g6liv";
     };
     meta = {
       description = "Template Toolkit reimplemented in as little code as possible";
