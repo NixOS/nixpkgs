@@ -4,7 +4,10 @@ with lib;
 let
   cfg = config.virtualisation.cri-o;
 
-  crioPackage = (pkgs.cri-o.override { inherit (cfg) extraPackages; });
+  crioPackage = pkgs.cri-o.override {
+    extraPackages = cfg.extraPackages
+      ++ lib.optional (builtins.elem "zfs" config.boot.supportedFilesystems) config.boot.zfs.package;
+  };
 
 in
 {
@@ -20,7 +23,7 @@ in
     enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
     storageDriver = mkOption {
-      type = types.enum [ "btrfs" "overlay" "vfs" ];
+      type = types.enum [ "aufs" "btrfs" "devmapper" "overlay" "vfs" "zfs" ];
       default = "overlay";
       description = "Storage driver to be used";
     };
