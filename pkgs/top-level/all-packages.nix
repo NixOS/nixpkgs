@@ -27265,9 +27265,7 @@ in
 
   wesnoth-dev = wesnoth;
 
-  widelands = callPackage ../games/widelands {
-    lua = lua5_2;
-  };
+  widelands = callPackage ../games/widelands { };
 
   worldofgoo = callPackage ../games/worldofgoo { };
 
