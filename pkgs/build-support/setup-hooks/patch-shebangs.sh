@@ -88,15 +88,17 @@ patchShebangs() {
         newInterpreterLine=${newInterpreterLine%${newInterpreterLine##*[![:space:]]}}
 
         if [[ -n "$oldPath" && "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]]; then
-            if [[ -n "$newPath" && "$newPath" != "$oldPath" ]]; then
+            if [[ -n "$newPath" ]] && [[ "$newPath" != "$oldPath" ]]; then
                 echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
                 # escape the escape chars so that sed doesn't interpret them
                 escapedInterpreterLine=${newInterpreterLine//\\/\\\\}
 
                 # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
-                timestamp=$(stat --printf "%y" "$f")
+                timestamp=$(mktemp)
+                touch -r "$f" "$timestamp"
                 sed -i -e "1 s|.*|#\!$escapedInterpreterLine|" "$f"
-                touch --date "$timestamp" "$f"
+                touch -r "$timestamp" "$f"
+                rm "$timestamp"
             fi
         fi
     done < <(find "$@" -type f -perm -0100 -print0)
