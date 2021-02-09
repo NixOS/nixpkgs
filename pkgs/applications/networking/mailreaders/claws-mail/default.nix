@@ -31,11 +31,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "claws-mail";
-  version = "3.17.7";
+  version = "3.17.8";
 
   src = fetchurl {
     url = "https://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "1j6x09621wng0lavh53nwzh9vqjzpspl8kh5azh7kbihpi4ldfb0";
+    sha256 = "sha256-zbeygUmV1vSpw7HwvBRn7Vw88qXg2hcwqqJaisyv3a8=";
   };
 
   outputs = [ "out" "dev" ];
