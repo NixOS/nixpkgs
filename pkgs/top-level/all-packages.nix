@@ -21434,7 +21434,7 @@ in
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
   cmus = callPackage ../applications/audio/cmus {
-    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio;
     libjack = libjack2;
     ffmpeg = ffmpeg_2;
   };
