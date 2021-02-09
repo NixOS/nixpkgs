@@ -2460,6 +2460,8 @@ in
 
   interlock = callPackage ../servers/interlock {};
 
+  iotools = callPackage ../tools/misc/iotools { };
+
   jellyfin = callPackage ../servers/jellyfin { };
 
   jellyfin_10_5 = callPackage ../servers/jellyfin/10.5.x.nix { };
@@ -12120,6 +12122,8 @@ in
 
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
 
+  edb = libsForQt5.callPackage ../development/tools/misc/edb { };
+
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
 
   effitask = callPackage ../applications/misc/effitask { };
@@ -14531,6 +14535,8 @@ in
   libatomic_ops = callPackage ../development/libraries/libatomic_ops {};
 
   libaudclient = callPackage ../development/libraries/libaudclient { };
+
+  libaudec = callPackage ../development/libraries/libaudec { };
 
   libav = libav_11; # branch 11 is API-compatible with branch 10
   libav_all = callPackages ../development/libraries/libav { };
@@ -18648,6 +18654,8 @@ in
     libapparmor apparmor-utils apparmor-bin-utils apparmor-parser apparmor-pam
     apparmor-profiles apparmor-kernel-patches;
 
+  aseq2json = callPackage ../os-specific/linux/aseq2json {};
+
   atop = callPackage ../os-specific/linux/atop { };
 
   audit = callPackage ../os-specific/linux/audit { };
@@ -21433,7 +21441,7 @@ in
   cmatrix = callPackage ../applications/misc/cmatrix { };
 
   cmus = callPackage ../applications/audio/cmus {
-    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+    inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio;
     libjack = libjack2;
     ffmpeg = ffmpeg_2;
   };
@@ -23905,6 +23913,8 @@ in
   librep = callPackage ../development/libraries/librep { };
 
   rep-gtk = callPackage ../development/libraries/rep-gtk { };
+
+  reproc = callPackage ../development/libraries/reproc { };
 
   sawfish = callPackage ../applications/window-managers/sawfish { };
 
@@ -29674,7 +29684,9 @@ in
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 
-  sccache = callPackage ../development/tools/misc/sccache { };
+  sccache = callPackage ../development/tools/misc/sccache {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   sequeler = callPackage ../applications/misc/sequeler { };
 

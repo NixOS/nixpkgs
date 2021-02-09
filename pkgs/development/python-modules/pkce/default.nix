@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pkce";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "RomeoDespres";
     repo = pname;
     rev = version;
-    sha256 = "15fzpp3b5qmj27hpgnwkzjwllgwwdfccizz8ydmliakm2hdr1xpn";
+    sha256 = "sha256-dOHCu0pDXk9LM4Yobaz8GAfVpBd8rXlty+Wfhx+WPME=";
   };
 
   checkInputs = [ pytestCheckHook ];
