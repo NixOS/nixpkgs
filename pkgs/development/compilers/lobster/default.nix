@@ -48,7 +48,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
-    updateScript = unstableGitUpdater { };
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/aardappel/lobster";
+    };
   };
 
   meta = with lib; {
