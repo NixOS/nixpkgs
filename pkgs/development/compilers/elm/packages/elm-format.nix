@@ -3,7 +3,7 @@
 , lib, mtl, optparse-applicative, parsec, QuickCheck, quickcheck-io
 , relude, tasty, tasty-hspec, tasty-hunit, tasty-quickcheck, text
 }:
-mkDerivation {
+mkDerivation rec {
   pname = "elm-format";
   version = "0.8.5";
   src = fetchgit {
@@ -34,7 +34,7 @@ mkDerivation {
     module Build_elm_format where
 
     gitDescribe :: String
-    gitDescribe = "0.8.5"
+    gitDescribe = "${version}"
     EOHS
   '';
 }
