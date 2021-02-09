@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Integrates the web vault into bitwarden_rs";
     homepage = "https://github.com/dani-garcia/bw_web_builds";
     platforms = platforms.all;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ msteen mic92 ];
   };
 }
