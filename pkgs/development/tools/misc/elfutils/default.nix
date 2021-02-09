@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
     })
   ] ++ lib.optional stdenv.hostPlatform.isMusl [ ./musl-error_h.patch ];
 
+  outputs = [ "bin" "dev" "out" "man" ];
+
   hardeningDisable = [ "format" ];
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
