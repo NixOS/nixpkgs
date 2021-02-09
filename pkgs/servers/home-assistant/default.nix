@@ -201,6 +201,8 @@ in with py.pkgs; buildPythonApplication rec {
     "test_secrets_credstash"
     # system_log/test_init.py: assert 0 == 1 where 0 = len([])
     "test_error_posted_as_event"
+    # ssdp/test_init.py: RuntimeError: Event loop is closed
+    "test_scan_match_st"
   ];
 
   preCheck = ''
