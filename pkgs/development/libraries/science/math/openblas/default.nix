@@ -107,9 +107,6 @@ in
 stdenv.mkDerivation rec {
   pname = "openblas";
   version = "0.3.13";
-
-  outputs = [ "out" "dev" ];
-
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";
