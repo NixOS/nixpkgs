@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "firejail";
-  version = "0.9.64.2";
+  version = "0.9.64.4";
 
   src = fetchFromGitHub {
     owner = "netblue30";
     repo = "firejail";
     rev = version;
-    sha256 = "1adizsb7pxr101bvvd359hxympnv36rnikp78npdr5dcvwddv3dv";
+    sha256 = "sha256-q/XL8cznHlUXdubUEptEAVma1jRUqFb5XcLAV0RVCzs=";
   };
 
   buildInputs = [ which ];

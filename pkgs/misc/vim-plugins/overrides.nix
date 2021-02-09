@@ -741,6 +741,15 @@ self: super: {
     meta.platforms = lib.platforms.all;
   });
 
+  compe-tabnine = super.compe-tabnine.overrideAttrs (old: {
+    buildInputs = [ tabnine ];
+
+    postFixup = ''
+      mkdir $target/binaries
+      ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
+    '';
+  });
+
   completion-tabnine = super.completion-tabnine.overrideAttrs (old: {
     buildInputs = [ tabnine ];
 

@@ -4354,6 +4354,8 @@ in
     gtk = gtk3;
   };
 
+  free42 = callPackage ../applications/misc/free42 { };
+
   galen = callPackage ../development/tools/galen {};
 
   gallery-dl = python3Packages.callPackage ../applications/misc/gallery-dl { };
@@ -11746,6 +11748,16 @@ in
     runJdk = jdk11_headless;
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
     bazel_self = bazel_3;
+  };
+
+  bazel_4 = callPackage ../development/tools/build-managers/bazel/bazel_4 {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
+    buildJdk = jdk11_headless;
+    buildJdkName = "java11";
+    runJdk = jdk11_headless;
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    bazel_self = bazel_4;
   };
 
   bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
@@ -21679,14 +21691,7 @@ in
     inherit (gnome2) libgnomeui;
   };
 
-  dwm = callPackage ../applications/window-managers/dwm {
-    patches = config.dwm.patches or [];
-  };
-
-  dwm-git = callPackage ../applications/window-managers/dwm/git.nix {
-    patches = config.dwm.patches or [];
-    conf = config.dwm.conf or null;
-  };
+  dwm = callPackage ../applications/window-managers/dwm { };
 
   dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
 
@@ -28729,6 +28734,8 @@ in
   };
   libjack2 = jack2.override { prefix = "lib"; };
   jack2Full = jack2; # TODO: move to aliases.nix
+
+  jstest-gtk = callPackage ../tools/misc/jstest-gtk { };
 
   keynav = callPackage ../tools/X11/keynav { };
 

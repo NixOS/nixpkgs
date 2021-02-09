@@ -29,27 +29,27 @@ let
   # Note: when raising the version, ensure that all SNAPSHOT versions in
   # build.gradle are replaced by a fixed version
   # (the current one at the time of release) (see postPatch).
-  version = "123.1";
+  version = "124.1";
   buildVersion = makeBuildVersion version;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "0qpgilb0v93zcik12idwzdd5b5lw74431iywq4d55gn5i6gb6bh1";
+    sha256 = "1k4k559y8l6wmj9m4980f7xmaaxzx84x86rqc77j4nd3y3x53546";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    sha256 = "146wvm0dahygnq327pspr62lq29irwrhc8ylgwdwwasrvlsscdp5";
+    sha256 = "08v929sgxy1pclzc00p7l7fak2h9l306447w5k5db3719kacj059";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
     # this is never pinned in upstream, see https://github.com/Anuken/Arc/issues/39
-    rev = "73860909189c9c42924eb82e9b4a0eab2a4d5e1c";
-    sha256 = "1gm3r16a539hm8jbc14mfxn7v88dv40vr7nzwmpifnz54qarkg3m";
+    rev = "b33dfc5178fcb2613ee68136f4a4869cadc0b06a";
+    sha256 = "1vf68i3pnsixch37285ib7afkwmlrc05v783395jsdjzj9i67lj3";
   };
 
   patches = [
@@ -114,7 +114,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "18r2gd1y79cy571f5hvlablfwrlz10cf7ssc9ckkvkk92i0323gk";
+    outputHash = "18yfchv55f0fza6gdxd3f6gm0m4wy2a9jkw5wgl84id518jal6la";
   };
 
 in
