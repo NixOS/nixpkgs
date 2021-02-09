@@ -51,6 +51,7 @@ in
 
     extraFlags = mkOption {
       type = types.listOf types.str;
+      example = [ "--max-size" "100000000" ];
       default = [];
       description = ''
         Extra commandline options to pass to Restic REST server.
