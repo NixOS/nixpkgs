@@ -18,9 +18,10 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage man/just.1
 
-    installShellCompletion --bash --name just.bash completions/just.bash
-    installShellCompletion --fish --name just.fish completions/just.fish
-    installShellCompletion --zsh  --name _just     completions/just.zsh
+    installShellCompletion --cmd just \
+      --bash completions/just.bash \
+      --fish completions/just.fish \
+      --zsh  completions/just.zsh
   '';
 
   checkInputs = [ coreutils bash ];
