@@ -13,13 +13,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "z3";
-  version = "4.8.9";
+  version = "4.8.10";
 
   src = fetchFromGitHub {
     owner  = "Z3Prover";
     repo   = pname;
     rev    = "z3-${version}";
-    sha256 = "1hnbzq10d23drd7ksm3c1n2611c3kd0q0yxgz8y78zaafwczvwxx";
+    sha256 = "sha256-jvn1RtSqmhRTA9I+VDDVGW3KID38WiFGl/vGB6ioPvA=";
   };
 
   nativeBuildInputs = optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
