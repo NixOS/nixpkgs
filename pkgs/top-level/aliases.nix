@@ -150,6 +150,7 @@ mapAliases ({
   dydisnix = throw "dydisnix has been removed."; # added 2021-01-27
   dysnomia = throw "dysnomia has been removed."; # added 2021-01-27
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
+  dwm-git = throw "dwm-git has been removed from nixpkgs, as it had no updates for 2 years not serving it's purpose."; # added 2021-02-07
   elasticmq = throw "elasticmq has been removed in favour of elasticmq-server-bin"; # added 2021-01-17
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
   emacsPackagesNgGen = emacsPackagesFor; # added 2018-08-18

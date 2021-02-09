@@ -3049,6 +3049,12 @@
     githubId = 9959940;
     name = "Andreas Fehn";
   };
+  felixsinger = {
+    email = "felixsinger@posteo.net";
+    github = "felixsinger";
+    githubId = 628359;
+    name = "Felix Singer";
+  };
   felschr = {
     email = "dev@felschr.com";
     github = "felschr";
@@ -7578,6 +7584,12 @@
     github = "qoelet";
     githubId = 115877;
     name = "Kenny Shen";
+  };
+  queezle = {
+    email = "git@queezle.net";
+    github = "qzle";
+    githubId = 1024891;
+    name = "Jens Nolte";
   };
   quentini = {
     email = "quentini@airmail.cc";

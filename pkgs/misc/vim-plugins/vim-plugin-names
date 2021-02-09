@@ -429,6 +429,7 @@ octol/vim-cpp-enhanced-highlight
 ojroques/vim-oscyank@main
 Olical/aniseed
 Olical/conjure
+onsails/lspkind-nvim
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
@@ -481,6 +482,7 @@ rhysd/vim-grammarous
 rhysd/vim-operator-surround
 RishabhRD/nvim-lsputils
 RishabhRD/popfix
+rmagatti/auto-session@main
 rodjek/vim-puppet
 romainl/vim-cool
 romainl/vim-qf
@@ -618,6 +620,7 @@ Twinside/vim-hoogle
 tyru/caw.vim
 tyru/open-browser-github.vim
 tyru/open-browser.vim
+tzachar/compe-tabnine@main
 uarun/vim-protobuf
 udalov/kotlin-vim
 ujihisa/neco-look

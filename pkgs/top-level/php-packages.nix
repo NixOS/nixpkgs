@@ -134,6 +134,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     redis = callPackage ../development/php-packages/redis { };
 
+    smbclient = callPackage ../development/php-packages/smbclient { };
+
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
     v8 = buildPecl {
