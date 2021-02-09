@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xsettingsd";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "derat";
     repo = "xsettingsd";
     rev = "v${version}";
-    sha256 = "05m4jlw0mgwp24cvyklncpziq1prr2lg0cq9c055sh4n9d93d07v";
+    sha256 = "sha256-CIYshZqJICuL8adKHIN4R6nudaqWOCK2UPrGhsKf9pE=";
   };
 
   patches = [
