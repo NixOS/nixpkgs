@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "2.3.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rwoEZnxh0x+xaggJuoeSjE1ctF43ChW5awcDJyoWioA=";
+    sha256 = "sha256-AojemBU3BUuMqokLH9mhYf+sH5Q+zSYeoGmuI5/6vPw=";
   };
 
-  cargoSha256 = "sha256-ey/fUHkPoWjWlLjh1WNpwMKOkdQKgFYcLwQdx2RQ3CI=";
+  cargoSha256 = "sha256-TFSD+G0i5EAu7D7gOtRzwFxO214CBPdh2Y6rRt39FVo=";
 
   meta = with lib; {
     homepage = "https://proxy.vulpes.one/gemini/gem.limpet.net/agate";
