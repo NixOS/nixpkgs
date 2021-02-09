@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "oauth2-proxy";
-  version = "6.1.1";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "oauth2-proxy";
-    sha256 = "10vvib4089yywd10kigjszsfxkzv8xzj7dy3wr5df8h80rcfa74n";
+    sha256 = "sha256-yH60mfuYRv31I0DOEtWxqGCzKOwDYsQh4yjvYO3vq3I=";
     rev = "v${version}";
   };
 
-  vendorSha256 = "0z8ibmpil899xvjaw7siswy22shjhx17a6lnjpr62paqdxy1sfwc";
+  vendorSha256 = "sha256-kclpoZ33JOciP2IUCQZB5idA7rgbWxPPFNwZU+pEJFU=";
 
   # Taken from https://github.com/oauth2-proxy/oauth2-proxy/blob/master/Makefile
   buildFlagsArray = ("-ldflags=-X main.VERSION=${version}");
