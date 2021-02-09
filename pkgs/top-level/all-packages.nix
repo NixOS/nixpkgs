@@ -5017,8 +5017,6 @@ in
 
   haste-client = callPackage ../tools/misc/haste-client { };
 
-  hal-flash = callPackage ../os-specific/linux/hal-flash { };
-
   hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer { };
 
   half = callPackage ../development/libraries/half { };
@@ -22248,14 +22246,6 @@ in
   redoflacs = callPackage ../applications/audio/redoflacs { };
 
   flameshot = libsForQt5.callPackage ../tools/misc/flameshot { };
-
-  flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer (config.flashplayer or {});
-
-  flashplayer-standalone = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer/standalone.nix (config.flashplayer or {});
-
-  flashplayer-standalone-debugger = flashplayer-standalone.override {
-    debug = true;
-  };
 
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
 

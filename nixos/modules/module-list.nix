@@ -651,7 +651,6 @@
   ./services/networking/fireqos.nix
   ./services/networking/firewall.nix
   ./services/networking/flannel.nix
-  ./services/networking/flashpolicyd.nix
   ./services/networking/freenet.nix
   ./services/networking/freeradius.nix
   ./services/networking/gale.nix
