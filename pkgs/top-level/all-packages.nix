@@ -24433,10 +24433,7 @@ in
 
   qcomicbook = libsForQt5.callPackage ../applications/graphics/qcomicbook { };
 
-  eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp {
-    lua5 = lua5_1;
-    miniupnpc = miniupnpc_1;
-  };
+  eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
   qdirstat = libsForQt5.callPackage ../applications/misc/qdirstat {};
 
