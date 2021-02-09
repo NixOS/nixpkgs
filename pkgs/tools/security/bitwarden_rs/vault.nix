@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dani-garcia/bw_web_builds";
     platforms = platforms.all;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ msteen ];
+    maintainers = with maintainers; [ msteen mic92 ];
   };
 }
