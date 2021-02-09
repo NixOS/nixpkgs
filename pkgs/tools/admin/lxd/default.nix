@@ -24,7 +24,7 @@ buildGoPackage rec {
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-PXC7Cge2s0Ox/0sG9i0RFH0gWzCoCKvBOXjqGOvtj90=";
+    sha256 = "1pcgxpmiiskq770sn25861dj0z8l24nzc1jbzyql7cxn0w5bnw1x";
   };
 
   postPatch = ''

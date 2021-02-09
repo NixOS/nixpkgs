@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lxpanel";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/lxde/${pname}-${version}.tar.xz";
-    sha256 = "0zis3b815p375s6mymhf5sn1a0c1xv0ixxzb0mh3fqhrby6cqy26";
+    sha256 = "sha256-HjGPV9fja2HCOlBNA9JDDHja0ULBgERRBh8bPqVEHug=";
   };
 
   nativeBuildInputs = [ pkg-config gettext m4 intltool libxmlxx ];

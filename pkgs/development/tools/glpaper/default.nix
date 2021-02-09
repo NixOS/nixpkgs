@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation {
   name = "glpaper";
-  version = "unstable-2020-03-30";
+  version = "unstable-2020-10-11";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~scoopta/glpaper";
-    rev = "a95db77088dfb5636a87f3743fc9b5eca70c1ae2";
-    sha256 = "04y12910wvhy4aqx2sa63dy9l6nbs7b77yqpdhc96x2b3mgzgjfs";
+    rev = "9e7ec7cd270af330039c395345c7d23c04682267";
+    sha256 = "sha256-yBHRg6eg+PK/ixuM0MBty3RJY9qcemr3Dt+8SAitqnk=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   version = "1.0";
 
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ wrapQtAppsHook ]; <co xml:id'qt-default-nix-co-2' />
+  nativeBuildInputs = [ wrapQtAppsHook ]; <co xml:id='qt-default-nix-co-2' />
 }
 </programlisting>
 
