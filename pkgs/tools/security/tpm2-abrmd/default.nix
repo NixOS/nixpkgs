@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tpm2-abrmd";
-  version = "2.3.3";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "17nv50w1yh6fg7393vfvys9y13lp0gvxx9vcw2pb87ky551d7xkf";
+    sha256 = "sha256-LM/uIrC5YocQrwgbkHT0I/1SZgPX7HHCoXK9CXCnG/s=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook autoconf-archive which ];
