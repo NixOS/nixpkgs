@@ -5666,6 +5666,8 @@ in {
 
   py-multibase = callPackage ../development/python-modules/py-multibase { };
 
+  py-multicodec = callPackage ../development/python-modules/py-multicodec { };
+
   py-multihash = callPackage ../development/python-modules/py-multihash { };
 
   pymumble = callPackage ../development/python-modules/pymumble { };
