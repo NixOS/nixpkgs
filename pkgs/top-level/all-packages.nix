@@ -29675,7 +29675,9 @@ in
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 
-  sccache = callPackage ../development/tools/misc/sccache { };
+  sccache = callPackage ../development/tools/misc/sccache {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   sequeler = callPackage ../applications/misc/sequeler { };
 
