@@ -15,6 +15,8 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=v${version}" ];
 
+  subPackages = [ "cmd/aws-iam-authenticator" ];
+
   meta = with lib; {
     homepage = "https://github.com/kubernetes-sigs/aws-iam-authenticator";
     description = "AWS IAM credentials for Kubernetes authentication";
