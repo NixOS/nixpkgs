@@ -3,7 +3,7 @@
 , buildPackages
 , cacert
 , cargo
-, diffutils
+, cargoSetupHook
 , fetchCargoTarball
 , runCommandNoCC
 , rustPlatform
@@ -71,19 +71,6 @@ let
   # against the src fixed-output derivation to check consistency.
   validateCargoDeps = !(cargoHash == "" && cargoSha256 == "");
 
-  # Some cargo builds include build hooks that modify their own vendor
-  # dependencies. This copies the vendor directory into the build tree and makes
-  # it writable. If we're using a tarball, the unpackFile hook already handles
-  # this for us automatically.
-  setupVendorDir = if cargoVendorDir == null
-    then (''
-      unpackFile "$cargoDeps"
-      cargoDepsCopy=$(stripHash $cargoDeps)
-    '')
-    else ''
-      cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
-    '';
-
   targetIsJSON = lib.hasSuffix ".json" target;
   useSysroot = targetIsJSON && !__internal_dontAddSysroot;
 
@@ -106,11 +93,6 @@ let
   releaseDir = "target/${shortTarget}/${buildType}";
   tmpDir = "${releaseDir}-tmp";
 
-  # Specify the stdenv's `diff` by abspath to ensure that the user's build
-  # inputs do not cause us to find the wrong `diff`.
-  # The `.nativeDrv` stanza works like nativeBuildInputs and ensures cross-compiling has the right version available.
-  diff = "${diffutils.nativeDrv or diffutils}/bin/diff";
-
 in
 
 # Tests don't currently work for `no_std`, and all custom sysroots are currently built without `std`.
@@ -124,7 +106,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = nativeBuildInputs ++ [ cacert git cargo rustc ];
+  nativeBuildInputs = nativeBuildInputs ++ [ cacert git cargo cargoSetupHook rustc ];
   buildInputs = buildInputs ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   patches = cargoPatches ++ patches;
@@ -135,71 +117,8 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
   postUnpack = ''
     eval "$cargoDepsHook"
 
-    ${setupVendorDir}
-
-    mkdir .cargo
-    config="$(pwd)/$cargoDepsCopy/.cargo/config";
-    if [[ ! -e $config ]]; then
-      config=${./fetchcargo-default-config.toml};
-    fi;
-    substitute $config .cargo/config \
-      --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
-
-    cat >> .cargo/config <<'EOF'
-    [target."${rust.toRustTarget stdenv.buildPlatform}"]
-    "linker" = "${ccForBuild}"
-    ${lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-    [target."${shortTarget}"]
-    "linker" = "${ccForHost}"
-    ${# https://github.com/rust-lang/rust/issues/46651#issuecomment-433611633
-      lib.optionalString (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64) ''
-    "rustflags" = [ "-C", "target-feature=+crt-static", "-C", "link-arg=-lgcc" ]
-    ''}
-    ''}
-    EOF
-
     export RUST_LOG=${logLevel}
   '' + (args.postUnpack or "");
-
-  # After unpacking and applying patches, check that the Cargo.lock matches our
-  # src package. Note that we do this after the patchPhase, because the
-  # patchPhase may create the Cargo.lock if upstream has not shipped one.
-  postPatch = (args.postPatch or "") + lib.optionalString validateCargoDeps ''
-    cargoDepsLockfile=$NIX_BUILD_TOP/$cargoDepsCopy/Cargo.lock
-    srcLockfile=$NIX_BUILD_TOP/$sourceRoot/Cargo.lock
-
-    echo "Validating consistency between $srcLockfile and $cargoDepsLockfile"
-    if ! ${diff} $srcLockfile $cargoDepsLockfile; then
-
-      # If the diff failed, first double-check that the file exists, so we can
-      # give a friendlier error msg.
-      if ! [ -e $srcLockfile ]; then
-        echo "ERROR: Missing Cargo.lock from src. Expected to find it at: $srcLockfile"
-        echo "Hint: You can use the cargoPatches attribute to add a Cargo.lock manually to the build."
-        exit 1
-      fi
-
-      if ! [ -e $cargoDepsLockfile ]; then
-        echo "ERROR: Missing lockfile from cargo vendor. Expected to find it at: $cargoDepsLockfile"
-        exit 1
-      fi
-
-      echo
-      echo "ERROR: cargoSha256 is out of date"
-      echo
-      echo "Cargo.lock is not the same in $cargoDepsCopy"
-      echo
-      echo "To fix the issue:"
-      echo '1. Use "0000000000000000000000000000000000000000000000000000" as the cargoSha256 value'
-      echo "2. Build the derivation and wait for it to fail with a hash mismatch"
-      echo "3. Copy the 'got: sha256:' value back into the cargoSha256 field"
-      echo
-
-      exit 1
-    fi
-  '' + ''
-    unset cargoDepsCopy
-  '';
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
