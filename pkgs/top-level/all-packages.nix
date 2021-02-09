@@ -18087,6 +18087,10 @@ in
     boost = boost172;
   };
 
+  pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy {
+    boost = boost172;
+  };
+
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 
   tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
