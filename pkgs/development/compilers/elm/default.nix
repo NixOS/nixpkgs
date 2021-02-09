@@ -41,7 +41,7 @@ let
               description = "Formats Elm source code according to a standard set of rules based on the official Elm Style Guide";
               homepage = "https://github.com/avh4/elm-format";
               license = licenses.bsd3;
-              maintainers = with maintainers; [ turbomack ];
+              maintainers = with maintainers; [ avh4 turbomack ];
             }));
 
             elmi-to-json = justStaticExecutables (overrideCabal (self.callPackage ./packages/elmi-to-json.nix {}) (drv: {
