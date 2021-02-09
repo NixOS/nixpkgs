@@ -12122,6 +12122,8 @@ in
 
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
 
+  edb = libsForQt5.callPackage ../development/tools/misc/edb { };
+
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
 
   effitask = callPackage ../applications/misc/effitask { };
