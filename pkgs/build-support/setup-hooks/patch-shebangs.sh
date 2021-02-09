@@ -51,7 +51,7 @@ patchShebangs() {
         isScript "$f" || continue
 
         read -r oldInterpreterLine < "$f"
-        read -r oldPath arg0 args <<< "${oldInterpreterLine:3}"
+        read -r oldPath arg0 args <<< "${oldInterpreterLine:2}"
 
         if [[ -z "$pathName" ]]; then
             if [[ -n $strictDeps && $f == "$NIX_STORE"* ]]; then
