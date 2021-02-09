@@ -207,6 +207,18 @@ let
     meta.homepage = "https://github.com/jiangmiao/auto-pairs/";
   };
 
+  auto-session = buildVimPluginFrom2Nix {
+    pname = "auto-session";
+    version = "2021-02-05";
+    src = fetchFromGitHub {
+      owner = "rmagatti";
+      repo = "auto-session";
+      rev = "691155697a809af8797c1b935aa4e73187516d42";
+      sha256 = "199rcp3wcqg40a6lsrk83lv2kxgmnbapd5zw16jcxg4svy30dhfg";
+    };
+    meta.homepage = "https://github.com/rmagatti/auto-session/";
+  };
+
   autoload_cscope-vim = buildVimPluginFrom2Nix {
     pname = "autoload_cscope-vim";
     version = "2011-01-28";

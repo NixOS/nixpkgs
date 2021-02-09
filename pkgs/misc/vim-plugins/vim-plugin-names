@@ -482,6 +482,7 @@ rhysd/vim-grammarous
 rhysd/vim-operator-surround
 RishabhRD/nvim-lsputils
 RishabhRD/popfix
+rmagatti/auto-session@main
 rodjek/vim-puppet
 romainl/vim-cool
 romainl/vim-qf
