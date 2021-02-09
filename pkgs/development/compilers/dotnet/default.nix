@@ -131,4 +131,33 @@ rec {
       x86_64-darwin = "69ccc7c686ac06f6c658d118f59cf1a0e7284b4570375dd88d3e3043098e311745922301f2650d159624d09c4d39a1f3cbdd5daee0e408eef915de839e3bce8f";
     };
   };
+
+  # latest
+
+  aspnetcore_latest = buildAspNetCore {
+    version = "5.0.3";
+    sha512 = {
+      x86_64-linux = "188618b07cd5c97a34c77efccc7c4eba10a52681592ef711a005c82d243e601891418e0dcc27a22aae7dd6ae33d35e0bb7aa9b9fc022746c6c2414bd25cdb110";
+      aarch64-linux = "4eaf1b0120479102b342f1f3a8ad8f40b7326e3657d2b7359c09fd1951c5169ca02d1ead4d4d01f6e594adbe0cb21f135f4c61ff90613219596f6cc222161717";
+      x86_64-darwin = "924eaea6a5331835238afc84ba7dd9281aabb4c2fedf0f5383820aebdf13e916720c5889e058e6c1da0261a1f828fdb241fff7a076bef6bc2719f9dc3dc92ab1";
+    };
+  };
+
+  net_latest = buildNetCore {
+    version = "5.0.3";
+    sha512 = {
+      x86_64-linux = "263dbe260123c3d6d706ed8b5f4d510d9384216422e9af0d293df87ed98e84e1e0ffbf0c7dd543c40c5ccc95bd7cd006c8bbbe9f1cd1f060b1eaa2f7a60fea74";
+      aarch64-linux = "f4d176b48714121040470a25f76a1b3554edb358953c1bfb39bd111cf0dcc85cb8a5ebcd617efd207b3cfaef0a2d242f94e9f018a186828a750c5c0dc9bd7da5";
+      x86_64-darwin = "a29bc8ddcb15b4be141495cd937b75cb2c1d83cd3d65900f0a591997a834f2187ffd3c56d44e2b3017ef0d70e032468a6630b2e16527aa8913d1a9b88dbe4da7";
+    };
+  };
+
+  sdk_latest = buildNetCoreSdk {
+    version = "5.0.103";
+    sha512 = {
+      x86_64-linux = "bf452dbdaec7a82835cfc7c698d2558e7ac4b092e7ef35092796ba5440eb45dd880e86c1e61f8e170ac4eb813240cf83f9fc2e342dfa8b37e45afdf5cd82fb8e";
+      aarch64-linux = "179bcc4d280011a0d23f8f0d78349a372fe495e9c5aff106882c08025367ce49afe897f65c033c3f046bae2b1e49f7f6526edce273ab21e77812bbb8317d08a8";
+      x86_64-darwin = "fa0a5dac50e49bcf67e96f77ff9074204aa34b0e09c49c08cd9abaaced24f60d878f5fe782c5f01c6b0679e93f3f360aee7cc4687fcf89e92034db7ae38cf6d8";
+    };
+  };
 }
