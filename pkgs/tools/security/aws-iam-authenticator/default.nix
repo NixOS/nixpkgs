@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X pkg.Version=v${version}" ];
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=v${version}" ];
 
   meta = with lib; {
     homepage = "https://github.com/kubernetes-sigs/aws-iam-authenticator";
