@@ -1114,6 +1114,8 @@ in
 
   bmap-tools = callPackage ../tools/misc/bmap-tools { };
 
+  bonnmotion = callPackage ../development/tools/misc/bonnmotion { };
+
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
   bonfire = callPackage ../tools/misc/bonfire { };
@@ -4829,6 +4831,8 @@ in
   ripgrep-all = callPackage ../tools/text/ripgrep-all {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  robodoc = callPackage ../tools/text/robodoc { };
 
   ucg = callPackage ../tools/text/ucg { };
 
