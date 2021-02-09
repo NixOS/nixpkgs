@@ -1283,6 +1283,8 @@ in {
 
   class-registry = callPackage ../development/python-modules/class-registry { };
 
+  claripy =  callPackage ../development/python-modules/claripy { };
+
   cld2-cffi = callPackage ../development/python-modules/cld2-cffi { };
 
   cleo = callPackage ../development/python-modules/cleo { };
@@ -5952,6 +5954,8 @@ in {
   pysmf = callPackage ../development/python-modules/pysmf { };
 
   pysmi = callPackage ../development/python-modules/pysmi { };
+
+  pysmt = callPackage ../development/python-modules/pysmt { };
 
   pysnmp = callPackage ../development/python-modules/pysnmp { };
 
