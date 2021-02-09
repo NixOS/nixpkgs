@@ -2460,6 +2460,8 @@ in
 
   interlock = callPackage ../servers/interlock {};
 
+  iotools = callPackage ../tools/misc/iotools { };
+
   jellyfin = callPackage ../servers/jellyfin { };
 
   jellyfin_10_5 = callPackage ../servers/jellyfin/10.5.x.nix { };

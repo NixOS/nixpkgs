@@ -3049,6 +3049,12 @@
     githubId = 9959940;
     name = "Andreas Fehn";
   };
+  felixsinger = {
+    email = "felixsinger@posteo.net";
+    github = "felixsinger";
+    githubId = 628359;
+    name = "Felix Singer";
+  };
   felschr = {
     email = "dev@felschr.com";
     github = "felschr";
