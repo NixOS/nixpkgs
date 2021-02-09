@@ -15,10 +15,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   configurePhase = ''
+    runHook preConfigure
     ./configure PREFIX=''${!outputDev} \
                 BINDIR=''${!outputBin}/bin \
                 LIBDIR=''${!outputLib}/lib \
                 MANDIR=''${!outputMan}/share/man
+    runHook postConfigure
   '';
 
   # Fix lib extension so that fixDarwinDylibNames detects it
