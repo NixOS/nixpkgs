@@ -2,7 +2,6 @@
 , replace, fetchurl, zip, unzip, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
-, flashplayer, hal-flash
 , ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd, libnotify
 , gnome3/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
@@ -47,28 +46,31 @@ let
     assert forceWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
 
     let
-      enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
       alsaSupport = browser.alsaSupport or false;
       pipewireSupport = browser.pipewireSupport or false;
 
+      # FIXME: This should probably be an assertion now?
       plugins =
         let
           removed = lib.filter (a: builtins.hasAttr a cfg) [
-            "enableVLC"
-            "enableDjvu"
-            "enableMPlayer"
-            "jre"
-            "icedtea"
-            "enableGoogleTalkPlugin"
-            "enableFriBIDPlugin"
-            "enableBluejeans"
+            "enableAdobeFlash"
             "enableAdobeReader"
+            "enableBluejeans"
+            "enableDjvu"
+            "enableFriBIDPlugin"
+            "enableGoogleTalkPlugin"
+            "enableMPlayer"
+            "enableVLC"
+            "icedtea"
+            "jre"
           ];
-        in if removed != []
-           then throw "Your configuration mentions ${lib.concatMapStringsSep ", " (p: browserName + "." + p) removed}. All plugin related options, except for the adobe flash player, have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins)."
-           else lib.optional enableAdobeFlash flashplayer;
+        in if removed != [] then
+          throw "Your configuration mentions ${lib.concatMapStringsSep ", " (p: browserName + "." + p) removed}. All plugin related options have been removed, since Firefox from version 52 onwards no longer supports npapi plugins (see https://support.mozilla.org/en-US/kb/npapi-plugins)."
+        else
+          []
+        ;
 
       nativeMessagingHosts =
         ([ ]
@@ -88,7 +90,6 @@ let
             ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
-            ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
             ++ lib.optional (config.pulseaudio or true) libpulseaudio
             ++ lib.optional alsaSupport alsaLib
             ++ pkcs11Modules;

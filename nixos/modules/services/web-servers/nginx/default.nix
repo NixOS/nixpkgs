@@ -79,6 +79,8 @@ let
       include ${pkgs.mailcap}/etc/nginx/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
       include ${cfg.package}/conf/uwsgi_params;
+
+      default_type application/octet-stream;
   '';
 
   configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
