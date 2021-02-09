@@ -5947,6 +5947,8 @@ in {
 
   pysmi = callPackage ../development/python-modules/pysmi { };
 
+  pysmt = callPackage ../development/python-modules/pysmt { };
+
   pysnmp = callPackage ../development/python-modules/pysnmp { };
 
   pysnooper = callPackage ../development/python-modules/pysnooper { };
