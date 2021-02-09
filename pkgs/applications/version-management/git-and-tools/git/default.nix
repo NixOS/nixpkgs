@@ -4,7 +4,7 @@
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2
 , asciidoctor, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xsl_ns, docbook_xml_dtd_45
-, libxslt, tcl, tk, makeWrapper, libiconv
+, libxslt, tcl, tk, makeWrapper, libiconv, cvsps
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , perlSupport ? true
 , nlsSupport ? true
@@ -191,6 +191,7 @@ stdenv.mkDerivation {
       makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc.perl" $out/bin/git-credential-netrc \
                   --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-cvsimport \
+                  --prefix PATH : ${cvsps}/bin/cvsps \
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-add--interactive \
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
