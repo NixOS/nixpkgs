@@ -53,6 +53,10 @@ in python.pkgs.buildPythonApplication {
         paths = map (path: "${path}/lib/aspell") enchantAspellDicts;
       }}"
     )
+
+    substituteInPlace $out/share/applications/me.mitya57.ReText.desktop \
+      --replace "Exec=ReText-${version}.data/scripts/retext %F" "Exec=$out/bin/retext %F" \
+      --replace "Icon=ReText-${version}.data/data/share/retext/icons/retext.svg" "Icon=$out/share/retext/icons/retext.svg"
   '';
 
   meta = with stdenv.lib; {
