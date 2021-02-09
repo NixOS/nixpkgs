@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, php }:
 
 stdenv.mkDerivation rec {
-  version = "4.7.8";
+  version = "4.7.9";
   pname = "adminer";
 
   # not using fetchFromGitHub as the git repo relies on submodules that are included in the tar file
   src = fetchurl {
     url = "https://github.com/vrana/adminer/releases/download/v${version}/adminer-${version}.tar.gz";
-    sha256 = "0k794agvd8pa3mwl0076i7753fzxd41lhr23aih4l2lbdgnzi68z";
+    sha256 = "sha256-V7cPdCcCjFlA3ykWe+F/fUO7+kZiOpqMgP0hHy6WDJE=";
   };
 
   nativeBuildInputs = [
