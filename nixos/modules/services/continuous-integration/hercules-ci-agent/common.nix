@@ -88,7 +88,7 @@ let
     };
   };
 
-  # TODO (2022) remove
+  # TODO (roberth, >=2022) remove
   checkNix =
     if !cfg.checkNix
     then ""
