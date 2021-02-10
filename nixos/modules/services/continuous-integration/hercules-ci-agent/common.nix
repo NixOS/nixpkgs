@@ -7,7 +7,6 @@ Platform-specific code is in the respective default.nix files.
  */
 
 { config, lib, options, pkgs, ... }:
-
 let
   inherit (lib)
     filterAttrs
@@ -22,7 +21,7 @@ let
   cfg =
     config.services.hercules-ci-agent;
 
-  format = pkgs.formats.toml {};
+  format = pkgs.formats.toml { };
 
   settingsModule = { config, ... }: {
     freeformType = format.type;
@@ -36,10 +35,14 @@ let
       };
       concurrentTasks = mkOption {
         description = ''
-          Number of tasks to perform simultaneously, such as evaluations, derivations.
+          Number of tasks to perform simultaneously.
 
-          You must have a total capacity across agents of at least 2 concurrent tasks on <literal>x86_64-linux</literal>
-          to allow for import from derivation.
+          A task is a single derivation build or an evaluation.
+          At minimum, you need 2 concurrent tasks for <literal>x86_64-linux</literal>
+          in your cluster, to allow for import from derivation.
+
+          <literal>concurrentTasks</literal> can be around the CPU core count or lower if memory is
+          the bottleneck.
         '';
         type = types.int;
         default = 4;
@@ -85,38 +88,39 @@ let
     };
   };
 
-  # TODO (2022) remove
+  # TODO (roberth, >=2022) remove
   checkNix =
     if !cfg.checkNix
     then ""
     else if lib.versionAtLeast config.nix.package.version "2.3.10"
     then ""
-    else pkgs.stdenv.mkDerivation {
-      name = "hercules-ci-check-system-nix-src";
-      inherit (config.nix.package) src patches;
-      configurePhase = ":";
-      buildPhase = ''
-        echo "Checking in-memory pathInfoCache expiry"
-        if ! grep 'PathInfoCacheValue' src/libstore/store-api.hh >/dev/null; then
-          cat 1>&2 <<EOF
+    else
+      pkgs.stdenv.mkDerivation {
+        name = "hercules-ci-check-system-nix-src";
+        inherit (config.nix.package) src patches;
+        configurePhase = ":";
+        buildPhase = ''
+          echo "Checking in-memory pathInfoCache expiry"
+          if ! grep 'PathInfoCacheValue' src/libstore/store-api.hh >/dev/null; then
+            cat 1>&2 <<EOF
 
-          You are deploying Hercules CI Agent on a system with an incompatible
-          nix-daemon. Please make sure nix.package is set to a Nix version of at
-          least 2.3.10 or a master version more recent than Mar 12, 2020.
-        EOF
-          exit 1
-        fi
-      '';
-      installPhase = "touch $out";
-    };
+            You are deploying Hercules CI Agent on a system with an incompatible
+            nix-daemon. Please make sure nix.package is set to a Nix version of at
+            least 2.3.10 or a master version more recent than Mar 12, 2020.
+          EOF
+            exit 1
+          fi
+        '';
+        installPhase = "touch $out";
+      };
 
 in
 {
   imports = [
-    (mkRenamedOptionModule ["services" "hercules-ci-agent" "extraOptions"] ["services" "hercules-ci-agent" "settings"])
-    (mkRenamedOptionModule ["services" "hercules-ci-agent" "baseDirectory"] ["services" "hercules-ci-agent" "settings" "baseDirectory"])
-    (mkRenamedOptionModule ["services" "hercules-ci-agent" "concurrentTasks"] ["services" "hercules-ci-agent" "settings" "concurrentTasks"])
-    (mkRemovedOptionModule ["services" "hercules-ci-agent" "patchNix"] "Nix versions packaged in this version of Nixpkgs don't need a patched nix-daemon to work correctly in Hercules CI Agent clusters.")
+    (mkRenamedOptionModule [ "services" "hercules-ci-agent" "extraOptions" ] [ "services" "hercules-ci-agent" "settings" ])
+    (mkRenamedOptionModule [ "services" "hercules-ci-agent" "baseDirectory" ] [ "services" "hercules-ci-agent" "settings" "baseDirectory" ])
+    (mkRenamedOptionModule [ "services" "hercules-ci-agent" "concurrentTasks" ] [ "services" "hercules-ci-agent" "settings" "concurrentTasks" ])
+    (mkRemovedOptionModule [ "services" "hercules-ci-agent" "patchNix" ] "Nix versions packaged in this version of Nixpkgs don't need a patched nix-daemon to work correctly in Hercules CI Agent clusters.")
   ];
 
   options.services.hercules-ci-agent = {
