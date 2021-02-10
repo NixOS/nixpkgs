@@ -6677,6 +6677,8 @@ in
 
   opencorsairlink = callPackage ../tools/misc/opencorsairlink { };
 
+  openfpgaloader = callPackage ../development/tools/misc/openfpgaloader { };
+
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
   obexfs = callPackage ../tools/bluetooth/obexfs { };
