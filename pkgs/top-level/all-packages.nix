@@ -17918,7 +17918,8 @@ in
   inherit (callPackages ../servers/mpd { })
     mpd mpd-small mpdWithFeatures;
 
-  mpd_clientlib = callPackage ../servers/mpd/clientlib.nix { };
+  mpd_clientlib = libmpdclient;
+  libmpdclient = callPackage ../servers/mpd/libmpdclient.nix { };
 
   mpdscribble = callPackage ../tools/misc/mpdscribble { };
 
@@ -22792,6 +22793,8 @@ in
 
   waybar = callPackage ../applications/misc/waybar {};
 
+  wbg = callPackage ../applications/misc/wbg { };
+
   hikari = callPackage ../applications/window-managers/hikari { };
 
   i3 = callPackage ../applications/window-managers/i3 {
@@ -23850,6 +23853,8 @@ in
     i3Support = true;
     i3GapsSupport = false;
   };
+
+  yambar = callPackage ../applications/misc/yambar { };
 
   polyphone = libsForQt514.callPackage ../applications/audio/polyphone { };
 
