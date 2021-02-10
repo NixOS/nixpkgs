@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "e2tools";
   version = "0.1.0";
 
-src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "e2tools";
     repo = "e2tools";
     rev = "6ee7c2d9015dce7b90c3388096602e307e3bd790";
