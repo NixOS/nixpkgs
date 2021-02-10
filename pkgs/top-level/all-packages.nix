@@ -9244,6 +9244,8 @@ in
 
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
 
+  zsh-autopair = callPackage ../shells/zsh/zsh-autopair { };
+
   zsh-bd = callPackage ../shells/zsh/zsh-bd { };
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
