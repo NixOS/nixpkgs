@@ -16196,7 +16196,7 @@ in
 
   poco = callPackage ../development/libraries/poco { };
 
-  podofo = callPackage ../development/libraries/podofo { lua5 = lua5_1; };
+  podofo = callPackage ../development/libraries/podofo { };
 
   polkit = callPackage ../development/libraries/polkit { };
 
