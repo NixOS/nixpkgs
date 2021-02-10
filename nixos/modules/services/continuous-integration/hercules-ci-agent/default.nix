@@ -80,4 +80,6 @@ in
 
     users.groups.hercules-ci-agent = { };
   };
+
+  meta.maintainers = [ lib.maintainers.roberth ];
 }
