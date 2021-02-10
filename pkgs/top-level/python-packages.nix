@@ -7927,6 +7927,8 @@ in {
 
   twisted = callPackage ../development/python-modules/twisted { };
 
+  twitch-python = callPackage ../development/python-modules/twitch-python { };
+
   twitter = callPackage ../development/python-modules/twitter { };
 
   twitter-common-collections = callPackage ../development/python-modules/twitter-common-collections { };
