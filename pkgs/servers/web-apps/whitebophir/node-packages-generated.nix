@@ -139,13 +139,13 @@ let
         sha512 = "zurD1ibz21BRlAOIKP8yhrxlqKx6L9VCwkB5kMiP6nZAhoF5MvC7qS1qPA7nRcr1GJolfkQC7/EAL4hdYejLtg==";
       };
     };
-    "@types/node-14.14.22" = {
+    "@types/node-14.14.25" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "14.14.22";
+      version = "14.14.25";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-14.14.22.tgz";
-        sha512 = "g+f/qj/cNcqKkc3tFqlXOYjrmZA+jNBiDzbP3kH+B+otKFqAdPgVTGP1IeKRdMml/aE69as5S4FqtxAbl+LaMw==";
+        url = "https://registry.npmjs.org/@types/node/-/node-14.14.25.tgz";
+        sha512 = "EPpXLOVqDvisVxtlbvzfyqSsFeQxltFbluZNRndIb8tr9KiBnYNLzrc1N3pyKUCww2RNrfHDViqDWWE1LCJQtQ==";
       };
     };
     "@webcomponents/template-1.4.4" = {
@@ -200,6 +200,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/align-text/-/align-text-0.1.4.tgz";
         sha1 = "0cd90a561093f35d0a99256c22b7069433fad117";
+      };
+    };
+    "async-mutex-0.3.0" = {
+      name = "async-mutex";
+      packageName = "async-mutex";
+      version = "0.3.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/async-mutex/-/async-mutex-0.3.0.tgz";
+        sha512 = "6VIpUM7s37EMXvnO3TvujgaS6gx4yJby13BhxovMYSap7nrbS0gJ1UzGcjD+HElNSdTz/+IlAIqj7H48N0ZlyQ==";
       };
     };
     "audio-context-polyfill-1.0.0" = {
@@ -535,13 +544,13 @@ let
         sha512 = "LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==";
       };
     };
-    "graceful-fs-4.2.4" = {
+    "graceful-fs-4.2.6" = {
       name = "graceful-fs";
       packageName = "graceful-fs";
-      version = "4.2.4";
+      version = "4.2.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.4.tgz";
-        sha512 = "WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==";
+        url = "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.6.tgz";
+        sha512 = "nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==";
       };
     };
     "handlebars-4.7.6" = {
@@ -1012,13 +1021,13 @@ let
         sha512 = "JvdAWfbXeIGaZ9cILp38HntZSFSo3mWg6xGcJJsd+d4aRMOqauag1C63dJfDw7OaMYwEbHMOxEZ1lqVRYP2OAw==";
       };
     };
-    "socket.io-3.1.0" = {
+    "socket.io-3.1.1" = {
       name = "socket.io";
       packageName = "socket.io";
-      version = "3.1.0";
+      version = "3.1.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/socket.io/-/socket.io-3.1.0.tgz";
-        sha512 = "Aqg2dlRh6xSJvRYK31ksG65q4kmBOqU4g+1ukhPcoT6wNGYoIwSYPlCPuRwOO9pgLUajojGFztl6+V2opmKcww==";
+        url = "https://registry.npmjs.org/socket.io/-/socket.io-3.1.1.tgz";
+        sha512 = "7cBWdsDC7bbyEF6WbBqffjizc/H4YF1wLdZoOzuYfo2uMNSFjJKuQ36t0H40o9B20DO6p+mSytEd92oP4S15bA==";
       };
     };
     "socket.io-adapter-2.1.0" = {
@@ -1147,13 +1156,13 @@ let
         sha1 = "29c5733148057bb4e1f75df35b7a9cb72e6a59dd";
       };
     };
-    "uglify-js-3.12.6" = {
+    "uglify-js-3.12.7" = {
       name = "uglify-js";
       packageName = "uglify-js";
-      version = "3.12.6";
+      version = "3.12.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/uglify-js/-/uglify-js-3.12.6.tgz";
-        sha512 = "aqWHe3DfQmZUDGWBbabZ2eQnJlQd1fKlMUu7gV+MiTuDzdgDw31bI3wA2jLLsV/hNcDP26IfyEgSVoft5+0SVw==";
+        url = "https://registry.npmjs.org/uglify-js/-/uglify-js-3.12.7.tgz";
+        sha512 = "SIZhkoh+U/wjW+BHGhVwE9nt8tWJspncloBcFapkpGRwNPqcH8pzX36BXe3TPBjzHWPMUZotpCigak/udWNr1Q==";
       };
     };
     "uglify-to-browserify-1.0.2" = {
@@ -1264,13 +1273,13 @@ let
         sha1 = "b5243d8f3ec1aa35f1364605bc0d1036e30ab69f";
       };
     };
-    "ws-7.4.2" = {
+    "ws-7.4.3" = {
       name = "ws";
       packageName = "ws";
-      version = "7.4.2";
+      version = "7.4.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ws/-/ws-7.4.2.tgz";
-        sha512 = "T4tewALS3+qsrpGI/8dqNMLIVdq/g/85U98HPMa6F0m6xTbvhXU6RCQLqPH3+SlomNV/LdY6RXEbBpMH6EOJnA==";
+        url = "https://registry.npmjs.org/ws/-/ws-7.4.3.tgz";
+        sha512 = "hr6vCR76GsossIRsr8OLR9acVVm1jyfEWvhbNjtgPOrfvAlKzvyeg/P6r8RuDjRyrcQoPQT7K0DGEPc7Ae6jzA==";
       };
     };
     "yaku-1.0.1" = {
@@ -1303,14 +1312,14 @@ let
   };
 in
 {
-  "whitebophir-git+https://github.com/lovasoa/whitebophir.git#v1.7.0" = nodeEnv.buildNodePackage {
+  "whitebophir-git+https://github.com/lovasoa/whitebophir.git#v1.8.0" = nodeEnv.buildNodePackage {
     name = "whitebophir";
     packageName = "whitebophir";
-    version = "1.7.0";
+    version = "1.8.0";
     src = fetchgit {
       url = "https://github.com/lovasoa/whitebophir.git";
-      rev = "3bf594334e683c63229ac9b6b3a607fdad43c8e1";
-      sha256 = "7d6d7baddc759d75b586131c436be3ea16b63889f916996e866f2e9aca7cfe50";
+      rev = "f3bc809c70af2e398b911c50643e6b903d4cb4af";
+      sha256 = "2c5edbf759998b348dfbdbab7790d72f3765d55009d724aafbe70895d453f335";
     };
     dependencies = [
       sources."@financial-times/polyfill-useragent-normaliser-1.9.0"
@@ -1328,13 +1337,14 @@ in
       sources."@types/component-emitter-1.2.10"
       sources."@types/cookie-0.4.0"
       sources."@types/cors-2.8.9"
-      sources."@types/node-14.14.22"
+      sources."@types/node-14.14.25"
       sources."@webcomponents/template-1.4.4"
       sources."Base64-1.1.0"
       sources."abort-controller-3.0.0"
       sources."accept-language-parser-1.5.0"
       sources."accepts-1.3.7"
       sources."align-text-0.1.4"
+      sources."async-mutex-0.3.0"
       sources."audio-context-polyfill-1.0.0"
       sources."balanced-match-1.0.0"
       sources."base64-arraybuffer-0.1.4"
@@ -1379,7 +1389,7 @@ in
       sources."from2-string-1.1.0"
       sources."fs.realpath-1.0.0"
       sources."glob-7.1.6"
-      sources."graceful-fs-4.2.4"
+      sources."graceful-fs-4.2.6"
       sources."handlebars-4.7.6"
       sources."html5shiv-3.7.3"
       sources."http-errors-1.7.3"
@@ -1443,7 +1453,7 @@ in
       })
       sources."serve-static-1.14.1"
       sources."setprototypeof-1.1.1"
-      (sources."socket.io-3.1.0" // {
+      (sources."socket.io-3.1.1" // {
         dependencies = [
           sources."debug-4.3.2"
           sources."ms-2.1.2"
@@ -1466,7 +1476,7 @@ in
       sources."toidentifier-1.0.0"
       sources."toposort-2.0.2"
       sources."tslib-2.1.0"
-      sources."uglify-js-3.12.6"
+      sources."uglify-js-3.12.7"
       sources."uglify-to-browserify-1.0.2"
       sources."unorm-1.6.0"
       sources."usertiming-0.1.8"
@@ -1478,7 +1488,7 @@ in
       sources."window-size-0.1.0"
       sources."wordwrap-1.0.0"
       sources."wrappy-1.0.2"
-      sources."ws-7.4.2"
+      sources."ws-7.4.3"
       sources."yaku-1.0.1"
       sources."yallist-4.0.0"
       sources."yargs-3.10.0"
