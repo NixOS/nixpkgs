@@ -129,12 +129,12 @@ in rec {
 
   dracula = mkDerivation rec {
     pluginName = "dracula";
-    version = "unstable-2020-12-28";
+    version = "unstable-2021-02-09";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
-      rev = "6757a5329948f00addd66b02ea94f61dd94456f5";
-      sha256 = "0wwwzg3bwcrbr2nmf84prz7k4i79yq0960vs6zjp0x8nqn2fvziy";
+      rev = "d1678a5834679d98ffac1dd7a0eaecff7868ab8e";
+      sha256 = "rdy5NFkh5Yl2YOTnuMKZQGRqVb2Pk8Bpq3nbJp2rCtE=";
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";

@@ -56,6 +56,7 @@ let
     "unifi-poller"
     "varnish"
     "wireguard"
+    "flow"
   ] (name:
     import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
   );
