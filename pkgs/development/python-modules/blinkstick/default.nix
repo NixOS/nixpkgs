@@ -1,30 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, pyusb }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pyusb
+}:
 
 buildPythonPackage rec {
   pname = "BlinkStick";
-  version = "1.1.8";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3edf4b83a3fa1a7bd953b452b76542d54285ff6f1145b6e19f9b5438120fa408";
+    sha256 = "0rdk3i81s6byw23za0bxvkh7sj5l16qxxgc2c53qjg3klc24wcm9";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/arvydas/blinkstick-python/commit/a9227d0.patch";
-      sha256 = "1mcmxlnkbfxwp84qz32l5rlc7r9anh9yhnqaj1y8rny5s13jb01f";
-    })
-    (fetchpatch {
-      url = "https://github.com/arvydas/blinkstick-python/pull/54.patch";
-      sha256 = "1gjq6xbai794bbdyrv82i96l1a7qkwvlhzd6sa937dy5ivv6s6hl";
-    })
-  ];
+  # Upstream fix https://github.com/arvydas/blinkstick-python/pull/54
+  # https://github.com/arvydas/blinkstick-python/pull/54/commits/b9bee2cd72f799f1210e5d9e13207f93bbc2d244.patch
+  # has line ending issues after 1.2.0
+  postPatch = ''
+    substituteInPlace setup.py --replace "pyusb==1.0.0" "pyusb>=1.0.0"
+  '';
 
   propagatedBuildInputs = [ pyusb ];
 
+  # Project has no tests
+  doCheck = false;
+  pythonImportsCheck = [ "blinkstick" ];
+
   meta = with lib; {
     description = "Python package to control BlinkStick USB devices";
-    homepage = "https://pypi.python.org/pypi/BlinkStick/";
+    homepage = "https://github.com/arvydas/blinkstick-python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ np ];
   };
