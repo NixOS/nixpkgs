@@ -192,13 +192,15 @@ in
     networking.firewall.allowedUDPPorts = [ cfg.listen.port ];
 
     # Create the service user and its group.
-    users.users."nebula" = {
-      name = "nebula";
-      group = "nebula";
-      description = "Nebula service user";
-      isSystemUser = true;
-      packages = [ cfg.package ];
+    users = mkIf cfg.tun.disable {
+      users.nebula = {
+        group = "nebula";
+        description = "Nebula service user";
+        isSystemUser = true;
+        packages = [ cfg.package ];
+      };
+
+      groups.nebula = {};
     };
-    users.groups."nebula" = {};
   };
 }
