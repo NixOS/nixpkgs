@@ -1,4 +1,4 @@
-{ callPackage, cudatoolkit_7, cudatoolkit_7_5, cudatoolkit_8, cudatoolkit_9_0, cudatoolkit_9_1, cudatoolkit_9_2, cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2, cudatoolkit_11_0, cudatoolkit_11_1 }:
+{ callPackage, cudatoolkit_7, cudatoolkit_7_5, cudatoolkit_8, cudatoolkit_9_0, cudatoolkit_9_1, cudatoolkit_9_2, cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2, cudatoolkit_11_0, cudatoolkit_11_1, cudatoolkit_11_2 }:
 
 let
   generic = args: callPackage (import ./generic.nix (removeAttrs args ["cudatoolkit"])) {
@@ -92,6 +92,10 @@ in rec {
 
   cudnn_cudatoolkit_11_1 = cudnn_cudatoolkit_11_0.override {
     cudatoolkit = cudatoolkit_11_1;
+  };
+
+  cudnn_cudatoolkit_11_2 = cudnn_cudatoolkit_11_0.override {
+    cudatoolkit = cudatoolkit_11_2;
   };
 
   cudnn_cudatoolkit_11 = cudnn_cudatoolkit_11_0;
