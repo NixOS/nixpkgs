@@ -5,24 +5,22 @@ assert backend == "mcode" || backend == "llvm";
 
 stdenv.mkDerivation rec {
   pname = "ghdl-${backend}";
-  # NOTE(aseipp): move to 0.38 when it comes out, since it should support a stable
-  # version of the yosys plugin
-  version = "unstable-2021.01.14";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner  = "ghdl";
     repo   = "ghdl";
-    rev    = "4868294436574660552ccef50a5b0849559393de";
-    sha256 = "1wqjf0qc66dam1n2mskmlvj53bcsdwwk5rq9gimq6ah1vcwi222p";
+    rev    = "v${version}";
+    sha256 = "1gyh0xckwbzgslbpw9yrpj4gqs9fm1a2qpbzl0sh143fk1kwjlly";
   };
 
   LIBRARY_PATH = "${stdenv.cc.libc}/lib";
 
-  buildInputs = [ gnat zlib ];
+  buildInputs = [ gnat zlib ] ++ lib.optional (backend == "llvm") [ llvm ];
 
   preConfigure = ''
     # If llvm 7.0 works, 7.x releases should work too.
-    sed -i 's/check_version 7.0/check_version 7/g' configure
+    sed -i 's/check_version  7.0/check_version  7/g' configure
   '';
 
   configureFlags = [ "--enable-synth" ] ++ lib.optional (backend == "llvm")
