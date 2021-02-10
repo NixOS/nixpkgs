@@ -4993,9 +4993,7 @@ in
     hdf4 = null;
   };
 
-  haproxy = callPackage ../tools/networking/haproxy {
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  };
+  haproxy = callPackage ../tools/networking/haproxy { };
 
   hackertyper = callPackage ../tools/misc/hackertyper { };
 
@@ -10883,6 +10881,8 @@ in
 
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = callPackage ../development/compilers/smlnj { };
+
+  smlpkg = callPackage ../tools/package-management/smlpkg { };
 
   solc = callPackage ../development/compilers/solc { };
 
@@ -27265,9 +27265,7 @@ in
 
   wesnoth-dev = wesnoth;
 
-  widelands = callPackage ../games/widelands {
-    lua = lua5_2;
-  };
+  widelands = callPackage ../games/widelands { };
 
   worldofgoo = callPackage ../games/worldofgoo { };
 
