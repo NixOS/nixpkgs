@@ -8480,10 +8480,10 @@ let
 
   FutureAsyncAwait = buildPerlModule rec {
     pname = "Future-AsyncAwait";
-    version = "0.47";
+    version = "0.48";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-${version}.tar.gz";
-      sha256 = "1ja85hzzl36sjikcyavjqy4m41f2yyrsr1ipypzi5mlw7clhmdi3";
+      sha256 = "077jnf5a07x0p30iqcw3kh53xh3dplhb0jyyyq9b4c79ira3ds6r";
     };
     buildInputs = [ TestRefcount ];
     propagatedBuildInputs = [ Future XSParseSublike ];
