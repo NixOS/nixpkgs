@@ -497,6 +497,10 @@ The build phase is responsible for actually building the package (e.g. compiling
 
 Set to true to skip the build phase.
 
+##### `make` {#var-stdenv-make}
+
+The make command to run (useful if the package requires an alternate Make implementation like BSD make).
+
 ##### `makefile` {#var-stdenv-makefile}
 
 The file name of the Makefile.

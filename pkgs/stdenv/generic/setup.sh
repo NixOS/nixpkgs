@@ -1033,7 +1033,7 @@ buildPhase() {
         )
 
         echoCmd 'build flags' "${flagsArray[@]}"
-        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        ${make:-make} ${makefile:+-f $makefile} "${flagsArray[@]}"
         unset flagsArray
     fi
 
@@ -1052,9 +1052,9 @@ checkPhase() {
 
     if [[ -z "${checkTarget:-}" ]]; then
         #TODO(@oxij): should flagsArray influence make -n?
-        if make -n ${makefile:+-f $makefile} check >/dev/null 2>&1; then
+        if ${make:-make} -n ${makefile:+-f $makefile} check >/dev/null 2>&1; then
             checkTarget=check
-        elif make -n ${makefile:+-f $makefile} test >/dev/null 2>&1; then
+        elif ${make:-make} -n ${makefile:+-f $makefile} test >/dev/null 2>&1; then
             checkTarget=test
         fi
     fi
@@ -1073,7 +1073,7 @@ checkPhase() {
         )
 
         echoCmd 'check flags' "${flagsArray[@]}"
-        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        ${make:-make} ${makefile:+-f $makefile} "${flagsArray[@]}"
 
         unset flagsArray
     fi
@@ -1099,7 +1099,7 @@ installPhase() {
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
-    make ${makefile:+-f $makefile} "${flagsArray[@]}"
+    ${make:-make} ${makefile:+-f $makefile} "${flagsArray[@]}"
     unset flagsArray
 
     runHook postInstall
@@ -1193,7 +1193,7 @@ installCheckPhase() {
         echo "no Makefile or custom installCheckPhase, doing nothing"
     #TODO(@oxij): should flagsArray influence make -n?
     elif [[ -z "${installCheckTarget:-}" ]] \
-       && ! make -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
+       && ! ${make:-make} -n ${makefile:+-f $makefile} ${installCheckTarget:-installcheck} >/dev/null 2>&1; then
         echo "no installcheck target in ${makefile:-Makefile}, doing nothing"
     else
         # Old bash empty array hack
@@ -1207,7 +1207,7 @@ installCheckPhase() {
         )
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
-        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        ${make:-make} ${makefile:+-f $makefile} "${flagsArray[@]}"
         unset flagsArray
     fi
 
@@ -1225,7 +1225,7 @@ distPhase() {
     )
 
     echo 'dist flags: %q' "${flagsArray[@]}"
-    make ${makefile:+-f $makefile} "${flagsArray[@]}"
+    ${make:-make} ${makefile:+-f $makefile} "${flagsArray[@]}"
 
     if [ "${dontCopyDist:-0}" != 1 ]; then
         mkdir -p "$out/tarballs"
