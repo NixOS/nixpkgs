@@ -8,8 +8,8 @@
 , libtirpc
 , nfs-utils
 , gawk, gnugrep, gnused, systemd
-, smartmontools, sysstat, sudo
-, pkg-config
+, smartmontools, enableMail ? false
+, sysstat, sudo, pkg-config
 
 # Kernel dependencies
 , kernel ? null
@@ -18,6 +18,8 @@
 
 with lib;
 let
+  smartmon = smartmontools.override { inherit enableMail; };
+
   buildKernel = any (n: n == configFile) [ "kernel" "all" ];
   buildUser = any (n: n == configFile) [ "user" "all" ];
 
@@ -148,7 +150,7 @@ let
       '';
 
       postFixup = let
-        path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep util-linux smartmontools sysstat ]}:$PATH";
+        path = "PATH=${makeBinPath [ coreutils gawk gnused gnugrep util-linux smartmon sysstat ]}:$PATH";
       in ''
         for i in $out/libexec/zfs/zpool.d/*; do
           sed -i '2i${path}' $i
@@ -157,12 +159,17 @@ let
 
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
 
-      passthru.tests = if isUnstable then
-        [ nixosTests.zfs.unstable ]
-      else [
-        nixosTests.zfs.installer
-        nixosTests.zfs.stable
-      ];
+      passthru = {
+        inherit enableMail;
+
+        tests =
+          if isUnstable then [
+            nixosTests.zfs.unstable
+          ] else [
+            nixosTests.zfs.installer
+            nixosTests.zfs.stable
+          ];
+      };
 
       meta = {
         description = "ZFS Filesystem Linux Kernel module";
