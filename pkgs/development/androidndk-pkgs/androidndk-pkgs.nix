@@ -1,6 +1,6 @@
 { lib, stdenv
-, makeWrapper
-, runCommand, wrapBintoolsWith, wrapCCWith
+, makeWrapper, python
+, runCommand, wrapBintoolsWith, wrapCCWith, autoPatchelfHook
 , buildAndroidndk, androidndk, targetAndroidndkPkgs
 }:
 
@@ -48,35 +48,41 @@ let
   hostInfo = ndkInfoFun stdenv.hostPlatform;
   targetInfo = ndkInfoFun stdenv.targetPlatform;
 
+  sdkVer = stdenv.targetPlatform.sdkVer;
   prefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (stdenv.targetPlatform.config + "-");
 in
 
 rec {
   # Misc tools
-  binaries = runCommand "ndk-toolchain-binutils" {
-    pname = "ndk-toolchain-binutils";
+  binaries = stdenv.mkDerivation {
+    pname = "ndk-toolchain";
     inherit (androidndk) version;
     isClang = true; # clang based cc, but bintools ld
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper python autoPatchelfHook ];
+
     propagatedBuildInputs = [ androidndk ];
-  } ''
-    mkdir -p $out/bin
+    dontUnpack = true;
+    dontBuild = true;
+    dontStrip = true;
+    dontConfigure = true;
+    dontPatch = true;
+    autoPatchelfIgnoreMissingDeps = true;
+    installPhase = ''
+      mkdir -p $out/
+      ${androidndk}/libexec/android-sdk/ndk-bundle/build/tools/make-standalone-toolchain.sh --arch=${targetInfo.arch} --install-dir=$out/ --platform=${sdkVer} --force
+      cp $out/sysroot/usr/lib/${targetInfo.triple}/*.so $out/lib/
+      cp $out/sysroot/usr/lib/${targetInfo.triple}/*.a $out/lib/
+      chmod +w $out/lib/*
+      cp $out/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.so $out/lib/
+      cp $out/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.a $out/lib/
+      cp $out/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.o $out/lib/
 
-    # llvm toolchain
-    for prog in ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double}/bin/*; do
-      ln -s $prog $out/bin/$(basename $prog)
-      ln -s $prog $out/bin/${prefix}$(basename $prog)
-    done
+      cp -r $out/${targetInfo.triple}/bin/* $out/bin
+      patchShebangs $out/
 
-    # bintools toolchain
-    for prog in ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}/bin/*; do
-      prog_suffix=$(basename $prog | sed 's/${targetInfo.triple}-//')
-      ln -s $prog $out/bin/${stdenv.targetPlatform.config}-$prog_suffix
-    done
-
-    # shitty googly wrappers
-    rm -f $out/bin/${stdenv.targetPlatform.config}-gcc $out/bin/${stdenv.targetPlatform.config}-g++
-  '';
+      rm -r $out/lib64
+    '';
+  };
 
   binutils = wrapBintoolsWith {
     bintools = binaries;
@@ -91,10 +97,12 @@ rec {
     bintools = binutils;
     libc = targetAndroidndkPkgs.libraries;
     extraBuildCommands = ''
+      echo "NIX_SUPPORT": $out/nix-support
       echo "-D__ANDROID_API__=${stdenv.targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
-      echo "-target ${stdenv.targetPlatform.config}" >> $out/nix-support/cc-cflags
+      echo "-target ${targetInfo.toolchain}" >> $out/nix-support/cc-cflags
       echo "-resource-dir=$(echo ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double}/lib*/clang/*)" >> $out/nix-support/cc-cflags
       echo "--gcc-toolchain=${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}" >> $out/nix-support/cc-cflags
+      echo "-L${binaries}/lib" >> $out/nix-support/cc-ldflags
     '';
   };
 
@@ -104,10 +112,10 @@ rec {
   # cross-compiling packages to wrap incorrectly wrap binaries we don't include
   # anyways.
   libraries = runCommand "bionic-prebuilt" {} ''
-    mkdir -p $out
-    cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include $out/include
-    chmod +w $out/include
-    cp -r ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/sysroot/usr/include/${targetInfo.triple}/* $out/include
-    ln -s ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/${if hostInfo.arch == "x86_64" then "lib64" else "lib"} $out/lib
+    mkdir -p $out/lib
+    cp ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/${targetInfo.triple}/*.so $out/lib
+    cp ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/${targetInfo.triple}/*.a $out/lib
+    chmod +w $out/lib/*
+    cp ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/* $out/lib
   '';
 }
