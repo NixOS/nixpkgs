@@ -1042,11 +1042,13 @@
     "version": "1.0.1"
   },
   "vsphere": {
-    "owner": "terraform-providers",
+    "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/vsphere",
     "repo": "terraform-provider-vsphere",
-    "rev": "v1.18.3",
-    "sha256": "1cvfmkckigi80cvv826m0d8wzd98qny0r5nqpl7nkzz5kybkb5qp",
-    "version": "1.18.3"
+    "rev": "v1.24.3",
+    "sha256": "1sc60x3r4nb48p8yb7778fpk78acq808jzcd5ijnwxqakccml5kl",
+    "vendorSha256": null,
+    "version": "1.24.3"
   },
   "vthunder": {
     "owner": "terraform-providers",
