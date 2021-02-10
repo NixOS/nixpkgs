@@ -485,9 +485,8 @@ in {
           wantedBy = [ "multi-user.target" ];
           before = [ "phpfpm-nextcloud.service" ];
           path = [ occ ];
+          serviceConfig.ExecStartPre = "+${pkgs.coreutils}/bin/install -m750 --owner nextcloud --group nextcloud -d ${cfg.home}";
           script = ''
-            chmod og+x ${cfg.home}
-
             ${optionalString (c.dbpassFile != null) ''
               if [ ! -r "${c.dbpassFile}" ]; then
                 echo "dbpassFile ${c.dbpassFile} is not readable by nextcloud:nextcloud! Aborting..."
@@ -570,7 +569,6 @@ in {
       users.users.nextcloud = {
         home = "${cfg.home}";
         group = "nextcloud";
-        createHome = true;
       };
       users.groups.nextcloud.members = [ "nextcloud" config.services.nginx.user ];
 
