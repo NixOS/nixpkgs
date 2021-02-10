@@ -1,4 +1,4 @@
-{ callPackage, cudatoolkit_7, cudatoolkit_7_5, cudatoolkit_8, cudatoolkit_9_0, cudatoolkit_9_1, cudatoolkit_9_2, cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2, cudatoolkit_11_0 }:
+{ callPackage, cudatoolkit_7, cudatoolkit_7_5, cudatoolkit_8, cudatoolkit_9_0, cudatoolkit_9_1, cudatoolkit_9_2, cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2, cudatoolkit_11_0, cudatoolkit_11_1 }:
 
 let
   generic = args: callPackage (import ./generic.nix (removeAttrs args ["cudatoolkit"])) {
@@ -88,6 +88,10 @@ in rec {
     # https://docs.nvidia.com/deeplearning/cudnn/support-matrix/index.html#cudnn-cuda-hardware-versions
     srcName = "cudnn-11.2-linux-x64-v8.1.0.77.tgz";
     sha256 = "sha256-2+gvrwcdkbqbzwBIAUatM/RiSC3+5WyvRHnBuNq+Pss=";
+  };
+
+  cudnn_cudatoolkit_11_1 = cudnn_cudatoolkit_11_0.override {
+    cudatoolkit = cudatoolkit_11_1;
   };
 
   cudnn_cudatoolkit_11 = cudnn_cudatoolkit_11_0;
