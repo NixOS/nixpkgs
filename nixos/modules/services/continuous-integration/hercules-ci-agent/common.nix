@@ -35,10 +35,14 @@ let
       };
       concurrentTasks = mkOption {
         description = ''
-          Number of tasks to perform simultaneously, such as evaluations, derivations.
+          Number of tasks to perform simultaneously.
 
-          You must have a total capacity across agents of at least 2 concurrent tasks on <literal>x86_64-linux</literal>
-          to allow for import from derivation.
+          A task is a single derivation build or an evaluation.
+          At minimum, you need 2 concurrent tasks for <literal>x86_64-linux</literal>
+          in your cluster, to allow for import from derivation.
+
+          <literal>concurrentTasks</literal> can be around the CPU core count or lower if memory is
+          the bottleneck.
         '';
         type = types.int;
         default = 4;
