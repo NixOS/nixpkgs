@@ -15662,6 +15662,8 @@ in
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
 
+  libcyaml = callPackage ../development/libraries/libcyaml { };
+
   rang = callPackage ../development/libraries/rang { };
 
   libyamlcpp_0_3 = pkgs.libyamlcpp.overrideAttrs (oldAttrs: {
@@ -16192,7 +16194,7 @@ in
 
   poco = callPackage ../development/libraries/poco { };
 
-  podofo = callPackage ../development/libraries/podofo { lua5 = lua5_1; };
+  podofo = callPackage ../development/libraries/podofo { };
 
   polkit = callPackage ../development/libraries/polkit { };
 
@@ -17914,7 +17916,8 @@ in
   inherit (callPackages ../servers/mpd { })
     mpd mpd-small mpdWithFeatures;
 
-  mpd_clientlib = callPackage ../servers/mpd/clientlib.nix { };
+  mpd_clientlib = libmpdclient;
+  libmpdclient = callPackage ../servers/mpd/libmpdclient.nix { };
 
   mpdscribble = callPackage ../tools/misc/mpdscribble { };
 
@@ -18271,6 +18274,7 @@ in
   prometheus-consul-exporter = callPackage ../servers/monitoring/prometheus/consul-exporter.nix { };
   prometheus-dnsmasq-exporter = callPackage ../servers/monitoring/prometheus/dnsmasq-exporter.nix { };
   prometheus-dovecot-exporter = callPackage ../servers/monitoring/prometheus/dovecot-exporter.nix { };
+  prometheus-flow-exporter = callPackage ../servers/monitoring/prometheus/flow-exporter.nix { };
   prometheus-fritzbox-exporter = callPackage ../servers/monitoring/prometheus/fritzbox-exporter.nix { };
   prometheus-gitlab-ci-pipelines-exporter = callPackage ../servers/monitoring/prometheus/gitlab-ci-pipelines-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
@@ -22790,6 +22794,8 @@ in
 
   waybar = callPackage ../applications/misc/waybar {};
 
+  wbg = callPackage ../applications/misc/wbg { };
+
   hikari = callPackage ../applications/window-managers/hikari { };
 
   i3 = callPackage ../applications/window-managers/i3 {
@@ -23849,6 +23855,8 @@ in
     i3GapsSupport = false;
   };
 
+  yambar = callPackage ../applications/misc/yambar { };
+
   polyphone = libsForQt514.callPackage ../applications/audio/polyphone { };
 
   portfolio = callPackage ../applications/office/portfolio {
@@ -24339,6 +24347,8 @@ in
   };
 
   pistol = callPackage ../tools/misc/pistol { };
+
+  piston-cli = callPackage ../tools/misc/piston-cli { };
 
   plater = libsForQt5.callPackage ../applications/misc/plater { };
 
@@ -25111,6 +25121,8 @@ in
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
   tabula = callPackage ../applications/misc/tabula { };
+
+  tabula-java = callPackage ../applications/misc/tabula-java { };
 
   tasknc = callPackage ../applications/misc/tasknc { };
 

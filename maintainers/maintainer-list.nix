@@ -3807,6 +3807,12 @@
     githubId = 15371828;
     name = "Hugo Lageneste";
   };
+  hypersw = {
+    email = "baltic@hypersw.net";
+    github = "hypersw";
+    githubId = 2332070;
+    name = "Serge Baltic";
+  };
   hyphon81 = {
     email = "zero812n@gmail.com";
     github = "hyphon81";

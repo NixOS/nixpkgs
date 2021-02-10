@@ -1,19 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, qtbase, qtwebengine, qtwebkit, qmake, makeWrapper, minizinc }:
+{ lib, mkDerivation, fetchFromGitHub, qtbase, qtwebengine, qtwebkit, qmake, minizinc }:
 let
-  version = "2.4.3";
+  version = "2.5.3";
 in
-stdenv.mkDerivation {
+mkDerivation {
   pname = "minizinc-ide";
   inherit version;
 
-  nativeBuildInputs = [ qmake makeWrapper ];
+  nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase qtwebengine qtwebkit ];
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
     rev = version;
-    sha256 = "0dfqh73rnp00336pyr1hlgl1wb4m2kh28zvdkamjgml60gmg6wdr";
+    sha256 = "1c80ilb1xbgzfadgal668h2zsaiv62il1jnljizrisgb7pszzyzw";
+    fetchSubmodules = true;
   };
 
   sourceRoot = "source/MiniZincIDE";
