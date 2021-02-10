@@ -6331,7 +6331,9 @@ in {
 
   python-lzo = callPackage ../development/python-modules/python-lzo { inherit (pkgs) lzo; };
 
-  python_magic = callPackage ../development/python-modules/python-magic { };
+  python-magic = callPackage ../development/python-modules/python-magic { };
+  python_magic = self.python-magic; # Old attr, 2021-02-10
+
 
   pythonmagick = callPackage ../development/python-modules/pythonmagick { };
 
