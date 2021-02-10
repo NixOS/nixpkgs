@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "compsize";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "kilobyte";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gk2vibfl9fh7biznlbr3dwknrwbm5q5602q95jbjvk185g9z126";
+    sha256 = "sha256-OX41ChtHX36lVRL7O2gH21Dfw6GPPEClD+yafR/PFm8=";
   };
 
   buildInputs = [ btrfs-progs ];
