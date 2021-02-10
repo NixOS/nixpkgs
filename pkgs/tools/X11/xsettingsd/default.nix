@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   # we end up with symlinked unit files if we don't move them around ourselves
   postFixup = ''
-    rm -rf $out/lib/systemd
+    rm -r $out/lib/systemd
     mv $out/share/systemd $out/lib
   '';
 
