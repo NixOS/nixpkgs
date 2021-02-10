@@ -56,8 +56,8 @@ in {
           properties = {
             # Properties to configure the session and some
             # modules
-            #mem.mlock-all = false
-            #context.profile.modules = default,rtkit
+            #mem.mlock-all = false;
+            #context.profile.modules = "default,rtkit";
           };
 
           spa-libs = {
@@ -141,14 +141,14 @@ in {
               # actions can update properties on the matched object.
               update-props = {
                 api.alsa.use-acp = true;
-                #api.alsa.use-ucm = true
-                #api.alsa.soft-mixer = false
-                #api.alsa.ignore-dB = false
-                #device.profile-set = "profileset-name"
-                #device.profile = "default profile name"
+                #api.alsa.use-ucm = true;
+                #api.alsa.soft-mixer = false;
+                #api.alsa.ignore-dB = false;
+                #device.profile-set = "profileset-name";
+                #device.profile = "default profile name";
                 api.acp.auto-profile = false;
                 api.acp.auto-port = false;
-                #device.nick = "My Device"
+                #device.nick = "My Device";
               };
             };
           }
@@ -165,22 +165,22 @@ in {
             ];
             actions = {
               update-props = {
-                #node.nick = 			"My Node"
-                #node.nick = 			null
-                #priority.driver = 		100
-                #priority.session = 		100
-                #node.pause-on-idle = 		false
-                #resample.quality = 		4
-                #channelmix.normalize =		false
-                #channelmix.mix-lfe = 		false
-                #audio.channels = 		2
-                #audio.format = 		"S16LE"
-                #audio.rate = 			44100
-                #audio.position = 		"FL,FR"
-                #api.alsa.period-size =         1024
-                #api.alsa.headroom =            0
-                #api.alsa.disable-mmap =        false
-                #api.alsa.disable-batch =       false
+                #node.nick = 			"My Node";
+                #node.nick = 			null;
+                #priority.driver = 		100;
+                #priority.session = 		100;
+                #node.pause-on-idle = 		false;
+                #resample.quality = 		4;
+                #channelmix.normalize =		false;
+                #channelmix.mix-lfe = 		false;
+                #audio.channels = 		2;
+                #audio.format = 		"S16LE";
+                #audio.rate = 			44100;
+                #audio.position = 		"FL,FR";
+                #api.alsa.period-size =         1024;
+                #api.alsa.headroom =            0;
+                #api.alsa.disable-mmap =        false;
+                #api.alsa.disable-batch =       false;
               };
             };
           }
@@ -197,8 +197,8 @@ in {
           # bluez-monitor config file
           properties = {
             # msbc is not expected to work on all headset + adapter combinations.
-            #bluez5.msbc-support = true
-            #bluez5.sbc-xq-support = true
+            #bluez5.msbc-support = true;
+            #bluez5.sbc-xq-support = true;
 
             # Enabled headset roles (default: [ hsp_hs hfp_ag ]), this
             # property only applies to native backend. Currently some headsets
@@ -208,10 +208,10 @@ in {
             # Supported headset roles: hsp_hs (HSP Headset),
             #                          hsp_ag (HSP Audio Gateway),
             #                          hfp_ag (HFP Audio Gateway)
-            #bluez5.headset-roles = [ hsp_hs hsp_ag hfp_ag ]
+            #bluez5.headset-roles = [ "hsp_hs" "hsp_ag" "hfp_ag" ];
 
             # Enabled A2DP codecs (default: all)
-            #bluez5.codecs = [ sbc aac ldac aptx aptx_hd ]
+            #bluez5.codecs = [ "sbc" "aac" "ldac" "aptx" "aptx_hd" ];
           };
 
           rules = [
@@ -229,7 +229,7 @@ in {
             actions = {
               # actions can update properties on the matched object.
               update-props = {
-                #device.nick = 			"My Device"
+                #device.nick = 			"My Device";
               };
             };
           }
@@ -247,13 +247,13 @@ in {
             actions = {
               update-props = {
                 #node.nick = 			"My Node"
-                #node.nick = 			null
-                #priority.driver = 		100
-                #priority.session = 		100
-                #node.pause-on-idle = 		false
-                #resample.quality = 		4
-                #channelmix.normalize =		false
-                #channelmix.mix-lfe = 		false
+                #node.nick = 			null;
+                #priority.driver = 		100;
+                #priority.session = 		100;
+                #node.pause-on-idle = 		false;
+                #resample.quality = 		4;
+                #channelmix.normalize =		false;
+                #channelmix.mix-lfe = 		false;
               };
             };
           }
@@ -286,7 +286,7 @@ in {
               actions = {
                 # actions can update properties on the matched object.
                 update-props = {
-                  #device.nick = 			"My Device"
+                  #device.nick = 			"My Device";
                 };
               };
             }
@@ -303,11 +303,11 @@ in {
               ];
               actions = {
                 update-props = {
-                  #node.nick = 			"My Node"
-                  #node.nick = 			null
-                  #priority.driver = 		100
-                  #priority.session = 		100
-                  #node.pause-on-idle = 		true
+                  #node.nick = 			"My Node";
+                  #node.nick = 			null;
+                  #priority.driver = 		100;
+                  #priority.session = 		100;
+                  #node.pause-on-idle = 		true;
                 };
               };
             }

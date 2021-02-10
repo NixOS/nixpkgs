@@ -75,22 +75,22 @@ in {
             #
             # "library.name.system" = "support/libspa-support";
             # "context.data-loop.library.name.system" = "support/libspa-support";
-            "link.max-buffers" = 64; # version < 3 clients can't handle more than 16
-            "mem.allow-mlock" = true;
-            "mem.mlock-all" = true;
-            # https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/src/pipewire/pipewire.h#L93
-            "log.level" = 3; # 5 is trace, which is verbose as hell, default is 2 which is warnings, 4 is debug output, 3 is info
+            "link.max-buffers" = 16; # version < 3 clients can't handle more than 16
+            #"mem.allow-mlock" = false;
+            #"mem.mlock-all" = true;
+            ## https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/src/pipewire/pipewire.h#L93
+            #"log.level" = 2; # 5 is trace, which is verbose as hell, default is 2 which is warnings, 4 is debug output, 3 is info
 
             ## Properties for the DSP configuration
             #
-            "default.clock.rate" = 48000; # 48000 is probably saner, 96000 has gaps in audio
-            "default.clock.quantum" = 128; # equivalent to buffer size which is correlated to latency
-            "default.clock.min-quantum" = 32; # No audio through bluetooth if 512 isn't allowed, 16 is the absolute minimum
-            "default.clock.max-quantum" = 1024; # qemu seems to use 16384 but 8192 is the absolute maximum
-            # "default.video.width" = 640;
-            # "default.video.height" = 480;
-            # "default.video.rate.num" = 25;
-            # "default.video.rate.denom" = 1;
+            #"default.clock.rate" = 48000;
+            #"default.clock.quantum" = 1024;
+            #"default.clock.min-quantum" = 32;
+            #"default.clock.max-quantum" = 8192;
+            #"default.video.width" = 640;
+            #"default.video.height" = 480;
+            #"default.video.rate.num" = 25;
+            #"default.video.rate.denom" = 1;
           };
 
           spa-libs = {
@@ -123,10 +123,10 @@ in {
             #
             libpipewire-module-rtkit = {
               args = {
-                rt.prio = 20;
-                rt.time.soft = 200000;
-                rt.time.hard = 200000;
-                nice.level = -11;
+                #rt.prio = 20;
+                #rt.time.soft = 200000;
+                #rt.time.hard = 200000;
+                #nice.level = -11;
               };
               flags = "ifexists|nofail";
             };

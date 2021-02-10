@@ -128,7 +128,7 @@ let
       moveToOutput "bin/pipewire-media-session" "$mediaSession"
     '';
 
-    passthru = {
+    passthru.tests = {
       installedTests = nixosTests.installed-tests.pipewire;
 
       # This ensures that all the paths used by the NixOS module are found.
