@@ -21688,6 +21688,8 @@ in
     inherit (gnome2) libgnomeui;
   };
 
+  dwl = callPackage ../applications/window-managers/dwl { };
+
   dwm = callPackage ../applications/window-managers/dwm { };
 
   dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
