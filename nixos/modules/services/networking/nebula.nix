@@ -139,66 +139,66 @@ in
 
   # Implementation
 
-  config =
-    let
-      # The service needs to launch as root to access the tun device, if it's enabled.
-      serviceUser = if cfg.tun.disable then "nebula" else "root";
-      serviceGroup = if cfg.tun.disable then "nebula" else "root";
-    in mkIf cfg.enable {
-      services.nebula.settings = {
-        pki = {
-          ca = cfg.ca;
-          cert = cfg.cert;
-          key = cfg.key;
-        };
-        static_host_map = cfg.staticHostMap;
-        lighthouse = {
-          am_lighthouse = cfg.isLighthouse;
-          hosts = cfg.lighthouses;
-        };
-        listen = {
-          host = cfg.listen.host;
-          port = cfg.listen.port;
-        };
-        punchy = {
-          punch = cfg.punch;
-        };
-        tun = {
-          disabled = cfg.tun.disable;
-          dev = cfg.tun.device;
-        };
-        firewall = {
-          inbound = cfg.firewall.inbound;
-          outbound = cfg.firewall.outbound;
-        };
+  config = mkIf cfg.enable {
+    services.nebula.settings = {
+      pki = {
+        ca = cfg.ca;
+        cert = cfg.cert;
+        key = cfg.key;
       };
+      static_host_map = cfg.staticHostMap;
+      lighthouse = {
+        am_lighthouse = cfg.isLighthouse;
+        hosts = cfg.lighthouses;
+      };
+      listen = {
+        host = cfg.listen.host;
+        port = cfg.listen.port;
+      };
+      punchy = {
+        punch = cfg.punch;
+      };
+      tun = {
+        disabled = cfg.tun.disable;
+        dev = cfg.tun.device;
+      };
+      firewall = {
+        inbound = cfg.firewall.inbound;
+        outbound = cfg.firewall.outbound;
+      };
+    };
 
-      # Create systemd service for Nebula.
-      systemd.services.nebula = {
-        description = nebulaDesc;
-        after = [ "network.target" ];
-        before = [ "sshd.service" ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
+    # Create systemd service for Nebula.
+    systemd.services.nebula = {
+      description = nebulaDesc;
+      after = [ "network.target" ];
+      before = [ "sshd.service" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = mkMerge [
+        {
           Type = "simple";
           Restart = "always";
-          User = serviceUser;
-          Group = serviceGroup;
           ExecStart = "${cfg.package}/bin/nebula -config ${configFile}";
-        };
-      };
-
-      # Open the chosen port for UDP.
-      networking.firewall.allowedUDPPorts = [ cfg.listen.port ];
-
-      # Create the service user and its group.
-      users.users."nebula" = {
-        name = "nebula";
-        group = "nebula";
-        description = "Nebula service user";
-        isSystemUser = true;
-        packages = [ cfg.package ];
-      };
-      users.groups."nebula" = {};
+        }
+        # The service needs to launch as root to access the tun device, if it's enabled.
+        (mkIf cfg.tun.disable {
+          User = "nebula";
+          Group = "nebula";
+        })
+      ];
     };
+
+    # Open the chosen port for UDP.
+    networking.firewall.allowedUDPPorts = [ cfg.listen.port ];
+
+    # Create the service user and its group.
+    users.users."nebula" = {
+      name = "nebula";
+      group = "nebula";
+      description = "Nebula service user";
+      isSystemUser = true;
+      packages = [ cfg.package ];
+    };
+    users.groups."nebula" = {};
+  };
 }
