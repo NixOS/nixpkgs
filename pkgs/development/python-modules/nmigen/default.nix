@@ -38,13 +38,6 @@ buildPythonPackage rec {
     export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
   '';
 
-  # Fail b/c can't find sby (symbiyosys) executable, which should be on path.
-  disabledTests = [
-    "test_distance"
-    "test_reversible"
-    "FIFOFormalCase"
-  ];
-
   meta = with lib; {
     description = "A refreshed Python toolbox for building complex digital hardware";
     homepage = "https://nmigen.info/nmigen";
