@@ -7,6 +7,9 @@ let
   cfg = config.services.nebula;
   nebulaDesc = "Nebula VPN service";
 
+  format = pkgs.formats.yaml {};
+  configFile = format.generate "nebula-config.yml" cfg.settings;
+
 in
 {
   # Interface
@@ -115,10 +118,14 @@ in
       example = ''[ { port = "any"; proto = "any"; host = "any"; } ]'';
     };
 
-    extraConfig = mkOption {
-      type = types.attrs;
+    settings = {
+      type = format.type;
       default = {};
-      description = "Extra configuration added to the Nebula config file.";
+      description = ''
+        Nebula configuration. Refer to
+        <link xlink:href="https://github.com/slackhq/nebula/blob/master/examples/config.yml"/>
+        for details on supported values.
+      '';
       example = literalExample ''
         {
           lighthouse.dns = {
@@ -134,28 +141,38 @@ in
 
   config =
     let
-      # Convert the options to an attrset.
-      optionConfigSet = {
-        pki = { ca = cfg.ca; cert = cfg.cert; key = cfg.key; };
-        static_host_map = cfg.staticHostMap;
-        lighthouse = { am_lighthouse = cfg.isLighthouse; hosts = cfg.lighthouses; };
-        listen = { host = cfg.listen.host; port = cfg.listen.port; };
-        punchy = { punch = cfg.punch; };
-        tun = { disabled = cfg.tun.disable; dev = cfg.tun.device; };
-        firewall = { inbound = cfg.firewall.inbound; outbound = cfg.firewall.outbound; };
-      };
-
-      # Merge in the extraconfig attrset.
-      mergedConfigSet = lib.recursiveUpdate optionConfigSet cfg.extraConfig;
-
-      # Dump the config to JSON. Because Nebula reads YAML and YAML is a superset of JSON, this works.
-      nebulaConfig = pkgs.writeTextFile { name = "nebula-config.yml"; text = (builtins.toJSON mergedConfigSet); };
-
       # The service needs to launch as root to access the tun device, if it's enabled.
       serviceUser = if cfg.tun.disable then "nebula" else "root";
       serviceGroup = if cfg.tun.disable then "nebula" else "root";
-
     in mkIf cfg.enable {
+      services.nebula.settings = {
+        pki = {
+          ca = cfg.ca;
+          cert = cfg.cert;
+          key = cfg.key;
+        };
+        static_host_map = cfg.staticHostMap;
+        lighthouse = {
+          am_lighthouse = cfg.isLighthouse;
+          hosts = cfg.lighthouses;
+        };
+        listen = {
+          host = cfg.listen.host;
+          port = cfg.listen.port;
+        };
+        punchy = {
+          punch = cfg.punch;
+        };
+        tun = {
+          disabled = cfg.tun.disable;
+          dev = cfg.tun.device;
+        };
+        firewall = {
+          inbound = cfg.firewall.inbound;
+          outbound = cfg.firewall.outbound;
+        };
+      };
+
       # Create systemd service for Nebula.
       systemd.services.nebula = {
         description = nebulaDesc;
@@ -167,7 +184,7 @@ in
           Restart = "always";
           User = serviceUser;
           Group = serviceGroup;
-          ExecStart = "${cfg.package}/bin/nebula -config ${nebulaConfig}";
+          ExecStart = "${cfg.package}/bin/nebula -config ${configFile}";
         };
       };
 
