@@ -37,6 +37,9 @@ let
     '' else ''
       kernel=kernel.img
       initramfs initrd followkernel
+    '') + (optional (cfg.version == 4) ''
+      enable_gic=1
+      armstub=armstub8-gic.bin
     '') + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
 
 in
