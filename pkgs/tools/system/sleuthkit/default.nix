@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libewf, afflib, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "4.6.5";
+  version = "4.10.1";
   pname = "sleuthkit";
 
   src = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
     rev = "${pname}-${version}";
-    sha256 = "1q1cdixnfv9v4qlzza8xwdsyvq1vdw6gjgkd41yc1d57ldp1qm0c";
+    sha256 = "142kkpkpawpqyc88pr6xdvlagw6djaah1schyjxq9qdq9cnqx0dw";
   };
 
   postPatch = ''
-    substituteInPlace tsk/img/ewf.c --replace libewf_handle_read_random libewf_handle_read_buffer_at_offset
+    substituteInPlace tsk/img/ewf.cpp --replace libewf_handle_read_random libewf_handle_read_buffer_at_offset
   '';
 
   enableParallelBuilding = true;
