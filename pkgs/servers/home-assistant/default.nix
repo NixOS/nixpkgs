@@ -181,7 +181,8 @@ in with py.pkgs; buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    "-n auto"
+    # limit amout of runners to reduce race conditions
+    "-n 2"
     # assign tests grouped by file to workers
     "--dist loadfile"
     # don't bulk test all components
@@ -199,14 +200,6 @@ in with py.pkgs; buildPythonApplication rec {
     # keyring.errors.NoKeyringError: No recommended backend was available.
     "test_secrets_from_unrelated_fails"
     "test_secrets_credstash"
-    # system_log/test_init.py: assert 0 == 1 where 0 = len([])
-    "test_error_posted_as_event"
-    # ssdp/test_init.py: RuntimeError: Event loop is closed
-    "test_scan_match_st"
-    # sun/test_init.py: RuntimeError: Event loop is closed
-    "test_setting_rising"
-    # sun/test_trigger.py: RuntimeError Event loop is closed
-    "test_sunset_trigger"
   ];
 
   preCheck = ''
