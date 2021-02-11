@@ -3,6 +3,7 @@
 , buildPackages
 , cacert
 , cargo
+, cargoBuildHook
 , cargoSetupHook
 , fetchCargoTarball
 , runCommandNoCC
@@ -37,7 +38,6 @@
 , cargoBuildFlags ? []
 , buildType ? "release"
 , meta ? {}
-, target ? rust.toRustTargetSpec stdenv.hostPlatform
 , cargoVendorDir ? null
 , checkType ? buildType
 , depsExtraArgs ? {}
@@ -71,6 +71,7 @@ let
   # against the src fixed-output derivation to check consistency.
   validateCargoDeps = !(cargoHash == "" && cargoSha256 == "");
 
+  target = rust.toRustTargetSpec stdenv.hostPlatform;
   targetIsJSON = lib.hasSuffix ".json" target;
   useSysroot = targetIsJSON && !__internal_dontAddSysroot;
 
@@ -86,10 +87,6 @@ let
     originalCargoToml = src + /Cargo.toml; # profile info is later extracted
   };
 
-  ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
-  cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
-  ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
-  cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
   releaseDir = "target/${shortTarget}/${buildType}";
   tmpDir = "${releaseDir}-tmp";
 
@@ -102,11 +99,17 @@ assert useSysroot -> !(args.doCheck or true);
 stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs useSysroot {
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
 } // {
-  inherit cargoDeps;
+  inherit buildAndTestSubdir cargoDeps releaseDir tmpDir;
+
+  cargoBuildFlags = lib.concatStringsSep " " cargoBuildFlags;
+
+  cargoBuildType = "--${buildType}";
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = nativeBuildInputs ++ [ cacert git cargo cargoSetupHook rustc ];
+  nativeBuildInputs = nativeBuildInputs ++
+    [ cacert git cargo cargoBuildHook cargoSetupHook rustc ];
+
   buildInputs = buildInputs ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   patches = cargoPatches ++ patches;
@@ -125,38 +128,6 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
     runHook postConfigure
   '';
 
-  buildPhase = with builtins; args.buildPhase or ''
-    ${lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
-    runHook preBuild
-
-    (
-    set -x
-    env \
-      "CC_${rust.toRustTarget stdenv.buildPlatform}"="${ccForBuild}" \
-      "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
-      "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
-      "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
-      cargo build -j $NIX_BUILD_CORES \
-        ${lib.optionalString (buildType == "release") "--release"} \
-        --target ${target} \
-        --frozen ${concatStringsSep " " cargoBuildFlags}
-    )
-
-    runHook postBuild
-
-    ${lib.optionalString (buildAndTestSubdir != null) "popd"}
-
-    # This needs to be done after postBuild: packages like `cargo` do a pushd/popd in
-    # the pre/postBuild-hooks that need to be taken into account before gathering
-    # all binaries to install.
-    mkdir -p $tmpDir
-    cp -r $releaseDir/* $tmpDir/
-    bins=$(find $tmpDir \
-      -maxdepth 1 \
-      -type f \
-      -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \))
-  '';
-
   checkPhase = args.checkPhase or (let
     argstr = "${lib.optionalString (checkType == "release") "--release"} --target ${target} --frozen";
     threads = if cargoParallelTestThreads then "$NIX_BUILD_CORES" else "1";
@@ -173,10 +144,18 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // lib.optionalAttrs u
 
   strictDeps = true;
 
-  inherit releaseDir tmpDir;
-
   installPhase = args.installPhase or ''
     runHook preInstall
+
+    # This needs to be done after postBuild: packages like `cargo` do a pushd/popd in
+    # the pre/postBuild-hooks that need to be taken into account before gathering
+    # all binaries to install.
+    mkdir -p $tmpDir
+    cp -r $releaseDir/* $tmpDir/
+    bins=$(find $tmpDir \
+      -maxdepth 1 \
+      -type f \
+      -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \))
 
     # rename the output dir to a architecture independent one
     mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${tmpDir}$')
