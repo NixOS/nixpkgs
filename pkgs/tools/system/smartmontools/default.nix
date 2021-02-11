@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, autoreconfHook
-, mailutils, inetutils
+, mailutils, enableMail ? true
+, inetutils
 , IOKit, ApplicationServices }:
 
 let
@@ -26,7 +27,7 @@ in stdenv.mkDerivation rec {
   postPatch = "cp -v ${driverdb} drivedb.h";
 
   configureFlags = [
-    "--with-scriptpath=${lib.makeBinPath [ mailutils inetutils ]}"
+    "--with-scriptpath=${lib.makeBinPath ([ inetutils ] ++ lib.optional enableMail mailutils)}"
   ];
 
   nativeBuildInputs = [ autoreconfHook ];

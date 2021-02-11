@@ -7,8 +7,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "acpi_call";
-    rev = "3d7c9fe5ed3fc5ed5bafd39d54b1fdc7a09ce710";
-    sha256 = "09kp8zl392h99wjwzqrdw2xcfnsc944hzmfwi8n1y7m2slpdybv3";
+    rev = "fe4cd0124099b88b61f83006023bc0d95e742e75";
+    sha256 = "1rksbg78i7y2wzam9p6kbhx8rmkaiq0kqg8nj7k0j6d25m79289s";
   };
 
   hardeningDisable = [ "pic" ];
