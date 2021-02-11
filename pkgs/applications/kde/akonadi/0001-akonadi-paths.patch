@@ -1,6 +1,6 @@
-From 90969b9b36400d47b1afe761fb8468c1acb8a04a Mon Sep 17 00:00:00 2001
+From f4d718502ecd8242500078a7783e27caba72871e Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@mailbox.org>
-Date: Mon, 13 Jul 2020 11:41:19 -0500
+Date: Sun, 31 Jan 2021 11:00:03 -0600
 Subject: [PATCH 1/3] akonadi paths
 
 ---
@@ -11,10 +11,10 @@ Subject: [PATCH 1/3] akonadi paths
  4 files changed, 11 insertions(+), 40 deletions(-)
 
 diff --git a/src/akonadicontrol/agentmanager.cpp b/src/akonadicontrol/agentmanager.cpp
-index 23b4a1f..c13b658 100644
+index 31e0cf2..6436e87 100644
 --- a/src/akonadicontrol/agentmanager.cpp
 +++ b/src/akonadicontrol/agentmanager.cpp
-@@ -61,7 +61,7 @@ public:
+@@ -48,7 +48,7 @@ public:
                  []() {
                      QCoreApplication::instance()->exit(255);
                  });
@@ -23,7 +23,7 @@ index 23b4a1f..c13b658 100644
      }
  
      ~StorageProcessControl() override
-@@ -84,7 +84,7 @@ public:
+@@ -70,7 +70,7 @@ public:
                  []() {
                      qCCritical(AKONADICONTROL_LOG) << "Failed to start AgentServer!";
                  });
@@ -33,10 +33,10 @@ index 23b4a1f..c13b658 100644
  
      ~AgentServerProcessControl() override
 diff --git a/src/akonadicontrol/agentprocessinstance.cpp b/src/akonadicontrol/agentprocessinstance.cpp
-index 4e58f7e..e8bb532 100644
+index c98946c..aa307ca 100644
 --- a/src/akonadicontrol/agentprocessinstance.cpp
 +++ b/src/akonadicontrol/agentprocessinstance.cpp
-@@ -62,7 +62,7 @@ bool AgentProcessInstance::start(const AgentType &agentInfo)
+@@ -49,7 +49,7 @@ bool AgentProcessInstance::start(const AgentType &agentInfo)
      } else {
          Q_ASSERT(agentInfo.launchMethod == AgentType::Launcher);
          const QStringList arguments = QStringList() << executable << identifier();
@@ -46,10 +46,10 @@ index 4e58f7e..e8bb532 100644
      }
      return true;
 diff --git a/src/server/storage/dbconfigmysql.cpp b/src/server/storage/dbconfigmysql.cpp
-index cac40f5..527649b 100644
+index d595a3a..99324f6 100644
 --- a/src/server/storage/dbconfigmysql.cpp
 +++ b/src/server/storage/dbconfigmysql.cpp
-@@ -83,7 +83,6 @@ bool DbConfigMysql::init(QSettings &settings)
+@@ -69,7 +69,6 @@ bool DbConfigMysql::init(QSettings &settings, bool storeSettings)
      // determine default settings depending on the driver
      QString defaultHostName;
      QString defaultOptions;
@@ -57,7 +57,7 @@ index cac40f5..527649b 100644
      QString defaultCleanShutdownCommand;
  
  #ifndef Q_OS_WIN
-@@ -92,16 +91,7 @@ bool DbConfigMysql::init(QSettings &settings)
+@@ -78,16 +77,7 @@ bool DbConfigMysql::init(QSettings &settings, bool storeSettings)
  #endif
  
      const bool defaultInternalServer = true;
@@ -75,7 +75,7 @@ index cac40f5..527649b 100644
      if (!mysqladminPath.isEmpty()) {
  #ifndef Q_OS_WIN
          defaultCleanShutdownCommand = QStringLiteral("%1 --defaults-file=%2/mysql.conf --socket=%3/%4 shutdown")
-@@ -111,10 +101,10 @@ bool DbConfigMysql::init(QSettings &settings)
+@@ -97,10 +87,10 @@ bool DbConfigMysql::init(QSettings &settings, bool storeSettings)
  #endif
      }
  
@@ -88,7 +88,7 @@ index cac40f5..527649b 100644
      qCDebug(AKONADISERVER_LOG) << "Found mysqlcheck: " << mMysqlCheckPath;
  
      mInternalServer = settings.value(QStringLiteral("QMYSQL/StartServer"), defaultInternalServer).toBool();
-@@ -131,7 +121,7 @@ bool DbConfigMysql::init(QSettings &settings)
+@@ -117,7 +107,7 @@ bool DbConfigMysql::init(QSettings &settings, bool storeSettings)
      mUserName = settings.value(QStringLiteral("User")).toString();
      mPassword = settings.value(QStringLiteral("Password")).toString();
      mConnectionOptions = settings.value(QStringLiteral("Options"), defaultOptions).toString();
@@ -97,7 +97,7 @@ index cac40f5..527649b 100644
      mCleanServerShutdownCommand = settings.value(QStringLiteral("CleanServerShutdownCommand"), defaultCleanShutdownCommand).toString();
      settings.endGroup();
  
-@@ -141,9 +131,6 @@ bool DbConfigMysql::init(QSettings &settings)
+@@ -127,9 +117,6 @@ bool DbConfigMysql::init(QSettings &settings, bool storeSettings)
          // intentionally not namespaced as we are the only one in this db instance when using internal mode
          mDatabaseName = QStringLiteral("akonadi");
      }
@@ -107,17 +107,17 @@ index cac40f5..527649b 100644
  
      qCDebug(AKONADISERVER_LOG) << "Using mysqld:" << mMysqldPath;
  
-@@ -152,9 +139,6 @@ bool DbConfigMysql::init(QSettings &settings)
-     settings.setValue(QStringLiteral("Name"), mDatabaseName);
-     settings.setValue(QStringLiteral("Host"), mHostName);
-     settings.setValue(QStringLiteral("Options"), mConnectionOptions);
--    if (!mMysqldPath.isEmpty()) {
--        settings.setValue(QStringLiteral("ServerPath"), mMysqldPath);
--    }
-     settings.setValue(QStringLiteral("StartServer"), mInternalServer);
-     settings.endGroup();
-     settings.sync();
-@@ -209,7 +193,7 @@ bool DbConfigMysql::startInternalServer()
+@@ -139,9 +126,6 @@ bool DbConfigMysql::init(QSettings &settings, bool storeSettings)
+         settings.setValue(QStringLiteral("Name"), mDatabaseName);
+         settings.setValue(QStringLiteral("Host"), mHostName);
+         settings.setValue(QStringLiteral("Options"), mConnectionOptions);
+-        if (!mMysqldPath.isEmpty()) {
+-            settings.setValue(QStringLiteral("ServerPath"), mMysqldPath);
+-        }
+         settings.setValue(QStringLiteral("StartServer"), mInternalServer);
+         settings.endGroup();
+         settings.sync();
+@@ -214,7 +198,7 @@ bool DbConfigMysql::startInternalServer()
  #endif
  
      // generate config file
@@ -127,10 +127,10 @@ index cac40f5..527649b 100644
      const QString actualConfig = StandardDirs::saveDir("data") + QLatin1String("/mysql.conf");
      if (globalConfig.isEmpty()) {
 diff --git a/src/server/storage/dbconfigpostgresql.cpp b/src/server/storage/dbconfigpostgresql.cpp
-index 09cdbd5..1c8996b 100644
+index dd273fc..05288d9 100644
 --- a/src/server/storage/dbconfigpostgresql.cpp
 +++ b/src/server/storage/dbconfigpostgresql.cpp
-@@ -141,9 +141,7 @@ bool DbConfigPostgresql::init(QSettings &settings)
+@@ -127,9 +127,7 @@ bool DbConfigPostgresql::init(QSettings &settings, bool storeSettings)
      // determine default settings depending on the driver
      QString defaultHostName;
      QString defaultOptions;
@@ -140,7 +140,7 @@ index 09cdbd5..1c8996b 100644
      QString defaultPgData;
  
  #ifndef Q_WS_WIN // We assume that PostgreSQL is running as service on Windows
-@@ -154,12 +152,8 @@ bool DbConfigPostgresql::init(QSettings &settings)
+@@ -140,12 +138,8 @@ bool DbConfigPostgresql::init(QSettings &settings, bool storeSettings)
  
      mInternalServer = settings.value(QStringLiteral("QPSQL/StartServer"), defaultInternalServer).toBool();
      if (mInternalServer) {
@@ -154,7 +154,7 @@ index 09cdbd5..1c8996b 100644
          defaultPgData = StandardDirs::saveDir("data", QStringLiteral("db_data"));
      }
  
-@@ -178,20 +172,14 @@ bool DbConfigPostgresql::init(QSettings &settings)
+@@ -164,20 +158,14 @@ bool DbConfigPostgresql::init(QSettings &settings, bool storeSettings)
      mUserName = settings.value(QStringLiteral("User")).toString();
      mPassword = settings.value(QStringLiteral("Password")).toString();
      mConnectionOptions = settings.value(QStringLiteral("Options"), defaultOptions).toString();
@@ -177,14 +177,14 @@ index 09cdbd5..1c8996b 100644
      qCDebug(AKONADISERVER_LOG) << "Found pg_upgrade:" << mPgUpgradePath;
      mPgData = settings.value(QStringLiteral("PgData"), defaultPgData).toString();
      if (mPgData.isEmpty()) {
-@@ -207,7 +195,6 @@ bool DbConfigPostgresql::init(QSettings &settings)
-         settings.setValue(QStringLiteral("Port"), mHostPort);
-     }
-     settings.setValue(QStringLiteral("Options"), mConnectionOptions);
--    settings.setValue(QStringLiteral("ServerPath"), mServerPath);
-     settings.setValue(QStringLiteral("InitDbPath"), mInitDbPath);
-     settings.setValue(QStringLiteral("StartServer"), mInternalServer);
-     settings.endGroup();
+@@ -194,7 +182,6 @@ bool DbConfigPostgresql::init(QSettings &settings, bool storeSettings)
+             settings.setValue(QStringLiteral("Port"), mHostPort);
+         }
+         settings.setValue(QStringLiteral("Options"), mConnectionOptions);
+-        settings.setValue(QStringLiteral("ServerPath"), mServerPath);
+         settings.setValue(QStringLiteral("InitDbPath"), mInitDbPath);
+         settings.setValue(QStringLiteral("StartServer"), mInternalServer);
+         settings.endGroup();
 -- 
-2.25.4
+2.29.2
 

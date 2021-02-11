@@ -16464,6 +16464,8 @@ in
 
   readosm = callPackage ../development/libraries/readosm { };
 
+  rinutils = callPackage ../development/libraries/rinutils { };
+
   kissfft = callPackage ../development/libraries/kissfft { };
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
@@ -26451,6 +26453,10 @@ in
 
   bitsnbots = callPackage ../games/bitsnbots {
     lua = lua5;
+  };
+
+  black-hole-solver = callPackage ../games/black-hole-solver {
+    inherit (perlPackages) PathTiny;
   };
 
   blackshades = callPackage ../games/blackshades { };
