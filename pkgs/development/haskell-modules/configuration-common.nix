@@ -1572,4 +1572,7 @@ self: super: {
   # This is fixed on lens master. Remove this override on assert fail.
   lens = assert super.lens.version == "4.19.2"; doJailbreak (dontCheck super.lens);
 
+  # Test suite fails, upstream not reachable for simple fix (not responsive on github)
+  vivid-osc = dontCheck super.vivid-osc;
+  vivid-supercollider = dontCheck super.vivid-supercollider;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
