@@ -1413,6 +1413,8 @@ self: super: {
   # 2021-02-08: Jailbreaking because of
   # https://github.com/haskell/haskell-language-server/issues/1329
   hls-tactics-plugin = doJailbreak super.hls-tactics-plugin;
+  # 2021-02-11: Jailbreaking because of syntax error on bound revision
+  hls-explicit-imports-plugin = doJailbreak super.hls-explicit-imports-plugin;
 
   # 2021-02-08: Overrides because nightly is to old for hls 0.9.0
   lsp-test = doDistribute (dontCheck self.lsp-test_0_11_0_7);
