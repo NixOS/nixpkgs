@@ -389,6 +389,7 @@ mapAliases ({
   mono-zeroconf = throw "mono-zeroconf was deprecated on 2019-09-20: abandoned by upstream.";
   mozart = mozart2-binary; # added 2019-09-23
   mozart-binary = mozart2-binary; # added 2019-09-23
+  mpd_clientlib = libmpdclient; # added 2021-02-11
   mpich2 = mpich;  # added 2018-08-06
   msf = metasploit; # added 2018-04-25
   libmsgpack = msgpack; # added 2018-08-17

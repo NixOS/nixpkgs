@@ -17922,7 +17922,6 @@ in
   inherit (callPackages ../servers/mpd { })
     mpd mpd-small mpdWithFeatures;
 
-  mpd_clientlib = libmpdclient;
   libmpdclient = callPackage ../servers/mpd/libmpdclient.nix { };
 
   mpdscribble = callPackage ../tools/misc/mpdscribble { };
