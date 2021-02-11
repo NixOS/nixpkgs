@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DENABLE_TESTS=OFF"
   ] ++ lib.optionals stdenv.isDarwin [
+    # CPU detection isn't supported on Darwin and breaks the aarch64-darwin build:
     "-DCONFIG_RUNTIME_CPU_DETECT=OFF"
   ];
 
