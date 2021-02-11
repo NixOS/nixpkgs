@@ -98,5 +98,7 @@ self: super: {
   # Older compilers need the latest ghc-lib to build this package.
   hls-hlint-plugin = addBuildDepend super.hls-hlint-plugin self.ghc-lib;
 
+  vector = dontCheck super.vector;
+
   mmorph = super.mmorph_1_1_3;
 }
