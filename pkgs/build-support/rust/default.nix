@@ -60,7 +60,7 @@ let
 
   cargoDeps = if cargoVendorDir == null
     then fetchCargoTarball ({
-        inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
+        inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
         hash = cargoHash;
         patches = cargoPatches;
         sha256 = cargoSha256;
