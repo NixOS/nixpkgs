@@ -23,9 +23,12 @@ let
         mkdir -p $out/${gimp.targetScriptDir}/${name};
         for p in "$@"; do cp "$p" -r $out/${gimp.targetScriptDir}/${name}; done
       }
-      installPlugins(){
-        mkdir -p $out/${gimp.targetPluginDir}/${name};
-        for p in "$@"; do cp "$p" -r $out/${gimp.targetPluginDir}/${name}; done
+      installPlugin() {
+        # The base name of the first argument is the plug-in name and the main executable.
+        # GIMP only allows a single plug-in per directory:
+        # https://gitlab.gnome.org/GNOME/gimp/-/commit/efae55a73e98389e38fa0e59ebebcda0abe3ee96
+        pluginDir=$out/${gimp.targetPluginDir}/$(basename "$1")
+        install -Dt "$pluginDir" "$@"
       }
     '';
 
@@ -101,7 +104,7 @@ in
     installPhase = ''
       runHook preInstall
 
-      installPlugins fourier
+      installPlugin fourier
 
       runHook postInstall
     '';
@@ -144,7 +147,7 @@ in
       rev = "de4367f71e40fe6d82387eaee68611a80a87e0e1";
       sha256 = "1zzvbczly7k456c0y6s92a1i8ph4ywmbvdl8i4rcc29l4qd2z8fw";
     };
-    installPhase = "installPlugins src/texturize";
+    installPhase = "installPlugin src/texturize";
     meta.broken = true; # https://github.com/lmanul/gimp-texturize/issues/1
   };
 
@@ -158,7 +161,7 @@ in
       url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz";
       sha256 = "0vql1k67i21g5ivaa1jh56rg427m0icrkpryrhg75nscpirfxxqw";
     };
-    installPhase = "installPlugins src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
+    installPhase = "installPlugin src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
   };
 
   lqrPlugin = pluginDerivation rec {
@@ -194,7 +197,7 @@ in
     buildInputs = with pkgs; [ lensfun gexiv2 ];
 
     installPhase = "
-      installPlugins gimp-lensfun
+      installPlugin gimp-lensfun
     ";
 
     meta = {
