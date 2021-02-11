@@ -191,9 +191,9 @@ in self: {
   };
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.20";
+    version = "9.6.21";
     psqlSchema = "9.6";
-    sha256 = "1dkv916y7vrfbygrfbfvs6y3fxaysnh32i5j88nvcnnl16jcn21x";
+    sha256 = "0d0ngpadf1i7c0i2psaxcbmiwx8334ibcsn283n9fp4853pyl3wk";
     this = self.postgresql_9_6;
     inherit self;
   };
