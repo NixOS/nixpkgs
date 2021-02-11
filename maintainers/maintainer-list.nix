@@ -48,6 +48,12 @@
     See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
 */
 {
+  _0qq = {
+    email = "0qqw0qqw@gmail.com";
+    github = "0qq";
+    githubId = 64707304;
+    name = "Dmitry Kulikov";
+  };
   _0x4A6F = {
     email = "mail-maintainer@0x4A6F.dev";
     name = "Joachim Ernst";
