@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pymyq";
-  version = "3.0.0";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "arraylabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uCXgJxMy5gZQBvhHnmfev/rfJXOjhLqZdOrn8SetUT0=";
+    sha256 = "1wrfnbz87ns2ginyvljna0axl35s0xfaiqwzapxm8ira40ax5wrl";
   };
 
   propagatedBuildInputs = [
