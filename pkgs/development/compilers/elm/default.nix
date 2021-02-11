@@ -104,7 +104,6 @@ let
         homepage = "https://github.com/zwilias/elm-json";
         license = licenses.mit;
         maintainers = [ maintainers.turbomack ];
-        platforms = platforms.linux;
       };
     };
   };
@@ -117,7 +116,7 @@ let
         };
     in with hsPkgs.elmPkgs; {
 
-      elm-test = patchBinwrap [elmi-to-json]
+      elm-test =
         nodePkgs.elm-test // {
           meta = with lib; {
             description = "Runs elm-test suites from Node.js";
@@ -162,8 +161,8 @@ let
           };
         });
 
-      create-elm-app = patchNpmElm (patchBinwrap [elmi-to-json]
-        nodePkgs.create-elm-app) // {
+      create-elm-app = patchNpmElm
+        nodePkgs.create-elm-app // {
           meta = with lib; {
             description = "Create Elm apps with no build configuration";
             homepage = "https://github.com/halfzebra/create-elm-app";
@@ -172,7 +171,7 @@ let
           };
         };
 
-      elm-review = patchBinwrap [elmRustPackages.elm-json]
+      elm-review =
         nodePkgs.elm-review // {
           meta = with lib; {
             description = "Analyzes Elm projects, to help find mistakes before your users find them";
