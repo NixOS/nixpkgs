@@ -1588,6 +1588,24 @@ let
         sha512 = "HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==";
       };
     };
+    "@emmetio/abbreviation-2.2.0" = {
+      name = "_at_emmetio_slash_abbreviation";
+      packageName = "@emmetio/abbreviation";
+      version = "2.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@emmetio/abbreviation/-/abbreviation-2.2.0.tgz";
+        sha512 = "NPGVUmnr7cLj4i6MKS4c8NjuoIIJROrruJl/8nXsp2MdbDRHvtfq25foySvv/NbfqTQm+P9JzVLDD9JxGIpvkQ==";
+      };
+    };
+    "@emmetio/css-abbreviation-2.1.2" = {
+      name = "_at_emmetio_slash_css-abbreviation";
+      packageName = "@emmetio/css-abbreviation";
+      version = "2.1.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@emmetio/css-abbreviation/-/css-abbreviation-2.1.2.tgz";
+        sha512 = "CvYTzJltVpLqJaCZ1Qn97LVAKsl2Uwl2fzir1EX/WuMY3xWxgc3BWRCheL6k65km6GyDrLVl6RhrrNb/pxOiAQ==";
+      };
+    };
     "@emmetio/extract-abbreviation-0.1.6" = {
       name = "_at_emmetio_slash_extract-abbreviation";
       packageName = "@emmetio/extract-abbreviation";
@@ -1595,6 +1613,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/@emmetio/extract-abbreviation/-/extract-abbreviation-0.1.6.tgz";
         sha512 = "Ce3xE2JvTSEbASFbRbA1gAIcMcZWdS2yUYRaQbeM0nbOzaZrUYfa3ePtcriYRZOZmr+CkKA+zbjhvTpIOAYVcw==";
+      };
+    };
+    "@emmetio/scanner-1.0.0" = {
+      name = "_at_emmetio_slash_scanner";
+      packageName = "@emmetio/scanner";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@emmetio/scanner/-/scanner-1.0.0.tgz";
+        sha512 = "8HqW8EVqjnCmWXVpqAOZf+EGESdkR27odcMMMGefgKXtar00SoYNSryGv//TELI4T3QFsECo78p+0lmalk/CFA==";
       };
     };
     "@emotion/is-prop-valid-0.8.8" = {
@@ -6313,6 +6340,15 @@ let
         sha512 = "a+fLdul8OczRvPWPf8eTb6wPhxzyWQwRGhNN0ugtOtk6yFOG53i2LwXaA0d2D6bsJlWxi6eCuGZLGoCcdOlWZA==";
       };
     };
+    "@types/pug-2.0.4" = {
+      name = "_at_types_slash_pug";
+      packageName = "@types/pug";
+      version = "2.0.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/pug/-/pug-2.0.4.tgz";
+        sha1 = "8772fcd0418e3cd2cc171555d73007415051f4b2";
+      };
+    };
     "@types/q-1.5.4" = {
       name = "_at_types_slash_q";
       packageName = "@types/q";
@@ -6410,6 +6446,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/@types/rimraf/-/rimraf-2.0.4.tgz";
         sha512 = "8gBudvllD2A/c0CcEX/BivIDorHFt5UI5m46TsNj8DjWCCTTZT74kEe4g+QsY7P/B9WdO98d82zZgXO/RQzu2Q==";
+      };
+    };
+    "@types/sass-1.16.0" = {
+      name = "_at_types_slash_sass";
+      packageName = "@types/sass";
+      version = "1.16.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/sass/-/sass-1.16.0.tgz";
+        sha512 = "2XZovu4NwcqmtZtsBR5XYLw18T8cBCnU2USFHTnYLLHz9fkhnoEMoDsqShJIOFsFhn5aJHjweiUUdTrDGujegA==";
       };
     };
     "@types/semver-5.5.0" = {
@@ -18689,6 +18734,15 @@ let
         sha1 = "2495ddbaf6eb874abb0e1be9df22d2e5a544326c";
       };
     };
+    "dedent-js-1.0.1" = {
+      name = "dedent-js";
+      packageName = "dedent-js";
+      version = "1.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/dedent-js/-/dedent-js-1.0.1.tgz";
+        sha1 = "bee5fb7c9e727d85dffa24590d10ec1ab1255305";
+      };
+    };
     "deep-eql-3.0.1" = {
       name = "deep-eql";
       packageName = "deep-eql";
@@ -20615,6 +20669,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/emitter-listener/-/emitter-listener-1.1.2.tgz";
         sha512 = "Bt1sBAGFHY9DKY+4/2cV6izcKJUf5T7/gkdmkxzX/qv9CcGH8xSwVRW5mtX03SWJtRTWSOpzCuWN9rBFYZepZQ==";
+      };
+    };
+    "emmet-2.3.0" = {
+      name = "emmet";
+      packageName = "emmet";
+      version = "2.3.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/emmet/-/emmet-2.3.0.tgz";
+        sha512 = "/9jfXVKjODNt1QBpMkfUp2SlyYNfi0CcWLpiYCQmwnsLmME/To3lScw+Ip4V7Pasp0O0uYUU0Um0M9ewSIfx3g==";
       };
     };
     "emoji-named-characters-1.0.2" = {
@@ -44024,6 +44087,15 @@ let
         sha512 = "2UzApPuxi2yRoyMlXMazgR6UcH9DKJhNgCviIwY3ixZ9THWSSrUww5vkiZ3C48WvpFl1M1y/oU63deSy1puWEA==";
       };
     };
+    "prettier-plugin-svelte-2.1.4" = {
+      name = "prettier-plugin-svelte";
+      packageName = "prettier-plugin-svelte";
+      version = "2.1.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/prettier-plugin-svelte/-/prettier-plugin-svelte-2.1.4.tgz";
+        sha512 = "fQfcIyl04VNWI3+JeseT+gLljs2bJJifbKmrTe8yMnTCdv0unfM1jnY2p4etzCfOj6skC1FPFaqBayYk3+7ZZg==";
+      };
+    };
     "prettier-stylelint-0.4.2" = {
       name = "prettier-stylelint";
       packageName = "prettier-stylelint";
@@ -53222,6 +53294,33 @@ let
         sha512 = "zoE5/e+dnEijk6ASB6/qrK+oYdm2do1hjoLWrqUC/8WEIW1gbxFcKuBof7sW8ArN6e+AYvsE8HBGiVRWL/F5CA==";
       };
     };
+    "svelte-3.32.3" = {
+      name = "svelte";
+      packageName = "svelte";
+      version = "3.32.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/svelte/-/svelte-3.32.3.tgz";
+        sha512 = "5etu/wDwtewhnYO/631KKTjSmFrKohFLWNm1sWErVHXqGZ8eJLqrW0qivDSyYTcN8GbUqsR4LkIhftNFsjNehg==";
+      };
+    };
+    "svelte-preprocess-4.6.8" = {
+      name = "svelte-preprocess";
+      packageName = "svelte-preprocess";
+      version = "4.6.8";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/svelte-preprocess/-/svelte-preprocess-4.6.8.tgz";
+        sha512 = "yrT+vuHPoGnNx5Oxa6gMqWV5ZhLgA4isfhUOBwv9iVqZAro9/Nyy8XF5sahAglfMmnCxJkDZSwg7CdAwGpVxhw==";
+      };
+    };
+    "svelte2tsx-0.1.169" = {
+      name = "svelte2tsx";
+      packageName = "svelte2tsx";
+      version = "0.1.169";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/svelte2tsx/-/svelte2tsx-0.1.169.tgz";
+        sha512 = "E4AM2WGMdsYWe8z3BQXbvKQ9dWrOPDrO9xx5V7e+5MHFhyof1a5ZupY6LprJlwQYmWm0Vj9HUGkm8fdVFCfnhA==";
+      };
+    };
     "sver-compat-1.5.0" = {
       name = "sver-compat";
       packageName = "sver-compat";
@@ -58498,6 +58597,15 @@ let
         sha512 = "jWi+297PJUUWTHwlcrZz0zIuEXuHOBJIQMapXmEzbosWGv/gMnNSAMV4hTKnl5wzxvZKZzV6j+WFdrSlKQ5qnw==";
       };
     };
+    "vscode-css-languageservice-5.0.0" = {
+      name = "vscode-css-languageservice";
+      packageName = "vscode-css-languageservice";
+      version = "5.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/vscode-css-languageservice/-/vscode-css-languageservice-5.0.0.tgz";
+        sha512 = "DTMa8QbVmujFPvD3NxoC5jjIXCyCG+cvn3hNzwQRhvhsk8LblNymBZBwzfcDdgEtqsi4O/2AB5HnMIRzxhzEzg==";
+      };
+    };
     "vscode-debugadapter-testsupport-1.44.0" = {
       name = "vscode-debugadapter-testsupport";
       packageName = "vscode-debugadapter-testsupport";
@@ -58525,6 +58633,15 @@ let
         sha512 = "X4pzcrJ8dE7M3ArFuySF5fgipKDd/EauXkiJwtjBIVRWpVNq0tF9+lNCyuC7iDUwP3Oq7ow/TGssD3GdG96Jow==";
       };
     };
+    "vscode-emmet-helper-2.1.2" = {
+      name = "vscode-emmet-helper";
+      packageName = "vscode-emmet-helper";
+      version = "2.1.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/vscode-emmet-helper/-/vscode-emmet-helper-2.1.2.tgz";
+        sha512 = "Fy6UNawSgxE3Kuqi54vSXohf03iOIrp1A74ReAgzvGP9Yt7fUAvkqF6No2WAc34/w0oWAHAeqoBNqmKKWh6U5w==";
+      };
+    };
     "vscode-html-languageservice-2.1.12" = {
       name = "vscode-html-languageservice";
       packageName = "vscode-html-languageservice";
@@ -58532,6 +58649,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/vscode-html-languageservice/-/vscode-html-languageservice-2.1.12.tgz";
         sha512 = "mIb5VMXM5jI97HzCk2eadI1K//rCEZXte0wBqA7PGXsyJH4KTyJUaYk9MR+mbfpUl2vMi3HZw9GUOLGYLc6l5w==";
+      };
+    };
+    "vscode-html-languageservice-4.0.0" = {
+      name = "vscode-html-languageservice";
+      packageName = "vscode-html-languageservice";
+      version = "4.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/vscode-html-languageservice/-/vscode-html-languageservice-4.0.0.tgz";
+        sha512 = "UmC+GS0IqBeZnOAmdtQvaDzoH1c5/un+b7qALUziu/Y4SOPXso5dF+YkJeTqsde6YU2pLm78RtMDzl9BParwbw==";
       };
     };
     "vscode-json-languageservice-3.11.0" = {
@@ -102588,6 +102714,100 @@ in
     meta = {
       description = "A mighty, modern CSS linter.";
       homepage = "https://stylelint.io";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  svelte-language-server = nodeEnv.buildNodePackage {
+    name = "svelte-language-server";
+    packageName = "svelte-language-server";
+    version = "0.12.9";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/svelte-language-server/-/svelte-language-server-0.12.9.tgz";
+      sha512 = "a1J4BTiP2uJ4LLk3/iuw4G9t2FbmTel0V8wyeuSVBPk+aZVAvt9sQ19Um0OFyUdwXWQVJn/jRTcrFYVXqE4Bgg==";
+    };
+    dependencies = [
+      sources."@babel/code-frame-7.12.13"
+      sources."@babel/helper-validator-identifier-7.12.11"
+      sources."@babel/highlight-7.12.13"
+      sources."@emmetio/abbreviation-2.2.0"
+      sources."@emmetio/css-abbreviation-2.1.2"
+      sources."@emmetio/scanner-1.0.0"
+      sources."@types/node-14.14.25"
+      sources."@types/parse-json-4.0.0"
+      sources."@types/pug-2.0.4"
+      sources."@types/sass-1.16.0"
+      sources."ansi-styles-3.2.1"
+      sources."anymatch-3.1.1"
+      sources."binary-extensions-2.2.0"
+      sources."braces-3.0.2"
+      sources."callsites-3.1.0"
+      sources."chalk-2.4.2"
+      sources."chokidar-3.5.1"
+      sources."color-convert-1.9.3"
+      sources."color-name-1.1.3"
+      sources."cosmiconfig-7.0.0"
+      sources."dedent-js-1.0.1"
+      sources."detect-indent-6.0.0"
+      sources."emmet-2.3.0"
+      sources."error-ex-1.3.2"
+      sources."escape-string-regexp-1.0.5"
+      sources."estree-walker-2.0.2"
+      sources."fill-range-7.0.1"
+      sources."fsevents-2.3.2"
+      sources."glob-parent-5.1.1"
+      sources."has-flag-3.0.0"
+      sources."import-fresh-3.3.0"
+      sources."is-arrayish-0.2.1"
+      sources."is-binary-path-2.1.0"
+      sources."is-extglob-2.1.1"
+      sources."is-glob-4.0.1"
+      sources."is-number-7.0.0"
+      sources."js-tokens-4.0.0"
+      sources."json-parse-even-better-errors-2.3.1"
+      sources."jsonc-parser-2.3.1"
+      sources."lines-and-columns-1.1.6"
+      sources."lodash-4.17.20"
+      sources."lower-case-2.0.2"
+      sources."min-indent-1.0.1"
+      sources."no-case-3.0.4"
+      sources."normalize-path-3.0.0"
+      sources."parent-module-1.0.1"
+      sources."parse-json-5.2.0"
+      sources."pascal-case-3.1.2"
+      sources."path-type-4.0.0"
+      sources."picomatch-2.2.2"
+      sources."prettier-2.2.1"
+      sources."prettier-plugin-svelte-2.1.4"
+      sources."readdirp-3.5.0"
+      sources."resolve-from-4.0.0"
+      sources."source-map-0.7.3"
+      sources."strip-indent-3.0.0"
+      sources."supports-color-5.5.0"
+      sources."svelte-3.32.3"
+      sources."svelte-preprocess-4.6.8"
+      sources."svelte2tsx-0.1.169"
+      sources."to-regex-range-5.0.1"
+      sources."tslib-2.1.0"
+      sources."typescript-4.1.5"
+      sources."vscode-css-languageservice-5.0.0"
+      sources."vscode-emmet-helper-2.1.2"
+      sources."vscode-html-languageservice-4.0.0"
+      sources."vscode-jsonrpc-6.0.0"
+      sources."vscode-languageserver-7.0.0"
+      sources."vscode-languageserver-protocol-3.16.0"
+      sources."vscode-languageserver-textdocument-1.0.1"
+      sources."vscode-languageserver-types-3.16.0"
+      sources."vscode-nls-5.0.0"
+      sources."vscode-uri-2.1.2"
+      sources."yaml-1.10.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "A language server for Svelte";
+      homepage = "https://github.com/sveltejs/language-tools#readme";
       license = "MIT";
     };
     production = true;
