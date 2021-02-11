@@ -10680,4 +10680,10 @@
     github = "zupo";
     githubId = 311580;
   };
+  felixscheinost = {
+    name = "Felix Scheinost";
+    email = "felix.scheinost@posteo.de";
+    github = "felixscheinost";
+    githubId = 31761492;
+  };
 }
