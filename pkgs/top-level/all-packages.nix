@@ -19631,7 +19631,10 @@ in
 
   azpainter = callPackage ../applications/graphics/azpainter { };
 
-  bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker { };
+  bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker {
+    jack = libjack2;
+    inherit (darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreFoundation CoreServices;
+  };
 
   cadence = let
     # Use Qt 5.14 consistently

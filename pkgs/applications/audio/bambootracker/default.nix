@@ -1,48 +1,59 @@
 { mkDerivation
 , stdenv
+, lib
 , fetchFromGitHub
 , qmake
-, qtbase
+, pkg-config
 , qttools
+, qtbase
 , alsaSupport ? stdenv.hostPlatform.isLinux
 , alsaLib
 , pulseSupport ? stdenv.hostPlatform.isLinux
 , libpulseaudio
 , jackSupport ? stdenv.hostPlatform.isUnix
-, libjack2
+, jack
+, CoreAudio
+, CoreMIDI
+, CoreFoundation
+, CoreServices
 }:
 let
-
-  inherit (stdenv.lib) optional optionals;
-
+  inherit (lib) optional optionals;
 in
 mkDerivation rec {
   pname = "bambootracker";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "rerrahkr";
     repo = "BambooTracker";
     rev = "v${version}";
-    sha256 = "0ibi0sykxf6cp5la2c4pgxf5gvy56yv259fbmdwdrdyv6vlddf42";
+    sha256 = "1qn4ax9cmmr1slkn83575m9a4wan3r4r6k7cnf4yq2nmh2znpjnh";
+    fetchSubmodules = true;
   };
 
-  sourceRoot = "source/BambooTracker";
-
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [ qmake qttools pkg-config ];
 
   buildInputs = [ qtbase ]
     ++ optional alsaSupport alsaLib
     ++ optional pulseSupport libpulseaudio
-    ++ optional jackSupport libjack2;
+    ++ optional jackSupport jack
+    ++ optionals stdenv.hostPlatform.isDarwin [
+    CoreAudio
+    CoreMIDI
+    CoreFoundation
+    CoreServices
+  ];
 
-  qmakeFlags = [ "CONFIG+=release" "CONFIG-=debug" ]
-    ++ optional pulseSupport "CONFIG+=use_pulse"
-    ++ optionals jackSupport [ "CONFIG+=use_jack" "CONFIG+=jack_has_rename" ];
+  qmakeFlags = optionals alsaSupport [ "CONFIG+=use_alsa" ]
+    ++ optionals pulseSupport [ "CONFIG+=use_pulse" ]
+    ++ optionals jackSupport [ "CONFIG+=use_jack" ];
 
-  meta = with stdenv.lib; {
+  postConfigure = "make qmake_all";
+
+  meta = with lib; {
     description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
-    homepage = "https://github.com/rerrahkr/BambooTracker";
+    homepage = "https://rerrahkr.github.io/BambooTracker";
     license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ OPNA2608 ];
