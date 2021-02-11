@@ -7,7 +7,7 @@
 let
   fetchElmDeps = import ./fetchElmDeps.nix { inherit stdenv lib fetchurl; };
 
-  hsPkgs = haskell.packages.ghc883.override {
+  hsPkgs = haskell.packages.ghc8103.override {
     overrides = self: super: with haskell.lib; with lib;
       let elmPkgs = rec {
             elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
@@ -41,7 +41,7 @@ let
               description = "Formats Elm source code according to a standard set of rules based on the official Elm Style Guide";
               homepage = "https://github.com/avh4/elm-format";
               license = licenses.bsd3;
-              maintainers = with maintainers; [ turbomack ];
+              maintainers = with maintainers; [ avh4 turbomack ];
             }));
 
             elmi-to-json = justStaticExecutables (overrideCabal (self.callPackage ./packages/elmi-to-json.nix {}) (drv: {
@@ -79,6 +79,11 @@ let
 
         # Needed for elm-format
         indents = self.callPackage ./packages/indents.nix {};
+        bimap = self.callPackage ./packages/bimap.nix {};
+        avh4-lib = self.callPackage ./packages/avh4-lib.nix {};
+        elm-format-lib = self.callPackage ./packages/elm-format-lib.nix {};
+        elm-format-test-lib = self.callPackage ./packages/elm-format-test-lib.nix {};
+        elm-format-markdown = self.callPackage ./packages/elm-format-markdown.nix {};
       };
   };
 

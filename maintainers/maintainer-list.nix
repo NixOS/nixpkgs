@@ -910,6 +910,12 @@
     githubId = 687218;
     name = "averelld";
   };
+  avh4 = {
+    email = "gruen0aermel@gmail.com";
+    github = "avh4";
+    githubId = 1222;
+    name = "Aaron VonderHaar";
+  };
   avitex = {
     email = "theavitex@gmail.com";
     github = "avitex";
