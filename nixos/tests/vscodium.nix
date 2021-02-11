@@ -29,33 +29,18 @@ import ./make-test-python.nix ({ pkgs, ...} :
     start_all()
     machine.wait_for_x()
 
-    # Create a file that we'll open
-    machine.succeed("su - alice -c 'echo \"   Hello World\" > foo.txt'")
-
-    # It's one line long
-    assert "1 foo.txt" in machine.succeed(
-        "su - alice -c 'wc foo.txt -l'"
-    ), "File has wrong length"
-
-    # Start VSCodium with that file
+    # Start VSCodium with a file that doesn't exist yet
+    machine.fail("ls /home/alice/foo.txt")
     machine.succeed("su - alice -c 'codium foo.txt' &")
 
     # Wait for the window to appear
     machine.wait_for_text("VSCodium")
 
-    # Add a line
-    machine.send_key("ret")
-
     # Save file
     machine.send_key("ctrl-s")
 
     # Wait until the file has been saved
-    machine.sleep(1)
-
-    # Now the file is 2 lines long
-    assert "2 foo.txt" in machine.succeed(
-        "su - alice -c 'wc foo.txt -l'"
-    ), "File has wrong length"
+    machine.wait_for_file("/home/alice/foo.txt")
 
     machine.screenshot("VSCodium")
   '';
