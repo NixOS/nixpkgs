@@ -8255,12 +8255,12 @@ let
     pname = "vimux";
     version = "2017-10-24";
     src = fetchFromGitHub {
-      owner = "benmills";
+      owner = "ostera";
       repo = "vimux";
       rev = "37f41195e6369ac602a08ec61364906600b771f1";
       sha256 = "0k7ymak2ag67lb4sf80y4k35zj38rj0jf61bf50i6h1bgw987pra";
     };
-    meta.homepage = "https://github.com/benmills/vimux/";
+    meta.homepage = "https://github.com/ostera/vimux/";
   };
 
   vimwiki = buildVimPluginFrom2Nix {

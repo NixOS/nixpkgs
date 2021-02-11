@@ -27,7 +27,6 @@ bakpakin/fennel.vim
 bazelbuild/vim-bazel
 bbchung/clighter8
 benizi/vim-automkdir
-benmills/vimux
 bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bkad/camelcasemotion
@@ -432,6 +431,7 @@ Olical/aniseed
 Olical/conjure
 onsails/lspkind-nvim
 OrangeT/vim-csharp
+ostera/vimux
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
 osyo-manga/vim-over
