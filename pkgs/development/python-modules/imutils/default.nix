@@ -18,6 +18,14 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
+  pythonImportsCheck = [
+    "imutils"
+    "imutils.video"
+    "imutils.io"
+    "imutils.feature"
+    "imutils.face_utils"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/jrosebr1/imutils";
     description = "A series of convenience functions to make basic image processing functions";
