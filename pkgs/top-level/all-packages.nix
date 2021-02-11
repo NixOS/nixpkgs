@@ -8510,6 +8510,8 @@ in
     libX11 = xorg.libX11;
   };
 
+  twitch-chat-downloader = python3Packages.callPackage ../applications/misc/twitch-chat-downloader { };
+
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
   twtxt = callPackage ../applications/networking/twtxt { };
