@@ -4,7 +4,7 @@
 
 mkDerivation {
   pname = "appstream-qt";
-  inherit (appstream) version src prePatch;
+  inherit (appstream) version src patches;
 
   outputs = [ "out" "dev" ];
 

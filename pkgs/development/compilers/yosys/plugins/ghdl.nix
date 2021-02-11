@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation {
   pname = "yosys-ghdl";
-  version = "2021.01.01";
+  version = "2021.01.25";
 
   src = fetchFromGitHub {
     owner  = "ghdl";
     repo   = "ghdl-yosys-plugin";
-    rev    = "8b3e740fef9a653a20a838f1ade475960e1d379b";
-    sha256 = "13kpcp37r11xgqd8aksddi40a5vpzqi7p8qgyjbs99lyscyli75x";
+    rev    = "cba859cacf8c6631146dbdaa0f297c060b5a68cd";
+    sha256 = "01d9wb7sqkmkf2y9bnn3pmhy08khzs5m1d06whxsiwgwnjzfk9mx";
   };
 
   buildInputs = [ yosys readline zlib ghdl ];

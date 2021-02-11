@@ -8420,6 +8420,8 @@ in
 
   trezor-udev-rules = callPackage ../os-specific/linux/trezor-udev-rules {};
 
+  trezorctl = with python3Packages; toPythonApplication trezor;
+
   trezord = callPackage ../servers/trezord { };
 
   trezor_agent = with python3Packages; toPythonApplication trezor_agent;
@@ -18790,9 +18792,10 @@ in
 
   erofs-utils = callPackage ../os-specific/linux/erofs-utils { };
 
+  fscryptctl = callPackage ../os-specific/linux/fscryptctl { };
   # unstable until the first 1.x release
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
-  fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
+  fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl/legacy.nix { };
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
 
@@ -20899,9 +20902,7 @@ in
 
   ttf-tw-moe = callPackage ../data/fonts/ttf-tw-moe { };
 
-  twemoji-color-font = callPackage ../data/fonts/twemoji-color-font {
-    inherit (nodePackages) svgo;
-  };
+  twemoji-color-font = callPackage ../data/fonts/twemoji-color-font { };
 
   twitter-color-emoji = callPackage ../data/fonts/twitter-color-emoji { };
 
@@ -26009,6 +26010,8 @@ in
   xfractint = callPackage ../applications/graphics/xfractint {};
 
   xineUI = callPackage ../applications/video/xine-ui { };
+
+  xlsxgrep = callPackage ../applications/search/xlsxgrep { };
 
   xmind = callPackage ../applications/misc/xmind { };
 

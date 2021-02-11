@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-table";
-  version = "1.9.25";
+  version = "1.12.3";
 
   src = fetchFromGitHub {
     owner  = "kaio";
     repo   = "ibus-table";
     rev    = version;
-    sha256 = "0v570qpnb2q79aqr9f0xnska34y7hw34ibiwsf7ybcw69fhi1zkg";
+    sha256 = "sha256-iVbct7p+i8ifSQzOFUUnJU0RHX36cFiTlv7p79iawj8=";
   };
 
   postPatch = ''
@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
         -e "/export IBUS_LOCALEDIR=/ s/^.$//" \
         -i "setup/ibus-setup-table.in"
     substituteInPlace engine/tabcreatedb.py --replace '/usr/share/ibus-table' $out/share/ibus-table
+    substituteInPlace engine/ibus_table_location.py \
+      --replace '/usr/libexec' $out/libexec \
+      --replace '/usr/share/ibus-table/' $out/share/ibus-table/
   '';
 
   buildInputs = [
@@ -34,6 +37,7 @@ stdenv.mkDerivation rec {
     gtk3
     ibus
     (python3.withPackages (pypkgs: with pypkgs; [
+      dbus-python
       pygobject3
       (toPythonModule ibus)
     ]))
