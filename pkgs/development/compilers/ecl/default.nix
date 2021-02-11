@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl
+{lib, stdenv, fetchurl, fetchpatch
 , libtool, autoconf, automake
 , texinfo
 , gmp, mpfr, libffi, makeWrapper
@@ -37,10 +37,9 @@ stdenv.mkDerivation {
 
   patches = [
     # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
-    (fetchurl {
-      name = "write_error.patch";
+    (fetchpatch {
       url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/write_error.patch?h=9.2";
-      sha256 = "1lvdvh77blnxp0zbd27dsbq1ljkb5qblabf1illszn4j7qgq88fh";
+      sha256 = "0hfxacpgn4919hg0mn4wf4m8r7y592r4gw7aqfnva7sckxi6w089";
     })
   ];
 
