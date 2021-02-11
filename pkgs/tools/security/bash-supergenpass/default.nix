@@ -24,7 +24,9 @@ stdenv.mkDerivation {
     wrapProgram "$out/bin/supergenpass" --prefix PATH : "${lib.makeBinPath [ openssl coreutils gnugrep ]}"
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://github.com/lanzz/bash-supergenpass.git";
+  };
 
   meta = with lib; {
     description = "Bash shell-script implementation of SuperGenPass password generation";
