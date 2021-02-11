@@ -9262,6 +9262,8 @@ in
 
   zsh-syntax-highlighting = callPackage ../shells/zsh/zsh-syntax-highlighting { };
 
+  zsh-system-clipboard = callPackage ../shells/zsh/zsh-system-clipboard { };
+
   zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
 
   zsh-fzf-tab = callPackage ../shells/zsh/zsh-fzf-tab { };

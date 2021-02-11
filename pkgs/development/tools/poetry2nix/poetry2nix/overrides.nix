@@ -81,6 +81,10 @@ self: super:
     }
   );
 
+  celery = super.celery.overridePythonAttrs (old: {
+    propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
+  });
+
   cssselect2 = super.cssselect2.overridePythonAttrs (
     old: {
       buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
@@ -135,11 +139,21 @@ self: super:
     }
   );
 
+  daphne = super.daphne.overridePythonAttrs (old: {
+    postPatch = ''
+      substituteInPlace setup.py --replace 'setup_requires=["pytest-runner"],' ""
+    '';
+  });
+
   datadog-lambda = super.datadog-lambda.overridePythonAttrs (old: {
     postPatch = ''
       substituteInPlace setup.py --replace "setuptools==" "setuptools>="
     '';
     buildInputs = (old.buildInputs or [ ]) ++ [ self.setuptools ];
+  });
+
+  dcli = super.dcli.overridePythonAttrs (old: {
+    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
   });
 
   ddtrace = super.ddtrace.overridePythonAttrs (old: {
@@ -363,6 +377,11 @@ self: super:
       dontPreferSetupPy = true;
     }
   );
+
+  jsonslicer = super.jsonslicer.overridePythonAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
+    buildInputs = old.buildInputs ++ [ pkgs.yajl ];
+  });
 
   jupyter = super.jupyter.overridePythonAttrs (
     old: rec {
