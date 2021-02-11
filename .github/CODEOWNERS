@@ -13,6 +13,7 @@
 # GitHub actions
 /.github/workflows @Mic92 @zowoq
 /.github/workflows/merge-staging @FRidh
+/.github/workflows/update-node-packages.yml @SuperSandro2000
 
 # EditorConfig
 /.editorconfig @Mic92 @zowoq
