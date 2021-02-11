@@ -1,4 +1,4 @@
-{ stdenv, nixosTests, lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
+{ stdenv, nixosTests, lib, fetchFromGitHub, python3
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
@@ -57,7 +57,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.2.2";
+  hassVersion = "2021.2.3";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -76,7 +76,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0y7yj3kwk2454yghslvv5s2783rch9pznhxrw4mh3plr6qzi70rp";
+    sha256 = "0s1jcd94wwvmvzq86w8s9dwfvnmjs9l661z9pc6kwgagggjjgd8c";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -203,6 +203,10 @@ in with py.pkgs; buildPythonApplication rec {
     "test_error_posted_as_event"
     # ssdp/test_init.py: RuntimeError: Event loop is closed
     "test_scan_match_st"
+    # sun/test_init.py: RuntimeError: Event loop is closed
+    "test_setting_rising"
+    # sun/test_trigger.py: RuntimeError Event loop is closed
+    "test_sunset_trigger"
   ];
 
   preCheck = ''
