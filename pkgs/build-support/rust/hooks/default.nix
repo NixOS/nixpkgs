@@ -4,6 +4,7 @@
 , diffutils
 , lib
 , makeSetupHook
+, maturin
 , rust
 , stdenv
 , target ? rust.toRustTargetSpec stdenv.hostPlatform
@@ -62,4 +63,14 @@ in {
         '';
       };
     } ./cargo-setup-hook.sh) {};
+
+  maturinBuildHook = callPackage ({ }:
+    makeSetupHook {
+      name = "maturin-build-hook.sh";
+      deps = [ cargo maturin ];
+      substitutions = {
+        inherit ccForBuild ccForHost cxxForBuild cxxForHost
+          rustBuildPlatform rustTargetPlatform rustTargetPlatformSpec;
+      };
+    } ./maturin-build-hook.sh) {};
 }
