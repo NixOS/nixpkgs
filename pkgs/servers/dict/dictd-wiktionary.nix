@@ -1,11 +1,11 @@
 {lib, stdenv, fetchurl, python, dict, glibcLocales, writeScript}:
 
 stdenv.mkDerivation rec {
-  version = "20161001";
+  version = "20210201";
   pname = "dict-db-wiktionary";
   data = fetchurl {
     url = "http://dumps.wikimedia.org/enwiktionary/${version}/enwiktionary-${version}-pages-articles.xml.bz2";
-    sha256 = "0g3k7kxp2nzg0v56i4cz253af3aqvhn1lwkys2fnam51cn3yqm7m";
+    sha256 = "0dc34cbadsg0f6lhfcyx0np7zjnlg6837piqhlvnn0b45xnzn0cs";
   };
 
   convert = ./wiktionary2dict.py;
