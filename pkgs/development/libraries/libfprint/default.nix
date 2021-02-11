@@ -2,6 +2,7 @@
 , fetchFromGitLab
 , pkg-config
 , meson
+, python3
 , ninja
 , gusb
 , pixman
@@ -44,9 +45,24 @@ stdenv.mkDerivation rec {
     nss
   ];
 
+  checkInputs = [
+    python3
+  ];
+
   mesonFlags = [
     "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
+    # Include virtual drivers for fprintd tests
+    "-Ddrivers=all"
   ];
+
+  doCheck = true;
+
+  postPatch = ''
+    patchShebangs \
+      tests/test-runner.sh \
+      tests/unittest_inspector.py \
+      tests/virtual-image.py
+  '';
 
   meta = with lib; {
     homepage = "https://fprint.freedesktop.org/";
