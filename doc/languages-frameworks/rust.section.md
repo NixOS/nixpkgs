@@ -237,6 +237,104 @@ rustPlatform.buildRustPackage rec {
 }
 ```
 
+## Compiling non-Rust packages that include Rust code
+
+Several non-Rust packages incorporate Rust code for performance- or
+security-sensitive parts. `rustPlatform` exposes several functions and
+hooks that can be used to integrate Cargo in non-Rust packages.
+
+### Vendoring of dependencies
+
+Since network access is not allowed in sandboxed builds, Rust crate
+dependencies need to be retrieved using a fetcher. `rustPlatform`
+provides the `fetchCargoTarball` fetcher, which vendors all
+dependencies of a crate. This fetcher can be used jointly with
+`cargoSetupHook` to vendor dependencies in derivations that do not use
+`buildRustPackage`.
+
+In the following partial example, `fetchCargoTarball` and
+`cargoSetupHook` are used to vendor dependencies in the Python
+`tokenizers` derivation. The `tokenizers` Python package is in the
+`source/bindings/python` directory of the project's source archive. We
+use `fetchCargoTarball` to retrieve the dependencies specified in
+`source/bidings/Cargo.{lock,toml}`. The resulting path is assigned to
+the `cargoDeps` attribute, which is used by `cargoSetupHook` to
+configure Cargo.
+
+```nix
+{ fetchFromGitHub
+, buildPythonPackage
+, rustPlatform
+, setuptools-rust
+}:
+
+buildPythonPackage rec {
+  pname = "tokenizers";
+  version = "0.10.0";
+
+  src = fetchFromGitHub {
+    owner = "huggingface";
+    repo = pname;
+    rev = "python-v${version}";
+    hash = "sha256-rQ2hRV52naEf6PvRsWVCTN7B1oXAQGmnpJw4iIdhamw=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src sourceRoot;
+    name = "${pname}-${version}";
+    hash = "sha256-BoHIN/519Top1NUBjpB/oEMqi86Omt3zTQcXFWqrek0=";
+  };
+
+  sourceRoot = "source/bindings/python";
+
+  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
+    cargoSetupHook
+    rust.cargo
+    rust.rustc
+  ]);
+
+  # ...
+}
+```
+
+In some projects, the Rust crate is not in the main source directory
+of the projects. In such cases, the `cargoRoot` attribute can be used
+to specify the crate's directory relative to `sourceRoot`. In the
+following example, the crate is in `src/rust`, as specified in the
+`cargoRoot` attribute. Note that we also need to specify the correct
+path for `fetchCargoTarball`.
+
+```nix
+
+{ buildPythonPackage
+, fetchPypi
+, rustPlatform
+, setuptools-rust
+, openssl
+}:
+
+buildPythonPackage rec {
+  pname = "cryptography";
+  version = "3.4.2"; # Also update the hash in vectors.nix
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1i1mx5y9hkyfi9jrrkcw804hmkcglxi6rmf7vin7jfnbr2bf4q64";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    sourceRoot = "${pname}-${version}/${cargoRoot}";
+    name = "${pname}-${version}";
+    hash = "sha256-PS562W4L1NimqDV2H0jl5vYhL08H9est/pbIxSdYVfo=";
+  };
+
+  cargoRoot = "src/rust";
+
+  # ...
+}
+```
+
 ## Compiling Rust crates using Nix instead of Cargo
 
 ### Simple operation

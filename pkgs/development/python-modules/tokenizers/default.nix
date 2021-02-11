@@ -1,12 +1,10 @@
 { lib
-, rustPlatform
 , fetchFromGitHub
 , fetchurl
-, pipInstallHook
+, buildPythonPackage
+, rustPlatform
 , setuptools-rust
-, wheel
 , numpy
-, python
 , datasets
 , pytestCheckHook
 , requests
@@ -49,7 +47,7 @@ let
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-merges.txt";
     sha256 = "09a754pm4djjglv3x5pkgwd6f79i2rq8ydg0f7c3q1wmwqdbba8f";
   };
-in rustPlatform.buildRustPackage rec {
+in buildPythonPackage rec {
   pname = "tokenizers";
   version = "0.10.0";
 
@@ -60,19 +58,22 @@ in rustPlatform.buildRustPackage rec {
     hash = "sha256-rQ2hRV52naEf6PvRsWVCTN7B1oXAQGmnpJw4iIdhamw=";
   };
 
-  cargoSha256 = "sha256-BoHIN/519Top1NUBjpB/oEMqi86Omt3zTQcXFWqrek0=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src sourceRoot;
+    name = "${pname}-${version}";
+    hash = "sha256-BoHIN/519Top1NUBjpB/oEMqi86Omt3zTQcXFWqrek0=";
+  };
 
   sourceRoot = "source/bindings/python";
 
-  nativeBuildInputs = [
-    pipInstallHook
-    setuptools-rust
-    wheel
-  ];
+  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
+    cargoSetupHook
+    rust.cargo
+    rust.rustc
+  ]);
 
   propagatedBuildInputs = [
     numpy
-    python
   ];
 
   installCheckInputs = [
@@ -97,14 +98,6 @@ in rustPlatform.buildRustPackage rec {
       ln -s ${norvigBig} big.txt
       ln -s ${openaiVocab} openai-gpt-vocab.json
       ln -s ${openaiMerges} openai-gpt-merges.txt )
-  '';
-
-  buildPhase = ''
-    ${python.interpreter} setup.py bdist_wheel
-  '';
-
-  installPhase = ''
-    pipInstallPhase
   '';
 
   preCheck = ''
