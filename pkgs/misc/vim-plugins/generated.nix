@@ -3058,6 +3058,18 @@ let
     meta.homepage = "https://github.com/RishabhRD/nvim-lsputils/";
   };
 
+  nvim-peekup = buildVimPluginFrom2Nix {
+    pname = "nvim-peekup";
+    version = "2021-02-10";
+    src = fetchFromGitHub {
+      owner = "gennaro-tedesco";
+      repo = "nvim-peekup";
+      rev = "95492e20139dcd911d6a1932bbe435010b87c6e7";
+      sha256 = "1q1ksr2v17nvar48gmixigc72xw8r5k6gd4q3h002hr8lnhfm1xp";
+    };
+    meta.homepage = "https://github.com/gennaro-tedesco/nvim-peekup/";
+  };
+
   nvim-scrollview = buildVimPluginFrom2Nix {
     pname = "nvim-scrollview";
     version = "2021-01-09";

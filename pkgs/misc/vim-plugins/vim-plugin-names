@@ -128,6 +128,7 @@ fruit-in/vim-nong-theme
 fsharp/vim-fsharp
 fszymanski/deoplete-emoji
 garbas/vim-snipmate
+gennaro-tedesco/nvim-peekup
 gentoo/gentoo-syntax
 GEverding/vim-hocon
 gfanto/fzf-lsp.nvim@main
