@@ -925,8 +925,8 @@ in with lib.licenses;
     src = fetchFromGitHub {
       owner = "snes9xgit";
       repo = core;
-      rev = "6db918cfe32b157239da44096091c212fdfb3b60";
-      sha256 = "0y3jhy50qdhhfglybys9m0fgk9r24ksdcgv5iqpyxy5a4cjvhv8j";
+      rev = "bd9246ddd75a5e9f78d6189c8c57754d843630f7";
+      sha256 = "10fm7ah3aha9lf4k9hgw0dlhdvshzpig2d0ylcb12gf9zz0i22ns";
     };
     description = "Port of SNES9x git to libretro";
     license = "Non-commercial";
