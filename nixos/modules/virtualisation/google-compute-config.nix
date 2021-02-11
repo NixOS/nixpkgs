@@ -69,67 +69,29 @@ in
   # GC has 1460 MTU
   networking.interfaces.eth0.mtu = 1460;
 
-  systemd.services.fetch-ssh-keys = {
+  # Used by NixOps
+  systemd.services.fetch-instance-ssh-keys = {
     description = "Fetch host keys and authorized_keys for root user";
 
     wantedBy = [ "sshd.service" ];
     before = [ "sshd.service" ];
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
+    path = [ pkgs.wget ];
 
-    script =
-      let
-        wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 15 --waitretry=10 --header='Metadata-Flavor: Google'";
-        mktemp = "mktemp --tmpdir=/run";
-      in ''
-        # When dealing with cryptographic keys, we want to keep things private.
-        umask 077
-        mkdir -m 0700 -p /root/.ssh
-
-        echo "Obtaining SSH keys..."
-        AUTH_KEYS=$(${mktemp})
-        ${wget} -O $AUTH_KEYS http://metadata.google.internal/computeMetadata/v1/instance/attributes/sshKeys
-        if [ -s $AUTH_KEYS ]; then
-            # Read in key one by one, split in case Google decided
-            # to append metadata (it does sometimes) and add to
-            # authorized_keys if not already present.
-            touch /root/.ssh/authorized_keys
-            NEW_KEYS=$(${mktemp})
-            # Yes this is a nix escape of two single quotes.
-            while IFS=''' read -r line || [[ -n "$line" ]]; do
-                keyLine=$(echo -n "$line" | cut -d ':' -f2)
-                IFS=' ' read -r -a array <<< "$keyLine"
-                if [ ''${#array[@]} -ge 3 ]; then
-                    echo ''${array[@]:0:3} >> $NEW_KEYS
-                    echo "Added ''${array[@]:2} to authorized_keys"
-                fi
-            done < $AUTH_KEYS
-            mv $NEW_KEYS /root/.ssh/authorized_keys
-            chmod 600 /root/.ssh/authorized_keys
-            rm -f $KEY_PUB
-        else
-            echo "Downloading http://metadata.google.internal/computeMetadata/v1/project/attributes/sshKeys failed."
-            false
-        fi
-        rm -f $AUTH_KEYS
-
-        SSH_HOST_KEYS_DIR=$(${mktemp} -d)
-        ${wget} -O $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key http://metadata.google.internal/computeMetadata/v1/instance/attributes/ssh_host_ed25519_key
-        ${wget} -O $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key.pub http://metadata.google.internal/computeMetadata/v1/instance/attributes/ssh_host_ed25519_key_pub
-        if [ -s $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key -a -s $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key.pub ]; then
-            mv -f $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key* /etc/ssh/
-            chmod 600 /etc/ssh/ssh_host_ed25519_key
-            chmod 644 /etc/ssh/ssh_host_ed25519_key.pub
-        else
-            echo "Setup of ssh host keys from http://metadata.google.internal/computeMetadata/v1/instance/attributes/ failed."
-            false
-        fi
-        rm -rf $SSH_HOST_KEYS_DIR
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.runCommand "fetch-instance-ssh-keys" { } ''
+        cp ${./fetch-instance-ssh-keys.bash} $out
+        chmod +x $out
+        ${pkgs.shfmt}/bin/shfmt -i 4 -d $out
+        ${pkgs.shellcheck}/bin/shellcheck $out
+        patchShebangs $out
       '';
-    serviceConfig.Type = "oneshot";
-    serviceConfig.RemainAfterExit = true;
-    serviceConfig.StandardError = "journal+console";
-    serviceConfig.StandardOutput = "journal+console";
+      PrivateTmp = true;
+      StandardError = "journal+console";
+      StandardOutput = "journal+console";
+    };
   };
 
   systemd.services.google-instance-setup = {
