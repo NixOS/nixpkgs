@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.16.6";
+  version = "1.17.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fc1e6a62ccb7c9830f1e7e9288e2d20eaf373cc8875b5c55b7d5d9b7717be91";
+    sha256 = "14198c5afeb289106e40ee6e5e4c0529c5369939f6ca588a028b371a75fe20dd";
   };
 
   propagatedBuildInputs = [ passlib scramp ];
