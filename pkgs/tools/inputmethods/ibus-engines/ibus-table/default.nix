@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
         -e "/export IBUS_LOCALEDIR=/ s/^.$//" \
         -i "setup/ibus-setup-table.in"
     substituteInPlace engine/tabcreatedb.py --replace '/usr/share/ibus-table' $out/share/ibus-table
+    substituteInPlace engine/ibus_table_location.py \
+      --replace '/usr/libexec' $out/libexec \
+      --replace '/usr/share/ibus-table/' $out/share/ibus-table/
   '';
 
   buildInputs = [
@@ -34,6 +37,7 @@ stdenv.mkDerivation rec {
     gtk3
     ibus
     (python3.withPackages (pypkgs: with pypkgs; [
+      dbus-python
       pygobject3
       (toPythonModule ibus)
     ]))
