@@ -1567,4 +1567,9 @@ self: super: {
   # Allow building with older versions of http-client.
   http-client-restricted = doJailbreak super.http-client-restricted;
 
+  # 2020-02-11: https://github.com/ekmett/lens/issues/969
+  # A change in vector 0.2.12 broke the lens doctests.
+  # This is fixed on lens master. Remove this override on assert fail.
+  lens = assert super.lens.version == "4.19.2"; doJailbreak (dontCheck super.lens);
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
