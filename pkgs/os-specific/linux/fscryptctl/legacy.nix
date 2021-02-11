@@ -1,8 +1,11 @@
 { lib, stdenv, fetchFromGitHub }:
 
+# Don't use this for anything important!
+# TODO: Drop fscryptctl-experimental after the NixOS 21.03/21.05 release.
+
 stdenv.mkDerivation rec {
   pname = "fscryptctl";
-  version = "1.0.0";
+  version = "0.1.0";
 
   goPackagePath = "github.com/google/fscrypt";
 
@@ -10,10 +13,10 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "fscryptctl";
     rev = "v${version}";
-    sha256 = "1hwj726mm0yhlcf6523n07h0yq1rvkv4km64h3ydpjcrcxklhw6l";
+    sha256 = "1853hlpklisbqnkb7a921dsf0vp2nr2im26zpmrs592cnpsvk3hb";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = [ "DESTDIR=$(out)/bin" ];
 
   meta = with lib; {
     description = "Small C tool for Linux filesystem encryption";
@@ -32,9 +35,17 @@ stdenv.mkDerivation rec {
       documentation for filesystem encryption before using fscryptctl.
     '';
     inherit (src.meta) homepage;
-    changelog = "https://github.com/google/fscryptctl/releases/tag/v{version}";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
+    knownVulnerabilities = [ ''
+      fscryptctl version 1.0.0 was released and now uses v2 encryption
+      policies. fscryptctl-experimental will remain at version 0.1.0 which
+      still supports the v1 encryption policies. Please try to switch from the
+      "fscryptctl-experimental" package to "fscryptctl". The v1 encryption
+      policies can be insecure, are hard to use correctly, and have different
+      semantics from v2 policies (which is why they are no longer supported in
+      fscryptctl 1.0.0+).
+    '' ];
   };
 }
