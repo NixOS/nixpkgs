@@ -787,11 +787,13 @@
     "version": "1.1.8"
   },
   "rabbitmq": {
-    "owner": "terraform-providers",
+    "owner": "cyrilgdn",
+    "provider-source-address": "registry.terraform.io/cyrilgdn/rabbitmq",
     "repo": "terraform-provider-rabbitmq",
-    "rev": "v1.3.0",
-    "sha256": "1adkbfm0p7a9i1i53bdmb34g5871rklgqkx7kzmwmk4fvv89n6g8",
-    "version": "1.3.0"
+    "rev": "v1.5.1",
+    "sha256": "1yxvhzrp63wv5zbzj3ma2745g1marpj32b5h41ha27h0i42498ky",
+    "vendorSha256": null,
+    "version": "1.5.1"
   },
   "rancher": {
     "owner": "terraform-providers",
