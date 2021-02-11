@@ -83,15 +83,28 @@ in
        Filters/Generic/FFT Forward
        Filters/Generic/FFT Inverse
     */
-    name = "fourier-0.4.3";
-    buildInputs = with pkgs; [ fftw ];
+    pname = "fourier";
+    version = "0.4.3";
 
     src = fetchurl {
-      url = "https://www.lprp.fr/files/old-web/soft/gimp/${name}.tar.gz";
+      url = "https://www.lprp.fr/files/old-web/soft/gimp/${pname}-${version}.tar.gz";
       sha256 = "0mf7f8vaqs2madx832x3kcxw3hv3w3wampvzvaps1mkf2kvrjbsn";
     };
 
-    installPhase = "installPlugins fourier";
+    buildInputs = with pkgs; [ fftw ];
+
+    postPatch = ''
+      # The tarball contains a prebuilt binary.
+      make clean
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      installPlugins fourier
+
+      runHook postInstall
+    '';
 
     meta = with lib; {
       description = "GIMP plug-in to do the fourier transform";
