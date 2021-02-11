@@ -192,9 +192,9 @@ let
 in self: {
 
   postgresql_9_5 = self.callPackage generic {
-    version = "9.5.24";
+    version = "9.5.25";
     psqlSchema = "9.5";
-    sha256 = "0an2k4m1da96897hyxlff8p4p63wg4dffwsfg57aib7mp4yzsp06";
+    sha256 = "00yny0sskxrqk4ji2phgv3iqxd1aiy6rh660k73s4s1pn9gcaa3n";
     this = self.postgresql_9_5;
     thisAttr = "postgresql_9_5";
     inherit self;
