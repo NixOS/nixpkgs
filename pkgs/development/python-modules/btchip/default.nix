@@ -14,6 +14,8 @@ buildPythonPackage rec {
   # tests requires hardware
   doCheck = false;
 
+  pythonImportsCheck = [ "btchip.btchip" ];
+
   meta = with lib; {
     description = "Python communication library for Ledger Hardware Wallet products";
     homepage = "https://github.com/LedgerHQ/btchip-python";
