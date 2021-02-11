@@ -36,7 +36,9 @@ stdenv.mkDerivation {
       --prefix PATH : "${lib.makeBinPath [ curl rlwrap ncurses xsel ]}"
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://github.com/chubin/cheat.sh.git";
+  };
 
   meta = with lib; {
     description = "CLI client for cheat.sh, a community driven cheat sheet";
