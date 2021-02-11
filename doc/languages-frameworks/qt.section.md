@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     because the Qt versions of dependencies may not be coherent, causing build and runtime failures.
    </para>
   </callout>
-  <callout arearefs="qt-default-nix-co-2'>
+  <callout arearefs='qt-default-nix-co-2'>
     <para>
       All Qt packages must include <literal>wrapQtAppsHook</literal> in
       <literal>nativeBuildInputs</literal>, or you must explicitly set
