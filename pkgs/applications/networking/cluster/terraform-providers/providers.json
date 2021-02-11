@@ -287,6 +287,15 @@
     "sha256": "1a3kxmbib2y0nl7gnxknbhsflj5kfknxnm3gjxxrb2h5d2kvqy48",
     "version": "1.2.0"
   },
+  "elasticsearch": {
+    "owner": "phillbaker",
+    "provider-source-address": "registry.terraform.io/phillbaker/elasticsearch",
+    "repo": "terraform-provider-elasticsearch",
+    "rev": "v1.5.2",
+    "sha256": "1yfmlqab2jb679gbns04sdcjfihzsa0dfp7blhfk3v5zhgv1g7ys",
+    "vendorSha256": "15m9aqb2lqjv6g3k46zyha2m118wpbjrh4ap1bfps0fcxn20qvr5",
+    "version": "1.5.2"
+  },
   "exoscale": {
     "owner": "terraform-providers",
     "repo": "terraform-provider-exoscale",
