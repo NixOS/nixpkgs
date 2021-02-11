@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ python dict glibcLocales ];
   builder = ./builder.sh;
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "DICT version of English Wiktionary";
     homepage = "http://en.wiktionary.org/";
