@@ -1,0 +1,12 @@
+diff -ru bzflag-2.4.20/data/bzflag.desktop bzflag-2.4.20.b/data/bzflag.desktop
+--- bzflag-2.4.20/data/bzflag.desktop	2019-03-03 11:34:43.000000000 -0800
++++ bzflag-2.4.20.b/data/bzflag.desktop	2021-03-20 21:51:13.722381294 -0700
+@@ -3,7 +3,7 @@
+ GenericName=Tank Battle Game
+ Comment=Battle enemy tanks
+ Keywords=capture;flag;tank;game;multiplayer;network;
+-Exec=/usr/games/bzflag
++Exec=bzflag
+ Icon=bzflag-48x48
+ Type=Application
+ Categories=Game;ActionGame;
