@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = {
+  meta = with lib; {
     description = "The Facebook protocol plugin for bitlbee";
-
     homepage = "https://github.com/bitlbee/bitlbee-facebook";
     license = licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ toonn ];
+    platforms = platforms.linux;
   };
 }
