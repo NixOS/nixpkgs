@@ -8420,6 +8420,8 @@ in
 
   trezor-udev-rules = callPackage ../os-specific/linux/trezor-udev-rules {};
 
+  trezorctl = with python3Packages; toPythonApplication trezor;
+
   trezord = callPackage ../servers/trezord { };
 
   trezor_agent = with python3Packages; toPythonApplication trezor_agent;
