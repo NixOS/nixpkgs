@@ -56,7 +56,6 @@ let
     # Packages that don't fit the default model
     ansible = callPackage ./ansible {};
     cloudfoundry = callPackage ./cloudfoundry {};
-    elasticsearch = callPackage ./elasticsearch {};
     gandi = callPackage ./gandi {};
     hcloud = callPackage ./hcloud {};
     keycloak = callPackage ./keycloak {};

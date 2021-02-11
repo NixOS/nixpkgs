@@ -10,15 +10,15 @@
 
 stdenv.mkDerivation {
   pname = "cht.sh";
-  version = "unstable-2020-08-06";
+  version = "unstable-2021-01-31";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "chubin";
     repo = "cheat.sh";
-    rev = "9f99bec1f0293e84d6d8a990a1940c1422e3b0ce";
-    sha256 = "1n4lgzsgg4502zh113d7pb1hw6bykqx6vpfp8j08z7y5clmdiwa6";
+    rev = "01e579176981356fb90d4aa58fea2d6c273a45a5";
+    sha256 = "0d98v67ajsc80i962myh0j4ph7bn3csk8y9jf8b5rfqd1zg737hb";
   };
 
   # Fix ".cht.sh-wrapped" in the help message
@@ -36,7 +36,9 @@ stdenv.mkDerivation {
       --prefix PATH : "${lib.makeBinPath [ curl rlwrap ncurses xsel ]}"
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://github.com/chubin/cheat.sh.git";
+  };
 
   meta = with lib; {
     description = "CLI client for cheat.sh, a community driven cheat sheet";

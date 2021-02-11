@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "msldap";
-  version = "0.3.24";
+  version = "0.3.25";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0q9bhw0lfw9iykjdsqz62ipy3ihfz6kprzw5sc7v1678l2pvs84j";
+    sha256 = "b5ef61c4f05493cfe78b3f955878a3d0a71950eead5ebb484282f07456a47bea";
   };
 
   propagatedBuildInputs = [

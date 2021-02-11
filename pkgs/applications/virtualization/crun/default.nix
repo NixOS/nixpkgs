@@ -10,6 +10,7 @@
 , systemd
 , yajl
 , nixosTests
+, criu
 }:
 
 let
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
 
-  buildInputs = [ libcap libseccomp systemd yajl ];
+  buildInputs = [ criu libcap libseccomp systemd yajl ];
 
   enableParallelBuilding = true;
 
