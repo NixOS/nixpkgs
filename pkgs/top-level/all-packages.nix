@@ -8429,6 +8429,8 @@ in
 
   trezor_agent = with python3Packages; toPythonApplication trezor_agent;
 
+  trezor-suite = callPackage ../applications/blockchains/trezor-suite { };
+
   tthsum = callPackage ../applications/misc/tthsum { };
 
   chaps = callPackage ../tools/security/chaps { };
