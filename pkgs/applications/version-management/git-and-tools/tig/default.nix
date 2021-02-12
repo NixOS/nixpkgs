@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   # those files are inherently impure, we'll handle the corresponding dependencies.
   postPatch = ''
-      rm -f contrib/config.make-*
+      rm contrib/config.make-*
   '';
 
   enableParallelBuilding = true;
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
     maintainers = with maintainers; [ bjornfor domenkozar qknight globin ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }
