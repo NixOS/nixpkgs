@@ -16,7 +16,7 @@
     "agent_dvr" = ps: with ps; [ agent-py ];
     "air_quality" = ps: with ps; [ ];
     "airly" = ps: with ps; [ airly ];
-    "airnow" = ps: with ps; [ ]; # missing inputs: pyairnow
+    "airnow" = ps: with ps; [ pyairnow ];
     "airvisual" = ps: with ps; [ pyairvisual ];
     "aladdin_connect" = ps: with ps; [ ]; # missing inputs: aladdin_connect
     "alarm_control_panel" = ps: with ps; [ ];
