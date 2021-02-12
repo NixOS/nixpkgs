@@ -1046,7 +1046,7 @@ in
       "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
     });
 
-    services.dbus.enable = true;
+    services.dbus.enable = mkDefault true;
 
     users.users.systemd-network.uid = config.ids.uids.systemd-network;
     users.groups.systemd-network.gid = config.ids.gids.systemd-network;
