@@ -6598,6 +6598,8 @@ in {
 
   pyyaml = callPackage ../development/python-modules/pyyaml { };
 
+  pyzerproc = callPackage ../development/python-modules/pyzerproc { };
+
   pyzmq = callPackage ../development/python-modules/pyzmq { };
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
