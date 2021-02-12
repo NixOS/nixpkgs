@@ -147,6 +147,10 @@ let
       (lib.enableFeature enablePlugin "plugin")
     ]
 
+    # Support -m32 on powerpc64le
+    ++ lib.optional (targetPlatform.system == "powerpc64le-linux")
+      "--enable-targets=powerpcle-linux"
+
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"
     ++ lib.optionals (cloog != null) [
