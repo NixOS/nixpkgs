@@ -4,7 +4,7 @@
 with lib;
 
 let
-  cfg = config.services.pipewire.pwms;
+  cfg = config.services.pipewire.media-session;
   enable32BitAlsaPlugins = cfg.alsa.support32Bit
                            && pkgs.stdenv.isx86_64
                            && pkgs.pkgsi686Linux.pipewire != null;
@@ -34,8 +34,12 @@ in {
 
   ###### interface
   options = {
-    services.pipewire.pwms = {
-      enable = mkEnableOption "Example pipewire session manager";
+    services.pipewire.media-session = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Example pipewire session manager";
+      };
 
       package = mkOption {
         type = types.package;
