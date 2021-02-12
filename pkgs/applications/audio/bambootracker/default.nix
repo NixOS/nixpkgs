@@ -33,6 +33,11 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace BambooTracker/BambooTracker.pro \
+      --replace '# Temporary known-error downgrades here' 'CPP_WARNING_FLAGS += -Wno-missing-braces'
+  '';
+
   nativeBuildInputs = [ qmake qttools pkg-config ];
 
   buildInputs = [ qtbase ]
