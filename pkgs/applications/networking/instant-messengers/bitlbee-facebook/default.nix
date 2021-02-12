@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
         name = "FB_ORCA_AGENT_version_bump.patch";
         url = "https://github.com/bitlbee/bitlbee-facebook/commit/49ea312d98b0578b9b2c1ff759e2cfa820a41f4d.patch";
-        sha256 = "1c7ipbjg3560hg90zmg9r599287xfka1f7wxhiqzknikcjrcj8br";
+        sha256 = "0nzyyg8pw4f2jcickcpxq7r2la5wgl7q6iz94lhzybrkhss5753d";
       }
     )
   ];
