@@ -91,5 +91,5 @@ in rec {
     locale = "en_UK";
   };
   wordnet = callPackage ./dictd-wordnet.nix {};
-  wiktionary = callPackage ./dictd-wiktionary.nix {};
+  wiktionary = callPackage ./wiktionary {};
 }
