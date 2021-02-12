@@ -41,7 +41,6 @@ in {
 
         As an example:
         <programlisting>
-        security.acme.certs."example.com".allowKeysForGroup = true;
         systemd.services.molly-brown.serviceConfig.SupplementaryGroups =
           [ config.security.acme.certs."example.com".group ];
         </programlisting>
