@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "flashbench";
-  version = "2012-06-06";
+  version = "2020-01-23";
 
   src = fetchFromGitHub {
     owner = "bradfa";
     repo = "flashbench";
-    rev = "2e30b1968a66147412f21002ea844122a0d5e2f0";
-    sha256 = "037rhd2alwfip9qk78cy8fwwnc2kdyzccsyc7v2zpmvl4vvpvnhg";
+    rev = "d783b1bd2443812c6deadc31b081f043e43e4c1a";
+    sha256 = "045j1kpay6x2ikz8x54ph862ymfy1nzpbmmqpf3nkapiv32fjqw5";
   };
 
   installPhase = ''
