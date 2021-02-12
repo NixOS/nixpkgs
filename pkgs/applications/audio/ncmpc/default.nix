@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, ncurses
-, mpd_clientlib, gettext, boost
-, pcreSupport ? false
-, pcre ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, glib
+, ncurses
+, libmpdclient
+, gettext
+, boost
+, pcreSupport ? false, pcre ? null
 }:
 
 with lib;
@@ -19,7 +27,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Qu41TL8KSKC9L25D6Z8bEbJUJQ9QI08grTGZ+0qGdUQ=";
   };
 
-  buildInputs = [ glib ncurses mpd_clientlib boost ]
+  buildInputs = [ glib ncurses libmpdclient boost ]
     ++ optional pcreSupport pcre;
   nativeBuildInputs = [ meson ninja pkg-config gettext ];
 
