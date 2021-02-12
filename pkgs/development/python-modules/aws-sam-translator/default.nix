@@ -30,6 +30,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/awslabs/serverless-application-model";
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.andreabedini ];
   };
 }

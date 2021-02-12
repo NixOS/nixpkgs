@@ -111,6 +111,8 @@
 
   helm-words = callPackage ./helm-words { };
 
+  jam-mode = callPackage ./jam-mode { };
+
   org-mac-link =
     callPackage ./org-mac-link { };
 
