@@ -1,5 +1,6 @@
 { mkDerivation
 , lib
+, stdenv
 , fetchFromGitHub
 , qmake
 , pkg-config
@@ -34,5 +35,6 @@ mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ OPNA2608 ];
+    broken = stdenv.isDarwin;
   };
 }
