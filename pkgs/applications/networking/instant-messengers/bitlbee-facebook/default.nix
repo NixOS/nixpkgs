@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkg-config, glib, json-glib }:
+{ lib, fetchFromGitHub, fetchpatch, stdenv, bitlbee, autoconf, automake, libtool, pkg-config, glib, json-glib }:
 
 with lib;
 stdenv.mkDerivation rec {
@@ -13,8 +13,15 @@ stdenv.mkDerivation rec {
   };
 
   # TODO: This patch should be included with the next release after v1.2.1
-  #       these lines and the patch should be removed when this happens.
-  patches = [ ./0001-Bump-the-FB_ORCA_AGENT-version-once-again-208.patch ];
+  #       these lines should be removed when this happens.
+  patches = [
+    (fetchpatch {
+        name = "FB_ORCA_AGENT_version_bump.patch";
+        url = "https://github.com/bitlbee/bitlbee-facebook/commit/49ea312d98b0578b9b2c1ff759e2cfa820a41f4d.patch";
+        sha256 = "1c7ipbjg3560hg90zmg9r599287xfka1f7wxhiqzknikcjrcj8br";
+      }
+    )
+  ];
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config ];
 
