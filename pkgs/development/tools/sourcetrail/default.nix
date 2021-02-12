@@ -168,6 +168,8 @@ in stdenv.mkDerivation rec {
   # Upstream install script:
   # https://github.com/CoatiSoftware/Sourcetrail/blob/master/setup/Linux/createPackages.sh
   installPhase = ''
+    runHook preInstall
+
     mkdir -p ${appResourceDir}
     cp -R ../bin/app/data ${appResourceDir}
     cp -R ../bin/app/user/projects ${appResourceDir}/data/fallback
@@ -229,9 +231,13 @@ in stdenv.mkDerivation rec {
     done
     png2icns ${appResourceDir}/project.icns \
       ${appResourceDir}/project.iconset/icon_{16x16,32x32,128x128,256x256,512x512,512x512@2x}.png
+  '' + ''
+    runHook postInstall
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     rm -rf ../bin/app/data/{python,java/lib}
     ln -s $out/opt/sourcetrail/share/data/python ../bin/app/data/python
     ln -s $out/opt/sourcetrail/share/data/java/lib ../bin/app/data/java/lib
@@ -246,6 +252,8 @@ in stdenv.mkDerivation rec {
     popd
 
     rm ../bin/app/data/{python,java/lib}
+
+    runHook postCheck
   '';
 
   # This has to be done manually in the installPhase because the actual binary
@@ -253,15 +261,15 @@ in stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   # FIXME: Some test cases are disabled in the patch phase.
-  # NOTE: Tests are disabled on macOS because Sourcetrail tries to use the
-  # system paths when looking for compilers.
-  doCheck = !stdenv.isDarwin;
+  # FIXME: Tests are disabled on some platforms because of faulty detection
+  # logic for libjvm.so. Should work with manual configuration.
+  doCheck = !stdenv.isDarwin && stdenv.isx86_64;
 
   meta = with lib; {
     homepage = "https://www.sourcetrail.com";
     description = "A cross-platform source explorer for C/C++ and Java";
     platforms = platforms.all;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ midchildan ];
   };
 }
