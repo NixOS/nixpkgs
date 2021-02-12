@@ -1,6 +1,7 @@
 { lib, stdenv, fetchgit, flex, bison, python3, autoconf, automake, gnulib, libtool
 , gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
 , pkgsBuildBuild
+, nixosTests
 , fuse # only needed for grub-mount
 , runtimeShell
 , zfs ? null
@@ -124,6 +125,14 @@ stdenv.mkDerivation rec {
     # Avoid a runtime reference to gcc
     sed -i $out/lib/grub/*/modinfo.sh -e "/grub_target_cppflags=/ s|'.*'|' '|"
   '';
+
+  passthru.tests = {
+    nixos-grub = nixosTests.grub;
+    nixos-install-simple = nixosTests.installer.simple;
+    nixos-install-grub1 = nixosTests.installer.grub1;
+    nixos-install-grub-uefi = nixosTests.installer.simpleUefiGrub;
+    nixos-install-grub-uefi-spec = nixosTests.installer.simpleUefiGrubSpecialisation;
+  };
 
   meta = with lib; {
     description = "GNU GRUB, the Grand Unified Boot Loader (2.x beta)";
