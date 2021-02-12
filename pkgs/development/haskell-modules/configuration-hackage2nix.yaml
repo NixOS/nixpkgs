@@ -8286,9 +8286,6 @@ broken-packages:
   - nested-sequence
   - NestedFunctor
   - nestedmap
-  - net-mqtt
-  - net-mqtt-lens
-  - net-mqtt-rpc
   - net-spider
   - net-spider-cli
   - net-spider-pangraph
