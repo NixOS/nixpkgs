@@ -1,6 +1,6 @@
 { stdenv, buildPackages, lib
 , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
-, zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
+, zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
 , makeWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
@@ -44,6 +44,7 @@ let
       , groff, docSupport ? true
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
+      , jemalloc, jemallocSupport ? false
       # By default, ruby has 3 observed references to stdenv.cc:
       #
       # - If you run:
@@ -94,6 +95,7 @@ let
           ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
+          ++ (op jemallocSupport jemalloc)
           # Looks like ruby fails to build on darwin without readline even if curses
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
@@ -134,6 +136,7 @@ let
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
           ++ op (!jitSupport) "--disable-jit-support"
           ++ op (!docSupport) "--disable-install-doc"
+          ++ op (jemallocSupport) "--with-jemalloc"
           ++ ops stdenv.isDarwin [
             # on darwin, we have /usr/include/tk.h -- so the configure script detects
             # that tk is installed
