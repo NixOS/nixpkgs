@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "0.9.21";
+  version = "0.9.22";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "newville";
     repo = pname;
     rev = version;
-    sha256 = "1bhdj7zybsqghgd7qx50il7nwfg79qx9wg03n0z96jgq5gydqd9w";
+    sha256 = "sha256-93IBv6beYE/VTKJCWUbA1QTRdmQdn2kg35KBw6kmDis=";
   };
 
   checkInputs = [ pytestCheckHook ];
