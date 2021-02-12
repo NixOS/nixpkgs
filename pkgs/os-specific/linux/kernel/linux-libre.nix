@@ -35,6 +35,8 @@ in linux.override {
       '';
     };
 
+    extraMeta.broken = true;
+
     passthru.updateScript = ./update-libre.sh;
 
     maintainers = [ lib.maintainers.qyliss ];
