@@ -4,7 +4,7 @@
 , fetchurl, fetchpatch
 , gmp, gnutls
 , libffi, binutils-unwrapped
-, libjpeg, libtiff, libpng, giflib, libungif
+, libjpeg, libtiff, libpng, giflib
 , libxml2, libxslt, libiconv
 , libobjc, libgcrypt
 , icu
@@ -26,7 +26,7 @@ gsmakeDerivation {
     cups
     gmp gnutls
     libffi binutils-unwrapped
-    libjpeg libtiff libpng giflib libungif
+    libjpeg libtiff libpng giflib giflib
     libxml2 libxslt libiconv
     libobjc libgcrypt
     icu

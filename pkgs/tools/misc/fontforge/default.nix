@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, lib
 , cmake, perl, uthash, pkg-config, gettext
-, python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, cairo, pango
+, python, freetype, zlib, glib, giflib, libpng, libjpeg, libtiff, libxml2, cairo, pango
 , readline, woff2, zeromq, libuninameslist
 , withSpiro ? false, libspiro
 , withGTK ? false, gtk3
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
     readline uthash woff2 zeromq libuninameslist
-    python freetype zlib glib libungif libpng libjpeg libtiff libxml2
+    python freetype zlib glib giflib libpng libjpeg libtiff libxml2
   ]
     ++ lib.optionals withSpiro [libspiro]
     ++ lib.optionals withGUI [ gtk3 cairo pango ]

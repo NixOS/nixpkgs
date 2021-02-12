@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, ocamlPackages, libGLU, libGL, freeglut
-, libmysqlclient, mpfr, gmp, libtiff, libjpeg, libpng, giflib
+{ lib, stdenv, fetchurl, ocamlPackages, libGLU, libGL, freeglut, giflib
+, libmysqlclient, mpfr, gmp, libtiff, libjpeg, libpng
 }:
 
 stdenv.mkDerivation {
