@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "0.2.0";
+  version = "0.2.1";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "0d984apw73kzd6bid65bqhp26gvvgqjni56nqr0gnb2sv7mknnm8";
+    sha256 = "sha256-yOloGkOVhXcTt0PAjf3yWUItN1okO94DndRFsImiuz4=";
   };
 
   # pytest-error-for-skips is not packaged
