@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkg-config
-, bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
+, bzip2, curlMinimal, expat, libarchive, xz, zlib, libuv, rhash
 , buildPackages
 # darwin attributes
 , ps
@@ -50,7 +50,7 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [ setupHook pkg-config ];
 
   buildInputs = []
-    ++ lib.optionals useSharedLibraries [ bzip2 curl expat libarchive xz zlib libuv rhash ]
+    ++ lib.optionals useSharedLibraries [ bzip2 curlMinimal expat libarchive xz zlib libuv rhash ]
     ++ lib.optional useOpenSSL openssl
     ++ lib.optional useNcurses ncurses
     ++ lib.optional useQt4 qt4
