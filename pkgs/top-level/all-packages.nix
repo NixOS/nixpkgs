@@ -10840,7 +10840,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  maturin = callPackage ../development/tools/rust/maturin { };
+  maturin = callPackage ../development/tools/rust/maturin {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   inherit (rustPackages) rls;
   rustfmt = rustPackages.rustfmt;
   rustracer = callPackage ../development/tools/rust/racer {
@@ -17890,6 +17893,8 @@ in
 
   mailman-web = with python3.pkgs; toPythonApplication mailman-web;
 
+  mastodon = callPackage ../servers/mastodon { };
+
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
   matterbridge = callPackage ../servers/matterbridge { };
@@ -17927,7 +17932,6 @@ in
   inherit (callPackages ../servers/mpd { })
     mpd mpd-small mpdWithFeatures;
 
-  mpd_clientlib = libmpdclient;
   libmpdclient = callPackage ../servers/mpd/libmpdclient.nix { };
 
   mpdscribble = callPackage ../tools/misc/mpdscribble { };
