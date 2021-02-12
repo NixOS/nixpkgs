@@ -1410,10 +1410,16 @@ self: super: {
   # https://github.com/haskell/haskell-language-server/issues/611
   haskell-language-server = dontCheck super.haskell-language-server;
 
-  # 2021-01-20
-  # apply-refact 0.9.0.0 get's a build error with hls-hlint-plugin 0.8.0
-  # https://github.com/haskell/haskell-language-server/issues/1240
-  apply-refact = super.apply-refact_0_8_2_1;
+  # 2021-02-08: Jailbreaking because of
+  # https://github.com/haskell/haskell-language-server/issues/1329
+  hls-tactics-plugin = doJailbreak super.hls-tactics-plugin;
+  # 2021-02-11: Jailbreaking because of syntax error on bound revision
+  hls-explicit-imports-plugin = doJailbreak super.hls-explicit-imports-plugin;
+
+  # 2021-02-08: Overrides because nightly is to old for hls 0.9.0
+  lsp-test = doDistribute (dontCheck self.lsp-test_0_11_0_7);
+  haskell-lsp = doDistribute self.haskell-lsp_0_23_0_0;
+  haskell-lsp-types = doDistribute self.haskell-lsp-types_0_23_0_0;
 
   # 1. test requires internet
   # 2. dependency shake-bench hasn't been published yet so we also need unmarkBroken and doDistribute
@@ -1567,4 +1573,12 @@ self: super: {
   # Allow building with older versions of http-client.
   http-client-restricted = doJailbreak super.http-client-restricted;
 
+  # 2020-02-11: https://github.com/ekmett/lens/issues/969
+  # A change in vector 0.2.12 broke the lens doctests.
+  # This is fixed on lens master. Remove this override on assert fail.
+  lens = assert super.lens.version == "4.19.2"; doJailbreak (dontCheck super.lens);
+
+  # Test suite fails, upstream not reachable for simple fix (not responsive on github)
+  vivid-osc = dontCheck super.vivid-osc;
+  vivid-supercollider = dontCheck super.vivid-supercollider;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
