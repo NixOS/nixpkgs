@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config
 , libX11, libXext, libXft, libXmu, libXinerama, libXrandr, libXpm
-, imagemagick, libpng, libjpeg, libexif, libtiff, libungif, libwebp }:
+, imagemagick, libpng, libjpeg, libexif, libtiff, giflib, libwebp }:
 
 stdenv.mkDerivation rec {
   pname = "windowmaker";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libX11 libXext libXft libXmu libXinerama libXrandr libXpm
-                  imagemagick libpng libjpeg libexif libtiff libungif libwebp ];
+                  imagemagick libpng libjpeg libexif libtiff giflib libwebp ];
 
   configureFlags = [
     "--with-x"

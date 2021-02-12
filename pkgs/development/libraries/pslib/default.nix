@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, pkg-config, zlib, libpng, libjpeg, libungif, libtiff
+{ lib, stdenv, fetchurl, cmake, pkg-config, zlib, libpng, libjpeg, giflib, libtiff
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ zlib libpng libjpeg libungif libtiff ];
+  buildInputs = [ zlib libpng libjpeg giflib libtiff ];
 
   doCheck = true;
 

@@ -7,7 +7,7 @@
   , patches ? [ ]
 }:
 { stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
-, Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, libungif
+, Xaw3d, libXcursor,  pkg-config, gettext, libXft, dbus, libpng, libjpeg, giflib
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , jansson, harfbuzz
@@ -108,7 +108,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
     [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext jansson harfbuzz.dev ]
     ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
     ++ lib.optionals withX
-      [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff libXft
+      [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg giflib libtiff libXft
         gconf cairo ]
     ++ lib.optionals (withX || withNS) [ librsvg ]
     ++ lib.optionals withImageMagick [ imagemagick ]
