@@ -26,7 +26,7 @@ let
     , extraPatches ? []
     , rev ? "zfs-${version}"
     , isUnstable ? false
-    , incompatibleKernelVersion ? null }:
+    , kernelCompatible ? null }:
 
     stdenv.mkDerivation {
       name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
@@ -169,7 +169,7 @@ let
         platforms = platforms.linux;
         maintainers = with maintainers; [ hmenke jcumming jonringer wizeman fpletz globin mic92 ];
         broken = if
-          buildKernel && (incompatibleKernelVersion != null) && versionAtLeast kernel.version incompatibleKernelVersion
+          buildKernel && (kernelCompatible != null) && !kernelCompatible
           then builtins.trace ''
             Linux v${kernel.version} is not yet supported by zfsonlinux v${version}.
             ${lib.optionalString (!isUnstable) "Try zfsUnstable or set the NixOS option boot.zfs.enableUnstable."}
@@ -182,23 +182,23 @@ in {
   # ./nixos/modules/tasks/filesystems/zfs.nix needs
   # to be adapted
   zfsStable = common {
-    # comment/uncomment if breaking kernel versions are known
-    # incompatibleKernelVersion = "4.20";
+    # check the release notes for compatible kernels
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.11";
 
     # this package should point to the latest release.
-    version = "2.0.2";
+    version = "2.0.3";
 
-    sha256 = "sha256-KzrRQwfQRvIQkHG5mj6cGBdcv2VEhC5y7bi09DaKqhY=";
+    sha256 = "sha256-bai7SwJNOsrACcrUxZ4339REhbBPOWyYikHzgHfbONs=";
   };
 
   zfsUnstable = common {
-    # comment/uncomment if breaking kernel versions are known
-    # incompatibleKernelVersion = "4.19";
+    # check the release notes for compatible kernels
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.11";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.0.2";
+    version = "2.0.3";
 
-    sha256 = "sha256-KzrRQwfQRvIQkHG5mj6cGBdcv2VEhC5y7bi09DaKqhY=";
+    sha256 = "sha256-bai7SwJNOsrACcrUxZ4339REhbBPOWyYikHzgHfbONs=";
   };
 }
 
