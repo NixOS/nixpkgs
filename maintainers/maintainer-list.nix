@@ -544,12 +544,6 @@
     githubId = 638836;
     name = "Andreas Rammhold";
   };
-  andreabedini = {
-    email = "andrea@kzn.io";
-    github = "andreabedini";
-    githubId = 69135;
-    name = "Andrea Bedini";
-  };
   andreasfelix = {
     email = "fandreas@physik.hu-berlin.de";
     github = "andreasfelix";
