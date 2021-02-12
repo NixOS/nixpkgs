@@ -658,7 +658,7 @@ self: super: {
   });
 
   lf-vim = super.lf-vim.overrideAttrs (old: {
-    dependencies = with super; [ bclose-vim ];
+    dependencies = with super; [ vim-bbye ];
   });
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {
