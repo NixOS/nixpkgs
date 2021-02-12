@@ -10191,6 +10191,8 @@ in
     inherit (emacs.pkgs.melpaStablePackages) irony;
   };
 
+  holo-build = callPackage ../tools/package-management/holo-build { };
+
   hugs = callPackage ../development/interpreters/hugs { };
 
   openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
