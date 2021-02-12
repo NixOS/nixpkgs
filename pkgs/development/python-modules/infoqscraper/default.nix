@@ -28,6 +28,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/cykl/infoqscraper/wiki";
     license = licenses.mit;
     maintainers = with maintainers; [ edwtjo ];
+    # infoq HTML has changed:
+    # https://github.com/cykl/infoqscraper/issues/29
+    broken = true;
   };
 
 }
