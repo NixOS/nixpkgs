@@ -26900,10 +26900,7 @@ in
     nixFlakes;
 
   nixops = callPackage ../tools/package-management/nixops { };
-
-  nixops_1_6_1 = callPackage ../tools/package-management/nixops/nixops-v1_6_1.nix {};
-
-  nixopsUnstable = lowPrio (callPackage ../tools/package-management/nixops/unstable.nix { });
+  nixopsUnstable = nixops;
 
   nixops-dns = callPackage ../tools/package-management/nixops/nixops-dns.nix { };
 
