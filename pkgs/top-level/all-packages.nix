@@ -22708,7 +22708,7 @@ in
 
   ht = callPackage ../applications/editors/ht { };
 
-  ht-rust = callPackage ../tools/networking/ht-rust {
+  xh = callPackage ../tools/networking/xh {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
