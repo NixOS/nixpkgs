@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     description = "Testing tool for flash based memory devices";
     homepage = "https://github.com/bradfa/flashbench";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.rycee ];
   };
 }
