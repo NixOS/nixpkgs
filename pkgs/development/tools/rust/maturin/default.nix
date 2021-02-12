@@ -1,9 +1,7 @@
 { lib, stdenv, fetchFromGitHub, rustPlatform, dbus, gmp, openssl, pkg-config
-, darwin }:
+, Security }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Security;
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "maturin";
   version = "0.9.0";
 

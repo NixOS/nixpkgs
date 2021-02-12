@@ -10833,7 +10833,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  maturin = callPackage ../development/tools/rust/maturin { };
+  maturin = callPackage ../development/tools/rust/maturin {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   inherit (rustPackages) rls;
   rustfmt = rustPackages.rustfmt;
   rustracer = callPackage ../development/tools/rust/racer {
