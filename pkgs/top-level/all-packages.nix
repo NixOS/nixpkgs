@@ -705,7 +705,9 @@ in
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
 
-  agate = callPackage ../servers/gemini/agate { };
+  agate = callPackage ../servers/gemini/agate {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   agda-pkg = callPackage ../development/tools/agda-pkg { };
 
