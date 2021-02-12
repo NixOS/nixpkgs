@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
       binPath = lib.makeBinPath [ rlwrap jdk ];
     in
     ''
+      runHook preInstall
+
       clojure_lib_dir=$out
       bin_dir=$out/bin
 
@@ -39,6 +41,8 @@ stdenv.mkDerivation rec {
       wrapProgram $bin_dir/clj --prefix PATH : $out/bin:${binPath}
 
       installManPage clj.1 clojure.1
+
+      runHook postInstall
     '';
 
   doInstallCheck = true;
