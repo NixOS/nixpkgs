@@ -3,7 +3,6 @@
 buildGoModule rec {
   pname = "tailscale";
   version = "1.4.4";
-  tagHash = "f40ccb086c4c3f09b3cc67b7c559bd2c5d3cf953"; # from `git rev-parse v1.4.4`
 
   src = fetchFromGitHub {
     owner = "tailscale";
@@ -25,7 +24,7 @@ buildGoModule rec {
   preBuild = ''
     export buildFlagsArray=(
       -tags="xversion"
-      -ldflags="-X tailscale.com/version.Long=${version} -X tailscale.com/version.Short=${version} -X tailscale.com/version.GitCommit=${tagHash}"
+      -ldflags="-X tailscale.com/version.Long=${version} -X tailscale.com/version.Short=${version}"
     )
   '';
 
