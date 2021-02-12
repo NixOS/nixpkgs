@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage    = "https://github.com/sgan81/apfs-fuse";
     description = "FUSE driver for APFS (Apple File System)";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ealasu ];
     platforms   = platforms.linux;
   };
