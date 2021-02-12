@@ -297,6 +297,8 @@ in
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
+  dockle = callPackage ../development/tools/dockle { };
+
   docui = callPackage ../tools/misc/docui { };
 
   dotfiles = callPackage ../applications/misc/dotfiles { };
