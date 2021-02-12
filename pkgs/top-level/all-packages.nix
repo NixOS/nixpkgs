@@ -26900,6 +26900,7 @@ in
     nixFlakes;
 
   nixops = callPackage ../tools/package-management/nixops { };
+  nixopsUnstable = nixops;
 
   nixops-dns = callPackage ../tools/package-management/nixops/nixops-dns.nix { };
 
