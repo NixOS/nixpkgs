@@ -6534,6 +6534,8 @@ in {
 
   pyvera = callPackage ../development/python-modules/pyvera { };
 
+  pyvesync = callPackage ../development/python-modules/pyvesync { };
+
   pyvex = callPackage ../development/python-modules/pyvex { };
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
