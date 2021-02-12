@@ -13,7 +13,7 @@ buildRustPackage rec {
     sha256 = "0086asrx48qlmc484pjz5r5znli85q6qgpfbd81gjlzylj7f57gg";
   };
 
-  cargoSha256 = "1fgv1kxiif48q9mm60ygn88r5nkxfyiacmvbgwp0jxiacv8r7779";
+  cargoSha256 = "1p2rsww4yxw3lqxvh6dlfndgwxj9kimw6n0qj58vlvf6p07xlzns";
 
   meta = with lib; {
     homepage = "https://github.com/cgag/loc";

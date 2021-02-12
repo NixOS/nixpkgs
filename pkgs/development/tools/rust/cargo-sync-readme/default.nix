@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1c38q87fyfmj6nlwdpavb1xxpi26ncywkgqcwbvblad15c6ydcyc";
   };
 
-  cargoSha256 = "1x15q6wv5278hm3ns2wmw4i8602g35y1jyv1b8wa5i4dnh52dj83";
+  cargoSha256 = "086b780mckscwnxcryz790gvah0pmf84m1sp50fpnxhfg6ga37jj";
 
   meta = with lib; {
     description = "A cargo plugin that generates a Markdown section in your README based on your Rust documentation";

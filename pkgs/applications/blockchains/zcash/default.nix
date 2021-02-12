@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "185zrw276g545np0niw5hlhlppkjbf5a1r4rwhnbaimdjdii2dil";
   };
 
-  cargoSha256 = "0qxr6asf8zsya0f1ri39z2cnfpjk96hgwjchz2c7j87vibbvg6dc";
+  cargoSha256 = "1cccj93k6a3k8nziddiii7b16dzq6w568dqfvx4lvdmdqrm9fc2x";
 
   nativeBuildInputs = [ autoreconfHook cargo makeWrapper pkg-config ];
   buildInputs = [ bash boost17x db62 libevent libsodium utf8cpp ];

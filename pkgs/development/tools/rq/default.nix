@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0km9d751jr6c5qy4af6ks7nv3xfn13iqi03wq59a1c73rnf0zinp";
   };
 
-  cargoSha256 = "0c5vwy3c5ji602dj64z6jqvcpi2xff03zvjbnwihb3ydqwnb3v67";
+  cargoSha256 = "0ci07ahq7isfm5zqjgayssx0s06vqk5sniw7z5l26pv02ww8dmni";
 
   buildInputs = [ llvmPackages.clang-unwrapped v8 ]
   ++ lib.optionals stdenv.isDarwin [ libiconv ];

@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0bzq4ridzb4l1zqrj1r0vlzkjpgfaqwky5jf49cwjhz4ybwrfpkq";
   };
 
-  cargoSha256 = "0r0hyp15knbbs4l9rcn395pzrx2vbibmwvs4pmga363irmi8mcy5";
+  cargoSha256 = "1sa70g4jiysmm8jc5a51qh1p03cpvv1yg1j8mj8dnalh0wpywdiw";
 
   meta = with lib; {
     homepage = "https://github.com/softprops/git-codeowners";

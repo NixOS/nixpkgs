@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0cbc78zrhda4adza88g05sy04chixqay2ylgdjgmf13h607hp3kn";
   };
 
-  cargoSha256 = "1dv1ywdy701bnc2jv5jq0hnpal1snlizaj9w6k1wxyrp9szjd48w";
+  cargoSha256 = "1dzfl4v2x3r1z4pqgxs8asf9qv8568bzi2grfyfvzvilgmxpv7hb";
 
   #for substituteAll
   libclang = llvmPackages.libclang.lib;

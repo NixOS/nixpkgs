@@ -36,5 +36,5 @@ buildRustPackage rec {
       cp ${cargo-lock} $out/Cargo.lock
     '';
 
-  cargoSha256 = "0wx5x7ll21bb6v34csk63kkvxdk3as720hdkaj0izdkpy0xf1knr";
+  cargoSha256 = "12bb74n2pmn59l0m22jrjawl62sf7xg1l8ixdsl865mc46xivqsr";
 }

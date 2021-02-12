@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-owa+HmzMXpLR7H1FssW4gQiVAQGJRXhcitgJj6pxJRc=";
   };
 
-  cargoSha256 = "sha256-TqWe4eARQmmWcwnvb6BIZrzGeKMpiIObPv0cW1JvWj4=";
+  cargoSha256 = "sha256-tH8sYhnGhC6WdamZXbfkxdCmfAGFulEdRgUX9pY4xIM=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation libiconv libresolv Security ];
 

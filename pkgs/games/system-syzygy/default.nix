@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ SDL2 ];
 
-  cargoSha256 = "001cwdq8zxji56yahwfsydi7s0j7c5zsip60lxk3qmn078wcipdp";
+  cargoSha256 = "1qiqvxs8yynz9mi4vvxcz2mvrz0zci05y01q9y75yd9kf92rihgh";
 
   postInstall = ''
     mkdir -p $out/share/syzygy/

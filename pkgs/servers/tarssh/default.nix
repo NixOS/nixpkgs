@@ -13,7 +13,7 @@ buildRustPackage rec {
     sha256 = "sha256-AoKc8VF6rqYIsijIfgvevwu+6+suOO7XQCXXgAPNgLk=";
   };
 
-  cargoSha256 = "sha256-7X9klYVZ2yE8BPuLhzWkuT7VFpmdOZGSD0D1x3kBNEs=";
+  cargoSha256 = "sha256-R2icW1hMWw0W1ZWg/5oVtUQIP6EvUKuoYMKbBWTLALo=";
 
   meta = with lib; {
     description = "A simple SSH tarpit inspired by endlessh";

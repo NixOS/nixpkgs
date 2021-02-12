@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0h4cd36lrhr64p3m2l7yvkq22h8fzzm3g61m39d303s1viibm6dg";
   };
 
-  cargoSha256 = "0aadalgs5p7wqbbkidm49ccfl716xairb4pirrgm3749zdg55bi9";
+  cargoSha256 = "0my314zdsy2lmmmppxf4j8g8dzhqzilg4rllxwr6xj1b5ghih4xi";
 
   meta = with lib; {
     description = "Ping, but with a graph";

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "09rz8f1xyc64qjbj6pgw8jxr2a7chghmdc6sfkbv7hdvx6vg4wvk";
+  cargoSha256 = "0dk45shw9n593yfh55sz15pyqqqrz0zmi99qvhg73kv7fxnmmqcn";
 
   meta = with lib; {
     description = "An advanced geospatial data analysis platform";

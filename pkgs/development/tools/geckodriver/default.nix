@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   });
 
   cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "1dv8vcjy8r9z19grj4gms05bhaafyr42y3q69h3azwq6dmacfd3y";
+  cargoSha256 = "121nbawlqdsdjj78xyj9d0zz745cdf5pk7i60alpy9n3mbzhwd2j";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 

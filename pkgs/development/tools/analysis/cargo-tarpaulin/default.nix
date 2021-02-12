@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ openssl ];
 
-  cargoSha256 = "0pn9xgryfb7f0plx50v9i7hsv1wib87pi0fl43cv6hgqyrdb52ny";
+  cargoSha256 = "0rf2v088n0h41v5lsz0pz89fjs36zdlhzwhcaxj1853gijg1wmla";
   #checkFlags = [ "--test-threads" "1" ];
   doCheck = false;
 

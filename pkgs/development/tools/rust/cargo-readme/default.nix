@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-/ufHHM13L83M3UYi6mjdhIjgXx7bZgzvR/X02Zsx7Fw=";
   };
 
-  cargoSha256 = "sha256-QVRl6xCvztWi5zAs3PXYR4saTqO5nTBPIjdlMiMXFTM=";
+  cargoSha256 = "sha256-FmSeLuInqgA9rzNeLA/hpfP6qhY9clvPWQPHwwa1FMQ=";
 
   patches = [
     (fetchpatch {

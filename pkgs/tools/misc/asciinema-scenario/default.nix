@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-ubiVpKFU81Ot9V9oMexWSiUXHepoJ6nXtrWVAFhgcYw=";
   };
 
-  cargoSha256 = "109ij5h31bhn44l0wywgpnnlfjgyairxr5l19s6bz47sbka0xyxk";
+  cargoSha256 = "0ii646m6dxaaypl84p1vjpf7mnnj8jrssr6d7410mwfvpq9821al";
 
   meta = with lib; {
     description = "Create asciinema videos from a text file";

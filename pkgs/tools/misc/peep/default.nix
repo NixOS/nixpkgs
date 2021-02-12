@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoPatches = [ ./0001-Add-Cargo.lock-by-running-cargo-vendor.patch ];
-  cargoSha256 = "15qc9a4zpnq7lbcaji1mkik93qkx366misczbi1mipiq5w7sgn0l";
+  cargoSha256 = "0hl6qkc0sy820xwrkdrlknwn0m7qq5cjyb3yh15jqv4z3r7r901d";
 
   meta = with lib; {
     description = "The CLI text viewer tool that works like less command on small pane within the terminal window";

@@ -14,7 +14,7 @@ buildRustPackage rec {
   };
   cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "0n0xc8b982ra007l6gygssf1n60gfc2rphwyi7n95dbys1chciyg";
+  cargoSha256 = "0a6009kbihm6z9aji11i9jy8v1013njr9zil1rzdsdbv54d27d7j";
 
   # doc tests fail due to missing dependency
   doCheck = false;

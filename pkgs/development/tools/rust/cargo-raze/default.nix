@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   };
   sourceRoot = "source/impl";
 
-  cargoSha256 = "1z20xc508a3slc1ii3hy09swvlyib14zwf9akxc0h24d5m48as1c";
+  cargoSha256 = "0kk0dc74z95nj3drz8157cckzv30hy8x99yjfqw306xcnm6nil1m";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ curl libgit2 openssl ]

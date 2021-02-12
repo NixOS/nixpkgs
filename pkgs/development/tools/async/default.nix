@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "19ypflbayi5l0mb8yw7w0a4bq9a3w8nl9jsxapp9m3xggzmsvrxx";
   };
 
-  cargoSha256 = "1zgds5rjjikvaj0rxc7slyvkjn067s0v8vdnxn3vsv819q5yd707";
+  cargoSha256 = "05lsb0rn5484g8rrkwgwbh91922nmcbvg1rc35vygl839c87fix0";
 
   meta = with lib; {
     description = "A tool to parallelize shell commands";

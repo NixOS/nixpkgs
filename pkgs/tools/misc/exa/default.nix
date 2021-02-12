@@ -8,7 +8,7 @@ buildRustPackage rec {
   pname = "exa";
   version = "0.9.0";
 
-  cargoSha256 = "0nl106jlbr8gnnlbi20mrc6zyww7vxgmw6w34ibndxqh9ggxwfvr";
+  cargoSha256 = "1hyflvfqsm4jhc4y9xzwb3f1pvv7bnaikkqy44kl5qr4sj7fdzq5";
 
   src = fetchFromGitHub {
     owner = "ogham";

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-424e40v2LBxlmgDKxvsT/iuUn/IKWPKMwih0cSQ5sFE=";
   };
 
-  cargoSha256 = "sha256-l+BTF9PGb8bG8QHhNCoBsrsVX8nlRjPlaea1ESFfMW0=";
+  cargoSha256 = "sha256-sGAwCE+ItiopxFYNsEkikSqLaAWqH+aa2OHRj+l4cLw=";
 
   meta = with lib; {
     description = "Match and rename subtitle files to video files and perform other batch operations on subtitle files";

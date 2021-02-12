@@ -17,7 +17,7 @@ let
   version = "1.2";
   gitRev = "43a260c221d5dac4a44fd82271736c8444474eec";
   sha256 = "0g6zq27dpr8bdan5xrqchybpbqwnhhc7x8sxbfygigbqd3xv9i6n";
-  cargoSha256 = "1zmlp14v7av0znmjyy2aq83lc74503p6r0l11l9iw7s3xad8rda4";
+  cargoSha256 = "0wvf2990kcl3b087d5k0nyx1djz5lni21pkxhi14qy17kvmabmmc";
 
 in (rustPlatform.buildRustPackage rec {
   pname = "lorri";

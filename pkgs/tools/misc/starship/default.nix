@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  cargoSha256 = "0plk47i2xrn3x5yr3gw3pq74maqf4krb8d6i4sf8gil4mnpcgxir";
+  cargoSha256 = "1cc3zx7rj51cwzybkbjbac7mlv8n3nqnc9yyvpzl6n2qcxa3bpgq";
 
   preCheck = ''
     HOME=$TMPDIR

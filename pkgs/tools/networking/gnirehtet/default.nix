@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage {
       sha256 = "0wk6n082gnj9xk46n542h1012h8gyhldca23bs7vl73g0534g878";
   };
   sourceRoot = "source/relay-rust";
-  cargoSha256 = "0i7f52r697gjw30m8k60hd3y6wsn5lpz419r083a1rhpbinzd26q";
+  cargoSha256 = "1ddyj21zkjwfx8vgizgawqidawpffpq3x3p4hv8vbm3rwnpm83yx";
 
   nativeBuildInputs = [ makeWrapper ];
 

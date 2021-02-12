@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1j9ca2lyxjsrf0rsfv83xi53vj6jz5nb76xibh367brcsc26mvd6";
   };
 
-  cargoSha256 = "1dfhx40jr5llqa554wifd920mqdbm8s5fns98m6vcqdjxzan4nr2";
+  cargoSha256 = "1wvsdfdldh8pmh2c00p7l6bfpxqbvg1nj256aq92v0d3hsmwszxb";
 
   meta = with lib; {
     description = "Decode x86 binaries and print out which instruction set extensions they use.";

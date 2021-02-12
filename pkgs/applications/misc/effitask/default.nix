@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   # workaround for missing Cargo.lock file https://github.com/sanpii/effitask/issues/48
   cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "0dvmp23kny6rlv6c0mfyy3cmz1bi5wcm1mxps4z67lym5kxfd362";
+  cargoSha256 = "1d75q4irm8fv94zx0szyb6lbxi31l75pp27602qlzxnhk24igd6i";
 
   buildInputs = [ openssl gtk3 ];
 

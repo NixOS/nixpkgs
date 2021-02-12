@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoSha256 = "0sja0q9i0b1zb3a0a6z561yg9lqykylwr3iwin4r6cmi7j2sw5j6";
+  cargoSha256 = "1vgpbcnwlnrx8saqxsz40bkf9qam7glvw9vbhd3x7715sxl350iy";
 
   meta = with lib; {
     description = "An autojump \"zap to directory\" helper";

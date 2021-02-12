@@ -12,7 +12,7 @@ buildRustPackage rec {
     sha256 = "1fba0w2979dmc2wyggqx4fj52rrl1s2vpjk6mkj1811a848l1hdi";
   };
 
-  cargoSha256 = "04ryin24z3pfxjxy4smngy66xs7k85g6gdzsl77cij8ifb29im99";
+  cargoSha256 = "1gwy61hcsa9zabd6pzv809gzrcmaj75y5qnn5gdbh0pirmsbcx2y";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  cargoSha256 = "sha256-r64Y8TxYmzxuZOTncHUYm+KmKlbK+KnHCHyNups5kRw=";
+  cargoSha256 = "sha256-4F0u2E4O/PmGnomPtQ2V2OnRyNFwrzD44lndiYA/YCs=";
 
   # Some tests fail because they need network access.
   # However, Travis ensures a proper build.

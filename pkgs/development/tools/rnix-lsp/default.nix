@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0fy620c34kxl27sd62x9mj0555bcdmnmbsxavmyiwb497z1m9wnn";
   };
 
-  cargoSha256 = "0xmaa7rds7hlagfxj65pv9vgflcv4nwbwbw4g7cyj88cbb1kbxxj";
+  cargoSha256 = "0h9dhv165y7wl2ykwdc74ph8b3dh74almjmxd1myfr55m4l1bbhk";
 
   meta = with lib; {
     description = "A work-in-progress language server for Nix, with syntax checking and basic completion";

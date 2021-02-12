@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage {
     sha256 = "0kc128xnnp1d56if70vfv0w3qnwhljhbnvzwwb7hfm3x2m0vqrqf";
   };
 
-  cargoSha256 = "0mfgax937na351qvi5n6s1ql9136djqiydzyfyax4684sp3kp613";
+  cargoSha256 = "0lrm38g9h8j2g01v8m3xwksldm68c3ah8jjzxxxg96s9hk8wl0cg";
 
   meta = with lib; {
     description = "Inspect your shell history";

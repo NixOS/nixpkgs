@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoPatches = [ ./0001-Generate-lockfile-for-cargo-update-v4.1.2.patch ];
-  cargoSha256 = "150fpb7wyyxi40z4wai6c94mn84g700c2228316g6y8i07c8ix0d";
+  cargoSha256 = "0kgvizn154m3annc34lgbj6q515appj3crgr3wd72shbj7h4l0am";
 
   nativeBuildInputs = [ cmake installShellFiles pkg-config ronn ];
 

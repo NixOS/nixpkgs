@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-hirT0gScC2LFPvygywgPiSVDUE/Zd++62wc26HlufYU=";
   };
 
-  cargoSha256 = "sha256-j57LHPU3U3ipUGQDrZ8KCuELOVJ3BxhLXsJePOO6rTM=";
+  cargoSha256 = "sha256-YVj2N6McdiAqR9ocR4SS2n5lYrkjVJOeLcTyP20lkaM=";
 
   buildInputs = [ makeWrapper libX11 libXinerama ];
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage {
     sha256 = "11mz07735gxqfamjcjjmxya6swlvr1p77sgd377zjcmd6z54gwyf";
   };
 
-  cargoSha256 = "06ghcd4j751mdkzwb88nqwk8la4zdb137y0iqrkpykkfx0as43x3";
+  cargoSha256 = "16958ps3wwsq4myxv66yspdisp75prkz973f7kwm7n46g67f25pb";
 
   buildInputs = [ ncurses ];
 

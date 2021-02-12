@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "1ssmgx9fjvkq7ycyzjanqmlm5b80akllq6qyv3mj0k5fvs659wcq";
+  cargoSha256 = "1zgb8qc6w2mqnkj7fvx7nv1dv2vm7b0rs80yqp8vm4z65bggzj25";
 
   nativeBuildInputs = [ cmake pkg-config ];
 

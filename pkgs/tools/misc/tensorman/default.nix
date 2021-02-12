@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
-  cargoSha256 = "0vckay4jhg02xg68mvh7ys0yjj0p30m6wsjriqc8k24wjsrhiw9k";
+  cargoSha256 = "1cgwfz3wckknxn6cdy2msj063clzpczkv3rhzdv0xpp1bm6fdcgh";
 
   meta = with lib; {
     description = "Utility for easy management of Tensorflow containers";

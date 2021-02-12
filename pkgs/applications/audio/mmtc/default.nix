@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1chcnv8wql6v2vckpzvq6sxgpss7mnxaj008jdm8xalhw9d496s4";
   };
 
-  cargoSha256 = "06b0hag3s5irvi57n0hc97agfw4sw783lkkl1b26iap6mfbvrqma";
+  cargoSha256 = "056mnfd0qd4pqnj3pwfi6g6f06ybvcbc7xds7lvyhghb9gs833bk";
 
   meta = with lib; {
     description = "Minimal mpd terminal client that aims to be simple yet highly configurable";

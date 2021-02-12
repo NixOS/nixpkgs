@@ -14,7 +14,7 @@ buildRustPackage rec {
     sha256 = "16a5fkpyqkf8w20k3ircc1d0qmif7nygkzxj6mzk9609dlb0dmxq";
   };
 
-  cargoSha256 = "11r551baz3hrkyf9nv68mdf09nqyvbcfjh2rgy8babmi7jljpzav";
+  cargoSha256 = "1hfnmqyd1y68ps9aba1ai762i9cw8cynxwwdq8kpdx67xxyf1p51";
 
   buildInputs = [ openssl zeromq czmq zlib ];
 

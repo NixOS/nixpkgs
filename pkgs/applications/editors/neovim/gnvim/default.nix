@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1cc3yk04v9icdjr5cn58mqc3ba1wqmlzhf9ly7biy9m8yk30w9y0";
   };
 
-  cargoSha256 = "1fyn8nsabzrfl9ykf2gk2p8if0yjp6k0ybrmp0pw67pbwaxpb9ym";
+  cargoSha256 = "09vp36930x00in03m82zy7k8jy8db780dhrjdrjj188hvqly7adh";
 
   buildInputs = [ gtk webkitgtk ];
 

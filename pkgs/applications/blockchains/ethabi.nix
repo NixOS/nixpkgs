@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1gqd3vwsvv1wvi659qcdywgmh41swblpwmmxb033k8irw581dwq4";
   };
 
-  cargoSha256 = "1hx8qw51rl7sn9jmnclw0hc4rx619hf78hpaih5mvny3k0zgiwpm";
+  cargoSha256 = "19qlc7sp7k1d0ybd777jv9dbn1ivv02q76i9hffqvangqwnblcyw";
 
   meta = with lib; {
     description = "Ethereum function call encoding (ABI) utility";

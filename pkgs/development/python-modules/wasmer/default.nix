@@ -20,7 +20,7 @@ let
       hash = "sha256-I1GfjLaPYMIHKh2m/5IQepUsJNiVUEJg49wyuuzUYtY=";
     };
 
-    cargoHash = "sha256-txOOia1C4W+nsXuXp4EytEn82CFfSmiOYwRLC4WPImc=";
+    cargoHash = "sha256-b319+tnXJYmVPgBo11Q7jew+zbRKirZHhd+JWEWoI4k=";
 
     nativeBuildInputs = [ maturin python ];
 

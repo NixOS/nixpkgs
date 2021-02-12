@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
       --replace '"fzf"' '"${fzf}/bin/fzf"'
   '';
 
-  cargoSha256 = "05mp101yk1zkjj1gwbkldizq6f9f8089gqgvq42c4ngq88pc7v9a";
+  cargoSha256 = "0hpln1cyvgifn7vpp0spggcgirm3xx3b5cl2hi7xykd243vxdfxv";
 
   meta = with lib; {
     description = "A fast cd command that learns your habits";

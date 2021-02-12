@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin  [ AppKit Security ];
 
-  cargoSha256 = "sha256-jTZso61Lyt6jprBxBAhvchgOsgM9y1qBleTxUx1jCnE=";
+  cargoSha256 = "sha256-vq1J0y0BLpKY1iAcGEQ6ri0HYaNrcUPJXAcdAXN+0w4=";
   checkFlagsArray = lib.optionals stdenv.isDarwin [ "--skip=copy" ];
   cargoParallelTestThreads = false;
 

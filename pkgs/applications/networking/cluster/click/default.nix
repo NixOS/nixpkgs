@@ -13,7 +13,7 @@ buildRustPackage rec {
     sha256 = "18mpzvvww2g6y2d3m8wcfajzdshagihn59k03xvcknd5d8zxagl3";
   };
 
-  cargoSha256 = "1f9yn4pvp58laylngdrfdkwygisnzkhkm7pndf6l33k3aqxhz5mm";
+  cargoSha256 = "08rqa1ph2lprnbb3g1mifr850nwkfmn27ryj2fngs0pfzrpzjiz9";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 

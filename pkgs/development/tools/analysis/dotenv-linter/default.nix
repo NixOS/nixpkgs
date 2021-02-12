@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-3Lj5GtWGyWDkZPhxYQu7UWzmh7TO5wk1UJ0lek1jTto=";
   };
 
-  cargoSha256 = "sha256-zdvIC+VUASjhrlyRts+JJeh5xdcdpX6Ixle6HhbMJJU=";
+  cargoSha256 = "sha256-LhM22ZkffKVwxVEI4o11iyIq36fQBwrpMRpEYzveU2A=";
 
   meta = with lib; {
     description = "Lightning-fast linter for .env files. Written in Rust";

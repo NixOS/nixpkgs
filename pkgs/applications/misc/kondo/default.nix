@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0kl2zn6ir3w75ny25ksgxl93vlyb13gzx2795zyimqqnsrdpbbrf";
   };
 
-  cargoSha256 = "1ax81a2828z3yla1psg5xi8ild65m6zcsvx48ncz902mpzqlj92b";
+  cargoSha256 = "1lvwnha4bcp9s790pmfk3md7x0jh9bh0cfq70vz01ha8zjxbm5f4";
 
   meta = with lib; {
     description = "Save disk space by cleaning unneeded files from software projects";

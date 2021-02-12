@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0gxcjrhfa86kz5qmdf5h278ydc3nc0nfj61brnykb723mg45jj41";
   };
 
-  cargoSha256 = "03p786hh54zql61vhmsqcdgvz23v2rm12cgwf7clfmk6a6yj6ibx";
+  cargoSha256 = "04lgamibj1pm4iwcnxq7nddxq4vfpfypg456wkaznnkcayp71ndh";
 
   # Enables build against a generic BLAS.
   cargoBuildFlags = [

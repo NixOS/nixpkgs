@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0339biydk997j5r72vzp7djwkscsz89xr3936nshv23fmxjh2rzj";
   };
 
-  cargoSha256 = "0z99pqd41y8cci3yvwsnm5zbq7pzli62z8qqqghmz1hcq5pb5q7g";
+  cargoSha256 = "11inh4gwg8q6724yfrgdz1mxq7s674gydsgrwbdwagl8azh3rhcy";
 
   meta = with lib; {
     description = "A simple program to view processes' swap usage on Linux";

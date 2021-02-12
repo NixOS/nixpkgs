@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-v84ZXhtJpejQmP61NmP06+qrtMu/0yb7UyD7U12xlME=";
   };
 
-  cargoSha256 = "sha256-2FmtbvtNfNoocj3Ly553KBLfOgBAa/eAxOrfZ3NGzzw=";
+  cargoSha256 = "sha256-Da/xQgSUOdMr6rH3RVDz7bCMaeBSCLlfKHvf+JBkabc=";
 
   meta = with lib; {
     description = "tool for expediting bazel build workflows";

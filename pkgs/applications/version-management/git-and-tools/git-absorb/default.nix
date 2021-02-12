@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  cargoSha256 = "0h0vlz4qd8i9bf1mgjr618zbdwfp6bmy7ql9a1xzjmfdpkl3cgk9";
+  cargoSha256 = "0m6zlg228dhg23v5f7zayk8xikndcb9ggxxfqking9c3z7rpsiy4";
 
   postInstall = ''
     installManPage Documentation/git-absorb.1

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0y34a3mpghdmcb2rx4z62q0s351bfmy1287d75mm07ryfgglgsd7";
   };
 
-  cargoSha256 = "0akwb7ak4h1i1zk4wcn27zyqjz6mrchs47014xbzw22rj8h8dx92";
+  cargoSha256 = "0la295vdn8x244s18pl06a691c06cq0rrldv5k81z8h9kc8d957i";
 
   cargoPatches = [
     ./v3.1.1-fix-Cargo.lock.patch

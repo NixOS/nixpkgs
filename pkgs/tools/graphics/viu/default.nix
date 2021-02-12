@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   # tests need an interactive terminal
   doCheck = false;
 
-  cargoSha256 = "0bdjfcyx2cwz68gcx0393h4ysccarfp02pvvp0a5xgkq11bad0r0";
+  cargoSha256 = "0hz8gqij2g4v3phjyyv019cl3mhcjwlna28886r7kw2y36wfsrkf";
 
   meta = with lib; {
     description = "A command-line application to view images from the terminal written in Rust";

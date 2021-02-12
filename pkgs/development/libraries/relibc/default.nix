@@ -66,7 +66,7 @@ redoxRustPlatform.buildRustPackage rec {
   # TODO: should be hostPlatform
   TARGET = buildPackages.rust.toRustTargetSpec stdenvNoCC.targetPlatform;
 
-  cargoSha256 = "1fzz7ba3ga57x1cbdrcfrdwwjr70nh4skrpxp4j2gak2c3scj6rz";
+  cargoSha256 = "1vjdy30md2l9fk1szzzyjg2mh7pbxxsxdawvk0s961qcnszv3sja";
 
   meta = with lib; {
     homepage = "https://gitlab.redox-os.org/redox-os/relibc";

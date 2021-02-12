@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "01whdjryz6zjsk4149h72w5xdjnkpcn5daf0xnsb59b0q38hjgg9";
   };
 
-  cargoSha256 = "1gcixzxca1yi4rvy55s986my6j0vx7n6fm1g5r4v4w0zgzlz4d89";
+  cargoSha256 = "0jwikm91ll0rc7fpjpqjfa750h7lsp968iiinh3n4m9ppr7nvk93";
 
   meta = with lib; {
     description = "Automatically cross-compiles the sysroot crates core, compiler_builtins, and alloc";

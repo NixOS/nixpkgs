@@ -26,7 +26,7 @@ buildRustPackage rec {
     sha256 = "1sx6sc2dj3l61gbiqz8vfyhw5w4xjdyfzn1ixz0y8ipm579yc7a2";
   };
 
-  cargoSha256 = "1wjbwd3scx71l2fpxgvgwaw05lkpw13rm6d2i1x5crhs7py96ky6";
+  cargoSha256 = "0vxzg78hxks15sld4yamr8kgjjlk6ar932b10hvyirk6hn3nq0q1";
 
   nativeBuildInputs = [
     cmake

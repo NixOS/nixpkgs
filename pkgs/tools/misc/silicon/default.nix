@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0cvzkfyljgxhmn456f2rn0vq2bhm1ishr4jg4dnwjjfgmjg3w908";
   };
 
-  cargoSha256 = "1aymhbfzcncrbc5n8rf62bdgi95b4bjhw6p716vhca5p6c7wfxcb";
+  cargoSha256 = "0qb188kzmwcb1wc3m5dv5352a9a1vs6dzpj5qvb0q092j53203qz";
 
   buildInputs = [ llvmPackages.libclang expat freetype ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]

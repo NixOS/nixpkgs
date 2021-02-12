@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage {
   cargoDepsHook = ''
     ln -s wishbone-tool source
   '';
-  cargoSha256 = "0d5kcwy0cgxqfxf2xysw65ng84q4knhp4fgvh6dwqhf0nsca9gvs";
+  cargoSha256 = "0mh8w8vqa7rzdaq0q6cbg9ds6y8g5fhqxcskqazz2lk5yk4shaim";
 
   buildInputs = [ libusb-compat-0_1 ];
 

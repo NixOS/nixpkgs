@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256:04k0maxy39k7qzcsqsv1byddsmjszmnyjffrf22nzbvml83p3l0y";
   };
 
-  cargoSha256 = "1v2az0v6l8mqryvq3898hm7bpvqdd2c4kpv6ck7932jfjyna512k";
+  cargoSha256 = "09ipziznpy8zy22pfnbmjz9zr0683px98c4nf7kgrl5hs3fqvh5g";
 
   buildInputs = [ makeWrapper ];
   postInstall = ''

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "12g0sbgs2dfnk0agp1kagfi1yhk26ga98zygxxrjhjxrqb2n5w80";
   };
 
-  cargoSha256 = "0svnz9r0lrmz333qpbpdddjd46vh9i74qchws8aifa2qwnqy0kmn";
+  cargoSha256 = "17qi4q9nnl4xgmpc8ch9n2sb578fgz99w9qzlc31287kawf5b9kz";
 
   meta = with lib; {
     description = "Deploy software or an entire NixOS system configuration to another NixOS system";

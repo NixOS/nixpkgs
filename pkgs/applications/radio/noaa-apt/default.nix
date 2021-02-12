@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
-  cargoSha256 = "0w4rbbz8lsh31xkgibzndiic47690nfcjrn1411dskf7ali6djy8";
+  cargoSha256 = "0wrl3qrpqagzmw6mhb3kkcj95g68a9ldd90rmw66zcmx43xy509j";
 
   preBuild = ''
     # Used by macro pointing to resource location at compile time.

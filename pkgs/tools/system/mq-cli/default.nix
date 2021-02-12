@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "02z85waj5jc312biv2qhbgplsggxgjmfmyv9v8b1ky0iq1mpxjw7";
   };
 
-  cargoSha256 = "19ccylnmmlm2d8kc178cffpjwrjlia6b4v3nzvxcs81a396ymr7b";
+  cargoSha256 = "0c8j27fpi0rhn94j68adqxaq3xw5b5mx7yq9y6z04d7gjpnmkc9s";
 
   meta = with lib; {
     description      = "CLI tool to manage POSIX message queues";

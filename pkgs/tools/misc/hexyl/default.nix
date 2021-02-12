@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0aj2sysl0spf5zlcd5kfzlw97w7dzf9x93pv0d1v9blnbd1rz7lm";
   };
 
-  cargoSha256 = "1am9vs7l2wzgwqakrsl27x1y7jpn9xaqa4kr48wwqzka401h6j4m";
+  cargoSha256 = "19i0k3ar9vjw60zdrrmf5vb7gv53kcyy37xfb71bmlzg533dzbsl";
 
   meta = with lib; {
     changelog = "https://github.com/sharkdp/hexyl/releases/tag/v${version}";

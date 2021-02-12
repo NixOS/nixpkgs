@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1jdp5ksxm4rsqhirgl5zwpiahrz2lx046pkvf6xvr6ms70l2xiwj";
   };
 
-  cargoSha256 = "07bjxsg5kgx8dg3wf6mvi5460db206l68irqc21hz10plz5llmnr";
+  cargoSha256 = "1m2i1ryzcbzwsghlxk68ivxzfb9jfv427vx0zsqkw68chgwrb40n";
 
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";

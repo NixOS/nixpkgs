@@ -31,7 +31,7 @@ buildRustPackage rec {
 
   doCheck = false;
 
-  cargoSha256 = "sha256-kCT2ulB+c2OlsABkyXyzrHfD/G92EPCdTO34FR5oSws=";
+  cargoSha256 = "sha256-e7YUt+Ao5GNIv6xPBUj4WIcFTjMxqRLy6cSZgn6x75E=";
 
   meta = with lib; {
     description = "A server application to run tox node written in pure Rust";
