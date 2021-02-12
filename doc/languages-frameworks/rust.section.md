@@ -248,18 +248,65 @@ hooks that can be used to integrate Cargo in non-Rust packages.
 Since network access is not allowed in sandboxed builds, Rust crate
 dependencies need to be retrieved using a fetcher. `rustPlatform`
 provides the `fetchCargoTarball` fetcher, which vendors all
-dependencies of a crate. This fetcher can be used jointly with
-`cargoSetupHook` to vendor dependencies in derivations that do not use
-`buildRustPackage`.
+dependencies of a crate. For example, given a source path `src`
+containing `Cargo.toml` and `Cargo.lock`, `fetchCargoTarball`
+can be used as follows:
 
-In the following partial example, `fetchCargoTarball` and
-`cargoSetupHook` are used to vendor dependencies in the Python
-`tokenizers` derivation. The `tokenizers` Python package is in the
-`source/bindings/python` directory of the project's source archive. We
-use `fetchCargoTarball` to retrieve the dependencies specified in
-`source/bidings/Cargo.{lock,toml}`. The resulting path is assigned to
-the `cargoDeps` attribute, which is used by `cargoSetupHook` to
-configure Cargo.
+```nix
+cargoDeps = rustPlatform.fetchCargoTarball {
+  inherit src;
+  hash = "sha256-BoHIN/519Top1NUBjpB/oEMqi86Omt3zTQcXFWqrek0=";
+};
+```
+
+The `src` attribute is required, as well as a hash specified through
+one of the `sha256` or `hash` attributes. The following optional
+attributes can also be used:
+
+* `name`: the name that is used for the dependencies tarball.  If
+  `name` is not specified, then the name `cargo-deps` will be used.
+* `sourceRoot`: when the `Cargo.lock`/`Cargo.toml` are in a
+  subdirectory, `sourceRoot` specifies the relative path to these
+  files.
+* `patches`: patches to apply before vendoring. This is useful when
+  the `Cargo.lock`/`Cargo.toml` files need to be patched before
+  vendoring.
+
+### Hooks
+
+`rustPlatform` provides the following hooks to automate Cargo builds:
+
+* `cargoSetupHook`: configure Cargo to use depenencies vendored
+  through `fetchCargoTarball`. This hook uses the `cargoDeps`
+  environment variable to find the vendored dependencies. If a project
+  already vendors its dependencies, the variable `cargoVendorDir` can
+  be used instead. When the `Cargo.toml`/`Cargo.lock` files are not in
+  `sourceRoot`, then the optional `cargoRoot` is used to specify the
+  Cargo root directory relative to `sourceRoot`.
+* `cargoBuildHook`: use Cargo to build a crate. If the crate to be
+  built is a crate in e.g. a Cargo workspace, the relative path to the
+  crate to build can be set through the optional `buildAndTestSubdir`
+  environment variable. Additional Cargo build flags can be passed
+  through `cargoBuildFlags`.
+* `maturinBuildHook`: use [Maturin](https://github.com/PyO3/maturin)
+  to build a Python wheel. Similar to `cargoBuildHook`, the optional
+  variable `buildAndTestSubdir` can be used to build a crate in a
+  Cargo workspace. Additional maturin flags can be passed through
+  `maturinBuildFlags`.
+
+### Examples
+
+#### Python package using `setuptools-rust`
+
+For Python packages using `setuptools-rust`, you can use
+`fetchCargoTarball` and `cargoSetupHook` to retrieve and set up Cargo
+dependencies. The build itself is then performed by
+`buildPythonPackage`.
+
+The following example outlines how the `tokenizers` Python package is
+built. Since the Python package is in the `source/bindings/python`
+directory of the *tokenizers* project's source archive, we use
+`sourceRoot` to point the tooling to this directory:
 
 ```nix
 { fetchFromGitHub
@@ -297,9 +344,9 @@ buildPythonPackage rec {
 }
 ```
 
-In some projects, the Rust crate is not in the main source directory
-of the projects. In such cases, the `cargoRoot` attribute can be used
-to specify the crate's directory relative to `sourceRoot`. In the
+In some projects, the Rust crate is not in the main Python source
+directory.  In such cases, the `cargoRoot` attribute can be used to
+specify the crate's directory relative to `sourceRoot`. In the
 following example, the crate is in `src/rust`, as specified in the
 `cargoRoot` attribute. Note that we also need to specify the correct
 path for `fetchCargoTarball`.
@@ -330,6 +377,47 @@ buildPythonPackage rec {
   };
 
   cargoRoot = "src/rust";
+
+  # ...
+}
+```
+
+#### Python package using `maturin`
+
+Python packages that use [Maturin](https://github.com/PyO3/maturin)
+can be built with `fetchCargoTarball`, `cargoSetupHook`, and
+`maturinBuildHook`. For example, the following (partial) derivation
+builds the `retworkx` Python package. `fetchCargoTarball` and
+`cargoSetupHook` are used to fetch and set up the crate dependencies.
+`maturinBuildHook` is used to perform the build.
+
+```nix
+{ lib
+, buildPythonPackage
+, rustPlatform
+, fetchFromGitHub
+}:
+
+buildPythonPackage rec {
+  pname = "retworkx";
+  version = "0.6.0";
+
+  src = fetchFromGitHub {
+    owner = "Qiskit";
+    repo = "retworkx";
+    rev = version;
+    sha256 = "11n30ldg3y3y6qxg3hbj837pnbwjkqw3nxq6frds647mmmprrd20";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-heOBK8qi2nuc/Ib+I/vLzZ1fUUD/G/KTw9d7M4Hz5O0=";
+  };
+
+  format = "pyproject";
+
+  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
 
   # ...
 }
