@@ -17,6 +17,11 @@ in {
         default = pkgs.qemu.ga;
         description = "The QEMU guest agent package.";
       };
+      stateDir = mkOption {
+        type = types.path;
+        default = "/var/run";
+        description = "Absolute path where qemu-ga stores state information";
+      };
   };
 
   config = mkIf cfg.enable (
@@ -30,7 +35,7 @@ in {
       systemd.services.qemu-guest-agent = {
         description = "Run the QEMU Guest Agent";
         serviceConfig = {
-          ExecStart = "${cfg.package}/bin/qemu-ga";
+          ExecStart = "${cfg.package}/bin/qemu-ga --statedir ${cfg.stateDir}";
           Restart = "always";
           RestartSec = 0;
         };
