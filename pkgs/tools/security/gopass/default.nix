@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , makeWrapper
 , buildGoModule
 , fetchFromGitHub
@@ -12,7 +13,7 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.11.0";
+  version = "1.12.0";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -20,10 +21,12 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0plg3hck6yqxcazjczx9m5palzz5h3qs5minzmmq8yzvfwi0shic";
+    sha256 = "0y3dcikw6gl436mhza5j0b3lm49jzl590a9ry53rkmzrv2lqx9w6";
   };
 
-  vendorSha256 = "1sycbcld5qyriqb771l52drxy4vhzm4nh9q5s6kn70nq1s2a3h7x";
+  vendorSha256 = "09lbkm7c361c2s87qi1wpfsqgpp3r862wcn98dzdg5j6pvpgwbag";
+
+  subPackages = [ "." ];
 
   doCheck = false;
 
@@ -47,9 +50,7 @@ buildGoModule rec {
   '';
 
   postFixup = ''
-    for bin in $out/bin/*; do
-      wrapProgram $bin --prefix PATH : "${wrapperPath}"
-    done
+    wrapProgram $out/bin/gopass --prefix PATH : "${wrapperPath}"
   '';
 
   meta = with lib; {
@@ -57,6 +58,7 @@ buildGoModule rec {
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
     maintainers = with maintainers; [ andir rvolosatovs ];
+    changelog = "https://github.com/gopasspw/gopass/blob/v${version}/CHANGELOG.md";
     platforms = platforms.unix;
 
     longDescription = ''
