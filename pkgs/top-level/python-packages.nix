@@ -5195,6 +5195,8 @@ in {
 
   pyahocorasick = callPackage ../development/python-modules/pyahocorasick { };
 
+  pyairnow = callPackage ../development/python-modules/pyairnow { };
+
   pyairvisual = callPackage ../development/python-modules/pyairvisual { };
 
   pyalgotrade = callPackage ../development/python-modules/pyalgotrade { };
