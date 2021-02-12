@@ -4,8 +4,6 @@
 , rustPlatform
 , pkg-config
 , dbus
-, gmp
-, openssl
 , Security
 }:
 
@@ -24,9 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gmp openssl ]
-    ++ lib.optional stdenv.isDarwin Security
-    ++ lib.optional stdenv.isLinux dbus;
+  buildInputs = lib.optional stdenv.isLinux dbus
+    ++ lib.optional stdenv.isDarwin Security;
 
   # Requires network access, fails in sandbox.
   doCheck = false;
