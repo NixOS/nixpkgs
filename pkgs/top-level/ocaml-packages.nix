@@ -114,12 +114,11 @@ let
       then callPackage ../development/ocaml-modules/camomile { }
       else callPackage ../development/ocaml-modules/camomile/0.8.5.nix { };
 
-    camlimages_4_0 =
+    camlimages_4_1_2 =
       if lib.versionOlder "4.02" ocaml.version
       then null
-      else callPackage ../development/ocaml-modules/camlimages/4.0.nix {
+      else callPackage ../development/ocaml-modules/camlimages/4.1.2.nix {
       libpng = pkgs.libpng12;
-      giflib = pkgs.giflib_4_1;
     };
     camlimages = callPackage ../development/ocaml-modules/camlimages { };
 
