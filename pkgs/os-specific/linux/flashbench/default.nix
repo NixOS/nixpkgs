@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "flashbench";
-  version = "2020-01-23";
+  version = "unstable-2020-01-23";
 
   src = fetchFromGitHub {
     owner = "bradfa";
