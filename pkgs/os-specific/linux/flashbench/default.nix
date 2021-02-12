@@ -12,10 +12,14 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -d -m755 $out/bin $out/share/doc/flashbench
     install -v -m755 flashbench $out/bin
     install -v -m755 erase $out/bin/flashbench-erase
     install -v -m644 README $out/share/doc/flashbench
+
+    runHook postInstall
   '';
 
   meta = with lib; {
