@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "pg_tileserv";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "CrunchyData";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6KFYTZq126uvxQ5IOrMN+hpnAk/WtmS1Dam7w6Oif1M=";
+    sha256 = "sha256-PHF8n0rjxvajyC/y2sFcdvxQdDFXkxcDZOkYT10UsE4=";
   };
 
   vendorSha256 = "sha256-qdlh9H039GwKTxOhx+dzyUHkzJbaOeuguKnBOyAPe/E=";
