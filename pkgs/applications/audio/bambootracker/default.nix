@@ -1,5 +1,6 @@
 { mkDerivation
 , lib
+, stdenv
 , fetchFromGitHub
 , qmake
 , pkg-config
@@ -19,6 +20,11 @@ mkDerivation rec {
     rev = "v${version}";
     sha256 = "0iddqfw951dw9xpl4w7310sl4z544507ppb12i8g4fzvlxfw2ifc";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace BambooTracker/BambooTracker.pro \
+      --replace '# Temporary known-error downgrades here' 'CPP_WARNING_FLAGS += -Wno-missing-braces'
+  '';
 
   nativeBuildInputs = [ qmake qttools pkg-config ];
 
