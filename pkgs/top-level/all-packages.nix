@@ -12661,7 +12661,7 @@ in
 
   pyrseas = callPackage ../development/tools/database/pyrseas { };
 
-  qtcreator = libsForQt514.callPackage ../development/tools/qtcreator { };
+  qtcreator = libsForQt5.callPackage ../development/tools/qtcreator { };
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit {} ;
 
