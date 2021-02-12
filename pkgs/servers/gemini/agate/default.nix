@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, installShellFiles }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-B07itUftDj3yVMDc/2VetwYs74fZBa1tmeELbbQ39P0=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     homepage = "https://proxy.vulpes.one/gemini/gem.limpet.net/agate";
