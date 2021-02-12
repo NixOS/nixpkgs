@@ -105,5 +105,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2Plus bsd3 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ tv ajs124 das_j ];
+    changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";
   };
 }
