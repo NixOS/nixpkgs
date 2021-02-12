@@ -278,6 +278,8 @@ in {
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
+  aiorecollect = callPackage ../development/python-modules/aiorecollect { };
+
   aioredis = callPackage ../development/python-modules/aioredis { };
 
   aioresponses = callPackage ../development/python-modules/aioresponses { };
@@ -460,6 +462,8 @@ in {
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
   aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
+
+  asteval = callPackage ../development/python-modules/asteval { };
 
   astor = callPackage ../development/python-modules/astor { };
 
@@ -7931,6 +7935,8 @@ in {
   twine = callPackage ../development/python-modules/twine { };
 
   twisted = callPackage ../development/python-modules/twisted { };
+
+  twitch-python = callPackage ../development/python-modules/twitch-python { };
 
   twitter = callPackage ../development/python-modules/twitter { };
 

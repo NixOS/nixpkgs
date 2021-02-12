@@ -5428,7 +5428,7 @@ in
 
   jo = callPackage ../development/tools/jo { };
 
-  jrnl = callPackage ../applications/misc/jrnl { };
+  jrnl = python3Packages.callPackage ../applications/misc/jrnl { };
 
   jsawk = callPackage ../tools/text/jsawk { };
 
@@ -6674,6 +6674,8 @@ in
   ocserv = callPackage ../tools/networking/ocserv { };
 
   opencorsairlink = callPackage ../tools/misc/opencorsairlink { };
+
+  openfpgaloader = callPackage ../development/tools/misc/openfpgaloader { };
 
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
@@ -8509,6 +8511,8 @@ in
   twilight = callPackage ../tools/graphics/twilight {
     libX11 = xorg.libX11;
   };
+
+  twitch-chat-downloader = python3Packages.callPackage ../applications/misc/twitch-chat-downloader { };
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
