@@ -5135,6 +5135,7 @@ broken-packages:
   - fay-websockets
   - fb-persistent
   - fbmessenger-api
+  - fbrnch
   - fca
   - fcache
   - fcd
@@ -11036,6 +11037,7 @@ broken-packages:
   - unix-fcntl
   - unix-handle
   - unix-process-conduit
+  - unix-simple
   - unlifted-list
   - unliftio-streams
   - unm-hip
