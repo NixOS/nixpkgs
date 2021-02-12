@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, dbus, gmp, openssl, pkg-config
-, Security }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, dbus
+, gmp
+, openssl
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
@@ -9,10 +17,10 @@ rustPlatform.buildRustPackage rec {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    sha256 = "sha256-X5/1zEVhhdTuyXcUwC3jVv9Gblmv8LT+ftsVo8BnnZs=";
+    hash = "sha256-X5/1zEVhhdTuyXcUwC3jVv9Gblmv8LT+ftsVo8BnnZs=";
   };
 
-  cargoSha256 = "sha256-PBmuPIpCwC7fr/MKFaeSd/0avoEATlxoeMHisjouAeI=";
+  cargoHash = "sha256-PBmuPIpCwC7fr/MKFaeSd/0avoEATlxoeMHisjouAeI=";
 
   nativeBuildInputs = [ pkg-config ];
 
