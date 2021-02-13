@@ -13841,6 +13841,8 @@ in
 
   libgit2-glib = callPackage ../development/libraries/libgit2-glib { };
 
+  libhsts = callPackage ../development/libraries/libhsts { };
+
   glbinding = callPackage ../development/libraries/glbinding { };
 
   gle = callPackage ../development/libraries/gle { };
