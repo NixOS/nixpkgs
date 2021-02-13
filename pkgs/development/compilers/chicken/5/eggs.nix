@@ -241,6 +241,20 @@ rec {
     ];
   };
 
+  sha2 = eggDerivation {
+    name = "sha2-4.0.5";
+
+    src = fetchegg {
+      name = "sha2";
+      version = "4.0.5";
+      sha256 = "020yc41gkpg2s48v5n1nnq02dii340yly2y1zsi71bbfbkai2vcs";
+    };
+
+    buildInputs = [
+      message-digest-primitive
+    ];
+  };
+
   spiffy = eggDerivation {
     name = "spiffy-6.3";
 
