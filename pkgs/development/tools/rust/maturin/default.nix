@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
       Python and can upload them to PyPI.
     '';
     homepage = "https://github.com/PyO3/maturin";
-    license = licenses.mit;
+    license = licenses.asl20;
     maintainers = [ maintainers.danieldk ];
   };
 }
