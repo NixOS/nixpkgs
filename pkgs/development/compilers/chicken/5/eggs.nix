@@ -64,6 +64,20 @@ rec {
     ];
   };
 
+  defstruct = eggDerivation {
+    name = "defstruct-2.0";
+
+    src = fetchegg {
+      name = "defstruct";
+      version = "2.0";
+      sha256 = "0q1v1gdwqlpmwcsa4jnqldfqky9k7kvb83qgkhdyqym52bm5aln8";
+    };
+
+    buildInputs = [
+      srfi-1
+    ];
+  };
+
   matchable = eggDerivation {
     name = "matchable-1.1";
 
