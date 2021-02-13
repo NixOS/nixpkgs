@@ -169,6 +169,20 @@ rec {
     ];
   };
 
+  packrat = eggDerivation {
+    name = "packrat-1.5";
+
+    src = fetchegg {
+      name = "packrat";
+      version = "1.5";
+      sha256 = "0hfnh57a8yga3byrk8522al5wdj7dyz48lixvvcgnsn3vdy333hq";
+    };
+
+    buildInputs = [
+      srfi-1
+    ];
+  };
+
   regex = eggDerivation {
     name = "regex-2.0";
 
