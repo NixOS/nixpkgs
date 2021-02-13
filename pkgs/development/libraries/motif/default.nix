@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libtool
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, libtool
 , xlibsWrapper, xbitmaps, libXrender, libXmu, libXt
 , expat, libjpeg, libpng, libiconv
 , flex
@@ -26,14 +26,18 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libXp libXau ];
 
-  hardeningDisable = [ "format" ];
-
   prePatch = lib.optionalString (!demoSupport) ''
     sed '/^SUBDIRS =,^$/s/\<demos\>//' -i Makefile.{am,in}
   '';
 
-  patches = [ ./Remove-unsupported-weak-refs-on-darwin.patch
-              ./Add-X.Org-to-bindings-file.patch
+  patches = [
+    ./Remove-unsupported-weak-refs-on-darwin.patch
+    ./Add-X.Org-to-bindings-file.patch
+    (fetchpatch rec {
+      name = "fix-format-security.patch";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/b9a1110dabb01c052dadc1abae1413bd4afe3652/srcpkgs/motif/patches/02-${name}";
+      sha256 = "13vzpf8yxvhf4gl7q0yzlr6ak1yzx382fsqsrv5lc8jbbg4nwrrq";
+    })
   ];
 
   enableParallelBuilding = true;
