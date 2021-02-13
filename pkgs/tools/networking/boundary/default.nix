@@ -14,12 +14,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "boundary";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchsrc version {
-    x86_64-linux = "sha256-A8dfmFjvOHDwotCyRq9QQ9uHJIkq1JkIwtHsqDqTSNo=";
-    aarch64-linux = "sha256-i2qc4bmoSzUwNCQmnXLFQ+W4VZjVwXzEBSF3NeTju3M=";
-    x86_64-darwin = "sha256-lKGTpS2TmgxFdjUsBXKg8Mu6oJA0VidHc/noWWEuUVo=";
+    x86_64-linux = "sha256-6Pwl8smp6ZX57hzPc7e8gVSqnPHse+RvhU2xprG/2dg=";
+    aarch64-linux = "sha256-/ZhLZ/Sj0h4HvOJthe83Y5Hqpz1UYiaQZxuyR8loI44=";
+    x86_64-darwin = "sha256-s+XoEmup/jvIf+jGI3OPIGFDwsWbgE1yuySLWsC3jJE=";
   };
 
   dontConfigure = true;
