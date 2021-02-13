@@ -111,6 +111,22 @@ rec {
     ];
   };
 
+  json = eggDerivation {
+    name = "json-1.6";
+
+    src = fetchegg {
+      name = "json";
+      version = "1.6";
+      sha256 = "0sb8285dqrm27c8zaqfzc0gixvfmvf0cq2nbza8c4z7j5snxzs2w";
+    };
+
+    buildInputs = [
+      packrat
+      srfi-1
+      srfi-69
+    ];
+  };
+
   matchable = eggDerivation {
     name = "matchable-1.1";
 

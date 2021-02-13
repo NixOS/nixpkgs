@@ -3,6 +3,7 @@ args
 matchable
 apropos
 spiffy
+json
 
 ;; other eggs to include in nixpkgs
 srfi-189
