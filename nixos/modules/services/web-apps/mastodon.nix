@@ -31,6 +31,22 @@ let
   // (if cfg.smtp.authenticate then { SMTP_LOGIN  = cfg.smtp.user; } else {})
   // cfg.extraConfig;
 
+  cfgService = {
+    # User and group
+    User = cfg.user;
+    Group = cfg.group;
+    # State directory and mode
+    StateDirectory = "mastodon";
+    StateDirectoryMode = "0750";
+    # Logs directory and mode
+    LogsDirectory = "mastodon";
+    LogsDirectoryMode = "0750";
+    # Access write directories
+    UMask = "0027";
+    # Sandboxing
+    PrivateTmp = true;
+  };
+
   envFile = pkgs.writeText "mastodon.env" (lib.concatMapStrings (s: s + "\n") (
     (lib.concatLists (lib.mapAttrsToList (name: value:
       if value != null then [
@@ -392,12 +408,9 @@ in {
       environment = env;
       serviceConfig = {
         Type = "oneshot";
-        User = cfg.user;
-        Group = cfg.group;
         WorkingDirectory = cfg.package;
-        LogsDirectory = "mastodon";
-        StateDirectory = "mastodon";
-      };
+      } // cfgService;
+
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
     };
@@ -419,14 +432,9 @@ in {
       environment = env;
       serviceConfig = {
         Type = "oneshot";
-        User = cfg.user;
-        Group = cfg.group;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
-        PrivateTmp = true;
-        LogsDirectory = "mastodon";
-        StateDirectory = "mastodon";
         WorkingDirectory = cfg.package;
-      };
+      } // cfgService;
       after = [ "mastodon-init-dirs.service" "network.target" ] ++ (if databaseActuallyCreateLocally then [ "postgresql.service" ] else []);
       wantedBy = [ "multi-user.target" ];
     };
@@ -445,17 +453,12 @@ in {
         ExecStart = "${pkgs.nodejs-slim}/bin/node streaming";
         Restart = "always";
         RestartSec = 20;
-        User = cfg.user;
-        Group = cfg.group;
-        WorkingDirectory = cfg.package;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
-        PrivateTmp = true;
-        LogsDirectory = "mastodon";
-        StateDirectory = "mastodon";
+        WorkingDirectory = cfg.package;
         # Runtime directory and mode
         RuntimeDirectory = "mastodon-streaming";
         RuntimeDirectoryMode = "0750";
-      };
+      } // cfgService;
     };
 
     systemd.services.mastodon-web = {
@@ -472,17 +475,12 @@ in {
         ExecStart = "${cfg.package}/bin/puma -C config/puma.rb";
         Restart = "always";
         RestartSec = 20;
-        User = cfg.user;
-        Group = cfg.group;
-        WorkingDirectory = cfg.package;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
-        PrivateTmp = true;
-        LogsDirectory = "mastodon";
-        StateDirectory = "mastodon";
+        WorkingDirectory = cfg.package;
         # Runtime directory and mode
         RuntimeDirectory = "mastodon-web";
         RuntimeDirectoryMode = "0750";
-      };
+      } // cfgService;
       path = with pkgs; [ file imagemagick ffmpeg ];
     };
 
@@ -499,14 +497,9 @@ in {
         ExecStart = "${cfg.package}/bin/sidekiq -c 25 -r ${cfg.package}";
         Restart = "always";
         RestartSec = 20;
-        User = cfg.user;
-        Group = cfg.group;
-        WorkingDirectory = cfg.package;
         EnvironmentFile = "/var/lib/mastodon/.secrets_env";
-        PrivateTmp = true;
-        LogsDirectory = "mastodon";
-        StateDirectory = "mastodon";
-      };
+        WorkingDirectory = cfg.package;
+      } // cfgService;
       path = with pkgs; [ file imagemagick ffmpeg ];
     };
 
