@@ -631,7 +631,7 @@
     "point" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pypoint
     "poolsense" = ps: with ps; [ poolsense ];
     "powerwall" = ps: with ps; [ ]; # missing inputs: tesla-powerwall
-    "profiler" = ps: with ps; [ objgraph pyprof2calltree ]; # missing inputs: guppy3
+    "profiler" = ps: with ps; [ guppy3 objgraph pyprof2calltree ];
     "progettihwsw" = ps: with ps; [ ]; # missing inputs: progettihwsw
     "proliphix" = ps: with ps; [ ]; # missing inputs: proliphix
     "prometheus" = ps: with ps; [ aiohttp-cors prometheus_client ];
