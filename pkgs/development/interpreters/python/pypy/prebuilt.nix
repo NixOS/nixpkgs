@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , python-setup-hook
 , self
